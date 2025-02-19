@@ -1,0 +1,4 @@
+SUBDIRS =								\
+	ares								\
+	emuletorrent							\
+	shareaza

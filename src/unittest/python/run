@@ -1,0 +1,2 @@
+#!/bin/bash
+PYTHONPATH=/home/aguiar/tmp/mobius.install/lib64/python2.7/site-packages unittest.py

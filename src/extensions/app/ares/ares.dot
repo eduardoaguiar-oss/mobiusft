@@ -1,0 +1,71 @@
+digraph forensic_tools
+{
+  rankdir=LR
+  bgcolor=seashell;
+
+  subgraph clusterlevel1 {
+    label="Files";
+    fillcolor="seagreen3:seagreen1";
+    style="filled";
+    node [shape=cylinder, fillcolor=lightgrey, style="filled"];
+    sharel [label="ShareL.dat"];
+    shareh [label="ShareH.dat"];
+    torrenth [label="TorrentH.dat"];
+  }
+  
+  //{rank=same; //subgraph clusterlevel2 {
+    node [shape=rect, fillcolor=bisque1, style="rounded, filled"];
+    //label="Procedures";
+    //fillcolor="seagreen3:seagreen1";
+    //style="filled";
+    {rank=same; get_trusted_metas [label="get_trusted_metas"];
+    set_trusted_metas [label="set_trusted_metas"];}
+
+    {rank=same;
+    get_cached_metas [label="get_cached_metas"];
+    set_cached_metas [label="set_cached_metas"];}
+
+    assign_trusted_metas [label="assign_trusted_metas"];
+    set_newtrusted_metas [label="set_newtrusted_metas"];
+    sharedlist_setglobal [label="sharedlist_setGlobal"];
+    deal_with_newfile [label="deal_with_newfile"];
+    add_to_sharedlist [label="add_to_sharedlist"];
+    storeTorrentReference [label="storeTorrentReference"];
+    getMagnetFile [label="getMagnetFile"];
+    add_to_sharedlist -> deal_with_newfile;
+    add_to_sharedlist -> assign_trusted_metas;
+  //}
+
+  subgraph clusterlevel3 {
+    label="Memory";
+    fillcolor="seagreen3:seagreen1";
+    style="filled";
+    node [shape=box3d, fillcolor=azure2, style="filled"];
+    db_trusted [label="DB_TRUSTED"];
+    db_cached [label="DB_CACHED"];
+    db_towrite [label="DB_TOWRITE"];
+    lista_shared [label="lista_shared"];
+    magnetFiles [label="magnetFiles"];
+  }
+
+  shareh -> get_trusted_metas;
+  sharel -> get_cached_metas;
+  set_trusted_metas -> shareh;
+  set_cached_metas -> sharel;
+  set_newtrusted_metas -> shareh;
+  set_newtrusted_metas -> sharel;
+
+  db_trusted -> set_trusted_metas;
+  db_towrite -> set_cached_metas;
+  lista_shared -> set_newtrusted_metas;
+  db_towrite -> sharedlist_setglobal -> lista_shared;
+  
+  deal_with_newfile -> db_towrite;
+  add_to_sharedlist -> db_towrite;
+  get_trusted_metas -> db_trusted;
+  get_cached_metas -> db_cached;
+  
+  torrenth -> getMagnetFile -> magnetFiles;
+  storeTorrentReference -> torrenth;
+}
+

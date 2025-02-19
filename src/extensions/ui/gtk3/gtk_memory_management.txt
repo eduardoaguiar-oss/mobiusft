@@ -1,0 +1,9 @@
+GtkWidget *button;
+button = gtk_button_new();		// REF count = 1
+
+g_object_ref(G_OBJECT( obj ) );		// increment reference count
+
+g_object_unref( G_OBJECT( store ) );	// decrement reference count
+
+* Each ui::gtk3::xxx_impl object calls g_object_ref_sink in the constructor
+* Each ui::gtk3::xxx_impl object calls g_object_unref in the destructor

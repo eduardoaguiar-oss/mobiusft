@@ -1,0 +1,131 @@
+[query]
+*	/busca	q
+*	/busca.php	q
+*	/busca/	q
+*	/search	q
+*	/search/	q
+*	/en/search/	q
+*	/pt/search/	q
+*	/search/	query
+*	/search/	text
+*	/search/sss	query
+*	/search.php	q
+*	/catalogsearch/result/	q
+br.answers.search.yahoo.com	/search	p
+br.search.yahoo.com	/search	p
+busca.drogaraia.com.br	/search	w
+busca.onofre.com.br	/search	w
+buscando.extra.com.br	/	strBusca
+buscas.casasbahia.com.br	/	strBusca
+empresas.americanas.com.br	/busca	conteudo
+empresas.americanas.com.br	/busca/	conteudo
+esportes.centauro.com.br	/search	w
+groupda.com	/tgme/search	q
+idg.receita.fazenda.gov.br	/@@busca	SearchableText
+imgsrc.ru	/main/search.php	str
+m.youtube.com	/results	search_query
+m.facebook.com	/search_results	q
+mangaplus.shueisha.co.jp	/search_result	keyword
+megafilmesahd.com	/	s
+megafilmesahd.net	/	s
+michaelis.uol.com.br	/busca	palavra
+motherless.com	/search	term
+motherless.com	/search/videos	term
+nenety.com.br	/busca/	busca
+pt.pornhub.com	/video/search	search
+search.conduit.com	/ResultsExt.aspx	q
+search.incredibar.com	/	q
+search.navegaki.com	/	q
+search.pontofrio.com.br	/	strBusca
+search.snapdo.com	/	q
+search.sidecubes.com	/	q
+shemaletube.sexy	/search2.php	search
+support.apple.com	/kb/index	q
+support.google.com	/a/search	q
+support.google.com	/drive/search	q
+support.microsoft.com	/pt-br/search	query
+torrentz.eu	/search	f
+torrentz2.eu	/search	f
+www.acessoriostrendparts.com.br	/loja/busca.php	palavra_busca
+www.aliexpress.com	/wholesale	SearchText
+www.almg.gov.br	/busca/busca_geral.html	busca
+www.alphacoders.com	/search.php	search
+www.americanas.com.br	/busca	conteudo
+www.americanas.com.br	/busca/	conteudo
+www.ashleymadison.com	/	keywords
+www.baixaki.com.br	/busca.asp	q
+www.behance.net	/search	search
+www.bing.com	/images/search	q
+www.bobwards.com	/search.cfm	q
+www.buscape.com.br	/lead	searchterm
+www.carrefour.com.br	/busca/	termo
+www.consultasocio.com	/buscar/	keyword
+www.copart.com.br	/br/search	ocN
+www.cysend.com	/catalog-search	text
+www.dafiti.com.br	/catalog/	q
+www.eserviceinfo.com	/fulltext.php	search_ft
+www.etna.com.br	/search/	text
+www.dicio.com.br	/pesquisa.php	q
+www.facebook.com	/search/results.php	q
+www.facebook.com	/search/pages/	q
+www.facebook.com	/search/people/	q
+www.facebook.com	/search/posts/	q
+www.facebook.com	/search/top/	q
+www.facebook.com	/search/videos/	q
+www.filecrop.com	/search.php	w
+www.filmesonlinegratis.net	/	s
+www.freepik.com	/index.php	k
+www.g2a.com	/search	query
+www.garmin.com	/en-US/search/	query
+www.gotporn.com	/results	search_query
+www.hoteis.com	/search.do	q-destination
+www.hoteis.com	/search/searchmap.html	q-destination
+www.kboing.com.br	/buscamusica.php	palavra
+www.indeed.com.br	/jobs	q
+www.istockphoto.com	/br/search/2/image	phrase
+www.jusbrasil.com.br	/artigos/busca	q
+www.jusbrasil.com.br	/jurisprudencia/busca	q
+www.jusbrasil.com.br	/noticias/busca	q
+www.lojaeletrica.com.br	/searchresults.aspx	keyword
+www.lojafocus.com.br	/loja/busca.php	palavra_busca
+www.mercadolivre.com.br	/jm/search	as_word
+www.microsoft.com	/pt-br/search/DownloadResults.aspx	q
+www.neopets.com	/games/arcade_more.phtml	search_game
+www.netshoes.com.br	/search	Ntt
+www.opensubtitles.org	/pt/search2	MovieName
+www.portaltudoaqui.com.br	/busca.php	q
+www.pornhub.com	/video/search	search
+www.shoptime.com.br	/busca/	query
+www.submarino.com.br	/busca	conteudo
+www.technicpack.net	/search/modpacks	q
+www.twitch.tv	/search	term
+www.walmart.com.br	/busca/	ft
+www.wizardhax.com	/	s
+www.xvideos.com	/	k
+www.youtube.com	/results	search_query
+
+[path]
+br.spankbang.com	/s/
+gruposdotelegram.com.br	/search/
+thepiratebay.se	/search/
+thepiratebay.sx	/search/
+treetorrent.com	/search/
+www.armacaseira.net	/search/label/
+www.clickjogos.com.br	/busca/
+www.facebook.com	/search/str/	/keywords_search
+www.facebook.com	/search/str/	/keywords_users
+www.facebook.com	/search/str/	/keywords_groups
+www.frasescurtas.com.br	/search/label/
+www.google.com	/maps/search/
+www.google.com.br	/maps/search/
+www.itatiaia.com.br	/busca/
+www.porntrex.com	/search/
+www.tabeladafipe.com	/search/
+www.tubegalore.com	/pt/search/a/
+www.tubegalore.com	/pt/search/
+www.wine-searcher.com	/find/
+www.xnxx.com	/search/
+
+[fragment]
+www.google.com.br	/webhp	q
+www.google.com.br	/search	q

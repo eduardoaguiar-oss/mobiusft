@@ -1,0 +1,4 @@
+#!/bin/bash
+
+exec_prefix=@prefix@
+PYTHONPATH=@pyexecdir@ python3 @bindir@/mobius_bin.py

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export LD_LIBRARY_PATH=$HOME/src/mobius/src/mobius/.libs:$HOME/src/mobius/src/mobius/framework/.libs:/opt/sleuthkit-4.12.1/lib64:$LD_LIBRARY_PATH
+cp .libs/app-shareaza.so $HOME/.config/mobiusft/extensions
+
+$HOME/src/mobius/tools/evidence_loader -t app-shareaza $HOME/tmp/case 4

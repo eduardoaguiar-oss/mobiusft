@@ -1,0 +1,125 @@
+				core	crypt	db	datetm	 decoder	disk	encoder	fs	 forens	imgfile	io	model	partition	system
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+eliminar return const			OK
+eliminar is_valid/is_null		OK
+ifndef __XX__ -> XX			OK
+#include "" nos .cc			OK
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+* DONE
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+* (R005) eliminate virtual...override
+* (R006) ifndef __XX__ -> XX
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+* (R001) capitalize comments
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+core
+crypt
+database
+datetime				OK
+decoder
+disk
+encoder
+filesystem
+registry
+imagefile
+io
+model
+partition
+system
+turing
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+* (R002) constexpr constructor when possible
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+core
+crypt
+database
+datetime				OK
+decoder
+disk
+encoder
+filesystem
+registry
+imagefile
+io
+model
+partition
+system
+turing
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+* (R003) eliminate return const
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+core
+crypt
+database
+datetime				OK
+decoder
+disk
+encoder
+filesystem
+registry
+imagefile
+io
+model
+partition
+system
+turing
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+* (R004) eliminate is_valid/is_null from handle classes
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+core
+crypt
+database
+datetime
+decoder
+disk
+encoder
+filesystem
+registry
+imagefile
+io
+model
+partition
+system
+turing
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+* (R007) include "" instead of <> when possible
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+core
+crypt
+database
+datetime				OK
+decoder
+disk
+encoder
+filesystem
+registry
+imagefile
+io
+model
+partition
+system
+turing
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+* (R008) noexcept on constructors and assignment operators
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+core
+crypt
+database
+decoder
+disk
+encoder
+filesystem
+registry
+imagefile
+io
+model
+partition
+system
+turing

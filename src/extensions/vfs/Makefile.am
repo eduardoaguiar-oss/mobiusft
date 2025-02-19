@@ -1,0 +1,4 @@
+SUBDIRS = 								\
+		block							\
+		filesystem						\
+		imagefile
