@@ -1,4 +1,8 @@
 ---
+title: Mobius Forensic Toolkit
+description: "Open-source forensic framework and tools written in C++/Python"
+version: 2.12
+---
 
 # Mobius Forensic Toolkit
 
@@ -37,15 +41,23 @@ Whether you're a digital forensics expert or a beginner, the Mobius Forensic Too
 Download the latest version of the Mobius Forensic Toolkit from the official website:  
 [https://www.nongnu.org/mobiusft](https://www.nongnu.org/mobiusft).
 
-## Installation
+You can download the latest development version from GitHub repository:  
+[https://www.github.com/eduardoaguiar-oss/mobiusft](https://www.github.com/eduardoaguiar-oss/mobiusft).
+
+## Installation and Usage
 
 For detailed installation instructions, refer to the official installation guide:  
 [https://www.nongnu.org/mobiusft/support/installation_guide/index.html](https://www.nongnu.org/mobiusft/support/installation_guide/index.html).
 
-## Usage
-
 To get started with the Mobius Forensic Toolkit, check out the **Quick Start Guide**:  
 [https://www.nongnu.org/mobiusft/support/getting_started/index.html](https://www.nongnu.org/mobiusft/support/getting_started/index.html).
+
+## Support this Project
+
+Please, support this project. Here are the ways you can make a donation:
+
+- Buy me a coffee at https://buymeacoffee.com/mobiusft.
+- Send any amount of crypto coins to one of the addresses listed at https://www.nongnu.org/mobiusft.
 
 ## Mailing List
 
