@@ -36,15 +36,13 @@ Whether you're a digital forensics expert or a beginner, the Mobius Forensic Too
 - **Comprehensive Documentation**: Access detailed tutorials, API references, and case studies to maximize your efficiency.
 - **Mailing List**: Stay updated with the latest developments and connect with other users through the official Mobius mailing list.
 
-## Where to Get It
+## Installation and Usage
 
 Download the latest version of the Mobius Forensic Toolkit from the official website:  
 [https://www.nongnu.org/mobiusft](https://www.nongnu.org/mobiusft).
 
 You can download the latest development version from GitHub repository:  
 [https://www.github.com/eduardoaguiar-oss/mobiusft](https://www.github.com/eduardoaguiar-oss/mobiusft).
-
-## Installation and Usage
 
 For detailed installation instructions, refer to the official installation guide:  
 [https://www.nongnu.org/mobiusft/support/installation_guide/index.html](https://www.nongnu.org/mobiusft/support/installation_guide/index.html).
