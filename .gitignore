@@ -47,3 +47,4 @@ src/tools/list_resources
 src/tools/vfs_info
 src/unittest/cpp/benchmark/benchmark
 src/unittest/cpp/unittest
+.idea/
