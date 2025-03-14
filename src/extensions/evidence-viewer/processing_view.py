@@ -27,6 +27,11 @@ from gi.repository import Gtk
 from metadata import *
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Constants
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PROFILES = pymobius.ant.evidence.PROFILES
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @class ProcessingView
 # @brief This class defines the user interface for evidence processing.
 #
@@ -118,10 +123,6 @@ class ProcessingView(object):
         # Create a ListStore with one string column
         model = Gtk.ListStore(str, str)
 
-        # Add some items to the ListStore
-        model.append(["vfs.general", "General (fastest)"])
-        model.append(["vfs.pedo", "Pedo (slow)"])
-
         # Create a ComboBox with the ListStore as its model
         self.__profile_combobox = Gtk.ComboBox.new_with_model(model)
 
@@ -129,7 +130,7 @@ class ProcessingView(object):
         renderer = Gtk.CellRendererText()
         self.__profile_combobox.pack_start(renderer, True)
         self.__profile_combobox.add_attribute(renderer, "text", 1)
-        self.__profile_combobox.set_active(0)
+        self.__profile_combobox.set_id_column(0)
         self.__profile_combobox.set_visible(True)
         hbox.add_child(self.__profile_combobox, mobius.ui.box.fill_none)
 
@@ -166,113 +167,134 @@ class ProcessingView(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Set data to be viewed in the processing list view.
     #
-    # This function takes a list of evidence items and displays them in the
-    # processing view's list. It checks the attributes of each item to assign
-    # a status (e.g., Running, No datasource, Completed) and adds it to the
-    # list model, which updates the UI accordingly.
+    # Summary: This method sets the item list for the view and updates the
+    # widget message based on the contents of the item list. It checks if the
+    # item list is empty, if any items have a data source, or if the selected
+    # items lack data sources, and updates the widget message accordingly.
     #
     # @param itemlist List of evidence items to display in the processing view.
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def set_data(self, itemlist):
         self.__itemlist = itemlist
 
-        if not itemlist:
-            self.__widget.set_message("Select a case item")
+        if itemlist:
+            if any(i.has_datasource() for i in itemlist):
+                self.__populate_itemlist()
 
-        elif len (itemlist) == 1:
-            if itemlist[0].has_datasource ():
-                self.__populate_item(itemlist[0])
-            else:
+            elif len (itemlist) == 1:
                 self.__widget.set_message("Selected item has no datasource")
-
-        else:
-            if any(i.has_datasource () for i in itemlist):
-                self.__populate_itemlist(itemlist)
 
             else:
                 self.__widget.set_message("Selected items have no datasource")
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Populates the panel with the status of the specified case item in the processing view.
-    #
-    # This method checks the current state of the provided item and updates the status label
-    # accordingly. It determines if the item is 'Running', 'Completed', or 'Not processed',
-    # and sets the sensitivity of the execute button based on whether the item can be run.
-    #
-    # @param item The case item to display in the processing view.
-    #
-    # @note If the item is currently running, its status is set to 'Running'.
-    # If the item has already run, it is marked as 'Completed' and can be run again.
-    # Otherwise, it is marked as 'Not processed' and can also be run.
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __populate_item(self, item):
-        can_run = False
-
-        # set status
-        if item in self.__running_items:
-            status = 'Running'
-
-        elif item.has_ant('evidence'):
-            status = 'Completed'
-            can_run = True
-
         else:
-            status = 'Not processed'
-            can_run = True
-
-        self.__status_label.set_text(status)
-
-        # populate running messages from item
-        # self.__populate_messages()
-
-        # set execution box
-        # self.__profile_combobox.set_sensitive(can_run)
-        self.__execute_button.set_sensitive(can_run)
-
-        # show widget
-        self.__widget.show_content()
+            self.__widget.set_message("Select a case item")
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Populate panel with itemlist
-    # @param itemlist List of evidence items to display in the processing view.
+    #
+    # This method populates the item list by categorizing items into running,
+    # completed, and not processed states. It updates the status label based on
+    # the count of each category and manages the sensitivity of UI elements
+    # based on the datasource types associated with the items.
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __populate_itemlist(self, itemlist):
+    def __populate_itemlist(self):
+        self.__populate_status_label()
+        # self.__populate_messages()
+        self.__populate_profile_combobox()
+
+        self.__widget.show_content()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Populate status label
+    # Update the status label based on the processing state of the selected items.
+    # It counts the number of items that are running, completed, and not processed,
+    # and updates the label accordingly. For a single item, it displays its status,
+    # while for multiple items, it shows the count of items in each state.
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __populate_status_label(self):
         completed = 0
         running = 0
         not_processed = 0
-        datasource_types = set()
 
-        for item in self.__itemlist:
-            profile = item.get_attribute('processing.profile')
-            name = item.name
-            obj = item
+        # Iterate through a list of items that have a data source. It counts
+        # how many items are currently running, completed, and not processed.
+        # It also tracks the types of data sources and checks if all data sources
+        # are of the same type.
+        for item in [i for i in self.__itemlist if i.has_datasource()]:
 
-            if not item.has_datasource():
-                pass
-
-            elif item in self.__running_items:
+            if item in self.__running_items:
                 running += 1
 
-            elif item.has_ant('evidence'):
-                completed += 1
-
             else:
-                not_processed += 1
+                if item.has_ant('evidence'):
+                    completed += 1
+                else:
+                    not_processed += 1
 
+        # Update the status label based on the processing state of items in a list.
+        # If there is only one item, it sets the label to "Running", "Completed", or "Not processed"
+        # based on each counter. If there are multiple items, it displays the count of items
+        # in each state: Running, Completed, and Not processed.
+        if len(self.__itemlist) == 1:
+            if running:
+                self.__status_label.set_text("Running")
+            elif completed:
+                self.__status_label.set_text("Completed")
+            else:
+                self.__status_label.set_text("Not processed")
+        else:
+            self.__status_label.set_text(f"{running} Running / {completed} Completed / {not_processed} Not processed")
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Populate profile combobox
+    #
+    # Populate profile combobox based on the data sources of selected items.
+    # It determines the type of data sources, filters available profiles that match the data source type,
+    # and sets the last selected profile as active if it exists.
+    # The combobox is also set to be sensitive based on whether any profiles are available.
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __populate_profile_combobox(self):
+        model = self.__profile_combobox.get_model()
+        model.clear()
+
+        # Iterates through selected items, checking the data source type of each item.
+        # If a data source is found, it sets the datasource_type to the type of the first data source.
+        # If subsequent data sources have a different type, datasource_type is set to '*' indicating mixed types.
+        datasource_type = ''
+
+        for item in self.__itemlist:
             datasource = item.get_datasource()
+
             if datasource:
-                datasource_types.add(datasource.get_type())
+                if not datasource_type:
+                    datasource_type = datasource.get_type()
 
-        self.__status_label.set_text(f"{running} Running / {completed} Completed / {not_processed} Not processed")
-        # self.__populate_messages()
+                else:
+                    if datasource_type != datasource.get_type():
+                        datasource_type = '*'
 
-        # set execution box
-        can_run = len(datasource_types) == 1
-        # self.__profile_combobox.set_sensitive(can_run)
+        # Process the list of available profiles based on a specified datasource type.
+        # It filters profiles that match the prefix derived from the datasource type and
+        # populates the profile combobox with these profiles. The last selected profile is also set
+        # as active in the combobox, defaulting to the first profile if no active profile is found.
+        if datasource_type and datasource_type != '*':
+            prefix = datasource_type + '.'
+            last_profile = mobius.framework.get_config('evidence.last_profile') or ''
+
+            for profile_id, profile_name in PROFILES:
+                if profile_id.startswith(prefix):
+                    model.append((profile_id, profile_name))
+                    if profile_id == last_profile:
+                        self.__profile_combobox.set_active(len(model) - 1)
+
+            if self.__profile_combobox.get_active() == -1:
+                self.__profile_combobox.set_active(0)
+
+        # Set profile combobox and execute button sensitivity
+        can_run = len(model) > 0
+        self.__profile_combobox.set_sensitive(can_run)
         self.__execute_button.set_sensitive(can_run)
-
-        # show widget
-        self.__widget.show_content()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Handles the "Execute" button click event to process selected items.
@@ -292,7 +314,10 @@ class ProcessingView(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_execute_button_clicked(self):
         try:
-            # Show warning message if any item has already been processed
+            # Check if any item in the item list has evidence. If so,
+            # it prompts the user with a confirmation dialog asking if they are sure
+            # they want to reload evidences. If the user selects 'no', the function
+            # returns early without proceeding further.
             if any (item.has_ant('evidence') for item in self.__itemlist):
                 dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_question)
                 dialog.text = "You are about to reload evidences. Are you sure?"
@@ -304,16 +329,27 @@ class ProcessingView(object):
                 if rc != mobius.ui.message_dialog.button_yes:
                     return
 
-                # reset ANT
-                transaction = self.__item.case.new_transaction()
-                ant = pymobius.ant.evidence.Ant(self.__item)
-                ant.reset()
+            # Retrieve the active profile ID from a combobox, checks if it exists,
+            # creates a new transaction, updates the configuration with the last profile ID,
+            # and commits the transaction.
+            profile_id = self.__profile_combobox.get_active_id()
+
+            if profile_id:
+                transaction = mobius.framework.new_transaction()
+                mobius.framework.set_config('evidence.last_profile', profile_id)
                 transaction.commit()
 
-            # Create new thread to process item
-            t = threading.Thread(target=self.__thread_begin, args=(self.__item,), daemon=True)
-            t.start()
-            self.__running_items[self.__item] = t
+            # Iterate over selected items and start a new thread for each item that has data source,
+            # using the __thread_begin method. Each thread is set as a daemon,
+            # meaning it will not prevent the program from exiting. The running threads are
+            # stored in the running_items dictionary with the corresponding item as the key.
+            for item in self.__itemlist:
+                if item.has_datasource() and item not in self.__running_items:
+                    t = threading.Thread(target=self.__thread_begin, args=(item, profile_id), daemon=True)
+                    t.start()
+                    self.__running_items[item] = t
+
+            # Refresh panel data
             self.set_data(self.__itemlist)
 
         except Exception as e:
@@ -328,13 +364,17 @@ class ProcessingView(object):
     # ANT engine to execute evidence-related tasks. Once processing is complete, 
     # a callback is scheduled on the main thread to finalize the operation.
     #
-    # @param item The evidence item to be processed. After starting, 
-    #             the function immediately returns control to the caller while 
-    #             the processing continues asynchronously.
+    # @param item The evidence item to be processed.
+    # @param profile_id Profile ID to process item
+    #
+    # After starting, the function immediately returns control to the caller while
+    # the processing continues asynchronously.
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __thread_begin(self, item):
+    def __thread_begin(self, item, profile_id):
         guard = mobius.core.thread_guard()
-        ant = pymobius.ant.evidence.Ant(item)
+
+        ant = pymobius.ant.evidence.Ant(item, profile_id)
+        ant.reset()
         ant.run()
 
         GLib.idle_add(self.__thread_end, item)

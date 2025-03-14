@@ -33,6 +33,17 @@ ANT_VERSION = '1.0'
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# @brief Profiles (id, name)
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PROFILES = [
+    ('ufdr.general', 'UFDR General'),
+    ('ufdr.pedo', 'UFDR Pedo'),
+    ('vfs.general', 'VFS General'),
+    ('vfs.pedo', 'VFS Pedo'),
+]
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Post-processing ants
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ANTS = [
@@ -49,12 +60,15 @@ class Ant(object):
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Initialize object
+    # @param item Item object
+    # @param profile_id Profile ID
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __init__(self, item):
+    def __init__(self, item, profile_id):
         self.id = ANT_ID
         self.name = ANT_NAME
         self.version = ANT_VERSION
         self.__item = item
+        self.__profile_id = profile_id
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Run ant

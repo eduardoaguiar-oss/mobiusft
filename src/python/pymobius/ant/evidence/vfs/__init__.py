@@ -16,10 +16,10 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import traceback
-from ctypes import pythonapi
 
 import mobius
 import pymobius.ant.turing
+
 from . import accounts
 from . import autofill
 from . import bookmarked_urls
@@ -111,8 +111,13 @@ class Ant(object):
         # run evidence loader ants
         for loader in LOADERS:
             mobius.core.logf(f"DBG ant.run started: evidence_loader.{loader}")
-            ant = mobius.framework.evidence_loader(loader, self.__item)
-            ant.run()
+
+            try:
+                ant = mobius.framework.evidence_loader(loader, self.__item)
+                ant.run()
+            except Exception as e:
+                mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
+
             mobius.core.logf(f"DBG ant.run ended: evidence_loader.{loader}")
 
         mobius.core.logf(f"INF ant {self.id} ended")
