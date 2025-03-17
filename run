@@ -2,10 +2,10 @@
 rm -r $HOME/tmp/mobius.install/*
 make install
 
-#cp $HOME/src/yfox/yfox-extension.mobius $HOME/tmp/mobius.install/share/mobiusft/extensions
+cp $HOME/src/yfox/yfox.mobius $HOME/tmp/mobius.install/share/mobiusft/extensions
 #cp $HOME/src/mobius/beta/sampler.mobius $HOME/tmp/mobius.install/share/mobiusft/extensions
 
-export LD_LIBRARY_PATH=/home/aguiar/tmp/mobius/install/lib64:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/home/aguiar/tmp/mobius.install/lib64:$LD_LIBRARY_PATH
 
 (cd $HOME; rm -rf .config/mobiusft/extensions)
-PYTHONPATH=/home/aguiar/tmp/mobius.install/lib64/python3.6/site-packages:/home/aguiar/src/yfox:$PYTHONPATH python3 mobius_bin.py &
+PYTHONPATH=/home/aguiar/tmp/mobius.install/lib64/python3.6/site-packages:$PYTHONPATH python3 mobius_bin.py &

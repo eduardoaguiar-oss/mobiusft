@@ -19,7 +19,6 @@ import os.path
 
 import mobius
 import pymobius.p2p.emule
-import pymobius.p2p.utorrent
 import pymobius.registry
 import pymobius.registry.main
 
@@ -158,10 +157,8 @@ class Ant(object):
             os.remove(path)
 
         # Retrieve activity data
-        mobius.core.logf('DBG 3.1')
+        mobius.core.logf('DBG 3')
         pymobius.p2p.emule.retrieve(self.__model)
-        mobius.core.logf('DBG 3.2')
-        pymobius.p2p.utorrent.retrieve(self.__model)
 
         # Normalize data
         mobius.core.logf('DBG 4')

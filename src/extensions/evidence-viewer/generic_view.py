@@ -181,17 +181,22 @@ class TableView(object):
         # generate getters
         self.__getters = []
 
-        for idx, col_args in enumerate(columns):
+        for col_args in columns:
             col_id = col_args.get('id')
             col_format = col_args.get('format')
 
             g = Getter(col_id, col_format)
             self.__getters.append(g)
 
+        # add alert column
+        alert_column = self.__tableview.add_column('alert', '', column_type='icon')
+        alert_column.is_visible = True
+        alert_column.is_sortable = True
+
         # add columns to tableview
         self.__first_sortable = -1
 
-        for idx, col_args in enumerate(columns):
+        for idx, col_args in enumerate(columns, 1):
             col_id = col_args.get('id')
             col_name = col_args.get('name') or pymobius.id_to_name(col_id)
             col_type = col_args.get('type') or 'str'
@@ -233,6 +238,11 @@ class TableView(object):
             exporter_f = exporter_args.get('function')
             self.__tableview.add_export_handler(exporter_id, exporter_name, exporter_ext, exporter_f)
 
+        # add alert icon
+        image = mobius.ui.new_icon_by_name('alert', mobius.ui.icon.size_toolbar)
+        self.__alert_icon = image.get_ui_widget().get_pixbuf()
+        self.__tableview.set_icon(evidence_type, self.__alert_icon)
+
         # show widget
         self.__tableview.show()
 
@@ -249,7 +259,8 @@ class TableView(object):
         model = self.__tableview.new_model()
 
         for e in evidences:
-            row = [g(e) for g in self.__getters] + [e]
+            icon = self.__alert_icon if e.has_tag('alert') else None
+            row = [icon] + [g(e) for g in self.__getters] + [e]
             model.append(row)
 
         if self.__first_sortable != -1:

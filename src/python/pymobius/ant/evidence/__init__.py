@@ -18,11 +18,12 @@
 import traceback
 
 import mobius
+
 from . import ufdr
 from . import vfs
-from . import ip_addresses_from_cookies
-from . import searched_texts_from_visited_urls
-
+from .post import ip_addresses_from_cookies as post_ip_addresses_from_cookies
+from .post import kff_alert as post_kff_alert
+from .post import searched_texts_from_visited_urls as post_searched_texts_from_visited_urls
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Constants
@@ -47,8 +48,9 @@ PROFILES = [
 # @brief Post-processing ants
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ANTS = [
-    ip_addresses_from_cookies.Ant,
-    searched_texts_from_visited_urls.Ant,
+    post_ip_addresses_from_cookies.Ant,
+    post_searched_texts_from_visited_urls.Ant,
+    post_kff_alert.Ant,
 ]
 
 
@@ -74,7 +76,7 @@ class Ant(object):
     # @brief Run ant
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def run(self):
-        mobius.core.logf(f"INF ant {self.id} started")
+        mobius.core.logf(f"INF ant {self.id} started. Profile: {self.__profile_id}")
 
         # create new connections to case db and config db (for multi-threading)
         case_connection = self.__item.new_connection()
@@ -98,6 +100,9 @@ class Ant(object):
     # @brief Reset ant
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def reset(self):
+        # create new connections to case db and config db (for multi-threading)
+        case_connection = self.__item.new_connection()
+
         datasource = self.__item.get_datasource()
 
         if not datasource:

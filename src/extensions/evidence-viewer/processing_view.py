@@ -335,7 +335,7 @@ class ProcessingView(object):
             profile_id = self.__profile_combobox.get_active_id()
 
             if profile_id:
-                transaction = mobius.framework.new_transaction()
+                transaction = mobius.framework.new_config_transaction()
                 mobius.framework.set_config('evidence.last_profile', profile_id)
                 transaction.commit()
 

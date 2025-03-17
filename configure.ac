@@ -466,6 +466,7 @@ AC_CONFIG_FILES([Makefile
                  src/python/pymobius/Makefile
                  src/python/pymobius/ant/Makefile
                  src/python/pymobius/ant/evidence/Makefile
+                 src/python/pymobius/ant/evidence/post/Makefile
                  src/python/pymobius/ant/evidence/ufdr/Makefile
                  src/python/pymobius/ant/evidence/vfs/Makefile
                  src/python/pymobius/ant/turing/Makefile
