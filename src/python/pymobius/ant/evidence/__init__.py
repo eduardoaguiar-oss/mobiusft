@@ -136,7 +136,9 @@ class Ant(object):
             ant.run()
 
         # run post-processing ants
-        for ant_class in ANTS:
+        ants = ANTS + [r.value for r in mobius.core.get_resources('evidence.post')]
+
+        for ant_class in ants:
             ant = ant_class(self.__item)
             mobius.core.logf(f"DBG ant.run started: {ant.name}")
 

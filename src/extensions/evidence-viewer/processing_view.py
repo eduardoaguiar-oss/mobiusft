@@ -205,13 +205,13 @@ class ProcessingView(object):
 
         self.__widget.show_content()
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Populate status label
     # Update the status label based on the processing state of the selected items.
     # It counts the number of items that are running, completed, and not processed,
     # and updates the label accordingly. For a single item, it displays its status,
     # while for multiple items, it shows the count of items in each state.
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __populate_status_label(self):
         completed = 0
         running = 0
@@ -246,14 +246,14 @@ class ProcessingView(object):
         else:
             self.__status_label.set_text(f"{running} Running / {completed} Completed / {not_processed} Not processed")
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Populate profile combobox
     #
     # Populate profile combobox based on the data sources of selected items.
     # It determines the type of data sources, filters available profiles that match the data source type,
     # and sets the last selected profile as active if it exists.
     # The combobox is also set to be sensitive based on whether any profiles are available.
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __populate_profile_combobox(self):
         model = self.__profile_combobox.get_model()
         model.clear()
@@ -296,8 +296,8 @@ class ProcessingView(object):
         self.__profile_combobox.set_sensitive(can_run)
         self.__execute_button.set_sensitive(can_run)
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Handles the "Execute" button click event to process selected items.
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Handle the "Execute" button click event to process selected items.
     #
     # When the "Execute" button is clicked, this function triggers the processing
     # of the currently selected evidence item in the list view. If the item has
@@ -311,7 +311,7 @@ class ProcessingView(object):
     # @exception Exception This function captures and logs any errors that occur
     # during the processing of evidence items. Errors are also displayed as messages
     # to the user.
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_execute_button_clicked(self):
         try:
             # Check if any item in the item list has evidence. If so,

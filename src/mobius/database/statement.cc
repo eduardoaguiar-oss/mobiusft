@@ -33,9 +33,7 @@
 // and copies data in bind functions.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-namespace mobius
-{
-namespace database
+namespace mobius::database
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \brief Implementation struct
@@ -427,5 +425,4 @@ statement::step ()
   return rc;
 }
 
-} // namespace database
-} // namespace mobius
+} // namespace mobius::database

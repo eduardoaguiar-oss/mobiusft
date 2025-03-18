@@ -10,6 +10,7 @@ Mobius Forensic Toolkit 2.13
 	* Libmobius: Changed model::item::remove_attribute method to log item event
 	* Libmobius: Changed model::item::new_child method to log item event
 	* Libmobius: Changed database::transaction to allow consecutive transactions at the same level
+	* Libmobius: Fixed bug in evidence::set_tag
 	* Python API: Added new class model.event
 	* Python API: Added new method model.item.add_event
 	* Python API: Added new method model.item.get_events
@@ -18,11 +19,15 @@ Mobius Forensic Toolkit 2.13
 	* app-shareaza: Changed to log item events
 	* app-shareaza: Changed to decode torrent data from CBTInfo structure
 	* ice: Added support for view-groups
+	* pymobius.ant.evidence: Changed to call post-processing classes registered at "evidence.post" resource list
+	* pymobius.ant.evidence.post: Created new module that stores pos-processing classes
+	* pymobius.ant.evidence.post.kff_alert: Pos-processing class to tag evidences using KFF
 	* evidence-viewer: Changed to add icon view to view-group
 	* evidence-viewer: Changed to add list view to view-group
 	* evidence-viewer: Changed to add navigation view to view-group
 	* evidence-viewer: Added processing view
 	* evidence-viewer: Removed main view
+	* evidence-viewer: Added alert column for all evidence types
 
 Mobius Forensic Toolkit 2.12
 	* configure.ac: Changed to check for libxml2

@@ -290,17 +290,15 @@ evidence::impl::has_tag (const std::string& name) const
 void
 evidence::impl::set_tag (const std::string& name)
 {
-  if (!has_attribute (name))
-    {
-      auto db = _get_database ();
-      mobius::database::statement stmt = db.new_statement (
-               "INSERT INTO evidence_tag "
-                    "VALUES (NULL, ?, ?)");
+  auto db = _get_database ();
 
-      stmt.bind (1, get_uid ());
-      stmt.bind (2, name);
-      stmt.execute ();
-    }
+  mobius::database::statement stmt = db.new_statement (
+           "INSERT OR IGNORE INTO evidence_tag "
+                          "VALUES (NULL, ?, ?)");
+
+  stmt.bind (1, get_uid ());
+  stmt.bind (2, name);
+  stmt.execute ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

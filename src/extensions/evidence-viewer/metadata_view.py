@@ -97,7 +97,7 @@ class MetadataView(object):
             for name, value in evidence.metadata.get_values():
                 self.__details_view.add_row((pymobius.id_to_name(name), pymobius.to_string(value)))
 
-            self.__details_view.add_row(("Tags", ', '.join (evidence.get_tags ())))
+            self.__details_view.add_row(("Tags", ', '.join (sorted(evidence.get_tags ()))))
 
             self.__details_view.set_report_name(f'Evidence <{evidence.id}> metadata')
             self.__details_view.set_sensitive(True)
