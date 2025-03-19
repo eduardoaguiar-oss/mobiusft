@@ -19,9 +19,7 @@
 #include <mobius/charset.h>
 #include <mobius/string_functions.h>
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \brief Constructor
@@ -29,7 +27,7 @@ namespace io
 //! \param encoding Charset encoding
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 text_writer::text_writer (
-  mobius::io::writer writer,
+  const mobius::io::writer& writer,
   const std::string& encoding
 )
  : writer_ (writer),
@@ -60,5 +58,4 @@ text_writer::flush ()
   writer_.flush ();
 }
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io

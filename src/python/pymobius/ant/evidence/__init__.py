@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+import datetime
 import traceback
 
 import mobius
@@ -63,20 +64,61 @@ class Ant(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Initialize object
     # @param item Item object
-    # @param profile_id Profile ID
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __init__(self, item, profile_id):
+    def __init__(self, item):
         self.id = ANT_ID
         self.name = ANT_NAME
         self.version = ANT_VERSION
         self.__item = item
+        self.__profile_id = None
+        self.__control = None
+        self.__evidence_msg_path = self.__item.create_data_path('evidence.msg')
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Set control object
+    # @param control Control object
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def set_control(self, control):
+        self.__control = control
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Set profile ID
+    # @param profile_id Profile ID
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def set_profile_id(self, profile_id):
         self.__profile_id = profile_id
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Get log messages, if any
+    # @return Messages
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def get_messages(self):
+        messages = []
+
+        f = mobius.io.new_file_by_path(self.__evidence_msg_path)
+        if f.exists():
+            reader = mobius.io.line_reader(f.new_reader())
+
+            for line in reader:
+                if '\t' in line:
+                    messages.append(line.split('\t'))
+
+        return messages
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Clear log messages
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def clear_messages(self):
+        f = mobius.io.new_file_by_path(self.__evidence_msg_path)
+
+        if f.exists():
+            f.remove()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Run ant
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def run(self):
-        mobius.core.logf(f"INF ant {self.id} started. Profile: {self.__profile_id}")
+        self.log(f"INF ant {self.id} started")
 
         # create new connections to case db and config db (for multi-threading)
         case_connection = self.__item.new_connection()
@@ -94,15 +136,13 @@ class Ant(object):
         self.__item.set_ant(ANT_ID, ANT_NAME, ANT_VERSION)
         transaction.commit()
 
-        mobius.core.logf(f"INF ant {self.id} ended")
+        self.log(f"INF ant {self.id} ended")
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Reset ant
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def reset(self):
-        # create new connections to case db and config db (for multi-threading)
         case_connection = self.__item.new_connection()
-
         datasource = self.__item.get_datasource()
 
         if not datasource:
@@ -129,10 +169,12 @@ class Ant(object):
 
         elif datasource.get_type() == 'ufdr':
             ant = ufdr.Ant(self.__item)
+            ant.set_control(self)
             ant.run()
 
         elif datasource.get_type() == 'vfs':
             ant = vfs.Ant(self.__item)
+            ant.set_control(self)
             ant.run()
 
         # run post-processing ants
@@ -140,11 +182,27 @@ class Ant(object):
 
         for ant_class in ants:
             ant = ant_class(self.__item)
-            mobius.core.logf(f"DBG ant.run started: {ant.name}")
+            self.log(f"INF Post-processing ant started: {ant.name}")
 
             try:
                 ant.run()
             except Exception as e:
-                mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
+                self.log(f'WRN {str(e)}\n{traceback.format_exc()}')
 
-            mobius.core.logf(f"DBG ant.run ended: {ant.name}")
+            self.log(f"INF Post-processing ant ended: {ant.name}")
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Write log
+    # @param text Text message
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def log(self, text):
+        mobius.core.logf(text)
+
+        timestamp = datetime.datetime.utcnow()
+
+        fp = open(self.__evidence_msg_path, 'a')
+        fp.write(f"{timestamp}\t{text}\n")
+        fp.close()
+
+        if self.__control:
+            self.__control.add_message(self.__item, timestamp, text)

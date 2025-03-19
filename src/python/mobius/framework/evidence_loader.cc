@@ -21,6 +21,7 @@
 //! \author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
+#include <pygil.h>
 #include "evidence_loader.h"
 #include "model/item.h"
 #include <mobius/exception.inc>
@@ -37,6 +38,7 @@ tp_f_run (framework_evidence_loader_o *self, PyObject *)
   // Execute C++ function
   try
     {
+      mobius::py::GIL GIL;
       self->obj->run ();
     }
   catch (const std::exception& e)

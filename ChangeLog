@@ -14,6 +14,7 @@ Mobius Forensic Toolkit 2.13
 	* Python API: Added new class model.event
 	* Python API: Added new method model.item.add_event
 	* Python API: Added new method model.item.get_events
+	* Python API: framework.evidence_loader.run using GIL control
 	* app-ares: Changed to log item events
 	* app-emuletorrent: Changed to log item events
 	* app-shareaza: Changed to log item events

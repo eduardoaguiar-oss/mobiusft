@@ -84,12 +84,20 @@ class Ant(object):
         self.__evidences = []
         self.__file_hashes = {}
         self.__unhandled_types = set()
+        self.__control = None
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Set control object
+    # @param control Control object
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def set_control(self, control):
+        self.__control = control
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Run ant
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def run(self):
-        mobius.core.logf(f"INF ant {self.id} started")
+        self.__control.log(f"INF ant {self.id} started")
 
         try:
             # get UFDR path
@@ -113,9 +121,9 @@ class Ant(object):
                 mobius.core.logf(f"DEV unknown datatype: {dt}")
 
         except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
+            self.__control.log(f'WRN {str(e)}\n{traceback.format_exc()}')
 
-        mobius.core.logf(f"INF ant {self.id} ended")
+        self.__control.log(f"INF ant {self.id} ended")
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Reset ant
@@ -186,7 +194,7 @@ class Ant(object):
                 if len(self.__evidences) > SAVE_THRESHOLD:
                     self.__save_evidences()
         except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
+            self.__control.log(f'WRN {str(e)}\n{traceback.format_exc()}')
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Save evidences into case DB

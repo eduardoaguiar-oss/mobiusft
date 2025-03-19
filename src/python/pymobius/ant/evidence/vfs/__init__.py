@@ -89,38 +89,46 @@ class Ant(object):
         self.__item = item
         self.__datasource = item.get_datasource()
         self.__vfs = self.__datasource.get_vfs()
+        self.__control = None
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Set control object
+    # @param control Control object
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def set_control(self, control):
+        self.__control = control
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Run ant
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def run(self):
-        mobius.core.logf(f"INF ant {self.id} started")
+        self.__control.log(f"INF ant {self.id} started")
 
         # run sub-ants
         for ant_class in ANTS:
             ant = ant_class(self.__item)
-            mobius.core.logf(f"DBG ant.run started: {ant.name}")
+            self.__control.log(f"INF ant.run started: {ant.name}")
 
             try:
                 ant.run()
             except Exception as e:
-                mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
+                self.__control.log(f'WRN {str(e)}\n{traceback.format_exc()}')
 
-            mobius.core.logf(f"DBG ant.run ended: {ant.name}")
+            self.__control.log(f"INF ant.run ended: {ant.name}")
 
         # run evidence loader ants
         for loader in LOADERS:
-            mobius.core.logf(f"DBG ant.run started: evidence_loader.{loader}")
+            self.__control.log(f"INF evidence loader started: {loader}")
 
             try:
                 ant = mobius.framework.evidence_loader(loader, self.__item)
                 ant.run()
             except Exception as e:
-                mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
+                self.__control.log(f'WRN {str(e)}\n{traceback.format_exc()}')
 
-            mobius.core.logf(f"DBG ant.run ended: evidence_loader.{loader}")
+            self.__control.log(f"INF evidence loader ended: {loader}")
 
-        mobius.core.logf(f"INF ant {self.id} ended")
+        self.__control.log(f"INF ant {self.id} ended")
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Reset ant

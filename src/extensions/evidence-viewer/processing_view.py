@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+import datetime
 import threading
 import traceback
 
@@ -63,10 +64,10 @@ class ProcessingView(object):
     #  @param control Control object to manage inter-widget interactions.
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __init__(self, control):
-        mediator = pymobius.mediator.copy()
         self.__control = control
         self.name = 'Evidence Processing View'
 
+        mediator = pymobius.mediator.copy()
         path = mediator.call('extension.get-resource-path', EXTENSION_ID, 'processing-view.png')
         self.icon_data = open(path, 'rb').read()
 
@@ -101,7 +102,7 @@ class ProcessingView(object):
         self.__running_view = mediator.call('ui.new-widget', 'tableview')
         self.__running_view.set_report_id('evidence.processing')
         self.__running_view.set_report_app(f'{EXTENSION_NAME} v{EXTENSION_VERSION}')
-        self.__running_view.set_sensitive(False)
+        # self.__running_view.set_sensitive(False)
         self.__running_view.show()
         vbox.add_child(self.__running_view.get_ui_widget(), mobius.ui.box.fill_with_widget)
 
@@ -117,7 +118,7 @@ class ProcessingView(object):
         vbox.add_child(hbox, mobius.ui.box.fill_none)
 
         label = mobius.ui.label('Profile:')
-        label.set_visible(True)
+        label.set_visible(False)
         hbox.add_child(label, mobius.ui.box.fill_none)
 
         # Create a ListStore with one string column
@@ -131,7 +132,7 @@ class ProcessingView(object):
         self.__profile_combobox.pack_start(renderer, True)
         self.__profile_combobox.add_attribute(renderer, "text", 1)
         self.__profile_combobox.set_id_column(0)
-        self.__profile_combobox.set_visible(True)
+        self.__profile_combobox.set_visible(False)
         hbox.add_child(self.__profile_combobox, mobius.ui.box.fill_none)
 
         hbox.add_filler ()
@@ -191,6 +192,15 @@ class ProcessingView(object):
             self.__widget.set_message("Select a case item")
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Add message for running item
+    # @param timestamp Message timestamp
+    # @param text Message text
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def add_message(self, item, timestamp, text):
+        if item in self.__running_items and item in self.__itemlist:
+            GLib.idle_add(self.__running_view.add_row, (str(timestamp), text))
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Populate panel with itemlist
     #
     # This method populates the item list by categorizing items into running,
@@ -200,9 +210,8 @@ class ProcessingView(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __populate_itemlist(self):
         self.__populate_status_label()
-        # self.__populate_messages()
+        self.__populate_messages()
         self.__populate_profile_combobox()
-
         self.__widget.show_content()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -245,6 +254,17 @@ class ProcessingView(object):
                 self.__status_label.set_text("Not processed")
         else:
             self.__status_label.set_text(f"{running} Running / {completed} Completed / {not_processed} Not processed")
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Populate running messages
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __populate_messages(self):
+        self.__running_view.clear()
+
+        for item in self.__itemlist:
+            ant = pymobius.ant.evidence.Ant(item)
+            for timestamp, text in ant.get_messages():
+                self.__running_view.add_row ((str(timestamp), text))
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Populate profile combobox
@@ -345,6 +365,9 @@ class ProcessingView(object):
             # stored in the running_items dictionary with the corresponding item as the key.
             for item in self.__itemlist:
                 if item.has_datasource() and item not in self.__running_items:
+                    ant = pymobius.ant.evidence.Ant(item)
+                    ant.clear_messages()
+
                     t = threading.Thread(target=self.__thread_begin, args=(item, profile_id), daemon=True)
                     t.start()
                     self.__running_items[item] = t
@@ -373,7 +396,9 @@ class ProcessingView(object):
     def __thread_begin(self, item, profile_id):
         guard = mobius.core.thread_guard()
 
-        ant = pymobius.ant.evidence.Ant(item, profile_id)
+        ant = pymobius.ant.evidence.Ant(item)
+        ant.set_profile_id(profile_id)
+        ant.set_control(self)
         ant.reset()
         ant.run()
 
@@ -391,4 +416,4 @@ class ProcessingView(object):
     def __thread_end(self, item):
         self.__running_items.pop(item, None)
         self.set_data(self.__itemlist)
-        self.__control.select_navigation_view()
+        self.__control.on_processing_end()

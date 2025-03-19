@@ -21,9 +21,7 @@
 #include <mobius/io/writer.h>
 #include <string>
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \brief Text writer adaptor class
@@ -32,7 +30,7 @@ namespace io
 class text_writer
 {
 public:
-  explicit text_writer (mobius::io::writer, const std::string& = "UTF-8");
+  explicit text_writer (const mobius::io::writer&, const std::string& = "UTF-8");
   void write (const std::string&);
   void flush ();
 
@@ -41,7 +39,6 @@ private:
   const std::string encoding_;
 };
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
 
 #endif

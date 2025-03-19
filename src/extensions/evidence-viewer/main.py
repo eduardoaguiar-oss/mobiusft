@@ -51,7 +51,8 @@ class EvidenceGroupView(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Handle on_view_activated event.
     # @param view_id Identifier of the view being activated.
-    # @details Ensures the corresponding list and icon views are updated and sets the navigation view as the current view.
+    # @details Ensures that the corresponding list and icon views are updated
+    # and sets the navigation view as the current view.
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def on_view_activated(self, view_id):
         self.__list_view.select_view(view_id)
@@ -69,11 +70,11 @@ class EvidenceGroupView(object):
         self.__icon_view.select_view(view_id)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Select navigation view.
+    # @brief Handle on_processing_end event.
     # @details Explicitly selects and sets the navigation view as the current view in the view selector.
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def select_navigation_view(self):
-        self.__view_selector.set_current_view('navigation-view')
+    def on_processing_end(self):
+        self.__view_selector.reload()
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

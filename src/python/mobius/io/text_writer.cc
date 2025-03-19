@@ -86,23 +86,18 @@ tp_f_write (io_text_writer_o *self, PyObject *args)
     }
 
   // execute C++ function
-  PyObject *ret = nullptr;
-
   try
     {
-      {
-        mobius::py::GIL GIL;
-        self->obj->write (arg_text);
-      }
-
-      ret = mobius::py::pynone ();
+      mobius::py::GIL GIL;
+      self->obj->write (arg_text);
     }
   catch (const std::exception& e)
     {
       mobius::py::set_io_error (e.what ());
+      return nullptr;
     }
 
-  return ret;
+  return mobius::py::pynone ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
