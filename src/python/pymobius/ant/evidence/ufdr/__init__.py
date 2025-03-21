@@ -185,7 +185,9 @@ class Ant(object):
                 # set evidence.hashes, if possible
                 file_id = evidence.attrs.get('file_id')
                 if file_id:
-                    evidence.attrs['hashes'] = self.__file_hashes.get(file_id)
+                    hashes = self.__file_hashes.get(file_id)
+                    if hashes:
+                        evidence.attrs['hashes'] = hashes
 
                 # add evidence to list
                 self.__evidences.append(evidence)
