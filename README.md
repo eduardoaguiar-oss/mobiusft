@@ -1,7 +1,7 @@
 ---
 title: Mobius Forensic Toolkit
 description: "Open-source forensic framework and tools written in C++/Python"
-version: 2.12
+version: 2.13
 ---
 
 # Mobius Forensic Toolkit
@@ -82,15 +82,6 @@ We extend our gratitude to the following organizations and individuals for their
 - **Everaldo's Crystal Interaction Design Project** ([https://everaldo.com/crystal](https://everaldo.com/crystal)) for their beautiful icon designs.
 - **Wikimedia Commons** ([https://commons.wikimedia.org](https://commons.wikimedia.org)) for their extensive collection of resources.
 - **GNU Savannah** ([https://savannah.nongnu.org](https://savannah.nongnu.org)) for hosting this project.
-
-## Thank You
+- **Beatae Mariae Virgini.**
 
 Thank you for using the **Mobius Forensic Toolkit**. Your support and feedback are invaluable in helping us improve and grow this project.
-
----
-
-**Beatae Mariae Virgini.**
-
----
-
-This version improves readability, uses consistent formatting, and adheres to Markdown syntax for better rendering on platforms like GitHub. Let me know if you need further adjustments!
