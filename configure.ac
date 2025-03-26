@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.69])
-AC_INIT([mobiusft], [2.13], [aguiar@protonmail.ch])
+AC_INIT([mobiusft], [2.14], [aguiar@protonmail.ch])
 AC_CONFIG_SRCDIR([src/mobius/unittest.cc])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror dist-xz dist-zip no-dist-gzip subdir-objects])
 AC_CONFIG_HEADERS([config.h])
@@ -79,6 +79,14 @@ pkgpyexecdir=$pyexecdir/mobius
 pkgpythondir=$pyexecdir/mobius
 AC_SUBST([PY_LIBS])
 AC_SUBST([PY_CXXFLAGS])
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Check for CMake availability
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+AC_CHECK_PROG([CMAKE], [cmake], [cmake], [no])
+
+AS_IF([test "x$CMAKE" = "xno"],
+    [AC_MSG_ERROR([CMake is required to build this project. Please install CMake.])])
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Checking for pygtk
@@ -492,6 +500,7 @@ AC_CONFIG_FILES([Makefile
 		 src/extensions/Makefile
                  src/extensions/app/Makefile
                  src/extensions/app/ares/Makefile
+                 src/extensions/app/emule/Makefile
                  src/extensions/app/emuletorrent/Makefile
                  src/extensions/app/shareaza/Makefile
                  src/extensions/attribute-viewer/Makefile

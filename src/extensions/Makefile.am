@@ -37,3 +37,5 @@ SUBDIRS =								\
 	vfs-block-view-bitlocker					\
 	vfs-block-view-partition-system					\
 	vfs-item-attributes
+
+EXTRA_DIST = CMakeLists.txt
