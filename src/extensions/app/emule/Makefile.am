@@ -20,4 +20,5 @@ install-exec-local: cmake-install
 EXTRA_DIST =				\
 	CMakeLists.txt			\
 	main.cpp			\
-	evidence_loader_impl.cpp
+	evidence_loader_impl.cpp	\
+	*.hpp

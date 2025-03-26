@@ -13,5 +13,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(TOP_SRC_DIR ${CMAKE_SOURCE_DIR}/..)
 set(TOP_BUILD_DIR ${CMAKE_BINARY_DIR}/..)
 
-# Add subdirectories for each extension
+# Build extensions
 add_subdirectory(app/emule)
+add_subdirectory(event-viewer)
