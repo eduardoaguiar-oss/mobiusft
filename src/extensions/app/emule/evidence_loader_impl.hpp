@@ -35,20 +35,34 @@ struct account
 {
   bool is_deleted = false;
 
+  // from preferences.dat
   std::string username;
   std::string emule_guid;
+  std::uint8_t preferences_dat_version = 0;
+  
+  // from preferenceskad.dat
   std::string kamdelia_guid;
   std::string kamdelia_ip;
 
+  // from preferences.ini
   std::string incoming_dir;
   std::string temp_dir;
   std::string nick;
+  std::string app_version;
+  mobius::framework::evidence_flag auto_start;
 
-  std::uint8_t preferences_dat_version = 0;
+  // from statistics.ini
+  std::uint64_t total_downloaded_bytes = 0;
+  std::uint64_t total_uploaded_bytes = 0;
+  std::uint64_t download_completed_files = 0;
+
+  // source files
   mobius::io::file preferences_dat_f;
   mobius::io::file preferences_ini_f;
   mobius::io::file preferenceskad_dat_f;
+  mobius::io::file statistics_ini_f;
 };
+
 /*
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \brief Autofill
@@ -212,17 +226,18 @@ private:
   void _decode_preferences_dat_file (const mobius::io::file&);
   void _decode_preferences_ini_file (const mobius::io::file&);
   void _decode_preferenceskad_dat_file (const mobius::io::file&);
+  void _decode_statistics_ini_file (const mobius::io::file&);
   //void _decode_ntuser_dat_file (const mobius::io::file&);
 
   void _save_evidences ();
-/*  void _save_accounts ();
-  void _save_autofills ();
-  void _save_searched_texts ();
-  void _save_local_files ();
-  void _save_p2p_remote_files ();
-  void _save_received_files ();
-  void _save_sent_files ();
-  void _save_shared_files ();*/
+  void _save_accounts ();
+  //void _save_autofills ();
+  //void _save_searched_texts ();
+  //void _save_local_files ();
+  //void _save_p2p_remote_files ();
+  //void _save_received_files ();
+  //void _save_sent_files ();
+  //void _save_shared_files ();
 };
 
 } // namespace mobius::extension::app::emule

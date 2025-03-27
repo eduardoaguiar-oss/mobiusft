@@ -1,7 +1,9 @@
 Mobius Forensic Toolkit 2.14
 	* configure.ac: Check for CMake availability.
 	* Added new C++ extension called "app-emule".
+	* attribute-viewer: Using CMake to build, install and package
 	* event-viewer: Using CMake to build, install and package
+	* tools: All source files renamed from .cc to .cpp
 
 Mobius Forensic Toolkit 2.13
 	* Added new extension event-viewer

@@ -50,3 +50,4 @@ src/unittest/cpp/unittest
 .idea/
 src/extensions/*/build/
 src/extensions/*/*/build/
+src/tools/build/

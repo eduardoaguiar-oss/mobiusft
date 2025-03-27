@@ -3,13 +3,13 @@
 all:
 	mkdir -p build
 	cd build && cmake .. -DCMAKE_INSTALL_PREFIX=$(prefix)
-	cd build && make
+	+cd build && make
 
 cmake-clean:
 	rm -rf build
 
 cmake-install:
-	cd build && make install
+	+cd build && make install
 
 # Hook into Automake's standard targets
 clean-local: cmake-clean

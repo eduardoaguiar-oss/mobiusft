@@ -19,8 +19,12 @@
 #include <mobius/core/log.h>
 #include <mobius/datasource/datasource_vfs.h>
 #include <mobius/decoder/data_decoder.h>
+#include <mobius/decoder/inifile.h>
 #include <mobius/io/walker.h>
+#include <mobius/model/evidence.h>
 #include <mobius/string_functions.h>
+
+#include <iostream>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Versions examined: Emule 0.50a and DreaMule 3.2
@@ -44,6 +48,8 @@
 //
 // . Sharedir.dat: Stores the paths to all shared directories
 //
+// . Statistics.ini: Stores statistics about program usage
+//
 // . StoredSearches.met: Stores open searches (ongoing searches)
 //
 // . *.part.met: information about a file being downloaded (not in known.met)
@@ -66,7 +72,6 @@
 #include <mobius/decoder/mfc.h>
 #include <mobius/decoder/xml/dom.h>
 #include <mobius/exception.inc>
-#include <mobius/model/evidence.h>
 #include <mobius/os/win/registry/hive_file.h>
 #include <mobius/os/win/registry/hive_data.h>
 #include <mobius/pod/map.h>
@@ -221,10 +226,19 @@ evidence_loader_impl::_scan_canonical_folders ()
 void
 evidence_loader_impl::_scan_canonical_root_folder (const mobius::io::folder& folder)
 {
+  username_ = {};
+
   auto w = mobius::io::walker (folder);
 
   for (const auto& f : w.get_folders_by_pattern ("users/*"))
     _scan_canonical_user_folder (f);
+
+  // Win XP folders
+  for (const auto& f : w.get_folders_by_path ("program files/dreamule/config"))
+    _scan_canonical_emule_config_folder (f);
+
+  for (const auto& f : w.get_folders_by_path ("arquivos de programas/dreamule/config"))
+    _scan_canonical_emule_config_folder (f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -268,23 +282,31 @@ evidence_loader_impl::_scan_canonical_emule_config_folder (const mobius::io::fol
   mobius::io::walker w (folder);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Decode preferences.dat first
+  // Decode account files
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+  // Decode preferences.dat first
   for (const auto& f : w.get_files_by_name ("preferences.dat"))
     _decode_preferences_dat_file (f);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Decode preferences.ini
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //for (const auto& f : w.get_files_by_name ("preferences.ini"))
-  //  _decode_preferences_ini (f);
+  for (const auto& f : w.get_files_by_name ("preferences.ini"))
+    _decode_preferences_ini_file (f);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // Decode statistics.ini
+  for (const auto& f : w.get_files_by_name ("statistics.ini"))
+    _decode_statistics_ini_file (f);
+
   // Decode preferenceskad.dat
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   for (const auto& f : w.get_files_by_name ("preferenceskad.dat"))
     _decode_preferenceskad_dat_file (f);
 
+  if (!account_.statistics_ini_f)
+    {
+      for (const auto& f : w.get_files_by_name ("statbkup.ini"))
+        _decode_statistics_ini_file (f);
+    }
+      
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Add account to accounts list
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -315,9 +337,93 @@ evidence_loader_impl::_decode_preferences_dat_file (const mobius::io::file& f)
 
           // Decode file
           mobius::decoder::data_decoder decoder (reader);
+
           account_.preferences_dat_version = decoder.get_uint8 ();
           account_.emule_guid = decoder.get_hex_string_by_size (16);
           account_.preferences_dat_f = f;
+        }
+    }
+  catch (const std::exception& e)
+    {
+      log.warning (__LINE__, e.what ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode Preferences.ini file
+// @param f File object
+// @see CPreferences::LoadPreferences@srchybrid/Preferences.cpp
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_loader_impl::_decode_preferences_ini_file (const mobius::io::file& f)
+{
+  mobius::core::log log (__FILE__, __FUNCTION__);
+
+  try
+    {
+      // Create account object
+      if (!account_.preferences_ini_f ||
+          (account_.preferences_ini_f.is_deleted () && !f.is_deleted ()))
+        {
+          // Get reader
+          auto reader = f.new_reader ();
+          if (!reader)
+            return;
+
+          // Decode file
+          mobius::decoder::inifile ini (reader);
+
+          account_.incoming_dir = ini.get_value ("emule", "incomingdir");
+          account_.temp_dir = ini.get_value ("emule", "tempdir");
+          account_.nick = ini.get_value ("emule", "nick");
+          account_.app_version = ini.get_value ("emule", "appversion");
+          
+          if (ini.has_value ("emule", "autostart"))
+            account_.auto_start = ini.get_value ("emule", "autostart") == "1";
+
+          account_.preferences_ini_f = f;
+        }
+    }
+  catch (const std::exception& e)
+    {
+      log.warning (__LINE__, e.what ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode statistics.ini file
+// @param f File object
+// @see CPreferences::LoadStats@srchybrid/Preferences.cpp
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_loader_impl::_decode_statistics_ini_file (const mobius::io::file& f)
+{
+  mobius::core::log log (__FILE__, __FUNCTION__);
+
+  try
+    {
+      // Create account object
+      if (!account_.statistics_ini_f ||
+          (account_.statistics_ini_f.is_deleted () && !f.is_deleted ()))
+        {
+          // Get reader
+          auto reader = f.new_reader ();
+          if (!reader)
+            return;
+
+          // Decode file
+          mobius::decoder::inifile ini (reader);
+
+          if (ini.has_value ("statistics", "TotalDownloadedBytes"))
+            account_.total_downloaded_bytes = std::stol (ini.get_value ("statistics", "TotalDownloadedBytes"));
+
+          if (ini.has_value ("statistics", "TotalUploadedBytes"))
+            account_.total_uploaded_bytes = std::stol (ini.get_value ("statistics", "TotalUploadedBytes"));
+
+          if (ini.has_value ("statistics", "DownCompletedFiles"))
+            account_.download_completed_files = std::stol (ini.get_value ("statistics", "DownCompletedFiles"));
+
+          account_.statistics_ini_f = f;
         }
     }
   catch (const std::exception& e)
@@ -603,20 +709,20 @@ void
 evidence_loader_impl::_save_evidences ()
 {
   auto transaction = item_.new_transaction ();
-/*
+
   _save_accounts ();
-  _save_autofills ();
-  _save_local_files ();
-  _save_p2p_remote_files ();
-  _save_received_files ();
-  _save_searched_texts ();
-  _save_sent_files ();
-  _save_shared_files ();
-*/
+  //_save_autofills ();
+  //_save_local_files ();
+  //_save_p2p_remote_files ();
+  //_save_received_files ();
+  //_save_searched_texts ();
+  //_save_sent_files ();
+  //_save_shared_files ();
+
   item_.set_ant (ANT_ID, ANT_NAME, ANT_VERSION);
   transaction.commit ();
 }
-/*
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \brief Save accounts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -629,40 +735,57 @@ evidence_loader_impl::_save_accounts ()
       metadata.set ("app_id", APP_ID);
       metadata.set ("app_name", APP_NAME);
       metadata.set ("username", a.username);
-      metadata.set ("gnutella_guid", a.gnutella_guid);
-      metadata.set ("bittorrent_guid", a.bittorrent_guid);
-      metadata.set ("identity_primary", a.identity);
+      metadata.set ("emule_guid", a.emule_guid);
+      metadata.set ("kamdelia_guid", a.kamdelia_guid);
+      metadata.set ("kamdelia_ip", a.kamdelia_ip);
+      metadata.set ("incoming_dir", a.incoming_dir);
+      metadata.set ("temp_dir", a.temp_dir);
+      metadata.set ("nickname", a.nick);
+      metadata.set ("app_version", a.app_version);
+      metadata.set ("auto_start", to_string (a.auto_start));
+      metadata.set ("total_downloaded_bytes", a.total_downloaded_bytes);
+      metadata.set ("total_uploaded_bytes", a.total_uploaded_bytes);
+      metadata.set ("download_completed_files", a.download_completed_files);
 
-      if (!a.gnutella_guid.empty ())
+      if (!a.emule_guid.empty ())
         {
           auto e = item_.new_evidence ("user-account");
 
-          e.set_attribute ("account_type", "p2p.gnutella");
-          e.set_attribute ("id", a.gnutella_guid);
+          e.set_attribute ("account_type", "p2p.edonkey");
+          e.set_attribute ("id", a.emule_guid);
           e.set_attribute ("password", {});
           e.set_attribute ("password_found", "no");
           e.set_attribute ("is_deleted", a.is_deleted);
           e.set_attribute ("metadata", metadata.clone ());
           e.set_tag ("p2p");
-          e.add_source (a.f);
+
+          e.add_source (a.preferences_dat_f);
+          e.add_source (a.preferences_ini_f);
+          e.add_source (a.preferenceskad_dat_f);
+          e.add_source (a.statistics_ini_f);
         }
 
-      if (!a.bittorrent_guid.empty ())
+      if (!a.kamdelia_guid.empty ())
         {
           auto e = item_.new_evidence ("user-account");
 
-          e.set_attribute ("account_type", "p2p.bittorrent");
-          e.set_attribute ("id", a.bittorrent_guid);
+          e.set_attribute ("account_type", "p2p.kamdelia");
+          e.set_attribute ("id", a.kamdelia_guid);
           e.set_attribute ("password", {});
           e.set_attribute ("password_found", "no");
           e.set_attribute ("is_deleted", a.is_deleted);
           e.set_attribute ("metadata", metadata.clone ());
           e.set_tag ("p2p");
-          e.add_source (a.f);
+
+          e.add_source (a.preferences_dat_f);
+          e.add_source (a.preferences_ini_f);
+          e.add_source (a.preferenceskad_dat_f);
+          e.add_source (a.statistics_ini_f);
         }
     }
 }
 
+/*
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \brief Save autofill entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

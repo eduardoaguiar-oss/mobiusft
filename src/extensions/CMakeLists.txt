@@ -14,5 +14,7 @@ set(TOP_SRC_DIR ${CMAKE_SOURCE_DIR}/..)
 set(TOP_BUILD_DIR ${CMAKE_BINARY_DIR}/..)
 
 # Build extensions
-add_subdirectory(app/emule)
+add_subdirectory(attribute-viewer)
+add_subdirectory(category-manager)
 add_subdirectory(event-viewer)
+add_subdirectory(app/emule)
