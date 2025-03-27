@@ -26,13 +26,7 @@
 #include <algorithm>
 #include <map>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace registry
+namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // helper functions prototypes
@@ -45,7 +39,7 @@ void registry_set_user_assist_keys (registry_key);
 namespace               // local namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create a new container key
+// @brief create a new container key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static registry_key
 new_container_key (const std::string& name = std::string ())
@@ -59,9 +53,9 @@ new_container_key (const std::string& name = std::string ())
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create a new link to key
-//! \param key registry key
-//! \param name new name of the key
+// @brief create a new link to key
+// @param key registry key
+// @param name new name of the key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static registry_key
 new_link (registry_key key, const std::string& name = std::string ())
@@ -75,9 +69,9 @@ new_link (registry_key key, const std::string& name = std::string ())
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief expand abbreviated path (HKLM, HKU, ...)
-//! \param path key, value or data path
-//! \return expanded path
+// @brief expand abbreviated path (HKLM, HKU, ...)
+// @param path key, value or data path
+// @return expanded path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
 expand_path (const std::string& path)
@@ -132,7 +126,7 @@ expand_path (const std::string& path)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry implementation class
+// @brief registry implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class registry::impl
 {
@@ -143,8 +137,8 @@ public:
   impl ();
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if object is valid
-  //! \return true/false
+  // @brief check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const
   {
@@ -152,8 +146,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get files
-  //! \return files
+  // @brief get files
+  // @return files
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::vector <registry_file>
   get_files () const
@@ -162,8 +156,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get keys
-  //! \return keys
+  // @brief get keys
+  // @return keys
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::vector <registry_key>
   get_keys () const
@@ -173,8 +167,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get syskey
-  //! \return registry syskey
+  // @brief get syskey
+  // @return registry syskey
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   get_syskey () const
@@ -200,19 +194,19 @@ public:
   std::vector <registry_data> get_data_by_mask (const std::string&) const;
 
 private:
-  //! \brief registry files
+  // @brief registry files
   std::vector <registry_file> files_;
 
-  //! \brief next UID for registry file
+  // @brief next UID for registry file
   std::uint32_t next_uid_ = 1;
 
-  //! \brief registry root keys container
+  // @brief registry root keys container
   mutable registry_key root_;
 
-  //! \brief keys loaded flag
+  // @brief keys loaded flag
   mutable bool keys_loaded_ = false;
 
-  //! \brief syskey
+  // @brief syskey
   mutable mobius::bytearray syskey_;
 
   // helper functions
@@ -226,7 +220,7 @@ private:
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief default constructor
+// @brief default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry::impl::impl ()
   : root_ (new_container_key ())
@@ -234,26 +228,26 @@ registry::impl::impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief add registry file by local path
-//! \param role file role
-//! \param path original path
-//! \param localpath local path
-//! \return new registry file
+// @brief add registry file by local path
+// @param role file role
+// @param path original path
+// @param localpath local path
+// @return new registry file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_file
 registry::impl::add_file_by_path (const std::string& role, const std::string& path, const std::string& localpath)
 {
   auto f = mobius::io::new_file_by_path (localpath);
-  
+
   return add_file_by_reader (role, path, f.new_reader ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief add registry file by URL
-//! \param role file role
-//! \param path original path
-//! \param url URL
-//! \return new registry file
+// @brief add registry file by URL
+// @param role file role
+// @param path original path
+// @param url URL
+// @return new registry file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_file
 registry::impl::add_file_by_url (const std::string& role, const std::string& path, const std::string& url)
@@ -265,11 +259,11 @@ registry::impl::add_file_by_url (const std::string& role, const std::string& pat
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief add registry file by reader
-//! \param role file role
-//! \param path original path
-//! \param reader generic reader
-//! \return new registry file
+// @brief add registry file by reader
+// @param role file role
+// @param path original path
+// @param reader generic reader
+// @return new registry file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_file
 registry::impl::add_file_by_reader (const std::string& role, const std::string& path, mobius::io::reader reader)
@@ -286,8 +280,8 @@ registry::impl::add_file_by_reader (const std::string& role, const std::string& 
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief remove registry file from registry
-//! \param uid unique identifier
+// @brief remove registry file from registry
+// @param uid unique identifier
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry::impl::remove_file (std::uint32_t uid)
@@ -306,9 +300,9 @@ registry::impl::remove_file (std::uint32_t uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get key by path
-//! \param name key path
-//! \return key or empty key, if not found
+// @brief get key by path
+// @param name key path
+// @return key or empty key, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_key
 registry::impl::get_key_by_path (const std::string& path) const
@@ -318,9 +312,9 @@ registry::impl::get_key_by_path (const std::string& path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get key by mask
-//! \param mask fnmatch mask
-//! \return subkeys or empty vector if none found
+// @brief get key by mask
+// @param mask fnmatch mask
+// @return subkeys or empty vector if none found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <registry_key>
 registry::impl::get_key_by_mask (const std::string& mask) const
@@ -330,9 +324,9 @@ registry::impl::get_key_by_mask (const std::string& mask) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get value by path
-//! \param name value path
-//! \return value or empty value, if not found
+// @brief get value by path
+// @param name value path
+// @return value or empty value, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_value
 registry::impl::get_value_by_path (const std::string& path) const
@@ -342,9 +336,9 @@ registry::impl::get_value_by_path (const std::string& path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get values by mask
-//! \param mask value mask
-//! \return values or empty vector, if no values were found
+// @brief get values by mask
+// @param mask value mask
+// @return values or empty vector, if no values were found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <registry_value>
 registry::impl::get_value_by_mask (const std::string& mask) const
@@ -354,9 +348,9 @@ registry::impl::get_value_by_mask (const std::string& mask) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get data by path
-//! \param name value path
-//! \return data
+// @brief get data by path
+// @param name value path
+// @return data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_data
 registry::impl::get_data_by_path (const std::string& path) const
@@ -366,9 +360,9 @@ registry::impl::get_data_by_path (const std::string& path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get data by mask
-//! \param mask value mask
-//! \return data or empty vector, if no values were found
+// @brief get data by mask
+// @param mask value mask
+// @return data or empty vector, if no values were found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <registry_data>
 registry::impl::get_data_by_mask (const std::string& mask) const
@@ -378,7 +372,7 @@ registry::impl::get_data_by_mask (const std::string& mask) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief build registry keys according to the files added
+// @brief build registry keys according to the files added
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry::impl::_load_keys () const
@@ -410,8 +404,8 @@ registry::impl::_load_keys () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set syskey
-//! \see https://github.com/Neohapsis/creddump7/blob/master/framework/win32/lsasecrets.py
+// @brief set syskey
+// @see https://github.com/Neohapsis/creddump7/blob/master/framework/win32/lsasecrets.py
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry::impl::_set_syskey () const
@@ -436,8 +430,8 @@ registry::impl::_set_syskey () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set HKEY_LOCAL_MACHINE root key
-//! \see https://msdn.microsoft.com/en-us/library/windows/desktop/ms724877(v=vs.85).aspx
+// @brief set HKEY_LOCAL_MACHINE root key
+// @see https://msdn.microsoft.com/en-us/library/windows/desktop/ms724877(v=vs.85).aspx
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry::impl::_set_hkey_local_machine () const
@@ -458,8 +452,8 @@ registry::impl::_set_hkey_local_machine () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set HKEY_USERS root key
-//! \see https://msdn.microsoft.com/en-us/library/windows/desktop/ms724877(v=vs.85).aspx
+// @brief set HKEY_USERS root key
+// @see https://msdn.microsoft.com/en-us/library/windows/desktop/ms724877(v=vs.85).aspx
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry::impl::_set_hkey_users () const
@@ -534,7 +528,7 @@ registry::impl::_set_hkey_users () const
     }
 
   // create .Default as link to S-1-5-18
-  //! \see https://blogs.msdn.microsoft.com/oldnewthing/20070302-00/?p=27783
+  // @see https://blogs.msdn.microsoft.com/oldnewthing/20070302-00/?p=27783
   auto ls_key = hku.get_key_by_name ("S-1-5-18");
 
   //if (ls_key)
@@ -545,7 +539,7 @@ registry::impl::_set_hkey_users () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set HKEY_CLASSES_ROOT root key
+// @brief set HKEY_CLASSES_ROOT root key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry::impl::_set_hkey_classes_root () const
@@ -563,7 +557,7 @@ registry::impl::_set_hkey_classes_root () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set HKEY_CURRENT_CONFIG root key
+// @brief set HKEY_CURRENT_CONFIG root key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry::impl::_set_hkey_current_config () const
@@ -611,7 +605,7 @@ registry::impl::_set_hkey_current_config () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set HKEY_CURRENT_USER root key
+// @brief set HKEY_CURRENT_USER root key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry::impl::_set_hkey_current_user () const
@@ -623,7 +617,7 @@ registry::impl::_set_hkey_current_user () const
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief default constructor
+// @brief default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry::registry ()
   : impl_ (std::make_shared <impl> ())
@@ -631,8 +625,8 @@ registry::registry ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief check if object is valid
-//! \return true/false
+// @brief check if object is valid
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry::operator bool () const
 {
@@ -640,11 +634,11 @@ registry::operator bool () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief add registry file by local path
-//! \param role file role
-//! \param path original path
-//! \param localpath local path
-//! \return new registry file
+// @brief add registry file by local path
+// @param role file role
+// @param path original path
+// @param localpath local path
+// @return new registry file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_file
 registry::add_file_by_path (const std::string& role, const std::string& path, const std::string& localpath)
@@ -653,11 +647,11 @@ registry::add_file_by_path (const std::string& role, const std::string& path, co
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief add registry file URL
-//! \param role file role
-//! \param path original path
-//! \param url URL
-//! \return new registry file
+// @brief add registry file URL
+// @param role file role
+// @param path original path
+// @param url URL
+// @return new registry file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_file
 registry::add_file_by_url (const std::string& role, const std::string& path, const std::string& url)
@@ -666,11 +660,11 @@ registry::add_file_by_url (const std::string& role, const std::string& path, con
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief add registry file by reader
-//! \param role file role
-//! \param path original path
-//! \param reader generic reader
-//! \return new registry file
+// @brief add registry file by reader
+// @param role file role
+// @param path original path
+// @param reader generic reader
+// @return new registry file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_file
 registry::add_file_by_reader (const std::string& role, const std::string& path, mobius::io::reader reader)
@@ -679,8 +673,8 @@ registry::add_file_by_reader (const std::string& role, const std::string& path, 
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief remove registry file from registry
-//! \param uid unique identifier
+// @brief remove registry file from registry
+// @param uid unique identifier
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry::remove_file (std::uint32_t uid)
@@ -689,8 +683,8 @@ registry::remove_file (std::uint32_t uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get files
-//! \return files
+// @brief get files
+// @return files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <registry_file>
 registry::get_files () const
@@ -699,8 +693,8 @@ registry::get_files () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get keys
-//! \return keys
+// @brief get keys
+// @return keys
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <registry_key>
 registry::get_keys () const
@@ -709,9 +703,9 @@ registry::get_keys () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get key by path
-//! \param name key path
-//! \return key or empty key, if not found
+// @brief get key by path
+// @param name key path
+// @return key or empty key, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_key
 registry::get_key_by_path (const std::string& path) const
@@ -720,9 +714,9 @@ registry::get_key_by_path (const std::string& path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get key by mask
-//! \param mask fnmatch mask
-//! \return subkeys or empty vector if none found
+// @brief get key by mask
+// @param mask fnmatch mask
+// @return subkeys or empty vector if none found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <registry_key>
 registry::get_key_by_mask (const std::string& mask) const
@@ -731,9 +725,9 @@ registry::get_key_by_mask (const std::string& mask) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get value by path
-//! \param name value path
-//! \return value or empty value, if not found
+// @brief get value by path
+// @param name value path
+// @return value or empty value, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_value
 registry::get_value_by_path (const std::string& path) const
@@ -742,9 +736,9 @@ registry::get_value_by_path (const std::string& path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get values by mask
-//! \param mask value mask
-//! \return values or empty vector, if no values were found
+// @brief get values by mask
+// @param mask value mask
+// @return values or empty vector, if no values were found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <registry_value>
 registry::get_value_by_mask (const std::string& mask) const
@@ -753,9 +747,9 @@ registry::get_value_by_mask (const std::string& mask) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get data by path
-//! \param name value path
-//! \return data
+// @brief get data by path
+// @param name value path
+// @return data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_data
 registry::get_data_by_path (const std::string& path) const
@@ -764,9 +758,9 @@ registry::get_data_by_path (const std::string& path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get data by mask
-//! \param mask value mask
-//! \return data or empty vector, if no values were found
+// @brief get data by mask
+// @param mask value mask
+// @return data or empty vector, if no values were found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <registry_data>
 registry::get_data_by_mask (const std::string& mask) const
@@ -775,8 +769,8 @@ registry::get_data_by_mask (const std::string& mask) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get syskey
-//! \return registry syskey
+// @brief get syskey
+// @return registry syskey
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 registry::get_syskey () const
@@ -784,7 +778,6 @@ registry::get_syskey () const
   return impl_->get_syskey ();
 }
 
-} // namespace registry
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::registry
+
+

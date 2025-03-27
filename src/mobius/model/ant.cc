@@ -22,7 +22,7 @@
 namespace mobius::model
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief ant implementation class
+// @brief ant implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class ant::impl
 {
@@ -35,8 +35,8 @@ public:
   impl (item, std::int64_t);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get item
-  //! \return Item
+  // @brief Get item
+  // @return Item
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   item
   get_item () const
@@ -45,8 +45,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get id
-  //! \return Id
+  // @brief Get id
+  // @return Id
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_id () const
@@ -56,8 +56,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get name
-  //! \return Name
+  // @brief Get name
+  // @return Name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_name () const
@@ -67,8 +67,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get version
-  //! \return Version
+  // @brief Get version
+  // @return Version
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_version () const
@@ -78,8 +78,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get last execution time
-  //! \return Last execution time
+  // @brief Get last execution time
+  // @return Last execution time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::datetime::datetime
   get_last_execution_time () const
@@ -89,25 +89,25 @@ public:
   }
 
 private:
-  //! \brief Case item
+  // @brief Case item
   item item_;
 
-  //! \brief Unique ID
+  // @brief Unique ID
   std::int64_t uid_;
 
-  //! \brief ANT ID
+  // @brief ANT ID
   mutable std::string id_;
 
-  //! \brief Name
+  // @brief Name
   mutable std::string name_;
 
-  //! \brief Version
+  // @brief Version
   mutable std::string version_;
 
-  //! \brief Last execution date/time
+  // @brief Last execution date/time
   mutable mobius::datetime::datetime last_execution_time_;
 
-  //! \brief data loaded flag
+  // @brief data loaded flag
   mutable bool data_loaded_ = false;
 
   // helper functions
@@ -115,9 +115,9 @@ private:
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param i item object
-//! \param uid Unique ID
+// @brief Constructor
+// @param i item object
+// @param uid Unique ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ant::impl::impl (item i, std::int64_t uid)
   : item_ (i), uid_ (uid)
@@ -125,7 +125,7 @@ ant::impl::impl (item i, std::int64_t uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load data on demand
+// @brief Load data on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 ant::impl::_load_data () const
@@ -159,9 +159,9 @@ ant::impl::_load_data () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param i item object
-//! \param uid Unique ID
+// @brief Constructor
+// @param i item object
+// @param uid Unique ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ant::ant (item i, std::int64_t uid)
   : impl_ (std::make_shared <impl> (i, uid))
@@ -169,8 +169,8 @@ ant::ant (item i, std::int64_t uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get item
-//! \return Item
+// @brief Get item
+// @return Item
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 item
 ant::get_item () const
@@ -179,8 +179,8 @@ ant::get_item () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get id
-//! \return Id
+// @brief Get id
+// @return Id
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 ant::get_id () const
@@ -189,8 +189,8 @@ ant::get_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get name
-//! \return Name
+// @brief Get name
+// @return Name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 ant::get_name () const
@@ -199,8 +199,8 @@ ant::get_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get version
-//! \return Version
+// @brief Get version
+// @return Version
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 ant::get_version () const
@@ -209,8 +209,8 @@ ant::get_version () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get last execution time
-//! \return Last execution time
+// @brief Get last execution time
+// @return Last execution time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 ant::get_last_execution_time () const
@@ -219,3 +219,5 @@ ant::get_last_execution_time () const
 }
 
 } // namespace mobius::model
+
+

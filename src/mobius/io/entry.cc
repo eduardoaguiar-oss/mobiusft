@@ -31,7 +31,7 @@
 namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief entry implementation class
+// @brief entry implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class entry::impl
 {
@@ -52,8 +52,8 @@ public:
   impl& operator= (impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get type
-  //! \return Type
+  // @brief Get type
+  // @return Type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   type
   get_type () const
@@ -62,8 +62,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get file
-  //! \return File
+  // @brief Get file
+  // @return File
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   file
   get_file () const
@@ -72,8 +72,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get folder
-  //! \return Folder
+  // @brief Get folder
+  // @return Folder
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   folder
   get_folder () const
@@ -82,19 +82,19 @@ public:
   }
 
 private:
-  //! \brief entry type
+  // @brief entry type
   type type_ = type::null;
 
-  //! \brief file object
+  // @brief file object
   file file_;
 
-  //! \brief folder object
+  // @brief folder object
   folder folder_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param f file object
+// @brief Constructor
+// @param f file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 entry::impl::impl (file f)
  : type_ (type::file), file_ (f)
@@ -102,8 +102,8 @@ entry::impl::impl (file f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param f folder object
+// @brief Constructor
+// @param f folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 entry::impl::impl (folder f)
  : type_ (type::folder), folder_ (f)
@@ -111,7 +111,7 @@ entry::impl::impl (folder f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
+// @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 entry::entry ()
   : impl_ (std::make_shared <impl> ())
@@ -119,8 +119,8 @@ entry::entry ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param f file object
+// @brief Constructor
+// @param f file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 entry::entry (file f)
   : impl_ (std::make_shared <impl> (f))
@@ -128,8 +128,8 @@ entry::entry (file f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param f folder object
+// @brief Constructor
+// @param f folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 entry::entry (folder f)
   : impl_ (std::make_shared <impl> (f))
@@ -137,8 +137,8 @@ entry::entry (folder f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief is null?
-//! \return true/false
+// @brief is null?
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 entry::operator bool () const noexcept
 {
@@ -146,8 +146,8 @@ entry::operator bool () const noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief is file?
-//! \return true/false
+// @brief is file?
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 entry::is_file () const
@@ -156,8 +156,8 @@ entry::is_file () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief is folder?
-//! \return true/false
+// @brief is folder?
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 entry::is_folder () const
@@ -166,8 +166,8 @@ entry::is_folder () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get type
-//! \return Type
+// @brief Get type
+// @return Type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 entry::type
 entry::get_type () const
@@ -176,8 +176,8 @@ entry::get_type () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get file object
-//! \return file object
+// @brief Get file object
+// @return file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file
 entry::get_file () const
@@ -189,8 +189,8 @@ entry::get_file () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get folder object
-//! \return folder object
+// @brief Get folder object
+// @return folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder
 entry::get_folder () const
@@ -202,8 +202,8 @@ entry::get_folder () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get entry name
-//! \return Name
+// @brief Get entry name
+// @return Name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 entry::get_name () const
@@ -218,8 +218,8 @@ entry::get_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get entry extension
-//! \return Extension
+// @brief Get entry extension
+// @return Extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 entry::get_extension () const
@@ -234,8 +234,8 @@ entry::get_extension () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get entry path
-//! \return Path
+// @brief Get entry path
+// @return Path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 entry::get_path () const
@@ -250,8 +250,8 @@ entry::get_path () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set entry path
-//! \param path Path
+// @brief Set entry path
+// @param path Path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 entry::set_path (const std::string& path)
@@ -266,8 +266,8 @@ entry::set_path (const std::string& path)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if entry is deleted
-//! \return true/false
+// @brief Check if entry is deleted
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 entry::is_deleted () const
@@ -282,8 +282,8 @@ entry::is_deleted () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if entry is reallocated
-//! \return true/false
+// @brief Check if entry is reallocated
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 entry::is_reallocated () const
@@ -298,9 +298,9 @@ entry::is_reallocated () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new entry by path
-//! \param path entry path
-//! \return Entry object
+// @brief Create new entry by path
+// @param path entry path
+// @return Entry object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 entry
 new_entry_by_path (const std::string& path)
@@ -309,9 +309,9 @@ new_entry_by_path (const std::string& path)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create entry by URL
-//! \param url Entry URL
-//! \return Entry object
+// @brief Create entry by URL
+// @param url Entry URL
+// @return Entry object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 entry
 new_entry_by_url (const std::string& url)
@@ -331,3 +331,5 @@ new_entry_by_url (const std::string& url)
 }
 
 } // namespace mobius::io
+
+

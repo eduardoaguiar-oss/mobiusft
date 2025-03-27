@@ -29,8 +29,8 @@
 namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Window's registry (hive) file class
-//! \author Eduardo Aguiar
+// @brief Window's registry (hive) file class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class hive_file
 {
@@ -71,13 +71,15 @@ public:
   mobius::metadata get_metadata () const;
 
 private:
-  //! \brief implementation class forward declaration
+  // @brief implementation class forward declaration
   class impl;
 
-  //! \brief implementation pointer
+  // @brief implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
 } // namespace mobius::os::win::registry
 
 #endif
+
+

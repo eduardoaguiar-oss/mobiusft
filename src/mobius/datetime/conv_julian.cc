@@ -18,16 +18,14 @@
 #include <mobius/datetime/conv_julian.h>
 #include <cmath>
 
-namespace mobius
-{
-namespace datetime
+namespace mobius::datetime
 {
 static constexpr julian_type EPOCH_GREGORIAN = 1721425.5;       // 0001-01-01 00:00:00
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert julian days to date
-//! \param jd julian days
-//! \return date
+// @brief Convert julian days to date
+// @param jd julian days
+// @return date
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 date
 date_from_julian (julian_type jd) noexcept
@@ -60,9 +58,9 @@ date_from_julian (julian_type jd) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert date to julian days
-//! \param d date
-//! \return julian days
+// @brief Convert date to julian days
+// @param d date
+// @return julian days
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 julian_type
 date_to_julian (const date& d) noexcept
@@ -87,5 +85,6 @@ date_to_julian (const date& d) noexcept
          d.get_day ();
 }
 
-} // namespace mobius
-} // namespace io
+} // namespace io::mobius
+
+

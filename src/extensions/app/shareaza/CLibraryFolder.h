@@ -27,28 +27,28 @@
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief CLibraryFolder decoder class
+// @brief CLibraryFolder decoder class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class CLibraryFolder
 {
 private:
 
-  //! \brief Library path
+  // @brief Library path
   std::string path_;
 
-  //! \brief Flag is valid
+  // @brief Flag is valid
   bool is_valid_ = false;
 
-  //! \brief Flag is shared
+  // @brief Flag is shared
   bool is_shared_ = false;
 
-  //! \brief Flag b_expanded
+  // @brief Flag b_expanded
   bool is_expanded_ = false;
 
-  //! \brief Sub folders
+  // @brief Sub folders
   std::vector <CLibraryFolder> children_;
 
-  //! \brief Files
+  // @brief Files
   std::vector <CLibraryFile> files_;
 
 public:
@@ -59,8 +59,8 @@ public:
   CLibraryFolder (mobius::decoder::mfc&, int, const CLibraryFolder&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if folder is valid
-  //! \return true/false
+  // @brief Check if folder is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const noexcept
   {
@@ -68,8 +68,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get folder path
-  //! \return Path
+  // @brief Get folder path
+  // @return Path
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_path () const
@@ -78,8 +78,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if folder is shared
-  //! \return true/false
+  // @brief Check if folder is shared
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_shared () const noexcept
@@ -88,8 +88,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if folder is expanded
-  //! \return true/false
+  // @brief Check if folder is expanded
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_expanded () const noexcept
@@ -98,8 +98,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get children folders
-  //! \return Children folders
+  // @brief Get children folders
+  // @return Children folders
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto
   get_children () const
@@ -108,8 +108,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get files
-  //! \return Files
+  // @brief Get files
+  // @return Files
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto
   get_files () const
@@ -121,3 +121,6 @@ public:
 } // namespace mobius::extension::app::shareaza
 
 #endif
+
+
+

@@ -19,15 +19,13 @@
 #include <sstream>
 #include <iomanip>
 
-namespace mobius
-{
-namespace encoder
+namespace mobius::encoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Encode bytes into hexstring
-//! \param data Data
-//! \param sep Separator
-//! \return Hexstring encoded string
+// @brief Encode bytes into hexstring
+// @param data Data
+// @param sep Separator
+// @return Hexstring encoded string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 hexstring (const mobius::bytearray& data, const std::string& sep)
@@ -35,7 +33,7 @@ hexstring (const mobius::bytearray& data, const std::string& sep)
   std::ostringstream stream;
   stream << std::hex;
   bool first = true;
- 
+
   for (const auto& c : data)
     {
       if (first)
@@ -45,9 +43,12 @@ hexstring (const mobius::bytearray& data, const std::string& sep)
 
       stream << std::setw (2) << std::setfill ('0') << static_cast <int> (c);
     }
-    
+
   return stream.str ();
 }
 
-} // namespace encoder
-} // namespace mobius
+} // namespace mobius::encoder
+
+
+
+

@@ -22,20 +22,18 @@
 #include <mobius/exception.inc>
 #include <stdexcept>
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief null writer implementation class
-//! \author Eduardo Aguiar
+// @brief null writer implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class writer_impl_null : public writer_impl_base
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if writer is seekable
-  //! \return true/false
+  // @brief check if writer is seekable
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_seekable () const override
@@ -44,8 +42,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if writer is rewindable
-  //! \return true/false
+  // @brief check if writer is rewindable
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_rewindable () const override
@@ -54,7 +52,7 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set write position to the beginning of data
+  // @brief set write position to the beginning of data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   rewind () override
@@ -63,8 +61,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief skip n bytes from current write position
-  //! \param size number of bytes to skip ahead
+  // @brief skip n bytes from current write position
+  // @param size number of bytes to skip ahead
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   skip (size_type) override
@@ -73,7 +71,7 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief flush data to writer
+  // @brief flush data to writer
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   flush () override
@@ -82,8 +80,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get write position
-  //! \return write position in bytes from the beginning of data
+  // @brief get write position
+  // @return write position in bytes from the beginning of data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   offset_type
   tell () const override
@@ -92,9 +90,9 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set write position
-  //! \param offset offset in bytes
-  //! \param w either beginning, current or end
+  // @brief set write position
+  // @param offset offset in bytes
+  // @param w either beginning, current or end
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   seek (offset_type, whence_type) override
@@ -103,9 +101,9 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief write bytes to writer
-  //! \param data a bytearray
-  //! \return number of bytes written
+  // @brief write bytes to writer
+  // @param data a bytearray
+  // @return number of bytes written
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   write (const mobius::bytearray&) override
@@ -114,7 +112,8 @@ public:
   }
 };
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
 
 #endif
+
+

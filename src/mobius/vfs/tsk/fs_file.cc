@@ -26,20 +26,20 @@
 namespace mobius::vfs::tsk
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Initialize object
-//! \param p Pointer to file structure
+// @brief Initialize object
+// @param p Pointer to file structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 fs_file::fs_file (TSK_FS_FILE *p)
 {
   if (!p)
     throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("pointer is null"));
-  
+
   p_ = std::shared_ptr <TSK_FS_FILE> (p, tsk_fs_file_close);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if file exists
-//! \return true/false
+// @brief Check if file exists
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 fs_file::exists () const
@@ -48,8 +48,8 @@ fs_file::exists () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get file name
-//! \return File name
+// @brief Get file name
+// @return File name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 fs_file::get_name () const
@@ -62,8 +62,8 @@ fs_file::get_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get short file name
-//! \return Short file name
+// @brief Get short file name
+// @return Short file name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 fs_file::get_short_name () const
@@ -76,8 +76,8 @@ fs_file::get_short_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get path
-//! \return Path
+// @brief Get path
+// @return Path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 fs_file::get_path () const
@@ -89,8 +89,8 @@ fs_file::get_path () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set path
-//! \param path Path
+// @brief Set path
+// @param path Path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 fs_file::set_path (const std::string& path)
@@ -102,8 +102,8 @@ fs_file::set_path (const std::string& path)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if file is deleted
-//! \return true/false
+// @brief Check if file is deleted
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 fs_file::is_deleted () const
@@ -116,8 +116,8 @@ fs_file::is_deleted () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if file is reallocated
-//! \return true/false
+// @brief Check if file is reallocated
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 fs_file::is_reallocated () const
@@ -130,8 +130,8 @@ fs_file::is_reallocated () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get file inode
-//! \return Inode
+// @brief Get file inode
+// @return Inode
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint64_t
 fs_file::get_inode () const
@@ -149,8 +149,8 @@ fs_file::get_inode () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get file size
-//! \return Size
+// @brief Get file size
+// @return Size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint64_t
 fs_file::get_size () const
@@ -163,8 +163,8 @@ fs_file::get_size () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get file type
-//! \return Size
+// @brief Get file type
+// @return Size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 fs_file::fs_file_type
 fs_file::get_type () const
@@ -182,8 +182,8 @@ fs_file::get_type () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get User ID
-//! \return User ID
+// @brief Get User ID
+// @return User ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int
 fs_file::get_user_id () const
@@ -196,8 +196,8 @@ fs_file::get_user_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get Group ID
-//! \return Group ID
+// @brief Get Group ID
+// @return Group ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int
 fs_file::get_group_id () const
@@ -210,8 +210,8 @@ fs_file::get_group_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get file access permissions
-//! \return Permission mask
+// @brief Get file access permissions
+// @return Permission mask
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int
 fs_file::get_permissions () const
@@ -224,8 +224,8 @@ fs_file::get_permissions () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get creation time
-//! \return Creation date/time
+// @brief Get creation time
+// @return Creation date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 fs_file::get_creation_time () const
@@ -238,8 +238,8 @@ fs_file::get_creation_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get last access timestamp
-//! \return Last file access date/time
+// @brief Get last access timestamp
+// @return Last file access date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 fs_file::get_access_time () const
@@ -252,8 +252,8 @@ fs_file::get_access_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get last metadata modification timestamp
-//! \return Last file metadata modification date/time
+// @brief Get last metadata modification timestamp
+// @return Last file metadata modification date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 fs_file::get_modification_time () const
@@ -266,8 +266,8 @@ fs_file::get_modification_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get last metadata modification timestamp
-//! \return Last file metadata modification date/time
+// @brief Get last metadata modification timestamp
+// @return Last file metadata modification date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 fs_file::get_metadata_time () const
@@ -280,8 +280,8 @@ fs_file::get_metadata_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get deletion time
-//! \return Deletion date/time
+// @brief Get deletion time
+// @return Deletion date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 fs_file::get_deletion_time () const
@@ -294,8 +294,8 @@ fs_file::get_deletion_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get backup time
-//! \return Backup date/time
+// @brief Get backup time
+// @return Backup date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 fs_file::get_backup_time () const
@@ -308,7 +308,7 @@ fs_file::get_backup_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reload data
+// @brief Reload data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 fs_file::reload ()
@@ -318,8 +318,8 @@ fs_file::reload ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get parent
-//! \return parent entry, if found
+// @brief Get parent
+// @return parent entry, if found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 fs_file
 fs_file::get_parent () const
@@ -348,8 +348,8 @@ fs_file::get_parent () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get streams
-//! \return Streams
+// @brief Get streams
+// @return Streams
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <fs_file::stream_type>
 fs_file::get_streams () const
@@ -362,7 +362,7 @@ fs_file::get_streams () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load fs_name on demand
+// @brief Load fs_name on demand
 //
 // According to libtsk manual: A file will typically have a name and metadata.
 // This structure holds that type of information. When deleted files are being
@@ -425,7 +425,7 @@ fs_file::_load_fs_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load fs_meta on demand
+// @brief Load fs_meta on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 fs_file::_load_fs_meta () const
@@ -507,7 +507,7 @@ fs_file::_load_fs_meta () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load streams on demand
+// @brief Load streams on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 fs_file::_load_streams () const
@@ -526,7 +526,7 @@ fs_file::_load_streams () const
 
       if (!fs_attr_p)
         throw std::runtime_error (TSK_EXCEPTION_MSG);
-  
+
       auto stream = std::make_shared <stream_impl> (*this, fs_attr_p);
       streams_.push_back (stream);
     }
@@ -535,3 +535,5 @@ fs_file::_load_streams () const
 }
 
 } // namespace mobius::vfs::tsk
+
+

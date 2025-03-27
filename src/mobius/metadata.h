@@ -26,14 +26,14 @@
 namespace mobius
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief metadata container
-//! \author Eduardo Aguiar
+// @brief metadata container
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class metadata
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief attribute metadata
+  // @brief attribute metadata
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   struct attribute
   {
@@ -58,8 +58,8 @@ public:
   using value_type = attribute;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get iterator to the beginning of the metadata
-  //! \return iterator
+  // @brief Get iterator to the beginning of the metadata
+  // @return iterator
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   const_iterator
   begin () const
@@ -68,8 +68,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get iterator past to the ending of the metadata
-  //! \return iterator
+  // @brief Get iterator past to the ending of the metadata
+  // @return iterator
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   const_iterator
   end () const
@@ -78,11 +78,11 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Add value
-  //! \param name Attribute name
-  //! \param description Attribute description
-  //! \param datatype Attribute datatype
-  //! \param value Attribute value
+  // @brief Add value
+  // @param name Attribute name
+  // @param description Attribute description
+  // @param datatype Attribute datatype
+  // @param value Attribute value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   add (const std::string& name,
@@ -93,7 +93,7 @@ public:
   {
     attributes_.push_back ({name, description, datatype, value});
   }
-  
+
 
 private:
   std::vector <attribute> attributes_;
@@ -102,3 +102,5 @@ private:
 } // namespace mobius
 
 #endif
+
+

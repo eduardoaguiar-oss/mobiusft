@@ -26,13 +26,13 @@ namespace
 static constexpr int SLEEP_TIME = 200;        // microseconds
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief libsqlite3 initialization class
+// @brief libsqlite3 initialization class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class sqlite3_init
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Initialize libsqlite3
+  // @brief Initialize libsqlite3
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   sqlite3_init ()
   {
@@ -40,7 +40,7 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Cleanup libsqlite3
+  // @brief Cleanup libsqlite3
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   ~sqlite3_init ()
   {
@@ -56,7 +56,7 @@ namespace mobius::database
 {
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Implementation struct
+// @brief Implementation struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct database_impl
 {
@@ -68,7 +68,7 @@ struct database_impl
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destroy shared implementation
+// @brief Destroy shared implementation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 database_impl::~database_impl ()
 {
@@ -79,7 +79,7 @@ database_impl::~database_impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create null database object
+// @brief Create null database object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 database::database ()
   : impl_ (std::make_shared <database_impl> ())
@@ -87,8 +87,8 @@ database::database ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create database object
-//! \param path database file path
+// @brief Create database object
+// @param path database file path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 database::database (const std::string& path)
   : impl_ (std::make_shared <database_impl> ())
@@ -109,8 +109,8 @@ database::database (const std::string& path)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check whether database is not null
-//! \return true/false
+// @brief Check whether database is not null
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 database::operator bool () const
 {
@@ -118,8 +118,8 @@ database::operator bool () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Execute SQL command
-//! \param sql SQL statement
+// @brief Execute SQL command
+// @param sql SQL statement
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 database::execute (const std::string& sql)
@@ -139,8 +139,8 @@ database::execute (const std::string& sql)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new transaction object
-//! \return transaction object
+// @brief Create new transaction object
+// @return transaction object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 transaction
 database::new_transaction ()
@@ -151,7 +151,7 @@ database::new_transaction ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief End current transaction
+// @brief End current transaction
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 database::end_transaction ()
@@ -160,9 +160,9 @@ database::end_transaction ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new statement object
-//! \param sql SQL command
-//! \return statement object
+// @brief Create new statement object
+// @param sql SQL command
+// @return statement object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 statement
 database::new_statement (const std::string& sql)
@@ -185,8 +185,8 @@ database::new_statement (const std::string& sql)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get last error message
-//! \return error message
+// @brief Get last error message
+// @return error message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 database::get_error_message () const
@@ -195,8 +195,8 @@ database::get_error_message () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get last insert row ID
-//! \return row ID
+// @brief Get last insert row ID
+// @return row ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::int64_t
 database::get_last_insert_row_id () const
@@ -205,8 +205,8 @@ database::get_last_insert_row_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get number of rows affected by last statement
-//! \return Number of rows affected
+// @brief Get number of rows affected by last statement
+// @return Number of rows affected
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::int64_t
 database::get_changes () const
@@ -215,10 +215,10 @@ database::get_changes () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if table has a given column
-//! \param table Table name
-//! \param column Column name
-//! \return true/false
+// @brief Check if table has a given column
+// @param table Table name
+// @param column Column name
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 database::table_has_column (const std::string& table, const std::string& column) const
@@ -237,3 +237,5 @@ database::table_has_column (const std::string& table, const std::string& column)
 }
 
 } // namespace mobius::database
+
+

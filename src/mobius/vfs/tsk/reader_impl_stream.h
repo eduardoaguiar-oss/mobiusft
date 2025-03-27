@@ -23,15 +23,11 @@
 
 struct TSK_FS_ATTR;
 
-namespace mobius
-{
-namespace vfs
-{
-namespace tsk
+namespace mobius::vfs::tsk
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Libtsk stream reader implementation
-//! \author Eduardo Aguiar
+// @brief Libtsk stream reader implementation
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class reader_impl_stream : public mobius::io::reader_impl_base
 {
@@ -56,8 +52,8 @@ public:
   void seek (offset_type, whence_type = whence_type::beginning) override;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if reader is seekable
-  //! \return true/false
+  // @brief Check if reader is seekable
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_seekable () const override
@@ -66,8 +62,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if <b>reader.get_size</b> is available
-  //! \return true/false
+  // @brief Check if <b>reader.get_size</b> is available
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_sizeable () const override
@@ -76,8 +72,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get data size
-  //! \return Data size in bytes
+  // @brief Get data size
+  // @return Data size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_size () const override
@@ -86,8 +82,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get read position
-  //! \return Read position in bytes from the beginning of data
+  // @brief Get read position
+  // @return Read position in bytes from the beginning of data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   offset_type
   tell () const override
@@ -96,8 +92,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if end-of-file was reached
-  //! \return true/false
+  // @brief Check if end-of-file was reached
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   eof () const override
@@ -106,8 +102,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get default block size
-  //! \return Block size in bytes
+  // @brief Get default block size
+  // @return Block size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_block_size () const override
@@ -116,21 +112,21 @@ public:
   }
 
 private:
-  //! \brief fs_file handler object. Must hold while using fs_attr_
+  // @brief fs_file handler object. Must hold while using fs_attr_
   const fs_file fs_file_;
 
-  //! \brief libtsk file structure pointer
+  // @brief libtsk file structure pointer
   const TSK_FS_ATTR *fs_attr_;
 
-  //! \brief Stream size
+  // @brief Stream size
   size_type size_;
 
-  //! \brief Current reading pos
+  // @brief Current reading pos
   size_type pos_ = 0;
 };
 
-} // namespace tsk
-} // namespace vfs
-} // namespace mobius
+} // namespace mobius::vfs::tsk
 
 #endif
+
+

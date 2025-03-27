@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file label.cc C++ API <i>mobius.ui.label</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "label.h"
@@ -26,9 +26,9 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_text</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_text</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_text (ui_label_o *self, PyObject *args)
@@ -62,9 +62,9 @@ tp_f_set_text (ui_label_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_markup</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_markup</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_markup (ui_label_o *self, PyObject *args)
@@ -98,9 +98,9 @@ tp_f_set_markup (ui_label_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_selectable</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_selectable</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_selectable (ui_label_o *self, PyObject *args)
@@ -134,9 +134,9 @@ tp_f_set_selectable (ui_label_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_halign</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_halign</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_halign (ui_label_o *self, PyObject *args)
@@ -170,9 +170,9 @@ tp_f_set_halign (ui_label_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_valign</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_valign</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_valign (ui_label_o *self, PyObject *args)
@@ -206,9 +206,9 @@ tp_f_set_valign (ui_label_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_elide_mode</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_elide_mode</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_elide_mode (ui_label_o *self, PyObject *args)
@@ -242,7 +242,7 @@ tp_f_set_elide_mode (ui_label_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -256,11 +256,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>label</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>label</i> object
+// @brief <i>label</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>label</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
@@ -303,8 +303,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>label</i> deallocator
-//! \param self Object
+// @brief <i>label</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (ui_label_o *self)
@@ -314,7 +314,7 @@ tp_dealloc (ui_label_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyTypeObject ui_label_t =
 {
@@ -369,7 +369,7 @@ static PyTypeObject ui_label_t =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create type
+// @brief Create type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
 new_ui_label_type ()
@@ -391,9 +391,9 @@ new_ui_label_type ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>label</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>label</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_ui_label_check (PyObject *value)
@@ -402,9 +402,9 @@ pymobius_ui_label_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>label</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New label object
+// @brief Create <i>label</i> Python object from C++ object
+// @param obj C++ object
+// @return New label object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_ui_label_to_pyobject (const mobius::ui::label& obj)
@@ -413,14 +413,16 @@ pymobius_ui_label_to_pyobject (const mobius::ui::label& obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>label</i> C++ object from Python object
-//! \param value Python value
-//! \return Label object
+// @brief Create <i>label</i> C++ object from Python object
+// @param value Python value
+// @return Label object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::ui::label
 pymobius_ui_label_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <ui_label_o> (value, &ui_label_t);
 }
+
+
 
 

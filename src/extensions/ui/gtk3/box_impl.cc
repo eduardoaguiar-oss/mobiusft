@@ -23,8 +23,8 @@
 namespace mobius::extension::ui::gtk3
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param orientation Widget orientation
+// @brief Constructor
+// @param orientation Widget orientation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 box_impl::box_impl (orientation_type orientation)
 {
@@ -47,7 +47,7 @@ box_impl::box_impl (orientation_type orientation)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destructor
+// @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 box_impl::~box_impl ()
 {
@@ -56,8 +56,8 @@ box_impl::~box_impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set widget sensitive
-//! \param flag true/false
+// @brief Set widget sensitive
+// @param flag true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 box_impl::set_sensitive (bool flag)
@@ -66,8 +66,8 @@ box_impl::set_sensitive (bool flag)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set widget visible
-//! \param flag Flag (true/false)
+// @brief Set widget visible
+// @param flag Flag (true/false)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 box_impl::set_visible (bool flag)
@@ -76,8 +76,8 @@ box_impl::set_visible (bool flag)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set spacing between widgets
-//! \param siz Size in pixels
+// @brief Set spacing between widgets
+// @param siz Size in pixels
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 box_impl::set_spacing (std::uint32_t siz)
@@ -86,8 +86,8 @@ box_impl::set_spacing (std::uint32_t siz)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set border width
-//! \param siz Size in pixels
+// @brief Set border width
+// @param siz Size in pixels
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 box_impl::set_border_width (std::uint32_t siz)
@@ -96,9 +96,9 @@ box_impl::set_border_width (std::uint32_t siz)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add child widget
-//! \param w Widget to be added
-//! \param filling Child widget filling mode
+// @brief Add child widget
+// @param w Widget to be added
+// @param filling Child widget filling mode
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 box_impl::add_child (const mobius::ui::widget& w, fill_type filling)
@@ -125,8 +125,8 @@ box_impl::add_child (const mobius::ui::widget& w, fill_type filling)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove child widget
-//! \param w Widget to be removed
+// @brief Remove child widget
+// @param w Widget to be removed
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 box_impl::remove_child (const mobius::ui::widget& w)
@@ -148,7 +148,7 @@ box_impl::remove_child (const mobius::ui::widget& w)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Clear widget
+// @brief Clear widget
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 box_impl::clear ()
@@ -163,3 +163,5 @@ box_impl::clear ()
 }
 
 } // namespace mobius::extension::ui::gtk3
+
+

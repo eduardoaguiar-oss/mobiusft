@@ -24,7 +24,7 @@
 namespace mobius::framework
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief attribute implementation class
+// @brief attribute implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class attribute::impl
 {
@@ -36,8 +36,8 @@ public:
   explicit impl (std::int64_t);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if object is valid
-  //! \return true/false
+  // @brief check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const
   {
@@ -45,8 +45,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get id
-  //! \return id
+  // @brief get id
+  // @return id
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_id () const
@@ -56,8 +56,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get name
-  //! \return name
+  // @brief get name
+  // @return name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_name () const
@@ -67,8 +67,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get description
-  //! \return description
+  // @brief get description
+  // @return description
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_description () const
@@ -78,8 +78,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get datatype
-  //! \return datatype
+  // @brief get datatype
+  // @return datatype
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_datatype () const
@@ -89,8 +89,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get value mask
-  //! \return value mask
+  // @brief get value mask
+  // @return value mask
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_value_mask () const
@@ -100,8 +100,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get index
-  //! \return index
+  // @brief get index
+  // @return index
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_index () const
@@ -111,8 +111,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if attribute is editable
-  //! \return true/false
+  // @brief check if attribute is editable
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_editable () const
@@ -135,28 +135,28 @@ public:
   void set_index (std::uint32_t);
 
 private:
-  // !\brief row ID
+  // @brief row ID
   std::int64_t uid_ = -1;
 
-  //! \brief attribute ID
+  // @brief attribute ID
   mutable std::string id_;
 
-  //! \brief name
+  // @brief name
   mutable std::string name_;
 
-  //! \brief description
+  // @brief description
   mutable std::string description_;
 
-  //! \brief datatype
+  // @brief datatype
   mutable std::string datatype_;
 
-  //! \brief value_mask
+  // @brief value_mask
   mutable std::string value_mask_;
 
-  //! \brief index
+  // @brief index
   mutable std::uint32_t index_;
 
-  //! \brief data loaded flag
+  // @brief data loaded flag
   mutable bool data_loaded_ = false;
 
   // helper functions
@@ -164,8 +164,8 @@ private:
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
-//! \param uid unique ID
+// @brief constructor
+// @param uid unique ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 attribute::impl::impl (std::int64_t uid)
   : uid_ (uid)
@@ -173,8 +173,8 @@ attribute::impl::impl (std::int64_t uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set name
-//! \param name new attribute name
+// @brief set name
+// @param name new attribute name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 attribute::impl::set_name (const std::string& name)
@@ -199,8 +199,8 @@ attribute::impl::set_name (const std::string& name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set description
-//! \param description description
+// @brief set description
+// @param description description
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 attribute::impl::set_description (const std::string& description)
@@ -225,8 +225,8 @@ attribute::impl::set_description (const std::string& description)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set datatype
-//! \param datatype datatype
+// @brief set datatype
+// @param datatype datatype
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 attribute::impl::set_datatype (const std::string& datatype)
@@ -251,8 +251,8 @@ attribute::impl::set_datatype (const std::string& datatype)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set value mask
-//! \param value_mask value mask
+// @brief set value mask
+// @param value_mask value mask
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 attribute::impl::set_value_mask (const std::string& value_mask)
@@ -277,8 +277,8 @@ attribute::impl::set_value_mask (const std::string& value_mask)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set index
-//! \param index index
+// @brief set index
+// @param index index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 attribute::impl::set_index (std::uint32_t index)
@@ -360,7 +360,7 @@ attribute::impl::set_index (std::uint32_t index)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief load data on demand
+// @brief load data on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 attribute::impl::_load_data () const
@@ -393,8 +393,8 @@ attribute::impl::_load_data () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
-//! \param uid attribute UID
+// @brief constructor
+// @param uid attribute UID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 attribute::attribute (std::int64_t uid)
   : impl_ (std::make_shared <impl> (uid))
@@ -402,7 +402,7 @@ attribute::attribute (std::int64_t uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief default constructor
+// @brief default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 attribute::attribute ()
   : impl_ (std::make_shared <impl> ())
@@ -410,8 +410,8 @@ attribute::attribute ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief check if object is valid
-//! \return true/false
+// @brief check if object is valid
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 attribute::operator bool () const
 {
@@ -419,8 +419,8 @@ attribute::operator bool () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get id
-//! \return id
+// @brief get id
+// @return id
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 attribute::get_id () const
@@ -429,8 +429,8 @@ attribute::get_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get name
-//! \return name
+// @brief get name
+// @return name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 attribute::get_name () const
@@ -439,8 +439,8 @@ attribute::get_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set name
-//! \param name name
+// @brief set name
+// @param name name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 attribute::set_name (const std::string& name)
@@ -449,8 +449,8 @@ attribute::set_name (const std::string& name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get description
-//! \return description
+// @brief get description
+// @return description
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 attribute::get_description () const
@@ -459,8 +459,8 @@ attribute::get_description () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set description
-//! \param description description
+// @brief set description
+// @param description description
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 attribute::set_description (const std::string& description)
@@ -469,8 +469,8 @@ attribute::set_description (const std::string& description)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get datatype
-//! \return datatype
+// @brief get datatype
+// @return datatype
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 attribute::get_datatype () const
@@ -479,8 +479,8 @@ attribute::get_datatype () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set datatype
-//! \param datatype datatype
+// @brief set datatype
+// @param datatype datatype
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 attribute::set_datatype (const std::string& datatype)
@@ -489,8 +489,8 @@ attribute::set_datatype (const std::string& datatype)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get value mask
-//! \return value mask
+// @brief get value mask
+// @return value mask
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 attribute::get_value_mask () const
@@ -499,8 +499,8 @@ attribute::get_value_mask () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set value mask
-//! \param value_mask value_mask
+// @brief set value mask
+// @param value_mask value_mask
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 attribute::set_value_mask (const std::string& value_mask)
@@ -509,8 +509,8 @@ attribute::set_value_mask (const std::string& value_mask)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get index
-//! \return index
+// @brief get index
+// @return index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 attribute::get_index () const
@@ -519,8 +519,8 @@ attribute::get_index () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set index
-//! \param index index
+// @brief set index
+// @param index index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 attribute::set_index (std::uint32_t index)
@@ -529,8 +529,8 @@ attribute::set_index (std::uint32_t index)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief check if attribute is editable
-//! \return true/false
+// @brief check if attribute is editable
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 attribute::is_editable () const
@@ -539,3 +539,5 @@ attribute::is_editable () const
 }
 
 } // namespace mobius::framework
+
+

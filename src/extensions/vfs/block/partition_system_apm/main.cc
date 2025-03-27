@@ -47,7 +47,7 @@ constexpr std::uint32_t DPME_FLAGS_OS_SPECIFIC_2 = 0x00000080;
 constexpr std::uint32_t DPME_FLAGS_OS_SPECIFIC_1 = 0x00000100;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Partition description by dpme_type
+// @brief Partition description by dpme_type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const std::map <const std::string, const std::string> PARTITION_DESCRIPTION =
 {
@@ -59,16 +59,16 @@ static const std::map <const std::string, const std::string> PARTITION_DESCRIPTI
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Try to decode block as APM partition system
-//! \param block Block object
-//! \param new_blocks Vector for newly created blocks
-//! \param pending_blocks Pending blocks
-//! \return <b>true</b> if block was decoded, <b>false</b> otherwise
-//! \see https://opensource.apple.com/source/IOStorageFamily/IOStorageFamily-116/IOApplePartitionScheme.h.auto.html
-//! \see https://formats.kaitai.io/apm_partition_table/
-//! \see https://github.com/libyal/libvsapm/blob/main/documentation/Apple%20partition%20map%20(APM)%20format.asciidoc
-//! \see https://en.wikipedia.org/wiki/Apple_Partition_Map
-//! \see File System Forensic Analysis, "Apple Partitions" section
+// @brief Try to decode block as APM partition system
+// @param block Block object
+// @param new_blocks Vector for newly created blocks
+// @param pending_blocks Pending blocks
+// @return <b>true</b> if block was decoded, <b>false</b> otherwise
+// @see https://opensource.apple.com/source/IOStorageFamily/IOStorageFamily-116/IOApplePartitionScheme.h.auto.html
+// @see https://formats.kaitai.io/apm_partition_table/
+// @see https://github.com/libyal/libvsapm/blob/main/documentation/Apple%20partition%20map%20(APM)%20format.asciidoc
+// @see https://en.wikipedia.org/wiki/Apple_Partition_Map
+// @see File System Forensic Analysis, "Apple Partitions" section
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static bool
 decoder (
@@ -272,7 +272,7 @@ const char *EXTENSION_DESCRIPTION = "Apple Partition Map partition table support
 } // extern "C"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Start extension
+// @brief Start extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extern "C" void
 start ()
@@ -285,10 +285,12 @@ start ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Stop extension
+// @brief Stop extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extern "C" void
 stop ()
 {
   mobius::core::remove_resource ("vfs.block.decoder.partition_system_apm");
 }
+
+

@@ -26,13 +26,11 @@
 #include <mobius/io/reader.h>
 #include <mobius/io/writer.h>
 
-namespace mobius
-{
-namespace vfs
+namespace mobius::vfs
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Generic array to store segment files
-//! \author Eduardo Aguiar
+// @brief Generic array to store segment files
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class segment_array
 {
@@ -59,7 +57,8 @@ private:
   std::shared_ptr <impl> impl_;
 };
 
-} // namespace vfs
-} // namespace mobius
+} // namespace mobius::vfs
 
 #endif
+
+

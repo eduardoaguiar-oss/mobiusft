@@ -18,14 +18,12 @@
 #include "item.h"
 #include "ant.h"
 
-namespace mobius
-{
-namespace model
+namespace mobius::model
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if ANT has been executed
-//! \param id ANT ID
-//! \return true/false
+// @brief Check if ANT has been executed
+// @param id ANT ID
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 item::has_ant (const std::string& id) const
@@ -45,10 +43,10 @@ item::has_ant (const std::string& id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set ANT
-//! \param id ANT ID
-//! \param name ANT name
-//! \param version ANT version
+// @brief Set ANT
+// @param id ANT ID
+// @param name ANT name
+// @param version ANT version
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::set_ant (
@@ -92,8 +90,8 @@ item::set_ant (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reset ANT
-//! \param id ANT ID
+// @brief Reset ANT
+// @param id ANT ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::reset_ant (const std::string& id)
@@ -111,8 +109,8 @@ item::reset_ant (const std::string& id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get executed ANTs
-//! \return Executed ANTs
+// @brief Get executed ANTs
+// @return Executed ANTs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <ant>
 item::get_ants () const
@@ -138,7 +136,7 @@ item::get_ants () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove ANTs
+// @brief Remove ANTs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::remove_ants ()
@@ -153,5 +151,6 @@ item::remove_ants ()
   stmt.execute ();
 }
 
-} // namespace model
-} // namespace mobius
+} // namespace mobius::model
+
+

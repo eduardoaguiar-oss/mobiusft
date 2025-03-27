@@ -21,16 +21,10 @@
 #include <mobius/os/win/registry/registry_data.h>
 #include <string>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace registry
+namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_value implementation base class
+// @brief registry_value implementation base class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class registry_value_impl_base
 {
@@ -43,9 +37,8 @@ public:
   virtual registry_data get_data () const = 0;
 };
 
-} // namespace registry
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::registry
 
 #endif
+
+

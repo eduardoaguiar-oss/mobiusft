@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file blob.cc C++ API <i>mobius.os.win.dpapi.blob</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pygil.h>
@@ -28,9 +28,9 @@
 #include <mobius/io/bytearray_io.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if object is an instance of <i>mobius.os.win.dpapi.blob</i>
-//! \param pyobj Python object
-//! \return true/false
+// @brief Check if object is an instance of <i>mobius.os.win.dpapi.blob</i>
+// @param pyobj Python object
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_os_win_dpapi_blob_check (PyObject *pyobj)
@@ -39,9 +39,9 @@ pymobius_os_win_dpapi_blob_check (PyObject *pyobj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>blob</i> Python object from C++ object
-//! \param obj C++ object
-//! \return new blob object
+// @brief Create <i>blob</i> Python object from C++ object
+// @param obj C++ object
+// @return new blob object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_os_win_dpapi_blob_to_pyobject (mobius::os::win::dpapi::blob obj)
@@ -55,9 +55,9 @@ pymobius_os_win_dpapi_blob_to_pyobject (mobius::os::win::dpapi::blob obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>blob</i> C++ object from Python object
-//! \param value Python object
-//! \return blob object
+// @brief Create <i>blob</i> C++ object from Python object
+// @param value Python object
+// @return blob object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::os::win::dpapi::blob
 pymobius_os_win_dpapi_blob_from_pyobject (PyObject *value)
@@ -69,9 +69,9 @@ pymobius_os_win_dpapi_blob_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>revision</i> Attribute getter
-//! \param self Object
-//! \return <i>revision</i> attribute
+// @brief <i>revision</i> Attribute getter
+// @param self Object
+// @return <i>revision</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_revision (os_win_dpapi_blob_o *self)
@@ -91,9 +91,9 @@ tp_getter_revision (os_win_dpapi_blob_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>provider_guid</i> Attribute getter
-//! \param self Object
-//! \return <i>provider_guid</i> attribute
+// @brief <i>provider_guid</i> Attribute getter
+// @param self Object
+// @return <i>provider_guid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_provider_guid (os_win_dpapi_blob_o *self)
@@ -113,9 +113,9 @@ tp_getter_provider_guid (os_win_dpapi_blob_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>master_key_revision</i> Attribute getter
-//! \param self Object
-//! \return <i>master_key_revision</i> attribute
+// @brief <i>master_key_revision</i> Attribute getter
+// @param self Object
+// @return <i>master_key_revision</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_master_key_revision (os_win_dpapi_blob_o *self)
@@ -135,9 +135,9 @@ tp_getter_master_key_revision (os_win_dpapi_blob_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>master_key_guid</i> Attribute getter
-//! \param self Object
-//! \return <i>master_key_guid</i> attribute
+// @brief <i>master_key_guid</i> Attribute getter
+// @param self Object
+// @return <i>master_key_guid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_master_key_guid (os_win_dpapi_blob_o *self)
@@ -157,9 +157,9 @@ tp_getter_master_key_guid (os_win_dpapi_blob_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>flags</i> Attribute getter
-//! \param self Object
-//! \return <i>flags</i> attribute
+// @brief <i>flags</i> Attribute getter
+// @param self Object
+// @return <i>flags</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_flags (os_win_dpapi_blob_o *self)
@@ -179,9 +179,9 @@ tp_getter_flags (os_win_dpapi_blob_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>description</i> Attribute getter
-//! \param self Object
-//! \return <i>description</i> attribute
+// @brief <i>description</i> Attribute getter
+// @param self Object
+// @return <i>description</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_description (os_win_dpapi_blob_o *self)
@@ -201,9 +201,9 @@ tp_getter_description (os_win_dpapi_blob_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>cipher_id</i> Attribute getter
-//! \param self Object
-//! \return <i>cipher_id</i> attribute
+// @brief <i>cipher_id</i> Attribute getter
+// @param self Object
+// @return <i>cipher_id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_cipher_id (os_win_dpapi_blob_o *self)
@@ -223,9 +223,9 @@ tp_getter_cipher_id (os_win_dpapi_blob_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>key_length</i> Attribute getter
-//! \param self Object
-//! \return <i>key_length</i> attribute
+// @brief <i>key_length</i> Attribute getter
+// @param self Object
+// @return <i>key_length</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_key_length (os_win_dpapi_blob_o *self)
@@ -245,9 +245,9 @@ tp_getter_key_length (os_win_dpapi_blob_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>salt</i> Attribute getter
-//! \param self Object
-//! \return <i>salt</i> attribute
+// @brief <i>salt</i> Attribute getter
+// @param self Object
+// @return <i>salt</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_salt (os_win_dpapi_blob_o *self)
@@ -267,9 +267,9 @@ tp_getter_salt (os_win_dpapi_blob_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>hmac_key</i> Attribute getter
-//! \param self Object
-//! \return <i>hmac_key</i> attribute
+// @brief <i>hmac_key</i> Attribute getter
+// @param self Object
+// @return <i>hmac_key</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_hmac_key (os_win_dpapi_blob_o *self)
@@ -289,9 +289,9 @@ tp_getter_hmac_key (os_win_dpapi_blob_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>hash_id</i> Attribute getter
-//! \param self Object
-//! \return <i>hash_id</i> attribute
+// @brief <i>hash_id</i> Attribute getter
+// @param self Object
+// @return <i>hash_id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_hash_id (os_win_dpapi_blob_o *self)
@@ -311,9 +311,9 @@ tp_getter_hash_id (os_win_dpapi_blob_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>hash_length</i> Attribute getter
-//! \param self Object
-//! \return <i>hash_length</i> attribute
+// @brief <i>hash_length</i> Attribute getter
+// @param self Object
+// @return <i>hash_length</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_hash_length (os_win_dpapi_blob_o *self)
@@ -333,9 +333,9 @@ tp_getter_hash_length (os_win_dpapi_blob_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>hmac_value</i> Attribute getter
-//! \param self Object
-//! \return <i>hmac_value</i> attribute
+// @brief <i>hmac_value</i> Attribute getter
+// @param self Object
+// @return <i>hmac_value</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_hmac_value (os_win_dpapi_blob_o *self)
@@ -355,9 +355,9 @@ tp_getter_hmac_value (os_win_dpapi_blob_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>cipher_text</i> Attribute getter
-//! \param self Object
-//! \return <i>cipher_text</i> attribute
+// @brief <i>cipher_text</i> Attribute getter
+// @param self Object
+// @return <i>cipher_text</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_cipher_text (os_win_dpapi_blob_o *self)
@@ -377,9 +377,9 @@ tp_getter_cipher_text (os_win_dpapi_blob_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>plain_text</i> Attribute getter
-//! \param self Object
-//! \return <i>plain_text</i> attribute
+// @brief <i>plain_text</i> Attribute getter
+// @param self Object
+// @return <i>plain_text</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_plain_text (os_win_dpapi_blob_o *self)
@@ -399,9 +399,9 @@ tp_getter_plain_text (os_win_dpapi_blob_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>signature</i> Attribute getter
-//! \param self Object
-//! \return <i>signature</i> attribute
+// @brief <i>signature</i> Attribute getter
+// @param self Object
+// @return <i>signature</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_signature (os_win_dpapi_blob_o *self)
@@ -421,9 +421,9 @@ tp_getter_signature (os_win_dpapi_blob_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>signature_data</i> Attribute getter
-//! \param self Object
-//! \return <i>signature</i> attribute
+// @brief <i>signature_data</i> Attribute getter
+// @param self Object
+// @return <i>signature</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_signature_data (os_win_dpapi_blob_o *self)
@@ -443,7 +443,7 @@ tp_getter_signature_data (os_win_dpapi_blob_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Getters and setters structure
+// @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -570,10 +570,10 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>test_key</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return None
+// @brief <i>test_key</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return None
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_test_key (os_win_dpapi_blob_o *self, PyObject *args)
@@ -613,10 +613,10 @@ tp_f_test_key (os_win_dpapi_blob_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>decrypt</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return None
+// @brief <i>decrypt</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return None
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_decrypt (os_win_dpapi_blob_o *self, PyObject *args)
@@ -655,10 +655,10 @@ tp_f_decrypt (os_win_dpapi_blob_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_decrypted</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_decrypted</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_decrypted (os_win_dpapi_blob_o *self, PyObject *)
@@ -680,7 +680,7 @@ tp_f_is_decrypted (os_win_dpapi_blob_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -706,11 +706,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>blob</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>blob</i> object
+// @brief <i>blob</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>blob</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
@@ -749,8 +749,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>blob</i> deallocator
-//! \param self Object
+// @brief <i>blob</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (os_win_dpapi_blob_o *self)
@@ -760,7 +760,7 @@ tp_dealloc (os_win_dpapi_blob_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject os_win_dpapi_blob_t =
 {
@@ -813,3 +813,5 @@ PyTypeObject os_win_dpapi_blob_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

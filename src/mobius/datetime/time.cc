@@ -17,13 +17,11 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/datetime/time.h>  // must be full qualified to avoid system's time.h
 
-namespace mobius
-{
-namespace datetime
+namespace mobius::datetime
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Construct time from day second number
-//! \param s day second
+// @brief Construct time from day second number
+// @param s day second
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 time::time (day_second_type s) noexcept
 {
@@ -31,8 +29,8 @@ time::time (day_second_type s) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set time from second
-//! \param s day second
+// @brief Set time from second
+// @param s day second
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 time::from_day_seconds (day_second_type s) noexcept
@@ -45,8 +43,8 @@ time::from_day_seconds (day_second_type s) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get total seconds
-//! \return number of second
+// @brief Get total seconds
+// @return number of second
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 day_second_type
 time::to_day_seconds () const noexcept
@@ -55,10 +53,10 @@ time::to_day_seconds () const noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Compare two time objects
-//! \param t1 time object
-//! \param t2 time object
-//! \return true if the two time objects are equal
+// @brief Compare two time objects
+// @param t1 time object
+// @param t2 time object
+// @return true if the two time objects are equal
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator== (const time& t1, const time& t2) noexcept
@@ -70,9 +68,9 @@ operator== (const time& t1, const time& t2) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert time to string
-//! \param t time object
-//! \return string
+// @brief Convert time to string
+// @param t time object
+// @return string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 to_string (const time& t)
@@ -95,10 +93,10 @@ to_string (const time& t)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Write datetime representation to std::ostream
-//! \param stream ostream reference
-//! \param dt datetime object
-//! \return reference to ostream
+// @brief Write datetime representation to std::ostream
+// @param stream ostream reference
+// @param dt datetime object
+// @return reference to ostream
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::ostream&
 operator<< (std::ostream& stream, const time& t)
@@ -108,5 +106,6 @@ operator<< (std::ostream& stream, const time& t)
   return stream;
 }
 
-} // namespace datetime
-} // namespace mobius
+} // namespace mobius::datetime
+
+

@@ -17,23 +17,21 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "data_impl_list.h"
 
-namespace mobius
-{
-namespace pod
+namespace mobius::pod
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param siz Vector size
+// @brief Constructor
+// @param siz Vector size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data_impl_list::data_impl_list (std::uint64_t siz)
  : value_ (siz)
 {
 }
- 
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Operator[]
-//! \param idx Entry index
-//! \return Entry value
+// @brief Operator[]
+// @param idx Entry index
+// @return Entry value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data_impl_list::value_type
 data_impl_list::operator[] (size_type idx)
@@ -42,9 +40,9 @@ data_impl_list::operator[] (size_type idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Operator[]
-//! \param idx Entry index
-//! \return Entry value
+// @brief Operator[]
+// @param idx Entry index
+// @return Entry value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data_impl_list::value_type
 data_impl_list::operator[] (size_type idx) const
@@ -53,8 +51,8 @@ data_impl_list::operator[] (size_type idx) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Append value to list
-//! \param v shared_ptr to value_impl_base
+// @brief Append value to list
+// @param v shared_ptr to value_impl_base
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 data_impl_list::append (std::shared_ptr <data_impl_base> v)
@@ -62,5 +60,6 @@ data_impl_list::append (std::shared_ptr <data_impl_base> v)
   value_.push_back (v);
 }
 
-} // namespace pod
-} // namespace mobius
+} // namespace mobius::pod
+
+

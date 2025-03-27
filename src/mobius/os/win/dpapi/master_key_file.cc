@@ -23,8 +23,8 @@
 namespace mobius::os::win::dpapi
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
+// @brief Constructor
+// @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 master_key_file::master_key_file (mobius::io::reader reader)
 {
@@ -36,13 +36,13 @@ master_key_file::master_key_file (mobius::io::reader reader)
   guid_ = mobius::string::toupper (decoder.get_string_by_size (72, "UTF-16LE"));
   decoder.skip (8);	// dummy3 and dummy4
   flags_ = decoder.get_uint32_le ();
-  
+
   // data block size
   auto master_key_size = decoder.get_uint64_le ();
   auto backup_key_size = decoder.get_uint64_le ();
   auto credhist_size = decoder.get_uint64_le ();
   auto domain_key_size = decoder.get_uint64_le ();
-  
+
   // keys
   if (master_key_size)
     {
@@ -57,7 +57,7 @@ master_key_file::master_key_file (mobius::io::reader reader)
       auto reader = mobius::io::new_bytearray_reader (data);
       backup_key_ = master_key (reader, flags_);
     }
-  
+
   if (credhist_size)
     {
       decoder.skip (4);		// CREDHIST revision
@@ -70,3 +70,5 @@ master_key_file::master_key_file (mobius::io::reader reader)
 }
 
 } // namespace mobius::os::win::dpapi
+
+

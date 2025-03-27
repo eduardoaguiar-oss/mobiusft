@@ -23,7 +23,7 @@
 #include <mobius/core/file_decoder/section.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -41,3 +41,5 @@ PyObject *pymobius_core_file_decoder_section_to_pyobject (const mobius::core::fi
 mobius::core::file_decoder::section pymobius_core_file_decoder_section_from_pyobject (PyObject *);
 
 #endif
+
+

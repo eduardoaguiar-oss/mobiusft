@@ -21,16 +21,10 @@
 #include <mobius/os/win/registry/registry_data_impl_base.h>
 #include <mobius/bytearray.h>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace registry
+namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_data (subtype LSA PolEkList) implementation class
+// @brief registry_data (subtype LSA PolEkList) implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class registry_data_impl_lsa_poleklist : public registry_data_impl_base
 {
@@ -38,8 +32,8 @@ public:
   registry_data_impl_lsa_poleklist (const mobius::bytearray&, const mobius::bytearray&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if object is valid
-  //! \return true/false
+  // @brief check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const override
   {
@@ -47,8 +41,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get size
-  //! \return size
+  // @brief get size
+  // @return size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_size () const override
@@ -58,8 +52,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get type
-  //! \return type
+  // @brief get type
+  // @return type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   data_type
   get_type () const override
@@ -68,8 +62,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get data
-  //! \return data
+  // @brief get data
+  // @return data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   get_data () const override
@@ -79,16 +73,16 @@ public:
   }
 
 private:
-  //! \brief LSA Secrets decryption key
+  // @brief LSA Secrets decryption key
   const mobius::bytearray lsa_key_;
 
-  //! \brief encrypted data from value
+  // @brief encrypted data from value
   const mobius::bytearray encrypted_data_;
 
-  //! \brief data loaded flag
+  // @brief data loaded flag
   mutable bool data_loaded_ = false;
 
-  //! \brief decrypted data
+  // @brief decrypted data
   mutable mobius::bytearray data_;
 
   // helper functions
@@ -98,9 +92,8 @@ private:
 // helper functions
 mobius::bytearray decrypt_aes (const mobius::bytearray&, const mobius::bytearray&);
 
-} // namespace registry
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::registry
 
 #endif
+
+

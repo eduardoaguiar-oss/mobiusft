@@ -37,8 +37,8 @@ class evidence;
 class event;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief item class
-//! \author Eduardo Aguiar
+// @brief item class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class item
 {
@@ -129,9 +129,9 @@ public:
   std::unordered_map <std::string, std::int64_t> count_evidences () const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get attribute
-  //! \param ID Attribute ID
-  //! \return Attribute value
+  // @brief Get attribute
+  // @param ID Attribute ID
+  // @return Attribute value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   template <typename T> T get_attribute (const std::string& id) const
   {
@@ -139,10 +139,10 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get attribute
-  //! \param id Attribute ID
-  //! \param value Default value
-  //! \return Attribute value
+  // @brief Get attribute
+  // @param id Attribute ID
+  // @param value Default value
+  // @return Attribute value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   template <typename T> T get_attribute (const std::string& id, const T& value) const
   {
@@ -153,8 +153,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if object is valid
-  //! \return true/false
+  // @brief Check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator bool () const noexcept
   {
@@ -162,10 +162,10 @@ public:
   }
 
 private:
-  //! \brief implementation class forward declaration
+  // @brief implementation class forward declaration
   class impl;
 
-  //! \brief implementation pointer
+  // @brief implementation pointer
   std::shared_ptr <impl> impl_;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -189,7 +189,7 @@ bool operator>= (const item&, const item&);
 namespace std
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief std::hash specialization for mobius::model::item class
+// @brief std::hash specialization for mobius::model::item class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <>
 struct hash <mobius::model::item>
@@ -200,3 +200,5 @@ struct hash <mobius::model::item>
 } // namespace std
 
 #endif
+
+

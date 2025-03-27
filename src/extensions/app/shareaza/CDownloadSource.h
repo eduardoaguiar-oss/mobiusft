@@ -29,16 +29,16 @@
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief CDownloadSource structure decoder
-//! \author Eduardo Aguiar
-//! \see DownloadSource.cpp - CDownloadSource::Serialize
+// @brief CDownloadSource structure decoder
+// @author Eduardo Aguiar
+// @see DownloadSource.cpp - CDownloadSource::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class CDownloadSource
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Fragmented info
-  //! \see FileFragments/Compatibility.hpp - SerializeIn2
+  // @brief Fragmented info
+  // @see FileFragments/Compatibility.hpp - SerializeIn2
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   struct CFragment
   {
@@ -53,8 +53,8 @@ public:
   CDownloadSource (mobius::decoder::mfc&, int);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get URL
-  //! \return URL
+  // @brief Get URL
+  // @return URL
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_url () const
@@ -63,8 +63,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get file name
-  //! \return File name
+  // @brief Get file name
+  // @return File name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_name () const
@@ -73,8 +73,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get IP address
-  //! \return IP Address
+  // @brief Get IP address
+  // @return IP Address
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_ip () const
@@ -83,8 +83,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get port number
-  //! \return Port number
+  // @brief Get port number
+  // @return Port number
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint16_t
   get_port () const
@@ -93,8 +93,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get last seen time
-  //! \return Date/time
+  // @brief Get last seen time
+  // @return Date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::datetime::datetime
   get_last_seen_time () const
@@ -103,8 +103,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get peer nickname
-  //! \return Nickname
+  // @brief Get peer nickname
+  // @return Nickname
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_nick () const
@@ -113,8 +113,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get speed
-  //! \return Speed in KB
+  // @brief Get speed
+  // @return Speed in KB
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_speed () const
@@ -123,8 +123,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get GUID
-  //! \return GUID
+  // @brief Get GUID
+  // @return GUID
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_guid () const
@@ -133,8 +133,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get protocol ID
-  //! \return Protocol ID
+  // @brief Get protocol ID
+  // @return Protocol ID
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_protocol_id () const
@@ -143,8 +143,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get protocol name
-  //! \return Protocol name
+  // @brief Get protocol name
+  // @return Protocol name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_protocol_name () const
@@ -153,8 +153,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get country code
-  //! \return Country code
+  // @brief Get country code
+  // @return Country code
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_country_code () const
@@ -163,8 +163,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get country name
-  //! \return Country name
+  // @brief Get country name
+  // @return Country name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_country_name () const
@@ -173,8 +173,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get server
-  //! \return Server
+  // @brief Get server
+  // @return Server
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_server () const
@@ -183,8 +183,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get server IP
-  //! \return IP
+  // @brief Get server IP
+  // @return IP
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_server_ip () const
@@ -193,8 +193,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get server port number
-  //! \return Port number
+  // @brief Get server port number
+  // @return Port number
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint16_t
   get_server_port () const
@@ -203,8 +203,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get index
-  //! \return Index
+  // @brief Get index
+  // @return Index
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_index () const
@@ -213,8 +213,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get b_push_only flag
-  //! \return b_push_only flag
+  // @brief Get b_push_only flag
+  // @return b_push_only flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_b_push_only () const
@@ -223,8 +223,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get b_close_conn flag
-  //! \return b_close_conn flag
+  // @brief Get b_close_conn flag
+  // @return b_close_conn flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_b_close_conn () const
@@ -233,8 +233,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get b_read_content flag
-  //! \return b_read_content flag
+  // @brief Get b_read_content flag
+  // @return b_read_content flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_b_read_content () const
@@ -243,8 +243,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get b_hash_auth flag
-  //! \return b_hash_auth flag
+  // @brief Get b_hash_auth flag
+  // @return b_hash_auth flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_b_hash_auth () const
@@ -253,8 +253,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get b_hash_sha1 flag
-  //! \return b_hash_sha1 flag
+  // @brief Get b_hash_sha1 flag
+  // @return b_hash_sha1 flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_b_hash_sha1 () const
@@ -263,8 +263,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get b_hash_tiger flag
-  //! \return b_hash_tiger flag
+  // @brief Get b_hash_tiger flag
+  // @return b_hash_tiger flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_b_hash_tiger () const
@@ -273,8 +273,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get b_hash_ed2k flag
-  //! \return b_hash_ed2k flag
+  // @brief Get b_hash_ed2k flag
+  // @return b_hash_ed2k flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_b_hash_ed2k () const
@@ -283,8 +283,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get b_hash_bth flag
-  //! \return b_hash_bth flag
+  // @brief Get b_hash_bth flag
+  // @return b_hash_bth flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_b_hash_bth () const
@@ -293,8 +293,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get b_hash_md5 flag
-  //! \return b_hash_md5 flag
+  // @brief Get b_hash_md5 flag
+  // @return b_hash_md5 flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_b_hash_md5 () const
@@ -303,8 +303,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get b_client_extended flag
-  //! \return b_client_extended flag
+  // @brief Get b_client_extended flag
+  // @return b_client_extended flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_b_client_extended () const
@@ -313,8 +313,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get b_meta_ignore flag
-  //! \return b_meta_ignore flag
+  // @brief Get b_meta_ignore flag
+  // @return b_meta_ignore flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_b_meta_ignore () const
@@ -323,8 +323,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get fragments
-  //! \return Fragments
+  // @brief Get fragments
+  // @return Fragments
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto
   get_fragments () const
@@ -333,88 +333,88 @@ public:
   }
 
 private:
-  //! \brief File name
+  // @brief File name
   std::string name_;
 
-  //! \brief URL
+  // @brief URL
   std::string url_;
 
-  //! \brief IP
+  // @brief IP
   std::string ip_;
 
-  //! \brief Port number
+  // @brief Port number
   std::uint16_t port_ = 0;
 
-  //! \brief Last seen time
+  // @brief Last seen time
   mobius::datetime::datetime last_seen_time_;
 
-  //! \brief Peer nickname
+  // @brief Peer nickname
   std::string nick_;
 
-  //! \brief Speed in KB
+  // @brief Speed in KB
   std::uint32_t speed_ = 0;
 
-  //! \brief GUID
+  // @brief GUID
   std::string guid_;
 
-  //! \brief Protocol ID
+  // @brief Protocol ID
   std::uint32_t protocol_id_ = 0;
 
-  //! \brief Protocol name
+  // @brief Protocol name
   std::string protocol_name_;
 
-  //! \brief Country code
+  // @brief Country code
   std::string country_code_;
 
-  //! \brief Country name
+  // @brief Country name
   std::string country_name_;
 
-  //! \brief Server
+  // @brief Server
   std::string server_;
 
-  //! \brief Server IP
+  // @brief Server IP
   std::string server_ip_;
 
-  //! \brief Port number
+  // @brief Port number
   std::uint16_t server_port_ = 0;
 
-  //! \brief Index
+  // @brief Index
   std::uint32_t index_ = 0;
 
-  //! \brief Flag b_push_only
+  // @brief Flag b_push_only
   bool b_push_only_ = false;
 
-  //! \brief Flag b_close_conn
+  // @brief Flag b_close_conn
   bool b_close_conn_ = false;
 
-  //! \brief Flag b_read_content
+  // @brief Flag b_read_content
   bool b_read_content_ = false;
 
-  //! \brief Flag b_hash_auth
+  // @brief Flag b_hash_auth
   bool b_hash_auth_ = false;
 
-  //! \brief Flag b_hash_sha1
+  // @brief Flag b_hash_sha1
   bool b_hash_sha1_ = false;
 
-  //! \brief Flag b_hash_tiger
+  // @brief Flag b_hash_tiger
   bool b_hash_tiger_ = false;
 
-  //! \brief Flag b_hash_ed2k
+  // @brief Flag b_hash_ed2k
   bool b_hash_ed2k_ = false;
 
-  //! \brief Flag b_hash_bth
+  // @brief Flag b_hash_bth
   bool b_hash_bth_ = false;
 
-  //! \brief Flag b_hash_md5
+  // @brief Flag b_hash_md5
   bool b_hash_md5_ = false;
 
-  //! \brief Flag b_client_extended
+  // @brief Flag b_client_extended
   bool b_client_extended_ = false;
 
-  //! \brief Flag b_meta_ignore
+  // @brief Flag b_meta_ignore
   bool b_meta_ignore_ = false;
 
-  //! \brief Fragments
+  // @brief Fragments
   std::vector <CFragment> fragments_;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -427,3 +427,7 @@ private:
 } // namespace mobius::extension::app::shareaza
 
 #endif
+
+
+
+

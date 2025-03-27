@@ -23,7 +23,7 @@
 #include <mobius/decoder/qdatastream.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -38,3 +38,7 @@ mobius::py::pytypeobject new_decoder_qdatastream_type ();
 PyObject *pymobius_decoder_qdatastream_to_pyobject (const mobius::decoder::qdatastream&);
 
 #endif
+
+
+
+

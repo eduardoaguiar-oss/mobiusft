@@ -33,7 +33,7 @@ const char *EXTENSION_DESCRIPTION = "ICS Solo image file support";
 } // extern "C"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Start extension
+// @brief Start extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extern "C" void
 start ()
@@ -46,10 +46,12 @@ start ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Stop extension
+// @brief Stop extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extern "C" void
 stop ()
 {
   mobius::core::remove_resource ("vfs.imagefile.solo");
 }
+
+

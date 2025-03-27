@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file thread_guard.cc C++ API <i>mobius.core.thread_guard</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "thread_guard.h"
@@ -26,11 +26,11 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>thread_guard</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>thread_guard</i> object
+// @brief <i>thread_guard</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>thread_guard</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *, PyObject *)
@@ -55,8 +55,8 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>thread_guard</i> deallocator
-//! \param self Object
+// @brief <i>thread_guard</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (core_thread_guard_o *self)
@@ -66,7 +66,7 @@ tp_dealloc (core_thread_guard_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyTypeObject core_thread_guard_t =
 {
@@ -121,7 +121,7 @@ static PyTypeObject core_thread_guard_t =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>mobius.core.thread_guard</i> type
+// @brief Create <i>mobius.core.thread_guard</i> type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
 new_core_thread_guard_type ()
@@ -133,9 +133,9 @@ new_core_thread_guard_type ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>thread_guard</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>thread_guard</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_core_thread_guard_check (PyObject *value)
@@ -144,9 +144,9 @@ pymobius_core_thread_guard_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>thread_guard</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New thread_guard object
+// @brief Create <i>thread_guard</i> Python object from C++ object
+// @param obj C++ object
+// @return New thread_guard object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_core_thread_guard_to_pyobject (const mobius::core::thread_guard& obj)
@@ -155,12 +155,14 @@ pymobius_core_thread_guard_to_pyobject (const mobius::core::thread_guard& obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>thread_guard</i> C++ object from Python object
-//! \param value Python value
-//! \return Thread_guard object
+// @brief Create <i>thread_guard</i> C++ object from Python object
+// @param value Python value
+// @return Thread_guard object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::thread_guard
 pymobius_core_thread_guard_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <core_thread_guard_o> (value, &core_thread_guard_t);
 }
+
+

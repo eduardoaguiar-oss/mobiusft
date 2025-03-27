@@ -25,8 +25,8 @@ namespace
 static const std::string RESOURCE_ID = "database.category";
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get database instance
-//! \return Database object
+// @brief Get database instance
+// @return Database object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::database::database
 _get_database ()
@@ -100,7 +100,7 @@ _get_database ()
 namespace mobius::framework
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Category implementation class
+// @brief Category implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class category::impl
 {
@@ -112,8 +112,8 @@ public:
   explicit impl (std::int64_t);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if object is valid
-  //! \return true/false
+  // @brief check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const
   {
@@ -121,8 +121,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get id
-  //! \return id
+  // @brief get id
+  // @return id
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_id () const
@@ -132,8 +132,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get name
-  //! \return name
+  // @brief get name
+  // @return name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_name () const
@@ -143,8 +143,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get description
-  //! \return description
+  // @brief get description
+  // @return description
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_description () const
@@ -154,8 +154,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get icon data
-  //! \return icon data
+  // @brief get icon data
+  // @return icon data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   get_icon_data () const
@@ -176,22 +176,22 @@ public:
   std::vector <attribute> get_attributes () const;
 
 private:
-  //! \brief unique ID
+  // @brief unique ID
   std::int64_t uid_ = -1;
 
-  //! \brief category ID
+  // @brief category ID
   mutable std::string id_;
 
-  //! \brief name
+  // @brief name
   mutable std::string name_;
 
-  //! \brief description
+  // @brief description
   mutable std::string description_;
 
-  //! \brief icon data
+  // @brief icon data
   mutable mobius::bytearray icon_data_;
 
-  //! \brief data loaded flag
+  // @brief data loaded flag
   mutable bool data_loaded_ = false;
 
   // helper functions
@@ -199,8 +199,8 @@ private:
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
-//! \param uid unique ID
+// @brief constructor
+// @param uid unique ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 category::impl::impl (std::int64_t uid)
   : uid_ (uid)
@@ -208,8 +208,8 @@ category::impl::impl (std::int64_t uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set name
-//! \param name new category name
+// @brief set name
+// @param name new category name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 category::impl::set_name (const std::string& name)
@@ -231,8 +231,8 @@ category::impl::set_name (const std::string& name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set description
-//! \param description description
+// @brief set description
+// @param description description
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 category::impl::set_description (const std::string& description)
@@ -254,8 +254,8 @@ category::impl::set_description (const std::string& description)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set icon data
-//! \param icon_data icon data
+// @brief set icon data
+// @param icon_data icon data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 category::impl::set_icon_data (const mobius::bytearray& icon_data)
@@ -277,9 +277,9 @@ category::impl::set_icon_data (const mobius::bytearray& icon_data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get attribute
-//! \param id attribute ID
-//! \return attribute
+// @brief get attribute
+// @param id attribute ID
+// @return attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 attribute
 category::impl::get_attribute (const std::string& id) const
@@ -307,9 +307,9 @@ category::impl::get_attribute (const std::string& id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief New attribute
-//! \param id attribute ID
-//! \return attribute
+// @brief New attribute
+// @param id attribute ID
+// @return attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 attribute
 category::impl::new_attribute (const std::string& id)
@@ -356,8 +356,8 @@ category::impl::new_attribute (const std::string& id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove attribute
-//! \param id attribute ID
+// @brief Remove attribute
+// @param id attribute ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 category::impl::remove_attribute (const std::string& id)
@@ -375,8 +375,8 @@ category::impl::remove_attribute (const std::string& id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attributes
-//! \return attributes
+// @brief Get attributes
+// @return attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <attribute>
 category::impl::get_attributes () const
@@ -402,7 +402,7 @@ category::impl::get_attributes () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief load data on demand
+// @brief load data on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 category::impl::_load_data () const
@@ -433,8 +433,8 @@ category::impl::_load_data () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param uid row ID
+// @brief Constructor
+// @param uid row ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 category::category (std::int64_t uid)
   : impl_ (std::make_shared <impl> (uid))
@@ -442,7 +442,7 @@ category::category (std::int64_t uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 category::category ()
   : impl_ (std::make_shared <impl> ())
@@ -450,8 +450,8 @@ category::category ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if object is valid
-//! \return true/false
+// @brief Check if object is valid
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 category::operator bool () const
 {
@@ -459,8 +459,8 @@ category::operator bool () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get id
-//! \return id
+// @brief get id
+// @return id
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 category::get_id () const
@@ -469,8 +469,8 @@ category::get_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get name
-//! \return name
+// @brief get name
+// @return name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 category::get_name () const
@@ -479,8 +479,8 @@ category::get_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set name
-//! \param name name
+// @brief set name
+// @param name name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 category::set_name (const std::string& name)
@@ -489,8 +489,8 @@ category::set_name (const std::string& name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get description
-//! \return description
+// @brief get description
+// @return description
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 category::get_description () const
@@ -499,8 +499,8 @@ category::get_description () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set description
-//! \param description description
+// @brief set description
+// @param description description
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 category::set_description (const std::string& description)
@@ -509,8 +509,8 @@ category::set_description (const std::string& description)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get icon data
-//! \return icon data
+// @brief get icon data
+// @return icon data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 category::get_icon_data () const
@@ -519,8 +519,8 @@ category::get_icon_data () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set icon data
-//! \param icon_data icon data
+// @brief set icon data
+// @param icon_data icon data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 category::set_icon_data (const mobius::bytearray& icon_data)
@@ -529,9 +529,9 @@ category::set_icon_data (const mobius::bytearray& icon_data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get attribute
-//! \param id attribute ID
-//! \return attribute
+// @brief get attribute
+// @param id attribute ID
+// @return attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 attribute
 category::get_attribute (const std::string& id) const
@@ -540,9 +540,9 @@ category::get_attribute (const std::string& id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create new attribute
-//! \param id attribute ID
-//! \return attribute
+// @brief create new attribute
+// @param id attribute ID
+// @return attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 attribute
 category::new_attribute (const std::string& id)
@@ -551,8 +551,8 @@ category::new_attribute (const std::string& id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief remove attribute
-//! \param id attribute ID
+// @brief remove attribute
+// @param id attribute ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 category::remove_attribute (const std::string& id)
@@ -561,8 +561,8 @@ category::remove_attribute (const std::string& id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get attributes
-//! \return attributes
+// @brief get attributes
+// @return attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <attribute>
 category::get_attributes () const
@@ -571,8 +571,8 @@ category::get_attributes () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get category database
-//! \return Database
+// @brief Get category database
+// @return Database
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::database::database
 get_category_database ()
@@ -581,8 +581,8 @@ get_category_database ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new transaction to category database
-//! \return New database transaction
+// @brief Create new transaction to category database
+// @return New database transaction
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::database::transaction
 new_category_transaction ()
@@ -592,9 +592,9 @@ new_category_transaction ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get category
-//! \param id category ID
-//! \return category
+// @brief Get category
+// @param id category ID
+// @return category
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 category
 get_category (const std::string& id)
@@ -620,9 +620,9 @@ get_category (const std::string& id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief New category
-//! \param id category ID
-//! \return category
+// @brief New category
+// @param id category ID
+// @return category
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 category
 new_category (const std::string& id)
@@ -654,8 +654,8 @@ new_category (const std::string& id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove category
-//! \param id category ID
+// @brief Remove category
+// @param id category ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 remove_category (const std::string& id)
@@ -671,8 +671,8 @@ remove_category (const std::string& id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get categories
-//! \return categories
+// @brief Get categories
+// @return categories
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <category>
 get_categories ()
@@ -694,7 +694,7 @@ get_categories ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove all categories
+// @brief Remove all categories
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 remove_categories ()
@@ -706,3 +706,5 @@ remove_categories ()
 }
 
 } // namespace mobius::framework
+
+

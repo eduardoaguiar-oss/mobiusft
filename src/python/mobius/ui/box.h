@@ -23,7 +23,7 @@
 #include <mobius/ui/box.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -41,3 +41,5 @@ PyObject *pymobius_ui_box_to_pyobject (const mobius::ui::box&);
 mobius::ui::box pymobius_ui_box_from_pyobject (PyObject *);
 
 #endif
+
+

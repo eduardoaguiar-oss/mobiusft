@@ -23,17 +23,11 @@
 #include <mobius/os/win/registry/registry_key_list.h>
 #include <mobius/os/win/registry/pssp_data2.h>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace registry
+namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Protected Storage System Provider key implementation class
-//! \see https://msdn.microsoft.com/library/bb432403.aspx
+// @brief Protected Storage System Provider key implementation class
+// @see https://msdn.microsoft.com/library/bb432403.aspx
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class registry_key_impl_pssp : public registry_key_impl_base
 {
@@ -42,8 +36,8 @@ public:
   explicit registry_key_impl_pssp (registry_key, pssp_data2);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if object is valid
-  //! \return true/false
+  // @brief check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const override
   {
@@ -51,8 +45,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if key has subkeys
-  //! \return true if key has at least one subkey, false otherwise
+  // @brief check if key has subkeys
+  // @return true if key has at least one subkey, false otherwise
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   has_subkeys () const override
@@ -62,8 +56,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get name
-  //! \return name
+  // @brief get name
+  // @return name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_name () const override
@@ -72,8 +66,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set name
-  //! \param name key name
+  // @brief set name
+  // @param name key name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_name (const std::string& name) override
@@ -82,8 +76,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get classname
-  //! \return classname
+  // @brief get classname
+  // @return classname
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_classname () const override
@@ -92,8 +86,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get last modification time
-  //! \return last modification time
+  // @brief get last modification time
+  // @return last modification time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::datetime::datetime
   get_last_modification_time () const override
@@ -102,8 +96,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief return iterator to the first item
-  //! \return iterator
+  // @brief return iterator to the first item
+  // @return iterator
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   const_iterator_type
   begin () const override
@@ -113,8 +107,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief return iterator after the last item
-  //! \return iterator
+  // @brief return iterator after the last item
+  // @return iterator
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   const_iterator_type
   end () const override
@@ -124,8 +118,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief add subkey
-  //! \param key key
+  // @brief add subkey
+  // @param key key
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   add_key (registry_key key) override
@@ -135,8 +129,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief add subkey
-  //! \param key key
+  // @brief add subkey
+  // @param key key
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   remove_key (const std::string& name) override
@@ -146,7 +140,7 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief clear all subkeys
+  // @brief clear all subkeys
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   clear_keys () override
@@ -156,8 +150,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get values
-  //! \return values
+  // @brief get values
+  // @return values
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::vector <registry_value>
   get_values () const override
@@ -167,25 +161,25 @@ public:
   }
 
 private:
-  //! \brief key
+  // @brief key
   registry_key key_;
 
-  //! \brief key name
+  // @brief key name
   std::string name_;
 
-  //! \brief PSSP data2 key collection
+  // @brief PSSP data2 key collection
   pssp_data2 data2_;
 
-  //! \brief subkeys loaded flag
+  // @brief subkeys loaded flag
   mutable bool subkeys_loaded_ = false;
 
-  //! \brief values loaded flag
+  // @brief values loaded flag
   mutable bool values_loaded_ = false;
 
-  //! \brief subkeys
+  // @brief subkeys
   mutable registry_key_list subkeys_;
 
-  //! \brief values
+  // @brief values
   mutable std::vector <registry_value> values_;
 
   // helper functions
@@ -193,9 +187,8 @@ private:
   void _load_values () const;
 };
 
-} // namespace registry
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::registry
 
 #endif
+
+

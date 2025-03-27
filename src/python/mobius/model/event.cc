@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file event.cc C++ API <i>mobius.model.event</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "event.h"
@@ -26,10 +26,10 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_timestamp</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Date/time
+// @brief <i>get_timestamp</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_timestamp (model_event_o *self, PyObject *)
@@ -51,10 +51,10 @@ tp_f_get_timestamp (model_event_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_text</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Text
+// @brief <i>get_text</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_text (model_event_o *self, PyObject *)
@@ -76,7 +76,7 @@ tp_f_get_text (model_event_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -86,8 +86,8 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>event</i> deallocator
-//! \param self Object
+// @brief <i>event</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (model_event_o *self)
@@ -97,7 +97,7 @@ tp_dealloc (model_event_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyTypeObject model_event_t =
 {
@@ -152,7 +152,7 @@ static PyTypeObject model_event_t =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>mobius.model.event</i> type
+// @brief Create <i>mobius.model.event</i> type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
 new_model_event_type ()
@@ -164,9 +164,9 @@ new_model_event_type ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>event</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>event</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_model_event_check (PyObject *value)
@@ -175,9 +175,9 @@ pymobius_model_event_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>event</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New event object
+// @brief Create <i>event</i> Python object from C++ object
+// @param obj C++ object
+// @return New event object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_model_event_to_pyobject (const mobius::model::event& obj)
@@ -186,12 +186,14 @@ pymobius_model_event_to_pyobject (const mobius::model::event& obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>event</i> C++ object from Python object
-//! \param value Python value
-//! \return Event object
+// @brief Create <i>event</i> C++ object from Python object
+// @param value Python value
+// @return Event object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::model::event
 pymobius_model_event_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <model_event_o> (value, &model_event_t);
 }
+
+

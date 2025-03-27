@@ -38,16 +38,16 @@ void register_callback_builder (const std::string&, callback_builder_type);
 mobius::core::callback new_callback (const std::string&, PyObject *);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Template class to register new callback builder
-//! \param T Callback class type
+// @brief Template class to register new callback builder
+// @param T Callback class type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename T>
 class callback
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Constructor
-  //! \param id Event ID
+  // @brief Constructor
+  // @param id Event ID
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   callback (const std::string& id)
   {
@@ -61,3 +61,5 @@ public:
 } // namespace mobius::py
 
 #endif
+
+

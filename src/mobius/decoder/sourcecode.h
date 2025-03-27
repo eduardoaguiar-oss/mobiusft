@@ -22,13 +22,11 @@
 #include <mobius/bytearray.h>
 #include <cstdint>
 
-namespace mobius
-{
-namespace decoder
+namespace mobius::decoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Generic sourcecode class
-//! \author Eduardo Aguiar
+// @brief Generic sourcecode class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class sourcecode
 {
@@ -46,10 +44,10 @@ public:
   explicit sourcecode (const mobius::io::reader&);
   char_type peek ();
   char_type get ();
-  
+
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get current row number
-  //! \return Row number, starting at 1
+  // @brief Get current row number
+  // @return Row number, starting at 1
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   row_type
   get_row () const noexcept
@@ -58,8 +56,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get current column number
-  //! \return Col number, starting at 1
+  // @brief Get current column number
+  // @return Col number, starting at 1
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   col_type
   get_column () const noexcept
@@ -68,23 +66,24 @@ public:
   }
 
 private:
-  //! \brief Reader object
+  // @brief Reader object
   mobius::io::reader reader_;
 
-  //! \brief Internal buffer
+  // @brief Internal buffer
   mobius::bytearray buffer_;
-  
-  //! \brief Current reading pos
+
+  // @brief Current reading pos
   std::uint64_t pos_ = 0;
 
-  //! \brief Current row number
+  // @brief Current row number
   row_type row_ = 1;
 
-  //! \brief Current column number
+  // @brief Current column number
   col_type col_ = 1;
 };
 
-} // namespace decoder
-} // namespace mobius
+} // namespace mobius::decoder
 
 #endif
+
+

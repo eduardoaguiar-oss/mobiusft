@@ -25,8 +25,8 @@
 namespace mobius::datasource
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief datasource handle class
-//! \author Eduardo Aguiar
+// @brief datasource handle class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class datasource
 {
@@ -47,8 +47,8 @@ public:
   datasource& operator= (datasource&&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if datasource is valid
-  //! \return true/false
+  // @brief Check if datasource is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator bool () const noexcept
   {
@@ -56,8 +56,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get datasource type
-  //! \return type as string
+  // @brief Get datasource type
+  // @return type as string
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_type () const
@@ -66,8 +66,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get object state
-  //! \return Object state
+  // @brief Get object state
+  // @return Object state
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::pod::map
   get_state () const
@@ -76,8 +76,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if datasource is available
-  //! \return True/False
+  // @brief Check if datasource is available
+  // @return True/False
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_available () const
@@ -87,8 +87,8 @@ public:
 
 protected:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get implementation pointer
-  //! \return Class implementation pointer
+  // @brief Get implementation pointer
+  // @return Class implementation pointer
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   template <typename T> std::shared_ptr <T>
   _impl () const
@@ -97,7 +97,7 @@ protected:
   }
 
 private:
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <datasource_impl_base> impl_;
 };
 
@@ -113,3 +113,5 @@ datasource new_datasource_by_ufdr_url (const std::string&);
 } // namespace mobius::datasource
 
 #endif
+
+

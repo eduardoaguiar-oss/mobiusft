@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file tdf.cc C++ API <i>mobius.decoder.tdf</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "tdf.h"
@@ -27,9 +27,9 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>tdf</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>tdf</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_decoder_tdf_check (PyObject *value)
@@ -38,9 +38,9 @@ pymobius_decoder_tdf_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>tdf</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New tdf object
+// @brief Create <i>tdf</i> Python object from C++ object
+// @param obj C++ object
+// @return New tdf object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_decoder_tdf_to_pyobject (const mobius::decoder::tdf& obj)
@@ -54,9 +54,9 @@ pymobius_decoder_tdf_to_pyobject (const mobius::decoder::tdf& obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>tdf</i> C++ object from Python object
-//! \param value Python value
-//! \return Tdf object
+// @brief Create <i>tdf</i> C++ object from Python object
+// @param value Python value
+// @return Tdf object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::decoder::tdf
 pymobius_decoder_tdf_from_pyobject (PyObject *value)
@@ -68,9 +68,9 @@ pymobius_decoder_tdf_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>version</i> Attribute getter
-//! \param self Object
-//! \return <i>version</i> attribute
+// @brief <i>version</i> Attribute getter
+// @param self Object
+// @return <i>version</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_version (decoder_tdf_o *self)
@@ -90,9 +90,9 @@ tp_getter_version (decoder_tdf_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>major_version</i> Attribute getter
-//! \param self Object
-//! \return <i>major_version</i> attribute
+// @brief <i>major_version</i> Attribute getter
+// @param self Object
+// @return <i>major_version</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_major_version (decoder_tdf_o *self)
@@ -112,9 +112,9 @@ tp_getter_major_version (decoder_tdf_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>minor_version</i> Attribute getter
-//! \param self Object
-//! \return <i>minor_version</i> attribute
+// @brief <i>minor_version</i> Attribute getter
+// @param self Object
+// @return <i>minor_version</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_minor_version (decoder_tdf_o *self)
@@ -134,9 +134,9 @@ tp_getter_minor_version (decoder_tdf_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>revision</i> Attribute getter
-//! \param self Object
-//! \return <i>revision</i> attribute
+// @brief <i>revision</i> Attribute getter
+// @param self Object
+// @return <i>revision</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_revision (decoder_tdf_o *self)
@@ -156,9 +156,9 @@ tp_getter_revision (decoder_tdf_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>hash_value</i> Attribute getter
-//! \param self Object
-//! \return <i>hash_value</i> attribute
+// @brief <i>hash_value</i> Attribute getter
+// @param self Object
+// @return <i>hash_value</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_hash_value (decoder_tdf_o *self)
@@ -178,9 +178,9 @@ tp_getter_hash_value (decoder_tdf_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>payload</i> Attribute getter
-//! \param self Object
-//! \return <i>payload</i> attribute
+// @brief <i>payload</i> Attribute getter
+// @param self Object
+// @return <i>payload</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_payload (decoder_tdf_o *self)
@@ -200,7 +200,7 @@ tp_getter_payload (decoder_tdf_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Getters and setters structure
+// @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -250,10 +250,10 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_version_as_string</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Version as string
+// @brief <i>get_version_as_string</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Version as string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_version_as_string (decoder_tdf_o *self, PyObject *)
@@ -275,10 +275,10 @@ tp_f_get_version_as_string (decoder_tdf_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_valid</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_valid</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_valid (decoder_tdf_o *self, PyObject *)
@@ -300,7 +300,7 @@ tp_f_is_valid (decoder_tdf_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -320,11 +320,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>tdf</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>tdf</i> object
+// @brief <i>tdf</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>tdf</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
@@ -364,8 +364,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>tdf</i> deallocator
-//! \param self Object
+// @brief <i>tdf</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (decoder_tdf_o *self)
@@ -375,7 +375,7 @@ tp_dealloc (decoder_tdf_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject decoder_tdf_t =
 {
@@ -428,3 +428,7 @@ PyTypeObject decoder_tdf_t =
   0,                                          		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+
+
+

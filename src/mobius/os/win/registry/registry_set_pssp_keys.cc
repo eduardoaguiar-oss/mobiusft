@@ -25,12 +25,12 @@
 
 namespace mobius::os::win::registry
 {
-namespace               // local namespace
+namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief retrieve pssp cryptographic keys from SID key
-//! \param sid_key SID key
-//! \return PSSP key collection
+// @brief retrieve pssp cryptographic keys from SID key
+// @param sid_key SID key
+// @return PSSP key collection
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 pssp_data2
 get_data2 (registry_key sid_key)
@@ -94,9 +94,9 @@ get_data2 (registry_key sid_key)
 } // local namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set Protected Storage System Provider (PSSP) keys
-//! \see https://msdn.microsoft.com/library/bb432403.aspx
-//! \param root registry root key
+// @brief set Protected Storage System Provider (PSSP) keys
+// @see https://msdn.microsoft.com/library/bb432403.aspx
+// @param root registry root key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry_set_pssp_keys (registry_key root)
@@ -120,3 +120,5 @@ registry_set_pssp_keys (registry_key root)
 }
 
 } // namespace mobius::os::win::registry
+
+

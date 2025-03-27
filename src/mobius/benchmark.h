@@ -25,8 +25,8 @@
 namespace mobius
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief benchmark class
-//! \author Eduardo Aguiar
+// @brief benchmark class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class benchmark
 {
@@ -43,3 +43,5 @@ public:
 } // namespace mobius
 
 #endif
+
+

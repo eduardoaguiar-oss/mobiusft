@@ -27,8 +27,8 @@
 namespace mobius::datasource::ufdr
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Cellebrite UFDR extraction data
-//! \author Eduardo Aguiar
+// @brief Cellebrite UFDR extraction data
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class extraction
 {
@@ -63,13 +63,15 @@ public:
   std::vector<std::pair<std::string,std::string>> get_metadata () const;
 
 private:
-  //! \brief Implementation class forward declaration
+  // @brief Implementation class forward declaration
   class impl;
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
 } // namespace mobius::datasource::ufdr
 
 #endif
+
+

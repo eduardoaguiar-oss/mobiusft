@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pygil.h>
@@ -26,7 +26,7 @@
 #include "io/file.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function new_imagefile_from_file
+// @brief Function new_imagefile_from_file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_vfs_new_imagefile_from_file (PyObject *, PyObject *args)
@@ -64,3 +64,5 @@ func_vfs_new_imagefile_from_file (PyObject *, PyObject *args)
   // create Python imagefile according to its type
   return ret;
 }
+
+

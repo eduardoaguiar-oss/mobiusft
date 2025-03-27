@@ -24,13 +24,11 @@
 #include <cstdint>
 #include <string>
 
-namespace mobius
-{
-namespace vfs
+namespace mobius::vfs
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief imagefile implementation base class
-//! \author Eduardo Aguiar
+// @brief imagefile implementation base class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class imagefile_impl_base
 {
@@ -63,7 +61,7 @@ public:
   virtual size_type get_size () const = 0;
   virtual size_type get_sectors () const = 0;
   virtual size_type get_sector_size () const = 0;
- 
+
   virtual mobius::pod::data get_attribute (const std::string&) const = 0;
   virtual void set_attribute (const std::string&, const mobius::pod::data&) = 0;
   virtual mobius::pod::map get_attributes () const = 0;
@@ -72,7 +70,8 @@ public:
   virtual mobius::io::writer new_writer () const = 0;
 };
 
-} // namespace vfs
-} // namespace mobius
+} // namespace mobius::vfs
 
 #endif
+
+

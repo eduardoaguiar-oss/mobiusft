@@ -20,7 +20,7 @@
 namespace mobius::datasource::ufdr
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief extraction implementation class
+// @brief extraction implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class extraction::impl
 {
@@ -42,8 +42,8 @@ public:
   impl& operator= (impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get id
-  //! \return Id
+  // @brief Get id
+  // @return Id
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   int
   get_id () const
@@ -52,8 +52,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get type
-  //! \return Type
+  // @brief Get type
+  // @return Type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_type () const
@@ -62,8 +62,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set type
-  //! \param type Extraction type
+  // @brief Set type
+  // @param type Extraction type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_type (const std::string& type)
@@ -72,8 +72,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get name
-  //! \return Name
+  // @brief Get name
+  // @return Name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_name () const
@@ -82,8 +82,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set name
-  //! \param name Extraction name
+  // @brief Set name
+  // @param name Extraction name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_name (const std::string& name)
@@ -92,8 +92,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get device name
-  //! \return Device name
+  // @brief Get device name
+  // @return Device name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_device_name () const
@@ -102,8 +102,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set device name
-  //! \param device_name Device name
+  // @brief Set device name
+  // @param device_name Device name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_device_name (const std::string& device_name)
@@ -112,8 +112,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get metadata
-  //! \return Extraction metadata
+  // @brief Get metadata
+  // @return Extraction metadata
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::vector<std::pair<std::string,std::string>>
   get_metadata () const
@@ -122,9 +122,9 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Add metadata
-  //! \param key Metadata key
-  //! \param value Metadata value
+  // @brief Add metadata
+  // @param key Metadata key
+  // @param value Metadata value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   add_metadata (const std::string& key, const std::string& value)
@@ -138,25 +138,25 @@ public:
   mobius::pod::map get_state () const;
 
 private:
-  //! \brief Extraction ID
+  // @brief Extraction ID
   int id_ = -1;
 
-  //! \brief Extraction type
+  // @brief Extraction type
   std::string type_;
 
-  //! \brief Extraction name
+  // @brief Extraction name
   std::string name_;
 
-  //! \brief Device name
+  // @brief Device name
   std::string device_name_;
 
-  //! \brief Metadata
+  // @brief Metadata
   std::vector<std::pair<std::string,std::string>> metadata_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param state Object state
+// @brief Constructor
+// @param state Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extraction::impl::impl (const mobius::pod::map& state)
 {
@@ -175,8 +175,8 @@ extraction::impl::impl (const mobius::pod::map& state)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param id Extraction ID
+// @brief Constructor
+// @param id Extraction ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extraction::impl::impl (int id)
   : id_ (id)
@@ -184,7 +184,7 @@ extraction::impl::impl (int id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
+// @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extraction::extraction ()
   : impl_ (std::make_shared <impl> ())
@@ -192,8 +192,8 @@ extraction::extraction ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param id Extraction ID
+// @brief Constructor
+// @param id Extraction ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extraction::extraction (int id)
   : impl_ (std::make_shared <impl> (id))
@@ -201,8 +201,8 @@ extraction::extraction (int id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param state Object state
+// @brief Constructor
+// @param state Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extraction::extraction (const mobius::pod::map& state)
   : impl_ (std::make_shared <impl> (state))
@@ -210,8 +210,8 @@ extraction::extraction (const mobius::pod::map& state)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get object state
-//! \return Object state
+// @brief Get object state
+// @return Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 extraction::impl::get_state () const
@@ -234,8 +234,8 @@ extraction::impl::get_state () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get object state
-//! \return Object state
+// @brief Get object state
+// @return Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 extraction::get_state () const
@@ -244,8 +244,8 @@ extraction::get_state () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get id
-//! \return Id
+// @brief Get id
+// @return Id
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int
 extraction::get_id () const
@@ -254,8 +254,8 @@ extraction::get_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get type
-//! \return Type
+// @brief Get type
+// @return Type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 extraction::get_type () const
@@ -264,8 +264,8 @@ extraction::get_type () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set type
-//! \param type Extraction type
+// @brief Set type
+// @param type Extraction type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 extraction::set_type (const std::string& type)
@@ -274,8 +274,8 @@ extraction::set_type (const std::string& type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get name
-//! \return Name
+// @brief Get name
+// @return Name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 extraction::get_name () const
@@ -284,8 +284,8 @@ extraction::get_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set name
-//! \param name Extraction name
+// @brief Set name
+// @param name Extraction name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 extraction::set_name (const std::string& name)
@@ -294,8 +294,8 @@ extraction::set_name (const std::string& name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get device name
-//! \return Device name
+// @brief Get device name
+// @return Device name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 extraction::get_device_name () const
@@ -304,8 +304,8 @@ extraction::get_device_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set device name
-//! \param device_name Device name
+// @brief Set device name
+// @param device_name Device name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 extraction::set_device_name (const std::string& device_name)
@@ -314,8 +314,8 @@ extraction::set_device_name (const std::string& device_name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get metadata
-//! \return Extraction metadata
+// @brief Get metadata
+// @return Extraction metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector<std::pair<std::string,std::string>>
 extraction::get_metadata () const
@@ -324,9 +324,9 @@ extraction::get_metadata () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add metadata
-//! \param key Metadata key
-//! \param value Metadata value
+// @brief Add metadata
+// @param key Metadata key
+// @param value Metadata value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 extraction::add_metadata (const std::string& key, const std::string& value)
@@ -335,3 +335,5 @@ extraction::add_metadata (const std::string& key, const std::string& value)
 }
 
 } // namespace mobius::datasource::ufdr
+
+

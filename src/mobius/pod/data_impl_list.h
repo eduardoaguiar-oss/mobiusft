@@ -23,13 +23,11 @@
 #include <memory>
 #include <vector>
 
-namespace mobius
-{
-namespace pod
+namespace mobius::pod
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief List data implementation class
-//! \author Eduardo Aguiar
+// @brief List data implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class data_impl_list : public data_impl_base
 {
@@ -55,8 +53,8 @@ public:
   value_type operator[] (size_type) const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get data type
-  //! \return Data type
+  // @brief Get data type
+  // @return Data type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   type
   get_type () const noexcept override
@@ -65,8 +63,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get list size
-  //! \return Size
+  // @brief Get list size
+  // @return Size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_size () const noexcept
@@ -75,8 +73,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get iterator pointing to beginning
-  //! \return Iterator
+  // @brief Get iterator pointing to beginning
+  // @return Iterator
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   const_iterator
   begin () const noexcept
@@ -85,8 +83,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get iterator pointing to end
-  //! \return Iterator
+  // @brief Get iterator pointing to end
+  // @return Iterator
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   const_iterator
   end () const noexcept
@@ -95,8 +93,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get iterator pointing to beginning
-  //! \return Iterator
+  // @brief Get iterator pointing to beginning
+  // @return Iterator
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   iterator
   begin () noexcept
@@ -105,8 +103,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get iterator pointing to end
-  //! \return Iterator
+  // @brief Get iterator pointing to end
+  // @return Iterator
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   iterator
   end () noexcept
@@ -118,12 +116,13 @@ public:
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void append (std::shared_ptr <data_impl_base>);
-  
+
 private:
   std::vector <value_type> value_;
 };
 
-} // namespace pod
-} // namespace mobius
+} // namespace mobius::pod
 
 #endif
+
+

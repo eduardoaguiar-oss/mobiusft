@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file extension.cc C++ API <i>mobius.core.extension</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "extension.h"
@@ -26,9 +26,9 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>extension</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>extension</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_core_extension_check (PyObject *value)
@@ -37,9 +37,9 @@ pymobius_core_extension_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>extension</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New extension object
+// @brief Create <i>extension</i> Python object from C++ object
+// @param obj C++ object
+// @return New extension object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_core_extension_to_pyobject (const mobius::core::extension& obj)
@@ -53,9 +53,9 @@ pymobius_core_extension_to_pyobject (const mobius::core::extension& obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>extension</i> C++ object from Python object
-//! \param value Python value
-//! \return Extension object
+// @brief Create <i>extension</i> C++ object from Python object
+// @param value Python value
+// @return Extension object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::extension
 pymobius_core_extension_from_pyobject (PyObject *value)
@@ -67,9 +67,9 @@ pymobius_core_extension_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>id</i> Attribute getter
-//! \param self Object
-//! \return <i>id</i> attribute
+// @brief <i>id</i> Attribute getter
+// @param self Object
+// @return <i>id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_id (core_extension_o *self)
@@ -89,9 +89,9 @@ tp_getter_id (core_extension_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>name</i> Attribute getter
-//! \param self Object
-//! \return <i>name</i> attribute
+// @brief <i>name</i> Attribute getter
+// @param self Object
+// @return <i>name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_name (core_extension_o *self)
@@ -111,9 +111,9 @@ tp_getter_name (core_extension_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>version</i> Attribute getter
-//! \param self Object
-//! \return <i>version</i> attribute
+// @brief <i>version</i> Attribute getter
+// @param self Object
+// @return <i>version</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_version (core_extension_o *self)
@@ -133,9 +133,9 @@ tp_getter_version (core_extension_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>authors</i> Attribute getter
-//! \param self Object
-//! \return <i>authors</i> attribute
+// @brief <i>authors</i> Attribute getter
+// @param self Object
+// @return <i>authors</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_authors (core_extension_o *self)
@@ -155,9 +155,9 @@ tp_getter_authors (core_extension_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>description</i> Attribute getter
-//! \param self Object
-//! \return <i>description</i> attribute
+// @brief <i>description</i> Attribute getter
+// @param self Object
+// @return <i>description</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_description (core_extension_o *self)
@@ -177,7 +177,7 @@ tp_getter_description (core_extension_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Getters and setters structure
+// @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -220,9 +220,9 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>start</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>start</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_start (core_extension_o *self, PyObject *)
@@ -243,9 +243,9 @@ tp_f_start (core_extension_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>stop</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>stop</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_stop (core_extension_o *self, PyObject *)
@@ -266,9 +266,9 @@ tp_f_stop (core_extension_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>install</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>install</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_install (core_extension_o *self, PyObject *)
@@ -289,9 +289,9 @@ tp_f_install (core_extension_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>uninstall</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>uninstall</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_uninstall (core_extension_o *self, PyObject *)
@@ -312,7 +312,7 @@ tp_f_uninstall (core_extension_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -344,11 +344,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>extension</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>extension</i> object
+// @brief <i>extension</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>extension</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
@@ -388,8 +388,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>extension</i> deallocator
-//! \param self Object
+// @brief <i>extension</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (core_extension_o *self)
@@ -399,7 +399,7 @@ tp_dealloc (core_extension_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject core_extension_t =
 {
@@ -452,3 +452,5 @@ PyTypeObject core_extension_t =
   0,                                       		// tp_version_tag
   0,							// tp_finalize
 };
+
+

@@ -20,19 +20,15 @@
 #include <mobius/string_functions.h>
 #include <stdexcept>
 
-namespace mobius
-{
-namespace decoder
-{
-namespace sgml
+namespace mobius::decoder::sgml
 {
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Parse tag with attributes
-//! \param type Tag type (empty_tag or start_tag)
-//! \param text Text
-//! \return Start tag element
+// @brief Parse tag with attributes
+// @param type Tag type (empty_tag or start_tag)
+// @param text Text
+// @return Start tag element
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static parser::element
 _parse_tag_with_attributes (parser::element::type type, const std::string& text)
@@ -116,11 +112,11 @@ _parse_tag_with_attributes (parser::element::type type, const std::string& text)
         {
           if (c == '=')
             state = 5;
-          
+
           else if (!isspace (c))
             state = 2;
         }
-        
+
       // state: after '='
       else if (state == 5)
         {
@@ -176,15 +172,15 @@ _parse_tag_with_attributes (parser::element::type type, const std::string& text)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Parse start_tag element
-//! \param text Text
-//! \return Start tag element
+// @brief Parse start_tag element
+// @param text Text
+// @return Start tag element
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static parser::element
 _parse_start_tag (const std::string& text)
 {
   parser::element e;
-  
+
   // comment
   if (mobius::string::startswith (text, "<!--"))
     {
@@ -205,15 +201,15 @@ _parse_start_tag (const std::string& text)
     {
       e = _parse_tag_with_attributes (parser::element::type::start_tag, text);
     }
-  
+
   return e;
 }
 
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create parser
-//! \param reader Reader object
+// @brief Create parser
+// @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 parser::parser (const mobius::io::reader& reader)
  : tokenizer_ (reader)
@@ -221,8 +217,8 @@ parser::parser (const mobius::io::reader& reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get element
-//! \return SGML element
+// @brief Get element
+// @return SGML element
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 parser::element
 parser::get ()
@@ -232,9 +228,9 @@ parser::get ()
   auto p = tokenizer_.get_token ();
   auto type = p.first;
   auto text = p.second;
-  
+
   using token_type = mobius::decoder::sgml::tokenizer::token_type;
-  
+
   switch (type)
   {
     case token_type::text:
@@ -260,10 +256,10 @@ parser::get ()
     case token_type::end:
       break;
   }
-  
+
   return e;
 }
 
-} // namespace sgml
-} // namespace decoder
-} // namespace mobius
+} // namespace mobius::decoder::sgml
+
+

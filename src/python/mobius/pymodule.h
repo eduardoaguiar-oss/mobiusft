@@ -27,8 +27,8 @@
 namespace mobius::py
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Python Module object
-//! \author Eduardo Aguiar
+// @brief Python Module object
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class pymodule
 {
@@ -58,13 +58,15 @@ public:
   void add_constant (const std::string&, int);
 
 private:
-  //! \brief Implementation class forward declaration
+  // @brief Implementation class forward declaration
   class impl;
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
 } // namespace mobius::py
 
 #endif
+
+

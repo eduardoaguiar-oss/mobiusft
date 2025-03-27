@@ -23,7 +23,7 @@
 #include <mobius/ui/window.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -41,3 +41,5 @@ PyObject *pymobius_ui_window_to_pyobject (const mobius::ui::window&);
 mobius::ui::window pymobius_ui_window_from_pyobject (PyObject *);
 
 #endif
+
+

@@ -27,8 +27,8 @@
 namespace mobius::framework
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief evidence_loader handle class
-//! \author Eduardo Aguiar
+// @brief evidence_loader handle class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class evidence_loader
 {
@@ -53,8 +53,8 @@ public:
   evidence_loader& operator= (evidence_loader&&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if evidence_loader is valid
-  //! \return true/false
+  // @brief Check if evidence_loader is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator bool () const noexcept
   {
@@ -62,8 +62,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get evidence_loader type
-  //! \return type as string
+  // @brief Get evidence_loader type
+  // @return type as string
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_type () const
@@ -72,7 +72,7 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Scan item files for evidences
+  // @brief Scan item files for evidences
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   run ()
@@ -81,7 +81,7 @@ public:
   }
 
 private:
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <evidence_loader_impl_base> impl_;
 };
 
@@ -97,8 +97,8 @@ using evidence_loader_builder_type =
    >;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add evidence_loader builder
-//! \param id Evidence loader ID
+// @brief Add evidence_loader builder
+// @param id Evidence loader ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename T> evidence_loader_builder_type
 new_evidence_loader_builder_resource ()
@@ -111,3 +111,5 @@ new_evidence_loader_builder_resource ()
 } // namespace mobius::framework
 
 #endif
+
+

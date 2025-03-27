@@ -66,11 +66,11 @@ std::uint32_t get_arg_as_uint32_t (PyObject *, std::uint32_t, std::uint32_t);
 std::uint64_t get_arg_as_uint64_t (PyObject *, std::uint32_t, std::uint64_t);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check argument type
-//! \param args Function arguments
-//! \param idx Argument number, starting in 0
-//! \param f Check function
-//! \return true/false
+// @brief Check argument type
+// @param args Function arguments
+// @param idx Argument number, starting in 0
+// @param f Check function
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename F> bool
 check_arg (PyObject *args, std::uint32_t idx, F f)
@@ -82,11 +82,11 @@ check_arg (PyObject *args, std::uint32_t idx, F f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument and convert using a function
-//! \param args Function arguments
-//! \param idx Argument number, starting in 0
-//! \param f Conversion function
-//! \return C++ object
+// @brief Get function argument and convert using a function
+// @param args Function arguments
+// @param idx Argument number, starting in 0
+// @param f Conversion function
+// @return C++ object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename F, typename D> decltype (auto)
 get_arg_as_cpp (PyObject *args, std::uint32_t idx, F f, D d)
@@ -97,11 +97,11 @@ get_arg_as_cpp (PyObject *args, std::uint32_t idx, F f, D d)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument and convert using a function
-//! \param args Function arguments
-//! \param idx Argument number, starting in 0
-//! \param f Conversion function
-//! \return C++ object
+// @brief Get function argument and convert using a function
+// @param args Function arguments
+// @param idx Argument number, starting in 0
+// @param f Conversion function
+// @return C++ object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename F> decltype (auto)
 get_arg_as_cpp (PyObject *args, std::uint32_t idx, F f)
@@ -237,11 +237,11 @@ to_pyobject_nullable (const Tcpp& obj, T *type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check setter value
-//! \param value Value object
-//! \param attr_name Attribute name
-//! \param pycheck Function to check value object
-//! \return -1 if error, 0 if OK
+// @brief Check setter value
+// @param value Value object
+// @param attr_name Attribute name
+// @param pycheck Function to check value object
+// @return -1 if error, 0 if OK
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename F> void
 check_setter_value (PyObject *value, const char* attr_name, F pycheck)
@@ -262,11 +262,11 @@ check_setter_value (PyObject *value, const char* attr_name, F pycheck)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new Python Tuple from C++ pair
-//! \param p C++ pair
-//! \param pyf1 Function to convert first value
-//! \param pyf2 Function to convert second value
-//! \return Python Tuple
+// @brief Create new Python Tuple from C++ pair
+// @param p C++ pair
+// @param pyf1 Function to convert first value
+// @param pyf2 Function to convert second value
+// @return Python Tuple
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename T, typename F1, typename F2> PyObject *
 pytuple_from_cpp_pair (const T& p, F1 pyf1, F2 pyf2)
@@ -285,3 +285,5 @@ pytuple_from_cpp_pair (const T& p, F1 pyf1, F2 pyf2)
 } // namespace mobius::py
 
 #endif
+
+

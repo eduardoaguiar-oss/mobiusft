@@ -20,10 +20,10 @@
 #include <mobius/crypt/pkcs5.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief pbkdf2_hmac function implementation
-//! \param self function object
-//! \param args argument list
-//! \return Python object
+// @brief pbkdf2_hmac function implementation
+// @param self function object
+// @param args argument list
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_pbkdf2_hmac (PyObject *, PyObject *args)
@@ -73,3 +73,5 @@ func_pbkdf2_hmac (PyObject *, PyObject *args)
 
   return ret;
 }
+
+

@@ -22,7 +22,7 @@
 namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create default reader
+// @brief Create default reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 reader::reader ()
   : impl_ (std::make_shared <reader_impl_null> ())
@@ -30,8 +30,8 @@ reader::reader ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create reader from a reader implementation object
-//! \param ptr smart pointer to a reader_impl object
+// @brief Create reader from a reader implementation object
+// @param ptr smart pointer to a reader_impl object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 reader::reader (const std::shared_ptr <reader_impl_base>& ptr)
   : is_null_ (false), impl_ (ptr)
@@ -39,10 +39,10 @@ reader::reader (const std::shared_ptr <reader_impl_base>& ptr)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create slice reader from reader
-//! \param reader Reader object
-//! \param pos Initial position
-//! \param end End position
+// @brief Create slice reader from reader
+// @param reader Reader object
+// @param pos Initial position
+// @param end End position
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 reader
 new_slice_reader (
@@ -57,3 +57,5 @@ new_slice_reader (
 }
 
 } // namespace mobius::io
+
+

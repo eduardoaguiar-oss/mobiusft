@@ -18,15 +18,13 @@
 #include "util.h"
 #include <mobius/string_functions.h>
 
-namespace mobius
-{
-namespace vfs
+namespace mobius::vfs
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Normalize drive info
-//! \param drive_vendor drive vendor
-//! \param drive_model drive model
-//! \param drive_serial_number drive serial number
+// @brief Normalize drive info
+// @param drive_vendor drive vendor
+// @param drive_model drive model
+// @param drive_serial_number drive serial number
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 normalize_drive_info (
@@ -70,5 +68,6 @@ normalize_drive_info (
     }
 }
 
-} // namespace vfs
-} // namespace mobius
+} // namespace mobius::vfs
+
+

@@ -23,9 +23,9 @@
 namespace mobius::os::win
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Generate IE entropy hash from URL
-//! \param url URL
-//! \return IE entropy hash
+// @brief Generate IE entropy hash from URL
+// @param url URL
+// @return IE entropy hash
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 hash_ie_entropy (const std::string& url)
@@ -39,3 +39,5 @@ hash_ie_entropy (const std::string& url)
 }
 
 } // namespace mobius::os::win
+
+

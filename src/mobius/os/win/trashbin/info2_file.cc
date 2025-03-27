@@ -20,16 +20,10 @@
 #include <mobius/decoder/data_decoder.h>
 #include <vector>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace trashbin
+namespace mobius::os::win::trashbin
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief info2_file implementation class
+// @brief info2_file implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class info2_file::impl
 {
@@ -49,8 +43,8 @@ public:
   impl& operator= (impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get version
-  //! \return Version
+  // @brief Get version
+  // @return Version
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t
   get_version () const
@@ -59,8 +53,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get number of files
-  //! \return Number of files
+  // @brief Get number of files
+  // @return Number of files
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::int32_t
   get_number_of_files () const
@@ -69,8 +63,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get file idx
-  //! \return File idx
+  // @brief Get file idx
+  // @return File idx
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::int32_t
   get_file_idx () const
@@ -79,8 +73,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get record size
-  //! \return Record size
+  // @brief Get record size
+  // @return Record size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_record_size () const
@@ -89,8 +83,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get size
-  //! \return Size
+  // @brief Get size
+  // @return Size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_size () const
@@ -99,8 +93,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Return iterator to the first item
-  //! \return iterator
+  // @brief Return iterator to the first item
+  // @return iterator
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   const_iterator_type
   begin () const
@@ -109,8 +103,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Return iterator after the last item
-  //! \return iterator
+  // @brief Return iterator after the last item
+  // @return iterator
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   const_iterator_type
   end () const
@@ -119,29 +113,29 @@ public:
   }
 
 private:
-  //! \brief Struct version
+  // @brief Struct version
   std::uint64_t version_;
 
-  //! \brief Number of files
+  // @brief Number of files
   std::int32_t number_of_files_;
 
-  //! \brief Last file index
+  // @brief Last file index
   std::int32_t last_file_idx_;
 
-  //! \brief Record size
+  // @brief Record size
   std::uint32_t record_size_;
 
-  //! \brief Recycle bin size
+  // @brief Recycle bin size
   std::uint32_t size_;
 
-  //! \brief INFO2 entries
+  // @brief INFO2 entries
   std::vector <info2_entry> entries_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
-//! \see https://abelcheung.github.io/rifiuti2/assets/Forensics_Recycle_Bin.pdf
+// @brief Constructor
+// @param reader Reader object
+// @see https://abelcheung.github.io/rifiuti2/assets/Forensics_Recycle_Bin.pdf
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 info2_file::impl::impl (const mobius::io::reader& reader)
 {
@@ -176,8 +170,8 @@ info2_file::impl::impl (const mobius::io::reader& reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
+// @brief Constructor
+// @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 info2_file::info2_file (const mobius::io::reader& reader)
   : impl_ (std::make_shared <impl> (reader))
@@ -185,8 +179,8 @@ info2_file::info2_file (const mobius::io::reader& reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get version
-//! \return Version
+// @brief Get version
+// @return Version
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint64_t
 info2_file::get_version () const
@@ -195,8 +189,8 @@ info2_file::get_version () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get number of files
-//! \return Number of files
+// @brief Get number of files
+// @return Number of files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::int32_t
 info2_file::get_number_of_files () const
@@ -205,8 +199,8 @@ info2_file::get_number_of_files () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get last file idx
-//! \return File idx
+// @brief Get last file idx
+// @return File idx
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::int32_t
 info2_file::get_last_file_idx () const
@@ -215,8 +209,8 @@ info2_file::get_last_file_idx () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get record size
-//! \return Record size
+// @brief Get record size
+// @return Record size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 info2_file::get_record_size () const
@@ -225,8 +219,8 @@ info2_file::get_record_size () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get size
-//! \return Size
+// @brief Get size
+// @return Size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 info2_file::get_size () const
@@ -235,8 +229,8 @@ info2_file::get_size () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Return iterator to the first item
-//! \return iterator
+// @brief Return iterator to the first item
+// @return iterator
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 info2_file::const_iterator_type
 info2_file::begin () const
@@ -245,8 +239,8 @@ info2_file::begin () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Return iterator after the last item
-//! \return iterator
+// @brief Return iterator after the last item
+// @return iterator
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 info2_file::const_iterator_type
 info2_file::end () const
@@ -254,7 +248,6 @@ info2_file::end () const
   return impl_->end ();
 }
 
-} // namespace trashbin
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::trashbin
+
+

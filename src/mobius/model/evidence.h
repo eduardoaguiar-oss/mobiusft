@@ -30,8 +30,8 @@
 namespace mobius::model
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Evidence object
-//! \author Eduardo Aguiar
+// @brief Evidence object
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class evidence
 {
@@ -42,7 +42,7 @@ public:
   enum class source_type { none, file, evidence };
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Evidence source class
+  // @brief Evidence source class
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   struct source
   {
@@ -90,9 +90,9 @@ public:
   std::vector <evidence::source> get_sources () const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get attribute
-  //! \param ID Attribute ID
-  //! \return Attribute value
+  // @brief Get attribute
+  // @param ID Attribute ID
+  // @return Attribute value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   template <typename T> T get_attribute (const std::string& id) const
   {
@@ -100,10 +100,10 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get attribute
-  //! \param id Attribute ID
-  //! \param value Default value
-  //! \return Attribute value
+  // @brief Get attribute
+  // @param id Attribute ID
+  // @param value Default value
+  // @return Attribute value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   template <typename T> T get_attribute (const std::string& id, const T& value) const
   {
@@ -114,8 +114,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if object is valid
-  //! \return true/false
+  // @brief Check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator bool () const noexcept
   {
@@ -123,13 +123,15 @@ public:
   }
 
 private:
-  //! \brief Implementation class forward declaration
+  // @brief Implementation class forward declaration
   class impl;
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
 } // namespace mobius::model
 
 #endif
+
+

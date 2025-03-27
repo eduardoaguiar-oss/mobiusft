@@ -27,7 +27,7 @@
 namespace mobius::extension::app::ares
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Ares account
+// @brief Ares account
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct account
 {
@@ -41,7 +41,7 @@ struct account
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Ares autofill
+// @brief Ares autofill
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct autofill
 {
@@ -54,7 +54,7 @@ struct autofill
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remote source (another users sharing file)
+// @brief Remote source (another users sharing file)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct remote_source
 {
@@ -64,7 +64,7 @@ struct remote_source
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Torrent file (file description containing in a torrent stream)
+// @brief Torrent file (file description containing in a torrent stream)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct torrent_file
 {
@@ -76,7 +76,7 @@ struct torrent_file
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Ares file catalog
+// @brief Ares file catalog
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct file
 {
@@ -126,8 +126,8 @@ struct file
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>ares evidence_loader</i> implementation class
-//! \author Eduardo Aguiar
+// @brief <i>ares evidence_loader</i> implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
 {
@@ -143,8 +143,8 @@ public:
   void run () final;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if object is valid
-  //! \return true/false
+  // @brief Check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator bool () const noexcept final
   {
@@ -152,8 +152,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get evidence_loader type
-  //! \return Type as string
+  // @brief Get evidence_loader type
+  // @return Type as string
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_type () const final
@@ -162,28 +162,28 @@ public:
   }
 
 private:
-  //! \brief Case item
+  // @brief Case item
   mobius::model::item item_;
 
-  //! \brief Scan type
+  // @brief Scan type
   scan_type scan_type_;
 
-  //! \brief User name
+  // @brief User name
   std::string username_;
 
-  //! \brief Account data
+  // @brief Account data
   account account_;
 
-  //! \brief Account files
+  // @brief Account files
   std::map <std::string, file> account_files_;
 
-  //! \brief All accounts found
+  // @brief All accounts found
   std::vector <account> accounts_;
 
-  //! \brief All autofills found
+  // @brief All autofills found
   std::vector <autofill> autofills_;
 
-  //! \brief File catalog
+  // @brief File catalog
   std::vector <file> files_;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -225,3 +225,7 @@ private:
 } // namespace mobius::extension::app::ares
 
 #endif
+
+
+
+

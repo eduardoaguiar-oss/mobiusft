@@ -24,8 +24,8 @@
 class imagefile_impl;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Split imagefile writer implementation
-//! \author Eduardo Aguiar
+// @brief Split imagefile writer implementation
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class writer_impl : public mobius::io::writer_impl_base
 {
@@ -44,8 +44,8 @@ public:
   writer_impl& operator= (writer_impl&&) = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if writer is seekable
-  //! \return true/false
+  // @brief Check if writer is seekable
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_seekable () const override
@@ -54,8 +54,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get current writing position
-  //! \return Writing position in bytes from the beginning of data
+  // @brief Get current writing position
+  // @return Writing position in bytes from the beginning of data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   offset_type
   tell () const override
@@ -84,3 +84,5 @@ private:
 };
 
 #endif
+
+

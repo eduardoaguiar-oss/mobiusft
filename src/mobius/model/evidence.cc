@@ -24,7 +24,7 @@
 namespace mobius::model
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief evidence implementation class
+// @brief evidence implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class evidence::impl
 {
@@ -43,8 +43,8 @@ public:
   impl& operator= (impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get item
-  //! \return Item
+  // @brief Get item
+  // @return Item
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   item
   get_item () const
@@ -53,8 +53,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get uid
-  //! \return Uid
+  // @brief Get uid
+  // @return Uid
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::int64_t
   get_uid () const
@@ -63,8 +63,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get type
-  //! \return Type
+  // @brief Get type
+  // @return Type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_type () const
@@ -93,8 +93,8 @@ public:
 
 private:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get database
-  //! \return database
+  // @brief Get database
+  // @return database
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::database::database
   _get_database () const
@@ -103,24 +103,24 @@ private:
   }
 
 private:
-  //! \brief Case object
+  // @brief Case object
   Case case_;
 
-  //! \brief Case item
+  // @brief Case item
   item item_;
 
-  //! \brief UID
+  // @brief UID
   const std::int64_t uid_ = -1;
 
-  //! \brief Evidence type
+  // @brief Evidence type
   const std::string type_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param i Item object
-//! \param uid Evidence UID
-//! \param type Evidence type
+// @brief Constructor
+// @param i Item object
+// @param uid Evidence UID
+// @param type Evidence type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 evidence::impl::impl (item i, std::int64_t uid, const std::string& type)
  : case_ (i.get_case ()),
@@ -131,9 +131,9 @@ evidence::impl::impl (item i, std::int64_t uid, const std::string& type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if attribute exists
-//! \param id Attribute ID
-//! \return true/false
+// @brief Check if attribute exists
+// @param id Attribute ID
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 evidence::impl::has_attribute (const std::string& id) const
@@ -153,9 +153,9 @@ evidence::impl::has_attribute (const std::string& id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attribute value
-//! \param id Attribute ID
-//! \return Attribute value
+// @brief Get attribute value
+// @param id Attribute ID
+// @return Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 evidence::impl::get_attribute (const std::string& id) const
@@ -178,9 +178,9 @@ evidence::impl::get_attribute (const std::string& id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set attribute value
-//! \param id Attribute ID
-//! \param value Attribute value
+// @brief Set attribute value
+// @param id Attribute ID
+// @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence::impl::set_attribute (const std::string& id, const mobius::pod::data& value)
@@ -216,8 +216,8 @@ evidence::impl::set_attribute (const std::string& id, const mobius::pod::data& v
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove attribute
-//! \param id Attribute ID
+// @brief Remove attribute
+// @param id Attribute ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence::impl::remove_attribute (const std::string& id)
@@ -235,8 +235,8 @@ evidence::impl::remove_attribute (const std::string& id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attributes
-//! \return Map with ID -> value
+// @brief Get attributes
+// @return Map with ID -> value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::map <std::string, mobius::pod::data>
 evidence::impl::get_attributes () const
@@ -262,9 +262,9 @@ evidence::impl::get_attributes () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if evidence has a given tag
-//! \param name Tag name
-//! \return true/false
+// @brief Check if evidence has a given tag
+// @param name Tag name
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 evidence::impl::has_tag (const std::string& name) const
@@ -284,8 +284,8 @@ evidence::impl::has_tag (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set tag
-//! \param name Tag name
+// @brief Set tag
+// @param name Tag name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence::impl::set_tag (const std::string& name)
@@ -302,8 +302,8 @@ evidence::impl::set_tag (const std::string& name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set tags
-//! \param tags Tags
+// @brief Set tags
+// @param tags Tags
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence::impl::set_tags (const std::set<std::string>& tags)
@@ -316,8 +316,8 @@ evidence::impl::set_tags (const std::set<std::string>& tags)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reset tag
-//! \param name Tag name
+// @brief Reset tag
+// @param name Tag name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence::impl::reset_tag (const std::string& name)
@@ -335,8 +335,8 @@ evidence::impl::reset_tag (const std::string& name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get tags
-//! \return Set of evidence tags
+// @brief Get tags
+// @return Set of evidence tags
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::set <std::string>
 evidence::impl::get_tags () const
@@ -362,10 +362,10 @@ evidence::impl::get_tags () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add evidence source
-//! \param type Source type
-//! \param uid Source UID
-//! \param description Source description
+// @brief Add evidence source
+// @param type Source type
+// @param uid Source UID
+// @param description Source description
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence::impl::add_source (
@@ -388,8 +388,8 @@ evidence::impl::add_source (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get sources
-//! \return List of sources
+// @brief Get sources
+// @return List of sources
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <evidence::source>
 evidence::impl::get_sources () const
@@ -419,10 +419,10 @@ evidence::impl::get_sources () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param i Item object
-//! \param uid Evidence UID
-//! \param type Evidence type
+// @brief Constructor
+// @param i Item object
+// @param uid Evidence UID
+// @param type Evidence type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 evidence::evidence (item i, std::int64_t uid, const std::string& type)
   : impl_ (std::make_shared <impl> (i, uid, type))
@@ -430,8 +430,8 @@ evidence::evidence (item i, std::int64_t uid, const std::string& type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get item
-//! \return Item
+// @brief Get item
+// @return Item
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 item
 evidence::get_item () const
@@ -443,8 +443,8 @@ evidence::get_item () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get uid
-//! \return Uid
+// @brief Get uid
+// @return Uid
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::int64_t
 evidence::get_uid () const
@@ -456,8 +456,8 @@ evidence::get_uid () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get type
-//! \return Type
+// @brief Get type
+// @return Type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 evidence::get_type () const
@@ -469,9 +469,9 @@ evidence::get_type () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if attribute exists
-//! \param id Attribute ID
-//! \return true/false
+// @brief Check if attribute exists
+// @param id Attribute ID
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 evidence::has_attribute (const std::string& id) const
@@ -483,9 +483,9 @@ evidence::has_attribute (const std::string& id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attribute value
-//! \param id Attribute ID
-//! \return Attribute value
+// @brief Get attribute value
+// @param id Attribute ID
+// @return Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 evidence::get_attribute (const std::string& id) const
@@ -497,9 +497,9 @@ evidence::get_attribute (const std::string& id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set attribute value
-//! \param id Attribute ID
-//! \param value Attribute value
+// @brief Set attribute value
+// @param id Attribute ID
+// @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence::set_attribute (const std::string& id, const mobius::pod::data& value)
@@ -511,8 +511,8 @@ evidence::set_attribute (const std::string& id, const mobius::pod::data& value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set attributes
-//! \param attributes Map of attr_id -> attr_value
+// @brief Set attributes
+// @param attributes Map of attr_id -> attr_value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence::set_attributes (const std::map <std::string, mobius::pod::data>& attributes)
@@ -528,8 +528,8 @@ evidence::set_attributes (const std::map <std::string, mobius::pod::data>& attri
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove attribute
-//! \param id Attribute ID
+// @brief Remove attribute
+// @param id Attribute ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence::remove_attribute (const std::string& id)
@@ -541,8 +541,8 @@ evidence::remove_attribute (const std::string& id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attributes
-//! \return Map with ID -> value
+// @brief Get attributes
+// @return Map with ID -> value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::map <std::string, mobius::pod::data>
 evidence::get_attributes () const
@@ -554,9 +554,9 @@ evidence::get_attributes () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if evidence has a given tag
-//! \param name Tag name
-//! \return true/false
+// @brief Check if evidence has a given tag
+// @param name Tag name
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 evidence::has_tag (const std::string& name) const
@@ -568,8 +568,8 @@ evidence::has_tag (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set tag
-//! \param name Tag name
+// @brief Set tag
+// @param name Tag name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence::set_tag (const std::string& name)
@@ -581,8 +581,8 @@ evidence::set_tag (const std::string& name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set tags
-//! \param tags Tags
+// @brief Set tags
+// @param tags Tags
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence::set_tags (const std::set<std::string>& tags)
@@ -594,8 +594,8 @@ evidence::set_tags (const std::set<std::string>& tags)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reset tag
-//! \param name Tag name
+// @brief Reset tag
+// @param name Tag name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence::reset_tag (const std::string& name)
@@ -607,8 +607,8 @@ evidence::reset_tag (const std::string& name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get tags
-//! \return Set of evidence tags
+// @brief Get tags
+// @return Set of evidence tags
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::set <std::string>
 evidence::get_tags () const
@@ -620,8 +620,8 @@ evidence::get_tags () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add evidence source
-//! \param f File object
+// @brief Add evidence source
+// @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence::add_source (const mobius::io::file& f)
@@ -640,8 +640,8 @@ evidence::add_source (const mobius::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add evidence source
-//! \param e Evidence object
+// @brief Add evidence source
+// @param e Evidence object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence::add_source (const evidence& e)
@@ -657,8 +657,8 @@ evidence::add_source (const evidence& e)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get sources
-//! \return List of sources
+// @brief Get sources
+// @return List of sources
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <evidence::source>
 evidence::get_sources () const
@@ -670,3 +670,5 @@ evidence::get_sources () const
 }
 
 } // namespace mobius::model
+
+

@@ -22,8 +22,8 @@
 namespace mobius::datasource::ufdr
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param d datasource
+// @brief Constructor
+// @param d datasource
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datasource::datasource (const mobius::datasource::datasource& d)
  : mobius::datasource::datasource (d)
@@ -37,3 +37,5 @@ datasource::datasource (const mobius::datasource::datasource& d)
 }
 
 } // namespace mobius::datasource
+
+

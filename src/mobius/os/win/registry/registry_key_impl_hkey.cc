@@ -17,16 +17,10 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "registry_key_impl_hkey.h"
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace registry
+namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
+// @brief constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_key_impl_hkey::registry_key_impl_hkey (hive_key hkey)
   : hive_key_ (hkey),
@@ -35,7 +29,7 @@ registry_key_impl_hkey::registry_key_impl_hkey (hive_key hkey)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief load subkeys on demand
+// @brief load subkeys on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry_key_impl_hkey::_load_subkeys () const
@@ -55,7 +49,7 @@ registry_key_impl_hkey::_load_subkeys () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief load values on demand
+// @brief load values on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry_key_impl_hkey::_load_values () const
@@ -74,7 +68,6 @@ registry_key_impl_hkey::_load_values () const
   values_loaded_ = true;
 }
 
-} // namespace registry
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::registry
+
+

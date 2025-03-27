@@ -22,19 +22,13 @@
 #include <stdexcept>
 #include <string>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace dpapi
+namespace mobius::os::win::dpapi
 {
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Cipher information map
-//! \see https://docs.microsoft.com/en-us/windows/desktop/seccrypto/alg-id
+// @brief Cipher information map
+// @see https://docs.microsoft.com/en-us/windows/desktop/seccrypto/alg-id
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct cipher_info
 {
@@ -57,57 +51,56 @@ static const std::map <std::uint32_t, cipher_info> CIPHERS =
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get cipher ID by MS alg ID
-//! \param ms_alg_id MS alg ID
-//! \return cipher ID
+// @brief Get cipher ID by MS alg ID
+// @param ms_alg_id MS alg ID
+// @return cipher ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 get_cipher_id (std::uint32_t ms_alg_id)
 {
   auto iter = CIPHERS.find (ms_alg_id);
-  
+
   if (iter != CIPHERS.end ())
     return iter->second.id;
-  
+
   else
     throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("Unknown MS alg ID"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get cipher key length by MS alg ID
-//! \param ms_alg_id MS alg ID
-//! \return Key length in bytes
+// @brief Get cipher key length by MS alg ID
+// @param ms_alg_id MS alg ID
+// @return Key length in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 get_cipher_key_length (std::uint32_t ms_alg_id)
 {
   auto iter = CIPHERS.find (ms_alg_id);
-  
+
   if (iter != CIPHERS.end ())
     return iter->second.key_length;
-  
+
   else
     throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("Unknown MS alg ID"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get cipher salt length by MS alg ID
-//! \param ms_alg_id MS alg ID
-//! \return Salt length in bytes
+// @brief Get cipher salt length by MS alg ID
+// @param ms_alg_id MS alg ID
+// @return Salt length in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 get_cipher_salt_length (std::uint32_t ms_alg_id)
 {
   auto iter = CIPHERS.find (ms_alg_id);
-  
+
   if (iter != CIPHERS.end ())
     return iter->second.iv_length;
-  
+
   else
     throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("Unknown MS alg ID"));
 }
 
-} // namespace dpapi
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::dpapi
+
+

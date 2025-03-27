@@ -24,13 +24,11 @@
 #include <string>
 #include <unordered_map>
 
-namespace mobius
-{
-namespace core
+namespace mobius::core
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Thread-safe extension set class
-//! \author Eduardo Aguiar
+// @brief Thread-safe extension set class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class extension_set
 {
@@ -43,14 +41,15 @@ public:
   void clear ();
 
 private:
-  //! \brief C++ extensions
+  // @brief C++ extensions
   container_type extensions_;
 
-  //! \brief C++ extensions mutex
+  // @brief C++ extensions mutex
   mutable std::mutex mutex_;
 };
 
-} // namespace core
-} // namespace mobius
+} // namespace mobius::core
 
 #endif
+
+

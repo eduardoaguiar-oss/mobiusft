@@ -32,7 +32,7 @@ namespace
 using entry_impl = mobius::io::folder_impl_base::entry_impl;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Collection implementation for folder entries
+// @brief Collection implementation for folder entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class collection_impl_folder : public mobius::collection_impl_base <entry_impl>
 {
@@ -65,8 +65,8 @@ private:
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Initialize object
-//! \param f fs_file object
+// @brief Initialize object
+// @param f fs_file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 collection_impl_folder::collection_impl_folder (const fs_file& f)
   : fs_file_ (f)
@@ -87,7 +87,7 @@ collection_impl_folder::collection_impl_folder (const fs_file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destroy object
+// @brief Destroy object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 collection_impl_folder::~collection_impl_folder ()
 {
@@ -99,9 +99,9 @@ collection_impl_folder::~collection_impl_folder ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get folder entry
-//! \param e Entry reference
-//! \return true/false if entry was found
+// @brief Get folder entry
+// @param e Entry reference
+// @return true/false if entry was found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 collection_impl_folder::get (entry_impl& e)
@@ -135,7 +135,7 @@ collection_impl_folder::get (entry_impl& e)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reset collection
+// @brief Reset collection
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 collection_impl_folder::reset ()
@@ -146,8 +146,8 @@ collection_impl_folder::reset ()
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Initialize object
-//! \param fp Pointer to file structure
+// @brief Initialize object
+// @param fp Pointer to file structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder_impl::folder_impl (const fs_file& fp)
   : fs_file_ (fp),
@@ -156,8 +156,8 @@ folder_impl::folder_impl (const fs_file& fp)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get user name
-//! \return User name
+// @brief Get user name
+// @return User name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 folder_impl::get_user_name () const
@@ -169,8 +169,8 @@ folder_impl::get_user_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get group name
-//! \return Group name
+// @brief Get group name
+// @return Group name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 folder_impl::get_group_name () const
@@ -182,8 +182,8 @@ folder_impl::get_group_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if folder is hidden
-//! \return true/false
+// @brief Check if folder is hidden
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 folder_impl::is_hidden () const
@@ -195,7 +195,7 @@ folder_impl::is_hidden () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create folder
+// @brief Create folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 folder_impl::create ()
@@ -204,7 +204,7 @@ folder_impl::create ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Clear folder
+// @brief Clear folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 folder_impl::clear ()
@@ -213,7 +213,7 @@ folder_impl::clear ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove folder
+// @brief Remove folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 folder_impl::remove ()
@@ -222,8 +222,8 @@ folder_impl::remove ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Rename folder
-//! \param filename New filename
+// @brief Rename folder
+// @param filename New filename
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 folder_impl::rename (const std::string&)
@@ -232,9 +232,9 @@ folder_impl::rename (const std::string&)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Move folder
-//! \param impl Folder implementation pointer
-//! \return <b>true</b> if folder has been moved, <b>false</b> otherwise
+// @brief Move folder
+// @param impl Folder implementation pointer
+// @return <b>true</b> if folder has been moved, <b>false</b> otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 folder_impl::move (folder_type)
@@ -243,9 +243,9 @@ folder_impl::move (folder_type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new file object
-//! \param name File name
-//! \return Pointer to file object
+// @brief Create new file object
+// @param name File name
+// @return Pointer to file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder_impl::file_type
 folder_impl::new_file (const std::string& name) const
@@ -272,9 +272,9 @@ folder_impl::new_file (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new folder object
-//! \param name Folder name
-//! \return Pointer to folder object
+// @brief Create new folder object
+// @param name Folder name
+// @return Pointer to folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder_impl::folder_type
 folder_impl::new_folder (const std::string& name) const
@@ -301,8 +301,8 @@ folder_impl::new_folder (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get parent folder
-//! \return Parent folder
+// @brief Get parent folder
+// @return Parent folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder_impl::folder_type
 folder_impl::get_parent () const
@@ -316,8 +316,8 @@ folder_impl::get_parent () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get children
-//! \return Collection
+// @brief Get children
+// @return Collection
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder_impl::children_type
 folder_impl::get_children () const
@@ -326,3 +326,5 @@ folder_impl::get_children () const
 }
 
 } // namespace mobius::vfs::tsk
+
+

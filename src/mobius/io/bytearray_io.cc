@@ -19,14 +19,12 @@
 #include <mobius/io/reader_impl_bytearray.h>
 #include <mobius/io/writer_impl_bytearray.h>
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new bytearray reader
-//! \param data bytearray
-//! \return Reader
+// @brief Create new bytearray reader
+// @param data bytearray
+// @return Reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::reader
 new_bytearray_reader (const mobius::bytearray& data)
@@ -35,9 +33,9 @@ new_bytearray_reader (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new bytearray writer
-//! \param data bytearray
-//! \return Writer
+// @brief Create new bytearray writer
+// @param data bytearray
+// @return Writer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::writer
 new_bytearray_writer (mobius::bytearray& data)
@@ -45,5 +43,6 @@ new_bytearray_writer (mobius::bytearray& data)
   return mobius::io::writer (std::make_shared <writer_impl_bytearray> (data));
 }
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
+
+

@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file mfc.cc C++ API <i>mobius.decoder.mfc</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "mfc.h"
@@ -26,9 +26,9 @@
 #include "io/reader.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create <i>mfc</i> Python object from C++ object
-//! \param obj C++ object
-//! \return new mfc object
+// @brief create <i>mfc</i> Python object from C++ object
+// @param obj C++ object
+// @return new mfc object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_decoder_mfc_to_pyobject (mobius::decoder::mfc obj)
@@ -42,9 +42,9 @@ pymobius_decoder_mfc_to_pyobject (mobius::decoder::mfc obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>skip</i> method implementation
-//! \param self object
-//! \param args argument list
+// @brief <i>skip</i> method implementation
+// @param self object
+// @param args argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_skip (decoder_mfc_o *self, PyObject *args)
@@ -80,10 +80,10 @@ tp_f_skip (decoder_mfc_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_bool</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return boolean value
+// @brief <i>get_bool</i> method implementation
+// @param self object
+// @param args argument list
+// @return boolean value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_bool (decoder_mfc_o *self, PyObject *)
@@ -105,10 +105,10 @@ tp_f_get_bool (decoder_mfc_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_word</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return 16-bits value
+// @brief <i>get_word</i> method implementation
+// @param self object
+// @param args argument list
+// @return 16-bits value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_word (decoder_mfc_o *self, PyObject *)
@@ -130,10 +130,10 @@ tp_f_get_word (decoder_mfc_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_dword</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return 32-bits value
+// @brief <i>get_dword</i> method implementation
+// @param self object
+// @param args argument list
+// @return 32-bits value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_dword (decoder_mfc_o *self, PyObject *)
@@ -155,10 +155,10 @@ tp_f_get_dword (decoder_mfc_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_qword</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return 64-bits value
+// @brief <i>get_qword</i> method implementation
+// @param self object
+// @param args argument list
+// @return 64-bits value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_qword (decoder_mfc_o *self, PyObject *)
@@ -180,10 +180,10 @@ tp_f_get_qword (decoder_mfc_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_int</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return 32-bits signed value
+// @brief <i>get_int</i> method implementation
+// @param self object
+// @param args argument list
+// @return 32-bits signed value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_int (decoder_mfc_o *self, PyObject *)
@@ -205,10 +205,10 @@ tp_f_get_int (decoder_mfc_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_count</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return 32-bits count
+// @brief <i>get_count</i> method implementation
+// @param self object
+// @param args argument list
+// @return 32-bits count
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_count (decoder_mfc_o *self, PyObject *)
@@ -230,10 +230,10 @@ tp_f_get_count (decoder_mfc_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_string</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return CString as std::string
+// @brief <i>get_string</i> method implementation
+// @param self object
+// @param args argument list
+// @return CString as std::string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_string (decoder_mfc_o *self, PyObject *)
@@ -255,10 +255,10 @@ tp_f_get_string (decoder_mfc_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_guid</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return GUID as std::string
+// @brief <i>get_guid</i> method implementation
+// @param self object
+// @param args argument list
+// @return GUID as std::string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_guid (decoder_mfc_o *self, PyObject *)
@@ -280,10 +280,10 @@ tp_f_get_guid (decoder_mfc_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_hex_string</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return hexadecimal string
+// @brief <i>get_hex_string</i> method implementation
+// @param self object
+// @param args argument list
+// @return hexadecimal string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_hex_string (decoder_mfc_o *self, PyObject *args)
@@ -317,10 +317,10 @@ tp_f_get_hex_string (decoder_mfc_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_ipv4</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return IPv4 string
+// @brief <i>get_ipv4</i> method implementation
+// @param self object
+// @param args argument list
+// @return IPv4 string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_ipv4 (decoder_mfc_o *self, PyObject *)
@@ -342,10 +342,10 @@ tp_f_get_ipv4 (decoder_mfc_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_data</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return data
+// @brief <i>get_data</i> method implementation
+// @param self object
+// @param args argument list
+// @return data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_data (decoder_mfc_o *self, PyObject *args)
@@ -380,10 +380,10 @@ tp_f_get_data (decoder_mfc_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_ctime</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return CTime as datetime
+// @brief <i>get_ctime</i> method implementation
+// @param self object
+// @param args argument list
+// @return CTime as datetime
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_ctime (decoder_mfc_o *self, PyObject *)
@@ -405,10 +405,10 @@ tp_f_get_ctime (decoder_mfc_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_nt_time</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return NT datetime as datetime
+// @brief <i>get_nt_time</i> method implementation
+// @param self object
+// @param args argument list
+// @return NT datetime as datetime
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_nt_time (decoder_mfc_o *self, PyObject *)
@@ -430,10 +430,10 @@ tp_f_get_nt_time (decoder_mfc_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_unix_time</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return NT datetime as datetime
+// @brief <i>get_unix_time</i> method implementation
+// @param self object
+// @param args argument list
+// @return NT datetime as datetime
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_unix_time (decoder_mfc_o *self, PyObject *)
@@ -455,7 +455,7 @@ tp_f_get_unix_time (decoder_mfc_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -553,11 +553,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>mfc</i> constructor
-//! \param type type object
-//! \param args argument list
-//! \param kwds keywords dict
-//! \return new <i>mfc</i> object
+// @brief <i>mfc</i> constructor
+// @param type type object
+// @param args argument list
+// @param kwds keywords dict
+// @return new <i>mfc</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
@@ -596,8 +596,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>mfc</i> deallocator
-//! \param self object
+// @brief <i>mfc</i> deallocator
+// @param self object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (decoder_mfc_o *self)
@@ -607,7 +607,7 @@ tp_dealloc (decoder_mfc_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject decoder_mfc_t =
 {
@@ -660,3 +660,7 @@ PyTypeObject decoder_mfc_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+
+
+

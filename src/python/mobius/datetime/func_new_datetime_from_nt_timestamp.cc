@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <cstdint>
@@ -29,7 +29,7 @@ static constexpr std::uint64_t MAX_PYTHON_TIMESTAMP = 2650467743990000000ULL; //
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function new_datetime_from_nt_timestamp
+// @brief Function new_datetime_from_nt_timestamp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_new_datetime_from_nt_timestamp (PyObject *, PyObject *args)
@@ -65,3 +65,5 @@ func_new_datetime_from_nt_timestamp (PyObject *, PyObject *args)
 
   return ret;
 }
+
+

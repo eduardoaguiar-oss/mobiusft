@@ -22,7 +22,7 @@
 #include <mobius/model/ant.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -38,3 +38,5 @@ extern PyTypeObject model_ant_t;
 PyObject *pymobius_model_ant_to_pyobject (mobius::model::ant);
 
 #endif
+
+

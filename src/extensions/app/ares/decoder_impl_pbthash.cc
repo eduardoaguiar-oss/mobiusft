@@ -21,8 +21,8 @@
 namespace mobius::extension::app::ares
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode file
-//! \see read_details_DB_Download - helper_download_disk.pas (line 722)
+// @brief Decode file
+// @see read_details_DB_Download - helper_download_disk.pas (line 722)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 decoder_impl_pbthash::decode (const mobius::io::reader& reader)
@@ -84,3 +84,7 @@ decoder_impl_pbthash::decode (const mobius::io::reader& reader)
 }
 
 } // namespace mobius::extension::app::ares
+
+
+
+

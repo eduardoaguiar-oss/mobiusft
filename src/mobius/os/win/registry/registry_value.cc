@@ -20,16 +20,10 @@
 #include "registry_value_impl_hvalue.h"
 #include "registry_value_impl_container.h"
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace registry
+namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief default constructor
+// @brief default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_value::registry_value ()
   : impl_ (std::make_shared <registry_value_impl_null> ())
@@ -37,8 +31,8 @@ registry_value::registry_value ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor from implementation pointer
-//! \param impl implementation pointer
+// @brief constructor from implementation pointer
+// @param impl implementation pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_value::registry_value (std::shared_ptr <registry_value_impl_base> impl)
   : impl_ (impl)
@@ -46,8 +40,8 @@ registry_value::registry_value (std::shared_ptr <registry_value_impl_base> impl)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor from hive_value
-//! \param hvalue hive_value
+// @brief constructor from hive_value
+// @param hvalue hive_value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_value::registry_value (hive_value hvalue)
   : impl_ (std::make_shared <registry_value_impl_hvalue>(hvalue))
@@ -55,16 +49,15 @@ registry_value::registry_value (hive_value hvalue)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor for generic value
-//! \param name value name
-//! \param data value data
+// @brief constructor for generic value
+// @param name value name
+// @param data value data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_value::registry_value (const std::string& name, registry_data data)
   : impl_ (std::make_shared <registry_value_impl_container> (name, data))
 {
 }
 
-} // namespace registry
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::registry
+
+

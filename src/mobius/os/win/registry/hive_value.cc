@@ -27,7 +27,7 @@ namespace mobius::os::win::registry
 static constexpr std::uint32_t INVALID_OFFSET = 0xffffffff;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief implementation class
+// @brief implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class hive_value::impl
 {
@@ -39,8 +39,8 @@ public:
   impl (mobius::io::reader, offset_type);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if object is valid
-  //! \return true/false
+  // @brief check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const
   {
@@ -48,8 +48,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get offset
-  //! \return offset
+  // @brief get offset
+  // @return offset
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   offset_type
   get_offset () const
@@ -58,8 +58,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get signature
-  //! \return signature
+  // @brief get signature
+  // @return signature
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_signature () const
@@ -69,8 +69,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get flags
-  //! \return flags
+  // @brief get flags
+  // @return flags
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint16_t
   get_flags () const
@@ -80,8 +80,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get name
-  //! \return name
+  // @brief get name
+  // @return name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_name () const
@@ -91,8 +91,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get data
-  //! \return data
+  // @brief get data
+  // @return data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   hive_data
   get_data () const
@@ -102,25 +102,25 @@ public:
   }
 
 private:
-  //! \brief generic reader
+  // @brief generic reader
   mobius::io::reader reader_;
 
-  //! \brief offset in bytes
+  // @brief offset in bytes
   offset_type offset_ = INVALID_OFFSET;
 
-  //! \brief key signature (vk)
+  // @brief key signature (vk)
   mutable std::string signature_;
 
-  //! \brief flags (bit mask)
+  // @brief flags (bit mask)
   mutable std::uint16_t flags_ = 0;
 
-  //! \brief value name
+  // @brief value name
   mutable std::string name_;
 
-  //! \brief data
+  // @brief data
   mutable hive_data data_;
 
-  //! \brief metadata loaded flag
+  // @brief metadata loaded flag
   mutable bool metadata_loaded_ = false;
 
   // helper functions
@@ -128,9 +128,9 @@ private:
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
-//! \param reader generic reader
-//! \param offset offset in bytes
+// @brief constructor
+// @param reader generic reader
+// @param offset offset in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_value::impl::impl (mobius::io::reader reader, offset_type offset)
   : reader_ (reader),
@@ -139,7 +139,7 @@ hive_value::impl::impl (mobius::io::reader reader, offset_type offset)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief load metadata on demand
+// @brief load metadata on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 hive_value::impl::_load_metadata () const
@@ -162,7 +162,7 @@ hive_value::impl::_load_metadata () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief default constructor
+// @brief default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_value::hive_value ()
   : impl_ (std::make_shared <impl> ())
@@ -170,9 +170,9 @@ hive_value::hive_value ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
-//! \param reader generic reader
-//! \param offset offset in bytes
+// @brief constructor
+// @param reader generic reader
+// @param offset offset in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_value::hive_value (mobius::io::reader reader, offset_type offset)
   : impl_ (std::make_shared <impl> (reader, offset))
@@ -180,8 +180,8 @@ hive_value::hive_value (mobius::io::reader reader, offset_type offset)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief check if object is valid
-//! \return true/false
+// @brief check if object is valid
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_value::operator bool () const
 {
@@ -189,8 +189,8 @@ hive_value::operator bool () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get offset
-//! \return offset
+// @brief get offset
+// @return offset
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_value::offset_type
 hive_value::get_offset () const
@@ -199,8 +199,8 @@ hive_value::get_offset () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get signature
-//! \return signature
+// @brief get signature
+// @return signature
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 hive_value::get_signature () const
@@ -209,8 +209,8 @@ hive_value::get_signature () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get flags
-//! \return flags
+// @brief get flags
+// @return flags
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint16_t
 hive_value::get_flags () const
@@ -219,8 +219,8 @@ hive_value::get_flags () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get name
-//! \return name
+// @brief get name
+// @return name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 hive_value::get_name () const
@@ -229,8 +229,8 @@ hive_value::get_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get data
-//! \return data
+// @brief get data
+// @return data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_data
 hive_value::get_data () const
@@ -239,3 +239,5 @@ hive_value::get_data () const
 }
 
 } // namespace mobius::os::win::registry
+
+

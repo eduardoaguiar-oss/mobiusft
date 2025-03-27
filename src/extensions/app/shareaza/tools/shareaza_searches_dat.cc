@@ -24,7 +24,7 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief show usage text
+// @brief show usage text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 usage ()
@@ -36,8 +36,8 @@ usage ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Show CXMLElement data
-//! \param indent Number of indentation tabs
+// @brief Show CXMLElement data
+// @param indent Number of indentation tabs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 show_cxmlelement (const mobius::extension::app::shareaza::CXMLElement& e, int indent)
@@ -61,8 +61,8 @@ show_cxmlelement (const mobius::extension::app::shareaza::CXMLElement& e, int in
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Show CQueryHit data
-//! \param indent Number of indentation tabs
+// @brief Show CQueryHit data
+// @param indent Number of indentation tabs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 show_cqueryhit (const mobius::extension::app::shareaza::CQueryHit& qh, int indent)
@@ -122,8 +122,8 @@ show_cqueryhit (const mobius::extension::app::shareaza::CQueryHit& qh, int inden
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Show CQuerySearch data
-//! \param indent Number of indentation tabs
+// @brief Show CQuerySearch data
+// @param indent Number of indentation tabs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 show_cquerysearch (const mobius::extension::app::shareaza::CQuerySearch& qs, int indent)
@@ -151,8 +151,8 @@ show_cquerysearch (const mobius::extension::app::shareaza::CQuerySearch& qs, int
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Show CManagedSearch data
-//! \param indent Number of indentation tabs
+// @brief Show CManagedSearch data
+// @param indent Number of indentation tabs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 show_cmanagedsearch (const mobius::extension::app::shareaza::CManagedSearch& ms, int indent)
@@ -174,8 +174,8 @@ show_cmanagedsearch (const mobius::extension::app::shareaza::CManagedSearch& ms,
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Show CMatchFile data
-//! \param indent Number of indentation tabs
+// @brief Show CMatchFile data
+// @param indent Number of indentation tabs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 show_cmatchfile (const mobius::extension::app::shareaza::CMatchFile& mf)
@@ -206,8 +206,8 @@ show_cmatchfile (const mobius::extension::app::shareaza::CMatchFile& mf)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Show CMatchList data
-//! \param indent Number of indentation tabs
+// @brief Show CMatchList data
+// @param indent Number of indentation tabs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 show_cmatchlist (const mobius::extension::app::shareaza::CMatchList& ml)
@@ -236,8 +236,8 @@ show_cmatchlist (const mobius::extension::app::shareaza::CMatchList& ml)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Show CWndSearch data
-//! \param indent Number of indentation tabs
+// @brief Show CWndSearch data
+// @param indent Number of indentation tabs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 show_cwndsearch (const mobius::extension::app::shareaza::CWndSearch& ws)
@@ -256,8 +256,8 @@ show_cwndsearch (const mobius::extension::app::shareaza::CWndSearch& ws)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Show Shareaza Searches.dat info
-//! \param path Searches.dat path
+// @brief Show Shareaza Searches.dat info
+// @param path Searches.dat path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 show_searches_dat (const std::string& path)
@@ -285,7 +285,7 @@ show_searches_dat (const std::string& path)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief main function
+// @brief main function
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int
 main (int argc, char **argv)
@@ -344,3 +344,5 @@ main (int argc, char **argv)
 
   return EXIT_SUCCESS;
 }
+
+

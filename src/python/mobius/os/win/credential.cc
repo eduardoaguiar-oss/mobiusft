@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file credential.cc C++ API <i>mobius.os.win.credential</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pylist.h>
@@ -28,9 +28,9 @@
 #include <functional>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if object type is <i>credential</i>
-//! \param pyobj Python object
-//! \return true/false
+// @brief Check if object type is <i>credential</i>
+// @param pyobj Python object
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_os_win_credential_check (PyObject *pyobj)
@@ -39,9 +39,9 @@ pymobius_os_win_credential_check (PyObject *pyobj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>credential</i> Python object from C++ object
-//! \param obj C++ object
-//! \return new credential object
+// @brief Create <i>credential</i> Python object from C++ object
+// @param obj C++ object
+// @return new credential object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_os_win_credential_to_pyobject (mobius::os::win::credential obj)
@@ -55,9 +55,9 @@ pymobius_os_win_credential_to_pyobject (mobius::os::win::credential obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>credential</i> C++ object from Python object
-//! \param pyobj Python object
-//! \return credential object
+// @brief Create <i>credential</i> C++ object from Python object
+// @param pyobj Python object
+// @return credential object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::os::win::credential
 pymobius_os_win_credential_from_pyobject (PyObject *pyobj)
@@ -66,9 +66,9 @@ pymobius_os_win_credential_from_pyobject (PyObject *pyobj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>domain</i> Attribute getter
-//! \param self Object
-//! \return <i>domain</i> attribute
+// @brief <i>domain</i> Attribute getter
+// @param self Object
+// @return <i>domain</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_domain (os_win_credential_o *self)
@@ -88,9 +88,9 @@ tp_getter_domain (os_win_credential_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>username</i> Attribute getter
-//! \param self Object
-//! \return <i>username</i> attribute
+// @brief <i>username</i> Attribute getter
+// @param self Object
+// @return <i>username</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_username (os_win_credential_o *self)
@@ -110,9 +110,9 @@ tp_getter_username (os_win_credential_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>password</i> Attribute getter
-//! \param self Object
-//! \return <i>password</i> attribute
+// @brief <i>password</i> Attribute getter
+// @param self Object
+// @return <i>password</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_password (os_win_credential_o *self)
@@ -132,9 +132,9 @@ tp_getter_password (os_win_credential_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>password_data</i> Attribute getter
-//! \param self Object
-//! \return <i>password_data</i> attribute
+// @brief <i>password_data</i> Attribute getter
+// @param self Object
+// @return <i>password_data</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_password_data (os_win_credential_o *self)
@@ -154,9 +154,9 @@ tp_getter_password_data (os_win_credential_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>flags</i> Attribute getter
-//! \param self Object
-//! \return <i>flags</i> attribute
+// @brief <i>flags</i> Attribute getter
+// @param self Object
+// @return <i>flags</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_flags (os_win_credential_o *self)
@@ -176,9 +176,9 @@ tp_getter_flags (os_win_credential_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>last_update_time</i> Attribute getter
-//! \param self Object
-//! \return <i>last_update_time</i> attribute
+// @brief <i>last_update_time</i> Attribute getter
+// @param self Object
+// @return <i>last_update_time</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_last_update_time (os_win_credential_o *self)
@@ -198,9 +198,9 @@ tp_getter_last_update_time (os_win_credential_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>data</i> Attribute getter
-//! \param self Object
-//! \return <i>data</i> attribute
+// @brief <i>data</i> Attribute getter
+// @param self Object
+// @return <i>data</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_data (os_win_credential_o *self)
@@ -224,7 +224,7 @@ tp_getter_data (os_win_credential_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Getters and setters structure
+// @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -281,11 +281,11 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>credential</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>credential</i> object
+// @brief <i>credential</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>credential</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
@@ -324,8 +324,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>credential</i> deallocator
-//! \param self Object
+// @brief <i>credential</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (os_win_credential_o *self)
@@ -335,7 +335,7 @@ tp_dealloc (os_win_credential_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject os_win_credential_t =
 {
@@ -388,3 +388,5 @@ PyTypeObject os_win_credential_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

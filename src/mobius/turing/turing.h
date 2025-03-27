@@ -27,8 +27,8 @@
 namespace mobius::turing
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Turing manager class
-//! \author Eduardo Aguiar
+// @brief Turing manager class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class turing
 {
@@ -72,10 +72,12 @@ public:
 private:
   class impl;           // forward declaration
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
 } // namespace mobius::turing
 
 #endif
+
+

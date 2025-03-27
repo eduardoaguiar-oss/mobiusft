@@ -28,13 +28,11 @@
 #include <utility>
 #include <vector>
 
-namespace mobius
-{
-namespace kff
+namespace mobius::kff
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Hash set
-//! \author Eduardo Aguiar
+// @brief Hash set
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class hashset
 {
@@ -75,14 +73,15 @@ public:
 
 
 private:
-  //! \brief Implementation class forward declaration
+  // @brief Implementation class forward declaration
   class impl;
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
-} // namespace kff
-} // namespace mobius
+} // namespace mobius::kff
 
 #endif
+
+

@@ -24,11 +24,11 @@
 namespace mobius::string
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief replace string's s1 substrings with s2
-//! \param str string
-//! \param s1 string
-//! \param s2 string
-//! \return new string
+// @brief replace string's s1 substrings with s2
+// @param str string
+// @param s1 string
+// @param s2 string
+// @return new string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 replace (const std::string& str, const std::string& s1, const std::string& s2)
@@ -49,9 +49,9 @@ replace (const std::string& str, const std::string& s1, const std::string& s2)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief convert ASCII string to lowercase
-//! \param str string
-//! \return lowercased string
+// @brief convert ASCII string to lowercase
+// @param str string
+// @return lowercased string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 tolower (const std::string& str)
@@ -62,9 +62,9 @@ tolower (const std::string& str)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief convert ASCII string to capitalize mode
-//! \param str string
-//! \return capitalized string
+// @brief convert ASCII string to capitalize mode
+// @param str string
+// @return capitalized string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 capitalize (const std::string& str)
@@ -78,9 +78,9 @@ capitalize (const std::string& str)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief convert ASCII string to uppercase
-//! \param str string
-//! \return uppercased string
+// @brief convert ASCII string to uppercase
+// @param str string
+// @return uppercased string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 toupper (const std::string& str)
@@ -91,10 +91,10 @@ toupper (const std::string& str)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief check if a string starts with another one
-//! \param str string
-//! \param starting starting string
-//! \return true if str starts with starting
+// @brief check if a string starts with another one
+// @param str string
+// @param starting starting string
+// @return true if str starts with starting
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 startswith (const std::string& str, const std::string& starting)
@@ -105,10 +105,10 @@ startswith (const std::string& str, const std::string& starting)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief check if a string ends with another one
-//! \param str string
-//! \param ending ending string
-//! \return true if str ends with ending
+// @brief check if a string ends with another one
+// @param str string
+// @param ending ending string
+// @return true if str ends with ending
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 endswith (const std::string& str, const std::string& ending)
@@ -119,10 +119,10 @@ endswith (const std::string& str, const std::string& ending)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if a string matches a given pattern
-//! \param patter fnmatch patter
-//! \param str string
-//! \return true if str matches, false otherwise
+// @brief Check if a string matches a given pattern
+// @param patter fnmatch patter
+// @param str string
+// @return true if str matches, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 fnmatch (const std::string& pattern, const std::string& str)
@@ -131,10 +131,10 @@ fnmatch (const std::string& pattern, const std::string& str)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if a string matches a given pattern (case insensitive)
-//! \param patter fnmatch patter
-//! \param str string
-//! \return true if str matches, false otherwise
+// @brief Check if a string matches a given pattern (case insensitive)
+// @param patter fnmatch patter
+// @param str string
+// @return true if str matches, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 case_insensitive_fnmatch (const std::string& pattern, const std::string& str)
@@ -146,10 +146,10 @@ case_insensitive_fnmatch (const std::string& pattern, const std::string& str)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if two strings are equal, case insensitive
-//! \param a First string
-//! \param b Second string
-//! \return True if strings match, false otherwise
+// @brief Check if two strings are equal, case insensitive
+// @param a First string
+// @param b Second string
+// @return True if strings match, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 case_insensitive_match (const std::string& a, const std::string& b)
@@ -162,10 +162,10 @@ case_insensitive_match (const std::string& a, const std::string& b)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if two strings are equal, case sensitive
-//! \param a First string
-//! \param b Second string
-//! \return True if strings match, false otherwise
+// @brief Check if two strings are equal, case sensitive
+// @param a First string
+// @param b Second string
+// @return True if strings match, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 case_sensitive_match (const std::string& a, const std::string& b)
@@ -174,10 +174,10 @@ case_sensitive_match (const std::string& a, const std::string& b)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief strip chars from both ends of a string
-//! \param str string
-//! \param chars chars
-//! \return a new string
+// @brief strip chars from both ends of a string
+// @param str string
+// @param chars chars
+// @return a new string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 strip (const std::string& str, const std::string& chars)
@@ -192,10 +192,10 @@ strip (const std::string& str, const std::string& chars)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief strip chars from the beginning of a string
-//! \param str string
-//! \param chars chars
-//! \return a new string
+// @brief strip chars from the beginning of a string
+// @param str string
+// @param chars chars
+// @return a new string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 lstrip (const std::string& str, const std::string& chars)
@@ -209,10 +209,10 @@ lstrip (const std::string& str, const std::string& chars)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief strip chars from the end of a string
-//! \param str string
-//! \param chars chars
-//! \return a new string
+// @brief strip chars from the end of a string
+// @param str string
+// @param chars chars
+// @return a new string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 rstrip (const std::string& str, const std::string& chars)
@@ -226,10 +226,10 @@ rstrip (const std::string& str, const std::string& chars)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief split string into parts
-//! \param str string
-//! \param sep separator string
-//! \return vector containing parts
+// @brief split string into parts
+// @param str string
+// @param sep separator string
+// @return vector containing parts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <std::string>
 split (const std::string& str, const std::string& sep)
@@ -250,11 +250,11 @@ split (const std::string& str, const std::string& sep)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get n word from string
-//! \param str string
-//! \param n word index (negative values count from right to left)
-//! \param sep separator string
-//! \return word
+// @brief get n word from string
+// @param str string
+// @param n word index (negative values count from right to left)
+// @param sep separator string
+// @return word
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 word (const std::string& str, int n, const std::string& sep)
@@ -275,10 +275,10 @@ word (const std::string& str, int n, const std::string& sep)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief remove all occurrences of 'c' in str
-//! \param str string
-//! \param c char
-//! \return a new string
+// @brief remove all occurrences of 'c' in str
+// @param str string
+// @param c char
+// @return a new string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 remove_char (const std::string& str, char c)
@@ -290,11 +290,11 @@ remove_char (const std::string& str, char c)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief pad string to the left with a given char
-//! \param str string
-//! \param siz string size
-//! \param c fill char
-//! \return a new string
+// @brief pad string to the left with a given char
+// @param str string
+// @param siz string size
+// @param c fill char
+// @return a new string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 lpad (const std::string& str, std::string::size_type siz, char c)
@@ -306,11 +306,11 @@ lpad (const std::string& str, std::string::size_type siz, char c)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief pad string to the right with a given char
-//! \param str string
-//! \param siz string size
-//! \param c fill char
-//! \return a new string
+// @brief pad string to the right with a given char
+// @param str string
+// @param siz string size
+// @param c fill char
+// @return a new string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 rpad (const std::string& str, std::string::size_type siz, char c)
@@ -322,9 +322,9 @@ rpad (const std::string& str, std::string::size_type siz, char c)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief convert value to hexadecimal string
-//! \param value value
-//! \param digits min digits
+// @brief convert value to hexadecimal string
+// @param value value
+// @param digits min digits
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 to_hex (std::uint64_t value, unsigned int digits)
@@ -335,10 +335,10 @@ to_hex (std::uint64_t value, unsigned int digits)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief convert value to string
-//! \param value value
-//! \param digits min digits
-//! \param fill fill char
+// @brief convert value to string
+// @param value value
+// @param digits min digits
+// @param fill fill char
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 to_string (std::uint64_t value, unsigned int digits, char fill)
@@ -349,3 +349,5 @@ to_string (std::uint64_t value, unsigned int digits, char fill)
 }
 
 } // namespace mobius::string
+
+

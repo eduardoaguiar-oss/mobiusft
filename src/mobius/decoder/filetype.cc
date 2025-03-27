@@ -20,9 +20,9 @@
 namespace mobius::decoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get filetype according to file content
-//! \param reader Reader object
-//! \return Filetype
+// @brief Get filetype according to file content
+// @param reader Reader object
+// @return Filetype
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 get_filetype (mobius::io::reader reader)
@@ -47,3 +47,5 @@ get_filetype (mobius::io::reader reader)
 }
 
 } // namespace mobius::decoder
+
+

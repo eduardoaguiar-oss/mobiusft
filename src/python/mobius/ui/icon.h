@@ -23,7 +23,7 @@
 #include <mobius/ui/icon.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -48,3 +48,5 @@ PyObject* func_ui_new_icon_from_data (PyObject *, PyObject *);
 PyObject* func_ui_set_icon_path (PyObject *, PyObject *);
 
 #endif
+
+

@@ -25,8 +25,8 @@
 namespace mobius::core
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Thread guard class
-//! \author Eduardo Aguiar
+// @brief Thread guard class
+// @author Eduardo Aguiar
 //
 // The <i>thread_guard</i> class and the get/set/has/remove_thread_resource
 // functions are designed to handle resources that are specific for each
@@ -64,10 +64,10 @@ public:
   thread_guard& operator=(thread_guard&&) noexcept = default;
 
 private:
-  //! \brief Forward declaration
+  // @brief Forward declaration
   class impl;
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr<impl> impl_;
 };
 
@@ -80,9 +80,9 @@ void set_thread_resource (const std::string&, const std::any&);
 void remove_thread_resource (const std::string&);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get thread resource
-//! \param resource_id Resource ID
-//! \return any object
+// @brief Get thread resource
+// @param resource_id Resource ID
+// @return any object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename T> T
 get_thread_resource (const std::string& resource_id)
@@ -93,3 +93,5 @@ get_thread_resource (const std::string& resource_id)
 } // namespace mobius::core
 
 #endif
+
+

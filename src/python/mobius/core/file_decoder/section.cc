@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file section.cc C++ API <i>mobius.core.decoder.section</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pydict.h>
@@ -29,9 +29,9 @@
 #include "io/reader.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>name</i> Attribute getter
-//! \param self Object
-//! \return <i>name</i> attribute
+// @brief <i>name</i> Attribute getter
+// @param self Object
+// @return <i>name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_name (core_file_decoder_section_o *self)
@@ -51,9 +51,9 @@ tp_getter_name (core_file_decoder_section_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>offset</i> Attribute getter
-//! \param self Object
-//! \return <i>offset</i> attribute
+// @brief <i>offset</i> Attribute getter
+// @param self Object
+// @return <i>offset</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_offset (core_file_decoder_section_o *self)
@@ -73,9 +73,9 @@ tp_getter_offset (core_file_decoder_section_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>size</i> Attribute getter
-//! \param self Object
-//! \return <i>size</i> attribute
+// @brief <i>size</i> Attribute getter
+// @param self Object
+// @return <i>size</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_size (core_file_decoder_section_o *self)
@@ -95,7 +95,7 @@ tp_getter_size (core_file_decoder_section_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Getters and setters structure
+// @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -106,10 +106,10 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>new_child</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Child section
+// @brief <i>new_child</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Child section
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_new_child (core_file_decoder_section_o *self, PyObject *args)
@@ -144,10 +144,10 @@ tp_f_new_child (core_file_decoder_section_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_children</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Children sections
+// @brief <i>get_children</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Children sections
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_children (core_file_decoder_section_o *self, PyObject *)
@@ -172,10 +172,10 @@ tp_f_get_children (core_file_decoder_section_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>new_reader</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Reader object
+// @brief <i>new_reader</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_new_reader (core_file_decoder_section_o *self, PyObject *)
@@ -197,9 +197,9 @@ tp_f_new_reader (core_file_decoder_section_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_data</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_data</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_data (core_file_decoder_section_o *self, PyObject *args)
@@ -233,9 +233,9 @@ tp_f_set_data (core_file_decoder_section_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>end</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>end</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_end (core_file_decoder_section_o *self, PyObject *)
@@ -256,7 +256,7 @@ tp_f_end (core_file_decoder_section_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -269,11 +269,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>section</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>section</i> object
+// @brief <i>section</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>section</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
@@ -315,8 +315,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>section</i> deallocator
-//! \param self Object
+// @brief <i>section</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (core_file_decoder_section_o *self)
@@ -326,7 +326,7 @@ tp_dealloc (core_file_decoder_section_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyTypeObject core_file_decoder_section_t =
 {
@@ -381,7 +381,7 @@ static PyTypeObject core_file_decoder_section_t =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>mobius.core.decoder.section</i> type
+// @brief Create <i>mobius.core.decoder.section</i> type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
 new_core_file_decoder_section_type ()
@@ -393,9 +393,9 @@ new_core_file_decoder_section_type ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>section</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>section</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_core_file_decoder_section_check (PyObject *value)
@@ -404,9 +404,9 @@ pymobius_core_file_decoder_section_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>section</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New section object
+// @brief Create <i>section</i> Python object from C++ object
+// @param obj C++ object
+// @return New section object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_core_file_decoder_section_to_pyobject (const mobius::core::file_decoder::section& obj)
@@ -415,12 +415,14 @@ pymobius_core_file_decoder_section_to_pyobject (const mobius::core::file_decoder
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>section</i> C++ object from Python object
-//! \param value Python value
-//! \return File_section object
+// @brief Create <i>section</i> C++ object from Python object
+// @param value Python value
+// @return File_section object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::file_decoder::section
 pymobius_core_file_decoder_section_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <core_file_decoder_section_o> (value, &core_file_decoder_section_t);
 }
+
+

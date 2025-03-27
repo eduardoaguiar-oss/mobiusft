@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pylist.h>
@@ -27,9 +27,9 @@
 #include <mobius/model/case.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>new_case</i> function implementation
-//! \param args Argument list
-//! \return New case
+// @brief <i>new_case</i> function implementation
+// @param args Argument list
+// @return New case
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_model_new_case (PyObject *, PyObject *args)
@@ -64,9 +64,9 @@ func_model_new_case (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>open_case</i> function implementation
-//! \param args Argument list
-//! \return Opened case
+// @brief <i>open_case</i> function implementation
+// @param args Argument list
+// @return Opened case
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_model_open_case (PyObject *, PyObject *args)
@@ -101,9 +101,9 @@ func_model_open_case (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>close_case</i> function implementation
-//! \param self object
-//! \param args Argument list
+// @brief <i>close_case</i> function implementation
+// @param self object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_model_close_case (PyObject *, PyObject *args)
@@ -138,9 +138,9 @@ func_model_close_case (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_cases</i> function implementation
-//! \param args Argument list
-//! \return Opened cases
+// @brief <i>get_cases</i> function implementation
+// @param args Argument list
+// @return Opened cases
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_model_get_cases (PyObject *, PyObject *)
@@ -158,14 +158,14 @@ func_model_get_cases (PyObject *, PyObject *)
     {
       mobius::py::set_runtime_error (e.what ());
     }
-    
+
   return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_case_count</i> function implementation
-//! \param args Argument list
-//! \return Number of opened cases
+// @brief <i>get_case_count</i> function implementation
+// @param args Argument list
+// @return Number of opened cases
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_model_get_case_count (PyObject *, PyObject *)
@@ -185,3 +185,5 @@ func_model_get_case_count (PyObject *, PyObject *)
   // return value
   return ret;
 }
+
+

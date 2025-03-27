@@ -25,8 +25,8 @@
 namespace mobius::core::file_decoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief decoder handle class
-//! \author Eduardo Aguiar
+// @brief decoder handle class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class decoder
 {
@@ -46,8 +46,8 @@ public:
   decoder& operator= (decoder&&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if decoder is valid
-  //! \return true/false
+  // @brief Check if decoder is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator bool () const noexcept
   {
@@ -55,8 +55,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get decoder type
-  //! \return type as string
+  // @brief Get decoder type
+  // @return type as string
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_type () const
@@ -65,8 +65,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if stream was decoded
-  //! \return true/false
+  // @brief Check if stream was decoded
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_instance () const
@@ -75,8 +75,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get main section
-  //! \return Main section
+  // @brief Get main section
+  // @return Main section
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   section
   get_section () const
@@ -85,8 +85,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get entries
-  //! \return Entries
+  // @brief Get entries
+  // @return Entries
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::vector<entry>
   get_entries () const
@@ -95,10 +95,10 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get metadata value
-  //! \param group_id Group ID
-  //! \param name Metadata name
-  //! \return Metadata value
+  // @brief Get metadata value
+  // @param group_id Group ID
+  // @param name Metadata name
+  // @return Metadata value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::pod::data
   get_metadata (const std::string& group_id, const std::string& name) const
@@ -108,10 +108,10 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get metadata value
-  //! \param group_id Group ID
-  //! \param name Metadata name
-  //! \return Metadata value
+  // @brief Get metadata value
+  // @param group_id Group ID
+  // @param name Metadata name
+  // @return Metadata value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   template <typename T> T
   get_metadata (const std::string& group_id, const std::string& name) const
@@ -127,9 +127,9 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get metadata group
-  //! \param group_id Group ID
-  //! \return Metadata
+  // @brief Get metadata group
+  // @param group_id Group ID
+  // @return Metadata
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::pod::map
   get_metadata_group (const std::string& group_id) const
@@ -139,8 +139,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get metadata groups
-  //! \return List of group IDs
+  // @brief Get metadata groups
+  // @return List of group IDs
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::vector<std::string>
   get_metadata_groups () const
@@ -150,8 +150,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Decode file
-  //! \param reader Reader object
+  // @brief Decode file
+  // @param reader Reader object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   decode (const mobius::io::reader& reader)
@@ -160,7 +160,7 @@ public:
   }
 
 private:
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <decoder_impl_base> impl_;
 };
 
@@ -175,8 +175,8 @@ using decoder_builder_type = std::function <decoder ()>;
 decoder new_decoder_by_id (const std::string&);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add decoder builder
-//! \param type Filetype
+// @brief Add decoder builder
+// @param type Filetype
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename T> decoder_builder_type
 make_decoder_builder_resource ()
@@ -189,3 +189,5 @@ make_decoder_builder_resource ()
 } // namespace mobius::core::file_decoder
 
 #endif
+
+

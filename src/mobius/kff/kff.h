@@ -24,13 +24,11 @@
 #include <utility>
 #include <vector>
 
-namespace mobius
-{
-namespace kff
+namespace mobius::kff
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief KFF database (singleton)
-//! \author Eduardo Aguiar
+// @brief KFF database (singleton)
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class kff
 {
@@ -60,7 +58,8 @@ public:
   char lookup (const std::string&, const std::string&) const;
 };
 
-} // namespace kff
-} // namespace mobius
+} // namespace mobius::kff
 
 #endif
+
+

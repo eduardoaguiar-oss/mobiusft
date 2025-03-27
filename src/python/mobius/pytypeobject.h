@@ -26,8 +26,8 @@
 namespace mobius::py
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Python type object
-//! \author Eduardo Aguiar
+// @brief Python type object
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class pytypeobject
 {
@@ -53,13 +53,15 @@ public:
   void add_constant (const std::string&, int);
 
 private:
-  //! \brief Implementation class forward declaration
+  // @brief Implementation class forward declaration
   class impl;
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
 } // namespace mobius::py
 
 #endif
+
+

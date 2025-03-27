@@ -25,8 +25,8 @@
 namespace mobius::ui
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>icon</i> implementation base class
-//! \author Eduardo Aguiar
+// @brief <i>icon</i> implementation base class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class icon_impl_base : public widget_impl_base
 {
@@ -59,8 +59,8 @@ public:
   icon_impl_base& operator= (icon_impl_base&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check whether widget object is valid
-  //! \return true/false
+  // @brief Check whether widget object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator bool () const noexcept final
   {
@@ -77,3 +77,5 @@ public:
 } // namespace mobius::ui
 
 #endif
+
+

@@ -17,14 +17,14 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "cipher.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function new_cipher_cbc
+// @brief Function new_cipher_cbc
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_new_cipher_cbc (PyObject *, PyObject *args)
@@ -64,7 +64,7 @@ func_new_cipher_cbc (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function new_cipher_cbc_cts
+// @brief Function new_cipher_cbc_cts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_new_cipher_cbc_cts (PyObject *, PyObject *args)
@@ -104,7 +104,7 @@ func_new_cipher_cbc_cts (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function new_cipher_ctr
+// @brief Function new_cipher_ctr
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_new_cipher_ctr (PyObject *, PyObject *args)
@@ -144,7 +144,7 @@ func_new_cipher_ctr (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function new_cipher_ecb
+// @brief Function new_cipher_ecb
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_new_cipher_ecb (PyObject *, PyObject *args)
@@ -182,7 +182,7 @@ func_new_cipher_ecb (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function new_cipher_gcm
+// @brief Function new_cipher_gcm
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_new_cipher_gcm (PyObject *, PyObject *args)
@@ -222,7 +222,7 @@ func_new_cipher_gcm (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function new_cipher_ige
+// @brief Function new_cipher_ige
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_new_cipher_ige (PyObject *, PyObject *args)
@@ -262,7 +262,7 @@ func_new_cipher_ige (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function new_cipher_ofb
+// @brief Function new_cipher_ofb
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_new_cipher_ofb (PyObject *, PyObject *args)
@@ -302,7 +302,7 @@ func_new_cipher_ofb (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function new_cipher_stream
+// @brief Function new_cipher_stream
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_new_cipher_stream (PyObject *, PyObject *args)
@@ -338,3 +338,4 @@ func_new_cipher_stream (PyObject *, PyObject *args)
   // create Python imagefile according to its type
   return ret;
 }
+

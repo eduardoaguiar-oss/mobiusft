@@ -27,9 +27,9 @@ namespace mobius::os::win::dpapi
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Try to decrypt all CREDHIST entries in sequence
-//! \param entries Reference to entries
-//! \return true if any entry has been decrypted, false if none
+// @brief Try to decrypt all CREDHIST entries in sequence
+// @param entries Reference to entries
+// @return true if any entry has been decrypted, false if none
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static bool
 decrypt_sequence (std::vector <credhist_entry>& entries)
@@ -68,8 +68,8 @@ decrypt_sequence (std::vector <credhist_entry>& entries)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
+// @brief Constructor
+// @param reader Reader object
 //
 // 1. CREDHIST files contain a single linked list of entries, starting from the
 //    end of the file, up to the beginning of it.
@@ -104,8 +104,8 @@ credhist_file::credhist_file (mobius::io::reader reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt CREDHIST entries
-//! \param key Decryption key
+// @brief Decrypt CREDHIST entries
+// @param key Decryption key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 credhist_file::decrypt_with_key (const mobius::bytearray& key)
@@ -122,8 +122,8 @@ credhist_file::decrypt_with_key (const mobius::bytearray& key)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt CREDHIST entries with password hash
-//! \param h Password hash
+// @brief Decrypt CREDHIST entries with password hash
+// @param h Password hash
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 credhist_file::decrypt_with_password_hash (const mobius::bytearray& h)
@@ -142,8 +142,8 @@ credhist_file::decrypt_with_password_hash (const mobius::bytearray& h)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt CREDHIST entries with password
-//! \param password Password
+// @brief Decrypt CREDHIST entries with password
+// @param password Password
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 credhist_file::decrypt_with_password (const std::string& password)
@@ -155,3 +155,5 @@ credhist_file::decrypt_with_password (const std::string& password)
 }
 
 } // namespace mobius::os::win::dpapi
+
+

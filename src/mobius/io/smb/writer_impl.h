@@ -21,15 +21,11 @@
 #include <mobius/io/writer_impl_base.h>
 #include <string>
 
-namespace mobius
-{
-namespace io
-{
-namespace smb
+namespace mobius::io::smb
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief SMB file writer implementation
-//! \author Eduardo Aguiar
+// @brief SMB file writer implementation
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class writer_impl : public writer_impl_base
 {
@@ -57,8 +53,8 @@ public:
   void flush () override;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if writer is seekable
-  //! \return true/false
+  // @brief Check if writer is seekable
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_seekable () const override
@@ -70,8 +66,8 @@ private:
   int fd_ = -1;
 };
 
-} // namespace smb
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io::smb
 
 #endif
+
+

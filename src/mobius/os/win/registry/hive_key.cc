@@ -32,9 +32,9 @@ static constexpr std::uint32_t INVALID_OFFSET = 0xffffffff;
 static constexpr std::uint32_t HIVE_BASE_OFFSET = 4096;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get absolute offset
-//! \param offset relative offset
-//! \return absolute offset
+// @brief get absolute offset
+// @param offset relative offset
+// @return absolute offset
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::uint32_t
 decode_offset (mobius::decoder::data_decoder& decoder)
@@ -48,7 +48,7 @@ decode_offset (mobius::decoder::data_decoder& decoder)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief implementation class
+// @brief implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class hive_key::impl
 {
@@ -60,8 +60,8 @@ public:
   impl (impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if object is valid
-  //! \return true/false
+  // @brief check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const
   {
@@ -69,8 +69,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get offset
-  //! \return offset
+  // @brief get offset
+  // @return offset
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   offset_type
   get_offset () const
@@ -79,8 +79,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if object is readonly
-  //! \return true/false
+  // @brief check if object is readonly
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_readonly () const
@@ -90,8 +90,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if object is symlink
-  //! \return true/false
+  // @brief check if object is symlink
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_symlink () const
@@ -101,8 +101,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if object is root key
-  //! \return true/false
+  // @brief check if object is root key
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_root_key () const
@@ -112,8 +112,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get signature
-  //! \return signature
+  // @brief get signature
+  // @return signature
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_signature () const
@@ -123,8 +123,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get flags
-  //! \return flags
+  // @brief get flags
+  // @return flags
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint16_t
   get_flags () const
@@ -134,8 +134,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get last modification time
-  //! \return last modification time
+  // @brief get last modification time
+  // @return last modification time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::datetime::datetime
   get_last_modification_time () const
@@ -145,8 +145,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get access bits
-  //! \return access bits
+  // @brief get access bits
+  // @return access bits
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_access_bits () const
@@ -156,8 +156,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get number of subkeys
-  //! \return number of subkeys
+  // @brief get number of subkeys
+  // @return number of subkeys
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_subkeys_count () const
@@ -167,8 +167,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get number of volatile subkeys
-  //! \return number of volatile subkeys
+  // @brief get number of volatile subkeys
+  // @return number of volatile subkeys
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_volatile_subkeys_count () const
@@ -178,8 +178,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get number of values
-  //! \return number of values
+  // @brief get number of values
+  // @return number of values
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_values_count () const
@@ -189,8 +189,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get name
-  //! \return name
+  // @brief get name
+  // @return name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_name () const
@@ -200,8 +200,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get classname
-  //! \return classname
+  // @brief get classname
+  // @return classname
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_classname () const
@@ -211,8 +211,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get subkeys offset
-  //! \return subkeys offset
+  // @brief get subkeys offset
+  // @return subkeys offset
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_subkeys_offset () const
@@ -222,8 +222,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get volatile subkeys offset
-  //! \return volatile subkeys offset
+  // @brief get volatile subkeys offset
+  // @return volatile subkeys offset
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_volatile_subkeys_offset () const
@@ -233,8 +233,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get parent offset
-  //! \return parent offset
+  // @brief get parent offset
+  // @return parent offset
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_parent_offset () const
@@ -244,8 +244,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get security offset
-  //! \return security offset
+  // @brief get security offset
+  // @return security offset
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_security_offset () const
@@ -255,8 +255,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get values offset
-  //! \return values offset
+  // @brief get values offset
+  // @return values offset
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_values_offset () const
@@ -266,8 +266,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get parent key
-  //! \return key
+  // @brief get parent key
+  // @return key
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   hive_key
   get_parent () const
@@ -277,8 +277,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief return iterator to the first item
-  //! \return iterator
+  // @brief return iterator to the first item
+  // @return iterator
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   const_iterator_type
   begin () const
@@ -288,8 +288,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief return iterator after the last item
-  //! \return iterator
+  // @brief return iterator after the last item
+  // @return iterator
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   const_iterator_type
   end () const
@@ -299,8 +299,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get values
-  //! \return values
+  // @brief get values
+  // @return values
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::vector <hive_value>
   get_values () const
@@ -310,76 +310,76 @@ public:
   }
 
 private:
-  //! \brief generic reader
+  // @brief generic reader
   mobius::io::reader reader_;
 
-  //! \brief offset in bytes
+  // @brief offset in bytes
   offset_type offset_ = INVALID_OFFSET;
 
-  //! \brief set if key is readonly
+  // @brief set if key is readonly
   mutable bool is_readonly_;
 
-  //! \brief set if key is symlink
+  // @brief set if key is symlink
   mutable bool is_symlink_;
 
-  //! \brief set if key is the root key
+  // @brief set if key is the root key
   mutable bool is_root_key_;
 
-  //! \brief signature (nk)
+  // @brief signature (nk)
   mutable std::string signature_;
 
-  //! \brief flags (bit mask)
+  // @brief flags (bit mask)
   mutable std::uint16_t flags_ = 0;
 
-  //! \brief last written timestamp
+  // @brief last written timestamp
   mutable mobius::datetime::datetime last_modification_time_;
 
-  //! \brief access bits (bit mask)
+  // @brief access bits (bit mask)
   mutable std::uint32_t access_bits_ = 0;
 
-  //! \brief number of subkeys
+  // @brief number of subkeys
   mutable std::uint32_t subkeys_count_;
 
-  //! \brief number of volatile subkeys
+  // @brief number of volatile subkeys
   mutable std::uint32_t volatile_subkeys_count_;
 
-  //! \brief number of values
+  // @brief number of values
   mutable std::uint32_t values_count_;
 
-  //! \brief key name
+  // @brief key name
   mutable std::string name_;
 
-  //! \brief class name
+  // @brief class name
   mutable std::string classname_;
 
-  //! \brief offset to the subkeys list
+  // @brief offset to the subkeys list
   mutable std::uint32_t subkeys_offset_;
 
-  //! \brief offset to the volatile subkeys list
+  // @brief offset to the volatile subkeys list
   mutable std::uint32_t volatile_subkeys_offset_;
 
-  //! \brief offset to the parent key
+  // @brief offset to the parent key
   mutable std::uint32_t parent_offset_;
 
-  //! \brief offset to the security data
+  // @brief offset to the security data
   mutable std::uint32_t security_offset_;
 
-  //! \brief offset to the values list
+  // @brief offset to the values list
   mutable std::uint32_t values_offset_;
 
-  //! \brief subkeys
+  // @brief subkeys
   mutable std::vector <hive_key> subkeys_;
 
-  //! \brief values
+  // @brief values
   mutable std::vector <hive_value> values_;
 
-  //! \brief metadata loaded flag
+  // @brief metadata loaded flag
   mutable bool metadata_loaded_ = false;
 
-  //! \brief subkeys loaded flag
+  // @brief subkeys loaded flag
   mutable bool subkeys_loaded_ = false;
 
-  //! \brief values loaded flag
+  // @brief values loaded flag
   mutable bool values_loaded_ = false;
 
   // helper functions
@@ -389,9 +389,9 @@ private:
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader generic reader
-//! \param offset offset in bytes
+// @brief Constructor
+// @param reader generic reader
+// @param offset offset in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_key::impl::impl (const mobius::io::reader& reader, offset_type offset)
   : reader_ (reader),
@@ -400,7 +400,7 @@ hive_key::impl::impl (const mobius::io::reader& reader, offset_type offset)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief load metadata on demand
+// @brief load metadata on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 hive_key::impl::_load_metadata () const
@@ -473,7 +473,7 @@ hive_key::impl::_load_metadata () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief load subkeys on demand
+// @brief load subkeys on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 hive_key::impl::_load_subkeys () const
@@ -502,7 +502,7 @@ hive_key::impl::_load_subkeys () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief load values on demand
+// @brief load values on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 hive_key::impl::_load_values () const
@@ -531,7 +531,7 @@ hive_key::impl::_load_values () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_key::hive_key ()
   : impl_ (std::make_shared <impl> ())
@@ -539,9 +539,9 @@ hive_key::hive_key ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Generic reader
-//! \param offset Offset in bytes
+// @brief Constructor
+// @param reader Generic reader
+// @param offset Offset in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_key::hive_key (const mobius::io::reader& reader, offset_type offset)
   : impl_ (std::make_shared <impl> (reader, offset))
@@ -549,8 +549,8 @@ hive_key::hive_key (const mobius::io::reader& reader, offset_type offset)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief check if object is valid
-//! \return true/false
+// @brief check if object is valid
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_key::operator bool () const
 {
@@ -558,8 +558,8 @@ hive_key::operator bool () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get offset
-//! \return offset
+// @brief get offset
+// @return offset
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_key::offset_type
 hive_key::get_offset () const
@@ -568,8 +568,8 @@ hive_key::get_offset () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief check if object is readonly
-//! \return true/false
+// @brief check if object is readonly
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 hive_key::is_readonly () const
@@ -578,8 +578,8 @@ hive_key::is_readonly () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief check if object is symlink
-//! \return true/false
+// @brief check if object is symlink
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 hive_key::is_symlink () const
@@ -588,8 +588,8 @@ hive_key::is_symlink () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief check if object is root key
-//! \return true/false
+// @brief check if object is root key
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 hive_key::is_root_key () const
@@ -598,8 +598,8 @@ hive_key::is_root_key () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get signature
-//! \return signature
+// @brief get signature
+// @return signature
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 hive_key::get_signature () const
@@ -608,8 +608,8 @@ hive_key::get_signature () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get flags
-//! \return flags
+// @brief get flags
+// @return flags
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint16_t
 hive_key::get_flags () const
@@ -618,8 +618,8 @@ hive_key::get_flags () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get last modification time
-//! \return last modification time
+// @brief get last modification time
+// @return last modification time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 hive_key::get_last_modification_time () const
@@ -628,8 +628,8 @@ hive_key::get_last_modification_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get access bits
-//! \return access bits
+// @brief get access bits
+// @return access bits
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 hive_key::get_access_bits () const
@@ -638,8 +638,8 @@ hive_key::get_access_bits () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get subkeys count
-//! \return subkeys count
+// @brief get subkeys count
+// @return subkeys count
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 hive_key::get_subkeys_count () const
@@ -648,8 +648,8 @@ hive_key::get_subkeys_count () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get volatile subkeys count
-//! \return volatile subkeys count
+// @brief get volatile subkeys count
+// @return volatile subkeys count
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 hive_key::get_volatile_subkeys_count () const
@@ -658,8 +658,8 @@ hive_key::get_volatile_subkeys_count () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get values count
-//! \return values count
+// @brief get values count
+// @return values count
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 hive_key::get_values_count () const
@@ -668,8 +668,8 @@ hive_key::get_values_count () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get name
-//! \return name
+// @brief get name
+// @return name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 hive_key::get_name () const
@@ -678,8 +678,8 @@ hive_key::get_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get classname
-//! \return classname
+// @brief get classname
+// @return classname
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 hive_key::get_classname () const
@@ -688,8 +688,8 @@ hive_key::get_classname () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get subkeys offset
-//! \return subkeys offset
+// @brief get subkeys offset
+// @return subkeys offset
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 hive_key::get_subkeys_offset () const
@@ -698,8 +698,8 @@ hive_key::get_subkeys_offset () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get volatile subkeys offset
-//! \return volatile subkeys offset
+// @brief get volatile subkeys offset
+// @return volatile subkeys offset
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 hive_key::get_volatile_subkeys_offset () const
@@ -708,8 +708,8 @@ hive_key::get_volatile_subkeys_offset () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get parent offset
-//! \return parent offset
+// @brief get parent offset
+// @return parent offset
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 hive_key::get_parent_offset () const
@@ -718,8 +718,8 @@ hive_key::get_parent_offset () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get security offset
-//! \return security offset
+// @brief get security offset
+// @return security offset
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 hive_key::get_security_offset () const
@@ -728,8 +728,8 @@ hive_key::get_security_offset () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get values offset
-//! \return values offset
+// @brief get values offset
+// @return values offset
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 hive_key::get_values_offset () const
@@ -738,8 +738,8 @@ hive_key::get_values_offset () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get parent
-//! \return parent
+// @brief get parent
+// @return parent
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_key
 hive_key::get_parent () const
@@ -748,8 +748,8 @@ hive_key::get_parent () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief return iterator to the first subkey
-//! \return iterator
+// @brief return iterator to the first subkey
+// @return iterator
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_key::const_iterator_type
 hive_key::begin () const
@@ -758,8 +758,8 @@ hive_key::begin () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief return iterator after the last subkey
-//! \return iterator
+// @brief return iterator after the last subkey
+// @return iterator
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_key::const_iterator_type
 hive_key::end () const
@@ -768,8 +768,8 @@ hive_key::end () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get values
-//! \return values
+// @brief get values
+// @return values
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <hive_value>
 hive_key::get_values () const
@@ -778,8 +778,8 @@ hive_key::get_values () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief check if hive key has subkeys
-//! \return true if hive key has at least one subkey, false otherwise
+// @brief check if hive key has subkeys
+// @return true if hive key has at least one subkey, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 hive_key::has_subkeys () const
@@ -788,9 +788,9 @@ hive_key::has_subkeys () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get subkey by name
-//! \param name subkey name
-//! \return subkey or empty key, if not found
+// @brief Get subkey by name
+// @param name subkey name
+// @return subkey or empty key, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_key
 hive_key::get_key_by_name (const std::string& name) const
@@ -805,9 +805,9 @@ hive_key::get_key_by_name (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get subkeys by mask
-//! \param a_mask fnmatch mask
-//! \return Subkeys or empty vector, if no keys were found
+// @brief Get subkeys by mask
+// @param a_mask fnmatch mask
+// @return Subkeys or empty vector, if no keys were found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <hive_key>
 hive_key::get_keys_by_mask (const std::string& a_mask) const
@@ -864,9 +864,9 @@ hive_key::get_keys_by_mask (const std::string& a_mask) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get subkey by path
-//! \param path subkey path
-//! \return subkey or empty key, if not found
+// @brief Get subkey by path
+// @param path subkey path
+// @return subkey or empty key, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_key
 hive_key::get_key_by_path (const std::string& path) const
@@ -906,9 +906,9 @@ hive_key::get_key_by_path (const std::string& path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get value by name
-//! \param name value name
-//! \return value or empty value, if not found
+// @brief Get value by name
+// @param name value name
+// @return value or empty value, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_value
 hive_key::get_value_by_name (const std::string& name) const
@@ -923,9 +923,9 @@ hive_key::get_value_by_name (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get values by mask
-//! \param a_mask value mask
-//! \return values or empty vector, if no values were found
+// @brief get values by mask
+// @param a_mask value mask
+// @return values or empty vector, if no values were found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <hive_value>
 hive_key::get_values_by_mask (const std::string& a_mask) const
@@ -973,9 +973,9 @@ hive_key::get_values_by_mask (const std::string& a_mask) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get data by value name
-//! \param name value name
-//! \return data
+// @brief Get data by value name
+// @param name value name
+// @return data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_data
 hive_key::get_data_by_name (const std::string& name) const
@@ -990,3 +990,5 @@ hive_key::get_data_by_name (const std::string& name) const
 }
 
 } // namespace mobius::os::win::registry
+
+

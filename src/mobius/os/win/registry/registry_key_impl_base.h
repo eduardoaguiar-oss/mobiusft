@@ -22,19 +22,13 @@
 #include <string>
 #include <vector>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace registry
+namespace mobius::os::win::registry
 {
 class registry_key;
 class registry_value;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_key implementation base class
+// @brief registry_key implementation base class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class registry_key_impl_base
 {
@@ -62,9 +56,8 @@ public:
   virtual std::vector <registry_value> get_values () const = 0;
 };
 
-} // namespace registry
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::registry
 
 #endif
+
+

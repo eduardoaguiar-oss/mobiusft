@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file imagefile.cc C++ API <i>mobius.vfs.imagefile</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pydict.h>
@@ -30,9 +30,9 @@
 #include "pod/data.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>imagefile</i> Python object from C++ object
-//! \param obj C++ object
-//! \return new imagefile object
+// @brief Create <i>imagefile</i> Python object from C++ object
+// @param obj C++ object
+// @return new imagefile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_vfs_imagefile_to_pyobject (mobius::vfs::imagefile obj)
@@ -55,9 +55,9 @@ pymobius_vfs_imagefile_to_pyobject (mobius::vfs::imagefile obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>type</i> attribute getter
-//! \param self object
-//! \return <i>type</i> attribute
+// @brief <i>type</i> attribute getter
+// @param self object
+// @return <i>type</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_type (vfs_imagefile_o *self)
@@ -77,9 +77,9 @@ tp_getter_type (vfs_imagefile_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>size</i> attribute getter
-//! \param self object
-//! \return <i>size</i> attribute
+// @brief <i>size</i> attribute getter
+// @param self object
+// @return <i>size</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_size (vfs_imagefile_o *self)
@@ -99,9 +99,9 @@ tp_getter_size (vfs_imagefile_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>sectors</i> attribute getter
-//! \param self object
-//! \return <i>sectors</i> attribute
+// @brief <i>sectors</i> attribute getter
+// @param self object
+// @return <i>sectors</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_sectors (vfs_imagefile_o *self)
@@ -121,9 +121,9 @@ tp_getter_sectors (vfs_imagefile_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>sector_size</i> attribute getter
-//! \param self object
-//! \return <i>sector_size</i> attribute
+// @brief <i>sector_size</i> attribute getter
+// @param self object
+// @return <i>sector_size</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_sector_size (vfs_imagefile_o *self)
@@ -143,7 +143,7 @@ tp_getter_sector_size (vfs_imagefile_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Getters and setters structure
+// @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -179,10 +179,10 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_available</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return new reader
+// @brief <i>is_available</i> method implementation
+// @param self object
+// @param args argument list
+// @return new reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_available (vfs_imagefile_o *self, PyObject *)
@@ -204,10 +204,10 @@ tp_f_is_available (vfs_imagefile_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_attribute</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return attribute value
+// @brief <i>get_attribute</i> method implementation
+// @param self object
+// @param args argument list
+// @return attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_attribute (vfs_imagefile_o *self, PyObject *args)
@@ -241,9 +241,9 @@ tp_f_get_attribute (vfs_imagefile_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_attribute</i> method implementation
-//! \param self object
-//! \param args argument list
+// @brief <i>set_attribute</i> method implementation
+// @param self object
+// @param args argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_attribute (vfs_imagefile_o *self, PyObject *args)
@@ -280,10 +280,10 @@ tp_f_set_attribute (vfs_imagefile_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_attributes</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return map containing attributes' IDs and values
+// @brief <i>get_attributes</i> method implementation
+// @param self object
+// @param args argument list
+// @return map containing attributes' IDs and values
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_attributes (vfs_imagefile_o *self, PyObject *)
@@ -307,10 +307,10 @@ tp_f_get_attributes (vfs_imagefile_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>new_reader</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return new reader
+// @brief <i>new_reader</i> method implementation
+// @param self object
+// @param args argument list
+// @return new reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_new_reader (vfs_imagefile_o *self, PyObject *)
@@ -332,10 +332,10 @@ tp_f_new_reader (vfs_imagefile_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>new_writer</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return new writer
+// @brief <i>new_writer</i> method implementation
+// @param self object
+// @param args argument list
+// @return new writer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_new_writer (vfs_imagefile_o *self, PyObject *)
@@ -357,7 +357,7 @@ tp_f_new_writer (vfs_imagefile_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -401,8 +401,8 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>imagefile</i> deallocator
-//! \param self object
+// @brief <i>imagefile</i> deallocator
+// @param self object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (vfs_imagefile_o *self)
@@ -412,10 +412,10 @@ tp_dealloc (vfs_imagefile_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>item</i> getattro
-//! \param o Object
-//! \param name Attribute name
-//! \return Attribute value
+// @brief <i>item</i> getattro
+// @param o Object
+// @param name Attribute name
+// @return Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getattro (PyObject *o, PyObject *name)
@@ -447,11 +447,11 @@ tp_getattro (PyObject *o, PyObject *name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>item</i> setattro
-//! \param o Object
-//! \param name Attribute name
-//! \param value Attribute value
-//! \return 0 if success, -1 if error
+// @brief <i>item</i> setattro
+// @param o Object
+// @param name Attribute name
+// @param value Attribute value
+// @return 0 if success, -1 if error
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static int
 tp_setattro (PyObject *o, PyObject *name, PyObject *value)
@@ -503,7 +503,7 @@ tp_setattro (PyObject *o, PyObject *name, PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject vfs_imagefile_t =
 {
@@ -556,3 +556,5 @@ PyTypeObject vfs_imagefile_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

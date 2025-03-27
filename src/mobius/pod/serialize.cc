@@ -31,13 +31,13 @@ namespace
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-//! \brief Serialization version
+// @brief Serialization version
 static constexpr std::uint32_t VERSION = 1;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Serialize data item
-//! \param encoder Encoder object
-//! \param d Data object
+// @brief Serialize data item
+// @param encoder Encoder object
+// @param d Data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 _serialize_data (mobius::encoder::data_encoder& encoder, const data& data)
@@ -127,9 +127,9 @@ _serialize_data (mobius::encoder::data_encoder& encoder, const data& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Serialize data object
-//! \param data Data object
-//! \return Encoded data
+// @brief Serialize data object
+// @param data Data object
+// @return Encoded data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 _serialize (mobius::encoder::data_encoder& encoder, const data& data)
@@ -141,9 +141,9 @@ _serialize (mobius::encoder::data_encoder& encoder, const data& data)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Serialize data object
-//! \param data Data object
-//! \return Encoded data
+// @brief Serialize data object
+// @param data Data object
+// @return Encoded data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 serialize (const data& data)
@@ -158,9 +158,9 @@ serialize (const data& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Serialize data object
-//! \param data Data object
-//! \return Encoded data
+// @brief Serialize data object
+// @param data Data object
+// @return Encoded data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 serialize (mobius::io::writer writer, const data& data)
@@ -170,3 +170,5 @@ serialize (mobius::io::writer writer, const data& data)
 }
 
 } // namespace mobius::pod
+
+

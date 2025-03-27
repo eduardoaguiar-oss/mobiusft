@@ -30,3 +30,4 @@ std::string get_error_message (gcry_error_t);
 } // namespace mobius::crypt::gcrypt
 
 #endif
+

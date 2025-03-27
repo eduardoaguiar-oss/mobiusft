@@ -17,18 +17,18 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API mobius.io module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API mobius.io module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pygil.h>
 #include <io/reader.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <b>mobius.io.new_slice_reader</b> function
-//! \param self function object
-//! \param args argument list
-//! \return Python object
+// @brief <b>mobius.io.new_slice_reader</b> function
+// @param self function object
+// @param args argument list
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_io_new_slice_reader (PyObject *, PyObject *args)
@@ -39,20 +39,20 @@ func_io_new_slice_reader (PyObject *, PyObject *args)
   std::int64_t arg_end = -1;
 
   try
-    { 
+    {
       arg_reader = mobius::py::get_arg_as_cpp (args, 0, pymobius_io_reader_from_pyobject);
       arg_pos = mobius::py::get_arg_as_int64_t (args, 1);
       arg_end = mobius::py::get_arg_as_int64_t (args, 2, -1);
     }
   catch (const std::exception& e)
-    { 
+    {
       mobius::py::set_invalid_type_error (e.what ());
       return nullptr;
     }
 
   // execute C++ code
   PyObject *ret = nullptr;
-  
+
   try
     {
       ret = pymobius_io_reader_to_pyobject (
@@ -60,9 +60,11 @@ func_io_new_slice_reader (PyObject *, PyObject *args)
             );
     }
   catch (const std::exception& e)
-    { 
+    {
       mobius::py::set_runtime_error (e.what ());
     }
 
   return ret;
 }
+
+

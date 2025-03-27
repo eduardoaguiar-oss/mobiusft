@@ -21,10 +21,10 @@
 namespace mobius::decoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode bytes from hexstring
-//! \param data Data
-//! \param sep Separator
-//! \return Bytes
+// @brief Decode bytes from hexstring
+// @param data Data
+// @param sep Separator
+// @return Bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 hexstring (const std::string& str, const std::string& sep)
@@ -36,3 +36,5 @@ hexstring (const std::string& str, const std::string& sep)
 }
 
 } // namespace mobius::decoder
+
+

@@ -24,8 +24,8 @@
 namespace mobius::ui
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief widget handle class
-//! \author Eduardo Aguiar
+// @brief widget handle class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class widget
 {
@@ -46,8 +46,8 @@ public:
   widget& operator= (widget&&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check whether widget object is valid
-  //! \return true/false
+  // @brief Check whether widget object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator bool () const
   {
@@ -55,8 +55,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get low level widget
-  //! \return Low level widget
+  // @brief Get low level widget
+  // @return Low level widget
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::any
   get_ui_widget () const
@@ -65,8 +65,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get low level widget
-  //! \return Low level widget
+  // @brief Get low level widget
+  // @return Low level widget
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   template <typename T> T
   get_ui_widget () const
@@ -75,8 +75,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set widget sensitive
-  //! \param flag Flag (true/false)
+  // @brief Set widget sensitive
+  // @param flag Flag (true/false)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_sensitive (bool flag)
@@ -85,8 +85,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set widget visible
-  //! \param flag Flag (true/false)
+  // @brief Set widget visible
+  // @param flag Flag (true/false)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_visible (bool flag)
@@ -96,8 +96,8 @@ public:
 
 protected:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get implementation pointer
-  //! \return Class implementation pointer
+  // @brief Get implementation pointer
+  // @return Class implementation pointer
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   template <typename T> constexpr std::shared_ptr <T>
   _impl () const noexcept
@@ -112,3 +112,5 @@ private:
 } // namespace mobius::ui
 
 #endif
+
+

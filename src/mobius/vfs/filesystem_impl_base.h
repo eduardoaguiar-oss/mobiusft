@@ -25,13 +25,11 @@
 #include <cstdint>
 #include <string>
 
-namespace mobius
-{
-namespace vfs
+namespace mobius::vfs
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief filesystem implementation base class
-//! \author Eduardo Aguiar
+// @brief filesystem implementation base class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class filesystem_impl_base
 {
@@ -69,7 +67,8 @@ public:
   virtual mobius::pod::map get_metadata () const = 0;
 };
 
-} // namespace vfs
-} // namespace mobius
+} // namespace mobius::vfs
 
 #endif
+
+

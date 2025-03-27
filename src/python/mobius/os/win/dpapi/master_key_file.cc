@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file master_key_file.cc C++ API <i>mobius.os.win.dpapi.master_key_file</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "master_key_file.h"
@@ -27,9 +27,9 @@
 #include "io/reader.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if object type is <i>master_key_file</i>
-//! \param pyobj Python object
-//! \return true/false
+// @brief Check if object type is <i>master_key_file</i>
+// @param pyobj Python object
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_os_win_dpapi_master_key_file_check (PyObject *pyobj)
@@ -38,9 +38,9 @@ pymobius_os_win_dpapi_master_key_file_check (PyObject *pyobj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>master_key_file</i> Python object from C++ object
-//! \param obj C++ object
-//! \return new master_key_file object
+// @brief Create <i>master_key_file</i> Python object from C++ object
+// @param obj C++ object
+// @return new master_key_file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_os_win_dpapi_master_key_file_to_pyobject (mobius::os::win::dpapi::master_key_file obj)
@@ -54,9 +54,9 @@ pymobius_os_win_dpapi_master_key_file_to_pyobject (mobius::os::win::dpapi::maste
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>master_key_file</i> C++ object from Python object
-//! \param pyobj Python object
-//! \return master_key_file object
+// @brief Create <i>master_key_file</i> C++ object from Python object
+// @param pyobj Python object
+// @return master_key_file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::os::win::dpapi::master_key_file
 pymobius_os_win_dpapi_master_key_file_from_pyobject (PyObject *pyobj)
@@ -65,9 +65,9 @@ pymobius_os_win_dpapi_master_key_file_from_pyobject (PyObject *pyobj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>revision</i> Attribute getter
-//! \param self Object
-//! \return <i>revision</i> attribute
+// @brief <i>revision</i> Attribute getter
+// @param self Object
+// @return <i>revision</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_revision (os_win_dpapi_master_key_file_o *self)
@@ -87,9 +87,9 @@ tp_getter_revision (os_win_dpapi_master_key_file_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>guid</i> Attribute getter
-//! \param self Object
-//! \return <i>guid</i> attribute
+// @brief <i>guid</i> Attribute getter
+// @param self Object
+// @return <i>guid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_guid (os_win_dpapi_master_key_file_o *self)
@@ -109,9 +109,9 @@ tp_getter_guid (os_win_dpapi_master_key_file_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>flags</i> Attribute getter
-//! \param self Object
-//! \return <i>flags</i> attribute
+// @brief <i>flags</i> Attribute getter
+// @param self Object
+// @return <i>flags</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_flags (os_win_dpapi_master_key_file_o *self)
@@ -131,9 +131,9 @@ tp_getter_flags (os_win_dpapi_master_key_file_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>master_key</i> Attribute getter
-//! \param self Object
-//! \return <i>master_key</i> attribute
+// @brief <i>master_key</i> Attribute getter
+// @param self Object
+// @return <i>master_key</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_master_key (os_win_dpapi_master_key_file_o *self)
@@ -153,9 +153,9 @@ tp_getter_master_key (os_win_dpapi_master_key_file_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>backup_key</i> Attribute getter
-//! \param self Object
-//! \return <i>backup_key</i> attribute
+// @brief <i>backup_key</i> Attribute getter
+// @param self Object
+// @return <i>backup_key</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_backup_key (os_win_dpapi_master_key_file_o *self)
@@ -175,9 +175,9 @@ tp_getter_backup_key (os_win_dpapi_master_key_file_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>credhist_guid</i> Attribute getter
-//! \param self Object
-//! \return <i>credhist_guid</i> attribute
+// @brief <i>credhist_guid</i> Attribute getter
+// @param self Object
+// @return <i>credhist_guid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_credhist_guid (os_win_dpapi_master_key_file_o *self)
@@ -197,7 +197,7 @@ tp_getter_credhist_guid (os_win_dpapi_master_key_file_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Getters and setters structure
+// @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -247,11 +247,11 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>master_key_file</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>master_key_file</i> object
+// @brief <i>master_key_file</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>master_key_file</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
@@ -290,8 +290,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>master_key_file</i> deallocator
-//! \param self Object
+// @brief <i>master_key_file</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (os_win_dpapi_master_key_file_o *self)
@@ -301,7 +301,7 @@ tp_dealloc (os_win_dpapi_master_key_file_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject os_win_dpapi_master_key_file_t =
 {
@@ -354,3 +354,5 @@ PyTypeObject os_win_dpapi_master_key_file_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

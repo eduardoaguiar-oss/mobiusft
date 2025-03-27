@@ -21,14 +21,12 @@
 #include <sstream>
 #include <cstdio>
 
-namespace mobius
-{
-namespace datetime
+namespace mobius::datetime
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert ISO 8601 formatted string to datetime
-//! \param str string
-//! \return datetime
+// @brief Convert ISO 8601 formatted string to datetime
+// @param str string
+// @return datetime
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datetime
 new_datetime_from_iso_string (const std::string& str)
@@ -59,9 +57,9 @@ new_datetime_from_iso_string (const std::string& str)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert date object to ISO 8601 string
-//! \param d date object
-//! \return date formatted as string
+// @brief Convert date object to ISO 8601 string
+// @param d date object
+// @return date formatted as string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 date_to_iso_string (const date& d)
@@ -75,9 +73,9 @@ date_to_iso_string (const date& d)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert time object to ISO 8601 string
-//! \param t time object
-//! \return time formatted as 'HH:MM:SS'
+// @brief Convert time object to ISO 8601 string
+// @param t time object
+// @return time formatted as 'HH:MM:SS'
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 time_to_iso_string (const time& t)
@@ -91,9 +89,9 @@ time_to_iso_string (const time& t)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert datetime object to ISO 8601 format
-//! \param dt datetime object
-//! \return datetime formatted as 'YYYY-MM-DD HH:MM:SS'
+// @brief Convert datetime object to ISO 8601 format
+// @param dt datetime object
+// @return datetime formatted as 'YYYY-MM-DD HH:MM:SS'
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 datetime_to_iso_string (const datetime& dt)
@@ -106,5 +104,6 @@ datetime_to_iso_string (const datetime& dt)
   return str;
 }
 
-} // namespace datetime
-} // namespace mobius
+} // namespace mobius::datetime
+
+

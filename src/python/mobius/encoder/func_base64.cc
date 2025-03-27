@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API mobius.encoder module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API mobius.encoder module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pymobius.h>
@@ -26,10 +26,10 @@
 #include <mobius/encoder/base64.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief base64 function
-//! \param self function object
-//! \param args argument list
-//! \return Python object
+// @brief base64 function
+// @param self function object
+// @param args argument list
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 encoder_func_base64 (PyObject *, PyObject *args)
@@ -66,3 +66,5 @@ encoder_func_base64 (PyObject *, PyObject *args)
   // return value
   return ret;
 }
+
+

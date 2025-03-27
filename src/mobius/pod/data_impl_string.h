@@ -21,20 +21,18 @@
 #include <mobius/pod/data_impl_base.h>
 #include <string>
 
-namespace mobius
-{
-namespace pod
+namespace mobius::pod
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief String data implementation class
-//! \author Eduardo Aguiar
+// @brief String data implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class data_impl_string : public data_impl_base
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Constructor
-  //! \param value Value
+  // @brief Constructor
+  // @param value Value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit data_impl_string (const std::string& value)
     : value_ (value)
@@ -42,8 +40,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get data type
-  //! \return Data type
+  // @brief Get data type
+  // @return Data type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   type
   get_type () const noexcept override
@@ -52,8 +50,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get value
-  //! \return Value
+  // @brief Get value
+  // @return Value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_value () const
@@ -65,7 +63,8 @@ private:
   std::string value_;
 };
 
-} // namespace pod
-} // namespace mobius
+} // namespace mobius::pod
 
 #endif
+
+

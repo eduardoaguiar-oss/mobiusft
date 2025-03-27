@@ -24,8 +24,8 @@
 namespace mobius::datasource::ufdr
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief UFDR <b>datasource</b> handle class
-//! \author Eduardo Aguiar
+// @brief UFDR <b>datasource</b> handle class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class datasource : public mobius::datasource::datasource
 {
@@ -44,8 +44,8 @@ public:
   datasource& operator= (datasource&&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Convert datasource to datasource
-  //! \return Datasource
+  // @brief Convert datasource to datasource
+  // @return Datasource
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator mobius::datasource::datasource () const
   {
@@ -53,8 +53,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get .ufdr URL
-  //! \return URL
+  // @brief Get .ufdr URL
+  // @return URL
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_url () const
@@ -63,8 +63,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get .ufdr file info
-  //! \return Map with .ufdr file attributes
+  // @brief Get .ufdr file info
+  // @return Map with .ufdr file attributes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::pod::map
   get_file_info () const
@@ -73,8 +73,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get case info
-  //! \return Map with case attributes
+  // @brief Get case info
+  // @return Map with case attributes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::pod::map
   get_case_info () const
@@ -83,8 +83,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set case info
-  //! \param case_info Map with case info
+  // @brief Set case info
+  // @param case_info Map with case info
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_case_info (const mobius::pod::map& case_info)
@@ -93,8 +93,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get extractions
-  //! \return Extractions
+  // @brief Get extractions
+  // @return Extractions
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::vector<extraction>
   get_extractions () const
@@ -103,8 +103,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Add extraction
-  //! \param extraction Extraction object
+  // @brief Add extraction
+  // @param extraction Extraction object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   add_extraction (const extraction& extraction)
@@ -116,3 +116,5 @@ public:
 } // namespace mobius::datasource
 
 #endif
+
+

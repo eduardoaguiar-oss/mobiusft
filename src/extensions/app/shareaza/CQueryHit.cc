@@ -21,8 +21,8 @@
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode QueryHit structure
-//! \see QueryHit.cpp - QueryHit::Serialize
+// @brief Decode QueryHit structure
+// @see QueryHit.cpp - QueryHit::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 CQueryHit::decode (mobius::decoder::mfc& decoder, int version)
@@ -120,3 +120,7 @@ CQueryHit::decode (mobius::decoder::mfc& decoder, int version)
 }
 
 } // namespace mobius::extension::app::shareaza
+
+
+
+

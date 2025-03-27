@@ -45,8 +45,8 @@ constexpr std::size_t MBR_SIGNATURE_OFFSET = 0x1fe;
 constexpr std::uint8_t EFI_GPT_TYPE = 0xee;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Partition description by type GUID
-//! \see https://en.wikipedia.org/wiki/GUID_Partition_Table#Partition_type_GUIDs
+// @brief Partition description by type GUID
+// @see https://en.wikipedia.org/wiki/GUID_Partition_Table#Partition_type_GUIDs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const std::map <const std::string, const std::string> PARTITION_DESCRIPTION =
 {
@@ -85,10 +85,10 @@ static const std::map <const std::string, const std::string> PARTITION_DESCRIPTI
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode protective MBR
-//! \param ps_block Partition System block
-//! \param sector_size Sector size
-//! \see UEFI 2.9 - section 5.3.2
+// @brief Decode protective MBR
+// @param ps_block Partition System block
+// @param sector_size Sector size
+// @see UEFI 2.9 - section 5.3.2
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 _decode_protective_mbr (
@@ -126,12 +126,12 @@ _decode_protective_mbr (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode GPT header
-//! \param ps_block Partition System block
-//! \param sector_size Sector size
-//! \param sector Header sector
-//! \return Block object
-//! \see UEFI 2.9 - section 5.3.2
+// @brief Decode GPT header
+// @param ps_block Partition System block
+// @param sector_size Sector size
+// @param sector Header sector
+// @return Block object
+// @see UEFI 2.9 - section 5.3.2
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::vfs::block
 _decode_gpt_header (
@@ -189,11 +189,11 @@ _decode_gpt_header (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create gpt.table block from GPT Header block
-//! \param ps_block Partition System block
-//! \param header_block Header block
-//! \param sector_size Sector size
-//! \return Block
+// @brief Create gpt.table block from GPT Header block
+// @param ps_block Partition System block
+// @param header_block Header block
+// @param sector_size Sector size
+// @return Block
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::vfs::block
 _create_gpt_partition_table (
@@ -230,11 +230,11 @@ _create_gpt_partition_table (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode GPT partition table blocks
-//! \param ps_block Partition System block
-//! \param partition_entry_lbaheader_block Header block
-//! \param sector_size Sector size
-//! \return Block
+// @brief Decode GPT partition table blocks
+// @param ps_block Partition System block
+// @param partition_entry_lbaheader_block Header block
+// @param sector_size Sector size
+// @return Block
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::uint32_t
 _decode_gpt_partition_table (
@@ -348,11 +348,11 @@ _decode_gpt_partition_table (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode GPT partition system
-//! \param block Block object
-//! \param new_blocks Vector for newly created blocks
-//! \param sector_size Sector size in bytes
-//! \see UEFI 2.9 - section 5.3.2
+// @brief Decode GPT partition system
+// @param block Block object
+// @param new_blocks Vector for newly created blocks
+// @param sector_size Sector size in bytes
+// @see UEFI 2.9 - section 5.3.2
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 _decode_gpt (
@@ -454,12 +454,12 @@ _decode_gpt (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Try to decode block as GPT partition system
-//! \param block Block object
-//! \param new_blocks Vector for newly created blocks
-//! \param pending_blocks Pending blocks
-//! \return <b>true</b> if block was decoded, <b>false</b> otherwise
-//! \see UEFI 2.9
+// @brief Try to decode block as GPT partition system
+// @param block Block object
+// @param new_blocks Vector for newly created blocks
+// @param pending_blocks Pending blocks
+// @return <b>true</b> if block was decoded, <b>false</b> otherwise
+// @see UEFI 2.9
 //
 // GPT Disk Structure:
 // Sector       Description
@@ -528,7 +528,7 @@ const char *EXTENSION_DESCRIPTION = "GPT partition table support";
 } // extern "C"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Start extension
+// @brief Start extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extern "C" void
 start ()
@@ -541,10 +541,12 @@ start ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Stop extension
+// @brief Stop extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extern "C" void
 stop ()
 {
   mobius::core::remove_resource ("vfs.block.decoder.partition_system_gpt");
 }
+
+

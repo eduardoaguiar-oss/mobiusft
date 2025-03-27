@@ -24,8 +24,8 @@
 namespace mobius::crypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Abstract base class for cryptographic ciphers
-//! \author Eduardo Aguiar
+// @brief Abstract base class for cryptographic ciphers
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class cipher_impl_base
 {
@@ -63,3 +63,5 @@ public:
 } // namespace mobius::crypt
 
 #endif
+
+

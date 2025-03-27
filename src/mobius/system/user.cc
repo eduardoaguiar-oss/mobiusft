@@ -21,13 +21,11 @@
 #include <pwd.h>
 #include <stdexcept>
 
-namespace mobius
-{
-namespace system
+namespace mobius::system
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param uid user ID
+// @brief Constructor
+// @param uid user ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 user::user (uid_t uid) : uid_ (uid)
 {
@@ -51,8 +49,8 @@ user::user (uid_t uid) : uid_ (uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get user ID
-//! \return user ID
+// @brief Get user ID
+// @return user ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 uid_t
 user::get_id () const
@@ -64,8 +62,8 @@ user::get_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get user name
-//! \return user name
+// @brief Get user name
+// @return user name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 user::get_name () const
@@ -77,8 +75,8 @@ user::get_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get user passwd
-//! \return user password, if available
+// @brief Get user passwd
+// @return user password, if available
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 user::get_passwd () const
@@ -90,8 +88,8 @@ user::get_passwd () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get user extra information
-//! \return user information, if available
+// @brief get user extra information
+// @return user information, if available
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 user::get_info () const
@@ -103,8 +101,8 @@ user::get_info () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get user home folder
-//! \return home folder as string
+// @brief get user home folder
+// @return home folder as string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 user::get_home_folder () const
@@ -116,8 +114,8 @@ user::get_home_folder () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get user shell
-//! \return shell command
+// @brief get user shell
+// @return shell command
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 user::get_shell () const
@@ -129,8 +127,8 @@ user::get_shell () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get group
-//! \return group
+// @brief Get group
+// @return group
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 group
 user::get_group () const
@@ -141,5 +139,6 @@ user::get_group () const
   return group (gid_);
 }
 
-} // namespace system
-} // namespace mobius
+} // namespace mobius::system
+
+

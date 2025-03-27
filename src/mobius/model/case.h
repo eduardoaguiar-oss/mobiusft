@@ -30,8 +30,8 @@
 namespace mobius::model
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Case class
-//! \author Eduardo Aguiar
+// @brief Case class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class Case
 {
@@ -66,12 +66,12 @@ public:
 
   std::vector <evidence> get_passwords () const;
   std::vector <evidence> get_password_hashes () const;
-  
+
 private:
-  //! \brief implementation class forward declaration
+  // @brief implementation class forward declaration
   class impl;
 
-  //! \brief implementation pointer
+  // @brief implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
@@ -94,3 +94,5 @@ int get_case_count ();
 } // namespace mobius::model
 
 #endif
+
+

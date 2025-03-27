@@ -21,13 +21,11 @@
 #include <mobius/database/database.h>
 #include <memory>
 
-namespace mobius
-{
-namespace database
+namespace mobius::database
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Metadata table class
-//! \author Eduardo Aguiar
+// @brief Metadata table class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class meta_table
 {
@@ -52,14 +50,15 @@ public:
   void set_version (int);
 
 private:
-  //! \brief Implementation class forward declaration
+  // @brief Implementation class forward declaration
   class impl;
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
-} // namespace database
-} // namespace mobius
+} // namespace mobius::database
 
 #endif
+
+

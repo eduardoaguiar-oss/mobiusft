@@ -21,8 +21,8 @@
 namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
-//! \param key delegated key
+// @brief constructor
+// @param key delegated key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_key_impl_user_assist::registry_key_impl_user_assist (registry_key key)
   : key_ (key),
@@ -31,9 +31,9 @@ registry_key_impl_user_assist::registry_key_impl_user_assist (registry_key key)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief load values on demand
-//! \see http://www.4n6k.com/2013/05/userassist-forensics-timelines.html
-//! \see https://github.com/libyal/winreg-kb/blob/master/documentation/User%20Assist%20keys.asciidoc
+// @brief load values on demand
+// @see http://www.4n6k.com/2013/05/userassist-forensics-timelines.html
+// @see https://github.com/libyal/winreg-kb/blob/master/documentation/User%20Assist%20keys.asciidoc
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry_key_impl_user_assist::_load_values () const
@@ -61,3 +61,5 @@ registry_key_impl_user_assist::_load_values () const
 }
 
 } // namespace mobius::os::win::registry
+
+

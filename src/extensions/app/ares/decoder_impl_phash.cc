@@ -31,9 +31,9 @@ static constexpr int STATE_UNKNOWN = 2;
 namespace mobius::extension::app::ares
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode file
-//! \see ICH_loadPieces - helper_ICH.pas (line 528)
-//! \see ICH_load_phash_index - helper_ICH.pas (line 1024)
+// @brief Decode file
+// @see ICH_loadPieces - helper_ICH.pas (line 528)
+// @see ICH_load_phash_index - helper_ICH.pas (line 1024)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 decoder_impl_phash::decode (const mobius::io::reader& reader)
@@ -97,3 +97,7 @@ decoder_impl_phash::decode (const mobius::io::reader& reader)
 }
 
 } // namespace mobius::extension::app::ares
+
+
+
+

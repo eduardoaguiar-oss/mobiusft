@@ -27,3 +27,5 @@ std::uint32_t crc32 (std::uint32_t, std::uint8_t) noexcept;
 } // namespace mobius::crypt
 
 #endif
+
+

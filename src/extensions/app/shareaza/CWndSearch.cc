@@ -24,7 +24,7 @@ namespace
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-//! \brief Shareaza 2.7.10.2
+// @brief Shareaza 2.7.10.2
 static constexpr int SER_VERSION = 1;
 
 } // namespace
@@ -32,8 +32,8 @@ static constexpr int SER_VERSION = 1;
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode CWndSearch structure
-//! \see WndSearch.cpp - CSearchWnd::Serialize
+// @brief Decode CWndSearch structure
+// @see WndSearch.cpp - CSearchWnd::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 CWndSearch::decode (mobius::decoder::mfc& decoder)
@@ -69,3 +69,7 @@ CWndSearch::decode (mobius::decoder::mfc& decoder)
 }
 
 } // namespace mobius::extension::app::shareaza
+
+
+
+

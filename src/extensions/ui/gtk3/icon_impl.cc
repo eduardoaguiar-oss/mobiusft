@@ -20,8 +20,8 @@
 namespace mobius::extension::ui::gtk3
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param widget Gtk Widget
+// @brief Constructor
+// @param widget Gtk Widget
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 icon_impl::icon_impl (GtkWidget *widget)
   : widget_ (widget)
@@ -30,7 +30,7 @@ icon_impl::icon_impl (GtkWidget *widget)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destructor
+// @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 icon_impl::~icon_impl ()
 {
@@ -38,8 +38,8 @@ icon_impl::~icon_impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set widget sensitive
-//! \param flag true/false
+// @brief Set widget sensitive
+// @param flag true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 icon_impl::set_sensitive (bool flag)
@@ -48,8 +48,8 @@ icon_impl::set_sensitive (bool flag)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set widget visible
-//! \param flag Flag (true/false)
+// @brief Set widget visible
+// @param flag Flag (true/false)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 icon_impl::set_visible (bool flag)
@@ -58,9 +58,9 @@ icon_impl::set_visible (bool flag)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set icon by name
-//! \param name Icon name
-//! \param size Icon size
+// @brief Set icon by name
+// @param name Icon name
+// @param size Icon size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 icon_impl::set_icon_by_name (const std::string& name, size_type size)
@@ -84,9 +84,9 @@ icon_impl::set_icon_by_name (const std::string& name, size_type size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set icon from data
-//! \param data Icon data
-//! \param size Icon size
+// @brief Set icon from data
+// @param data Icon data
+// @param size Icon size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 icon_impl::set_icon_from_data (const mobius::bytearray& data, size_type size)
@@ -102,3 +102,5 @@ icon_impl::set_icon_from_data (const mobius::bytearray& data, size_type size)
 }
 
 } // namespace mobius::extension::ui::gtk3
+
+

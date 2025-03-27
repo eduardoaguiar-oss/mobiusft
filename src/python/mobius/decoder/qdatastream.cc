@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file qdatastream.cc C++ API <i>mobius.decoder.qdatastream</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "qdatastream.h"
@@ -27,10 +27,10 @@
 #include "pod/data.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>eof</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return Boolean
+// @brief <i>eof</i> method implementation
+// @param self object
+// @param args argument list
+// @return Boolean
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_eof (decoder_qdatastream_o *self, PyObject *)
@@ -52,10 +52,10 @@ tp_f_eof (decoder_qdatastream_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_qint8</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return 8-bits signed value
+// @brief <i>get_qint8</i> method implementation
+// @param self object
+// @param args argument list
+// @return 8-bits signed value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_qint8 (decoder_qdatastream_o *self, PyObject *)
@@ -77,10 +77,10 @@ tp_f_get_qint8 (decoder_qdatastream_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_qint16</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return 16-bits value
+// @brief <i>get_qint16</i> method implementation
+// @param self object
+// @param args argument list
+// @return 16-bits value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_qint16 (decoder_qdatastream_o *self, PyObject *)
@@ -102,10 +102,10 @@ tp_f_get_qint16 (decoder_qdatastream_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_qint32</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return 32-bits value
+// @brief <i>get_qint32</i> method implementation
+// @param self object
+// @param args argument list
+// @return 32-bits value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_qint32 (decoder_qdatastream_o *self, PyObject *)
@@ -127,10 +127,10 @@ tp_f_get_qint32 (decoder_qdatastream_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_qint64</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return 64-bits value
+// @brief <i>get_qint64</i> method implementation
+// @param self object
+// @param args argument list
+// @return 64-bits value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_qint64 (decoder_qdatastream_o *self, PyObject *)
@@ -152,10 +152,10 @@ tp_f_get_qint64 (decoder_qdatastream_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_quint8</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return 8-bits value
+// @brief <i>get_quint8</i> method implementation
+// @param self object
+// @param args argument list
+// @return 8-bits value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_quint8 (decoder_qdatastream_o *self, PyObject *)
@@ -177,10 +177,10 @@ tp_f_get_quint8 (decoder_qdatastream_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_qstring</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return QString as std::string
+// @brief <i>get_qstring</i> method implementation
+// @param self object
+// @param args argument list
+// @return QString as std::string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_qstring (decoder_qdatastream_o *self, PyObject *)
@@ -202,10 +202,10 @@ tp_f_get_qstring (decoder_qdatastream_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_qbytearray</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return data
+// @brief <i>get_qbytearray</i> method implementation
+// @param self object
+// @param args argument list
+// @return data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_qbytearray (decoder_qdatastream_o *self, PyObject *)
@@ -227,10 +227,10 @@ tp_f_get_qbytearray (decoder_qdatastream_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_qdatetime</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return QDateTime as datetime
+// @brief <i>get_qdatetime</i> method implementation
+// @param self object
+// @param args argument list
+// @return QDateTime as datetime
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_qdatetime (decoder_qdatastream_o *self, PyObject *)
@@ -252,10 +252,10 @@ tp_f_get_qdatetime (decoder_qdatastream_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_qimage</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return data
+// @brief <i>get_qimage</i> method implementation
+// @param self object
+// @param args argument list
+// @return data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_qimage (decoder_qdatastream_o *self, PyObject *)
@@ -277,10 +277,10 @@ tp_f_get_qimage (decoder_qdatastream_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_qpixmap</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return data
+// @brief <i>get_qpixmap</i> method implementation
+// @param self object
+// @param args argument list
+// @return data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_qpixmap (decoder_qdatastream_o *self, PyObject *)
@@ -302,10 +302,10 @@ tp_f_get_qpixmap (decoder_qdatastream_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_qvariantap</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return data
+// @brief <i>get_qvariantap</i> method implementation
+// @param self object
+// @param args argument list
+// @return data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_qvariant (decoder_qdatastream_o *self, PyObject *)
@@ -327,7 +327,7 @@ tp_f_get_qvariant (decoder_qdatastream_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -347,11 +347,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>qdatastream</i> constructor
-//! \param type type object
-//! \param args argument list
-//! \param kwds keywords dict
-//! \return new <i>qdatastream</i> object
+// @brief <i>qdatastream</i> constructor
+// @param type type object
+// @param args argument list
+// @param kwds keywords dict
+// @return new <i>qdatastream</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
@@ -392,8 +392,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>qdatastream</i> deallocator
-//! \param self object
+// @brief <i>qdatastream</i> deallocator
+// @param self object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (decoder_qdatastream_o *self)
@@ -403,7 +403,7 @@ tp_dealloc (decoder_qdatastream_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyTypeObject decoder_qdatastream_t =
 {
@@ -458,7 +458,7 @@ static PyTypeObject decoder_qdatastream_t =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>mobius.decoder.qdatastream</i> type
+// @brief Create <i>mobius.decoder.qdatastream</i> type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
 new_decoder_qdatastream_type ()
@@ -505,9 +505,9 @@ new_decoder_qdatastream_type ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create <i>qdatastream</i> Python object from C++ object
-//! \param obj C++ object
-//! \return new qdatastream object
+// @brief create <i>qdatastream</i> Python object from C++ object
+// @param obj C++ object
+// @return new qdatastream object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_decoder_qdatastream_to_pyobject (const mobius::decoder::qdatastream& obj)
@@ -519,3 +519,7 @@ pymobius_decoder_qdatastream_to_pyobject (const mobius::decoder::qdatastream& ob
 
   return ret;
 }
+
+
+
+

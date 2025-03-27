@@ -29,14 +29,14 @@
 namespace mobius::extension::app::emuletorrent
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief ED2K/*.fastresume file decoder
-//! \author Eduardo Aguiar
+// @brief ED2K/*.fastresume file decoder
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class file_ed2k_fastresume
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Piece structure
+  // @brief Piece structure
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   struct piece
   {
@@ -52,8 +52,8 @@ public:
   file_ed2k_fastresume (const mobius::io::reader&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if stream is an instance of ShareH.dat file
-  //! \return true/false
+  // @brief Check if stream is an instance of ShareH.dat file
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const noexcept
   {
@@ -61,8 +61,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get file signature
-  //! \return File signature
+  // @brief Get file signature
+  // @return File signature
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_hash_ed2k () const
@@ -71,8 +71,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get path
-  //! \return Path
+  // @brief Get path
+  // @return Path
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_path () const
@@ -81,8 +81,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get path
-  //! \return Path
+  // @brief Get path
+  // @return Path
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_filename () const
@@ -91,8 +91,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get URL
-  //! \return URL
+  // @brief Get URL
+  // @return URL
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_url () const
@@ -101,8 +101,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get original file size
-  //! \return File size in bytes
+  // @brief Get original file size
+  // @return File size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t
   get_file_size () const
@@ -111,8 +111,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if file is paused
-  //! \return true/false
+  // @brief Check if file is paused
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_paused () const
@@ -121,8 +121,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if file is completed
-  //! \return true/false
+  // @brief Check if file is completed
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_completed () const
@@ -131,8 +131,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get downloaded bytes
-  //! \return Number of bytes downloaded
+  // @brief Get downloaded bytes
+  // @return Number of bytes downloaded
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t
   get_downloaded_bytes () const
@@ -141,8 +141,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get uploaded bytes
-  //! \return Number of bytes uploaded
+  // @brief Get uploaded bytes
+  // @return Number of bytes uploaded
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t
   get_uploaded_bytes () const
@@ -151,8 +151,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get pieces count
-  //! \return Number of pieces
+  // @brief Get pieces count
+  // @return Number of pieces
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t
   get_pieces_count () const
@@ -161,8 +161,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get pieces downloaded
-  //! \return Number of pieces downloaded
+  // @brief Get pieces downloaded
+  // @return Number of pieces downloaded
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t
   get_pieces_downloaded () const
@@ -171,8 +171,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get metadata
-  //! \return Metadata
+  // @brief Get metadata
+  // @return Metadata
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::pod::map
   get_metadata () const
@@ -181,8 +181,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get pieces
-  //! \return Pieces
+  // @brief Get pieces
+  // @return Pieces
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::vector <piece>
   get_pieces () const
@@ -191,8 +191,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get file sections
-  //! \return Sections
+  // @brief Get file sections
+  // @return Sections
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::core::file_decoder::section
   get_section () const
@@ -201,49 +201,49 @@ public:
   }
 
 private:
-  //! \brief Flag is instance
+  // @brief Flag is instance
   bool is_instance_ = false;
 
-  //! \brief Hash ED2K
+  // @brief Hash ED2K
   std::string hash_ed2k_;
 
-  //! \brief Path
+  // @brief Path
   std::string path_;
 
-  //! \brief Filename
+  // @brief Filename
   std::string filename_;
 
-  //! \brief URL ED2K
+  // @brief URL ED2K
   std::string url_;
 
-  //! \brief Original file size
+  // @brief Original file size
   std::uint64_t file_size_;
 
-  //! \brief Flag is paused
+  // @brief Flag is paused
   bool is_paused_ = false;
 
-  //! \brief Flag is completed
+  // @brief Flag is completed
   bool is_completed_ = false;
 
-  //! \brief Total downloaded bytes
+  // @brief Total downloaded bytes
   std::uint64_t downloaded_bytes_ = 0;
 
-  //! \brief Total uploaded bytes
+  // @brief Total uploaded bytes
   std::uint64_t uploaded_bytes_ = 0;
 
-  //! \brief Pieces count
+  // @brief Pieces count
   std::uint64_t pieces_count_ = 0;
 
-  //! \brief Pieces downloaded
+  // @brief Pieces downloaded
   std::uint64_t pieces_downloaded_ = 0;
 
-  //! \brief Metadata
+  // @brief Metadata
   mobius::pod::map metadata_;
 
-  //! \brief Pieces
+  // @brief Pieces
   std::vector <piece> pieces_;
 
-  //! \brief File main section
+  // @brief File main section
   mobius::core::file_decoder::section section_;
 
   // Helper functions
@@ -253,3 +253,7 @@ private:
 } // namespace mobius::extension::app::emuletorrent
 
 #endif
+
+
+
+

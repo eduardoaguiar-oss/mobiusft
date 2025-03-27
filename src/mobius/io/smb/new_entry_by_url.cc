@@ -23,16 +23,12 @@
 #include <stdexcept>
 #include <libsmbclient.h>
 
-namespace mobius
-{
-namespace io
-{
-namespace smb
+namespace mobius::io::smb
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create entry by URL
-//! \param url Entry URL
-//! \return Entry object
+// @brief Create entry by URL
+// @param url Entry URL
+// @return Entry object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::entry
 new_entry_by_url (const std::string& url)
@@ -59,6 +55,6 @@ new_entry_by_url (const std::string& url)
   return e;
 }
 
-} // namespace smb
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io::smb
+
+

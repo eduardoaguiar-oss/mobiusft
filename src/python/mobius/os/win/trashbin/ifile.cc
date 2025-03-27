@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file ifile.cc C++ API <i>mobius.os.win.trashbin.ifile</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "ifile.h"
@@ -27,9 +27,9 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>ifile</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>ifile</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_os_win_trashbin_ifile_check (PyObject *value)
@@ -38,9 +38,9 @@ pymobius_os_win_trashbin_ifile_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>ifile</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New ifile object
+// @brief Create <i>ifile</i> Python object from C++ object
+// @param obj C++ object
+// @return New ifile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_os_win_trashbin_ifile_to_pyobject (const mobius::os::win::trashbin::ifile& obj)
@@ -54,9 +54,9 @@ pymobius_os_win_trashbin_ifile_to_pyobject (const mobius::os::win::trashbin::ifi
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>ifile</i> C++ object from Python object
-//! \param value Python value
-//! \return Ifile object
+// @brief Create <i>ifile</i> C++ object from Python object
+// @param value Python value
+// @return Ifile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::os::win::trashbin::ifile
 pymobius_os_win_trashbin_ifile_from_pyobject (PyObject *value)
@@ -68,9 +68,9 @@ pymobius_os_win_trashbin_ifile_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>version</i> Attribute getter
-//! \param self Object
-//! \return <i>version</i> attribute
+// @brief <i>version</i> Attribute getter
+// @param self Object
+// @return <i>version</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_version (os_win_trashbin_ifile_o *self)
@@ -90,9 +90,9 @@ tp_getter_version (os_win_trashbin_ifile_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>size</i> Attribute getter
-//! \param self Object
-//! \return <i>size</i> attribute
+// @brief <i>size</i> Attribute getter
+// @param self Object
+// @return <i>size</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_size (os_win_trashbin_ifile_o *self)
@@ -112,9 +112,9 @@ tp_getter_size (os_win_trashbin_ifile_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>deletion_time</i> Attribute getter
-//! \param self Object
-//! \return <i>deletion_time</i> attribute
+// @brief <i>deletion_time</i> Attribute getter
+// @param self Object
+// @return <i>deletion_time</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_deletion_time (os_win_trashbin_ifile_o *self)
@@ -134,9 +134,9 @@ tp_getter_deletion_time (os_win_trashbin_ifile_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>path</i> Attribute getter
-//! \param self Object
-//! \return <i>path</i> attribute
+// @brief <i>path</i> Attribute getter
+// @param self Object
+// @return <i>path</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_path (os_win_trashbin_ifile_o *self)
@@ -156,7 +156,7 @@ tp_getter_path (os_win_trashbin_ifile_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Getters and setters structure
+// @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -192,11 +192,11 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>ifile</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>ifile</i> object
+// @brief <i>ifile</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>ifile</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
@@ -236,8 +236,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>ifile</i> deallocator
-//! \param self Object
+// @brief <i>ifile</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (os_win_trashbin_ifile_o *self)
@@ -247,7 +247,7 @@ tp_dealloc (os_win_trashbin_ifile_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject os_win_trashbin_ifile_t =
 {
@@ -300,3 +300,5 @@ PyTypeObject os_win_trashbin_ifile_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

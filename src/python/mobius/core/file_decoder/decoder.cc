@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file decoder.cc C++ API <i>mobius.core.file_decoder.decoder</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pylist.h>
@@ -33,10 +33,10 @@
 #include "pod/map.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_instance</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_instance</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_instance (core_file_decoder_decoder_o *self, PyObject *)
@@ -58,10 +58,10 @@ tp_f_is_instance (core_file_decoder_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_section</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Main section
+// @brief <i>get_section</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Main section
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_section (core_file_decoder_decoder_o *self, PyObject *)
@@ -83,10 +83,10 @@ tp_f_get_section (core_file_decoder_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_entries</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Entries
+// @brief <i>get_entries</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_entries (core_file_decoder_decoder_o *self, PyObject *)
@@ -109,10 +109,10 @@ tp_f_get_entries (core_file_decoder_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_metadata</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Metadata value
+// @brief <i>get_metadata</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Metadata value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_metadata (core_file_decoder_decoder_o *self, PyObject *args)
@@ -149,10 +149,10 @@ tp_f_get_metadata (core_file_decoder_decoder_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_metadata_group</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Metadata
+// @brief <i>get_metadata_group</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_metadata_group (core_file_decoder_decoder_o *self, PyObject *args)
@@ -187,10 +187,10 @@ tp_f_get_metadata_group (core_file_decoder_decoder_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_metadata_groups</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Metadata group IDs
+// @brief <i>get_metadata_groups</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Metadata group IDs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_metadata_groups (core_file_decoder_decoder_o *self, PyObject *)
@@ -213,9 +213,9 @@ tp_f_get_metadata_groups (core_file_decoder_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>decode</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>decode</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_decode (core_file_decoder_decoder_o *self, PyObject *args)
@@ -249,7 +249,7 @@ tp_f_decode (core_file_decoder_decoder_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -264,8 +264,8 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>decoder</i> deallocator
-//! \param self Object
+// @brief <i>decoder</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (core_file_decoder_decoder_o *self)
@@ -275,7 +275,7 @@ tp_dealloc (core_file_decoder_decoder_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyTypeObject core_file_decoder_decoder_t =
 {
@@ -330,7 +330,7 @@ static PyTypeObject core_file_decoder_decoder_t =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>mobius.core.file_decoder.decoder</i> type
+// @brief Create <i>mobius.core.file_decoder.decoder</i> type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
 new_core_file_decoder_decoder_type ()
@@ -342,9 +342,9 @@ new_core_file_decoder_decoder_type ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>decoder</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>decoder</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_core_file_decoder_decoder_check (PyObject *value)
@@ -353,9 +353,9 @@ pymobius_core_file_decoder_decoder_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>decoder</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New decoder object
+// @brief Create <i>decoder</i> Python object from C++ object
+// @param obj C++ object
+// @return New decoder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_core_file_decoder_decoder_to_pyobject (const mobius::core::file_decoder::decoder& obj)
@@ -364,9 +364,9 @@ pymobius_core_file_decoder_decoder_to_pyobject (const mobius::core::file_decoder
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>decoder</i> C++ object from Python object
-//! \param value Python value
-//! \return Decoder object
+// @brief Create <i>decoder</i> C++ object from Python object
+// @param value Python value
+// @return Decoder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::file_decoder::decoder
 pymobius_core_file_decoder_decoder_from_pyobject (PyObject *value)
@@ -375,8 +375,8 @@ pymobius_core_file_decoder_decoder_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>decoder</i> by filetype ID
-//! \return Decoder object
+// @brief Create <i>decoder</i> by filetype ID
+// @return Decoder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_core_file_decoder_new_decoder_by_uid (PyObject *, PyObject *args)
@@ -412,3 +412,4 @@ pymobius_core_file_decoder_new_decoder_by_uid (PyObject *, PyObject *args)
   return ret;
 
 }
+

@@ -21,13 +21,11 @@
 #include <mobius/bytearray.h>
 #include <cstdint>
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Abstract base implementation class for data readers
-//! \author Eduardo Aguiar
+// @brief Abstract base implementation class for data readers
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class reader_impl_base
 {
@@ -36,7 +34,7 @@ public:
   using offset_type = std::int64_t;	//< offset for seek/tell function
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Seek function parameter
+  // @brief Seek function parameter
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   enum class whence_type
   {
@@ -74,8 +72,8 @@ public:
   virtual size_type get_block_size () const = 0;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if reader is seekable
-  //! \return true/false
+  // @brief Check if reader is seekable
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   virtual bool
   is_seekable () const
@@ -84,8 +82,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if reader is rewindable
-  //! \return true/false
+  // @brief Check if reader is rewindable
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   virtual bool
   is_rewindable () const
@@ -94,8 +92,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if <b>reader.get_size</b> is available
-  //! \return true/false
+  // @brief Check if <b>reader.get_size</b> is available
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   virtual bool
   is_sizeable () const
@@ -104,7 +102,7 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set read position to the beginning of data
+  // @brief Set read position to the beginning of data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   virtual void
   rewind ()
@@ -113,8 +111,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Skip n bytes from current read position
-  //! \param size number of bytes to skip ahead
+  // @brief Skip n bytes from current read position
+  // @param size number of bytes to skip ahead
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   virtual void
   skip (size_type size)
@@ -123,7 +121,8 @@ public:
   }
 };
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
 
 #endif
+
+

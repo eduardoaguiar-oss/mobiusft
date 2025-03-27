@@ -22,7 +22,7 @@
 #include <mobius/pod/data.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -41,3 +41,5 @@ PyObject *pymobius_pod_data_to_pyobject (const mobius::pod::data&);
 PyObject *pymobius_pod_data_to_python (const mobius::pod::data&);
 
 #endif
+
+

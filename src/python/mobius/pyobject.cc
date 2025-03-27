@@ -20,7 +20,7 @@
 namespace mobius::py
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief pyobject implementation class
+// @brief pyobject implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class pyobject::impl
 {
@@ -41,8 +41,8 @@ public:
   impl& operator= (impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get pointer
-  //! \return PyObject pointer
+  // @brief Get pointer
+  // @return PyObject pointer
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   PyObject *
   pointer ()
@@ -51,8 +51,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Create new reference to object
-  //! \return PyObject pointer
+  // @brief Create new reference to object
+  // @return PyObject pointer
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   PyObject *
   new_reference ()
@@ -64,14 +64,14 @@ public:
   }
 
 private:
-  //! \brief Python object
+  // @brief Python object
   PyObject *obj_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param obj Python Object pointer
-//! \param is_borrowed If pointer points to borrowed reference
+// @brief Constructor
+// @param obj Python Object pointer
+// @param is_borrowed If pointer points to borrowed reference
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 pyobject::impl::impl (PyObject *obj, bool is_borrowed)
  : obj_ (obj)
@@ -81,7 +81,7 @@ pyobject::impl::impl (PyObject *obj, bool is_borrowed)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destructor
+// @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 pyobject::impl::~impl ()
 {
@@ -93,9 +93,9 @@ pyobject::impl::~impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param obj Python Object pointer
-//! \param is_borrowed If pointer points to borrowed reference
+// @brief Constructor
+// @param obj Python Object pointer
+// @param is_borrowed If pointer points to borrowed reference
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 pyobject::pyobject (PyObject *obj, bool is_borrowed)
  : impl_ (std::make_shared <impl> (obj, is_borrowed))
@@ -103,8 +103,8 @@ pyobject::pyobject (PyObject *obj, bool is_borrowed)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if object is valid
-//! \return true/false
+// @brief Check if object is valid
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 pyobject::operator bool () const noexcept
 {
@@ -112,8 +112,8 @@ pyobject::operator bool () const noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get PyObject pointer
-//! \return PyObject pointer
+// @brief Get PyObject pointer
+// @return PyObject pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 pyobject::operator PyObject * () const noexcept
 {
@@ -121,8 +121,8 @@ pyobject::operator PyObject * () const noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if object is callable
-//! \return true/false
+// @brief Check if object is callable
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pyobject::is_callable () const noexcept
@@ -131,8 +131,8 @@ pyobject::is_callable () const noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Return new reference to object
-//! \return New reference
+// @brief Return new reference to object
+// @return New reference
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pyobject::new_reference () const noexcept
@@ -141,8 +141,8 @@ pyobject::new_reference () const noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert object to C++ string
-//! \return C++ string
+// @brief Convert object to C++ string
+// @return C++ string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 pyobject::to_std_string () const
@@ -164,8 +164,8 @@ pyobject::to_std_string () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Return names of object attributes
-//! \return List of names
+// @brief Return names of object attributes
+// @return List of names
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <std::string>
 pyobject::dir () const
@@ -195,9 +195,9 @@ pyobject::dir () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Return object attribute
-//! \param name Attribute name
-//! \return Attribute value
+// @brief Return object attribute
+// @param name Attribute name
+// @return Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 pyobject
 pyobject::get_attribute (const std::string& name) const
@@ -211,8 +211,8 @@ pyobject::get_attribute (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Return object attributes
-//! \return Key, value pairs
+// @brief Return object attributes
+// @return Key, value pairs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::map <std::string, pyobject>
 pyobject::get_attributes () const
@@ -232,3 +232,5 @@ pyobject::get_attributes () const
 }
 
 } // namespace mobius::py
+
+

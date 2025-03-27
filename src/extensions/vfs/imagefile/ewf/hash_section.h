@@ -21,9 +21,9 @@
 #include "section.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief hash section
-//! \author Eduardo Aguiar
-//! \see EWCF v0.0.80
+// @brief hash section
+// @author Eduardo Aguiar
+// @see EWCF v0.0.80
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class hash_section : public section
 {
@@ -42,8 +42,8 @@ public:
   hash_section& operator= (hash_section&&) = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief initialize hash_section from section object
-  //! \param s section object
+  // @brief initialize hash_section from section object
+  // @param s section object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   hash_section (const section& s)
     : section (s)
@@ -51,8 +51,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get MD5 hash
-  //! \return MD5 hash
+  // @brief get MD5 hash
+  // @return MD5 hash
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_md5_hash () const
@@ -61,8 +61,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set MD5 hash
-  //! \param md5_hash MD5 hash
+  // @brief set MD5 hash
+  // @param md5_hash MD5 hash
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_md5_hash (const std::string& md5_hash)
@@ -71,8 +71,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get section Adler-32 CRC
-  //! \return Adler-32 CRC
+  // @brief get section Adler-32 CRC
+  // @return Adler-32 CRC
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_section_adler32 () const
@@ -81,8 +81,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set section Adler-32 CRC
-  //! \param section_adler32 Adler-32 CRC
+  // @brief set section Adler-32 CRC
+  // @param section_adler32 Adler-32 CRC
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_section_adler32 (std::uint32_t section_adler32)
@@ -92,11 +92,13 @@ public:
 
 private:
 
-  //! \brief MD5 hash as string
+  // @brief MD5 hash as string
   std::string md5_hash_;
 
-  //! \brief Adler-32 CRC
+  // @brief Adler-32 CRC
   std::uint32_t section_adler32_ = 0;
 };
 
 #endif
+
+

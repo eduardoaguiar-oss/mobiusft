@@ -21,20 +21,14 @@
 #include <mobius/exception.inc>
 #include <stdexcept>
 
-namespace mobius
+namespace mobius::os::win::registry
 {
-namespace os
-{
-namespace win
-{
-namespace registry
-{
-namespace               // local namespace
+namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create a new registry_key from a hive_key
-//! \param hkey hive key
-//! \return registry_key
+// @brief create a new registry_key from a hive_key
+// @param hkey hive key
+// @return registry_key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline const registry_key
 new_registry_key (hive_key hkey)
@@ -45,7 +39,7 @@ new_registry_key (hive_key hkey)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief implementation class
+// @brief implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class registry_file::impl
 {
@@ -56,8 +50,8 @@ public:
   impl (std::uint32_t, const std::string&, const std::string&, mobius::io::reader);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get uid
-  //! \return uid
+  // @brief get uid
+  // @return uid
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_uid () const
@@ -66,8 +60,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get path
-  //! \return path
+  // @brief get path
+  // @return path
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_path () const
@@ -76,8 +70,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get role
-  //! \return role
+  // @brief get role
+  // @return role
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_role () const
@@ -86,8 +80,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get last modification time
-  //! \return last modification time
+  // @brief get last modification time
+  // @return last modification time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::datetime::datetime
   get_last_modification_time () const
@@ -96,8 +90,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get root key
-  //! \return root key
+  // @brief get root key
+  // @return root key
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   registry_key
   get_root_key () const
@@ -106,8 +100,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get metadata
-  //! \return metadata list
+  // @brief get metadata
+  // @return metadata list
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::metadata
   get_metadata () const
@@ -116,25 +110,25 @@ public:
   }
 
 private:
-  //! \brief unique identifier
+  // @brief unique identifier
   std::uint32_t uid_;
 
-  //! \brief file role
+  // @brief file role
   std::string role_;
 
-  //! \brief original path
+  // @brief original path
   std::string path_;
 
-  //! \brief hive file
+  // @brief hive file
   hive_file hivefile_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
-//! \param uid unique identifier
-//! \param role file role
-//! \param path original path
-//! \param reader generic reader
+// @brief constructor
+// @param uid unique identifier
+// @param role file role
+// @param path original path
+// @param reader generic reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_file::impl::impl (
   std::uint32_t uid,
@@ -151,11 +145,11 @@ registry_file::impl::impl (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
-//! \param uid unique identifier
-//! \param role file role
-//! \param path original path
-//! \param reader generic reader
+// @brief constructor
+// @param uid unique identifier
+// @param role file role
+// @param path original path
+// @param reader generic reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_file::registry_file (
   std::uint32_t uid,
@@ -167,8 +161,8 @@ registry_file::registry_file (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get uid
-//! \return uid
+// @brief get uid
+// @return uid
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 registry_file::get_uid () const
@@ -177,8 +171,8 @@ registry_file::get_uid () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get path
-//! \return path
+// @brief get path
+// @return path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 registry_file::get_path () const
@@ -187,8 +181,8 @@ registry_file::get_path () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get role
-//! \return role
+// @brief get role
+// @return role
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 registry_file::get_role () const
@@ -197,8 +191,8 @@ registry_file::get_role () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get last modification time
-//! \return last modification time
+// @brief get last modification time
+// @return last modification time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 registry_file::get_last_modification_time () const
@@ -207,8 +201,8 @@ registry_file::get_last_modification_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get root key
-//! \return root key
+// @brief get root key
+// @return root key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_key
 registry_file::get_root_key () const
@@ -217,8 +211,8 @@ registry_file::get_root_key () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get metadata
-//! \return metadata list
+// @brief get metadata
+// @return metadata list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::metadata
 registry_file::get_metadata () const
@@ -226,7 +220,6 @@ registry_file::get_metadata () const
   return impl_->get_metadata ();
 }
 
-} // namespace registry
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::registry
+
+

@@ -24,15 +24,15 @@
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief CManagedSearch decoder class
+// @brief CManagedSearch decoder class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class CManagedSearch
 {
 public:
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get version
-  //! \return Structure version
+  // @brief Get version
+  // @return Structure version
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   int
   get_version () const
@@ -41,8 +41,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get priority
-  //! \return Priority
+  // @brief Get priority
+  // @return Priority
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   int
   get_priority () const
@@ -51,8 +51,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get allow G1 flag
-  //! \return Flag
+  // @brief Get allow G1 flag
+  // @return Flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_allow_g1 () const
@@ -61,8 +61,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get allow G2 flag
-  //! \return Flag
+  // @brief Get allow G2 flag
+  // @return Flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_allow_g2 () const
@@ -71,8 +71,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get allow ED2K flag
-  //! \return Flag
+  // @brief Get allow ED2K flag
+  // @return Flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_allow_ed2k () const
@@ -81,8 +81,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get allow DC flag
-  //! \return Flag
+  // @brief Get allow DC flag
+  // @return Flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_allow_dc () const
@@ -91,8 +91,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get active flag
-  //! \return Flag
+  // @brief Get active flag
+  // @return Flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_flag_active () const
@@ -101,8 +101,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get receive flag
-  //! \return Flag
+  // @brief Get receive flag
+  // @return Flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_flag_receive () const
@@ -111,8 +111,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get query search
-  //! \return Query search
+  // @brief Get query search
+  // @return Query search
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   CQuerySearch
   get_query_search () const
@@ -126,34 +126,38 @@ public:
   void decode (mobius::decoder::mfc&);
 
 private:
-  //! \brief Structure version
+  // @brief Structure version
   int version_;
 
-  //! \brief Priority
+  // @brief Priority
   int priority_ = -1;
 
-  //! \brief Allow Gnutella 1
+  // @brief Allow Gnutella 1
   bool allow_g1_ = false;
 
-  //! \brief Allow Gnutella 2
+  // @brief Allow Gnutella 2
   bool allow_g2_ = false;
 
-  //! \brief Allow ED2K
+  // @brief Allow ED2K
   bool allow_ed2k_ = false;
 
-  //! \brief Allow DC
+  // @brief Allow DC
   bool allow_dc_ = false;
 
-  //! \brief Flag active
+  // @brief Flag active
   bool flag_active_ = false;
 
-  //! \brief Flag receive
+  // @brief Flag receive
   bool flag_receive_ = false;
 
-  //! \brief Query search
+  // @brief Query search
   CQuerySearch qs_;
 };
 
 } // namespace mobius::extension::app::shareaza
 
 #endif
+
+
+
+

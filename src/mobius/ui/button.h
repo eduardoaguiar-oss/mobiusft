@@ -24,8 +24,8 @@
 namespace mobius::ui
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <b>button</b> handle class
-//! \author Eduardo Aguiar
+// @brief <b>button</b> handle class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class button : public widget
 {
@@ -47,8 +47,8 @@ public:
   button& operator= (button&&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Convert button to widget
-  //! \return Widget
+  // @brief Convert button to widget
+  // @return Widget
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator widget () const
   {
@@ -56,8 +56,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set text
-  //! \param text Text
+  // @brief Set text
+  // @param text Text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_text (const std::string& text)
@@ -66,8 +66,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set button icon
-  //! \param icon Icon object
+  // @brief Set button icon
+  // @param icon Icon object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_icon (const mobius::ui::icon& icon)
@@ -76,8 +76,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set button icon by name
-  //! \param name Icon name
+  // @brief Set button icon by name
+  // @param name Icon name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_icon_by_name (const std::string& name)
@@ -86,9 +86,9 @@ public:
     }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set callback to event
-  //! \param event_id Event ID
-  //! \param f Function or functor
+  // @brief Set callback to event
+  // @param event_id Event ID
+  // @param f Function or functor
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_callback (const std::string& event_id, const mobius::core::functor<bool>& f)
@@ -97,10 +97,10 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set member callback to event
-  //! \param event_id Event ID
-  //! \param obj Instance
-  //! \param f Member function
+  // @brief Set member callback to event
+  // @param event_id Event ID
+  // @param obj Instance
+  // @param f Member function
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   template <typename T, typename ...Args> void
   set_callback (const std::string& event_id, T& obj, bool (T::*f)(Args...))
@@ -109,8 +109,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Reset callback to event
-  //! \param event_id Event ID
+  // @brief Reset callback to event
+  // @param event_id Event ID
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   reset_callback (const std::string& event_id)
@@ -119,10 +119,12 @@ public:
   }
 
 private:
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <button_impl_base> impl_;
 };
 
 } // namespace mobius::ui
 
 #endif
+
+

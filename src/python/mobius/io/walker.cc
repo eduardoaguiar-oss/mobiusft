@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file walker.cc C++ API <i>mobius.io.walker</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pyobject.h>
@@ -33,9 +33,9 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_ignore_reallocated</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_ignore_reallocated</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_ignore_reallocated (io_walker_o *self, PyObject *args)
@@ -69,9 +69,9 @@ tp_f_set_ignore_reallocated (io_walker_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_case_sensitive</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_case_sensitive</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_case_sensitive (io_walker_o *self, PyObject *args)
@@ -105,10 +105,10 @@ tp_f_set_case_sensitive (io_walker_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_entries</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Entries
+// @brief <i>get_entries</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_entries (io_walker_o *self, PyObject *)
@@ -131,10 +131,10 @@ tp_f_get_entries (io_walker_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_entries_by_name</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Entries
+// @brief <i>get_entries_by_name</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_entries_by_name (io_walker_o *self, PyObject *args)
@@ -170,10 +170,10 @@ tp_f_get_entries_by_name (io_walker_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_entries_by_path</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Entries
+// @brief <i>get_entries_by_path</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_entries_by_path (io_walker_o *self, PyObject *args)
@@ -209,10 +209,10 @@ tp_f_get_entries_by_path (io_walker_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_entries_by_pattern</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Entries
+// @brief <i>get_entries_by_pattern</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_entries_by_pattern (io_walker_o *self, PyObject *args)
@@ -248,10 +248,10 @@ tp_f_get_entries_by_pattern (io_walker_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_entries_by_predicate</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Entries
+// @brief <i>get_entries_by_predicate</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_entries_by_predicate (io_walker_o *self, PyObject *args)
@@ -287,10 +287,10 @@ tp_f_get_entries_by_predicate (io_walker_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>find_entries</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Entries
+// @brief <i>find_entries</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_find_entries (io_walker_o *self, PyObject *args)
@@ -326,10 +326,10 @@ tp_f_find_entries (io_walker_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_files</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Files
+// @brief <i>get_files</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_files (io_walker_o *self, PyObject *)
@@ -352,10 +352,10 @@ tp_f_get_files (io_walker_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_files_by_name</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Files
+// @brief <i>get_files_by_name</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_files_by_name (io_walker_o *self, PyObject *args)
@@ -391,10 +391,10 @@ tp_f_get_files_by_name (io_walker_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_files_by_path</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Files
+// @brief <i>get_files_by_path</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_files_by_path (io_walker_o *self, PyObject *args)
@@ -430,10 +430,10 @@ tp_f_get_files_by_path (io_walker_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_files_by_pattern</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Files
+// @brief <i>get_files_by_pattern</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_files_by_pattern (io_walker_o *self, PyObject *args)
@@ -469,10 +469,10 @@ tp_f_get_files_by_pattern (io_walker_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_files_by_predicate</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Files
+// @brief <i>get_files_by_predicate</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_files_by_predicate (io_walker_o *self, PyObject *args)
@@ -508,10 +508,10 @@ tp_f_get_files_by_predicate (io_walker_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>find_files</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Files
+// @brief <i>find_files</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_find_files (io_walker_o *self, PyObject *args)
@@ -547,10 +547,10 @@ tp_f_find_files (io_walker_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_folders</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Folders
+// @brief <i>get_folders</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_folders (io_walker_o *self, PyObject *)
@@ -573,10 +573,10 @@ tp_f_get_folders (io_walker_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_folders_by_name</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Folders
+// @brief <i>get_folders_by_name</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_folders_by_name (io_walker_o *self, PyObject *args)
@@ -612,10 +612,10 @@ tp_f_get_folders_by_name (io_walker_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_folders_by_path</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Folders
+// @brief <i>get_folders_by_path</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_folders_by_path (io_walker_o *self, PyObject *args)
@@ -651,10 +651,10 @@ tp_f_get_folders_by_path (io_walker_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_folders_by_pattern</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Folders
+// @brief <i>get_folders_by_pattern</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_folders_by_pattern (io_walker_o *self, PyObject *args)
@@ -690,10 +690,10 @@ tp_f_get_folders_by_pattern (io_walker_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_folders_by_predicate</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Folders
+// @brief <i>get_folders_by_predicate</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_folders_by_predicate (io_walker_o *self, PyObject *args)
@@ -729,10 +729,10 @@ tp_f_get_folders_by_predicate (io_walker_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>find_folders</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Folders
+// @brief <i>find_folders</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_find_folders (io_walker_o *self, PyObject *args)
@@ -768,7 +768,7 @@ tp_f_find_folders (io_walker_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -796,11 +796,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>walker</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>walker</i> object
+// @brief <i>walker</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>walker</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
@@ -840,8 +840,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>walker</i> deallocator
-//! \param self Object
+// @brief <i>walker</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (io_walker_o *self)
@@ -851,7 +851,7 @@ tp_dealloc (io_walker_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyTypeObject io_walker_t =
 {
@@ -906,7 +906,7 @@ static PyTypeObject io_walker_t =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>mobius.io.walker</i> type
+// @brief Create <i>mobius.io.walker</i> type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
 new_io_walker_type ()
@@ -918,9 +918,9 @@ new_io_walker_type ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>walker</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>walker</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_io_walker_check (PyObject *value)
@@ -929,9 +929,9 @@ pymobius_io_walker_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>walker</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New walker object
+// @brief Create <i>walker</i> Python object from C++ object
+// @param obj C++ object
+// @return New walker object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_io_walker_to_pyobject (const mobius::io::walker& obj)
@@ -940,12 +940,14 @@ pymobius_io_walker_to_pyobject (const mobius::io::walker& obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>walker</i> C++ object from Python object
-//! \param value Python value
-//! \return Walker object
+// @brief Create <i>walker</i> C++ object from Python object
+// @param value Python value
+// @return Walker object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::walker
 pymobius_io_walker_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <io_walker_o> (value, &io_walker_t);
 }
+
+

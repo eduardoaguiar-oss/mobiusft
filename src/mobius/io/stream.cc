@@ -18,12 +18,10 @@
 #include "stream.h"
 #include "stream_impl_null.h"
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 stream::stream ()
   : impl_ (std::make_shared <stream_impl_null> ())
@@ -31,13 +29,14 @@ stream::stream ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor from implementation pointer
-//! \param impl implementation pointer
+// @brief Constructor from implementation pointer
+// @param impl implementation pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 stream::stream (const std::shared_ptr <stream_impl_base>& impl)
   : impl_ (impl)
 {
 }
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
+
+

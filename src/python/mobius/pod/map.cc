@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file map.cc C++ API <i>mobius.pod.map</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pylist.h>
@@ -34,9 +34,9 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create Python object from POD map
-//! \param value POD map
-//! \return Python object
+// @brief Create Python object from POD map
+// @param value POD map
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 map_to_object (const mobius::pod::map& value)
@@ -53,9 +53,9 @@ map_to_object (const mobius::pod::map& value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>map</i> from Python object
-//! \param obj Python object
-//! \return POD map
+// @brief Create <i>map</i> from Python object
+// @param obj Python object
+// @return POD map
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::pod::map
 map_from_object (PyObject *obj)
@@ -81,9 +81,9 @@ map_from_object (PyObject *obj)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if object type is <i>map</i>
-//! \param pyobj Python object
-//! \return true/false
+// @brief Check if object type is <i>map</i>
+// @param pyobj Python object
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_pod_map_check (PyObject *pyobj)
@@ -92,9 +92,9 @@ pymobius_pod_map_check (PyObject *pyobj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>map</i> Python object from C++ object
-//! \param map POD map object
-//! \return new map object
+// @brief Create <i>map</i> Python object from C++ object
+// @param map POD map object
+// @return new map object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_pod_map_to_pyobject (const mobius::pod::map& map)
@@ -116,9 +116,9 @@ pymobius_pod_map_to_pyobject (const mobius::pod::map& map)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create pure Python object from C++ object
-//! \param map POD map object
-//! \return Dict object
+// @brief Create pure Python object from C++ object
+// @param map POD map object
+// @return Dict object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_pod_map_to_python (const mobius::pod::map& map)
@@ -142,9 +142,9 @@ pymobius_pod_map_to_python (const mobius::pod::map& map)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>map</i> C++ object from Python object
-//! \param py_value Python object
-//! \return map object
+// @brief Create <i>map</i> C++ object from Python object
+// @param py_value Python object
+// @return map object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 pymobius_pod_map_from_pyobject (PyObject *py_value)
@@ -176,10 +176,10 @@ pymobius_pod_map_from_pyobject (PyObject *py_value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_size</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Number of items
+// @brief <i>get_size</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Number of items
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_size (pod_map_o *self, PyObject *)
@@ -201,10 +201,10 @@ tp_f_get_size (pod_map_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>contains</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>contains</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_contains (pod_map_o *self, PyObject *args)
@@ -239,10 +239,10 @@ tp_f_contains (pod_map_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Data object
+// @brief <i>get</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get (pod_map_o *self, PyObject *args)
@@ -281,10 +281,10 @@ tp_f_get (pod_map_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return None
+// @brief <i>set</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return None
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set (pod_map_o *self, PyObject *args)
@@ -319,9 +319,9 @@ tp_f_set (pod_map_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>remove</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>remove</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_remove (pod_map_o *self, PyObject *args)
@@ -355,9 +355,9 @@ tp_f_remove (pod_map_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>update</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>update</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_update (pod_map_o *self, PyObject *args)
@@ -391,10 +391,10 @@ tp_f_update (pod_map_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>to_python</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Data object
+// @brief <i>to_python</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_to_python (pod_map_o *self, PyObject *)
@@ -418,10 +418,10 @@ tp_f_to_python (pod_map_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_values</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Data object
+// @brief <i>get_values</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_values (pod_map_o *self, PyObject *)
@@ -445,7 +445,7 @@ tp_f_get_values (pod_map_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -501,11 +501,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>map</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>map</i> object
+// @brief <i>map</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>map</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *, PyObject *args, PyObject *)
@@ -530,8 +530,8 @@ tp_new (PyTypeObject *, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>map</i> deallocator
-//! \param self Object
+// @brief <i>map</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (pod_map_o *self)
@@ -541,7 +541,7 @@ tp_dealloc (pod_map_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject pod_map_t =
 {
@@ -594,3 +594,5 @@ PyTypeObject pod_map_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

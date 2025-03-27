@@ -21,8 +21,8 @@ namespace mobius
 {
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Build a standard exception message
-//! \return String containing formatted error message
+// @brief Build a standard exception message
+// @return String containing formatted error message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 exception_msg (
@@ -37,8 +37,8 @@ exception_msg (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Build a standard exception message
-//! \return String containing formatted error message
+// @brief Build a standard exception message
+// @return String containing formatted error message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 exception_msg (
@@ -52,3 +52,5 @@ exception_msg (
 }
 
 } // namespace mobius
+
+

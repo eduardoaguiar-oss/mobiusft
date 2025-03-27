@@ -29,8 +29,8 @@ namespace mobius::vfs
 class block;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data block implementation base class
-//! \author Eduardo Aguiar
+// @brief Data block implementation base class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class block_impl_base
 {
@@ -90,3 +90,5 @@ public:
 } // namespace mobius::vfs
 
 #endif
+
+

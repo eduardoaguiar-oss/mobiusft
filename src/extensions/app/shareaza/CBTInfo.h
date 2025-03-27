@@ -30,15 +30,15 @@
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief CBTInfo structure decoder
-//! \author Eduardo Aguiar
-//! \see BTInfo.cpp - CBTInfo::Serialize
+// @brief CBTInfo structure decoder
+// @author Eduardo Aguiar
+// @see BTInfo.cpp - CBTInfo::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class CBTInfo
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Filer info
+  // @brief Filer info
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   struct CBTFile
   {
@@ -53,7 +53,7 @@ public:
   };
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Tracker info
+  // @brief Tracker info
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   struct CBTTracker
   {
@@ -73,8 +73,8 @@ public:
   explicit CBTInfo (mobius::decoder::mfc&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get version
-  //! \return Structure version
+  // @brief Get version
+  // @return Structure version
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   int
   get_version () const
@@ -83,8 +83,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hash BTH
-  //! \return Hash
+  // @brief Get hash BTH
+  // @return Hash
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_hash_bth () const
@@ -93,8 +93,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get size
-  //! \return Size
+  // @brief Get size
+  // @return Size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t
   get_size () const
@@ -103,8 +103,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get block size
-  //! \return Size
+  // @brief Get block size
+  // @return Size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_block_size () const
@@ -113,8 +113,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get block count
-  //! \return Count
+  // @brief Get block count
+  // @return Count
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_block_count () const
@@ -124,8 +124,8 @@ public:
 
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get total bytes uploaded
-  //! \return Number of bytes
+  // @brief Get total bytes uploaded
+  // @return Number of bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t
   get_total_uploaded () const
@@ -134,8 +134,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get total bytes downloaded
-  //! \return Number of bytes
+  // @brief Get total bytes downloaded
+  // @return Number of bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t
   get_total_downloaded () const
@@ -144,8 +144,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get file name
-  //! \return File name
+  // @brief Get file name
+  // @return File name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_name () const
@@ -154,8 +154,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get encoding
-  //! \return Encoding
+  // @brief Get encoding
+  // @return Encoding
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_encoding () const
@@ -164,8 +164,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get comments
-  //! \return Comments
+  // @brief Get comments
+  // @return Comments
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_comments () const
@@ -174,8 +174,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get creation time
-  //! \return Date/time
+  // @brief Get creation time
+  // @return Date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::datetime::datetime
   get_creation_time () const
@@ -184,8 +184,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get created by
-  //! \return Created by
+  // @brief Get created by
+  // @return Created by
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_created_by () const
@@ -194,8 +194,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get b_private flag
-  //! \return b_private flag
+  // @brief Get b_private flag
+  // @return b_private flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_b_private () const
@@ -204,8 +204,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get main tracker
-  //! \return Tracker
+  // @brief Get main tracker
+  // @return Tracker
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_main_tracker () const
@@ -214,8 +214,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get tracker index
-  //! \return Index
+  // @brief Get tracker index
+  // @return Index
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_tracker_index () const
@@ -224,8 +224,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get tracker mode
-  //! \return Mode
+  // @brief Get tracker mode
+  // @return Mode
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_tracker_mode () const
@@ -234,8 +234,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get info section start pos
-  //! \return Pos
+  // @brief Get info section start pos
+  // @return Pos
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_info_start () const
@@ -244,8 +244,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get info section size
-  //! \return Size
+  // @brief Get info section size
+  // @return Size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_info_size () const
@@ -254,8 +254,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get torrent data
-  //! \return Data
+  // @brief Get torrent data
+  // @return Data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto
   get_data () const
@@ -264,8 +264,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get files
-  //! \return Files
+  // @brief Get files
+  // @return Files
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto
   get_files () const
@@ -274,8 +274,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get trackers
-  //! \return Trackers
+  // @brief Get trackers
+  // @return Trackers
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto
   get_trackers () const
@@ -284,8 +284,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get block hashes
-  //! \return Hashes
+  // @brief Get block hashes
+  // @return Hashes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::vector <std::string>
   get_block_hashes () const
@@ -299,70 +299,70 @@ public:
   std::map <std::string, std::string> get_metadata () const;
 
 private:
-  //! \brief Structure version
+  // @brief Structure version
   int version_ = 0;
 
-  //! \brief Hash BTH
+  // @brief Hash BTH
   std::string hash_bth_;
 
-  //! \brief File size
+  // @brief File size
   std::uint64_t size_ = 0;
 
-  //! \brief Block size
+  // @brief Block size
   std::uint32_t block_size_ = 0;
 
-  //! \brief Block count
+  // @brief Block count
   std::uint32_t block_count_ = 0;
 
-  //! \brief Total bytes uploaded
+  // @brief Total bytes uploaded
   std::uint64_t total_uploaded_ = 0;
 
-  //! \brief Total bytes downloaded
+  // @brief Total bytes downloaded
   std::uint64_t total_downloaded_ = 0;
 
-  //! \brief File name
+  // @brief File name
   std::string name_;
 
-  //! \brief Encoding
+  // @brief Encoding
   std::uint32_t encoding_ = 0;
 
-  //! \brief Comments
+  // @brief Comments
   std::string comments_;
 
-  //! \brief Creation time
+  // @brief Creation time
   mobius::datetime::datetime creation_time_;
 
-  //! \brief Created by
+  // @brief Created by
   std::string created_by_;
 
-  //! \brief Flag b_private
+  // @brief Flag b_private
   bool b_private_ = false;
 
-  //! \brief Main tracker
+  // @brief Main tracker
   std::string tracker_;
 
-  //! \brief Tracker index
+  // @brief Tracker index
   std::uint32_t tracker_index_ = 0;
 
-  //! \brief Tracker mode
+  // @brief Tracker mode
   std::uint32_t tracker_mode_ = 0;
 
-  //! \brief Info section start pos
+  // @brief Info section start pos
   std::uint32_t info_start_ = 0;
 
-  //! \brief Info section start pos
+  // @brief Info section start pos
   std::uint32_t info_size_ = 0;
 
-  //! \brief Torrent data
+  // @brief Torrent data
   mobius::pod::map data_;
 
-  //! \brief Files
+  // @brief Files
   std::vector <CBTFile> files_;
 
-  //! \brief Trackers
+  // @brief Trackers
   std::vector <CBTTracker> trackers_;
 
-  //! \brief Block hashes
+  // @brief Block hashes
   std::vector <std::string> block_hashes_;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -375,3 +375,7 @@ private:
 } // namespace mobius::extension::app::shareaza
 
 #endif
+
+
+
+

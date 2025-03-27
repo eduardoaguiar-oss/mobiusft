@@ -23,15 +23,15 @@
 namespace mobius::extension::app::ares
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decoder for Ares Galaxy's ShareH.dat files
-//! \author Eduardo Aguiar
+// @brief Decoder for Ares Galaxy's ShareH.dat files
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class decoder_impl_shareh : public mobius::core::file_decoder::decoder_impl_base
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if decoder is valid
-  //! \return true/false
+  // @brief Check if decoder is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const noexcept final
   {
@@ -39,8 +39,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get decoder type
-  //! \return Type as string
+  // @brief Get decoder type
+  // @return Type as string
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_type () const final
@@ -49,8 +49,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if stream was decoded
-  //! \return true/false
+  // @brief Check if stream was decoded
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_instance () const final
@@ -59,8 +59,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get file sections
-  //! \return Sections
+  // @brief Get file sections
+  // @return Sections
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::core::file_decoder::section
   get_section () const final
@@ -69,8 +69,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get file entries
-  //! \return Entries
+  // @brief Get file entries
+  // @return Entries
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::vector <mobius::core::file_decoder::entry>
   get_entries () const final
@@ -79,8 +79,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get metadata object
-  //! \return Metadata value
+  // @brief Get metadata object
+  // @return Metadata value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::core::file_decoder::metadata
   get_metadata () const final
@@ -94,19 +94,23 @@ public:
   void decode (const mobius::io::reader&) final;
 
 private:
-  //! \brief Flag is instance
+  // @brief Flag is instance
   bool is_instance_ = false;
 
-  //! \brief File main section
+  // @brief File main section
   mobius::core::file_decoder::section section_;
 
-  //! \brief File entries
+  // @brief File entries
   std::vector <mobius::core::file_decoder::entry> entries_;
 
-  //! \brief File metadata
+  // @brief File metadata
   mobius::core::file_decoder::metadata metadata_;
 };
 
 } // namespace mobius::extension::app::ares
 
 #endif
+
+
+
+

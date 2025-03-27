@@ -22,7 +22,7 @@
 #include <mobius/system/device.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief data structure
+// @brief data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -38,3 +38,5 @@ extern PyTypeObject system_device_t;
 PyObject *pymobius_system_device_to_pyobject (mobius::system::device);
 
 #endif
+
+

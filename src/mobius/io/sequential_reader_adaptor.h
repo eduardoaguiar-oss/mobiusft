@@ -22,13 +22,11 @@
 #include <mobius/io/reader.h>
 #include <cstdint>
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Sequential reader adaptor
-//! \author Eduardo Aguiar
+// @brief Sequential reader adaptor
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class sequential_reader_adaptor
 {
@@ -39,8 +37,8 @@ public:
   explicit sequential_reader_adaptor (const mobius::io::reader&, size_type = 65536);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get block size
-  //! \return Block size in bytes
+  // @brief Get block size
+  // @return Block size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_block_size () const
@@ -62,11 +60,12 @@ public:
 private:
   mobius::io::reader reader_;
   size_type block_size_ = 65536;
-  mobius::bytearray buffer_; 
+  mobius::bytearray buffer_;
   size_type pos_ = 0;
 };
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
 
 #endif
+
+

@@ -24,13 +24,13 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Libxml2 initialization class
+// @brief Libxml2 initialization class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class xml2_init
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Initialize libxml2
+  // @brief Initialize libxml2
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   xml2_init ()
   {
@@ -38,7 +38,7 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Cleanup libxml2
+  // @brief Cleanup libxml2
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   ~xml2_init ()
   {
@@ -53,7 +53,7 @@ static xml2_init xml2_instance;
 namespace mobius::decoder::xml
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief dom implementation class
+// @brief dom implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class dom::impl
 {
@@ -74,8 +74,8 @@ public:
   impl& operator= (impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get root element
-  //! \return Root element
+  // @brief Get root element
+  // @return Root element
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   element
   get_root_element () const
@@ -84,13 +84,13 @@ public:
   }
 
 private:
-  //! \brief Document root element
+  // @brief Document root element
   element root_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param text Text string
+// @brief Constructor
+// @param text Text string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 dom::impl::impl (const std::string& text, const std::string& encoding)
   : impl (mobius::bytearray (text), encoding)
@@ -98,8 +98,8 @@ dom::impl::impl (const std::string& text, const std::string& encoding)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
+// @brief Constructor
+// @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 dom::impl::impl (mobius::io::reader reader, const std::string& encoding)
   : impl (reader.read (reader.get_size ()), encoding)
@@ -107,8 +107,8 @@ dom::impl::impl (mobius::io::reader reader, const std::string& encoding)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param data Data
+// @brief Constructor
+// @param data Data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 dom::impl::impl (const mobius::bytearray& data, const std::string& encoding)
 {
@@ -143,9 +143,9 @@ dom::impl::impl (const mobius::bytearray& data, const std::string& encoding)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param text Text string
-//! \param encoding XML encoding
+// @brief Constructor
+// @param text Text string
+// @param encoding XML encoding
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 dom::dom (const std::string& text, const std::string& encoding)
   : impl_ (std::make_shared <impl> (text, encoding))
@@ -154,9 +154,9 @@ dom::dom (const std::string& text, const std::string& encoding)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
-//! \param encoding XML encoding
+// @brief Constructor
+// @param reader Reader object
+// @param encoding XML encoding
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 dom::dom (const mobius::io::reader& reader, const std::string& encoding)
   : impl_ (std::make_shared <impl> (reader, encoding))
@@ -164,8 +164,8 @@ dom::dom (const mobius::io::reader& reader, const std::string& encoding)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get root element
-//! \return Root element
+// @brief Get root element
+// @return Root element
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 element
 dom::get_root_element () const
@@ -174,3 +174,5 @@ dom::get_root_element () const
 }
 
 } // namespace mobius::decoder::xml
+
+

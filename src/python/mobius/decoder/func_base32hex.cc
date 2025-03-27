@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API mobius.decoder module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API mobius.decoder module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pymobius.h>
@@ -26,10 +26,10 @@
 #include <mobius/decoder/base64.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief base32hex function
-//! \param self function object
-//! \param args argument list
-//! \return Python object
+// @brief base32hex function
+// @param self function object
+// @param args argument list
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 decoder_func_base32hex (PyObject *, PyObject *args)
@@ -66,3 +66,7 @@ decoder_func_base32hex (PyObject *, PyObject *args)
   // return value
   return ret;
 }
+
+
+
+

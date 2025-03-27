@@ -22,7 +22,7 @@
 #include <mobius/decoder/tdf.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,7 @@ PyObject *pymobius_decoder_tdf_to_pyobject (const mobius::decoder::tdf&);
 mobius::decoder::tdf pymobius_decoder_tdf_from_pyobject (PyObject *);
 
 #endif
+
+
+
+

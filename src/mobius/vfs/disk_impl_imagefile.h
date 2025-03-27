@@ -26,8 +26,8 @@
 namespace mobius::vfs
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Imagefile disk implementation class
-//! \author Eduardo Aguiar
+// @brief Imagefile disk implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class disk_impl_imagefile : public disk_impl_base
 {
@@ -51,8 +51,8 @@ public:
   mobius::io::reader new_reader () const override;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if object is valid
-  //! \return true/false
+  // @brief Check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator bool () const noexcept override
   {
@@ -60,8 +60,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get type
-  //! \return Type
+  // @brief Get type
+  // @return Type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_type () const override
@@ -70,8 +70,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get size
-  //! \return Size
+  // @brief Get size
+  // @return Size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_size () const override
@@ -81,8 +81,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get name
-  //! \return Name
+  // @brief Get name
+  // @return Name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_name () const override
@@ -92,28 +92,28 @@ public:
   }
 
 private:
-  //! \brief Image file URL
+  // @brief Image file URL
   std::string url_;
 
-  //! \brief Image file object
+  // @brief Image file object
   mutable imagefile imagefile_;
 
-  //! \brief Image file type
+  // @brief Image file type
   mutable std::string imagetype_;
 
-  //! \brief Size in bytes
+  // @brief Size in bytes
   mutable size_type size_;
 
-  //! \brief Name
+  // @brief Name
   mutable std::string name_;
 
-  //! \brief Attributes
+  // @brief Attributes
   mutable mobius::pod::map attributes_;
 
-  //! \brief imagefile_ loaded flag
+  // @brief imagefile_ loaded flag
   mutable thread_safe_flag imagefile_loaded_;
 
-  //! \brief metadata loaded flag
+  // @brief metadata loaded flag
   mutable thread_safe_flag metadata_loaded_;
 
   // Helper functions
@@ -124,3 +124,5 @@ private:
 } // namespace mobius::vfs
 
 #endif
+
+

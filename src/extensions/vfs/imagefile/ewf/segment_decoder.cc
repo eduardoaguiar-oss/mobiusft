@@ -33,9 +33,9 @@ static constexpr int FILE_HEADER_SIZE = 13;
 static constexpr int SECTION_HEADER_SIZE = 76;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert an Adler-32 digest from bytearray to uint32_t
-//! \param digest bytearray digest (4 bytes length)
-//! \return std::uint32_t
+// @brief Convert an Adler-32 digest from bytearray to uint32_t
+// @param digest bytearray digest (4 bytes length)
+// @return std::uint32_t
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::uint32_t
 digest_to_uint32_t (const mobius::bytearray& digest)
@@ -49,8 +49,8 @@ digest_to_uint32_t (const mobius::bytearray& digest)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief iterator constructor
-//! \param reader reader object
+// @brief iterator constructor
+// @param reader reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 segment_decoder::const_iterator::const_iterator (const segment_decoder *decoder, offset_type offset)
   : decoder_ (decoder)
@@ -59,9 +59,9 @@ segment_decoder::const_iterator::const_iterator (const segment_decoder *decoder,
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if two iterators are equal
-//! \param i iterator
-//! \return true/false
+// @brief Check if two iterators are equal
+// @param i iterator
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 segment_decoder::const_iterator::operator== (const const_iterator& i)
@@ -70,8 +70,8 @@ segment_decoder::const_iterator::operator== (const const_iterator& i)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief operator++
-//! \return reference to object
+// @brief operator++
+// @return reference to object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 segment_decoder::const_iterator&
 segment_decoder::const_iterator::operator++ ()
@@ -89,8 +89,8 @@ segment_decoder::const_iterator::operator++ ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \see EWCF 2.1.1
+// @brief Constructor
+// @see EWCF 2.1.1
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 segment_decoder::segment_decoder (mobius::io::reader reader)
   : reader_ (reader)
@@ -109,8 +109,8 @@ segment_decoder::segment_decoder (mobius::io::reader reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get first section
-//! \return section
+// @brief Get first section
+// @return section
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 segment_decoder::const_iterator
 segment_decoder::begin () const
@@ -119,8 +119,8 @@ segment_decoder::begin () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get ending section
-//! \return section
+// @brief Get ending section
+// @return section
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 segment_decoder::const_iterator
 segment_decoder::end () const
@@ -129,8 +129,8 @@ segment_decoder::end () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode generic section
-//! \param offset offset from the beginning of data
+// @brief Decode generic section
+// @param offset offset from the beginning of data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 section
 segment_decoder::decode_section (offset_type offset) const
@@ -157,9 +157,9 @@ segment_decoder::decode_section (offset_type offset) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode <header> and <header2> sections
-//! \return header_section
-//! \see EWCF 3.4
+// @brief Decode <header> and <header2> sections
+// @return header_section
+// @see EWCF 3.4
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 header_section
 segment_decoder::decode_header_section (const section& arg_section) const
@@ -236,10 +236,10 @@ segment_decoder::decode_header_section (const section& arg_section) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode <hash> section
-//! \param arg_section generic section
-//! \return hash_section
-//! \see EWCF 3.18
+// @brief Decode <hash> section
+// @param arg_section generic section
+// @return hash_section
+// @see EWCF 3.18
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hash_section
 segment_decoder::decode_hash_section (const section& arg_section) const
@@ -256,10 +256,10 @@ segment_decoder::decode_hash_section (const section& arg_section) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode <volume>, <disk> and <data> sections
-//! \param arg_section generic section
-//! \return volume_section
-//! \see EWCF 3.5
+// @brief Decode <volume>, <disk> and <data> sections
+// @param arg_section generic section
+// @return volume_section
+// @see EWCF 3.5
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 volume_section
 segment_decoder::decode_volume_section (const section& arg_section) const
@@ -286,10 +286,10 @@ segment_decoder::decode_volume_section (const section& arg_section) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode <table> section
-//! \param arg_section generic section
-//! \return table_section
-//! \see EWCF 3.9
+// @brief Decode <table> section
+// @param arg_section generic section
+// @return table_section
+// @see EWCF 3.9
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 table_section
 segment_decoder::decode_table_section (const section& arg_section) const
@@ -322,3 +322,5 @@ segment_decoder::decode_table_section (const section& arg_section) const
 
   return section;
 }
+
+

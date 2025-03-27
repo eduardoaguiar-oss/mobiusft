@@ -23,10 +23,10 @@
 namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt data
-//! \param key LSA Secrets decryption key
-//! \param ciphertext Ciphertext
-//! \return plaintext
+// @brief Decrypt data
+// @param key LSA Secrets decryption key
+// @param ciphertext Ciphertext
+// @return plaintext
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 decrypt_aes (const mobius::bytearray& key, const mobius::bytearray& ciphertext)
@@ -68,9 +68,9 @@ decrypt_aes (const mobius::bytearray& key, const mobius::bytearray& ciphertext)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
-//! \param lsa_key LSA Secrets decryption key
-//! \param encrypted_data value's encrypted data
+// @brief constructor
+// @param lsa_key LSA Secrets decryption key
+// @param encrypted_data value's encrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_data_impl_lsa_poleklist::registry_data_impl_lsa_poleklist (
   const mobius::bytearray& lsa_key,
@@ -81,7 +81,7 @@ registry_data_impl_lsa_poleklist::registry_data_impl_lsa_poleklist (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief load data on demand
+// @brief load data on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry_data_impl_lsa_poleklist::_load_data () const
@@ -101,3 +101,5 @@ registry_data_impl_lsa_poleklist::_load_data () const
 }
 
 } // namespace mobius::os::win::registry
+
+

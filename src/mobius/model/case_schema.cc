@@ -74,8 +74,8 @@ static constexpr int SCHEMA_VERSION = 13;
  */
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Upgrade schema to v11
-//! \param db Case database object
+// @brief Upgrade schema to v11
+// @param db Case database object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 _case_schema_upgrade_v11 (mobius::database::database db)
@@ -87,8 +87,8 @@ _case_schema_upgrade_v11 (mobius::database::database db)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create database tables and indexes
-//! \param db Case database object
+// @brief Create database tables and indexes
+// @param db Case database object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 case_schema (mobius::database::database db)
@@ -273,3 +273,5 @@ case_schema (mobius::database::database db)
 }
 
 } // namespace mobius::model
+
+

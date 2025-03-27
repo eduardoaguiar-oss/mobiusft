@@ -27,7 +27,7 @@
 namespace mobius::decoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief inifile implementation class
+// @brief inifile implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class inifile::impl
 {
@@ -56,19 +56,19 @@ public:
 
 private:
 
-  //! \brief Line reader object
+  // @brief Line reader object
   mutable mobius::io::line_reader line_reader_;
 
-  //! \brief Flag is case sensitive
+  // @brief Flag is case sensitive
   bool is_case_sensitive_ = false;
 
-  //! \brief Comment char
+  // @brief Comment char
   char comment_char_ = ';';
 
-  //! \brief Flag is loaded
+  // @brief Flag is loaded
   mutable std::atomic_bool is_loaded_ = false;
 
-  //! \brief Map of group,key -> value
+  // @brief Map of group,key -> value
   mutable std::map <std::pair <std::string, std::string>, std::string> values_;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -78,10 +78,10 @@ private:
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
-//! \param encoding File encoding
-//! \param separator Line separator
+// @brief Constructor
+// @param reader Reader object
+// @param encoding File encoding
+// @param separator Line separator
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inifile::impl::impl (
   const mobius::io::reader& reader,
@@ -93,10 +93,10 @@ inifile::impl::impl (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if inifile has a given value
-//! \param group Group name
-//! \param key Key
-//! \return true/false
+// @brief Check if inifile has a given value
+// @param group Group name
+// @param key Key
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 inifile::impl::has_value (const std::string& group, const std::string& key) const
@@ -110,10 +110,10 @@ inifile::impl::has_value (const std::string& group, const std::string& key) cons
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get value
-//! \param group Group name
-//! \param key Key
-//! \return Value
+// @brief Get value
+// @param group Group name
+// @param key Key
+// @return Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 inifile::impl::get_value (const std::string& group, const std::string& key) const
@@ -134,8 +134,8 @@ inifile::impl::get_value (const std::string& group, const std::string& key) cons
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set group and key to be case sensitive or not
-//! \param flag Flag
+// @brief Set group and key to be case sensitive or not
+// @param flag Flag
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 inifile::impl::set_case_sensitive (bool flag)
@@ -147,8 +147,8 @@ inifile::impl::set_case_sensitive (bool flag)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set char used to start a comment
-//! \param c Char
+// @brief Set char used to start a comment
+// @param c Char
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 inifile::impl::set_comment_char (char c)
@@ -160,7 +160,7 @@ inifile::impl::set_comment_char (char c)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load values
+// @brief Load values
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 inifile::impl::_load () const
@@ -222,10 +222,10 @@ inifile::impl::_load () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
-//! \param encoding File encoding
-//! \param separator Line separator
+// @brief Constructor
+// @param reader Reader object
+// @param encoding File encoding
+// @param separator Line separator
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inifile::inifile (
   const mobius::io::reader& reader,
@@ -236,10 +236,10 @@ inifile::inifile (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if inifile has a given value
-//! \param group Group name
-//! \param name Value name
-//! \return true/false
+// @brief Check if inifile has a given value
+// @param group Group name
+// @param name Value name
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 inifile::has_value (const std::string& group, const std::string& name) const
@@ -248,10 +248,10 @@ inifile::has_value (const std::string& group, const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get value
-//! \param group Group name
-//! \param name Value name
-//! \return Value
+// @brief Get value
+// @param group Group name
+// @param name Value name
+// @return Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 inifile::get_value (const std::string& group, const std::string& name) const
@@ -260,8 +260,8 @@ inifile::get_value (const std::string& group, const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set group and key to be case sensitive or not
-//! \param flag Flag
+// @brief Set group and key to be case sensitive or not
+// @param flag Flag
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 inifile::set_case_sensitive (bool flag)
@@ -270,8 +270,8 @@ inifile::set_case_sensitive (bool flag)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set char used to start a comment
-//! \param c Char
+// @brief Set char used to start a comment
+// @param c Char
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 inifile::set_comment_char (char c)
@@ -280,3 +280,5 @@ inifile::set_comment_char (char c)
 }
 
 } // namespace mobius::decoder
+
+

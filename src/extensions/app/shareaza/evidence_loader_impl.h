@@ -29,7 +29,7 @@
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Shareaza account
+// @brief Shareaza account
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct account
 {
@@ -52,7 +52,7 @@ struct account
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Autofill
+// @brief Autofill
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct autofill
 {
@@ -64,7 +64,7 @@ struct autofill
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Searched text
+// @brief Searched text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct search
 {
@@ -81,7 +81,7 @@ struct search
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Local file
+// @brief Local file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct local_file
 {
@@ -111,7 +111,7 @@ struct local_file
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remote file
+// @brief Remote file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct remote_file
 {
@@ -137,8 +137,8 @@ struct remote_file
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>Shareaza evidence_loader</i> implementation class
-//! \author Eduardo Aguiar
+// @brief <i>Shareaza evidence_loader</i> implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
 {
@@ -154,8 +154,8 @@ public:
   void run () final;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if object is valid
-  //! \return true/false
+  // @brief Check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator bool () const noexcept final
   {
@@ -163,8 +163,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get evidence_loader type
-  //! \return Type as string
+  // @brief Get evidence_loader type
+  // @return Type as string
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_type () const final
@@ -173,31 +173,31 @@ public:
   }
 
 private:
-  //! \brief Case item
+  // @brief Case item
   mobius::model::item item_;
 
-  //! \brief Scan type
+  // @brief Scan type
   scan_type scan_type_;
 
-  //! \brief User name
+  // @brief User name
   std::string username_;
 
-  //! \brief Account data
+  // @brief Account data
   account account_;
 
-  //! \brief Accounts found
+  // @brief Accounts found
   std::vector <account> accounts_;
 
-  //! \brief Autofills found
+  // @brief Autofills found
   std::vector <autofill> autofills_;
 
-  //! \brief Searched texts
+  // @brief Searched texts
   std::vector <search> searches_;
 
-  //! \brief Library files
+  // @brief Library files
   std::vector <local_file> local_files_;
 
-  //! \brief Remote files
+  // @brief Remote files
   std::vector <remote_file> remote_files_;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -229,3 +229,7 @@ private:
 } // namespace mobius::extension::app::shareaza
 
 #endif
+
+
+
+

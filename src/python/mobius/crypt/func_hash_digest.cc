@@ -17,18 +17,18 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API mobius.turing module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API mobius.turing module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pygil.h>
 #include <mobius/crypt/hash_digest.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief hash_digest function
-//! \param self Function object
-//! \param args Argument list
-//! \return Python object
+// @brief hash_digest function
+// @param self Function object
+// @param args Argument list
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_hash_digest (PyObject *, PyObject *args)
@@ -69,3 +69,5 @@ func_hash_digest (PyObject *, PyObject *args)
   // return value
   return ret;
 }
+
+

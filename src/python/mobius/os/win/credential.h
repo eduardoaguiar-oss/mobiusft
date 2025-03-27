@@ -22,7 +22,7 @@
 #include <mobius/os/win/credential.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_os_win_credential_to_pyobject (mobius::os::win::credential);
 mobius::os::win::credential pymobius_os_win_credential_from_pyobject (PyObject *);
 
 #endif
+
+

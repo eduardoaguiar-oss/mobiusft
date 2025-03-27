@@ -28,8 +28,8 @@ constexpr std::uint32_t ZIPCONST = 0x08088405U;
 namespace mobius::crypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param passwd Encryption/decryption password
+// @brief Constructor
+// @param passwd Encryption/decryption password
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher_impl_zip::cipher_impl_zip (const bytearray& passwd)
   : passwd_ (passwd)
@@ -38,9 +38,9 @@ cipher_impl_zip::cipher_impl_zip (const bytearray& passwd)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Encrypt data
-//! \param data Data to be encrypted
-//! \return Encrypted data
+// @brief Encrypt data
+// @param data Data to be encrypted
+// @return Encrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 cipher_impl_zip::encrypt (const mobius::bytearray& data)
@@ -64,9 +64,9 @@ cipher_impl_zip::encrypt (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt data
-//! \param data Data to be decrypted
-//! \return Decrypted data
+// @brief Decrypt data
+// @param data Data to be decrypted
+// @return Decrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 cipher_impl_zip::decrypt (const mobius::bytearray& data)
@@ -90,7 +90,7 @@ cipher_impl_zip::decrypt (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reset state
+// @brief Reset state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 cipher_impl_zip::reset () noexcept
@@ -108,3 +108,5 @@ cipher_impl_zip::reset () noexcept
 }
 
 } // namespace mobius::crypt
+
+

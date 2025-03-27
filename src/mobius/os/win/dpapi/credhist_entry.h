@@ -24,17 +24,11 @@
 #include <memory>
 #include <string>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace dpapi
+namespace mobius::os::win::dpapi
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief credhist_entry class
-//! \author Eduardo Aguiar
+// @brief credhist_entry class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class credhist_entry
 {
@@ -74,16 +68,15 @@ public:
   bool is_decrypted () const;
 
 private:
-  //! \brief Implementation class forward declaration
+  // @brief Implementation class forward declaration
   class impl;
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
-} // namespace dpapi
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::dpapi
 
 #endif
+
+

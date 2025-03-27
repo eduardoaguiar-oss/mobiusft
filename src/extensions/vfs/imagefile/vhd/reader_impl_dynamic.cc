@@ -21,8 +21,8 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param impl imagefile_impl object
+// @brief Constructor
+// @param impl imagefile_impl object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 reader_impl_dynamic::reader_impl_dynamic (const imagefile_impl& impl)
   : size_ (impl.get_size ()),
@@ -36,7 +36,7 @@ reader_impl_dynamic::reader_impl_dynamic (const imagefile_impl& impl)
   bitmap_size_ = sectors_per_block_ / 8;
 
   std::uint32_t remaining = bitmap_size_ % sector_size;
-  
+
   if (remaining)
     bitmap_size_ = bitmap_size_ + sector_size - remaining;
 
@@ -45,9 +45,9 @@ reader_impl_dynamic::reader_impl_dynamic (const imagefile_impl& impl)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set read position
-//! \param offset offset in bytes
-//! \param w either beginning, current or end
+// @brief Set read position
+// @param offset offset in bytes
+// @param w either beginning, current or end
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 reader_impl_dynamic::seek (offset_type offset, whence_type w)
@@ -70,15 +70,15 @@ reader_impl_dynamic::seek (offset_type offset, whence_type w)
   // update current pos, if possible
   if (abs_offset < 0)
     throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid offset"));
-  
-  else if (size_type (abs_offset) <= size_)  
+
+  else if (size_type (abs_offset) <= size_)
     pos_ = abs_offset;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Read bytes from reader
-//! \param size size in bytes
-//! \return Data
+// @brief Read bytes from reader
+// @param size size in bytes
+// @return Data
 //
 // Block is composed of Bitmap array + Data. The bitmap array seems to be
 // filled with 1's bits, so there is no need to read the bit corresponding to
@@ -96,7 +96,7 @@ reader_impl_dynamic::read (size_type size)
       std::uint32_t block_pos = pos_ % block_size_;   // data pos inside block
       std::uint32_t sector_offset = block_allocation_table_[block_idx];
       std::uint32_t data_size = std::min (size, block_size_ - block_pos);
-      
+
       if (sector_offset == 0xffffffff)
         data += mobius::bytearray (data_size);
 
@@ -113,3 +113,5 @@ reader_impl_dynamic::read (size_type size)
 
   return data;
 }
+
+

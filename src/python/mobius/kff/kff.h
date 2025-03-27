@@ -22,7 +22,7 @@
 #include <mobius/kff/kff.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_kff_kff_to_pyobject (const mobius::kff::kff&);
 mobius::kff::kff pymobius_kff_kff_from_pyobject (PyObject *);
 
 #endif
+
+

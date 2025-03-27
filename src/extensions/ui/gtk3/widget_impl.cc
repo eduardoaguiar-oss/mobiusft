@@ -20,7 +20,7 @@
 namespace mobius::extension::ui::gtk3
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
+// @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 widget_impl::widget_impl (std::any w)
   : widget_ (std::any_cast <GtkWidget *>(w))
@@ -28,8 +28,8 @@ widget_impl::widget_impl (std::any w)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set widget sensitive
-//! \param flag true/false
+// @brief Set widget sensitive
+// @param flag true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 widget_impl::set_sensitive (bool flag)
@@ -38,8 +38,8 @@ widget_impl::set_sensitive (bool flag)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set widget visible
-//! \param flag Flag (true/false)
+// @brief Set widget visible
+// @param flag Flag (true/false)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 widget_impl::set_visible (bool flag)
@@ -48,8 +48,8 @@ widget_impl::set_visible (bool flag)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get low level widget
-//! \return Low level widget
+// @brief Get low level widget
+// @return Low level widget
 //
 // Increment widget reference because some widgets are dangling
 // When all widgets are derived from mobius.ui.widget, Python API's
@@ -62,3 +62,5 @@ widget_impl::get_ui_widget () const
 }
 
 } // namespace mobius::extension::ui::gtk3
+
+

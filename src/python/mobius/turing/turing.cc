@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file turing.cc C++ API <i>mobius.turing.turing</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pylist.h>
@@ -29,7 +29,7 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create tuple from hash
+// @brief Create tuple from hash
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 PyTuple_from_hash (const std::tuple <std::string, std::string, std::string>& row)
@@ -49,9 +49,9 @@ PyTuple_from_hash (const std::tuple <std::string, std::string, std::string>& row
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>turing</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New turing object
+// @brief Create <i>turing</i> Python object from C++ object
+// @param obj C++ object
+// @return New turing object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_turing_turing_to_pyobject (mobius::turing::turing obj)
@@ -60,10 +60,10 @@ pymobius_turing_turing_to_pyobject (mobius::turing::turing obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>has_hash</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return True/False
+// @brief <i>has_hash</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return True/False
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_has_hash (turing_turing_o *self, PyObject *args)
@@ -100,10 +100,10 @@ tp_f_has_hash (turing_turing_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_hash</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return new hash object
+// @brief <i>set_hash</i> method implementation
+// @param self object
+// @param args argument list
+// @return new hash object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_hash (turing_turing_o *self, PyObject *args)
@@ -143,10 +143,10 @@ tp_f_set_hash (turing_turing_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_hash_password</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return status, password
+// @brief <i>get_hash_password</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return status, password
 //
 // status: 0 - not found
 //         1 - found
@@ -200,8 +200,8 @@ tp_f_get_hash_password (turing_turing_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>remove_hashes</i> method implementation
-//! \param self object
+// @brief <i>remove_hashes</i> method implementation
+// @param self object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_remove_hashes (turing_turing_o *self, PyObject *)
@@ -223,10 +223,10 @@ tp_f_remove_hashes (turing_turing_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_hashes</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return hash list
+// @brief <i>get_hashes</i> method implementation
+// @param self object
+// @param args argument list
+// @return hash list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_hashes (turing_turing_o *self, PyObject *)
@@ -249,10 +249,10 @@ tp_f_get_hashes (turing_turing_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>new_transaction</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return new transaction object
+// @brief <i>new_transaction</i> method implementation
+// @param self object
+// @param args argument list
+// @return new transaction object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_new_transaction (turing_turing_o *self, PyObject *)
@@ -274,7 +274,7 @@ tp_f_new_transaction (turing_turing_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -318,11 +318,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>turing</i> constructor
-//! \param type type object
-//! \param args argument list
-//! \param kwds keywords dict
-//! \return new <i>turing</i> object
+// @brief <i>turing</i> constructor
+// @param type type object
+// @param args argument list
+// @param kwds keywords dict
+// @return new <i>turing</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *, PyObject *)
@@ -347,8 +347,8 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>turing</i> deallocator
-//! \param self object
+// @brief <i>turing</i> deallocator
+// @param self object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (turing_turing_o *self)
@@ -358,7 +358,7 @@ tp_dealloc (turing_turing_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject turing_turing_t =
 {
@@ -411,3 +411,5 @@ PyTypeObject turing_turing_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

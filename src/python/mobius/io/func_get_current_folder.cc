@@ -17,29 +17,31 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "folder.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function get_current_folder
+// @brief Function get_current_folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_get_current_folder (PyObject *, PyObject *)
 {
   // execute C++ code
   PyObject *ret = nullptr;
-  
+
   try
     {
       ret = pymobius_io_folder_to_pyobject (mobius::io::get_current_folder ());
     }
   catch (const std::exception& e)
-    { 
+    {
       mobius::py::set_runtime_error (e.what ());
     }
 
   return ret;
 }
+
+

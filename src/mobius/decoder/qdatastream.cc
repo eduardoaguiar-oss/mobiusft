@@ -34,9 +34,9 @@ constexpr int QT_TimeZone = 3;
 namespace mobius::decoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
-//! \param version Serialization version
+// @brief Constructor
+// @param reader Reader object
+// @param version Serialization version
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 qdatastream::qdatastream (const mobius::io::reader& reader, std::uint32_t version)
   : decoder_ (reader), version_ (version)
@@ -44,8 +44,8 @@ qdatastream::qdatastream (const mobius::io::reader& reader, std::uint32_t versio
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode QString
-//! \return value
+// @brief Decode QString
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 qdatastream::get_qstring ()
@@ -61,8 +61,8 @@ qdatastream::get_qstring ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode Qbytearray
-//! \return value
+// @brief Decode Qbytearray
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 qdatastream::get_qbytearray ()
@@ -78,9 +78,9 @@ qdatastream::get_qbytearray ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode QDate
-//! \return value
-//! \see https://github.com/qt/qtbase/blob/dev/src/gui/image/qdatetime.cpp (operator>>)
+// @brief Decode QDate
+// @return value
+// @see https://github.com/qt/qtbase/blob/dev/src/gui/image/qdatetime.cpp (operator>>)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::date
 qdatastream::get_qdate ()
@@ -104,9 +104,9 @@ qdatastream::get_qdate ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode QTime
-//! \return value
-//! \see https://github.com/qt/qtbase/blob/dev/src/gui/image/qdatetime.cpp (operator>>)
+// @brief Decode QTime
+// @return value
+// @see https://github.com/qt/qtbase/blob/dev/src/gui/image/qdatetime.cpp (operator>>)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::time
 qdatastream::get_qtime ()
@@ -128,9 +128,9 @@ qdatastream::get_qtime ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode QDateTime
-//! \return value
-//! \see https://github.com/qt/qtbase/blob/dev/src/gui/image/qdatetime.cpp (operator>>)
+// @brief Decode QDateTime
+// @return value
+// @see https://github.com/qt/qtbase/blob/dev/src/gui/image/qdatetime.cpp (operator>>)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 qdatastream::get_qdatetime ()
@@ -174,9 +174,9 @@ qdatastream::get_qdatetime ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode QImage
-//! \return value
-//! \see https://github.com/qt/qtbase/blob/dev/src/gui/image/qimage.cpp (operator>>)
+// @brief Decode QImage
+// @return value
+// @see https://github.com/qt/qtbase/blob/dev/src/gui/image/qimage.cpp (operator>>)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 qdatastream::get_qimage ()
@@ -220,8 +220,8 @@ qdatastream::get_qimage ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode QPixmap
-//! \return value
+// @brief Decode QPixmap
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 qdatastream::get_qpixmap ()
@@ -230,8 +230,8 @@ qdatastream::get_qpixmap ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode QVariant
-//! \return value
+// @brief Decode QVariant
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 qdatastream::get_qvariant ()
@@ -255,3 +255,5 @@ qdatastream::get_qvariant ()
 }
 
 } // namespace mobius::decoder
+
+

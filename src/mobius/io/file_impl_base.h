@@ -33,8 +33,8 @@ class writer_impl_base;
 class stream_impl_base;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief File implementation base class
-//! \author Eduardo Aguiar
+// @brief File implementation base class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class file_impl_base
 {
@@ -69,7 +69,7 @@ public:
   using permission_type = mode_t;	//< access permission mask
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief File subtype
+  // @brief File subtype
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   enum class type {
           none,
@@ -120,3 +120,5 @@ public:
 } // namespace mobius::io
 
 #endif
+
+

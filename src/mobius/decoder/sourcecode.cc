@@ -18,9 +18,7 @@
 #include "sourcecode.h"
 #include <cstdint>
 
-namespace mobius
-{
-namespace decoder
+namespace mobius::decoder
 {
 namespace
 {
@@ -31,8 +29,8 @@ static constexpr std::uint64_t BLOCK_SIZE = 4096;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create sourcecode object
-//! \param reader Reader object
+// @brief Create sourcecode object
+// @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 sourcecode::sourcecode (const mobius::io::reader& reader)
  : reader_ (reader)
@@ -40,8 +38,8 @@ sourcecode::sourcecode (const mobius::io::reader& reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Peek next character
-//! \return Character
+// @brief Peek next character
+// @return Character
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 sourcecode::char_type
 sourcecode::peek ()
@@ -61,8 +59,8 @@ sourcecode::peek ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get next character
-//! \return Character
+// @brief Get next character
+// @return Character
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 sourcecode::char_type
 sourcecode::get ()
@@ -93,5 +91,6 @@ sourcecode::get ()
   return c;
 }
 
-} // namespace decoder
-} // namespace mobius
+} // namespace mobius::decoder
+
+

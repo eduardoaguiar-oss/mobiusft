@@ -33,7 +33,7 @@ const char *EXTENSION_DESCRIPTION = "Ext2/3/4 File System support";
 } // extern "C"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Start extension
+// @brief Start extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extern "C" void
 start ()
@@ -46,10 +46,12 @@ start ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Stop extension
+// @brief Stop extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extern "C" void
 stop ()
 {
   mobius::core::remove_resource ("vfs.filesystem.ext2");
 }
+
+

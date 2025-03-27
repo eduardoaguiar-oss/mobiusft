@@ -20,20 +20,18 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/pod/data_impl_base.h>
 
-namespace mobius
-{
-namespace pod
+namespace mobius::pod
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Bool data implementation class
-//! \author Eduardo Aguiar
+// @brief Bool data implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class data_impl_bool : public data_impl_base
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Constructor
-  //! \param value Value
+  // @brief Constructor
+  // @param value Value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit data_impl_bool (bool value)
     : value_ (value)
@@ -41,18 +39,18 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get data type
-  //! \return Data type
+  // @brief Get data type
+  // @return Data type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   type
   get_type () const noexcept override
   {
     return type::boolean;
   }
-  
+
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get value
-  //! \return Value
+  // @brief Get value
+  // @return Value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_value () const noexcept
@@ -64,7 +62,8 @@ private:
   bool value_;
 };
 
-} // namespace pod
-} // namespace mobius
+} // namespace mobius::pod
 
 #endif
+
+

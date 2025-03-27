@@ -21,15 +21,11 @@
 #include <mobius/io/reader_impl_base.h>
 #include <mobius/vfs/tsk/fs_file.h>
 
-namespace mobius
-{
-namespace vfs
-{
-namespace tsk
+namespace mobius::vfs::tsk
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief libtsk file reader implementation
-//! \author Eduardo Aguiar
+// @brief libtsk file reader implementation
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class reader_impl_file : public mobius::io::reader_impl_base
 {
@@ -54,8 +50,8 @@ public:
   void seek (offset_type, whence_type = whence_type::beginning) override;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if reader is seekable
-  //! \return true/false
+  // @brief Check if reader is seekable
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_seekable () const override
@@ -64,8 +60,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if <b>reader.get_size</b> is available
-  //! \return true/false
+  // @brief Check if <b>reader.get_size</b> is available
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_sizeable () const override
@@ -74,8 +70,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get data size
-  //! \return Data size in bytes
+  // @brief Get data size
+  // @return Data size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_size () const override
@@ -84,8 +80,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get read position
-  //! \return Read position in bytes from the beginning of data
+  // @brief Get read position
+  // @return Read position in bytes from the beginning of data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   offset_type
   tell () const override
@@ -94,8 +90,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if end-of-file was reached
-  //! \return true/false
+  // @brief Check if end-of-file was reached
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   eof () const override
@@ -104,8 +100,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get default block size
-  //! \return Block size in bytes
+  // @brief Get default block size
+  // @return Block size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_block_size () const override
@@ -119,8 +115,8 @@ private:
   size_type pos_ = 0;
 };
 
-} // namespace tsk
-} // namespace vfs
-} // namespace mobius
+} // namespace mobius::vfs::tsk
 
 #endif
+
+

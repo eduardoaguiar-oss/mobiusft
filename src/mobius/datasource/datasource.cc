@@ -26,7 +26,7 @@
 namespace mobius::datasource
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datasource::datasource ()
  : impl_ (std::make_shared <datasource_impl_null> ())
@@ -34,8 +34,8 @@ datasource::datasource ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor from implementation pointer
-//! \param impl Implementation pointer
+// @brief Constructor from implementation pointer
+// @param impl Implementation pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datasource::datasource (const std::shared_ptr <datasource_impl_base>& impl)
   : impl_ (impl)
@@ -43,8 +43,8 @@ datasource::datasource (const std::shared_ptr <datasource_impl_base>& impl)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param state Object state
+// @brief Constructor
+// @param state Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datasource::datasource (const mobius::pod::map& state)
 {
@@ -61,9 +61,9 @@ datasource::datasource (const mobius::pod::map& state)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create datasource from VFS object
-//! \param vfs VFS object
-//! \return Datasource object
+// @brief Create datasource from VFS object
+// @param vfs VFS object
+// @return Datasource object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datasource
 new_datasource_from_vfs (const mobius::vfs::vfs& vfs)
@@ -72,9 +72,9 @@ new_datasource_from_vfs (const mobius::vfs::vfs& vfs)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create datasource from image file
-//! \param path Image file path
-//! \return Datasource object
+// @brief Create datasource from image file
+// @param path Image file path
+// @return Datasource object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datasource
 new_datasource_by_imagefile_path (const std::string& path)
@@ -86,9 +86,9 @@ new_datasource_by_imagefile_path (const std::string& path)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create datasource from image file
-//! \param url Image file URL
-//! \return Datasource object
+// @brief Create datasource from image file
+// @param url Image file URL
+// @return Datasource object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datasource
 new_datasource_by_imagefile_url (const std::string& url)
@@ -100,9 +100,9 @@ new_datasource_by_imagefile_url (const std::string& url)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create datasource from UFDR file path
-//! \param path UFDR file path
-//! \return Datasource object
+// @brief Create datasource from UFDR file path
+// @param path UFDR file path
+// @return Datasource object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datasource
 new_datasource_by_ufdr_path (const std::string& path)
@@ -112,9 +112,9 @@ new_datasource_by_ufdr_path (const std::string& path)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create datasource from UFDR file URL
-//! \param url UFDR file URL
-//! \return Datasource object
+// @brief Create datasource from UFDR file URL
+// @param url UFDR file URL
+// @return Datasource object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datasource
 new_datasource_by_ufdr_url (const std::string& url)
@@ -123,3 +123,5 @@ new_datasource_by_ufdr_url (const std::string& url)
 }
 
 } // namespace mobius::datasource
+
+

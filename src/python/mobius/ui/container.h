@@ -23,7 +23,7 @@
 #include <mobius/ui/container.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -41,3 +41,5 @@ PyObject *pymobius_ui_container_to_pyobject (const mobius::ui::container&);
 mobius::ui::container pymobius_ui_container_from_pyobject (PyObject *);
 
 #endif
+
+

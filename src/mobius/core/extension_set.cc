@@ -18,14 +18,12 @@
 #include "extension_set.h"
 #include <algorithm>
 
-namespace mobius
-{
-namespace core
+namespace mobius::core
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load extension
-//! \param path Extension path
-//! \return Loaded extension
+// @brief Load extension
+// @param path Extension path
+// @return Loaded extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extension
 extension_set::load (const std::string& path)
@@ -34,13 +32,13 @@ extension_set::load (const std::string& path)
 
   std::lock_guard <std::mutex> lock (mutex_);
   extensions_.emplace (e.get_id (), e);
-  
+
   return e;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Unload extension
-//! \param id Extension ID
+// @brief Unload extension
+// @param id Extension ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 extension_set::unload (const std::string& id)
@@ -50,8 +48,8 @@ extension_set::unload (const std::string& id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get extensions
-//! \return List of extensions
+// @brief Get extensions
+// @return List of extensions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::list <extension>
 extension_set::get_extensions () const
@@ -70,7 +68,7 @@ extension_set::get_extensions () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Clear extensions
+// @brief Clear extensions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 extension_set::clear ()
@@ -79,5 +77,6 @@ extension_set::clear ()
   extensions_.clear ();
 }
 
-} // namespace core
-} // namespace mobius
+} // namespace mobius::core
+
+

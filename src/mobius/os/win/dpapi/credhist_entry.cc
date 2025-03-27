@@ -30,7 +30,7 @@
 namespace mobius::os::win::dpapi
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief credhist_entry implementation class
+// @brief credhist_entry implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class credhist_entry::impl
 {
@@ -49,8 +49,8 @@ public:
   impl& operator= (impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get revision
-  //! \return Revision
+  // @brief Get revision
+  // @return Revision
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_revision () const
@@ -59,8 +59,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get guid
-  //! \return Guid
+  // @brief Get guid
+  // @return Guid
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_guid () const
@@ -69,8 +69,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get next link size
-  //! \return Size in bytes
+  // @brief Get next link size
+  // @return Size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_next_link_size () const
@@ -79,8 +79,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get type
-  //! \return Type
+  // @brief Get type
+  // @return Type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_type () const
@@ -89,8 +89,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hash id
-  //! \return Hash id
+  // @brief Get hash id
+  // @return Hash id
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_hash_id () const
@@ -99,8 +99,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get iterations
-  //! \return Iterations
+  // @brief Get iterations
+  // @return Iterations
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_iterations () const
@@ -109,8 +109,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get cipher id
-  //! \return Cipher id
+  // @brief Get cipher id
+  // @return Cipher id
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_cipher_id () const
@@ -119,8 +119,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get salt
-  //! \return Salt
+  // @brief Get salt
+  // @return Salt
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   get_salt () const
@@ -129,8 +129,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get SID
-  //! \return Sid
+  // @brief Get SID
+  // @return Sid
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_sid () const
@@ -139,8 +139,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get cipher text
-  //! \return Cipher text
+  // @brief Get cipher text
+  // @return Cipher text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   get_cipher_text () const
@@ -149,8 +149,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hash sha1
-  //! \return Hash sha1
+  // @brief Get hash sha1
+  // @return Hash sha1
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   get_hash_sha1 () const
@@ -159,8 +159,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hash ntlm
-  //! \return Hash ntlm
+  // @brief Get hash ntlm
+  // @return Hash ntlm
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   get_hash_ntlm () const
@@ -169,8 +169,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get is decrypted flag
-  //! \return true/false
+  // @brief Get is decrypted flag
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_decrypted () const
@@ -186,55 +186,55 @@ public:
   bool decrypt_with_password (const std::string&);
 
 private:
-  //! \brief Struct revision
+  // @brief Struct revision
   std::uint32_t revision_;
 
-  //! \brief GUID
+  // @brief GUID
   std::string guid_;
 
-  //! \brief Next link size in bytes
+  // @brief Next link size in bytes
   std::uint32_t next_link_size_;
 
-  //! \brief Type
+  // @brief Type
   std::uint32_t type_ = 0;
 
-  //! \brief Hash algorithm ID
+  // @brief Hash algorithm ID
   std::uint32_t hash_id_ = 0;
 
-  //! \brief Number of key iterations
+  // @brief Number of key iterations
   std::uint32_t iterations_ = 0;
 
-  //! \brief Cipher algorithm ID
+  // @brief Cipher algorithm ID
   std::uint32_t cipher_id_ = 0;
 
-  //! \brief Salt
+  // @brief Salt
   mobius::bytearray salt_;
 
-  //! \brief SID
+  // @brief SID
   std::string sid_;
 
-  //! \brief Cipher text
+  // @brief Cipher text
   mobius::bytearray cipher_text_;
 
-  //! \brief SHA1 hash value
+  // @brief SHA1 hash value
   mobius::bytearray hash_sha1_;
 
-  //! \brief MD4 hash value
+  // @brief MD4 hash value
   mobius::bytearray hash_ntlm_;
 
-  //! \brief SHA1 hash length
+  // @brief SHA1 hash length
   std::uint32_t sha1_length_ = 0;
 
-  //! \brief MD4 hash length
+  // @brief MD4 hash length
   std::uint32_t ntlm_length_ = 0;
 
-  //! \brief Is decrypted flag
+  // @brief Is decrypted flag
   bool is_decrypted_ = false;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
+// @brief Constructor
+// @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 credhist_entry::impl::impl (mobius::io::reader reader, std::uint32_t size)
 {
@@ -270,9 +270,9 @@ credhist_entry::impl::impl (mobius::io::reader reader, std::uint32_t size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt entry with key
-//! \param key Decryption key
-//! \return true if entry has been decrypted using key
+// @brief Decrypt entry with key
+// @param key Decryption key
+// @return true if entry has been decrypted using key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 credhist_entry::impl::decrypt_with_key (const mobius::bytearray& key)
@@ -317,9 +317,9 @@ credhist_entry::impl::decrypt_with_key (const mobius::bytearray& key)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt entry with password hash
-//! \param h Password hash
-//! \return true if entry has been decrypted using password hash
+// @brief Decrypt entry with password hash
+// @param h Password hash
+// @return true if entry has been decrypted using password hash
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 credhist_entry::impl::decrypt_with_password_hash (const mobius::bytearray& h)
@@ -337,9 +337,9 @@ credhist_entry::impl::decrypt_with_password_hash (const mobius::bytearray& h)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt entry with password
-//! \param password Password
-//! \return true if entry has been decrypted using password
+// @brief Decrypt entry with password
+// @param password Password
+// @return true if entry has been decrypted using password
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 credhist_entry::impl::decrypt_with_password (const std::string& password)
@@ -357,9 +357,9 @@ credhist_entry::impl::decrypt_with_password (const std::string& password)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
-//! \param size Entry size in bytes
+// @brief Constructor
+// @param reader Reader object
+// @param size Entry size in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 credhist_entry::credhist_entry (mobius::io::reader reader, std::uint32_t size)
   : impl_ (std::make_shared <impl> (reader, size))
@@ -367,8 +367,8 @@ credhist_entry::credhist_entry (mobius::io::reader reader, std::uint32_t size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get revision
-//! \return Revision
+// @brief Get revision
+// @return Revision
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 credhist_entry::get_revision () const
@@ -377,8 +377,8 @@ credhist_entry::get_revision () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get guid
-//! \return Guid
+// @brief Get guid
+// @return Guid
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 credhist_entry::get_guid () const
@@ -387,8 +387,8 @@ credhist_entry::get_guid () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get next link size
-//! \return Size in bytes
+// @brief Get next link size
+// @return Size in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 credhist_entry::get_next_link_size () const
@@ -397,8 +397,8 @@ credhist_entry::get_next_link_size () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get type
-//! \return Type
+// @brief Get type
+// @return Type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 credhist_entry::get_type () const
@@ -407,8 +407,8 @@ credhist_entry::get_type () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get hash id
-//! \return Hash id
+// @brief Get hash id
+// @return Hash id
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 credhist_entry::get_hash_id () const
@@ -417,8 +417,8 @@ credhist_entry::get_hash_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get iterations
-//! \return Iterations
+// @brief Get iterations
+// @return Iterations
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 credhist_entry::get_iterations () const
@@ -427,8 +427,8 @@ credhist_entry::get_iterations () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get cipher id
-//! \return Cipher id
+// @brief Get cipher id
+// @return Cipher id
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 credhist_entry::get_cipher_id () const
@@ -437,8 +437,8 @@ credhist_entry::get_cipher_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get salt
-//! \return Salt
+// @brief Get salt
+// @return Salt
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 credhist_entry::get_salt () const
@@ -447,8 +447,8 @@ credhist_entry::get_salt () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get SID
-//! \return SID
+// @brief Get SID
+// @return SID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 credhist_entry::get_sid () const
@@ -457,8 +457,8 @@ credhist_entry::get_sid () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get cipher text
-//! \return Cipher text
+// @brief Get cipher text
+// @return Cipher text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 credhist_entry::get_cipher_text () const
@@ -467,8 +467,8 @@ credhist_entry::get_cipher_text () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get hash sha1
-//! \return Hash sha1
+// @brief Get hash sha1
+// @return Hash sha1
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 credhist_entry::get_hash_sha1 () const
@@ -477,8 +477,8 @@ credhist_entry::get_hash_sha1 () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get hash ntlm
-//! \return Hash ntlm
+// @brief Get hash ntlm
+// @return Hash ntlm
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 credhist_entry::get_hash_ntlm () const
@@ -487,8 +487,8 @@ credhist_entry::get_hash_ntlm () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt cipher text using key
-//! \param key Key
+// @brief Decrypt cipher text using key
+// @param key Key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 credhist_entry::decrypt_with_key (const mobius::bytearray& key)
@@ -497,8 +497,8 @@ credhist_entry::decrypt_with_key (const mobius::bytearray& key)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt cipher text using password hash
-//! \param h Password hash
+// @brief Decrypt cipher text using password hash
+// @param h Password hash
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 credhist_entry::decrypt_with_password_hash (const mobius::bytearray& h)
@@ -507,8 +507,8 @@ credhist_entry::decrypt_with_password_hash (const mobius::bytearray& h)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt cipher text using password
-//! \param password Password encoded in UTF-8
+// @brief Decrypt cipher text using password
+// @param password Password encoded in UTF-8
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 credhist_entry::decrypt_with_password (const std::string& password)
@@ -517,8 +517,8 @@ credhist_entry::decrypt_with_password (const std::string& password)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if entry is decrypted
-//! \return true/false
+// @brief Check if entry is decrypted
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 credhist_entry::is_decrypted () const
@@ -527,3 +527,5 @@ credhist_entry::is_decrypted () const
 }
 
 } // namespace mobius::os::win::dpapi
+
+

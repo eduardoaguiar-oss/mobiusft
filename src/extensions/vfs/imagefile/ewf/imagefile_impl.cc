@@ -27,14 +27,14 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \see https://github.com/libyal/libewf/blob/master/documentation/Expert%20Witness%20Compression%20Format%20(EWF).asciidoc
+// @see https://github.com/libyal/libewf/blob/master/documentation/Expert%20Witness%20Compression%20Format%20(EWF).asciidoc
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get segment file extension
-//! \param idx Segment idx
-//! \return File extension
+// @brief Get segment file extension
+// @param idx Segment idx
+// @return File extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
 get_segment_extension (mobius::vfs::segment_array::idx_type idx)
@@ -58,9 +58,9 @@ get_segment_extension (mobius::vfs::segment_array::idx_type idx)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if file is an instance of imagefile EWF
-//! \param f File object
-//! \return true/false
+// @brief Check if file is an instance of imagefile EWF
+// @param f File object
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 imagefile_impl::is_instance (const mobius::io::file& f)
@@ -82,8 +82,8 @@ imagefile_impl::is_instance (const mobius::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Construct object
-//! \param f File object
+// @brief Construct object
+// @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile_impl::imagefile_impl (const mobius::io::file& f)
   : file_ (f),
@@ -94,9 +94,9 @@ imagefile_impl::imagefile_impl (const mobius::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attribute
-//! \param name Attribute name
-//! \return Attribute value
+// @brief Get attribute
+// @param name Attribute name
+// @return Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 imagefile_impl::get_attribute (const std::string& name) const
@@ -106,9 +106,9 @@ imagefile_impl::get_attribute (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set attribute
-//! \param name Attribute name
-//! \param value Attribute value
+// @brief Set attribute
+// @param name Attribute name
+// @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 imagefile_impl::set_attribute (
@@ -121,8 +121,8 @@ imagefile_impl::set_attribute (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attributes
-//! \return Attributes
+// @brief Get attributes
+// @return Attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 imagefile_impl::get_attributes () const
@@ -132,8 +132,8 @@ imagefile_impl::get_attributes () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new reader for imagefile
-//! \return Reader object
+// @brief Create new reader for imagefile
+// @return Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::reader
 imagefile_impl::new_reader () const
@@ -142,8 +142,8 @@ imagefile_impl::new_reader () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new writer for imagefile
-//! \return Writer object
+// @brief Create new writer for imagefile
+// @return Writer object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::writer
 imagefile_impl::new_writer () const
@@ -152,7 +152,7 @@ imagefile_impl::new_writer () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load metadata
+// @brief Load metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 imagefile_impl::_load_metadata () const
@@ -245,7 +245,7 @@ imagefile_impl::_load_metadata () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load chunk offset table on demand
+// @brief Load chunk offset table on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 imagefile_impl::_load_chunk_offset_table () const
@@ -299,3 +299,5 @@ imagefile_impl::_load_chunk_offset_table () const
   // set chunk offset table loaded
   chunk_offset_table_loaded_ = true;
 }
+
+

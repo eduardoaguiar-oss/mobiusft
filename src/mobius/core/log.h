@@ -24,19 +24,17 @@
 #include <string>
 #include <vector>
 
-namespace mobius
-{
-namespace core
+namespace mobius::core
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Log event class
-//! \author Eduardo Aguiar
+// @brief Log event class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class event
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Event types
+  // @brief Event types
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   enum class type { none, error, warning, info, development, debug };
 
@@ -46,7 +44,7 @@ public:
   event (type, const std::string&, const std::string&, std::size_t, const std::string&);
   event (event&&) = default;
   event (const event&) = default;
-  
+
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Operators
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -54,8 +52,8 @@ public:
   event& operator= (const event&) = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get event type
-  //! \return Event type
+  // @brief Get event type
+  // @return Event type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   type
   get_type () const
@@ -64,8 +62,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get event timestamp
-  //! \return Event timestamp
+  // @brief Get event timestamp
+  // @return Event timestamp
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::datetime::datetime
   get_timestamp () const
@@ -74,8 +72,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get file name
-  //! \return File name
+  // @brief Get file name
+  // @return File name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_filename () const
@@ -84,8 +82,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get function name
-  //! \return Function name
+  // @brief Get function name
+  // @return Function name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_funcname () const
@@ -94,8 +92,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get line number
-  //! \return Line number
+  // @brief Get line number
+  // @return Line number
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::size_t
   get_line_number () const
@@ -104,8 +102,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get event text
-  //! \return Event text
+  // @brief Get event text
+  // @return Event text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_text () const
@@ -122,12 +120,12 @@ private:
   const mobius::datetime::datetime timestamp_;
 };
 
-//! \brief Implementation class forward declaration
+// @brief Implementation class forward declaration
 class log_impl;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Log class
-//! \author Eduardo Aguiar
+// @brief Log class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class log
 {
@@ -159,13 +157,13 @@ public:
   std::vector <event> get_events () const;
 
 private:
-  //! \brief Source filename
+  // @brief Source filename
   std::string filename_;
-  
-  //! \brief Source function name
+
+  // @brief Source function name
   std::string funcname_;
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <log_impl> impl_;
 };
 
@@ -174,7 +172,8 @@ private:
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void set_logfile_path (const std::string&);
 
-} // namespace core
-} // namespace mobius
+} // namespace mobius::core
 
 #endif
+
+

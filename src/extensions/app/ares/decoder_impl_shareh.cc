@@ -24,8 +24,8 @@
 namespace mobius::extension::app::ares
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode file
-//! \see get_trusted_metas function (helper_library_db.pas)
+// @brief Decode file
+// @see get_trusted_metas function (helper_library_db.pas)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 decoder_impl_shareh::decode (const mobius::io::reader& reader)
@@ -76,3 +76,7 @@ decoder_impl_shareh::decode (const mobius::io::reader& reader)
 }
 
 } // namespace mobius::extension::app::ares
+
+
+
+

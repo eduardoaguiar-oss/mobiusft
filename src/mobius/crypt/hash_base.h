@@ -21,13 +21,11 @@
 #include <mobius/bytearray.h>
 #include <cstdint>
 
-namespace mobius
-{
-namespace crypt
+namespace mobius::crypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Abstract base class for hash functions implementation
-//! \author Eduardo Aguiar
+// @brief Abstract base class for hash functions implementation
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class hash_base
 {
@@ -43,7 +41,8 @@ public:
   virtual std::size_t get_block_size () const = 0;
 };
 
-} // namespace crypt
-} // namespace mobius
+} // namespace mobius::crypt
 
 #endif
+
+

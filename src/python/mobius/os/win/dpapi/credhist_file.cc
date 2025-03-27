@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file credhist_file.cc C++ API <i>mobius.os.win.dpapi.credhist_file</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pylist.h>
@@ -30,9 +30,9 @@
 #include <mobius/io/bytearray_io.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if object type is <i>credhist_file</i>
-//! \param pyobj Python object
-//! \return true/false
+// @brief Check if object type is <i>credhist_file</i>
+// @param pyobj Python object
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_os_win_dpapi_credhist_file_check (PyObject *pyobj)
@@ -41,9 +41,9 @@ pymobius_os_win_dpapi_credhist_file_check (PyObject *pyobj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>credhist_file</i> Python object from C++ object
-//! \param obj C++ object
-//! \return new credhist_file object
+// @brief Create <i>credhist_file</i> Python object from C++ object
+// @param obj C++ object
+// @return new credhist_file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_os_win_dpapi_credhist_file_to_pyobject (mobius::os::win::dpapi::credhist_file obj)
@@ -57,9 +57,9 @@ pymobius_os_win_dpapi_credhist_file_to_pyobject (mobius::os::win::dpapi::credhis
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>credhist_file</i> C++ object from Python object
-//! \param value Python object
-//! \return credhist_file object
+// @brief Create <i>credhist_file</i> C++ object from Python object
+// @param value Python object
+// @return credhist_file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::os::win::dpapi::credhist_file
 pymobius_os_win_dpapi_credhist_file_from_pyobject (PyObject *value)
@@ -71,9 +71,9 @@ pymobius_os_win_dpapi_credhist_file_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>entries</i> Attribute getter
-//! \param self Object
-//! \return <i>entries</i> attribute
+// @brief <i>entries</i> Attribute getter
+// @param self Object
+// @return <i>entries</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_entries (os_win_dpapi_credhist_file_o *self)
@@ -96,7 +96,7 @@ tp_getter_entries (os_win_dpapi_credhist_file_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Getters and setters structure
+// @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -111,9 +111,9 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>decrypt_with_key</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>decrypt_with_key</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_decrypt_with_key (os_win_dpapi_credhist_file_o *self, PyObject *args)
@@ -151,9 +151,9 @@ tp_f_decrypt_with_key (os_win_dpapi_credhist_file_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>decrypt_with_password_hash</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>decrypt_with_password_hash</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_decrypt_with_password_hash (os_win_dpapi_credhist_file_o *self, PyObject *args)
@@ -191,9 +191,9 @@ tp_f_decrypt_with_password_hash (os_win_dpapi_credhist_file_o *self, PyObject *a
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>decrypt_with_password</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>decrypt_with_password</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_decrypt_with_password (os_win_dpapi_credhist_file_o *self, PyObject *args)
@@ -230,7 +230,7 @@ tp_f_decrypt_with_password (os_win_dpapi_credhist_file_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -256,11 +256,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>credhist_file</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>credhist_file</i> object
+// @brief <i>credhist_file</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>credhist_file</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
@@ -288,8 +288,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>credhist_file</i> deallocator
-//! \param self Object
+// @brief <i>credhist_file</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (os_win_dpapi_credhist_file_o *self)
@@ -299,7 +299,7 @@ tp_dealloc (os_win_dpapi_credhist_file_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject os_win_dpapi_credhist_file_t =
 {
@@ -352,3 +352,5 @@ PyTypeObject os_win_dpapi_credhist_file_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

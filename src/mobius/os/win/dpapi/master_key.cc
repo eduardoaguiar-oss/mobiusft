@@ -40,7 +40,7 @@ constexpr bool DEBUG = false;
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief master_key implementation class
+// @brief master_key implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class master_key::impl
 {
@@ -66,8 +66,8 @@ public:
   bool decrypt_with_password (const std::string&, const std::string&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get revision
-  //! \return Revision
+  // @brief Get revision
+  // @return Revision
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_revision () const
@@ -76,8 +76,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set revision
-  //! \param revision Struct revision
+  // @brief Set revision
+  // @param revision Struct revision
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_revision (std::uint32_t revision)
@@ -87,8 +87,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get salt
-  //! \return Salt
+  // @brief Get salt
+  // @return Salt
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   get_salt () const
@@ -97,8 +97,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set salt
-  //! \param salt Salt
+  // @brief Set salt
+  // @param salt Salt
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_salt (const mobius::bytearray& salt)
@@ -108,8 +108,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get iterations
-  //! \return Iterations
+  // @brief Get iterations
+  // @return Iterations
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_iterations () const
@@ -118,8 +118,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set iterations
-  //! \param iterations Number of key iterations
+  // @brief Set iterations
+  // @param iterations Number of key iterations
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_iterations (std::uint32_t iterations)
@@ -129,8 +129,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hash id
-  //! \return Hash id
+  // @brief Get hash id
+  // @return Hash id
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_hash_id () const
@@ -139,8 +139,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set hash id
-  //! \param hash_id Hash algorithm ID
+  // @brief Set hash id
+  // @param hash_id Hash algorithm ID
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_hash_id (std::uint32_t hash_id)
@@ -150,8 +150,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get cipher id
-  //! \return Cipher id
+  // @brief Get cipher id
+  // @return Cipher id
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_cipher_id () const
@@ -160,8 +160,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set cipher id
-  //! \param cipher_id Cipher algorithm ID
+  // @brief Set cipher id
+  // @param cipher_id Cipher algorithm ID
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_cipher_id (std::uint32_t cipher_id)
@@ -171,8 +171,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get cipher text
-  //! \return Cipher text
+  // @brief Get cipher text
+  // @return Cipher text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   get_cipher_text () const
@@ -181,8 +181,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set cipher text
-  //! \param cipher_text Cipher text
+  // @brief Set cipher text
+  // @param cipher_text Cipher text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_cipher_text (const mobius::bytearray& cipher_text)
@@ -192,8 +192,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get plain text
-  //! \return Plain text
+  // @brief Get plain text
+  // @return Plain text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   get_plain_text () const
@@ -202,8 +202,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set plain text
-  //! \param plain_text Plain text
+  // @brief Set plain text
+  // @param plain_text Plain text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_plain_text (const mobius::bytearray& plain_text)
@@ -213,8 +213,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get flags
-  //! \return Flags
+  // @brief Get flags
+  // @return Flags
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_flags () const
@@ -223,8 +223,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set flags
-  //! \param flags Master key file flags
+  // @brief Set flags
+  // @param flags Master key file flags
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_flags (std::uint32_t flags)
@@ -234,8 +234,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get decrypted flag
-  //! \return true/false
+  // @brief Get decrypted flag
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_decrypted () const
@@ -244,39 +244,39 @@ public:
   }
 
 private:
-  //! \brief Struct revision
+  // @brief Struct revision
   std::uint32_t revision_;
 
-  //! \brief Salt
+  // @brief Salt
   mobius::bytearray salt_;
 
-  //! \brief Number of key iterations
+  // @brief Number of key iterations
   std::uint32_t iterations_;
 
-  //! \brief Hash algorithm ID
+  // @brief Hash algorithm ID
   std::uint32_t hash_id_;
 
-  //! \brief Cipher algorithm ID
+  // @brief Cipher algorithm ID
   std::uint32_t cipher_id_;
 
-  //! \brief Cipher text
+  // @brief Cipher text
   mobius::bytearray cipher_text_;
 
-  //! \brief Master key file flags
+  // @brief Master key file flags
   std::uint32_t flags_;
 
-  //! \brief Plain text
+  // @brief Plain text
   mobius::bytearray plain_text_;
 
-  //! \brief True/false if object is valid
+  // @brief True/false if object is valid
   std::uint32_t is_valid_ = false;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
-//! \param flags Master key file flags
-//! \see https://www.passcape.com/index.php?section=blog&cmd=details&id=20
+// @brief Constructor
+// @param reader Reader object
+// @param flags Master key file flags
+// @see https://www.passcape.com/index.php?section=blog&cmd=details&id=20
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 master_key::impl::impl (mobius::io::reader reader, std::uint32_t flags)
 {
@@ -308,10 +308,10 @@ master_key::impl::impl (mobius::io::reader reader, std::uint32_t flags)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt master key using key
-//! \param key Key
-//! \return true if successful, false if not
-//! \see dpapick v0.3
+// @brief Decrypt master key using key
+// @param key Key
+// @return true if successful, false if not
+// @see dpapick v0.3
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 master_key::impl::decrypt_with_key (const mobius::bytearray& key)
@@ -355,10 +355,10 @@ master_key::impl::decrypt_with_key (const mobius::bytearray& key)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt entry with password hash
-//! \param sid User SID as string
-//! \param h Password hash
-//! \return true if master key has been decrypted
+// @brief Decrypt entry with password hash
+// @param sid User SID as string
+// @param h Password hash
+// @return true if master key has been decrypted
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 master_key::impl::decrypt_with_password_hash (
@@ -371,10 +371,10 @@ master_key::impl::decrypt_with_password_hash (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt entry with password
-//! \param sid User SID as string
-//! \param pwd Password
-//! \return true if master key has been decrypted
+// @brief Decrypt entry with password
+// @param sid User SID as string
+// @param pwd Password
+// @return true if master key has been decrypted
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 master_key::impl::decrypt_with_password (
@@ -390,9 +390,9 @@ master_key::impl::decrypt_with_password (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
-//! \param flags Master key file flags
+// @brief Constructor
+// @param reader Reader object
+// @param flags Master key file flags
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 master_key::master_key (mobius::io::reader reader, std::uint32_t flags)
   : impl_ (std::make_shared <impl> (reader, flags))
@@ -400,9 +400,9 @@ master_key::master_key (mobius::io::reader reader, std::uint32_t flags)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt master key using key
-//! \param key Key
-//! \return True if successful, false otherwise
+// @brief Decrypt master key using key
+// @param key Key
+// @return True if successful, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 master_key::decrypt_with_key (const mobius::bytearray& key)
@@ -411,10 +411,10 @@ master_key::decrypt_with_key (const mobius::bytearray& key)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt master key using password hash
-//! \param sid User SID as string
-//! \param password_hash Password hash
-//! \return True if successful, false otherwise
+// @brief Decrypt master key using password hash
+// @param sid User SID as string
+// @param password_hash Password hash
+// @return True if successful, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 master_key::decrypt_with_password_hash (
@@ -425,10 +425,10 @@ master_key::decrypt_with_password_hash (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt master key using password
-//! \param sid User SID as string
-//! \param password Password
-//! \return True if successful, false otherwise
+// @brief Decrypt master key using password
+// @param sid User SID as string
+// @param password Password
+// @return True if successful, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 master_key::decrypt_with_password (
@@ -439,8 +439,8 @@ master_key::decrypt_with_password (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get revision
-//! \return Revision
+// @brief Get revision
+// @return Revision
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 master_key::get_revision () const
@@ -449,8 +449,8 @@ master_key::get_revision () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get salt
-//! \return Salt
+// @brief Get salt
+// @return Salt
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 master_key::get_salt () const
@@ -459,8 +459,8 @@ master_key::get_salt () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get iterations
-//! \return Iterations
+// @brief Get iterations
+// @return Iterations
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 master_key::get_iterations () const
@@ -469,8 +469,8 @@ master_key::get_iterations () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get hash id
-//! \return Hash id
+// @brief Get hash id
+// @return Hash id
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 master_key::get_hash_id () const
@@ -479,8 +479,8 @@ master_key::get_hash_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get cipher id
-//! \return Cipher id
+// @brief Get cipher id
+// @return Cipher id
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 master_key::get_cipher_id () const
@@ -489,8 +489,8 @@ master_key::get_cipher_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get cipher text
-//! \return Cipher text
+// @brief Get cipher text
+// @return Cipher text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 master_key::get_cipher_text () const
@@ -499,8 +499,8 @@ master_key::get_cipher_text () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get plain text
-//! \return Plain text
+// @brief Get plain text
+// @return Plain text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 master_key::get_plain_text () const
@@ -509,8 +509,8 @@ master_key::get_plain_text () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get flags
-//! \return Flags
+// @brief Get flags
+// @return Flags
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 master_key::get_flags () const
@@ -519,8 +519,8 @@ master_key::get_flags () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get decrypted flag
-//! \return true/false
+// @brief Get decrypted flag
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 master_key::is_decrypted () const
@@ -529,3 +529,5 @@ master_key::is_decrypted () const
 }
 
 } // namespace mobius::os::win::dpapi
+
+

@@ -23,17 +23,17 @@
 namespace mobius::crypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Abstract base class for block ciphers
-//! \author Eduardo Aguiar
-//! \see http://en.wikipedia.org/wiki/Block_cipher
-//! \see http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher_Block_Chaining_.28CBC.29
+// @brief Abstract base class for block ciphers
+// @author Eduardo Aguiar
+// @see http://en.wikipedia.org/wiki/Block_cipher
+// @see http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher_Block_Chaining_.28CBC.29
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class cipher_impl_block : public cipher_impl_base
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Return true if it is a cipher stream algorithm
-  //! \return true/false
+  // @brief Return true if it is a cipher stream algorithm
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   constexpr bool
   is_stream () const noexcept final
@@ -42,8 +42,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Return true if it is a cipher block algorithm
-  //! \return true/false
+  // @brief Return true if it is a cipher block algorithm
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   constexpr bool
   is_block () const noexcept final
@@ -67,3 +67,5 @@ public:
 } // namespace mobius::crypt
 
 #endif
+
+

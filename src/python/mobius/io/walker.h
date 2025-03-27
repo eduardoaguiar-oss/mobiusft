@@ -23,7 +23,7 @@
 #include <mobius/io/walker.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -41,3 +41,5 @@ PyObject *pymobius_io_walker_to_pyobject (const mobius::io::walker&);
 mobius::io::walker pymobius_io_walker_from_pyobject (PyObject *);
 
 #endif
+
+

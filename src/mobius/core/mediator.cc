@@ -27,7 +27,7 @@ namespace mobius::core
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Unordered map entry
+// @brief Unordered map entry
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct entry
 {
@@ -36,14 +36,14 @@ struct entry
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Module mediator object
+// @brief Module mediator object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::core::mediator mediator_;
 
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>mediator</i> implementation class
+// @brief <i>mediator</i> implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class mediator::impl
 {
@@ -70,24 +70,24 @@ public:
   std::vector <callback> get_callbacks (const std::string&);
 
 private:
-  //! \brief Event ID -> entry map
+  // @brief Event ID -> entry map
   std::unordered_multimap <std::string, entry> entries_;
 
-  //! \brief Subscription ID -> (subscription UID -> event ID)
+  // @brief Subscription ID -> (subscription UID -> event ID)
   std::unordered_map <std::uint64_t, std::string> subscriptions_;
 
-  //! \brief Next subscription ID
+  // @brief Next subscription ID
   std::uint64_t next_uid_ = 1;
 
-  //! \brief Data mutex
+  // @brief Data mutex
   std::mutex mutex_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Subscribe to event
-//! \param id Event ID
-//! \param c Callback function
-//! \return Subscription ID
+// @brief Subscribe to event
+// @param id Event ID
+// @param c Callback function
+// @return Subscription ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint64_t
 mediator::impl::subscribe (const std::string& id, const callback& c)
@@ -104,8 +104,8 @@ mediator::impl::subscribe (const std::string& id, const callback& c)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Unsubscribe from event
-//! \param uid Subscription ID
+// @brief Unsubscribe from event
+// @param uid Subscription ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 mediator::impl::unsubscribe (std::uint64_t uid)
@@ -135,9 +135,9 @@ mediator::impl::unsubscribe (std::uint64_t uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get callback functions for a given event ID
-//! \param id Event ID
-//! \return List of callbacks
+// @brief Get callback functions for a given event ID
+// @param id Event ID
+// @return List of callbacks
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <callback>
 mediator::impl::get_callbacks (const std::string& id)
@@ -157,7 +157,7 @@ mediator::impl::get_callbacks (const std::string& id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
+// @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mediator::mediator ()
   : impl_ (std::make_shared <impl> ())
@@ -165,10 +165,10 @@ mediator::mediator ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Subscribe to event
-//! \param id Event ID
-//! \param c Callback function
-//! \return Subscription ID
+// @brief Subscribe to event
+// @param id Event ID
+// @param c Callback function
+// @return Subscription ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint64_t
 mediator::subscribe (const std::string& id, const callback& c)
@@ -177,8 +177,8 @@ mediator::subscribe (const std::string& id, const callback& c)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Unsubscribe from event
-//! \param uid Subscription ID
+// @brief Unsubscribe from event
+// @param uid Subscription ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 mediator::unsubscribe (std::uint64_t uid)
@@ -187,9 +187,9 @@ mediator::unsubscribe (std::uint64_t uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get callback functions for a given event ID
-//! \param id Event ID
-//! \return List of callbacks
+// @brief Get callback functions for a given event ID
+// @param id Event ID
+// @return List of callbacks
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <callback>
 mediator::get_callbacks (const std::string& id)
@@ -198,10 +198,10 @@ mediator::get_callbacks (const std::string& id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Subscribe to event
-//! \param id Event ID
-//! \param c Callback function
-//! \return Subscription ID
+// @brief Subscribe to event
+// @param id Event ID
+// @param c Callback function
+// @return Subscription ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint64_t
 subscribe (const std::string& id, const callback& c)
@@ -210,8 +210,8 @@ subscribe (const std::string& id, const callback& c)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Unsubscribe from event
-//! \param uid Subscription ID
+// @brief Unsubscribe from event
+// @param uid Subscription ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 unsubscribe (std::uint64_t uid)
@@ -220,9 +220,9 @@ unsubscribe (std::uint64_t uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get callback functions for a given event ID
-//! \param id Event ID
-//! \return List of callbacks
+// @brief Get callback functions for a given event ID
+// @param id Event ID
+// @return List of callbacks
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <callback>
 get_callbacks (const std::string& id)
@@ -231,3 +231,5 @@ get_callbacks (const std::string& id)
 }
 
 } // namespace mobius::core
+
+

@@ -20,9 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <string>
 
-namespace mobius
-{
-namespace system
+namespace mobius::system
 {
 class dynamic_lib
 {
@@ -47,8 +45,8 @@ public:
   void *get_symbol (const std::string&) const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if dynamic library is valid
-  //! \return true/false
+  // @brief Check if dynamic library is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const noexcept
   {
@@ -56,11 +54,12 @@ public:
   }
 
 private:
-  //! \brief Pointer to dynamic library handle
+  // @brief Pointer to dynamic library handle
   void *handle_ = 0;
 };
 
-} // namespace system
-} // namespace mobius
+} // namespace mobius::system
 
 #endif
+
+

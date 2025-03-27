@@ -26,8 +26,8 @@
 #include <vector>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief EWF imagefile implementation class
-//! \author Eduardo Aguiar
+// @brief EWF imagefile implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class imagefile_impl : public mobius::vfs::imagefile_impl_base
 {
@@ -50,7 +50,7 @@ public:
   mobius::io::writer new_writer () const override;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Chunk offset table
+  // @brief Chunk offset table
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   struct chunk_offset_table
   {
@@ -60,8 +60,8 @@ public:
   };
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get type
-  //! \return type as string
+  // @brief Get type
+  // @return type as string
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_type () const override
@@ -70,8 +70,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if object is valid
-  //! \return true/false
+  // @brief Check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const noexcept override
   {
@@ -79,8 +79,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if imagefile is available
-  //! \return true/false
+  // @brief Check if imagefile is available
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_available () const override
@@ -89,8 +89,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get file object
-  //! \return File object
+  // @brief Get file object
+  // @return File object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::io::file
   get_file () const
@@ -99,8 +99,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get imagefile size
-  //! \return imagefile size
+  // @brief Get imagefile size
+  // @return imagefile size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_size () const override
@@ -110,8 +110,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get number of sectors
-  //! \return number of sectors
+  // @brief Get number of sectors
+  // @return number of sectors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_sectors () const override
@@ -121,8 +121,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get sector size
-  //! \return sector size
+  // @brief Get sector size
+  // @return sector size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_sector_size () const override
@@ -132,8 +132,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set chunk size
-  //! \return chunk size
+  // @brief Set chunk size
+  // @return chunk size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_chunk_size () const
@@ -143,8 +143,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get chunk count
-  //! \return chunk count
+  // @brief Get chunk count
+  // @return chunk count
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t
   get_chunk_count () const
@@ -154,8 +154,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get segment array
-  //! \return Segment array
+  // @brief Get segment array
+  // @return Segment array
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::vfs::segment_array
   get_segment_array () const
@@ -165,8 +165,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get chunk offset tables of all segment files
-  //! \return vector of chunk offset tables
+  // @brief Get chunk offset tables of all segment files
+  // @return vector of chunk offset tables
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   const std::vector <chunk_offset_table>&
   get_chunk_offset_table () const
@@ -176,37 +176,37 @@ public:
   }
 
 private:
-  //! \brief File object
+  // @brief File object
   mobius::io::file file_;
 
-  //! \brief Segment array
+  // @brief Segment array
   mutable mobius::vfs::segment_array segments_;
 
-  //! \brief imagefile size in bytes
+  // @brief imagefile size in bytes
   mutable size_type size_ = 0;
 
-  //! \brief number of sectors
+  // @brief number of sectors
   mutable size_type sectors_ = 0;
 
-  //! \brief sector size in bytes
+  // @brief sector size in bytes
   mutable size_type sector_size_ = 512;
 
-  //! \brief chunk size
+  // @brief chunk size
   mutable std::uint32_t chunk_size_ = 0;
 
-  //! \brief chunk count
+  // @brief chunk count
   mutable std::uint64_t chunk_count_ = 0;
 
-  //! \brief attributes
+  // @brief attributes
   mutable mobius::pod::map attributes_;
 
-  //! \brief metadata loaded flag
+  // @brief metadata loaded flag
   mutable bool metadata_loaded_ = false;
 
-  //! \brief vector of chunk offset table
+  // @brief vector of chunk offset table
   mutable std::vector <chunk_offset_table> chunk_offset_table_;
 
-  //! \brief chunk offset table flag
+  // @brief chunk offset table flag
   mutable bool chunk_offset_table_loaded_ = false;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -217,3 +217,5 @@ private:
 };
 
 #endif
+
+

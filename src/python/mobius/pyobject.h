@@ -31,8 +31,8 @@
 namespace mobius::py
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Generic PyObject
-//! \author Eduardo Aguiar
+// @brief Generic PyObject
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class pyobject
 {
@@ -64,9 +64,9 @@ public:
   std::string to_std_string () const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Call function
-  //! \param args Function arguments
-  //! \return Value returned by function
+  // @brief Call function
+  // @param args Function arguments
+  // @return Value returned by function
   //! \todo Get error message
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   template <typename ...Args> pyobject
@@ -89,13 +89,15 @@ public:
   }
 
 private:
-  //! \brief Implementation class forward declaration
+  // @brief Implementation class forward declaration
   class impl;
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
 } // namespace mobius::py
 
 #endif
+
+

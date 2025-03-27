@@ -21,13 +21,11 @@
 #include <mobius/io/writer_impl_base.h>
 #include <mobius/bytearray.h>
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Bytearray writer implementation class
-//! \author Eduardo Aguiar
+// @brief Bytearray writer implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class writer_impl_bytearray : public writer_impl_base
 {
@@ -38,7 +36,7 @@ public:
   explicit writer_impl_bytearray (mobius::bytearray&);
   writer_impl_bytearray (const writer_impl_bytearray&) = delete;
   writer_impl_bytearray (writer_impl_bytearray&&) = delete;
-  
+
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Assignment operators
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -53,8 +51,8 @@ public:
   void flush () override;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if writer is seekable
-  //! \return true/false
+  // @brief Check if writer is seekable
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_seekable () const override
@@ -63,8 +61,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get write position
-  //! \return Write position in bytes from the beginning of data
+  // @brief Get write position
+  // @return Write position in bytes from the beginning of data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   offset_type
   tell () const override
@@ -77,7 +75,8 @@ private:
   mobius::bytearray::size_type pos_ = 0;
 };
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
 
 #endif
+
+

@@ -18,15 +18,15 @@
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "disk.h"
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function new_disk_by_device_uid
+// @brief Function new_disk_by_device_uid
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_vfs_new_disk_by_device_uid (PyObject *, PyObject *args)
@@ -63,7 +63,7 @@ func_vfs_new_disk_by_device_uid (PyObject *, PyObject *args)
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function new_disk_by_path
+// @brief Function new_disk_by_path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_vfs_new_disk_by_path (PyObject *, PyObject *args)
@@ -100,7 +100,7 @@ func_vfs_new_disk_by_path (PyObject *, PyObject *args)
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function new_disk_by_url
+// @brief Function new_disk_by_url
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_vfs_new_disk_by_url (PyObject *, PyObject *args)
@@ -134,3 +134,4 @@ func_vfs_new_disk_by_url (PyObject *, PyObject *args)
   // create Python disk according to its type
   return ret;
 }
+

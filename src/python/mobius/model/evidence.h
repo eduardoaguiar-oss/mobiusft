@@ -22,7 +22,7 @@
 #include <mobius/model/evidence.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_model_evidence_to_pyobject (const mobius::model::evidence&);
 mobius::model::evidence pymobius_model_evidence_from_pyobject (PyObject *);
 
 #endif
+
+

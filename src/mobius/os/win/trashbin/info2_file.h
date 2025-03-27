@@ -23,17 +23,11 @@
 #include <cstdint>
 #include <memory>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace trashbin
+namespace mobius::os::win::trashbin
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief info2_file class
-//! \author Eduardo Aguiar
+// @brief info2_file class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class info2_file
 {
@@ -66,16 +60,15 @@ public:
   const_iterator_type end () const;
 
 private:
-  //! \brief Implementation class forward declaration
+  // @brief Implementation class forward declaration
   class impl;
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
-} // namespace trashbin
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::trashbin
 
 #endif
+
+

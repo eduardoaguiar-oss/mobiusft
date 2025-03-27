@@ -22,7 +22,7 @@
 namespace mobius::py
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief function implementation class
+// @brief function implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class function::impl
 {
@@ -43,8 +43,8 @@ public:
   impl& operator= (impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get pointer
-  //! \return PyObject pointer
+  // @brief Get pointer
+  // @return PyObject pointer
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   PyObject *
   pointer ()
@@ -53,13 +53,13 @@ public:
   }
 
 private:
-  //! \brief Python object
+  // @brief Python object
   PyObject *f_ = nullptr;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param f Python Object pointer
+// @brief Constructor
+// @param f Python Object pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 function::impl::impl (PyObject *f)
  : f_ (f)
@@ -71,7 +71,7 @@ function::impl::impl (PyObject *f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destructor
+// @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 function::impl::~impl ()
 {
@@ -82,8 +82,8 @@ function::impl::~impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param obj Python Object pointer
+// @brief Constructor
+// @param obj Python Object pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 function::function (PyObject *obj)
  : impl_ (std::make_shared <impl> (obj))
@@ -91,8 +91,8 @@ function::function (PyObject *obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get PyObject pointer
-//! \return PyObject pointer
+// @brief Get PyObject pointer
+// @return PyObject pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 function::operator PyObject * () const noexcept
 {
@@ -100,3 +100,5 @@ function::operator PyObject * () const noexcept
 }
 
 } // namespace mobius::py
+
+

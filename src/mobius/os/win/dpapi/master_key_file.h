@@ -23,20 +23,14 @@
 #include <cstdint>
 #include <string>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace dpapi
+namespace mobius::os::win::dpapi
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief master_key_file class
-//! \author Eduardo Aguiar
-//! \see https://elie.net/static/files/reversing-dpapi-and-stealing-windows-secrets-offline/reversing-dpapi-and-stealing-windows-secrets-offline-paper.pdf
-//! \see https://www.passcape.com/index.php?section=blog&cmd=details&id=20
-//! \see https://www.passcape.com/windows_password_recovery_dpapi_master_key
+// @brief master_key_file class
+// @author Eduardo Aguiar
+// @see https://elie.net/static/files/reversing-dpapi-and-stealing-windows-secrets-offline/reversing-dpapi-and-stealing-windows-secrets-offline-paper.pdf
+// @see https://www.passcape.com/index.php?section=blog&cmd=details&id=20
+// @see https://www.passcape.com/windows_password_recovery_dpapi_master_key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class master_key_file
 {
@@ -47,8 +41,8 @@ public:
   explicit master_key_file (mobius::io::reader);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get revision
-  //! \return Revision
+  // @brief Get revision
+  // @return Revision
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_revision () const
@@ -57,8 +51,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get GUID
-  //! \return GUID as string
+  // @brief Get GUID
+  // @return GUID as string
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_guid () const
@@ -67,8 +61,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get flags
-  //! \return Flags
+  // @brief Get flags
+  // @return Flags
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_flags () const
@@ -77,8 +71,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get master key
-  //! \return Master key
+  // @brief Get master key
+  // @return Master key
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   master_key
   get_master_key () const
@@ -87,8 +81,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get backup key
-  //! \return Backup key
+  // @brief Get backup key
+  // @return Backup key
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   master_key
   get_backup_key () const
@@ -97,8 +91,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get CREDHIST GUID
-  //! \return GUID as string
+  // @brief Get CREDHIST GUID
+  // @return GUID as string
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_credhist_guid () const
@@ -107,28 +101,27 @@ public:
   }
 
 private:
-  //! \brief Revision number
+  // @brief Revision number
   std::uint32_t revision_;
 
-  //! \brief GUID
+  // @brief GUID
   std::string guid_;
 
-  //! \brief Flags
+  // @brief Flags
   std::uint32_t flags_;
 
-  //! \brief Master key object
+  // @brief Master key object
   master_key master_key_;
 
-  //! \brief Backup key object
+  // @brief Backup key object
   master_key backup_key_;
 
-  //! \brief Credhist GUID
+  // @brief Credhist GUID
   std::string credhist_guid_;
 };
 
-} // namespace dpapi
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::dpapi
 
 #endif
+
+

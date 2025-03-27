@@ -22,7 +22,7 @@
 #include <mobius/io/line_reader.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief data structure
+// @brief data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_io_line_reader_to_pyobject (const mobius::io::line_reader&);
 mobius::io::line_reader pymobius_io_line_reader_from_pyobject (PyObject *);
 
 #endif
+
+

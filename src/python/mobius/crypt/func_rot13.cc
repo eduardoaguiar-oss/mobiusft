@@ -19,10 +19,10 @@
 #include <mobius/crypt/rot13.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>rot13</i> function implementation
-//! \param self Function object
-//! \param args Argument list
-//! \return Python object
+// @brief <i>rot13</i> function implementation
+// @param self Function object
+// @param args Argument list
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_rot13 (PyObject *, PyObject *args)
@@ -56,3 +56,5 @@ func_rot13 (PyObject *, PyObject *args)
 
   return ret;
 }
+
+

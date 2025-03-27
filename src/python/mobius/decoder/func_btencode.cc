@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API mobius.decoder module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API mobius.decoder module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pymobius.h>
@@ -28,10 +28,10 @@
 #include "pod/data.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief btencode function
-//! \param self function object
-//! \param args argument list
-//! \return Python object
+// @brief btencode function
+// @param self function object
+// @param args argument list
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 decoder_func_btencode (PyObject *, PyObject *args)
@@ -68,3 +68,7 @@ decoder_func_btencode (PyObject *, PyObject *args)
   // return value
   return ret;
 }
+
+
+
+

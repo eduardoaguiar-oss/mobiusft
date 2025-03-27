@@ -23,9 +23,9 @@
 namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
-//! \param des_key DES cryptographic key
-//! \param item_data data from "Item Data" value
+// @brief constructor
+// @param des_key DES cryptographic key
+// @param item_data data from "Item Data" value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_data_impl_pssp::registry_data_impl_pssp (
   const mobius::bytearray& des_key,
@@ -36,7 +36,7 @@ registry_data_impl_pssp::registry_data_impl_pssp (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief load data on demand
+// @brief load data on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry_data_impl_pssp::_load_data () const
@@ -71,3 +71,5 @@ registry_data_impl_pssp::_load_data () const
 }
 
 } // namespace mobius::os::win::registry
+
+

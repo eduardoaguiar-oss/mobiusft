@@ -21,13 +21,11 @@
 #include <mobius/encoder/data_encoder.h>
 #include <sstream>
 
-namespace mobius
-{
-namespace decoder
+namespace mobius::decoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief tdf implementation class
-//! \see Telegram Desktop v3.5.2 source code [TDF]
+// @brief tdf implementation class
+// @see Telegram Desktop v3.5.2 source code [TDF]
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class tdf::impl
 {
@@ -47,8 +45,8 @@ public:
   impl& operator= (impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Return true if file is valid
-  //! \return true/false
+  // @brief Return true if file is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_valid () const
@@ -57,8 +55,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get version
-  //! \return Version
+  // @brief Get version
+  // @return Version
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_version () const
@@ -67,8 +65,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get md5 hash value
-  //! \return Md5 hash value
+  // @brief Get md5 hash value
+  // @return Md5 hash value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_hash_value () const
@@ -77,8 +75,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get payload
-  //! \return Payload
+  // @brief Get payload
+  // @return Payload
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   get_payload () const
@@ -87,23 +85,23 @@ public:
   }
 
 private:
-  //! \brief Version
+  // @brief Version
   std::uint32_t version_;
 
-  //! \brief MD5 hash value
+  // @brief MD5 hash value
   std::string hash_value_;
 
-  //! \brief File payload
+  // @brief File payload
   mobius::bytearray payload_;
 
-  //! \brief Is valid flag
+  // @brief Is valid flag
   bool is_valid_ = false;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
-//! \see [TDF]/Telegram/SourceFiles/storage/details/storage_file_utilities.cpp (ReadFile function)
+// @brief Constructor
+// @param reader Reader object
+// @see [TDF]/Telegram/SourceFiles/storage/details/storage_file_utilities.cpp (ReadFile function)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 tdf::impl::impl (const mobius::io::reader& reader)
 {
@@ -117,7 +115,7 @@ tdf::impl::impl (const mobius::io::reader& reader)
 
   if (signature != "TDF$")
     return;
-  
+
   // Decode data
   version_ = decoder.get_uint32_le ();
   payload_ = decoder.get_bytearray_by_size (reader.get_size () - 24);
@@ -134,14 +132,14 @@ tdf::impl::impl (const mobius::io::reader& reader)
   md5.update (encoded_data);
 
   md5.update ("TDF$");
-  
+
   // Compare calculated and stored hash values
   is_valid_ = (md5.get_hex_digest () == hash_value_);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
+// @brief Constructor
+// @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 tdf::tdf (const mobius::io::reader& reader)
   : impl_ (std::make_shared <impl> (reader))
@@ -149,8 +147,8 @@ tdf::tdf (const mobius::io::reader& reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get version as string
-//! \return Version as string
+// @brief Get version as string
+// @return Version as string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 tdf::get_version_as_string () const
@@ -164,8 +162,8 @@ tdf::get_version_as_string () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Return true if file is valid
-//! \return true/false
+// @brief Return true if file is valid
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 tdf::is_valid () const
@@ -174,8 +172,8 @@ tdf::is_valid () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get version
-//! \return Version
+// @brief Get version
+// @return Version
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 tdf::get_version () const
@@ -184,8 +182,8 @@ tdf::get_version () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get major version
-//! \return Major version
+// @brief Get major version
+// @return Major version
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 tdf::get_major_version () const
@@ -194,8 +192,8 @@ tdf::get_major_version () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get minor version
-//! \return Minor version
+// @brief Get minor version
+// @return Minor version
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 tdf::get_minor_version () const
@@ -204,8 +202,8 @@ tdf::get_minor_version () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get revision
-//! \return Revision
+// @brief Get revision
+// @return Revision
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 tdf::get_revision () const
@@ -214,8 +212,8 @@ tdf::get_revision () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get hash value
-//! \return MD5 hash value
+// @brief Get hash value
+// @return MD5 hash value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 tdf::get_hash_value () const
@@ -224,8 +222,8 @@ tdf::get_hash_value () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get payload
-//! \return Payload
+// @brief Get payload
+// @return Payload
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 tdf::get_payload () const
@@ -233,5 +231,6 @@ tdf::get_payload () const
   return impl_->get_payload ();
 }
 
-} // namespace decoder
-} // namespace mobius
+} // namespace mobius::decoder
+
+

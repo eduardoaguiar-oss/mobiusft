@@ -26,9 +26,9 @@
 #include <mobius/io/reader.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief EWF segment file decoder
-//! \author Eduardo Aguiar
-//! \see https://github.com/libyal/libewf/blob/master/documentation/Expert%20
+// @brief EWF segment file decoder
+// @author Eduardo Aguiar
+// @see https://github.com/libyal/libewf/blob/master/documentation/Expert%20
 //       Witness%20Compression%20Format%20(EWF).asciidoc
 //       (version 0.0.80, visited in 2016-08-25)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -38,7 +38,7 @@ public:
   using offset_type = mobius::io::reader::offset_type;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief iterator for EWF sections
+  // @brief iterator for EWF sections
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   class const_iterator
   {
@@ -67,9 +67,9 @@ public:
     bool operator== (const const_iterator&);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    //! \brief check if two iterators are different
-    //! \param i iterator
-    //! \return true/false
+    // @brief check if two iterators are different
+    // @param i iterator
+    // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     bool
     operator!= (const_iterator& i)
@@ -78,8 +78,8 @@ public:
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    //! \brief get current section
-    //! \return section object
+    // @brief get current section
+    // @return section object
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     const section&
     operator* ()
@@ -93,8 +93,8 @@ public:
   };
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check whether segment file is valid
-  //! \return true/false
+  // @brief check whether segment file is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const
   {
@@ -102,8 +102,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get segment number
-  //! \return segment number, starting from 1
+  // @brief get segment number
+  // @return segment number, starting from 1
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_segment_number () const
@@ -131,3 +131,5 @@ private:
 };
 
 #endif
+
+

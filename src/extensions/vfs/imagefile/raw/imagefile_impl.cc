@@ -19,8 +19,8 @@
 #include <mobius/datetime/conv_iso_string.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Construct object
-//! \param f File object
+// @brief Construct object
+// @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile_impl::imagefile_impl (const mobius::io::file& f)
   : file_ (f)
@@ -28,9 +28,9 @@ imagefile_impl::imagefile_impl (const mobius::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attribute
-//! \param name Attribute name
-//! \return Attribute value
+// @brief Get attribute
+// @param name Attribute name
+// @return Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 imagefile_impl::get_attribute (const std::string& name) const
@@ -40,9 +40,9 @@ imagefile_impl::get_attribute (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set attribute
-//! \param name Attribute name
-//! \param value Attribute value
+// @brief Set attribute
+// @param name Attribute name
+// @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 imagefile_impl::set_attribute (
@@ -55,8 +55,8 @@ imagefile_impl::set_attribute (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attributes
-//! \return Attributes
+// @brief Get attributes
+// @return Attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 imagefile_impl::get_attributes () const
@@ -66,8 +66,8 @@ imagefile_impl::get_attributes () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new reader for imagefile
-//! \return reader
+// @brief Create new reader for imagefile
+// @return reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::reader
 imagefile_impl::new_reader () const
@@ -76,8 +76,8 @@ imagefile_impl::new_reader () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new writer for imagefile
-//! \return writer
+// @brief Create new writer for imagefile
+// @return writer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::writer
 imagefile_impl::new_writer () const
@@ -86,7 +86,7 @@ imagefile_impl::new_writer () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load metadata
+// @brief Load metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 imagefile_impl::_load_metadata () const
@@ -98,7 +98,7 @@ imagefile_impl::_load_metadata () const
     {
       size_ = file_.get_size ();
       sectors_ = (size_ + sector_size_ - 1) / sector_size_;
-      
+
       // fill attributes
       attributes_.set ("last_metadata_time", file_.get_metadata_time ());
       attributes_.set ("last_modification_time", file_.get_modification_time ());
@@ -109,3 +109,5 @@ imagefile_impl::_load_metadata () const
 
   metadata_loaded_ = true;
 }
+
+

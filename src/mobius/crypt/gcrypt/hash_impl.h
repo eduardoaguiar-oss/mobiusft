@@ -25,9 +25,9 @@
 namespace mobius::crypt::gcrypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief libgcrypt hash adaptor implementation class
-//! \author Eduardo Aguiar
-//! \see https://www.gnupg.org/documentation/manuals/gcrypt/index.html#SEC_Contents
+// @brief libgcrypt hash adaptor implementation class
+// @author Eduardo Aguiar
+// @see https://www.gnupg.org/documentation/manuals/gcrypt/index.html#SEC_Contents
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class hash_impl : public hash_impl_base
 {
@@ -48,8 +48,8 @@ public:
   hash_impl& operator= (hash_impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if object is valid
-  //! \return true/false
+  // @brief Check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator bool () const noexcept final
   {
@@ -57,8 +57,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hash type
-  //! \return Hash type
+  // @brief Get hash type
+  // @return Hash type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_type () const final
@@ -67,8 +67,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get block size
-  //! \return Block size in bytes
+  // @brief Get block size
+  // @return Block size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::size_t
   get_block_size () const noexcept final
@@ -77,8 +77,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get digest size
-  //! \return Digest size in bytes
+  // @brief Get digest size
+  // @return Digest size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::size_t
   get_digest_size () const noexcept final
@@ -95,19 +95,20 @@ public:
   std::shared_ptr <hash_impl_base> clone () const final;
 
 private:
-  //! \brief Message digest handle
+  // @brief Message digest handle
   gcry_md_hd_t md_ = 0;
 
-  //! \brief Hash type
+  // @brief Hash type
   std::string type_;
 
-  //! \brief Block size in bytes
+  // @brief Block size in bytes
   std::size_t block_size_ = 0;
 
-  //! \brief Digest size in bytes
+  // @brief Digest size in bytes
   std::size_t digest_size_ = 0;
 };
 
 } // namespace mobius::crypt::gcrypt
 
 #endif
+

@@ -22,15 +22,13 @@
 #include <mobius/io/reader_impl_base.h>
 #include <stdexcept>
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 class reader_impl_null : public reader_impl_base
 {
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if reader is seekable
-  //! \return true/false
+  // @brief check if reader is seekable
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_seekable () const override
@@ -39,8 +37,8 @@ class reader_impl_null : public reader_impl_base
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if reader is rewindable
-  //! \return true/false
+  // @brief check if reader is rewindable
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_rewindable () const override
@@ -49,8 +47,8 @@ class reader_impl_null : public reader_impl_base
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if <b>reader.get_size</b> is available
-  //! \return true/false
+  // @brief check if <b>reader.get_size</b> is available
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_sizeable () const override
@@ -59,8 +57,8 @@ class reader_impl_null : public reader_impl_base
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get data size
-  //! \return data size in bytes
+  // @brief get data size
+  // @return data size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_size () const override
@@ -69,7 +67,7 @@ class reader_impl_null : public reader_impl_base
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set read position to the beginning of data
+  // @brief set read position to the beginning of data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   rewind () override
@@ -78,8 +76,8 @@ class reader_impl_null : public reader_impl_base
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief skip n bytes from current read position
-  //! \param size number of bytes to skip ahead
+  // @brief skip n bytes from current read position
+  // @param size number of bytes to skip ahead
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   skip (size_type) override
@@ -88,8 +86,8 @@ class reader_impl_null : public reader_impl_base
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get read position
-  //! \return read position in bytes from the beginning of data
+  // @brief get read position
+  // @return read position in bytes from the beginning of data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   offset_type
   tell () const override
@@ -98,9 +96,9 @@ class reader_impl_null : public reader_impl_base
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set read position
-  //! \param offset offset in bytes
-  //! \param w either beginning, current or end
+  // @brief set read position
+  // @param offset offset in bytes
+  // @param w either beginning, current or end
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   seek (offset_type, whence_type) override
@@ -109,9 +107,9 @@ class reader_impl_null : public reader_impl_base
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief read bytes from reader
-  //! \param size size in bytes
-  //! \return bytearray containing data
+  // @brief read bytes from reader
+  // @param size size in bytes
+  // @return bytearray containing data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   read (size_type) override
@@ -120,18 +118,18 @@ class reader_impl_null : public reader_impl_base
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if end-of-file indicator is set
-  //! \return true/false
+  // @brief check if end-of-file indicator is set
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   eof () const override
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid reader"));
   }
-  
+
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get default block size
-  //! \return Block size in bytes
+  // @brief Get default block size
+  // @return Block size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_block_size () const override
@@ -140,7 +138,8 @@ class reader_impl_null : public reader_impl_base
   }
 };
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
 
 #endif
+
+

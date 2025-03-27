@@ -26,9 +26,9 @@
 namespace mobius::crypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Cipher mode IGE implementation class
-//! \author Eduardo Aguiar
-//! \see //! \see https://mgp25.com/blog/2015/06/21/AESIGE/
+// @brief Cipher mode IGE implementation class
+// @author Eduardo Aguiar
+// @see // @see https://mgp25.com/blog/2015/06/21/AESIGE/
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class cipher_impl_ige : public cipher_impl_base
 {
@@ -55,8 +55,8 @@ public:
   mobius::bytearray decrypt (const mobius::bytearray&) final;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get cipher type
-  //! \return Cipher type
+  // @brief Get cipher type
+  // @return Cipher type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_type () const final
@@ -65,8 +65,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Return true if it is a cipher stream algorithm
-  //! \return true/false
+  // @brief Return true if it is a cipher stream algorithm
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   constexpr bool
   is_stream () const noexcept final
@@ -75,8 +75,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Return true if it is a cipher block algorithm
-  //! \return true/false
+  // @brief Return true if it is a cipher block algorithm
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   constexpr bool
   is_block () const noexcept final
@@ -85,8 +85,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get block size
-  //! \return Block size in bytes
+  // @brief Get block size
+  // @return Block size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::size_t
   get_block_size () const noexcept final
@@ -95,8 +95,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Authenticate data
-  //! \param data Data
+  // @brief Authenticate data
+  // @param data Data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   authenticate (const mobius::bytearray&) final
@@ -105,8 +105,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get authentication tag
-  //! \return Tag
+  // @brief Get authentication tag
+  // @return Tag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   get_tag () const final
@@ -115,9 +115,9 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check authentication tag
-  //! \param tag Tag to compare
-  //! \return True if tag match
+  // @brief Check authentication tag
+  // @param tag Tag to compare
+  // @return True if tag match
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   check_tag (const mobius::bytearray&) const final
@@ -126,19 +126,20 @@ public:
   }
 
 private:
-  //! \brief Cipher object
+  // @brief Cipher object
   gcrypt::cipher_impl cipher_;
 
-  //! \brief Initialization vector (IV)
+  // @brief Initialization vector (IV)
   const mobius::bytearray iv_;
 
-  //! \brief Vector v1
+  // @brief Vector v1
   mobius::bytearray v1_;
 
-  //! \brief Vector v2
+  // @brief Vector v2
   mobius::bytearray v2_;
 };
 
 } // namespace mobius::crypt
 
 #endif
+

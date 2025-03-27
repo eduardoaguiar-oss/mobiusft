@@ -28,10 +28,10 @@
 namespace mobius::py
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new Python set from C++ set
-//! \param container C++ set
-//! \param pyfunc Function to convert C++ items to Python objects
-//! \return Python set object
+// @brief Create new Python set from C++ set
+// @param container C++ set
+// @param pyfunc Function to convert C++ items to Python objects
+// @return Python set object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename C, typename F> PyObject *
 pyset_from_cpp_container (const C& container, F pyfunc)
@@ -64,10 +64,10 @@ pyset_from_cpp_container (const C& container, F pyfunc)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new C++ set from Python set
-//! \param py_set Python set
-//! \param cppfunc Function convert from Python objects to C++ items
-//! \return set
+// @brief Create new C++ set from Python set
+// @param py_set Python set
+// @param cppfunc Function convert from Python objects to C++ items
+// @return set
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename F> auto
 pyset_to_cpp_container (PyObject *py_set, F cppfunc) -> std::set <decltype (cppfunc (nullptr))>
@@ -95,11 +95,11 @@ pyset_to_cpp_container (PyObject *py_set, F cppfunc) -> std::set <decltype (cppf
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get argument and convert to C++ vector, using a function
-//! \param args List of arguments
-//! \param idx Argument number, starting in 0
-//! \param f Conversion function
-//! \return C++ vector
+// @brief Get argument and convert to C++ vector, using a function
+// @param args List of arguments
+// @param idx Argument number, starting in 0
+// @param f Conversion function
+// @return C++ vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename F> decltype (auto)
 get_arg_as_cpp_set (PyObject *args, std::uint32_t idx, F f)
@@ -110,3 +110,5 @@ get_arg_as_cpp_set (PyObject *args, std::uint32_t idx, F f)
 } // namespace mobius::py
 
 #endif
+
+

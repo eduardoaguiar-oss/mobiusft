@@ -17,14 +17,14 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "api_dataholder.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief tp_dir implementation
+// @brief tp_dir implementation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_dir (api_dataholder_o *self, PyObject *)
@@ -33,7 +33,7 @@ tp_dir (api_dataholder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -47,7 +47,7 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief api.dataholder: tp_dealloc
+// @brief api.dataholder: tp_dealloc
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 api_dataholder_tp_dealloc (api_dataholder_o *self)
@@ -57,7 +57,7 @@ api_dataholder_tp_dealloc (api_dataholder_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief api.dataholder: type structure
+// @brief api.dataholder: type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject api_dataholder_t =
 {
@@ -112,7 +112,7 @@ PyTypeObject api_dataholder_t =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief api.dataholder: create new object
+// @brief api.dataholder: create new object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 api_dataholder_o *
 api_dataholder_new ()
@@ -126,10 +126,10 @@ api_dataholder_new ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set attribute
-//! \param obj object
-//! \param name name
-//! \param value value
+// @brief set attribute
+// @param obj object
+// @param name name
+// @param value value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 api_dataholder_setattr (api_dataholder_o *obj, const std::string& name, const std::string& value)
@@ -140,10 +140,10 @@ api_dataholder_setattr (api_dataholder_o *obj, const std::string& name, const st
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set attribute
-//! \param obj object
-//! \param name name
-//! \param value value
+// @brief set attribute
+// @param obj object
+// @param name name
+// @param value value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 api_dataholder_setattr (api_dataholder_o *obj, const std::string& name, std::int64_t value)
@@ -154,10 +154,10 @@ api_dataholder_setattr (api_dataholder_o *obj, const std::string& name, std::int
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set attribute
-//! \param obj object
-//! \param name name
-//! \param value value
+// @brief set attribute
+// @param obj object
+// @param name name
+// @param value value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 api_dataholder_setattr (api_dataholder_o *obj, const std::string& name, const mobius::datetime::datetime& value)
@@ -168,10 +168,10 @@ api_dataholder_setattr (api_dataholder_o *obj, const std::string& name, const mo
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set attribute
-//! \param obj object
-//! \param name name
-//! \param value value
+// @brief set attribute
+// @param obj object
+// @param name name
+// @param value value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 api_dataholder_setattr (api_dataholder_o *obj, const std::string& name, PyObject *value)
@@ -180,3 +180,5 @@ api_dataholder_setattr (api_dataholder_o *obj, const std::string& name, PyObject
                            mobius::py::pystring_from_std_string (name),
                            value);
 }
+
+

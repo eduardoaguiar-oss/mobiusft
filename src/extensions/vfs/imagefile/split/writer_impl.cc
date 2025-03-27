@@ -22,8 +22,8 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param imagefile_impl imagefile implementation object
+// @brief Constructor
+// @param imagefile_impl imagefile implementation object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl::writer_impl (const imagefile_impl& imagefile_impl)
   : segment_size_ (std::int64_t (imagefile_impl.get_attribute ("segment_size"))),
@@ -34,9 +34,9 @@ writer_impl::writer_impl (const imagefile_impl& imagefile_impl)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set write position
-//! \param offset offset in bytes
-//! \param w either beginning, current or end
+// @brief Set write position
+// @param offset offset in bytes
+// @param w either beginning, current or end
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 writer_impl::seek (offset_type offset, whence_type w)
@@ -62,9 +62,9 @@ writer_impl::seek (offset_type offset, whence_type w)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Write bytes
-//! \param data a bytearray
-//! \return Number of bytes written
+// @brief Write bytes
+// @param data a bytearray
+// @return Number of bytes written
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl::size_type
 writer_impl::write (const mobius::bytearray& data)
@@ -102,9 +102,9 @@ writer_impl::write (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Write data block, splitting into segment files, if necessary
-//! \param pos write position
-//! \param data data
+// @brief Write data block, splitting into segment files, if necessary
+// @param pos write position
+// @param data data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl::size_type
 writer_impl::_write_data (size_type pos, const mobius::bytearray& data)
@@ -135,8 +135,8 @@ writer_impl::_write_data (size_type pos, const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set write stream according to current position
-//! \param pos Write position
+// @brief Set write stream according to current position
+// @param pos Write position
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 writer_impl::_set_stream (size_type pos)
@@ -154,10 +154,12 @@ writer_impl::_set_stream (size_type pos)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Flush data to file
+// @brief Flush data to file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 writer_impl::flush ()
 {
   stream_.flush ();
 }
+
+

@@ -26,15 +26,13 @@
 
 struct sqlite3_stmt;
 
-namespace mobius
-{
-namespace database
+namespace mobius::database
 {
 class database;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief SQL statement class
-//! \author Eduardo Aguiar
+// @brief SQL statement class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class statement
 {
@@ -92,7 +90,8 @@ private:
   int step ();
 };
 
-} // namespace database
-} // namespace mobius
+} // namespace mobius::database
 
 #endif
+
+

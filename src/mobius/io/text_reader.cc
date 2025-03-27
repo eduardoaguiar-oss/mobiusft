@@ -22,9 +22,9 @@
 namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
-//! \param encoding Charset encoding
+// @brief Constructor
+// @param reader Reader object
+// @param encoding Charset encoding
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 text_reader::text_reader (
   const mobius::io::reader& reader,
@@ -36,15 +36,15 @@ text_reader::text_reader (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Read data from text_reader, returning valid utf-8 sequences
-//! \param size Size in bytes
-//! \return String
+// @brief Read data from text_reader, returning valid utf-8 sequences
+// @param size Size in bytes
+// @return String
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 text_reader::read (reader::size_type size)
 {
   std::string data = _read_chars (size);
-  
+
   // check if data ends with partially read char
   if ((size > 0) && (data.size () == size) && (data[size-1] & 0x80))
     {
@@ -56,7 +56,7 @@ text_reader::read (reader::size_type size)
 
       if ((data[pos] & 0xf8) == 0xf0 && count <= 3)
         data += _read_chars (3 - count);
-      
+
       else if ((data[pos] & 0xf0) == 0xe0 && count <= 2)
         data += _read_chars (2 - count);
 
@@ -68,9 +68,9 @@ text_reader::read (reader::size_type size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Read characters from reader
-//! \param size Size in bytes
-//! \return String
+// @brief Read characters from reader
+// @param size Size in bytes
+// @return String
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 text_reader::_read_chars (reader::size_type size)
@@ -103,7 +103,7 @@ text_reader::_read_chars (reader::size_type size)
 
   // update chars buffer
   std::string ret = str_.substr (0, size);
-  
+
   if (eof)
     str_.clear ();
 
@@ -114,3 +114,5 @@ text_reader::_read_chars (reader::size_type size)
 }
 
 } // namespace mobius::io
+
+

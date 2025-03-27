@@ -24,9 +24,9 @@
 #include <vector>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief EWF segment writer
-//! \author Eduardo Aguiar
-//! \see https://github.com/libyal/libewf/blob/master/documentation/Expert%20
+// @brief EWF segment writer
+// @author Eduardo Aguiar
+// @see https://github.com/libyal/libewf/blob/master/documentation/Expert%20
 //       Witness%20Compression%20Format%20(EWF).asciidoc
 //       (version 0.0.80, visited in 2016-08-25)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -51,8 +51,8 @@ public:
   segment_writer& operator= (segment_writer&&) = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set segment size
-  //! \param segment_size segment size in bytes
+  // @brief set segment size
+  // @param segment_size segment size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_segment_size (size_type segment_size)
@@ -61,8 +61,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set chunk size
-  //! \param chunk_size chunk size in bytes
+  // @brief set chunk size
+  // @param chunk_size chunk size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_chunk_size (size_type chunk_size)
@@ -71,8 +71,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set compression level
-  //! \param compression_level (0 - none, 1 - fast, 9 - best)
+  // @brief set compression level
+  // @param compression_level (0 - none, 1 - fast, 9 - best)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_compression_level (int compression_level)
@@ -81,8 +81,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set drive vendor
-  //! \param drive_vendor drive vendor
+  // @brief set drive vendor
+  // @param drive_vendor drive vendor
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_drive_vendor (const std::string& drive_vendor)
@@ -91,8 +91,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set drive model
-  //! \param drive_model drive model
+  // @brief set drive model
+  // @param drive_model drive model
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_drive_model (const std::string& drive_model)
@@ -101,8 +101,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set drive serial number
-  //! \param drive_serial_number drive serial number
+  // @brief set drive serial number
+  // @param drive_serial_number drive serial number
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_drive_serial_number (const std::string& drive_serial_number)
@@ -111,8 +111,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set acquisition user name
-  //! \param acquisition_user acquisition user name
+  // @brief set acquisition user name
+  // @param acquisition_user acquisition user name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_acquisition_user (const std::string& acquisition_user)
@@ -121,8 +121,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set sector size
-  //! \param sector_size sector size in bytes
+  // @brief set sector size
+  // @param sector_size sector size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_sector_size (size_type sector_size)
@@ -131,8 +131,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set chunk sectors
-  //! \param chunk_sectors sectors per chunk
+  // @brief set chunk sectors
+  // @param chunk_sectors sectors per chunk
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_chunk_sectors (size_type chunk_sectors)
@@ -141,8 +141,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set segment count
-  //! \param segment_count segment count
+  // @brief set segment count
+  // @param segment_count segment count
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_segment_count (std::uint16_t segment_count)
@@ -151,8 +151,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set imagefile total size
-  //! \param size size in bytes
+  // @brief set imagefile total size
+  // @param size size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_total_size (size_type size)
@@ -161,8 +161,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set segment file set GUID
-  //! \param guid GUID as bytearray
+  // @brief set segment file set GUID
+  // @param guid GUID as bytearray
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_guid (const mobius::bytearray& guid)
@@ -171,8 +171,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set MD5 hash
-  //! \param hd5_hash MD5 hash as bytearray
+  // @brief set MD5 hash
+  // @param hd5_hash MD5 hash as bytearray
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_md5_hash (const mobius::bytearray& md5_hash)
@@ -238,3 +238,5 @@ private:
 };
 
 #endif
+
+

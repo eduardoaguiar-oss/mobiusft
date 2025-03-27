@@ -22,15 +22,13 @@
 #include <cstdint>
 #include <string>
 
-namespace mobius
-{
-namespace datetime
+namespace mobius::datetime
 {
 using day_second_type = unsigned int;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Time representation
-//! \author Eduardo Aguiar
+// @brief Time representation
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class time
 {
@@ -46,10 +44,10 @@ public:
   explicit time (day_second_type) noexcept;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Create time object from hh, mm, ss values
-  //! \param hh hours
-  //! \param mm minutes
-  //! \param ss seconds
+  // @brief Create time object from hh, mm, ss values
+  // @param hh hours
+  // @param mm minutes
+  // @param ss seconds
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   constexpr time (resolution_type h, resolution_type m, resolution_type s) noexcept
     : hour_ (h), minute_ (m), second_ (s), is_null_ (false)
@@ -63,8 +61,8 @@ public:
   time& operator= (time&&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hour
-  //! \return hour (0 - 23)
+  // @brief Get hour
+  // @return hour (0 - 23)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   resolution_type
   get_hour () const noexcept
@@ -73,8 +71,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get minute
-  //! \return minute (0 - 59)
+  // @brief Get minute
+  // @return minute (0 - 59)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   resolution_type
   get_minute () const noexcept
@@ -83,8 +81,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get second
-  //! \return second (0 - 59)
+  // @brief Get second
+  // @return second (0 - 59)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   resolution_type
   get_second () const noexcept
@@ -93,8 +91,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if time is not null
-  //! \return true/false
+  // @brief Check if time is not null
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const noexcept
   {
@@ -126,7 +124,8 @@ std::ostream& operator<< (std::ostream&, const time&);
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string to_string (const time&);
 
-} // namespace datetime
-} // namespace mobius
+} // namespace mobius::datetime
 
 #endif
+
+

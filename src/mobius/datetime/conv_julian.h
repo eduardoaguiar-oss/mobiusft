@@ -20,16 +20,15 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/datetime/date.h>
 
-namespace mobius
-{
-namespace datetime
+namespace mobius::datetime
 {
 using julian_type = double;
 
 date date_from_julian (julian_type) noexcept;
 julian_type date_to_julian (const date&) noexcept;
 
-} // namespace mobius
-} // namespace datetime
+} // namespace datetime::mobius
 
 #endif
+
+

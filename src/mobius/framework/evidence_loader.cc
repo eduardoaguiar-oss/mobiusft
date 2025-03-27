@@ -23,7 +23,7 @@
 namespace mobius::framework
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 evidence_loader::evidence_loader ()
  : impl_ (std::make_shared <evidence_loader_impl_null> ())
@@ -31,9 +31,9 @@ evidence_loader::evidence_loader ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param id Evidence loader ID
-//! \param item Item object
+// @brief Constructor
+// @param id Evidence loader ID
+// @param item Item object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 evidence_loader::evidence_loader (
   const std::string& id,
@@ -53,3 +53,5 @@ evidence_loader::evidence_loader (
 }
 
 } // namespace mobius::framework
+
+

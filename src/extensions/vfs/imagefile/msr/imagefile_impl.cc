@@ -33,15 +33,15 @@ namespace
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-//! \brief header size in bytes
+// @brief header size in bytes
 constexpr int HEADER_SIZE = 16384;
 
-//! \brief header signatures
+// @brief header signatures
 const mobius::bytearray HEADER_SIGNATURE_V0 = {0x98, 0x92, 0x04, 0x71};
 const mobius::bytearray HEADER_SIGNATURE_V1 = {0x12, 0xa1, 0x58, 0x32};
 const mobius::bytearray HEADER_SIGNATURE_V2 = {0xa7, 0xb2, 0x62, 0x5a};
 
-//! \brief header encryption key
+// @brief header encryption key
 const mobius::bytearray HEADER_ENCRYPTION_KEY =
 {
   0x06, 0x42, 0x21, 0x98, 0x03, 0x69, 0x5e, 0xb1,
@@ -49,8 +49,8 @@ const mobius::bytearray HEADER_ENCRYPTION_KEY =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Read and decrypt file header
-//! \param reader reader
+// @brief Read and decrypt file header
+// @param reader reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 read_header_data (mobius::io::reader reader)
@@ -64,9 +64,9 @@ read_header_data (mobius::io::reader reader)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if file is an instance of imagefile msr
-//! \param f File object
-//! \return true/false
+// @brief Check if file is an instance of imagefile msr
+// @param f File object
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 imagefile_impl::is_instance (const mobius::io::file& f)
@@ -91,8 +91,8 @@ imagefile_impl::is_instance (const mobius::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Construct object
-//! \param f File object
+// @brief Construct object
+// @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile_impl::imagefile_impl (const mobius::io::file& f)
   : file_ (f)
@@ -100,9 +100,9 @@ imagefile_impl::imagefile_impl (const mobius::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attribute
-//! \param name Attribute name
-//! \return Attribute value
+// @brief Get attribute
+// @param name Attribute name
+// @return Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 imagefile_impl::get_attribute (const std::string& name) const
@@ -112,9 +112,9 @@ imagefile_impl::get_attribute (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set attribute
-//! \param name Attribute name
-//! \param value Attribute value
+// @brief Set attribute
+// @param name Attribute name
+// @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 imagefile_impl::set_attribute (
@@ -126,8 +126,8 @@ imagefile_impl::set_attribute (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attributes
-//! \return Attributes
+// @brief Get attributes
+// @return Attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 imagefile_impl::get_attributes () const
@@ -137,8 +137,8 @@ imagefile_impl::get_attributes () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new reader for imagefile
-//! \return reader
+// @brief Create new reader for imagefile
+// @return reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::reader
 imagefile_impl::new_reader () const
@@ -160,8 +160,8 @@ imagefile_impl::new_reader () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create new writer for imagefile
-//! \return writer
+// @brief create new writer for imagefile
+// @return writer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::writer
 imagefile_impl::new_writer () const
@@ -170,7 +170,7 @@ imagefile_impl::new_writer () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief load metadata
+// @brief load metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 imagefile_impl::_load_metadata () const
@@ -280,3 +280,5 @@ imagefile_impl::_load_metadata () const
 
   metadata_loaded_ = true;
 }
+
+

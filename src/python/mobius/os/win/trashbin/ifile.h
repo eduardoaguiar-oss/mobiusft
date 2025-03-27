@@ -22,7 +22,7 @@
 #include <mobius/os/win/trashbin/ifile.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_os_win_trashbin_ifile_to_pyobject (const mobius::os::win::tra
 mobius::os::win::trashbin::ifile pymobius_os_win_trashbin_ifile_from_pyobject (PyObject *);
 
 #endif
+
+

@@ -38,7 +38,7 @@ constexpr std::uint8_t EFI_GPT_TYPE = 0xee;
 constexpr std::uint16_t DISK_COPY_PROTECTED = 0x5a5a;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Partition description by type
+// @brief Partition description by type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const std::map <std::uint8_t, const std::string> PARTITION_DESCRIPTION =
 {
@@ -73,7 +73,7 @@ static const std::map <std::uint8_t, const std::string> PARTITION_DESCRIPTION =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert CHS information to string
+// @brief Convert CHS information to string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
 chs_to_string (const mobius::bytearray& chs)
@@ -86,10 +86,10 @@ chs_to_string (const mobius::bytearray& chs)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if block has an instance of DOS partition system
-//! \param block Block object
-//! \return true/false
-//! \see Linux source code: block/partitions/msdos.c
+// @brief Check if block has an instance of DOS partition system
+// @param block Block object
+// @return true/false
+// @see Linux source code: block/partitions/msdos.c
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static bool
 _is_instance (const mobius::vfs::block& block)
@@ -124,11 +124,11 @@ _is_instance (const mobius::vfs::block& block)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan partitions
-//! \param ps_block Partition system block
-//! \param sector_size Sector size in bytes
-//! \param sector MBR/EMBR sector
-//! \see Linux source code: block/partitions/msdos.c
+// @brief Scan partitions
+// @param ps_block Partition system block
+// @param sector_size Sector size in bytes
+// @param sector MBR/EMBR sector
+// @see Linux source code: block/partitions/msdos.c
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 _scan_partitions (
@@ -259,12 +259,12 @@ _scan_partitions (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Try to decode block as DOS partition system
-//! \param block Block object
-//! \param new_blocks Vector for newly created blocks
-//! \param pending_blocks Pending blocks
-//! \return <b>true</b> if block was decoded, <b>false</b> otherwise
-//! \see Linux source code: block/partitions/msdos.c
+// @brief Try to decode block as DOS partition system
+// @param block Block object
+// @param new_blocks Vector for newly created blocks
+// @param pending_blocks Pending blocks
+// @return <b>true</b> if block was decoded, <b>false</b> otherwise
+// @see Linux source code: block/partitions/msdos.c
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static bool
 decoder (
@@ -362,7 +362,7 @@ const char *EXTENSION_DESCRIPTION = "DOS partition table support";
 } // extern "C"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Start extension
+// @brief Start extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extern "C" void
 start ()
@@ -375,10 +375,12 @@ start ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Stop extension
+// @brief Stop extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extern "C" void
 stop ()
 {
   mobius::core::remove_resource ("vfs.block.decoder.partition_system_dos");
 }
+
+

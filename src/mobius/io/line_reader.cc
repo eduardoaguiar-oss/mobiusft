@@ -17,45 +17,43 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "line_reader.h"
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Detect line separator
-//! \param s String
-//! \return Separator string or "" if not found
+// @brief Detect line separator
+// @param s String
+// @return Separator string or "" if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
 _detect_separator (const std::string& s)
 {
   char last_c = 0;
-  
+
   for (const auto& c : s)
     {
       if (c == '\n' && last_c == '\r')
         return "\r\n";
-      
+
       else if (c == '\n')
         return "\n";
-      
+
       else if (last_c == '\r')
         return "\r";
-      
+
       last_c = c;
     }
-    
+
   return {};
 }
 
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param text_reader Text reader object
-//! \param separator Line separator
+// @brief Constructor
+// @param text_reader Text reader object
+// @param separator Line separator
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 line_reader::line_reader (
   const mobius::io::text_reader& text_reader,
@@ -67,10 +65,10 @@ line_reader::line_reader (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
-//! \param encoding Charset encoding
-//! \param separator Line separator
+// @brief Constructor
+// @param reader Reader object
+// @param encoding Charset encoding
+// @param separator Line separator
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 line_reader::line_reader (
   const mobius::io::reader& reader,
@@ -83,9 +81,9 @@ line_reader::line_reader (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Read line
-//! \param line Reference to line
-//! \return <i>true</i> if line has been read, <i>false</i> otherwise
+// @brief Read line
+// @param line Reference to line
+// @return <i>true</i> if line has been read, <i>false</i> otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 line_reader::read (std::string& line)
@@ -141,5 +139,6 @@ line_reader::read (std::string& line)
   return false;
 }
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
+
+

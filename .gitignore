@@ -21,6 +21,7 @@ stamp-h1
 *.lo
 *.la
 *.mobius
+*.swp
 Makefile.in
 Makefile
 .deps

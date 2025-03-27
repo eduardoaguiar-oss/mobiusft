@@ -21,9 +21,7 @@
 #include <mobius/bytearray.h>
 #include <string>
 
-namespace mobius
-{
-namespace encoder
+namespace mobius::encoder
 {
 std::string base64 (const mobius::bytearray&);
 std::string base64url (const mobius::bytearray&);
@@ -31,7 +29,10 @@ std::string base32 (const mobius::bytearray&);
 std::string base32hex (const mobius::bytearray&);
 std::string base16 (const mobius::bytearray&);
 
-} // namespace encoder
-} // namespace mobius
+} // namespace mobius::encoder
 
 #endif
+
+
+
+

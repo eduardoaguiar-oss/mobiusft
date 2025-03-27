@@ -24,7 +24,7 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief show usage text
+// @brief show usage text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 usage ()
@@ -36,8 +36,8 @@ usage ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Show CXMLElement data
-//! \param indent Number of indentation tabs
+// @brief Show CXMLElement data
+// @param indent Number of indentation tabs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 show_cxmlelement (const mobius::extension::app::shareaza::CXMLElement& e, int indent)
@@ -61,8 +61,8 @@ show_cxmlelement (const mobius::extension::app::shareaza::CXMLElement& e, int in
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Show CSharedSource data
-//! \param indent Number of indentation tabs
+// @brief Show CSharedSource data
+// @param indent Number of indentation tabs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 show_csharedsource (const mobius::extension::app::shareaza::CSharedSource& s, int indent)
@@ -77,8 +77,8 @@ show_csharedsource (const mobius::extension::app::shareaza::CSharedSource& s, in
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Show CLibraryFile data
-//! \param indent Number of indentation tabs
+// @brief Show CLibraryFile data
+// @param indent Number of indentation tabs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 show_clibraryfile (const mobius::extension::app::shareaza::CLibraryFile& f, int indent)
@@ -122,8 +122,8 @@ show_clibraryfile (const mobius::extension::app::shareaza::CLibraryFile& f, int 
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Show CLibraryFolder data
-//! \param indent Number of indentation tabs
+// @brief Show CLibraryFolder data
+// @param indent Number of indentation tabs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 show_clibraryfolder (const mobius::extension::app::shareaza::CLibraryFolder& folder, int indent = 1)
@@ -144,8 +144,8 @@ show_clibraryfolder (const mobius::extension::app::shareaza::CLibraryFolder& fol
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Show Shareaza Library.dat info
-//! \param path Library.dat path
+// @brief Show Shareaza Library.dat info
+// @param path Library.dat path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 show_clibrary (const std::string& path)
@@ -173,7 +173,7 @@ show_clibrary (const std::string& path)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Main function
+// @brief Main function
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int
 main (int argc, char **argv)
@@ -232,3 +232,5 @@ main (int argc, char **argv)
 
   return EXIT_SUCCESS;
 }
+
+

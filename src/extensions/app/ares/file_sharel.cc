@@ -24,10 +24,10 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Populate entry metadata
-//! \param e Entry
-//! \param data Raw data
-//! \see get_cached_metas@helper_library_db.pas
+// @brief Populate entry metadata
+// @param e Entry
+// @param data Raw data
+// @see get_cached_metas@helper_library_db.pas
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 _populate_metadata (mobius::extension::app::ares::file_sharel::entry& e, const mobius::bytearray& data)
@@ -61,8 +61,8 @@ _populate_metadata (mobius::extension::app::ares::file_sharel::entry& e, const m
 namespace mobius::extension::app::ares
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \see get_trusted_metas function (helper_library_db.pas)
+// @brief Constructor
+// @see get_trusted_metas function (helper_library_db.pas)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_sharel::file_sharel (const mobius::io::reader& reader)
 {
@@ -151,3 +151,7 @@ file_sharel::file_sharel (const mobius::io::reader& reader)
 }
 
 } // namespace mobius::extension::app::ares
+
+
+
+

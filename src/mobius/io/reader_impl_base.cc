@@ -19,13 +19,11 @@
 #include <mobius/exception.inc>
 #include <stdexcept>
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get read position
-//! \return read position in bytes from the beginning of data
+// @brief get read position
+// @return read position in bytes from the beginning of data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 reader_impl_base::offset_type
 reader_impl_base::tell () const
@@ -34,9 +32,9 @@ reader_impl_base::tell () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set read position
-//! \param offset offset in bytes
-//! \param w either beginning, current or end
+// @brief set read position
+// @param offset offset in bytes
+// @param w either beginning, current or end
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 reader_impl_base::seek (offset_type, whence_type)
@@ -45,8 +43,8 @@ reader_impl_base::seek (offset_type, whence_type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get data size
-//! \return data size in bytes
+// @brief get data size
+// @return data size in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 reader_impl_base::size_type
 reader_impl_base::get_size () const
@@ -54,5 +52,6 @@ reader_impl_base::get_size () const
   throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("reader does not support get_size"));
 }
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
+
+

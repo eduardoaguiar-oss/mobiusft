@@ -26,8 +26,8 @@
 namespace mobius::vfs
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param uid Device UID
+// @brief Constructor
+// @param uid Device UID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 disk_impl_device::disk_impl_device (const std::string& uid)
   : uid_ (uid)
@@ -35,8 +35,8 @@ disk_impl_device::disk_impl_device (const std::string& uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param state Object state
+// @brief Constructor
+// @param state Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 disk_impl_device::disk_impl_device (const mobius::pod::map& state)
 {
@@ -49,8 +49,8 @@ disk_impl_device::disk_impl_device (const mobius::pod::map& state)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if disk is available
-//! \return true/false
+// @brief Check if disk is available
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 disk_impl_device::is_available () const
@@ -69,9 +69,9 @@ disk_impl_device::is_available () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if attribute exists
-//! \param id Attribute ID
-//! \return true/false
+// @brief Check if attribute exists
+// @param id Attribute ID
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 disk_impl_device::has_attribute (const std::string& id) const
@@ -80,9 +80,9 @@ disk_impl_device::has_attribute (const std::string& id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set attribute
-//! \param id Attribute ID
-//! \param value Attribute value
+// @brief Set attribute
+// @param id Attribute ID
+// @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 disk_impl_device::set_attribute (const std::string& id, const mobius::pod::data& value)
@@ -91,9 +91,9 @@ disk_impl_device::set_attribute (const std::string& id, const mobius::pod::data&
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attribute
-//! \param id Attribute ID
-//! \return Data object
+// @brief Get attribute
+// @param id Attribute ID
+// @return Data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 disk_impl_device::get_attribute (const std::string& id) const
@@ -102,8 +102,8 @@ disk_impl_device::get_attribute (const std::string& id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attributes
-//! \return Attributes
+// @brief Get attributes
+// @return Attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 disk_impl_device::get_attributes () const
@@ -113,8 +113,8 @@ disk_impl_device::get_attributes () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get object state
-//! \return Object state
+// @brief Get object state
+// @return Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 disk_impl_device::get_state () const
@@ -133,8 +133,8 @@ disk_impl_device::get_state () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get path to underlying file, when available
-//! \return File path
+// @brief Get path to underlying file, when available
+// @return File path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 disk_impl_device::get_path () const
@@ -148,8 +148,8 @@ disk_impl_device::get_path () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new reader
-//! \return New reader
+// @brief Create new reader
+// @return New reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::reader
 disk_impl_device::new_reader () const
@@ -163,7 +163,7 @@ disk_impl_device::new_reader () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load device
+// @brief Load device
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 disk_impl_device::_load_device () const
@@ -201,7 +201,7 @@ disk_impl_device::_load_device () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load metadata
+// @brief Load metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 disk_impl_device::_load_metadata () const
@@ -263,3 +263,5 @@ disk_impl_device::_load_metadata () const
 }
 
 } // namespace mobius::vfs
+
+

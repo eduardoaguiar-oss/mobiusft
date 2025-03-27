@@ -24,8 +24,8 @@
 namespace mobius::extension::ui::gtk3
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>gtk3 button</i> implementation class
-//! \author Eduardo Aguiar
+// @brief <i>gtk3 button</i> implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class button_impl : public mobius::ui::button_impl_base
 {
@@ -37,8 +37,8 @@ public:
   ~button_impl ();
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check whether widget object is valid
-  //! \return true/false
+  // @brief Check whether widget object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator bool () const noexcept final
   {
@@ -46,8 +46,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get low level widget
-  //! \return Low level widget
+  // @brief Get low level widget
+  // @return Low level widget
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::any
   get_ui_widget () const final
@@ -66,13 +66,15 @@ public:
   void reset_callback (const std::string&) final;
 
 private:
-  //! \brief Low level widget
+  // @brief Low level widget
   GtkWidget *widget_ = nullptr;
 
-  //! \brief Callback for clicked event
+  // @brief Callback for clicked event
   mobius::core::functor <bool> on_clicked_callback_;
 };
 
 } // namespace mobius::extension::ui::gtk3
 
 #endif
+
+

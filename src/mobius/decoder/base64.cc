@@ -19,9 +19,7 @@
 #include <mobius/exception.inc>
 #include <stdexcept>
 
-namespace mobius
-{
-namespace decoder
+namespace mobius::decoder
 {
 namespace
 {
@@ -29,7 +27,7 @@ namespace
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-//! \brief Base 16 chars (RFC 4648, section 8)
+// @brief Base 16 chars (RFC 4648, section 8)
 static constexpr std::uint8_t BASE16[] =
 {
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -46,7 +44,7 @@ static constexpr std::uint8_t BASE16[] =
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 };
 
-//! \brief Base 32 chars (RFC 4648, section 6)
+// @brief Base 32 chars (RFC 4648, section 6)
 static constexpr std::uint8_t BASE32[] =
 {
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -63,7 +61,7 @@ static constexpr std::uint8_t BASE32[] =
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 };
 
-//! \brief Base 32 hex chars (RFC 4648, section 7)
+// @brief Base 32 hex chars (RFC 4648, section 7)
 static constexpr std::uint8_t BASE32_HEX[] =
 {
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -80,7 +78,7 @@ static constexpr std::uint8_t BASE32_HEX[] =
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 };
 
-//! \brief Base 64 chars (RFC 4648, section 4)
+// @brief Base 64 chars (RFC 4648, section 4)
 static constexpr std::uint8_t BASE64[] =
 {
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -97,7 +95,7 @@ static constexpr std::uint8_t BASE64[] =
     0x31, 0x32, 0x33, 0xff, 0xff, 0xff, 0xff, 0xff
 };
 
-//! \brief Base 64 chars, URL and filename (RFC 4648, section 5)
+// @brief Base 64 chars, URL and filename (RFC 4648, section 5)
 static constexpr std::uint8_t BASE64_URL[] =
 {
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -117,10 +115,10 @@ static constexpr std::uint8_t BASE64_URL[] =
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode base64 string
-//! \param s Base64 encoded string
-//! \return Data
-//! \see RFC 4648, section 4
+// @brief Decode base64 string
+// @param s Base64 encoded string
+// @return Data
+// @see RFC 4648, section 4
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 base64 (const std::string& s)
@@ -140,14 +138,14 @@ base64 (const std::string& s)
 
       if (c == '\n' || c == '\r')          // ignore
         ;
-      
+
       else if (c < 32 || BASE64[c - 32] == 0xff)
         throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid base64 encoded string"));
 
       else
         obits += 6;
     }
-  
+
   // convert
   mobius::bytearray ret (obits >> 3);
   std::uint32_t d = 0;
@@ -176,10 +174,10 @@ base64 (const std::string& s)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode base64 encoded string, URL and Filename Safe Alphabet
-//! \param s Base64url encoded string
-//! \return Data
-//! \see RFC 4648, section 5
+// @brief Decode base64 encoded string, URL and Filename Safe Alphabet
+// @param s Base64url encoded string
+// @return Data
+// @see RFC 4648, section 5
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 base64url (const std::string& s)
@@ -215,7 +213,7 @@ base64url (const std::string& s)
 
       d = (d << 6) | BASE64_URL[c - 32];
       bits += 6;
-      
+
       while (bits >= 8)
         {
           bits -= 8;
@@ -228,10 +226,10 @@ base64url (const std::string& s)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode base32 encoded string
-//! \param s Base32 encoded string
-//! \return Data
-//! \see RFC 4648, section 6
+// @brief Decode base32 encoded string
+// @param s Base32 encoded string
+// @return Data
+// @see RFC 4648, section 6
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 base32 (const std::string& s)
@@ -267,7 +265,7 @@ base32 (const std::string& s)
 
       d = (d << 5) | BASE32[c - 32];
       bits += 5;
-      
+
       while (bits >= 8)
         {
           bits -= 8;
@@ -280,10 +278,10 @@ base32 (const std::string& s)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode base32hex encoded string
-//! \param s Base32hex encoded string
-//! \return Data
-//! \see RFC 4648, section 7
+// @brief Decode base32hex encoded string
+// @param s Base32hex encoded string
+// @return Data
+// @see RFC 4648, section 7
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 base32hex (const std::string& s)
@@ -319,7 +317,7 @@ base32hex (const std::string& s)
 
       d = (d << 5) | BASE32_HEX[c - 32];
       bits += 5;
-      
+
       while (bits >= 8)
         {
           bits -= 8;
@@ -332,10 +330,10 @@ base32hex (const std::string& s)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode base16 encoded string
-//! \param s Base16 encoded string
-//! \return Data
-//! \see RFC 4648, section 8
+// @brief Decode base16 encoded string
+// @param s Base16 encoded string
+// @return Data
+// @see RFC 4648, section 8
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 base16 (const std::string& s)
@@ -348,12 +346,12 @@ base16 (const std::string& s)
 
   // convert
   mobius::bytearray ret (l / 2);
-  
+
   for (std::uint64_t i = 0;i < l;i+=2)
     {
       char c1 = s[i];
       char c2 = s[i+1];
-      
+
       if (c1 < 32 || BASE16[c1-32] == 0xff || c2 < 32 || BASE16[c2-32] == 0xff)
         throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid base16 encoded string"));
 
@@ -363,5 +361,6 @@ base16 (const std::string& s)
   return ret;
 }
 
-} // namespace decoder
-} // namespace mobius
+} // namespace mobius::decoder
+
+

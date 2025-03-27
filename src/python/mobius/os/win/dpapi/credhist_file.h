@@ -22,7 +22,7 @@
 #include <mobius/os/win/dpapi/credhist_file.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_os_win_dpapi_credhist_file_to_pyobject (mobius::os::win::dpap
 mobius::os::win::dpapi::credhist_file pymobius_os_win_dpapi_credhist_file_from_pyobject (PyObject *);
 
 #endif
+
+

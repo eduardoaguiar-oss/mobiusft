@@ -21,16 +21,12 @@
 #include <mobius/io/entry.h>
 #include <string>
 
-namespace mobius
-{
-namespace io
-{
-namespace smb
+namespace mobius::io::smb
 {
 mobius::io::entry new_entry_by_url (const std::string&);
 
-} // namespace smb
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io::smb
 
 #endif
+
+

@@ -30,8 +30,8 @@
 namespace mobius::io::smb
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Initialize object
-//! \param url File URL
+// @brief Initialize object
+// @param url File URL
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_impl::file_impl (const std::string& url)
   : url_ (url)
@@ -43,8 +43,8 @@ file_impl::file_impl (const std::string& url)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get file name
-//! \return File name
+// @brief Get file name
+// @return File name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 file_impl::get_name () const
@@ -53,8 +53,8 @@ file_impl::get_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if URL file exists
-//! \return true/false
+// @brief Check if URL file exists
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 file_impl::exists () const
@@ -66,8 +66,8 @@ file_impl::exists () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if file is deleted
-//! \return true/false
+// @brief Check if file is deleted
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 file_impl::is_deleted () const
@@ -79,8 +79,8 @@ file_impl::is_deleted () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if file is reallocated
-//! \return true/false
+// @brief Check if file is reallocated
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 file_impl::is_reallocated () const
@@ -92,8 +92,8 @@ file_impl::is_reallocated () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if file is hidden
-//! \return true/false
+// @brief Check if file is hidden
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 file_impl::is_hidden () const
@@ -105,8 +105,8 @@ file_impl::is_hidden () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get short file name
-//! \return Short file name
+// @brief Get short file name
+// @return Short file name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 file_impl::get_short_name () const
@@ -118,8 +118,8 @@ file_impl::get_short_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get file inode
-//! \return Inode
+// @brief Get file inode
+// @return Inode
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_impl::inode_type
 file_impl::get_inode () const
@@ -131,8 +131,8 @@ file_impl::get_inode () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get file size
-//! \return Size in bytes
+// @brief Get file size
+// @return Size in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_impl::size_type
 file_impl::get_size () const
@@ -144,8 +144,8 @@ file_impl::get_size () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get file type
-//! \return File type
+// @brief Get file type
+// @return File type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_impl::type
 file_impl::get_type () const
@@ -157,8 +157,8 @@ file_impl::get_type () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get file owner's user id
-//! \return user ID
+// @brief Get file owner's user id
+// @return user ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_impl::user_id_type
 file_impl::get_user_id () const
@@ -170,8 +170,8 @@ file_impl::get_user_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get file owner's user name
-//! \return user name
+// @brief Get file owner's user name
+// @return user name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 file_impl::get_user_name () const
@@ -183,8 +183,8 @@ file_impl::get_user_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get file group ID
-//! \return group ID
+// @brief Get file group ID
+// @return group ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_impl::group_id_type
 file_impl::get_group_id () const
@@ -196,8 +196,8 @@ file_impl::get_group_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get file owner's group name
-//! \return group name
+// @brief Get file owner's group name
+// @return group name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 file_impl::get_group_name () const
@@ -209,8 +209,8 @@ file_impl::get_group_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get file access permissions
-//! \return permission mask
+// @brief Get file access permissions
+// @return permission mask
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_impl::permission_type
 file_impl::get_permissions () const
@@ -222,8 +222,8 @@ file_impl::get_permissions () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get last access timestamp
-//! \return Last file access date/time
+// @brief Get last access timestamp
+// @return Last file access date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 file_impl::get_access_time () const
@@ -235,8 +235,8 @@ file_impl::get_access_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get last metadata modification timestamp
-//! \return Last file metadata modification date/time
+// @brief Get last metadata modification timestamp
+// @return Last file metadata modification date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 file_impl::get_modification_time () const
@@ -248,8 +248,8 @@ file_impl::get_modification_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get last metadata modification timestamp
-//! \return Last file metadata modification date/time
+// @brief Get last metadata modification timestamp
+// @return Last file metadata modification date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 file_impl::get_metadata_time () const
@@ -261,8 +261,8 @@ file_impl::get_metadata_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get creation time
-//! \return Creation date/time
+// @brief Get creation time
+// @return Creation date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 file_impl::get_creation_time () const
@@ -274,8 +274,8 @@ file_impl::get_creation_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get deletion time
-//! \return Deletion date/time
+// @brief Get deletion time
+// @return Deletion date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 file_impl::get_deletion_time () const
@@ -287,8 +287,8 @@ file_impl::get_deletion_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get backup time
-//! \return Backup date/time
+// @brief Get backup time
+// @return Backup date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 file_impl::get_backup_time () const
@@ -300,20 +300,20 @@ file_impl::get_backup_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get parent folder
-//! \return Parent folder
+// @brief Get parent folder
+// @return Parent folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_impl::folder_type
 file_impl::get_parent () const
 {
   mobius::io::uri uri (url_);
   auto parent = uri.get_parent ();
-  
+
   return std::make_shared <folder_impl> (parent.get_value ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reload file info
+// @brief Reload file info
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 file_impl::reload ()
@@ -322,7 +322,7 @@ file_impl::reload ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove file
+// @brief Remove file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 file_impl::remove ()
@@ -332,13 +332,13 @@ file_impl::remove ()
 
   if (smbc_unlink (url_.c_str ()) < 0)
     throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
-  
+
   is_stat_loaded_ = false;  // force reload of attributes
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Rename file
-//! \param filename New filename
+// @brief Rename file
+// @param filename New filename
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 file_impl::rename (const std::string& filename)
@@ -349,7 +349,7 @@ file_impl::rename (const std::string& filename)
   // create new URI
   mobius::io::uri old_uri (url_);
   mobius::io::uri new_uri = old_uri.get_sibling_by_name (filename);
-  
+
   // rename file
   if (smbc_rename (url_.c_str (), new_uri.get_value ().c_str ()) < 0)
     throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
@@ -362,16 +362,16 @@ file_impl::rename (const std::string& filename)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Move file
-//! \param f File implementation pointer
-//! \return <b>true</b> if file has been moved, <b>false</b> otherwise
+// @brief Move file
+// @param f File implementation pointer
+// @return <b>true</b> if file has been moved, <b>false</b> otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 file_impl::move (file_type impl)
 {
   if (!exists ())
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
-  
+
   // if destination file impl is also smb, use rename function
   auto pimpl = std::dynamic_pointer_cast <file_impl> (impl);
 
@@ -379,16 +379,16 @@ file_impl::move (file_type impl)
     {
       if (smbc_rename (url_.c_str (), pimpl->url_.c_str ()) < 0)
         throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
-      
+
       return true;
     }
-    
+
   return false;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create a reader for file
-//! \return Pointer to a new created reader
+// @brief Create a reader for file
+// @return Pointer to a new created reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_impl::reader_type
 file_impl::new_reader () const
@@ -400,9 +400,9 @@ file_impl::new_reader () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create a writer for file
-//! \param overwite true/false to wipe file content
-//! \return Pointer to a new created writer
+// @brief Create a writer for file
+// @param overwite true/false to wipe file content
+// @return Pointer to a new created writer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_impl::writer_type
 file_impl::new_writer (bool overwrite) const
@@ -411,7 +411,7 @@ file_impl::new_writer (bool overwrite) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load metadata calling smbc_stat function
+// @brief Load metadata calling smbc_stat function
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 file_impl::_load_stat () const
@@ -457,3 +457,5 @@ file_impl::_load_stat () const
 }
 
 } // namespace mobius::io::smb
+
+

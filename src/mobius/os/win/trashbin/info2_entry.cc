@@ -18,16 +18,10 @@
 #include "info2_entry.h"
 #include <mobius/decoder/data_decoder.h>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace trashbin
+namespace mobius::os::win::trashbin
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief info2_entry implementation class
+// @brief info2_entry implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class info2_entry::impl
 {
@@ -47,8 +41,8 @@ public:
   impl& operator= (impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get deleted flag
-  //! \return true/false
+  // @brief Get deleted flag
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_deleted () const
@@ -57,8 +51,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get path
-  //! \return Path
+  // @brief Get path
+  // @return Path
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_path () const
@@ -67,8 +61,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get drive number
-  //! \return Drive number
+  // @brief Get drive number
+  // @return Drive number
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_drive_number () const
@@ -77,8 +71,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get file idx
-  //! \return File idx
+  // @brief Get file idx
+  // @return File idx
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::int32_t
   get_file_idx () const
@@ -87,8 +81,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get deletion time
-  //! \return Deletion time
+  // @brief Get deletion time
+  // @return Deletion time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::datetime::datetime
   get_deletion_time () const
@@ -97,8 +91,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get size
-  //! \return Size
+  // @brief Get size
+  // @return Size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_size () const
@@ -107,29 +101,29 @@ public:
   }
 
 private:
-  //! \brief Is entry deleted
+  // @brief Is entry deleted
   bool is_deleted_;
 
-  //! \brief File path
+  // @brief File path
   std::string path_;
 
-  //! \brief Drive number
+  // @brief Drive number
   std::uint32_t drive_number_;
 
-  //! \brief File index
+  // @brief File index
   std::int32_t file_idx_;
 
-  //! \brief File deletion date/time
+  // @brief File deletion date/time
   mobius::datetime::datetime deletion_time_;
 
-  //! \brief File size
+  // @brief File size
   std::uint32_t size_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
-//! \param size Record size
+// @brief Constructor
+// @param reader Reader object
+// @param size Record size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 info2_entry::impl::impl (const mobius::io::reader& reader)
 {
@@ -147,9 +141,9 @@ info2_entry::impl::impl (const mobius::io::reader& reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
-//! \param size Record size
+// @brief Constructor
+// @param reader Reader object
+// @param size Record size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 info2_entry::info2_entry (const mobius::io::reader& reader)
   : impl_ (std::make_shared <impl> (reader))
@@ -157,8 +151,8 @@ info2_entry::info2_entry (const mobius::io::reader& reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get deleted flag
-//! \return true/false
+// @brief Get deleted flag
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 info2_entry::is_deleted () const
@@ -167,8 +161,8 @@ info2_entry::is_deleted () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get path
-//! \return Path
+// @brief Get path
+// @return Path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 info2_entry::get_path () const
@@ -177,8 +171,8 @@ info2_entry::get_path () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get drive number
-//! \return Drive number
+// @brief Get drive number
+// @return Drive number
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 info2_entry::get_drive_number () const
@@ -187,8 +181,8 @@ info2_entry::get_drive_number () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get file idx
-//! \return File idx
+// @brief Get file idx
+// @return File idx
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::int32_t
 info2_entry::get_file_idx () const
@@ -197,8 +191,8 @@ info2_entry::get_file_idx () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get deletion time
-//! \return Deletion time
+// @brief Get deletion time
+// @return Deletion time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 info2_entry::get_deletion_time () const
@@ -207,8 +201,8 @@ info2_entry::get_deletion_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get size
-//! \return Size
+// @brief Get size
+// @return Size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 info2_entry::get_size () const
@@ -216,7 +210,6 @@ info2_entry::get_size () const
   return impl_->get_size ();
 }
 
-} // namespace trashbin
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::trashbin
+
+

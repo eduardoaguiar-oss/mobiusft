@@ -23,13 +23,13 @@
 
 namespace
 {
-//! \brief header size in bytes
+// @brief header size in bytes
 constexpr int HEADER_SIZE = 16384;
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param impl imagefile_impl object
+// @brief Constructor
+// @param impl imagefile_impl object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 reader_impl_aes::reader_impl_aes (const imagefile_impl& impl)
   : size_ (impl.get_size ()),
@@ -41,9 +41,9 @@ reader_impl_aes::reader_impl_aes (const imagefile_impl& impl)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set read position
-//! \param offset offset in bytes
-//! \param w either beginning, current or end
+// @brief set read position
+// @param offset offset in bytes
+// @param w either beginning, current or end
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 reader_impl_aes::seek (offset_type offset, whence_type w)
@@ -66,15 +66,15 @@ reader_impl_aes::seek (offset_type offset, whence_type w)
   // update current pos, if possible
   if (abs_offset < 0)
     throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid offset"));
-  
-  else if (size_type (abs_offset) <= size_)  
+
+  else if (size_type (abs_offset) <= size_)
     pos_ = abs_offset;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief read bytes from reader
-//! \param size size in bytes
-//! \return bytearray containing data
+// @brief read bytes from reader
+// @param size size in bytes
+// @return bytearray containing data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 reader_impl_aes::read (size_type size)
@@ -104,3 +104,5 @@ reader_impl_aes::read (size_type size)
 
   return data;
 }
+
+

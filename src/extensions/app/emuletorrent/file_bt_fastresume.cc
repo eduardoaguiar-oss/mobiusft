@@ -29,8 +29,8 @@
 namespace mobius::extension::app::emuletorrent
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
+// @brief Constructor
+// @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_bt_fastresume::file_bt_fastresume (const mobius::io::reader& reader)
 {
@@ -57,7 +57,7 @@ file_bt_fastresume::file_bt_fastresume (const mobius::io::reader& reader)
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Derived attributes
-  //! \see https://en.wikipedia.org/wiki/Magnet_URI_scheme
+  // @see https://en.wikipedia.org/wiki/Magnet_URI_scheme
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto p = mobius::io::path (path_);
   filename_ = p.get_filename ();
@@ -70,9 +70,9 @@ file_bt_fastresume::file_bt_fastresume (const mobius::io::reader& reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load metadata
-//! \param metadata Map object
-//! \see write_resume_data@write_resume_data.cpp (libtorrent)
+// @brief Load metadata
+// @param metadata Map object
+// @see write_resume_data@write_resume_data.cpp (libtorrent)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 file_bt_fastresume::_load_metadata (const mobius::pod::map& metadata)
@@ -201,3 +201,7 @@ file_bt_fastresume::_load_metadata (const mobius::pod::map& metadata)
 }
 
 } // namespace mobius::extension::app::emuletorrent
+
+
+
+

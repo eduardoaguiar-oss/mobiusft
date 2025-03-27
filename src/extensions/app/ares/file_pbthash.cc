@@ -22,8 +22,8 @@
 namespace mobius::extension::app::ares
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \see read_details_DB_Download@helper_download_disk.pas (line 722)
+// @brief Constructor
+// @see read_details_DB_Download@helper_download_disk.pas (line 722)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_pbthash::file_pbthash (const mobius::io::reader& reader)
 {
@@ -59,8 +59,8 @@ file_pbthash::file_pbthash (const mobius::io::reader& reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode header section
-//! \see BitTorrentDb_load@BitTorrent/BitTorrentDlDb.pas (line 69)
+// @brief Decode header section
+// @see BitTorrentDb_load@BitTorrent/BitTorrentDlDb.pas (line 69)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 file_pbthash::_decode_header (mobius::decoder::data_decoder& decoder)
@@ -74,7 +74,7 @@ file_pbthash::_decode_header (mobius::decoder::data_decoder& decoder)
   hash_sha1_ = decoder.get_hex_string_by_size (20);
 
   // Decode state
-  //! \see BytetoBittorrentState@BitTorrent/BitTorrentUtils (line 76)
+  // @see BytetoBittorrentState@BitTorrent/BitTorrentUtils (line 76)
   auto state = decoder.get_uint8 ();
   is_paused_ = (state == 1);
   is_seeding_ = (state == 2);
@@ -88,8 +88,8 @@ file_pbthash::_decode_header (mobius::decoder::data_decoder& decoder)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode pieces section
-//! \see BitTorrentDb_load - BitTorrent/BitTorrentDlDb.pas (line 163)
+// @brief Decode pieces section
+// @see BitTorrentDb_load - BitTorrent/BitTorrentDlDb.pas (line 163)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 file_pbthash::_decode_pieces (mobius::decoder::data_decoder& decoder)
@@ -111,9 +111,9 @@ file_pbthash::_decode_pieces (mobius::decoder::data_decoder& decoder)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode torrent name and path
-//! \param decoder Decoder object
-//! \see BitTorrentDb_load - BitTorrent/BitTorrentDlDb.pas (line 193)
+// @brief Decode torrent name and path
+// @param decoder Decoder object
+// @see BitTorrentDb_load - BitTorrent/BitTorrentDlDb.pas (line 193)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 file_pbthash::_decode_metadata (mobius::decoder::data_decoder& decoder)
@@ -135,9 +135,9 @@ file_pbthash::_decode_metadata (mobius::decoder::data_decoder& decoder)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode files section
-//! \param decoder Decoder object
-//! \see BitTorrentDb_load - BitTorrent/BitTorrentDlDb.pas (line 211)
+// @brief Decode files section
+// @param decoder Decoder object
+// @see BitTorrentDb_load - BitTorrent/BitTorrentDlDb.pas (line 211)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 file_pbthash::_decode_files (mobius::decoder::data_decoder& decoder)
@@ -164,7 +164,7 @@ file_pbthash::_decode_files (mobius::decoder::data_decoder& decoder)
 
       f.name = decoder.get_string_by_size (siz);
 
-      //! \see BitTorrentDb_load - BitTorrent/BitTorrentDlDb.pas (line 241)
+      // @see BitTorrentDb_load - BitTorrent/BitTorrentDlDb.pas (line 241)
       if (files_count_ == 1)
         f.path = torrent_path_;
 
@@ -178,9 +178,9 @@ file_pbthash::_decode_files (mobius::decoder::data_decoder& decoder)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode tags section
-//! \param decoder Decoder object
-//! \see BitTorrentDb_load - BitTorrent/BitTorrentDlDb.pas (line 296)
+// @brief Decode tags section
+// @param decoder Decoder object
+// @see BitTorrentDb_load - BitTorrent/BitTorrentDlDb.pas (line 296)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 file_pbthash::_decode_tags (mobius::decoder::data_decoder& decoder)
@@ -236,3 +236,7 @@ file_pbthash::_decode_tags (mobius::decoder::data_decoder& decoder)
 }
 
 } // namespace mobius::extension::app::ares
+
+
+
+

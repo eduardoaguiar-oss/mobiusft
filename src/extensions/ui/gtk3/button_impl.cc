@@ -23,7 +23,7 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Callback for <i>clicked</i>
+// @brief Callback for <i>clicked</i>
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static bool
 _callback_clicked (GtkWidget*, gpointer data)
@@ -36,7 +36,7 @@ _callback_clicked (GtkWidget*, gpointer data)
 namespace mobius::extension::ui::gtk3
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
+// @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 button_impl::button_impl ()
   : widget_ (gtk_button_new ())
@@ -46,7 +46,7 @@ button_impl::button_impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destructor
+// @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 button_impl::~button_impl ()
 {
@@ -55,8 +55,8 @@ button_impl::~button_impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set widget sensitive
-//! \param flag true/false
+// @brief Set widget sensitive
+// @param flag true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 button_impl::set_sensitive (bool flag)
@@ -65,8 +65,8 @@ button_impl::set_sensitive (bool flag)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set widget visible
-//! \param flag Flag (true/false)
+// @brief Set widget visible
+// @param flag Flag (true/false)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 button_impl::set_visible (bool flag)
@@ -75,8 +75,8 @@ button_impl::set_visible (bool flag)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set text
-//! \param text Text
+// @brief Set text
+// @param text Text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 button_impl::set_text (const std::string& text)
@@ -85,8 +85,8 @@ button_impl::set_text (const std::string& text)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set button icon
-//! \param icon Icon object
+// @brief Set button icon
+// @param icon Icon object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 button_impl::set_icon (const mobius::ui::icon& icon)
@@ -95,9 +95,9 @@ button_impl::set_icon (const mobius::ui::icon& icon)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set callback to event
-//! \param event_id Event ID
-//! \param f Function or functor
+// @brief Set callback to event
+// @param event_id Event ID
+// @param f Function or functor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 button_impl::set_callback (const std::string& event_id, const mobius::core::functor<bool>& f)
@@ -122,8 +122,8 @@ button_impl::set_callback (const std::string& event_id, const mobius::core::func
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reset callback to event
-//! \param event_id Event ID
+// @brief Reset callback to event
+// @param event_id Event ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 button_impl::reset_callback (const std::string& event_id)
@@ -142,3 +142,5 @@ button_impl::reset_callback (const std::string& event_id)
 }
 
 } // namespace mobius::extension::ui::gtk3
+
+

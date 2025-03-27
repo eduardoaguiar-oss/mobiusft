@@ -22,7 +22,7 @@
 #include <mobius/kff/hashset.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_kff_hashset_to_pyobject (const mobius::kff::hashset&);
 mobius::kff::hashset pymobius_kff_hashset_from_pyobject (PyObject *);
 
 #endif
+
+

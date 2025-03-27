@@ -22,23 +22,21 @@
 #include <stdexcept>
 #include <dlfcn.h>
 
-namespace mobius
-{
-namespace core
+namespace mobius::core
 {
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get symbol from dynamic library
-//! \param handle Dynamic library handle
-//! \param name Symbol name
-//! \param var Var reference
+// @brief Get symbol from dynamic library
+// @param handle Dynamic library handle
+// @param name Symbol name
+// @param var Var reference
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 get (void *handle, const std::string& name, std::string& var)
 {
   void *symbol = dlsym (handle, name.c_str ());
-  
+
   if (symbol)
     var = *reinterpret_cast <const char**> (symbol);
 }
@@ -46,7 +44,7 @@ get (void *handle, const std::string& name, std::string& var)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief extension implementation class
+// @brief extension implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class extension::impl
 {
@@ -67,8 +65,8 @@ public:
   impl& operator= (impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get id
-  //! \return Id
+  // @brief Get id
+  // @return Id
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_id () const
@@ -77,8 +75,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get name
-  //! \return Name
+  // @brief Get name
+  // @return Name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_name () const
@@ -87,8 +85,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get version
-  //! \return Version
+  // @brief Get version
+  // @return Version
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_version () const
@@ -97,8 +95,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get authors
-  //! \return Authors
+  // @brief Get authors
+  // @return Authors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_authors () const
@@ -107,8 +105,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get description
-  //! \return Description
+  // @brief Get description
+  // @return Description
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_description () const
@@ -125,28 +123,28 @@ public:
   void uninstall ();
 
 private:
-  //! \brief Dynamic library handle
+  // @brief Dynamic library handle
   void *handle_ = nullptr;
 
-  //! \brief ID
+  // @brief ID
   std::string id_;
 
-  //! \brief Name
+  // @brief Name
   std::string name_;
 
-  //! \brief Version
+  // @brief Version
   std::string version_;
-  
-  //! \brief Authors
+
+  // @brief Authors
   std::string authors_;
 
-  //! \brief Description
+  // @brief Description
   std::string description_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param path Extension path
+// @brief Constructor
+// @param path Extension path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extension::impl::impl (const std::string& path)
 {
@@ -156,7 +154,7 @@ extension::impl::impl (const std::string& path)
 
   if (!handle_)
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG (dlerror ()));
-    
+
   // load extension data
   get (handle_, "EXTENSION_ID", id_);
   get (handle_, "EXTENSION_NAME", name_);
@@ -166,7 +164,7 @@ extension::impl::impl (const std::string& path)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destructor
+// @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extension::impl::~impl ()
 {
@@ -174,7 +172,7 @@ extension::impl::~impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Start extension
+// @brief Start extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 extension::impl::start ()
@@ -182,13 +180,13 @@ extension::impl::start ()
   auto f = reinterpret_cast <void (*)()> (dlsym (handle_, "start"));
   if (f)
     f ();
-  
+
   mobius::core::log log (__FILE__, __FUNCTION__);
   log.info (__LINE__, "C++ extension '" + id_ + "' started");
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Stop extension
+// @brief Stop extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 extension::impl::stop ()
@@ -196,13 +194,13 @@ extension::impl::stop ()
   auto f = reinterpret_cast <void (*)()> (dlsym (handle_, "stop"));
   if (f)
     f ();
-  
+
   mobius::core::log log (__FILE__, __FUNCTION__);
   log.info (__LINE__, "C++ extension '" + id_ + "' stopped");
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Install extension
+// @brief Install extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 extension::impl::install ()
@@ -216,7 +214,7 @@ extension::impl::install ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Uninstall extension
+// @brief Uninstall extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 extension::impl::uninstall ()
@@ -230,8 +228,8 @@ extension::impl::uninstall ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param path Extension path
+// @brief Constructor
+// @param path Extension path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extension::extension (const std::string& path)
   : impl_ (std::make_shared <impl> (path))
@@ -239,7 +237,7 @@ extension::extension (const std::string& path)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Start extension
+// @brief Start extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 extension::start ()
@@ -248,7 +246,7 @@ extension::start ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Stop extension
+// @brief Stop extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 extension::stop ()
@@ -257,7 +255,7 @@ extension::stop ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Install extension
+// @brief Install extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 extension::install ()
@@ -266,7 +264,7 @@ extension::install ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Uninstall extension
+// @brief Uninstall extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 extension::uninstall ()
@@ -275,8 +273,8 @@ extension::uninstall ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get id
-//! \return Id
+// @brief Get id
+// @return Id
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 extension::get_id () const
@@ -285,8 +283,8 @@ extension::get_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get name
-//! \return Name
+// @brief Get name
+// @return Name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 extension::get_name () const
@@ -295,8 +293,8 @@ extension::get_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get version
-//! \return Version
+// @brief Get version
+// @return Version
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 extension::get_version () const
@@ -305,8 +303,8 @@ extension::get_version () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get authors
-//! \return Authors
+// @brief Get authors
+// @return Authors
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 extension::get_authors () const
@@ -315,8 +313,8 @@ extension::get_authors () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get description
-//! \return Description
+// @brief Get description
+// @return Description
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 extension::get_description () const
@@ -324,5 +322,6 @@ extension::get_description () const
   return impl_->get_description ();
 }
 
-} // namespace core
-} // namespace mobius
+} // namespace mobius::core
+
+

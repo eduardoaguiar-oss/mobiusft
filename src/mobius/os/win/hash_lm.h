@@ -21,17 +21,13 @@
 #include <mobius/bytearray.h>
 #include <string>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
+namespace mobius::os::win
 {
 
 mobius::bytearray hash_lm (const std::string&);
 
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win
 
 #endif
+
+

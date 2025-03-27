@@ -21,7 +21,7 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Callback for <i>delete-event</i>
+// @brief Callback for <i>delete-event</i>
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static bool
 _callback_delete_event (GtkWidget*, GdkEvent*, gpointer data)
@@ -34,7 +34,7 @@ _callback_delete_event (GtkWidget*, GdkEvent*, gpointer data)
 namespace mobius::extension::ui::gtk3
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
+// @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 window_impl::window_impl ()
 {
@@ -45,7 +45,7 @@ window_impl::window_impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destructor
+// @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 window_impl::~window_impl ()
 {
@@ -54,8 +54,8 @@ window_impl::~window_impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set widget sensitivity
-//! \param flag Flag (true/false)
+// @brief Set widget sensitivity
+// @param flag Flag (true/false)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 window_impl::set_sensitive (bool flag)
@@ -64,8 +64,8 @@ window_impl::set_sensitive (bool flag)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set widget visibility
-//! \param flag Flag (true/false)
+// @brief Set widget visibility
+// @param flag Flag (true/false)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 window_impl::set_visible (bool flag)
@@ -74,7 +74,7 @@ window_impl::set_visible (bool flag)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Show widget and its children
+// @brief Show widget and its children
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 window_impl::show_all ()
@@ -83,7 +83,7 @@ window_impl::show_all ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destroy window
+// @brief Destroy window
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 window_impl::destroy ()
@@ -101,8 +101,8 @@ window_impl::destroy ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set title
-//! \param title Title text
+// @brief Set title
+// @param title Title text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 window_impl::set_title (const std::string& title)
@@ -111,8 +111,8 @@ window_impl::set_title (const std::string& title)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get title
-//! \return Title
+// @brief Get title
+// @return Title
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 window_impl::get_title () const
@@ -127,8 +127,8 @@ window_impl::get_title () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set icon
-//! \param icon Iocn object
+// @brief Set icon
+// @param icon Iocn object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 window_impl::set_icon (const mobius::ui::icon& icon)
@@ -142,8 +142,8 @@ window_impl::set_icon (const mobius::ui::icon& icon)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set border width
-//! \param width Border width in pixels
+// @brief Set border width
+// @param width Border width in pixels
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 window_impl::set_border_width (std::uint32_t width)
@@ -152,8 +152,8 @@ window_impl::set_border_width (std::uint32_t width)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set content
-//! \param w Widget
+// @brief Set content
+// @param w Widget
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 window_impl::set_content (const mobius::ui::widget& w)
@@ -170,8 +170,8 @@ window_impl::set_content (const mobius::ui::widget& w)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get content
-//! \return Contained widget
+// @brief Get content
+// @return Contained widget
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::ui::widget
 window_impl::get_content () const
@@ -180,7 +180,7 @@ window_impl::get_content () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove content
+// @brief Remove content
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 window_impl::remove_content ()
@@ -197,9 +197,9 @@ window_impl::remove_content ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set position
-//! \param x X pos
-//! \param y Y pos
+// @brief Set position
+// @param x X pos
+// @param y Y pos
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 window_impl::set_position (std::uint32_t x, std::uint32_t y)
@@ -208,8 +208,8 @@ window_impl::set_position (std::uint32_t x, std::uint32_t y)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get position
-//! \return X, Y coordinates, in pixels
+// @brief Get position
+// @return X, Y coordinates, in pixels
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::pair <std::uint32_t, std::uint32_t>
 window_impl::get_position () const
@@ -223,9 +223,9 @@ window_impl::get_position () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set size
-//! \param width Width
-//! \param height Height
+// @brief Set size
+// @param width Width
+// @param height Height
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 window_impl::set_size (std::uint32_t width, std::uint32_t height)
@@ -234,8 +234,8 @@ window_impl::set_size (std::uint32_t width, std::uint32_t height)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get size
-//! \return Width and height, in pixels
+// @brief Get size
+// @return Width and height, in pixels
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::pair <std::uint32_t, std::uint32_t>
 window_impl::get_size () const
@@ -249,9 +249,9 @@ window_impl::get_size () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set callback to event
-//! \param event_id Event ID
-//! \param f Function or functor
+// @brief Set callback to event
+// @param event_id Event ID
+// @param f Function or functor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 window_impl::set_callback (const std::string& event_id, const mobius::core::functor<bool>& f)
@@ -276,8 +276,8 @@ window_impl::set_callback (const std::string& event_id, const mobius::core::func
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reset callback to event
-//! \param event_id Event ID
+// @brief Reset callback to event
+// @param event_id Event ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 window_impl::reset_callback (const std::string& event_id)
@@ -296,3 +296,5 @@ window_impl::reset_callback (const std::string& event_id)
 }
 
 } // namespace mobius::extension::ui::gtk3
+
+

@@ -22,13 +22,11 @@
 #include <cstdint>
 #include <string>
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Stream implementation base class
-//! \author Eduardo Aguiar
+// @brief Stream implementation base class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class stream_impl_base
 {
@@ -62,7 +60,8 @@ public:
   virtual mobius::io::reader new_reader () const = 0;
 };
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
 
 #endif
+
+

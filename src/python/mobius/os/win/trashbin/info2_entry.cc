@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file info2_entry.cc C++ API <i>mobius.os.win.trashbin.info2_entry</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "info2_entry.h"
@@ -27,9 +27,9 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>info2_entry</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>info2_entry</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_os_win_trashbin_info2_entry_check (PyObject *value)
@@ -38,9 +38,9 @@ pymobius_os_win_trashbin_info2_entry_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>info2_entry</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New info2_entry object
+// @brief Create <i>info2_entry</i> Python object from C++ object
+// @param obj C++ object
+// @return New info2_entry object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_os_win_trashbin_info2_entry_to_pyobject (const mobius::os::win::trashbin::info2_entry& obj)
@@ -54,9 +54,9 @@ pymobius_os_win_trashbin_info2_entry_to_pyobject (const mobius::os::win::trashbi
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>info2_entry</i> C++ object from Python object
-//! \param value Python value
-//! \return Info2_entry object
+// @brief Create <i>info2_entry</i> C++ object from Python object
+// @param value Python value
+// @return Info2_entry object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::os::win::trashbin::info2_entry
 pymobius_os_win_trashbin_info2_entry_from_pyobject (PyObject *value)
@@ -68,9 +68,9 @@ pymobius_os_win_trashbin_info2_entry_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_deleted</i> Attribute getter
-//! \param self Object
-//! \return <i>is_deleted</i> attribute
+// @brief <i>is_deleted</i> Attribute getter
+// @param self Object
+// @return <i>is_deleted</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_is_deleted (os_win_trashbin_info2_entry_o *self)
@@ -90,9 +90,9 @@ tp_getter_is_deleted (os_win_trashbin_info2_entry_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>path</i> Attribute getter
-//! \param self Object
-//! \return <i>path</i> attribute
+// @brief <i>path</i> Attribute getter
+// @param self Object
+// @return <i>path</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_path (os_win_trashbin_info2_entry_o *self)
@@ -112,9 +112,9 @@ tp_getter_path (os_win_trashbin_info2_entry_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>drive_number</i> Attribute getter
-//! \param self Object
-//! \return <i>drive_number</i> attribute
+// @brief <i>drive_number</i> Attribute getter
+// @param self Object
+// @return <i>drive_number</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_drive_number (os_win_trashbin_info2_entry_o *self)
@@ -134,9 +134,9 @@ tp_getter_drive_number (os_win_trashbin_info2_entry_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>file_idx</i> Attribute getter
-//! \param self Object
-//! \return <i>file_idx</i> attribute
+// @brief <i>file_idx</i> Attribute getter
+// @param self Object
+// @return <i>file_idx</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_file_idx (os_win_trashbin_info2_entry_o *self)
@@ -156,9 +156,9 @@ tp_getter_file_idx (os_win_trashbin_info2_entry_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>deletion_time</i> Attribute getter
-//! \param self Object
-//! \return <i>deletion_time</i> attribute
+// @brief <i>deletion_time</i> Attribute getter
+// @param self Object
+// @return <i>deletion_time</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_deletion_time (os_win_trashbin_info2_entry_o *self)
@@ -178,9 +178,9 @@ tp_getter_deletion_time (os_win_trashbin_info2_entry_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>size</i> Attribute getter
-//! \param self Object
-//! \return <i>size</i> attribute
+// @brief <i>size</i> Attribute getter
+// @param self Object
+// @return <i>size</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_size (os_win_trashbin_info2_entry_o *self)
@@ -200,7 +200,7 @@ tp_getter_size (os_win_trashbin_info2_entry_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Getters and setters structure
+// @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -250,8 +250,8 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>info2_entry</i> deallocator
-//! \param self Object
+// @brief <i>info2_entry</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (os_win_trashbin_info2_entry_o *self)
@@ -261,7 +261,7 @@ tp_dealloc (os_win_trashbin_info2_entry_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject os_win_trashbin_info2_entry_t =
 {
@@ -314,3 +314,5 @@ PyTypeObject os_win_trashbin_info2_entry_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

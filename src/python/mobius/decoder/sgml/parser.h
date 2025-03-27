@@ -22,7 +22,7 @@
 #include <mobius/decoder/sgml/parser.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_decoder_sgml_parser_to_pyobject (const mobius::decoder::sgml:
 mobius::decoder::sgml::parser pymobius_decoder_sgml_parser_from_pyobject (PyObject *);
 
 #endif
+
+

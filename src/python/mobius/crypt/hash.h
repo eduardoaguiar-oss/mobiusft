@@ -22,7 +22,7 @@
 #include <mobius/crypt/hash.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_crypt_hash_to_pyobject (const mobius::crypt::hash&);
 mobius::crypt::hash pymobius_crypt_hash_from_pyobject (PyObject *);
 
 #endif
+
+

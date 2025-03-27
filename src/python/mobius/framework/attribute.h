@@ -23,7 +23,7 @@
 #include <mobius/framework/attribute.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -41,3 +41,5 @@ PyObject *pymobius_framework_attribute_to_pyobject (const mobius::framework::att
 mobius::framework::attribute pymobius_framework_attribute_from_pyobject (PyObject *);
 
 #endif
+
+

@@ -22,7 +22,7 @@
 #include <mobius/decoder/lnk.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,7 @@ PyObject *pymobius_decoder_lnk_to_pyobject (const mobius::decoder::lnk&);
 mobius::decoder::lnk pymobius_decoder_lnk_from_pyobject (PyObject *);
 
 #endif
+
+
+
+

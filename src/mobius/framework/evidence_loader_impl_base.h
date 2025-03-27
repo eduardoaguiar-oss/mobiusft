@@ -23,8 +23,8 @@
 namespace mobius::framework
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>evidence_loader</i> implementation base class
-//! \author Eduardo Aguiar
+// @brief <i>evidence_loader</i> implementation base class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class evidence_loader_impl_base
 {
@@ -59,3 +59,5 @@ public:
 } // namespace mobius::framework
 
 #endif
+
+

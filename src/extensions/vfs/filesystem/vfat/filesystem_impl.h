@@ -22,9 +22,9 @@
 #include <mobius/vfs/tsk/adaptor.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief VFAT filesystem implementation class
-//! \author Eduardo Aguiar
-//! \see ECMA-107
+// @brief VFAT filesystem implementation class
+// @author Eduardo Aguiar
+// @see ECMA-107
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class filesystem_impl : public mobius::vfs::filesystem_impl_base
 {
@@ -40,8 +40,8 @@ public:
   mobius::io::folder get_root_folder () const override;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if object is valid
-  //! \return true/false
+  // @brief Check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator bool () const noexcept override
   {
@@ -49,8 +49,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get reader
-  //! \return Reader
+  // @brief Get reader
+  // @return Reader
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::io::reader
   get_reader () const override
@@ -59,8 +59,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get offset
-  //! \return Offset
+  // @brief Get offset
+  // @return Offset
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_offset () const override
@@ -69,8 +69,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get size
-  //! \return Size
+  // @brief Get size
+  // @return Size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_size () const override
@@ -80,8 +80,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get type
-  //! \return Type
+  // @brief Get type
+  // @return Type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_type () const override
@@ -91,8 +91,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get name
-  //! \return Name
+  // @brief Get name
+  // @return Name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_name () const override
@@ -102,8 +102,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get metadata
-  //! \return Metadata
+  // @brief Get metadata
+  // @return Metadata
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::pod::map
   get_metadata () const override
@@ -113,28 +113,28 @@ public:
   }
 
 private:
-  //! \brief Volume reader object
+  // @brief Volume reader object
   mobius::io::reader reader_;
 
-  //! \brief Offset from the beginning of volume
+  // @brief Offset from the beginning of volume
   size_type offset_;
 
-  //! \brief Size in bytes
+  // @brief Size in bytes
   mutable size_type size_;
 
-  //! \brief Filesystem type
+  // @brief Filesystem type
   mutable std::string type_;
 
-  //! \brief Filesystem name
+  // @brief Filesystem name
   mutable std::string name_;
 
-  //! \brief Metadata
+  // @brief Metadata
   mutable mobius::pod::map metadata_;
 
-  //! \brief TSK adaptor class
+  // @brief TSK adaptor class
   mobius::vfs::tsk::adaptor tsk_adaptor_;
 
-  //! \brief data loaded flag
+  // @brief data loaded flag
   mutable bool data_loaded_ = false;
 
   // helper functions
@@ -142,3 +142,5 @@ private:
 };
 
 #endif
+
+

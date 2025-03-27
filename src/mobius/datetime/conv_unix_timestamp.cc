@@ -20,16 +20,14 @@
 #include <mobius/exception.inc>
 #include <stdexcept>
 
-namespace mobius
-{
-namespace datetime
+namespace mobius::datetime
 {
 static constexpr datetime EPOCH_UNIX_DATETIME (1970, 1, 1, 0, 0, 0);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert UNIX timestamp to datetime
-//! \param timestamp UNIX timestamp
-//! \return datetime
+// @brief Convert UNIX timestamp to datetime
+// @param timestamp UNIX timestamp
+// @return datetime
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datetime
 new_datetime_from_unix_timestamp (std::uint64_t timestamp)
@@ -47,9 +45,9 @@ new_datetime_from_unix_timestamp (std::uint64_t timestamp)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert datetime to UNIX timestamp
-//! \param dt datetime
-//! \return UNIX timestamp
+// @brief Convert datetime to UNIX timestamp
+// @param dt datetime
+// @return UNIX timestamp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 /*
 std::uint64_t
@@ -64,5 +62,6 @@ datetime_from_unix_timestamp (const datetime& dt)
   return 0; //EPOCH_UNIX_DATETIME + delta;
 }*/
 
-} // namespace datetime
-} // namespace mobius
+} // namespace mobius::datetime
+
+

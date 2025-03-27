@@ -22,7 +22,7 @@
 #include <mobius/io/uri.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_io_uri_to_pyobject (mobius::io::uri);
 mobius::io::uri pymobius_io_uri_from_pyobject (PyObject *);
 
 #endif
+
+

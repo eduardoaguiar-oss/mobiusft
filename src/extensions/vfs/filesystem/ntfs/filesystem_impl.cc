@@ -20,10 +20,10 @@
 #include <mobius/string_functions.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if stream contains an instance of NTFS filesystem
-//! \param reader Reader object
-//! \param offset Offset from the beginning of the stream
-//! \return True/false
+// @brief Check if stream contains an instance of NTFS filesystem
+// @param reader Reader object
+// @param offset Offset from the beginning of the stream
+// @return True/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 filesystem_impl::is_instance (mobius::io::reader reader, std::uint64_t offset)
@@ -35,9 +35,9 @@ filesystem_impl::is_instance (mobius::io::reader reader, std::uint64_t offset)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
-//! \param offset Offset from the beginning of volume
+// @brief Constructor
+// @param reader Reader object
+// @param offset Offset from the beginning of volume
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 filesystem_impl::filesystem_impl (
   const mobius::io::reader& reader,
@@ -50,9 +50,9 @@ filesystem_impl::filesystem_impl (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get metadata item
-//! \param name Item name
-//! \return Data object
+// @brief Get metadata item
+// @param name Item name
+// @return Data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 filesystem_impl::get_metadata (const std::string& name) const
@@ -62,8 +62,8 @@ filesystem_impl::get_metadata (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get root folder
-//! \return Root folder
+// @brief Get root folder
+// @return Root folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::folder
 filesystem_impl::get_root_folder () const
@@ -72,7 +72,7 @@ filesystem_impl::get_root_folder () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load data on demand
+// @brief Load data on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 filesystem_impl::_load_data () const
@@ -141,3 +141,5 @@ filesystem_impl::_load_data () const
   // Set data loaded
   data_loaded_ = true;
 }
+
+

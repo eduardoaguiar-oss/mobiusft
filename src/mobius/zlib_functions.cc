@@ -28,9 +28,9 @@ static constexpr int CHUNK_SIZE = 512 * 1024;
 namespace mobius
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief compress zlib stream
-//! \param bytearray
-//! \return compressed bytearray
+// @brief compress zlib stream
+// @param bytearray
+// @return compressed bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 zlib_compress (const mobius::bytearray& array, int level)
@@ -77,9 +77,9 @@ zlib_compress (const mobius::bytearray& array, int level)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief decompress zlib stream
-//! \param compressed bytearray
-//! \return decompressed bytearray
+// @brief decompress zlib stream
+// @param compressed bytearray
+// @return decompressed bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 zlib_decompress (const mobius::bytearray& array)
@@ -126,3 +126,5 @@ zlib_decompress (const mobius::bytearray& array)
 }
 
 } // namespace mobius
+
+

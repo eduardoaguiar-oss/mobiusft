@@ -26,9 +26,9 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if file is an instance of imagefile solo
-//! \param f File object
-//! \return true/false
+// @brief Check if file is an instance of imagefile solo
+// @param f File object
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 imagefile_impl::is_instance (const mobius::io::file& f)
@@ -38,7 +38,7 @@ imagefile_impl::is_instance (const mobius::io::file& f)
   if (f && f.exists ())
     {
       auto reader = f.new_reader ();
-      
+
       if (reader)
         {
           mobius::bytearray data = reader.read (14);
@@ -50,8 +50,8 @@ imagefile_impl::is_instance (const mobius::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Construct object
-//! \param f File object
+// @brief Construct object
+// @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile_impl::imagefile_impl (const mobius::io::file& f)
   : file_ (f),
@@ -65,9 +65,9 @@ imagefile_impl::imagefile_impl (const mobius::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attribute
-//! \param name Attribute name
-//! \return Attribute value
+// @brief Get attribute
+// @param name Attribute name
+// @return Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 imagefile_impl::get_attribute (const std::string& name) const
@@ -77,9 +77,9 @@ imagefile_impl::get_attribute (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set attribute
-//! \param name Attribute name
-//! \param value Attribute value
+// @brief Set attribute
+// @param name Attribute name
+// @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 imagefile_impl::set_attribute (
@@ -91,8 +91,8 @@ imagefile_impl::set_attribute (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attributes
-//! \return Attributes
+// @brief Get attributes
+// @return Attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 imagefile_impl::get_attributes () const
@@ -102,8 +102,8 @@ imagefile_impl::get_attributes () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new reader for imagefile
-//! \return Reader object
+// @brief Create new reader for imagefile
+// @return Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::reader
 imagefile_impl::new_reader () const
@@ -112,8 +112,8 @@ imagefile_impl::new_reader () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new writer for imagefile
-//! \return Writer object
+// @brief Create new writer for imagefile
+// @return Writer object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::writer
 imagefile_impl::new_writer () const
@@ -122,7 +122,7 @@ imagefile_impl::new_writer () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load metadata on demand
+// @brief Load metadata on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 imagefile_impl::_load_metadata () const
@@ -138,7 +138,7 @@ imagefile_impl::_load_metadata () const
 
   if (file_.get_size () > LOG_MAX_SIZE)
     throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("Image file control file too large"));
-          
+
   // Load metadata
   std::regex REGEX_SEIZE_TIME ("\\nSeize Time = *([0-9]+):([0-9]+):([0-9]+)\\n");
   std::regex REGEX_SEIZE_DATE ("\\nSeize Date = *([0-9]+)/([0-9]+)/([0-9]+)\\n");
@@ -181,7 +181,7 @@ imagefile_impl::_load_metadata () const
                             stoi (match[2].str ()));
 
     }
-     
+
   if (std::regex_search (text, match, REGEX_SEIZE_TIME))
     {
       mobius::datetime::time time = mobius::datetime::time (
@@ -219,7 +219,7 @@ imagefile_impl::_load_metadata () const
   std::string acquisition_user = file_.get_user_name ();
 
   mobius::vfs::normalize_drive_info (drive_vendor, drive_model, drive_serial_number);
- 
+
   // fill attributes
   attributes_.set ("drive_vendor", drive_vendor);
   attributes_.set ("drive_model", drive_model);
@@ -231,7 +231,9 @@ imagefile_impl::_load_metadata () const
   attributes_.set ("acquisition_platform", acquisition_platform);
   attributes_.set ("acquisition_user", acquisition_user);
   attributes_.set ("hash_md5", hash_md5);
-    
+
   // set metadata loaded
   metadata_loaded_ = true;
 }
+
+

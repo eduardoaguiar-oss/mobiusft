@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file metadata.cc C++ API <i>mobius.core.decoder.metadata</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pylist.h>
@@ -29,9 +29,9 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_value</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_value</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_value (core_file_decoder_metadata_o *self, PyObject *args)
@@ -69,10 +69,10 @@ tp_f_set_value (core_file_decoder_metadata_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_value</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Metadata value
+// @brief <i>get_value</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Metadata value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_value (core_file_decoder_metadata_o *self, PyObject *args)
@@ -109,10 +109,10 @@ tp_f_get_value (core_file_decoder_metadata_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_groups</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Groups IDs
+// @brief <i>get_groups</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Groups IDs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_groups (core_file_decoder_metadata_o *self, PyObject *)
@@ -137,10 +137,10 @@ tp_f_get_groups (core_file_decoder_metadata_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_group</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Metadata
+// @brief <i>get_group</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_group (core_file_decoder_metadata_o *self, PyObject *args)
@@ -175,7 +175,7 @@ tp_f_get_group (core_file_decoder_metadata_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -187,11 +187,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>metadata</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>metadata</i> object
+// @brief <i>metadata</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>metadata</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *, PyObject *)
@@ -216,8 +216,8 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>metadata</i> deallocator
-//! \param self Object
+// @brief <i>metadata</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (core_file_decoder_metadata_o *self)
@@ -227,7 +227,7 @@ tp_dealloc (core_file_decoder_metadata_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyTypeObject core_file_decoder_metadata_t =
 {
@@ -282,7 +282,7 @@ static PyTypeObject core_file_decoder_metadata_t =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>mobius.core.decoder.metadata</i> type
+// @brief Create <i>mobius.core.decoder.metadata</i> type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
 new_core_file_decoder_metadata_type ()
@@ -294,9 +294,9 @@ new_core_file_decoder_metadata_type ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>metadata</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>metadata</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_core_file_decoder_metadata_check (PyObject *value)
@@ -305,9 +305,9 @@ pymobius_core_file_decoder_metadata_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>metadata</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New metadata object
+// @brief Create <i>metadata</i> Python object from C++ object
+// @param obj C++ object
+// @return New metadata object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_core_file_decoder_metadata_to_pyobject (const mobius::core::file_decoder::metadata& obj)
@@ -316,12 +316,14 @@ pymobius_core_file_decoder_metadata_to_pyobject (const mobius::core::file_decode
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>metadata</i> C++ object from Python object
-//! \param value Python value
-//! \return File_metadata object
+// @brief Create <i>metadata</i> C++ object from Python object
+// @param value Python value
+// @return File_metadata object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::file_decoder::metadata
 pymobius_core_file_decoder_metadata_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <core_file_decoder_metadata_o> (value, &core_file_decoder_metadata_t);
 }
+
+

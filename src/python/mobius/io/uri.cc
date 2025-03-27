@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file uri.cc C++ API <i>mobius.io.uri</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "uri.h"
@@ -27,9 +27,9 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if object type is <i>uri</i>
-//! \param pyobj Python object
-//! \return true/false
+// @brief Check if object type is <i>uri</i>
+// @param pyobj Python object
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_io_uri_check (PyObject *pyobj)
@@ -38,9 +38,9 @@ pymobius_io_uri_check (PyObject *pyobj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>uri</i> Python object from C++ object
-//! \param obj C++ object
-//! \return new uri object
+// @brief Create <i>uri</i> Python object from C++ object
+// @param obj C++ object
+// @return new uri object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_io_uri_to_pyobject (mobius::io::uri obj)
@@ -54,9 +54,9 @@ pymobius_io_uri_to_pyobject (mobius::io::uri obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>uri</i> C++ object from Python object
-//! \param pyobj Python object
-//! \return uri object
+// @brief Create <i>uri</i> C++ object from Python object
+// @param pyobj Python object
+// @return uri object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::uri
 pymobius_io_uri_from_pyobject (PyObject *pyobj)
@@ -68,10 +68,10 @@ pymobius_io_uri_from_pyobject (PyObject *pyobj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_value</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return URI
+// @brief <i>get_value</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return URI
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_value (io_uri_o *self, PyObject *)
@@ -93,10 +93,10 @@ tp_f_get_value (io_uri_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_scheme</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Scheme
+// @brief <i>get_scheme</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Scheme
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_scheme (io_uri_o *self, PyObject *)
@@ -118,10 +118,10 @@ tp_f_get_scheme (io_uri_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_authority</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Authority
+// @brief <i>get_authority</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Authority
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_authority (io_uri_o *self, PyObject *)
@@ -143,10 +143,10 @@ tp_f_get_authority (io_uri_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_path</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Path
+// @brief <i>get_path</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_path (io_uri_o *self, PyObject *args)
@@ -181,10 +181,10 @@ tp_f_get_path (io_uri_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_query</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Query
+// @brief <i>get_query</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Query
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_query (io_uri_o *self, PyObject *args)
@@ -219,10 +219,10 @@ tp_f_get_query (io_uri_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_fragment</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Fragment
+// @brief <i>get_fragment</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Fragment
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_fragment (io_uri_o *self, PyObject *args)
@@ -257,10 +257,10 @@ tp_f_get_fragment (io_uri_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_username</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return User name
+// @brief <i>get_username</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return User name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_username (io_uri_o *self, PyObject *)
@@ -282,10 +282,10 @@ tp_f_get_username (io_uri_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_password</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Password
+// @brief <i>get_password</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Password
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_password (io_uri_o *self, PyObject *)
@@ -307,10 +307,10 @@ tp_f_get_password (io_uri_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_host</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Host
+// @brief <i>get_host</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Host
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_host (io_uri_o *self, PyObject *)
@@ -332,10 +332,10 @@ tp_f_get_host (io_uri_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_port</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Port
+// @brief <i>get_port</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Port
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_port (io_uri_o *self, PyObject *)
@@ -357,10 +357,10 @@ tp_f_get_port (io_uri_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_parent</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Directory
+// @brief <i>get_parent</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Directory
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_parent (io_uri_o *self, PyObject *)
@@ -382,10 +382,10 @@ tp_f_get_parent (io_uri_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_sibling_by_name</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Directory
+// @brief <i>get_sibling_by_name</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Directory
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_sibling_by_name (io_uri_o *self, PyObject *args)
@@ -420,10 +420,10 @@ tp_f_get_sibling_by_name (io_uri_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_sibling_by_extension</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Directory
+// @brief <i>get_sibling_by_extension</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Directory
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_sibling_by_extension (io_uri_o *self, PyObject *args)
@@ -458,10 +458,10 @@ tp_f_get_sibling_by_extension (io_uri_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_child_by_name</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Directory
+// @brief <i>get_child_by_name</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Directory
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_child_by_name (io_uri_o *self, PyObject *args)
@@ -496,10 +496,10 @@ tp_f_get_child_by_name (io_uri_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_child_by_path</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Directory
+// @brief <i>get_child_by_path</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Directory
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_child_by_path (io_uri_o *self, PyObject *args)
@@ -534,10 +534,10 @@ tp_f_get_child_by_path (io_uri_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_filename</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Filename
+// @brief <i>get_filename</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Filename
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_filename (io_uri_o *self, PyObject *)
@@ -559,10 +559,10 @@ tp_f_get_filename (io_uri_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_extension</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Get file extension
+// @brief <i>get_extension</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Get file extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_extension (io_uri_o *self, PyObject *)
@@ -584,10 +584,10 @@ tp_f_get_extension (io_uri_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_empty</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_empty</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_empty (io_uri_o *self, PyObject *)
@@ -609,10 +609,10 @@ tp_f_is_empty (io_uri_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_relative</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_relative</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_relative (io_uri_o *self, PyObject *)
@@ -634,10 +634,10 @@ tp_f_is_relative (io_uri_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_absolute</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_absolute</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_absolute (io_uri_o *self, PyObject *)
@@ -659,7 +659,7 @@ tp_f_is_absolute (io_uri_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -787,11 +787,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>uri</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>uri</i> object
+// @brief <i>uri</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>uri</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
@@ -855,8 +855,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>uri</i> deallocator
-//! \param self Object
+// @brief <i>uri</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (io_uri_o *self)
@@ -866,7 +866,7 @@ tp_dealloc (io_uri_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject io_uri_t =
 {
@@ -919,3 +919,5 @@ PyTypeObject io_uri_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

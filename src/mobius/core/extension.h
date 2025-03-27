@@ -21,13 +21,11 @@
 #include <memory>
 #include <string>
 
-namespace mobius
-{
-namespace core
+namespace mobius::core
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief C++ extension class
-//! \author Eduardo Aguiar
+// @brief C++ extension class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class extension
 {
@@ -59,14 +57,15 @@ public:
   std::string get_description () const;
 
 private:
-  //! \brief Implementation class forward declaration
+  // @brief Implementation class forward declaration
   class impl;
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
-} // namespace core
-} // namespace mobius
+} // namespace mobius::core
 
 #endif
+
+

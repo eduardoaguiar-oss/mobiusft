@@ -22,9 +22,9 @@
 namespace mobius::framework
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert flag to string
-//! \param f Flag
-//! \return String
+// @brief Convert flag to string
+// @param f Flag
+// @return String
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 to_string (evidence_flag f)
@@ -40,3 +40,5 @@ to_string (evidence_flag f)
 }
 
 } // namespace mobius::framework
+
+

@@ -21,9 +21,7 @@
 #include <stdexcept>
 #include <fnmatch.h>
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 namespace
 {
@@ -33,10 +31,10 @@ namespace
 static constexpr char SEPARATOR = '/';
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove dot segments
-//! \param path path as string
-//! \return path without "." and ".." dot segments
-//! \see RFC 3986 - section 5.2.4
+// @brief Remove dot segments
+// @param path path as string
+// @return path without "." and ".." dot segments
+// @see RFC 3986 - section 5.2.4
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
 _remove_dot_segments (const std::string& path)
@@ -57,7 +55,7 @@ _remove_dot_segments (const std::string& path)
       else if (input.size () >= 2 && input[0] == '.' && input[1] == SEPARATOR)
         input = input.substr (2);
 
-      // 5.2.4.B (replace "/./" or "/." for "/") 
+      // 5.2.4.B (replace "/./" or "/." for "/")
       else if (input.size () >= 3 && input[0] == SEPARATOR && input[1] == '.' && input[2] == SEPARATOR)
         input = SEPARATOR + input.substr (3);
 
@@ -115,8 +113,8 @@ _remove_dot_segments (const std::string& path)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param value Path value as char array
+// @brief Constructor
+// @param value Path value as char array
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 path::path (const char *value)
   : value_ (_remove_dot_segments (value))
@@ -124,8 +122,8 @@ path::path (const char *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param value Path value as string
+// @brief Constructor
+// @param value Path value as string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 path::path (const std::string& value)
   : value_ (_remove_dot_segments (value))
@@ -133,8 +131,8 @@ path::path (const std::string& value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get dirname from path
-//! \return Dirname (all but last segment of path)
+// @brief Get dirname from path
+// @return Dirname (all but last segment of path)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 path::get_dirname () const
@@ -149,8 +147,8 @@ path::get_dirname () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get filename from path
-//! \return Filename
+// @brief Get filename from path
+// @return Filename
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 path::get_filename () const
@@ -162,42 +160,42 @@ path::get_filename () const
     filename = value_;
   else
     filename = value_.substr (pos+1);
-  
+
   return filename;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get prefix from path
-//! \return File prefix (path without extension)
+// @brief Get prefix from path
+// @return File prefix (path without extension)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 path::get_prefix () const
 {
   const std::string extension = get_extension ();
   std::string prefix;
-  
+
   if (!extension.empty ())
     prefix = value_.substr (0, value_.size () - extension.size () - 1);
-  
+
   return prefix;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get prefix from filename
-//! \return File prefix (filename without extension)
+// @brief Get prefix from filename
+// @return File prefix (filename without extension)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 path::get_filename_prefix () const
 {
   const std::string extension = get_extension ();
   const std::string filename = get_filename ();
-  
+
   return filename.substr (0, filename.size () - extension.size () - 1);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get extension from path
-//! \return File extension
+// @brief Get extension from path
+// @return File extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 path::get_extension () const
@@ -208,13 +206,13 @@ path::get_extension () const
 
   if (pos != std::string::npos)
     extension = filename.substr (pos+1);
-  
+
   return extension;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get parent path
-//! \return Parent path
+// @brief Get parent path
+// @return Parent path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 path
 path::get_parent () const
@@ -223,9 +221,9 @@ path::get_parent () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get sibling path by name
-//! \param filename Sibling file name
-//! \return Sibling path
+// @brief Get sibling path by name
+// @param filename Sibling file name
+// @return Sibling path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 path
 path::get_sibling_by_name (const std::string& filename) const
@@ -240,14 +238,14 @@ path::get_sibling_by_name (const std::string& filename) const
     p = filename;
   else
     p = value_.substr (0, pos + 1) + filename;
-  
+
   return path (p);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get sibling path by extension
-//! \param ext Sibling extension
-//! \return Sibling path
+// @brief Get sibling path by extension
+// @param ext Sibling extension
+// @return Sibling path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 path
 path::get_sibling_by_extension (const std::string& ext) const
@@ -259,9 +257,9 @@ path::get_sibling_by_extension (const std::string& ext) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get child path by name
-//! \param name Child name
-//! \return Child path
+// @brief Get child path by name
+// @param name Child name
+// @return Child path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 path
 path::get_child_by_name (const std::string& name) const
@@ -280,9 +278,9 @@ path::get_child_by_name (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get child path by path
-//! \param path Child path
-//! \return Child path
+// @brief Get child path by path
+// @param path Child path
+// @return Child path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 path
 path::get_child_by_path (const std::string& path) const
@@ -303,33 +301,33 @@ path::get_child_by_path (const std::string& path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if path is absolute
-//! \return true/false
+// @brief Check if path is absolute
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 path::is_absolute () const
 {
   return !value_.empty () && value_[0] == SEPARATOR;
-}  
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if filename matches pattern
-//! \param pattern fnmatch function pattern
-//! \return true/false
+// @brief Check if filename matches pattern
+// @param pattern fnmatch function pattern
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 path::filename_match (const std::string& pattern) const
 {
   const std::string filename = get_filename ();
-      
+
   return fnmatch (pattern.c_str (), filename.c_str (), FNM_NOESCAPE) == 0;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if two path objects are equal
-//! \param lhs path object
-//! \param rhs path object
-//! \return true if lhs == rhs
+// @brief Check if two path objects are equal
+// @param lhs path object
+// @param rhs path object
+// @return true if lhs == rhs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator== (const path& lhs, const path& rhs)
@@ -338,10 +336,10 @@ operator== (const path& lhs, const path& rhs)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if one path object is less than another one
-//! \param lhs Path object
-//! \param rhs Path object
-//! \return true if lhs < rhs
+// @brief Check if one path object is less than another one
+// @param lhs Path object
+// @param rhs Path object
+// @return true if lhs < rhs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator< (const path& lhs, const path& rhs)
@@ -350,9 +348,9 @@ operator< (const path& lhs, const path& rhs)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert path to string
-//! \param p Path object
-//! \return String representation of path
+// @brief Convert path to string
+// @param p Path object
+// @return String representation of path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 to_string (const path& p)
@@ -361,10 +359,10 @@ to_string (const path& p)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Write path representation to std::ostream
-//! \param stream ostream reference
-//! \param p Path object
-//! \return reference to ostream
+// @brief Write path representation to std::ostream
+// @param stream ostream reference
+// @param p Path object
+// @return reference to ostream
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::ostream&
 operator<< (std::ostream& stream, const path& p)
@@ -375,10 +373,10 @@ operator<< (std::ostream& stream, const path& p)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Join two paths
-//! \param p1 Path object
-//! \param p2 Path object
-//! \return New path
+// @brief Join two paths
+// @param p1 Path object
+// @param p2 Path object
+// @return New path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 path
 join (const path& p1, const path& p2)
@@ -390,9 +388,9 @@ join (const path& p1, const path& p2)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create path from Win path
-//! \param value Path
-//! \return New path object
+// @brief Create path from Win path
+// @param value Path
+// @return New path object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 path
 new_path_from_win (const std::string& value)
@@ -401,8 +399,8 @@ new_path_from_win (const std::string& value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get path formatted for Win
-//! \return Path
+// @brief Get path formatted for Win
+// @return Path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 to_win_path (const path& path)
@@ -410,5 +408,6 @@ to_win_path (const path& path)
   return mobius::string::replace (path.get_value (), "/", "\\");
 }
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
+
+

@@ -21,13 +21,11 @@
 #include <mobius/io/reader_impl_base.h>
 #include <mobius/io/reader.h>
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief reader_impl_evaluator template
-//! \author Eduardo Aguiar
+// @brief reader_impl_evaluator template
+// @author Eduardo Aguiar
 // This template class allows us to create a write object, passing another
 // write object (called client reader) and a functor, which will be called
 // at every write operation.
@@ -53,8 +51,8 @@ public:
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // main constructor
-  //! \param reader client reader
-  //! \param functor evaluation functor
+  // @param reader client reader
+  // @param functor evaluation functor
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   reader_impl_evaluator (mobius::io::reader reader, T& functor)
     : reader_ (reader),
@@ -63,8 +61,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if reader is seekable
-  //! \return true/false
+  // @brief check if reader is seekable
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_seekable () const override
@@ -73,8 +71,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get current read position
-  //! \return read position in bytes from the beginning of data
+  // @brief get current read position
+  // @return read position in bytes from the beginning of data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   offset_type
   tell () const override
@@ -83,9 +81,9 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set read position
-  //! \param offset offset in bytes
-  //! \param w either beginning, current or end
+  // @brief set read position
+  // @param offset offset in bytes
+  // @param w either beginning, current or end
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   seek (offset_type offset, whence_type whence = whence_type::beginning) override
@@ -94,8 +92,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get stream size, if available
-  //! \return stream size in bytes
+  // @brief get stream size, if available
+  // @return stream size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_size () const override
@@ -104,8 +102,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if end-of-file (EOF) is reached
-  //! \return true/false
+  // @brief check if end-of-file (EOF) is reached
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   eof () const override
@@ -114,8 +112,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get default block size
-  //! \return Block size in bytes
+  // @brief Get default block size
+  // @return Block size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_block_size () const override
@@ -124,9 +122,9 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief read bytes from reader
-  //! \param size size in bytes
-  //! \param bytearray containing data
+  // @brief read bytes from reader
+  // @param size size in bytes
+  // @param bytearray containing data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   read (size_type size) override
@@ -142,10 +140,10 @@ private:
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create new reader object, with filter functor
-//! \author Eduardo Aguiar
-//! \param reader client reader
-//! \param functor functor object
+// @brief create new reader object, with filter functor
+// @author Eduardo Aguiar
+// @param reader client reader
+// @param functor functor object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename T> const mobius::io::reader
 reader_evaluator (mobius::io::reader reader, T& functor)
@@ -153,7 +151,8 @@ reader_evaluator (mobius::io::reader reader, T& functor)
   return mobius::io::reader (std::make_shared <reader_impl_evaluator<T>> (reader, functor));
 }
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
 
 #endif
+
+

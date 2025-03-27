@@ -21,21 +21,14 @@
 #include <cstdint>
 #include <string>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace dpapi
+namespace mobius::os::win::dpapi
 {
 std::string get_cipher_id (std::uint32_t);
 std::uint32_t get_cipher_key_length (std::uint32_t);
 std::uint32_t get_cipher_salt_length (std::uint32_t);
 
-} // namespace dpapi
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::dpapi
 
 #endif
+
+

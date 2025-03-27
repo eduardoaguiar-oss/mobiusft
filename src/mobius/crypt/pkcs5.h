@@ -22,9 +22,7 @@
 #include <string>
 #include <cstdint>
 
-namespace mobius
-{
-namespace crypt
+namespace mobius::crypt
 {
 
 mobius::bytearray pkcs5_unpad (const mobius::bytearray&);
@@ -33,7 +31,8 @@ mobius::bytearray pbkdf1 (const std::string&, const mobius::bytearray&, const mo
 
 mobius::bytearray pbkdf2_hmac (const std::string&, const mobius::bytearray&, const mobius::bytearray&, std::uint32_t, std::uint16_t);
 
-} // namespace crypt
-} // namespace mobius
+} // namespace mobius::crypt
 
 #endif
+
+

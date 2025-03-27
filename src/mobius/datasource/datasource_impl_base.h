@@ -23,8 +23,8 @@
 namespace mobius::datasource
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>datasource</i> implementation base class
-//! \author Eduardo Aguiar
+// @brief <i>datasource</i> implementation base class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class datasource_impl_base
 {
@@ -55,3 +55,5 @@ public:
 } // namespace mobius::datasource
 
 #endif
+
+

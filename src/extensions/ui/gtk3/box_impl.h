@@ -25,8 +25,8 @@
 namespace mobius::extension::ui::gtk3
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>gtk3 box</i> implementation class
-//! \author Eduardo Aguiar
+// @brief <i>gtk3 box</i> implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class box_impl : public mobius::ui::box_impl_base
 {
@@ -38,8 +38,8 @@ public:
   ~box_impl ();
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get low level widget
-  //! \return Low level widget
+  // @brief Get low level widget
+  // @return Low level widget
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::any
   get_ui_widget () const final
@@ -59,13 +59,15 @@ public:
   void clear () final;
 
 private:
-  //! \brief Low level widget
+  // @brief Low level widget
   GtkWidget *widget_ = nullptr;
 
-  //! \brief Children widget
+  // @brief Children widget
   std::vector <mobius::ui::widget> children_;
 };
 
 } // namespace mobius::extension::ui::gtk3
 
 #endif
+
+

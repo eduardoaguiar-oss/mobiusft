@@ -22,13 +22,11 @@
 #include <mobius/bytearray.h>
 #include <cstdint>
 
-namespace mobius
-{
-namespace encoder
+namespace mobius::encoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data encoder class
-//! \author Eduardo Aguiar
+// @brief Data encoder class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class data_encoder
 {
@@ -49,7 +47,10 @@ private:
   mobius::io::writer writer_;
 };
 
-} // namespace encoder
-} // namespace mobius
+} // namespace mobius::encoder
 
 #endif
+
+
+
+

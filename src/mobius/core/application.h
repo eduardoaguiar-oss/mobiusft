@@ -25,8 +25,8 @@
 namespace mobius::core
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Application main class
-//! \author Eduardo Aguiar
+// @brief Application main class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class application
 {
@@ -71,3 +71,5 @@ public:
 } // namespace mobius::core
 
 #endif
+
+

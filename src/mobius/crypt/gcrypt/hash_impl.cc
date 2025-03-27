@@ -26,7 +26,7 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Struct to hold hash algorithm data
+// @brief Struct to hold hash algorithm data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct hash_data
 {
@@ -35,7 +35,7 @@ struct hash_data
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Hash data map
+// @brief Hash data map
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const std::unordered_map <std::string, hash_data> HASHES =
 {
@@ -84,8 +84,8 @@ static const std::unordered_map <std::string, hash_data> HASHES =
 namespace mobius::crypt::gcrypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param algo Algorithm name
+// @brief Constructor
+// @param algo Algorithm name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hash_impl::hash_impl (const std::string& algo)
 {
@@ -131,7 +131,7 @@ hash_impl::hash_impl (const std::string& algo)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destructor
+// @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hash_impl::~hash_impl ()
 {
@@ -140,8 +140,8 @@ hash_impl::~hash_impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Update data
-//! \param data Data
+// @brief Update data
+// @param data Data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 hash_impl::update (const mobius::bytearray& data) noexcept
@@ -150,7 +150,7 @@ hash_impl::update (const mobius::bytearray& data) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reset cipher
+// @brief Reset cipher
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 hash_impl::reset () noexcept
@@ -159,8 +159,8 @@ hash_impl::reset () noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Clone object
-//! \return Pointer to newly created object
+// @brief Clone object
+// @return Pointer to newly created object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::shared_ptr <hash_impl_base>
 hash_impl::clone () const
@@ -182,8 +182,8 @@ hash_impl::clone () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get digest
-//! \return Digest
+// @brief Get digest
+// @return Digest
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 hash_impl::get_digest ()
@@ -194,3 +194,4 @@ hash_impl::get_digest ()
 }
 
 } // namespace mobius::crypt::gcrypt
+

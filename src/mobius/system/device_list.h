@@ -22,15 +22,13 @@
 #include <memory>
 #include <vector>
 
-namespace mobius
-{
-namespace system
+namespace mobius::system
 {
 struct device_list_impl;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief hardware device list
-//! \author Eduardo Aguiar
+// @brief hardware device list
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class device_list
 {
@@ -52,7 +50,8 @@ private:
   std::shared_ptr <device_list_impl> impl_;
 };
 
-} // namespace system
-} // namespace mobius
+} // namespace mobius::system
 
 #endif
+
+

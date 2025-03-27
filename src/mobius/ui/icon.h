@@ -25,8 +25,8 @@
 namespace mobius::ui
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief icon handle class
-//! \author Eduardo Aguiar
+// @brief icon handle class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class icon : public widget
 {
@@ -52,8 +52,8 @@ public:
   icon& operator= (icon&&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Convert icon to widget
-  //! \return Widget
+  // @brief Convert icon to widget
+  // @return Widget
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator widget () const
   {
@@ -61,9 +61,9 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set icon from data
-  //! \param data Icon data
-  //! \param size Icon size
+  // @brief Set icon from data
+  // @param data Icon data
+  // @param size Icon size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_icon_from_data (const mobius::bytearray& data, size_type size)
@@ -92,3 +92,5 @@ icon new_icon_from_data (const mobius::bytearray&, icon::size_type = icon::size_
 } // namespace mobius::ui
 
 #endif
+
+

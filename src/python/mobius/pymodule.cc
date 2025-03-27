@@ -23,7 +23,7 @@
 namespace mobius::py
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief pymodule implementation class
+// @brief pymodule implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class pymodule::impl
 {
@@ -44,8 +44,8 @@ public:
   impl& operator= (impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get pointer
-  //! \return PyObject pointer
+  // @brief Get pointer
+  // @return PyObject pointer
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   PyObject *
   pointer ()
@@ -54,8 +54,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Create new reference
-  //! \return PyObject pointer
+  // @brief Create new reference
+  // @return PyObject pointer
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   PyObject *
   new_reference () const
@@ -73,13 +73,13 @@ public:
   void add_constant (const std::string&, int);
 
 private:
-  //! \brief Python object
+  // @brief Python object
   PyObject *obj_ = nullptr;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param p Pointer to PyModuleDef structure
+// @brief Constructor
+// @param p Pointer to PyModuleDef structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 pymodule::impl::impl (PyModuleDef *p)
 {
@@ -90,7 +90,7 @@ pymodule::impl::impl (PyModuleDef *p)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destructor
+// @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 pymodule::impl::~impl ()
 {
@@ -101,9 +101,9 @@ pymodule::impl::~impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add type to module
-//! \param name Type name
-//! \param type Type object
+// @brief Add type to module
+// @param name Type name
+// @param type Type object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 pymodule::impl::add_type (const std::string& name, PyTypeObject *type)
@@ -117,9 +117,9 @@ pymodule::impl::add_type (const std::string& name, PyTypeObject *type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add type to module
-//! \param name Type name
-//! \param type Type object
+// @brief Add type to module
+// @param name Type name
+// @param type Type object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 pymodule::impl::add_type (const std::string& name, pytypeobject type)
@@ -132,9 +132,9 @@ pymodule::impl::add_type (const std::string& name, pytypeobject type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add submodule to module
-//! \param name Submodule name
-//! \param module Submodule object
+// @brief Add submodule to module
+// @param name Submodule name
+// @param module Submodule object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 pymodule::impl::add_submodule (const std::string& name, const pymodule& module)
@@ -149,9 +149,9 @@ pymodule::impl::add_submodule (const std::string& name, const pymodule& module)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add constant to module
-//! \param name Name
-//! \param value Value
+// @brief Add constant to module
+// @param name Name
+// @param value Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 pymodule::impl::add_constant (const std::string& name, int value)
@@ -164,8 +164,8 @@ pymodule::impl::add_constant (const std::string& name, int value)
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param p Pointer to PyModuleDef structure
+// @brief Constructor
+// @param p Pointer to PyModuleDef structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 pymodule::pymodule (PyModuleDef *p)
  : impl_ (std::make_shared <impl> (p))
@@ -173,8 +173,8 @@ pymodule::pymodule (PyModuleDef *p)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if object is valid
-//! \return true/false
+// @brief Check if object is valid
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 pymodule::operator bool () const noexcept
 {
@@ -182,8 +182,8 @@ pymodule::operator bool () const noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get PyObject pointer
-//! \return PyObject pointer
+// @brief Get PyObject pointer
+// @return PyObject pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 pymodule::operator PyObject * () const noexcept
 {
@@ -191,8 +191,8 @@ pymodule::operator PyObject * () const noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new reference to module
-//! \return Reference
+// @brief Create new reference to module
+// @return Reference
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymodule::new_reference () const
@@ -201,9 +201,9 @@ pymodule::new_reference () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add type to module
-//! \param name Type name
-//! \param type Type object
+// @brief Add type to module
+// @param name Type name
+// @param type Type object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 pymodule::add_type (const std::string& name, PyTypeObject *type)
@@ -212,9 +212,9 @@ pymodule::add_type (const std::string& name, PyTypeObject *type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add type to module
-//! \param name Type name
-//! \param type Type object
+// @brief Add type to module
+// @param name Type name
+// @param type Type object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 pymodule::add_type (const std::string& name, pytypeobject type)
@@ -223,9 +223,9 @@ pymodule::add_type (const std::string& name, pytypeobject type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add submodule to module
-//! \param name Submodule name
-//! \param module Submodule object
+// @brief Add submodule to module
+// @param name Submodule name
+// @param module Submodule object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 pymodule::add_submodule (const std::string& name, const pymodule& module)
@@ -234,9 +234,9 @@ pymodule::add_submodule (const std::string& name, const pymodule& module)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add constant to module
-//! \param name Name
-//! \param value Value
+// @brief Add constant to module
+// @param name Name
+// @param value Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 pymodule::add_constant (const std::string& name, int value)
@@ -245,3 +245,5 @@ pymodule::add_constant (const std::string& name, int value)
 }
 
 } // namespace mobius::py
+
+

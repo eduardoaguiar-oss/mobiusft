@@ -27,7 +27,7 @@
 namespace mobius::os::win::dpapi
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Blob implementation class
+// @brief Blob implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class blob::impl
 {
@@ -46,8 +46,8 @@ public:
   impl& operator= (impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get revision
-  //! \return Revision
+  // @brief Get revision
+  // @return Revision
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_revision () const
@@ -56,8 +56,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get provider guid
-  //! \return Provider guid
+  // @brief Get provider guid
+  // @return Provider guid
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_provider_guid () const
@@ -66,8 +66,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get master key revision
-  //! \return Master key revision
+  // @brief Get master key revision
+  // @return Master key revision
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_master_key_revision () const
@@ -76,8 +76,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get master key guid
-  //! \return Master key guid
+  // @brief Get master key guid
+  // @return Master key guid
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_master_key_guid () const
@@ -86,8 +86,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get flags
-  //! \return Flags
+  // @brief Get flags
+  // @return Flags
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_flags () const
@@ -96,8 +96,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get description
-  //! \return Description
+  // @brief Get description
+  // @return Description
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_description () const
@@ -106,8 +106,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get cipher id
-  //! \return Cipher id
+  // @brief Get cipher id
+  // @return Cipher id
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_cipher_id () const
@@ -116,8 +116,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get key length
-  //! \return Key length
+  // @brief Get key length
+  // @return Key length
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_key_length () const
@@ -126,8 +126,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get salt
-  //! \return Salt
+  // @brief Get salt
+  // @return Salt
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   get_salt () const
@@ -136,8 +136,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hmac key
-  //! \return Hmac key
+  // @brief Get hmac key
+  // @return Hmac key
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   get_hmac_key () const
@@ -146,8 +146,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hash id
-  //! \return Hash id
+  // @brief Get hash id
+  // @return Hash id
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_hash_id () const
@@ -156,8 +156,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hash length
-  //! \return Hash length
+  // @brief Get hash length
+  // @return Hash length
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_hash_length () const
@@ -166,8 +166,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hmac value
-  //! \return Hmac value
+  // @brief Get hmac value
+  // @return Hmac value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   get_hmac_value () const
@@ -176,8 +176,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get cipher text
-  //! \return Cipher text
+  // @brief Get cipher text
+  // @return Cipher text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   get_cipher_text () const
@@ -186,8 +186,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get plain text
-  //! \return Plain text
+  // @brief Get plain text
+  // @return Plain text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   get_plain_text () const
@@ -196,8 +196,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get signature
-  //! \return Signature
+  // @brief Get signature
+  // @return Signature
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   get_signature () const
@@ -206,8 +206,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get signature data
-  //! \return Signature data
+  // @brief Get signature data
+  // @return Signature data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   get_signature_data () const
@@ -216,8 +216,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if blob is decrypted
-  //! \return true/false
+  // @brief Check if blob is decrypted
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_decrypted () const noexcept
@@ -226,69 +226,69 @@ public:
   }
 
 private:
-  //! \brief Struct revision
+  // @brief Struct revision
   std::uint32_t revision_;
 
-  //! \brief Provider GUID
+  // @brief Provider GUID
   std::string provider_guid_;
 
-  //! \brief Master key revision
+  // @brief Master key revision
   std::uint32_t master_key_revision_;
 
-  //! \brief Master key GUID
+  // @brief Master key GUID
   std::string master_key_guid_;
 
-  //! \brief Flags
+  // @brief Flags
   std::uint32_t flags_;
 
-  //! \brief Description
+  // @brief Description
   std::string description_;
 
-  //! \brief Cipher algorithm ID
+  // @brief Cipher algorithm ID
   std::uint32_t cipher_id_;
 
-  //! \brief Key length in bytes
+  // @brief Key length in bytes
   std::uint32_t key_length_;
 
-  //! \brief Salt
+  // @brief Salt
   mobius::bytearray salt_;
 
-  //! \brief HMAC key value
+  // @brief HMAC key value
   mobius::bytearray hmac_key_;
 
-  //! \brief Hash algorithm ID
+  // @brief Hash algorithm ID
   std::uint32_t hash_id_;
 
-  //! \brief Hash length in bytes
+  // @brief Hash length in bytes
   std::uint32_t hash_length_;
 
-  //! \brief HMAC value
+  // @brief HMAC value
   mobius::bytearray hmac_value_;
 
-  //! \brief Cipher text
+  // @brief Cipher text
   mobius::bytearray cipher_text_;
 
-  //! \brief Plain text
+  // @brief Plain text
   mobius::bytearray plain_text_;
 
-  //! \brief Signature
+  // @brief Signature
   mobius::bytearray signature_;
 
-  //! \brief Signature data (for signature computation)
+  // @brief Signature data (for signature computation)
   mobius::bytearray signature_data_;
 };
 
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Generate session key
-//! \param ms_hash_id MS Hash ID
-//! \param key Decryption key
-//! \param salt Salt value
-//! \param entropy Optional entropy
-//! \param data Generic data (blob_data or hmac_value)
-//! \return Session key
-//! \see https://github.com/mis-team/dpapick
+// @brief Generate session key
+// @param ms_hash_id MS Hash ID
+// @param key Decryption key
+// @param salt Salt value
+// @param entropy Optional entropy
+// @param data Generic data (blob_data or hmac_value)
+// @return Session key
+// @see https://github.com/mis-team/dpapick
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::bytearray
 _generate_session_key (
@@ -365,8 +365,8 @@ _generate_session_key (
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
+// @brief Constructor
+// @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 blob::impl::impl (mobius::io::reader reader)
 {
@@ -413,8 +413,8 @@ blob::impl::impl (mobius::io::reader reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
+// @brief Constructor
+// @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 blob::blob (mobius::io::reader reader)
   : impl_ (std::make_shared <impl> (reader))
@@ -422,10 +422,10 @@ blob::blob (mobius::io::reader reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Test if key is the right one
-//! \param key Key
-//! \param entropy Optional entropy value
-//! \return true/false
+// @brief Test if key is the right one
+// @param key Key
+// @param entropy Optional entropy value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 blob::impl::test_key (
@@ -443,10 +443,10 @@ blob::impl::test_key (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt BLOB using key
-//! \param key Key
-//! \param entropy Optional entropy value
-//! \return true/false
+// @brief Decrypt BLOB using key
+// @param key Key
+// @param entropy Optional entropy value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 blob::impl::decrypt (const mobius::bytearray& key, const mobius::bytearray& entropy)
@@ -507,10 +507,10 @@ blob::impl::decrypt (const mobius::bytearray& key, const mobius::bytearray& entr
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Test if key is the right one
-//! \param key Key
-//! \param entropy Optional entropy value
-//! \return true/false
+// @brief Test if key is the right one
+// @param key Key
+// @param entropy Optional entropy value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 blob::test_key (const mobius::bytearray& key, const mobius::bytearray& entropy)
@@ -519,10 +519,10 @@ blob::test_key (const mobius::bytearray& key, const mobius::bytearray& entropy)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt BLOB using key
-//! \param key Key
-//! \param entropy Optional entropy value
-//! \return true/false
+// @brief Decrypt BLOB using key
+// @param key Key
+// @param entropy Optional entropy value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 blob::decrypt (const mobius::bytearray& key, const mobius::bytearray& entropy)
@@ -531,8 +531,8 @@ blob::decrypt (const mobius::bytearray& key, const mobius::bytearray& entropy)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if BLOB is decrypted
-//! \return true/false
+// @brief Check if BLOB is decrypted
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 blob::is_decrypted () const
@@ -541,8 +541,8 @@ blob::is_decrypted () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get revision
-//! \return Revision
+// @brief Get revision
+// @return Revision
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 blob::get_revision () const
@@ -551,8 +551,8 @@ blob::get_revision () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get provider guid
-//! \return Provider guid
+// @brief Get provider guid
+// @return Provider guid
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 blob::get_provider_guid () const
@@ -561,8 +561,8 @@ blob::get_provider_guid () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get master key revision
-//! \return Master key revision
+// @brief Get master key revision
+// @return Master key revision
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 blob::get_master_key_revision () const
@@ -571,8 +571,8 @@ blob::get_master_key_revision () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get master key guid
-//! \return Master key guid
+// @brief Get master key guid
+// @return Master key guid
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 blob::get_master_key_guid () const
@@ -581,8 +581,8 @@ blob::get_master_key_guid () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get flags
-//! \return Flags
+// @brief Get flags
+// @return Flags
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 blob::get_flags () const
@@ -591,8 +591,8 @@ blob::get_flags () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get description
-//! \return Description
+// @brief Get description
+// @return Description
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 blob::get_description () const
@@ -601,8 +601,8 @@ blob::get_description () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get cipher id
-//! \return Cipher id
+// @brief Get cipher id
+// @return Cipher id
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 blob::get_cipher_id () const
@@ -611,8 +611,8 @@ blob::get_cipher_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get key length
-//! \return Key length
+// @brief Get key length
+// @return Key length
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 blob::get_key_length () const
@@ -621,8 +621,8 @@ blob::get_key_length () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get salt
-//! \return Salt
+// @brief Get salt
+// @return Salt
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 blob::get_salt () const
@@ -631,8 +631,8 @@ blob::get_salt () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get hmac key
-//! \return Hmac key
+// @brief Get hmac key
+// @return Hmac key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 blob::get_hmac_key () const
@@ -641,8 +641,8 @@ blob::get_hmac_key () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get hash id
-//! \return Hash id
+// @brief Get hash id
+// @return Hash id
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 blob::get_hash_id () const
@@ -651,8 +651,8 @@ blob::get_hash_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get hash length
-//! \return Hash length
+// @brief Get hash length
+// @return Hash length
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 blob::get_hash_length () const
@@ -661,8 +661,8 @@ blob::get_hash_length () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get hmac value
-//! \return Hmac value
+// @brief Get hmac value
+// @return Hmac value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 blob::get_hmac_value () const
@@ -671,8 +671,8 @@ blob::get_hmac_value () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get cipher text
-//! \return Cipher text
+// @brief Get cipher text
+// @return Cipher text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 blob::get_cipher_text () const
@@ -681,8 +681,8 @@ blob::get_cipher_text () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get plain text
-//! \return Plain text
+// @brief Get plain text
+// @return Plain text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 blob::get_plain_text () const
@@ -691,8 +691,8 @@ blob::get_plain_text () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get signature
-//! \return Signature
+// @brief Get signature
+// @return Signature
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 blob::get_signature () const
@@ -701,8 +701,8 @@ blob::get_signature () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get blob data
-//! \return BLOB data
+// @brief Get blob data
+// @return BLOB data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 blob::get_signature_data () const
@@ -711,3 +711,5 @@ blob::get_signature_data () const
 }
 
 } // namespace mobius::os::win::dpapi
+
+

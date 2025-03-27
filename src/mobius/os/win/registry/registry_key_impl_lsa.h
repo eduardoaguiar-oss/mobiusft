@@ -22,32 +22,26 @@
 #include <mobius/os/win/registry/registry_key.h>
 #include <mobius/os/win/registry/registry_key_list.h>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace registry
+namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief LSA Secrets key implementation class
-//! \see https://www.passcape.com/index.php?section=docsys&cmd=details&id=23
-//! \see http://moyix.blogspot.com.br/2008/02/decrypting-lsa-secrets.html
-//! \see https://github.com/Neohapsis/creddump7/blob/master/framework/win32/lsasecrets.py
+// @brief LSA Secrets key implementation class
+// @see https://www.passcape.com/index.php?section=docsys&cmd=details&id=23
+// @see http://moyix.blogspot.com.br/2008/02/decrypting-lsa-secrets.html
+// @see https://github.com/Neohapsis/creddump7/blob/master/framework/win32/lsasecrets.py
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class registry_key_impl_lsa : public registry_key_impl_base
 {
 public:
-  //! \brief LSA key type
+  // @brief LSA key type
   enum class type { polseckey, poleklist };
 
   // function prototypes
   explicit registry_key_impl_lsa (registry_key, const mobius::bytearray&, type);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if object is valid
-  //! \return true/false
+  // @brief check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const override
   {
@@ -55,8 +49,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if key has subkeys
-  //! \return true if key has at least one subkey, false otherwise
+  // @brief check if key has subkeys
+  // @return true if key has at least one subkey, false otherwise
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   has_subkeys () const override
@@ -65,8 +59,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get name
-  //! \return name
+  // @brief get name
+  // @return name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_name () const override
@@ -75,8 +69,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set name
-  //! \param name key name
+  // @brief set name
+  // @param name key name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_name (const std::string& name) override
@@ -85,8 +79,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get classname
-  //! \return classname
+  // @brief get classname
+  // @return classname
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_classname () const override
@@ -95,8 +89,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get last modification time
-  //! \return last modification time
+  // @brief get last modification time
+  // @return last modification time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::datetime::datetime
   get_last_modification_time () const override
@@ -105,8 +99,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief return iterator to the first item
-  //! \return iterator
+  // @brief return iterator to the first item
+  // @return iterator
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   const_iterator_type
   begin () const override
@@ -115,8 +109,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief return iterator after the last item
-  //! \return iterator
+  // @brief return iterator after the last item
+  // @return iterator
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   const_iterator_type
   end () const override
@@ -125,8 +119,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief add subkey
-  //! \param key key
+  // @brief add subkey
+  // @param key key
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   add_key (registry_key key) override
@@ -135,8 +129,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief add subkey
-  //! \param key key
+  // @brief add subkey
+  // @param key key
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   remove_key (const std::string& name) override
@@ -145,7 +139,7 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief clear all subkeys
+  // @brief clear all subkeys
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   clear_keys () override
@@ -154,8 +148,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get values
-  //! \return values
+  // @brief get values
+  // @return values
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::vector <registry_value>
   get_values () const override
@@ -165,31 +159,30 @@ public:
   }
 
 private:
-  //! \brief key
+  // @brief key
   registry_key key_;
 
-  //! \brief key name
+  // @brief key name
   std::string name_;
 
-  //! \brief LSA Secret encryption key
+  // @brief LSA Secret encryption key
   const mobius::bytearray lsa_key_;
 
-  //! \brief values loaded flag
+  // @brief values loaded flag
   mutable bool values_loaded_ = false;
 
-  //! \brief values
+  // @brief values
   mutable std::vector <registry_value> values_;
 
-  //! \brief key type
+  // @brief key type
   type type_;
 
   // helper functions
   void _load_values () const;
 };
 
-} // namespace registry
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::registry
 
 #endif
+
+

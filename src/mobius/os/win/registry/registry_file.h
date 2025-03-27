@@ -1,5 +1,5 @@
-#ifndef MOBIUS_REGISTRY_REGISTRY_FILE_H
-#define MOBIUS_REGISTRY_REGISTRY_FILE_H
+#ifndef MOBIUS_OS_WIN_REGISTRY_REGISTRY_FILE_H
+#define MOBIUS_OS_WIN_REGISTRY_REGISTRY_FILE_H
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -26,17 +26,11 @@
 #include <memory>
 #include <string>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace registry
+namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_file class
-//! \author Eduardo Aguiar
+// @brief registry_file class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class registry_file
 {
@@ -59,16 +53,15 @@ public:
   mobius::metadata get_metadata () const;
 
 private:
-  //! \brief implementation class forward declaration
+  // @brief implementation class forward declaration
   class impl;
 
-  //! \brief implementation pointer
+  // @brief implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
-} // namespace registry
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::registry
 
 #endif
+
+

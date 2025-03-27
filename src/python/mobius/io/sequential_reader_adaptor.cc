@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file sequential_reader_adaptor.cc C++ API <i>mobius.io.sequential_reader_adaptor</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "sequential_reader_adaptor.h"
@@ -27,9 +27,9 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>sequential_reader_adaptor</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>sequential_reader_adaptor</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_io_sequential_reader_adaptor_check (PyObject *value)
@@ -38,9 +38,9 @@ pymobius_io_sequential_reader_adaptor_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>sequential_reader_adaptor</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New sequential_reader_adaptor object
+// @brief Create <i>sequential_reader_adaptor</i> Python object from C++ object
+// @param obj C++ object
+// @return New sequential_reader_adaptor object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_io_sequential_reader_adaptor_to_pyobject (const mobius::io::sequential_reader_adaptor& obj)
@@ -54,9 +54,9 @@ pymobius_io_sequential_reader_adaptor_to_pyobject (const mobius::io::sequential_
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>sequential_reader_adaptor</i> C++ object from Python object
-//! \param value Python value
-//! \return Sequential_reader_adaptor object
+// @brief Create <i>sequential_reader_adaptor</i> C++ object from Python object
+// @param value Python value
+// @return Sequential_reader_adaptor object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::sequential_reader_adaptor
 pymobius_io_sequential_reader_adaptor_from_pyobject (PyObject *value)
@@ -68,9 +68,9 @@ pymobius_io_sequential_reader_adaptor_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>block_size</i> Attribute getter
-//! \param self Object
-//! \return <i>block_size</i> attribute
+// @brief <i>block_size</i> Attribute getter
+// @param self Object
+// @return <i>block_size</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_block_size (io_sequential_reader_adaptor_o *self)
@@ -90,7 +90,7 @@ tp_getter_block_size (io_sequential_reader_adaptor_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Getters and setters structure
+// @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -105,10 +105,10 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>peek</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Byte read
+// @brief <i>peek</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Byte read
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_peek (io_sequential_reader_adaptor_o *self, PyObject *args)
@@ -147,10 +147,10 @@ tp_f_peek (io_sequential_reader_adaptor_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Byte read
+// @brief <i>get</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Byte read
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get (io_sequential_reader_adaptor_o *self, PyObject *args)
@@ -189,9 +189,9 @@ tp_f_get (io_sequential_reader_adaptor_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>skip</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>skip</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_skip (io_sequential_reader_adaptor_o *self, PyObject *args)
@@ -225,10 +225,10 @@ tp_f_skip (io_sequential_reader_adaptor_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>tell</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Current reading position from the beginning of the reader
+// @brief <i>tell</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Current reading position from the beginning of the reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_tell (io_sequential_reader_adaptor_o *self, PyObject *)
@@ -250,10 +250,10 @@ tp_f_tell (io_sequential_reader_adaptor_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>eof</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return True/False
+// @brief <i>eof</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return True/False
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_eof (io_sequential_reader_adaptor_o *self, PyObject *)
@@ -275,7 +275,7 @@ tp_f_eof (io_sequential_reader_adaptor_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -313,11 +313,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>sequential_reader_adaptor</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>sequential_reader_adaptor</i> object
+// @brief <i>sequential_reader_adaptor</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>sequential_reader_adaptor</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
@@ -359,8 +359,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>sequential_reader_adaptor</i> deallocator
-//! \param self Object
+// @brief <i>sequential_reader_adaptor</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (io_sequential_reader_adaptor_o *self)
@@ -370,7 +370,7 @@ tp_dealloc (io_sequential_reader_adaptor_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject io_sequential_reader_adaptor_t =
 {
@@ -423,3 +423,5 @@ PyTypeObject io_sequential_reader_adaptor_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

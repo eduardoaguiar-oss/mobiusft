@@ -25,8 +25,8 @@
 namespace mobius::extension::ui::gtk3
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief GTK3 widget implementation class
-//! \author Eduardo Aguiar
+// @brief GTK3 widget implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class widget_impl : public mobius::ui::widget_impl_base
 {
@@ -37,8 +37,8 @@ public:
   widget_impl (std::any);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check whether widget object is valid
-  //! \return true/false
+  // @brief Check whether widget object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator bool () const noexcept final
   {
@@ -53,10 +53,12 @@ public:
   std::any get_ui_widget () const final;
 
 private:
-  //! \brief Low level widget
+  // @brief Low level widget
   GtkWidget *widget_ = nullptr;
 };
 
 } // namespace mobius::extension::ui::gtk3
 
 #endif
+
+

@@ -21,17 +21,13 @@
 #include <mobius/exception.h>
 #include <stdexcept>
 
-namespace mobius
-{
-namespace vfs
-{
-namespace tsk
+namespace mobius::vfs::tsk
 {
 std::string tsk_exception_msg (const char*, const char*, std::size_t);
-} // namespace tsk
-} // namespace vfs
-} // namespace mobius
+} // namespace mobius::vfs::tsk
 
 #define TSK_EXCEPTION_MSG tsk_exception_msg (__FILE__, __func__, __LINE__)
 
 #endif
+
+

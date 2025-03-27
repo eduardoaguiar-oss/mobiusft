@@ -23,14 +23,12 @@
 #include <ostream>
 #include <string>
 
-namespace mobius
-{
-namespace datetime
+namespace mobius::datetime
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Gregorian date representation
-//! \author Eduardo Aguiar
-//! \see http://www.fourmilab.ch/documents/calendar/calendar.js
+// @brief Gregorian date representation
+// @author Eduardo Aguiar
+// @see http://www.fourmilab.ch/documents/calendar/calendar.js
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class date
 {
@@ -45,10 +43,10 @@ public:
   date (date&&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Create date object from d, m, y values
-  //! \param y year
-  //! \param m month (1-12)
-  //! \param d day (1-31)
+  // @brief Create date object from d, m, y values
+  // @param y year
+  // @param m month (1-12)
+  // @param d day (1-31)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   constexpr date (int y, int m, int d) noexcept
     : year_ (y), month_ (m), day_ (d), is_null_ (false)
@@ -62,8 +60,8 @@ public:
   date& operator= (date&&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get year
-  //! \return year
+  // @brief Get year
+  // @return year
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   int
   get_year () const noexcept
@@ -72,8 +70,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set year
-  //! \param year year
+  // @brief Set year
+  // @param year year
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_year (int year) noexcept
@@ -82,8 +80,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get month
-  //! \return month (1-12)
+  // @brief Get month
+  // @return month (1-12)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   int
   get_month () const noexcept
@@ -92,8 +90,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set month
-  //! \param month month (1-12)
+  // @brief Set month
+  // @param month month (1-12)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_month (int month) noexcept
@@ -102,8 +100,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get day
-  //! \return day (1-31)
+  // @brief Get day
+  // @return day (1-31)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   int
   get_day () const noexcept
@@ -112,8 +110,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set day
-  //! \param day day (1-31)
+  // @brief Set day
+  // @param day day (1-31)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_day (int day) noexcept
@@ -122,8 +120,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if date is valid
-  //! \return true/false
+  // @brief Check if date is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const noexcept
   {
@@ -159,10 +157,10 @@ std::ostream& operator<< (std::ostream&, const date&);
 std::string to_string (const date&);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Compare two dates
-//! \param d1 date object
-//! \param d2 date object
-//! \return true if d1 != d2
+// @brief Compare two dates
+// @param d1 date object
+// @param d2 date object
+// @return true if d1 != d2
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline bool
 operator!= (const date& d1, const date& d2) noexcept
@@ -171,10 +169,10 @@ operator!= (const date& d1, const date& d2) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Compare two dates
-//! \param d1 date object
-//! \param d2 date object
-//! \return true if d1 <= d2
+// @brief Compare two dates
+// @param d1 date object
+// @param d2 date object
+// @return true if d1 <= d2
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline bool
 operator<= (const date& d1, const date& d2) noexcept
@@ -183,10 +181,10 @@ operator<= (const date& d1, const date& d2) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Compare two dates
-//! \param d1 date object
-//! \param d2 date object
-//! \return true if d1 > d2
+// @brief Compare two dates
+// @param d1 date object
+// @param d2 date object
+// @return true if d1 > d2
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline bool
 operator> (const date& d1, const date& d2) noexcept
@@ -195,10 +193,10 @@ operator> (const date& d1, const date& d2) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Compare two dates
-//! \param d1 date object
-//! \param d2 date object
-//! \return true if d1 > d2
+// @brief Compare two dates
+// @param d1 date object
+// @param d2 date object
+// @return true if d1 > d2
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inline bool
 operator>= (const date& d1, const date& d2) noexcept
@@ -206,7 +204,8 @@ operator>= (const date& d1, const date& d2) noexcept
   return ! (d1 < d2);
 }
 
-} // namespace datetime
-} // namespace mobius
+} // namespace mobius::datetime
 
 #endif
+
+

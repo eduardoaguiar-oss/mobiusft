@@ -23,16 +23,12 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-namespace mobius
-{
-namespace io
-{
-namespace local
+namespace mobius::io::local
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create entry by path
-//! \param path Entry path
-//! \return Entry object
+// @brief Create entry by path
+// @param path Entry path
+// @return Entry object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::entry
 new_entry_by_path (const std::string& path)
@@ -57,6 +53,6 @@ new_entry_by_path (const std::string& path)
   return e;
 }
 
-} // namespace local
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io::local
+
+

@@ -23,7 +23,7 @@
 namespace mobius::crypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hmac::hmac ()
  : impl_ (std::make_shared <hmac_impl_null> ())
@@ -31,8 +31,8 @@ hmac::hmac ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor from implementation pointer
-//! \param impl Implementation pointer
+// @brief Constructor from implementation pointer
+// @param impl Implementation pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hmac::hmac (const std::shared_ptr <hmac_impl_base>& impl)
   : impl_ (impl)
@@ -40,9 +40,9 @@ hmac::hmac (const std::shared_ptr <hmac_impl_base>& impl)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param hash_type Hash type
-//! \param key Key
+// @brief Constructor
+// @param hash_type Hash type
+// @param key Key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hmac::hmac (const std::string& hash_type, const mobius::bytearray& key)
 {
@@ -54,3 +54,5 @@ hmac::hmac (const std::string& hash_type, const mobius::bytearray& key)
 }
 
 } // namespace mobius::crypt
+
+

@@ -22,7 +22,7 @@
 #include <mobius/turing/turing.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -38,3 +38,5 @@ extern PyTypeObject turing_turing_t;
 PyObject *pymobius_turing_turing_to_pyobject (mobius::turing::turing);
 
 #endif
+
+

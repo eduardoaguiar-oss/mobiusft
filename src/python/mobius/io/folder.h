@@ -22,7 +22,7 @@
 #include <mobius/io/folder.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief data structure
+// @brief data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_io_folder_to_pyobject (mobius::io::folder);
 mobius::io::folder pymobius_io_folder_from_pyobject (PyObject *);
 
 #endif
+
+

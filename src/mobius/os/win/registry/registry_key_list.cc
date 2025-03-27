@@ -19,17 +19,11 @@
 #include <mobius/string_functions.h>
 #include <algorithm>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace registry
+namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief add key, sorted by name
-//! \param key key
+// @brief add key, sorted by name
+// @param key key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry_key_list::add (registry_key key)
@@ -46,8 +40,8 @@ registry_key_list::add (registry_key key)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief remove key
-//! \param name key name
+// @brief remove key
+// @param name key name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry_key_list::remove (const std::string& name)
@@ -65,9 +59,9 @@ registry_key_list::remove (const std::string& name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get a key
-//! \param name key name
-//! \return registry_key (can be invalid)
+// @brief get a key
+// @param name key name
+// @return registry_key (can be invalid)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_key
 registry_key_list::get (const std::string& name) const
@@ -87,7 +81,6 @@ registry_key_list::get (const std::string& name) const
   return registry_key ();
 }
 
-} // namespace registry
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::registry
+
+

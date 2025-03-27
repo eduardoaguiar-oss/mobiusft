@@ -23,11 +23,11 @@
 namespace mobius::vfs
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param parent Parent block object
-//! \param type Block type
-//! \param start Start position at parent block
-//! \param end End position at parent block
+// @brief Constructor
+// @param parent Parent block object
+// @param type Block type
+// @param start Start position at parent block
+// @param end End position at parent block
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 block_impl_slice::block_impl_slice (
   const block& parent,
@@ -46,8 +46,8 @@ block_impl_slice::block_impl_slice (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param state Object state
+// @brief Constructor
+// @param state Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 block_impl_slice::block_impl_slice (const mobius::pod::map& state)
 {
@@ -64,8 +64,8 @@ block_impl_slice::block_impl_slice (const mobius::pod::map& state)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get object state
-//! \return Object state
+// @brief Get object state
+// @return Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 block_impl_slice::get_state () const
@@ -97,8 +97,8 @@ block_impl_slice::get_state () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set complete flag
-//! \param flag Flag
+// @brief Set complete flag
+// @param flag Flag
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 block_impl_slice::set_complete (bool)
@@ -107,8 +107,8 @@ block_impl_slice::set_complete (bool)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set available flag
-//! \param flag Flag
+// @brief Set available flag
+// @param flag Flag
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 block_impl_slice::set_available (bool)
@@ -117,8 +117,8 @@ block_impl_slice::set_available (bool)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add parent
-//! \param parent Block object
+// @brief Add parent
+// @param parent Block object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 block_impl_slice::add_parent (const block& parent)
@@ -130,8 +130,8 @@ block_impl_slice::add_parent (const block& parent)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new reader
-//! \return New reader
+// @brief Create new reader
+// @return New reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::reader
 block_impl_slice::new_reader () const
@@ -148,3 +148,5 @@ block_impl_slice::new_reader () const
 }
 
 } // namespace mobius::vfs
+
+

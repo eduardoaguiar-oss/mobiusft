@@ -24,9 +24,9 @@
 namespace mobius::crypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>default hmac</i> implementation class
-//! \author Eduardo Aguiar
-//! \see RFC 2104
+// @brief <i>default hmac</i> implementation class
+// @author Eduardo Aguiar
+// @see RFC 2104
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class hmac_impl_default : public hmac_impl_base
 {
@@ -45,8 +45,8 @@ public:
   std::shared_ptr <hmac_impl_base> clone () const final;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if object is valid
-  //! \return true/false
+  // @brief Check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator bool () const noexcept override
   {
@@ -54,8 +54,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get type
-  //! \return Hash type
+  // @brief Get type
+  // @return Hash type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_type () const final
@@ -64,8 +64,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get block size
-  //! \return Block size in bytes
+  // @brief Get block size
+  // @return Block size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::size_t
   get_block_size () const final
@@ -74,8 +74,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get digest size
-  //! \return Digest size in bytes
+  // @brief Get digest size
+  // @return Digest size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::size_t
   get_digest_size () const final
@@ -84,8 +84,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Update HMAC object
-  //! \param data Data block
+  // @brief Update HMAC object
+  // @param data Data block
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   update (const bytearray& data) final
@@ -94,19 +94,21 @@ public:
   }
 
 private:
-  //! \brief inner hash: H (K ^ ipad || text)
+  // @brief inner hash: H (K ^ ipad || text)
   mobius::crypt::hash h_inner_;
 
-  //! \brief outer hash: H (K ^ opad || h_inner_.get_digest ())
+  // @brief outer hash: H (K ^ opad || h_inner_.get_digest ())
   mobius::crypt::hash h_outer_;
 
-  //! \brief inner hash initial value
+  // @brief inner hash initial value
   mobius::crypt::hash h_inner_0_;
 
-  //! \brief outer hash initial value
+  // @brief outer hash initial value
   mobius::crypt::hash h_outer_0_;
 };
 
 } // namespace mobius::crypt
 
 #endif
+
+

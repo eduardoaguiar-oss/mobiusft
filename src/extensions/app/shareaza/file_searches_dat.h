@@ -29,15 +29,15 @@
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Searches.dat file decoder
-//! \author Eduardo Aguiar
-//! \see https://sourceforge.net/projects/shareaza/
+// @brief Searches.dat file decoder
+// @author Eduardo Aguiar
+// @see https://sourceforge.net/projects/shareaza/
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class file_searches_dat
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Search data
+  // @brief Search data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   struct search
   {
@@ -51,7 +51,7 @@ public:
   };
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Remote file data
+  // @brief Remote file data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   struct remote_file
   {
@@ -65,8 +65,8 @@ public:
   file_searches_dat (const mobius::io::reader&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if stream is an instance of ShareH.dat file
-  //! \return true/false
+  // @brief Check if stream is an instance of ShareH.dat file
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const noexcept
   {
@@ -74,8 +74,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get searches
-  //! \return Searches
+  // @brief Get searches
+  // @return Searches
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::vector <search>
   get_searches () const
@@ -84,8 +84,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get remote files
-  //! \return Remote files
+  // @brief Get remote files
+  // @return Remote files
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::vector <remote_file>
   get_remote_files () const
@@ -94,8 +94,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get file sections
-  //! \return Sections
+  // @brief Get file sections
+  // @return Sections
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::core::file_decoder::section
   get_section () const
@@ -104,16 +104,16 @@ public:
   }
 
 private:
-  //! \brief Flag is instance
+  // @brief Flag is instance
   bool is_instance_ = false;
 
-  //! \brief File main section
+  // @brief File main section
   mobius::core::file_decoder::section section_;
 
-  //! \brief Searches
+  // @brief Searches
   std::vector <search> searches_;
 
-  //! \brief Remote files
+  // @brief Remote files
   std::vector <remote_file> remote_files_;
 
   // Helper functions
@@ -123,3 +123,7 @@ private:
 } // namespace mobius::extension::app::shareaza
 
 #endif
+
+
+
+

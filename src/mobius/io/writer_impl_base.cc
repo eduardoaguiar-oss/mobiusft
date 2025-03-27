@@ -19,13 +19,11 @@
 #include <mobius/exception.inc>
 #include <stdexcept>
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get write position
-//! \return write position in bytes from the beginning of data
+// @brief get write position
+// @return write position in bytes from the beginning of data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl_base::offset_type
 writer_impl_base::tell () const
@@ -34,9 +32,9 @@ writer_impl_base::tell () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set write position
-//! \param offset offset in bytes
-//! \param w either beginning, current or end
+// @brief set write position
+// @param offset offset in bytes
+// @param w either beginning, current or end
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 writer_impl_base::seek (offset_type, whence_type)
@@ -44,5 +42,6 @@ writer_impl_base::seek (offset_type, whence_type)
   throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("writer does not support seek/tell"));
 }
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
+
+

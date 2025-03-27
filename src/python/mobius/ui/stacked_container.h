@@ -23,7 +23,7 @@
 #include <mobius/ui/stacked_container.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -41,3 +41,5 @@ PyObject *pymobius_ui_stacked_container_to_pyobject (const mobius::ui::stacked_c
 mobius::ui::stacked_container pymobius_ui_stacked_container_from_pyobject (PyObject *);
 
 #endif
+
+

@@ -18,16 +18,16 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file cipher.cc C++ API <i>mobius.crypt.cipher</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pygil.h>
 #include "cipher.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>cipher</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>cipher</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_crypt_cipher_check (PyObject *value)
@@ -36,9 +36,9 @@ pymobius_crypt_cipher_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>cipher</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New cipher object
+// @brief Create <i>cipher</i> Python object from C++ object
+// @param obj C++ object
+// @return New cipher object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_crypt_cipher_to_pyobject (const mobius::crypt::cipher& obj)
@@ -47,9 +47,9 @@ pymobius_crypt_cipher_to_pyobject (const mobius::crypt::cipher& obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>cipher</i> C++ object from Python object
-//! \param value Python value
-//! \return Cipher object
+// @brief Create <i>cipher</i> C++ object from Python object
+// @param value Python value
+// @return Cipher object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::crypt::cipher
 pymobius_crypt_cipher_from_pyobject (PyObject *value)
@@ -58,10 +58,10 @@ pymobius_crypt_cipher_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_stream</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_stream</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_stream (crypt_cipher_o *self, PyObject *)
@@ -83,10 +83,10 @@ tp_f_is_stream (crypt_cipher_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_block</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_block</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_block (crypt_cipher_o *self, PyObject *)
@@ -108,9 +108,9 @@ tp_f_is_block (crypt_cipher_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>reset</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>reset</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_reset (crypt_cipher_o *self, PyObject *)
@@ -131,9 +131,9 @@ tp_f_reset (crypt_cipher_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>final</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>final</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_final (crypt_cipher_o *self, PyObject *)
@@ -154,10 +154,10 @@ tp_f_final (crypt_cipher_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>encrypt</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return encrypted data
+// @brief <i>encrypt</i> method implementation
+// @param self object
+// @param args argument list
+// @return encrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_encrypt (crypt_cipher_o *self, PyObject *args)
@@ -195,10 +195,10 @@ tp_f_encrypt (crypt_cipher_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>decrypt</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return decrypted data
+// @brief <i>decrypt</i> method implementation
+// @param self object
+// @param args argument list
+// @return decrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_decrypt (crypt_cipher_o *self, PyObject *args)
@@ -236,10 +236,10 @@ tp_f_decrypt (crypt_cipher_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_block_size</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Block size in bytes
+// @brief <i>get_block_size</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Block size in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_block_size (crypt_cipher_o *self, PyObject *)
@@ -261,9 +261,9 @@ tp_f_get_block_size (crypt_cipher_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>authenticate</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>authenticate</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_authenticate (crypt_cipher_o *self, PyObject *args)
@@ -297,10 +297,10 @@ tp_f_authenticate (crypt_cipher_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_tag</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Authentication tag
+// @brief <i>get_tag</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Authentication tag
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_tag (crypt_cipher_o *self, PyObject *)
@@ -322,10 +322,10 @@ tp_f_get_tag (crypt_cipher_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>check_tag</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>check_tag</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_check_tag (crypt_cipher_o *self, PyObject *args)
@@ -360,7 +360,7 @@ tp_f_check_tag (crypt_cipher_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -428,8 +428,8 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>cipher</i> deallocator
-//! \param self object
+// @brief <i>cipher</i> deallocator
+// @param self object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (crypt_cipher_o *self)
@@ -439,7 +439,7 @@ tp_dealloc (crypt_cipher_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject crypt_cipher_t =
 {
@@ -492,3 +492,5 @@ PyTypeObject crypt_cipher_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

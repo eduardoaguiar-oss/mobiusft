@@ -24,9 +24,9 @@
 namespace mobius::vfs
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param url Image file URL
-//! \param type Image type
+// @brief Constructor
+// @param url Image file URL
+// @param type Image type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 disk_impl_imagefile::disk_impl_imagefile (
   const std::string& url,
@@ -37,8 +37,8 @@ disk_impl_imagefile::disk_impl_imagefile (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param state Object state
+// @brief Constructor
+// @param state Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 disk_impl_imagefile::disk_impl_imagefile (const mobius::pod::map& state)
 {
@@ -52,8 +52,8 @@ disk_impl_imagefile::disk_impl_imagefile (const mobius::pod::map& state)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if disk is available
-//! \return true/false
+// @brief Check if disk is available
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 disk_impl_imagefile::is_available () const
@@ -63,9 +63,9 @@ disk_impl_imagefile::is_available () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if attribute exists
-//! \param id Attribute ID
-//! \return true/false
+// @brief Check if attribute exists
+// @param id Attribute ID
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 disk_impl_imagefile::has_attribute (const std::string& id) const
@@ -74,9 +74,9 @@ disk_impl_imagefile::has_attribute (const std::string& id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set attribute
-//! \param id Attribute ID
-//! \param value Attribute value
+// @brief Set attribute
+// @param id Attribute ID
+// @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 disk_impl_imagefile::set_attribute (const std::string& id, const mobius::pod::data& value)
@@ -85,9 +85,9 @@ disk_impl_imagefile::set_attribute (const std::string& id, const mobius::pod::da
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attribute
-//! \param id Attribute ID
-//! \return Data object
+// @brief Get attribute
+// @param id Attribute ID
+// @return Data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 disk_impl_imagefile::get_attribute (const std::string& id) const
@@ -96,8 +96,8 @@ disk_impl_imagefile::get_attribute (const std::string& id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attributes
-//! \return Attributes
+// @brief Get attributes
+// @return Attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 disk_impl_imagefile::get_attributes () const
@@ -107,8 +107,8 @@ disk_impl_imagefile::get_attributes () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get object state
-//! \return Object state
+// @brief Get object state
+// @return Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 disk_impl_imagefile::get_state () const
@@ -128,8 +128,8 @@ disk_impl_imagefile::get_state () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get path to underlying file, when available
-//! \return File path
+// @brief Get path to underlying file, when available
+// @return File path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 disk_impl_imagefile::get_path () const
@@ -143,8 +143,8 @@ disk_impl_imagefile::get_path () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new reader
-//! \return New reader
+// @brief Create new reader
+// @return New reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::reader
 disk_impl_imagefile::new_reader () const
@@ -154,7 +154,7 @@ disk_impl_imagefile::new_reader () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load image file
+// @brief Load image file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 disk_impl_imagefile::_load_imagefile () const
@@ -178,7 +178,7 @@ disk_impl_imagefile::_load_imagefile () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load metadata
+// @brief Load metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 disk_impl_imagefile::_load_metadata () const
@@ -222,3 +222,5 @@ disk_impl_imagefile::_load_metadata () const
 }
 
 } // namespace mobius::vfs
+
+

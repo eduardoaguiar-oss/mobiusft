@@ -563,10 +563,6 @@ AC_CONFIG_FILES([Makefile
                  src/extensions/vfs-block-view-partition-system/Makefile
                  src/extensions/vfs-item-attributes/Makefile
                  src/tools/Makefile
-                 src/unittest/Makefile
-                 src/unittest/cpp/Makefile
-                 src/unittest/cpp/benchmark/Makefile
-                 src/unittest/python/Makefile
                  data/Makefile
                  data/data/Makefile
                  data/icons/Makefile

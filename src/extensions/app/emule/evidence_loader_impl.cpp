@@ -20,6 +20,7 @@
 #include <mobius/datasource/datasource_vfs.h>
 #include <mobius/decoder/data_decoder.h>
 #include <mobius/decoder/inifile.h>
+#include <mobius/io/line_reader.h>
 #include <mobius/io/walker.h>
 #include <mobius/model/evidence.h>
 #include <mobius/string_functions.h>
@@ -91,9 +92,9 @@ static const std::string ANT_NAME = APP_NAME;
 static const std::string ANT_VERSION = "1.0";
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get vector of hashes for a given file
-//! \param f File structure
-//! \return Vector
+// @brief Get vector of hashes for a given file
+// @param f File structure
+// @return Vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename T> std::vector <mobius::pod::data>
 get_file_hashes (const T& f)
@@ -123,8 +124,8 @@ get_file_hashes (const T& f)
 namespace mobius::extension::app::emule
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param item Item object
+// @brief Constructor
+// @param item Item object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 evidence_loader_impl::evidence_loader_impl (const mobius::model::item& item, scan_type type)
   : item_ (item),
@@ -133,7 +134,7 @@ evidence_loader_impl::evidence_loader_impl (const mobius::model::item& item, sca
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan item files for evidences
+// @brief Scan item files for evidences
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::run ()
@@ -204,7 +205,7 @@ evidence_loader_impl::run ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan canonical folders
+// @brief Scan canonical folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_scan_canonical_folders ()
@@ -220,8 +221,8 @@ evidence_loader_impl::_scan_canonical_folders ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan root folder for evidences
-//! \param folder Root folder
+// @brief Scan root folder for evidences
+// @param folder Root folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_scan_canonical_root_folder (const mobius::io::folder& folder)
@@ -242,8 +243,8 @@ evidence_loader_impl::_scan_canonical_root_folder (const mobius::io::folder& fol
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan user folder for evidences
-//! \param folder User folder
+// @brief Scan user folder for evidences
+// @param folder User folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_scan_canonical_user_folder (const mobius::io::folder& folder)
@@ -270,8 +271,8 @@ evidence_loader_impl::_scan_canonical_user_folder (const mobius::io::folder& fol
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan AppData/Local/eMule/config folder for evidences
-//! \param folder Config folder
+// @brief Scan AppData/Local/eMule/config folder for evidences
+// @param folder Config folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_scan_canonical_emule_config_folder (const mobius::io::folder& folder)
@@ -284,29 +285,40 @@ evidence_loader_impl::_scan_canonical_emule_config_folder (const mobius::io::fol
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Decode account files
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  for (const auto& f : w.get_files ())
+    {
+      const std::string lname = mobius::string::tolower (f.get_name ());
 
-  // Decode preferences.dat first
-  for (const auto& f : w.get_files_by_name ("preferences.dat"))
-    _decode_preferences_dat_file (f);
+      if (lname == "preferences.dat")
+        _decode_preferences_dat_file (f);
 
-  // Decode preferences.ini
-  for (const auto& f : w.get_files_by_name ("preferences.ini"))
-    _decode_preferences_ini_file (f);
+      else if (lname == "preferences.ini")
+        _decode_preferences_ini_file (f);
 
-  // Decode statistics.ini
-  for (const auto& f : w.get_files_by_name ("statistics.ini"))
-    _decode_statistics_ini_file (f);
+      else if (lname == "statistics.ini")
+        _decode_statistics_ini_file (f);
 
-  // Decode preferenceskad.dat
-  for (const auto& f : w.get_files_by_name ("preferenceskad.dat"))
-    _decode_preferenceskad_dat_file (f);
+      else if (lname == "preferenceskad.dat")
+       _decode_preferenceskad_dat_file (f);
+    }
 
   if (!account_.statistics_ini_f)
     {
       for (const auto& f : w.get_files_by_name ("statbkup.ini"))
         _decode_statistics_ini_file (f);
     }
-      
+
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // Decoder other config files
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  for (const auto& f : w.get_files ())
+    {
+      const std::string lname = mobius::string::tolower (f.get_name ());
+
+      if (lname == "ac_searchstrings.dat")
+        _decode_ac_searchstrings_dat_file (f);
+    }
+
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Add account to accounts list
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -338,6 +350,7 @@ evidence_loader_impl::_decode_preferences_dat_file (const mobius::io::file& f)
           // Decode file
           mobius::decoder::data_decoder decoder (reader);
 
+          account_.is_deleted = f.is_deleted ();
           account_.preferences_dat_version = decoder.get_uint8 ();
           account_.emule_guid = decoder.get_hex_string_by_size (16);
           account_.preferences_dat_f = f;
@@ -377,7 +390,7 @@ evidence_loader_impl::_decode_preferences_ini_file (const mobius::io::file& f)
           account_.temp_dir = ini.get_value ("emule", "tempdir");
           account_.nick = ini.get_value ("emule", "nick");
           account_.app_version = ini.get_value ("emule", "appversion");
-          
+
           if (ini.has_value ("emule", "autostart"))
             account_.auto_start = ini.get_value ("emule", "autostart") == "1";
 
@@ -478,10 +491,52 @@ evidence_loader_impl::_decode_preferenceskad_dat_file (const mobius::io::file& f
     }
 }
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode AC_SearchStrings.dat file
+// @param f File object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_loader_impl::_decode_ac_searchstrings_dat_file (const mobius::io::file& f)
+{
+  mobius::core::log log (__FILE__, __FUNCTION__);
+
+  try
+    {
+      // Get reader
+      auto reader = f.new_reader ();
+      if (!reader)
+        return;
+
+      // Decode file
+      mobius::io::line_reader lr (reader, "utf-16", "\r\n");
+      std::string line;
+
+      while (lr.read (line))
+        {
+          if (!line.empty ())
+            {
+              autofill af;
+
+              af.is_deleted = f.is_deleted ();
+              af.username = username_;
+              af.value = line;
+              af.id = "search";
+              af.f = f;
+
+              autofills_.push_back (af);
+            }
+        }
+    }
+  catch (const std::exception& e)
+    {
+      log.warning (__LINE__, e.what ());
+    }
+}
+
 /*
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode Searches.dat file
-//! \param f File object
+// @brief Decode Searches.dat file
+// @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_decode_searches_dat_file (const mobius::io::file& f)
@@ -544,157 +599,6 @@ evidence_loader_impl::_decode_searches_dat_file (const mobius::io::file& f)
 
           searches_.push_back (st);
         }
-
-      // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-      // Add remote files
-      // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-      for (const auto& search_rf : searches_dat.get_remote_files ())
-        {
-          const auto& mf = search_rf.match_file;
-          const auto& q = search_rf.query_hit;
-
-          remote_file rf;
-
-          // attributes
-          rf.timestamp = mf.get_found_time ();
-          rf.ip = q.get_ip ();
-          rf.port = q.get_port ();
-          rf.filename = q.get_name ();
-          rf.username = username_;
-
-          // metadata
-          rf.metadata.set ("size", mf.get_size ());
-          rf.metadata.set ("peer_nickname", q.get_nick ());
-          rf.metadata.set ("url", q.get_url ());
-          rf.metadata.set ("schema_uri", q.get_schema_uri ());
-          rf.metadata.set ("rating", q.get_rating ());
-          rf.metadata.set ("comments", q.get_comments ());
-          rf.metadata.set ("protocol_id", q.get_protocol_id ());
-          rf.metadata.set ("protocol_name", q.get_protocol_name ());
-          rf.metadata.set ("search_id",  q.get_search_id ());
-          rf.metadata.set ("client_id", q.get_client_id ());
-          rf.metadata.set ("speed", q.get_speed ());
-          rf.metadata.set ("str_speed", q.get_str_speed ());
-          rf.metadata.set ("vendor_code", q.get_vendor_code ());
-          rf.metadata.set ("vendor_name", q.get_vendor_name ());
-          rf.metadata.set ("tri_push", q.get_tri_push ());
-          rf.metadata.set ("tri_busy", q.get_tri_busy ());
-          rf.metadata.set ("tri_stable", q.get_tri_stable ());
-          rf.metadata.set ("tri_measured", q.get_tri_measured ());
-          rf.metadata.set ("up_slots", q.get_up_slots ());
-          rf.metadata.set ("up_queue", q.get_up_queue ());
-          rf.metadata.set ("b_chat", q.get_b_chat ());
-          rf.metadata.set ("b_browse_host", q.get_b_browse_host ());
-          rf.metadata.set ("b_matched", q.get_b_matched ());
-          rf.metadata.set ("b_size", q.get_b_size ());
-          rf.metadata.set ("b_preview", q.get_b_preview ());
-          rf.metadata.set ("b_collection", q.get_b_collection ());
-          rf.metadata.set ("b_bogus", q.get_b_bogus ());
-          rf.metadata.set ("b_download", q.get_b_download ());
-          rf.metadata.set ("b_exact_match", q.get_b_exact_match ());
-          rf.metadata.set ("index", q.get_index ());
-          rf.metadata.set ("hit_sources", q.get_hit_sources ());
-          rf.metadata.set ("partial", q.get_partial ());
-          rf.metadata.set ("schema_plural", q.get_schema_plural ());
-
-          for (const auto& [k, v] : q.get_pxml ().get_metadata ())
-            rf.metadata.set (k, v);
-
-          // other data
-          rf.thumbnail_data = mf.get_preview ();
-          rf.hashes = get_file_hashes (mf);
-          rf.f = f;
-
-          // add remote file
-          remote_files_.push_back (rf);
-        }
-
-    }
-  catch (const std::exception& e)
-    {
-      log.warning (__LINE__, e.what ());
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode data from NTUSER.dat file
-//! \param f File object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_decode_ntuser_dat_file (const mobius::io::file& f)
-{
-  mobius::core::log log (__FILE__, __FUNCTION__);
-
-  try
-    {
-      // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-      // Create decoder
-      // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-      auto decoder = mobius::os::win::registry::hive_file (f.new_reader ());
-
-      if (!decoder.is_instance ())
-        {
-          log.info (__LINE__, "File " + f.get_path () + " ignored.");
-          return;
-        }
-
-      // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-      // Get evidences from Shareaza key
-      // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-      const auto& root_key = decoder.get_root_key ();
-      const auto& shareaza_key = root_key.get_key_by_path ("Software\\Shareaza\\Shareaza");
-
-      if (shareaza_key)
-        {
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Set account
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          account acc;
-          acc.username = username_;
-          acc.is_deleted = f.is_deleted ();
-          acc.f = f;
-
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Load values from key
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          acc.install_path = shareaza_key.get_data_by_name ("Path").get_data_as_string ("utf-16le");
-          acc.user_path = shareaza_key.get_data_by_name ("UserPath").get_data_as_string ("utf-16le");
-
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Load values from Downloads key
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          const auto& download_key = shareaza_key.get_key_by_name ("Downloads");
-
-          if (download_key)
-            {
-              acc.collection_path = download_key.get_data_by_name ("CollectionPath").get_data_as_string ("utf-16le");
-              acc.complete_path = download_key.get_data_by_name ("CompletePath").get_data_as_string ("utf-16le");
-              acc.incomplete_path = download_key.get_data_by_name ("IncompletePath").get_data_as_string ("utf-16le");
-              acc.torrent_path = download_key.get_data_by_name ("TorrentPath").get_data_as_string ("utf-16le");
-            }
-
-          if (account_.guid.empty () ||
-              (account_.is_deleted && !acc.is_deleted))
-            account_ = acc;
-
-          accounts_.push_back (acc);
-
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Load autofill values
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          for (const auto& value: shareaza_key.get_values_by_mask ("Search\\Search.*"))
-            {
-              autofill af;
-
-              af.value = mobius::string::word (value.get_data ().get_data_as_string ("utf-16le"), 0, "\n");
-              af.username = username_;
-              af.id = value.get_name ().substr(7);
-              af.is_deleted = acc.is_deleted;
-              af.f = f;
-
-              autofills_.push_back (af);
-            }
-        }
     }
   catch (const std::exception& e)
     {
@@ -703,7 +607,7 @@ evidence_loader_impl::_decode_ntuser_dat_file (const mobius::io::file& f)
 }*/
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save evidences
+// @brief Save evidences
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_evidences ()
@@ -711,11 +615,10 @@ evidence_loader_impl::_save_evidences ()
   auto transaction = item_.new_transaction ();
 
   _save_accounts ();
-  //_save_autofills ();
+  _save_autofills ();
   //_save_local_files ();
   //_save_p2p_remote_files ();
   //_save_received_files ();
-  //_save_searched_texts ();
   //_save_sent_files ();
   //_save_shared_files ();
 
@@ -724,7 +627,7 @@ evidence_loader_impl::_save_evidences ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save accounts
+// @brief Save accounts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_accounts ()
@@ -785,9 +688,8 @@ evidence_loader_impl::_save_accounts ()
     }
 }
 
-/*
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save autofill entries
+// @brief Save autofill entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_autofills ()
@@ -810,9 +712,9 @@ evidence_loader_impl::_save_autofills ()
       e.add_source (a.f);
     }
 }
-
+/*
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save local files
+// @brief Save local files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_local_files ()
@@ -836,7 +738,7 @@ evidence_loader_impl::_save_local_files ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save received files
+// @brief Save received files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_received_files ()
@@ -862,7 +764,7 @@ evidence_loader_impl::_save_received_files ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save remote files
+// @brief Save remote files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_p2p_remote_files ()
@@ -889,31 +791,7 @@ evidence_loader_impl::_save_p2p_remote_files ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save searched texts
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_save_searched_texts ()
-{
-  for (const auto& search : searches_)
-    {
-      if (search.timestamp)
-        {
-          auto e = item_.new_evidence ("searched-text");
-
-          e.set_attribute ("timestamp", search.timestamp);
-          e.set_attribute ("search_type", "p2p.shareaza");
-          e.set_attribute ("text", search.text);
-          e.set_attribute ("username", search.username);
-          e.set_attribute ("metadata", search.metadata);
-
-          e.set_tag ("p2p");
-          e.add_source (search.f);
-        }
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save sent files
+// @brief Save sent files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_sent_files ()
@@ -940,7 +818,7 @@ evidence_loader_impl::_save_sent_files ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save shared files
+// @brief Save shared files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_shared_files ()
@@ -968,3 +846,4 @@ evidence_loader_impl::_save_shared_files ()
 */
 
 } // namespace mobius::extension::app::emule
+

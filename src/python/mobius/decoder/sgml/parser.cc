@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file parser.cc C++ API <i>mobius.decoder.parser</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "parser.h"
@@ -29,9 +29,9 @@
 #include "pod/map.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if object type is <i>parser</i>
-//! \param pyobj Python object
-//! \return true/false
+// @brief Check if object type is <i>parser</i>
+// @param pyobj Python object
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_decoder_sgml_parser_check (PyObject *pyobj)
@@ -40,9 +40,9 @@ pymobius_decoder_sgml_parser_check (PyObject *pyobj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>parser</i> Python object from C++ object
-//! \param obj C++ object
-//! \return new parser object
+// @brief Create <i>parser</i> Python object from C++ object
+// @param obj C++ object
+// @return new parser object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_decoder_sgml_parser_to_pyobject (const mobius::decoder::sgml::parser& obj)
@@ -56,9 +56,9 @@ pymobius_decoder_sgml_parser_to_pyobject (const mobius::decoder::sgml::parser& o
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>parser</i> C++ object from Python object
-//! \param pyobj Python object
-//! \return parser object
+// @brief Create <i>parser</i> C++ object from Python object
+// @param pyobj Python object
+// @return parser object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::decoder::sgml::parser
 pymobius_decoder_sgml_parser_from_pyobject (PyObject *pyobj)
@@ -70,10 +70,10 @@ pymobius_decoder_sgml_parser_from_pyobject (PyObject *pyobj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Pair <type, text>
+// @brief <i>get</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Pair <type, text>
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get (decoder_sgml_parser_o *self, PyObject *)
@@ -86,7 +86,7 @@ tp_f_get (decoder_sgml_parser_o *self, PyObject *)
       auto e = self->obj->get ();
 
       api_dataholder_o *pyobj = api_dataholder_new ();
-  
+
       if (pyobj)
         {
           api_dataholder_setattr (pyobj, "text", e.get_text ());
@@ -105,7 +105,7 @@ tp_f_get (decoder_sgml_parser_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -119,11 +119,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>parser</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>parser</i> object
+// @brief <i>parser</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>parser</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
@@ -163,8 +163,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>parser</i> deallocator
-//! \param self Object
+// @brief <i>parser</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (decoder_sgml_parser_o *self)
@@ -174,7 +174,7 @@ tp_dealloc (decoder_sgml_parser_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject decoder_sgml_parser_t =
 {
@@ -227,3 +227,5 @@ PyTypeObject decoder_sgml_parser_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

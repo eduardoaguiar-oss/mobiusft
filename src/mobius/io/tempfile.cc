@@ -29,7 +29,7 @@ static std::string TMPDIR = "/tmp";
 namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
+// @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 tempfile::tempfile ()
 {
@@ -41,7 +41,7 @@ tempfile::tempfile ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destructor
+// @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 tempfile::~tempfile ()
 {
@@ -50,8 +50,8 @@ tempfile::~tempfile ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Copy file content from reader
-//! \param reader Reader object
+// @brief Copy file content from reader
+// @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 tempfile::copy_from (mobius::io::reader reader) const
@@ -69,8 +69,8 @@ tempfile::copy_from (mobius::io::reader reader) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Copy file content to writer
-//! \param writer Writer object
+// @brief Copy file content to writer
+// @param writer Writer object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 tempfile::copy_to (mobius::io::writer writer) const
@@ -88,8 +88,8 @@ tempfile::copy_to (mobius::io::writer writer) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set TMPDIR path
-//! \param path Directory path
+// @brief Set TMPDIR path
+// @param path Directory path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 set_tempdir_path (const std::string& path)
@@ -98,3 +98,5 @@ set_tempdir_path (const std::string& path)
 }
 
 } // namespace mobius::io
+
+

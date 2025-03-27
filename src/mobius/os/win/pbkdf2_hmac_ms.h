@@ -22,11 +22,7 @@
 #include <cstdint>
 #include <string>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
+namespace mobius::os::win
 {
 
 mobius::bytearray pbkdf2_hmac_ms (
@@ -36,8 +32,8 @@ mobius::bytearray pbkdf2_hmac_ms (
    std::uint16_t,
    const std::string&);
 
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win
 
 #endif
+
+

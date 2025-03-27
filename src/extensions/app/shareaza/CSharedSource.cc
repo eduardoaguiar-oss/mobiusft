@@ -21,10 +21,10 @@
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode CSharedSource structure
-//! \param decoder MFC decoder object
-//! \param version Structure version
-//! \see SharedFile.cpp - CSharedSource::Serialize
+// @brief Decode CSharedSource structure
+// @param decoder MFC decoder object
+// @param version Structure version
+// @see SharedFile.cpp - CSharedSource::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 CSharedSource::CSharedSource (mobius::decoder::mfc& decoder, int version)
 {
@@ -49,3 +49,7 @@ CSharedSource::CSharedSource (mobius::decoder::mfc& decoder, int version)
 }
 
 } // namespace mobius::extension::app::shareaza
+
+
+
+

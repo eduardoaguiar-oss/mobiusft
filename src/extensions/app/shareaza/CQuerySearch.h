@@ -28,15 +28,15 @@
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief CXMLElement decoder class
+// @brief CXMLElement decoder class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class CQuerySearch
 {
 public:
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get version
-  //! \return Structure version
+  // @brief Get version
+  // @return Structure version
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   int
   get_version () const
@@ -45,8 +45,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get search GUID
-  //! \return GUID
+  // @brief Get search GUID
+  // @return GUID
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_guid () const
@@ -55,8 +55,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get searched text
-  //! \return Text
+  // @brief Get searched text
+  // @return Text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_text () const
@@ -65,8 +65,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get schema URI
-  //! \return URI
+  // @brief Get schema URI
+  // @return URI
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_uri () const
@@ -75,8 +75,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hash SHA-1
-  //! \return Hash
+  // @brief Get hash SHA-1
+  // @return Hash
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_hash_sha1 () const
@@ -85,8 +85,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hash Tiger
-  //! \return Hash
+  // @brief Get hash Tiger
+  // @return Hash
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_hash_tiger () const
@@ -95,8 +95,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hash ED2K
-  //! \return Hash
+  // @brief Get hash ED2K
+  // @return Hash
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_hash_ed2k () const
@@ -105,8 +105,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hash BTH
-  //! \return Hash
+  // @brief Get hash BTH
+  // @return Hash
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_hash_bth () const
@@ -115,8 +115,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hash MD5
-  //! \return Hash
+  // @brief Get hash MD5
+  // @return Hash
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_hash_md5 () const
@@ -125,8 +125,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get XML root element
-  //! \return Root element
+  // @brief Get XML root element
+  // @return Root element
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto
   get_pxml () const
@@ -135,8 +135,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get want URL flag
-  //! \return Flag
+  // @brief Get want URL flag
+  // @return Flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_flag_want_url () const
@@ -145,8 +145,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get want DN flag
-  //! \return Flag
+  // @brief Get want DN flag
+  // @return Flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_flag_want_dn () const
@@ -155,8 +155,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get want XML flag
-  //! \return Flag
+  // @brief Get want XML flag
+  // @return Flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_flag_want_xml () const
@@ -165,8 +165,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get want COM flag
-  //! \return Flag
+  // @brief Get want COM flag
+  // @return Flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_flag_want_com () const
@@ -175,8 +175,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get want PFS flag
-  //! \return Flag
+  // @brief Get want PFS flag
+  // @return Flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_flag_want_pfs () const
@@ -185,8 +185,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get search min. size
-  //! \return Size in bytes
+  // @brief Get search min. size
+  // @return Size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t
   get_min_size () const
@@ -195,8 +195,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get search max. size
-  //! \return Size in bytes
+  // @brief Get search max. size
+  // @return Size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t
   get_max_size () const
@@ -210,58 +210,62 @@ public:
   void decode (mobius::decoder::mfc&);
 
 private:
-  //! \brief Structure version
+  // @brief Structure version
   int version_;
 
-  //! \brief Query GUID
+  // @brief Query GUID
   std::string guid_;
 
-  //! \brief Text searched
+  // @brief Text searched
   std::string text_;
 
-  //! \brief Schema URI
+  // @brief Schema URI
   std::string uri_;
 
-  //! \brief Hash MD5
+  // @brief Hash MD5
   std::string hash_md5_;
 
-  //! \brief Hash SHA-1
+  // @brief Hash SHA-1
   std::string hash_sha1_;
 
-  //! \brief Hash Tiger
+  // @brief Hash Tiger
   std::string hash_tiger_;
 
-  //! \brief Hash ED2K
+  // @brief Hash ED2K
   std::string hash_ed2k_;
 
-  //! \brief Hash BTH
+  // @brief Hash BTH
   std::string hash_bth_;
 
-  //! \brief Root XML element
+  // @brief Root XML element
   CXMLElement pxml_;
 
-  //! \brief Flag want URL
+  // @brief Flag want URL
   bool flag_want_url_ = false;
 
-  //! \brief Flag want DN
+  // @brief Flag want DN
   bool flag_want_dn_ = false;
 
-  //! \brief Flag want XML
+  // @brief Flag want XML
   bool flag_want_xml_ = false;
 
-  //! \brief Flag want COM
+  // @brief Flag want COM
   bool flag_want_com_ = false;
 
-  //! \brief Flag want PFS
+  // @brief Flag want PFS
   bool flag_want_pfs_ = false;
 
-  //! \brief Search min. size
+  // @brief Search min. size
   std::int64_t min_size_ = 0;
 
-  //! \brief Search max. size
+  // @brief Search max. size
   std::int64_t max_size_ = -1;
 };
 
 } // namespace mobius::extension::app::shareaza
 
 #endif
+
+
+
+

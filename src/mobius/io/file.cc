@@ -30,12 +30,10 @@
 #include "smb/file_impl.h"
 #endif
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Construct object
+// @brief Construct object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file::file ()
 {
@@ -43,8 +41,8 @@ file::file ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Construct object
-//! \param impl Implementation object
+// @brief Construct object
+// @param impl Implementation object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file::file (const std::shared_ptr <file_impl_base>& impl)
   : impl_ (impl)
@@ -52,8 +50,8 @@ file::file (const std::shared_ptr <file_impl_base>& impl)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Copy file
-//! \param f File object (destination)
+// @brief Copy file
+// @param f File object (destination)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 file::copy (file f) const
@@ -73,8 +71,8 @@ file::copy (file f) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Copy file to folder
-//! \param folder_out Folder object (dest)
+// @brief Copy file to folder
+// @param folder_out Folder object (dest)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 file::copy (folder folder_out) const
@@ -84,8 +82,8 @@ file::copy (folder folder_out) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Move file
-//! \param f Destination file
+// @brief Move file
+// @param f Destination file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 file::move (file f)
@@ -100,8 +98,8 @@ file::move (file f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Move file to folder
-//! \param folder_out Folder object (dest)
+// @brief Move file to folder
+// @param folder_out Folder object (dest)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 file::move (folder folder_out)
@@ -111,8 +109,8 @@ file::move (folder folder_out)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get file extension
-//! \return File extension
+// @brief Get file extension
+// @return File extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 file::get_extension () const
@@ -128,8 +126,8 @@ file::get_extension () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get parent folder
-//! \return Parent folder
+// @brief Get parent folder
+// @return Parent folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder
 file::get_parent () const
@@ -146,9 +144,9 @@ file::get_parent () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new sibling file object by name
-//! \param name Sibling file name
-//! \return Sibling file object
+// @brief Create new sibling file object by name
+// @param name Sibling file name
+// @return Sibling file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file
 file::new_sibling_by_name (const std::string& name) const
@@ -159,9 +157,9 @@ file::new_sibling_by_name (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new sibling file object by extension
-//! \param ext Sibling extension
-//! \return Sibling file object
+// @brief Create new sibling file object by extension
+// @param ext Sibling extension
+// @return Sibling file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file
 file::new_sibling_by_extension (const std::string& ext) const
@@ -181,8 +179,8 @@ file::new_sibling_by_extension (const std::string& ext) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get streams
-//! \return Streams
+// @brief Get streams
+// @return Streams
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <stream>
 file::get_streams () const
@@ -201,9 +199,9 @@ file::get_streams () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create file by path
-//! \param path file path
-//! \return file object
+// @brief Create file by path
+// @param path file path
+// @return file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file
 new_file_by_path (const std::string& path)
@@ -212,9 +210,9 @@ new_file_by_path (const std::string& path)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create file by URI
-//! \param url file URL
-//! \return file object
+// @brief Create file by URI
+// @param url file URL
+// @return file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file
 new_file_by_url (const std::string& url)
@@ -233,5 +231,6 @@ new_file_by_url (const std::string& url)
     throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("unhandled file scheme"));
 }
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
+
+

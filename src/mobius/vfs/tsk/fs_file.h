@@ -26,15 +26,15 @@
 #include <vector>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief libtsk exception message
+// @brief libtsk exception message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct TSK_FS_FILE;
 
 namespace mobius::vfs::tsk
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief TSK_FS_FILE C++ class
-//! \author Eduardo Aguiar
+// @brief TSK_FS_FILE C++ class
+// @author Eduardo Aguiar
 // Shared owner of TSK_FS_FILE pointer, calling tsk_fs_file_close when
 // pointer is finally deallocated.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -42,7 +42,7 @@ class fs_file
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief File subtype
+  // @brief File subtype
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   enum class fs_file_type {
           none,
@@ -54,7 +54,7 @@ public:
           socket,
           folder
   };
-  
+
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Datatypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -102,8 +102,8 @@ public:
   std::vector <stream_type> get_streams () const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if fs_file is valid
-  //! \return true/false
+  // @brief Check if fs_file is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const noexcept
   {
@@ -111,8 +111,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get internal pointer
-  //! \return Pointer
+  // @brief Get internal pointer
+  // @return Pointer
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   TSK_FS_FILE *
   get_pointer () const
@@ -121,70 +121,70 @@ public:
   }
 
 private:
-  //! \brief libtsk file structure pointer
+  // @brief libtsk file structure pointer
   std::shared_ptr <TSK_FS_FILE> p_;
 
-  //! \brief i-node
+  // @brief i-node
   mutable std::uint64_t inode_ = 0;
 
-  //! \brief name
+  // @brief name
   mutable std::string name_;
 
-  //! \brief short name
+  // @brief short name
   mutable std::string short_name_;
 
-  //! \brief path
+  // @brief path
   mutable std::string path_;
 
-  //! \brief deleted flag
+  // @brief deleted flag
   mutable bool is_deleted_ = false;
-  
-  //! \brief file type
+
+  // @brief file type
   mutable fs_file_type type_ = {};
 
-  //! \brief size in bytes
+  // @brief size in bytes
   mutable std::uint64_t size_ = 0;
 
-  //! \brief user id
+  // @brief user id
   mutable int user_id_ = -1;
 
-  //! \brief group id
+  // @brief group id
   mutable int group_id_ = -1;
 
-  //! \brief RWX permissions
+  // @brief RWX permissions
   mutable int permissions_ = 0;
 
-  //! \brief creation date/time
+  // @brief creation date/time
   mutable mobius::datetime::datetime creation_time_;
 
-  //! \brief last modification date/time
+  // @brief last modification date/time
   mutable mobius::datetime::datetime modification_time_;
 
-  //! \brief last access date/time
+  // @brief last access date/time
   mutable mobius::datetime::datetime access_time_;
 
-  //! \brief last metadata modification date/time
+  // @brief last metadata modification date/time
   mutable mobius::datetime::datetime metadata_time_;
 
-  //! \brief deletion date/time
+  // @brief deletion date/time
   mutable mobius::datetime::datetime deletion_time_;
 
-  //! \brief last backup date/time
+  // @brief last backup date/time
   mutable mobius::datetime::datetime backup_time_;
 
-  //! \brief Streams
+  // @brief Streams
   mutable std::vector <stream_type> streams_;
 
-  //! \brief reallocated flag
+  // @brief reallocated flag
   mutable bool is_reallocated_ = false;
 
-  //! \brief fs_name loaded flag
+  // @brief fs_name loaded flag
   mutable bool fs_name_loaded_ = false;
 
-  //! \brief fs_meta loaded flag
+  // @brief fs_meta loaded flag
   mutable bool fs_meta_loaded_ = false;
 
-  //! \brief Streams loaded flag
+  // @brief Streams loaded flag
   mutable bool streams_loaded_ = false;
 
 private:
@@ -199,3 +199,5 @@ private:
 } // namespace mobius::vfs::tsk
 
 #endif
+
+

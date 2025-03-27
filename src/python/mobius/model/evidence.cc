@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file evidence.cc C++ API <i>mobius.model.evidence</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pydict.h>
@@ -31,9 +31,9 @@
 #include "pod/data.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>evidence</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>evidence</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_model_evidence_check (PyObject *value)
@@ -42,9 +42,9 @@ pymobius_model_evidence_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>evidence</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New evidence object
+// @brief Create <i>evidence</i> Python object from C++ object
+// @param obj C++ object
+// @return New evidence object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_model_evidence_to_pyobject (const mobius::model::evidence& obj)
@@ -53,9 +53,9 @@ pymobius_model_evidence_to_pyobject (const mobius::model::evidence& obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>evidence</i> C++ object from Python object
-//! \param value Python value
-//! \return Evidence object
+// @brief Create <i>evidence</i> C++ object from Python object
+// @param value Python value
+// @return Evidence object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::model::evidence
 pymobius_model_evidence_from_pyobject (PyObject *value)
@@ -64,9 +64,9 @@ pymobius_model_evidence_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>item</i> Attribute getter
-//! \param self Object
-//! \return <i>item</i> attribute
+// @brief <i>item</i> Attribute getter
+// @param self Object
+// @return <i>item</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_item (model_evidence_o *self)
@@ -86,9 +86,9 @@ tp_getter_item (model_evidence_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>uid</i> Attribute getter
-//! \param self Object
-//! \return <i>uid</i> attribute
+// @brief <i>uid</i> Attribute getter
+// @param self Object
+// @return <i>uid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_uid (model_evidence_o *self)
@@ -108,9 +108,9 @@ tp_getter_uid (model_evidence_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>type</i> Attribute getter
-//! \param self Object
-//! \return <i>type</i> attribute
+// @brief <i>type</i> Attribute getter
+// @param self Object
+// @return <i>type</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_type (model_evidence_o *self)
@@ -130,7 +130,7 @@ tp_getter_type (model_evidence_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Getters and setters structure
+// @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -159,10 +159,10 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>has_attribute</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>has_attribute</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_has_attribute (model_evidence_o *self, PyObject *args)
@@ -197,10 +197,10 @@ tp_f_has_attribute (model_evidence_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_attribute</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Attribute value
+// @brief <i>get_attribute</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_attribute (model_evidence_o *self, PyObject *args)
@@ -235,9 +235,9 @@ tp_f_get_attribute (model_evidence_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_attribute</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_attribute</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_attribute (model_evidence_o *self, PyObject *args)
@@ -273,9 +273,9 @@ tp_f_set_attribute (model_evidence_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_attributes</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_attributes</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_attributes (model_evidence_o *self, PyObject *args)
@@ -314,9 +314,9 @@ tp_f_set_attributes (model_evidence_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>remove_attribute</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>remove_attribute</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_remove_attribute (model_evidence_o *self, PyObject *args)
@@ -350,10 +350,10 @@ tp_f_remove_attribute (model_evidence_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_attribute</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Attribute value
+// @brief <i>get_attribute</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_attributes (model_evidence_o *self, PyObject *)
@@ -379,10 +379,10 @@ tp_f_get_attributes (model_evidence_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>has_tag</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>has_tag</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_has_tag (model_evidence_o *self, PyObject *args)
@@ -417,9 +417,9 @@ tp_f_has_tag (model_evidence_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_tag</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_tag</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_tag (model_evidence_o *self, PyObject *args)
@@ -453,9 +453,9 @@ tp_f_set_tag (model_evidence_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_tag</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_tag</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_tags (model_evidence_o *self, PyObject *args)
@@ -489,9 +489,9 @@ tp_f_set_tags (model_evidence_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>reset_tag</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>reset_tag</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_reset_tag (model_evidence_o *self, PyObject *args)
@@ -525,10 +525,10 @@ tp_f_reset_tag (model_evidence_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_tags</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Set of evidence tags
+// @brief <i>get_tags</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Set of evidence tags
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_tags (model_evidence_o *self, PyObject *)
@@ -553,7 +553,7 @@ tp_f_get_tags (model_evidence_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -627,8 +627,8 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>evidence</i> deallocator
-//! \param self Object
+// @brief <i>evidence</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (model_evidence_o *self)
@@ -638,10 +638,10 @@ tp_dealloc (model_evidence_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>evidence</i> getattro
-//! \param o Object
-//! \param name Attribute name
-//! \return Attribute value
+// @brief <i>evidence</i> getattro
+// @param o Object
+// @param name Attribute name
+// @return Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getattro (PyObject *o, PyObject *name)
@@ -678,11 +678,11 @@ tp_getattro (PyObject *o, PyObject *name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>evidence</i> setattro
-//! \param o Object
-//! \param name Attribute name
-//! \param value Attribute value
-//! \return 0 if success, -1 if error
+// @brief <i>evidence</i> setattro
+// @param o Object
+// @param name Attribute name
+// @param value Attribute value
+// @return 0 if success, -1 if error
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static int
 tp_setattro (PyObject *o, PyObject *name, PyObject *value)
@@ -732,7 +732,7 @@ tp_setattro (PyObject *o, PyObject *name, PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject model_evidence_t =
 {
@@ -785,3 +785,5 @@ PyTypeObject model_evidence_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

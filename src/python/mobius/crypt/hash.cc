@@ -18,16 +18,16 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file hash.cc C++ API <i>mobius.crypt.hash</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pygil.h>
 #include "hash.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>hash</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>hash</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_crypt_hash_check (PyObject *value)
@@ -36,9 +36,9 @@ pymobius_crypt_hash_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>hash</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New hash object
+// @brief Create <i>hash</i> Python object from C++ object
+// @param obj C++ object
+// @return New hash object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_crypt_hash_to_pyobject (const mobius::crypt::hash& obj)
@@ -47,9 +47,9 @@ pymobius_crypt_hash_to_pyobject (const mobius::crypt::hash& obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>hash</i> C++ object from Python object
-//! \param value Python value
-//! \return Hash object
+// @brief Create <i>hash</i> C++ object from Python object
+// @param value Python value
+// @return Hash object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::crypt::hash
 pymobius_crypt_hash_from_pyobject (PyObject *value)
@@ -58,10 +58,10 @@ pymobius_crypt_hash_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_type</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Hash ID
+// @brief <i>get_type</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Hash ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_type (crypt_hash_o *self, PyObject *)
@@ -83,10 +83,10 @@ tp_f_get_type (crypt_hash_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_block_size</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Block size in bytes
+// @brief <i>get_block_size</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Block size in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_block_size (crypt_hash_o *self, PyObject *)
@@ -108,10 +108,10 @@ tp_f_get_block_size (crypt_hash_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_digest_size</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Digest size in bytes
+// @brief <i>get_digest_size</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Digest size in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_digest_size (crypt_hash_o *self, PyObject *)
@@ -133,9 +133,9 @@ tp_f_get_digest_size (crypt_hash_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>update</i> method implementation
-//! \param self object
-//! \param args argument list
+// @brief <i>update</i> method implementation
+// @param self object
+// @param args argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_update (crypt_hash_o *self, PyObject *args)
@@ -171,9 +171,9 @@ tp_f_update (crypt_hash_o *self, PyObject *args)
 }
 
 /// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>reset</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>reset</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_reset (crypt_hash_o *self, PyObject *)
@@ -194,9 +194,9 @@ tp_f_reset (crypt_hash_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_digest</i> method implementation
-//! \param self object
-//! \param args argument list
+// @brief <i>get_digest</i> method implementation
+// @param self object
+// @param args argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_digest (crypt_hash_o *self, PyObject *)
@@ -217,9 +217,9 @@ tp_f_get_digest (crypt_hash_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_hex_digest</i> method implementation
-//! \param self object
-//! \param args argument list
+// @brief <i>get_hex_digest</i> method implementation
+// @param self object
+// @param args argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_hex_digest (crypt_hash_o *self, PyObject *)
@@ -241,10 +241,10 @@ tp_f_get_hex_digest (crypt_hash_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>clone</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Pointer to newly created object
+// @brief <i>clone</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Pointer to newly created object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_clone (crypt_hash_o *self, PyObject *)
@@ -266,7 +266,7 @@ tp_f_clone (crypt_hash_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -322,10 +322,10 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>hash</i> constructor
-//! \param type type object
-//! \param args constructor arguments
-//! \return new <i>hash</i> object
+// @brief <i>hash</i> constructor
+// @param type type object
+// @param args constructor arguments
+// @return new <i>hash</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
@@ -365,8 +365,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>hash</i> deallocator
-//! \param self object
+// @brief <i>hash</i> deallocator
+// @param self object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (crypt_hash_o *self)
@@ -376,7 +376,7 @@ tp_dealloc (crypt_hash_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject crypt_hash_t =
 {
@@ -429,3 +429,5 @@ PyTypeObject crypt_hash_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

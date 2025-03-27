@@ -21,13 +21,11 @@
 #include <mobius/io/writer_impl_base.h>
 #include <mobius/io/writer.h>
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief writer_impl_evaluator template
-//! \author Eduardo Aguiar
+// @brief writer_impl_evaluator template
+// @author Eduardo Aguiar
 // This template class allows us to create a write object, passing another
 // write object (called client writer) and a functor, which will be called
 // at every write operation.
@@ -53,8 +51,8 @@ public:
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // main constructor
-  //! \param writer client writer
-  //! \param functor evaluation functor
+  // @param writer client writer
+  // @param functor evaluation functor
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   writer_impl_evaluator (mobius::io::writer writer, T& functor)
     : writer_ (writer),
@@ -63,9 +61,9 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set write position
-  //! \param offset offset in bytes
-  //! \param w either beginning, current or end
+  // @brief set write position
+  // @param offset offset in bytes
+  // @param w either beginning, current or end
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   virtual void
   seek (offset_type offset, whence_type whence = whence_type::beginning) override
@@ -74,8 +72,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief write bytes into writer
-  //! \param data bytearray containing data
+  // @brief write bytes into writer
+  // @param data bytearray containing data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   virtual size_type
   write (const mobius::bytearray& data) override
@@ -85,7 +83,7 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief flush data to file
+  // @brief flush data to file
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   virtual void
   flush () override
@@ -94,8 +92,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if writer is seekable
-  //! \return true/false
+  // @brief check if writer is seekable
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   virtual bool
   is_seekable () const override
@@ -104,8 +102,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get current write position
-  //! \return write position in bytes from the beginning of data
+  // @brief get current write position
+  // @return write position in bytes from the beginning of data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   virtual offset_type
   tell () const override
@@ -119,10 +117,10 @@ private:
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create new writer object, with filter functor
-//! \author Eduardo Aguiar
-//! \param writer client writer
-//! \param functor functor object
+// @brief create new writer object, with filter functor
+// @author Eduardo Aguiar
+// @param writer client writer
+// @param functor functor object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename T> const mobius::io::writer
 writer_evaluator (mobius::io::writer writer, T& functor)
@@ -130,7 +128,8 @@ writer_evaluator (mobius::io::writer writer, T& functor)
   return mobius::io::writer (std::make_shared <writer_impl_evaluator<T>> (writer, functor));
 }
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
 
 #endif
+
+

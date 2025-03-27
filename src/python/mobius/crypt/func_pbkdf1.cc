@@ -20,10 +20,10 @@
 #include <mobius/crypt/pkcs5.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief pbkdf1 function implementation
-//! \param self Function object
-//! \param args Argument list
-//! \return Python object
+// @brief pbkdf1 function implementation
+// @param self Function object
+// @param args Argument list
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_pbkdf1 (PyObject *, PyObject *args)
@@ -73,3 +73,5 @@ func_pbkdf1 (PyObject *, PyObject *args)
 
   return ret;
 }
+
+

@@ -31,13 +31,13 @@ namespace
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-//! \brief Serialization version
+// @brief Serialization version
 static constexpr std::uint32_t VERSION = 1;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Unserialize data item
-//! \param decoder Decoder object
-//! \return Data object
+// @brief Unserialize data item
+// @param decoder Decoder object
+// @return Data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data
 _unserialize_data (mobius::decoder::data_decoder& decoder)
@@ -127,9 +127,9 @@ _unserialize_data (mobius::decoder::data_decoder& decoder)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Unserialize data object
-//! \param decoder Decoder object
-//! \return Data object
+// @brief Unserialize data object
+// @param decoder Decoder object
+// @return Data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data
 _unserialize (mobius::decoder::data_decoder& decoder)
@@ -147,9 +147,9 @@ _unserialize (mobius::decoder::data_decoder& decoder)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Unserialize data object
-//! \param b Encoded data
-//! \return Data object
+// @brief Unserialize data object
+// @param b Encoded data
+// @return Data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data
 unserialize (const mobius::bytearray& b)
@@ -159,9 +159,9 @@ unserialize (const mobius::bytearray& b)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Unserialize data object from reader
-//! \param reader Reader object
-//! \return Data object
+// @brief Unserialize data object from reader
+// @param reader Reader object
+// @return Data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data
 unserialize (mobius::io::reader reader)
@@ -171,3 +171,5 @@ unserialize (mobius::io::reader reader)
 }
 
 } // namespace mobius::pod
+
+

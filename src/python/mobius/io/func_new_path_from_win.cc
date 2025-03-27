@@ -17,14 +17,14 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "path.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function new_path_from_win
+// @brief Function new_path_from_win
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_new_path_from_win (PyObject *, PyObject *args)
@@ -44,7 +44,7 @@ func_new_path_from_win (PyObject *, PyObject *args)
 
   // execute C++ code
   PyObject *ret = nullptr;
-  
+
   try
     {
       auto p = mobius::io::new_path_from_win (arg_value);
@@ -54,6 +54,8 @@ func_new_path_from_win (PyObject *, PyObject *args)
     {
       mobius::py::set_runtime_error (e.what ());
     }
-    
+
   return ret;
 }
+
+

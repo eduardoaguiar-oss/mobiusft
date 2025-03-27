@@ -22,17 +22,13 @@
 #include <cstdint>
 #include <string>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
+namespace mobius::os::win
 {
 
 mobius::bytearray hash_msdcc2 (const std::string&, const std::string&, std::uint32_t = 10240);
 
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win
 
 #endif
+
+

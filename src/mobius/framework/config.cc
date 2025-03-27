@@ -25,8 +25,8 @@ namespace
 static const std::string RESOURCE_ID = "database.config";
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get database instance
-//! \return Database object
+// @brief Get database instance
+// @return Database object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::database::database
 _get_database ()
@@ -74,8 +74,8 @@ _get_database ()
 namespace mobius::framework
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new transaction to config database
-//! \return New database transaction
+// @brief Create new transaction to config database
+// @return New database transaction
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::database::transaction
 new_config_transaction ()
@@ -85,9 +85,9 @@ new_config_transaction ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if config value exists
-//! \param name Value name
-//! \return true/false
+// @brief Check if config value exists
+// @param name Value name
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 has_config (const std::string& name)
@@ -106,9 +106,9 @@ has_config (const std::string& name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get config value
-//! \param name Value name
-//! \return Value
+// @brief Get config value
+// @param name Value name
+// @return Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 get_config (const std::string& name)
@@ -132,9 +132,9 @@ get_config (const std::string& name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set config value
-//! \param name Value name
-//! \param value Value
+// @brief Set config value
+// @param name Value name
+// @param value Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 set_config (const std::string& name, const mobius::pod::data& value)
@@ -152,8 +152,8 @@ set_config (const std::string& name, const mobius::pod::data& value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove config value
-//! \param name Value name
+// @brief Remove config value
+// @param name Value name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 remove_config (const std::string& name)
@@ -170,3 +170,5 @@ remove_config (const std::string& name)
 }
 
 } // namespace mobius::framework
+
+

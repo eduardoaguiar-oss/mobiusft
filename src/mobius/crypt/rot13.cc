@@ -21,9 +21,9 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Encrypt/decrypt one byte
-//! \param c byte
-//! \return a new byte
+// @brief Encrypt/decrypt one byte
+// @param c byte
+// @return a new byte
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static constexpr std::uint8_t
 _rot13 (std::uint8_t c) noexcept
@@ -42,9 +42,9 @@ _rot13 (std::uint8_t c) noexcept
 namespace mobius::crypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Encode/decode data with ROT-13
-//! \param data Data
-//! \return Encoded/decoded data
+// @brief Encode/decode data with ROT-13
+// @param data Data
+// @return Encoded/decoded data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 rot13 (const mobius::bytearray& data)
@@ -56,3 +56,5 @@ rot13 (const mobius::bytearray& data)
 }
 
 } // namespace mobius::crypt
+
+

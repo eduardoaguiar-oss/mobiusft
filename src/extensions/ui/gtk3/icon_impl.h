@@ -24,8 +24,8 @@
 namespace mobius::extension::ui::gtk3
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>GTK3 icon</i> implementation class
-//! \author Eduardo Aguiar
+// @brief <i>GTK3 icon</i> implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class icon_impl : public mobius::ui::icon_impl_base
 {
@@ -37,8 +37,8 @@ public:
   ~icon_impl ();
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get low level widget
-  //! \return Low level widget
+  // @brief Get low level widget
+  // @return Low level widget
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::any
   get_ui_widget () const final
@@ -55,10 +55,12 @@ public:
   void set_icon_from_data (const mobius::bytearray&, size_type) final;
 
 private:
-  //! \brief Low level widget
+  // @brief Low level widget
   GtkWidget *widget_ = nullptr;
 };
 
 } // namespace mobius::extension::ui::gtk3
 
 #endif
+
+

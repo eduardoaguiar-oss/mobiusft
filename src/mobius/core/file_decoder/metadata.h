@@ -27,8 +27,8 @@
 namespace mobius::core::file_decoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief metadata class
-//! \author Eduardo Aguiar
+// @brief metadata class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class metadata
 {
@@ -55,10 +55,10 @@ public:
   mobius::pod::map get_group (const std::string&) const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get metadata value
-  //! \param group Group ID
-  //! \param Metadata name
-  //! \return Metadata value, if any
+  // @brief Get metadata value
+  // @param group Group ID
+  // @param Metadata name
+  // @return Metadata value, if any
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   template <typename T> T
   get_value (const std::string& group_id, const std::string& name) const
@@ -73,13 +73,15 @@ public:
   }
 
 private:
-  //! \brief Implementation class forward declaration
+  // @brief Implementation class forward declaration
   class impl;
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
 } // namespace mobius::core::file_decoder
 
 #endif
+
+

@@ -28,8 +28,8 @@
 namespace mobius::pod
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Map handle class
-//! \author Eduardo Aguiar
+// @brief Map handle class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class map : public data
 {
@@ -41,7 +41,7 @@ public:
   using value_type = std::pair <const std::string,data>;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Iterator class
+  // @brief Iterator class
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   class iterator : public std::iterator <std::random_access_iterator_tag, data_impl_map::iterator::value_type>
   {
@@ -49,8 +49,8 @@ public:
     using value_type = std::pair <const std::string,data>;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    //! \brief Constructor
-    //! \param impl Shared pointer to implementation object
+    // @brief Constructor
+    // @param impl Shared pointer to implementation object
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     explicit iterator (const data_impl_map::iterator& impl)
       : impl_ (impl)
@@ -58,8 +58,8 @@ public:
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    //! \brief Check if two iterators are different
-    //! \return true/false
+    // @brief Check if two iterators are different
+    // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     bool
     operator != (const iterator& it)
@@ -68,8 +68,8 @@ public:
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    //! \brief Increment iterator
-    //! \return Reference to iterator
+    // @brief Increment iterator
+    // @return Reference to iterator
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     iterator&
     operator ++ ()
@@ -79,8 +79,8 @@ public:
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    //! \brief Decrement iterator
-    //! \return Reference to iterator
+    // @brief Decrement iterator
+    // @return Reference to iterator
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     iterator&
     operator-- ()
@@ -90,8 +90,8 @@ public:
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    //! \brief Get current data
-    //! \return Data value
+    // @brief Get current data
+    // @return Data value
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     value_type
     operator* ()
@@ -109,7 +109,7 @@ public:
   map ();
   explicit map (data);
   map (const std::initializer_list <value_type>&);
-  
+
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -118,9 +118,9 @@ public:
   void update (const map&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Operator=
-  //! \param d Data object
-  //! \return Reference to this object
+  // @brief Operator=
+  // @param d Data object
+  // @return Reference to this object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   map&
   operator= (const mobius::pod::data& d)
@@ -130,19 +130,19 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get map size
-  //! \return Size
+  // @brief Get map size
+  // @return Size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_size () const noexcept
   {
     return impl_->get_size ();
   }
-  
+
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if key is found
-  //! \param key Key
-  //! \return true/false
+  // @brief Check if key is found
+  // @param key Key
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   contains (const std::string& key) const
@@ -151,10 +151,10 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get value
-  //! \param key Key
-  //! \param varg Default value
-  //! \return Value if key is found or default value otherwise
+  // @brief Get value
+  // @param key Key
+  // @param varg Default value
+  // @return Value if key is found or default value otherwise
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   data
   get (const std::string& key, const data& varg = {}) const
@@ -163,10 +163,10 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get value as a given type
-  //! \param key Key
-  //! \param varg Default value
-  //! \return Value if key is found or default value otherwise
+  // @brief Get value as a given type
+  // @param key Key
+  // @param varg Default value
+  // @return Value if key is found or default value otherwise
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   template <typename T> T
   get (const std::string& key, T varg = {}) const
@@ -178,9 +178,9 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set value
-  //! \param key Key
-  //! \param value Value
+  // @brief Set value
+  // @param key Key
+  // @param value Value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set (const std::string& key, const data& value)
@@ -189,8 +189,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Remove value
-  //! \param key Key object
+  // @brief Remove value
+  // @param key Key object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   remove (const std::string& key)
@@ -199,8 +199,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Create iterator to beginning
-  //! \return iterator
+  // @brief Create iterator to beginning
+  // @return iterator
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   iterator
   begin ()
@@ -209,8 +209,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Create iterator to end
-  //! \return iterator
+  // @brief Create iterator to end
+  // @return iterator
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   iterator
   end ()
@@ -219,8 +219,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Create iterator to beginning
-  //! \return iterator
+  // @brief Create iterator to beginning
+  // @return iterator
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   const iterator
   begin () const
@@ -229,8 +229,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Create iterator to end
-  //! \return iterator
+  // @brief Create iterator to end
+  // @return iterator
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   const iterator
   end () const
@@ -252,3 +252,5 @@ bool operator!= (const map&, const map&);
 } // namespace mobius::pod
 
 #endif
+
+

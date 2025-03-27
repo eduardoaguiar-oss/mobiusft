@@ -24,8 +24,8 @@
 namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief File path (UTF-8)
-//! \author Eduardo Aguiar
+// @brief File path (UTF-8)
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class path
 {
@@ -53,7 +53,7 @@ public:
   std::string get_prefix () const;
   std::string get_filename_prefix () const;
   std::string get_extension () const;
-  
+
   path get_parent () const;
   path get_sibling_by_name (const std::string&) const;
   path get_sibling_by_extension (const std::string&) const;
@@ -64,8 +64,8 @@ public:
   bool filename_match (const std::string&) const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Test if path is valid
-  //! \return true/false
+  // @brief Test if path is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const noexcept
   {
@@ -73,8 +73,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get path
-  //! \return Path as string
+  // @brief Get path
+  // @return Path as string
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_value () const
@@ -100,3 +100,5 @@ std::string to_win_path (const path&);
 } // namespace mobius::io
 
 #endif
+
+

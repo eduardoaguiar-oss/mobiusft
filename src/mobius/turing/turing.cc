@@ -48,7 +48,7 @@ static constexpr int SCHEMA_VERSION = 2;
 namespace mobius::turing
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Implementation class for turing class
+// @brief Implementation class for turing class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class mobius::turing::turing::impl
 {
@@ -67,8 +67,8 @@ public:
   impl& operator=(impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if object is valid
-  //! \return true/false
+  // @brief Check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool() const noexcept
   {
@@ -86,10 +86,10 @@ public:
   void remove_hashes ();
 
 private:
-  //! \brief Flag is database loaded?
+  // @brief Flag is database loaded?
   mutable bool is_database_loaded_ = false;
 
-  //! \brief database object
+  // @brief database object
   mutable mobius::database::database db_;
 
   // Helper functions
@@ -98,8 +98,8 @@ private:
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new transaction for Turing database
-//! \return New database transaction
+// @brief Create new transaction for Turing database
+// @return New database transaction
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::database::transaction
 turing::impl::new_transaction ()
@@ -111,10 +111,10 @@ turing::impl::new_transaction ()
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if hash is set
-//! \param hash_type Hash type
-//! \param hash_value Hash value
-//! \return true/false
+// @brief Check if hash is set
+// @param hash_type Hash type
+// @param hash_value Hash value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 turing::impl::has_hash (
@@ -137,10 +137,10 @@ turing::impl::has_hash (
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set hash
-//! \param hash_type Hash type
-//! \param hash_value Hash value
-//! \param password Password as UTF-8 string
+// @brief Set hash
+// @param hash_type Hash type
+// @param hash_value Hash value
+// @param password Password as UTF-8 string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 turing::impl::set_hash (
@@ -186,10 +186,10 @@ turing::impl::set_hash (
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get hash password
-//! \param hash_type Hash type
-//! \param hash_value Hash value
-//! \return status, password
+// @brief Get hash password
+// @param hash_type Hash type
+// @param hash_value Hash value
+// @return status, password
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::pair <turing::pwd_status, std::string>
 turing::impl::get_hash_password (
@@ -263,8 +263,8 @@ turing::impl::get_hash_password (
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get hashes
-//! \return Tuples <type, value, password>
+// @brief Get hashes
+// @return Tuples <type, value, password>
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 turing::hashlist_type
 turing::impl::get_hashes () const
@@ -291,7 +291,7 @@ turing::impl::get_hashes () const
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove hashes
+// @brief Remove hashes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 turing::impl::remove_hashes ()
@@ -304,7 +304,7 @@ turing::impl::remove_hashes ()
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load database, if necessary
+// @brief Load database, if necessary
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 turing::impl::_load_database () const
@@ -388,7 +388,7 @@ turing::impl::_load_database () const
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
+// @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 turing::turing ()
   : impl_ (std::make_shared<impl> ())
@@ -396,8 +396,8 @@ turing::turing ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new transaction for Turing database
-//! \return new database transaction
+// @brief Create new transaction for Turing database
+// @return new database transaction
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::database::transaction
 turing::new_transaction ()
@@ -406,9 +406,9 @@ turing::new_transaction ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if hash is set
-//! \param hash_type Hash type
-//! \param hash_value Hash value
+// @brief Check if hash is set
+// @param hash_type Hash type
+// @param hash_value Hash value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 turing::has_hash (
@@ -420,10 +420,10 @@ turing::has_hash (
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set hash
-//! \param hash_type Hash type
-//! \param hash_value Hash value
-//! \param password Password as UTF-8 string
+// @brief Set hash
+// @param hash_type Hash type
+// @param hash_value Hash value
+// @param password Password as UTF-8 string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 turing::set_hash (
@@ -435,10 +435,10 @@ turing::set_hash (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get hash password
-//! \param hash_type Hash type
-//! \param hash_value Hash value
-//! \return status, password
+// @brief Get hash password
+// @param hash_type Hash type
+// @param hash_value Hash value
+// @return status, password
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::pair <turing::pwd_status, std::string>
 turing::get_hash_password (
@@ -449,8 +449,8 @@ turing::get_hash_password (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get hashes
-//! \return Tuples <type, value, password>
+// @brief Get hashes
+// @return Tuples <type, value, password>
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 turing::hashlist_type
 turing::get_hashes () const
@@ -460,7 +460,7 @@ turing::get_hashes () const
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove hashes
+// @brief Remove hashes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 turing::remove_hashes ()
@@ -469,3 +469,5 @@ turing::remove_hashes ()
 }
 
 } // namespace mobius::turing
+
+

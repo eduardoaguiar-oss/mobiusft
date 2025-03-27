@@ -22,7 +22,7 @@
 #include <mobius/core/extension.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_core_extension_to_pyobject (const mobius::core::extension&);
 mobius::core::extension pymobius_core_extension_from_pyobject (PyObject *);
 
 #endif
+
+

@@ -18,12 +18,10 @@
 #include "connection_set.h"
 #include <vector>
 
-namespace mobius
-{
-namespace database
+namespace mobius::database
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Implementation class
+// @brief Implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class connection_set::impl
 {
@@ -48,13 +46,13 @@ public:
   void release ();
 
 private:
-  //! \brief connections
+  // @brief connections
   std::vector <connection> connections_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add connection
-//! \param c Connection object
+// @brief Add connection
+// @param c Connection object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 connection_set::impl::add (const connection& c)
@@ -63,7 +61,7 @@ connection_set::impl::add (const connection& c)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Release connections
+// @brief Release connections
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 connection_set::impl::release ()
@@ -73,7 +71,7 @@ connection_set::impl::release ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
+// @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 connection_set::connection_set ()
  : impl_ (std::make_shared <impl> ())
@@ -81,8 +79,8 @@ connection_set::connection_set ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add connection
-//! \param c Connection object
+// @brief Add connection
+// @param c Connection object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 connection_set::add (const connection& c)
@@ -91,7 +89,7 @@ connection_set::add (const connection& c)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Release connections
+// @brief Release connections
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 connection_set::release ()
@@ -99,5 +97,6 @@ connection_set::release ()
   impl_->release ();
 }
 
-} // namespace database
-} // namespace mobius
+} // namespace mobius::database
+
+

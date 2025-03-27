@@ -17,15 +17,11 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "tokenizer.h"
 
-namespace mobius
-{
-namespace decoder
-{
-namespace sgml
+namespace mobius::decoder::sgml
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create tokenizer
-//! \param reader Reader object
+// @brief Create tokenizer
+// @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 tokenizer::tokenizer (const mobius::io::reader& reader)
  : sourcecode_ (reader)
@@ -33,8 +29,8 @@ tokenizer::tokenizer (const mobius::io::reader& reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get token
-//! \return Token type and token text
+// @brief Get token
+// @return Token type and token text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::pair <tokenizer::token_type, std::string>
 tokenizer::get_token ()
@@ -77,8 +73,8 @@ tokenizer::get_token ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get entity token
-//! \return Entity token ("&entity;")
+// @brief Get entity token
+// @return Entity token ("&entity;")
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 tokenizer::_get_entity_token ()
@@ -100,8 +96,8 @@ tokenizer::_get_entity_token ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get tag token
-//! \return Tag token ("<xxx yyy=...>")
+// @brief Get tag token
+// @return Tag token ("<xxx yyy=...>")
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 tokenizer::_get_tag_token ()
@@ -122,8 +118,8 @@ tokenizer::_get_tag_token ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get text token
-//! \return Text token
+// @brief Get text token
+// @return Text token
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 tokenizer::_get_text_token ()
@@ -141,6 +137,6 @@ tokenizer::_get_text_token ()
   return text;
 }
 
-} // namespace sgml
-} // namespace decoder
-} // namespace mobius
+} // namespace mobius::decoder::sgml
+
+

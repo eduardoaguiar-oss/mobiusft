@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file tokenizer.cc C++ API <i>mobius.decoder.tokenizer</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "tokenizer.h"
@@ -27,9 +27,9 @@
 #include "io/reader.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if object type is <i>tokenizer</i>
-//! \param pyobj Python object
-//! \return true/false
+// @brief Check if object type is <i>tokenizer</i>
+// @param pyobj Python object
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_decoder_sgml_tokenizer_check (PyObject *pyobj)
@@ -38,9 +38,9 @@ pymobius_decoder_sgml_tokenizer_check (PyObject *pyobj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>tokenizer</i> Python object from C++ object
-//! \param obj C++ object
-//! \return new tokenizer object
+// @brief Create <i>tokenizer</i> Python object from C++ object
+// @param obj C++ object
+// @return new tokenizer object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_decoder_sgml_tokenizer_to_pyobject (const mobius::decoder::sgml::tokenizer& obj)
@@ -54,9 +54,9 @@ pymobius_decoder_sgml_tokenizer_to_pyobject (const mobius::decoder::sgml::tokeni
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>tokenizer</i> C++ object from Python object
-//! \param pyobj Python object
-//! \return tokenizer object
+// @brief Create <i>tokenizer</i> C++ object from Python object
+// @param pyobj Python object
+// @return tokenizer object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::decoder::sgml::tokenizer
 pymobius_decoder_sgml_tokenizer_from_pyobject (PyObject *pyobj)
@@ -68,10 +68,10 @@ pymobius_decoder_sgml_tokenizer_from_pyobject (PyObject *pyobj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_token</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Pair <type, text>
+// @brief <i>get_token</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Pair <type, text>
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_token (decoder_sgml_tokenizer_o *self, PyObject *)
@@ -97,7 +97,7 @@ tp_f_get_token (decoder_sgml_tokenizer_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -111,11 +111,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>tokenizer</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>tokenizer</i> object
+// @brief <i>tokenizer</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>tokenizer</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
@@ -154,8 +154,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>tokenizer</i> deallocator
-//! \param self Object
+// @brief <i>tokenizer</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (decoder_sgml_tokenizer_o *self)
@@ -165,7 +165,7 @@ tp_dealloc (decoder_sgml_tokenizer_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject decoder_sgml_tokenizer_t =
 {
@@ -218,3 +218,5 @@ PyTypeObject decoder_sgml_tokenizer_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

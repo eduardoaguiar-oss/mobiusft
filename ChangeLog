@@ -1,9 +1,20 @@
 Mobius Forensic Toolkit 2.14
 	* configure.ac: Check for CMake availability.
 	* Added new C++ extension called "app-emule".
+	* Libmobius: Using doxygen tags with '@'
+	* Libmobius: Namespaces using C++17 nested convention
+	* Python API: Using doxygen tags with '@'
+	* C++ extensions: Using doxygen tags with '@'
 	* attribute-viewer: Using CMake to build, install and package
+	* datasource-ufdr: Using CMake to build, install and package
+	* datasource-vfs: Using CMake to build, install and package
+	* date-code: All source files renamed from .h/.cc to .hpp/.cpp
+	* date-code: Using CMake to build, install and package
 	* event-viewer: Using CMake to build, install and package
-	* tools: All source files renamed from .cc to .cpp
+	* tools: All source files renamed from .h/.cc to .hpp/.cpp
+	* benchmark: Removed module
+	* unittest: Removed module
+	* mobius::app: Removed module
 
 Mobius Forensic Toolkit 2.13
 	* Added new extension event-viewer

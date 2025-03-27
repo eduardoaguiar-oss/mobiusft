@@ -27,9 +27,9 @@
 namespace mobius::os::win::dpapi
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief BLOB class
-//! \author Eduardo Aguiar
-//! \see https://elie.net/talk/reversing-dpapi-and-stealing-windows-secrets-offline/
+// @brief BLOB class
+// @author Eduardo Aguiar
+// @see https://elie.net/talk/reversing-dpapi-and-stealing-windows-secrets-offline/
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class blob
 {
@@ -73,13 +73,15 @@ public:
   bool is_decrypted () const;
 
 private:
-  //! \brief Implementation class forward declaration
+  // @brief Implementation class forward declaration
   class impl;
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
 } // namespace mobius::os::win::dpapi
 
 #endif
+
+

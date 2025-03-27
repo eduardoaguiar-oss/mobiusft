@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file data_decoder.cc C++ API <i>mobius.decoder.data_decoder</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "data_decoder.h"
@@ -26,9 +26,9 @@
 #include "io/reader.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create <i>data_decoder</i> Python object from C++ object
-//! \param obj C++ object
-//! \return new data_decoder object
+// @brief create <i>data_decoder</i> Python object from C++ object
+// @param obj C++ object
+// @return new data_decoder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_decoder_data_decoder_to_pyobject (mobius::decoder::data_decoder obj)
@@ -42,9 +42,9 @@ pymobius_decoder_data_decoder_to_pyobject (mobius::decoder::data_decoder obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>skip</i> method implementation
-//! \param self object
-//! \param args argument list
+// @brief <i>skip</i> method implementation
+// @param self object
+// @param args argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_skip (decoder_data_decoder_o *self, PyObject *args)
@@ -80,9 +80,9 @@ tp_f_skip (decoder_data_decoder_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>seek</i> method implementation
-//! \param self object
-//! \param args argument list
+// @brief <i>seek</i> method implementation
+// @param self object
+// @param args argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_seek (decoder_data_decoder_o *self, PyObject *args)
@@ -118,10 +118,10 @@ tp_f_seek (decoder_data_decoder_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>tell</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return value
+// @brief <i>tell</i> method implementation
+// @param self object
+// @param args argument list
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_tell (decoder_data_decoder_o *self, PyObject *)
@@ -143,10 +143,10 @@ tp_f_tell (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_size</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return value
+// @brief <i>get_size</i> method implementation
+// @param self object
+// @param args argument list
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_size (decoder_data_decoder_o *self, PyObject *)
@@ -168,10 +168,10 @@ tp_f_get_size (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_int8</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return value
+// @brief <i>get_int8</i> method implementation
+// @param self object
+// @param args argument list
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_int8 (decoder_data_decoder_o *self, PyObject *)
@@ -193,10 +193,10 @@ tp_f_get_int8 (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_int16_le</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return value
+// @brief <i>get_int16_le</i> method implementation
+// @param self object
+// @param args argument list
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_int16_le (decoder_data_decoder_o *self, PyObject *)
@@ -218,10 +218,10 @@ tp_f_get_int16_le (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_int32_le</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return value
+// @brief <i>get_int32_le</i> method implementation
+// @param self object
+// @param args argument list
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_int32_le (decoder_data_decoder_o *self, PyObject *)
@@ -243,10 +243,10 @@ tp_f_get_int32_le (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_uint8</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return value
+// @brief <i>get_uint8</i> method implementation
+// @param self object
+// @param args argument list
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_uint8 (decoder_data_decoder_o *self, PyObject *)
@@ -268,10 +268,10 @@ tp_f_get_uint8 (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_uint16_le</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return value
+// @brief <i>get_uint16_le</i> method implementation
+// @param self object
+// @param args argument list
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_uint16_le (decoder_data_decoder_o *self, PyObject *)
@@ -293,10 +293,10 @@ tp_f_get_uint16_le (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_uint32_le</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return value
+// @brief <i>get_uint32_le</i> method implementation
+// @param self object
+// @param args argument list
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_uint32_le (decoder_data_decoder_o *self, PyObject *)
@@ -318,10 +318,10 @@ tp_f_get_uint32_le (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_uint64_le</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return value
+// @brief <i>get_uint64_le</i> method implementation
+// @param self object
+// @param args argument list
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_uint64_le (decoder_data_decoder_o *self, PyObject *)
@@ -343,10 +343,10 @@ tp_f_get_uint64_le (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_uint16_be</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return value
+// @brief <i>get_uint16_be</i> method implementation
+// @param self object
+// @param args argument list
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_uint16_be (decoder_data_decoder_o *self, PyObject *)
@@ -368,10 +368,10 @@ tp_f_get_uint16_be (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_uint32_be</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return value
+// @brief <i>get_uint32_be</i> method implementation
+// @param self object
+// @param args argument list
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_uint32_be (decoder_data_decoder_o *self, PyObject *)
@@ -393,10 +393,10 @@ tp_f_get_uint32_be (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_uint64_be</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return value
+// @brief <i>get_uint64_be</i> method implementation
+// @param self object
+// @param args argument list
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_uint64_be (decoder_data_decoder_o *self, PyObject *)
@@ -418,10 +418,10 @@ tp_f_get_uint64_be (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_hfs_datetime</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return datetime
+// @brief <i>get_hfs_datetime</i> method implementation
+// @param self object
+// @param args argument list
+// @return datetime
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_hfs_datetime (decoder_data_decoder_o *self, PyObject *)
@@ -443,10 +443,10 @@ tp_f_get_hfs_datetime (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_iso9660_datetime</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return datetime
+// @brief <i>get_iso9660_datetime</i> method implementation
+// @param self object
+// @param args argument list
+// @return datetime
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_iso9660_datetime (decoder_data_decoder_o *self, PyObject *)
@@ -468,10 +468,10 @@ tp_f_get_iso9660_datetime (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_nt_datetime</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return datetime
+// @brief <i>get_nt_datetime</i> method implementation
+// @param self object
+// @param args argument list
+// @return datetime
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_nt_datetime (decoder_data_decoder_o *self, PyObject *)
@@ -493,10 +493,10 @@ tp_f_get_nt_datetime (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_unix_datetime</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return datetime
+// @brief <i>get_unix_datetime</i> method implementation
+// @param self object
+// @param args argument list
+// @return datetime
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_unix_datetime (decoder_data_decoder_o *self, PyObject *)
@@ -518,10 +518,10 @@ tp_f_get_unix_datetime (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_fat_datetime</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return datetime
+// @brief <i>get_fat_datetime</i> method implementation
+// @param self object
+// @param args argument list
+// @return datetime
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_fat_datetime (decoder_data_decoder_o *self, PyObject *)
@@ -543,10 +543,10 @@ tp_f_get_fat_datetime (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_bytearray_by_size</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return data
+// @brief <i>get_bytearray_by_size</i> method implementation
+// @param self object
+// @param args argument list
+// @return data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_bytearray_by_size (decoder_data_decoder_o *self, PyObject *args)
@@ -581,10 +581,10 @@ tp_f_get_bytearray_by_size (decoder_data_decoder_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_string_by_size</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return value
+// @brief <i>get_string_by_size</i> method implementation
+// @param self object
+// @param args argument list
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_string_by_size (decoder_data_decoder_o *self, PyObject *args)
@@ -621,10 +621,10 @@ tp_f_get_string_by_size (decoder_data_decoder_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_c_string</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return value
+// @brief <i>get_c_string</i> method implementation
+// @param self object
+// @param args argument list
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_c_string (decoder_data_decoder_o *self, PyObject *args)
@@ -659,10 +659,10 @@ tp_f_get_c_string (decoder_data_decoder_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_hex_string_by_size</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return value
+// @brief <i>get_hex_string_by_size</i> method implementation
+// @param self object
+// @param args argument list
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_hex_string_by_size (decoder_data_decoder_o *self, PyObject *args)
@@ -697,10 +697,10 @@ tp_f_get_hex_string_by_size (decoder_data_decoder_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_guid</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return GUID as std::string
+// @brief <i>get_guid</i> method implementation
+// @param self object
+// @param args argument list
+// @return GUID as std::string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_guid (decoder_data_decoder_o *self, PyObject *)
@@ -722,10 +722,10 @@ tp_f_get_guid (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_uuid</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return hexadecimal string
+// @brief <i>get_uuid</i> method implementation
+// @param self object
+// @param args argument list
+// @return hexadecimal string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_uuid (decoder_data_decoder_o *self, PyObject *)
@@ -747,10 +747,10 @@ tp_f_get_uuid (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_sid</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return SID as string
+// @brief <i>get_sid</i> method implementation
+// @param self object
+// @param args argument list
+// @return SID as string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_sid (decoder_data_decoder_o *self, PyObject *)
@@ -772,10 +772,10 @@ tp_f_get_sid (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_ipv4</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return IPv4 string
+// @brief <i>get_ipv4</i> method implementation
+// @param self object
+// @param args argument list
+// @return IPv4 string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_ipv4 (decoder_data_decoder_o *self, PyObject *)
@@ -797,10 +797,10 @@ tp_f_get_ipv4 (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_ipv4_be</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return IPv4 string
+// @brief <i>get_ipv4_be</i> method implementation
+// @param self object
+// @param args argument list
+// @return IPv4 string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_ipv4_be (decoder_data_decoder_o *self, PyObject *)
@@ -822,10 +822,10 @@ tp_f_get_ipv4_be (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_ipv4_le</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return IPv4 string
+// @brief <i>get_ipv4_le</i> method implementation
+// @param self object
+// @param args argument list
+// @return IPv4 string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_ipv4_le (decoder_data_decoder_o *self, PyObject *)
@@ -847,10 +847,10 @@ tp_f_get_ipv4_le (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_ipv6</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return IPv6 string
+// @brief <i>get_ipv6</i> method implementation
+// @param self object
+// @param args argument list
+// @return IPv6 string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_ipv6 (decoder_data_decoder_o *self, PyObject *)
@@ -872,10 +872,10 @@ tp_f_get_ipv6 (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_ipv4_mapped_ipv6</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return IPv6 string
+// @brief <i>get_ipv4_mapped_ipv6</i> method implementation
+// @param self object
+// @param args argument list
+// @return IPv6 string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_ipv4_mapped_ipv6 (decoder_data_decoder_o *self, PyObject *)
@@ -897,7 +897,7 @@ tp_f_get_ipv4_mapped_ipv6 (decoder_data_decoder_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -1076,11 +1076,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>data_decoder</i> constructor
-//! \param type type object
-//! \param args argument list
-//! \param kwds keywords dict
-//! \return new <i>data_decoder</i> object
+// @brief <i>data_decoder</i> constructor
+// @param type type object
+// @param args argument list
+// @param kwds keywords dict
+// @return new <i>data_decoder</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
@@ -1119,8 +1119,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>data_decoder</i> deallocator
-//! \param self object
+// @brief <i>data_decoder</i> deallocator
+// @param self object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (decoder_data_decoder_o *self)
@@ -1130,7 +1130,7 @@ tp_dealloc (decoder_data_decoder_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject decoder_data_decoder_t =
 {
@@ -1183,3 +1183,7 @@ PyTypeObject decoder_data_decoder_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+
+
+

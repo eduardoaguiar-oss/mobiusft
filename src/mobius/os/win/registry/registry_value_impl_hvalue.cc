@@ -18,17 +18,11 @@
 #include "registry_value_impl_hvalue.h"
 #include "registry_data_impl_hdata.h"
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace registry
+namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
-//! \param hvalue hive_value
+// @brief constructor
+// @param hvalue hive_value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_value_impl_hvalue::registry_value_impl_hvalue (hive_value hvalue)
   : hive_value_ (hvalue),
@@ -37,7 +31,6 @@ registry_value_impl_hvalue::registry_value_impl_hvalue (hive_value hvalue)
 {
 }
 
-} // namespace registry
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::registry
+
+

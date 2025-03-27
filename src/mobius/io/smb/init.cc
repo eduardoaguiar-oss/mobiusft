@@ -35,7 +35,7 @@ static std::string smb_passwd_;
 static std::string smb_workgroup_;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Authentication function passed to smbc_init
+// @brief Authentication function passed to smbc_init
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 _get_auth_data_fn (
@@ -64,11 +64,11 @@ _get_auth_data_fn (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Initialize SMB library
-//! \param user User name
-//! \param passwd User password
-//! \param workgroup Workgroup name
-//! \see https://gitlab.com/samba-team/samba/-/blob/master/examples/libsmbclient/testbrowse.c
+// @brief Initialize SMB library
+// @param user User name
+// @param passwd User password
+// @param workgroup Workgroup name
+// @see https://gitlab.com/samba-team/samba/-/blob/master/examples/libsmbclient/testbrowse.c
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 _init (
@@ -105,10 +105,10 @@ _init (
 namespace mobius::io::smb
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Initialize SMB library
-//! \param user User name
-//! \param passwd User password
-//! \param workgroup Workgroup name
+// @brief Initialize SMB library
+// @param user User name
+// @param passwd User password
+// @param workgroup Workgroup name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 init (
@@ -121,3 +121,5 @@ init (
 }
 
 } // namespace mobius::io::smb
+
+

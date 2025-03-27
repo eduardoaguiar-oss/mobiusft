@@ -21,16 +21,12 @@
 #include <mobius/io/entry.h>
 #include <string>
 
-namespace mobius
-{
-namespace io
-{
-namespace local
+namespace mobius::io::local
 {
 mobius::io::entry new_entry_by_path (const std::string&);
 
-} // namespace local
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io::local
 
 #endif
+
+

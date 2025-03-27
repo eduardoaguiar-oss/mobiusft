@@ -23,15 +23,11 @@
 #include <cstdio>
 #include <memory>
 
-namespace mobius
-{
-namespace io
-{
-namespace local
+namespace mobius::io::local
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief local file writer implementation
-//! \author Eduardo Aguiar
+// @brief local file writer implementation
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class writer_impl : public writer_impl_base
 {
@@ -54,8 +50,8 @@ public:
   void flush () override;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if reader is seekable
-  //! \return true/false
+  // @brief check if reader is seekable
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_seekable () const override
@@ -67,8 +63,8 @@ private:
   std::shared_ptr <FILE> fp_;
 };
 
-} // namespace local
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io::local
 
 #endif
+
+

@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file master_key.cc C++ API <i>mobius.os.win.dpapi.master_key</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pygil.h>
@@ -26,9 +26,9 @@
 #include "module.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if object type is <i>master_key</i>
-//! \param pyobj Python object
-//! \return true/false
+// @brief Check if object type is <i>master_key</i>
+// @param pyobj Python object
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_os_win_dpapi_master_key_check (PyObject *pyobj)
@@ -37,9 +37,9 @@ pymobius_os_win_dpapi_master_key_check (PyObject *pyobj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>master_key</i> Python object from C++ object
-//! \param obj C++ object
-//! \return new master_key object
+// @brief Create <i>master_key</i> Python object from C++ object
+// @param obj C++ object
+// @return new master_key object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_os_win_dpapi_master_key_to_pyobject (mobius::os::win::dpapi::master_key obj)
@@ -60,9 +60,9 @@ pymobius_os_win_dpapi_master_key_to_pyobject (mobius::os::win::dpapi::master_key
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>master_key</i> C++ object from Python object
-//! \param value Python object
-//! \return master_key object
+// @brief Create <i>master_key</i> C++ object from Python object
+// @param value Python object
+// @return master_key object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::os::win::dpapi::master_key
 pymobius_os_win_dpapi_master_key_from_pyobject (PyObject *value)
@@ -74,9 +74,9 @@ pymobius_os_win_dpapi_master_key_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>revision</i> Attribute getter
-//! \param self Object
-//! \return <i>revision</i> attribute
+// @brief <i>revision</i> Attribute getter
+// @param self Object
+// @return <i>revision</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_revision (os_win_dpapi_master_key_o *self)
@@ -96,9 +96,9 @@ tp_getter_revision (os_win_dpapi_master_key_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>salt</i> Attribute getter
-//! \param self Object
-//! \return <i>salt</i> attribute
+// @brief <i>salt</i> Attribute getter
+// @param self Object
+// @return <i>salt</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_salt (os_win_dpapi_master_key_o *self)
@@ -118,9 +118,9 @@ tp_getter_salt (os_win_dpapi_master_key_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>iterations</i> Attribute getter
-//! \param self Object
-//! \return <i>iterations</i> attribute
+// @brief <i>iterations</i> Attribute getter
+// @param self Object
+// @return <i>iterations</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_iterations (os_win_dpapi_master_key_o *self)
@@ -140,9 +140,9 @@ tp_getter_iterations (os_win_dpapi_master_key_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>hash_id</i> Attribute getter
-//! \param self Object
-//! \return <i>hash_id</i> attribute
+// @brief <i>hash_id</i> Attribute getter
+// @param self Object
+// @return <i>hash_id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_hash_id (os_win_dpapi_master_key_o *self)
@@ -162,9 +162,9 @@ tp_getter_hash_id (os_win_dpapi_master_key_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>cipher_id</i> Attribute getter
-//! \param self Object
-//! \return <i>cipher_id</i> attribute
+// @brief <i>cipher_id</i> Attribute getter
+// @param self Object
+// @return <i>cipher_id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_cipher_id (os_win_dpapi_master_key_o *self)
@@ -184,9 +184,9 @@ tp_getter_cipher_id (os_win_dpapi_master_key_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>cipher_text</i> Attribute getter
-//! \param self Object
-//! \return <i>cipher_text</i> attribute
+// @brief <i>cipher_text</i> Attribute getter
+// @param self Object
+// @return <i>cipher_text</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_cipher_text (os_win_dpapi_master_key_o *self)
@@ -206,9 +206,9 @@ tp_getter_cipher_text (os_win_dpapi_master_key_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>plain_text</i> Attribute getter
-//! \param self Object
-//! \return <i>plain_text</i> attribute
+// @brief <i>plain_text</i> Attribute getter
+// @param self Object
+// @return <i>plain_text</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_plain_text (os_win_dpapi_master_key_o *self)
@@ -228,9 +228,9 @@ tp_getter_plain_text (os_win_dpapi_master_key_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>flags</i> Attribute getter
-//! \param self Object
-//! \return <i>flags</i> attribute
+// @brief <i>flags</i> Attribute getter
+// @param self Object
+// @return <i>flags</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_flags (os_win_dpapi_master_key_o *self)
@@ -250,7 +250,7 @@ tp_getter_flags (os_win_dpapi_master_key_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Getters and setters structure
+// @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -314,10 +314,10 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>decrypt_with_key</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return None
+// @brief <i>decrypt_with_key</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return None
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_decrypt_with_key (os_win_dpapi_master_key_o *self, PyObject *args)
@@ -355,10 +355,10 @@ tp_f_decrypt_with_key (os_win_dpapi_master_key_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>decrypt_with_password_hash</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return None
+// @brief <i>decrypt_with_password_hash</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return None
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_decrypt_with_password_hash (os_win_dpapi_master_key_o *self, PyObject *args)
@@ -399,10 +399,10 @@ tp_f_decrypt_with_password_hash (os_win_dpapi_master_key_o *self, PyObject *args
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>decrypt_with_password</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return None
+// @brief <i>decrypt_with_password</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return None
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_decrypt_with_password (os_win_dpapi_master_key_o *self, PyObject *args)
@@ -442,10 +442,10 @@ tp_f_decrypt_with_password (os_win_dpapi_master_key_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_decrypted</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Python object
+// @brief <i>is_decrypted</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_decrypted (os_win_dpapi_master_key_o *self, PyObject *)
@@ -466,7 +466,7 @@ tp_f_is_decrypted (os_win_dpapi_master_key_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -498,11 +498,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>master_key</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>master_key</i> object
+// @brief <i>master_key</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>master_key</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *, PyObject *)
@@ -516,8 +516,8 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>master_key</i> deallocator
-//! \param self Object
+// @brief <i>master_key</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (os_win_dpapi_master_key_o *self)
@@ -527,7 +527,7 @@ tp_dealloc (os_win_dpapi_master_key_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject os_win_dpapi_master_key_t =
 {
@@ -580,3 +580,5 @@ PyTypeObject os_win_dpapi_master_key_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

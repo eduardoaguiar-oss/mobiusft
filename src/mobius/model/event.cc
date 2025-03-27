@@ -20,9 +20,9 @@
 namespace mobius::model
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param tm Timestamp
-//! \param text Text
+// @brief Constructor
+// @param tm Timestamp
+// @param text Text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 event::event (const mobius::datetime::datetime& tm, const std::string& text)
   : timestamp_ (tm), text_ (text)
@@ -30,3 +30,5 @@ event::event (const mobius::datetime::datetime& tm, const std::string& text)
 }
 
 } // namespace mobius::model
+
+

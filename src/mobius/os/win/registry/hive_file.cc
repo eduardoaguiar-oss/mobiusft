@@ -23,7 +23,7 @@
 namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief implementation class
+// @brief implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class hive_file::impl
 {
@@ -34,8 +34,8 @@ public:
   explicit impl (const mobius::io::reader&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check if object is instance
-  //! \return true/false
+  // @brief check if object is instance
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_instance () const
@@ -44,8 +44,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get signature
-  //! \return signature
+  // @brief get signature
+  // @return signature
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_signature () const
@@ -54,8 +54,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get sequence 1
-  //! \return sequence 1
+  // @brief get sequence 1
+  // @return sequence 1
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_sequence_1 () const
@@ -64,8 +64,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get sequence 2
-  //! \return sequence 2
+  // @brief get sequence 2
+  // @return sequence 2
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_sequence_2 () const
@@ -74,8 +74,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get last modification time
-  //! \return last modification time
+  // @brief get last modification time
+  // @return last modification time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::datetime::datetime
   get_last_modification_time () const
@@ -84,8 +84,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get major version
-  //! \return major version
+  // @brief get major version
+  // @return major version
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_major_version () const
@@ -94,8 +94,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get minor version
-  //! \return minor version
+  // @brief get minor version
+  // @return minor version
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_minor_version () const
@@ -104,8 +104,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get file type
-  //! \return file type
+  // @brief get file type
+  // @return file type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_file_type () const
@@ -114,8 +114,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get file format
-  //! \return file format
+  // @brief get file format
+  // @return file format
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_file_format () const
@@ -124,8 +124,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get hbin data size
-  //! \return hbin data size
+  // @brief get hbin data size
+  // @return hbin data size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_hbin_data_size () const
@@ -134,8 +134,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get disk sector size
-  //! \return disk sector size
+  // @brief get disk sector size
+  // @return disk sector size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_disk_sector_size () const
@@ -144,8 +144,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get filename
-  //! \return filename
+  // @brief get filename
+  // @return filename
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_filename () const
@@ -154,8 +154,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get header checksum
-  //! \return header checksum
+  // @brief get header checksum
+  // @return header checksum
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_header_checksum () const
@@ -164,8 +164,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get rm guid
-  //! \return rm guid
+  // @brief get rm guid
+  // @return rm guid
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_rm_guid () const
@@ -174,8 +174,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get log guid
-  //! \return log guid
+  // @brief get log guid
+  // @return log guid
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_log_guid () const
@@ -184,8 +184,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get flags
-  //! \return flags
+  // @brief get flags
+  // @return flags
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_flags () const
@@ -194,8 +194,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get tm guid
-  //! \return tm guid
+  // @brief get tm guid
+  // @return tm guid
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_tm_guid () const
@@ -204,8 +204,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get guid signature
-  //! \return guid signature
+  // @brief get guid signature
+  // @return guid signature
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_guid_signature () const
@@ -214,8 +214,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get last reorganization time
-  //! \return last reorganization time
+  // @brief get last reorganization time
+  // @return last reorganization time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::datetime::datetime
   get_last_reorganization_time () const
@@ -224,8 +224,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get root key
-  //! \return root key
+  // @brief get root key
+  // @return root key
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   hive_key
   get_root_key () const
@@ -240,73 +240,73 @@ public:
   mobius::metadata get_metadata () const;
 
 private:
-  //! \brief whether file is a hive file
+  // @brief whether file is a hive file
   bool is_instance_;
 
-  //! \brief file signature (regf)
+  // @brief file signature (regf)
   std::string signature_;
 
-  //! \brief incremented by 1 in the beginning of a write operation on the hive
+  // @brief incremented by 1 in the beginning of a write operation on the hive
   std::uint32_t sequence_1_;
 
-  //! \brief incremented by 1 at the end of a write operation on the hive
+  // @brief incremented by 1 at the end of a write operation on the hive
   std::uint32_t sequence_2_;
 
-  //! \brief last written timestamp
+  // @brief last written timestamp
   mobius::datetime::datetime last_modification_time_;
 
-  //! \brief major version of the hivefile
+  // @brief major version of the hivefile
   std::uint32_t major_version_;
 
-  //! \brief minor version of the hivefile
+  // @brief minor version of the hivefile
   std::uint32_t minor_version_;
 
-  //! \brief file type: 0 - registry file, 1 - transaction log
+  // @brief file type: 0 - registry file, 1 - transaction log
   std::uint32_t file_type_;
 
-  //! \brief file format: 1 - direct memory load
+  // @brief file format: 1 - direct memory load
   std::uint32_t file_format_;
 
-  //! \brief size of the hive bins data in bytes
+  // @brief size of the hive bins data in bytes
   std::uint32_t hbin_data_size_;
 
-  //! \brief sector size of the interlying disk, in bytes
+  // @brief sector size of the interlying disk, in bytes
   std::uint32_t disk_sector_size_;
 
-  //! \brief last 32 characters of the filename
+  // @brief last 32 characters of the filename
   std::string filename_;
 
-  //! \brief header checksum
+  // @brief header checksum
   std::uint32_t header_checksum_;
 
-  //! \brief GUID of the Resource Manager (RM)
+  // @brief GUID of the Resource Manager (RM)
   std::string rm_guid_;
 
-  //! \brief this field usually contains the same value as the rm_guid field
+  // @brief this field usually contains the same value as the rm_guid field
   std::string log_guid_;
 
-  //! \brief flags (bit mask)
+  // @brief flags (bit mask)
   std::uint32_t flags_;
 
-  //! \brief GUID used to generate a file name of a log file for the Transaction Manager (TM)
+  // @brief GUID used to generate a file name of a log file for the Transaction Manager (TM)
   std::string tm_guid_;
 
-  //! \brief GUID signature (rmtm)
+  // @brief GUID signature (rmtm)
   std::string guid_signature_;
 
-  //! \brief last reorganization timestamp
+  // @brief last reorganization timestamp
   mobius::datetime::datetime last_reorganization_time_;
 
-  //! \brief root key
+  // @brief root key
   hive_key root_key_;
 
-  //! \brief generic reader
+  // @brief generic reader
   mutable mobius::io::reader reader_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
+// @brief Constructor
+// @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_file::impl::impl (const mobius::io::reader& reader)
   : reader_ (reader)
@@ -340,8 +340,8 @@ hive_file::impl::impl (const mobius::io::reader& reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief evaluate header checksum
-//! \return header checksum
+// @brief evaluate header checksum
+// @return header checksum
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 hive_file::impl::eval_header_checksum () const
@@ -357,8 +357,8 @@ hive_file::impl::eval_header_checksum () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get metadata from hive_file
-//! \return metadata list
+// @brief get metadata from hive_file
+// @return metadata list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::metadata
 hive_file::impl::get_metadata () const
@@ -489,8 +489,8 @@ hive_file::impl::get_metadata () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
+// @brief Constructor
+// @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_file::hive_file (const mobius::io::reader& reader)
   : impl_ (std::make_shared <impl> (reader))
@@ -498,8 +498,8 @@ hive_file::hive_file (const mobius::io::reader& reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief check if object is instance
-//! \return true/false
+// @brief check if object is instance
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 hive_file::is_instance () const
@@ -508,8 +508,8 @@ hive_file::is_instance () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get signature
-//! \return signature
+// @brief get signature
+// @return signature
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 hive_file::get_signature () const
@@ -518,8 +518,8 @@ hive_file::get_signature () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get sequence 1
-//! \return sequence 1
+// @brief get sequence 1
+// @return sequence 1
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 hive_file::get_sequence_1 () const
@@ -528,8 +528,8 @@ hive_file::get_sequence_1 () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get sequence 2
-//! \return sequence 2
+// @brief get sequence 2
+// @return sequence 2
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 hive_file::get_sequence_2 () const
@@ -538,8 +538,8 @@ hive_file::get_sequence_2 () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get last modification time
-//! \return last modification time
+// @brief get last modification time
+// @return last modification time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 hive_file::get_last_modification_time () const
@@ -548,8 +548,8 @@ hive_file::get_last_modification_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get major version
-//! \return major version
+// @brief get major version
+// @return major version
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 hive_file::get_major_version () const
@@ -558,8 +558,8 @@ hive_file::get_major_version () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get minor version
-//! \return minor version
+// @brief get minor version
+// @return minor version
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 hive_file::get_minor_version () const
@@ -568,8 +568,8 @@ hive_file::get_minor_version () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get file type
-//! \return file type
+// @brief get file type
+// @return file type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 hive_file::get_file_type () const
@@ -578,8 +578,8 @@ hive_file::get_file_type () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get file format
-//! \return file format
+// @brief get file format
+// @return file format
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 hive_file::get_file_format () const
@@ -588,8 +588,8 @@ hive_file::get_file_format () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get hbin data size
-//! \return hbin data size
+// @brief get hbin data size
+// @return hbin data size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 hive_file::get_hbin_data_size () const
@@ -598,8 +598,8 @@ hive_file::get_hbin_data_size () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get disk sector size
-//! \return disk sector size
+// @brief get disk sector size
+// @return disk sector size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 hive_file::get_disk_sector_size () const
@@ -608,8 +608,8 @@ hive_file::get_disk_sector_size () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get filename
-//! \return filename
+// @brief get filename
+// @return filename
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 hive_file::get_filename () const
@@ -618,8 +618,8 @@ hive_file::get_filename () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get header checksum
-//! \return header checksum
+// @brief get header checksum
+// @return header checksum
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 hive_file::get_header_checksum () const
@@ -628,8 +628,8 @@ hive_file::get_header_checksum () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get rm guid
-//! \return rm guid
+// @brief get rm guid
+// @return rm guid
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 hive_file::get_rm_guid () const
@@ -638,8 +638,8 @@ hive_file::get_rm_guid () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get log guid
-//! \return log guid
+// @brief get log guid
+// @return log guid
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 hive_file::get_log_guid () const
@@ -648,8 +648,8 @@ hive_file::get_log_guid () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get flags
-//! \return flags
+// @brief get flags
+// @return flags
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 hive_file::get_flags () const
@@ -658,8 +658,8 @@ hive_file::get_flags () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get tm guid
-//! \return tm guid
+// @brief get tm guid
+// @return tm guid
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 hive_file::get_tm_guid () const
@@ -668,8 +668,8 @@ hive_file::get_tm_guid () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get guid signature
-//! \return guid signature
+// @brief get guid signature
+// @return guid signature
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 hive_file::get_guid_signature () const
@@ -678,8 +678,8 @@ hive_file::get_guid_signature () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get last reorganization time
-//! \return last reorganization time
+// @brief get last reorganization time
+// @return last reorganization time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 hive_file::get_last_reorganization_time () const
@@ -688,8 +688,8 @@ hive_file::get_last_reorganization_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get root key
-//! \return root key
+// @brief get root key
+// @return root key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_key
 hive_file::get_root_key () const
@@ -698,8 +698,8 @@ hive_file::get_root_key () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get metadata from hive_file
-//! \return metadata list
+// @brief get metadata from hive_file
+// @return metadata list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::metadata
 hive_file::get_metadata () const
@@ -708,8 +708,8 @@ hive_file::get_metadata () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief evaluate header checksum
-//! \return header checksum
+// @brief evaluate header checksum
+// @return header checksum
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 hive_file::eval_header_checksum ()
@@ -718,3 +718,5 @@ hive_file::eval_header_checksum ()
 }
 
 } // namespace mobius::os::win::registry
+
+

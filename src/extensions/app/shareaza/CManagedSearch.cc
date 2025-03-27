@@ -24,7 +24,7 @@ namespace
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-//! \brief Shareaza 2.7.10.2
+// @brief Shareaza 2.7.10.2
 static constexpr int SER_VERSION = 4;
 
 } // namespace
@@ -32,8 +32,8 @@ static constexpr int SER_VERSION = 4;
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode CManagedSearch structure
-//! \see ManagedSearch.cpp - CManagedSearch::Serialize
+// @brief Decode CManagedSearch structure
+// @see ManagedSearch.cpp - CManagedSearch::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 CManagedSearch::decode (mobius::decoder::mfc& decoder)
@@ -71,3 +71,7 @@ CManagedSearch::decode (mobius::decoder::mfc& decoder)
 }
 
 } // namespace mobius::extension::app::shareaza
+
+
+
+

@@ -22,7 +22,7 @@
 namespace mobius::pod
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 map::map ()
   : data (std::make_shared <data_impl_map> ())
@@ -31,8 +31,8 @@ map::map ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create map from data
-//! \param d Data object (must be of type::map)
+// @brief Create map from data
+// @param d Data object (must be of type::map)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 map::map (data d)
  : data (d)
@@ -44,8 +44,8 @@ map::map (data d)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param l initializer_list
+// @brief Constructor
+// @param l initializer_list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 map::map (const std::initializer_list <value_type>& l)
   : data (std::make_shared <data_impl_map> ())
@@ -57,8 +57,8 @@ map::map (const std::initializer_list <value_type>& l)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Clone object
-//! \return New data object
+// @brief Clone object
+// @return New data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 map::clone () const
@@ -72,8 +72,8 @@ map::clone () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Update object
-//! \param m Other map
+// @brief Update object
+// @param m Other map
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 map::update (const map& m)
@@ -83,8 +83,8 @@ map::update (const map& m)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert map to std::string
-//! \return String representation of data
+// @brief Convert map to std::string
+// @return String representation of data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 map::to_string () const
@@ -115,10 +115,10 @@ map::to_string () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Ostream inserter for data
-//! \param os Ostream reference
-//! \param m Map object
-//! \return Ostream reference
+// @brief Ostream inserter for data
+// @param os Ostream reference
+// @param m Map object
+// @return Ostream reference
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::ostream&
 operator<< (std::ostream& os, const mobius::pod::map& m)
@@ -127,10 +127,10 @@ operator<< (std::ostream& os, const mobius::pod::map& m)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Operator==
-//! \param a First object
-//! \param b Second object
-//! \return <b>true</b> if objects are equal <b>false<b> otherwise
+// @brief Operator==
+// @param a First object
+// @param b Second object
+// @return <b>true</b> if objects are equal <b>false<b> otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator== (const map& a, const map& b)
@@ -140,10 +140,10 @@ operator== (const map& a, const map& b)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Operator!=
-//! \param a First object
-//! \param b Second object
-//! \return <b>true</b> if objects are different <b>false<b> otherwise
+// @brief Operator!=
+// @param a First object
+// @param b Second object
+// @return <b>true</b> if objects are different <b>false<b> otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator!= (const map& a, const map& b)
@@ -152,3 +152,5 @@ operator!= (const map& a, const map& b)
 }
 
 } // namespace mobius::pod
+
+

@@ -22,7 +22,7 @@ namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Tristate constants
-//! \see ShareazaOM.h
+// @see ShareazaOM.h
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 constexpr std::uint32_t TRI_UNKNOWN = 0;
 constexpr std::uint32_t TRI_FALSE = 1;
@@ -33,11 +33,11 @@ constexpr std::uint32_t TRI_TRUE = 2;
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode CLibraryFolder structure
-//! \param decoder MFC decoder object
-//! \param version CLibrary structure version
-//! \param parent Parent CLibraryFolder, if any
-//! \see SharedFolder.cpp - CLibraryFolder::Serialize
+// @brief Decode CLibraryFolder structure
+// @param decoder MFC decoder object
+// @param version CLibrary structure version
+// @param parent Parent CLibraryFolder, if any
+// @see SharedFolder.cpp - CLibraryFolder::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 CLibraryFolder::CLibraryFolder (
   mobius::decoder::mfc& decoder,
@@ -51,7 +51,7 @@ CLibraryFolder::CLibraryFolder (
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // is_shared_ (true/false)
-  //! \see SharedFolder.cpp - CLibraryFolder::IsShared
+  // @see SharedFolder.cpp - CLibraryFolder::IsShared
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t b_shared;
 
@@ -93,3 +93,7 @@ CLibraryFolder::CLibraryFolder (
 }
 
 } // namespace mobius::extension::app::shareaza
+
+
+
+

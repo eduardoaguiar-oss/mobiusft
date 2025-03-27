@@ -20,9 +20,9 @@
 namespace mobius::crypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param hash_type Hash type
-//! \param key Key
+// @brief Constructor
+// @param hash_type Hash type
+// @param key Key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hmac_impl_default::hmac_impl_default (const std::string& hash_type, const mobius::bytearray& key)
   : h_inner_ (hash_type),
@@ -62,7 +62,7 @@ hmac_impl_default::hmac_impl_default (const std::string& hash_type, const mobius
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reset hmac value
+// @brief Reset hmac value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 hmac_impl_default::reset ()
@@ -72,8 +72,8 @@ hmac_impl_default::reset ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get hash digest
-//! \return Hash digest
+// @brief Get hash digest
+// @return Hash digest
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 hmac_impl_default::get_digest ()
@@ -83,8 +83,8 @@ hmac_impl_default::get_digest ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Clone object
-//! \return Pointer to newly created object
+// @brief Clone object
+// @return Pointer to newly created object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::shared_ptr <hmac_impl_base>
 hmac_impl_default::clone () const
@@ -100,3 +100,5 @@ hmac_impl_default::clone () const
 }
 
 } // namespace mobius::crypt
+
+

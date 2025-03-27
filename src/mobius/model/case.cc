@@ -41,13 +41,13 @@ using uid_type = std::uint32_t;
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Module data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief data mutex
+// @brief data mutex
 static std::mutex mutex_;
 
-//! \brief next case UID
+// @brief next case UID
 static uid_type next_uid_ = 1;
 
-//! \brief opened cases
+// @brief opened cases
 static std::unordered_map <uid_type, Case> cases_;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -56,8 +56,8 @@ static std::unordered_map <uid_type, Case> cases_;
 static constexpr char DIR_SEPARATOR = '/';
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create directory recursively
-//! \param path directory path
+// @brief create directory recursively
+// @param path directory path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 make_directory (const std::string& path)
@@ -82,10 +82,10 @@ make_directory (const std::string& path)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Join paths
-//! \param abs_path Absolute path
-//! \param rel_path Relative path
-//! \return Full path
+// @brief Join paths
+// @param abs_path Absolute path
+// @param rel_path Relative path
+// @return Full path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
 join_path (const std::string& abs_path, const std::string& rel_path)
@@ -97,7 +97,7 @@ join_path (const std::string& abs_path, const std::string& rel_path)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Case implementation class
+// @brief Case implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class Case::impl
 {
@@ -120,8 +120,8 @@ public:
   bool has_item_by_uid (std::int64_t) const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get root item
-  //! \return root item
+  // @brief get root item
+  // @return root item
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::int64_t
   get_root_item_uid () const
@@ -130,8 +130,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get uid
-  //! \return uid
+  // @brief get uid
+  // @return uid
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_uid () const
@@ -140,23 +140,23 @@ public:
   }
 
 private:
-  //! \brief case UID
+  // @brief case UID
   std::uint32_t uid_;
 
-  //! \brief root item UID
+  // @brief root item UID
   std::int64_t root_item_uid_;
 
-  //! \brief base directory
+  // @brief base directory
   std::string base_dir_;
 
-  //! \brief database connection pool
+  // @brief database connection pool
   mobius::database::connection_pool pool_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param path case folder path
-//! \param uid case UID
+// @brief Constructor
+// @param path case folder path
+// @param uid case UID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 Case::impl::impl (const std::string& path, std::uint32_t uid)
   : uid_ (uid),
@@ -211,9 +211,9 @@ Case::impl::impl (const std::string& path, std::uint32_t uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get path inside case folder
-//! \param rpath Relative path
-//! \return Full path
+// @brief Get path inside case folder
+// @param rpath Relative path
+// @return Full path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 Case::impl::get_path (const std::string& rpath) const
@@ -222,9 +222,9 @@ Case::impl::get_path (const std::string& rpath) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create path inside case folder
-//! \param rpath relative path
-//! \return full path
+// @brief Create path inside case folder
+// @param rpath relative path
+// @return full path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 Case::impl::create_path (const std::string& rpath) const
@@ -238,8 +238,8 @@ Case::impl::create_path (const std::string& rpath) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create new connection for case database
-//! \return new connection object
+// @brief create new connection for case database
+// @return new connection object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::database::connection
 Case::impl::new_connection ()
@@ -248,8 +248,8 @@ Case::impl::new_connection ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create new transaction
-//! \return new transaction object
+// @brief create new transaction
+// @return new transaction object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::database::transaction
 Case::impl::new_transaction ()
@@ -259,8 +259,8 @@ Case::impl::new_transaction ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get database object
-//! \return database object for current thread
+// @brief get database object
+// @return database object for current thread
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::database::database
 Case::impl::get_database () const
@@ -269,9 +269,9 @@ Case::impl::get_database () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get item by UID
-//! \param uid item UID
-//! \return item
+// @brief get item by UID
+// @param uid item UID
+// @return item
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 Case::impl::has_item_by_uid (std::int64_t uid) const
@@ -289,9 +289,9 @@ Case::impl::has_item_by_uid (std::int64_t uid) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
-//! \param path case folder path
-//! \param uid case UID
+// @brief constructor
+// @param path case folder path
+// @param uid case UID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 Case::Case (const std::string& path, std::uint32_t uid)
   : impl_ (std::make_shared <impl> (path, uid))
@@ -299,9 +299,9 @@ Case::Case (const std::string& path, std::uint32_t uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get path inside case folder
-//! \param rpath relative path
-//! \return full path
+// @brief get path inside case folder
+// @param rpath relative path
+// @return full path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 Case::get_path (const std::string& rpath) const
@@ -310,9 +310,9 @@ Case::get_path (const std::string& rpath) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create path inside case folder
-//! \param rpath relative path
-//! \return full path
+// @brief create path inside case folder
+// @param rpath relative path
+// @return full path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 Case::create_path (const std::string& rpath) const
@@ -321,8 +321,8 @@ Case::create_path (const std::string& rpath) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create new connection for case database
-//! \return new connection object
+// @brief create new connection for case database
+// @return new connection object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::database::connection
 Case::new_connection ()
@@ -331,8 +331,8 @@ Case::new_connection ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create new transaction
-//! \return new transaction object
+// @brief create new transaction
+// @return new transaction object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::database::transaction
 Case::new_transaction ()
@@ -341,8 +341,8 @@ Case::new_transaction ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get database object
-//! \return database object for current thread
+// @brief get database object
+// @return database object for current thread
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::database::database
 Case::get_database () const
@@ -351,9 +351,9 @@ Case::get_database () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get item by UID
-//! \param uid item UID
-//! \return item
+// @brief get item by UID
+// @param uid item UID
+// @return item
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 item
 Case::get_item_by_uid (std::int64_t uid) const
@@ -367,8 +367,8 @@ Case::get_item_by_uid (std::int64_t uid) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get root item
-//! \return root item
+// @brief get root item
+// @return root item
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 item
 Case::get_root_item () const
@@ -377,8 +377,8 @@ Case::get_root_item () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get uid
-//! \return uid
+// @brief get uid
+// @return uid
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 Case::get_uid () const
@@ -387,8 +387,8 @@ Case::get_uid () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get passwords
-//! \return Passwords
+// @brief Get passwords
+// @return Passwords
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <evidence>
 Case::get_passwords () const
@@ -419,8 +419,8 @@ Case::get_passwords () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get password hashes
-//! \return Password hashes
+// @brief Get password hashes
+// @return Password hashes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <evidence>
 Case::get_password_hashes () const
@@ -451,10 +451,10 @@ Case::get_password_hashes () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if two cases are equal
-//! \param a case a
-//! \param b case b
-//! \return true/false
+// @brief Check if two cases are equal
+// @param a case a
+// @param b case b
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator== (const Case& a, const Case& b)
@@ -463,10 +463,10 @@ operator== (const Case& a, const Case& b)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if two cases are different
-//! \param a case a
-//! \param b case b
-//! \return true/false
+// @brief Check if two cases are different
+// @param a case a
+// @param b case b
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator!= (const Case& a, const Case& b)
@@ -475,10 +475,10 @@ operator!= (const Case& a, const Case& b)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Operator<
-//! \param a case a
-//! \param b case b
-//! \return true/false
+// @brief Operator<
+// @param a case a
+// @param b case b
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator< (const Case& a, const Case& b)
@@ -487,10 +487,10 @@ operator< (const Case& a, const Case& b)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Operator<=
-//! \param a case a
-//! \param b case b
-//! \return true/false
+// @brief Operator<=
+// @param a case a
+// @param b case b
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator<= (const Case& a, const Case& b)
@@ -499,10 +499,10 @@ operator<= (const Case& a, const Case& b)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Operator>
-//! \param a case a
-//! \param b case b
-//! \return true/false
+// @brief Operator>
+// @param a case a
+// @param b case b
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator> (const Case& a, const Case& b)
@@ -511,10 +511,10 @@ operator> (const Case& a, const Case& b)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Operator>=
-//! \param a case a
-//! \param b case b
-//! \return true/false
+// @brief Operator>=
+// @param a case a
+// @param b case b
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator>= (const Case& a, const Case& b)
@@ -523,9 +523,9 @@ operator>= (const Case& a, const Case& b)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new case
-//! \param path case folder path
-//! \return new case
+// @brief Create new case
+// @param path case folder path
+// @return new case
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 Case
 new_case (const std::string& path)
@@ -540,9 +540,9 @@ new_case (const std::string& path)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Open case
-//! \param path case folder path
-//! \return opened case
+// @brief Open case
+// @param path case folder path
+// @return opened case
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 Case
 open_case (const std::string& path)
@@ -557,8 +557,8 @@ open_case (const std::string& path)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Close case
-//! \param c case object
+// @brief Close case
+// @param c case object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 close_case (const Case& c)
@@ -568,8 +568,8 @@ close_case (const Case& c)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get opened cases
-//! \return opened cases
+// @brief Get opened cases
+// @return opened cases
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <Case>
 get_cases ()
@@ -584,8 +584,8 @@ get_cases ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get number of cases opened
-//! \return number
+// @brief Get number of cases opened
+// @return number
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int
 get_case_count ()
@@ -595,3 +595,5 @@ get_case_count ()
 }
 
 } // namespace mobius::model
+
+

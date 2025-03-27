@@ -23,8 +23,8 @@
 namespace mobius::ui
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor from implementation pointer
-//! \param impl Implementation pointer
+// @brief Constructor from implementation pointer
+// @param impl Implementation pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 label::label (const std::shared_ptr <label_impl_base>& impl)
   : widget (std::static_pointer_cast <widget_impl_base> (impl))
@@ -32,7 +32,7 @@ label::label (const std::shared_ptr <label_impl_base>& impl)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
+// @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 label::label ()
   : widget (std::static_pointer_cast <widget_impl_base> (get_implementation ()->new_label ()))
@@ -40,8 +40,8 @@ label::label ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param text Label text
+// @brief Constructor
+// @param text Label text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 label::label (const std::string& text)
   : widget (std::static_pointer_cast <widget_impl_base> (get_implementation ()->new_label ()))
@@ -50,8 +50,8 @@ label::label (const std::string& text)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param w widget
+// @brief Constructor
+// @param w widget
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 label::label (const widget& w)
  : widget (w)
@@ -65,3 +65,5 @@ label::label (const widget& w)
 }
 
 } // namespace mobius::ui
+
+

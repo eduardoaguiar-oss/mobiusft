@@ -24,8 +24,8 @@
 namespace mobius::crypt::gcrypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>gcrypt hmac</i> implementation class
-//! \author Eduardo Aguiar
+// @brief <i>gcrypt hmac</i> implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class hmac_impl : public hmac_impl_base
 {
@@ -40,8 +40,8 @@ public:
   ~hmac_impl ();
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get HMAC type
-  //! \return HMAC type
+  // @brief Get HMAC type
+  // @return HMAC type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_type () const final
@@ -50,8 +50,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get block size
-  //! \return Block size in bytes
+  // @brief Get block size
+  // @return Block size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::size_t
   get_block_size () const noexcept final
@@ -60,8 +60,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get digest size
-  //! \return Digest size in bytes
+  // @brief Get digest size
+  // @return Digest size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::size_t
   get_digest_size () const noexcept final
@@ -78,8 +78,8 @@ public:
   std::shared_ptr <hmac_impl_base> clone () const final;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if object is valid
-  //! \return true/false
+  // @brief Check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator bool () const noexcept final
   {
@@ -87,22 +87,22 @@ public:
   }
 
 private:
-  //! \brief HMAC handle
+  // @brief HMAC handle
   gcry_mac_hd_t hd_ = 0;
 
-  //! \brief Context
+  // @brief Context
   gcry_ctx_t ctx_;
 
-  //! \brief Hash type
+  // @brief Hash type
   std::string type_;
 
-  //! \brief Key
+  // @brief Key
   mobius::bytearray key_;
 
-  //! \brief Block size in bytes
+  // @brief Block size in bytes
   std::size_t block_size_ = 0;
 
-  //! \brief Digest size in bytes
+  // @brief Digest size in bytes
   std::size_t digest_size_ = 0;
 };
 
@@ -114,3 +114,5 @@ bool is_hmac_available (const std::string&);
 } // namespace mobius::crypt::gcrypt
 
 #endif
+
+

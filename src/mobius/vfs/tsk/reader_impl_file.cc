@@ -21,15 +21,11 @@
 #include <stdexcept>
 #include <tsk/libtsk.h>
 
-namespace mobius
-{
-namespace vfs
-{
-namespace tsk
+namespace mobius::vfs::tsk
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param f fs_file object
+// @brief Constructor
+// @param f fs_file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 reader_impl_file::reader_impl_file (const fs_file& f)
   : fs_file_ (f), size_ (fs_file_.get_size ())
@@ -37,9 +33,9 @@ reader_impl_file::reader_impl_file (const fs_file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set read position
-//! \param offset Offset in bytes
-//! \param w Either beginning, current or end
+// @brief Set read position
+// @param offset Offset in bytes
+// @param w Either beginning, current or end
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 reader_impl_file::seek (offset_type offset, whence_type w)
@@ -62,15 +58,15 @@ reader_impl_file::seek (offset_type offset, whence_type w)
   // update current pos, if possible
   if (abs_offset < 0)
     throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid offset"));
-  
-  else if (size_type (abs_offset) <= size_)  
+
+  else if (size_type (abs_offset) <= size_)
     pos_ = abs_offset;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Read bytes from reader
-//! \param size Size in bytes
-//! \return Bytearray containing data
+// @brief Read bytes from reader
+// @param size Size in bytes
+// @return Bytearray containing data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 reader_impl_file::read (size_type size)
@@ -101,6 +97,6 @@ reader_impl_file::read (size_type size)
   return data;
 }
 
-} // namespace tsk
-} // namespace vfs
-} // namespace mobius
+} // namespace mobius::vfs::tsk
+
+

@@ -23,8 +23,8 @@
 #include <memory>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Talon imagefile implementation class
-//! \author Eduardo Aguiar
+// @brief Talon imagefile implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class imagefile_impl : public mobius::vfs::imagefile_impl_base
 {
@@ -47,8 +47,8 @@ public:
   mobius::io::writer new_writer () const override;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get type
-  //! \return type as string
+  // @brief Get type
+  // @return type as string
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_type () const override
@@ -57,8 +57,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if object is valid
-  //! \return true/false
+  // @brief Check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const noexcept override
   {
@@ -66,8 +66,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if imagefile is available
-  //! \return true/false
+  // @brief Check if imagefile is available
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_available () const override
@@ -76,8 +76,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get imagefile size
-  //! \return imagefile size
+  // @brief get imagefile size
+  // @return imagefile size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_size () const override
@@ -87,8 +87,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get number of sectors
-  //! \return number of sectors
+  // @brief get number of sectors
+  // @return number of sectors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_sectors () const override
@@ -98,8 +98,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get sector size
-  //! \return sector size
+  // @brief get sector size
+  // @return sector size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_sector_size () const override
@@ -109,25 +109,25 @@ public:
   }
 
 private:
-  //! \brief File object
+  // @brief File object
   mobius::io::file file_;
 
-  //! \brief Size
+  // @brief Size
   mutable size_type size_ = 0;
 
-  //! \brief Number of sectors
+  // @brief Number of sectors
   mutable size_type sectors_ = 0;
 
-  //! \brief Sector size
+  // @brief Sector size
   mutable size_type sector_size_ = 512;
 
-    //! \brief Attributes
+    // @brief Attributes
   mutable mobius::pod::map attributes_;
 
-  //! \brief Metadata loaded flag
+  // @brief Metadata loaded flag
   mutable bool metadata_loaded_ = false;
 
-  //! \brief Underlying split imagefile
+  // @brief Underlying split imagefile
   std::shared_ptr <imagefile_impl_base> split_imagefile_impl_;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -137,3 +137,5 @@ private:
 };
 
 #endif
+
+

@@ -28,8 +28,8 @@
 namespace mobius::datetime
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief datetime representation
-//! \author Eduardo Aguiar
+// @brief datetime representation
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class datetime
 {
@@ -43,13 +43,13 @@ public:
   explicit datetime (const date&, const time& = time ()) noexcept;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Create datetime object from d, m, y, hh, mm, ss values
-  //! \param y year
-  //! \param m month (1-12)
-  //! \param d day (1-31)
-  //! \param hh hour (0-23)
-  //! \param mm minute (0 - 59)
-  //! \param ss second (0 - 59)
+  // @brief Create datetime object from d, m, y, hh, mm, ss values
+  // @param y year
+  // @param m month (1-12)
+  // @param d day (1-31)
+  // @param hh hour (0-23)
+  // @param mm minute (0 - 59)
+  // @param ss second (0 - 59)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   constexpr datetime (int y, int m, int d,int hh, int mm, int ss) noexcept
     : date_ (y, m, d), time_ (hh, mm, ss), is_null_ (false)
@@ -63,8 +63,8 @@ public:
   datetime& operator= (datetime&&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get date from datetime
-  //! \return date object
+  // @brief Get date from datetime
+  // @return date object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   date
   get_date () const noexcept
@@ -73,8 +73,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get time from datetime
-  //! \return time object
+  // @brief Get time from datetime
+  // @return time object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   time
   get_time () const noexcept
@@ -83,8 +83,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if datetime is not null
-  //! \return true/false
+  // @brief Check if datetime is not null
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const noexcept
   {
@@ -122,3 +122,5 @@ datetime new_datetime_from_fat_time (std::uint16_t, std::uint16_t);
 } // namespace mobius::datetime
 
 #endif
+
+

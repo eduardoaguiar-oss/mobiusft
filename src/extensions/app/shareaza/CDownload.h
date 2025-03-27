@@ -31,15 +31,15 @@
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief CDownload structure decoder
-//! \author Eduardo Aguiar
+// @brief CDownload structure decoder
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class CDownload
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Fragmented info
-  //! \see FileFragments/Compatibility.hpp - SerializeIn1
+  // @brief Fragmented info
+  // @see FileFragments/Compatibility.hpp - SerializeIn1
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   struct CFragment
   {
@@ -48,8 +48,8 @@ public:
   };
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Fragmented file part
-  //! \see CFragmentedFile::Open@FragmentedFile.cpp
+  // @brief Fragmented file part
+  // @see CFragmentedFile::Open@FragmentedFile.cpp
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   struct CVirtualFilePart
   {
@@ -68,8 +68,8 @@ public:
   CDownload (const mobius::io::reader&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if stream is an instance of .sd file
-  //! \return true/false
+  // @brief Check if stream is an instance of .sd file
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const noexcept
   {
@@ -77,8 +77,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get file signature
-  //! \return Signature
+  // @brief Get file signature
+  // @return Signature
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_signature () const
@@ -87,8 +87,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get version
-  //! \return Structure version
+  // @brief Get version
+  // @return Structure version
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   int
   get_version () const
@@ -97,8 +97,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get size
-  //! \return Size
+  // @brief Get size
+  // @return Size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto
   get_size () const
@@ -107,8 +107,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get estimated size
-  //! \return Estimated size
+  // @brief Get estimated size
+  // @return Estimated size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto
   get_estimated_size () const
@@ -117,8 +117,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get downloaded size
-  //! \return Downloaded size
+  // @brief Get downloaded size
+  // @return Downloaded size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto
   get_downloaded_size () const
@@ -127,8 +127,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get remaining size
-  //! \return Remaining size
+  // @brief Get remaining size
+  // @return Remaining size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto
   get_remaining_size () const
@@ -137,8 +137,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if file is shared
-  //! \return true/false
+  // @brief Check if file is shared
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_shared () const noexcept
@@ -147,8 +147,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if file is expanded
-  //! \return true/false
+  // @brief Check if file is expanded
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_expanded () const noexcept
@@ -157,8 +157,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if file is paused
-  //! \return true/false
+  // @brief Check if file is paused
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_paused () const noexcept
@@ -167,8 +167,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if file is boosted
-  //! \return true/false
+  // @brief Check if file is boosted
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_boosted () const noexcept
@@ -177,8 +177,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if file is seeding
-  //! \return true/false
+  // @brief Check if file is seeding
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_seeding () const noexcept
@@ -187,8 +187,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get SerID
-  //! \return SerID
+  // @brief Get SerID
+  // @return SerID
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_ser_id () const
@@ -197,8 +197,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get search keyword
-  //! \return Keyword
+  // @brief Get search keyword
+  // @return Keyword
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_search_keyword () const
@@ -207,8 +207,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hash SHA-1
-  //! \return Hash
+  // @brief Get hash SHA-1
+  // @return Hash
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_hash_sha1 () const
@@ -217,8 +217,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hash Tiger
-  //! \return Hash
+  // @brief Get hash Tiger
+  // @return Hash
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_hash_tiger () const
@@ -227,8 +227,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hash ED2K
-  //! \return Hash
+  // @brief Get hash ED2K
+  // @return Hash
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_hash_ed2k () const
@@ -237,8 +237,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hash BTH
-  //! \return Hash
+  // @brief Get hash BTH
+  // @return Hash
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_hash_bth () const
@@ -247,8 +247,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hash MD5
-  //! \return Hash
+  // @brief Get hash MD5
+  // @return Hash
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_hash_md5 () const
@@ -257,8 +257,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get local name
-  //! \return Name
+  // @brief Get local name
+  // @return Name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_local_name () const
@@ -267,8 +267,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get name
-  //! \return Name
+  // @brief Get name
+  // @return Name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_name () const
@@ -277,8 +277,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get torrent success counter
-  //! \return Counter
+  // @brief Get torrent success counter
+  // @return Counter
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_torrent_success () const
@@ -287,8 +287,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get serving file name
-  //! \return Serving file name
+  // @brief Get serving file name
+  // @return Serving file name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_serving_file_name () const
@@ -297,8 +297,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get XML root element
-  //! \return Root element
+  // @brief Get XML root element
+  // @return Root element
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto
   get_pxml () const
@@ -307,8 +307,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get BTInfo data
-  //! \return BTInfo data
+  // @brief Get BTInfo data
+  // @return BTInfo data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto
   get_btinfo () const
@@ -317,8 +317,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get download sources
-  //! \return Sources
+  // @brief Get download sources
+  // @return Sources
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto
   get_sources () const
@@ -327,8 +327,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get fragmented file parts
-  //! \return Parts
+  // @brief Get fragmented file parts
+  // @return Parts
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto
   get_parts () const
@@ -337,8 +337,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get fragments
-  //! \return Fragments
+  // @brief Get fragments
+  // @return Fragments
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto
   get_fragments () const
@@ -347,103 +347,103 @@ public:
   }
 
 private:
-  //! \brief Is instance?
+  // @brief Is instance?
   bool is_instance_ = false;
 
-  //! \brief File signature
+  // @brief File signature
   std::string signature_;
 
-  //! \brief Structure version
+  // @brief Structure version
   int version_;
 
-  //! \brief Size
+  // @brief Size
   std::uint64_t size_ = 0;
 
-  //! \brief Size
+  // @brief Size
   std::uint64_t estimated_size_ = 0;
 
-  //! \brief Downloaded size
+  // @brief Downloaded size
   std::uint64_t downloaded_size_ = 0;
 
-  //! \brief Remaining size
+  // @brief Remaining size
   std::uint64_t remaining_size_ = 0;
 
-  //! \brief Flag is shared
+  // @brief Flag is shared
   bool is_shared_ = false;
 
-  //! \brief Flag is expanded
+  // @brief Flag is expanded
   bool is_expanded_ = false;
 
-  //! \brief Flag is paused
+  // @brief Flag is paused
   bool is_paused_ = false;
 
-  //! \brief Flag is boosted
+  // @brief Flag is boosted
   bool is_boosted_ = false;
 
-  //! \brief Flag is seeding
+  // @brief Flag is seeding
   bool is_seeding_ = false;
 
-  //! \brief Ser ID
+  // @brief Ser ID
   std::uint32_t ser_id_ = 0;
 
-  //! \brief Local name
+  // @brief Local name
   std::string local_name_;
 
-  //! \brief File name
+  // @brief File name
   std::string name_;
 
-  //! \brief Search keyword
+  // @brief Search keyword
   std::string search_keyword_;
 
-  //! \brief Hash SHA-1
+  // @brief Hash SHA-1
   std::string hash_sha1_;
 
-  //! \brief Hash Tiger
+  // @brief Hash Tiger
   std::string hash_tiger_;
 
-  //! \brief Hash ED2K
+  // @brief Hash ED2K
   std::string hash_ed2k_;
 
-  //! \brief Hash BTH
+  // @brief Hash BTH
   std::string hash_bth_;
 
-  //! \brief Hash MD5
+  // @brief Hash MD5
   std::string hash_md5_;
 
-  //! \brief Hash SHA-1 trusted
+  // @brief Hash SHA-1 trusted
   bool hash_sha1_trusted_ = false;
 
-  //! \brief Hash Tiger trused
+  // @brief Hash Tiger trused
   bool hash_tiger_trusted_ = false;
 
-  //! \brief Hash ED2K trusted
+  // @brief Hash ED2K trusted
   bool hash_ed2k_trusted_ = false;
 
-  //! \brief Hash BTH trusted
+  // @brief Hash BTH trusted
   bool hash_bth_trusted_ = false;
 
-  //! \brief Hash MD5 trusted
+  // @brief Hash MD5 trusted
   bool hash_md5_trusted_ = false;
 
-  //! \brief Torrent success counter
+  // @brief Torrent success counter
   std::uint32_t torrent_success_ = 0;
 
-  //! \brief Serving file name
+  // @brief Serving file name
   std::string serving_file_name_;
 
-  //! \brief XML data
+  // @brief XML data
   CXMLElement pxml_;
 
-  //! \brief BTInfo data
+  // @brief BTInfo data
   CBTInfo btinfo_;
 
-  //! \brief Download sources
+  // @brief Download sources
   std::vector <CDownloadSource> sources_;
 
-  //! \brief File parts
+  // @brief File parts
   std::vector <CVirtualFilePart> parts_;
 
-  //! \brief Fragments
+  // @brief Fragments
   std::vector <CFragment> fragments_;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -461,3 +461,7 @@ private:
 } // namespace mobius::extension::app::shareaza
 
 #endif
+
+
+
+

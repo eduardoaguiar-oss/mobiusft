@@ -21,13 +21,11 @@
 #include <mobius/io/reader.h>
 #include <cstdint>
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Adaptor class for reading disk sectors
-//! \author Eduardo Aguiar
+// @brief Adaptor class for reading disk sectors
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class sector_reader_adaptor
 {
@@ -39,8 +37,8 @@ public:
   explicit sector_reader_adaptor (mobius::io::reader, size_type = 512);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get sector size
-  //! \return sector size in bytes
+  // @brief Get sector size
+  // @return sector size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_sector_size () const
@@ -49,8 +47,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get sector count
-  //! \return number of sectors
+  // @brief Get sector count
+  // @return number of sectors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   sector_type
   get_sectors () const
@@ -70,7 +68,8 @@ private:
   sector_type sectors_ = 0;
 };
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
 
 #endif
+
+

@@ -27,10 +27,10 @@
 namespace mobius::py
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new Python list from C++ container
-//! \param container C++ container
-//! \param pyfunc Function to convert C++ items to Python objects
-//! \return Python list
+// @brief Create new Python list from C++ container
+// @param container C++ container
+// @param pyfunc Function to convert C++ items to Python objects
+// @return Python list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename C, typename F> PyObject *
 pylist_from_cpp_container (const C& container, F pyfunc)
@@ -58,10 +58,10 @@ pylist_from_cpp_container (const C& container, F pyfunc)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new C++ vector from Python list
-//! \param container C++ container
-//! \param cppfunc Function to Python objects to C++ items
-//! \return Vector
+// @brief Create new C++ vector from Python list
+// @param container C++ container
+// @param cppfunc Function to Python objects to C++ items
+// @return Vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename F> auto
 pylist_to_cpp_container (PyObject *list, F cppfunc) -> std::vector <decltype (cppfunc (nullptr))>
@@ -89,11 +89,11 @@ pylist_to_cpp_container (PyObject *list, F cppfunc) -> std::vector <decltype (cp
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new Python list from C++ pair container
-//! \param container C++ container
-//! \param pyf1 Function to convert first value
-//! \param pyf2 Function to convert second value
-//! \return Python list
+// @brief Create new Python list from C++ pair container
+// @param container C++ container
+// @param pyf1 Function to convert first value
+// @param pyf2 Function to convert second value
+// @return Python list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename C, typename F1, typename F2> PyObject *
 pylist_from_cpp_pair_container (const C& container, F1 pyf1, F2 pyf2)
@@ -124,11 +124,11 @@ pylist_from_cpp_pair_container (const C& container, F1 pyf1, F2 pyf2)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get argument and convert to C++ vector, using a function
-//! \param args List of arguments
-//! \param idx Argument number, starting in 0
-//! \param f Conversion function
-//! \return C++ vector
+// @brief Get argument and convert to C++ vector, using a function
+// @param args List of arguments
+// @param idx Argument number, starting in 0
+// @param f Conversion function
+// @return C++ vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename F> decltype (auto)
 get_arg_as_cpp_vector (PyObject *args, std::uint32_t idx, F f)
@@ -139,3 +139,5 @@ get_arg_as_cpp_vector (PyObject *args, std::uint32_t idx, F f)
 } // namespace mobius::py
 
 #endif
+
+

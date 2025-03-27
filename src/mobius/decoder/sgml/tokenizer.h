@@ -22,22 +22,18 @@
 #include <string>
 #include <utility>
 
-namespace mobius
-{
-namespace decoder
-{
-namespace sgml
+namespace mobius::decoder::sgml
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief SGML tokenizer
-//! \author Eduardo Aguiar
+// @brief SGML tokenizer
+// @author Eduardo Aguiar
 // Input must be UTF-8 stream
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class tokenizer
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Token types
+  // @brief Token types
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   enum class token_type
   {
@@ -48,17 +44,17 @@ public:
       empty_tag,
       entity
   };
-  
+
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit tokenizer (const mobius::io::reader&);
   std::pair <token_type, std::string> get_token ();
-  
+
 private:
-  //! \brief Sourcecode object
+  // @brief Sourcecode object
   mobius::decoder::sourcecode sourcecode_;
-  
+
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Helper functions
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -67,8 +63,8 @@ private:
   std::string _get_entity_token ();
 };
 
-} // namespace sgml
-} // namespace decoder
-} // namespace mobius
+} // namespace mobius::decoder::sgml
 
 #endif
+
+

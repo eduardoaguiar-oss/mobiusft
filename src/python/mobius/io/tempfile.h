@@ -23,7 +23,7 @@
 #include <mobius/io/tempfile.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -41,3 +41,5 @@ PyObject *pymobius_io_tempfile_to_pyobject (const mobius::io::tempfile&);
 mobius::io::tempfile pymobius_io_tempfile_from_pyobject (PyObject *);
 
 #endif
+
+

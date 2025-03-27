@@ -22,7 +22,7 @@
 #include <mobius/datasource/datasource.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_datasource_datasource_to_pyobject (const mobius::datasource::
 mobius::datasource::datasource pymobius_datasource_datasource_from_pyobject (PyObject *);
 
 #endif
+
+

@@ -23,8 +23,8 @@
 namespace mobius::io::smb
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief SMB folder implementation class
-//! \author Eduardo Aguiar
+// @brief SMB folder implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class folder_impl : public folder_impl_base
 {
@@ -76,8 +76,8 @@ public:
   bool move (folder_type) override;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if object is valid
-  //! \return true/false
+  // @brief Check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const noexcept override
   {
@@ -85,8 +85,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set name
-  //! \param name Name
+  // @brief Set name
+  // @param name Name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_name (const std::string& name) override
@@ -95,8 +95,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get path
-  //! \return Path
+  // @brief Get path
+  // @return Path
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_path () const override
@@ -105,8 +105,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set path
-  //! \param path Path
+  // @brief Set path
+  // @param path Path
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_path (const std::string&) override
@@ -114,8 +114,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if object is browseable
-  //! \return true/false
+  // @brief Check if object is browseable
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_browseable () const override
@@ -124,8 +124,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get streams
-  //! \return Streams
+  // @brief Get streams
+  // @return Streams
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::vector <stream_type>
   get_streams () const override
@@ -134,46 +134,46 @@ public:
   }
 
 private:
-  //! \brief URL
+  // @brief URL
   std::string url_;
 
-  //! \brief Folder name
+  // @brief Folder name
   std::string name_;
 
-  //! \brief Folder exists flag
+  // @brief Folder exists flag
   mutable bool exists_;
 
-  //! \brief I-node
+  // @brief I-node
   mutable inode_type inode_;
 
-  //! \brief Size in bytes
+  // @brief Size in bytes
   mutable size_type size_;
 
-  //! \brief User id
+  // @brief User id
   mutable user_id_type user_id_;
 
-  //! \brief User name
+  // @brief User name
   mutable std::string user_name_;
 
-  //! \brief Group id
+  // @brief Group id
   mutable group_id_type group_id_;
 
-  //! \brief Group name
+  // @brief Group name
   mutable std::string group_name_;
 
-  //! \brief RWX permissions
+  // @brief RWX permissions
   mutable permission_type permissions_;
 
-  //! \brief Last access date/time
+  // @brief Last access date/time
   mutable mobius::datetime::datetime access_time_;
 
-  //! \brief Last modification date/time
+  // @brief Last modification date/time
   mutable mobius::datetime::datetime modification_time_;
 
-  //! \brief Last metadata modification date/time
+  // @brief Last metadata modification date/time
   mutable mobius::datetime::datetime metadata_time_;
 
-  //! \brief Is stat loaded flag
+  // @brief Is stat loaded flag
   mutable bool is_stat_loaded_ = false;
 
 private:
@@ -183,3 +183,5 @@ private:
 } // namespace mobius::io::smb
 
 #endif
+
+

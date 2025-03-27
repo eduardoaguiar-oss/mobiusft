@@ -23,7 +23,7 @@
 namespace mobius::database
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure shared by copies of the connection object
+// @brief Data structure shared by copies of the connection object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class connection::impl
 {
@@ -34,15 +34,15 @@ public:
   void release ();
 
 private:
-  //! \brief connection pool that owns this connection
+  // @brief connection pool that owns this connection
   connection_pool& pool_;
 
-  //! \brief flag: if connection is still active
+  // @brief flag: if connection is still active
   bool is_active_ = false;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Initialize connection::impl object
+// @brief Initialize connection::impl object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 connection::impl::impl (connection_pool& a_pool)
   : pool_ (a_pool), is_active_ (true)
@@ -50,7 +50,7 @@ connection::impl::impl (connection_pool& a_pool)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destroy connection::impl object
+// @brief Destroy connection::impl object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 connection::impl::~impl ()
 {
@@ -58,7 +58,7 @@ connection::impl::~impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Release connection
+// @brief Release connection
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 connection::impl::release ()
@@ -71,9 +71,9 @@ connection::impl::release ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Initialize object
-//! \param pool connection pool
-//! \param path database file path
+// @brief Initialize object
+// @param pool connection pool
+// @param path database file path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 connection::connection (connection_pool& pool)
   : impl_ (std::make_shared <impl> (pool))
@@ -81,7 +81,7 @@ connection::connection (connection_pool& pool)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Release connection
+// @brief Release connection
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 connection::release ()
@@ -93,3 +93,5 @@ connection::release ()
 }
 
 } // namespace mobius::database
+
+

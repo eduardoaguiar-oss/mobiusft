@@ -21,8 +21,8 @@
 #include "section.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief volume_section data class
-//! \author Eduardo Aguiar
+// @brief volume_section data class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class volume_section : public section
 {
@@ -42,8 +42,8 @@ public:
   volume_section& operator= (volume_section&&) = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief initialize volume_section from section object
-  //! \param s section object
+  // @brief initialize volume_section from section object
+  // @param s section object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   volume_section (const section& s)
     : section (s)
@@ -51,8 +51,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get media type
-  //! \return media type
+  // @brief get media type
+  // @return media type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_media_type () const
@@ -61,8 +61,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set media type
-  //! \param media_type media type
+  // @brief set media type
+  // @param media_type media type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_media_type (std::uint32_t media_type)
@@ -71,8 +71,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get chunk count
-  //! \return chunk count
+  // @brief get chunk count
+  // @return chunk count
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_chunk_count () const
@@ -81,8 +81,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set chunk count
-  //! \param chunk_count chunk count
+  // @brief set chunk count
+  // @param chunk_count chunk count
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_chunk_count (std::uint32_t chunk_count)
@@ -91,8 +91,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get sectors per chunk
-  //! \return sectors per chunk
+  // @brief get sectors per chunk
+  // @return sectors per chunk
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_chunk_sectors () const
@@ -101,8 +101,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set sectors per chunk
-  //! \param chunk_sectors sectors per chunk
+  // @brief set sectors per chunk
+  // @param chunk_sectors sectors per chunk
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_chunk_sectors (std::uint32_t chunk_sectors)
@@ -111,8 +111,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get bytes per sector
-  //! \return bytes per sector
+  // @brief get bytes per sector
+  // @return bytes per sector
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_sector_size () const
@@ -121,8 +121,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set bytes per sector
-  //! \param sector_size bytes per sector
+  // @brief set bytes per sector
+  // @param sector_size bytes per sector
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_sector_size (std::uint32_t sector_size)
@@ -131,8 +131,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get number of sectors within all segment files
-  //! \return number of sectors within all segment files
+  // @brief get number of sectors within all segment files
+  // @return number of sectors within all segment files
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t
   get_sectors () const
@@ -141,8 +141,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set number of sectors within all segment files
-  //! \param sectors number of sectors within all segment files
+  // @brief set number of sectors within all segment files
+  // @param sectors number of sectors within all segment files
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_sectors (std::uint64_t sectors)
@@ -151,8 +151,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get media flags
-  //! \return media flags
+  // @brief get media flags
+  // @return media flags
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_media_flags () const
@@ -161,8 +161,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set media flags
-  //! \param media_flags media flags
+  // @brief set media flags
+  // @param media_flags media flags
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_media_flags (std::uint32_t media_flags)
@@ -171,8 +171,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get compression level
-  //! \return compression level
+  // @brief get compression level
+  // @return compression level
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_compression_level () const
@@ -181,8 +181,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set compression level
-  //! \param compression_level compression level
+  // @brief set compression level
+  // @param compression_level compression level
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_compression_level (std::uint32_t compression_level)
@@ -191,8 +191,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get section Adler-32 CRC
-  //! \return Adler-32 CRC
+  // @brief get section Adler-32 CRC
+  // @return Adler-32 CRC
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_section_adler32 () const
@@ -201,8 +201,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set section Adler-32 CRC
-  //! \param section_adler32 Adler-32 CRC
+  // @brief set section Adler-32 CRC
+  // @param section_adler32 Adler-32 CRC
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_section_adler32 (std::uint32_t section_adler32)
@@ -211,8 +211,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get GUID
-  //! \return GUID
+  // @brief get GUID
+  // @return GUID
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_guid () const
@@ -221,8 +221,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set GUID
-  //! \param guid GUID
+  // @brief set GUID
+  // @param guid GUID
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_guid (const std::string& guid)
@@ -233,32 +233,34 @@ public:
 
 private:
 
-  //! \brief media type
+  // @brief media type
   std::uint32_t media_type_ = 0;
 
-  //! \brief chunk count
+  // @brief chunk count
   std::uint32_t chunk_count_ = 0;
 
-  //! \brief sectors per chunk
+  // @brief sectors per chunk
   std::uint32_t chunk_sectors_ = 64;
 
-  //! \brief bytes per sector
+  // @brief bytes per sector
   std::uint32_t sector_size_ = 512;
 
-  //! \brief number of sectors within all segment files
+  // @brief number of sectors within all segment files
   std::uint64_t sectors_ = 0;
 
-  //! \brief media flags
+  // @brief media flags
   std::uint32_t media_flags_ = 0;
 
-  //! \brief compression level
+  // @brief compression level
   std::uint32_t compression_level_ = 0;
 
-  //! \brief Adler-32 CRC
+  // @brief Adler-32 CRC
   std::uint32_t section_adler32_ = 0;
 
-  //! \brief GUID
+  // @brief GUID
   std::string guid_;
 };
 
 #endif
+
+

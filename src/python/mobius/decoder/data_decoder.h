@@ -22,7 +22,7 @@
 #include <mobius/decoder/data_decoder.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -38,3 +38,7 @@ extern PyTypeObject decoder_data_decoder_t;
 PyObject *pymobius_decoder_data_decoder_to_pyobject (mobius::decoder::data_decoder);
 
 #endif
+
+
+
+

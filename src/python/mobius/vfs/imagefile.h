@@ -22,7 +22,7 @@
 #include <mobius/vfs/imagefile.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -38,3 +38,5 @@ extern PyTypeObject vfs_imagefile_t;
 PyObject *pymobius_vfs_imagefile_to_pyobject (mobius::vfs::imagefile);
 
 #endif
+
+

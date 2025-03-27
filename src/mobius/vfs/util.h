@@ -20,14 +20,13 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <string>
 
-namespace mobius
-{
-namespace vfs
+namespace mobius::vfs
 {
 
 void normalize_drive_info (std::string&, std::string&, std::string&);
 
-} // namespace vfs
-} // namespace mobius
+} // namespace mobius::vfs
 
 #endif
+
+

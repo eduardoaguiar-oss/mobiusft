@@ -25,7 +25,7 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief img_info for mobius::io::reader
+// @brief img_info for mobius::io::reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct TSK_IMG_INFO_MOBIUS
 {
@@ -34,7 +34,7 @@ struct TSK_IMG_INFO_MOBIUS
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief read data from reader
+// @brief read data from reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static ssize_t
 mobius_read (TSK_IMG_INFO *img, TSK_OFF_T off, char *buf, size_t len)
@@ -59,7 +59,7 @@ mobius_read (TSK_IMG_INFO *img, TSK_OFF_T off, char *buf, size_t len)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief close TSK_IMG_INFO_MOBIUS
+// @brief close TSK_IMG_INFO_MOBIUS
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 mobius_close (TSK_IMG_INFO *img)
@@ -69,7 +69,7 @@ mobius_close (TSK_IMG_INFO *img)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief show img status
+// @brief show img status
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 mobius_imgstat (TSK_IMG_INFO *, FILE *)
@@ -81,9 +81,9 @@ mobius_imgstat (TSK_IMG_INFO *, FILE *)
 namespace mobius::vfs::tsk
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
-//! \param reader generic reader
-//! \param offset offset in bytes from the beginning of the stream
+// @brief constructor
+// @param reader generic reader
+// @param offset offset in bytes from the beginning of the stream
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 adaptor::adaptor (const mobius::io::reader reader, std::uint64_t offset)
   : reader_ (reader), offset_ (offset)
@@ -115,7 +115,7 @@ adaptor::adaptor (const mobius::io::reader reader, std::uint64_t offset)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief destructor
+// @brief destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 adaptor::~adaptor ()
 {
@@ -133,8 +133,8 @@ adaptor::~adaptor ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get filesystem root folder
-//! \return Root folder
+// @brief Get filesystem root folder
+// @return Root folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::folder
 adaptor::get_root_folder () const
@@ -152,7 +152,7 @@ adaptor::get_root_folder () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create TSK image and filesystem objects
+// @brief create TSK image and filesystem objects
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 adaptor::_create_tsk () const
@@ -184,3 +184,5 @@ adaptor::_create_tsk () const
 }
 
 } // namespace mobius::vfs::tsk
+
+

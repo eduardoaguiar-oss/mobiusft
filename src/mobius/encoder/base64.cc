@@ -17,9 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "base64.h"
 
-namespace mobius
-{
-namespace encoder
+namespace mobius::encoder
 {
 namespace
 {
@@ -27,28 +25,28 @@ namespace
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-//! \brief Base 64 chars (RFC 4648, section 4)
+// @brief Base 64 chars (RFC 4648, section 4)
 static constexpr char BASE64[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-//! \brief Base 64 chars, URL and filename (RFC 4648, section 5)
+// @brief Base 64 chars, URL and filename (RFC 4648, section 5)
 static constexpr char BASE64_URL[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
-//! \brief Base 32 chars (RFC 4648, section 6)
+// @brief Base 32 chars (RFC 4648, section 6)
 static constexpr char BASE32[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 
-//! \brief Base 32 hex chars (RFC 4648, section 7)
+// @brief Base 32 hex chars (RFC 4648, section 7)
 static constexpr char BASE32_HEX[] = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
 
-//! \brief Base 16 chars (RFC 4648, section 8)
+// @brief Base 16 chars (RFC 4648, section 8)
 static constexpr char BASE16[] = "0123456789ABCDEF";
 
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Encode bytes into base64 encoding
-//! \param data Data
-//! \return Base64 encoded data
-//! \see RFC 4648, section 4
+// @brief Encode bytes into base64 encoding
+// @param data Data
+// @return Base64 encoded data
+// @see RFC 4648, section 4
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 base64 (const mobius::bytearray& data)
@@ -62,7 +60,7 @@ base64 (const mobius::bytearray& data)
     {
       d = (d << 8) | c;
       bits += 8;
-      
+
       while (bits >= 6)
         {
           bits -= 6;
@@ -79,10 +77,10 @@ base64 (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Encode bytes into base64 encoding, URL and Filename Safe Alphabet
-//! \param data Data
-//! \return Base64 encoded data
-//! \see RFC 4648, section 5
+// @brief Encode bytes into base64 encoding, URL and Filename Safe Alphabet
+// @param data Data
+// @return Base64 encoded data
+// @see RFC 4648, section 5
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 base64url (const mobius::bytearray& data)
@@ -96,7 +94,7 @@ base64url (const mobius::bytearray& data)
     {
       d = (d << 8) | c;
       bits += 8;
-      
+
       while (bits >= 6)
         {
           bits -= 6;
@@ -113,10 +111,10 @@ base64url (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Encode bytes into base32 encoding
-//! \param data Data
-//! \return Base32 encoded data
-//! \see RFC 4648, section 6
+// @brief Encode bytes into base32 encoding
+// @param data Data
+// @return Base32 encoded data
+// @see RFC 4648, section 6
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 base32 (const mobius::bytearray& data)
@@ -130,7 +128,7 @@ base32 (const mobius::bytearray& data)
     {
       d = (d << 8) | c;
       bits += 8;
-      
+
       while (bits >= 5)
         {
           bits -= 5;
@@ -147,10 +145,10 @@ base32 (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Encode bytes into base32hex encoding
-//! \param data Data
-//! \return Base32hex encoded data
-//! \see RFC 4648, section 7
+// @brief Encode bytes into base32hex encoding
+// @param data Data
+// @return Base32hex encoded data
+// @see RFC 4648, section 7
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 base32hex (const mobius::bytearray& data)
@@ -164,7 +162,7 @@ base32hex (const mobius::bytearray& data)
     {
       d = (d << 8) | c;
       bits += 8;
-      
+
       while (bits >= 5)
         {
           bits -= 5;
@@ -181,10 +179,10 @@ base32hex (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Encode bytes into base16 encoding
-//! \param data Data
-//! \return Base16 encoded data
-//! \see RFC 4648, section 8
+// @brief Encode bytes into base16 encoding
+// @param data Data
+// @return Base16 encoded data
+// @see RFC 4648, section 8
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 base16 (const mobius::bytearray& data)
@@ -201,5 +199,8 @@ base16 (const mobius::bytearray& data)
   return ret;
 }
 
-} // namespace encoder
-} // namespace mobius
+} // namespace mobius::encoder
+
+
+
+

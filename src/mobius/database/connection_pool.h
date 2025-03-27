@@ -26,8 +26,8 @@
 namespace mobius::database
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Database connection pool
-//! \author Eduardo Aguiar
+// @brief Database connection pool
+// @author Eduardo Aguiar
 //
 // * Rationale:
 //
@@ -71,13 +71,15 @@ public:
   void release ();
 
 private:
-  //! \brief Forward declaration
+  // @brief Forward declaration
   class impl;
 
-  //! \brief Smart pointer to implementation class
+  // @brief Smart pointer to implementation class
   std::shared_ptr <impl> impl_;
 };
 
 } // namespace mobius::database
 
 #endif
+
+

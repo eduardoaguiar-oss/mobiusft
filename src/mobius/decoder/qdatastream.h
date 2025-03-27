@@ -24,17 +24,17 @@
 namespace mobius::decoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief QDataStream decoder
-//! \author Eduardo Aguiar
-//! \see https://surfer.nmr.mgh.harvard.edu/ftp/dist/freesurfer/tutorial_versions/freesurfer/lib/qt/qt_doc/html/datastreamformat.html
-//! \see https://code.qt.io/cgit/qt/qtbase.git/tree/src/corelib/kernel/qmetatype.h
+// @brief QDataStream decoder
+// @author Eduardo Aguiar
+// @see https://surfer.nmr.mgh.harvard.edu/ftp/dist/freesurfer/tutorial_versions/freesurfer/lib/qt/qt_doc/html/datastreamformat.html
+// @see https://code.qt.io/cgit/qt/qtbase.git/tree/src/corelib/kernel/qmetatype.h
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class qdatastream
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief QDataStream format versions
-  //! \see qdatastream.h@qtbase
+  // @brief QDataStream format versions
+  // @see qdatastream.h@qtbase
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   enum version
   {
@@ -88,8 +88,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get qint8
-  //! \return Qint8 value
+  // @brief Get qint8
+  // @return Qint8 value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::int8_t
   get_qint8 ()
@@ -98,8 +98,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get quint8
-  //! \return Quint8 value
+  // @brief Get quint8
+  // @return Quint8 value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint8_t
   get_quint8 ()
@@ -107,8 +107,8 @@ public:
     return decoder_.get_uint8 ();
   }
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get qint16
-  //! \return Qint16 value
+  // @brief Get qint16
+  // @return Qint16 value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::int16_t
   get_qint16 ()
@@ -117,8 +117,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get qint32
-  //! \return Qint32 value
+  // @brief Get qint32
+  // @return Qint32 value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::int32_t
   get_qint32 ()
@@ -127,8 +127,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get qint64
-  //! \return Qint64 value
+  // @brief Get qint64
+  // @return Qint64 value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::int64_t
   get_qint64 ()
@@ -149,13 +149,15 @@ public:
   pod::data get_qvariant ();
 
 private:
-  //! \brief Internal data decoder object
+  // @brief Internal data decoder object
   mobius::decoder::data_decoder decoder_;
 
-  //! \brief QDataStream version
+  // @brief QDataStream version
   std::uint32_t version_ = 0;
 };
 
 } // namespace mobius::decoder
 
 #endif
+
+

@@ -22,7 +22,7 @@
 namespace mobius::vfs
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 filesystem::filesystem ()
  : impl_ (std::make_shared <filesystem_impl_null> ())
@@ -30,10 +30,10 @@ filesystem::filesystem ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
-//! \param offset Offset from the beginning of the stream
-//! \param type Filesystem type (default = "autodetect")
+// @brief Constructor
+// @param reader Reader object
+// @param offset Offset from the beginning of the stream
+// @param type Filesystem type (default = "autodetect")
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 filesystem::filesystem (
   const mobius::io::reader& reader,
@@ -80,3 +80,5 @@ filesystem::filesystem (
 }
 
 } // namespace mobius::vfs
+
+

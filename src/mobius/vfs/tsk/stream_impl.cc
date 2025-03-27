@@ -19,15 +19,11 @@
 #include "reader_impl_stream.h"
 #include <tsk/libtsk.h>
 
-namespace mobius
-{
-namespace vfs
-{
-namespace tsk
+namespace mobius::vfs::tsk
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param fs_attr_p pointer to TSK_FS_ATTR
+// @brief Constructor
+// @param fs_attr_p pointer to TSK_FS_ATTR
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 stream_impl::stream_impl (const fs_file& fs_file, const TSK_FS_ATTR *fs_attr_p)
   : fs_file_ (fs_file),
@@ -39,8 +35,8 @@ stream_impl::stream_impl (const fs_file& fs_file, const TSK_FS_ATTR *fs_attr_p)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new reader
-//! \return new reader
+// @brief Create new reader
+// @return new reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::reader
 stream_impl::new_reader () const
@@ -48,6 +44,6 @@ stream_impl::new_reader () const
   return mobius::io::reader (std::make_shared <reader_impl_stream> (fs_file_, fs_attr_));
 }
 
-} // namespace tsk
-} // namespace vfs
-} // namespace mobius
+} // namespace mobius::vfs::tsk
+
+

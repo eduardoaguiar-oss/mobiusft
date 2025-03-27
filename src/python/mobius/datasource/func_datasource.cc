@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pygil.h>
@@ -26,7 +26,7 @@
 #include "vfs/vfs.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function new_datasource_from_vfs
+// @brief Function new_datasource_from_vfs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_datasource_new_datasource_from_vfs (PyObject *, PyObject *args)
@@ -62,7 +62,7 @@ func_datasource_new_datasource_from_vfs (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function new_datasource_by_imagefile_path
+// @brief Function new_datasource_by_imagefile_path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_datasource_new_datasource_by_imagefile_path (PyObject *, PyObject *args)
@@ -98,7 +98,7 @@ func_datasource_new_datasource_by_imagefile_path (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function new_datasource_by_imagefile_url
+// @brief Function new_datasource_by_imagefile_url
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_datasource_new_datasource_by_imagefile_url (PyObject *, PyObject *args)
@@ -134,7 +134,7 @@ func_datasource_new_datasource_by_imagefile_url (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function new_datasource_by_ufdr_path
+// @brief Function new_datasource_by_ufdr_path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_datasource_new_datasource_by_ufdr_path (PyObject *, PyObject *args)
@@ -170,7 +170,7 @@ func_datasource_new_datasource_by_ufdr_path (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function new_datasource_by_ufdr_url
+// @brief Function new_datasource_by_ufdr_url
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_datasource_new_datasource_by_ufdr_url (PyObject *, PyObject *args)
@@ -204,3 +204,4 @@ func_datasource_new_datasource_by_ufdr_url (PyObject *, PyObject *args)
   // create Python imagefile according to its type
   return ret;
 }
+

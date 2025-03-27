@@ -22,12 +22,10 @@
 #include <mobius/string_functions.h>
 #include <stdexcept>
 
-namespace mobius
-{
-namespace decoder
+namespace mobius::decoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief lnk implementation class
+// @brief lnk implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class lnk::impl
 {
@@ -47,8 +45,8 @@ public:
   impl& operator= (impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get header size
-  //! \return Header size
+  // @brief Get header size
+  // @return Header size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_header_size () const
@@ -58,8 +56,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get clsid
-  //! \return Clsid
+  // @brief Get clsid
+  // @return Clsid
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_clsid () const
@@ -69,8 +67,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get flags
-  //! \return Flags
+  // @brief Get flags
+  // @return Flags
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_flags () const
@@ -80,8 +78,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get file attributes
-  //! \return File attributes
+  // @brief Get file attributes
+  // @return File attributes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_file_attributes () const
@@ -91,8 +89,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get creation time
-  //! \return Creation time
+  // @brief Get creation time
+  // @return Creation time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::datetime::datetime
   get_creation_time () const
@@ -102,8 +100,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get access time
-  //! \return Access time
+  // @brief Get access time
+  // @return Access time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::datetime::datetime
   get_access_time () const
@@ -113,8 +111,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get write time
-  //! \return Write time
+  // @brief Get write time
+  // @return Write time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::datetime::datetime
   get_write_time () const
@@ -124,8 +122,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get file size
-  //! \return File size
+  // @brief Get file size
+  // @return File size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_file_size () const
@@ -135,8 +133,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get icon index
-  //! \return Icon index
+  // @brief Get icon index
+  // @return Icon index
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_icon_index () const
@@ -146,8 +144,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get show command
-  //! \return Show command
+  // @brief Get show command
+  // @return Show command
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_show_command () const
@@ -157,8 +155,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get hotkeys
-  //! \return Hotkeys
+  // @brief Get hotkeys
+  // @return Hotkeys
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint16_t
   get_hotkeys () const
@@ -168,8 +166,8 @@ public:
   }
 
  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get volume label
-  //! \return Volume label
+  // @brief Get volume label
+  // @return Volume label
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_volume_label () const
@@ -179,8 +177,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get drive type
-  //! \return Drive type
+  // @brief Get drive type
+  // @return Drive type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_drive_type () const
@@ -190,8 +188,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get drive serial number
-  //! \return Drive serial number
+  // @brief Get drive serial number
+  // @return Drive serial number
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_drive_serial_number () const
@@ -201,8 +199,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get local base path
-  //! \return Local base path
+  // @brief Get local base path
+  // @return Local base path
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_local_base_path () const
@@ -212,8 +210,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get common path suffix
-  //! \return Common path suffix
+  // @brief Get common path suffix
+  // @return Common path suffix
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_common_path_suffix () const
@@ -223,8 +221,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get net name
-  //! \return Net name
+  // @brief Get net name
+  // @return Net name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_net_name () const
@@ -234,8 +232,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get device name
-  //! \return Device name
+  // @brief Get device name
+  // @return Device name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_device_name () const
@@ -245,8 +243,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get network provider type
-  //! \return Network provider type
+  // @brief Get network provider type
+  // @return Network provider type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_network_provider_type () const
@@ -255,8 +253,8 @@ public:
     return network_provider_type_;
   }
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get name
-  //! \return Name
+  // @brief Get name
+  // @return Name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_name () const
@@ -266,8 +264,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get relative path
-  //! \return Relative path
+  // @brief Get relative path
+  // @return Relative path
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_relative_path () const
@@ -277,8 +275,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get working dir
-  //! \return Working dir
+  // @brief Get working dir
+  // @return Working dir
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_working_dir () const
@@ -288,8 +286,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get arguments
-  //! \return Arguments
+  // @brief Get arguments
+  // @return Arguments
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_arguments () const
@@ -299,8 +297,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get icon location
-  //! \return Icon location
+  // @brief Get icon location
+  // @return Icon location
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_icon_location () const
@@ -310,8 +308,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get NetBIOS name
-  //! \return NetBIOS name
+  // @brief Get NetBIOS name
+  // @return NetBIOS name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_netbios_name () const
@@ -321,8 +319,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get header section offset
-  //! \return Header offset
+  // @brief Get header section offset
+  // @return Header offset
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t
   get_header_offset () const
@@ -332,8 +330,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get link target id list section offset
-  //! \return Link target id list offset
+  // @brief Get link target id list section offset
+  // @return Link target id list offset
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t
   get_link_target_id_list_offset () const
@@ -343,8 +341,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get link info section offset
-  //! \return Link info offset
+  // @brief Get link info section offset
+  // @return Link info offset
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t
   get_link_info_offset () const
@@ -354,8 +352,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get string data section offset
-  //! \return String data offset
+  // @brief Get string data section offset
+  // @return String data offset
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t
   get_string_data_offset () const
@@ -365,8 +363,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get extra data section offset
-  //! \return Extra data offset
+  // @brief Get extra data section offset
+  // @return Extra data offset
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t
   get_extra_data_offset () const
@@ -376,100 +374,100 @@ public:
   }
 
 private:
-  //! \brief Reader object
+  // @brief Reader object
   mobius::io::reader reader_;
 
-  //! \brief Header size in bytes
+  // @brief Header size in bytes
   mutable std::uint32_t header_size_ = 0;
 
-  //! \brief CLSID
+  // @brief CLSID
   mutable std::string clsid_;
 
-  //! \brief Flags
+  // @brief Flags
   mutable std::uint32_t flags_ = 0;
 
-  //! \brief Link target attributes
+  // @brief Link target attributes
   mutable std::uint32_t file_attributes_ = 0;
 
-  //! \brief Link target creation time
+  // @brief Link target creation time
   mutable mobius::datetime::datetime creation_time_;
 
-  //! \brief Link target access time
+  // @brief Link target access time
   mutable mobius::datetime::datetime access_time_;
 
-  //! \brief Link target write time
+  // @brief Link target write time
   mutable mobius::datetime::datetime write_time_;
 
-  //! \brief Link target file size (32 bits)
+  // @brief Link target file size (32 bits)
   mutable std::uint32_t file_size_ = 0;
 
-  //! \brief Icon index within icon location
+  // @brief Icon index within icon location
   mutable std::uint32_t icon_index_ = 0;
 
-  //! \brief Show command
+  // @brief Show command
   mutable std::uint32_t show_command_ = 0;
 
-  //! \brief Hot keys
+  // @brief Hot keys
   mutable std::uint16_t hotkeys_ = 0;
 
-  //! \brief Volume label
+  // @brief Volume label
   mutable std::string volume_label_;
 
-  //! \brief Drive type
+  // @brief Drive type
   mutable std::uint32_t drive_type_ = 0;
 
-  //! \brief Drive serial number
+  // @brief Drive serial number
   mutable std::uint32_t drive_serial_number_ = 0;
 
-  //! \brief Local base path
+  // @brief Local base path
   mutable std::string local_base_path_;
 
-  //! \brief Common path suffix
+  // @brief Common path suffix
   mutable std::string common_path_suffix_;
 
-  //! \brief Net name
+  // @brief Net name
   mutable std::string net_name_;
 
-  //! \brief Device name
+  // @brief Device name
   mutable std::string device_name_;
 
-  //! \brief Network provider type
+  // @brief Network provider type
   mutable std::uint32_t network_provider_type_ = 0;
 
-  //! \brief Name
+  // @brief Name
   mutable std::string name_;
 
-  //! \brief Relative path
+  // @brief Relative path
   mutable std::string relative_path_;
 
-  //! \brief Working directory
+  // @brief Working directory
   mutable std::string working_dir_;
 
-  //! \brief Command line arguments
+  // @brief Command line arguments
   mutable std::string arguments_;
 
-  //! \brief Icon location
+  // @brief Icon location
   mutable std::string icon_location_;
 
-  //! \brief NetBIOS name
+  // @brief NetBIOS name
   mutable std::string netbios_name_;
 
-  //! \brief Header section offset
+  // @brief Header section offset
   mutable mobius::io::reader::offset_type header_offset_ = 0;
-  
-  //! \brief LinkTargetIDList section offset
+
+  // @brief LinkTargetIDList section offset
   mutable mobius::io::reader::offset_type link_target_id_list_offset_ = 0;
-  
-  //! \brief LinkInfo section offset
+
+  // @brief LinkInfo section offset
   mutable mobius::io::reader::offset_type link_info_offset_ = 0;
 
-  //! \brief StringData section offset
+  // @brief StringData section offset
   mutable mobius::io::reader::offset_type string_data_offset_ = 0;
 
-  //! \brief ExtraData section offset
+  // @brief ExtraData section offset
   mutable mobius::io::reader::offset_type extra_data_offset_ = 0;
 
-  //! \brief Data loaded flag
+  // @brief Data loaded flag
   mutable bool data_loaded_ = false;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -486,8 +484,8 @@ private:
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
+// @brief Constructor
+// @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 lnk::impl::impl (const mobius::io::reader& reader)
  : reader_ (reader)
@@ -495,8 +493,8 @@ lnk::impl::impl (const mobius::io::reader& reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load data on demand
-//! \see https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-shllink/16cb4ca1-9339-4d0c-a68d-bf1d6cc0f943 [MS-SHLLINK]
+// @brief Load data on demand
+// @see https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-shllink/16cb4ca1-9339-4d0c-a68d-bf1d6cc0f943 [MS-SHLLINK]
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 lnk::impl::_load_data () const
@@ -518,15 +516,15 @@ lnk::impl::_load_data () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode header structure
-//! \see https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-shllink/16cb4ca1-9339-4d0c-a68d-bf1d6cc0f943 (section 2.1)
+// @brief Decode header structure
+// @see https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-shllink/16cb4ca1-9339-4d0c-a68d-bf1d6cc0f943 (section 2.1)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 lnk::impl::_load_header (mobius::decoder::data_decoder& decoder) const
 {
   header_offset_ = decoder.tell ();
   header_size_ = decoder.get_uint32_le ();
-  
+
   if (header_size_ != 0x0000004c)
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid header size"));
 
@@ -549,21 +547,21 @@ lnk::impl::_load_header (mobius::decoder::data_decoder& decoder) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode LinkTargetIDList structure
-//! \see [MS-SHLLINK] (section 2.2)
-//! \see https://helgeklein.com/blog/dissecting-a-shortcut/
+// @brief Decode LinkTargetIDList structure
+// @see [MS-SHLLINK] (section 2.2)
+// @see https://helgeklein.com/blog/dissecting-a-shortcut/
 //! \todo Decode items
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 lnk::impl::_load_link_target_id_list (mobius::decoder::data_decoder& decoder) const
 {
-  // Check if file has LinkTargetIDList section 
+  // Check if file has LinkTargetIDList section
   if (!(flags_ & 0x0001))
     return;
 
   link_target_id_list_offset_ = decoder.tell ();
   auto size = decoder.get_uint16_le () + 2;
-  
+
   // Decode IDList structure (section 2.2.1)
   auto item_id_size = decoder.get_uint16_le ();
 
@@ -578,13 +576,13 @@ lnk::impl::_load_link_target_id_list (mobius::decoder::data_decoder& decoder) co
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode LinkInfo structure
-//! \see [MS-SHLLINK] (section 2.3)
+// @brief Decode LinkInfo structure
+// @see [MS-SHLLINK] (section 2.3)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 lnk::impl::_load_link_info (mobius::decoder::data_decoder& decoder) const
 {
-  // Check if file has LinkInfo section 
+  // Check if file has LinkInfo section
   if (!(flags_ & 0x0002))
     return;
 
@@ -598,7 +596,7 @@ lnk::impl::_load_link_info (mobius::decoder::data_decoder& decoder) const
   auto common_network_relative_link_offset = decoder.get_uint32_le ();
   auto common_path_suffix_offset = decoder.get_uint32_le ();
   std::string encoding = "CP1252";
-  
+
   if (header_size >= 0x0024)
     {
       encoding = "UTF-16LE";
@@ -629,8 +627,8 @@ lnk::impl::_load_link_info (mobius::decoder::data_decoder& decoder) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode VolumeID structure
-//! \see [MS-SHLLINK] (section 2.3.1)
+// @brief Decode VolumeID structure
+// @see [MS-SHLLINK] (section 2.3.1)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 lnk::impl::_load_volume_id (mobius::decoder::data_decoder& decoder) const
@@ -661,8 +659,8 @@ lnk::impl::_load_volume_id (mobius::decoder::data_decoder& decoder) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode CommonNetworkRelativeLink structure
-//! \see [MS-SHLLINK] (section 2.3.2)
+// @brief Decode CommonNetworkRelativeLink structure
+// @see [MS-SHLLINK] (section 2.3.2)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 lnk::impl::_load_common_network_relative_link (mobius::decoder::data_decoder& decoder) const
@@ -676,7 +674,7 @@ lnk::impl::_load_common_network_relative_link (mobius::decoder::data_decoder& de
   auto device_name_offset = decoder.get_uint32_le ();
   network_provider_type_ = decoder.get_uint32_le ();
   std::string encoding = "CP1252";
-  
+
   // Define net and device names offsets
   if (net_name_offset > 0x00000014)
     {
@@ -684,7 +682,7 @@ lnk::impl::_load_common_network_relative_link (mobius::decoder::data_decoder& de
       net_name_offset = decoder.get_uint32_le ();
       device_name_offset = decoder.get_uint32_le ();
     }
-  
+
   // Read net name
   decoder.seek (offset + net_name_offset);
   net_name_ = decoder.get_c_string (encoding);
@@ -701,8 +699,8 @@ lnk::impl::_load_common_network_relative_link (mobius::decoder::data_decoder& de
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode string data section
-//! \see [MS-SHLLINK] (section 2.4)
+// @brief Decode string data section
+// @see [MS-SHLLINK] (section 2.4)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 lnk::impl::_load_string_data (mobius::decoder::data_decoder& decoder) const
@@ -710,7 +708,7 @@ lnk::impl::_load_string_data (mobius::decoder::data_decoder& decoder) const
   string_data_offset_ = decoder.tell ();
   std::string encoding = (flags_ & 0x00000080) ? "UTF-16LE" : "CP1252";
   std::uint32_t dsize = (flags_ & 0x00000080) ? 2 : 1;
-  
+
   // Name_string
   if (flags_ & 0x00000004)
     {
@@ -748,8 +746,8 @@ lnk::impl::_load_string_data (mobius::decoder::data_decoder& decoder) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode extra data section
-//! \see [MS-SHLLINK] (section 2.5)
+// @brief Decode extra data section
+// @see [MS-SHLLINK] (section 2.5)
 //! \todo Other signatures
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -757,11 +755,11 @@ lnk::impl::_load_extra_data (mobius::decoder::data_decoder& decoder) const
 {
   extra_data_offset_ = decoder.tell ();
   auto size = decoder.get_uint32_le ();
-  
+
   while (size > 3)
     {
       auto signature = decoder.get_uint32_le ();
-      
+
       if (signature == 0xa0000003)		// section 2.5.10
         {
           decoder.skip (8);	// length, version
@@ -781,8 +779,8 @@ lnk::impl::_load_extra_data (mobius::decoder::data_decoder& decoder) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
+// @brief Constructor
+// @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 lnk::lnk (const mobius::io::reader& reader)
   : impl_ (std::make_shared <impl> (reader))
@@ -790,28 +788,28 @@ lnk::lnk (const mobius::io::reader& reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if link target is readonly
-//! \return true/false
+// @brief Check if link target is readonly
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 lnk::is_target_readonly () const
 {
   return get_file_attributes () & 0x0001;
 }
-  
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if link target is hidden
-//! \return true/false
+// @brief Check if link target is hidden
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 lnk::is_target_hidden () const
 {
   return get_file_attributes () & 0x0002;
 }
-  
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if link target is system file
-//! \return true/false
+// @brief Check if link target is system file
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 lnk::is_target_system () const
@@ -820,8 +818,8 @@ lnk::is_target_system () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if link target is directory
-//! \return true/false
+// @brief Check if link target is directory
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 lnk::is_target_directory () const
@@ -830,8 +828,8 @@ lnk::is_target_directory () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if link target is archive
-//! \return true/false
+// @brief Check if link target is archive
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 lnk::is_target_archive () const
@@ -840,8 +838,8 @@ lnk::is_target_archive () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if link target is temporary
-//! \return true/false
+// @brief Check if link target is temporary
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 lnk::is_target_temporary () const
@@ -850,8 +848,8 @@ lnk::is_target_temporary () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if link target is sparse file
-//! \return true/false
+// @brief Check if link target is sparse file
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 lnk::is_target_sparse () const
@@ -860,8 +858,8 @@ lnk::is_target_sparse () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if link target is reparse point
-//! \return true/false
+// @brief Check if link target is reparse point
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 lnk::is_target_reparse_point () const
@@ -870,8 +868,8 @@ lnk::is_target_reparse_point () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if link target is compressed
-//! \return true/false
+// @brief Check if link target is compressed
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 lnk::is_target_compressed () const
@@ -880,8 +878,8 @@ lnk::is_target_compressed () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if link target is offline
-//! \return true/false
+// @brief Check if link target is offline
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 lnk::is_target_offline () const
@@ -890,8 +888,8 @@ lnk::is_target_offline () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if link target is content indexed
-//! \return true/false
+// @brief Check if link target is content indexed
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 lnk::is_target_content_indexed () const
@@ -900,8 +898,8 @@ lnk::is_target_content_indexed () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if link target is encrypted
-//! \return true/false
+// @brief Check if link target is encrypted
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 lnk::is_target_encrypted () const
@@ -910,8 +908,8 @@ lnk::is_target_encrypted () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Target run in separate process if set
-//! \return true/false
+// @brief Target run in separate process if set
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 lnk::is_run_in_separate_process () const
@@ -920,8 +918,8 @@ lnk::is_run_in_separate_process () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Target run as a different user if set
-//! \return true/false
+// @brief Target run as a different user if set
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 lnk::is_run_as_user () const
@@ -930,8 +928,8 @@ lnk::is_run_as_user () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get header size
-//! \return Header size
+// @brief Get header size
+// @return Header size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 lnk::get_header_size () const
@@ -940,8 +938,8 @@ lnk::get_header_size () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get clsid
-//! \return Clsid
+// @brief Get clsid
+// @return Clsid
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 lnk::get_clsid () const
@@ -950,8 +948,8 @@ lnk::get_clsid () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get flags
-//! \return Flags
+// @brief Get flags
+// @return Flags
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 lnk::get_flags () const
@@ -960,8 +958,8 @@ lnk::get_flags () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get file attributes
-//! \return File attributes
+// @brief Get file attributes
+// @return File attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 lnk::get_file_attributes () const
@@ -970,8 +968,8 @@ lnk::get_file_attributes () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get creation time
-//! \return Creation time
+// @brief Get creation time
+// @return Creation time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 lnk::get_creation_time () const
@@ -980,8 +978,8 @@ lnk::get_creation_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get access time
-//! \return Access time
+// @brief Get access time
+// @return Access time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 lnk::get_access_time () const
@@ -990,8 +988,8 @@ lnk::get_access_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get write time
-//! \return Write time
+// @brief Get write time
+// @return Write time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 lnk::get_write_time () const
@@ -1000,8 +998,8 @@ lnk::get_write_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get file size
-//! \return File size
+// @brief Get file size
+// @return File size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 lnk::get_file_size () const
@@ -1010,8 +1008,8 @@ lnk::get_file_size () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get icon index
-//! \return Icon index
+// @brief Get icon index
+// @return Icon index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 lnk::get_icon_index () const
@@ -1020,8 +1018,8 @@ lnk::get_icon_index () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get show command
-//! \return Show command
+// @brief Get show command
+// @return Show command
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 lnk::get_show_command () const
@@ -1030,8 +1028,8 @@ lnk::get_show_command () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get hotkeys
-//! \return Hotkeys
+// @brief Get hotkeys
+// @return Hotkeys
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint16_t
 lnk::get_hotkeys () const
@@ -1040,8 +1038,8 @@ lnk::get_hotkeys () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get volume label
-//! \return Volume label
+// @brief Get volume label
+// @return Volume label
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 lnk::get_volume_label () const
@@ -1050,8 +1048,8 @@ lnk::get_volume_label () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get drive type
-//! \return Drive type
+// @brief Get drive type
+// @return Drive type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 lnk::get_drive_type () const
@@ -1060,8 +1058,8 @@ lnk::get_drive_type () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get drive serial number
-//! \return Drive serial number
+// @brief Get drive serial number
+// @return Drive serial number
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 lnk::get_drive_serial_number () const
@@ -1070,8 +1068,8 @@ lnk::get_drive_serial_number () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get local base path
-//! \return Local base path
+// @brief Get local base path
+// @return Local base path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 lnk::get_local_base_path () const
@@ -1080,8 +1078,8 @@ lnk::get_local_base_path () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get common path suffix
-//! \return Common path suffix
+// @brief Get common path suffix
+// @return Common path suffix
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 lnk::get_common_path_suffix () const
@@ -1090,8 +1088,8 @@ lnk::get_common_path_suffix () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get net name
-//! \return Net name
+// @brief Get net name
+// @return Net name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 lnk::get_net_name () const
@@ -1100,8 +1098,8 @@ lnk::get_net_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get device name
-//! \return Device name
+// @brief Get device name
+// @return Device name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 lnk::get_device_name () const
@@ -1110,8 +1108,8 @@ lnk::get_device_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get network provider type
-//! \return Network provider type
+// @brief Get network provider type
+// @return Network provider type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 lnk::get_network_provider_type () const
@@ -1120,8 +1118,8 @@ lnk::get_network_provider_type () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get name
-//! \return Name
+// @brief Get name
+// @return Name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 lnk::get_name () const
@@ -1130,8 +1128,8 @@ lnk::get_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get relative path
-//! \return Relative path
+// @brief Get relative path
+// @return Relative path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 lnk::get_relative_path () const
@@ -1140,8 +1138,8 @@ lnk::get_relative_path () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get working dir
-//! \return Working dir
+// @brief Get working dir
+// @return Working dir
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 lnk::get_working_dir () const
@@ -1150,8 +1148,8 @@ lnk::get_working_dir () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get arguments
-//! \return Arguments
+// @brief Get arguments
+// @return Arguments
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 lnk::get_arguments () const
@@ -1160,8 +1158,8 @@ lnk::get_arguments () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get icon location
-//! \return Icon location
+// @brief Get icon location
+// @return Icon location
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 lnk::get_icon_location () const
@@ -1170,8 +1168,8 @@ lnk::get_icon_location () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get NetBIOS name
-//! \return NetBIOS name
+// @brief Get NetBIOS name
+// @return NetBIOS name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 lnk::get_netbios_name () const
@@ -1180,8 +1178,8 @@ lnk::get_netbios_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get header offset
-//! \return Header offset
+// @brief Get header offset
+// @return Header offset
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint64_t
 lnk::get_header_offset () const
@@ -1190,8 +1188,8 @@ lnk::get_header_offset () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get link target id list offset
-//! \return Link target id list offset
+// @brief Get link target id list offset
+// @return Link target id list offset
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint64_t
 lnk::get_link_target_id_list_offset () const
@@ -1200,8 +1198,8 @@ lnk::get_link_target_id_list_offset () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get link info section offset
-//! \return Link info offset
+// @brief Get link info section offset
+// @return Link info offset
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint64_t
 lnk::get_link_info_offset () const
@@ -1210,8 +1208,8 @@ lnk::get_link_info_offset () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get string data section offset
-//! \return String data offset
+// @brief Get string data section offset
+// @return String data offset
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint64_t
 lnk::get_string_data_offset () const
@@ -1220,8 +1218,8 @@ lnk::get_string_data_offset () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get extra data section offset
-//! \return Extra data offset
+// @brief Get extra data section offset
+// @return Extra data offset
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint64_t
 lnk::get_extra_data_offset () const
@@ -1229,5 +1227,6 @@ lnk::get_extra_data_offset () const
   return impl_->get_extra_data_offset ();
 }
 
-} // namespace decoder
-} // namespace mobius
+} // namespace mobius::decoder
+
+

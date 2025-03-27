@@ -20,14 +20,12 @@
 #include <dlfcn.h>
 #include <stdexcept>
 
-namespace mobius
-{
-namespace system
+namespace mobius::system
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param filename Dynamic library path/filename (according to dlopen function)
-//! \param flag Open flag (according to dlopen function)
+// @brief Constructor
+// @param filename Dynamic library path/filename (according to dlopen function)
+// @param flag Open flag (according to dlopen function)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 dynamic_lib::dynamic_lib (const std::string& filename, bool lazy_binding)
 {
@@ -39,7 +37,7 @@ dynamic_lib::dynamic_lib (const std::string& filename, bool lazy_binding)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destructor
+// @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 dynamic_lib::~dynamic_lib ()
 {
@@ -51,8 +49,8 @@ dynamic_lib::~dynamic_lib ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get symbol from library
-//! \return Pointer to symbol or nullptr if symbol does not exist
+// @brief Get symbol from library
+// @return Pointer to symbol or nullptr if symbol does not exist
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void *
 dynamic_lib::get_symbol (const std::string& name) const
@@ -63,5 +61,6 @@ dynamic_lib::get_symbol (const std::string& name) const
   return dlsym (handle_, name.c_str ());
 }
 
-} // namespace system
-} // namespace mobius
+} // namespace mobius::system
+
+

@@ -17,14 +17,14 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "file.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function new_file_by_path
+// @brief Function new_file_by_path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_new_file_by_path (PyObject *, PyObject *args)
@@ -33,26 +33,28 @@ func_new_file_by_path (PyObject *, PyObject *args)
   std::string arg_path;
 
   try
-    { 
+    {
       arg_path = mobius::py::get_arg_as_std_string (args, 0);
     }
   catch (const std::exception& e)
-    { 
+    {
       mobius::py::set_invalid_type_error (e.what ());
       return nullptr;
     }
-    
+
   // execute C++ code
   PyObject *ret = nullptr;
-  
+
   try
     {
       ret = pymobius_io_file_to_pyobject (mobius::io::new_file_by_path (arg_path));
     }
   catch (const std::exception& e)
-    { 
+    {
       mobius::py::set_runtime_error (e.what ());
     }
 
   return ret;
 }
+
+

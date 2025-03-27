@@ -20,16 +20,12 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/io/folder.h>
 
-namespace mobius
-{
-namespace io
-{
-namespace local
+namespace mobius::io::local
 {
 mobius::io::folder get_current_folder ();
 
-} // namespace local
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io::local
 
 #endif
+
+

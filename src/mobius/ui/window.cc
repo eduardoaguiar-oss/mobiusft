@@ -21,7 +21,7 @@
 namespace mobius::ui
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 window::window ()
   : impl_ (get_implementation ()->new_window ())
@@ -29,8 +29,8 @@ window::window ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor from implementation pointer
-//! \param impl Implementation pointer
+// @brief Constructor from implementation pointer
+// @param impl Implementation pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 window::window (const std::shared_ptr <window_impl_base>& impl)
   : impl_ (impl)
@@ -38,3 +38,5 @@ window::window (const std::shared_ptr <window_impl_base>& impl)
 }
 
 } // namespace mobius::ui
+
+

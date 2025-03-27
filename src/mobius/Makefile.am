@@ -15,7 +15,6 @@ libmobius_la_SOURCES =						\
 libmobius_la_LDFLAGS = -avoid-version $(LIBGCRYPT_LIBS) $(LIBXML2_LIBS)
 
 libmobius_la_LIBADD =						\
-	app/libmobius-app.la					\
 	core/libmobius-core.la					\
 	crypt/libmobius-crypt.la				\
 	database/libmobius-database.la				\
@@ -34,7 +33,6 @@ libmobius_la_LIBADD =						\
 	vfs/libmobius-vfs.la
 
 SUBDIRS =							\
-	app							\
 	core							\
 	crypt							\
 	database						\

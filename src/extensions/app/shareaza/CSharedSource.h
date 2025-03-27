@@ -26,21 +26,21 @@
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief CSharedSource decoder class
+// @brief CSharedSource decoder class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class CSharedSource
 {
 private:
-  //! \brief URL
+  // @brief URL
   std::string url_;
 
-  //! \brief IP
+  // @brief IP
   std::string ip_;
 
-  //! \brief Port number
+  // @brief Port number
   std::uint16_t port_ = 0;
 
-  //! \brief Timestamp
+  // @brief Timestamp
   mobius::datetime::datetime timestamp_;
 
 
@@ -52,8 +52,8 @@ public:
   CSharedSource (mobius::decoder::mfc&, int);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get URL
-  //! \return URL
+  // @brief Get URL
+  // @return URL
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_url () const
@@ -62,8 +62,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get IP address
-  //! \return IP Address
+  // @brief Get IP address
+  // @return IP Address
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_ip () const
@@ -72,8 +72,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get port number
-  //! \return Port number
+  // @brief Get port number
+  // @return Port number
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint16_t
   get_port () const
@@ -82,8 +82,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get timestamp
-  //! \return Date/time
+  // @brief Get timestamp
+  // @return Date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::datetime::datetime
   get_timestamp () const
@@ -95,3 +95,6 @@ public:
 } // namespace mobius::extension::app::shareaza
 
 #endif
+
+
+

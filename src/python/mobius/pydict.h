@@ -30,11 +30,11 @@
 namespace mobius::py
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new Python dict from C++ container
-//! \param container C++ container
-//! \param pyfk Function to convert C++ keys to Python objects
-//! \param pyfv Function to convert C++ values to Python objects
-//! \return Python dict
+// @brief Create new Python dict from C++ container
+// @param container C++ container
+// @param pyfk Function to convert C++ keys to Python objects
+// @param pyfv Function to convert C++ values to Python objects
+// @return Python dict
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename C, typename FK, typename FV> PyObject *
 pydict_from_cpp_container (const C& container, FK pyfk, FV pyfv)
@@ -72,10 +72,10 @@ pydict_from_cpp_container (const C& container, FK pyfk, FV pyfv)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new C++ map from Python dict
-//! \param py_dict Python dict
-//! \param cppfunc Function to Python objects to C++ items
-//! \return Vector
+// @brief Create new C++ map from Python dict
+// @param py_dict Python dict
+// @param cppfunc Function to Python objects to C++ items
+// @return Vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename F1, typename F2> auto
 pydict_to_cpp_container (PyObject *py_dict, F1 cppfunc1, F2 cppfunc2) -> std::map <decltype (cppfunc1 (nullptr)), decltype (cppfunc2 (nullptr))>
@@ -95,12 +95,12 @@ pydict_to_cpp_container (PyObject *py_dict, F1 cppfunc1, F2 cppfunc2) -> std::ma
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get argument and convert to C++ map, using two functions
-//! \param args List of arguments
-//! \param idx Argument number, starting in 0
-//! \param f1 Conversion function 1
-//! \param f2 Conversion function 2
-//! \return C++ map
+// @brief Get argument and convert to C++ map, using two functions
+// @param args List of arguments
+// @param idx Argument number, starting in 0
+// @param f1 Conversion function 1
+// @param f2 Conversion function 2
+// @return C++ map
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename F1, typename F2> decltype (auto)
 get_arg_as_cpp_map (PyObject *args, std::uint32_t idx, F1 f1, F2 f2)
@@ -111,3 +111,5 @@ get_arg_as_cpp_map (PyObject *args, std::uint32_t idx, F1 f1, F2 f2)
 } // namespace mobius::py
 
 #endif
+
+

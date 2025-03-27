@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file ant.cc C++ API <i>mobius.model.ant</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "ant.h"
@@ -26,9 +26,9 @@
 #include "module.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>ant</i> Python object from C++ object
-//! \param obj C++ object
-//! \return new ant object
+// @brief Create <i>ant</i> Python object from C++ object
+// @param obj C++ object
+// @return new ant object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_model_ant_to_pyobject (mobius::model::ant obj)
@@ -49,9 +49,9 @@ pymobius_model_ant_to_pyobject (mobius::model::ant obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>item</i> Attribute getter
-//! \param self Object
-//! \return <i>item</i> attribute
+// @brief <i>item</i> Attribute getter
+// @param self Object
+// @return <i>item</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_item (model_ant_o *self)
@@ -71,9 +71,9 @@ tp_getter_item (model_ant_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>id</i> Attribute getter
-//! \param self Object
-//! \return <i>id</i> attribute
+// @brief <i>id</i> Attribute getter
+// @param self Object
+// @return <i>id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_id (model_ant_o *self)
@@ -93,9 +93,9 @@ tp_getter_id (model_ant_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>name</i> Attribute getter
-//! \param self Object
-//! \return <i>name</i> attribute
+// @brief <i>name</i> Attribute getter
+// @param self Object
+// @return <i>name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_name (model_ant_o *self)
@@ -115,9 +115,9 @@ tp_getter_name (model_ant_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>version</i> Attribute getter
-//! \param self Object
-//! \return <i>version</i> attribute
+// @brief <i>version</i> Attribute getter
+// @param self Object
+// @return <i>version</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_version (model_ant_o *self)
@@ -137,9 +137,9 @@ tp_getter_version (model_ant_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>last_execution_time</i> Attribute getter
-//! \param self Object
-//! \return <i>last_execution_time</i> attribute
+// @brief <i>last_execution_time</i> Attribute getter
+// @param self Object
+// @return <i>last_execution_time</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_last_execution_time (model_ant_o *self)
@@ -159,7 +159,7 @@ tp_getter_last_execution_time (model_ant_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Getters and setters structure
+// @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -202,8 +202,8 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>ant</i> deallocator
-//! \param self Object
+// @brief <i>ant</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (model_ant_o *self)
@@ -213,7 +213,7 @@ tp_dealloc (model_ant_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject model_ant_t =
 {
@@ -266,3 +266,5 @@ PyTypeObject model_ant_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

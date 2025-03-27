@@ -19,8 +19,8 @@
 #include "imagefile_impl.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param impl imagefile_impl object
+// @brief Constructor
+// @param impl imagefile_impl object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 reader_impl_fixed::reader_impl_fixed (const imagefile_impl& impl)
   : size_ (impl.get_size ())
@@ -30,15 +30,15 @@ reader_impl_fixed::reader_impl_fixed (const imagefile_impl& impl)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Read bytes from reader
-//! \param size size in bytes
-//! \return Data
+// @brief Read bytes from reader
+// @param size size in bytes
+// @return Data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 reader_impl_fixed::read (size_type size)
 {
   mobius::bytearray data;
-  
+
   if (!eof ())
     {
       if (reader_.tell () + size >= size_)
@@ -49,3 +49,5 @@ reader_impl_fixed::read (size_type size)
 
   return data;
 }
+
+

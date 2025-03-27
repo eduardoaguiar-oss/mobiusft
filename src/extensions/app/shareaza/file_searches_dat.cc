@@ -23,7 +23,7 @@
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
+// @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_searches_dat::file_searches_dat (const mobius::io::reader& reader)
 {
@@ -66,14 +66,14 @@ file_searches_dat::file_searches_dat (const mobius::io::reader& reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Process CndSearch structure
-//! \param cwndsearch CWndSearch structure
+// @brief Process CndSearch structure
+// @param cwndsearch CWndSearch structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 file_searches_dat::process_cwndsearch_ (const CWndSearch& cwndsearch)
 {
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Remote file stats
+  // @brief Remote file stats
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   struct remote_file_stats
   {
@@ -143,3 +143,7 @@ file_searches_dat::process_cwndsearch_ (const CWndSearch& cwndsearch)
 }
 
 } // namespace mobius::extension::app::shareaza
+
+
+
+

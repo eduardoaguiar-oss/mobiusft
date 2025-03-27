@@ -21,12 +21,10 @@
 #include <vector>
 #include <stdexcept>
 
-namespace mobius
-{
-namespace system
+namespace mobius::system
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Implementation struct
+// @brief Implementation struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct device_list_impl
 {
@@ -39,7 +37,7 @@ struct device_list_impl
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create shared implementation
+// @brief Create shared implementation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 device_list_impl::device_list_impl ()
 {
@@ -55,7 +53,7 @@ device_list_impl::device_list_impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destroy shared implementation
+// @brief Destroy shared implementation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 device_list_impl::~device_list_impl ()
 {
@@ -67,7 +65,7 @@ device_list_impl::~device_list_impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create object
+// @brief Create object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 device_list::device_list ()
 {
@@ -76,7 +74,7 @@ device_list::device_list ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan system devices
+// @brief Scan system devices
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 device_list::scan ()
@@ -95,8 +93,8 @@ device_list::scan ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create iterator to first device
-//! \return const iterator
+// @brief Create iterator to first device
+// @return const iterator
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 device_list::const_iterator
 device_list::begin () const
@@ -105,8 +103,8 @@ device_list::begin () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create iterator pass to last device
-//! \return const iterator
+// @brief Create iterator pass to last device
+// @return const iterator
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 device_list::const_iterator
 device_list::end () const
@@ -114,5 +112,6 @@ device_list::end () const
   return impl_->devices.end ();
 }
 
-} // namespace system
-} // namespace mobius
+} // namespace mobius::system
+
+

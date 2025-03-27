@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API mobius.pod module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API mobius.pod module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pygil.h>
@@ -26,10 +26,10 @@
 #include "data.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <b>mobius.pod.unserialize</b> function
-//! \param self function object
-//! \param args argument list
-//! \return Python object
+// @brief <b>mobius.pod.unserialize</b> function
+// @param self function object
+// @param args argument list
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_pod_unserialize (PyObject *, PyObject *args)
@@ -38,18 +38,18 @@ func_pod_unserialize (PyObject *, PyObject *args)
   mobius::io::reader arg_reader;
 
   try
-    { 
+    {
       arg_reader = mobius::py::get_arg_as_cpp (args, 0, pymobius_io_reader_from_pyobject);
     }
   catch (const std::exception& e)
-    { 
+    {
       mobius::py::set_invalid_type_error (e.what ());
       return nullptr;
     }
 
   // execute C++ code
   PyObject *ret = nullptr;
-  
+
   try
     {
       ret = pymobius_pod_data_to_pyobject (
@@ -59,9 +59,11 @@ func_pod_unserialize (PyObject *, PyObject *args)
             );
     }
   catch (const std::exception& e)
-    { 
+    {
       mobius::py::set_runtime_error (e.what ());
     }
 
   return ret;
 }
+
+

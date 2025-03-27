@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file datasource.cc C++ API <i>mobius.datasource.datasource</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "datasource.h"
@@ -29,9 +29,9 @@
 #include "pod/map.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>datasource</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>datasource</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_datasource_datasource_check (PyObject *value)
@@ -40,9 +40,9 @@ pymobius_datasource_datasource_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>datasource</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New datasource object
+// @brief Create <i>datasource</i> Python object from C++ object
+// @param obj C++ object
+// @return New datasource object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_datasource_datasource_to_pyobject (const mobius::datasource::datasource& obj)
@@ -61,9 +61,9 @@ pymobius_datasource_datasource_to_pyobject (const mobius::datasource::datasource
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>datasource</i> C++ object from Python object
-//! \param value Python value
-//! \return Datasource object
+// @brief Create <i>datasource</i> C++ object from Python object
+// @param value Python value
+// @return Datasource object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datasource::datasource
 pymobius_datasource_datasource_from_pyobject (PyObject *value)
@@ -72,10 +72,10 @@ pymobius_datasource_datasource_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_type</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Object state
+// @brief <i>get_type</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_type (datasource_datasource_o *self, PyObject *)
@@ -97,10 +97,10 @@ tp_f_get_type (datasource_datasource_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_state</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Object state
+// @brief <i>get_state</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_state (datasource_datasource_o *self, PyObject *)
@@ -122,10 +122,10 @@ tp_f_get_state (datasource_datasource_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_available</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return True/False
+// @brief <i>is_available</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return True/False
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_available (datasource_datasource_o *self, PyObject *)
@@ -147,7 +147,7 @@ tp_f_is_available (datasource_datasource_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -173,8 +173,8 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>datasource</i> deallocator
-//! \param self Object
+// @brief <i>datasource</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (datasource_datasource_o *self)
@@ -184,7 +184,7 @@ tp_dealloc (datasource_datasource_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject datasource_datasource_t =
 {
@@ -237,3 +237,5 @@ PyTypeObject datasource_datasource_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

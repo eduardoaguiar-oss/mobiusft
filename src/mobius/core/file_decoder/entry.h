@@ -26,8 +26,8 @@
 namespace mobius::core::file_decoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief entry class
-//! \author Eduardo Aguiar
+// @brief entry class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class entry
 {
@@ -60,10 +60,10 @@ public:
   std::string get_name () const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get metadata
-  //! \param Metadata name
-  //! \param dvalue Default value
-  //! \return Metadata value, if any
+  // @brief Get metadata
+  // @param Metadata name
+  // @param dvalue Default value
+  // @return Metadata value, if any
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   template <typename T> T
   get_metadata (const std::string& name, const T& dvalue = {}) const
@@ -78,13 +78,15 @@ public:
   }
 
 private:
-  //! \brief Implementation class forward declaration
+  // @brief Implementation class forward declaration
   class impl;
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
 } // namespace mobius::core::file_decoder
 
 #endif
+
+

@@ -21,10 +21,10 @@
 namespace mobius::crypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param cipher_id Cipher ID
-//! \param key Cipher key
-//! \param iv Initialization vector
+// @brief Constructor
+// @param cipher_id Cipher ID
+// @param key Cipher key
+// @param iv Initialization vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher_impl_ige::cipher_impl_ige (
   const std::string& cipher_id,
@@ -42,9 +42,9 @@ cipher_impl_ige::cipher_impl_ige (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Encrypt data
-//! \param data Plaintext data
-//! \return Encrypted data
+// @brief Encrypt data
+// @param data Plaintext data
+// @return Encrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 cipher_impl_ige::encrypt (const mobius::bytearray& data)
@@ -64,9 +64,9 @@ cipher_impl_ige::encrypt (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt data
-//! \param data Ciphertext data
-//! \return Decrypted data
+// @brief Decrypt data
+// @param data Ciphertext data
+// @return Decrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 cipher_impl_ige::decrypt (const mobius::bytearray& data)
@@ -86,7 +86,7 @@ cipher_impl_ige::decrypt (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reset cipher mode
+// @brief Reset cipher mode
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 cipher_impl_ige::reset ()
@@ -97,7 +97,7 @@ cipher_impl_ige::reset ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set final flag
+// @brief Set final flag
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 cipher_impl_ige::final ()
@@ -106,3 +106,4 @@ cipher_impl_ige::final ()
 }
 
 } // namespace mobius::crypt
+

@@ -29,7 +29,7 @@ namespace
 // Module data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-//! \brief ID -> Callback builder map
+// @brief ID -> Callback builder map
 std::unordered_map <std::string, mobius::py::callback_builder_type> callbacks_;
 
 } // namespace
@@ -37,9 +37,9 @@ std::unordered_map <std::string, mobius::py::callback_builder_type> callbacks_;
 namespace mobius::py
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Register new callback builder
-//! \param id Event ID
-//! \param builder Callback builder
+// @brief Register new callback builder
+// @param id Event ID
+// @param builder Callback builder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 register_callback_builder (const std::string& id, callback_builder_type builder)
@@ -48,10 +48,10 @@ register_callback_builder (const std::string& id, callback_builder_type builder)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create callback
-//! \param id Event ID
-//! \param f Python function
-//! \return Callback object
+// @brief Create callback
+// @param id Event ID
+// @param f Python function
+// @return Callback object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::callback
 new_callback (const std::string& id, PyObject *f)
@@ -67,3 +67,5 @@ new_callback (const std::string& id, PyObject *f)
 }
 
 } // namespace mobius::py
+
+

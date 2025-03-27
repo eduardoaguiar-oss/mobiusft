@@ -25,7 +25,7 @@ std::size_t unittest::global_errors_ = 0;
 std::size_t unittest::global_unittests_ = 0;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
+// @brief constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 unittest::unittest (const std::string& title)
   : title_ (title), count_ (0), errors_ (0)
@@ -34,7 +34,7 @@ unittest::unittest (const std::string& title)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief terminate test set
+// @brief terminate test set
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 unittest::end ()
@@ -51,10 +51,10 @@ unittest::end ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief test whether condition is true
-//! \param b condition (boolean)
-//! \param line code line number
-//! \param e expression
+// @brief test whether condition is true
+// @param b condition (boolean)
+// @param line code line number
+// @param e expression
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 unittest::assert_true (bool b, std::size_t line, const char *e)
@@ -71,10 +71,10 @@ unittest::assert_true (bool b, std::size_t line, const char *e)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief test whether condition is false
-//! \param b condition (boolean)
-//! \param line code line number
-//! \param e expression
+// @brief test whether condition is false
+// @param b condition (boolean)
+// @param line code line number
+// @param e expression
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 unittest::assert_false (bool b, std::size_t line, const char *e)
@@ -91,11 +91,11 @@ unittest::assert_false (bool b, std::size_t line, const char *e)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief test whether two expressions are equal
-//! \param b condition (boolean)
-//! \param line code line number
-//! \param e1 first expression
-//! \param e2 second expression
+// @brief test whether two expressions are equal
+// @param b condition (boolean)
+// @param line code line number
+// @param e1 first expression
+// @param e2 second expression
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 unittest::assert_equal (bool b, std::size_t line, const char *e1, const char *e2)
@@ -112,11 +112,11 @@ unittest::assert_equal (bool b, std::size_t line, const char *e1, const char *e2
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief test whether two expressions are not equal
-//! \param b condition (boolean)
-//! \param line code line number
-//! \param e1 first expression
-//! \param e2 second expression
+// @brief test whether two expressions are not equal
+// @param b condition (boolean)
+// @param line code line number
+// @param e1 first expression
+// @param e2 second expression
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 unittest::assert_not_equal (bool b, std::size_t line, const char *e1, const char *e2)
@@ -133,11 +133,11 @@ unittest::assert_not_equal (bool b, std::size_t line, const char *e1, const char
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief test whether an expression throws an exception
-//! \param b whether expression threw an exception
-//! \param line code line number
-//! \param e expression
-//! \param exc exception
+// @brief test whether an expression throws an exception
+// @param b whether expression threw an exception
+// @param line code line number
+// @param e expression
+// @param exc exception
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 unittest::assert_exception (int rc, std::size_t line, const char *e, const char *exc)
@@ -159,7 +159,7 @@ unittest::assert_exception (int rc, std::size_t line, const char *e, const char 
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief generate final summary
+// @brief generate final summary
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 unittest::final_summary ()
@@ -171,3 +171,5 @@ unittest::final_summary ()
 }
 
 } // namespace mobius
+
+

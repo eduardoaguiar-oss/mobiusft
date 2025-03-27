@@ -17,6 +17,9 @@ set(TOP_BUILD_DIR ${CMAKE_BINARY_DIR}/../../../../..)
 # Add include directories
 include_directories(${TOP_SRC_DIR}/src)
 
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# EXTENSION
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Define source files
 set(SOURCES
     main.cpp
@@ -42,3 +45,16 @@ target_link_libraries(app_emule PRIVATE ${MOBIUS_LIB} ${MOBIUS_FRAMEWORK_LIB})
 
 # Install to the same location as the original
 install(TARGETS app_emule LIBRARY DESTINATION share/mobiusft/extensions)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# TOOLS
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+set(STORED_SEARCHES_MET_SOURCES
+    tools/emule_stored_searches_met.cpp
+    file_stored_searches_met.cpp
+)
+
+add_executable(emule_stored_searches_met ${STORED_SEARCHES_MET_SOURCES})
+target_link_libraries(emule_stored_searches_met PRIVATE ${MOBIUS_LIB} ${MOBIUS_FRAMEWORK_LIB})
+
+install(TARGETS emule_stored_searches_met RUNTIME DESTINATION share/mobiusft/tools)

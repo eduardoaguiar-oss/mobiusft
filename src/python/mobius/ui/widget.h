@@ -23,7 +23,7 @@
 #include <mobius/ui/widget.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -41,3 +41,5 @@ PyObject *pymobius_ui_widget_to_pyobject (const mobius::ui::widget&);
 mobius::ui::widget pymobius_ui_widget_from_pyobject (PyObject *);
 
 #endif
+
+

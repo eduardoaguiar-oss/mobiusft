@@ -22,8 +22,8 @@
 namespace mobius::ui
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor from implementation pointer
-//! \param impl Implementation pointer
+// @brief Constructor from implementation pointer
+// @param impl Implementation pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 box::box (const std::shared_ptr <box_impl_base>& impl)
   : widget (std::static_pointer_cast <widget_impl_base> (impl))
@@ -31,8 +31,8 @@ box::box (const std::shared_ptr <box_impl_base>& impl)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param orientation Box orientation
+// @brief Constructor
+// @param orientation Box orientation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 box::box (orientation_type orientation)
   : widget (std::static_pointer_cast <widget_impl_base> (get_implementation ()->new_box (orientation)))
@@ -40,7 +40,7 @@ box::box (orientation_type orientation)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add filler
+// @brief Add filler
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 box::add_filler ()
@@ -52,3 +52,5 @@ box::add_filler ()
 }
 
 } // namespace mobius::ui
+
+

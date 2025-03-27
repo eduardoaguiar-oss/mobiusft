@@ -19,21 +19,19 @@
 #include <mobius/exception.inc>
 #include <stdexcept>
 
-namespace mobius
-{
-namespace vfs
+namespace mobius::vfs
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Implementation class
-//! \author Eduardo Aguiar
+// @brief Implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class segment_array::impl
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Constructor
-  //! \param f First segment file
-  //! \param func <tt>ext = func (idx)</tt> (get file extension for idx)
+  // @brief Constructor
+  // @param f First segment file
+  // @param func <tt>ext = func (idx)</tt> (get file extension for idx)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   impl (const mobius::io::file& f, func_get_extension_type func)
     : file_ (f),
@@ -42,8 +40,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get number of segments
-  //! \return Number of segments
+  // @brief Get number of segments
+  // @return Number of segments
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   idx_type
   get_size () const
@@ -52,8 +50,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get total data size
-  //! \return Total data size in bytes
+  // @brief Get total data size
+  // @return Total data size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_data_size () const
@@ -62,9 +60,9 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Create new reader
-  //! \param idx Segment index, starting from 0
-  //! \return New reader object
+  // @brief Create new reader
+  // @param idx Segment index, starting from 0
+  // @return New reader object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::io::reader
   new_reader (idx_type idx)
@@ -89,7 +87,7 @@ private:
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan segment files
+// @brief Scan segment files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 segment_array::impl::scan ()
@@ -103,7 +101,7 @@ segment_array::impl::scan ()
     {
       segments_.push_back (f);
       data_size_ += f.get_size ();
-      
+
       i++;
       auto ext = func_extension_ (i);
       f = file_.new_sibling_by_extension (ext);
@@ -111,9 +109,9 @@ segment_array::impl::scan ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new writer
-//! \param idx Segment index, starting from 0
-//! \return New writer object
+// @brief Create new writer
+// @param idx Segment index, starting from 0
+// @return New writer object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::writer
 segment_array::impl::new_writer (idx_type idx)
@@ -133,7 +131,7 @@ segment_array::impl::new_writer (idx_type idx)
           auto f = file_.new_sibling_by_extension (ext);
           segments_.push_back (f);
         }
-        
+
       flag_overwrite = true;
     }
 
@@ -142,9 +140,9 @@ segment_array::impl::new_writer (idx_type idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param f First segment file
-//! \param func <tt>ext = func (idx)</tt> (get file extension for idx)
+// @brief Constructor
+// @param f First segment file
+// @param func <tt>ext = func (idx)</tt> (get file extension for idx)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 segment_array::segment_array (
   const mobius::io::file& f,
@@ -155,8 +153,8 @@ segment_array::segment_array (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get number of segments
-//! \return Number of segments
+// @brief Get number of segments
+// @return Number of segments
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 segment_array::idx_type
 segment_array::get_size () const
@@ -165,8 +163,8 @@ segment_array::get_size () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get total data size
-//! \return Total data size in bytes
+// @brief Get total data size
+// @return Total data size in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 segment_array::size_type
 segment_array::get_data_size () const
@@ -175,7 +173,7 @@ segment_array::get_data_size () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan segment files
+// @brief Scan segment files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 segment_array::scan ()
@@ -184,9 +182,9 @@ segment_array::scan ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new reader
-//! \param idx Segment index, starting from 0
-//! \return New reader object
+// @brief Create new reader
+// @param idx Segment index, starting from 0
+// @return New reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::reader
 segment_array::new_reader (idx_type idx)
@@ -195,9 +193,9 @@ segment_array::new_reader (idx_type idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new writer
-//! \param idx Segment index, starting from 0
-//! \return New writer object
+// @brief Create new writer
+// @param idx Segment index, starting from 0
+// @return New writer object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::writer
 segment_array::new_writer (idx_type idx)
@@ -205,5 +203,6 @@ segment_array::new_writer (idx_type idx)
   return impl_->new_writer (idx);
 }
 
-} // namespace vfs
-} // namespace mobius
+} // namespace mobius::vfs
+
+

@@ -23,15 +23,11 @@
 
 struct TSK_FS_ATTR;
 
-namespace mobius
-{
-namespace vfs
-{
-namespace tsk
+namespace mobius::vfs::tsk
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief stream_impl_tsk class
-//! \author Eduardo Aguiar
+// @brief stream_impl_tsk class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class stream_impl : public mobius::io::stream_impl_base
 {
@@ -50,8 +46,8 @@ public:
   stream_impl& operator= (stream_impl&&) noexcept = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if object is valid
-  //! \return true/false
+  // @brief Check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const noexcept
   {
@@ -59,8 +55,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get stream size
-  //! \return Stream size in bytes
+  // @brief Get stream size
+  // @return Stream size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   size_type
   get_size () const override
@@ -69,8 +65,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get stream type
-  //! \return Type
+  // @brief Get stream type
+  // @return Type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   int
   get_type () const override
@@ -79,8 +75,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get stream name
-  //! \return Name
+  // @brief Get stream name
+  // @return Name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_name () const override
@@ -94,24 +90,24 @@ public:
   mobius::io::reader new_reader () const override;
 
 private:
-  //! \brief fs_file handler object. Must hold while using fs_attr_
+  // @brief fs_file handler object. Must hold while using fs_attr_
   const fs_file fs_file_;
 
-  //! \brief libtsk file structure pointer
+  // @brief libtsk file structure pointer
   const TSK_FS_ATTR *fs_attr_;
-  
-  //! \brief Stream size
+
+  // @brief Stream size
   const size_type size_ = 0;
-  
-  //! \brief Stream type
+
+  // @brief Stream type
   const int type_ = 0;
-  
-  //! \brief Stream name
+
+  // @brief Stream name
   const std::string name_;
 };
 
-} // namespace tsk
-} // namespace vfs
-} // namespace mobius
+} // namespace mobius::vfs::tsk
 
 #endif
+
+

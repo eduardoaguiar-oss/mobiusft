@@ -21,7 +21,7 @@
 namespace mobius
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
+// @brief constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 benchmark::benchmark (const std::string& title, const std::string& unit)
   : title_ (title),
@@ -33,8 +33,8 @@ benchmark::benchmark (const std::string& title, const std::string& unit)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get time from the start of this benchmark
-//! \return time in microseconds
+// @brief get time from the start of this benchmark
+// @return time in microseconds
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint64_t
 benchmark::mtime () const
@@ -44,8 +44,8 @@ benchmark::mtime () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief end benchmark
-//! \param count test count
+// @brief end benchmark
+// @param count test count
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 benchmark::end (std::uint64_t count)
@@ -66,3 +66,5 @@ benchmark::end (std::uint64_t count)
 }
 
 } // namespace mobius
+
+

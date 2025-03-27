@@ -22,7 +22,7 @@
 #include <mobius/decoder/mfc.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -38,3 +38,7 @@ extern PyTypeObject decoder_mfc_t;
 PyObject *pymobius_decoder_mfc_to_pyobject (mobius::decoder::mfc);
 
 #endif
+
+
+
+

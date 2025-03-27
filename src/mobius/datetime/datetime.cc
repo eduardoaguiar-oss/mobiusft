@@ -18,14 +18,12 @@
 #include "datetime.h"
 #include <chrono>
 
-namespace mobius
-{
-namespace datetime
+namespace mobius::datetime
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Construct datetime from date and time
-//! \param d date object
-//! \param t time object
+// @brief Construct datetime from date and time
+// @param d date object
+// @param t time object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datetime::datetime (const date& d, const time& t) noexcept
   : date_ (d),
@@ -35,10 +33,10 @@ datetime::datetime (const date& d, const time& t) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Subtract timedelta from datetime object
-//! \param dt datetime object
-//! \param delta timedelta object
-//! \return new datetime object
+// @brief Subtract timedelta from datetime object
+// @param dt datetime object
+// @param delta timedelta object
+// @return new datetime object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datetime
 now ()
@@ -50,9 +48,9 @@ now ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Compare two datetimes
-//! \param d1 datetime object
-//! \param d2 datetime object
+// @brief Compare two datetimes
+// @param d1 datetime object
+// @param d2 datetime object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator== (const datetime& d1, const datetime& d2) noexcept
@@ -63,10 +61,10 @@ operator== (const datetime& d1, const datetime& d2) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add timedelta to datetime object
-//! \param dt datetime object
-//! \param delta timedelta object
-//! \return new datetime object
+// @brief Add timedelta to datetime object
+// @param dt datetime object
+// @param delta timedelta object
+// @return new datetime object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datetime
 operator+ (const datetime& dt, const timedelta& delta) noexcept
@@ -98,10 +96,10 @@ operator+ (const datetime& dt, const timedelta& delta) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Subtract timedelta from datetime object
-//! \param dt datetime object
-//! \param delta timedelta object
-//! \return new datetime object
+// @brief Subtract timedelta from datetime object
+// @param dt datetime object
+// @param delta timedelta object
+// @return new datetime object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datetime
 operator- (const datetime& dt, const timedelta& delta) noexcept
@@ -115,9 +113,9 @@ operator- (const datetime& dt, const timedelta& delta) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert datetime to string
-//! \param dt datetime object
-//! \return string
+// @brief Convert datetime to string
+// @param dt datetime object
+// @return string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 to_string (const datetime& dt)
@@ -129,10 +127,10 @@ to_string (const datetime& dt)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Write datetime representation to std::ostream
-//! \param stream ostream reference
-//! \param dt datetime object
-//! \return reference to ostream
+// @brief Write datetime representation to std::ostream
+// @param stream ostream reference
+// @param dt datetime object
+// @return reference to ostream
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::ostream&
 operator<< (std::ostream& stream, const datetime& dt)
@@ -142,5 +140,6 @@ operator<< (std::ostream& stream, const datetime& dt)
   return stream;
 }
 
-} // namespace datetime
-} // namespace mobius
+} // namespace mobius::datetime
+
+

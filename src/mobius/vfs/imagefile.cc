@@ -26,7 +26,7 @@
 namespace mobius::vfs
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Construct object
+// @brief Construct object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile::imagefile ()
 {
@@ -34,8 +34,8 @@ imagefile::imagefile ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor from implementation pointer
-//! \param impl implementation pointer
+// @brief Constructor from implementation pointer
+// @param impl implementation pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile::imagefile (const std::shared_ptr <imagefile_impl_base>& impl)
   : impl_ (impl)
@@ -43,9 +43,9 @@ imagefile::imagefile (const std::shared_ptr <imagefile_impl_base>& impl)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor from file object
-//! \param f File object
-//! \param type Imagefile type (default = "autodetect")
+// @brief Constructor from file object
+// @param f File object
+// @param type Imagefile type (default = "autodetect")
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile::imagefile (const mobius::io::file& f, const std::string& type)
   : impl_ (build_imagefile_implementation (f, type))
@@ -53,8 +53,8 @@ imagefile::imagefile (const mobius::io::file& f, const std::string& type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get metadata
-//! \return imagefile metadata
+// @brief Get metadata
+// @return imagefile metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::metadata
 imagefile::get_metadata () const
@@ -99,10 +99,10 @@ imagefile::get_metadata () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Build implementation, according to ID
-//! \param f File object
-//! \param id Implementation ID
-//! \return shared_ptr to implementation object
+// @brief Build implementation, according to ID
+// @param f File object
+// @param id Implementation ID
+// @return shared_ptr to implementation object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::shared_ptr <imagefile_impl_base>
 build_imagefile_implementation (const mobius::io::file& f, const std::string& id)
@@ -136,10 +136,10 @@ build_imagefile_implementation (const mobius::io::file& f, const std::string& id
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new imagefile object by URL
-//! \param url Imagefile URL
-//! \param type Imagefile type (default = "autodetect")
-//! \return Imagefile object
+// @brief Create new imagefile object by URL
+// @param url Imagefile URL
+// @param type Imagefile type (default = "autodetect")
+// @return Imagefile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile
 new_imagefile_by_url (const std::string& url, const std::string& type)
@@ -149,10 +149,10 @@ new_imagefile_by_url (const std::string& url, const std::string& type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new imagefile object by path
-//! \param path Imagefile path
-//! \param type Imagefile type (default = "autodetect")
-//! \return Imagefile object
+// @brief Create new imagefile object by path
+// @param path Imagefile path
+// @param type Imagefile type (default = "autodetect")
+// @return Imagefile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile
 new_imagefile_by_path (const std::string& path, const std::string& type)
@@ -162,10 +162,10 @@ new_imagefile_by_path (const std::string& path, const std::string& type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new imagefile object from file
-//! \param f File object
-//! \param type Imagefile type (default = "autodetect")
-//! \return Imagefile object
+// @brief Create new imagefile object from file
+// @param f File object
+// @param type Imagefile type (default = "autodetect")
+// @return Imagefile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile
 new_imagefile_from_file (const mobius::io::file& f, const std::string& type)
@@ -174,3 +174,5 @@ new_imagefile_from_file (const mobius::io::file& f, const std::string& type)
 }
 
 } // namespace mobius::vfs
+
+

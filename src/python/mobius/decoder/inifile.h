@@ -23,7 +23,7 @@
 #include <mobius/decoder/inifile.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -41,3 +41,7 @@ PyObject *pymobius_decoder_inifile_to_pyobject (const mobius::decoder::inifile&)
 mobius::decoder::inifile pymobius_decoder_inifile_from_pyobject (PyObject *);
 
 #endif
+
+
+
+

@@ -23,10 +23,10 @@
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode fragment
-//! \param decoder MFC decoder object
-//! \param version Structure version
-//! \see FileFragments/Compatibility.hpp - SerializeIn
+// @brief Decode fragment
+// @param decoder MFC decoder object
+// @param version Structure version
+// @see FileFragments/Compatibility.hpp - SerializeIn
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 CDownloadSource::decode_fragment (mobius::decoder::mfc& decoder, int version)
@@ -49,10 +49,10 @@ CDownloadSource::decode_fragment (mobius::decoder::mfc& decoder, int version)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode fragments
-//! \param decoder MFC decoder object
-//! \param version Structure version
-//! \see FileFragments/Compatibility.hpp - SerializeIn2
+// @brief Decode fragments
+// @param decoder MFC decoder object
+// @param version Structure version
+// @see FileFragments/Compatibility.hpp - SerializeIn2
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 CDownloadSource::decode_fragments (mobius::decoder::mfc& decoder, int version)
@@ -73,9 +73,9 @@ CDownloadSource::decode_fragments (mobius::decoder::mfc& decoder, int version)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param decoder MFC decoder object
-//! \param version Structure version
+// @brief Constructor
+// @param decoder MFC decoder object
+// @param version Structure version
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 CDownloadSource::CDownloadSource (mobius::decoder::mfc& decoder, int version)
 {
@@ -187,7 +187,7 @@ CDownloadSource::CDownloadSource (mobius::decoder::mfc& decoder, int version)
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // If IP is empty, try to get IP from ED2KFTP URL
-  //! \see DownloadWithSources.cpp - CDownloadWithSources::Serialize
+  // @see DownloadWithSources.cpp - CDownloadWithSources::Serialize
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   if (ip_.empty () && mobius::string::startswith (url_, "ed2kftp://"))
     {
@@ -199,3 +199,7 @@ CDownloadSource::CDownloadSource (mobius::decoder::mfc& decoder, int version)
 }
 
 } // namespace mobius::extension::app::shareaza
+
+
+
+

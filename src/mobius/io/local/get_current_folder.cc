@@ -21,27 +21,23 @@
 #include <unistd.h>
 #include <limits.h>
 
-namespace mobius
-{
-namespace io
-{
-namespace local
+namespace mobius::io::local
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get current folder
-//! \return Folder object
+// @brief Get current folder
+// @return Folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::folder
 get_current_folder ()
 {
   char buffer[PATH_MAX];
-  
+
   if (!getcwd (buffer, PATH_MAX))
     throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
 
   return mobius::io::new_folder_by_path (buffer);
 }
 
-} // namespace local
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io::local
+
+

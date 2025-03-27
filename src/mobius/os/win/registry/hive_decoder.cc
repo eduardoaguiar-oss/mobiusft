@@ -18,13 +18,7 @@
 #include "hive_decoder.h"
 #include <mobius/decoder/data_decoder.h>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace registry
+namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // constants
@@ -33,9 +27,9 @@ static constexpr std::uint32_t INVALID_OFFSET = 0xffffffff;
 static constexpr std::uint32_t HIVE_BASE_OFFSET = 4096;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get absolute offset
-//! \param offset relative offset
-//! \return absolute offset
+// @brief get absolute offset
+// @param offset relative offset
+// @return absolute offset
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::uint32_t
 get_offset (mobius::decoder::data_decoder& decoder)
@@ -49,13 +43,13 @@ get_offset (mobius::decoder::data_decoder& decoder)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
-//! \param reader generic reader
-//! \see http://en.wikipedia.org/wiki/Windows_Registry
-//! \see http://www.sentinelchicken.com/data/TheWindowsNTRegistryFileFormat.pdf
-//! \see http://github.com/libyal/libregf/blob/master/documentation/Windows%20NT%20Registry%20File%20%28REGF%29%20format.asciidoc
-//! \see http://github.com/msuhanov/regf/blob/master/Windows%20registry%20file%20format%20specification.md
-//! \see https://binaryforay.blogspot.com.br/2015/01/registry-hive-basics.html
+// @brief constructor
+// @param reader generic reader
+// @see http://en.wikipedia.org/wiki/Windows_Registry
+// @see http://www.sentinelchicken.com/data/TheWindowsNTRegistryFileFormat.pdf
+// @see http://github.com/libyal/libregf/blob/master/documentation/Windows%20NT%20Registry%20File%20%28REGF%29%20format.asciidoc
+// @see http://github.com/msuhanov/regf/blob/master/Windows%20registry%20file%20format%20specification.md
+// @see https://binaryforay.blogspot.com.br/2015/01/registry-hive-basics.html
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_decoder::hive_decoder (mobius::io::reader reader)
   : reader_ (reader)
@@ -63,8 +57,8 @@ hive_decoder::hive_decoder (mobius::io::reader reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief decode hivefile header
-//! \return header_data structure
+// @brief decode hivefile header
+// @return header_data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 header_data
 hive_decoder::decode_header ()
@@ -101,8 +95,8 @@ hive_decoder::decode_header ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief decode vk structure
-//! \return vk_data structure
+// @brief decode vk structure
+// @return vk_data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 vk_data
 hive_decoder::decode_vk (offset_type offset)
@@ -158,8 +152,8 @@ hive_decoder::decode_vk (offset_type offset)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief decode subkeys list
-//! \return vector of offsets
+// @brief decode subkeys list
+// @return vector of offsets
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <hive_decoder::offset_type>
 hive_decoder::decode_subkeys_list (offset_type offset)
@@ -171,8 +165,8 @@ hive_decoder::decode_subkeys_list (offset_type offset)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief decode values list
-//! \return vector of offsets
+// @brief decode values list
+// @return vector of offsets
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <hive_decoder::offset_type>
 hive_decoder::decode_values_list (offset_type offset, std::uint32_t count)
@@ -206,9 +200,9 @@ hive_decoder::decode_values_list (offset_type offset, std::uint32_t count)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief retrieve subkeys from list, recursively
-//! \param offsets offset vector
-//! \param offset list offset
+// @brief retrieve subkeys from list, recursively
+// @param offsets offset vector
+// @param offset list offset
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 hive_decoder::_retrieve_subkeys (std::vector <offset_type>& offsets, offset_type offset)
@@ -280,11 +274,11 @@ hive_decoder::_retrieve_subkeys (std::vector <offset_type>& offsets, offset_type
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief decode value's data
-//! \param offset offset in bytes
-//! \param size data size
-//! \return data
-//! \see https://binaryforay.blogspot.com.br/2015/08/registry-hive-basics-part-5-lists.html
+// @brief decode value's data
+// @param offset offset in bytes
+// @param size data size
+// @return data
+// @see https://binaryforay.blogspot.com.br/2015/08/registry-hive-basics-part-5-lists.html
 //! \todo big data (db)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
@@ -327,10 +321,10 @@ hive_decoder::decode_data (offset_type offset, std::uint32_t size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief decode data cell
-//! \param offset offset in bytes
-//! \param size data size
-//! \return data
+// @brief decode data cell
+// @param offset offset in bytes
+// @param size data size
+// @return data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 hive_decoder::decode_data_cell (offset_type offset)
@@ -355,10 +349,10 @@ hive_decoder::decode_data_cell (offset_type offset)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief decode big data cell
-//! \param offset offset in bytes
-//! \param size data size
-//! \return data
+// @brief decode big data cell
+// @param offset offset in bytes
+// @param size data size
+// @return data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 hive_decoder::decode_data_db (offset_type offset)
@@ -404,7 +398,6 @@ hive_decoder::decode_data_db (offset_type offset)
   return data;
 }
 
-} // namespace registry
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::registry
+
+

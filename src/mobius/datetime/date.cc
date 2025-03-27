@@ -18,13 +18,11 @@
 #include "date.h"
 #include "conv_julian.h"
 
-namespace mobius
-{
-namespace datetime
+namespace mobius::datetime
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if year is a leap year
-//! \return true/false
+// @brief Check if year is a leap year
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 date::is_leap_year () const noexcept
@@ -34,8 +32,8 @@ date::is_leap_year () const noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get date weekday
-//! \return Weekday (0 = Monday, 6 = Sunday)
+// @brief Get date weekday
+// @return Weekday (0 = Monday, 6 = Sunday)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int
 date::get_weekday () const noexcept
@@ -44,10 +42,10 @@ date::get_weekday () const noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Compare two dates
-//! \param d1 date object
-//! \param d2 date object
-//! \return true if the two dates are equal
+// @brief Compare two dates
+// @param d1 date object
+// @param d2 date object
+// @return true if the two dates are equal
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator== (const mobius::datetime::date& d1, const mobius::datetime::date& d2) noexcept
@@ -59,10 +57,10 @@ operator== (const mobius::datetime::date& d1, const mobius::datetime::date& d2) 
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Compare two dates
-//! \param d1 date object
-//! \param d2 date object
-//! \return true if the d1 < d2
+// @brief Compare two dates
+// @param d1 date object
+// @param d2 date object
+// @return true if the d1 < d2
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator< (const mobius::datetime::date& d1, const mobius::datetime::date& d2) noexcept
@@ -78,8 +76,8 @@ operator< (const mobius::datetime::date& d1, const mobius::datetime::date& d2) n
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Calculate the number of days between two dates
-//! \return timedelta object
+// @brief Calculate the number of days between two dates
+// @return timedelta object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 timedelta
 operator- (const date& d1, const date& d2) noexcept
@@ -91,8 +89,8 @@ operator- (const date& d1, const date& d2) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add timedelta to a date
-//! \return date object
+// @brief Add timedelta to a date
+// @return date object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 date
 operator+ (const date& d, const timedelta& delta) noexcept
@@ -104,8 +102,8 @@ operator+ (const date& d, const timedelta& delta) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Subtract timedelta from a date
-//! \return date object
+// @brief Subtract timedelta from a date
+// @return date object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 date
 operator- (const date& d, const timedelta& delta) noexcept
@@ -119,9 +117,9 @@ operator- (const date& d, const timedelta& delta) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert date to string
-//! \param d date object
-//! \return string
+// @brief Convert date to string
+// @param d date object
+// @return string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 to_string (const date& d)
@@ -144,10 +142,10 @@ to_string (const date& d)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Write datetime representation to std::ostream
-//! \param stream ostream reference
-//! \param dt datetime object
-//! \return reference to ostream
+// @brief Write datetime representation to std::ostream
+// @param stream ostream reference
+// @param dt datetime object
+// @return reference to ostream
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::ostream&
 operator<< (std::ostream& stream, const date& d)
@@ -157,5 +155,6 @@ operator<< (std::ostream& stream, const date& d)
   return stream;
 }
 
-} // namespace datetime
-} // namespace mobius
+} // namespace mobius::datetime
+
+

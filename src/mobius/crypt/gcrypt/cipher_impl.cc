@@ -26,7 +26,7 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Map cipher alias. It contains only those IDs that differs from GCRYPT.name
+// @brief Map cipher alias. It contains only those IDs that differs from GCRYPT.name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const std::unordered_map <std::string, int> CIPHERS =
 {
@@ -37,7 +37,7 @@ static const std::unordered_map <std::string, int> CIPHERS =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Map cipher mode name to ID
+// @brief Map cipher mode name to ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const std::unordered_map <std::string, int> MODES =
 {
@@ -60,9 +60,9 @@ static const std::unordered_map <std::string, int> MODES =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get cipher algorithm ID
-//! \param name Algorithm name
-//! \return Algo ID or 0, if not found
+// @brief Get cipher algorithm ID
+// @param name Algorithm name
+// @return Algo ID or 0, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static int
 _get_algo_id (const std::string& name)
@@ -81,9 +81,9 @@ _get_algo_id (const std::string& name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get cipher mode ID
-//! \param name Mode name
-//! \return Mode ID or 0, if not found
+// @brief Get cipher mode ID
+// @param name Mode name
+// @return Mode ID or 0, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static int
 _get_mode_id (const std::string& name)
@@ -99,10 +99,10 @@ _get_mode_id (const std::string& name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Format DES cipher key to 8 bytes
-//! \param key Key
-//! \return Key reformatted, if necessary
-//! \see https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-samr/ebdb15df-8d0d-4347-9d62-082e6eccac40
+// @brief Format DES cipher key to 8 bytes
+// @param key Key
+// @return Key reformatted, if necessary
+// @see https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-samr/ebdb15df-8d0d-4347-9d62-082e6eccac40
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::bytearray
 _des_key (const mobius::bytearray& key)
@@ -129,9 +129,9 @@ _des_key (const mobius::bytearray& key)
 namespace mobius::crypt::gcrypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param algo Algorithm name
-//! \param mode Mode name
+// @brief Constructor
+// @param algo Algorithm name
+// @param mode Mode name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher_impl::cipher_impl (const std::string& algo, const std::string& mode)
 {
@@ -187,7 +187,7 @@ cipher_impl::cipher_impl (const std::string& algo, const std::string& mode)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destructor
+// @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher_impl::~cipher_impl ()
 {
@@ -196,7 +196,7 @@ cipher_impl::~cipher_impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reset cipher
+// @brief Reset cipher
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 cipher_impl::reset ()
@@ -216,7 +216,7 @@ cipher_impl::reset ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set final flag on encryption/decryption
+// @brief Set final flag on encryption/decryption
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 cipher_impl::final ()
@@ -227,8 +227,8 @@ cipher_impl::final ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Authenticate data
-//! \param data Data
+// @brief Authenticate data
+// @param data Data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 cipher_impl::authenticate (const mobius::bytearray& data)
@@ -239,8 +239,8 @@ cipher_impl::authenticate (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get authentication tag
-//! \return Tag
+// @brief Get authentication tag
+// @return Tag
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 cipher_impl::get_tag () const
@@ -255,9 +255,9 @@ cipher_impl::get_tag () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check authentication tag
-//! \param tag Tag to compare
-//! \return True if tag match
+// @brief Check authentication tag
+// @param tag Tag to compare
+// @return True if tag match
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 cipher_impl::check_tag (const mobius::bytearray& tag) const
@@ -271,8 +271,8 @@ cipher_impl::check_tag (const mobius::bytearray& tag) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set key
-//! \param key Key
+// @brief Set key
+// @param key Key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 cipher_impl::set_key (const mobius::bytearray& key)
@@ -290,8 +290,8 @@ cipher_impl::set_key (const mobius::bytearray& key)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set initialization vector (IV)
-//! \param iv Initialization vector
+// @brief Set initialization vector (IV)
+// @param iv Initialization vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 cipher_impl::set_iv (const mobius::bytearray& iv)
@@ -304,8 +304,8 @@ cipher_impl::set_iv (const mobius::bytearray& iv)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set counter vector
-//! \param cv Counter vector
+// @brief Set counter vector
+// @param cv Counter vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 cipher_impl::set_counter (const mobius::bytearray& cv)
@@ -318,9 +318,9 @@ cipher_impl::set_counter (const mobius::bytearray& cv)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Encrypt data
-//! \param data Data to be encrypted
-//! \return Encrypted data
+// @brief Encrypt data
+// @param data Data to be encrypted
+// @return Encrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 cipher_impl::encrypt (const mobius::bytearray& data)
@@ -335,9 +335,9 @@ cipher_impl::encrypt (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt data
-//! \param data Data to be decrypted
-//! \return Decrypted data
+// @brief Decrypt data
+// @param data Data to be decrypted
+// @return Decrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 cipher_impl::decrypt (const mobius::bytearray& data)
@@ -352,3 +352,4 @@ cipher_impl::decrypt (const mobius::bytearray& data)
 }
 
 } // namespace mobius::crypt
+

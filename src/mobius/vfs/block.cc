@@ -27,7 +27,7 @@
 namespace mobius::vfs
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 block::block ()
  : impl_ (std::make_shared <block_impl_null> ())
@@ -35,8 +35,8 @@ block::block ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor from implementation pointer
-//! \param impl Implementation pointer
+// @brief Constructor from implementation pointer
+// @param impl Implementation pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 block::block (const std::shared_ptr <block_impl_base>& impl)
   : impl_ (impl)
@@ -44,8 +44,8 @@ block::block (const std::shared_ptr <block_impl_base>& impl)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param state Object state
+// @brief Constructor
+// @param state Object state
 //! \deprecated since=2.5 datasource type blocks
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 block::block (const mobius::pod::map& state)
@@ -69,11 +69,11 @@ block::block (const mobius::pod::map& state)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create child slice block from block
-//! \param type Block type
-//! \param start Start position at parent block
-//! \param end End position at parent block
-//! \return Block object
+// @brief Create child slice block from block
+// @param type Block type
+// @param start Start position at parent block
+// @param end End position at parent block
+// @return Block object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 block
 block::new_slice_block (const std::string& type, offset_type start, offset_type end)
@@ -85,7 +85,7 @@ block::new_slice_block (const std::string& type, offset_type start, offset_type 
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add freespaces between non-contiguous blocks
+// @brief Add freespaces between non-contiguous blocks
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 block::add_freespaces ()
@@ -152,12 +152,12 @@ block::add_freespaces ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create slice block from block
-//! \param parent_block Parent block
-//! \param type Block type
-//! \param start Start position at parent block
-//! \param end End position at parent block
-//! \return Block object
+// @brief Create slice block from block
+// @param parent_block Parent block
+// @param type Block type
+// @param start Start position at parent block
+// @param end End position at parent block
+// @return Block object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 block
 new_slice_block (
@@ -182,3 +182,5 @@ new_slice_block (
 }
 
 } // namespace mobius::vfs
+
+

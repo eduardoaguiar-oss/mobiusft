@@ -22,7 +22,7 @@
 #include <mobius/io/stream.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_io_stream_to_pyobject (const mobius::io::stream&);
 mobius::io::stream pymobius_io_stream_from_pyobject (PyObject *);
 
 #endif
+
+

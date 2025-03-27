@@ -64,9 +64,9 @@ static constexpr int CHUNK_SECTORS = 64;
 static constexpr int SECTOR_SIZE = 512;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert an Adler-32 digest from bytearray to uint32_t
-//! \param digest bytearray digest (4 bytes length)
-//! \return std::uint32_t
+// @brief Convert an Adler-32 digest from bytearray to uint32_t
+// @param digest bytearray digest (4 bytes length)
+// @return std::uint32_t
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::uint32_t
 digest_to_uint32_t (const mobius::bytearray& digest)
@@ -80,9 +80,9 @@ digest_to_uint32_t (const mobius::bytearray& digest)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param writer generic mobius::io::writer object
-//! \param segment_idx segment index, starting from 1
+// @brief Constructor
+// @param writer generic mobius::io::writer object
+// @param segment_idx segment index, starting from 1
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 segment_writer::segment_writer (mobius::io::writer writer, std::uint16_t segment_number)
   : writer_ (writer),
@@ -94,7 +94,7 @@ segment_writer::segment_writer (mobius::io::writer writer, std::uint16_t segment
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create segment file
+// @brief Create segment file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 segment_writer::create ()
@@ -112,9 +112,9 @@ segment_writer::create ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Write data
-//! \param arg_data data
-//! \return the number of bytes written
+// @brief Write data
+// @param arg_data data
+// @return the number of bytes written
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 segment_writer::size_type
 segment_writer::write (const mobius::bytearray& arg_data)
@@ -156,7 +156,7 @@ segment_writer::write (const mobius::bytearray& arg_data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Flush data to segment writer
+// @brief Flush data to segment writer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 segment_writer::flush ()
@@ -165,7 +165,7 @@ segment_writer::flush ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Close segment file
+// @brief Close segment file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 segment_writer::close ()
@@ -180,7 +180,7 @@ segment_writer::close ()
   // write remaining bytes, if any, and close sectors, table and table2 sections
   if (sector_offset_ != -1)
     _close_sectors_section ();
-  
+
   // update volume, disk and data sections
   auto offset = writer_.tell ();
 
@@ -207,8 +207,8 @@ segment_writer::close ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Write file header
-//! \see EWCF 2.1
+// @brief Write file header
+// @see EWCF 2.1
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 segment_writer::_write_file_header (std::uint16_t segment_idx)
@@ -223,10 +223,10 @@ segment_writer::_write_file_header (std::uint16_t segment_idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Write section header
-//! \param name section name
-//! \param size section size
-//! \see EWCF 3.1
+// @brief Write section header
+// @param name section name
+// @param size section size
+// @see EWCF 3.1
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 segment_writer::_write_section_header (const std::string& name, size_type size)
@@ -252,8 +252,8 @@ segment_writer::_write_section_header (const std::string& name, size_type size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Write section data
-//! \param data section data
+// @brief Write section data
+// @param data section data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 segment_writer::_write_section_data (const mobius::bytearray& data)
@@ -262,7 +262,7 @@ segment_writer::_write_section_data (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Write "header" section
+// @brief Write "header" section
 // Writes twice "header2" sections, encoded in UTF-16, followed by an
 // UTF-8 "header" section
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -321,8 +321,8 @@ segment_writer::_write_header_section ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief write "volume" stub section
-//! \param section_name section name (volume/disk/data)
+// @brief write "volume" stub section
+// @param section_name section name (volume/disk/data)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 segment_writer::_write_volume_stub (const std::string& section_name)
@@ -334,8 +334,8 @@ segment_writer::_write_volume_stub (const std::string& section_name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief write "volume" section
-//! \param section_name section name (volume/disk/data)
+// @brief write "volume" section
+// @param section_name section name (volume/disk/data)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 segment_writer::_write_volume_section (const std::string& section_name)
@@ -373,8 +373,8 @@ segment_writer::_write_volume_section (const std::string& section_name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief write "hash" section
-//! \param section_name section name (volume/disk/data)
+// @brief write "hash" section
+// @param section_name section name (volume/disk/data)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 segment_writer::_write_hash_section ()
@@ -395,8 +395,8 @@ segment_writer::_write_hash_section ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief write "table" sections
-//! \param section_name section name (table/table2)
+// @brief write "table" sections
+// @param section_name section name (table/table2)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 segment_writer::_write_table_section (const std::string& name)
@@ -434,8 +434,8 @@ segment_writer::_write_table_section (const std::string& name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief check if there is room for another chunk
-//! \return true/false if chunk can be written
+// @brief check if there is room for another chunk
+// @return true/false if chunk can be written
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 segment_writer::_can_write_chunk_data ()
@@ -454,9 +454,9 @@ segment_writer::_can_write_chunk_data ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief write chunk data
-//! \param data chunk data to be written
-//! \return true/false if chunk could be written
+// @brief write chunk data
+// @param data chunk data to be written
+// @return true/false if chunk could be written
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 segment_writer::_write_chunk_data (mobius::bytearray data)
@@ -507,7 +507,7 @@ segment_writer::_write_chunk_data (mobius::bytearray data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief close current "sectors" section
+// @brief close current "sectors" section
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 segment_writer::_close_sectors_section ()
@@ -527,3 +527,5 @@ segment_writer::_close_sectors_section ()
   // clear sector_offset_
   sector_offset_ = -1;
 }
+
+

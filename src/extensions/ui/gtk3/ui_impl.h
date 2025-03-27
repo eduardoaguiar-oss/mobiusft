@@ -25,8 +25,8 @@
 namespace mobius::extension::ui::gtk3
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief GTK3 UI implementation class
-//! \author Eduardo Aguiar
+// @brief GTK3 UI implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class ui_impl : public mobius::ui::ui_impl_base
 {
@@ -34,8 +34,8 @@ public:
   ui_impl ();
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get UI implementation ID
-  //! \return ID
+  // @brief Get UI implementation ID
+  // @return ID
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   static std::string
   get_id ()
@@ -44,8 +44,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get UI implementation description
-  //! \return Description
+  // @brief Get UI implementation description
+  // @return Description
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   static std::string
   get_description ()
@@ -76,3 +76,5 @@ public:
 } // namespace mobius::extension::ui::gtk3
 
 #endif
+
+

@@ -25,13 +25,11 @@
 
 struct udev_device;
 
-namespace mobius
-{
-namespace system
+namespace mobius::system
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Hardware device class
-//! \author Eduardo Aguiar
+// @brief Hardware device class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class device
 {
@@ -70,8 +68,8 @@ public:
   mobius::io::reader new_reader () const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if device is valid
-  //! \return true/false
+  // @brief Check if device is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const
   {
@@ -82,7 +80,8 @@ private:
   std::shared_ptr <udev_device> impl_;
 };
 
-} // namespace system
-} // namespace mobius
+} // namespace mobius::system
 
 #endif
+
+

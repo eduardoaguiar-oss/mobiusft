@@ -23,7 +23,7 @@
 namespace mobius::py
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief pytypeobject implementation class
+// @brief pytypeobject implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class pytypeobject::impl
 {
@@ -43,8 +43,8 @@ public:
   impl& operator= (impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get pointer
-  //! \return PyObject pointer
+  // @brief Get pointer
+  // @return PyObject pointer
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   PyObject *
   pointer ()
@@ -59,13 +59,13 @@ public:
   void add_constant (const std::string&, int);
 
 private:
-  //! \brief Python object
+  // @brief Python object
   PyTypeObject *obj_ = nullptr;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param p Pointer to PyTypeObject structure
+// @brief Constructor
+// @param p Pointer to PyTypeObject structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 pytypeobject::impl::impl (PyTypeObject *p)
   : obj_ (p)
@@ -73,7 +73,7 @@ pytypeobject::impl::impl (PyTypeObject *p)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create type
+// @brief Create type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 pytypeobject::impl::create ()
@@ -83,9 +83,9 @@ pytypeobject::impl::create ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add constant to type
-//! \param name Name
-//! \param value Value
+// @brief Add constant to type
+// @param name Name
+// @param value Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 pytypeobject::impl::add_constant (const std::string& name, int value)
@@ -109,8 +109,8 @@ pytypeobject::impl::add_constant (const std::string& name, int value)
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param p Pointer to PyTypeObject structure
+// @brief Constructor
+// @param p Pointer to PyTypeObject structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 pytypeobject::pytypeobject (PyTypeObject *p)
  : impl_ (std::make_shared <impl> (p))
@@ -118,8 +118,8 @@ pytypeobject::pytypeobject (PyTypeObject *p)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get PyObject pointer
-//! \return PyObject pointer
+// @brief Get PyObject pointer
+// @return PyObject pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 pytypeobject::operator PyObject * () const noexcept
 {
@@ -127,7 +127,7 @@ pytypeobject::operator PyObject * () const noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create type
+// @brief Create type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 pytypeobject::create ()
@@ -136,9 +136,9 @@ pytypeobject::create ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add constant to type
-//! \param name Name
-//! \param value Value
+// @brief Add constant to type
+// @param name Name
+// @param value Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 pytypeobject::add_constant (const std::string& name, int value)
@@ -147,3 +147,5 @@ pytypeobject::add_constant (const std::string& name, int value)
 }
 
 } // namespace mobius::py
+
+

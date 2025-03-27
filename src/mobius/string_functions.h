@@ -57,9 +57,9 @@ std::string to_hex (std::uint64_t, unsigned int = 1);
 std::string to_string (std::uint64_t, unsigned int = 1, char = '0');
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Try to convert value to string
-//! \param v Value
-//! \return String representation of value
+// @brief Try to convert value to string
+// @param v Value
+// @return String representation of value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename T> std::string
 to_string (const T& t)
@@ -72,9 +72,9 @@ to_string (const T& t)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get first non-empty string from arguments
-//! \param args Arguments
-//! \return First non-empty argument
+// @brief Get first non-empty string from arguments
+// @param args Arguments
+// @return First non-empty argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename T> std::string
 first_of (const T& t)
@@ -97,3 +97,5 @@ first_of (T t, Args... args)
 } // namespace mobius::string
 
 #endif
+
+

@@ -26,8 +26,8 @@
 namespace mobius::crypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Abstract base class for hash functions implementation
-//! \author Eduardo Aguiar
+// @brief Abstract base class for hash functions implementation
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class hash_impl_base
 {
@@ -50,3 +50,5 @@ public:
 } // namespace mobius::crypt
 
 #endif
+
+

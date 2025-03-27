@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file message_dialog.cc C++ API <i>mobius.ui.message_dialog</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "message_dialog.h"
@@ -26,9 +26,9 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>type</i> Attribute getter
-//! \param self Object
-//! \return <i>type</i> attribute
+// @brief <i>type</i> Attribute getter
+// @param self Object
+// @return <i>type</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_type (ui_message_dialog_o *self)
@@ -48,9 +48,9 @@ tp_getter_type (ui_message_dialog_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>title</i> Attribute getter
-//! \param self Object
-//! \return <i>title</i> attribute
+// @brief <i>title</i> Attribute getter
+// @param self Object
+// @return <i>title</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_title (ui_message_dialog_o *self)
@@ -70,10 +70,10 @@ tp_getter_title (ui_message_dialog_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>title</i> Attribute setter
-//! \param self Object
-//! \param value New value
-//! \return 0 on success, -1 on error
+// @brief <i>title</i> Attribute setter
+// @param self Object
+// @param value New value
+// @return 0 on success, -1 on error
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static int
 tp_setter_title (ui_message_dialog_o *self, PyObject *value, void *)
@@ -109,9 +109,9 @@ tp_setter_title (ui_message_dialog_o *self, PyObject *value, void *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>text</i> Attribute getter
-//! \param self Object
-//! \return <i>text</i> attribute
+// @brief <i>text</i> Attribute getter
+// @param self Object
+// @return <i>text</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_text (ui_message_dialog_o *self)
@@ -131,10 +131,10 @@ tp_getter_text (ui_message_dialog_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>text</i> Attribute setter
-//! \param self Object
-//! \param value New value
-//! \return 0 on success, -1 on error
+// @brief <i>text</i> Attribute setter
+// @param self Object
+// @param value New value
+// @return 0 on success, -1 on error
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static int
 tp_setter_text (ui_message_dialog_o *self, PyObject *value, void *)
@@ -170,9 +170,9 @@ tp_setter_text (ui_message_dialog_o *self, PyObject *value, void *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>informative_text</i> Attribute getter
-//! \param self Object
-//! \return <i>informative_text</i> attribute
+// @brief <i>informative_text</i> Attribute getter
+// @param self Object
+// @return <i>informative_text</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_informative_text (ui_message_dialog_o *self)
@@ -192,10 +192,10 @@ tp_getter_informative_text (ui_message_dialog_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>informative_text</i> Attribute setter
-//! \param self Object
-//! \param value New value
-//! \return 0 on success, -1 on error
+// @brief <i>informative_text</i> Attribute setter
+// @param self Object
+// @param value New value
+// @return 0 on success, -1 on error
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static int
 tp_setter_informative_text (ui_message_dialog_o *self, PyObject *value, void *)
@@ -231,7 +231,7 @@ tp_setter_informative_text (ui_message_dialog_o *self, PyObject *value, void *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Getters and setters structure
+// @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -267,10 +267,10 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>add_button</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Response ID
+// @brief <i>add_button</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Response ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_add_button (ui_message_dialog_o *self, PyObject *args)
@@ -316,9 +316,9 @@ tp_f_add_button (ui_message_dialog_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_default_response</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_default_response</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_default_response (ui_message_dialog_o *self, PyObject *args)
@@ -352,10 +352,10 @@ tp_f_set_default_response (ui_message_dialog_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>run</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Response ID
+// @brief <i>run</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Response ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_run (ui_message_dialog_o *self, PyObject *)
@@ -377,7 +377,7 @@ tp_f_run (ui_message_dialog_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -403,11 +403,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>message_dialog</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>message_dialog</i> object
+// @brief <i>message_dialog</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>message_dialog</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
@@ -446,8 +446,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>message_dialog</i> deallocator
-//! \param self Object
+// @brief <i>message_dialog</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (ui_message_dialog_o *self)
@@ -457,7 +457,7 @@ tp_dealloc (ui_message_dialog_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject ui_message_dialog_t =
 {
@@ -512,7 +512,7 @@ PyTypeObject ui_message_dialog_t =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>mobius.ui.message_dialog</i> type
+// @brief Create <i>mobius.ui.message_dialog</i> type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
 new_ui_message_dialog_type ()
@@ -548,9 +548,9 @@ new_ui_message_dialog_type ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>message_dialog</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>message_dialog</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_ui_message_dialog_check (PyObject *value)
@@ -559,9 +559,9 @@ pymobius_ui_message_dialog_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>message_dialog</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New message_dialog object
+// @brief Create <i>message_dialog</i> Python object from C++ object
+// @param obj C++ object
+// @return New message_dialog object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_ui_message_dialog_to_pyobject (const mobius::ui::message_dialog& obj)
@@ -575,9 +575,9 @@ pymobius_ui_message_dialog_to_pyobject (const mobius::ui::message_dialog& obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>message_dialog</i> C++ object from Python object
-//! \param value Python value
-//! \return Message_dialog object
+// @brief Create <i>message_dialog</i> C++ object from Python object
+// @param value Python value
+// @return Message_dialog object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::ui::message_dialog
 pymobius_ui_message_dialog_from_pyobject (PyObject *value)
@@ -587,3 +587,5 @@ pymobius_ui_message_dialog_from_pyobject (PyObject *value)
 
   return * (reinterpret_cast <ui_message_dialog_o *>(value)->obj);
 }
+
+

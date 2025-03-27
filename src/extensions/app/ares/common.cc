@@ -23,10 +23,10 @@
 namespace mobius::extension::app::ares
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt data
-//! \param enc_data Encrypted data
-//! \return Decrypted data
-//! \see helper_library_db.pas
+// @brief Decrypt data
+// @param enc_data Encrypted data
+// @return Decrypted data
+// @see helper_library_db.pas
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 decrypt (const mobius::bytearray& enc_data, std::uint16_t seed)
@@ -45,11 +45,11 @@ decrypt (const mobius::bytearray& enc_data, std::uint16_t seed)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert media type to string
-//! \param t Media type
-//! \see mediatype_to_str function (helper_mimetypes.pas)
-//! \see const_ares.pas
-//! \see vars_localiz.pas
+// @brief Convert media type to string
+// @param t Media type
+// @see mediatype_to_str function (helper_mimetypes.pas)
+// @see const_ares.pas
+// @see vars_localiz.pas
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 media_type_to_string (std::uint8_t t)
@@ -70,10 +70,10 @@ media_type_to_string (std::uint8_t t)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decoder old altsources
-//! \param data Encoded data
-//! \return Alt sources
-//! \see add_sources function @helper_altsources (line 106)
+// @brief Decoder old altsources
+// @param data Encoded data
+// @return Alt sources
+// @see add_sources function @helper_altsources (line 106)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <std::pair <std::string, std::uint16_t>>
 decode_old_alt_sources (const mobius::bytearray& data)
@@ -93,10 +93,10 @@ decode_old_alt_sources (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decoder altsources
-//! \param data Encoded data
-//! \return Alt sources
-//! \see add_sources function @helper_altsources (line 106)
+// @brief Decoder altsources
+// @param data Encoded data
+// @return Alt sources
+// @see add_sources function @helper_altsources (line 106)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <std::pair <std::string, std::uint16_t>>
 decode_alt_sources (const mobius::bytearray& data)
@@ -117,12 +117,12 @@ decode_alt_sources (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get metadata from data
-//! \param data Encoded data
-//! \param type Metadata type
-//! \see get_cached_metas@helper_library_db.pas
-//! \see get_trusted_metas@helper_library_db.pas
-//! \see read_details_DB_Download@helper_download_disk.pas
+// @brief Get metadata from data
+// @param data Encoded data
+// @param type Metadata type
+// @see get_cached_metas@helper_library_db.pas
+// @see get_trusted_metas@helper_library_db.pas
+// @see read_details_DB_Download@helper_download_disk.pas
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::map <int, mobius::bytearray>
 decode_metadata (const mobius::bytearray& data)
@@ -143,3 +143,7 @@ decode_metadata (const mobius::bytearray& data)
 }
 
 } // namespace mobius::extension::app::ares
+
+
+
+

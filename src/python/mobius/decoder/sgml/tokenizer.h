@@ -22,7 +22,7 @@
 #include <mobius/decoder/sgml/tokenizer.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_decoder_sgml_tokenizer_to_pyobject (const mobius::decoder::sg
 mobius::decoder::sgml::tokenizer pymobius_decoder_sgml_tokenizer_from_pyobject (PyObject *);
 
 #endif
+
+

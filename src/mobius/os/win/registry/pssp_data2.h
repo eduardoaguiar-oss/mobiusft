@@ -23,17 +23,11 @@
 #include <memory>
 #include <string>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace registry
+namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Protected Storage System Provider Data2's keys container
-//! \author Eduardo Aguiar
+// @brief Protected Storage System Provider Data2's keys container
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class pssp_data2
 {
@@ -52,16 +46,15 @@ public:
   mobius::bytearray get_key (const std::string&) const;
 
 private:
-  //! \brief implementation class forward declaration
+  // @brief implementation class forward declaration
   class impl;
 
-  //! \brief implementation pointer
+  // @brief implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
-} // namespace registry
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::registry
 
 #endif
+
+

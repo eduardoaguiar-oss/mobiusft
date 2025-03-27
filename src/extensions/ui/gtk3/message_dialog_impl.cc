@@ -29,7 +29,7 @@ namespace mobius::extension::ui::gtk3
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Default buttons' text
+// @brief Default buttons' text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const std::vector <std::string> button_text_ =
 {
@@ -57,8 +57,8 @@ static const std::vector <std::string> button_text_ =
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param t Message type
+// @brief Constructor
+// @param t Message type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 message_dialog_impl::message_dialog_impl (type t)
  : type_ (t)
@@ -66,8 +66,8 @@ message_dialog_impl::message_dialog_impl (type t)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add default button
-//! \param button_id Button ID
+// @brief Add default button
+// @param button_id Button ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 message_dialog_impl::response_type
 message_dialog_impl::add_button (button button_id)
@@ -80,9 +80,9 @@ message_dialog_impl::add_button (button button_id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add button
-//! \param text Button text
-//! \return Response ID
+// @brief Add button
+// @param text Button text
+// @return Response ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 message_dialog_impl::response_type
 message_dialog_impl::add_button (const std::string& text)
@@ -94,8 +94,8 @@ message_dialog_impl::add_button (const std::string& text)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set default response
-//! \param response_id Response ID
+// @brief Set default response
+// @param response_id Response ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 message_dialog_impl::set_default_response (response_type response_id)
@@ -104,8 +104,8 @@ message_dialog_impl::set_default_response (response_type response_id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Run dialog
-//! \return Response ID
+// @brief Run dialog
+// @return Response ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 message_dialog_impl::response_type
 message_dialog_impl::run ()
@@ -157,9 +157,9 @@ message_dialog_impl::run ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add button to list of buttons
-//! \param text Button text
-//! \param response_id Response ID
+// @brief Add button to list of buttons
+// @param text Button text
+// @param response_id Response ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 message_dialog_impl::_add_button (
@@ -179,3 +179,5 @@ message_dialog_impl::_add_button (
 }
 
 } // namespace mobius::extension::ui::gtk3
+
+

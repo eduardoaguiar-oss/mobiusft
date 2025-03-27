@@ -34,16 +34,14 @@
 #include "smb/folder_impl.h"
 #endif
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 namespace
 {
 using entry_impl = folder_impl_base::entry_impl;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Collection implementation for folder entries
+// @brief Collection implementation for folder entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class collection_impl : public mobius::collection_impl_base <mobius::io::entry>
 {
@@ -63,9 +61,9 @@ private:
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Initialize object
-//! \param impl Implementation object
-//! \param path Collection base folder path
+// @brief Initialize object
+// @param impl Implementation object
+// @param path Collection base folder path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 collection_impl::collection_impl (const pointer_type& impl, const std::string& path)
   : impl_ (impl),
@@ -74,9 +72,9 @@ collection_impl::collection_impl (const pointer_type& impl, const std::string& p
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get folder entry
-//! \param e Entry reference
-//! \return true/false if entry was found
+// @brief Get folder entry
+// @param e Entry reference
+// @return true/false if entry was found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 collection_impl::get (mobius::io::entry& e)
@@ -103,7 +101,7 @@ collection_impl::get (mobius::io::entry& e)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reset collection
+// @brief Reset collection
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 collection_impl::reset ()
@@ -114,7 +112,7 @@ collection_impl::reset ()
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Construct object
+// @brief Construct object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder::folder ()
 {
@@ -122,8 +120,8 @@ folder::folder ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Construct object
-//! \param impl Implementation object
+// @brief Construct object
+// @param impl Implementation object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder::folder (std::shared_ptr <folder_impl_base> impl)
   : impl_ (impl)
@@ -131,8 +129,8 @@ folder::folder (std::shared_ptr <folder_impl_base> impl)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new file object
-//! \return File object
+// @brief Create new file object
+// @return File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file
 folder::new_file (const std::string& name) const
@@ -141,8 +139,8 @@ folder::new_file (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get folder extension
-//! \return Folder extension
+// @brief Get folder extension
+// @return Folder extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 folder::get_extension () const
@@ -158,8 +156,8 @@ folder::get_extension () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Copy folder
-//! \param dst Folder object (destination)
+// @brief Copy folder
+// @param dst Folder object (destination)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 folder::copy (folder dst) const
@@ -188,8 +186,8 @@ folder::copy (folder dst) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Move folder
-//! \param dst Destination folder
+// @brief Move folder
+// @param dst Destination folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 folder::move (folder dst)
@@ -204,8 +202,8 @@ folder::move (folder dst)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get parent folder
-//! \return Parent folder
+// @brief Get parent folder
+// @return Parent folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder
 folder::get_parent () const
@@ -222,8 +220,8 @@ folder::get_parent () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get children
-//! \return Child entries
+// @brief Get children
+// @return Child entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder::children_type
 folder::get_children () const
@@ -236,10 +234,10 @@ folder::get_children () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get child by name
-//! \param name Name
-//! \param cs Case sensitive flag
-//! \return Child, if found
+// @brief Get child by name
+// @param name Name
+// @param cs Case sensitive flag
+// @return Child, if found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::entry
 folder::get_child_by_name (const std::string& name, bool cs) const
@@ -264,10 +262,10 @@ folder::get_child_by_name (const std::string& name, bool cs) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get child by path
-//! \param path Relative path
-//! \param cs Case sensitive flag
-//! \return Child, if found
+// @brief Get child by path
+// @param path Relative path
+// @param cs Case sensitive flag
+// @return Child, if found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::entry
 folder::get_child_by_path (const std::string& path, bool cs) const
@@ -296,10 +294,10 @@ folder::get_child_by_path (const std::string& path, bool cs) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get children by name
-//! \param name Children name
-//! \param cs Case sensitive flag
-//! \return Children
+// @brief Get children by name
+// @param name Children name
+// @param cs Case sensitive flag
+// @return Children
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <entry>
 folder::get_children_by_name (const std::string& name, bool cs) const
@@ -317,8 +315,8 @@ folder::get_children_by_name (const std::string& name, bool cs) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get streams
-//! \return Streams
+// @brief Get streams
+// @return Streams
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <stream>
 folder::get_streams () const
@@ -337,9 +335,9 @@ folder::get_streams () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create folder by path
-//! \param path folder path
-//! \return Folder object
+// @brief Create folder by path
+// @param path folder path
+// @return Folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder
 new_folder_by_path (const std::string& path)
@@ -348,9 +346,9 @@ new_folder_by_path (const std::string& path)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create folder by URL
-//! \param url folder URL
-//! \return Folder object
+// @brief Create folder by URL
+// @param url folder URL
+// @return Folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder
 new_folder_by_url (const std::string& url)
@@ -370,8 +368,8 @@ new_folder_by_url (const std::string& url)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get current folder
-//! \return Folder object
+// @brief Get current folder
+// @return Folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder
 get_current_folder ()
@@ -379,5 +377,6 @@ get_current_folder ()
   return local::get_current_folder ();
 }
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
+
+

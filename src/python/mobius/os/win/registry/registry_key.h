@@ -22,7 +22,7 @@
 #include <mobius/os/win/registry/registry_key.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_key: data structure
+// @brief registry_key: data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -41,3 +41,5 @@ mobius::os::win::registry::registry_key pymobius_os_win_registry_registry_key_fr
 
 
 #endif
+
+

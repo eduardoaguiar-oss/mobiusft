@@ -21,7 +21,7 @@
 namespace mobius::core::file_decoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief entry implementation class
+// @brief entry implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class entry::impl
 {
@@ -41,8 +41,8 @@ public:
   impl& operator= (impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get idx
-  //! \return Idx
+  // @brief Get idx
+  // @return Idx
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   idx_type
   get_idx () const
@@ -51,8 +51,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get name
-  //! \return Name
+  // @brief Get name
+  // @return Name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_name () const
@@ -61,9 +61,9 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get metadata
-  //! \param name Metadata name
-  //! \return Metadata value
+  // @brief Get metadata
+  // @param name Metadata name
+  // @return Metadata value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::pod::data
   get_metadata (const std::string& name) const
@@ -72,9 +72,9 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set metadata
-  //! \param name Metadata name
-  //! \param value Metadata value
+  // @brief Set metadata
+  // @param name Metadata name
+  // @param value Metadata value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_metadata (const std::string& name, const mobius::pod::data& value)
@@ -83,8 +83,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get all metadata
-  //! \return Metadata map
+  // @brief Get all metadata
+  // @return Metadata map
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::pod::map
   get_all_metadata () const
@@ -93,20 +93,20 @@ public:
   }
 
 private:
-  //! \brief Entry number
+  // @brief Entry number
   idx_type idx_;
 
-  //! \brief Entry name
+  // @brief Entry name
   std::string name_;
 
-  //! \brief Metadata
+  // @brief Metadata
   mobius::pod::map metadata_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param idx Entry index
-//! \param name Entry name
+// @brief Constructor
+// @param idx Entry index
+// @param name Entry name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 entry::impl::impl (idx_type idx, const std::string& name)
   : idx_ (idx),
@@ -115,9 +115,9 @@ entry::impl::impl (idx_type idx, const std::string& name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param idx Entry index
-//! \param name Entry name
+// @brief Constructor
+// @param idx Entry index
+// @param name Entry name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 entry::entry (idx_type idx, const std::string& name)
   : impl_ (std::make_shared <impl> (idx, name))
@@ -125,9 +125,9 @@ entry::entry (idx_type idx, const std::string& name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get metadata value
-//! \param name Metadata name
-//! \return Metadata value
+// @brief Get metadata value
+// @param name Metadata name
+// @return Metadata value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 entry::get_metadata (const std::string& name) const
@@ -136,8 +136,8 @@ entry::get_metadata (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get metadata
-//! \return Metadata
+// @brief Get metadata
+// @return Metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 entry::get_all_metadata () const
@@ -146,9 +146,9 @@ entry::get_all_metadata () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set metadata
-//! \param name Metadata name
-//! \param value Metadata value
+// @brief Set metadata
+// @param name Metadata name
+// @param value Metadata value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 entry::set_metadata (const std::string& name, const mobius::pod::data& value)
@@ -157,8 +157,8 @@ entry::set_metadata (const std::string& name, const mobius::pod::data& value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get idx
-//! \return Idx
+// @brief Get idx
+// @return Idx
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 entry::idx_type
 entry::get_idx () const
@@ -167,8 +167,8 @@ entry::get_idx () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get name
-//! \return Name
+// @brief Get name
+// @return Name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 entry::get_name () const
@@ -177,3 +177,5 @@ entry::get_name () const
 }
 
 } // namespace mobius::core::file_decoder
+
+

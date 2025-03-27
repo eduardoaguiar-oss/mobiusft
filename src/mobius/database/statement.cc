@@ -36,7 +36,7 @@
 namespace mobius::database
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Implementation struct
+// @brief Implementation struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct statement::impl
 {
@@ -47,7 +47,7 @@ struct statement::impl
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destroy shared implementation
+// @brief Destroy shared implementation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 statement::impl::~impl ()
 {
@@ -56,7 +56,7 @@ statement::impl::~impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create statement object
+// @brief Create statement object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 statement::statement ()
 {
@@ -64,7 +64,7 @@ statement::statement ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create statement object
+// @brief create statement object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 statement::statement (database db, sqlite3_stmt *stmt)
 {
@@ -74,9 +74,9 @@ statement::statement (database db, sqlite3_stmt *stmt)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Bind bool value
-//! \param idx Value index
-//! \param value value
+// @brief Bind bool value
+// @param idx Value index
+// @param value value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 statement::bind (int idx, bool value)
@@ -86,9 +86,9 @@ statement::bind (int idx, bool value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Bind int value
-//! \param idx Value index
-//! \param value value
+// @brief Bind int value
+// @param idx Value index
+// @param value value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 statement::bind (int idx, int value)
@@ -98,9 +98,9 @@ statement::bind (int idx, int value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Bind uint64_t value
-//! \param idx Value index
-//! \param value value
+// @brief Bind uint64_t value
+// @param idx Value index
+// @param value value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 statement::bind (int idx, std::int64_t value)
@@ -110,9 +110,9 @@ statement::bind (int idx, std::int64_t value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Bind double value
-//! \param idx Value index
-//! \param v Value
+// @brief Bind double value
+// @param idx Value index
+// @param v Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 statement::bind (int idx, double value)
@@ -122,9 +122,9 @@ statement::bind (int idx, double value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Bind C string value
-//! \param idx Value index
-//! \param v Value
+// @brief Bind C string value
+// @param idx Value index
+// @param v Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 statement::bind (int idx, const char *value)
@@ -134,15 +134,15 @@ statement::bind (int idx, const char *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Bind string lvalue
-//! \param idx Value index
-//! \param v Value
+// @brief Bind string lvalue
+// @param idx Value index
+// @param v Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 statement::bind (int idx, const std::string& value)
 {
   auto rc = sqlite3_bind_text64 (impl_->stmt, idx, value.c_str (), value.length (), SQLITE_TRANSIENT, SQLITE_UTF8);
-  
+
   if (rc == SQLITE_TOOBIG)
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("data too big to persist"));
 
@@ -151,9 +151,9 @@ statement::bind (int idx, const std::string& value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Bind bytearray lvalue
-//! \param idx Value index
-//! \param v Value
+// @brief Bind bytearray lvalue
+// @param idx Value index
+// @param v Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 statement::bind (int idx, const mobius::bytearray& value)
@@ -168,9 +168,9 @@ statement::bind (int idx, const mobius::bytearray& value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Bind datetime value
-//! \param idx Value index
-//! \param v Value
+// @brief Bind datetime value
+// @param idx Value index
+// @param v Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 statement::bind (int idx, const mobius::datetime::datetime& value)
@@ -188,9 +188,9 @@ statement::bind (int idx, const mobius::datetime::datetime& value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Bind pod::data value
-//! \param idx Value index
-//! \param v Value
+// @brief Bind pod::data value
+// @param idx Value index
+// @param v Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 statement::bind (int idx, const mobius::pod::data& value)
@@ -203,8 +203,8 @@ statement::bind (int idx, const mobius::pod::data& value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Bind null value
-//! \param idx Value index
+// @brief Bind null value
+// @param idx Value index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 statement::bind_null (int idx)
@@ -214,7 +214,7 @@ statement::bind_null (int idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Execute statement
+// @brief Execute statement
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 statement::execute ()
@@ -229,7 +229,7 @@ statement::execute ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reset statement
+// @brief Reset statement
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 statement::reset ()
@@ -238,8 +238,8 @@ statement::reset ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Fetch one row
-//! \return true if a row has been found
+// @brief Fetch one row
+// @return true if a row has been found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 statement::fetch_row ()
@@ -263,8 +263,8 @@ statement::fetch_row ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get number of columns returned by statement
-//! \return number of columns
+// @brief Get number of columns returned by statement
+// @return number of columns
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int
 statement::get_column_count ()
@@ -273,8 +273,8 @@ statement::get_column_count ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check whether column value is null
-//! \param idx Value index
+// @brief Check whether column value is null
+// @param idx Value index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 statement::is_column_null (int idx)
@@ -283,8 +283,8 @@ statement::is_column_null (int idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get bool column value
-//! \param idx Value index
+// @brief Get bool column value
+// @param idx Value index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 statement::get_column_bool (int idx)
@@ -293,8 +293,8 @@ statement::get_column_bool (int idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get int column value
-//! \param idx Value index
+// @brief Get int column value
+// @param idx Value index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int
 statement::get_column_int (int idx)
@@ -303,8 +303,8 @@ statement::get_column_int (int idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get int64_t column value
-//! \param idx Value index
+// @brief Get int64_t column value
+// @param idx Value index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::int64_t
 statement::get_column_int64 (int idx)
@@ -313,8 +313,8 @@ statement::get_column_int64 (int idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get double column value
-//! \param idx Value index
+// @brief Get double column value
+// @param idx Value index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 double
 statement::get_column_double (int idx)
@@ -323,8 +323,8 @@ statement::get_column_double (int idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get string column value
-//! \param idx Value index
+// @brief Get string column value
+// @param idx Value index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 statement::get_column_string (int idx)
@@ -339,8 +339,8 @@ statement::get_column_string (int idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get bytearray column value
-//! \param idx Value index
+// @brief Get bytearray column value
+// @param idx Value index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 statement::get_column_bytearray (int idx)
@@ -357,8 +357,8 @@ statement::get_column_bytearray (int idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get datetime column value
-//! \param idx Value index
+// @brief Get datetime column value
+// @param idx Value index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 statement::get_column_datetime (int idx)
@@ -374,8 +374,8 @@ statement::get_column_datetime (int idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get pod::data column value
-//! \param idx Value index
+// @brief Get pod::data column value
+// @param idx Value index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 statement::get_column_pod (int idx)
@@ -395,8 +395,8 @@ statement::get_column_pod (int idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get database error message
-//! \return error message
+// @brief Get database error message
+// @return error message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 statement::get_error_message () const
@@ -405,8 +405,8 @@ statement::get_error_message () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Execute a statement step
-//! \return sqlite error code
+// @brief Execute a statement step
+// @return sqlite error code
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int
 statement::step ()
@@ -426,3 +426,5 @@ statement::step ()
 }
 
 } // namespace mobius::database
+
+

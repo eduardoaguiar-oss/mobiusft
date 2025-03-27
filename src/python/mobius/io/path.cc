@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file path.cc C++ API <i>mobius.io.path</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "path.h"
@@ -27,9 +27,9 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if object type is <i>path</i>
-//! \param pyobj Python object
-//! \return true/false
+// @brief Check if object type is <i>path</i>
+// @param pyobj Python object
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_io_path_check (PyObject *pyobj)
@@ -38,9 +38,9 @@ pymobius_io_path_check (PyObject *pyobj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>path</i> Python object from C++ object
-//! \param obj C++ object
-//! \return new path object
+// @brief Create <i>path</i> Python object from C++ object
+// @param obj C++ object
+// @return new path object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_io_path_to_pyobject (mobius::io::path obj)
@@ -54,9 +54,9 @@ pymobius_io_path_to_pyobject (mobius::io::path obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>path</i> C++ object from Python object
-//! \param pyobj Python object
-//! \return path object
+// @brief Create <i>path</i> C++ object from Python object
+// @param pyobj Python object
+// @return path object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::path
 pymobius_io_path_from_pyobject (PyObject *pyobj)
@@ -68,10 +68,10 @@ pymobius_io_path_from_pyobject (PyObject *pyobj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_value</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Path
+// @brief <i>get_value</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_value (io_path_o *self, PyObject *)
@@ -93,10 +93,10 @@ tp_f_get_value (io_path_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_dirname</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Directory name
+// @brief <i>get_dirname</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Directory name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_dirname (io_path_o *self, PyObject *)
@@ -118,10 +118,10 @@ tp_f_get_dirname (io_path_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_filename</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Basename
+// @brief <i>get_filename</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Basename
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_filename (io_path_o *self, PyObject *)
@@ -143,10 +143,10 @@ tp_f_get_filename (io_path_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_prefix</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Path without extension
+// @brief <i>get_prefix</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Path without extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_prefix (io_path_o *self, PyObject *)
@@ -168,10 +168,10 @@ tp_f_get_prefix (io_path_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_extension</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Get file extension
+// @brief <i>get_extension</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Get file extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_extension (io_path_o *self, PyObject *)
@@ -193,10 +193,10 @@ tp_f_get_extension (io_path_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_parent</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Parent path
+// @brief <i>get_parent</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Parent path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_parent (io_path_o *self, PyObject *)
@@ -218,10 +218,10 @@ tp_f_get_parent (io_path_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_sibling_by_name</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Sibling path
+// @brief <i>get_sibling_by_name</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Sibling path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_sibling_by_name (io_path_o *self, PyObject *args)
@@ -256,10 +256,10 @@ tp_f_get_sibling_by_name (io_path_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_sibling_by_extension</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Sibling path
+// @brief <i>get_sibling_by_extension</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Sibling path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_sibling_by_extension (io_path_o *self, PyObject *args)
@@ -294,10 +294,10 @@ tp_f_get_sibling_by_extension (io_path_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_child_by_name</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Child name
+// @brief <i>get_child_by_name</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Child name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_child_by_name (io_path_o *self, PyObject *args)
@@ -332,10 +332,10 @@ tp_f_get_child_by_name (io_path_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_child_by_path</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Child path
+// @brief <i>get_child_by_path</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Child path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_child_by_path (io_path_o *self, PyObject *args)
@@ -370,10 +370,10 @@ tp_f_get_child_by_path (io_path_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_absolute</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_absolute</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_absolute (io_path_o *self, PyObject *)
@@ -395,10 +395,10 @@ tp_f_is_absolute (io_path_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>filename_match</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>filename_match</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_filename_match (io_path_o *self, PyObject *args)
@@ -433,7 +433,7 @@ tp_f_filename_match (io_path_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -513,11 +513,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>path</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>path</i> object
+// @brief <i>path</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>path</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
@@ -555,8 +555,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>path</i> deallocator
-//! \param self Object
+// @brief <i>path</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (io_path_o *self)
@@ -566,7 +566,7 @@ tp_dealloc (io_path_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject io_path_t =
 {
@@ -619,3 +619,5 @@ PyTypeObject io_path_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

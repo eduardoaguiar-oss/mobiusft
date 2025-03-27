@@ -20,14 +20,10 @@
 #include <mobius/core/log.h>
 #include <mobius/decoder/data_decoder.h>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
+namespace mobius::os::win
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief credential implementation class
+// @brief credential implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class credential::impl
 {
@@ -46,8 +42,8 @@ public:
   impl& operator= (impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get domain
-  //! \return Domain
+  // @brief Get domain
+  // @return Domain
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_domain () const
@@ -56,8 +52,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get username
-  //! \return Username
+  // @brief Get username
+  // @return Username
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_username () const
@@ -66,8 +62,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get password
-  //! \return Password
+  // @brief Get password
+  // @return Password
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_password () const
@@ -76,8 +72,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get password data
-  //! \return Password data
+  // @brief Get password data
+  // @return Password data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::bytearray
   get_password_data () const
@@ -86,8 +82,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get flags
-  //! \return Flags
+  // @brief Get flags
+  // @return Flags
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_flags () const
@@ -96,8 +92,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get last update time
-  //! \return Last update time
+  // @brief Get last update time
+  // @return Last update time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::datetime::datetime
   get_last_update_time () const
@@ -106,8 +102,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get data
-  //! \return data
+  // @brief Get data
+  // @return data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::vector <std::pair <std::string, mobius::bytearray>>
   get_data () const
@@ -116,31 +112,31 @@ public:
   }
 
 private:
-  //! \brief Domain name
+  // @brief Domain name
   std::string domain_;
 
-  //! \brief User name
+  // @brief User name
   std::string username_;
 
-  //! \brief Password
+  // @brief Password
   std::string password_;
 
-  //! \brief Password data
+  // @brief Password data
   mobius::bytearray password_data_;
 
-  //! \brief Flags
+  // @brief Flags
   std::uint32_t flags_;
 
-  //! \brief Last update date/time
+  // @brief Last update date/time
   mobius::datetime::datetime last_update_time_;
 
-  //! \brief Credential data
+  // @brief Credential data
   std::vector <std::pair <std::string, mobius::bytearray>> data_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
+// @brief Constructor
+// @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 credential::impl::impl (mobius::io::reader reader)
 {
@@ -149,7 +145,7 @@ credential::impl::impl (mobius::io::reader reader)
 
   // check header size
   auto header_size = decoder.get_uint32_le ();
-  
+
   if (header_size == 0)
     return;
 
@@ -164,7 +160,7 @@ credential::impl::impl (mobius::io::reader reader)
   flags_ = decoder.get_uint32_le ();
   auto u7 = decoder.get_uint32_le ();
   auto u8 = decoder.get_uint32_le ();
-  
+
   log.development (__LINE__, "win::credential flags=" + std::to_string (flags_));
   log.development (__LINE__, "win::credential u1=" + std::to_string (u1));
   log.development (__LINE__, "win::credential u2=" + std::to_string (u2));
@@ -176,22 +172,22 @@ credential::impl::impl (mobius::io::reader reader)
 
   auto size = decoder.get_uint32_le ();
   domain_ = decoder.get_string_by_size (size, "utf-16le");
-    
+
   size = decoder.get_uint32_le ();
   auto s1 = decoder.get_string_by_size (size, "utf-16le");
-    
+
   size = decoder.get_uint32_le ();
   auto s2 = decoder.get_string_by_size (size, "utf-16le");
-    
+
   size = decoder.get_uint32_le ();
   auto s3 = decoder.get_string_by_size (size, "utf-16le");
-    
+
   size = decoder.get_uint32_le ();
   username_ = decoder.get_string_by_size (size, "utf-16le");
-    
+
   size = decoder.get_uint32_le ();
   password_data_ = decoder.get_bytearray_by_size (size);
-  
+
   log.development (__LINE__, "win::credential s1=" + s1);
   log.development (__LINE__, "win::credential s2=" + s2);
   log.development (__LINE__, "win::credential s3=" + s3);
@@ -213,20 +209,20 @@ credential::impl::impl (mobius::io::reader reader)
 
       if (unk1 != 0)
         log.development (__LINE__, "win::credential unk1=" + std::to_string (unk1));
-      
+
       size = decoder.get_uint32_le ();
       auto name = decoder.get_string_by_size (size, "utf-16le");
-      
+
       size = decoder.get_uint32_le ();
       auto value = decoder.get_bytearray_by_size (size);
-      
+
       data_.emplace_back (std::make_pair (name, value));
     }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
+// @brief Constructor
+// @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 credential::credential (mobius::io::reader reader)
   : impl_ (std::make_shared <impl> (reader))
@@ -234,8 +230,8 @@ credential::credential (mobius::io::reader reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get domain
-//! \return Domain
+// @brief Get domain
+// @return Domain
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 credential::get_domain () const
@@ -244,8 +240,8 @@ credential::get_domain () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get username
-//! \return Username
+// @brief Get username
+// @return Username
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 credential::get_username () const
@@ -254,8 +250,8 @@ credential::get_username () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get password
-//! \return Password
+// @brief Get password
+// @return Password
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 credential::get_password () const
@@ -264,8 +260,8 @@ credential::get_password () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get password data
-//! \return Password data
+// @brief Get password data
+// @return Password data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 credential::get_password_data () const
@@ -274,8 +270,8 @@ credential::get_password_data () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get flags
-//! \return Flags
+// @brief Get flags
+// @return Flags
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 credential::get_flags () const
@@ -284,8 +280,8 @@ credential::get_flags () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get last update time
-//! \return Last update time
+// @brief Get last update time
+// @return Last update time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 credential::get_last_update_time () const
@@ -294,8 +290,8 @@ credential::get_last_update_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get data
-//! \return data
+// @brief Get data
+// @return data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <std::pair <std::string, mobius::bytearray>>
 credential::get_data () const
@@ -303,6 +299,6 @@ credential::get_data () const
   return impl_->get_data ();
 }
 
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win
+
+

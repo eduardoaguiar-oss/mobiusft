@@ -22,14 +22,14 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief number of sectors per chunk
+// @brief number of sectors per chunk
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static constexpr int SECTOR_SIZE = 512;
 static constexpr int CHUNK_SECTORS = 64;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param imagefile_impl imagefile implementation object
+// @brief Constructor
+// @param imagefile_impl imagefile implementation object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl::writer_impl (const imagefile_impl& imagefile_impl)
   : segment_size_ (std::int64_t (imagefile_impl.get_attribute ("segment_size"))),
@@ -71,7 +71,7 @@ writer_impl::writer_impl (const imagefile_impl& imagefile_impl)
   auto drive_vendor = imagefile_impl.get_attribute ("drive_vendor");
   auto drive_model = imagefile_impl.get_attribute ("drive_model");
   auto drive_serial_number = imagefile_impl.get_attribute ("drive_serial_number");
-  
+
   if (drive_vendor.is_string ())
     segment_writer.set_drive_vendor (std::string (drive_vendor));
 
@@ -80,7 +80,7 @@ writer_impl::writer_impl (const imagefile_impl& imagefile_impl)
 
   if (drive_serial_number.is_string ())
     segment_writer.set_drive_serial_number (std::string (drive_serial_number));
-  
+
   if (acquisition_user.is_string ())
     segment_writer.set_acquisition_user (std::string (acquisition_user));
 
@@ -88,7 +88,7 @@ writer_impl::writer_impl (const imagefile_impl& imagefile_impl)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destructor
+// @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl::~writer_impl ()
 {
@@ -112,9 +112,9 @@ writer_impl::~writer_impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set write position
-//! \param offset offset in bytes
-//! \param w either beginning, current or end
+// @brief Set write position
+// @param offset offset in bytes
+// @param w either beginning, current or end
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 writer_impl::seek (offset_type, whence_type)
@@ -123,9 +123,9 @@ writer_impl::seek (offset_type, whence_type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Write bytes to stream
-//! \param data Data
-//! \return Number of bytes written
+// @brief Write bytes to stream
+// @param data Data
+// @return Number of bytes written
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl::size_type
 writer_impl::write (const mobius::bytearray& data)
@@ -158,7 +158,7 @@ writer_impl::write (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Flush data to file
+// @brief Flush data to file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 writer_impl::flush ()
@@ -168,8 +168,8 @@ writer_impl::flush ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new segment file
-//! \return Reference to current segment writer
+// @brief Create new segment file
+// @return Reference to current segment writer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 segment_writer&
 writer_impl::_new_segment_writer ()
@@ -188,8 +188,8 @@ writer_impl::_new_segment_writer ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get current segment writer
-//! \return Reference to current segment writer
+// @brief Get current segment writer
+// @return Reference to current segment writer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 segment_writer&
 writer_impl::_get_current_segment_writer ()
@@ -201,9 +201,9 @@ writer_impl::_get_current_segment_writer ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Return next extension
-//! \param extension
-//! \return next extension
+// @brief Return next extension
+// @param extension
+// @return next extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 writer_impl::_get_next_extension (const std::string& extension) const
@@ -240,3 +240,5 @@ writer_impl::_get_next_extension (const std::string& extension) const
 
   return tmp_extension;
 }
+
+

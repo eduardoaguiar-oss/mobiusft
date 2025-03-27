@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief C++ API module wrapper
-//! \author Eduardo Aguiar
+// @brief C++ API module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pylist.h>
@@ -27,9 +27,9 @@
 #include "registry_data.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>registry_key</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>registry_key</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_os_win_registry_registry_key_check (PyObject *value)
@@ -38,9 +38,9 @@ pymobius_os_win_registry_registry_key_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <b>registry_key</b> Python object from C++ object
-//! \param r Registry key
-//! \return Python object
+// @brief Create <b>registry_key</b> Python object from C++ object
+// @param r Registry key
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_os_win_registry_registry_key_to_pyobject (mobius::os::win::registry::registry_key r)
@@ -61,9 +61,9 @@ pymobius_os_win_registry_registry_key_to_pyobject (mobius::os::win::registry::re
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <b>registry_key</b> C++ object from Python object
-//! \param pyobj Python object
-//! \return C++ object
+// @brief Create <b>registry_key</b> C++ object from Python object
+// @param pyobj Python object
+// @return C++ object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::os::win::registry::registry_key
 pymobius_os_win_registry_registry_key_from_pyobject (PyObject *pyobj)
@@ -75,7 +75,7 @@ pymobius_os_win_registry_registry_key_from_pyobject (PyObject *pyobj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_key: tp_dealloc
+// @brief registry_key: tp_dealloc
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (os_win_registry_registry_key_o *self)
@@ -85,7 +85,7 @@ tp_dealloc (os_win_registry_registry_key_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_key: name getter
+// @brief registry_key: name getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_name (os_win_registry_registry_key_o *self)
@@ -105,7 +105,7 @@ tp_getter_name (os_win_registry_registry_key_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_key: name setter
+// @brief registry_key: name setter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static int
 tp_setter_name (os_win_registry_registry_key_o *self, PyObject *value, void *)
@@ -139,7 +139,7 @@ tp_setter_name (os_win_registry_registry_key_o *self, PyObject *value, void *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_key: classname getter
+// @brief registry_key: classname getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_classname (os_win_registry_registry_key_o *self)
@@ -159,7 +159,7 @@ tp_getter_classname (os_win_registry_registry_key_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_key: last_modification_time getter
+// @brief registry_key: last_modification_time getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_last_modification_time (os_win_registry_registry_key_o *self)
@@ -179,7 +179,7 @@ tp_getter_last_modification_time (os_win_registry_registry_key_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_key: subkeys getter
+// @brief registry_key: subkeys getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_subkeys (os_win_registry_registry_key_o *self)
@@ -202,7 +202,7 @@ tp_getter_subkeys (os_win_registry_registry_key_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_key: values getter
+// @brief registry_key: values getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_values (os_win_registry_registry_key_o *self)
@@ -225,7 +225,7 @@ tp_getter_values (os_win_registry_registry_key_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_key: getters and setters structure
+// @brief registry_key: getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -268,7 +268,7 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_key: add_key
+// @brief registry_key: add_key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_add_key (os_win_registry_registry_key_o *self, PyObject *args)
@@ -303,7 +303,7 @@ tp_f_add_key (os_win_registry_registry_key_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_key: remove_key
+// @brief registry_key: remove_key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_remove_key (os_win_registry_registry_key_o *self, PyObject *args)
@@ -338,7 +338,7 @@ tp_f_remove_key (os_win_registry_registry_key_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_key: clear_keys
+// @brief registry_key: clear_keys
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_clear_keys (os_win_registry_registry_key_o *self, PyObject *)
@@ -360,7 +360,7 @@ tp_f_clear_keys (os_win_registry_registry_key_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_key: get_key_by_path
+// @brief registry_key: get_key_by_path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_key_by_path (os_win_registry_registry_key_o *self, PyObject *args)
@@ -395,7 +395,7 @@ tp_f_get_key_by_path (os_win_registry_registry_key_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_key: get_key_by_name
+// @brief registry_key: get_key_by_name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_key_by_name (os_win_registry_registry_key_o *self, PyObject *args)
@@ -430,7 +430,7 @@ tp_f_get_key_by_name (os_win_registry_registry_key_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry: get_key_by_mask
+// @brief registry: get_key_by_mask
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_key_by_mask (os_win_registry_registry_key_o *self, PyObject *args)
@@ -467,7 +467,7 @@ tp_f_get_key_by_mask (os_win_registry_registry_key_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_key: get_value_by_path
+// @brief registry_key: get_value_by_path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_value_by_path (os_win_registry_registry_key_o *self, PyObject *args)
@@ -502,7 +502,7 @@ tp_f_get_value_by_path (os_win_registry_registry_key_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_key: get_value_by_name
+// @brief registry_key: get_value_by_name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_value_by_name (os_win_registry_registry_key_o *self, PyObject *args)
@@ -537,7 +537,7 @@ tp_f_get_value_by_name (os_win_registry_registry_key_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry: get_value_by_mask
+// @brief registry: get_value_by_mask
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_value_by_mask (os_win_registry_registry_key_o *self, PyObject *args)
@@ -574,7 +574,7 @@ tp_f_get_value_by_mask (os_win_registry_registry_key_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_key: get_data_by_path
+// @brief registry_key: get_data_by_path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_data_by_path (os_win_registry_registry_key_o *self, PyObject *args)
@@ -609,7 +609,7 @@ tp_f_get_data_by_path (os_win_registry_registry_key_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_key: get_data_by_name
+// @brief registry_key: get_data_by_name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_data_by_name (os_win_registry_registry_key_o *self, PyObject *args)
@@ -644,7 +644,7 @@ tp_f_get_data_by_name (os_win_registry_registry_key_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry: get_data_by_mask
+// @brief registry: get_data_by_mask
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_data_by_mask (os_win_registry_registry_key_o *self, PyObject *args)
@@ -681,7 +681,7 @@ tp_f_get_data_by_mask (os_win_registry_registry_key_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_key: has_subkeys
+// @brief registry_key: has_subkeys
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_has_subkeys (os_win_registry_registry_key_o *self, PyObject *)
@@ -703,7 +703,7 @@ tp_f_has_subkeys (os_win_registry_registry_key_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_key: methods structure
+// @brief registry_key: methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -789,7 +789,7 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief mobius.os.win.registry.registry_key: type structure
+// @brief mobius.os.win.registry.registry_key: type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject os_win_registry_registry_key_t =
 {
@@ -842,3 +842,5 @@ PyTypeObject os_win_registry_registry_key_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

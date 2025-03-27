@@ -24,7 +24,7 @@
 namespace mobius::core
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Log implementation class
+// @brief Log implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class log_impl
 {
@@ -52,8 +52,8 @@ public:
   void debug (const std::string&, const std::string&, std::size_t, const std::string&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if an error occurred
-  //! \return true/false
+  // @brief Check if an error occurred
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   has_errors () const
@@ -62,8 +62,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set debug (on/off)
-  //! \param flag (true/false)
+  // @brief Set debug (on/off)
+  // @param flag (true/false)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_debug (bool flag)
@@ -72,8 +72,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get events
-  //! \return Event list
+  // @brief Get events
+  // @return Event list
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::vector <event>
   get_events () const
@@ -82,13 +82,13 @@ public:
   }
 
 private:
-  //! \brief Has error flag
+  // @brief Has error flag
   bool has_errors_ = false;
 
-  //! \brief Debug flag
+  // @brief Debug flag
   bool debug_flag_ = false;
 
-  //! \brief Events
+  // @brief Events
   std::vector <event> events_;
 };
 
@@ -97,22 +97,22 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Control variables
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Log file full path
+// @brief Log file full path
 static std::string log_path_;
 
-//! \brief Write mutex
+// @brief Write mutex
 static std::mutex log_mutex_;
 
-//! \brief Log implementation map per thread
+// @brief Log implementation map per thread
 static std::unordered_map <std::thread::id, std::shared_ptr <log_impl>> impl_map_;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Write event to log file
-//! \param type Event type
-//! \param filename Source file name
-//! \param funcname Source function name
-//! \param line_number Source file line number
-//! \param text Text
+// @brief Write event to log file
+// @param type Event type
+// @param filename Source file name
+// @param funcname Source function name
+// @param line_number Source file line number
+// @param text Text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 _write_log (
@@ -139,8 +139,8 @@ _write_log (
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set log file path
-//! \param path Log file path
+// @brief Set log file path
+// @param path Log file path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 set_logfile_path (const std::string& path)
@@ -150,12 +150,12 @@ set_logfile_path (const std::string& path)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param type Event type
-//! \param filename File name
-//! \param funcname Function name
-//! \param line_number Line number
-//! \param text Text
+// @brief Constructor
+// @param type Event type
+// @param filename File name
+// @param funcname Function name
+// @param line_number Line number
+// @param text Text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 event::event (
   event::type type,
@@ -174,11 +174,11 @@ event::event (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add error event
-//! \param filename Source file name
-//! \param funcname Source function name
-//! \param line_number Source file line number
-//! \param text Text message
+// @brief Add error event
+// @param filename Source file name
+// @param funcname Source function name
+// @param line_number Source file line number
+// @param text Text message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 log_impl::error (
@@ -195,11 +195,11 @@ log_impl::error (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add warning event
-//! \param filename Source file name
-//! \param funcname Source function name
-//! \param line_number Source file line number
-//! \param text Text message
+// @brief Add warning event
+// @param filename Source file name
+// @param funcname Source function name
+// @param line_number Source file line number
+// @param text Text message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 log_impl::warning (
@@ -214,11 +214,11 @@ log_impl::warning (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add info event
-//! \param filename Source file name
-//! \param funcname Source function name
-//! \param line_number Source file line number
-//! \param text Text message
+// @brief Add info event
+// @param filename Source file name
+// @param funcname Source function name
+// @param line_number Source file line number
+// @param text Text message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 log_impl::info (
@@ -233,11 +233,11 @@ log_impl::info (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add development event
-//! \param filename Source file name
-//! \param funcname Source function name
-//! \param line_number Source file line number
-//! \param text Text message
+// @brief Add development event
+// @param filename Source file name
+// @param funcname Source function name
+// @param line_number Source file line number
+// @param text Text message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 log_impl::development (
@@ -253,11 +253,11 @@ log_impl::development (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add debug event
-//! \param filename Source file name
-//! \param funcname Source function name
-//! \param line_number Source file line number
-//! \param text Text message
+// @brief Add debug event
+// @param filename Source file name
+// @param funcname Source function name
+// @param line_number Source file line number
+// @param text Text message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 log_impl::debug (
@@ -274,9 +274,9 @@ log_impl::debug (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param file_name Source file name
-//! \param function_name Source function name
+// @brief Constructor
+// @param file_name Source file name
+// @param function_name Source function name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 log::log (const std::string& filename, const std::string& funcname)
   : filename_ (filename),
@@ -299,7 +299,7 @@ log::log (const std::string& filename, const std::string& funcname)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destructor
+// @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 log::~log ()
 {
@@ -313,9 +313,9 @@ log::~log ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add error event
-//! \param line_number Source file line number
-//! \param text Text message
+// @brief Add error event
+// @param line_number Source file line number
+// @param text Text message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 log::error (std::size_t line_number, const std::string& text)
@@ -324,9 +324,9 @@ log::error (std::size_t line_number, const std::string& text)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add warning event
-//! \param line_number Source file line number
-//! \param text Text message
+// @brief Add warning event
+// @param line_number Source file line number
+// @param text Text message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 log::warning (std::size_t line_number, const std::string& text)
@@ -335,9 +335,9 @@ log::warning (std::size_t line_number, const std::string& text)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add info event
-//! \param line_number Source file line number
-//! \param text Text message
+// @brief Add info event
+// @param line_number Source file line number
+// @param text Text message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 log::info (std::size_t line_number, const std::string& text)
@@ -346,9 +346,9 @@ log::info (std::size_t line_number, const std::string& text)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add development event
-//! \param line_number Source file line number
-//! \param text Text message
+// @brief Add development event
+// @param line_number Source file line number
+// @param text Text message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 log::development (std::size_t line_number, const std::string& text)
@@ -357,9 +357,9 @@ log::development (std::size_t line_number, const std::string& text)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add debug event
-//! \param line_number Source file line number
-//! \param text Text message
+// @brief Add debug event
+// @param line_number Source file line number
+// @param text Text message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 log::debug (std::size_t line_number, const std::string& text)
@@ -368,8 +368,8 @@ log::debug (std::size_t line_number, const std::string& text)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if an error occurred
-//! \return true/false
+// @brief Check if an error occurred
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 log::has_errors () const
@@ -378,8 +378,8 @@ log::has_errors () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set debug mode (on/off)
-//! \param flag (true/false)
+// @brief Set debug mode (on/off)
+// @param flag (true/false)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 log::set_debug (bool flag)
@@ -388,8 +388,8 @@ log::set_debug (bool flag)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get events
-//! \return Event list
+// @brief Get events
+// @return Event list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <event>
 log::get_events () const
@@ -398,3 +398,5 @@ log::get_events () const
 }
 
 } // namespace mobius::core
+
+

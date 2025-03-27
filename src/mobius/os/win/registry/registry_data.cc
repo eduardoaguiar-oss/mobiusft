@@ -24,8 +24,8 @@
 namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief default constructor
-//! \param hdata hive_data
+// @brief default constructor
+// @param hdata hive_data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_data::registry_data ()
   : impl_ (std::make_shared <registry_data_impl_null> ())
@@ -33,8 +33,8 @@ registry_data::registry_data ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor from implementation pointer
-//! \param impl implementation pointer
+// @brief constructor from implementation pointer
+// @param impl implementation pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_data::registry_data (std::shared_ptr <registry_data_impl_base> impl)
   : impl_ (impl)
@@ -42,8 +42,8 @@ registry_data::registry_data (std::shared_ptr <registry_data_impl_base> impl)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get data as DWORD
-//! \return dword value
+// @brief get data as DWORD
+// @return dword value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 registry_data::get_data_as_dword () const
@@ -74,8 +74,8 @@ registry_data::get_data_as_dword () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get data as QWORD
-//! \return qword value
+// @brief get data as QWORD
+// @return qword value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint64_t
 registry_data::get_data_as_qword () const
@@ -102,9 +102,9 @@ registry_data::get_data_as_qword () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get data as UTF-8 string
-//! \param encoding data encoding
-//! \return string
+// @brief get data as UTF-8 string
+// @param encoding data encoding
+// @return string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 registry_data::get_data_as_string (const std::string& encoding) const
@@ -113,3 +113,5 @@ registry_data::get_data_as_string (const std::string& encoding) const
 }
 
 } // namespace mobius::os::win::registry
+
+

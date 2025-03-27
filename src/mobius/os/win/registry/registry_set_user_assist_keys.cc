@@ -18,20 +18,14 @@
 #include "registry_key.h"
 #include "registry_key_impl_user_assist.h"
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace registry
+namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set User Assist "Count" keys
-//! \see http://www.4n6k.com/2013/05/userassist-forensics-timelines.html
-//! \see https://windowsexplored.com/2012/02/06/a-quick-glance-at-the-userassist-key-in-windows/
-//! \see https://github.com/libyal/winreg-kb/blob/master/documentation/User%20Assist%20keys.asciidoc
-//! \param root registry root key
+// @brief set User Assist "Count" keys
+// @see http://www.4n6k.com/2013/05/userassist-forensics-timelines.html
+// @see https://windowsexplored.com/2012/02/06/a-quick-glance-at-the-userassist-key-in-windows/
+// @see https://github.com/libyal/winreg-kb/blob/master/documentation/User%20Assist%20keys.asciidoc
+// @param root registry root key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry_set_user_assist_keys (registry_key root)
@@ -48,7 +42,6 @@ registry_set_user_assist_keys (registry_key root)
     }
 }
 
-} // namespace registry
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::registry
+
+

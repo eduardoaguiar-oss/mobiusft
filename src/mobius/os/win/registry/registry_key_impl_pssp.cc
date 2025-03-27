@@ -25,8 +25,8 @@
 namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
-//! \param key delegated key
+// @brief constructor
+// @param key delegated key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_key_impl_pssp::registry_key_impl_pssp (registry_key key, pssp_data2 data2)
   : key_ (key),
@@ -36,7 +36,7 @@ registry_key_impl_pssp::registry_key_impl_pssp (registry_key key, pssp_data2 dat
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief load subkeys on demand
+// @brief load subkeys on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry_key_impl_pssp::_load_subkeys () const
@@ -62,7 +62,7 @@ registry_key_impl_pssp::_load_subkeys () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief load values on demand
+// @brief load values on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry_key_impl_pssp::_load_values () const
@@ -108,3 +108,5 @@ registry_key_impl_pssp::_load_values () const
 }
 
 } // namespace mobius::os::win::registry
+
+

@@ -25,8 +25,8 @@
 namespace mobius::extension::ui::gtk3
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief gtk3 message_dialog implementation class
-//! \author Eduardo Aguiar
+// @brief gtk3 message_dialog implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class message_dialog_impl : public mobius::ui::message_dialog_impl_base
 {
@@ -37,8 +37,8 @@ public:
   explicit message_dialog_impl (type);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get type
-  //! \return Type
+  // @brief Get type
+  // @return Type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   type
   get_type () const final
@@ -47,8 +47,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get title
-  //! \return Title
+  // @brief Get title
+  // @return Title
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_title () const final
@@ -57,8 +57,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set title
-  //! \param title Window's title
+  // @brief Set title
+  // @param title Window's title
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_title (const std::string& title) final
@@ -67,8 +67,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get text
-  //! \return Text
+  // @brief Get text
+  // @return Text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_text () const final
@@ -77,8 +77,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set text
-  //! \param text Text
+  // @brief Set text
+  // @param text Text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_text (const std::string& text) final
@@ -87,8 +87,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get informative text
-  //! \return Informative text
+  // @brief Get informative text
+  // @return Informative text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_informative_text () const final
@@ -97,8 +97,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set informative text
-  //! \param informative_text Informative text
+  // @brief Set informative text
+  // @param informative_text Informative text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_informative_text (const std::string& informative_text) final
@@ -120,28 +120,30 @@ public:
 void _add_button (const std::string&, response_type);
 
 private:
-  //! \brief Message type
+  // @brief Message type
   type type_;
 
-  //! \brief Window's title
+  // @brief Window's title
   std::string title_;
 
-  //! \brief Text
+  // @brief Text
   std::string text_;
 
-  //! \brief Informative text
+  // @brief Informative text
   std::string informative_text_;
 
-  //! \brief Buttons
+  // @brief Buttons
   std::vector <std::pair <std::string, int>> buttons_;
 
-  //! \brief Next response ID
+  // @brief Next response ID
   response_type next_response_id_ = 1000;
 
-  //! \brief Default response ID
+  // @brief Default response ID
   response_type default_response_id_ = 0;
 };
 
 } // namespace mobius::extension::ui::gtk3
 
 #endif
+
+

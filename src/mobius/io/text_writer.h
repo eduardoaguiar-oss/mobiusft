@@ -24,8 +24,8 @@
 namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Text writer adaptor class
-//! \author Eduardo Aguiar
+// @brief Text writer adaptor class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class text_writer
 {
@@ -42,3 +42,5 @@ private:
 } // namespace mobius::io
 
 #endif
+
+

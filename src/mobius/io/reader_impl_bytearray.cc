@@ -19,13 +19,11 @@
 #include <mobius/exception.inc>
 #include <stdexcept>
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param data bytearray
+// @brief Constructor
+// @param data bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 reader_impl_bytearray::reader_impl_bytearray (const mobius::bytearray& data)
   : data_ (data)
@@ -33,9 +31,9 @@ reader_impl_bytearray::reader_impl_bytearray (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set read position
-//! \param offset Offset in bytes
-//! \param w Either beginning, current or end
+// @brief Set read position
+// @param offset Offset in bytes
+// @param w Either beginning, current or end
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 reader_impl_bytearray::seek (offset_type offset, whence_type w)
@@ -64,9 +62,9 @@ reader_impl_bytearray::seek (offset_type offset, whence_type w)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Read bytes from reader
-//! \param size Size in bytes
-//! \return Data
+// @brief Read bytes from reader
+// @param size Size in bytes
+// @return Data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 reader_impl_bytearray::read (size_type size)
@@ -83,5 +81,6 @@ reader_impl_bytearray::read (size_type size)
   return data;
 }
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
+
+

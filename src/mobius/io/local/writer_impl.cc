@@ -20,16 +20,12 @@
 #include <mobius/exception_posix.inc>
 #include <stdexcept>
 
-namespace mobius
-{
-namespace io
-{
-namespace local
+namespace mobius::io::local
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
-//! \param path path to local file
-//! \param overwrite overwrite flag
+// @brief constructor
+// @param path path to local file
+// @param overwrite overwrite flag
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl::writer_impl (const std::string& path, bool overwrite)
 {
@@ -59,9 +55,9 @@ writer_impl::writer_impl (const std::string& path, bool overwrite)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set write position
-//! \param offset offset in bytes
-//! \param w either beginning, current or end
+// @brief Set write position
+// @param offset offset in bytes
+// @param w either beginning, current or end
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 writer_impl::seek (offset_type offset, whence_type w)
@@ -84,8 +80,8 @@ writer_impl::seek (offset_type offset, whence_type w)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get write position
-//! \return Write position in bytes from the beginning of data
+// @brief Get write position
+// @return Write position in bytes from the beginning of data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl::offset_type
 writer_impl::tell () const
@@ -99,9 +95,9 @@ writer_impl::tell () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief write bytes to writer
-//! \param data a bytearray
-//! \return number of bytes written
+// @brief write bytes to writer
+// @param data a bytearray
+// @return number of bytes written
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl::size_type
 writer_impl::write (const mobius::bytearray& data)
@@ -123,7 +119,7 @@ writer_impl::write (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief flush data to file
+// @brief flush data to file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 writer_impl::flush ()
@@ -132,6 +128,6 @@ writer_impl::flush ()
     throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
 }
 
-} // namespace local
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io::local
+
+

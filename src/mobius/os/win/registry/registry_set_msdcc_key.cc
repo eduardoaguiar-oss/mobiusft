@@ -18,19 +18,13 @@
 #include "registry_key.h"
 #include "registry_key_impl_msdcc.h"
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace registry
+namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set MS Domain Cached Credential key
-//! \see http://support.microsoft.com/kb/913485
-//! \see https://github.com/moyix/creddump/blob/master/cachedump.py (creddump7)
-//! \param root registry root key
+// @brief set MS Domain Cached Credential key
+// @see http://support.microsoft.com/kb/913485
+// @see https://github.com/moyix/creddump/blob/master/cachedump.py (creddump7)
+// @param root registry root key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry_set_msdcc_key (registry_key root)
@@ -49,7 +43,6 @@ registry_set_msdcc_key (registry_key root)
     }
 }
 
-} // namespace registry
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::registry
+
+

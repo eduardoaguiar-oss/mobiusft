@@ -22,7 +22,7 @@
 #include <mobius/database/connection.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_database_connection_to_pyobject (const mobius::database::conn
 mobius::database::connection pymobius_database_connection_from_pyobject (PyObject *);
 
 #endif
+
+

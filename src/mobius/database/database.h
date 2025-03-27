@@ -26,8 +26,8 @@
 namespace mobius::database
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief sqlite3 database class
-//! \author Eduardo Aguiar
+// @brief sqlite3 database class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct database_impl;
 
@@ -68,3 +68,5 @@ private:
 } // namespace mobius::database
 
 #endif
+
+

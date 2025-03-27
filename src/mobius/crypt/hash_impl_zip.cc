@@ -33,7 +33,7 @@ static constexpr std::uint32_t INITK2 = 0x34567890;
 namespace mobius::crypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hash_impl_zip::hash_impl_zip () noexcept
   : k0_ (INITK0), k1_ (INITK1), k2_ (INITK2)
@@ -41,7 +41,7 @@ hash_impl_zip::hash_impl_zip () noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reset hash value
+// @brief Reset hash value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 hash_impl_zip::reset () noexcept
@@ -52,8 +52,8 @@ hash_impl_zip::reset () noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Update hash for a given bytearray
-//! \param data Data block
+// @brief Update hash for a given bytearray
+// @param data Data block
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 hash_impl_zip::update (const mobius::bytearray& data) noexcept
@@ -67,8 +67,8 @@ hash_impl_zip::update (const mobius::bytearray& data) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Return hash digest
-//! \return Hash digest
+// @brief Return hash digest
+// @return Hash digest
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray
 hash_impl_zip::get_digest ()
@@ -91,8 +91,8 @@ hash_impl_zip::get_digest ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Clone object
-//! \return Pointer to newly created object
+// @brief Clone object
+// @return Pointer to newly created object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::shared_ptr <hash_impl_base>
 hash_impl_zip::clone () const
@@ -107,3 +107,5 @@ hash_impl_zip::clone () const
 }
 
 } // namespace mobius::crypt
+
+

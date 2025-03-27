@@ -22,7 +22,7 @@
 namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief default constructor
+// @brief default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_key::registry_key ()
   : impl_ (std::make_shared <registry_key_impl_null> ())
@@ -30,8 +30,8 @@ registry_key::registry_key ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor from implementation pointer
-//! \param impl implementation pointer
+// @brief constructor from implementation pointer
+// @param impl implementation pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_key::registry_key (std::shared_ptr <registry_key_impl_base> impl)
   : impl_ (impl)
@@ -39,9 +39,9 @@ registry_key::registry_key (std::shared_ptr <registry_key_impl_base> impl)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get subkey by name
-//! \param name subkey name
-//! \return subkey or empty key, if not found
+// @brief get subkey by name
+// @param name subkey name
+// @return subkey or empty key, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_key
 registry_key::get_key_by_name (const std::string& name) const
@@ -56,9 +56,9 @@ registry_key::get_key_by_name (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get subkey by path
-//! \param path subkey path
-//! \return subkey or empty key, if not found
+// @brief get subkey by path
+// @param path subkey path
+// @return subkey or empty key, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_key
 registry_key::get_key_by_path (const std::string& path) const
@@ -98,9 +98,9 @@ registry_key::get_key_by_path (const std::string& path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get subkey by mask
-//! \param a_mask fnmatch mask
-//! \return subkeys or empty vector, if no keys were found
+// @brief get subkey by mask
+// @param a_mask fnmatch mask
+// @return subkeys or empty vector, if no keys were found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <registry_key>
 registry_key::get_key_by_mask (const std::string& a_mask) const
@@ -157,9 +157,9 @@ registry_key::get_key_by_mask (const std::string& a_mask) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get value by name
-//! \param name value name
-//! \return value or empty value, if not found
+// @brief get value by name
+// @param name value name
+// @return value or empty value, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_value
 registry_key::get_value_by_name (const std::string& name) const
@@ -174,9 +174,9 @@ registry_key::get_value_by_name (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get value by path
-//! \param name value path
-//! \return value or empty value, if not found
+// @brief get value by path
+// @param name value path
+// @return value or empty value, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_value
 registry_key::get_value_by_path (const std::string& path) const
@@ -213,9 +213,9 @@ registry_key::get_value_by_path (const std::string& path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get values by mask
-//! \param a_mask value mask
-//! \return values or empty vector, if no values were found
+// @brief get values by mask
+// @param a_mask value mask
+// @return values or empty vector, if no values were found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <registry_value>
 registry_key::get_value_by_mask (const std::string& a_mask) const
@@ -263,9 +263,9 @@ registry_key::get_value_by_mask (const std::string& a_mask) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get data by value name
-//! \param name value name
-//! \return data
+// @brief get data by value name
+// @param name value name
+// @return data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_data
 registry_key::get_data_by_name (const std::string& name) const
@@ -280,9 +280,9 @@ registry_key::get_data_by_name (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get value by path
-//! \param name value path
-//! \return value or empty value, if not found
+// @brief get value by path
+// @param name value path
+// @return value or empty value, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_data
 registry_key::get_data_by_path (const std::string& path) const
@@ -297,9 +297,9 @@ registry_key::get_data_by_path (const std::string& path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get data by mask
-//! \param mask value mask
-//! \return data or empty vector, if no values were found
+// @brief get data by mask
+// @param mask value mask
+// @return data or empty vector, if no values were found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <registry_data>
 registry_key::get_data_by_mask (const std::string& mask) const
@@ -313,3 +313,5 @@ registry_key::get_data_by_mask (const std::string& mask) const
 }
 
 } // namespace mobius::os::win::registry
+
+

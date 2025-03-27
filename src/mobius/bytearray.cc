@@ -26,7 +26,7 @@
 namespace mobius
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create bytearray from C string
+// @brief Create bytearray from C string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray::bytearray (const char *str)
   : data_ (str, str + strlen (str))
@@ -34,7 +34,7 @@ bytearray::bytearray (const char *str)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create bytearray from C++ string
+// @brief Create bytearray from C++ string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray::bytearray (const std::string& str)
   : data_ (str.begin (), str.end ())
@@ -42,7 +42,7 @@ bytearray::bytearray (const std::string& str)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create bytearray from C array
+// @brief Create bytearray from C array
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray::bytearray (const uint8_t *data, size_type size)
   : data_ (data, data + size)
@@ -50,9 +50,9 @@ bytearray::bytearray (const uint8_t *data, size_type size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create bytearray with size copies of byte b
-//! \param b Byte
-//! \param size Bytearray size
+// @brief Create bytearray with size copies of byte b
+// @param b Byte
+// @param size Bytearray size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray::bytearray (const uint8_t b, size_type size)
   : data_ (size)
@@ -61,7 +61,7 @@ bytearray::bytearray (const uint8_t b, size_type size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create bytearray with given size
+// @brief Create bytearray with given size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray::bytearray (bytearray::size_type size)
   : data_ (size)
@@ -69,7 +69,7 @@ bytearray::bytearray (bytearray::size_type size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create bytearray from initializer list
+// @brief Create bytearray from initializer list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray::bytearray (const std::initializer_list<uint8_t>& list)
   : data_ (list.begin (), list.end ())
@@ -77,7 +77,7 @@ bytearray::bytearray (const std::initializer_list<uint8_t>& list)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create bytearray from two const iterators
+// @brief Create bytearray from two const iterators
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray::bytearray (const_iterator b, const_iterator e)
   : data_ (b, e)
@@ -85,8 +85,8 @@ bytearray::bytearray (const_iterator b, const_iterator e)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief operator[]
-//! \return element of bytearray
+// @brief operator[]
+// @return element of bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray::const_reference
 bytearray::operator[] (bytearray::size_type idx) const
@@ -95,8 +95,8 @@ bytearray::operator[] (bytearray::size_type idx) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief operator[]
-//! \return Reference to an element of bytearray
+// @brief operator[]
+// @return Reference to an element of bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray::reference
 bytearray::operator[] (bytearray::size_type idx)
@@ -105,8 +105,8 @@ bytearray::operator[] (bytearray::size_type idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief operator^= apply XOR operator on two bytearrays
-//! \param o another bytearray
+// @brief operator^= apply XOR operator on two bytearrays
+// @param o another bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray&
 bytearray::operator^= (const bytearray& o) noexcept
@@ -120,8 +120,8 @@ bytearray::operator^= (const bytearray& o) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief operator+= concatenate another bytearray
-//! \param o another bytearray
+// @brief operator+= concatenate another bytearray
+// @param o another bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray&
 bytearray::operator+= (const bytearray& o)
@@ -131,8 +131,8 @@ bytearray::operator+= (const bytearray& o)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief operator<<= Left shift with carrying
-//! \param n Number of bits
+// @brief operator<<= Left shift with carrying
+// @param n Number of bits
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray&
 bytearray::operator<<= (int n) noexcept
@@ -164,8 +164,8 @@ bytearray::operator<<= (int n) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief operator<<= Right shift with carrying
-//! \param n Number of bits
+// @brief operator<<= Right shift with carrying
+// @param n Number of bits
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray&
 bytearray::operator>>= (int n) noexcept
@@ -196,8 +196,8 @@ bytearray::operator>>= (int n) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Fill array with value
-//! \param val value to fill the array with
+// @brief Fill array with value
+// @param val value to fill the array with
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 bytearray::fill (bytearray::value_type val) noexcept
@@ -206,7 +206,7 @@ bytearray::fill (bytearray::value_type val) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Fill array with random bytes
+// @brief Fill array with random bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 bytearray::random () noexcept
@@ -215,9 +215,9 @@ bytearray::random () noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief left pad bytearray
-//! \param siz new size in bytes
-//! \param val value to fill
+// @brief left pad bytearray
+// @param siz new size in bytes
+// @param val value to fill
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 bytearray::lpad (bytearray::size_type siz, bytearray::value_type val)
@@ -231,9 +231,9 @@ bytearray::lpad (bytearray::size_type siz, bytearray::value_type val)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief right pad bytearray
-//! \param siz new size in bytes
-//! \param val value to fill
+// @brief right pad bytearray
+// @param siz new size in bytes
+// @param val value to fill
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 bytearray::rpad (size_type siz, value_type val)
@@ -247,9 +247,9 @@ bytearray::rpad (size_type siz, value_type val)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Count the elements that are equal to value
-//! \param value Value to compare
-//! \return Number of elements that are equal to value
+// @brief Count the elements that are equal to value
+// @param value Value to compare
+// @return Number of elements that are equal to value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint64_t
 bytearray::count (value_type value) const noexcept
@@ -262,8 +262,8 @@ bytearray::count (value_type value) const noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if all bytes are equal to value
-//! \param value Value to check
+// @brief Check if all bytes are equal to value
+// @param value Value to check
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 bytearray::all_equal (value_type value) const noexcept
@@ -276,10 +276,10 @@ bytearray::all_equal (value_type value) const noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Compare bytearray slice to another bytearray
-//! \param pos Start position
-//! \param b Bytearray
-//! \return true/false
+// @brief Compare bytearray slice to another bytearray
+// @param pos Start position
+// @param b Bytearray
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 bytearray::compare (size_type pos, const bytearray& b) const noexcept
@@ -288,9 +288,9 @@ bytearray::compare (size_type pos, const bytearray& b) const noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if bytearray starts with another bytearray
-//! \param b Bytearray
-//! \return true/false
+// @brief Check if bytearray starts with another bytearray
+// @param b Bytearray
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 bytearray::startswith (const bytearray& b) const noexcept
@@ -299,9 +299,9 @@ bytearray::startswith (const bytearray& b) const noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if bytearray ends with another bytearray
-//! \param b Bytearray
-//! \return true/false
+// @brief Check if bytearray ends with another bytearray
+// @param b Bytearray
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 bytearray::endswith (const bytearray& b) const noexcept
@@ -310,9 +310,9 @@ bytearray::endswith (const bytearray& b) const noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Search for sequence inside bytearray
-//! \param b Sequence data
-//! \return Sequence position or <i>notfound</i> if not found
+// @brief Search for sequence inside bytearray
+// @param b Sequence data
+// @return Sequence position or <i>notfound</i> if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray::pos_type
 bytearray::find (const bytearray& b) const noexcept
@@ -326,9 +326,9 @@ bytearray::find (const bytearray& b) const noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Search for sequence inside bytearray, starting from the end
-//! \param b Sequence data
-//! \return Sequence position or <i>notfound</i> if not found
+// @brief Search for sequence inside bytearray, starting from the end
+// @param b Sequence data
+// @return Sequence position or <i>notfound</i> if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray::pos_type
 bytearray::rfind (const bytearray& b) const noexcept
@@ -342,9 +342,9 @@ bytearray::rfind (const bytearray& b) const noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create a new bytearray from a subset of bytearray
-//! \param start start position
-//! \param end end position
+// @brief create a new bytearray from a subset of bytearray
+// @param start start position
+// @param end end position
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 bytearray::slice (bytearray::size_type start, bytearray::size_type end) const
@@ -367,8 +367,8 @@ bytearray::slice (bytearray::size_type start, bytearray::size_type end) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief parse a hexadecimal string into bytearray
-//! \param s string
+// @brief parse a hexadecimal string into bytearray
+// @param s string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 bytearray::from_hexstring (const std::string& s)
@@ -398,8 +398,8 @@ bytearray::from_hexstring (const std::string& s)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief return a hexadecimal representation of bytearray
-//! \return hexadecimal string
+// @brief return a hexadecimal representation of bytearray
+// @return hexadecimal string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 bytearray::to_hexstring () const
@@ -419,9 +419,9 @@ bytearray::to_hexstring () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert bytearray to string
-//! \param encoding Byterray encoding or "", if none
-//! \return string
+// @brief Convert bytearray to string
+// @param encoding Byterray encoding or "", if none
+// @return string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 bytearray::to_string (const std::string& encoding) const
@@ -433,8 +433,8 @@ bytearray::to_string (const std::string& encoding) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Generate hexdump from bytearray
-//! \return String
+// @brief Generate hexdump from bytearray
+// @return String
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 bytearray::dump (unsigned int indent) const
@@ -486,9 +486,9 @@ bytearray::dump (unsigned int indent) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Split bytearray into sequences
-//! \param sep Separator sequence data
-//! \return Sequences
+// @brief Split bytearray into sequences
+// @param sep Separator sequence data
+// @return Sequences
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <bytearray>
 bytearray::split (const bytearray& sep) const
@@ -510,10 +510,10 @@ bytearray::split (const bytearray& sep) const
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Concatenate two bytearrays
-//! \param a1 bytearray
-//! \param a2 bytearray
-//! \return new concatenated bytearray
+// @brief Concatenate two bytearrays
+// @param a1 bytearray
+// @param a2 bytearray
+// @return new concatenated bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray
 operator+ (const bytearray& a1, const bytearray& a2)
@@ -524,10 +524,10 @@ operator+ (const bytearray& a1, const bytearray& a2)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief XOR two bytearrays
-//! \param a1 bytearray
-//! \param a2 bytearray
-//! \return a1 ^ a2
+// @brief XOR two bytearrays
+// @param a1 bytearray
+// @param a2 bytearray
+// @return a1 ^ a2
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray
 operator^ (const bytearray& a1, const bytearray& a2)
@@ -538,10 +538,10 @@ operator^ (const bytearray& a1, const bytearray& a2)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Left shift bytearray
-//! \param b Bytearray
-//! \param n Number of bits
-//! \return New bytearray = b << n
+// @brief Left shift bytearray
+// @param b Bytearray
+// @param n Number of bits
+// @return New bytearray = b << n
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray
 operator<< (const bytearray& b, int n)
@@ -552,10 +552,10 @@ operator<< (const bytearray& b, int n)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Right shift bytearray
-//! \param b Bytearray
-//! \param n Number of bits
-//! \return New bytearray = b >> n
+// @brief Right shift bytearray
+// @param b Bytearray
+// @param n Number of bits
+// @return New bytearray = b >> n
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray
 operator>> (const bytearray& b, int n)
@@ -566,9 +566,9 @@ operator>> (const bytearray& b, int n)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief check if two bytearrays are different
-//! \param a bytearray
-//! \param b bytearray
+// @brief check if two bytearrays are different
+// @param a bytearray
+// @param b bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator!= (const bytearray& a, const bytearray& b)
@@ -577,3 +577,5 @@ operator!= (const bytearray& a, const bytearray& b)
 }
 
 } // namespace mobius
+
+

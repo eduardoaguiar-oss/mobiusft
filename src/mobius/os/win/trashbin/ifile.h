@@ -24,17 +24,11 @@
 #include <memory>
 #include <string>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace trashbin
+namespace mobius::os::win::trashbin
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Trash bin $I file decoder class
-//! \author Eduardo Aguiar
+// @brief Trash bin $I file decoder class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class ifile
 {
@@ -61,16 +55,15 @@ public:
   std::string get_path () const;
 
 private:
-  //! \brief Implementation class forward declaration
+  // @brief Implementation class forward declaration
   class impl;
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
-} // namespace trashbin
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::trashbin
 
 #endif
+
+

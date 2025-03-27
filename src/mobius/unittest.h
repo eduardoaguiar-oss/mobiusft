@@ -44,8 +44,8 @@
 namespace mobius
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief unittest class
-//! \author Eduardo Aguiar
+// @brief unittest class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class unittest
 {
@@ -71,3 +71,5 @@ public:
 } // namespace mobius
 
 #endif
+
+

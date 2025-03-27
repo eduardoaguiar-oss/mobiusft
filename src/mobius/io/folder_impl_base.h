@@ -33,8 +33,8 @@ class file_impl_base;
 class stream_impl_base;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Folder base class
-//! \author Eduardo Aguiar
+// @brief Folder base class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class folder_impl_base
 {
@@ -54,7 +54,7 @@ public:
   folder_impl_base& operator= (folder_impl_base&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief entry_impl concrete class
+  // @brief entry_impl concrete class
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   struct entry_impl
   {
@@ -119,3 +119,5 @@ public:
 } // namespace mobius::io
 
 #endif
+
+

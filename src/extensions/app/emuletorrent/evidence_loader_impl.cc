@@ -57,9 +57,9 @@ static const std::string ANT_NAME = APP_NAME;
 static const std::string ANT_VERSION = "1.2";
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Update metadata map, preferring non null values
-//! \param metadata Metadata map
-//! \param other Other metadata map
+// @brief Update metadata map, preferring non null values
+// @param metadata Metadata map
+// @param other Other metadata map
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 _update_metadata (mobius::pod::map& metadata, const mobius::pod::map& other)
@@ -74,9 +74,9 @@ _update_metadata (mobius::pod::map& metadata, const mobius::pod::map& other)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get vector of hashes for a given file
-//! \param f File structure
-//! \return Vector
+// @brief Get vector of hashes for a given file
+// @param f File structure
+// @return Vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::pod::data>
 _get_file_hashes (const mobius::extension::app::emuletorrent::file& f)
@@ -99,8 +99,8 @@ _get_file_hashes (const mobius::extension::app::emuletorrent::file& f)
 namespace mobius::extension::app::emuletorrent
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param item Item object
+// @brief Constructor
+// @param item Item object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 evidence_loader_impl::evidence_loader_impl (const mobius::model::item& item, scan_type type)
   : item_ (item),
@@ -109,7 +109,7 @@ evidence_loader_impl::evidence_loader_impl (const mobius::model::item& item, sca
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan item files for evidences
+// @brief Scan item files for evidences
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::run ()
@@ -180,7 +180,7 @@ evidence_loader_impl::run ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan canonical folders
+// @brief Scan canonical folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_scan_canonical_folders ()
@@ -196,8 +196,8 @@ evidence_loader_impl::_scan_canonical_folders ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan root folder for evidences
-//! \param folder Root folder
+// @brief Scan root folder for evidences
+// @param folder Root folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_scan_canonical_root_folder (const mobius::io::folder& folder)
@@ -209,8 +209,8 @@ evidence_loader_impl::_scan_canonical_root_folder (const mobius::io::folder& fol
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan user folder for evidences
-//! \param folder User folder
+// @brief Scan user folder for evidences
+// @param folder User folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_scan_canonical_user_folder (const mobius::io::folder& folder)
@@ -228,8 +228,8 @@ evidence_loader_impl::_scan_canonical_user_folder (const mobius::io::folder& fol
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan AppData/Roaming/mulehome folder for evidences
-//! \param folder <i>mulehome</i> folder
+// @brief Scan AppData/Roaming/mulehome folder for evidences
+// @param folder <i>mulehome</i> folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_scan_canonical_emuletorrent_roaming_folder (const mobius::io::folder& folder)
@@ -241,8 +241,8 @@ evidence_loader_impl::_scan_canonical_emuletorrent_roaming_folder (const mobius:
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan AppData/Local/eMuleTorrent folder for evidences
-//! \param folder <i>eMuleTorrent</i> folder
+// @brief Scan AppData/Local/eMuleTorrent folder for evidences
+// @param folder <i>eMuleTorrent</i> folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_scan_canonical_emuletorrent_local_folder (const mobius::io::folder& folder)
@@ -261,8 +261,8 @@ evidence_loader_impl::_scan_canonical_emuletorrent_local_folder (const mobius::i
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode eMuleTorrent.ini file
-//! \param f File object
+// @brief Decode eMuleTorrent.ini file
+// @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_decode_emuletorrent_ini_file (const mobius::io::file& f)
@@ -307,8 +307,8 @@ evidence_loader_impl::_decode_emuletorrent_ini_file (const mobius::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode BT_backup/*.fastresume file
-//! \param f File object
+// @brief Decode BT_backup/*.fastresume file
+// @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_decode_bt_fastresume_file (const mobius::io::file& f)
@@ -374,8 +374,8 @@ evidence_loader_impl::_decode_bt_fastresume_file (const mobius::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode ED2K_backup/*.fastresume file
-//! \param f File object
+// @brief Decode ED2K_backup/*.fastresume file
+// @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_decode_ed2k_fastresume_file (const mobius::io::file& f)
@@ -424,7 +424,7 @@ evidence_loader_impl::_decode_ed2k_fastresume_file (const mobius::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan all folders
+// @brief Scan all folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_scan_all_folders ()
@@ -440,8 +440,8 @@ evidence_loader_impl::_scan_all_folders ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan generic folder
-//! \param folder Folder object
+// @brief Scan generic folder
+// @param folder Folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_scan_generic_folder (const mobius::io::folder& folder)
@@ -461,7 +461,7 @@ evidence_loader_impl::_scan_generic_folder (const mobius::io::folder& folder)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save evidences
+// @brief Save evidences
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_evidences ()
@@ -480,7 +480,7 @@ evidence_loader_impl::_save_evidences ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save accounts
+// @brief Save accounts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_accounts ()
@@ -515,7 +515,7 @@ evidence_loader_impl::_save_accounts ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save local files
+// @brief Save local files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_local_files ()
@@ -565,7 +565,7 @@ evidence_loader_impl::_save_local_files ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save received files
+// @brief Save received files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_received_files ()
@@ -614,7 +614,7 @@ evidence_loader_impl::_save_received_files ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save remote files
+// @brief Save remote files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_p2p_remote_files ()
@@ -661,7 +661,7 @@ evidence_loader_impl::_save_p2p_remote_files ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save sent files
+// @brief Save sent files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_sent_files ()
@@ -711,7 +711,7 @@ evidence_loader_impl::_save_sent_files ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save shared files
+// @brief Save shared files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_shared_files ()
@@ -762,3 +762,6 @@ evidence_loader_impl::_save_shared_files ()
 }
 
 } // namespace mobius::extension::app::ares
+
+
+

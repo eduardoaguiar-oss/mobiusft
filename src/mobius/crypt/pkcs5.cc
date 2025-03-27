@@ -21,15 +21,13 @@
 #include <mobius/exception.inc>
 #include <stdexcept>
 
-namespace mobius
-{
-namespace crypt
+namespace mobius::crypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Unpad plain text
-//! \param data Plain text data
-//! \return Unpadded data
-//! \see RFC 2898 (section 6.1.1.4)
+// @brief Unpad plain text
+// @param data Plain text data
+// @return Unpadded data
+// @see RFC 2898 (section 6.1.1.4)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 pkcs5_unpad (const mobius::bytearray& data)
@@ -48,13 +46,13 @@ pkcs5_unpad (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief PBKDF1 key derivation function
-//! \param hash_id Hash algorithm (either "md2", "md5" or "sha1")
-//! \param key Key
-//! \param salt Salt
-//! \param count Iterations
-//! \param dklen Derived key length in bytes
-//! \see RFC 2898
+// @brief PBKDF1 key derivation function
+// @param hash_id Hash algorithm (either "md2", "md5" or "sha1")
+// @param key Key
+// @param salt Salt
+// @param count Iterations
+// @param dklen Derived key length in bytes
+// @see RFC 2898
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 pbkdf1 (
@@ -101,13 +99,13 @@ pbkdf1 (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief PBKDF2 key derivation function (with HMAC)
-//! \param hash_id hash algorithm (e.g. "md2", "md5", "sha1")
-//! \param key Key
-//! \param salt Salt
-//! \param count Iterations
-//! \param dklen Derived key length in bytes
-//! \see RFC 2898
+// @brief PBKDF2 key derivation function (with HMAC)
+// @param hash_id hash algorithm (e.g. "md2", "md5", "sha1")
+// @param key Key
+// @param salt Salt
+// @param count Iterations
+// @param dklen Derived key length in bytes
+// @see RFC 2898
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 pbkdf2_hmac (
@@ -157,5 +155,6 @@ pbkdf2_hmac (
   return dk.slice (0, dklen - 1);
 }
 
-} // namespace crypt
-} // namespace mobius
+} // namespace mobius::crypt
+
+

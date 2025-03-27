@@ -27,8 +27,8 @@
 namespace mobius::extension::app::emuletorrent
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
+// @brief Constructor
+// @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_ed2k_fastresume::file_ed2k_fastresume (const mobius::io::reader& reader)
 {
@@ -63,7 +63,7 @@ file_ed2k_fastresume::file_ed2k_fastresume (const mobius::io::reader& reader)
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Derived attributes
-  //! \see https://en.wikipedia.org/wiki/Ed2k_URI_scheme
+  // @see https://en.wikipedia.org/wiki/Ed2k_URI_scheme
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto p = mobius::io::path (path_);
   filename_ = p.get_filename ();
@@ -71,7 +71,7 @@ file_ed2k_fastresume::file_ed2k_fastresume (const mobius::io::reader& reader)
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Decode metadata, if any
-  //! \see transfer::write_resume_data@transfer.cpp (libed2k)
+  // @see transfer::write_resume_data@transfer.cpp (libed2k)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto metadata_section = section_.new_child ("metadata");
 
@@ -87,8 +87,8 @@ file_ed2k_fastresume::file_ed2k_fastresume (const mobius::io::reader& reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load metadata
-//! \param metadata Map object
+// @brief Load metadata
+// @param metadata Map object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 file_ed2k_fastresume::_load_metadata (const mobius::pod::map& metadata)
@@ -137,3 +137,7 @@ file_ed2k_fastresume::_load_metadata (const mobius::pod::map& metadata)
 }
 
 } // namespace mobius::extension::app::emuletorrent
+
+
+
+

@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file datasource_vfs.cc C++ API <i>mobius.datasource.datasource_vfs</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "datasource_vfs.h"
@@ -28,9 +28,9 @@
 #include "vfs/vfs.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>datasource_vfs</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>datasource_vfs</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_datasource_datasource_vfs_check (PyObject *value)
@@ -39,9 +39,9 @@ pymobius_datasource_datasource_vfs_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>datasource_vfs</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New datasource_vfs object
+// @brief Create <i>datasource_vfs</i> Python object from C++ object
+// @param obj C++ object
+// @return New datasource_vfs object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_datasource_datasource_vfs_to_pyobject (const mobius::datasource::datasource_vfs& obj)
@@ -50,9 +50,9 @@ pymobius_datasource_datasource_vfs_to_pyobject (const mobius::datasource::dataso
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>datasource_vfs</i> C++ object from Python object
-//! \param value Python value
-//! \return Datasource_vfs object
+// @brief Create <i>datasource_vfs</i> C++ object from Python object
+// @param value Python value
+// @return Datasource_vfs object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datasource::datasource_vfs
 pymobius_datasource_datasource_vfs_from_pyobject (PyObject *value)
@@ -61,10 +61,10 @@ pymobius_datasource_datasource_vfs_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_vfs</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return VFS object
+// @brief <i>get_vfs</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return VFS object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_vfs (datasource_datasource_vfs_o *self, PyObject *)
@@ -86,7 +86,7 @@ tp_f_get_vfs (datasource_datasource_vfs_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -100,8 +100,8 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>datasource_vfs</i> deallocator
-//! \param self Object
+// @brief <i>datasource_vfs</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (datasource_datasource_vfs_o *self)
@@ -111,7 +111,7 @@ tp_dealloc (datasource_datasource_vfs_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject datasource_datasource_vfs_t =
 {
@@ -164,3 +164,5 @@ PyTypeObject datasource_datasource_vfs_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

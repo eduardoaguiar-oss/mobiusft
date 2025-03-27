@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file ufdr_datasource.cc C++ API <i>mobius.datasource.ufdr.datasource</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pylist.h>
@@ -30,9 +30,9 @@
 #include "pod/map.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>ufdr_datasource</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>ufdr_datasource</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_datasource_ufdr_datasource_check (PyObject *value)
@@ -41,9 +41,9 @@ pymobius_datasource_ufdr_datasource_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>ufdr_datasource</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New ufdr_datasource object
+// @brief Create <i>ufdr_datasource</i> Python object from C++ object
+// @param obj C++ object
+// @return New ufdr_datasource object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_datasource_ufdr_datasource_to_pyobject (const mobius::datasource::ufdr::datasource& obj)
@@ -52,9 +52,9 @@ pymobius_datasource_ufdr_datasource_to_pyobject (const mobius::datasource::ufdr:
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>ufdr_datasource</i> C++ object from Python object
-//! \param value Python value
-//! \return Datasource_ufdr object
+// @brief Create <i>ufdr_datasource</i> C++ object from Python object
+// @param value Python value
+// @return Datasource_ufdr object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datasource::ufdr::datasource
 pymobius_datasource_ufdr_datasource_from_pyobject (PyObject *value)
@@ -63,10 +63,10 @@ pymobius_datasource_ufdr_datasource_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_url</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return URL
+// @brief <i>get_url</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return URL
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_url (datasource_ufdr_datasource_o *self, PyObject *)
@@ -88,10 +88,10 @@ tp_f_get_url (datasource_ufdr_datasource_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_file_info</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Map with .ufdr file attributes
+// @brief <i>get_file_info</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Map with .ufdr file attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_file_info (datasource_ufdr_datasource_o *self, PyObject *)
@@ -113,10 +113,10 @@ tp_f_get_file_info (datasource_ufdr_datasource_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_case_info</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Map with case attributes
+// @brief <i>get_case_info</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Map with case attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_case_info (datasource_ufdr_datasource_o *self, PyObject *)
@@ -138,9 +138,9 @@ tp_f_get_case_info (datasource_ufdr_datasource_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_case_info</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_case_info</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_case_info (datasource_ufdr_datasource_o *self, PyObject *args)
@@ -174,9 +174,9 @@ tp_f_set_case_info (datasource_ufdr_datasource_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>add_extraction</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>add_extraction</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_add_extraction (datasource_ufdr_datasource_o *self, PyObject *args)
@@ -210,10 +210,10 @@ tp_f_add_extraction (datasource_ufdr_datasource_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_extractions</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Extractions
+// @brief <i>get_extractions</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Extractions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_extractions (datasource_ufdr_datasource_o *self, PyObject *)
@@ -238,7 +238,7 @@ tp_f_get_extractions (datasource_ufdr_datasource_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -282,8 +282,8 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>ufdr_datasource</i> deallocator
-//! \param self Object
+// @brief <i>ufdr_datasource</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (datasource_ufdr_datasource_o *self)
@@ -293,7 +293,7 @@ tp_dealloc (datasource_ufdr_datasource_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject datasource_ufdr_datasource_t =
 {
@@ -346,3 +346,5 @@ PyTypeObject datasource_ufdr_datasource_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

@@ -29,10 +29,10 @@ namespace
 // Module data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-//! \brief Resources by thread
+// @brief Resources by thread
 static std::unordered_map<std::thread::id, std::unordered_map<std::string, std::any>> resources_;
 
-//! \brief Mutex for resources map
+// @brief Mutex for resources map
 static std::mutex mutex_;
 
 //! brief Main thread guard
@@ -44,7 +44,7 @@ static mobius::core::thread_guard main_thread_guard_;
 namespace mobius::core
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Thread guard implementation class
+// @brief Thread guard implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class thread_guard::impl
 {
@@ -69,7 +69,7 @@ private:
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 thread_guard::impl::impl()
   : thread_id_(std::this_thread::get_id ())
@@ -83,7 +83,7 @@ thread_guard::impl::impl()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destructor
+// @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 thread_guard::impl::~impl()
 {
@@ -93,7 +93,7 @@ thread_guard::impl::~impl()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 thread_guard::thread_guard()
   : impl_ (std::make_shared<impl> ())
@@ -102,9 +102,9 @@ thread_guard::thread_guard()
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if thread resource exists
-//! \param resource_id Resource ID
-//! \return true/false
+// @brief Check if thread resource exists
+// @param resource_id Resource ID
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 has_thread_resource (const std::string& resource_id)
@@ -120,9 +120,9 @@ has_thread_resource (const std::string& resource_id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get thread resource
-//! \param resource_id Resource ID
-//! \return any object
+// @brief Get thread resource
+// @param resource_id Resource ID
+// @return any object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::any
 get_thread_resource (const std::string& resource_id)
@@ -144,9 +144,9 @@ get_thread_resource (const std::string& resource_id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set thread resource
-//! \param resource_id Resource ID
-//! \param resource_value Resource value
+// @brief Set thread resource
+// @param resource_id Resource ID
+// @param resource_value Resource value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 set_thread_resource (const std::string& resource_id, const std::any& resource_value)
@@ -162,8 +162,8 @@ set_thread_resource (const std::string& resource_id, const std::any& resource_va
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove thread resource
-//! \param resource_id Resource ID
+// @brief Remove thread resource
+// @param resource_id Resource ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 remove_thread_resource (const std::string& resource_id)
@@ -179,3 +179,4 @@ remove_thread_resource (const std::string& resource_id)
 }
 
 } // namespace mobius::core
+

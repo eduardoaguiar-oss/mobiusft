@@ -17,18 +17,18 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API mobius.ui module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API mobius.ui module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pygil.h>
 #include <mobius/ui/ui.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_implementation</i> function
-//! \param self Function object
-//! \param args Argument list
-//! \return Python object
+// @brief <i>set_implementation</i> function
+// @param self Function object
+// @param args Argument list
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_ui_set_implementation (PyObject *, PyObject *args)
@@ -62,9 +62,9 @@ func_ui_set_implementation (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>init</i> function
-//! \param self Function object
-//! \param args Argument list
+// @brief <i>init</i> function
+// @param self Function object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_ui_init (PyObject *, PyObject *)
@@ -86,9 +86,9 @@ func_ui_init (PyObject *, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>start</i> function
-//! \param self Function object
-//! \param args Argument list
+// @brief <i>start</i> function
+// @param self Function object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_ui_start (PyObject *, PyObject *)
@@ -110,9 +110,9 @@ func_ui_start (PyObject *, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>stop</i> method implementation
-//! \param self Function object
-//! \param args Argument list
+// @brief <i>stop</i> method implementation
+// @param self Function object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_ui_stop (PyObject *, PyObject *)
@@ -134,9 +134,9 @@ func_ui_stop (PyObject *, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>flush</i> method implementation
-//! \param self Function object
-//! \param args Argument list
+// @brief <i>flush</i> method implementation
+// @param self Function object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_ui_flush (PyObject *, PyObject *)
@@ -155,3 +155,5 @@ func_ui_flush (PyObject *, PyObject *)
   // return None
   return mobius::py::pynone ();
 }
+
+

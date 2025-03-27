@@ -31,17 +31,17 @@ namespace
 // Resources
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-//! \brief Resources
+// @brief Resources
 std::unordered_map <std::string, resource> resources_;
 
-//! \brief Resource mutex
+// @brief Resource mutex
 static std::mutex mutex_;
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add resource
-//! \param id Resource ID
-//! \param r Resource
+// @brief Add resource
+// @param id Resource ID
+// @param r Resource
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 add_resource (const std::string& id, const resource& r)
@@ -55,8 +55,8 @@ add_resource (const std::string& id, const resource& r)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove resource
-//! \param id Resource ID
+// @brief Remove resource
+// @param id Resource ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 remove_resource (const std::string& id)
@@ -70,8 +70,8 @@ remove_resource (const std::string& id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if resource exists
-//! \param id Resource ID
+// @brief Check if resource exists
+// @param id Resource ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 has_resource (const std::string& id)
@@ -81,8 +81,8 @@ has_resource (const std::string& id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get resource
-//! \param id Resource ID
+// @brief Get resource
+// @param id Resource ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 resource
 get_resource (const std::string& id)
@@ -98,8 +98,8 @@ get_resource (const std::string& id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get resources
-//! \param group_id Group ID
+// @brief Get resources
+// @param group_id Group ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <resource>
 get_resources (const std::string& group_id)
@@ -126,3 +126,5 @@ get_resources (const std::string& group_id)
 }
 
 } // namespace mobius::core
+
+

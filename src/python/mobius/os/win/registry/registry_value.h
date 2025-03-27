@@ -22,7 +22,7 @@
 #include <mobius/os/win/registry/registry_value.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_value: data structure
+// @brief registry_value: data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -38,3 +38,5 @@ extern PyTypeObject os_win_registry_registry_value_t;
 PyObject *pymobius_os_win_registry_registry_value_to_pyobject (mobius::os::win::registry::registry_value);
 
 #endif
+
+

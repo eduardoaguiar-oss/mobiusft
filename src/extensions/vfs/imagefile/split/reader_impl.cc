@@ -22,8 +22,8 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param imagefile_impl imagefile_impl object
+// @brief Constructor
+// @param imagefile_impl imagefile_impl object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 reader_impl::reader_impl (const imagefile_impl& imagefile_impl)
   : size_ (imagefile_impl.get_size ()),
@@ -35,14 +35,14 @@ reader_impl::reader_impl (const imagefile_impl& imagefile_impl)
     throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("segment files not found"));
 
   segment_size_ = std::int64_t (imagefile_impl.get_attribute ("segment_size"));
-  
+
   _set_stream ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set read position
-//! \param offset offset in bytes
-//! \param w either beginning, current or end
+// @brief Set read position
+// @param offset offset in bytes
+// @param w either beginning, current or end
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 reader_impl::seek (offset_type offset, whence_type w)
@@ -65,8 +65,8 @@ reader_impl::seek (offset_type offset, whence_type w)
   // update current pos, if possible
   if (abs_offset < 0)
     throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid offset"));
-  
-  else if (size_type (abs_offset) <= size_)  
+
+  else if (size_type (abs_offset) <= size_)
     {
       pos_ = abs_offset;
       _set_stream ();
@@ -74,9 +74,9 @@ reader_impl::seek (offset_type offset, whence_type w)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Read bytes from reader
-//! \param size size in bytes
-//! \return bytearray containing data
+// @brief Read bytes from reader
+// @param size size in bytes
+// @return bytearray containing data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 reader_impl::read (size_type size)
@@ -101,7 +101,7 @@ reader_impl::read (size_type size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set read stream according to current position
+// @brief Set read stream according to current position
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 reader_impl::_set_stream ()
@@ -120,3 +120,5 @@ reader_impl::_set_stream ()
 
   stream_.seek (pos);
 }
+
+

@@ -22,8 +22,8 @@
 #include <mobius/datetime/datetime.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief header_section data class
-//! \author Eduardo Aguiar
+// @brief header_section data class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class header_section : public section
 {
@@ -42,8 +42,8 @@ public:
   header_section& operator= (header_section&&) = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief initialize header_section from section object
-  //! \param s section object
+  // @brief initialize header_section from section object
+  // @param s section object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   header_section (const section& s)
     : section (s)
@@ -51,8 +51,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get drive model name
-  //! \return drive model name
+  // @brief get drive model name
+  // @return drive model name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_drive_model () const
@@ -61,8 +61,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set drive model name
-  //! \param drive_model drive model name
+  // @brief set drive model name
+  // @param drive_model drive model name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_drive_model (const std::string& drive_model)
@@ -71,8 +71,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get drive serial number
-  //! \return drive serial number
+  // @brief get drive serial number
+  // @return drive serial number
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_drive_serial_number () const
@@ -81,8 +81,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set drive serial number
-  //! \param drive_serial_number drive serial number
+  // @brief set drive serial number
+  // @param drive_serial_number drive serial number
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_drive_serial_number (const std::string& drive_serial_number)
@@ -91,8 +91,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get imagefile acquisition user name
-  //! \return imagefile acquisition user name
+  // @brief get imagefile acquisition user name
+  // @return imagefile acquisition user name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_acquisition_user () const
@@ -101,8 +101,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set imagefile acquisition user name
-  //! \param acquisition_user imagefile acquisition user name
+  // @brief set imagefile acquisition user name
+  // @param acquisition_user imagefile acquisition user name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_acquisition_user (const std::string& acquisition_user)
@@ -111,8 +111,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get imagefile acquisition tool
-  //! \return imagefile acquisition tool
+  // @brief get imagefile acquisition tool
+  // @return imagefile acquisition tool
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_acquisition_tool () const
@@ -121,8 +121,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set imagefile acquisition tool
-  //! \param acquisition_tool imagefile acquisition tool
+  // @brief set imagefile acquisition tool
+  // @param acquisition_tool imagefile acquisition tool
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_acquisition_tool (const std::string& acquisition_tool)
@@ -131,8 +131,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get imagefile acquisition platform
-  //! \return imagefile acquisition platform
+  // @brief get imagefile acquisition platform
+  // @return imagefile acquisition platform
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_acquisition_platform () const
@@ -141,8 +141,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set imagefile acquisition platform
-  //! \param acquisition_platform imagefile acquisition platform
+  // @brief set imagefile acquisition platform
+  // @param acquisition_platform imagefile acquisition platform
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_acquisition_platform (const std::string& acquisition_platform)
@@ -151,8 +151,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get imagefile acquisition date and time
-  //! \return imagefile acquisition date and time
+  // @brief get imagefile acquisition date and time
+  // @return imagefile acquisition date and time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::datetime::datetime
   get_acquisition_time () const
@@ -161,8 +161,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set imagefile acquisition date and time
-  //! \param acquisition_time imagefile acquisition date and time
+  // @brief set imagefile acquisition date and time
+  // @param acquisition_time imagefile acquisition date and time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_acquisition_time (const mobius::datetime::datetime& acquisition_time)
@@ -171,8 +171,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get section text
-  //! \return section text
+  // @brief get section text
+  // @return section text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_text () const
@@ -181,8 +181,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set section text
-  //! \param text section text
+  // @brief set section text
+  // @param text section text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_text (const std::string& text)
@@ -192,26 +192,28 @@ public:
 
 private:
 
-  //! \brief drive model name
+  // @brief drive model name
   std::string drive_model_;
 
-  //! \brief drive serial number
+  // @brief drive serial number
   std::string drive_serial_number_;
 
-  //! \brief imagefile acquisition user name
+  // @brief imagefile acquisition user name
   std::string acquisition_user_;
 
-  //! \brief imagefile acquisition tool
+  // @brief imagefile acquisition tool
   std::string acquisition_tool_;
 
-  //! \brief imagefile acquisition platform
+  // @brief imagefile acquisition platform
   std::string acquisition_platform_;
 
-  //! \brief imagefile acquisition date and time
+  // @brief imagefile acquisition date and time
   mobius::datetime::datetime acquisition_time_;
 
-  //! \brief section text
+  // @brief section text
   std::string text_;
 };
 
 #endif
+
+

@@ -21,13 +21,11 @@
 #include <grp.h>
 #include <stdexcept>
 
-namespace mobius
-{
-namespace system
+namespace mobius::system
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief construct object
-//! \param gid group ID
+// @brief construct object
+// @param gid group ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 group::group (gid_t gid) : gid_ (gid)
 {
@@ -46,8 +44,8 @@ group::group (gid_t gid) : gid_ (gid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get user ID
-//! \return user ID
+// @brief get user ID
+// @return user ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 gid_t
 group::get_id () const
@@ -59,8 +57,8 @@ group::get_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get user name
-//! \return user name
+// @brief get user name
+// @return user name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 group::get_name () const
@@ -71,5 +69,6 @@ group::get_name () const
   return name_;
 }
 
-} // namespace system
-} // namespace mobius
+} // namespace mobius::system
+
+

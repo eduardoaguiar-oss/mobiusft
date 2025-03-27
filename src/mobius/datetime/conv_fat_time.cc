@@ -18,15 +18,13 @@
 #include <mobius/datetime/datetime.h>
 #include <mobius/datetime/timedelta.h>
 
-namespace mobius
-{
-namespace datetime
+namespace mobius::datetime
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert FAT timestamp to datetime
-//! \param d date value
-//! \param t time value
-//! \return datetime
+// @brief Convert FAT timestamp to datetime
+// @param d date value
+// @param t time value
+// @return datetime
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datetime
 new_datetime_from_fat_time (std::uint16_t d, std::uint16_t t)
@@ -45,5 +43,6 @@ new_datetime_from_fat_time (std::uint16_t d, std::uint16_t t)
   return dt;
 }
 
-} // namespace datetime
-} // namespace mobius
+} // namespace mobius::datetime
+
+

@@ -25,9 +25,9 @@
 namespace mobius::crypt::gcrypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief libgcrypt cipher adaptor implementation class
-//! \author Eduardo Aguiar
-//! \see https://www.gnupg.org/documentation/manuals/gcrypt/index.html#SEC_Contents
+// @brief libgcrypt cipher adaptor implementation class
+// @author Eduardo Aguiar
+// @see https://www.gnupg.org/documentation/manuals/gcrypt/index.html#SEC_Contents
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class cipher_impl : public cipher_impl_base
 {
@@ -47,8 +47,8 @@ public:
   cipher_impl& operator= (cipher_impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get cipher type
-  //! \return Cipher type
+  // @brief Get cipher type
+  // @return Cipher type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_type () const final
@@ -57,8 +57,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Return true if it is a cipher stream algorithm
-  //! \return true/false
+  // @brief Return true if it is a cipher stream algorithm
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_stream () const noexcept final
@@ -67,8 +67,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Return true if it is a cipher block algorithm
-  //! \return true/false
+  // @brief Return true if it is a cipher block algorithm
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   is_block () const noexcept final
@@ -77,8 +77,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get block size
-  //! \return Block size in bytes
+  // @brief Get block size
+  // @return Block size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::size_t
   get_block_size () const noexcept final
@@ -106,25 +106,26 @@ public:
 
 private:
 
-  //! \brief Cipher handle
+  // @brief Cipher handle
   gcry_cipher_hd_t hd_ = 0;
 
-  //! \brief Cipher block size in bytes
+  // @brief Cipher block size in bytes
   std::size_t block_size_ = 0;
 
-  //! \brief Cipher type
+  // @brief Cipher type
   std::string type_;
 
-  //! \brief Initialization vector (IV)
+  // @brief Initialization vector (IV)
   mobius::bytearray iv_;
 
-  //! \brief Counter vector (CV)
+  // @brief Counter vector (CV)
   mobius::bytearray cv_;
 
-  //! \brief True if it is a stream cipher
+  // @brief True if it is a stream cipher
   bool is_stream_ = false;
 };
 
 } // namespace mobius::crypt::gcrypt
 
 #endif
+

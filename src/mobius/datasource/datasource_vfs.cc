@@ -22,8 +22,8 @@
 namespace mobius::datasource
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param d datasource
+// @brief Constructor
+// @param d datasource
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datasource_vfs::datasource_vfs (const datasource& d)
  : datasource (d)
@@ -37,3 +37,5 @@ datasource_vfs::datasource_vfs (const datasource& d)
 }
 
 } // namespace mobius::datasource
+
+

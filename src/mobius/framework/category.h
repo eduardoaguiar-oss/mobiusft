@@ -29,8 +29,8 @@
 namespace mobius::framework
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief General category class
-//! \author Eduardo Aguiar
+// @brief General category class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class category
 {
@@ -68,10 +68,10 @@ public:
   std::vector <attribute> get_attributes () const;
 
 private:
-  //! \brief implementation class forward declaration
+  // @brief implementation class forward declaration
   class impl;
 
-  //! \brief implementation pointer
+  // @brief implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
@@ -89,3 +89,5 @@ mobius::database::transaction new_category_transaction ();
 } // namespace mobius::framework
 
 #endif
+
+

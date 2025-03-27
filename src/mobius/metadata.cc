@@ -20,8 +20,8 @@
 namespace mobius
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief initialize metadata with initializer_list
-//! \param attributes initializer list of attributes
+// @brief initialize metadata with initializer_list
+// @param attributes initializer list of attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 metadata::metadata (const std::initializer_list <metadata::attribute>& attributes)
   : attributes_ (attributes)
@@ -29,3 +29,5 @@ metadata::metadata (const std::initializer_list <metadata::attribute>& attribute
 }
 
 } // namespace mobius
+
+

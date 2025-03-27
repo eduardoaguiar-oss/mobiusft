@@ -25,8 +25,8 @@ namespace mobius::database
 class database;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Nested transaction control class
-//! \author Eduardo Aguiar
+// @brief Nested transaction control class
+// @author Eduardo Aguiar
 //
 // This class is implemented with the following features:
 //
@@ -83,13 +83,15 @@ public:
   void rollback ();
 
 private:
-  //! \brief Forward declaration
+  // @brief Forward declaration
   class impl;
 
-  //! \brief Pointer to implementation class
+  // @brief Pointer to implementation class
   std::shared_ptr <impl> impl_;
 };
 
 } // namespace mobius::database
 
 #endif
+
+

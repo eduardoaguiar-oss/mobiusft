@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file hashset.cc C++ API <i>mobius.kff.hashset</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pylist.h>
@@ -29,9 +29,9 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>hashset</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>hashset</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_kff_hashset_check (PyObject *value)
@@ -40,9 +40,9 @@ pymobius_kff_hashset_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>hashset</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New hashset object
+// @brief Create <i>hashset</i> Python object from C++ object
+// @param obj C++ object
+// @return New hashset object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_kff_hashset_to_pyobject (const mobius::kff::hashset& obj)
@@ -51,9 +51,9 @@ pymobius_kff_hashset_to_pyobject (const mobius::kff::hashset& obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>hashset</i> C++ object from Python object
-//! \param value Python value
-//! \return Hashset object
+// @brief Create <i>hashset</i> C++ object from Python object
+// @param value Python value
+// @return Hashset object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::kff::hashset
 pymobius_kff_hashset_from_pyobject (PyObject *value)
@@ -62,9 +62,9 @@ pymobius_kff_hashset_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>description</i> Attribute getter
-//! \param self Object
-//! \return <i>description</i> attribute
+// @brief <i>description</i> Attribute getter
+// @param self Object
+// @return <i>description</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_description (kff_hashset_o *self)
@@ -84,10 +84,10 @@ tp_getter_description (kff_hashset_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>description</i> Attribute setter
-//! \param self Object
-//! \param value New value
-//! \return 0 on success, -1 on error
+// @brief <i>description</i> Attribute setter
+// @param self Object
+// @param value New value
+// @return 0 on success, -1 on error
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static int
 tp_setter_description (kff_hashset_o *self, PyObject *value, void *)
@@ -123,9 +123,9 @@ tp_setter_description (kff_hashset_o *self, PyObject *value, void *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>hashes</i> Attribute getter
-//! \param self Object
-//! \return <i>hashes</i> attribute
+// @brief <i>hashes</i> Attribute getter
+// @param self Object
+// @return <i>hashes</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_hashes (kff_hashset_o *self)
@@ -149,7 +149,7 @@ tp_getter_hashes (kff_hashset_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Getters and setters structure
+// @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -171,10 +171,10 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>new_connection</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return new connection object
+// @brief <i>new_connection</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return new connection object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_new_connection (kff_hashset_o *self, PyObject *)
@@ -196,10 +196,10 @@ tp_f_new_connection (kff_hashset_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>new_transaction</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return new transaction object
+// @brief <i>new_transaction</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return new transaction object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_new_transaction (kff_hashset_o *self, PyObject *)
@@ -221,10 +221,10 @@ tp_f_new_transaction (kff_hashset_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_alert</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_alert</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_alert (kff_hashset_o *self, PyObject *)
@@ -246,10 +246,10 @@ tp_f_is_alert (kff_hashset_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_size</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Number of hashes
+// @brief <i>get_size</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Number of hashes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_size (kff_hashset_o *self, PyObject *)
@@ -271,9 +271,9 @@ tp_f_get_size (kff_hashset_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>clear</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>clear</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_clear (kff_hashset_o *self, PyObject *)
@@ -294,9 +294,9 @@ tp_f_clear (kff_hashset_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>add</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>add</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_add (kff_hashset_o *self, PyObject *args)
@@ -332,9 +332,9 @@ tp_f_add (kff_hashset_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>remove</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>remove</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_remove (kff_hashset_o *self, PyObject *args)
@@ -370,7 +370,7 @@ tp_f_remove (kff_hashset_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -420,8 +420,8 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>hashset</i> deallocator
-//! \param self Object
+// @brief <i>hashset</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (kff_hashset_o *self)
@@ -431,7 +431,7 @@ tp_dealloc (kff_hashset_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject kff_hashset_t =
 {
@@ -484,3 +484,5 @@ PyTypeObject kff_hashset_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

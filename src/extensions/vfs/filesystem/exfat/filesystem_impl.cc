@@ -25,16 +25,16 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief sector size
+// @brief sector size
 static constexpr std::uint32_t SECTOR_SIZE = 512;
 
-//! \brief signature
+// @brief signature
 static const mobius::bytearray SIGNATURE = "EXFAT   ";	// Exfat (section 3.1.2)
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if reader contains an EXFAT boot sector
-//! \param reader stream reader
-//! \return true/false
+// @brief Check if reader contains an EXFAT boot sector
+// @param reader stream reader
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static bool
 check_boot_sector (mobius::io::reader reader, std::uint64_t offset)
@@ -59,10 +59,10 @@ check_boot_sector (mobius::io::reader reader, std::uint64_t offset)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if stream contains an instance of exfat filesystem
-//! \param reader Reader object
-//! \param offset Offset from the beginning of the stream
-//! \return True/false
+// @brief Check if stream contains an instance of exfat filesystem
+// @param reader Reader object
+// @param offset Offset from the beginning of the stream
+// @return True/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 filesystem_impl::is_instance (
@@ -72,7 +72,7 @@ filesystem_impl::is_instance (
 {
   // Test Main Boot Sector
   bool rc = check_boot_sector (reader, offset);
-  
+
   // Test Backup Boot Sector
   if (!rc)
     rc = check_boot_sector (reader, offset + SECTOR_SIZE * 12);
@@ -81,9 +81,9 @@ filesystem_impl::is_instance (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
-//! \param offset Offset from the beginning of volume
+// @brief Constructor
+// @param reader Reader object
+// @param offset Offset from the beginning of volume
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 filesystem_impl::filesystem_impl (
   const mobius::io::reader& reader,
@@ -96,9 +96,9 @@ filesystem_impl::filesystem_impl (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get metadata item
-//! \param name Item name
-//! \return Data object
+// @brief Get metadata item
+// @param name Item name
+// @return Data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 filesystem_impl::get_metadata (const std::string& name) const
@@ -108,8 +108,8 @@ filesystem_impl::get_metadata (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get root folder
-//! \return Root folder
+// @brief Get root folder
+// @return Root folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::folder
 filesystem_impl::get_root_folder () const
@@ -118,7 +118,7 @@ filesystem_impl::get_root_folder () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load data on demand
+// @brief Load data on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 filesystem_impl::_load_data () const
@@ -139,7 +139,7 @@ filesystem_impl::_load_data () const
 
   else          // force data decoding anyway
     boot_offset = offset_;
-  
+
   // decode data - EXFAT (section 3.1)
   reader.seek (boot_offset);
   mobius::decoder::data_decoder decoder (reader);
@@ -153,8 +153,8 @@ filesystem_impl::_load_data () const
   auto cluster_count = decoder.get_uint32_le ();
   auto root_dir_cluster = decoder.get_uint32_le ();
   auto serial_number = "0x" + mobius::string::to_hex (decoder.get_uint32_le (), 8);
-  auto revision_minor = decoder.get_uint8 (); 
-  auto revision_major = decoder.get_uint8 (); 
+  auto revision_minor = decoder.get_uint8 ();
+  auto revision_major = decoder.get_uint8 ();
   auto flags = decoder.get_uint16_le ();
   auto bytes_per_sector_shift = decoder.get_uint8 ();
   std::uint64_t sector_size = 1 << bytes_per_sector_shift;
@@ -182,10 +182,10 @@ filesystem_impl::_load_data () const
   metadata_.set ("media_failure", (flags & 0x04) ? "yes" : "no");
   metadata_.set ("number_of_fats", number_of_fats);
   metadata_.set ("drive_select", drive_select);
-  
+
   if (percent_in_use != 0xff)
     metadata_.set ("percent_in_use", std::to_string (percent_in_use) + '%');
-  
+
   type_ = "exfat";
   size_ = sectors * sector_size;
   name_ = "EXFAT (s/n: " + serial_number + ")";
@@ -193,3 +193,5 @@ filesystem_impl::_load_data () const
   // Set data loaded
   data_loaded_ = true;
 }
+
+

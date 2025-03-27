@@ -22,8 +22,8 @@
 namespace mobius::decoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader reader object
+// @brief Constructor
+// @param reader reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mfc::mfc (const mobius::io::reader& reader)
   : decoder_ (reader)
@@ -31,8 +31,8 @@ mfc::mfc (const mobius::io::reader& reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief decode bool
-//! \return value
+// @brief decode bool
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 mfc::get_bool ()
@@ -41,8 +41,8 @@ mfc::get_bool ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief decode WORD (16 bits)
-//! \return value
+// @brief decode WORD (16 bits)
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint16_t
 mfc::get_word ()
@@ -51,8 +51,8 @@ mfc::get_word ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief decode DWORD (32 bits)
-//! \return value
+// @brief decode DWORD (32 bits)
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 mfc::get_dword ()
@@ -61,8 +61,8 @@ mfc::get_dword ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief decode QWORD (64 bits)
-//! \return value
+// @brief decode QWORD (64 bits)
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint64_t
 mfc::get_qword ()
@@ -71,8 +71,8 @@ mfc::get_qword ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief decode int (32 bits)
-//! \return value
+// @brief decode int (32 bits)
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int32_t
 mfc::get_int ()
@@ -81,9 +81,9 @@ mfc::get_int ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode count
-//! \see http://computer-programming-forum.com/82-mfc/1758299f7763d979.htm
-//! \return value
+// @brief Decode count
+// @see http://computer-programming-forum.com/82-mfc/1758299f7763d979.htm
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 mfc::get_count ()
@@ -97,8 +97,8 @@ mfc::get_count ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief decode GUID
-//! \return value
+// @brief decode GUID
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 mfc::get_guid ()
@@ -107,9 +107,9 @@ mfc::get_guid ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief decode data as hexadecimal string
-//! \param siz size in bytes
-//! \return value
+// @brief decode data as hexadecimal string
+// @param siz size in bytes
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 mfc::get_hex_string (std::uint64_t siz)
@@ -124,9 +124,9 @@ mfc::get_hex_string (std::uint64_t siz)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief decode data
-//! \param siz size in bytes
-//! \return value
+// @brief decode data
+// @param siz size in bytes
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 mfc::get_data (std::uint64_t siz)
@@ -135,8 +135,8 @@ mfc::get_data (std::uint64_t siz)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode CString
-//! \return value
+// @brief Decode CString
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 mfc::get_string ()
@@ -172,9 +172,9 @@ mfc::get_string ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief decode CTime
-//! \see https://msdn.microsoft.com/en-us/library/b6989cds.aspx
-//! \return value
+// @brief decode CTime
+// @see https://msdn.microsoft.com/en-us/library/b6989cds.aspx
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 mfc::get_ctime ()
@@ -192,8 +192,8 @@ mfc::get_ctime ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode NT time
-//! \return value
+// @brief Decode NT time
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 mfc::get_nt_time ()
@@ -202,8 +202,8 @@ mfc::get_nt_time ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode Unix time
-//! \return value
+// @brief Decode Unix time
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 mfc::get_unix_time ()
@@ -214,8 +214,8 @@ mfc::get_unix_time ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode IP v4
-//! \return value
+// @brief Decode IP v4
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 mfc::get_ipv4 ()
@@ -224,3 +224,5 @@ mfc::get_ipv4 ()
 }
 
 } // namespace mobius::decoder
+
+

@@ -24,13 +24,11 @@
 #include <memory>
 #include <string>
 
-namespace mobius
-{
-namespace decoder
+namespace mobius::decoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Telegram desktop data files decoder class
-//! \author Eduardo Aguiar
+// @brief Telegram desktop data files decoder class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class tdf
 {
@@ -61,14 +59,15 @@ public:
   mobius::bytearray get_payload () const;
 
 private:
-  //! \brief Implementation class forward declaration
+  // @brief Implementation class forward declaration
   class impl;
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
-} // namespace decoder
-} // namespace mobius
+} // namespace mobius::decoder
 
 #endif
+
+

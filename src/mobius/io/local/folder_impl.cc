@@ -40,7 +40,7 @@ namespace
 using entry_impl = folder_impl_base::entry_impl;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Collection implementation for folder entries
+// @brief Collection implementation for folder entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class collection_impl_folder : public mobius::collection_impl_base <entry_impl>
 {
@@ -60,9 +60,9 @@ private:
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Initialize object
-//! \param path Path to local folder
-//! \param given_path Path given by user
+// @brief Initialize object
+// @param path Path to local folder
+// @param given_path Path given by user
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 collection_impl_folder::collection_impl_folder (
   const std::string& path,
@@ -78,7 +78,7 @@ collection_impl_folder::collection_impl_folder (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destructor
+// @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 collection_impl_folder::~collection_impl_folder ()
 {
@@ -87,9 +87,9 @@ collection_impl_folder::~collection_impl_folder ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get folder entry
-//! \param e Entry reference
-//! \return true/false if entry was found
+// @brief Get folder entry
+// @param e Entry reference
+// @return true/false if entry was found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 collection_impl_folder::get (entry_impl& e)
@@ -127,7 +127,7 @@ collection_impl_folder::get (entry_impl& e)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reset collection
+// @brief Reset collection
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 collection_impl_folder::reset ()
@@ -138,8 +138,8 @@ collection_impl_folder::reset ()
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Initialize object
-//! \param path Folder path
+// @brief Initialize object
+// @param path Folder path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder_impl::folder_impl (const std::string& path)
  : path_ (path), given_path_ (path)
@@ -152,8 +152,8 @@ folder_impl::folder_impl (const std::string& path)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief check if URL folder exists
-//! \return true/false
+// @brief check if URL folder exists
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 folder_impl::exists () const
@@ -165,8 +165,8 @@ folder_impl::exists () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if folder is deleted
-//! \return true/false
+// @brief Check if folder is deleted
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 folder_impl::is_deleted () const
@@ -178,8 +178,8 @@ folder_impl::is_deleted () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if folder is reallocated
-//! \return true/false
+// @brief Check if folder is reallocated
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 folder_impl::is_reallocated () const
@@ -191,8 +191,8 @@ folder_impl::is_reallocated () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if folder is hidden
-//! \return true/false
+// @brief Check if folder is hidden
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 folder_impl::is_hidden () const
@@ -204,8 +204,8 @@ folder_impl::is_hidden () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get folder name
-//! \return File name
+// @brief Get folder name
+// @return File name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 folder_impl::get_name () const
@@ -217,8 +217,8 @@ folder_impl::get_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get short folder name
-//! \return Short folder name
+// @brief Get short folder name
+// @return Short folder name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 folder_impl::get_short_name () const
@@ -230,8 +230,8 @@ folder_impl::get_short_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get folder inode
-//! \return Inode
+// @brief Get folder inode
+// @return Inode
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder_impl::inode_type
 folder_impl::get_inode () const
@@ -243,8 +243,8 @@ folder_impl::get_inode () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get folder size
-//! \return Size in bytes
+// @brief Get folder size
+// @return Size in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder_impl::size_type
 folder_impl::get_size () const
@@ -256,8 +256,8 @@ folder_impl::get_size () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get folder owner's user id
-//! \return user ID
+// @brief get folder owner's user id
+// @return user ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder_impl::user_id_type
 folder_impl::get_user_id () const
@@ -272,8 +272,8 @@ folder_impl::get_user_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get folder owner's user name
-//! \return user name
+// @brief get folder owner's user name
+// @return user name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 folder_impl::get_user_name () const
@@ -288,8 +288,8 @@ folder_impl::get_user_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get folder group ID
-//! \return group ID
+// @brief get folder group ID
+// @return group ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder_impl::group_id_type
 folder_impl::get_group_id () const
@@ -304,8 +304,8 @@ folder_impl::get_group_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get folder owner's group name
-//! \return group name
+// @brief get folder owner's group name
+// @return group name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 folder_impl::get_group_name () const
@@ -320,8 +320,8 @@ folder_impl::get_group_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get file access permissions
-//! \return permission mask
+// @brief get file access permissions
+// @return permission mask
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder_impl::permission_type
 folder_impl::get_permissions () const
@@ -336,8 +336,8 @@ folder_impl::get_permissions () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get last access timestamp
-//! \return Last folder access date/time
+// @brief Get last access timestamp
+// @return Last folder access date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 folder_impl::get_access_time () const
@@ -352,8 +352,8 @@ folder_impl::get_access_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get last metadata modification timestamp
-//! \return Last folder metadata modification date/time
+// @brief Get last metadata modification timestamp
+// @return Last folder metadata modification date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 folder_impl::get_modification_time () const
@@ -368,8 +368,8 @@ folder_impl::get_modification_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get last metadata modification timestamp
-//! \return Last folder metadata modification date/time
+// @brief Get last metadata modification timestamp
+// @return Last folder metadata modification date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 folder_impl::get_metadata_time () const
@@ -384,8 +384,8 @@ folder_impl::get_metadata_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get creation time
-//! \return Creation date/time
+// @brief Get creation time
+// @return Creation date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 folder_impl::get_creation_time () const
@@ -397,8 +397,8 @@ folder_impl::get_creation_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get deletion time
-//! \return Deletion date/time
+// @brief Get deletion time
+// @return Deletion date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 folder_impl::get_deletion_time () const
@@ -410,8 +410,8 @@ folder_impl::get_deletion_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get backup time
-//! \return Backup date/time
+// @brief Get backup time
+// @return Backup date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 folder_impl::get_backup_time () const
@@ -423,8 +423,8 @@ folder_impl::get_backup_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get parent folder
-//! \return Parent folder
+// @brief Get parent folder
+// @return Parent folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder_impl::folder_type
 folder_impl::get_parent () const
@@ -435,8 +435,8 @@ folder_impl::get_parent () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get children
-//! \return Collection
+// @brief Get children
+// @return Collection
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder_impl::children_type
 folder_impl::get_children () const
@@ -445,9 +445,9 @@ folder_impl::get_children () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new file object
-//! \param name File name
-//! \return Pointer to file object
+// @brief Create new file object
+// @param name File name
+// @return Pointer to file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder_impl::file_type
 folder_impl::new_file (const std::string& name) const
@@ -459,9 +459,9 @@ folder_impl::new_file (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new folder object
-//! \param name Folder name
-//! \return Pointer to folder object
+// @brief Create new folder object
+// @param name Folder name
+// @return Pointer to folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder_impl::folder_type
 folder_impl::new_folder (const std::string& name) const
@@ -473,7 +473,7 @@ folder_impl::new_folder (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create folder
+// @brief Create folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 folder_impl::create ()
@@ -497,7 +497,7 @@ folder_impl::create ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Clear folder content
+// @brief Clear folder content
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 folder_impl::clear ()
@@ -519,7 +519,7 @@ folder_impl::clear ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reload folder info
+// @brief Reload folder info
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 folder_impl::reload ()
@@ -528,7 +528,7 @@ folder_impl::reload ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove folder
+// @brief Remove folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 folder_impl::remove ()
@@ -540,8 +540,8 @@ folder_impl::remove ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Rename folder
-//! \param name New folder name
+// @brief Rename folder
+// @param name New folder name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 folder_impl::rename (const std::string& name)
@@ -564,9 +564,9 @@ folder_impl::rename (const std::string& name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Move folder
-//! \param folder File implementation pointer
-//! \return <b>true</b> if folder has been moved, <b>false</b> otherwise
+// @brief Move folder
+// @param folder File implementation pointer
+// @return <b>true</b> if folder has been moved, <b>false</b> otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 folder_impl::move (folder_type impl)
@@ -581,15 +581,15 @@ folder_impl::move (folder_type impl)
     {
       if (::rename (path_.c_str (), pimpl->path_.c_str ()) == -1)
         throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
-      
+
       return true;
     }
-    
+
   return false;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief load metadata calling POSIX stat function
+// @brief load metadata calling POSIX stat function
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 folder_impl::_load_stat () const
@@ -634,3 +634,5 @@ folder_impl::_load_stat () const
 }
 
 } // namespace mobius::io::local
+
+

@@ -25,8 +25,8 @@
 namespace mobius::ui
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Stacked Container class
-//! \author Eduardo Aguiar
+// @brief Stacked Container class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class stacked_container : public widget
 {
@@ -57,3 +57,5 @@ public:
 } // namespace mobius::ui
 
 #endif
+
+

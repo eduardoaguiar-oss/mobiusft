@@ -32,8 +32,8 @@
 namespace mobius::ui
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief UI implementation base class
-//! \author Eduardo Aguiar
+// @brief UI implementation base class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class ui_impl_base
 {
@@ -71,3 +71,5 @@ public:
 } // namespace mobius::ui
 
 #endif
+
+

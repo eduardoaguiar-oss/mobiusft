@@ -21,22 +21,15 @@
 #include <cstdint>
 #include <string>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace dpapi
+namespace mobius::os::win::dpapi
 {
 
 std::string get_hash_id (std::uint32_t);
 std::uint32_t get_hash_digest_size (std::uint32_t);
 std::uint32_t get_hash_block_size (std::uint32_t);
 
-} // namespace dpapi
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::dpapi
 
 #endif
+
+

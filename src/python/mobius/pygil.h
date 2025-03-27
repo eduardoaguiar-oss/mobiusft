@@ -23,8 +23,8 @@
 namespace mobius::py
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief GIL auto release/acquire class
-//! \author Eduardo Aguiar
+// @brief GIL auto release/acquire class
+// @author Eduardo Aguiar
 //
 // Use: auto v = mobius::py::GIL () (expression)
 // Example: auto data = mobius::py::GIL () (self->obj->get_bytearray ())
@@ -33,7 +33,7 @@ class GIL
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Constructor
+  // @brief Constructor
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   GIL () noexcept
     : state_ (PyEval_SaveThread ())
@@ -41,7 +41,7 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Destructor
+  // @brief Destructor
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   ~GIL ()
   {
@@ -50,9 +50,9 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Return value passed
-  //! \param value Any value
-  //! \return value
+  // @brief Return value passed
+  // @param value Any value
+  // @return value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   template <typename T>
   T operator () (T&& value)
@@ -68,8 +68,8 @@ private:
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief GIL auto acquire/release class
-//! \author Eduardo Aguiar
+// @brief GIL auto acquire/release class
+// @author Eduardo Aguiar
 //
 // Use: auto v = mobius::py::GILHolder () (expression)
 // Example: auto data = mobius::py::GIL () (self->obj->get_bytearray ())
@@ -78,7 +78,7 @@ class GIL_holder
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Constructor
+  // @brief Constructor
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   GIL_holder () noexcept
     : state_ (PyGILState_Ensure ())
@@ -86,7 +86,7 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Destructor
+  // @brief Destructor
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   ~GIL_holder ()
   {
@@ -100,3 +100,5 @@ private:
 } // namespace mobius::py
 
 #endif
+
+

@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file icon.cc C++ API <i>mobius.ui.icon</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "icon.h"
@@ -26,9 +26,9 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_icon_by_name</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_icon_by_name</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_icon_by_name (ui_icon_o *self, PyObject *args)
@@ -66,9 +66,9 @@ tp_f_set_icon_by_name (ui_icon_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_icon_by_path</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_icon_by_path</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_icon_by_path (ui_icon_o *self, PyObject *args)
@@ -106,9 +106,9 @@ tp_f_set_icon_by_path (ui_icon_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_icon_by_url</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_icon_by_url</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_icon_by_url (ui_icon_o *self, PyObject *args)
@@ -146,9 +146,9 @@ tp_f_set_icon_by_url (ui_icon_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_icon_from_data</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_icon_from_data</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_icon_from_data (ui_icon_o *self, PyObject *args)
@@ -186,7 +186,7 @@ tp_f_set_icon_from_data (ui_icon_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -198,8 +198,8 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>icon</i> deallocator
-//! \param self Object
+// @brief <i>icon</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (ui_icon_o *self)
@@ -209,7 +209,7 @@ tp_dealloc (ui_icon_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyTypeObject ui_icon_t =
 {
@@ -264,7 +264,7 @@ static PyTypeObject ui_icon_t =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>mobius.ui.icon</i> type
+// @brief Create <i>mobius.ui.icon</i> type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
 new_ui_icon_type ()
@@ -283,9 +283,9 @@ new_ui_icon_type ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>icon</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>icon</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_ui_icon_check (PyObject *value)
@@ -294,9 +294,9 @@ pymobius_ui_icon_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>icon</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New icon object
+// @brief Create <i>icon</i> Python object from C++ object
+// @param obj C++ object
+// @return New icon object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_ui_icon_to_pyobject (const mobius::ui::icon& obj)
@@ -305,9 +305,9 @@ pymobius_ui_icon_to_pyobject (const mobius::ui::icon& obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>icon</i> C++ object from Python object
-//! \param value Python value
-//! \return Icon object
+// @brief Create <i>icon</i> C++ object from Python object
+// @param value Python value
+// @return Icon object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::ui::icon
 pymobius_ui_icon_from_pyobject (PyObject *value)
@@ -316,10 +316,10 @@ pymobius_ui_icon_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_icon_path</i> function
-//! \param self Function object
-//! \param args Argument list
-//! \return Python object
+// @brief <i>set_icon_path</i> function
+// @param self Function object
+// @param args Argument list
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_ui_set_icon_path (PyObject *, PyObject *args)
@@ -353,10 +353,10 @@ func_ui_set_icon_path (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>new_icon_by_name</i> function
-//! \param self Function object
-//! \param args Argument list
-//! \return Python object
+// @brief <i>new_icon_by_name</i> function
+// @param self Function object
+// @param args Argument list
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_ui_new_icon_by_name (PyObject *, PyObject *args)
@@ -395,10 +395,10 @@ func_ui_new_icon_by_name (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>new_icon_by_path</i> function
-//! \param self Function object
-//! \param args Argument list
-//! \return Python object
+// @brief <i>new_icon_by_path</i> function
+// @param self Function object
+// @param args Argument list
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_ui_new_icon_by_path (PyObject *, PyObject *args)
@@ -437,10 +437,10 @@ func_ui_new_icon_by_path (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>new_icon_by_url</i> function
-//! \param self Function object
-//! \param args Argument list
-//! \return Python object
+// @brief <i>new_icon_by_url</i> function
+// @param self Function object
+// @param args Argument list
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_ui_new_icon_by_url (PyObject *, PyObject *args)
@@ -479,10 +479,10 @@ func_ui_new_icon_by_url (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>new_icon_from_data</i> function
-//! \param self Function object
-//! \param args Argument list
-//! \return Python object
+// @brief <i>new_icon_from_data</i> function
+// @param self Function object
+// @param args Argument list
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_ui_new_icon_from_data (PyObject *, PyObject *args)
@@ -519,3 +519,4 @@ func_ui_new_icon_from_data (PyObject *, PyObject *args)
   // return icon
   return ret;
 }
+

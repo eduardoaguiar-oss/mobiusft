@@ -29,7 +29,7 @@ namespace mobius::extension::app::emule
 {
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Emule account
+// @brief Emule account
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct account
 {
@@ -39,7 +39,7 @@ struct account
   std::string username;
   std::string emule_guid;
   std::uint8_t preferences_dat_version = 0;
-  
+
   // from preferenceskad.dat
   std::string kamdelia_guid;
   std::string kamdelia_ip;
@@ -63,9 +63,8 @@ struct account
   mobius::io::file statistics_ini_f;
 };
 
-/*
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Autofill
+// @brief Autofill
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct autofill
 {
@@ -75,9 +74,9 @@ struct autofill
   std::string id;
   mobius::io::file f;
 };
-
+/*
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Searched text
+// @brief Searched text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct search
 {
@@ -94,7 +93,7 @@ struct search
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Local file
+// @brief Local file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct local_file
 {
@@ -124,7 +123,7 @@ struct local_file
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remote file
+// @brief Remote file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct remote_file
 {
@@ -151,8 +150,8 @@ struct remote_file
 */
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>Emule evidence_loader</i> implementation class
-//! \author Eduardo Aguiar
+// @brief <i>Emule evidence_loader</i> implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
 {
@@ -168,8 +167,8 @@ public:
   void run () final;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if object is valid
-  //! \return true/false
+  // @brief Check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator bool () const noexcept final
   {
@@ -177,8 +176,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get evidence_loader type
-  //! \return Type as string
+  // @brief Get evidence_loader type
+  // @return Type as string
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_type () const final
@@ -187,31 +186,31 @@ public:
   }
 
 private:
-  //! \brief Case item
+  // @brief Case item
   mobius::model::item item_;
 
-  //! \brief Scan type
+  // @brief Scan type
   scan_type scan_type_;
 
-  //! \brief User name
+  // @brief User name
   std::string username_;
 
-  //! \brief Account data
+  // @brief Account data
   account account_;
 
-  //! \brief Accounts found
+  // @brief Accounts found
   std::vector <account> accounts_;
 
-/*  //! \brief Autofills found
+  // @brief Autofills found
   std::vector <autofill> autofills_;
 
-  //! \brief Searched texts
+/*  // @brief Searched texts
   std::vector <search> searches_;
 
-  //! \brief Library files
+  // @brief Library files
   std::vector <local_file> local_files_;
 
-  //! \brief Remote files
+  // @brief Remote files
   std::vector <remote_file> remote_files_;
 */
 
@@ -227,12 +226,12 @@ private:
   void _decode_preferences_ini_file (const mobius::io::file&);
   void _decode_preferenceskad_dat_file (const mobius::io::file&);
   void _decode_statistics_ini_file (const mobius::io::file&);
+  void _decode_ac_searchstrings_dat_file (const mobius::io::file&);
   //void _decode_ntuser_dat_file (const mobius::io::file&);
 
   void _save_evidences ();
   void _save_accounts ();
-  //void _save_autofills ();
-  //void _save_searched_texts ();
+  void _save_autofills ();
   //void _save_local_files ();
   //void _save_p2p_remote_files ();
   //void _save_received_files ();
@@ -243,3 +242,5 @@ private:
 } // namespace mobius::extension::app::emule
 
 #endif
+
+

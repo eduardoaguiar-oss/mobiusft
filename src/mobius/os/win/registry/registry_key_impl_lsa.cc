@@ -21,22 +21,16 @@
 #include "registry_value.h"
 #include <mobius/decoder/data_decoder.h>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace registry
+namespace mobius::os::win::registry
 {
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get the right LSA key for a given data
-//! \param lsa_key_stream LSA key stream data
-//! \param data value's data
-//! \return lsa_key or an empty key
-//! \see https://github.com/gentilkiwi/mimikatz/wiki
+// @brief get the right LSA key for a given data
+// @param lsa_key_stream LSA key stream data
+// @param data value's data
+// @return lsa_key or an empty key
+// @see https://github.com/gentilkiwi/mimikatz/wiki
 //
 // The value's data has the folllowing structure:
 //  0	uint32_le	version
@@ -83,9 +77,9 @@ get_lsa_key (const mobius::bytearray& lsa_key_stream, const mobius::bytearray& d
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
-//! \param key delegated key
-//! \param lsa_key LSA Secrets encryption key
+// @brief constructor
+// @param key delegated key
+// @param lsa_key LSA Secrets encryption key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_key_impl_lsa::registry_key_impl_lsa (registry_key key, const mobius::bytearray& lsa_key, type t)
   : key_ (key),
@@ -96,8 +90,8 @@ registry_key_impl_lsa::registry_key_impl_lsa (registry_key key, const mobius::by
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief load values on demand
-//! \see https://github.com/gentilkiwi/mimikatz/wiki
+// @brief load values on demand
+// @see https://github.com/gentilkiwi/mimikatz/wiki
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry_key_impl_lsa::_load_values () const
@@ -140,7 +134,6 @@ registry_key_impl_lsa::_load_values () const
   values_loaded_ = true;
 }
 
-} // namespace registry
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::registry
+
+

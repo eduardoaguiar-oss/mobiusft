@@ -35,49 +35,49 @@ namespace mobius::core
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Application data
+// @brief Application data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief application ID
+// @brief application ID
 static const std::string id_ = "mobiusft";
 
-//! \brief application name
+// @brief application name
 static const std::string name_ = "Mobius Forensic Toolkit";
 
-//! \brief application version
+// @brief application version
 static const std::string version_ = "@VERSION@";
 
-//! \brief application title
+// @brief application title
 static const std::string title_ = "Mobius v@VERSION@";
 
-//! \brief application copyright
+// @brief application copyright
 static const std::string copyright_ = "Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar";
 
-//! \brief application OS name
+// @brief application OS name
 static const std::string os_name_ = "@host@";
 
-//! \brief data folder path
+// @brief data folder path
 static std::string data_folder_ = "@prefix@/share/" + id_;
 
-//! \brief configuration folder path
+// @brief configuration folder path
 static std::string config_folder_;
 
-//! \brief cache folder path
+// @brief cache folder path
 static std::string cache_folder_;
 
-//! \brief C++ extensions
+// @brief C++ extensions
 static extension_set extensions_;
 
-//! \brief Is application data loaded
+// @brief Is application data loaded
 static std::once_flag is_loaded_;
 
-//! \brief Is application running
+// @brief Is application running
 static std::atomic_bool is_running_ {false};
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Join a relative path to a absolute path
-//! \param abs_path absolute path
-//! \param rel_path relative path
-//! \return absolute path
+// @brief Join a relative path to a absolute path
+// @param abs_path absolute path
+// @param rel_path relative path
+// @return absolute path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
 _join_path (const std::string& abs_path, const std::string& rel_path)
@@ -87,7 +87,7 @@ _join_path (const std::string& abs_path, const std::string& rel_path)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Initialize application data
+// @brief Initialize application data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 _init ()
@@ -144,8 +144,8 @@ _init ()
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \see https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
+// @brief Constructor
+// @see https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 application::application ()
 {
@@ -153,7 +153,7 @@ application::application ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Start application
+// @brief Start application
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 application::start ()
@@ -195,7 +195,7 @@ application::start ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Stop application
+// @brief Stop application
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 application::stop ()
@@ -227,7 +227,7 @@ application::stop ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get application ID
+// @brief Get application ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 application::get_id () const
@@ -236,7 +236,7 @@ application::get_id () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get application name
+// @brief Get application name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 application::get_name () const
@@ -245,7 +245,7 @@ application::get_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get application version
+// @brief Get application version
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 application::get_version () const
@@ -254,7 +254,7 @@ application::get_version () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get application title
+// @brief Get application title
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 application::get_title () const
@@ -263,7 +263,7 @@ application::get_title () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get application copyright
+// @brief Get application copyright
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 application::get_copyright () const
@@ -272,7 +272,7 @@ application::get_copyright () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get application host OS
+// @brief Get application host OS
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 application::get_os_name () const
@@ -281,9 +281,9 @@ application::get_os_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get data path
-//! \param path relative path
-//! \return absolute path to data_folder sub-path
+// @brief Get data path
+// @param path relative path
+// @return absolute path to data_folder sub-path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 application::get_data_path (const std::string& path) const
@@ -292,9 +292,9 @@ application::get_data_path (const std::string& path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get config path
-//! \param path relative path
-//! \return absolute path to config_folder sub-path
+// @brief Get config path
+// @param path relative path
+// @return absolute path to config_folder sub-path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 application::get_config_path (const std::string& path) const
@@ -303,9 +303,9 @@ application::get_config_path (const std::string& path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get cache path
-//! \param path relative path
-//! \return absolute path to cache_folder sub-path
+// @brief Get cache path
+// @param path relative path
+// @return absolute path to cache_folder sub-path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 application::get_cache_path (const std::string& path) const
@@ -314,3 +314,5 @@ application::get_cache_path (const std::string& path) const
 }
 
 } // namespace mobius::core
+
+

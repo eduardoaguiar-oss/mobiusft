@@ -23,8 +23,8 @@
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
+// @brief Constructor
+// @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 CThumbCache::CThumbCache (const mobius::io::reader& reader)
 {
@@ -60,9 +60,9 @@ CThumbCache::CThumbCache (const mobius::io::reader& reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get cache entry
-//! \param Path
-//! \return Cache entry, if any
+// @brief Get cache entry
+// @param Path
+// @return Cache entry, if any
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::optional <CThumbCache::entry>
 CThumbCache::get (const std::string& path) const
@@ -78,3 +78,7 @@ CThumbCache::get (const std::string& path) const
 }
 
 } // namespace mobius::extension::app::shareaza
+
+
+
+

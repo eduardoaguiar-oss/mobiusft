@@ -24,7 +24,7 @@
 namespace mobius::crypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher::cipher ()
   : impl_ (std::make_shared <cipher_impl_null> ())
@@ -32,8 +32,8 @@ cipher::cipher ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor from implementation pointer
-//! \param impl Implementation pointer
+// @brief Constructor from implementation pointer
+// @param impl Implementation pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher::cipher (const std::shared_ptr <cipher_impl_base>& impl)
   : impl_ (impl)
@@ -41,10 +41,10 @@ cipher::cipher (const std::shared_ptr <cipher_impl_base>& impl)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new cipher object with CBC mode
-//! \param id Cipher ID
-//! \param key Cipher key
-//! \param iv Initialization vector
+// @brief Create new cipher object with CBC mode
+// @param id Cipher ID
+// @param key Cipher key
+// @param iv Initialization vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher
 new_cipher_cbc (const std::string& id, const bytearray& key, const bytearray& iv)
@@ -61,10 +61,10 @@ new_cipher_cbc (const std::string& id, const bytearray& key, const bytearray& iv
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new cipher object with CBC/CTS mode
-//! \param id Cipher ID
-//! \param key Cipher key
-//! \param iv Initialization vector
+// @brief Create new cipher object with CBC/CTS mode
+// @param id Cipher ID
+// @param key Cipher key
+// @param iv Initialization vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher
 new_cipher_cbc_cts (const std::string& id, const bytearray& key, const bytearray& iv)
@@ -81,10 +81,10 @@ new_cipher_cbc_cts (const std::string& id, const bytearray& key, const bytearray
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new cipher object with CTR mode
-//! \param id Cipher ID
-//! \param key Cipher key
-//! \param cv Counter vector
+// @brief Create new cipher object with CTR mode
+// @param id Cipher ID
+// @param key Cipher key
+// @param cv Counter vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher
 new_cipher_ctr (const std::string& id, const bytearray& key, const bytearray& cv)
@@ -106,9 +106,9 @@ new_cipher_ctr (const std::string& id, const bytearray& key, const bytearray& cv
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new cipher object with ECB mode
-//! \param id Cipher ID
-//! \param key Cipher key
+// @brief Create new cipher object with ECB mode
+// @param id Cipher ID
+// @param key Cipher key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher
 new_cipher_ecb (const std::string& id, const bytearray& key)
@@ -120,10 +120,10 @@ new_cipher_ecb (const std::string& id, const bytearray& key)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new cipher object with GCM mode
-//! \param id Cipher ID
-//! \param key Cipher key
-//! \param iv Initialization vector
+// @brief Create new cipher object with GCM mode
+// @param id Cipher ID
+// @param key Cipher key
+// @param iv Initialization vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher
 new_cipher_gcm (const std::string& id, const bytearray& key, const bytearray& iv)
@@ -140,10 +140,10 @@ new_cipher_gcm (const std::string& id, const bytearray& key, const bytearray& iv
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new cipher object with IGE mode
-//! \param id Cipher ID
-//! \param key Cipher key
-//! \param iv Initialization vector
+// @brief Create new cipher object with IGE mode
+// @param id Cipher ID
+// @param key Cipher key
+// @param iv Initialization vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher
 new_cipher_ige (const std::string& id, const bytearray& key, const bytearray& iv)
@@ -152,10 +152,10 @@ new_cipher_ige (const std::string& id, const bytearray& key, const bytearray& iv
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new cipher object with OFB mode
-//! \param id Cipher ID
-//! \param key Cipher key
-//! \param iv Initialization vector
+// @brief Create new cipher object with OFB mode
+// @param id Cipher ID
+// @param key Cipher key
+// @param iv Initialization vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher
 new_cipher_ofb (const std::string& id, const bytearray& key, const bytearray& iv)
@@ -172,9 +172,9 @@ new_cipher_ofb (const std::string& id, const bytearray& key, const bytearray& iv
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new stream cipher object
-//! \param id Cipher ID
-//! \param key Cipher key
+// @brief Create new stream cipher object
+// @param id Cipher ID
+// @param key Cipher key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher
 new_cipher_stream (const std::string& id, const bytearray& key)
@@ -191,3 +191,5 @@ new_cipher_stream (const std::string& id, const bytearray& key)
 }
 
 } // namespace mobius::crypt
+
+

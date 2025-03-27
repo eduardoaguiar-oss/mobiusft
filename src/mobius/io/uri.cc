@@ -57,34 +57,34 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 namespace
 {
-//! \brief RFC 3986 - section 2.3
+// @brief RFC 3986 - section 2.3
 static constexpr const char *UNRESERVED_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~";
 
-//! \brief RFC 3986 - section 3.1
+// @brief RFC 3986 - section 3.1
 static constexpr const char *ALLOWED_SCHEME = UNRESERVED_CHARS;
 
-//! \brief RFC 3986 - section 3.2
+// @brief RFC 3986 - section 3.2
 static constexpr const char *ALLOWED_AUTHORITY = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~!$&'()*+,;=:@[]";
 
-//! \brief RFC 3986 - section 3.3
+// @brief RFC 3986 - section 3.3
 static constexpr const char *ALLOWED_PATH = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~!$&'()*+,;=:@/";
 
-//! \brief RFC 3986 - section 3.4
+// @brief RFC 3986 - section 3.4
 static constexpr const char *ALLOWED_QUERY = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~!$&'()*+,;=:@/?";
 
-//! \brief RFC 3986 - section 3.5
+// @brief RFC 3986 - section 3.5
 static constexpr const char *ALLOWED_FRAGMENT = ALLOWED_QUERY;
 
-//! \brief RFC 3986 - appendix B - URI regular expression
+// @brief RFC 3986 - appendix B - URI regular expression
 static constexpr const char *URI_PATTERN = "(([A-Z][A-Z0-9+.-]*):)?(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?";
 static std::regex URI_REGEX (URI_PATTERN, std::regex::icase | std::regex::extended);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief merge two URI paths
-//! \param base base URI
-//! \param rel relative URI
-//! \return merged path
-//! \see RFC 3986 - section 5.2.3
+// @brief merge two URI paths
+// @param base base URI
+// @param rel relative URI
+// @return merged path
+// @see RFC 3986 - section 5.2.3
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
 merge_paths (const mobius::io::uri& base, const mobius::io::uri& rel)
@@ -109,10 +109,10 @@ merge_paths (const mobius::io::uri& base, const mobius::io::uri& rel)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief remove dot segments
-//! \param path URI path
-//! \return path without "." and ".." dot segments
-//! \see RFC 3986 - section 5.2.4
+// @brief remove dot segments
+// @param path URI path
+// @return path without "." and ".." dot segments
+// @see RFC 3986 - section 5.2.4
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
 remove_dot_segments (const std::string& path)
@@ -122,11 +122,11 @@ remove_dot_segments (const std::string& path)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Encode a string with %XX escape sequences
-//! \param s Encoded string
-//! \param allowed Allowed chars (not converted)
-//! \return Decoded string
-//! \see RFC 3986 - section 2.1
+// @brief Encode a string with %XX escape sequences
+// @param s Encoded string
+// @param allowed Allowed chars (not converted)
+// @return Decoded string
+// @see RFC 3986 - section 2.1
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
 _encode_triplets (const std::string& s, const std::string& allowed)
@@ -149,10 +149,10 @@ _encode_triplets (const std::string& s, const std::string& allowed)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode a string with %XX escape sequences
-//! \param s Encoded string
-//! \return Decoded string
-//! \see RFC 3986 - section 2.1
+// @brief Decode a string with %XX escape sequences
+// @param s Encoded string
+// @return Decoded string
+// @see RFC 3986 - section 2.1
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
 _decode_triplets (const std::string& s)
@@ -191,9 +191,9 @@ _decode_triplets (const std::string& s)
 namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Build URI from string
-//! \param value URI as string
-//! \see RFC 3986 - section 3
+// @brief Build URI from string
+// @param value URI as string
+// @see RFC 3986 - section 3
 // 2. Parsing must be called before decoding the percent-encoded triplets.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 uri::uri (const std::string& value)
@@ -224,15 +224,15 @@ uri::uri (const std::string& value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Build URI from parts
-//! \param scheme Scheme
-//! \param username User name
-//! \param password Password
-//! \param host Host
-//! \param port Port
-//! \param path Path
-//! \param query Query
-//! \param fragment Fragment
+// @brief Build URI from parts
+// @param scheme Scheme
+// @param username User name
+// @param password Password
+// @param host Host
+// @param port Port
+// @param path Path
+// @param query Query
+// @param fragment Fragment
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 uri::uri (
   const std::string& scheme,
@@ -257,8 +257,8 @@ uri::uri (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Rebuild URI from its parts
-//! \see RFC 3986 - section 5.3
+// @brief Rebuild URI from its parts
+// @see RFC 3986 - section 5.3
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 uri::_normalize ()
@@ -291,7 +291,7 @@ uri::_normalize ()
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Normalize value
-  //! \see RFC 3986 - section 5.3
+  // @see RFC 3986 - section 5.3
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   value_.clear ();
 
@@ -323,8 +323,8 @@ uri::_normalize ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set authority
-//! \param authority authority
+// @brief Set authority
+// @param authority authority
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 uri::_set_authority (const std::string& value)
@@ -400,9 +400,9 @@ uri::_set_authority (const std::string& value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get path
-//! \param encoding String encoding
-//! \return URI path
+// @brief Get path
+// @param encoding String encoding
+// @return URI path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 uri::get_path (const std::string& encoding) const
@@ -414,9 +414,9 @@ uri::get_path (const std::string& encoding) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get query string
-//! \param encoding String encoding
-//! \return URI query string
+// @brief Get query string
+// @param encoding String encoding
+// @return URI query string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 uri::get_query (const std::string& encoding) const
@@ -428,9 +428,9 @@ uri::get_query (const std::string& encoding) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get fragment
-//! \param encoding String encoding
-//! \return URI fragment
+// @brief Get fragment
+// @param encoding String encoding
+// @return URI fragment
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 uri::get_fragment (const std::string& encoding) const
@@ -442,8 +442,8 @@ uri::get_fragment (const std::string& encoding) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get parent URI
-//! \return Parent URI
+// @brief Get parent URI
+// @return Parent URI
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 uri
 uri::get_parent () const
@@ -459,9 +459,9 @@ uri::get_parent () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get sibling URI by name
-//! \param filename Sibling file name
-//! \return Sibling URI
+// @brief Get sibling URI by name
+// @param filename Sibling file name
+// @return Sibling URI
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 uri
 uri::get_sibling_by_name (const std::string& filename) const
@@ -473,9 +473,9 @@ uri::get_sibling_by_name (const std::string& filename) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get sibling URI by extension
-//! \param ext Sibling extension
-//! \return Sibling URI
+// @brief Get sibling URI by extension
+// @param ext Sibling extension
+// @return Sibling URI
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 uri
 uri::get_sibling_by_extension (const std::string& ext) const
@@ -487,9 +487,9 @@ uri::get_sibling_by_extension (const std::string& ext) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get child URI by name
-//! \param name Child name
-//! \return Child URI
+// @brief Get child URI by name
+// @param name Child name
+// @return Child URI
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 uri
 uri::get_child_by_name (const std::string& name) const
@@ -501,9 +501,9 @@ uri::get_child_by_name (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get child by path
-//! \param subpath Sub path
-//! \return Child URI
+// @brief Get child by path
+// @param subpath Sub path
+// @return Child URI
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 uri
 uri::get_child_by_path (const std::string& subpath) const
@@ -517,9 +517,9 @@ uri::get_child_by_path (const std::string& subpath) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get filename from URI
-//! \param encoding String encoding
-//! \return Filename
+// @brief Get filename from URI
+// @param encoding String encoding
+// @return Filename
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 uri::get_filename (const std::string& encoding) const
@@ -537,8 +537,8 @@ uri::get_filename (const std::string& encoding) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get filename extension from URI
-//! \return extension, if any
+// @brief Get filename extension from URI
+// @return extension, if any
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 uri::get_extension () const
@@ -555,8 +555,8 @@ uri::get_extension () const
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get port number
-//! \return Port number
+// @brief Get port number
+// @return Port number
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint16_t
 uri::get_port_number () const
@@ -570,11 +570,11 @@ uri::get_port_number () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Resolve an URI reference
-//! \param base base URI (not relative URI)
-//! \param rel relative URI
-//! \return target URI joining base and relative URIs
-//! \see RFC 3986 - section 5.2
+// @brief Resolve an URI reference
+// @param base base URI (not relative URI)
+// @param rel relative URI
+// @return target URI joining base and relative URIs
+// @see RFC 3986 - section 5.2
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 uri
 join (const uri& base, const uri& rel)
@@ -648,10 +648,10 @@ join (const uri& base, const uri& rel)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Test if two URI objects are equal
-//! \param lhs URI object
-//! \param rhs URI object
-//! \return true if lhs == rhs
+// @brief Test if two URI objects are equal
+// @param lhs URI object
+// @param rhs URI object
+// @return true if lhs == rhs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator== (const uri& lhs, const uri& rhs)
@@ -660,10 +660,10 @@ operator== (const uri& lhs, const uri& rhs)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Test if two URI objects are different
-//! \param lhs URI object
-//! \param rhs URI object
-//! \return true if lhs != rhs
+// @brief Test if two URI objects are different
+// @param lhs URI object
+// @param rhs URI object
+// @return true if lhs != rhs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator!= (const uri& lhs, const uri& rhs)
@@ -672,10 +672,10 @@ operator!= (const uri& lhs, const uri& rhs)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check whether one URI object is less than another one
-//! \param lhs URI object
-//! \param rhs URI object
-//! \return true if lhs < rhs
+// @brief Check whether one URI object is less than another one
+// @param lhs URI object
+// @param rhs URI object
+// @return true if lhs < rhs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator< (const uri& lhs, const uri& rhs)
@@ -684,11 +684,11 @@ operator< (const uri& lhs, const uri& rhs)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check whether two URI objects are equal
-//! \param lhs URI object
-//! \param rhs URI object
-//! \return true if lhs == rhs
-//! \see RFC 3986 - section 4.4
+// @brief Check whether two URI objects are equal
+// @param lhs URI object
+// @param rhs URI object
+// @return true if lhs == rhs
+// @see RFC 3986 - section 4.4
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 is_same_document (const uri& lhs, const uri& rhs)
@@ -700,9 +700,9 @@ is_same_document (const uri& lhs, const uri& rhs)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert path into URI
-//! \param path path
-//! \return URI
+// @brief Convert path into URI
+// @param path path
+// @return URI
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 uri
 new_uri_from_path (const std::string& path)
@@ -711,9 +711,9 @@ new_uri_from_path (const std::string& path)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert URI to string
-//! \param u URI object
-//! \return String representation of URI
+// @brief Convert URI to string
+// @param u URI object
+// @return String representation of URI
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 to_string (const uri& u)
@@ -722,10 +722,10 @@ to_string (const uri& u)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Write URI representation to std::ostream
-//! \param stream ostream reference
-//! \param u URI object
-//! \return reference to ostream
+// @brief Write URI representation to std::ostream
+// @param stream ostream reference
+// @param u URI object
+// @return reference to ostream
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::ostream&
 operator<< (std::ostream& stream, const uri& u)
@@ -736,3 +736,5 @@ operator<< (std::ostream& stream, const uri& u)
 }
 
 } // namespace mobius::io
+
+

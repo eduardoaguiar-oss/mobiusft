@@ -66,9 +66,9 @@ static const std::string ANT_NAME = APP_NAME;
 static const std::string ANT_VERSION = "1.2";
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get vector of hashes for a given file
-//! \param f File structure
-//! \return Vector
+// @brief Get vector of hashes for a given file
+// @param f File structure
+// @return Vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename T> std::vector <mobius::pod::data>
 get_file_hashes (const T& f)
@@ -94,9 +94,9 @@ get_file_hashes (const T& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get library timestamp
-//! \param f File object
-//! \return Timestamp
+// @brief Get library timestamp
+// @param f File object
+// @return Timestamp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 get_library_timestamp (const mobius::io::file& f)
@@ -117,8 +117,8 @@ get_library_timestamp (const mobius::io::file& f)
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param item Item object
+// @brief Constructor
+// @param item Item object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 evidence_loader_impl::evidence_loader_impl (const mobius::model::item& item, scan_type type)
   : item_ (item),
@@ -127,7 +127,7 @@ evidence_loader_impl::evidence_loader_impl (const mobius::model::item& item, sca
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan item files for evidences
+// @brief Scan item files for evidences
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::run ()
@@ -198,7 +198,7 @@ evidence_loader_impl::run ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan canonical folders
+// @brief Scan canonical folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_scan_canonical_folders ()
@@ -214,8 +214,8 @@ evidence_loader_impl::_scan_canonical_folders ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan root folder for evidences
-//! \param folder Root folder
+// @brief Scan root folder for evidences
+// @param folder Root folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_scan_canonical_root_folder (const mobius::io::folder& folder)
@@ -227,8 +227,8 @@ evidence_loader_impl::_scan_canonical_root_folder (const mobius::io::folder& fol
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan user folder for evidences
-//! \param folder User folder
+// @brief Scan user folder for evidences
+// @param folder User folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_scan_canonical_user_folder (const mobius::io::folder& folder)
@@ -252,8 +252,8 @@ evidence_loader_impl::_scan_canonical_user_folder (const mobius::io::folder& fol
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Scan AppData/Roaming/Shareaza/Data folder for evidences
-//! \param folder Data folder
+// @brief Scan AppData/Roaming/Shareaza/Data folder for evidences
+// @param folder Data folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_scan_canonical_shareaza_data_folder (const mobius::io::folder& folder)
@@ -276,7 +276,7 @@ evidence_loader_impl::_scan_canonical_shareaza_data_folder (const mobius::io::fo
   // Process current library file
   // The current library is the library with the higher last_modification_time.
   // Active library (non deleted) is preferred.
-  //! \see CLibrary::Load function
+  // @see CLibrary::Load function
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto lib_f = w.get_file_by_name ("library1.dat");
   auto lib2_f = w.get_file_by_name ("library2.dat");
@@ -298,8 +298,8 @@ evidence_loader_impl::_scan_canonical_shareaza_data_folder (const mobius::io::fo
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode LibraryN.dat file
-//! \param f File object
+// @brief Decode LibraryN.dat file
+// @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_decode_library_dat_file (const mobius::io::file& f)
@@ -433,8 +433,8 @@ evidence_loader_impl::_decode_library_dat_file (const mobius::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode Profile.xml file
-//! \param f File object
+// @brief Decode Profile.xml file
+// @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_decode_profile_xml_file (const mobius::io::file& f)
@@ -466,8 +466,8 @@ evidence_loader_impl::_decode_profile_xml_file (const mobius::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode Searches.dat file
-//! \param f File object
+// @brief Decode Searches.dat file
+// @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_decode_searches_dat_file (const mobius::io::file& f)
@@ -603,8 +603,8 @@ evidence_loader_impl::_decode_searches_dat_file (const mobius::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode Shareaza.db3 file
-//! \param f File object
+// @brief Decode Shareaza.db3 file
+// @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_decode_shareaza_db3_file (const mobius::io::file& f)
@@ -642,8 +642,8 @@ evidence_loader_impl::_decode_shareaza_db3_file (const mobius::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode Incomplete/*.sd file
-//! \param f File object
+// @brief Decode Incomplete/*.sd file
+// @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_decode_sd_file (const mobius::io::file& f)
@@ -769,8 +769,8 @@ evidence_loader_impl::_decode_sd_file (const mobius::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode data from NTUSER.dat file
-//! \param f File object
+// @brief Decode data from NTUSER.dat file
+// @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_decode_ntuser_dat_file (const mobius::io::file& f)
@@ -855,7 +855,7 @@ evidence_loader_impl::_decode_ntuser_dat_file (const mobius::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save evidences
+// @brief Save evidences
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_evidences ()
@@ -876,7 +876,7 @@ evidence_loader_impl::_save_evidences ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save accounts
+// @brief Save accounts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_accounts ()
@@ -922,7 +922,7 @@ evidence_loader_impl::_save_accounts ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save autofill entries
+// @brief Save autofill entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_autofills ()
@@ -947,7 +947,7 @@ evidence_loader_impl::_save_autofills ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save local files
+// @brief Save local files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_local_files ()
@@ -971,7 +971,7 @@ evidence_loader_impl::_save_local_files ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save received files
+// @brief Save received files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_received_files ()
@@ -997,7 +997,7 @@ evidence_loader_impl::_save_received_files ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save remote files
+// @brief Save remote files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_p2p_remote_files ()
@@ -1024,7 +1024,7 @@ evidence_loader_impl::_save_p2p_remote_files ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save searched texts
+// @brief Save searched texts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_searched_texts ()
@@ -1048,7 +1048,7 @@ evidence_loader_impl::_save_searched_texts ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save sent files
+// @brief Save sent files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_sent_files ()
@@ -1075,7 +1075,7 @@ evidence_loader_impl::_save_sent_files ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save shared files
+// @brief Save shared files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_shared_files ()
@@ -1102,3 +1102,6 @@ evidence_loader_impl::_save_shared_files ()
 }
 
 } // namespace mobius::extension::app::shareaza
+
+
+

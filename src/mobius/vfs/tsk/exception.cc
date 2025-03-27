@@ -18,15 +18,11 @@
 #include "exception.h"
 #include <tsk/libtsk.h>
 
-namespace mobius
-{
-namespace vfs
-{
-namespace tsk
+namespace mobius::vfs::tsk
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief assembly libtsk error message
-//! \return message text
+// @brief assembly libtsk error message
+// @return message text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 tsk_exception_msg (const char *fname, const char *funcname, std::size_t line)
@@ -37,6 +33,6 @@ tsk_exception_msg (const char *fname, const char *funcname, std::size_t line)
   return msg;
 }
 
-} // namespace tsk
-} // namespace vfs
-} // namespace mobius
+} // namespace mobius::vfs::tsk
+
+

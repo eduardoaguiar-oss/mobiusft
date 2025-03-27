@@ -22,7 +22,7 @@
 namespace mobius::crypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Encrypt remaining data, if any
+// @brief Encrypt remaining data, if any
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 /*void
 cipher_impl_stream::final ()
@@ -30,8 +30,8 @@ cipher_impl_stream::final ()
 }*/
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get block size
-//! \return Block size in bytes
+// @brief Get block size
+// @return Block size in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::size_t
 cipher_impl_stream::get_block_size () const
@@ -40,3 +40,5 @@ cipher_impl_stream::get_block_size () const
 }
 
 } // namespace mobius::crypt
+
+

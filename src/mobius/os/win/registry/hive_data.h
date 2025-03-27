@@ -26,8 +26,8 @@
 namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief hive_data class
-//! \author Eduardo Aguiar
+// @brief hive_data class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class hive_data
 {
@@ -38,8 +38,8 @@ public:
   using offset_type = std::uint32_t;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Registry data types
-  //! \see https://msdn.microsoft.com/en-us/library/windows/desktop/ms724884(v=vs.85).aspx
+  // @brief Registry data types
+  // @see https://msdn.microsoft.com/en-us/library/windows/desktop/ms724884(v=vs.85).aspx
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   enum class data_type
   {
@@ -88,13 +88,15 @@ public:
   std::string get_data_as_string (const std::string& = "ascii") const;
 
 private:
-  //! \brief implementation class forward declaration
+  // @brief implementation class forward declaration
   class impl;
 
-  //! \brief implementation pointer
+  // @brief implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
 } // namespace mobius::os::win::registry
 
 #endif
+
+

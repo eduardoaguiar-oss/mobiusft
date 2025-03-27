@@ -21,12 +21,10 @@
 #include <mobius/database/connection.h>
 #include <memory>
 
-namespace mobius
-{
-namespace database
+namespace mobius::database
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Handle connections to different databases
+// @brief Handle connections to different databases
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class connection_set
 {
@@ -51,14 +49,15 @@ public:
   void release ();
 
 private:
-  //! \brief Implementation class forward declaration
+  // @brief Implementation class forward declaration
   class impl;
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
-} // namespace database
-} // namespace mobius
+} // namespace mobius::database
 
 #endif
+
+

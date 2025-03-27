@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file Case.cc C++ API <i>mobius.model.Case</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pylist.h>
@@ -30,9 +30,9 @@
 #include "database/transaction.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if object is an instance of <i>mobius.model.case</i>
-//! \param pyobj Python object
-//! \return true/false
+// @brief Check if object is an instance of <i>mobius.model.case</i>
+// @param pyobj Python object
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_model_case_check (PyObject *pyobj)
@@ -41,9 +41,9 @@ pymobius_model_case_check (PyObject *pyobj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>Case</i> Python object from C++ object
-//! \param obj C++ object
-//! \return new Case object
+// @brief Create <i>Case</i> Python object from C++ object
+// @param obj C++ object
+// @return new Case object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_model_case_to_pyobject (mobius::model::Case obj)
@@ -57,9 +57,9 @@ pymobius_model_case_to_pyobject (mobius::model::Case obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>case</i> C++ object from Python object
-//! \param value Python object
-//! \return reader object
+// @brief Create <i>case</i> C++ object from Python object
+// @param value Python object
+// @return reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::model::Case
 pymobius_model_case_from_pyobject (PyObject *value)
@@ -71,9 +71,9 @@ pymobius_model_case_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>root_item</i> attribute getter
-//! \param self object
-//! \return <i>root_item</i> attribute
+// @brief <i>root_item</i> attribute getter
+// @param self object
+// @return <i>root_item</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_root_item (model_case_o *self)
@@ -93,9 +93,9 @@ tp_getter_root_item (model_case_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>uid</i> attribute getter
-//! \param self object
-//! \return <i>uid</i> attribute
+// @brief <i>uid</i> attribute getter
+// @param self object
+// @return <i>uid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_uid (model_case_o *self)
@@ -115,7 +115,7 @@ tp_getter_uid (model_case_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Getters and setters structure
+// @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -137,10 +137,10 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_path</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return full path
+// @brief <i>get_path</i> method implementation
+// @param self object
+// @param args argument list
+// @return full path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_path (model_case_o *self, PyObject *args)
@@ -175,10 +175,10 @@ tp_f_get_path (model_case_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>create_path</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return full path
+// @brief <i>create_path</i> method implementation
+// @param self object
+// @param args argument list
+// @return full path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_create_path (model_case_o *self, PyObject *args)
@@ -213,10 +213,10 @@ tp_f_create_path (model_case_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>new_connection</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return new transaction object
+// @brief <i>new_connection</i> method implementation
+// @param self object
+// @param args argument list
+// @return new transaction object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_new_connection (model_case_o *self, PyObject *)
@@ -238,10 +238,10 @@ tp_f_new_connection (model_case_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>new_transaction</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return new transaction object
+// @brief <i>new_transaction</i> method implementation
+// @param self object
+// @param args argument list
+// @return new transaction object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_new_transaction (model_case_o *self, PyObject *)
@@ -263,10 +263,10 @@ tp_f_new_transaction (model_case_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_item_by_uid</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return item
+// @brief <i>get_item_by_uid</i> method implementation
+// @param self object
+// @param args argument list
+// @return item
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_item_by_uid (model_case_o *self, PyObject *args)
@@ -301,10 +301,10 @@ tp_f_get_item_by_uid (model_case_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_passwords</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Passwords
+// @brief <i>get_passwords</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Passwords
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_passwords (model_case_o *self, PyObject *)
@@ -327,10 +327,10 @@ tp_f_get_passwords (model_case_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_password_hashes</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Password hashes
+// @brief <i>get_password_hashes</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Password hashes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_password_hashes (model_case_o *self, PyObject *)
@@ -353,7 +353,7 @@ tp_f_get_password_hashes (model_case_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -403,11 +403,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>Case</i> constructor
-//! \param type type object
-//! \param args argument list
-//! \param kwds keywords dict
-//! \return new <i>Case</i> object
+// @brief <i>Case</i> constructor
+// @param type type object
+// @param args argument list
+// @param kwds keywords dict
+// @return new <i>Case</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *, PyObject *)
@@ -421,8 +421,8 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>Case</i> deallocator
-//! \param self object
+// @brief <i>Case</i> deallocator
+// @param self object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (model_case_o *self)
@@ -432,11 +432,11 @@ tp_dealloc (model_case_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>case</i> tp_richcompare
-//! \param py_a Case Object
-//! \param py_b Case Object
-//! \param op Operation
-//! \return Either Py_True or Py_False
+// @brief <i>case</i> tp_richcompare
+// @param py_a Case Object
+// @param py_b Case Object
+// @param op Operation
+// @return Either Py_True or Py_False
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_richcompare (PyObject *py_a, PyObject *py_b, int op)
@@ -486,7 +486,7 @@ tp_richcompare (PyObject *py_a, PyObject *py_b, int op)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject model_case_t =
 {
@@ -539,3 +539,5 @@ PyTypeObject model_case_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

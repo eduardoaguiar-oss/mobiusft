@@ -28,8 +28,8 @@ struct TSK_FS_INFO;
 namespace mobius::vfs::tsk
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief libtsk adaptor
-//! \author Eduardo Aguiar
+// @brief libtsk adaptor
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class adaptor
 {
@@ -51,3 +51,5 @@ private:
 } // namespace mobius::vfs::tsk
 
 #endif
+
+

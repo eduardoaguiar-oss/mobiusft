@@ -20,18 +20,12 @@
 #include "registry_value.h"
 #include <mobius/string_functions.h>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace registry
+namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
-//! \param key \\HKLM\\SECURITY\\Cache key
-//! \param nlkm NL$KM value from LSA Secrets
+// @brief constructor
+// @param key \\HKLM\\SECURITY\\Cache key
+// @param nlkm NL$KM value from LSA Secrets
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_key_impl_msdcc::registry_key_impl_msdcc (registry_key key, const mobius::bytearray& nlkm)
   : key_ (key),
@@ -41,7 +35,7 @@ registry_key_impl_msdcc::registry_key_impl_msdcc (registry_key key, const mobius
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief load values on demand
+// @brief load values on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry_key_impl_msdcc::_load_values () const
@@ -73,7 +67,6 @@ registry_key_impl_msdcc::_load_values () const
   values_loaded_ = true;
 }
 
-} // namespace registry
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::registry
+
+

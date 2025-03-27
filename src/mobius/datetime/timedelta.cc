@@ -17,10 +17,9 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "timedelta.h"
 
-namespace mobius
-{
-namespace datetime
+namespace mobius::datetime
 {
 
-} // namespace datetime
-} // namespace mobius
+} // namespace mobius::datetime
+
+

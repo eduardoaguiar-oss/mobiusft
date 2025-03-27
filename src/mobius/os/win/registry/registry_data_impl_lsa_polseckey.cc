@@ -22,10 +22,10 @@
 namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief decrypt data according to SystemFunction005
-//! \param lsa_key LSA Secrets decryption key
-//! \param data values' data
-//! \return plaintext
+// @brief decrypt data according to SystemFunction005
+// @param lsa_key LSA Secrets decryption key
+// @param data values' data
+// @return plaintext
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const mobius::bytearray
 decrypt_sysfcn5 (const mobius::bytearray& lsa_key, const mobius::bytearray& data)
@@ -52,9 +52,9 @@ decrypt_sysfcn5 (const mobius::bytearray& lsa_key, const mobius::bytearray& data
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
-//! \param lsa_key LSA Secrets decryption key
-//! \param encrypted_data value's encrypted data
+// @brief constructor
+// @param lsa_key LSA Secrets decryption key
+// @param encrypted_data value's encrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_data_impl_lsa_polseckey::registry_data_impl_lsa_polseckey (
   const mobius::bytearray& lsa_key,
@@ -65,7 +65,7 @@ registry_data_impl_lsa_polseckey::registry_data_impl_lsa_polseckey (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief load data on demand
+// @brief load data on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry_data_impl_lsa_polseckey::_load_data () const
@@ -92,3 +92,5 @@ registry_data_impl_lsa_polseckey::_load_data () const
 
 
 } // namespace mobius::os::win::registry
+
+

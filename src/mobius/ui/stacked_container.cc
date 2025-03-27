@@ -28,7 +28,7 @@ namespace mobius::ui
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief stacked_container implementation class
+// @brief stacked_container implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class stacked_container_impl : public widget_impl_base
 {
@@ -48,8 +48,8 @@ public:
   stacked_container_impl& operator= (stacked_container_impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check whether widget object is valid
-  //! \return true/false
+  // @brief Check whether widget object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator bool () const noexcept final
   {
@@ -57,8 +57,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get low level widget
-  //! \return Low level widget
+  // @brief Get low level widget
+  // @return Low level widget
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::any
   get_ui_widget () const
@@ -67,8 +67,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set widget sensitive
-  //! \param flag Flag (true/false)
+  // @brief Set widget sensitive
+  // @param flag Flag (true/false)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_sensitive (bool flag) final
@@ -77,8 +77,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set widget visible
-  //! \param flag Flag (true/false)
+  // @brief Set widget visible
+  // @param flag Flag (true/false)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_visible (bool flag) final
@@ -97,18 +97,18 @@ public:
   std::string get_selected () const;
 
 private:
-  //! \brief Container widget
+  // @brief Container widget
   mobius::ui::box widget_;
 
-  //! \brief Children container
+  // @brief Children container
   std::unordered_map <std::string, mobius::ui::widget> children_;
 
-  //! \brief Selected child ID
+  // @brief Selected child ID
   std::string selected_widget_id_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
+// @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 stacked_container_impl::stacked_container_impl ()
   : widget_ (mobius::ui::box::orientation_type::horizontal)
@@ -116,9 +116,9 @@ stacked_container_impl::stacked_container_impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add child widget
-//! \param widget_id Widget ID
-//! \param w Widget object
+// @brief Add child widget
+// @param widget_id Widget ID
+// @param w Widget object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 stacked_container_impl::add_child (const std::string& widget_id, const mobius::ui::widget& w)
@@ -133,8 +133,8 @@ stacked_container_impl::add_child (const std::string& widget_id, const mobius::u
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove child widget
-//! \param widget_id Widget ID
+// @brief Remove child widget
+// @param widget_id Widget ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 stacked_container_impl::remove_child (const std::string& widget_id)
@@ -162,9 +162,9 @@ stacked_container_impl::remove_child (const std::string& widget_id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get child widget
-//! \param widget_id Widget ID
-//! \return Child widget
+// @brief Get child widget
+// @param widget_id Widget ID
+// @return Child widget
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::ui::widget
 stacked_container_impl::get_child (const std::string& widget_id) const
@@ -180,8 +180,8 @@ stacked_container_impl::get_child (const std::string& widget_id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Select child widget
-//! \param widget_id Widget ID
+// @brief Select child widget
+// @param widget_id Widget ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 stacked_container_impl::select_child (const std::string& widget_id)
@@ -205,8 +205,8 @@ stacked_container_impl::select_child (const std::string& widget_id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get selected widget
-//! \return Selected widget ID
+// @brief Get selected widget
+// @return Selected widget ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 stacked_container_impl::get_selected () const
@@ -217,7 +217,7 @@ stacked_container_impl::get_selected () const
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 stacked_container::stacked_container ()
   : widget (std::static_pointer_cast <widget_impl_base> (std::make_shared <stacked_container_impl> ()))
@@ -225,9 +225,9 @@ stacked_container::stacked_container ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add child widget
-//! \param widget_id Widget ID
-//! \param w Widget object
+// @brief Add child widget
+// @param widget_id Widget ID
+// @param w Widget object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 stacked_container::add_child (const std::string& widget_id, const mobius::ui::widget& w)
@@ -236,8 +236,8 @@ stacked_container::add_child (const std::string& widget_id, const mobius::ui::wi
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove child widget
-//! \param widget_id Widget ID
+// @brief Remove child widget
+// @param widget_id Widget ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 stacked_container::remove_child (const std::string& widget_id)
@@ -246,9 +246,9 @@ stacked_container::remove_child (const std::string& widget_id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get child widget
-//! \param widget_id Widget ID
-//! \return Child widget
+// @brief Get child widget
+// @param widget_id Widget ID
+// @return Child widget
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::ui::widget
 stacked_container::get_child (const std::string& widget_id) const
@@ -257,8 +257,8 @@ stacked_container::get_child (const std::string& widget_id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Select child widget
-//! \param widget_id Widget ID
+// @brief Select child widget
+// @param widget_id Widget ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 stacked_container::select_child (const std::string& widget_id)
@@ -267,8 +267,8 @@ stacked_container::select_child (const std::string& widget_id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get selected widget
-//! \return Selected widget ID
+// @brief Get selected widget
+// @return Selected widget ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 stacked_container::get_selected () const
@@ -277,3 +277,5 @@ stacked_container::get_selected () const
 }
 
 } // namespace mobius::ui
+
+

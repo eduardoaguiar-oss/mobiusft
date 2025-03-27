@@ -25,8 +25,8 @@
 namespace mobius::decoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data decoder class
-//! \author Eduardo Aguiar
+// @brief Data decoder class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class data_decoder
 {
@@ -112,3 +112,5 @@ private:
 } // namespace mobius::decoder
 
 #endif
+
+

@@ -26,9 +26,9 @@
 namespace mobius::py
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument list size
-//! \param args Argument tuple
-//! \return Number of items
+// @brief Get function argument list size
+// @param args Argument tuple
+// @return Number of items
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 get_arg_size (PyObject *args) noexcept
@@ -37,10 +37,10 @@ get_arg_size (PyObject *args) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \return Argument
+// @brief Get function argument
+// @param args Argument tuple
+// @param idx Argument index
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 get_arg (PyObject *args, std::uint32_t idx)
@@ -52,10 +52,10 @@ get_arg (PyObject *args, std::uint32_t idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as string
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \return Argument
+// @brief Get function argument as string
+// @param args Argument tuple
+// @param idx Argument index
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 get_arg_as_std_string (PyObject *args, std::uint32_t idx)
@@ -64,11 +64,11 @@ get_arg_as_std_string (PyObject *args, std::uint32_t idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as string (with default value)
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \param value Default value
-//! \return Argument
+// @brief Get function argument as string (with default value)
+// @param args Argument tuple
+// @param idx Argument index
+// @param value Default value
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 get_arg_as_std_string (PyObject *args, std::uint32_t idx, const std::string& value)
@@ -80,10 +80,10 @@ get_arg_as_std_string (PyObject *args, std::uint32_t idx, const std::string& val
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as bytearray
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \return Argument
+// @brief Get function argument as bytearray
+// @param args Argument tuple
+// @param idx Argument index
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 get_arg_as_bytearray (PyObject *args, std::uint32_t idx)
@@ -92,11 +92,11 @@ get_arg_as_bytearray (PyObject *args, std::uint32_t idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as bytearray (with default value)
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \param value Default value
-//! \return Argument
+// @brief Get function argument as bytearray (with default value)
+// @param args Argument tuple
+// @param idx Argument index
+// @param value Default value
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 get_arg_as_bytearray (PyObject *args, std::uint32_t idx, const mobius::bytearray& value)
@@ -108,10 +108,10 @@ get_arg_as_bytearray (PyObject *args, std::uint32_t idx, const mobius::bytearray
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as datetime
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \return Argument
+// @brief Get function argument as datetime
+// @param args Argument tuple
+// @param idx Argument index
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 get_arg_as_datetime (PyObject *args, std::uint32_t idx)
@@ -125,11 +125,11 @@ get_arg_as_datetime (PyObject *args, std::uint32_t idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as datetime (with default value)
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \param value Default value
-//! \return Argument
+// @brief Get function argument as datetime (with default value)
+// @param args Argument tuple
+// @param idx Argument index
+// @param value Default value
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 get_arg_as_datetime (
@@ -144,10 +144,10 @@ get_arg_as_datetime (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as bool
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \return Argument
+// @brief Get function argument as bool
+// @param args Argument tuple
+// @param idx Argument index
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 get_arg_as_bool (PyObject *args, std::uint32_t idx)
@@ -156,11 +156,11 @@ get_arg_as_bool (PyObject *args, std::uint32_t idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as bool (with default value)
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \param value Default value
-//! \return Argument
+// @brief Get function argument as bool (with default value)
+// @param args Argument tuple
+// @param idx Argument index
+// @param value Default value
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 get_arg_as_bool (PyObject *args, std::uint32_t idx, bool value)
@@ -172,10 +172,10 @@ get_arg_as_bool (PyObject *args, std::uint32_t idx, bool value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as char
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \return Argument
+// @brief Get function argument as char
+// @param args Argument tuple
+// @param idx Argument index
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 char
 get_arg_as_char (PyObject *args, std::uint32_t idx)
@@ -196,11 +196,11 @@ get_arg_as_char (PyObject *args, std::uint32_t idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as char
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \param c Default value
-//! \return Argument
+// @brief Get function argument as char
+// @param args Argument tuple
+// @param idx Argument index
+// @param c Default value
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 char
 get_arg_as_char (PyObject *args, std::uint32_t idx, char c)
@@ -212,10 +212,10 @@ get_arg_as_char (PyObject *args, std::uint32_t idx, char c)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as int
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \return Argument
+// @brief Get function argument as int
+// @param args Argument tuple
+// @param idx Argument index
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int
 get_arg_as_int (PyObject *args, std::uint32_t idx)
@@ -224,11 +224,11 @@ get_arg_as_int (PyObject *args, std::uint32_t idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as int (with default value)
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \param value Default value
-//! \return Argument
+// @brief Get function argument as int (with default value)
+// @param args Argument tuple
+// @param idx Argument index
+// @param value Default value
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int
 get_arg_as_int (PyObject *args, std::uint32_t idx, int value)
@@ -240,10 +240,10 @@ get_arg_as_int (PyObject *args, std::uint32_t idx, int value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as std::int32_t
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \return Argument
+// @brief Get function argument as std::int32_t
+// @param args Argument tuple
+// @param idx Argument index
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::int32_t
 get_arg_as_int32_t (PyObject *args, std::uint32_t idx)
@@ -252,11 +252,11 @@ get_arg_as_int32_t (PyObject *args, std::uint32_t idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as std::int32_t (with default value)
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \param value Default value
-//! \return Argument
+// @brief Get function argument as std::int32_t (with default value)
+// @param args Argument tuple
+// @param idx Argument index
+// @param value Default value
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::int32_t
 get_arg_as_int32_t (PyObject *args, std::uint32_t idx, std::int32_t value)
@@ -268,10 +268,10 @@ get_arg_as_int32_t (PyObject *args, std::uint32_t idx, std::int32_t value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as std::int64_t
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \return Argument
+// @brief Get function argument as std::int64_t
+// @param args Argument tuple
+// @param idx Argument index
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::int64_t
 get_arg_as_int64_t (PyObject *args, std::uint32_t idx)
@@ -280,11 +280,11 @@ get_arg_as_int64_t (PyObject *args, std::uint32_t idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as std::int64_t (with default value)
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \param value Default value
-//! \return Argument
+// @brief Get function argument as std::int64_t (with default value)
+// @param args Argument tuple
+// @param idx Argument index
+// @param value Default value
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::int64_t
 get_arg_as_int64_t (PyObject *args, std::uint32_t idx, std::int64_t value)
@@ -296,10 +296,10 @@ get_arg_as_int64_t (PyObject *args, std::uint32_t idx, std::int64_t value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as std::uint8_t
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \return Argument
+// @brief Get function argument as std::uint8_t
+// @param args Argument tuple
+// @param idx Argument index
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint8_t
 get_arg_as_uint8_t (PyObject *args, std::uint32_t idx)
@@ -308,11 +308,11 @@ get_arg_as_uint8_t (PyObject *args, std::uint32_t idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as std::uint8_t (with default value)
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \param value Default value
-//! \return Argument
+// @brief Get function argument as std::uint8_t (with default value)
+// @param args Argument tuple
+// @param idx Argument index
+// @param value Default value
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint8_t
 get_arg_as_uint8_t (PyObject *args, std::uint32_t idx, std::uint8_t value)
@@ -324,10 +324,10 @@ get_arg_as_uint8_t (PyObject *args, std::uint32_t idx, std::uint8_t value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as std::uint16_t
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \return Argument
+// @brief Get function argument as std::uint16_t
+// @param args Argument tuple
+// @param idx Argument index
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint16_t
 get_arg_as_uint16_t (PyObject *args, std::uint32_t idx)
@@ -336,11 +336,11 @@ get_arg_as_uint16_t (PyObject *args, std::uint32_t idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as std::uint16_t (with default value)
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \param value Default value
-//! \return Argument
+// @brief Get function argument as std::uint16_t (with default value)
+// @param args Argument tuple
+// @param idx Argument index
+// @param value Default value
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint16_t
 get_arg_as_uint16_t (PyObject *args, std::uint32_t idx, std::uint16_t value)
@@ -352,10 +352,10 @@ get_arg_as_uint16_t (PyObject *args, std::uint32_t idx, std::uint16_t value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as std::uint32_t
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \return Argument
+// @brief Get function argument as std::uint32_t
+// @param args Argument tuple
+// @param idx Argument index
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 get_arg_as_uint32_t (PyObject *args, std::uint32_t idx)
@@ -364,11 +364,11 @@ get_arg_as_uint32_t (PyObject *args, std::uint32_t idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as std::uint32_t (with default value)
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \param value Default value
-//! \return Argument
+// @brief Get function argument as std::uint32_t (with default value)
+// @param args Argument tuple
+// @param idx Argument index
+// @param value Default value
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 get_arg_as_uint32_t (PyObject *args, std::uint32_t idx, std::uint32_t value)
@@ -380,10 +380,10 @@ get_arg_as_uint32_t (PyObject *args, std::uint32_t idx, std::uint32_t value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as std::uint64_t
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \return Argument
+// @brief Get function argument as std::uint64_t
+// @param args Argument tuple
+// @param idx Argument index
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint64_t
 get_arg_as_uint64_t (PyObject *args, std::uint32_t idx)
@@ -392,11 +392,11 @@ get_arg_as_uint64_t (PyObject *args, std::uint32_t idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get function argument as std::uint64_t (with default value)
-//! \param args Argument tuple
-//! \param idx Argument index
-//! \param value Default value
-//! \return Argument
+// @brief Get function argument as std::uint64_t (with default value)
+// @param args Argument tuple
+// @param idx Argument index
+// @param value Default value
+// @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint64_t
 get_arg_as_uint64_t (PyObject *args, std::uint32_t idx, std::uint64_t value)
@@ -408,7 +408,7 @@ get_arg_as_uint64_t (PyObject *args, std::uint32_t idx, std::uint64_t value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reset error
+// @brief Reset error
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 reset_error ()
@@ -417,8 +417,8 @@ reset_error ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set AttributeError
-//! \param msg Error message
+// @brief Set AttributeError
+// @param msg Error message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 set_attribute_error (const std::string& msg)
@@ -427,8 +427,8 @@ set_attribute_error (const std::string& msg)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set TypeError
-//! \param msg Error message
+// @brief Set TypeError
+// @param msg Error message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 set_invalid_type_error (const std::string& msg)
@@ -437,8 +437,8 @@ set_invalid_type_error (const std::string& msg)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set ValueError
-//! \param msg Error message
+// @brief Set ValueError
+// @param msg Error message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 set_value_error (const std::string& msg)
@@ -447,8 +447,8 @@ set_value_error (const std::string& msg)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set IOError
-//! \param msg Error message
+// @brief Set IOError
+// @param msg Error message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 set_io_error (const std::string& msg)
@@ -457,8 +457,8 @@ set_io_error (const std::string& msg)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set RuntimeError
-//! \param msg Error message
+// @brief Set RuntimeError
+// @param msg Error message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 set_runtime_error (const std::string& msg)
@@ -467,7 +467,7 @@ set_runtime_error (const std::string& msg)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set StopIteration
+// @brief Set StopIteration
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 set_stop_iteration ()
@@ -476,8 +476,8 @@ set_stop_iteration ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get error message
-//! \return Error message
+// @brief Get error message
+// @return Error message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 get_error_message ()
@@ -506,8 +506,8 @@ get_error_message ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get current line number
-//! \return Line number
+// @brief Get current line number
+// @return Line number
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int
 get_line_number ()
@@ -523,8 +523,8 @@ get_line_number ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get current file name
-//! \return File name
+// @brief Get current file name
+// @return File name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 get_filename ()
@@ -539,8 +539,8 @@ get_filename ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get current function name
-//! \return Function name
+// @brief Get current function name
+// @return Function name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 get_funcname ()
@@ -555,8 +555,8 @@ get_funcname ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new instance of Py_None
-//! \return Python object
+// @brief Create new instance of Py_None
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pynone ()
@@ -566,8 +566,8 @@ pynone ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new instance of Py_True
-//! \return Python object
+// @brief Create new instance of Py_True
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 py_true ()
@@ -577,8 +577,8 @@ py_true ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new instance of Py_False
-//! \return Python object
+// @brief Create new instance of Py_False
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 py_false ()
@@ -588,8 +588,8 @@ py_false ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new instance of Py_NotImplemented
-//! \return Python object
+// @brief Create new instance of Py_NotImplemented
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 py_not_implemented ()
@@ -599,9 +599,9 @@ py_not_implemented ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if object is Py_None
-//! \param value Python object
-//! \return true/false
+// @brief Check if object is Py_None
+// @param value Python object
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pynone_check (PyObject *value)
@@ -610,9 +610,9 @@ pynone_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check string
-//! \param value Python object
-//! \return true/false
+// @brief Check string
+// @param value Python object
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pystring_check (PyObject *value)
@@ -621,9 +621,9 @@ pystring_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create PyUnicode from std::string
-//! \param s C++ string
-//! \return Python Unicode object
+// @brief Create PyUnicode from std::string
+// @param s C++ string
+// @return Python Unicode object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pystring_from_std_string (const std::string& s)
@@ -637,9 +637,9 @@ pystring_from_std_string (const std::string& s)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create std::string from PyUnicode
-//! \param value Python String
-//! \return C++ string
+// @brief Create std::string from PyUnicode
+// @param value Python String
+// @return C++ string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 pystring_as_std_string (PyObject *value)
@@ -657,9 +657,9 @@ pystring_as_std_string (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check PyBytes
-//! \param value Python object
-//! \return true/false
+// @brief Check PyBytes
+// @param value Python object
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pybytes_check (PyObject *value)
@@ -668,9 +668,9 @@ pybytes_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create PyBytes from mobius::bytearray
-//! \param array Bytearray
-//! \return Python Bytes object
+// @brief Create PyBytes from mobius::bytearray
+// @param array Bytearray
+// @return Python Bytes object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pybytes_from_bytearray (const mobius::bytearray& array)
@@ -679,9 +679,9 @@ pybytes_from_bytearray (const mobius::bytearray& array)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create mobius::bytearray from PyBytes
-//! \param value Python Object
-//! \return Bytearray
+// @brief Create mobius::bytearray from PyBytes
+// @param value Python Object
+// @return Bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 pybytes_as_bytearray (PyObject *value)
@@ -696,9 +696,9 @@ pybytes_as_bytearray (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create PyBytes from char
-//! \param c Char
-//! \return Python Bytes object
+// @brief Create PyBytes from char
+// @param c Char
+// @return Python Bytes object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pybytes_from_char (char c)
@@ -708,9 +708,9 @@ pybytes_from_char (char c)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check PyBool
-//! \param value Python object
-//! \return true/false
+// @brief Check PyBool
+// @param value Python object
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pybool_check (PyObject *value)
@@ -719,9 +719,9 @@ pybool_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create PyBytes from mobius::bytearray
-//! \param b Bool value
-//! \return Python Bool object
+// @brief Create PyBytes from mobius::bytearray
+// @param b Bool value
+// @return Python Bool object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pybool_from_bool (bool b)
@@ -733,9 +733,9 @@ pybool_from_bool (bool b)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create bool from PyBool
-//! \param value Python Object
-//! \return bool value
+// @brief Create bool from PyBool
+// @param value Python Object
+// @return bool value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pybool_as_bool (PyObject *value)
@@ -744,9 +744,9 @@ pybool_as_bool (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check PyLong
-//! \param value Python object
-//! \return true/false
+// @brief Check PyLong
+// @param value Python object
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pylong_check (PyObject *value)
@@ -755,9 +755,9 @@ pylong_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create PyLong from std::int8_t
-//! \param value Value
-//! \return Python Unicode object
+// @brief Create PyLong from std::int8_t
+// @param value Value
+// @return Python Unicode object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pylong_from_std_int8_t (std::int8_t value)
@@ -766,9 +766,9 @@ pylong_from_std_int8_t (std::int8_t value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create std::int8_t from PyLong
-//! \param value Python Object
-//! \return std::int8_t
+// @brief Create std::int8_t from PyLong
+// @param value Python Object
+// @return std::int8_t
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::int8_t
 pylong_as_std_int8_t (PyObject *value)
@@ -777,9 +777,9 @@ pylong_as_std_int8_t (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create PyLong from std::int16_t
-//! \param value Value
-//! \return Python Unicode object
+// @brief Create PyLong from std::int16_t
+// @param value Value
+// @return Python Unicode object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pylong_from_std_int16_t (std::int16_t value)
@@ -788,9 +788,9 @@ pylong_from_std_int16_t (std::int16_t value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create std::uint16_t from PyLong
-//! \param value Python Object
-//! \return std::uint16_t
+// @brief Create std::uint16_t from PyLong
+// @param value Python Object
+// @return std::uint16_t
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::int16_t
 pylong_as_std_int16_t (PyObject *value)
@@ -799,9 +799,9 @@ pylong_as_std_int16_t (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create PyLong from std::int32_t
-//! \param value Value
-//! \return Python Unicode object
+// @brief Create PyLong from std::int32_t
+// @param value Value
+// @return Python Unicode object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pylong_from_std_int32_t (std::int32_t value)
@@ -810,9 +810,9 @@ pylong_from_std_int32_t (std::int32_t value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create std::uint32_t from PyLong
-//! \param value Python Object
-//! \return std::uint32_t
+// @brief Create std::uint32_t from PyLong
+// @param value Python Object
+// @return std::uint32_t
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::int32_t
 pylong_as_std_int32_t (PyObject *value)
@@ -821,9 +821,9 @@ pylong_as_std_int32_t (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create PyLong from std::uint8_t
-//! \param value Value
-//! \return Python Long object
+// @brief Create PyLong from std::uint8_t
+// @param value Value
+// @return Python Long object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pylong_from_std_uint8_t (std::uint8_t value)
@@ -832,9 +832,9 @@ pylong_from_std_uint8_t (std::uint8_t value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create PyLong from std::uint16_t
-//! \param value Value
-//! \return Python Long object
+// @brief Create PyLong from std::uint16_t
+// @param value Value
+// @return Python Long object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pylong_from_std_uint16_t (std::uint16_t value)
@@ -843,9 +843,9 @@ pylong_from_std_uint16_t (std::uint16_t value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create PyLong from std::uint32_t
-//! \param value Value
-//! \return Python Long object
+// @brief Create PyLong from std::uint32_t
+// @param value Value
+// @return Python Long object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pylong_from_std_uint32_t (std::uint32_t value)
@@ -854,9 +854,9 @@ pylong_from_std_uint32_t (std::uint32_t value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create std::uint8_t from PyLong
-//! \param value Python Object
-//! \return std::uint8_t
+// @brief Create std::uint8_t from PyLong
+// @param value Python Object
+// @return std::uint8_t
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint8_t
 pylong_as_std_uint8_t (PyObject *value)
@@ -865,9 +865,9 @@ pylong_as_std_uint8_t (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create std::uint16_t from PyLong
-//! \param value Python Object
-//! \return std::uint16_t
+// @brief Create std::uint16_t from PyLong
+// @param value Python Object
+// @return std::uint16_t
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint16_t
 pylong_as_std_uint16_t (PyObject *value)
@@ -876,9 +876,9 @@ pylong_as_std_uint16_t (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create std::uint32_t from PyLong
-//! \param value Python Object
-//! \return std::uint32_t
+// @brief Create std::uint32_t from PyLong
+// @param value Python Object
+// @return std::uint32_t
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 pylong_as_std_uint32_t (PyObject *value)
@@ -887,9 +887,9 @@ pylong_as_std_uint32_t (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create PyLong from std::int64_t
-//! \param value Value
-//! \return Python Unicode object
+// @brief Create PyLong from std::int64_t
+// @param value Value
+// @return Python Unicode object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pylong_from_std_int64_t (std::int64_t value)
@@ -898,9 +898,9 @@ pylong_from_std_int64_t (std::int64_t value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create std::uint64_t from PyLong
-//! \param value Python Object
-//! \return std::uint64_t
+// @brief Create std::uint64_t from PyLong
+// @param value Python Object
+// @return std::uint64_t
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::int64_t
 pylong_as_std_int64_t (PyObject *value)
@@ -909,9 +909,9 @@ pylong_as_std_int64_t (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create PyLong from std::uint64_t
-//! \param value Value
-//! \return Python Unicode object
+// @brief Create PyLong from std::uint64_t
+// @param value Value
+// @return Python Unicode object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pylong_from_std_uint64_t (std::uint64_t value)
@@ -920,9 +920,9 @@ pylong_from_std_uint64_t (std::uint64_t value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create std::uint64_t from PyLong
-//! \param value Python Object
-//! \return std::uint64_t
+// @brief Create std::uint64_t from PyLong
+// @param value Python Object
+// @return std::uint64_t
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint64_t
 pylong_as_std_uint64_t (PyObject *value)
@@ -936,9 +936,9 @@ pylong_as_std_uint64_t (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create PyLong from int
-//! \param value Value
-//! \return Python object
+// @brief Create PyLong from int
+// @param value Value
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pylong_from_int (int value)
@@ -947,9 +947,9 @@ pylong_from_int (int value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create int from PyLong
-//! \param value Python Object
-//! \return int
+// @brief Create int from PyLong
+// @param value Python Object
+// @return int
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int
 pylong_as_int (PyObject *value)
@@ -958,9 +958,9 @@ pylong_as_int (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check PyFloat
-//! \param value Python object
-//! \return true/false
+// @brief Check PyFloat
+// @param value Python object
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pyfloat_check (PyObject *value)
@@ -969,9 +969,9 @@ pyfloat_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create double value from PyFloat
-//! \param value Python Object
-//! \return double value
+// @brief Create double value from PyFloat
+// @param value Python Object
+// @return double value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 double
 pyfloat_as_cpp (PyObject *value)
@@ -980,9 +980,9 @@ pyfloat_as_cpp (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create PyFloat from double
-//! \param value Value
-//! \return Python object
+// @brief Create PyFloat from double
+// @param value Value
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pyfloat_from_cpp (double value)
@@ -991,3 +991,5 @@ pyfloat_from_cpp (double value)
 }
 
 } // namespace mobius::py
+
+

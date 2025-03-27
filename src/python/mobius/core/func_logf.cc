@@ -17,15 +17,15 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <mobius/core/log.h>
 #include <mobius/string_functions.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <b>logf</b> function implementation
+// @brief <b>logf</b> function implementation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_logf (PyObject *, PyObject *args)
@@ -63,7 +63,7 @@ func_logf (PyObject *, PyObject *args)
 
       else if (mobius::string::startswith (arg_text, "DBG "))
         log.debug (line_number, arg_text.substr (4));
-  
+
       else
         log.info (line_number, arg_text);
     }
@@ -76,3 +76,5 @@ func_logf (PyObject *, PyObject *args)
   // return None
   return mobius::py::pynone ();
 }
+
+

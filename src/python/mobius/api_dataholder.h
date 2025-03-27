@@ -24,7 +24,7 @@
 #include <string>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief api.dataholder: data structure
+// @brief api.dataholder: data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -44,3 +44,5 @@ void api_dataholder_setattr (api_dataholder_o *, const std::string&, const mobiu
 void api_dataholder_setattr (api_dataholder_o *, const std::string&, PyObject *);
 
 #endif
+
+

@@ -28,7 +28,7 @@
 namespace mobius::extension::ui::gtk3
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
+// @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ui_impl::ui_impl ()
 {
@@ -39,7 +39,7 @@ ui_impl::ui_impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Start user interface
+// @brief Start user interface
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 ui_impl::start ()
@@ -48,7 +48,7 @@ ui_impl::start ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Stop user interface
+// @brief Stop user interface
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 ui_impl::stop ()
@@ -57,7 +57,7 @@ ui_impl::stop ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Flush UI events
+// @brief Flush UI events
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 ui_impl::flush ()
@@ -67,8 +67,8 @@ ui_impl::flush ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new box
-//! \param orientation Orientation type
+// @brief Create new box
+// @param orientation Orientation type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::shared_ptr <mobius::ui::box_impl_base>
 ui_impl::new_box (mobius::ui::box_impl_base::orientation_type orientation) const
@@ -77,7 +77,7 @@ ui_impl::new_box (mobius::ui::box_impl_base::orientation_type orientation) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new button
+// @brief Create new button
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::shared_ptr <mobius::ui::button_impl_base>
 ui_impl::new_button () const
@@ -86,10 +86,10 @@ ui_impl::new_button () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new icon by name
-//! \param name Icon name
-//! \param size Icon size
-//! \return Pointer to icon implementation
+// @brief Create new icon by name
+// @param name Icon name
+// @param size Icon size
+// @return Pointer to icon implementation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::shared_ptr <mobius::ui::icon_impl_base>
 ui_impl::new_icon_by_name (const std::string& name, mobius::ui::icon_impl_base::size_type size) const
@@ -111,10 +111,10 @@ ui_impl::new_icon_by_name (const std::string& name, mobius::ui::icon_impl_base::
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new icon from data
-//! \param data Data
-//! \param size Icon size
-//! \return Pointer to icon implementation
+// @brief Create new icon from data
+// @param data Data
+// @param size Icon size
+// @return Pointer to icon implementation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::shared_ptr <mobius::ui::icon_impl_base>
 ui_impl::new_icon_from_data (const mobius::bytearray& data, mobius::ui::icon_impl_base::size_type size) const
@@ -132,7 +132,7 @@ ui_impl::new_icon_from_data (const mobius::bytearray& data, mobius::ui::icon_imp
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new Label
+// @brief Create new Label
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::shared_ptr <mobius::ui::label_impl_base>
 ui_impl::new_label () const
@@ -141,8 +141,8 @@ ui_impl::new_label () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new Message Dialog
-//! \param t Message type
+// @brief Create new Message Dialog
+// @param t Message type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::shared_ptr <mobius::ui::message_dialog_impl_base>
 ui_impl::new_message_dialog (mobius::ui::message_dialog_impl_base::type t) const
@@ -151,8 +151,8 @@ ui_impl::new_message_dialog (mobius::ui::message_dialog_impl_base::type t) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new Widget
-//! \param w Low level widget object
+// @brief Create new Widget
+// @param w Low level widget object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::shared_ptr <mobius::ui::widget_impl_base>
 ui_impl::new_widget (std::any w, bool) const
@@ -161,7 +161,7 @@ ui_impl::new_widget (std::any w, bool) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new Window
+// @brief Create new Window
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::shared_ptr <mobius::ui::window_impl_base>
 ui_impl::new_window () const
@@ -170,3 +170,5 @@ ui_impl::new_window () const
 }
 
 } // namespace mobius::extension::ui::gtk3
+
+

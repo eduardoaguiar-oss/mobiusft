@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file attribute.cc C++ API <i>mobius.framework.attribute</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "attribute.h"
@@ -26,9 +26,9 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>id</i> Attribute getter
-//! \param self Object
-//! \return <i>id</i> attribute
+// @brief <i>id</i> Attribute getter
+// @param self Object
+// @return <i>id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_id (framework_attribute_o *self)
@@ -48,9 +48,9 @@ tp_getter_id (framework_attribute_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>name</i> Attribute getter
-//! \param self Object
-//! \return <i>name</i> attribute
+// @brief <i>name</i> Attribute getter
+// @param self Object
+// @return <i>name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_name (framework_attribute_o *self)
@@ -70,10 +70,10 @@ tp_getter_name (framework_attribute_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>name</i> Attribute setter
-//! \param self Object
-//! \param value New value
-//! \return 0 on success, -1 on error
+// @brief <i>name</i> Attribute setter
+// @param self Object
+// @param value New value
+// @return 0 on success, -1 on error
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static int
 tp_setter_name (framework_attribute_o *self, PyObject *value, void *)
@@ -109,9 +109,9 @@ tp_setter_name (framework_attribute_o *self, PyObject *value, void *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>description</i> Attribute getter
-//! \param self Object
-//! \return <i>description</i> attribute
+// @brief <i>description</i> Attribute getter
+// @param self Object
+// @return <i>description</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_description (framework_attribute_o *self)
@@ -131,10 +131,10 @@ tp_getter_description (framework_attribute_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>description</i> Attribute setter
-//! \param self Object
-//! \param value New value
-//! \return 0 on success, -1 on error
+// @brief <i>description</i> Attribute setter
+// @param self Object
+// @param value New value
+// @return 0 on success, -1 on error
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static int
 tp_setter_description (framework_attribute_o *self, PyObject *value, void *)
@@ -170,9 +170,9 @@ tp_setter_description (framework_attribute_o *self, PyObject *value, void *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>datatype</i> Attribute getter
-//! \param self Object
-//! \return <i>datatype</i> attribute
+// @brief <i>datatype</i> Attribute getter
+// @param self Object
+// @return <i>datatype</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_datatype (framework_attribute_o *self)
@@ -192,10 +192,10 @@ tp_getter_datatype (framework_attribute_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>datatype</i> Attribute setter
-//! \param self Object
-//! \param value New value
-//! \return 0 on success, -1 on error
+// @brief <i>datatype</i> Attribute setter
+// @param self Object
+// @param value New value
+// @return 0 on success, -1 on error
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static int
 tp_setter_datatype (framework_attribute_o *self, PyObject *value, void *)
@@ -231,9 +231,9 @@ tp_setter_datatype (framework_attribute_o *self, PyObject *value, void *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>value_mask</i> Attribute getter
-//! \param self Object
-//! \return <i>value_mask</i> attribute
+// @brief <i>value_mask</i> Attribute getter
+// @param self Object
+// @return <i>value_mask</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_value_mask (framework_attribute_o *self)
@@ -253,10 +253,10 @@ tp_getter_value_mask (framework_attribute_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>value_mask</i> Attribute setter
-//! \param self Object
-//! \param value New value
-//! \return 0 on success, -1 on error
+// @brief <i>value_mask</i> Attribute setter
+// @param self Object
+// @param value New value
+// @return 0 on success, -1 on error
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static int
 tp_setter_value_mask (framework_attribute_o *self, PyObject *value, void *)
@@ -292,9 +292,9 @@ tp_setter_value_mask (framework_attribute_o *self, PyObject *value, void *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>index</i> Attribute getter
-//! \param self Object
-//! \return <i>index</i> attribute
+// @brief <i>index</i> Attribute getter
+// @param self Object
+// @return <i>index</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_index (framework_attribute_o *self)
@@ -314,10 +314,10 @@ tp_getter_index (framework_attribute_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>index</i> Attribute setter
-//! \param self Object
-//! \param value New value
-//! \return 0 on success, -1 on error
+// @brief <i>index</i> Attribute setter
+// @param self Object
+// @param value New value
+// @return 0 on success, -1 on error
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static int
 tp_setter_index (framework_attribute_o *self, PyObject *value, void *)
@@ -353,9 +353,9 @@ tp_setter_index (framework_attribute_o *self, PyObject *value, void *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_editable</i> Attribute getter
-//! \param self Object
-//! \return <i>is_editable</i> attribute
+// @brief <i>is_editable</i> Attribute getter
+// @param self Object
+// @return <i>is_editable</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_is_editable (framework_attribute_o *self)
@@ -375,7 +375,7 @@ tp_getter_is_editable (framework_attribute_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Getters and setters structure
+// @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -390,8 +390,8 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>attribute</i> deallocator
-//! \param self Object
+// @brief <i>attribute</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (framework_attribute_o *self)
@@ -401,7 +401,7 @@ tp_dealloc (framework_attribute_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyTypeObject framework_attribute_t =
 {
@@ -456,7 +456,7 @@ static PyTypeObject framework_attribute_t =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>mobius.framework.attribute</i> type
+// @brief Create <i>mobius.framework.attribute</i> type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
 new_framework_attribute_type ()
@@ -468,9 +468,9 @@ new_framework_attribute_type ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>attribute</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>attribute</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_framework_attribute_check (PyObject *value)
@@ -479,9 +479,9 @@ pymobius_framework_attribute_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>attribute</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New attribute object
+// @brief Create <i>attribute</i> Python object from C++ object
+// @param obj C++ object
+// @return New attribute object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_framework_attribute_to_pyobject (const mobius::framework::attribute& obj)
@@ -490,12 +490,14 @@ pymobius_framework_attribute_to_pyobject (const mobius::framework::attribute& ob
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>attribute</i> C++ object from Python object
-//! \param value Python value
-//! \return Attribute object
+// @brief Create <i>attribute</i> C++ object from Python object
+// @param value Python value
+// @return Attribute object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::framework::attribute
 pymobius_framework_attribute_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <framework_attribute_o> (value, &framework_attribute_t);
 }
+
+

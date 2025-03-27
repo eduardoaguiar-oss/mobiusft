@@ -22,7 +22,7 @@
 #include <mobius/os/win/dpapi/master_key.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_os_win_dpapi_master_key_to_pyobject (mobius::os::win::dpapi::
 mobius::os::win::dpapi::master_key pymobius_os_win_dpapi_master_key_from_pyobject (PyObject *);
 
 #endif
+
+

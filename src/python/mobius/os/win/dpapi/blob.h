@@ -22,7 +22,7 @@
 #include <mobius/os/win/dpapi/blob.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_os_win_dpapi_blob_to_pyobject (mobius::os::win::dpapi::blob);
 mobius::os::win::dpapi::blob pymobius_os_win_dpapi_blob_from_pyobject (PyObject *);
 
 #endif
+
+

@@ -32,7 +32,7 @@ static std::string icon_path_;
 namespace mobius::ui
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 icon::icon ()
   : widget (std::static_pointer_cast <widget_impl_base> (std::make_shared <widget_impl_null> ()))
@@ -40,8 +40,8 @@ icon::icon ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor from implementation pointer
-//! \param impl Implementation pointer
+// @brief Constructor from implementation pointer
+// @param impl Implementation pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 icon::icon (const std::shared_ptr <icon_impl_base>& impl)
   : widget (std::static_pointer_cast <widget_impl_base> (impl))
@@ -49,9 +49,9 @@ icon::icon (const std::shared_ptr <icon_impl_base>& impl)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set icon by name
-//! \param name Icon name
-//! \param size Icon size
+// @brief Set icon by name
+// @param name Icon name
+// @param size Icon size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 icon::set_icon_by_name (const std::string& name, size_type size)
@@ -69,9 +69,9 @@ icon::set_icon_by_name (const std::string& name, size_type size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set icon by path
-//! \param path Icon path
-//! \param size Icon size
+// @brief Set icon by path
+// @param path Icon path
+// @param size Icon size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 icon::set_icon_by_path (const std::string& path, size_type size)
@@ -84,9 +84,9 @@ icon::set_icon_by_path (const std::string& path, size_type size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set icon by URL
-//! \param url Icon URL
-//! \param size Icon size
+// @brief Set icon by URL
+// @param url Icon URL
+// @param size Icon size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 icon::set_icon_by_url (const std::string& url, size_type size)
@@ -99,8 +99,8 @@ icon::set_icon_by_url (const std::string& url, size_type size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set icon directory path
-//! \param path Icon path
+// @brief Set icon directory path
+// @param path Icon path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 set_icon_path (const std::string& path)
@@ -109,10 +109,10 @@ set_icon_path (const std::string& path)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new icon from data
-//! \param data Icon data
-//! \param size Size
-//! \return New icon object
+// @brief Create new icon from data
+// @param data Icon data
+// @param size Size
+// @return New icon object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 icon
 new_icon_from_data (const mobius::bytearray& data, icon::size_type size)
@@ -121,10 +121,10 @@ new_icon_from_data (const mobius::bytearray& data, icon::size_type size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new icon by icon name
-//! \param name Icon name
-//! \param size Size
-//! \return New icon object
+// @brief Create new icon by icon name
+// @param name Icon name
+// @param size Size
+// @return New icon object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 icon
 new_icon_by_name (const std::string& name, icon::size_type size)
@@ -142,10 +142,10 @@ new_icon_by_name (const std::string& name, icon::size_type size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new icon by file path
-//! \param path File path
-//! \param size Size
-//! \return New icon object
+// @brief Create new icon by file path
+// @param path File path
+// @param size Size
+// @return New icon object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 icon
 new_icon_by_path (const std::string& path, icon::size_type size)
@@ -158,10 +158,10 @@ new_icon_by_path (const std::string& path, icon::size_type size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new icon by file URL
-//! \param url File URL
-//! \param size Size
-//! \return New icon object
+// @brief Create new icon by file URL
+// @param url File URL
+// @param size Size
+// @return New icon object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 icon
 new_icon_by_url (const std::string& url, icon::size_type size)
@@ -174,3 +174,5 @@ new_icon_by_url (const std::string& url, icon::size_type size)
 }
 
 } // namespace mobius::ui
+
+

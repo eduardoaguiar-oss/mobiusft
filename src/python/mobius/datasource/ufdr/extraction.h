@@ -22,7 +22,7 @@
 #include <mobius/datasource/ufdr/extraction.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_datasource_ufdr_extraction_to_pyobject (const mobius::datasou
 mobius::datasource::ufdr::extraction pymobius_datasource_ufdr_extraction_from_pyobject (PyObject *);
 
 #endif
+
+

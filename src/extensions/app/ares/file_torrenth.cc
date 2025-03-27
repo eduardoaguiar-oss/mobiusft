@@ -24,10 +24,10 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Populate entry metadata
-//! \param e Entry
-//! \param data Raw data
-//! \see get_trusted_metas@helper_library_db.pas
+// @brief Populate entry metadata
+// @param e Entry
+// @param data Raw data
+// @see get_trusted_metas@helper_library_db.pas
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 _populate_metadata (mobius::extension::app::ares::file_torrenth::entry& e, const mobius::bytearray& data)
@@ -70,8 +70,8 @@ _populate_metadata (mobius::extension::app::ares::file_torrenth::entry& e, const
 namespace mobius::extension::app::ares
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \see tthread_dht.getMagnetFiles@DHT/thread_dht.pas (line 284)
+// @brief Constructor
+// @see tthread_dht.getMagnetFiles@DHT/thread_dht.pas (line 284)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_torrenth::file_torrenth (const mobius::io::reader& reader)
 {
@@ -92,7 +92,7 @@ file_torrenth::file_torrenth (const mobius::io::reader& reader)
   auto header_section = section_.new_child ("file-header");
   auto signature = decoder.get_bytearray_by_size (14);
 
-  //! \see DHT/thread_dht.pas (line 319)
+  // @see DHT/thread_dht.pas (line 319)
   if (signature != "__ARESDB1.02H_")
     return;
 
@@ -112,7 +112,7 @@ file_torrenth::file_torrenth (const mobius::io::reader& reader)
 
       // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
       // Create data section
-      //! \see DHT/thread_dht.pas (line 335)
+      // @see DHT/thread_dht.pas (line 335)
       // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
       auto data_section = entry_section.new_child ("entry-header");
 
@@ -124,8 +124,8 @@ file_torrenth::file_torrenth (const mobius::io::reader& reader)
 
       // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
       // Create entry
-      //! \see DHT/thread_dht.pas (line 338)
-      //! \see https://en.wikipedia.org/wiki/Magnet_URI_scheme
+      // @see DHT/thread_dht.pas (line 338)
+      // @see https://en.wikipedia.org/wiki/Magnet_URI_scheme
       // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
       mobius::decoder::data_decoder entry_decoder (data);
 
@@ -140,7 +140,7 @@ file_torrenth::file_torrenth (const mobius::io::reader& reader)
 
       // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
       // Decode metadata, if any
-      //! \see DHT/thread_dht.pas (line 355)
+      // @see DHT/thread_dht.pas (line 355)
       // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
       std::uint16_t metadata_size = entry_decoder.get_uint16_le ();
 
@@ -162,3 +162,7 @@ file_torrenth::file_torrenth (const mobius::io::reader& reader)
 }
 
 } // namespace mobius::extension::app::ares
+
+
+
+

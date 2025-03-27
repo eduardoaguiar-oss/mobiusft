@@ -25,110 +25,104 @@
 #include <string>
 #include <vector>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
-{
-namespace registry
+namespace mobius::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief hive file header struct
+// @brief hive file header struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct header_data
 {
-  //! \brief file signature (regf)
+  // @brief file signature (regf)
   std::string signature;
 
-  //! \brief this number is incremented by 1 in the beginning of a write operation on the hive
+  // @brief this number is incremented by 1 in the beginning of a write operation on the hive
   std::uint32_t sequence_1;
 
-  //! \brief this number is incremented by 1 at the end of a write operation on the hive
+  // @brief this number is incremented by 1 at the end of a write operation on the hive
   std::uint32_t sequence_2;
 
-  //! \brief last written timestamp as NT datetime
+  // @brief last written timestamp as NT datetime
   mobius::datetime::datetime mtime;
 
-  //! \brief major version of the hivefile
+  // @brief major version of the hivefile
   std::uint32_t major_version;
 
-  //! \brief minor version of the hivefile
+  // @brief minor version of the hivefile
   std::uint32_t minor_version;
 
-  //! \brief file type: 0 - registry file, 1 - transaction log
+  // @brief file type: 0 - registry file, 1 - transaction log
   std::uint32_t file_type;
 
-  //! \brief file format: 1 - direct memory load
+  // @brief file format: 1 - direct memory load
   std::uint32_t file_format;
 
-  //! \brief offset of the root cell in bytes, relative from the start of the hive bins data
+  // @brief offset of the root cell in bytes, relative from the start of the hive bins data
   std::uint32_t root_offset;
 
-  //! \brief size of the hive bins data in bytes
+  // @brief size of the hive bins data in bytes
   std::uint32_t hbin_data_size;
 
-  //! \brief sector size of the interlying disk, in bytes
+  // @brief sector size of the interlying disk, in bytes
   std::uint32_t disk_sector_size;
 
-  //! \brief last 32 characters of the filename, in UTF-16LE
+  // @brief last 32 characters of the filename, in UTF-16LE
   std::string filename;
 
-  //! \brief header checksum
+  // @brief header checksum
   std::uint32_t header_checksum;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Windows 10 fields
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief GUID of the Resource Manager (RM)
+  // @brief GUID of the Resource Manager (RM)
   std::string rm_guid;
 
-  //! \brief unused
+  // @brief unused
   std::string log_guid;
 
-  //! \brief flags (bit mask)
+  // @brief flags (bit mask)
   std::uint32_t flags;
 
-  //! \brief GUID used to generate a file name of a log file for the Transaction Manager (TM)
+  // @brief GUID used to generate a file name of a log file for the Transaction Manager (TM)
   std::string tm_guid;
 
-  //! \brief GUID signature
+  // @brief GUID signature
   std::string guid_signature;
 
-  //! \brief last reorganization timestamp
+  // @brief last reorganization timestamp
   mobius::datetime::datetime rtime;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Key value struct
+// @brief Key value struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct vk_data
 {
-  //! \brief signature (vk)
+  // @brief signature (vk)
   std::string signature;
 
-  //! \brief flags (bit mask)
+  // @brief flags (bit mask)
   std::uint16_t flags = 0;
 
-  //! \brief data size
+  // @brief data size
   std::uint32_t data_size;
 
-  //! \brief data type
+  // @brief data type
   std::uint32_t data_type;
 
-  //! \brief data offset
+  // @brief data offset
   std::uint32_t data_offset;
 
-  //! \brief data value
+  // @brief data value
   mobius::bytearray data_value;
 
-  //! \brief value name
+  // @brief value name
   std::string name;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Windows' registry file decoder
-//! \author Eduardo Aguiar
+// @brief Windows' registry file decoder
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class hive_decoder
 {
@@ -148,7 +142,7 @@ public:
   mobius::bytearray decode_data_db (offset_type);
 
 private:
-  //! \brief generic reader
+  // @brief generic reader
   mobius::io::reader reader_;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -158,9 +152,8 @@ private:
 
 };
 
-} // namespace registry
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win::registry
 
 #endif
+
+

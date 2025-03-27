@@ -24,8 +24,8 @@
 namespace mobius::datasource
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <b>datasource_vfs</b> handle class
-//! \author Eduardo Aguiar
+// @brief <b>datasource_vfs</b> handle class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class datasource_vfs : public datasource
 {
@@ -44,8 +44,8 @@ public:
   datasource_vfs& operator= (datasource_vfs&&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Convert datasource_vfs to datasource
-  //! \return Datasource
+  // @brief Convert datasource_vfs to datasource
+  // @return Datasource
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator datasource () const
   {
@@ -53,8 +53,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get VFS object
-  //! \return VFS object
+  // @brief Get VFS object
+  // @return VFS object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::vfs::vfs
   get_vfs () const
@@ -66,3 +66,5 @@ public:
 } // namespace mobius::datasource
 
 #endif
+
+

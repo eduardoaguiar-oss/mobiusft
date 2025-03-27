@@ -23,9 +23,9 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get files from entries
-//! \param entries Entries
-//! \return Files
+// @brief Get files from entries
+// @param entries Entries
+// @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::vector <mobius::io::file>
 _get_files_from_entries (const std::vector <mobius::io::entry>& entries)
@@ -45,9 +45,9 @@ _get_files_from_entries (const std::vector <mobius::io::entry>& entries)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get folders from entries
-//! \param entries Entries
-//! \return Folders
+// @brief Get folders from entries
+// @param entries Entries
+// @return Folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::vector <mobius::io::folder>
 _get_folders_from_entries (const std::vector <mobius::io::entry>& entries)
@@ -67,11 +67,11 @@ _get_folders_from_entries (const std::vector <mobius::io::entry>& entries)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Walk through path, getting entries that match
-//! \param folder Folder object
-//! \param rpath Relative path
-//! \param cmp Compare function
-//! \return Entries that match compare function
+// @brief Walk through path, getting entries that match
+// @param folder Folder object
+// @param rpath Relative path
+// @param cmp Compare function
+// @return Entries that match compare function
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::entry>
 _walk (
@@ -115,10 +115,10 @@ _walk (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Walk folder recursively, getting entries that match predicate function
-//! \param folder Folder object
-//! \param f Predicate function
-//! \return Entries
+// @brief Walk folder recursively, getting entries that match predicate function
+// @param folder Folder object
+// @param f Predicate function
+// @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::entry>
 _find (
@@ -155,7 +155,7 @@ _find (
 namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief walker implementation class
+// @brief walker implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class walker::impl
 {
@@ -175,8 +175,8 @@ public:
   impl& operator= (impl&&) = delete;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set ignore reallocated flag
-  //! \param f Flag (true/false)
+  // @brief Set ignore reallocated flag
+  // @param f Flag (true/false)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_ignore_reallocated (bool f)
@@ -185,8 +185,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Set case sensitive flag
-  //! \param f Flag (true/false)
+  // @brief Set case sensitive flag
+  // @param f Flag (true/false)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_case_sensitive (bool f)
@@ -217,19 +217,19 @@ public:
   std::vector <mobius::io::folder> find_folders (std::function <bool (const mobius::io::folder&)>) const;
 
 private:
-  //! \brief Base folder
+  // @brief Base folder
   const mobius::io::folder folder_;
 
-  //! \brief Flag to ignore reallocated entries
+  // @brief Flag to ignore reallocated entries
   bool flag_ignore_reallocated_ = true;
 
-  //! \brief Flag to compare file names with case sensitivity or not
+  // @brief Flag to compare file names with case sensitivity or not
   bool flag_case_sensitive_ = false;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param folder Base folder
+// @brief Constructor
+// @param folder Base folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 walker::impl::impl (const mobius::io::folder& folder)
     : folder_ (folder)
@@ -237,8 +237,8 @@ walker::impl::impl (const mobius::io::folder& folder)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get entries
-//! \return Entries
+// @brief Get entries
+// @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::entry>
 walker::impl::get_entries () const
@@ -270,9 +270,9 @@ walker::impl::get_entries () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get entries by name
-//! \param name Name
-//! \return Entries
+// @brief Get entries by name
+// @param name Name
+// @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::entry>
 walker::impl::get_entries_by_name (const std::string& name) const
@@ -289,9 +289,9 @@ walker::impl::get_entries_by_name (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get entries by path
-//! \param path Relative path
-//! \return Entries
+// @brief Get entries by path
+// @param path Relative path
+// @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::entry>
 walker::impl::get_entries_by_path (const std::string& path) const
@@ -304,9 +304,9 @@ walker::impl::get_entries_by_path (const std::string& path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get entries by pattern
-//! \param pattern fnmatch function pattern
-//! \return Entries
+// @brief Get entries by pattern
+// @param pattern fnmatch function pattern
+// @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::entry>
 walker::impl::get_entries_by_pattern (const std::string& pattern) const
@@ -319,9 +319,9 @@ walker::impl::get_entries_by_pattern (const std::string& pattern) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get entries by predicate function
-//! \param f Predicate function
-//! \return Entries
+// @brief Get entries by predicate function
+// @param f Predicate function
+// @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::entry>
 walker::impl::get_entries_by_predicate (std::function <bool (const mobius::io::entry&)> f) const
@@ -341,9 +341,9 @@ walker::impl::get_entries_by_predicate (std::function <bool (const mobius::io::e
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Find entries recursively by predicate function
-//! \param f Predicate function
-//! \return Entries
+// @brief Find entries recursively by predicate function
+// @param f Predicate function
+// @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::entry>
 walker::impl::find_entries (std::function <bool (const mobius::io::entry&)> f) const
@@ -352,8 +352,8 @@ walker::impl::find_entries (std::function <bool (const mobius::io::entry&)> f) c
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get files
-//! \return Files
+// @brief Get files
+// @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::file>
 walker::impl::get_files () const
@@ -362,9 +362,9 @@ walker::impl::get_files () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get files by name
-//! \param name Name
-//! \return Files
+// @brief Get files by name
+// @param name Name
+// @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::file>
 walker::impl::get_files_by_name (const std::string& name) const
@@ -373,9 +373,9 @@ walker::impl::get_files_by_name (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get files by path
-//! \param path Relative path
-//! \return Files
+// @brief Get files by path
+// @param path Relative path
+// @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::file>
 walker::impl::get_files_by_path (const std::string& path) const
@@ -384,9 +384,9 @@ walker::impl::get_files_by_path (const std::string& path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get files by pattern
-//! \param pattern fnmatch function pattern
-//! \return Files
+// @brief Get files by pattern
+// @param pattern fnmatch function pattern
+// @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::file>
 walker::impl::get_files_by_pattern (const std::string& pattern) const
@@ -395,9 +395,9 @@ walker::impl::get_files_by_pattern (const std::string& pattern) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get files by predicate function
-//! \param f Predicate function
-//! \return Files
+// @brief Get files by predicate function
+// @param f Predicate function
+// @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::file>
 walker::impl::get_files_by_predicate (std::function <bool (const mobius::io::file&)> f) const
@@ -410,9 +410,9 @@ walker::impl::get_files_by_predicate (std::function <bool (const mobius::io::fil
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Find files recursively by predicate function
-//! \param f Predicate function
-//! \return Files
+// @brief Find files recursively by predicate function
+// @param f Predicate function
+// @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::file>
 walker::impl::find_files (std::function <bool (const mobius::io::file&)> f) const
@@ -425,8 +425,8 @@ walker::impl::find_files (std::function <bool (const mobius::io::file&)> f) cons
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get folders
-//! \return Folders
+// @brief Get folders
+// @return Folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::folder>
 walker::impl::get_folders () const
@@ -435,9 +435,9 @@ walker::impl::get_folders () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get folders by name
-//! \param name Name
-//! \return Folders
+// @brief Get folders by name
+// @param name Name
+// @return Folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::folder>
 walker::impl::get_folders_by_name (const std::string& name) const
@@ -446,9 +446,9 @@ walker::impl::get_folders_by_name (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get folders by path
-//! \param path Relative path
-//! \return Folders
+// @brief Get folders by path
+// @param path Relative path
+// @return Folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::folder>
 walker::impl::get_folders_by_path (const std::string& path) const
@@ -457,9 +457,9 @@ walker::impl::get_folders_by_path (const std::string& path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get folders by pattern
-//! \param pattern fnmatch function pattern
-//! \return Folders
+// @brief Get folders by pattern
+// @param pattern fnmatch function pattern
+// @return Folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::folder>
 walker::impl::get_folders_by_pattern (const std::string& pattern) const
@@ -468,9 +468,9 @@ walker::impl::get_folders_by_pattern (const std::string& pattern) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get folders by predicate function
-//! \param f Predicate function
-//! \return Folders
+// @brief Get folders by predicate function
+// @param f Predicate function
+// @return Folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::folder>
 walker::impl::get_folders_by_predicate (std::function <bool (const mobius::io::folder&)> f) const
@@ -483,9 +483,9 @@ walker::impl::get_folders_by_predicate (std::function <bool (const mobius::io::f
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Find folders recursively by predicate function
-//! \param f Predicate function
-//! \return Folders
+// @brief Find folders recursively by predicate function
+// @param f Predicate function
+// @return Folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::folder>
 walker::impl::find_folders (std::function <bool (const mobius::io::folder&)> f) const
@@ -498,8 +498,8 @@ walker::impl::find_folders (std::function <bool (const mobius::io::folder&)> f) 
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param folder Base folder
+// @brief Constructor
+// @param folder Base folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 walker::walker (const mobius::io::folder& folder)
   : impl_ (std::make_shared <impl> (folder))
@@ -507,8 +507,8 @@ walker::walker (const mobius::io::folder& folder)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set ignore reallocated flag
-//! \param flag Flag (true/false)
+// @brief Set ignore reallocated flag
+// @param flag Flag (true/false)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 walker::set_ignore_reallocated (bool flag)
@@ -517,8 +517,8 @@ walker::set_ignore_reallocated (bool flag)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set case sensitive flag
-//! \param flag Flag (true/false)
+// @brief Set case sensitive flag
+// @param flag Flag (true/false)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 walker::set_case_sensitive (bool flag)
@@ -527,8 +527,8 @@ walker::set_case_sensitive (bool flag)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get entries
-//! \return Entries
+// @brief Get entries
+// @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::entry>
 walker::get_entries () const
@@ -537,9 +537,9 @@ walker::get_entries () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get entries by name
-//! \param name Name
-//! \return Entries
+// @brief Get entries by name
+// @param name Name
+// @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::entry>
 walker::get_entries_by_name (const std::string& name) const
@@ -548,9 +548,9 @@ walker::get_entries_by_name (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get entries by path
-//! \param path Relative path
-//! \return Entries
+// @brief Get entries by path
+// @param path Relative path
+// @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::entry>
 walker::get_entries_by_path (const std::string& path) const
@@ -559,9 +559,9 @@ walker::get_entries_by_path (const std::string& path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get entries by pattern
-//! \param pattern fnmatch function pattern
-//! \return Entries
+// @brief Get entries by pattern
+// @param pattern fnmatch function pattern
+// @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::entry>
 walker::get_entries_by_pattern (const std::string& pattern) const
@@ -570,9 +570,9 @@ walker::get_entries_by_pattern (const std::string& pattern) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get entries by predicate function
-//! \param f Predicate function
-//! \return Entries
+// @brief Get entries by predicate function
+// @param f Predicate function
+// @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::entry>
 walker::get_entries_by_predicate (std::function <bool (const mobius::io::entry&)> f) const
@@ -581,9 +581,9 @@ walker::get_entries_by_predicate (std::function <bool (const mobius::io::entry&)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Find entries recursively by predicate function
-//! \param f Predicate function
-//! \return Entries
+// @brief Find entries recursively by predicate function
+// @param f Predicate function
+// @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::entry>
 walker::find_entries (std::function <bool (const mobius::io::entry&)> f) const
@@ -592,8 +592,8 @@ walker::find_entries (std::function <bool (const mobius::io::entry&)> f) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get files
-//! \return Files
+// @brief Get files
+// @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::file>
 walker::get_files () const
@@ -602,9 +602,9 @@ walker::get_files () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get files by name
-//! \param name Name
-//! \return Files
+// @brief Get files by name
+// @param name Name
+// @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::file>
 walker::get_files_by_name (const std::string& name) const
@@ -613,9 +613,9 @@ walker::get_files_by_name (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get files by path
-//! \param path Relative path
-//! \return Files
+// @brief Get files by path
+// @param path Relative path
+// @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::file>
 walker::get_files_by_path (const std::string& path) const
@@ -624,9 +624,9 @@ walker::get_files_by_path (const std::string& path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get files by pattern
-//! \param pattern fnmatch function pattern
-//! \return Files
+// @brief Get files by pattern
+// @param pattern fnmatch function pattern
+// @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::file>
 walker::get_files_by_pattern (const std::string& pattern) const
@@ -635,9 +635,9 @@ walker::get_files_by_pattern (const std::string& pattern) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get files by predicate function
-//! \param f Predicate function
-//! \return Files
+// @brief Get files by predicate function
+// @param f Predicate function
+// @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::file>
 walker::get_files_by_predicate (std::function <bool (const mobius::io::file&)> f) const
@@ -646,9 +646,9 @@ walker::get_files_by_predicate (std::function <bool (const mobius::io::file&)> f
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Find files recursively by predicate function
-//! \param f Predicate function
-//! \return Files
+// @brief Find files recursively by predicate function
+// @param f Predicate function
+// @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::file>
 walker::find_files (std::function <bool (const mobius::io::file&)> f) const
@@ -657,8 +657,8 @@ walker::find_files (std::function <bool (const mobius::io::file&)> f) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get folders
-//! \return Folders
+// @brief Get folders
+// @return Folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::folder>
 walker::get_folders () const
@@ -667,9 +667,9 @@ walker::get_folders () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get folders by name
-//! \param name Name
-//! \return Folders
+// @brief Get folders by name
+// @param name Name
+// @return Folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::folder>
 walker::get_folders_by_name (const std::string& name) const
@@ -678,9 +678,9 @@ walker::get_folders_by_name (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get folders by path
-//! \param path Relative path
-//! \return Folders
+// @brief Get folders by path
+// @param path Relative path
+// @return Folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::folder>
 walker::get_folders_by_path (const std::string& path) const
@@ -689,9 +689,9 @@ walker::get_folders_by_path (const std::string& path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get folders by pattern
-//! \param pattern fnmatch function pattern
-//! \return Folders
+// @brief Get folders by pattern
+// @param pattern fnmatch function pattern
+// @return Folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::folder>
 walker::get_folders_by_pattern (const std::string& pattern) const
@@ -700,9 +700,9 @@ walker::get_folders_by_pattern (const std::string& pattern) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get folders by predicate function
-//! \param f Predicate function
-//! \return Folders
+// @brief Get folders by predicate function
+// @param f Predicate function
+// @return Folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::folder>
 walker::get_folders_by_predicate (std::function <bool (const mobius::io::folder&)> f) const
@@ -711,9 +711,9 @@ walker::get_folders_by_predicate (std::function <bool (const mobius::io::folder&
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Find folders recursively by predicate function
-//! \param f Predicate function
-//! \return Folders
+// @brief Find folders recursively by predicate function
+// @param f Predicate function
+// @return Folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::folder>
 walker::find_folders (std::function <bool (const mobius::io::folder&)> f) const
@@ -722,9 +722,9 @@ walker::find_folders (std::function <bool (const mobius::io::folder&)> f) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get file by name
-//! \param name Name
-//! \return File
+// @brief Get file by name
+// @param name Name
+// @return File
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::file
 walker::get_file_by_name (const std::string& name) const
@@ -745,3 +745,5 @@ walker::get_file_by_name (const std::string& name) const
 
 
 } // namespace mobius::io
+
+

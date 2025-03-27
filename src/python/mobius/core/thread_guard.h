@@ -23,7 +23,7 @@
 #include <mobius/core/thread_guard.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -41,3 +41,5 @@ PyObject *pymobius_core_thread_guard_to_pyobject (const mobius::core::thread_gua
 mobius::core::thread_guard pymobius_core_thread_guard_from_pyobject (PyObject *);
 
 #endif
+
+

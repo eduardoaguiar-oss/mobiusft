@@ -21,8 +21,8 @@
 namespace mobius::datasource::ufdr
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param state Object state
+// @brief Constructor
+// @param state Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datasource_impl::datasource_impl (const mobius::pod::map& state)
 {
@@ -49,8 +49,8 @@ datasource_impl::datasource_impl (const mobius::pod::map& state)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param url UFDR file URL
+// @brief Constructor
+// @param url UFDR file URL
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datasource_impl::datasource_impl (const std::string& url)
   : url_ (url)
@@ -66,8 +66,8 @@ datasource_impl::datasource_impl (const std::string& url)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get object state
-//! \return Object state
+// @brief Get object state
+// @return Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 datasource_impl::get_state () const
@@ -91,8 +91,8 @@ datasource_impl::get_state () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if datasource is available
-//! \return True/False
+// @brief Check if datasource is available
+// @return True/False
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 datasource_impl::is_available () const
@@ -102,3 +102,5 @@ datasource_impl::is_available () const
 }
 
 } // namespace mobius::datasource::ufdr
+
+

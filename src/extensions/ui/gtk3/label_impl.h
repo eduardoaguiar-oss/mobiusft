@@ -24,8 +24,8 @@
 namespace mobius::extension::ui::gtk3
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>gtk3 label</i> implementation class
-//! \author Eduardo Aguiar
+// @brief <i>gtk3 label</i> implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class label_impl : public mobius::ui::label_impl_base
 {
@@ -37,8 +37,8 @@ public:
   ~label_impl ();
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get low level widget
-  //! \return Low level widget
+  // @brief Get low level widget
+  // @return Low level widget
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::any
   get_ui_widget () const final
@@ -59,10 +59,12 @@ public:
   void set_elide_mode (elide_type) final;
 
 private:
-    //! \brief Low level widget
+    // @brief Low level widget
   GtkWidget *widget_ = nullptr;
 };
 
 } // namespace mobius::extension::ui::gtk3
 
 #endif
+
+

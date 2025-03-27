@@ -22,7 +22,7 @@
 #include <mobius/core/application.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief application: data structure
+// @brief application: data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -33,3 +33,5 @@ typedef struct
 extern PyTypeObject core_application_t;
 
 #endif
+
+

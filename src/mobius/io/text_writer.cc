@@ -22,9 +22,9 @@
 namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param writer Writer object
-//! \param encoding Charset encoding
+// @brief Constructor
+// @param writer Writer object
+// @param encoding Charset encoding
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 text_writer::text_writer (
   const mobius::io::writer& writer,
@@ -36,8 +36,8 @@ text_writer::text_writer (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Write text to writer
-//! \param text String text
+// @brief Write text to writer
+// @param text String text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 text_writer::write (const std::string& text)
@@ -50,7 +50,7 @@ text_writer::write (const std::string& text)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Flush writer
+// @brief Flush writer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 text_writer::flush ()
@@ -59,3 +59,5 @@ text_writer::flush ()
 }
 
 } // namespace mobius::io
+
+

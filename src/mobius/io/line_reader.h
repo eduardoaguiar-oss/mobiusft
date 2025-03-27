@@ -21,13 +21,11 @@
 #include <mobius/io/text_reader.h>
 #include <mobius/io/reader.h>
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Line reader adaptor class
-//! \author Eduardo Aguiar
+// @brief Line reader adaptor class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class line_reader
 {
@@ -58,7 +56,8 @@ private:
   std::string buffer_;
 };
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
 
 #endif
+
+

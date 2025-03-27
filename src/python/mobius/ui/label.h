@@ -23,7 +23,7 @@
 #include <mobius/ui/label.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_ui_label_to_pyobject (const mobius::ui::label&);
 mobius::ui::label pymobius_ui_label_from_pyobject (PyObject *);
 
 #endif
+
+

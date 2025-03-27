@@ -27,8 +27,8 @@
 namespace mobius::core
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Event mediator class
-//! \author Eduardo Aguiar
+// @brief Event mediator class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class mediator
 {
@@ -54,9 +54,9 @@ public:
   std::vector <callback> get_callbacks (const std::string&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Emit event
-  //! \param id Event ID
-  //! \param args Variadic template args, passed to the internal function
+  // @brief Emit event
+  // @param id Event ID
+  // @param args Variadic template args, passed to the internal function
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   template <typename ...Args> void
   emit (const std::string& id, Args... args)
@@ -66,10 +66,10 @@ public:
   }
 
 private:
-  //! \brief Implementation class forward declaration
+  // @brief Implementation class forward declaration
   class impl;
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
@@ -81,9 +81,9 @@ void unsubscribe (std::uint64_t);
 std::vector <callback> get_callbacks (const std::string&);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Emit event
-//! \param id Event ID
-//! \param args Variadic template args, passed to the internal function
+// @brief Emit event
+// @param id Event ID
+// @param args Variadic template args, passed to the internal function
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename ...Args> void
 emit (const std::string& id, Args... args)
@@ -95,3 +95,5 @@ emit (const std::string& id, Args... args)
 } // namespace mobius::core
 
 #endif
+
+

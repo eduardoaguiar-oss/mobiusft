@@ -25,7 +25,7 @@ namespace
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-//! \brief Shareaza 2.7.10.2
+// @brief Shareaza 2.7.10.2
 static constexpr int SER_VERSION = 42;
 
 } // namespace
@@ -33,10 +33,10 @@ static constexpr int SER_VERSION = 42;
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode CFragmentedFile structure
-//! \see FragmentedFile.cpp - CFragmentedFile::Serialize
-//! \see FileFragments/Compatibility.hpp - SerializeIn1
-//! \see FileFragments/Compatibility.hpp - SerializeIn
+// @brief Decode CFragmentedFile structure
+// @see FragmentedFile.cpp - CFragmentedFile::Serialize
+// @see FileFragments/Compatibility.hpp - SerializeIn1
+// @see FileFragments/Compatibility.hpp - SerializeIn
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 CDownload::decode_CFragmentedFile (mobius::decoder::mfc& decoder, int version)
@@ -102,8 +102,8 @@ CDownload::decode_CFragmentedFile (mobius::decoder::mfc& decoder, int version)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode CDownloadBase structure
-//! \see DownloadBase.cpp - CDownloadBase::Serialize
+// @brief Decode CDownloadBase structure
+// @see DownloadBase.cpp - CDownloadBase::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 CDownload::decode_CDownloadBase (mobius::decoder::mfc& decoder, int version)
@@ -144,8 +144,8 @@ CDownload::decode_CDownloadBase (mobius::decoder::mfc& decoder, int version)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode CDownloadWithSources structure
-//! \see DownloadWithSources.cpp - CDownloadWithSources::Serialize
+// @brief Decode CDownloadWithSources structure
+// @see DownloadWithSources.cpp - CDownloadWithSources::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 CDownload::decode_CDownloadWithSources (mobius::decoder::mfc& decoder, int version)
@@ -164,8 +164,8 @@ CDownload::decode_CDownloadWithSources (mobius::decoder::mfc& decoder, int versi
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode CDownloadWithFile structure
-//! \see DownloadWithFile.cpp - CDownloadWithFile::Serialize
+// @brief Decode CDownloadWithFile structure
+// @see DownloadWithFile.cpp - CDownloadWithFile::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 CDownload::decode_CDownloadWithFile (mobius::decoder::mfc& decoder, int version)
@@ -180,8 +180,8 @@ CDownload::decode_CDownloadWithFile (mobius::decoder::mfc& decoder, int version)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode CDownloadWithTorrent structure
-//! \see DownloadWithTorrent.cpp - CDownloadWithTorrent::Serialize
+// @brief Decode CDownloadWithTorrent structure
+// @see DownloadWithTorrent.cpp - CDownloadWithTorrent::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 CDownload::decode_CDownloadWithTorrent (mobius::decoder::mfc& decoder, int version)
@@ -214,8 +214,8 @@ CDownload::decode_CDownloadWithTorrent (mobius::decoder::mfc& decoder, int versi
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode CDownloadWithTiger structure (IMPLEMENT)
-//! \see DownloadWithTiger.cpp - CDownloadWithTiger::Serialize
+// @brief Decode CDownloadWithTiger structure (IMPLEMENT)
+// @see DownloadWithTiger.cpp - CDownloadWithTiger::Serialize
 //! \todo Full implementation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -251,8 +251,8 @@ CDownload::decode_CDownloadWithTiger (mobius::decoder::mfc& decoder, int version
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode CDownloadWithExtras structure
-//! \see DownloadWithExtras.cpp - CDownloadWithExtras::Serialize
+// @brief Decode CDownloadWithExtras structure
+// @see DownloadWithExtras.cpp - CDownloadWithExtras::Serialize
 //! \todo Full implementation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -286,9 +286,9 @@ CDownload::decode_CDownloadWithExtras (mobius::decoder::mfc& decoder, int versio
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
-//! \see Download.cpp - CDownload::Serialize
+// @brief Constructor
+// @param reader Reader object
+// @see Download.cpp - CDownload::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 CDownload::CDownload (const mobius::io::reader& reader)
 {
@@ -325,7 +325,7 @@ CDownload::CDownload (const mobius::io::reader& reader)
   is_boosted_ = decoder.get_bool ();
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \see Download.cpp - CDownload::IsShared
+  // @see Download.cpp - CDownload::IsShared
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   if (version_ >= 14)
     is_shared_ = decoder.get_bool () || !hash_sha1_.empty () || !hash_ed2k_.empty () || !hash_tiger_.empty ();
@@ -345,3 +345,7 @@ CDownload::CDownload (const mobius::io::reader& reader)
 }
 
 } // namespace mobius::extension::app::shareaza
+
+
+
+

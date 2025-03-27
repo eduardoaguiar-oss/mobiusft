@@ -23,13 +23,13 @@
 
 namespace mobius::os::win::registry
 {
-namespace               // local namespace
+namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get decrypted LSAKEY
-//! \param syskey registry SysKey
-//! \param data PolSecKey value's data
-//! \return decrypted LSAKEY
+// @brief get decrypted LSAKEY
+// @param syskey registry SysKey
+// @param data PolSecKey value's data
+// @return decrypted LSAKEY
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::bytearray
 get_lsa_key_from_polseckey (
@@ -52,12 +52,12 @@ get_lsa_key_from_polseckey (
 } // local namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set LSA Secrets keys
-//! \see https://www.passcape.com/index.php?section=docsys&cmd=details&id=23
-//! \see http://moyix.blogspot.com.br/2008/02/decrypting-lsa-secrets.html
-//! \see https://github.com/Neohapsis/creddump7/blob/master/framework/win32/lsasecrets.py
-//! \see https://github.com/gentilkiwi/mimikatz/wiki
-//! \param root registry root key
+// @brief set LSA Secrets keys
+// @see https://www.passcape.com/index.php?section=docsys&cmd=details&id=23
+// @see http://moyix.blogspot.com.br/2008/02/decrypting-lsa-secrets.html
+// @see https://github.com/Neohapsis/creddump7/blob/master/framework/win32/lsasecrets.py
+// @see https://github.com/gentilkiwi/mimikatz/wiki
+// @param root registry root key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry_set_lsa_keys (registry_key root, const mobius::bytearray& syskey)
@@ -118,3 +118,5 @@ registry_set_lsa_keys (registry_key root, const mobius::bytearray& syskey)
 }
 
 } // namespace mobius::os::win::registry
+
+

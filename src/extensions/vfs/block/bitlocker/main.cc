@@ -63,7 +63,7 @@ static const std::string BDE_GUID = "4967D63B-2E29-4AD8-8399-F6A339E3D001";
 static const std::string BDE_USED_DISK_SPACE_ONLY_GUID = "92A84D3B-DD80-4D0E-9E4E-B1E3284EAED8";
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Protection descriptions
+// @brief Protection descriptions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const std::map <std::uint16_t, const std::string> PROTECTION_DESCRIPTION =
 {
@@ -76,7 +76,7 @@ static const std::map <std::uint16_t, const std::string> PROTECTION_DESCRIPTION 
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Encryption descriptions
+// @brief Encryption descriptions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const std::map <std::uint16_t, const std::string> ENCRYPTION_DESCRIPTION =
 {
@@ -94,9 +94,9 @@ static const std::map <std::uint16_t, const std::string> ENCRYPTION_DESCRIPTION 
 static std::vector <mobius::pod::map> _decode_fve_metadata_entries (const mobius::bytearray&);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get protection description
-//! \param flag Protection flag
-//! \return Description
+// @brief Get protection description
+// @param flag Protection flag
+// @return Description
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
 _get_protection_description (std::uint16_t flag)
@@ -110,9 +110,9 @@ _get_protection_description (std::uint16_t flag)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get encryption description
-//! \param type Encryption type
-//! \return Description
+// @brief Get encryption description
+// @param type Encryption type
+// @return Description
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
 _get_encryption_description (std::uint16_t type)
@@ -127,9 +127,9 @@ _get_encryption_description (std::uint16_t type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode FVE AES-CCM encrypted key (section 5.6)
-//! \param data Data
-//! \return Map containing attributes
+// @brief Decode FVE AES-CCM encrypted key (section 5.6)
+// @param data Data
+// @return Map containing attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::pod::map
 _decode_fve_metadata_0005 (const mobius::bytearray& data)
@@ -146,9 +146,9 @@ _decode_fve_metadata_0005 (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode Volume Master Key (VMK) (section 5.9)
-//! \param data Data
-//! \return Map containing attributes
+// @brief Decode Volume Master Key (VMK) (section 5.9)
+// @param data Data
+// @return Map containing attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::pod::map
 _decode_fve_metadata_0008 (const mobius::bytearray& data)
@@ -185,9 +185,9 @@ _decode_fve_metadata_0008 (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode metadata entry
-//! \param decoder Data decoder object
-//! \return Entry as map
+// @brief Decode metadata entry
+// @param decoder Data decoder object
+// @return Entry as map
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::pod::map
 _decode_fve_metadata_entry (mobius::decoder::data_decoder& decoder)
@@ -262,9 +262,9 @@ _decode_fve_metadata_entry (mobius::decoder::data_decoder& decoder)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode metadata entries
-//! \param data Data
-//! \return Entries
+// @brief Decode metadata entries
+// @param data Data
+// @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::vector <mobius::pod::map>
 _decode_fve_metadata_entries (const mobius::bytearray& data)
@@ -282,10 +282,10 @@ _decode_fve_metadata_entries (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode FVE metadata block
-//! \param bde_block BDE block object
-//! \param offset Offset from the beginning of BDE block
-//! \see Bitlocker Drive Encryption (BDE) format - section 5
+// @brief Decode FVE metadata block
+// @param bde_block BDE block object
+// @param offset Offset from the beginning of BDE block
+// @see Bitlocker Drive Encryption (BDE) format - section 5
 //
 // FVE metadata block consists of:
 //   1. block header
@@ -417,9 +417,9 @@ _decode_fve_metadata (mobius::vfs::block& bde_block, std::uint64_t offset)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode BPB (BIOS parameter block) fields block
-//! \param decoder Data decoder object
-//! \param bde_block BDE block object
+// @brief Decode BPB (BIOS parameter block) fields block
+// @param decoder Data decoder object
+// @param bde_block BDE block object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 _decode_bpb_fields (
@@ -453,9 +453,9 @@ _decode_bpb_fields (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode FAT-32 info block
-//! \param decoder Data decoder object
-//! \param bde_block BDE block object
+// @brief Decode FAT-32 info block
+// @param decoder Data decoder object
+// @param bde_block BDE block object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 _decode_fat32_info (
@@ -473,9 +473,9 @@ _decode_fat32_info (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode Extended BPB fields block
-//! \param decoder Data decoder object
-//! \param bde_block BDE block object
+// @brief Decode Extended BPB fields block
+// @param decoder Data decoder object
+// @param bde_block BDE block object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 _decode_extended_bpb_fields (
@@ -496,9 +496,9 @@ _decode_extended_bpb_fields (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode FVE metadata offset block
-//! \param decoder Data decoder object
-//! \param bde_block BDE block object
+// @brief Decode FVE metadata offset block
+// @param decoder Data decoder object
+// @param bde_block BDE block object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 _decode_fve_metadata_offset_block (
@@ -552,9 +552,9 @@ _decode_fve_metadata_offset_block (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode Bitlocker Win7 and later implementation data
-//! \param block Block object
-//! \return BDE block object
+// @brief Decode Bitlocker Win7 and later implementation data
+// @param block Block object
+// @return BDE block object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::vfs::block
 _decode_win7 (const mobius::vfs::block& block)
@@ -593,9 +593,9 @@ _decode_win7 (const mobius::vfs::block& block)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode Bitlocker To Go implementation data
-//! \param block Block object
-//! \return BDE block object
+// @brief Decode Bitlocker To Go implementation data
+// @param block Block object
+// @return BDE block object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::vfs::block
 _decode_to_go (const mobius::vfs::block& block)
@@ -642,9 +642,9 @@ _decode_to_go (const mobius::vfs::block& block)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Try to decoder an unknown Bitlocker implementation
-//! \param block Block object
-//! \return BDE block object
+// @brief Try to decoder an unknown Bitlocker implementation
+// @param block Block object
+// @return BDE block object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::vfs::block
 _decode_unknown_bitlocker (const mobius::vfs::block& block)
@@ -685,12 +685,12 @@ _decode_unknown_bitlocker (const mobius::vfs::block& block)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Try to decode block
-//! \author Eduardo Aguiar
-//! \param block Block object
-//! \param new_blocks Vector for newly created blocks
-//! \param pending_blocks Pending blocks
-//! \return <b>true</b> if block was decoded, <b>false</b> otherwise
+// @brief Try to decode block
+// @author Eduardo Aguiar
+// @param block Block object
+// @param new_blocks Vector for newly created blocks
+// @param pending_blocks Pending blocks
+// @return <b>true</b> if block was decoded, <b>false</b> otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static bool
 decoder (
@@ -768,7 +768,7 @@ const char *EXTENSION_DESCRIPTION = "Bitlocker VFS block support";
 } // extern "C"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Start extension
+// @brief Start extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extern "C" void
 start ()
@@ -781,10 +781,12 @@ start ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Stop extension
+// @brief Stop extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extern "C" void
 stop ()
 {
   mobius::core::remove_resource ("vfs.block.decoder.bitlocker");
 }
+
+

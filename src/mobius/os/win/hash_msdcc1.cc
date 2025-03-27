@@ -24,10 +24,10 @@
 namespace mobius::os::win
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Generate MSDCC1 hash
-//! \param password Password
-//! \param username User name
-//! \return MSDCC1 hash
+// @brief Generate MSDCC1 hash
+// @param password Password
+// @param username User name
+// @return MSDCC1 hash
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 hash_msdcc1 (const std::string& password, const std::string& username)
@@ -39,3 +39,5 @@ hash_msdcc1 (const std::string& password, const std::string& username)
 }
 
 } // namespace mobius::os::win
+
+

@@ -27,7 +27,7 @@ constexpr std::uint64_t BLOCK_SIZE = 0x10000000;  // max block size per iteratio
 constexpr std::uint32_t BASE = 65521;		  // mod value
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reset hash value
+// @brief Reset hash value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 hash_impl_adler32::reset () noexcept
@@ -37,8 +37,8 @@ hash_impl_adler32::reset () noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Update hash by a given bytearray
-//! \param data Data buffer
+// @brief Update hash by a given bytearray
+// @param data Data buffer
 //
 // Original Adler-32 is:
 //
@@ -82,8 +82,8 @@ hash_impl_adler32::update (const mobius::bytearray& data) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Return hash digest
-//! \return Hash digest
+// @brief Return hash digest
+// @return Hash digest
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray
 hash_impl_adler32::get_digest ()
@@ -99,8 +99,8 @@ hash_impl_adler32::get_digest ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Clone object
-//! \return Pointer to newly created object
+// @brief Clone object
+// @return Pointer to newly created object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::shared_ptr <hash_impl_base>
 hash_impl_adler32::clone () const
@@ -114,3 +114,5 @@ hash_impl_adler32::clone () const
 }
 
 } // namespace mobius::crypt
+
+

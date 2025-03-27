@@ -25,8 +25,8 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Hash information map
-//! \see https://docs.microsoft.com/en-us/windows/desktop/seccrypto/alg-id
+// @brief Hash information map
+// @see https://docs.microsoft.com/en-us/windows/desktop/seccrypto/alg-id
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct hash_info
 {
@@ -51,54 +51,56 @@ static const std::map <std::uint32_t, hash_info> HASHES =
 namespace mobius::os::win::dpapi
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get mobius::crypt hash ID from MS alg ID
-//! \param ms_alg_id MS alg ID
-//! \return mobius::crypt::hash ID
+// @brief Get mobius::crypt hash ID from MS alg ID
+// @param ms_alg_id MS alg ID
+// @return mobius::crypt::hash ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 get_hash_id (std::uint32_t ms_alg_id)
 {
   auto iter = HASHES.find (ms_alg_id);
-  
+
   if (iter != HASHES.end ())
     return iter->second.id;
-  
+
   else
     throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("Unknown MS alg ID"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get hash digest size from MS alg ID
-//! \param ms_alg_id MS alg ID
-//! \return Digest size in bytes
+// @brief Get hash digest size from MS alg ID
+// @param ms_alg_id MS alg ID
+// @return Digest size in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 get_hash_digest_size (std::uint32_t ms_alg_id)
 {
   auto iter = HASHES.find (ms_alg_id);
-  
+
   if (iter != HASHES.end ())
     return iter->second.digest_size;
-  
+
   else
     throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("Unknown MS alg ID"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get hash block size from MS alg ID
-//! \param ms_alg_id MS alg ID
-//! \return Block size in bytes
+// @brief Get hash block size from MS alg ID
+// @param ms_alg_id MS alg ID
+// @return Block size in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 get_hash_block_size (std::uint32_t ms_alg_id)
 {
   auto iter = HASHES.find (ms_alg_id);
-  
+
   if (iter != HASHES.end ())
     return iter->second.block_size;
-  
+
   else
     throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("Unknown MS alg ID"));
 }
 
 } // namespace mobius::os::win::dpapi
+
+

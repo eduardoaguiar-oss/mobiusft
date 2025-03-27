@@ -26,8 +26,8 @@
 namespace mobius::ui
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief button_impl_base class
-//! \author Eduardo Aguiar
+// @brief button_impl_base class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class button_impl_base : public widget_impl_base
 {
@@ -44,3 +44,4 @@ public:
 } // namespace mobius::ui
 
 #endif
+

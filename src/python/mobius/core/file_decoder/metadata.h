@@ -23,7 +23,7 @@
 #include <mobius/core/file_decoder/metadata.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -41,3 +41,5 @@ PyObject *pymobius_core_file_decoder_metadata_to_pyobject (const mobius::core::f
 mobius::core::file_decoder::metadata pymobius_core_file_decoder_metadata_from_pyobject (PyObject *);
 
 #endif
+
+

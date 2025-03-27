@@ -22,8 +22,8 @@
 #include <vector>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief table_section data class
-//! \author Eduardo Aguiar
+// @brief table_section data class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class table_section : public section
 {
@@ -42,8 +42,8 @@ public:
   table_section& operator= (table_section&&) = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief initialize table_section from section object
-  //! \param s section object
+  // @brief initialize table_section from section object
+  // @param s section object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   table_section (const section& s)
     : section (s)
@@ -51,8 +51,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get chunk count
-  //! \return chunk count
+  // @brief get chunk count
+  // @return chunk count
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_chunk_count () const
@@ -61,8 +61,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set chunk count
-  //! \param chunk_count chunk count
+  // @brief set chunk count
+  // @param chunk_count chunk count
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_chunk_count (std::uint32_t chunk_count)
@@ -72,8 +72,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get the table base offset
-  //! \return the table base offset
+  // @brief get the table base offset
+  // @return the table base offset
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t
   get_base_offset () const
@@ -82,8 +82,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set the table base offset
-  //! \param base_offset the table base offset
+  // @brief set the table base offset
+  // @param base_offset the table base offset
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_base_offset (std::uint64_t base_offset)
@@ -92,7 +92,7 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get chunk offset list
+  // @brief get chunk offset list
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::vector <std::uint64_t>
   get_chunk_offset_list () const
@@ -101,8 +101,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief add chunk data offset
-  //! \param offset chunk data offset
+  // @brief add chunk data offset
+  // @param offset chunk data offset
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   add_offset (std::uint32_t offset)
@@ -117,8 +117,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get section Adler-32 CRC
-  //! \return Adler-32 CRC
+  // @brief get section Adler-32 CRC
+  // @return Adler-32 CRC
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_section_adler32 () const
@@ -127,8 +127,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set section Adler-32 CRC
-  //! \param section_adler32 Adler-32 CRC
+  // @brief set section Adler-32 CRC
+  // @param section_adler32 Adler-32 CRC
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_section_adler32 (std::uint32_t section_adler32)
@@ -137,8 +137,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief get table adler-32 CRC
-  //! \return table adler-32 CRC
+  // @brief get table adler-32 CRC
+  // @return table adler-32 CRC
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_table_adler32 () const
@@ -147,8 +147,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief set table adler-32 CRC
-  //! \param table_adler32 table adler-32 CRC
+  // @brief set table adler-32 CRC
+  // @param table_adler32 table adler-32 CRC
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
   set_table_adler32 (std::uint32_t table_adler32)
@@ -158,20 +158,22 @@ public:
 
 private:
 
-  //! \brief chunk count
+  // @brief chunk count
   std::uint32_t chunk_count_ = 0;
 
-  //! \brief the table base offset
+  // @brief the table base offset
   std::uint64_t base_offset_ = 0;
 
-  //! \brief chunk offsets
+  // @brief chunk offsets
   std::vector <std::uint64_t> chunk_offset_list_;
 
-  //! \brief metadata adler-32 CRC
+  // @brief metadata adler-32 CRC
   std::uint32_t section_adler32_;
 
-  //! \brief table adler-32 CRC
+  // @brief table adler-32 CRC
   std::uint32_t table_adler32_;
 };
 
 #endif
+
+

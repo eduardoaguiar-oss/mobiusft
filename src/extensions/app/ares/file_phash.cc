@@ -24,9 +24,9 @@
 namespace mobius::extension::app::ares
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \see ICH_loadPieces@helper_ICH.pas (line 528)
-//! \see ICH_load_phash_indexs@helper_ICH.pas (line 1023)
+// @brief Constructor
+// @see ICH_loadPieces@helper_ICH.pas (line 528)
+// @see ICH_load_phash_indexs@helper_ICH.pas (line 1023)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_phash::file_phash (const mobius::io::reader& reader)
 {
@@ -80,9 +80,9 @@ file_phash::file_phash (const mobius::io::reader& reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode entry
-//! \param decoder Decoder object
-//! \return Entry
+// @brief Decode entry
+// @param decoder Decoder object
+// @return Entry
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_phash::entry
 file_phash::_decode_entry (mobius::decoder::data_decoder& decoder)
@@ -151,9 +151,9 @@ file_phash::_decode_entry (mobius::decoder::data_decoder& decoder)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode pieces
-//! \param decoder Decoder object
-//! \return Pieces
+// @brief Decode pieces
+// @param decoder Decoder object
+// @return Pieces
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <file_phash::piece>
 file_phash::_decode_pieces (mobius::decoder::data_decoder& decoder, std::uint32_t data_size)
@@ -185,3 +185,7 @@ file_phash::_decode_pieces (mobius::decoder::data_decoder& decoder, std::uint32_
 }
 
 } // namespace mobius::extension::app::ares
+
+
+
+

@@ -20,9 +20,9 @@
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode CMatchFile structure
-//! \param version Structure version
-//! \see MatchObjects.cpp - CMatchFile::Serialize
+// @brief Decode CMatchFile structure
+// @param version Structure version
+// @see MatchObjects.cpp - CMatchFile::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 CMatchFile::decode (mobius::decoder::mfc& decoder, int version)
@@ -73,3 +73,7 @@ CMatchFile::decode (mobius::decoder::mfc& decoder, int version)
 }
 
 } // namespace mobius::extension::app::shareaza
+
+
+
+

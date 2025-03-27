@@ -22,9 +22,9 @@
 namespace mobius::os::win
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Generate LM hash
-//! \param password Password
-//! \return LM hash
+// @brief Generate LM hash
+// @param password Password
+// @return LM hash
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 hash_lm (const std::string& password)
@@ -46,3 +46,5 @@ hash_lm (const std::string& password)
 }
 
 } // namespace mobius::os::win
+
+

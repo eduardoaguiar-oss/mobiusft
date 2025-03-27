@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file lnk.cc C++ API <i>mobius.decoder.lnk</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "lnk.h"
@@ -27,9 +27,9 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>lnk</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>lnk</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_decoder_lnk_check (PyObject *value)
@@ -38,9 +38,9 @@ pymobius_decoder_lnk_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>lnk</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New lnk object
+// @brief Create <i>lnk</i> Python object from C++ object
+// @param obj C++ object
+// @return New lnk object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_decoder_lnk_to_pyobject (const mobius::decoder::lnk& obj)
@@ -54,9 +54,9 @@ pymobius_decoder_lnk_to_pyobject (const mobius::decoder::lnk& obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>lnk</i> C++ object from Python object
-//! \param value Python value
-//! \return Lnk object
+// @brief Create <i>lnk</i> C++ object from Python object
+// @param value Python value
+// @return Lnk object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::decoder::lnk
 pymobius_decoder_lnk_from_pyobject (PyObject *value)
@@ -68,9 +68,9 @@ pymobius_decoder_lnk_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>header_size</i> Attribute getter
-//! \param self Object
-//! \return <i>header_size</i> attribute
+// @brief <i>header_size</i> Attribute getter
+// @param self Object
+// @return <i>header_size</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_header_size (decoder_lnk_o *self)
@@ -90,9 +90,9 @@ tp_getter_header_size (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>clsid</i> Attribute getter
-//! \param self Object
-//! \return <i>clsid</i> attribute
+// @brief <i>clsid</i> Attribute getter
+// @param self Object
+// @return <i>clsid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_clsid (decoder_lnk_o *self)
@@ -112,9 +112,9 @@ tp_getter_clsid (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>flags</i> Attribute getter
-//! \param self Object
-//! \return <i>flags</i> attribute
+// @brief <i>flags</i> Attribute getter
+// @param self Object
+// @return <i>flags</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_flags (decoder_lnk_o *self)
@@ -134,9 +134,9 @@ tp_getter_flags (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>file_attributes</i> Attribute getter
-//! \param self Object
-//! \return <i>file_attributes</i> attribute
+// @brief <i>file_attributes</i> Attribute getter
+// @param self Object
+// @return <i>file_attributes</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_file_attributes (decoder_lnk_o *self)
@@ -156,9 +156,9 @@ tp_getter_file_attributes (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>creation_time</i> Attribute getter
-//! \param self Object
-//! \return <i>creation_time</i> attribute
+// @brief <i>creation_time</i> Attribute getter
+// @param self Object
+// @return <i>creation_time</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_creation_time (decoder_lnk_o *self)
@@ -178,9 +178,9 @@ tp_getter_creation_time (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>access_time</i> Attribute getter
-//! \param self Object
-//! \return <i>access_time</i> attribute
+// @brief <i>access_time</i> Attribute getter
+// @param self Object
+// @return <i>access_time</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_access_time (decoder_lnk_o *self)
@@ -200,9 +200,9 @@ tp_getter_access_time (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>write_time</i> Attribute getter
-//! \param self Object
-//! \return <i>write_time</i> attribute
+// @brief <i>write_time</i> Attribute getter
+// @param self Object
+// @return <i>write_time</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_write_time (decoder_lnk_o *self)
@@ -222,9 +222,9 @@ tp_getter_write_time (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>file_size</i> Attribute getter
-//! \param self Object
-//! \return <i>file_size</i> attribute
+// @brief <i>file_size</i> Attribute getter
+// @param self Object
+// @return <i>file_size</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_file_size (decoder_lnk_o *self)
@@ -244,9 +244,9 @@ tp_getter_file_size (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>icon_index</i> Attribute getter
-//! \param self Object
-//! \return <i>icon_index</i> attribute
+// @brief <i>icon_index</i> Attribute getter
+// @param self Object
+// @return <i>icon_index</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_icon_index (decoder_lnk_o *self)
@@ -266,9 +266,9 @@ tp_getter_icon_index (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>show_command</i> Attribute getter
-//! \param self Object
-//! \return <i>show_command</i> attribute
+// @brief <i>show_command</i> Attribute getter
+// @param self Object
+// @return <i>show_command</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_show_command (decoder_lnk_o *self)
@@ -288,9 +288,9 @@ tp_getter_show_command (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>hotkeys</i> Attribute getter
-//! \param self Object
-//! \return <i>hotkeys</i> attribute
+// @brief <i>hotkeys</i> Attribute getter
+// @param self Object
+// @return <i>hotkeys</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_hotkeys (decoder_lnk_o *self)
@@ -310,9 +310,9 @@ tp_getter_hotkeys (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>volume_label</i> Attribute getter
-//! \param self Object
-//! \return <i>volume_label</i> attribute
+// @brief <i>volume_label</i> Attribute getter
+// @param self Object
+// @return <i>volume_label</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_volume_label (decoder_lnk_o *self)
@@ -332,9 +332,9 @@ tp_getter_volume_label (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>drive_type</i> Attribute getter
-//! \param self Object
-//! \return <i>drive_type</i> attribute
+// @brief <i>drive_type</i> Attribute getter
+// @param self Object
+// @return <i>drive_type</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_drive_type (decoder_lnk_o *self)
@@ -354,9 +354,9 @@ tp_getter_drive_type (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>drive_serial_number</i> Attribute getter
-//! \param self Object
-//! \return <i>drive_serial_number</i> attribute
+// @brief <i>drive_serial_number</i> Attribute getter
+// @param self Object
+// @return <i>drive_serial_number</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_drive_serial_number (decoder_lnk_o *self)
@@ -376,9 +376,9 @@ tp_getter_drive_serial_number (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>local_base_path</i> Attribute getter
-//! \param self Object
-//! \return <i>local_base_path</i> attribute
+// @brief <i>local_base_path</i> Attribute getter
+// @param self Object
+// @return <i>local_base_path</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_local_base_path (decoder_lnk_o *self)
@@ -398,9 +398,9 @@ tp_getter_local_base_path (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>common_path_suffix</i> Attribute getter
-//! \param self Object
-//! \return <i>common_path_suffix</i> attribute
+// @brief <i>common_path_suffix</i> Attribute getter
+// @param self Object
+// @return <i>common_path_suffix</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_common_path_suffix (decoder_lnk_o *self)
@@ -420,9 +420,9 @@ tp_getter_common_path_suffix (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>net_name</i> Attribute getter
-//! \param self Object
-//! \return <i>net_name</i> attribute
+// @brief <i>net_name</i> Attribute getter
+// @param self Object
+// @return <i>net_name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_net_name (decoder_lnk_o *self)
@@ -442,9 +442,9 @@ tp_getter_net_name (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>device_name</i> Attribute getter
-//! \param self Object
-//! \return <i>device_name</i> attribute
+// @brief <i>device_name</i> Attribute getter
+// @param self Object
+// @return <i>device_name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_device_name (decoder_lnk_o *self)
@@ -464,9 +464,9 @@ tp_getter_device_name (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>network_provider_type</i> Attribute getter
-//! \param self Object
-//! \return <i>network_provider_type</i> attribute
+// @brief <i>network_provider_type</i> Attribute getter
+// @param self Object
+// @return <i>network_provider_type</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_network_provider_type (decoder_lnk_o *self)
@@ -486,9 +486,9 @@ tp_getter_network_provider_type (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>name</i> Attribute getter
-//! \param self Object
-//! \return <i>name</i> attribute
+// @brief <i>name</i> Attribute getter
+// @param self Object
+// @return <i>name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_name (decoder_lnk_o *self)
@@ -508,9 +508,9 @@ tp_getter_name (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>relative_path</i> Attribute getter
-//! \param self Object
-//! \return <i>relative_path</i> attribute
+// @brief <i>relative_path</i> Attribute getter
+// @param self Object
+// @return <i>relative_path</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_relative_path (decoder_lnk_o *self)
@@ -530,9 +530,9 @@ tp_getter_relative_path (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>working_dir</i> Attribute getter
-//! \param self Object
-//! \return <i>working_dir</i> attribute
+// @brief <i>working_dir</i> Attribute getter
+// @param self Object
+// @return <i>working_dir</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_working_dir (decoder_lnk_o *self)
@@ -552,9 +552,9 @@ tp_getter_working_dir (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>arguments</i> Attribute getter
-//! \param self Object
-//! \return <i>arguments</i> attribute
+// @brief <i>arguments</i> Attribute getter
+// @param self Object
+// @return <i>arguments</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_arguments (decoder_lnk_o *self)
@@ -574,9 +574,9 @@ tp_getter_arguments (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>icon_location</i> Attribute getter
-//! \param self Object
-//! \return <i>icon_location</i> attribute
+// @brief <i>icon_location</i> Attribute getter
+// @param self Object
+// @return <i>icon_location</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_icon_location (decoder_lnk_o *self)
@@ -596,9 +596,9 @@ tp_getter_icon_location (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>netbios_name</i> Attribute getter
-//! \param self Object
-//! \return <i>netbios_name</i> attribute
+// @brief <i>netbios_name</i> Attribute getter
+// @param self Object
+// @return <i>netbios_name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_netbios_name (decoder_lnk_o *self)
@@ -618,9 +618,9 @@ tp_getter_netbios_name (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>header_offset</i> Attribute getter
-//! \param self Object
-//! \return <i>header_offset</i> attribute
+// @brief <i>header_offset</i> Attribute getter
+// @param self Object
+// @return <i>header_offset</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_header_offset (decoder_lnk_o *self)
@@ -640,9 +640,9 @@ tp_getter_header_offset (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>link_target_id_list_offset</i> Attribute getter
-//! \param self Object
-//! \return <i>link_target_id_list_offset</i> attribute
+// @brief <i>link_target_id_list_offset</i> Attribute getter
+// @param self Object
+// @return <i>link_target_id_list_offset</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_link_target_id_list_offset (decoder_lnk_o *self)
@@ -662,9 +662,9 @@ tp_getter_link_target_id_list_offset (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>link_info_offset</i> Attribute getter
-//! \param self Object
-//! \return <i>link_info_offset</i> attribute
+// @brief <i>link_info_offset</i> Attribute getter
+// @param self Object
+// @return <i>link_info_offset</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_link_info_offset (decoder_lnk_o *self)
@@ -684,7 +684,7 @@ tp_getter_link_info_offset (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Getters and setters structure
+// @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -888,10 +888,10 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_target_readonly</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_target_readonly</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_target_readonly (decoder_lnk_o *self, PyObject *)
@@ -913,10 +913,10 @@ tp_f_is_target_readonly (decoder_lnk_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_target_hidden</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_target_hidden</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_target_hidden (decoder_lnk_o *self, PyObject *)
@@ -938,10 +938,10 @@ tp_f_is_target_hidden (decoder_lnk_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_target_system</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_target_system</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_target_system (decoder_lnk_o *self, PyObject *)
@@ -963,10 +963,10 @@ tp_f_is_target_system (decoder_lnk_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_target_directory</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_target_directory</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_target_directory (decoder_lnk_o *self, PyObject *)
@@ -988,10 +988,10 @@ tp_f_is_target_directory (decoder_lnk_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_target_archive</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_target_archive</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_target_archive (decoder_lnk_o *self, PyObject *)
@@ -1013,10 +1013,10 @@ tp_f_is_target_archive (decoder_lnk_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_target_temporary</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_target_temporary</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_target_temporary (decoder_lnk_o *self, PyObject *)
@@ -1038,10 +1038,10 @@ tp_f_is_target_temporary (decoder_lnk_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_target_sparse</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_target_sparse</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_target_sparse (decoder_lnk_o *self, PyObject *)
@@ -1063,10 +1063,10 @@ tp_f_is_target_sparse (decoder_lnk_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_target_reparse_point</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_target_reparse_point</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_target_reparse_point (decoder_lnk_o *self, PyObject *)
@@ -1088,10 +1088,10 @@ tp_f_is_target_reparse_point (decoder_lnk_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_target_compressed</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_target_compressed</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_target_compressed (decoder_lnk_o *self, PyObject *)
@@ -1113,10 +1113,10 @@ tp_f_is_target_compressed (decoder_lnk_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_target_offline</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_target_offline</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_target_offline (decoder_lnk_o *self, PyObject *)
@@ -1138,10 +1138,10 @@ tp_f_is_target_offline (decoder_lnk_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_target_content_indexed</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_target_content_indexed</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_target_content_indexed (decoder_lnk_o *self, PyObject *)
@@ -1163,10 +1163,10 @@ tp_f_is_target_content_indexed (decoder_lnk_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_target_encrypted</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_target_encrypted</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_target_encrypted (decoder_lnk_o *self, PyObject *)
@@ -1188,10 +1188,10 @@ tp_f_is_target_encrypted (decoder_lnk_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_run_in_separate_process</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_run_in_separate_process</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_run_in_separate_process (decoder_lnk_o *self, PyObject *)
@@ -1213,10 +1213,10 @@ tp_f_is_run_in_separate_process (decoder_lnk_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_run_as_user</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>is_run_as_user</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_run_as_user (decoder_lnk_o *self, PyObject *)
@@ -1238,7 +1238,7 @@ tp_f_is_run_as_user (decoder_lnk_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -1330,11 +1330,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>lnk</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>lnk</i> object
+// @brief <i>lnk</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>lnk</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
@@ -1374,8 +1374,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>lnk</i> deallocator
-//! \param self Object
+// @brief <i>lnk</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (decoder_lnk_o *self)
@@ -1385,7 +1385,7 @@ tp_dealloc (decoder_lnk_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject decoder_lnk_t =
 {
@@ -1438,3 +1438,7 @@ PyTypeObject decoder_lnk_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+
+
+

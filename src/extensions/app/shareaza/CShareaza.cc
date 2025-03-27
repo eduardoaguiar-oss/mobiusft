@@ -21,8 +21,8 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief List of protocols
-//! \see StdAfx.h
+// @brief List of protocols
+// @see StdAfx.h
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const std::unordered_map <int, std::string> PROTOCOLS =
 {
@@ -39,8 +39,8 @@ static const std::unordered_map <int, std::string> PROTOCOLS =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief List of vendors
-//! \see Vendors.xml
+// @brief List of vendors
+// @see Vendors.xml
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const std::unordered_map <std::string, std::string> VENDORS =
 {
@@ -107,9 +107,9 @@ static const std::unordered_map <std::string, std::string> VENDORS =
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get protocol name
-//! \param id Protocol ID
-//! \return Protocol name
+// @brief Get protocol name
+// @param id Protocol ID
+// @return Protocol name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 get_protocol_name (int id)
@@ -125,9 +125,9 @@ get_protocol_name (int id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get vendor name
-//! \param code Vendor code
-//! \return Vendor name
+// @brief Get vendor name
+// @param code Vendor code
+// @return Vendor name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 get_vendor_name (const std::string& code)
@@ -143,3 +143,7 @@ get_vendor_name (const std::string& code)
 }
 
 } // namespace mobius::extension::app::shareaza
+
+
+
+

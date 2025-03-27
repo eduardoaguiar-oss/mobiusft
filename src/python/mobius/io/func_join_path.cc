@@ -17,14 +17,14 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "path.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function join_path
+// @brief Function join_path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_join_path (PyObject *, PyObject *args)
@@ -37,7 +37,7 @@ func_join_path (PyObject *, PyObject *args)
       mobius::py::set_value_error ("join_path must have at least one argument");
       return nullptr;
     }
-    
+
   // parse arguments
   mobius::io::path path;
 
@@ -48,7 +48,7 @@ func_join_path (PyObject *, PyObject *args)
 
       if (pymobius_io_path_check (item))
         segment = pymobius_io_path_from_pyobject (item);
-        
+
       else if (mobius::py::pystring_check (item))
         segment = mobius::io::path (mobius::py::pystring_as_std_string (item));
 
@@ -57,7 +57,7 @@ func_join_path (PyObject *, PyObject *args)
           mobius::py::set_value_error ("Invalid path segment");
           return nullptr;
         }
-        
+
       if (i == 0)
         path = segment;
       else
@@ -67,3 +67,5 @@ func_join_path (PyObject *, PyObject *args)
   // return path
   return pymobius_io_path_to_pyobject (path);
 }
+
+

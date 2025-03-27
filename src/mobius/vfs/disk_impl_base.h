@@ -25,8 +25,8 @@
 namespace mobius::vfs
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief disk implementation base class
-//! \author Eduardo Aguiar
+// @brief disk implementation base class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class disk_impl_base
 {
@@ -70,3 +70,5 @@ public:
 } // namespace mobius::vfs
 
 #endif
+
+

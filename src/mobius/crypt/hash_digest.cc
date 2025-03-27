@@ -21,10 +21,10 @@
 namespace mobius::crypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Calculate hash digest for a given data
-//! \param hash_id Hash algorithm ID
-//! \param data Data
-//! \return Hash digest
+// @brief Calculate hash digest for a given data
+// @param hash_id Hash algorithm ID
+// @param data Data
+// @return Hash digest
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 hash_digest (const std::string& hash_id, const mobius::bytearray& data)
@@ -36,3 +36,5 @@ hash_digest (const std::string& hash_id, const mobius::bytearray& data)
 }
 
 } // namespace mobius::crypt
+
+

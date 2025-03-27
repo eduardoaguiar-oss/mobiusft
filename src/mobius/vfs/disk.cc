@@ -26,7 +26,7 @@
 namespace mobius::vfs
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 disk::disk ()
  : impl_ (std::make_shared <disk_impl_null> ())
@@ -34,8 +34,8 @@ disk::disk ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor from implementation pointer
-//! \param impl Implementation pointer
+// @brief Constructor from implementation pointer
+// @param impl Implementation pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 disk::disk (const std::shared_ptr <disk_impl_base>& impl)
   : impl_ (impl)
@@ -43,8 +43,8 @@ disk::disk (const std::shared_ptr <disk_impl_base>& impl)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param state Object state
+// @brief Constructor
+// @param state Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 disk::disk (const mobius::pod::map& state)
 {
@@ -61,9 +61,9 @@ disk::disk (const mobius::pod::map& state)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create device disk
-//! \param uid Device UID
-//! \return Disk object
+// @brief Create device disk
+// @param uid Device UID
+// @return Disk object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 disk
 new_disk_by_device_uid (const std::string& uid)
@@ -72,10 +72,10 @@ new_disk_by_device_uid (const std::string& uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create imagefile disk
-//! \param url Imagefile URL
-//! \param type Imagefile type
-//! \return Disk object
+// @brief Create imagefile disk
+// @param url Imagefile URL
+// @param type Imagefile type
+// @return Disk object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 disk
 new_disk_by_url (const std::string& url, const std::string& type)
@@ -84,10 +84,10 @@ new_disk_by_url (const std::string& url, const std::string& type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create imagefile disk
-//! \param path Imagefile path
-//! \param type Imagefile type
-//! \return Disk object
+// @brief Create imagefile disk
+// @param path Imagefile path
+// @param type Imagefile type
+// @return Disk object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 disk
 new_disk_by_path (const std::string& path, const std::string& type)
@@ -97,3 +97,5 @@ new_disk_by_path (const std::string& path, const std::string& type)
 }
 
 } // namespace mobius::vfs
+
+

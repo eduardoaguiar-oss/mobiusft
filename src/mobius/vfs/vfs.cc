@@ -39,7 +39,7 @@ inline constexpr int VERSION = 1;
 namespace mobius::vfs
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief vfs implementation class
+// @brief vfs implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class vfs::impl
 {
@@ -73,22 +73,22 @@ public:
   std::vector<mobius::io::entry> get_root_entries () const;
 
 private:
-  //! \brief Datasources
+  // @brief Datasources
   std::vector <disk> disks_;
 
-  //! \brief Data blocks
+  // @brief Data blocks
   mutable std::vector <block> blocks_;
 
-  //! \brief Filesystems
+  // @brief Filesystems
   mutable std::vector <filesystem> filesystems_;
 
-  //! \brief Root entries
+  // @brief Root entries
   mutable std::vector <mobius::io::entry> root_entries_;
 
-  //! \brief Data blocks loaded flag
+  // @brief Data blocks loaded flag
   mutable thread_safe_flag blocks_loaded_;
 
-  //! \brief Root entries loaded flag
+  // @brief Root entries loaded flag
   mutable thread_safe_flag root_entries_loaded_;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -100,8 +100,8 @@ private:
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param state Object state
+// @brief Constructor
+// @param state Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 vfs::impl::impl (const mobius::pod::map& state)
 {
@@ -172,8 +172,8 @@ vfs::impl::impl (const mobius::pod::map& state)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get object state
-//! \return Object state
+// @brief Get object state
+// @return Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 vfs::impl::get_state () const
@@ -208,7 +208,7 @@ vfs::impl::get_state () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Rescan blocks and root entries
+// @brief Rescan blocks and root entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 vfs::impl::rescan ()
@@ -224,7 +224,7 @@ vfs::impl::rescan ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Clear VFS
+// @brief Clear VFS
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 vfs::impl::clear ()
@@ -234,8 +234,8 @@ vfs::impl::clear ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if VFS is available
-//! \return True/False
+// @brief Check if VFS is available
+// @return True/False
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 vfs::impl::is_available () const
@@ -249,9 +249,9 @@ vfs::impl::is_available () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add disk
-//! \param d Datasource object
-//! \return Datasource index
+// @brief Add disk
+// @param d Datasource object
+// @return Datasource index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::size_t
 vfs::impl::add_disk (const mobius::vfs::disk& d)
@@ -263,8 +263,8 @@ vfs::impl::add_disk (const mobius::vfs::disk& d)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove disk
-//! \param idx Datasource index
+// @brief Remove disk
+// @param idx Datasource index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 vfs::impl::remove_disk (std::size_t idx)
@@ -277,8 +277,8 @@ vfs::impl::remove_disk (std::size_t idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get disks
-//! \return Datasources
+// @brief Get disks
+// @return Datasources
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <disk>
 vfs::impl::get_disks () const
@@ -287,8 +287,8 @@ vfs::impl::get_disks () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get blocks
-//! \return blocks
+// @brief Get blocks
+// @return blocks
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <block>
 vfs::impl::get_blocks () const
@@ -298,8 +298,8 @@ vfs::impl::get_blocks () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get root entries
-//! \return Root entries
+// @brief Get root entries
+// @return Root entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::io::entry>
 vfs::impl::get_root_entries () const
@@ -309,8 +309,8 @@ vfs::impl::get_root_entries () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add new blocks to VFS, recursively
-//! \param blocks New blocks
+// @brief Add new blocks to VFS, recursively
+// @param blocks New blocks
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 vfs::impl::_add_blocks (std::vector <block>& blocks) const
@@ -335,7 +335,7 @@ vfs::impl::_add_blocks (std::vector <block>& blocks) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load blocks on demand
+// @brief Load blocks on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 vfs::impl::_load_blocks () const
@@ -482,7 +482,7 @@ vfs::impl::_load_blocks () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load root entries on demand
+// @brief Load root entries on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 vfs::impl::_load_root_entries () const
@@ -555,7 +555,7 @@ vfs::impl::_load_root_entries () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 vfs::vfs ()
   : impl_ (std::make_shared <impl> ())
@@ -563,8 +563,8 @@ vfs::vfs ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param state Object state
+// @brief Constructor
+// @param state Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 vfs::vfs (const mobius::pod::map& state)
   : impl_ (std::make_shared <impl> (state))
@@ -572,8 +572,8 @@ vfs::vfs (const mobius::pod::map& state)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get object state
-//! \return Object state
+// @brief Get object state
+// @return Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 vfs::get_state () const
@@ -582,7 +582,7 @@ vfs::get_state () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Clear VFS
+// @brief Clear VFS
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 vfs::clear ()
@@ -591,7 +591,7 @@ vfs::clear ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Rescan VFS blocks and root entries
+// @brief Rescan VFS blocks and root entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 vfs::rescan ()
@@ -600,8 +600,8 @@ vfs::rescan ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if VFS is available
-//! \return True/False
+// @brief Check if VFS is available
+// @return True/False
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 vfs::is_available () const
@@ -610,9 +610,9 @@ vfs::is_available () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add disk
-//! \param d Datasource object
-//! \return Datasource index
+// @brief Add disk
+// @param d Datasource object
+// @return Datasource index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::size_t
 vfs::add_disk (const mobius::vfs::disk& d)
@@ -621,8 +621,8 @@ vfs::add_disk (const mobius::vfs::disk& d)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove disk
-//! \param idx Datasource index
+// @brief Remove disk
+// @param idx Datasource index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 vfs::remove_disk (std::size_t idx)
@@ -631,8 +631,8 @@ vfs::remove_disk (std::size_t idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get disks
-//! \return Datasources
+// @brief Get disks
+// @return Datasources
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector<disk>
 vfs::get_disks () const
@@ -641,8 +641,8 @@ vfs::get_disks () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get blocks
-//! \return blocks
+// @brief Get blocks
+// @return blocks
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <block>
 vfs::get_blocks () const
@@ -651,8 +651,8 @@ vfs::get_blocks () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get root entries
-//! \return Root entries
+// @brief Get root entries
+// @return Root entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector<mobius::io::entry>
 vfs::get_root_entries () const
@@ -661,3 +661,5 @@ vfs::get_root_entries () const
 }
 
 } // namespace mobius::vfs
+
+

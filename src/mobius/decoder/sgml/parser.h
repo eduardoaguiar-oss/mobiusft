@@ -24,28 +24,24 @@
 #include <string>
 #include <vector>
 
-namespace mobius
-{
-namespace decoder
-{
-namespace sgml
+namespace mobius::decoder::sgml
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief SGML parser
-//! \author Eduardo Aguiar
+// @brief SGML parser
+// @author Eduardo Aguiar
 // Input must be UTF-8 stream
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class parser
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief SGML element
+  // @brief SGML element
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   class element
   {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    //! \brief Element type
+    // @brief Element type
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     enum class type
     {
@@ -65,7 +61,7 @@ public:
     element () = default;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    //! \brief Constructor
+    // @brief Constructor
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     explicit element (type t, const std::string& text, const mobius::pod::map& attributes = {})
       : type_ (t), text_ (text), attributes_ (attributes)
@@ -73,25 +69,25 @@ public:
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    //! \brief Get element type
+    // @brief Get element type
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     type
     get_type () const
     {
       return type_;
     }
-    
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    //! \brief Get text
+    // @brief Get text
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::string
     get_text () const
     {
       return text_;
     }
-    
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    //! \brief Get attribute
+    // @brief Get attribute
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::pod::data
     get_attribute (const std::string& name) const
@@ -100,7 +96,7 @@ public:
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    //! \brief Get attributes
+    // @brief Get attributes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::pod::map
     get_attributes () const
@@ -113,20 +109,20 @@ public:
     std::string text_;
     mobius::pod::map attributes_;
   };
-  
+
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit parser (const mobius::io::reader&);
   element get ();
-  
+
 private:
-  //! \brief Tokenizer object
+  // @brief Tokenizer object
   mobius::decoder::sgml::tokenizer tokenizer_;
 };
 
-} // namespace sgml
-} // namespace decoder
-} // namespace mobius
+} // namespace mobius::decoder::sgml
 
 #endif
+
+

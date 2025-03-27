@@ -22,7 +22,7 @@
 #include <mobius/os/win/registry/registry_data.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief registry_data: data structure
+// @brief registry_data: data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -38,3 +38,5 @@ extern PyTypeObject os_win_registry_registry_data_t;
 PyObject *pymobius_os_win_registry_registry_data_to_pyobject (mobius::os::win::registry::registry_data);
 
 #endif
+
+

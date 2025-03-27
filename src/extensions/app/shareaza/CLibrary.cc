@@ -24,7 +24,7 @@ namespace
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-//! \brief Shareaza 2.7.10.2
+// @brief Shareaza 2.7.10.2
 static constexpr int SER_VERSION = 29;
 
 } // namespace
@@ -32,8 +32,8 @@ static constexpr int SER_VERSION = 29;
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode CLibrary structure
-//! \see Library.cpp - CLibrary::Serialize
+// @brief Decode CLibrary structure
+// @see Library.cpp - CLibrary::Serialize
 //! \todo AlbumFolder, LibraryHistory and LibraryMaps
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 CLibrary::CLibrary (mobius::decoder::mfc& decoder)
@@ -83,8 +83,8 @@ CLibrary::CLibrary (mobius::decoder::mfc& decoder)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get all folders from CLibrary
-//! \return Folders
+// @brief Get all folders from CLibrary
+// @return Folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <CLibraryFolder>
 CLibrary::get_all_folders () const
@@ -103,8 +103,8 @@ CLibrary::get_all_folders () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get all files from CLibrary
-//! \return Files
+// @brief Get all files from CLibrary
+// @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <CLibraryFile>
 CLibrary::get_all_files () const
@@ -121,3 +121,7 @@ CLibrary::get_all_files () const
 }
 
 } // namespace mobius::extension::app::shareaza
+
+
+
+

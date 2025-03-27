@@ -23,7 +23,7 @@
 #include <mobius/framework/evidence_loader.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -41,3 +41,5 @@ PyObject *pymobius_framework_evidence_loader_to_pyobject (const mobius::framewor
 mobius::framework::evidence_loader pymobius_framework_evidence_loader_from_pyobject (PyObject *);
 
 #endif
+
+

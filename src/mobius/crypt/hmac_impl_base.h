@@ -26,8 +26,8 @@
 namespace mobius::crypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>hmac</i> implementation base class
-//! \author Eduardo Aguiar
+// @brief <i>hmac</i> implementation base class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class hmac_impl_base
 {
@@ -62,3 +62,5 @@ public:
 } // namespace mobius::crypt
 
 #endif
+
+

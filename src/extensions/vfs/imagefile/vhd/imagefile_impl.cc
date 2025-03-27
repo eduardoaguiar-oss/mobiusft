@@ -34,8 +34,8 @@ static constexpr int DISK_TYPE_DYNAMIC = 3;
 static constexpr int DISK_TYPE_DIFFERENCING = 4;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode timestamp
-//! \return datetime object
+// @brief Decode timestamp
+// @return datetime object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 decode_timestamp (std::uint32_t timestamp)
@@ -51,9 +51,9 @@ decode_timestamp (std::uint32_t timestamp)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if file is an instance of imagefile vhd
-//! \param f File object
-//! \return True/false
+// @brief Check if file is an instance of imagefile vhd
+// @param f File object
+// @return True/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 imagefile_impl::is_instance (const mobius::io::file& f)
@@ -76,8 +76,8 @@ imagefile_impl::is_instance (const mobius::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param f File object
+// @brief Constructor
+// @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile_impl::imagefile_impl (const mobius::io::file& f)
   : file_ (f)
@@ -85,9 +85,9 @@ imagefile_impl::imagefile_impl (const mobius::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attribute
-//! \param name Attribute name
-//! \return Attribute value
+// @brief Get attribute
+// @param name Attribute name
+// @return Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 imagefile_impl::get_attribute (const std::string& name) const
@@ -97,9 +97,9 @@ imagefile_impl::get_attribute (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set attribute
-//! \param name Attribute name
-//! \param value Attribute value
+// @brief Set attribute
+// @param name Attribute name
+// @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 imagefile_impl::set_attribute (
@@ -111,8 +111,8 @@ imagefile_impl::set_attribute (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attributes
-//! \return Attributes
+// @brief Get attributes
+// @return Attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 imagefile_impl::get_attributes () const
@@ -122,8 +122,8 @@ imagefile_impl::get_attributes () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new reader for imagefile
-//! \return reader
+// @brief Create new reader for imagefile
+// @return reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::reader
 imagefile_impl::new_reader () const
@@ -141,8 +141,8 @@ imagefile_impl::new_reader () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new writer for imagefile
-//! \return writer
+// @brief Create new writer for imagefile
+// @return writer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::writer
 imagefile_impl::new_writer () const
@@ -151,8 +151,8 @@ imagefile_impl::new_writer () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get Block Allocation Table
-//! \return Table
+// @brief Get Block Allocation Table
+// @return Table
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile_impl::table_type
 imagefile_impl::get_block_allocation_table () const
@@ -166,8 +166,8 @@ imagefile_impl::get_block_allocation_table () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get block size
-//! \return block size
+// @brief Get block size
+// @return block size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 imagefile_impl::get_block_size () const
@@ -181,7 +181,7 @@ imagefile_impl::get_block_size () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load metadata from imagefile
+// @brief Load metadata from imagefile
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 imagefile_impl::_load_metadata () const
@@ -201,7 +201,7 @@ imagefile_impl::_load_metadata () const
   auto reader = file_.new_reader ();
   reader.seek (-SECTOR_SIZE, mobius::io::reader::whence_type::end);
   mobius::decoder::data_decoder decoder (reader);
-  
+
   // test signature
   auto signature = decoder.get_string_by_size (8);
 
@@ -210,23 +210,23 @@ imagefile_impl::_load_metadata () const
 
   // features
   decoder.skip (4);
-  
+
   // format version
   std::string format_version = std::to_string (decoder.get_uint16_be ());
   format_version += '.' + std::to_string (decoder.get_uint16_be ());
-  
+
   // data offset
   auto data_offset = decoder.get_uint64_be ();
-  
+
   // acquisition info
   mobius::datetime::datetime acquisition_time = decode_timestamp (decoder.get_uint32_be ());
 
   std::string acquisition_tool = decoder.get_string_by_size (4) + " v";
   acquisition_tool += std::to_string (decoder.get_uint16_be ());
   acquisition_tool += '.' + std::to_string (decoder.get_uint16_be ());
-  
+
   std::string acquisition_platform = decoder.get_string_by_size (4);
-  
+
   // size
   decoder.skip (8);		// original size
   size_ = decoder.get_uint64_be ();
@@ -250,22 +250,22 @@ imagefile_impl::_load_metadata () const
   if (disk_type_ == DISK_TYPE_DYNAMIC)
     {
       decoder.seek (data_offset);
-      
+
       // test signature
       auto signature = decoder.get_string_by_size (8);
 
       if (signature != "cxsparse")
         throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("Invalid VHD Dynamic Disk Header signature"));
-      
+
       // data offset (unused)
       decoder.skip (8);
-      
+
       // table offset
       auto table_offset = decoder.get_uint64_be ();
-      
+
       // header version
       decoder.skip (4);
-      
+
       // max_table_entries
       auto max_table_entries = decoder.get_uint32_be ();
 
@@ -296,3 +296,5 @@ imagefile_impl::_load_metadata () const
 
   metadata_loaded_ = true;
 }
+
+

@@ -23,15 +23,15 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create Python object from metadata attribute object
-//! \param attr Attribute object
-//! \return Python object
+// @brief Create Python object from metadata attribute object
+// @param attr Attribute object
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 Metadata_Attr_from_cpp (const mobius::metadata::attribute& attr)
 {
   api_dataholder_o *pyobj = api_dataholder_new ();
-  
+
   if (pyobj)
     {
       api_dataholder_setattr (pyobj, "name", attr.name);
@@ -46,9 +46,9 @@ Metadata_Attr_from_cpp (const mobius::metadata::attribute& attr)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create PyList from metadata
-//! \param metadata metadata object
-//! \return list
+// @brief create PyList from metadata
+// @param metadata metadata object
+// @return list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *PyList_FromMetadata (const mobius::metadata& metadata)
 {
@@ -68,3 +68,5 @@ PyObject *PyList_FromMetadata (const mobius::metadata& metadata)
 
   return ret;
 }
+
+

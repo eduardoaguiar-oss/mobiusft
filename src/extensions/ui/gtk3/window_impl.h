@@ -25,8 +25,8 @@
 namespace mobius::extension::ui::gtk3
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>gtk3 window</i> implementation class
-//! \author Eduardo Aguiar
+// @brief <i>gtk3 window</i> implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class window_impl : public mobius::ui::window_impl_base
 {
@@ -55,19 +55,21 @@ public:
   void reset_callback (const std::string&) final;
 
 private:
-  //! \brief Low level widget
+  // @brief Low level widget
   GtkWidget *widget_ = nullptr;
 
-  //! \brief Accel group
+  // @brief Accel group
   GtkAccelGroup *accel_group_ = nullptr;
 
-  //! \brief Content widget
+  // @brief Content widget
   mobius::ui::widget content_;
 
-  //! \brief Callback for closing event
+  // @brief Callback for closing event
   mobius::core::functor <bool> closing_callback_;
 };
 
 } // namespace mobius::extension::ui::gtk3
 
 #endif
+
+

@@ -42,9 +42,9 @@ static constexpr int PAYLOAD_BLOCK_PARTIALLY_PRESENT = 7;
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if file is an instance of imagefile vhd
-//! \param f File object
-//! \return True/false
+// @brief Check if file is an instance of imagefile vhd
+// @param f File object
+// @return True/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 imagefile_impl::is_instance (const mobius::io::file& f)
@@ -66,8 +66,8 @@ imagefile_impl::is_instance (const mobius::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param f File object
+// @brief Constructor
+// @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile_impl::imagefile_impl (const mobius::io::file& f)
   : file_ (f)
@@ -75,9 +75,9 @@ imagefile_impl::imagefile_impl (const mobius::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attribute
-//! \param name Attribute name
-//! \return Attribute value
+// @brief Get attribute
+// @param name Attribute name
+// @return Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 imagefile_impl::get_attribute (const std::string& name) const
@@ -87,9 +87,9 @@ imagefile_impl::get_attribute (const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set attribute
-//! \param name Attribute name
-//! \param value Attribute value
+// @brief Set attribute
+// @param name Attribute name
+// @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 imagefile_impl::set_attribute (
@@ -101,8 +101,8 @@ imagefile_impl::set_attribute (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attributes
-//! \return Attributes
+// @brief Get attributes
+// @return Attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 imagefile_impl::get_attributes () const
@@ -112,8 +112,8 @@ imagefile_impl::get_attributes () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new reader for imagefile
-//! \return reader
+// @brief Create new reader for imagefile
+// @return reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::reader
 imagefile_impl::new_reader () const
@@ -130,8 +130,8 @@ imagefile_impl::new_reader () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new writer for imagefile
-//! \return writer
+// @brief Create new writer for imagefile
+// @return writer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::writer
 imagefile_impl::new_writer () const
@@ -140,8 +140,8 @@ imagefile_impl::new_writer () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get Block Allocation Table
-//! \return Table
+// @brief Get Block Allocation Table
+// @return Table
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile_impl::bat_type
 imagefile_impl::get_block_allocation_table () const
@@ -156,7 +156,7 @@ imagefile_impl::get_block_allocation_table () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load metadata from imagefile
+// @brief Load metadata from imagefile
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 imagefile_impl::_load_metadata () const
@@ -191,15 +191,15 @@ imagefile_impl::_load_metadata () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load data from File Type Identifier
-//! \param reader Reader object
-//! \see MS-VHDX - section 2.2.1
+// @brief Load data from File Type Identifier
+// @param reader Reader object
+// @see MS-VHDX - section 2.2.1
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 imagefile_impl::_load_file_type_identifier (mobius::io::reader reader) const
 {
   mobius::decoder::data_decoder decoder (reader);
-  
+
   // test signature
   auto signature = decoder.get_string_by_size (8);
 
@@ -211,9 +211,9 @@ imagefile_impl::_load_file_type_identifier (mobius::io::reader reader) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load data from Header
-//! \param reader Reader object
-//! \see MS-VHDX - section 2.2.2
+// @brief Load data from Header
+// @param reader Reader object
+// @see MS-VHDX - section 2.2.2
 //
 // A header is valid if the Signature and Checksum fields both validate
 // correctly. A header is current if it is the only valid header or if it is
@@ -226,10 +226,10 @@ imagefile_impl::_load_header (mobius::io::reader reader) const
 {
   mobius::decoder::data_decoder decoder (reader);
   decoder.seek (65536);
-  
+
   std::uint64_t h1_sequence_number = 0;
   std::uint64_t h2_sequence_number = 0;
-  
+
   // test signature - first header
   auto signature_1 = decoder.get_string_by_size (4);
 
@@ -240,7 +240,7 @@ imagefile_impl::_load_header (mobius::io::reader reader) const
     }
 
   decoder.seek (131072);
-  
+
   // test signature - second header
   auto signature_2 = decoder.get_string_by_size (4);
 
@@ -268,27 +268,27 @@ imagefile_impl::_load_header (mobius::io::reader reader) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load data from Region Table
-//! \param reader Reader object
-//! \see MS-VHDX - section 2.2.3
+// @brief Load data from Region Table
+// @param reader Reader object
+// @see MS-VHDX - section 2.2.3
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 imagefile_impl::_load_region_table (mobius::io::reader reader) const
 {
   mobius::decoder::data_decoder decoder (reader);
   decoder.seek (196608);
-  
+
   // test signature
   auto signature = decoder.get_string_by_size (4);
 
   if (signature != "regi")
     throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("invalid VHDX Region Table signature"));
 
-  // read Region Table metadata  
+  // read Region Table metadata
   decoder.skip (4);		// checksum
   auto count = decoder.get_uint32_le ();
   decoder.skip (4);		// reserved
-  
+
   // read Regions data
   for (std::uint32_t i = 0;i < count;i++)
     {
@@ -296,23 +296,23 @@ imagefile_impl::_load_region_table (mobius::io::reader reader) const
       auto file_offset = decoder.get_uint64_le ();
       decoder.skip (4);         // length
       auto is_required = decoder.get_uint32_le ();
-      
+
       if (guid == "8B7CA206-4790-4B9A-B8FE-575F050F886E")
         _load_metadata_region (reader, file_offset);
 
       else if (guid == "2DC27766-F623-4200-9D64-115E9BFD4A08")
          bat_offset_ = file_offset;
-         
+
       else if (is_required)
         throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("unknown and required Region Table entry"));
     }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load data from Metadata Region
-//! \param reader Reader object
-//! \param file_offset File offset
-//! \see MS-VHDX - section 2.6
+// @brief Load data from Metadata Region
+// @param reader Reader object
+// @param file_offset File offset
+// @see MS-VHDX - section 2.6
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 imagefile_impl::_load_metadata_region (
@@ -322,25 +322,25 @@ imagefile_impl::_load_metadata_region (
 {
   mobius::decoder::data_decoder decoder (reader);
   decoder.seek (file_offset);
-  
+
   // test signature
   auto signature = decoder.get_string_by_size (8);
 
   if (signature != "metadata")
     throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("invalid VHDX Metadata Region signature"));
-  
+
   // read Metadata Table header (section 2.6.1.1)
   decoder.skip (2);		// Reserved
   auto count = decoder.get_uint16_le ();
   decoder.skip (20);		// reserved
-  
+
   // read Metadata Region
   for (std::uint16_t i = 0;i < count;i++)
     {
       auto guid = decoder.get_guid ();
       auto offset = decoder.get_uint32_le ();
       decoder.skip (12);		// length, flags, reserved
-      
+
       auto pos = decoder.tell ();
       decoder.seek (file_offset + offset);
 
@@ -352,10 +352,10 @@ imagefile_impl::_load_metadata_region (
 
           if (flags & 0x80000000)
             disk_type_ = DISK_TYPE_FIXED;
-          
+
           else if (flags & 0x40000000)     // differencing
             throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("unsupported disk type"));
-            
+
           else
             disk_type_ = DISK_TYPE_DYNAMIC;
         }
@@ -381,7 +381,7 @@ imagefile_impl::_load_metadata_region (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load block allocation table from imagefile
+// @brief Load block allocation table from imagefile
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 imagefile_impl::_load_block_allocation_table () const
@@ -407,14 +407,14 @@ imagefile_impl::_load_block_allocation_table () const
   while (block_count > 0)
     {
       auto value = decoder.get_uint64_le ();
-      
+
       // for every chunk_ration data blocks, there is one bitmap block,
       // which we skip for now.
       if (i % (chunk_ratio + 1) != chunk_ratio)
         {
           auto state = value & 0x07;
           auto offset = value & 0xfffffffffff00000;
-          
+
           if (state == PAYLOAD_BLOCK_FULLY_PRESENT)
             block_allocation_table_.push_back (offset);
           else
@@ -422,9 +422,11 @@ imagefile_impl::_load_block_allocation_table () const
 
           block_count--;
         }
-        
+
       i++;
     }
 
   block_allocation_table_loaded_ = true;
 }
+
+

@@ -23,7 +23,7 @@
 #include <mobius/ui/message_dialog.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_ui_message_dialog_to_pyobject (const mobius::ui::message_dial
 mobius::ui::message_dialog pymobius_ui_message_dialog_from_pyobject (PyObject *);
 
 #endif
+
+

@@ -32,9 +32,9 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Clone data vector
-//! \param v Data vector
-//! \return New data data vector
+// @brief Clone data vector
+// @param v Data vector
+// @return New data data vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <mobius::pod::data>
 list_clone (const std::vector <mobius::pod::data>& v)
@@ -48,9 +48,9 @@ list_clone (const std::vector <mobius::pod::data>& v)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert data vector to std::string
-//! \param v Data vector
-//! \return String representation of data
+// @brief Convert data vector to std::string
+// @param v Data vector
+// @return String representation of data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
 list_to_string (const std::vector <mobius::pod::data>& v)
@@ -74,12 +74,12 @@ list_to_string (const std::vector <mobius::pod::data>& v)
   return text;
 }
 
-}
+} // namespace
 
 namespace mobius::pod
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data ()
  : impl_ (std::make_shared <data_impl_null> ())
@@ -87,8 +87,8 @@ data::data ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param p shared_ptr to data_impl_base
+// @brief Constructor
+// @param p shared_ptr to data_impl_base
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (const std::shared_ptr <data_impl_base>& p)
  : impl_ (p)
@@ -96,8 +96,8 @@ data::data (const std::shared_ptr <data_impl_base>& p)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param b Boolean value
+// @brief Constructor
+// @param b Boolean value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (bool b)
  : impl_ (std::make_shared <data_impl_bool> (b))
@@ -105,8 +105,8 @@ data::data (bool b)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param i Integer value
+// @brief Constructor
+// @param i Integer value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (int i)
  : impl_ (std::make_shared <data_impl_integer> (i))
@@ -114,8 +114,8 @@ data::data (int i)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param i Integer value
+// @brief Constructor
+// @param i Integer value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (std::int64_t i)
  : impl_ (std::make_shared <data_impl_integer> (i))
@@ -123,8 +123,8 @@ data::data (std::int64_t i)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param i Integer value
+// @brief Constructor
+// @param i Integer value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (std::uint64_t i)
  : impl_ (std::make_shared <data_impl_integer> (static_cast <std::int64_t> (i)))
@@ -132,8 +132,8 @@ data::data (std::uint64_t i)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param i Integer value
+// @brief Constructor
+// @param i Integer value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (std::uint32_t i)
  : impl_ (std::make_shared <data_impl_integer> (static_cast <std::int64_t> (i)))
@@ -141,8 +141,8 @@ data::data (std::uint32_t i)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param v Float value
+// @brief Constructor
+// @param v Float value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (double v)
  : impl_ (std::make_shared <data_impl_float> (v))
@@ -150,8 +150,8 @@ data::data (double v)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param v Float value
+// @brief Constructor
+// @param v Float value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (long double v)
  : impl_ (std::make_shared <data_impl_float> (v))
@@ -159,8 +159,8 @@ data::data (long double v)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param v Datetime value
+// @brief Constructor
+// @param v Datetime value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (const mobius::datetime::datetime& v)
  : impl_ (std::make_shared <data_impl_datetime> (v))
@@ -168,8 +168,8 @@ data::data (const mobius::datetime::datetime& v)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param s C string
+// @brief Constructor
+// @param s C string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (const char *s)
 {
@@ -181,8 +181,8 @@ data::data (const char *s)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param s C++ string
+// @brief Constructor
+// @param s C++ string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (const std::string& s)
  : impl_ (std::make_shared <data_impl_string> (s))
@@ -190,8 +190,8 @@ data::data (const std::string& s)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param b Bytearray
+// @brief Constructor
+// @param b Bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (const mobius::bytearray& b)
  : impl_ (std::make_shared <data_impl_bytearray> (b))
@@ -199,8 +199,8 @@ data::data (const mobius::bytearray& b)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param l initializer_list
+// @brief Constructor
+// @param l initializer_list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (const std::initializer_list <data>& l)
  : impl_ (std::make_shared <data_impl_list> ())
@@ -212,8 +212,8 @@ data::data (const std::initializer_list <data>& l)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param v Vector
+// @brief Constructor
+// @param v Vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (const std::vector <data>& v)
  : impl_ (std::make_shared <data_impl_list> ())
@@ -225,8 +225,8 @@ data::data (const std::vector <data>& v)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Assignment operator
-//! \param b Boolean value
+// @brief Assignment operator
+// @param b Boolean value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data&
 data::operator= (bool b)
@@ -236,8 +236,8 @@ data::operator= (bool b)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Assignment operator
-//! \param i Integer value
+// @brief Assignment operator
+// @param i Integer value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data&
 data::operator= (int i)
@@ -247,8 +247,8 @@ data::operator= (int i)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Assignment operator
-//! \param i Integer value
+// @brief Assignment operator
+// @param i Integer value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data&
 data::operator= (std::int64_t i)
@@ -258,8 +258,8 @@ data::operator= (std::int64_t i)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Assignment operator
-//! \param v Real value
+// @brief Assignment operator
+// @param v Real value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data&
 data::operator= (double v)
@@ -269,8 +269,8 @@ data::operator= (double v)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Assignment operator
-//! \param v Real value
+// @brief Assignment operator
+// @param v Real value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data&
 data::operator= (long double v)
@@ -280,8 +280,8 @@ data::operator= (long double v)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Assignment operator
-//! \param v Datetime value
+// @brief Assignment operator
+// @param v Datetime value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data&
 data::operator= (const mobius::datetime::datetime& v)
@@ -291,8 +291,8 @@ data::operator= (const mobius::datetime::datetime& v)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Assignment operator
-//! \param s C string
+// @brief Assignment operator
+// @param s C string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data&
 data::operator= (const char *s)
@@ -307,8 +307,8 @@ data::operator= (const char *s)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Assignment operator
-//! \param s C++ string
+// @brief Assignment operator
+// @param s C++ string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data&
 data::operator= (const std::string& s)
@@ -318,8 +318,8 @@ data::operator= (const std::string& s)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Assignment operator
-//! \param b Bytearray
+// @brief Assignment operator
+// @param b Bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data&
 data::operator= (const mobius::bytearray& b)
@@ -329,8 +329,8 @@ data::operator= (const mobius::bytearray& b)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Assignment operator
-//! \param l initializer_list
+// @brief Assignment operator
+// @param l initializer_list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data&
 data::operator= (const std::initializer_list <data>& l)
@@ -345,8 +345,8 @@ data::operator= (const std::initializer_list <data>& l)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Assignment operator
-//! \param v Vector
+// @brief Assignment operator
+// @param v Vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data&
 data::operator= (const std::vector <data>& v)
@@ -361,8 +361,8 @@ data::operator= (const std::vector <data>& v)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert data to boolean
-//! \return Bool value if type == boolean, otherwise exception
+// @brief Convert data to boolean
+// @return Bool value if type == boolean, otherwise exception
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::operator bool () const
 {
@@ -373,8 +373,8 @@ data::operator bool () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert data to int64_t
-//! \return int64_t value if type == integer, otherwise exception
+// @brief Convert data to int64_t
+// @return int64_t value if type == integer, otherwise exception
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::operator std::int64_t () const
 {
@@ -385,8 +385,8 @@ data::operator std::int64_t () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert data to long double
-//! \return Long double value if type == real, otherwise exception
+// @brief Convert data to long double
+// @return Long double value if type == real, otherwise exception
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::operator long double () const
 {
@@ -397,8 +397,8 @@ data::operator long double () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert data to datetime
-//! \return Long double value if type == datetime, otherwise exception
+// @brief Convert data to datetime
+// @return Long double value if type == datetime, otherwise exception
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::operator mobius::datetime::datetime () const
 {
@@ -409,8 +409,8 @@ data::operator mobius::datetime::datetime () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert data to string
-//! \return Bool value if type == string, otherwise exception
+// @brief Convert data to string
+// @return Bool value if type == string, otherwise exception
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::operator std::string () const
 {
@@ -427,8 +427,8 @@ data::operator std::string () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert data to bytearray
-//! \return Bytearray value if type == bytearray, otherwise exception
+// @brief Convert data to bytearray
+// @return Bytearray value if type == bytearray, otherwise exception
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::operator mobius::bytearray () const
 {
@@ -439,8 +439,8 @@ data::operator mobius::bytearray () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert data to std::vector <data>
-//! \return Vector value if type == list, otherwise exception
+// @brief Convert data to std::vector <data>
+// @return Vector value if type == list, otherwise exception
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::operator std::vector <data> () const
 {
@@ -454,8 +454,8 @@ data::operator std::vector <data> () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Clone object
-//! \return New data object
+// @brief Clone object
+// @return New data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data
 data::clone () const
@@ -491,8 +491,8 @@ data::clone () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert data to std::string
-//! \return String representation of data
+// @brief Convert data to std::string
+// @return String representation of data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 data::to_string () const
@@ -528,10 +528,10 @@ data::to_string () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Ostream inserter for data
-//! \param os Ostream reference
-//! \param d Data object
-//! \return Ostream reference
+// @brief Ostream inserter for data
+// @param os Ostream reference
+// @param d Data object
+// @return Ostream reference
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::ostream&
 operator<< (std::ostream& os, const mobius::pod::data& d)
@@ -540,10 +540,10 @@ operator<< (std::ostream& os, const mobius::pod::data& d)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Compare two data objects
-//! \param a First object
-//! \param b Second object
-//! \return <b>true</b> if objects are equal <b>false<b> otherwise
+// @brief Compare two data objects
+// @param a First object
+// @param b Second object
+// @return <b>true</b> if objects are equal <b>false<b> otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator== (const data& a, const data& b)
@@ -584,10 +584,10 @@ operator== (const data& a, const data& b)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Compare two data objects
-//! \param a First object
-//! \param b Second object
-//! \return <b>true</b> if objects are different <b>false<b> otherwise
+// @brief Compare two data objects
+// @param a First object
+// @param b Second object
+// @return <b>true</b> if objects are different <b>false<b> otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator!= (const data& a, const data& b)
@@ -596,3 +596,5 @@ operator!= (const data& a, const data& b)
 }
 
 } // namespace mobius::pod
+
+

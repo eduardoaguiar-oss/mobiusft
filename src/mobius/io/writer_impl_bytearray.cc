@@ -20,13 +20,11 @@
 #include <algorithm>
 #include <stdexcept>
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param data Bytearray object
+// @brief Constructor
+// @param data Bytearray object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl_bytearray::writer_impl_bytearray (mobius::bytearray& data)
  : data_ (data)
@@ -34,9 +32,9 @@ writer_impl_bytearray::writer_impl_bytearray (mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set write position
-//! \param offset offset in bytes
-//! \param w either beginning, current or end
+// @brief Set write position
+// @param offset offset in bytes
+// @param w either beginning, current or end
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 writer_impl_bytearray::seek (offset_type offset, whence_type w)
@@ -63,16 +61,16 @@ writer_impl_bytearray::seek (offset_type offset, whence_type w)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Write bytes to writer
-//! \param data Data
-//! \return Number of bytes written
+// @brief Write bytes to writer
+// @param data Data
+// @return Number of bytes written
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl_bytearray::size_type
 writer_impl_bytearray::write (const mobius::bytearray& data)
 {
   if (pos_ + data.size () >= data_.size ())
     data_.resize (pos_ + data.size ());
-  
+
   std::copy (data.begin (), data.end (), data_.begin () + pos_);
   pos_ += data.size ();
 
@@ -80,12 +78,13 @@ writer_impl_bytearray::write (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Flush data
+// @brief Flush data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 writer_impl_bytearray::flush ()
 {
 }
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
+
+

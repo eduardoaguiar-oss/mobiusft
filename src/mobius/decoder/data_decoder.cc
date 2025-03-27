@@ -32,10 +32,10 @@ namespace mobius::decoder
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Read <i>size</i> bytes from reader
-//! \param reader Reader object
-//! \param size Size in bytes
-//! \return Bytearray
+// @brief Read <i>size</i> bytes from reader
+// @param reader Reader object
+// @param size Size in bytes
+// @return Bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static inline mobius::bytearray
 read (mobius::io::reader& reader, std::size_t size)
@@ -51,8 +51,8 @@ read (mobius::io::reader& reader, std::size_t size)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param in reader object
+// @brief Constructor
+// @param in reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data_decoder::data_decoder (const mobius::io::reader& in)
   : in_ (in)
@@ -60,8 +60,8 @@ data_decoder::data_decoder (const mobius::io::reader& in)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param data bytearray object
+// @brief Constructor
+// @param data bytearray object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data_decoder::data_decoder (const mobius::bytearray& data)
   : in_ (mobius::io::new_bytearray_reader (data))
@@ -69,8 +69,8 @@ data_decoder::data_decoder (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Operator bool
-//! \return true If there is data to read, false otherwise
+// @brief Operator bool
+// @return true If there is data to read, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data_decoder::operator bool () const
 {
@@ -78,8 +78,8 @@ data_decoder::operator bool () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Skip n bytes
-//! \param size size in bytes
+// @brief Skip n bytes
+// @param size size in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 data_decoder::skip (size_type size)
@@ -88,8 +88,8 @@ data_decoder::skip (size_type size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Jump to position pos
-//! \param pos position from the start of data
+// @brief Jump to position pos
+// @param pos position from the start of data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 data_decoder::seek (size_type pos)
@@ -98,8 +98,8 @@ data_decoder::seek (size_type pos)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get current position
-//! \return position from the start of data
+// @brief Get current position
+// @return position from the start of data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data_decoder::size_type
 data_decoder::tell () const
@@ -108,8 +108,8 @@ data_decoder::tell () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get data size
-//! \return data size in bytes
+// @brief Get data size
+// @return data size in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data_decoder::size_type
 data_decoder::get_size () const
@@ -118,8 +118,8 @@ data_decoder::get_size () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode an int8
-//! \return value
+// @brief Decode an int8
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int8_t
 data_decoder::get_int8 ()
@@ -128,8 +128,8 @@ data_decoder::get_int8 ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode an int16 (le)
-//! \return value
+// @brief Decode an int16 (le)
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int16_t
 data_decoder::get_int16_le ()
@@ -138,8 +138,8 @@ data_decoder::get_int16_le ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode an int16 (be)
-//! \return value
+// @brief Decode an int16 (be)
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int16_t
 data_decoder::get_int16_be ()
@@ -148,8 +148,8 @@ data_decoder::get_int16_be ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode an int32 (le)
-//! \return value
+// @brief Decode an int32 (le)
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int32_t
 data_decoder::get_int32_le ()
@@ -158,8 +158,8 @@ data_decoder::get_int32_le ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode an int32 (be)
-//! \return value
+// @brief Decode an int32 (be)
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int32_t
 data_decoder::get_int32_be ()
@@ -168,8 +168,8 @@ data_decoder::get_int32_be ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode an int64 (le)
-//! \return value
+// @brief Decode an int64 (le)
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int64_t
 data_decoder::get_int64_le ()
@@ -178,8 +178,8 @@ data_decoder::get_int64_le ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode an int64 (be)
-//! \return value
+// @brief Decode an int64 (be)
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int64_t
 data_decoder::get_int64_be ()
@@ -188,8 +188,8 @@ data_decoder::get_int64_be ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode an uint8
-//! \return value
+// @brief Decode an uint8
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 uint8_t
 data_decoder::get_uint8 ()
@@ -199,8 +199,8 @@ data_decoder::get_uint8 ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode an uint16 (le)
-//! \return value
+// @brief Decode an uint16 (le)
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 uint16_t
 data_decoder::get_uint16_le ()
@@ -212,8 +212,8 @@ data_decoder::get_uint16_le ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode an uint16 (be)
-//! \return value
+// @brief Decode an uint16 (be)
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 uint16_t
 data_decoder::get_uint16_be ()
@@ -225,8 +225,8 @@ data_decoder::get_uint16_be ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode an uint32 (le)
-//! \return value
+// @brief Decode an uint32 (le)
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 uint32_t
 data_decoder::get_uint32_le ()
@@ -241,8 +241,8 @@ data_decoder::get_uint32_le ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode an uint32 (be)
-//! \return value
+// @brief Decode an uint32 (be)
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 uint32_t
 data_decoder::get_uint32_be ()
@@ -257,8 +257,8 @@ data_decoder::get_uint32_be ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode an uint64 (le)
-//! \return value
+// @brief Decode an uint64 (le)
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 uint64_t
 data_decoder::get_uint64_le ()
@@ -277,8 +277,8 @@ data_decoder::get_uint64_le ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode an uint64 (be)
-//! \return value
+// @brief Decode an uint64 (be)
+// @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 uint64_t
 data_decoder::get_uint64_be ()
@@ -297,8 +297,8 @@ data_decoder::get_uint64_be ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode HFS timestamp
-//! \return datetime object
+// @brief Decode HFS timestamp
+// @return datetime object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 data_decoder::get_hfs_datetime ()
@@ -313,8 +313,8 @@ data_decoder::get_hfs_datetime ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode ISO9660 timestamp
-//! \return datetime object
+// @brief Decode ISO9660 timestamp
+// @return datetime object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 data_decoder::get_iso9660_datetime ()
@@ -349,8 +349,8 @@ data_decoder::get_iso9660_datetime ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode NT timestamp
-//! \return datetime object
+// @brief Decode NT timestamp
+// @return datetime object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 data_decoder::get_nt_datetime ()
@@ -361,8 +361,8 @@ data_decoder::get_nt_datetime ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode UNIX timestamp
-//! \return datetime object
+// @brief Decode UNIX timestamp
+// @return datetime object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 data_decoder::get_unix_datetime ()
@@ -377,8 +377,8 @@ data_decoder::get_unix_datetime ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode FAT timestamp
-//! \return datetime object
+// @brief Decode FAT timestamp
+// @return datetime object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datetime::datetime
 data_decoder::get_fat_datetime ()
@@ -390,9 +390,9 @@ data_decoder::get_fat_datetime ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode bytearray by size
-//! \param size size in bytes
-//! \return bytearray
+// @brief Decode bytearray by size
+// @param size size in bytes
+// @return bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 data_decoder::get_bytearray_by_size (std::size_t size)
@@ -401,9 +401,9 @@ data_decoder::get_bytearray_by_size (std::size_t size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode bytearray as hex string
-//! \param size size in bytes
-//! \return string
+// @brief Decode bytearray as hex string
+// @param size size in bytes
+// @return string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 data_decoder::get_hex_string_by_size (std::size_t size)
@@ -412,9 +412,9 @@ data_decoder::get_hex_string_by_size (std::size_t size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode string by size
-//! \param size size in bytes
-//! \return string
+// @brief Decode string by size
+// @param size size in bytes
+// @return string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 data_decoder::get_string_by_size (std::size_t size, const std::string& encoding)
@@ -437,9 +437,9 @@ data_decoder::get_string_by_size (std::size_t size, const std::string& encoding)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode C '\0' terminated string
-//! \param encoding Encoding of original data
-//! \return string
+// @brief Decode C '\0' terminated string
+// @param encoding Encoding of original data
+// @return string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 data_decoder::get_c_string (const std::string& encoding)
@@ -486,8 +486,8 @@ data_decoder::get_c_string (const std::string& encoding)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode GUID
-//! \return GUID as formatted string
+// @brief Decode GUID
+// @return GUID as formatted string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 data_decoder::get_guid ()
@@ -507,8 +507,8 @@ data_decoder::get_guid ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode UUID
-//! \return UUID as formatted string
+// @brief Decode UUID
+// @return UUID as formatted string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 data_decoder::get_uuid ()
@@ -523,9 +523,9 @@ data_decoder::get_uuid ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode SID
-//! \return SID as formatted string
-//! \see https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/f992ad60-0fe4-4b87-9fed-beb478836861
+// @brief Decode SID
+// @return SID as formatted string
+// @see https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/f992ad60-0fe4-4b87-9fed-beb478836861
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 data_decoder::get_sid ()
@@ -549,8 +549,8 @@ data_decoder::get_sid ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode IPv4
-//! \return IPv4 as formatted string
+// @brief Decode IPv4
+// @return IPv4 as formatted string
 //! \deprecated Use either get_ipv4_le or get_ipv4_be
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
@@ -560,8 +560,8 @@ data_decoder::get_ipv4 ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode IPv4 (big endian)
-//! \return IPv4 as formatted string
+// @brief Decode IPv4 (big endian)
+// @return IPv4 as formatted string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 data_decoder::get_ipv4_be ()
@@ -575,8 +575,8 @@ data_decoder::get_ipv4_be ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode IPv4 (little endian)
-//! \return IPv4 as formatted string
+// @brief Decode IPv4 (little endian)
+// @return IPv4 as formatted string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 data_decoder::get_ipv4_le ()
@@ -590,9 +590,9 @@ data_decoder::get_ipv4_le ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode IPv6
-//! \return IPv6 as formatted string
-//! \see RFC 4291 - section 2.2.2
+// @brief Decode IPv6
+// @return IPv6 as formatted string
+// @see RFC 4291 - section 2.2.2
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 data_decoder::get_ipv6 ()
@@ -650,9 +650,9 @@ data_decoder::get_ipv6 ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode IPv6
-//! \return IPv6 as formatted string
-//! \see RFC 4291 - section 2.2.3
+// @brief Decode IPv6
+// @return IPv6 as formatted string
+// @see RFC 4291 - section 2.2.3
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 data_decoder::get_ipv4_mapped_ipv6 ()
@@ -721,3 +721,5 @@ data_decoder::get_ipv4_mapped_ipv6 ()
 }
 
 } // namespace mobius::decoder
+
+

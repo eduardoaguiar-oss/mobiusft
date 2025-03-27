@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file element.cc C++ API <i>mobius.decoder.xml.element</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pydict.h>
@@ -28,10 +28,10 @@
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_name</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Name
+// @brief <i>get_name</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_name (decoder_xml_element_o *self, PyObject *)
@@ -53,10 +53,10 @@ tp_f_get_name (decoder_xml_element_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_path</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Full path
+// @brief <i>get_path</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Full path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_path (decoder_xml_element_o *self, PyObject *)
@@ -78,10 +78,10 @@ tp_f_get_path (decoder_xml_element_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_content</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Text
+// @brief <i>get_content</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_content (decoder_xml_element_o *self, PyObject *)
@@ -103,10 +103,10 @@ tp_f_get_content (decoder_xml_element_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>has_property</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>has_property</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_has_property (decoder_xml_element_o *self, PyObject *args)
@@ -141,10 +141,10 @@ tp_f_has_property (decoder_xml_element_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_property</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Property value
+// @brief <i>get_property</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Property value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_property (decoder_xml_element_o *self, PyObject *args)
@@ -179,10 +179,10 @@ tp_f_get_property (decoder_xml_element_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_property_by_path</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Property value
+// @brief <i>get_property_by_path</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Property value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_property_by_path (decoder_xml_element_o *self, PyObject *args)
@@ -217,10 +217,10 @@ tp_f_get_property_by_path (decoder_xml_element_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_properties</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Properties
+// @brief <i>get_properties</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Properties
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_properties (decoder_xml_element_o *self, PyObject *)
@@ -244,10 +244,10 @@ tp_f_get_properties (decoder_xml_element_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_parent</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Parent element, if any
+// @brief <i>get_parent</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Parent element, if any
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_parent (decoder_xml_element_o *self, PyObject *)
@@ -269,10 +269,10 @@ tp_f_get_parent (decoder_xml_element_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_child_by_path</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return First element that matches a given path
+// @brief <i>get_child_by_path</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return First element that matches a given path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_child_by_path (decoder_xml_element_o *self, PyObject *args)
@@ -307,10 +307,10 @@ tp_f_get_child_by_path (decoder_xml_element_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_children</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Children elements
+// @brief <i>get_children</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Children elements
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_children (decoder_xml_element_o *self, PyObject *)
@@ -333,10 +333,10 @@ tp_f_get_children (decoder_xml_element_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_children_by_name</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Children elements
+// @brief <i>get_children_by_name</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Children elements
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_children_by_name (decoder_xml_element_o *self, PyObject *args)
@@ -372,10 +372,10 @@ tp_f_get_children_by_name (decoder_xml_element_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_children_by_path</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Children elements
+// @brief <i>get_children_by_path</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Children elements
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_children_by_path (decoder_xml_element_o *self, PyObject *args)
@@ -411,7 +411,7 @@ tp_f_get_children_by_path (decoder_xml_element_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -431,8 +431,8 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>element</i> deallocator
-//! \param self Object
+// @brief <i>element</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (decoder_xml_element_o *self)
@@ -442,7 +442,7 @@ tp_dealloc (decoder_xml_element_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyTypeObject decoder_xml_element_t =
 {
@@ -497,7 +497,7 @@ static PyTypeObject decoder_xml_element_t =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>mobius.decoder.xml.element</i> type
+// @brief Create <i>mobius.decoder.xml.element</i> type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
 new_decoder_xml_element_type ()
@@ -509,9 +509,9 @@ new_decoder_xml_element_type ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>element</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>element</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_decoder_xml_element_check (PyObject *value)
@@ -520,9 +520,9 @@ pymobius_decoder_xml_element_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>element</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New element object
+// @brief Create <i>element</i> Python object from C++ object
+// @param obj C++ object
+// @return New element object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_decoder_xml_element_to_pyobject (const mobius::decoder::xml::element& obj)
@@ -531,12 +531,14 @@ pymobius_decoder_xml_element_to_pyobject (const mobius::decoder::xml::element& o
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>element</i> C++ object from Python object
-//! \param value Python value
-//! \return Element object
+// @brief Create <i>element</i> C++ object from Python object
+// @param value Python value
+// @return Element object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::decoder::xml::element
 pymobius_decoder_xml_element_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <decoder_xml_element_o> (value, &decoder_xml_element_t);
 }
+
+

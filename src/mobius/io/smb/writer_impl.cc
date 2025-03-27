@@ -22,16 +22,12 @@
 #include <libsmbclient.h>
 #include <fcntl.h>
 
-namespace mobius
-{
-namespace io
-{
-namespace smb
+namespace mobius::io::smb
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param url URL to SMB file
-//! \param overwrite Overwrite flag
+// @brief Constructor
+// @param url URL to SMB file
+// @param overwrite Overwrite flag
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl::writer_impl (const std::string& url, bool overwrite)
 {
@@ -47,7 +43,7 @@ writer_impl::writer_impl (const std::string& url, bool overwrite)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Destructor
+// @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl::~writer_impl ()
 {
@@ -56,9 +52,9 @@ writer_impl::~writer_impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set writing position
-//! \param offset Offset in bytes
-//! \param w Either beginning, current or end
+// @brief Set writing position
+// @param offset Offset in bytes
+// @param w Either beginning, current or end
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 writer_impl::seek (offset_type offset, whence_type w)
@@ -79,8 +75,8 @@ writer_impl::seek (offset_type offset, whence_type w)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get writing position
-//! \return Writing position in bytes from the beginning of data
+// @brief Get writing position
+// @return Writing position in bytes from the beginning of data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl::offset_type
 writer_impl::tell () const
@@ -89,14 +85,14 @@ writer_impl::tell () const
 
   if (off < 0)
     throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
-  
+
   return off;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Write data to writer
-//! \param data Data
-//! \return Number of bytes written
+// @brief Write data to writer
+// @param data Data
+// @return Number of bytes written
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl::size_type
 writer_impl::write (const mobius::bytearray& data)
@@ -113,13 +109,13 @@ writer_impl::write (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Flush data to file
+// @brief Flush data to file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 writer_impl::flush ()
 {
 }
 
-} // namespace smb
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io::smb
+
+

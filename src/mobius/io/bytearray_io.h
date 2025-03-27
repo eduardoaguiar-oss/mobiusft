@@ -29,3 +29,5 @@ writer new_bytearray_writer (bytearray&);
 } // namespace mobius::io
 
 #endif
+
+

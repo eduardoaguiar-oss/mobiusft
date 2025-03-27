@@ -25,8 +25,8 @@
 namespace mobius::vfs::tsk
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Initialize object
-//! \param fp fs_file object
+// @brief Initialize object
+// @param fp fs_file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_impl::file_impl (const fs_file& fp)
   : fs_file_ (fp)
@@ -34,8 +34,8 @@ file_impl::file_impl (const fs_file& fp)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get file type
-//! \return File type
+// @brief Get file type
+// @return File type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_impl::type
 file_impl::get_type () const
@@ -47,8 +47,8 @@ file_impl::get_type () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get user name
-//! \return User name
+// @brief Get user name
+// @return User name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 file_impl::get_user_name () const
@@ -60,8 +60,8 @@ file_impl::get_user_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get group name
-//! \return Group name
+// @brief Get group name
+// @return Group name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 file_impl::get_group_name () const
@@ -73,8 +73,8 @@ file_impl::get_group_name () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if file is hidden
-//! \return true/false
+// @brief Check if file is hidden
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 file_impl::is_hidden () const
@@ -86,8 +86,8 @@ file_impl::is_hidden () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get parent folder
-//! \return Parent folder
+// @brief Get parent folder
+// @return Parent folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_impl::folder_type
 file_impl::get_parent () const
@@ -96,12 +96,12 @@ file_impl::get_parent () const
 
   if (parent)
     return std::make_shared <folder_impl> (parent);
-  
+
   return std::make_shared <mobius::io::folder_impl_null> ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove file
+// @brief Remove file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 file_impl::remove ()
@@ -110,8 +110,8 @@ file_impl::remove ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Rename file
-//! \param filename New filename
+// @brief Rename file
+// @param filename New filename
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 file_impl::rename (const std::string&)
@@ -120,9 +120,9 @@ file_impl::rename (const std::string&)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Move file
-//! \param f File implementation pointer
-//! \return <b>true</b> if file has been moved, <b>false</b> otherwise
+// @brief Move file
+// @param f File implementation pointer
+// @return <b>true</b> if file has been moved, <b>false</b> otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 file_impl::move (file_type)
@@ -131,8 +131,8 @@ file_impl::move (file_type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create a reader for file
-//! \return Pointer to a new created reader
+// @brief Create a reader for file
+// @return Pointer to a new created reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_impl::reader_type
 file_impl::new_reader () const
@@ -144,9 +144,9 @@ file_impl::new_reader () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create a writer for file
-//! \param overwite true/false to wipe file content
-//! \return Pointer to a new created writer
+// @brief Create a writer for file
+// @param overwite true/false to wipe file content
+// @return Pointer to a new created writer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_impl::writer_type
 file_impl::new_writer (bool) const
@@ -155,3 +155,5 @@ file_impl::new_writer (bool) const
 }
 
 } // namespace mobius::vfs::tsk
+
+

@@ -24,7 +24,7 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief show usage text
+// @brief show usage text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 usage ()
@@ -36,8 +36,8 @@ usage ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Show CXMLElement data
-//! \param indent Number of indentation tabs
+// @brief Show CXMLElement data
+// @param indent Number of indentation tabs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 show_cxmlelement (const mobius::extension::app::shareaza::CXMLElement& e, int indent)
@@ -61,8 +61,8 @@ show_cxmlelement (const mobius::extension::app::shareaza::CXMLElement& e, int in
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Show CDownloadSource data
-//! \param indent Number of indentation tabs
+// @brief Show CDownloadSource data
+// @param indent Number of indentation tabs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 show_cdownloadsource (const mobius::extension::app::shareaza::CDownloadSource& s, int indent)
@@ -104,8 +104,8 @@ show_cdownloadsource (const mobius::extension::app::shareaza::CDownloadSource& s
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Show CBTInfo data
-//! \param indent Number of indentation tabs
+// @brief Show CBTInfo data
+// @param indent Number of indentation tabs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 show_cbtinfo (const mobius::extension::app::shareaza::CBTInfo& bt, int indent)
@@ -163,8 +163,8 @@ show_cbtinfo (const mobius::extension::app::shareaza::CBTInfo& bt, int indent)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Show Shareaza .sd file info
-//! \param path .sd path
+// @brief Show Shareaza .sd file info
+// @param path .sd path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 show_sd (const std::string& path)
@@ -231,7 +231,7 @@ show_sd (const std::string& path)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief main function
+// @brief main function
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int
 main (int argc, char **argv)
@@ -290,3 +290,5 @@ main (int argc, char **argv)
 
   return EXIT_SUCCESS;
 }
+
+

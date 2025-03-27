@@ -21,13 +21,11 @@
 #include <sys/types.h>
 #include <string>
 
-namespace mobius
-{
-namespace system
+namespace mobius::system
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief system's group
-//! \author Eduardo Aguiar
+// @brief system's group
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class group
 {
@@ -42,8 +40,8 @@ public:
   std::string get_name () const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief check whether group is valid
-  //! \return true/false
+  // @brief check whether group is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   operator bool () const
   {
@@ -56,7 +54,8 @@ private:
   std::string name_;
 };
 
-} // namespace system
-} // namespace mobius
+} // namespace mobius::system
 
 #endif
+
+

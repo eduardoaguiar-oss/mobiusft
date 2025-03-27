@@ -22,7 +22,7 @@
 #include <mobius/io/text_writer.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief data structure
+// @brief data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_io_text_writer_to_pyobject (const mobius::io::text_writer&);
 mobius::io::text_writer pymobius_io_text_writer_from_pyobject (PyObject *);
 
 #endif
+
+

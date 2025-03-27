@@ -24,7 +24,7 @@ namespace
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-//! \brief Shareaza 2.7.10.2
+// @brief Shareaza 2.7.10.2
 static constexpr int SER_VERSION = 8;
 
 } // namespace
@@ -32,8 +32,8 @@ static constexpr int SER_VERSION = 8;
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode CQuerySearch structure
-//! \see QuerySearch.cpp - CQuerySearch::Serialize
+// @brief Decode CQuerySearch structure
+// @see QuerySearch.cpp - CQuerySearch::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 CQuerySearch::decode (mobius::decoder::mfc& decoder)
@@ -86,3 +86,7 @@ CQuerySearch::decode (mobius::decoder::mfc& decoder)
 }
 
 } // namespace mobius::extension::app::shareaza
+
+
+
+

@@ -30,13 +30,13 @@ namespace mobius::database
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief main thread ID
+// @brief main thread ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::thread::id main_thread_id = std::this_thread::get_id ();
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Implementation class for connection_pool
+// @brief Implementation class for connection_pool
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class connection_pool::impl
 {
@@ -58,23 +58,23 @@ public:
   void release ();
 
 private:
-  //! \brief database file path
+  // @brief database file path
   std::string path_;
 
-  //! \brief max connections for this pool
+  // @brief max connections for this pool
   unsigned int max_ = 32;
 
-  //! \brief pool mutex
+  // @brief pool mutex
   std::mutex mutex_;
 
-  //! \brief pool of database objects
+  // @brief pool of database objects
   std::unordered_map <std::thread::id, database> pool_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param path Database path
-//! \param max Maximum number of simultaneous connections
+// @brief Constructor
+// @param path Database path
+// @param max Maximum number of simultaneous connections
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 connection_pool::impl::impl (const std::string& path, unsigned int max)
   : path_ (path), max_ (max)
@@ -82,8 +82,8 @@ connection_pool::impl::impl (const std::string& path, unsigned int max)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set database path
-//! \param path Database path
+// @brief Set database path
+// @param path Database path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 connection_pool::impl::set_path (const std::string& path)
@@ -95,8 +95,8 @@ connection_pool::impl::set_path (const std::string& path)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get database object
-//! \return Database object
+// @brief Get database object
+// @return Database object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 database
 connection_pool::impl::get_database ()
@@ -122,8 +122,8 @@ connection_pool::impl::get_database ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Acquire a connection
-//! \return A connection object for this thread
+// @brief Acquire a connection
+// @return A connection object for this thread
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 connection_pool::impl::acquire ()
@@ -154,7 +154,7 @@ connection_pool::impl::acquire ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Release connection
+// @brief Release connection
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 connection_pool::impl::release ()
@@ -170,7 +170,7 @@ connection_pool::impl::release ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 connection_pool::connection_pool ()
   : impl_ (std::make_shared <impl> ())
@@ -178,9 +178,9 @@ connection_pool::connection_pool ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create connection_pool object
-//! \param path database file path
-//! \param max maximum number of connections opened
+// @brief Create connection_pool object
+// @param path database file path
+// @param max maximum number of connections opened
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 connection_pool::connection_pool (
   const std::string& path,
@@ -190,8 +190,8 @@ connection_pool::connection_pool (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set database path
-//! \param path database file path
+// @brief Set database path
+// @param path database file path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 connection_pool::set_path (const std::string& path)
@@ -200,8 +200,8 @@ connection_pool::set_path (const std::string& path)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Acquire a connection
-//! \return A connection object for this thread
+// @brief Acquire a connection
+// @return A connection object for this thread
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 connection
 connection_pool::acquire ()
@@ -211,8 +211,8 @@ connection_pool::acquire ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get database
-//! \return Database object
+// @brief Get database
+// @return Database object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 database
 connection_pool::get_database () const
@@ -221,7 +221,7 @@ connection_pool::get_database () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Release connection
+// @brief Release connection
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 connection_pool::release ()
@@ -230,3 +230,5 @@ connection_pool::release ()
 }
 
 } // namespace mobius::database
+
+

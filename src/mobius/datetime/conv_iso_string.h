@@ -23,16 +23,15 @@
 #include <mobius/datetime/datetime.h>
 #include <string>
 
-namespace mobius
-{
-namespace datetime
+namespace mobius::datetime
 {
 std::string date_to_iso_string (const date&);
 std::string time_to_iso_string (const time&);
 std::string datetime_to_iso_string (const datetime&);
 datetime new_datetime_from_iso_string (const std::string&);
 
-} // namespace datetime
-} // namespace mobius
+} // namespace mobius::datetime
 
 #endif
+
+

@@ -26,8 +26,8 @@
 namespace mobius::core::file_decoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>decoder</i> implementation base class
-//! \author Eduardo Aguiar
+// @brief <i>decoder</i> implementation base class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class decoder_impl_base
 {
@@ -61,3 +61,5 @@ public:
 } // namespace mobius::core::file_decoder
 
 #endif
+
+

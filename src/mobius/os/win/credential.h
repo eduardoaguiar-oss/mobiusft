@@ -27,15 +27,11 @@
 #include <utility>
 #include <vector>
 
-namespace mobius
-{
-namespace os
-{
-namespace win
+namespace mobius::os::win
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief credential class
-//! \author Eduardo Aguiar
+// @brief credential class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class credential
 {
@@ -65,15 +61,15 @@ public:
   std::vector <std::pair <std::string, mobius::bytearray>> get_data () const;
 
 private:
-  //! \brief Implementation class forward declaration
+  // @brief Implementation class forward declaration
   class impl;
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
-} // namespace win
-} // namespace os
-} // namespace mobius
+} // namespace mobius::os::win
 
 #endif
+
+

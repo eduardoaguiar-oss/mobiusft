@@ -22,9 +22,9 @@
 namespace mobius::os::win
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Generate NT hash
-//! \param password Password
-//! \return NT hash
+// @brief Generate NT hash
+// @param password Password
+// @return NT hash
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 hash_nt (const std::string& password)
@@ -35,3 +35,5 @@ hash_nt (const std::string& password)
 }
 
 } // namespace mobius::os::win
+
+

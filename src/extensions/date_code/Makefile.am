@@ -1,9 +1,22 @@
-date_codedir = $(datadir)/$(PACKAGE)/extensions
-date_code_LTLIBRARIES = date_code.la
+.PHONY: all cmake-clean cmake-install
 
-date_code_la_CXXFLAGS = -I$(top_srcdir)/src
+all:
+	mkdir -p build
+	cd build && cmake .. -DCMAKE_INSTALL_PREFIX=$(prefix)
+	+cd build && make
 
-date_code_la_SOURCES =						\
-	main.cc	
+cmake-clean:
+	rm -rf build
 
-date_code_la_LDFLAGS = -module -avoid-version -shared -L$(top_srcdir)/src/mobius -lmobius
+cmake-install:
+	+cd build && make install
+
+# Hook into Automake's standard targets
+clean-local: cmake-clean
+
+install-exec-local: cmake-install
+
+# Include CMakeLists.txt and source files in the distribution
+EXTRA_DIST =				\
+	CMakeLists.txt			\
+	main.cpp

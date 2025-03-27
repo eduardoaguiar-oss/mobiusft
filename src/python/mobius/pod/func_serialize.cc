@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API mobius.pod module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API mobius.pod module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pygil.h>
@@ -29,9 +29,9 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Serialize data to bytearray
-//! \param args argument list
-//! \return Python object
+// @brief Serialize data to bytearray
+// @param args argument list
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 _serialize_to_bytearray (PyObject *args)
@@ -40,28 +40,28 @@ _serialize_to_bytearray (PyObject *args)
   mobius::pod::data arg_data;
 
   try
-    { 
+    {
       arg_data = mobius::py::get_arg_as_cpp (args, 0, pymobius_pod_data_from_pyobject);
     }
   catch (const std::exception& e)
-    { 
+    {
       mobius::py::set_invalid_type_error (e.what ());
       return nullptr;
     }
-    
+
   // execute C++ code
   PyObject *ret = nullptr;
-  
+
   try
     {
       ret = mobius::py::pybytes_from_bytearray (
                mobius::py::GIL () (
                   mobius::pod::serialize (arg_data)
-               ) 
+               )
             );
     }
   catch (const std::exception& e)
-    { 
+    {
       mobius::py::set_runtime_error (e.what ());
     }
 
@@ -69,9 +69,9 @@ _serialize_to_bytearray (PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Serialize data to writer
-//! \param args argument list
-//! \return Python object
+// @brief Serialize data to writer
+// @param args argument list
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 _serialize_to_writer (PyObject *args)
@@ -81,19 +81,19 @@ _serialize_to_writer (PyObject *args)
   mobius::pod::data arg_data;
 
   try
-    { 
+    {
       arg_writer = mobius::py::get_arg_as_cpp (args, 0, pymobius_io_writer_from_pyobject);
       arg_data = mobius::py::get_arg_as_cpp (args, 1, pymobius_pod_data_from_pyobject);
     }
   catch (const std::exception& e)
-    { 
+    {
       mobius::py::set_invalid_type_error (e.what ());
       return nullptr;
     }
-    
+
   // execute C++ code
   PyObject *ret = nullptr;
-  
+
   try
     {
       {
@@ -103,7 +103,7 @@ _serialize_to_writer (PyObject *args)
       ret = mobius::py::pynone ();
     }
   catch (const std::exception& e)
-    { 
+    {
       mobius::py::set_runtime_error (e.what ());
     }
 
@@ -113,26 +113,28 @@ _serialize_to_writer (PyObject *args)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <b>mobius.pod.serialize</b> function
-//! \param self function object
-//! \param args argument list
-//! \return Python object
+// @brief <b>mobius.pod.serialize</b> function
+// @param self function object
+// @param args argument list
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_pod_serialize (PyObject *, PyObject *args)
 {
   PyObject *ret = nullptr;
-  
+
   auto arg_size = mobius::py::get_arg_size (args);
 
   if (arg_size == 1)
     ret = _serialize_to_bytearray (args);
-  
+
   else if (arg_size == 2)
     ret = _serialize_to_writer (args);
-  
+
   else
     mobius::py::set_invalid_type_error (mobius::MOBIUS_EXCEPTION_MSG ("invalid number of arguments").c_str ());
-  
+
   return ret;
 }
+
+

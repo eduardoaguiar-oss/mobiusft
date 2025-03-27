@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file item.cc C++ API <i>mobius.model.item</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pycallback.h>
@@ -39,9 +39,9 @@
 #include <mobius/crypt/hash.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>uid</i> attribute getter
-//! \param self object
-//! \return <i>uid</i> attribute
+// @brief <i>uid</i> attribute getter
+// @param self object
+// @return <i>uid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_uid (model_item_o *self)
@@ -61,9 +61,9 @@ tp_getter_uid (model_item_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>category</i> attribute getter
-//! \param self object
-//! \return <i>category</i> attribute
+// @brief <i>category</i> attribute getter
+// @param self object
+// @return <i>category</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_category (model_item_o *self)
@@ -83,9 +83,9 @@ tp_getter_category (model_item_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>case</i> attribute getter
-//! \param self object
-//! \return <i>case</i> attribute
+// @brief <i>case</i> attribute getter
+// @param self object
+// @return <i>case</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_case (model_item_o *self)
@@ -105,7 +105,7 @@ tp_getter_case (model_item_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Getters and setters structure
+// @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -116,10 +116,10 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_child_count</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return true/false
+// @brief <i>get_child_count</i> method implementation
+// @param self object
+// @param args argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_child_count (model_item_o *self, PyObject *)
@@ -141,10 +141,10 @@ tp_f_get_child_count (model_item_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_children</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return children
+// @brief <i>get_children</i> method implementation
+// @param self object
+// @param args argument list
+// @return children
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_children (model_item_o *self, PyObject *)
@@ -167,10 +167,10 @@ tp_f_get_children (model_item_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_parent</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return parent, if exists
+// @brief <i>get_parent</i> method implementation
+// @param self object
+// @param args argument list
+// @return parent, if exists
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_parent (model_item_o *self, PyObject *)
@@ -192,10 +192,10 @@ tp_f_get_parent (model_item_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>new_child</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return new item
+// @brief <i>new_child</i> method implementation
+// @param self object
+// @param args argument list
+// @return new item
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_new_child (model_item_o *self, PyObject *args)
@@ -231,9 +231,9 @@ tp_f_new_child (model_item_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>remove</i> method implementation
-//! \param self object
-//! \param args argument list
+// @brief <i>remove</i> method implementation
+// @param self object
+// @param args argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_remove (model_item_o *self, PyObject *)
@@ -254,9 +254,9 @@ tp_f_remove (model_item_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>move</i> method implementation
-//! \param self object
-//! \param args argument list
+// @brief <i>move</i> method implementation
+// @param self object
+// @param args argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_move (model_item_o *self, PyObject *args)
@@ -293,9 +293,9 @@ tp_f_move (model_item_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>expand_masks</i> method implementation
-//! \param self object
-//! \param args argument list
+// @brief <i>expand_masks</i> method implementation
+// @param self object
+// @param args argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_expand_masks (model_item_o *self, PyObject *)
@@ -316,10 +316,10 @@ tp_f_expand_masks (model_item_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_data_path</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return full path
+// @brief <i>get_data_path</i> method implementation
+// @param self object
+// @param args argument list
+// @return full path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_data_path (model_item_o *self, PyObject *args)
@@ -354,10 +354,10 @@ tp_f_get_data_path (model_item_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>create_data_path</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return full path
+// @brief <i>create_data_path</i> method implementation
+// @param self object
+// @param args argument list
+// @return full path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_create_data_path (model_item_o *self, PyObject *args)
@@ -392,10 +392,10 @@ tp_f_create_data_path (model_item_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>has_attribute</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return true/false
+// @brief <i>has_attribute</i> method implementation
+// @param self object
+// @param args argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_has_attribute (model_item_o *self, PyObject *args)
@@ -429,10 +429,10 @@ tp_f_has_attribute (model_item_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_attribute</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return attribute value
+// @brief <i>get_attribute</i> method implementation
+// @param self object
+// @param args argument list
+// @return attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_attribute (model_item_o *self, PyObject *args)
@@ -466,9 +466,9 @@ tp_f_get_attribute (model_item_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_attribute</i> method implementation
-//! \param self object
-//! \param args argument list
+// @brief <i>set_attribute</i> method implementation
+// @param self object
+// @param args argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_attribute (model_item_o *self, PyObject *args)
@@ -505,9 +505,9 @@ tp_f_set_attribute (model_item_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>remove_attribute</i> method implementation
-//! \param self object
-//! \param args argument list
+// @brief <i>remove_attribute</i> method implementation
+// @param self object
+// @param args argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_remove_attribute (model_item_o *self, PyObject *args)
@@ -542,10 +542,10 @@ tp_f_remove_attribute (model_item_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_attributes</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return map containing attributes' IDs and values
+// @brief <i>get_attributes</i> method implementation
+// @param self object
+// @param args argument list
+// @return map containing attributes' IDs and values
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_attributes (model_item_o *self, PyObject *)
@@ -569,10 +569,10 @@ tp_f_get_attributes (model_item_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>has_datasource</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>has_datasource</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_has_datasource (model_item_o *self, PyObject *)
@@ -594,10 +594,10 @@ tp_f_has_datasource (model_item_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_datasource</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Datasource object
+// @brief <i>get_datasource</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Datasource object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_datasource (model_item_o *self, PyObject *)
@@ -619,9 +619,9 @@ tp_f_get_datasource (model_item_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_datasource</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_datasource</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_datasource (model_item_o *self, PyObject *args)
@@ -655,9 +655,9 @@ tp_f_set_datasource (model_item_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>remove_datasource</i> method implementation
-//! \param self object
-//! \param args argument list
+// @brief <i>remove_datasource</i> method implementation
+// @param self object
+// @param args argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_remove_datasource (model_item_o *self, PyObject *)
@@ -679,10 +679,10 @@ tp_f_remove_datasource (model_item_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>has_ant</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return true/false
+// @brief <i>has_ant</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_has_ant (model_item_o *self, PyObject *args)
@@ -717,9 +717,9 @@ tp_f_has_ant (model_item_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>set_ant</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>set_ant</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_set_ant (model_item_o *self, PyObject *args)
@@ -758,9 +758,9 @@ tp_f_set_ant (model_item_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>reset_ant</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>reset_ant</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_reset_ant (model_item_o *self, PyObject *args)
@@ -795,9 +795,9 @@ tp_f_reset_ant (model_item_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>remove_ants</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>remove_ants</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_remove_ants (model_item_o *self, PyObject *)
@@ -819,10 +819,10 @@ tp_f_remove_ants (model_item_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_ants</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Executed ANTs
+// @brief <i>get_ants</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Executed ANTs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_ants (model_item_o *self, PyObject *)
@@ -845,10 +845,10 @@ tp_f_get_ants (model_item_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>new_evidence</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return New evidence object
+// @brief <i>new_evidence</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return New evidence object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_new_evidence (model_item_o *self, PyObject *args)
@@ -883,10 +883,10 @@ tp_f_new_evidence (model_item_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>add_evidence</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return New evidence object
+// @brief <i>add_evidence</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return New evidence object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_add_evidence (model_item_o *self, PyObject *args)
@@ -922,10 +922,10 @@ tp_f_add_evidence (model_item_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_evidences</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return None
+// @brief <i>get_evidences</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return None
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_evidences (model_item_o *self, PyObject *args)
@@ -961,9 +961,9 @@ tp_f_get_evidences (model_item_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>remove_evidences</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>remove_evidences</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_remove_evidences (model_item_o *self, PyObject *args)
@@ -1002,9 +1002,9 @@ tp_f_remove_evidences (model_item_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>count_evidences</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>count_evidences</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_count_evidences (model_item_o *self, PyObject *args)
@@ -1046,9 +1046,9 @@ tp_f_count_evidences (model_item_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>add_event</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>add_event</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_add_event (model_item_o *self, PyObject *args)
@@ -1082,10 +1082,10 @@ tp_f_add_event (model_item_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_events</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Events
+// @brief <i>get_events</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Events
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_events (model_item_o *self, PyObject *)
@@ -1108,10 +1108,10 @@ tp_f_get_events (model_item_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>new_connection</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return new transaction object
+// @brief <i>new_connection</i> method implementation
+// @param self object
+// @param args argument list
+// @return new transaction object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_new_connection (model_item_o *self, PyObject *)
@@ -1133,10 +1133,10 @@ tp_f_new_connection (model_item_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>new_transaction</i> method implementation
-//! \param self object
-//! \param args argument list
-//! \return new transaction object
+// @brief <i>new_transaction</i> method implementation
+// @param self object
+// @param args argument list
+// @return new transaction object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_new_transaction (model_item_o *self, PyObject *)
@@ -1158,7 +1158,7 @@ tp_f_new_transaction (model_item_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -1198,11 +1198,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>item</i> constructor
-//! \param type type object
-//! \param args argument list
-//! \param kwds keywords dict
-//! \return new <i>item</i> object
+// @brief <i>item</i> constructor
+// @param type type object
+// @param args argument list
+// @param kwds keywords dict
+// @return new <i>item</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *, PyObject *)
@@ -1216,8 +1216,8 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>item</i> deallocator
-//! \param self object
+// @brief <i>item</i> deallocator
+// @param self object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (model_item_o *self)
@@ -1227,10 +1227,10 @@ tp_dealloc (model_item_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>item</i> getattro
-//! \param o Object
-//! \param name Attribute name
-//! \return Attribute value
+// @brief <i>item</i> getattro
+// @param o Object
+// @param name Attribute name
+// @return Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getattro (PyObject *o, PyObject *name)
@@ -1267,11 +1267,11 @@ tp_getattro (PyObject *o, PyObject *name)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>item</i> setattro
-//! \param o Object
-//! \param name Attribute name
-//! \param value Attribute value
-//! \return 0 if success, -1 if error
+// @brief <i>item</i> setattro
+// @param o Object
+// @param name Attribute name
+// @param value Attribute value
+// @return 0 if success, -1 if error
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static int
 tp_setattro (PyObject *o, PyObject *name, PyObject *value)
@@ -1321,11 +1321,11 @@ tp_setattro (PyObject *o, PyObject *name, PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>item</i> tp_richcompare
-//! \param py_a Item Object
-//! \param py_b Item Object
-//! \param op Operation
-//! \return Either Py_True or Py_False
+// @brief <i>item</i> tp_richcompare
+// @param py_a Item Object
+// @param py_b Item Object
+// @param op Operation
+// @return Either Py_True or Py_False
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_richcompare (PyObject *py_a, PyObject *py_b, int op)
@@ -1375,9 +1375,9 @@ tp_richcompare (PyObject *py_a, PyObject *py_b, int op)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>item</i> tp_hash
-//! \param self Item Object
-//! \return Item hash
+// @brief <i>item</i> tp_hash
+// @param self Item Object
+// @return Item hash
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static Py_hash_t
 tp_hash (model_item_o *self)
@@ -1391,7 +1391,7 @@ tp_hash (model_item_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject model_item_t =
 {
@@ -1446,7 +1446,7 @@ PyTypeObject model_item_t =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>mobius.model.item</i> type
+// @brief Create <i>mobius.model.item</i> type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
 new_model_item_type ()
@@ -1458,9 +1458,9 @@ new_model_item_type ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>item</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>item</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_model_item_check (PyObject *value)
@@ -1469,9 +1469,9 @@ pymobius_model_item_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>item</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New item object
+// @brief Create <i>item</i> Python object from C++ object
+// @param obj C++ object
+// @return New item object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_model_item_to_pyobject (const mobius::model::item& obj)
@@ -1480,9 +1480,9 @@ pymobius_model_item_to_pyobject (const mobius::model::item& obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>item</i> C++ object from Python object
-//! \param value Python value
-//! \return Item object
+// @brief Create <i>item</i> C++ object from Python object
+// @param value Python value
+// @return Item object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::model::item
 pymobius_model_item_from_pyobject (PyObject *value)
@@ -1493,7 +1493,7 @@ pymobius_model_item_from_pyobject (PyObject *value)
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <b>attribute-modified</b> event callback
+// @brief <b>attribute-modified</b> event callback
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class attribute_modified_callback
 {
@@ -1525,7 +1525,7 @@ private:
 mobius::py::callback <attribute_modified_callback> cb_1_ ("attribute-modified");
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <b>attribute-removed</b> event callback
+// @brief <b>attribute-removed</b> event callback
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class attribute_removed_callback
 {
@@ -1555,7 +1555,7 @@ private:
 mobius::py::callback <attribute_removed_callback> cb_2_ ("attribute-removed");
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <b>datasource-modified</b> event callback
+// @brief <b>datasource-modified</b> event callback
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class datasource_modified_callback
 {
@@ -1583,7 +1583,7 @@ private:
 mobius::py::callback <datasource_modified_callback> cb_3_ ("datasource-modified");
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <b>datasource-removed</b> event callback
+// @brief <b>datasource-removed</b> event callback
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class datasource_removed_callback
 {
@@ -1609,3 +1609,5 @@ private:
 mobius::py::callback <datasource_removed_callback> cb_4_ ("datasource-removed");
 
 } // namespace
+
+

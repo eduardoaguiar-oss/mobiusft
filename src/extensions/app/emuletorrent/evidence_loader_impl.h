@@ -27,7 +27,7 @@
 namespace mobius::extension::app::emuletorrent
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief EmuleTorrent account
+// @brief EmuleTorrent account
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct account
 {
@@ -43,7 +43,7 @@ struct account
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remote source (another users sharing file)
+// @brief Remote source (another users sharing file)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct remote_source
 {
@@ -53,7 +53,7 @@ struct remote_source
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief File
+// @brief File
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct file
 {
@@ -90,8 +90,8 @@ struct file
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>EmuleTorrent evidence_loader</i> implementation class
-//! \author Eduardo Aguiar
+// @brief <i>EmuleTorrent evidence_loader</i> implementation class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
 {
@@ -102,8 +102,8 @@ public:
   explicit evidence_loader_impl (const mobius::model::item&, scan_type);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Check if object is valid
-  //! \return true/false
+  // @brief Check if object is valid
+  // @return true/false
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit operator bool () const noexcept final
   {
@@ -111,8 +111,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get evidence_loader type
-  //! \return Type as string
+  // @brief Get evidence_loader type
+  // @return Type as string
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_type () const final
@@ -126,22 +126,22 @@ public:
   void run () final;
 
 private:
-  //! \brief Case item
+  // @brief Case item
   mobius::model::item item_;
 
-  //! \brief Scan type
+  // @brief Scan type
   scan_type scan_type_;
 
-  //! \brief User name
+  // @brief User name
   std::string username_;
 
-  //! \brief Account data
+  // @brief Account data
   account account_;
 
-  //! \brief All accounts found
+  // @brief All accounts found
   std::vector <account> accounts_;
 
-  //! \brief File catalog
+  // @brief File catalog
   std::vector <file> files_;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -172,3 +172,7 @@ private:
 } // namespace mobius::extension::app::emuletorrent
 
 #endif
+
+
+
+

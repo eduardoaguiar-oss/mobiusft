@@ -25,14 +25,14 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Internal variables and constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Mininum libgcrypt version needed
+// @brief Mininum libgcrypt version needed
 static constexpr const char *LIBGCRYPT_MIN_VERSION = "1.9.0";
 
-//! \brief Is libgcrypt initialized?
+// @brief Is libgcrypt initialized?
 static std::once_flag is_libgcrypt_initialized_;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Initialize libgcrypt
+// @brief Initialize libgcrypt
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 _init_libgcrypt ()
@@ -49,7 +49,7 @@ _init_libgcrypt ()
 namespace mobius::crypt::gcrypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Initialize libgcrypt
+// @brief Initialize libgcrypt
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 init ()
@@ -61,9 +61,9 @@ init ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get libgcrypt error message
-//! \param err Error number
-//! \return Error message
+// @brief Get libgcrypt error message
+// @param err Error number
+// @return Error message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 get_error_message (gcry_error_t err)
@@ -77,3 +77,4 @@ get_error_message (gcry_error_t err)
 }
 
 } // namespace mobius::crypt::gcrypt
+

@@ -37,9 +37,9 @@ static mobius::pod::data _decode_string (mobius::io::sequential_reader_adaptor&)
 static mobius::pod::data _decode_integer (mobius::io::sequential_reader_adaptor&);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode btencode data, according to type
-//! \param adaptor Reader adaptor object
-//! \return Pod object
+// @brief Decode btencode data, according to type
+// @param adaptor Reader adaptor object
+// @return Pod object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::pod::data
 _decode_data (mobius::io::sequential_reader_adaptor& adaptor)
@@ -69,9 +69,9 @@ _decode_data (mobius::io::sequential_reader_adaptor& adaptor)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode dict object
-//! \param adaptor sequential_reader_adaptor object
-//! \return Dict object
+// @brief Decode dict object
+// @param adaptor sequential_reader_adaptor object
+// @return Dict object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::pod::map
 _decode_dict (mobius::io::sequential_reader_adaptor& adaptor)
@@ -94,9 +94,9 @@ _decode_dict (mobius::io::sequential_reader_adaptor& adaptor)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode list object
-//! \param adaptor sequential_reader_adaptor object
-//! \return Vector
+// @brief Decode list object
+// @param adaptor sequential_reader_adaptor object
+// @return Vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::vector <mobius::pod::data>
 _decode_list (mobius::io::sequential_reader_adaptor& adaptor)
@@ -117,9 +117,9 @@ _decode_list (mobius::io::sequential_reader_adaptor& adaptor)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode string object
-//! \param adaptor sequential_reader_adaptor object
-//! \return Dict object
+// @brief Decode string object
+// @param adaptor sequential_reader_adaptor object
+// @return Dict object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::pod::data
 _decode_string (mobius::io::sequential_reader_adaptor& adaptor)
@@ -144,9 +144,9 @@ _decode_string (mobius::io::sequential_reader_adaptor& adaptor)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode integer object
-//! \param adaptor sequential_reader_adaptor object
-//! \return Integer as pod::data
+// @brief Decode integer object
+// @param adaptor sequential_reader_adaptor object
+// @return Integer as pod::data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::pod::data
 _decode_integer (mobius::io::sequential_reader_adaptor& adaptor)
@@ -171,9 +171,9 @@ _decode_integer (mobius::io::sequential_reader_adaptor& adaptor)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode btencode data
-//! \param reader Reader object
-//! \return Pod object
+// @brief Decode btencode data
+// @param reader Reader object
+// @return Pod object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 btencode (const mobius::io::reader& reader)
@@ -183,9 +183,9 @@ btencode (const mobius::io::reader& reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode btencode data
-//! \param data Data
-//! \return Pod object
+// @brief Decode btencode data
+// @param data Data
+// @return Pod object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 btencode (const mobius::bytearray& data)
@@ -194,3 +194,5 @@ btencode (const mobius::bytearray& data)
 }
 
 } // namespace mobius::decoder
+
+

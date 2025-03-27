@@ -22,7 +22,7 @@
 namespace mobius::core::file_decoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief metadata implementation class
+// @brief metadata implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class metadata::impl
 {
@@ -54,10 +54,10 @@ private:
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set metadata value
-//! \param group Group ID
-//! \param name Metadata name
-//! \param value Metadata value
+// @brief Set metadata value
+// @param group Group ID
+// @param name Metadata name
+// @param value Metadata value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 metadata::impl::set_value (const std::string& group, const std::string& name, const mobius::pod::data& value)
@@ -69,10 +69,10 @@ metadata::impl::set_value (const std::string& group, const std::string& name, co
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get metadata value
-//! \param group Group ID
-//! \param name Metadata name
-//! \return Metadata value
+// @brief Get metadata value
+// @param group Group ID
+// @param name Metadata name
+// @return Metadata value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 metadata::impl::get_value (const std::string& group, const std::string& name) const
@@ -88,8 +88,8 @@ metadata::impl::get_value (const std::string& group, const std::string& name) co
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get groups
-//! \return Groups IDs
+// @brief Get groups
+// @return Groups IDs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector<std::string>
 metadata::impl::get_groups () const
@@ -107,9 +107,9 @@ metadata::impl::get_groups () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get group metadata
-//! \param group_id Group ID
-//! \return Metadata
+// @brief Get group metadata
+// @param group_id Group ID
+// @return Metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 metadata::impl::get_group (const std::string& group_id) const
@@ -125,7 +125,7 @@ metadata::impl::get_group (const std::string& group_id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
+// @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 metadata::metadata ()
   : impl_ (std::make_shared <impl> ())
@@ -133,10 +133,10 @@ metadata::metadata ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set metadata value
-//! \param group Group ID
-//! \param name Metadata name
-//! \param value Metadata value
+// @brief Set metadata value
+// @param group Group ID
+// @param name Metadata name
+// @param value Metadata value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 metadata::set_value (const std::string& group, const std::string& name, const mobius::pod::data& value)
@@ -145,10 +145,10 @@ metadata::set_value (const std::string& group, const std::string& name, const mo
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get metadata value
-//! \param group Group ID
-//! \param name Metadata name
-//! \return Metadata value
+// @brief Get metadata value
+// @param group Group ID
+// @param name Metadata name
+// @return Metadata value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 metadata::get_value (const std::string& group, const std::string& name) const
@@ -157,8 +157,8 @@ metadata::get_value (const std::string& group, const std::string& name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get groups
-//! \return Groups IDs
+// @brief Get groups
+// @return Groups IDs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector<std::string>
 metadata::get_groups () const
@@ -167,9 +167,9 @@ metadata::get_groups () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get group metadata
-//! \param group Group ID
-//! \return Metadata
+// @brief Get group metadata
+// @param group Group ID
+// @return Metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 metadata::get_group (const std::string& group) const
@@ -178,3 +178,5 @@ metadata::get_group (const std::string& group) const
 }
 
 } // namespace mobius::core::file_decoder
+
+

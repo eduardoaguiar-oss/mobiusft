@@ -25,12 +25,12 @@ namespace mobius::os::win::registry
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief decrypt data using CTS AES-128 with CBC
-//! \param key AES key
-//! \param iv Initialization Vector
-//! \param ciphertext ciphertext
-//! \return plaintext
-//! \see https://en.wikipedia.org/wiki/Ciphertext_stealing
+// @brief decrypt data using CTS AES-128 with CBC
+// @param key AES key
+// @param iv Initialization Vector
+// @param ciphertext ciphertext
+// @return plaintext
+// @see https://en.wikipedia.org/wiki/Ciphertext_stealing
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray decrypt_cts_aes_128 (
   const mobius::bytearray& key,
@@ -73,9 +73,9 @@ mobius::bytearray decrypt_cts_aes_128 (
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
-//! \param nlkm NL$KM decrypted key
-//! \param encrypted_data value's encrypted data
+// @brief constructor
+// @param nlkm NL$KM decrypted key
+// @param encrypted_data value's encrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_data_impl_msdcc::registry_data_impl_msdcc (
   const mobius::bytearray& nlkm,
@@ -86,10 +86,10 @@ registry_data_impl_msdcc::registry_data_impl_msdcc (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief load data on demand
-//! \see http://moyix.blogspot.com.br/2008/02/cached-domain-credentials.html
-//! \see https://github.com/Neohapsis/creddump7/blob/master/framework/win32/domcachedump.py
-//! \see https://github.com/gentilkiwi/mimikatz
+// @brief load data on demand
+// @see http://moyix.blogspot.com.br/2008/02/cached-domain-credentials.html
+// @see https://github.com/Neohapsis/creddump7/blob/master/framework/win32/domcachedump.py
+// @see https://github.com/gentilkiwi/mimikatz
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry_data_impl_msdcc::_load_data () const
@@ -147,3 +147,5 @@ registry_data_impl_msdcc::_load_data () const
 }
 
 } // namespace mobius::os::win::registry
+
+

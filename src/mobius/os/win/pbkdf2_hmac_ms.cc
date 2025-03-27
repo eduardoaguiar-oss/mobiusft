@@ -23,12 +23,12 @@
 namespace mobius::os::win
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief PBKDF2 key derivation function (with HMAC) - MS version
-//! \param password password
-//! \param salt salt
-//! \param count iterations count
-//! \param dklen derived key length in bytes
-//! \param hash_id hash algorithm (e.g. "md2", "md5", "sha1", "sha2-256")
+// @brief PBKDF2 key derivation function (with HMAC) - MS version
+// @param password password
+// @param salt salt
+// @param count iterations count
+// @param dklen derived key length in bytes
+// @param hash_id hash algorithm (e.g. "md2", "md5", "sha1", "sha2-256")
 // This function implements MS version, which is not compatible with RFC 2898
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
@@ -78,3 +78,5 @@ pbkdf2_hmac_ms (
 }
 
 } // namespace mobius::os::win
+
+

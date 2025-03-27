@@ -18,12 +18,10 @@
 #include <mobius/io/writer.h>
 #include <mobius/io/writer_impl_null.h>
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create default writer
+// @brief create default writer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer::writer ()
   : impl_ (std::make_shared <writer_impl_null> ())
@@ -31,13 +29,14 @@ writer::writer ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief construct writer
-//! \param ptr smart pointer to a writer_impl_base object
+// @brief construct writer
+// @param ptr smart pointer to a writer_impl_base object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer::writer (std::shared_ptr <writer_impl_base> ptr)
   : impl_ (ptr), is_null_ (false)
 {
 }
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
+
+

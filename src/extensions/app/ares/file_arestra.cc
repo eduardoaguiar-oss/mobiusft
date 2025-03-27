@@ -24,8 +24,8 @@
 namespace mobius::extension::app::ares
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \see read_details_DB_Download@helper_download_disk.pas (line 722)
+// @brief Constructor
+// @see read_details_DB_Download@helper_download_disk.pas (line 722)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_arestra::file_arestra (const mobius::io::reader& reader)
 {
@@ -146,10 +146,10 @@ file_arestra::file_arestra (const mobius::io::reader& reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Populate entry metadata
-//! \param e Entry
-//! \param data Raw data
-//! \see read_details_DB_Download@helper_download_disk.pas
+// @brief Populate entry metadata
+// @param e Entry
+// @param data Raw data
+// @see read_details_DB_Download@helper_download_disk.pas
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 file_arestra::_populate_metadata (const mobius::bytearray& data)
@@ -184,3 +184,7 @@ file_arestra::_populate_metadata (const mobius::bytearray& data)
 }
 
 } // namespace mobius::extension::app::ares
+
+
+
+

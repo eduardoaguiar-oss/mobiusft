@@ -24,8 +24,8 @@
 namespace mobius::model
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Item event
-//! \author Eduardo Aguiar
+// @brief Item event
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class event
 {
@@ -37,7 +37,7 @@ public:
   event () noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get event timestamp
+  // @brief Get event timestamp
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::datetime::datetime
   get_timestamp () const
@@ -46,7 +46,7 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get event text
+  // @brief Get event text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_text () const
@@ -55,13 +55,15 @@ public:
   }
 
 private:
-  //! \brief Timestamp (date/time)
+  // @brief Timestamp (date/time)
   mobius::datetime::datetime timestamp_;
 
-  //! \brief Text
+  // @brief Text
   std::string text_;
 };
 
 } // namespace mobius::model
 
 #endif
+
+

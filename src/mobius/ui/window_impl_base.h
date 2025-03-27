@@ -28,8 +28,8 @@
 namespace mobius::ui
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>window</i> implementation base class
-//! \author Eduardo Aguiar
+// @brief <i>window</i> implementation base class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class window_impl_base
 {
@@ -73,3 +73,5 @@ public:
 } // namespace mobius::ui
 
 #endif
+
+

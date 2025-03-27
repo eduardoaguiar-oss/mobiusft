@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file credhist_entry.cc C++ API <i>mobius.os.win.dpapi.credhist_entry</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pygil.h>
@@ -26,9 +26,9 @@
 #include "module.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if object type is <i>credhist_entry</i>
-//! \param pyobj Python object
-//! \return true/false
+// @brief Check if object type is <i>credhist_entry</i>
+// @param pyobj Python object
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_os_win_dpapi_credhist_entry_check (PyObject *pyobj)
@@ -37,9 +37,9 @@ pymobius_os_win_dpapi_credhist_entry_check (PyObject *pyobj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>credhist_entry</i> Python object from C++ object
-//! \param obj C++ object
-//! \return new credhist_entry object
+// @brief Create <i>credhist_entry</i> Python object from C++ object
+// @param obj C++ object
+// @return new credhist_entry object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_os_win_dpapi_credhist_entry_to_pyobject (mobius::os::win::dpapi::credhist_entry obj)
@@ -53,9 +53,9 @@ pymobius_os_win_dpapi_credhist_entry_to_pyobject (mobius::os::win::dpapi::credhi
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>credhist_entry</i> C++ object from Python object
-//! \param value Python object
-//! \return credhist_entry object
+// @brief Create <i>credhist_entry</i> C++ object from Python object
+// @param value Python object
+// @return credhist_entry object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::os::win::dpapi::credhist_entry
 pymobius_os_win_dpapi_credhist_entry_from_pyobject (PyObject *value)
@@ -67,9 +67,9 @@ pymobius_os_win_dpapi_credhist_entry_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>revision</i> Attribute getter
-//! \param self Object
-//! \return <i>revision</i> attribute
+// @brief <i>revision</i> Attribute getter
+// @param self Object
+// @return <i>revision</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_revision (os_win_dpapi_credhist_entry_o *self)
@@ -89,9 +89,9 @@ tp_getter_revision (os_win_dpapi_credhist_entry_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>guid</i> Attribute getter
-//! \param self Object
-//! \return <i>guid</i> attribute
+// @brief <i>guid</i> Attribute getter
+// @param self Object
+// @return <i>guid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_guid (os_win_dpapi_credhist_entry_o *self)
@@ -111,9 +111,9 @@ tp_getter_guid (os_win_dpapi_credhist_entry_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>type</i> Attribute getter
-//! \param self Object
-//! \return <i>type</i> attribute
+// @brief <i>type</i> Attribute getter
+// @param self Object
+// @return <i>type</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_type (os_win_dpapi_credhist_entry_o *self)
@@ -133,9 +133,9 @@ tp_getter_type (os_win_dpapi_credhist_entry_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>hash_id</i> Attribute getter
-//! \param self Object
-//! \return <i>hash_id</i> attribute
+// @brief <i>hash_id</i> Attribute getter
+// @param self Object
+// @return <i>hash_id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_hash_id (os_win_dpapi_credhist_entry_o *self)
@@ -155,9 +155,9 @@ tp_getter_hash_id (os_win_dpapi_credhist_entry_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>iterations</i> Attribute getter
-//! \param self Object
-//! \return <i>iterations</i> attribute
+// @brief <i>iterations</i> Attribute getter
+// @param self Object
+// @return <i>iterations</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_iterations (os_win_dpapi_credhist_entry_o *self)
@@ -177,9 +177,9 @@ tp_getter_iterations (os_win_dpapi_credhist_entry_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>cipher_id</i> Attribute getter
-//! \param self Object
-//! \return <i>cipher_id</i> attribute
+// @brief <i>cipher_id</i> Attribute getter
+// @param self Object
+// @return <i>cipher_id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_cipher_id (os_win_dpapi_credhist_entry_o *self)
@@ -199,9 +199,9 @@ tp_getter_cipher_id (os_win_dpapi_credhist_entry_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>salt</i> Attribute getter
-//! \param self Object
-//! \return <i>salt</i> attribute
+// @brief <i>salt</i> Attribute getter
+// @param self Object
+// @return <i>salt</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_salt (os_win_dpapi_credhist_entry_o *self)
@@ -221,9 +221,9 @@ tp_getter_salt (os_win_dpapi_credhist_entry_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>sid</i> Attribute getter
-//! \param self Object
-//! \return <i>sid</i> attribute
+// @brief <i>sid</i> Attribute getter
+// @param self Object
+// @return <i>sid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_sid (os_win_dpapi_credhist_entry_o *self)
@@ -243,9 +243,9 @@ tp_getter_sid (os_win_dpapi_credhist_entry_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>cipher_text</i> Attribute getter
-//! \param self Object
-//! \return <i>cipher_text</i> attribute
+// @brief <i>cipher_text</i> Attribute getter
+// @param self Object
+// @return <i>cipher_text</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_cipher_text (os_win_dpapi_credhist_entry_o *self)
@@ -265,9 +265,9 @@ tp_getter_cipher_text (os_win_dpapi_credhist_entry_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>hash_sha1</i> Attribute getter
-//! \param self Object
-//! \return <i>hash_sha1</i> attribute
+// @brief <i>hash_sha1</i> Attribute getter
+// @param self Object
+// @return <i>hash_sha1</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_hash_sha1 (os_win_dpapi_credhist_entry_o *self)
@@ -287,9 +287,9 @@ tp_getter_hash_sha1 (os_win_dpapi_credhist_entry_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>hash_ntlm</i> Attribute getter
-//! \param self Object
-//! \return <i>hash_ntlm</i> attribute
+// @brief <i>hash_ntlm</i> Attribute getter
+// @param self Object
+// @return <i>hash_ntlm</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_getter_hash_ntlm (os_win_dpapi_credhist_entry_o *self)
@@ -309,7 +309,7 @@ tp_getter_hash_ntlm (os_win_dpapi_credhist_entry_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Getters and setters structure
+// @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] =
 {
@@ -394,9 +394,9 @@ static PyGetSetDef tp_getset[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>decrypt_with_key</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>decrypt_with_key</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_decrypt_with_key (os_win_dpapi_credhist_entry_o *self, PyObject *args)
@@ -433,9 +433,9 @@ tp_f_decrypt_with_key (os_win_dpapi_credhist_entry_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>decrypt_with_password_hash</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>decrypt_with_password_hash</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_decrypt_with_password_hash (os_win_dpapi_credhist_entry_o *self, PyObject *args)
@@ -473,9 +473,9 @@ tp_f_decrypt_with_password_hash (os_win_dpapi_credhist_entry_o *self, PyObject *
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>decrypt_with_password</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>decrypt_with_password</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_decrypt_with_password (os_win_dpapi_credhist_entry_o *self, PyObject *args)
@@ -512,9 +512,9 @@ tp_f_decrypt_with_password (os_win_dpapi_credhist_entry_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_decrypted</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>is_decrypted</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_decrypted (os_win_dpapi_credhist_entry_o *self, PyObject *)
@@ -536,7 +536,7 @@ tp_f_is_decrypted (os_win_dpapi_credhist_entry_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -568,8 +568,8 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>credhist_entry</i> deallocator
-//! \param self Object
+// @brief <i>credhist_entry</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (os_win_dpapi_credhist_entry_o *self)
@@ -579,7 +579,7 @@ tp_dealloc (os_win_dpapi_credhist_entry_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject os_win_dpapi_credhist_entry_t =
 {
@@ -632,3 +632,5 @@ PyTypeObject os_win_dpapi_credhist_entry_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

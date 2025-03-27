@@ -22,9 +22,9 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode filesystem block
-//! \param parent_block Parent block
-//! \param fs_type Filesystem type
+// @brief Decode filesystem block
+// @param parent_block Parent block
+// @param fs_type Filesystem type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::vfs::block
 _create_filesystem_block (const mobius::vfs::block& parent_block, const std::string& fs_type)
@@ -46,11 +46,11 @@ _create_filesystem_block (const mobius::vfs::block& parent_block, const std::str
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Try to decode block
-//! \param block Block object
-//! \param new_blocks Vector for newly created blocks
-//! \param pending_blocks Pending blocks
-//! \return <b>true</b> if block was decoded, <b>false</b> otherwise
+// @brief Try to decode block
+// @param block Block object
+// @param new_blocks Vector for newly created blocks
+// @param pending_blocks Pending blocks
+// @return <b>true</b> if block was decoded, <b>false</b> otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static bool
 decoder (
@@ -91,7 +91,7 @@ const char *EXTENSION_DESCRIPTION = "Filesystems VFS block support";
 } // extern "C"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Start extension
+// @brief Start extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extern "C" void
 start ()
@@ -104,10 +104,12 @@ start ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Stop extension
+// @brief Stop extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extern "C" void
 stop ()
 {
   mobius::core::remove_resource ("vfs.block.decoder.filesystems");
 }
+
+

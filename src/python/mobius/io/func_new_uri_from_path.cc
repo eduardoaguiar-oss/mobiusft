@@ -17,14 +17,14 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include "uri.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Function new_uri_from_path
+// @brief Function new_uri_from_path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject*
 func_new_uri_from_path (PyObject *, PyObject *args)
@@ -44,7 +44,7 @@ func_new_uri_from_path (PyObject *, PyObject *args)
 
   // execute C++ code
   PyObject *ret = nullptr;
-  
+
   try
     {
       auto p = mobius::io::new_uri_from_path (arg_value);
@@ -54,6 +54,8 @@ func_new_uri_from_path (PyObject *, PyObject *args)
     {
       mobius::py::set_runtime_error (e.what ());
     }
-    
+
   return ret;
 }
+
+

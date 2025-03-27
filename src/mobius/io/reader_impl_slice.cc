@@ -22,10 +22,10 @@
 namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Reader object
-//! \param pos Initial position
-//! \param end Final position
+// @brief Constructor
+// @param reader Reader object
+// @param pos Initial position
+// @param end Final position
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 reader_impl_slice::reader_impl_slice (
   mobius::io::reader reader,
@@ -36,13 +36,13 @@ reader_impl_slice::reader_impl_slice (
 {
   if (pos < 0)
     pos += reader.get_size ();
-  
+
   if (end < 0)
     end += reader.get_size ();
-  
+
   if (pos < 0)
     throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid start position"));
-    
+
   if (end < pos)
     throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid end position"));
 
@@ -52,9 +52,9 @@ reader_impl_slice::reader_impl_slice (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set read position
-//! \param offset Offset in bytes
-//! \param w Either beginning, current or end
+// @brief Set read position
+// @param offset Offset in bytes
+// @param w Either beginning, current or end
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 reader_impl_slice::seek (offset_type offset, whence_type w)
@@ -86,9 +86,9 @@ reader_impl_slice::seek (offset_type offset, whence_type w)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Read bytes from reader
-//! \param size Size in bytes
-//! \return Data
+// @brief Read bytes from reader
+// @param size Size in bytes
+// @return Data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 reader_impl_slice::read (size_type size)
@@ -103,3 +103,5 @@ reader_impl_slice::read (size_type size)
 }
 
 } // namespace mobius::io
+
+

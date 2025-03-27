@@ -23,7 +23,7 @@
 #include <mobius/decoder/xml/element.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -41,3 +41,5 @@ PyObject *pymobius_decoder_xml_element_to_pyobject (const mobius::decoder::xml::
 mobius::decoder::xml::element pymobius_decoder_xml_element_from_pyobject (PyObject *);
 
 #endif
+
+

@@ -29,7 +29,7 @@ static constexpr std::uint64_t BLOCK_SIZE = 9728000ul;          // 9500 * 1024
 namespace mobius::crypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
+// @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hash_impl_ed2k::hash_impl_ed2k ()
   : md4_accum_ ("md4"),
@@ -38,7 +38,7 @@ hash_impl_ed2k::hash_impl_ed2k ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reset hash value
+// @brief Reset hash value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 hash_impl_ed2k::reset ()
@@ -49,8 +49,8 @@ hash_impl_ed2k::reset ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Update hash value
-//! \param data Data block
+// @brief Update hash value
+// @param data Data block
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 hash_impl_ed2k::update (const mobius::bytearray& data)
@@ -89,9 +89,9 @@ hash_impl_ed2k::update (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get digest
-//! \param data remaining data
-//! \return digest
+// @brief Get digest
+// @param data remaining data
+// @return digest
 //
 // If data size is <= BLOCK_SIZE, hash ED2K is equal to hash MD4
 //
@@ -112,8 +112,8 @@ hash_impl_ed2k::get_digest ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Clone object
-//! \return Pointer to newly created object
+// @brief Clone object
+// @return Pointer to newly created object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::shared_ptr <hash_impl_base>
 hash_impl_ed2k::clone () const
@@ -128,3 +128,5 @@ hash_impl_ed2k::clone () const
 }
 
 } // namespace mobius::crypt
+
+

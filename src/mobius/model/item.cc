@@ -51,10 +51,10 @@ constexpr std::uint64_t ATTRIBUTE_FILE_THRESHOLD = 33554432; // 32 MiB
 const mobius::bytearray ATTRIBUTE_FILE_ID = {0xde, 0xea, 0xbe, 0xef, 0xc0, 0xc0, 0xa0, 'M', 'O', 'B', 'I', 'U', 'S', 'P', 'O', 'D'};
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Expand value mask, using item attributes
-//! \param value_mask value mask
-//! \param item case item
-//! \return expanded string value
+// @brief Expand value mask, using item attributes
+// @param value_mask value mask
+// @param item case item
+// @return expanded string value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 expand_value_mask (const std::string& value_mask, mobius::model::item item)
@@ -105,7 +105,7 @@ expand_value_mask (const std::string& value_mask, mobius::model::item item)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief item implementation class
+// @brief item implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class item::impl
 {
@@ -149,8 +149,8 @@ public:
   std::string create_data_path (const std::string&) const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get uid
-  //! \return uid
+  // @brief Get uid
+  // @return uid
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   uid_type
   get_uid () const
@@ -159,8 +159,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get category
-  //! \return category
+  // @brief Get category
+  // @return category
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_category () const
@@ -170,8 +170,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get case
-  //! \return case
+  // @brief Get case
+  // @return case
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   Case
   get_case () const
@@ -180,8 +180,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get database
-  //! \return database
+  // @brief Get database
+  // @return database
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::database::database
   get_database () const
@@ -190,19 +190,19 @@ public:
   }
 
 private:
-  //! \brief Case object
+  // @brief Case object
   Case case_;
 
-  //! \brief Unique ID
+  // @brief Unique ID
   uid_type uid_ = -1;
 
-  //! \brief Category
+  // @brief Category
   mutable std::string category_;
 
-  //! \brief Datasource revision
+  // @brief Datasource revision
   mutable std::int64_t datasource_revision_ = 0;
 
-  //! \brief Datasource object
+  // @brief Datasource object
   mutable mobius::datasource::datasource datasource_;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -218,8 +218,8 @@ private:
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param c case object
+// @brief Constructor
+// @param c case object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 item::impl::impl (const mobius::model::Case& c)
   : case_ (c)
@@ -227,9 +227,9 @@ item::impl::impl (const mobius::model::Case& c)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param c case object
-//! \param uid Unique ID
+// @brief Constructor
+// @param c case object
+// @param uid Unique ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 item::impl::impl (const mobius::model::Case& c, uid_type uid)
   : case_ (c),
@@ -238,9 +238,9 @@ item::impl::impl (const mobius::model::Case& c, uid_type uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get data path
-//! \param rpath Relative path
-//! \return Fullpath
+// @brief Get data path
+// @param rpath Relative path
+// @return Fullpath
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 item::impl::get_data_path (const std::string& rpath) const
@@ -255,9 +255,9 @@ item::impl::get_data_path (const std::string& rpath) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create data path
-//! \param rpath Relative path
-//! \return Fullpath
+// @brief Create data path
+// @param rpath Relative path
+// @return Fullpath
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 item::impl::create_data_path (const std::string& rpath) const
@@ -269,9 +269,9 @@ item::impl::create_data_path (const std::string& rpath) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if item has attribute
-//! \param id Attribute ID
-//! \return true/false
+// @brief Check if item has attribute
+// @param id Attribute ID
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 item::impl::has_attribute (const std::string& id) const
@@ -296,9 +296,9 @@ item::impl::has_attribute (const std::string& id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attribute
-//! \param id Attribute ID
-//! \return Attribute value or pod::null if not found
+// @brief Get attribute
+// @param id Attribute ID
+// @return Attribute value or pod::null if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 item::impl::get_attribute (const std::string& id) const
@@ -335,9 +335,9 @@ item::impl::get_attribute (const std::string& id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set attribute
-//! \param id Attribute ID
-//! \param value Attribute value
+// @brief Set attribute
+// @param id Attribute ID
+// @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::impl::set_attribute (const std::string& id, const mobius::pod::data& value)
@@ -397,8 +397,8 @@ item::impl::set_attribute (const std::string& id, const mobius::pod::data& value
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove attribute
-//! \param id Attribute ID
+// @brief Remove attribute
+// @param id Attribute ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::impl::remove_attribute (const std::string& id)
@@ -425,7 +425,7 @@ item::impl::remove_attribute (const std::string& id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load attributes on demand
+// @brief Load attributes on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::unordered_map <std::string, mobius::pod::data>
 item::impl::get_attributes () const
@@ -462,8 +462,8 @@ item::impl::get_attributes () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if item has datasource
-//! \return true/false
+// @brief Check if item has datasource
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 item::impl::has_datasource () const
@@ -487,8 +487,8 @@ item::impl::has_datasource () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get datasource
-//! \return Datasource object
+// @brief Get datasource
+// @return Datasource object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datasource::datasource
 item::impl::get_datasource () const
@@ -524,8 +524,8 @@ item::impl::get_datasource () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set datasource
-//! \param datasource Datasource object
+// @brief Set datasource
+// @param datasource Datasource object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::impl::set_datasource (const mobius::datasource::datasource& datasource)
@@ -567,7 +567,7 @@ item::impl::set_datasource (const mobius::datasource::datasource& datasource)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove datasource
+// @brief Remove datasource
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::impl::remove_datasource ()
@@ -588,10 +588,10 @@ item::impl::remove_datasource ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new child item
-//! \param category item's category
-//! \param idx child position, starting in 1 or -1 for last position
-//! \return new item
+// @brief Create new child item
+// @param category item's category
+// @param idx child position, starting in 1 or -1 for last position
+// @return new item
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 item
 item::impl::new_child (const std::string& category, int idx)
@@ -630,7 +630,7 @@ item::impl::new_child (const std::string& category, int idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove item
+// @brief Remove item
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::impl::remove ()
@@ -698,9 +698,9 @@ item::impl::remove ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Move item
-//! \param idx position before which the item will be inserted
-//! \param parent parent item
+// @brief Move item
+// @param idx position before which the item will be inserted
+// @param parent parent item
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::impl::move (int idx, const item& parent)
@@ -766,8 +766,8 @@ item::impl::move (int idx, const item& parent)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add event
-//! \param text Event text
+// @brief Add event
+// @param text Event text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::impl::add_event (const std::string& text)
@@ -786,8 +786,8 @@ item::impl::add_event (const std::string& text)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get events
-//! \return Events
+// @brief Get events
+// @return Events
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <event>
 item::impl::get_events () const
@@ -814,7 +814,7 @@ item::impl::get_events () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load data on demand
+// @brief Load data on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::impl::_load_data () const
@@ -833,9 +833,9 @@ item::impl::_load_data () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Reserve one slot for a child at position idx
-//! \param idx index, starting in 1 or -1 for last position
-//! \return index reserved
+// @brief Reserve one slot for a child at position idx
+// @param idx index, starting in 1 or -1 for last position
+// @return index reserved
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int
 item::impl::_reserve_index (int idx) const
@@ -886,9 +886,9 @@ item::impl::_reserve_index (int idx) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attribute file
-//! \param id Attribute ID
-//! \return File object
+// @brief Get attribute file
+// @param id Attribute ID
+// @return File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::file
 item::impl::_get_attribute_file (const std::string& id) const
@@ -898,9 +898,9 @@ item::impl::_get_attribute_file (const std::string& id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create attribute file
-//! \param id Attribute ID
-//! \return File object
+// @brief Create attribute file
+// @param id Attribute ID
+// @return File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::io::file
 item::impl::_create_attribute_file (const std::string& id) const
@@ -910,9 +910,9 @@ item::impl::_create_attribute_file (const std::string& id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Save attribute file
-//! \param id Attribute ID
-//! \param bytes Attribute data serialized
+// @brief Save attribute file
+// @param id Attribute ID
+// @param bytes Attribute data serialized
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::impl::_save_attribute_file (
@@ -925,9 +925,9 @@ item::impl::_save_attribute_file (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Load attribute file
-//! \param id Attribute ID
-//! \return Attribute data serialized
+// @brief Load attribute file
+// @param id Attribute ID
+// @return Attribute data serialized
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 item::impl::_load_attribute_file (const std::string& id) const
@@ -938,8 +938,8 @@ item::impl::_load_attribute_file (const std::string& id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove attribute file, if any
-//! \param id Attribute ID
+// @brief Remove attribute file, if any
+// @param id Attribute ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::impl::_remove_attribute_file (const std::string& id)
@@ -951,9 +951,9 @@ item::impl::_remove_attribute_file (const std::string& id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param c case object
-//! \param uid Unique ID
+// @brief Constructor
+// @param c case object
+// @param uid Unique ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 item::item (const mobius::model::Case& c, uid_type uid)
   : impl_ (std::make_shared <impl> (c, uid))
@@ -961,8 +961,8 @@ item::item (const mobius::model::Case& c, uid_type uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get database object
-//! \return Database object
+// @brief Get database object
+// @return Database object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::database::database
 item::get_database () const
@@ -974,8 +974,8 @@ item::get_database () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get uid
-//! \return uid
+// @brief get uid
+// @return uid
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 item::uid_type
 item::get_uid () const
@@ -987,8 +987,8 @@ item::get_uid () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get category
-//! \return category
+// @brief get category
+// @return category
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 item::get_category () const
@@ -1000,8 +1000,8 @@ item::get_category () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief get case
-//! \return case
+// @brief get case
+// @return case
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 Case
 item::get_case () const
@@ -1013,9 +1013,9 @@ item::get_case () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if attribute exists
-//! \param id attribute ID
-//! \return true/false
+// @brief Check if attribute exists
+// @param id attribute ID
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 item::has_attribute (const std::string& id) const
@@ -1027,9 +1027,9 @@ item::has_attribute (const std::string& id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attribute value
-//! \param id attribute ID
-//! \return attribute value
+// @brief Get attribute value
+// @param id attribute ID
+// @return attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::data
 item::get_attribute (const std::string& id) const
@@ -1041,9 +1041,9 @@ item::get_attribute (const std::string& id) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set attribute value
-//! \param id attribute ID
-//! \param value attribute value
+// @brief Set attribute value
+// @param id attribute ID
+// @param value attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::set_attribute (const std::string& id, const mobius::pod::data& value)
@@ -1061,8 +1061,8 @@ item::set_attribute (const std::string& id, const mobius::pod::data& value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove attribute
-//! \param id attribute ID
+// @brief Remove attribute
+// @param id attribute ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::remove_attribute (const std::string& id)
@@ -1077,8 +1077,8 @@ item::remove_attribute (const std::string& id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get attributes
-//! \return Map containing attributes' IDs and values
+// @brief Get attributes
+// @return Map containing attributes' IDs and values
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::unordered_map <std::string, mobius::pod::data>
 item::get_attributes () const
@@ -1090,8 +1090,8 @@ item::get_attributes () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if item has datasource
-//! \return true/false
+// @brief Check if item has datasource
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 item::has_datasource () const
@@ -1103,8 +1103,8 @@ item::has_datasource () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get datasource
-//! \return Datasource object
+// @brief Get datasource
+// @return Datasource object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::datasource::datasource
 item::get_datasource () const
@@ -1116,8 +1116,8 @@ item::get_datasource () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set datasource
-//! \param datasource Datasource object
+// @brief Set datasource
+// @param datasource Datasource object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::set_datasource (const mobius::datasource::datasource& datasource)
@@ -1133,7 +1133,7 @@ item::set_datasource (const mobius::datasource::datasource& datasource)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove datasource
+// @brief Remove datasource
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::remove_datasource ()
@@ -1149,8 +1149,8 @@ item::remove_datasource ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get number of children
-//! \return Number of children
+// @brief Get number of children
+// @return Number of children
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 int
 item::get_child_count () const
@@ -1182,8 +1182,8 @@ item::get_child_count () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get children items
-//! \return children
+// @brief Get children items
+// @return children
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <item>
 item::get_children () const
@@ -1220,8 +1220,8 @@ item::get_children () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get parent item
-//! \return parent, if exists
+// @brief Get parent item
+// @return parent, if exists
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 item
 item::get_parent () const
@@ -1259,10 +1259,10 @@ item::get_parent () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new child item
-//! \param category item's category
-//! \param idx child position, starting in 1 or -1 for last position
-//! \return new item
+// @brief Create new child item
+// @param category item's category
+// @param idx child position, starting in 1 or -1 for last position
+// @return new item
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 item
 item::new_child (const std::string& category, int idx)
@@ -1274,7 +1274,7 @@ item::new_child (const std::string& category, int idx)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove item
+// @brief Remove item
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::remove ()
@@ -1286,9 +1286,9 @@ item::remove ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Move item
-//! \param idx new index
-//! \param parent parent item
+// @brief Move item
+// @param idx new index
+// @param parent parent item
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::move (int idx, const item& parent)
@@ -1300,7 +1300,7 @@ item::move (int idx, const item& parent)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Expand ${} masks into attribute values
+// @brief Expand ${} masks into attribute values
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::expand_masks ()
@@ -1324,9 +1324,9 @@ item::expand_masks ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get data path
-//! \param rpath Relative path
-//! \return Fullpath
+// @brief Get data path
+// @param rpath Relative path
+// @return Fullpath
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 item::get_data_path (const std::string& rpath) const
@@ -1338,9 +1338,9 @@ item::get_data_path (const std::string& rpath) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief create data path
-//! \param rpath relative path
-//! \return fullpath
+// @brief create data path
+// @param rpath relative path
+// @return fullpath
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 item::create_data_path (const std::string& rpath) const
@@ -1352,9 +1352,9 @@ item::create_data_path (const std::string& rpath) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new evidence
-//! \param type Evidence type
-//! \return Evidence
+// @brief Create new evidence
+// @param type Evidence type
+// @return Evidence
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 evidence
 item::new_evidence (const std::string& type)
@@ -1377,8 +1377,8 @@ item::new_evidence (const std::string& type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add evidence
-//! \param e Evidence object
+// @brief Add evidence
+// @param e Evidence object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 evidence
 item::add_evidence (const evidence& e)
@@ -1394,9 +1394,9 @@ item::add_evidence (const evidence& e)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get evidences for a given type
-//! \param type Evidence type
-//! \return Vector of evidences of that type
+// @brief Get evidences for a given type
+// @param type Evidence type
+// @return Vector of evidences of that type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <evidence>
 item::get_evidences (const std::string& type) const
@@ -1427,8 +1427,8 @@ item::get_evidences (const std::string& type) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove evidences
-//! \param type Evidence type
+// @brief Remove evidences
+// @param type Evidence type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::remove_evidences (const std::string& type)
@@ -1449,7 +1449,7 @@ item::remove_evidences (const std::string& type)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove all evidences
+// @brief Remove all evidences
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::remove_evidences ()
@@ -1468,8 +1468,8 @@ item::remove_evidences ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Count evidences
-//! \param type Evidence type
+// @brief Count evidences
+// @param type Evidence type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::int64_t
 item::count_evidences (const std::string& type) const
@@ -1497,8 +1497,8 @@ item::count_evidences (const std::string& type) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Count all evidences
-//! \return map of type -> count
+// @brief Count all evidences
+// @return map of type -> count
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::unordered_map <std::string, std::int64_t>
 item::count_evidences () const
@@ -1530,8 +1530,8 @@ item::count_evidences () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Add event
-//! \param text Event text
+// @brief Add event
+// @param text Event text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 item::add_event (const std::string& text)
@@ -1543,8 +1543,8 @@ item::add_event (const std::string& text)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get events
-//! \return Events
+// @brief Get events
+// @return Events
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <event>
 item::get_events () const
@@ -1556,8 +1556,8 @@ item::get_events () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new connection
-//! \return New connection object
+// @brief Create new connection
+// @return New connection object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::database::connection
 item::new_connection ()
@@ -1567,8 +1567,8 @@ item::new_connection ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create new transaction
-//! \return New transaction object
+// @brief Create new transaction
+// @return New transaction object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::database::transaction
 item::new_transaction ()
@@ -1578,10 +1578,10 @@ item::new_transaction ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief check if two items are equal
-//! \param a item a
-//! \param b item b
-//! \return true/false
+// @brief check if two items are equal
+// @param a item a
+// @param b item b
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator== (const item& a, const item& b)
@@ -1590,10 +1590,10 @@ operator== (const item& a, const item& b)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief check if two items are different
-//! \param a item a
-//! \param b item b
-//! \return true/false
+// @brief check if two items are different
+// @param a item a
+// @param b item b
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator!= (const item& a, const item& b)
@@ -1602,10 +1602,10 @@ operator!= (const item& a, const item& b)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Operator <
-//! \param a item a
-//! \param b item b
-//! \return true/false
+// @brief Operator <
+// @param a item a
+// @param b item b
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator< (const item& a, const item& b)
@@ -1614,10 +1614,10 @@ operator< (const item& a, const item& b)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Operator <=
-//! \param a item a
-//! \param b item b
-//! \return true/false
+// @brief Operator <=
+// @param a item a
+// @param b item b
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator<= (const item& a, const item& b)
@@ -1626,10 +1626,10 @@ operator<= (const item& a, const item& b)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Operator >
-//! \param a item a
-//! \param b item b
-//! \return true/false
+// @brief Operator >
+// @param a item a
+// @param b item b
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator> (const item& a, const item& b)
@@ -1638,10 +1638,10 @@ operator> (const item& a, const item& b)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Operator >=
-//! \param a item a
-//! \param b item b
-//! \return true/false
+// @brief Operator >=
+// @param a item a
+// @param b item b
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 operator>= (const item& a, const item& b)
@@ -1672,3 +1672,5 @@ std::hash <mobius::model::item>::operator () (const mobius::model::item& item) c
 }
 
 } // namespace std
+
+

@@ -24,14 +24,12 @@
 #include <memory>
 #include <string>
 
-namespace mobius
-{
-namespace decoder
+namespace mobius::decoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief .LNK decoder class
-//! \author Eduardo Aguiar
-//! \see https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-shllink/16cb4ca1-9339-4d0c-a68d-bf1d6cc0f943
+// @brief .LNK decoder class
+// @author Eduardo Aguiar
+// @see https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-shllink/16cb4ca1-9339-4d0c-a68d-bf1d6cc0f943
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class lnk
 {
@@ -98,14 +96,15 @@ public:
   std::uint64_t get_extra_data_offset () const;
 
 private:
-  //! \brief Implementation class forward declaration
+  // @brief Implementation class forward declaration
   class impl;
 
-  //! \brief Implementation pointer
+  // @brief Implementation pointer
   std::shared_ptr <impl> impl_;
 };
 
-} // namespace decoder
-} // namespace mobius
+} // namespace mobius::decoder
 
 #endif
+
+

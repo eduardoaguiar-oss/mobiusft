@@ -17,17 +17,17 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief  C++ API mobius.os.win module wrapper
-//! \author Eduardo Aguiar
+// @brief  C++ API mobius.os.win module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <mobius/os/win/pbkdf2_hmac_ms.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief pbkdf2_hmac_ms function
-//! \param self Function object
-//! \param args Argument list
-//! \return Python object
+// @brief pbkdf2_hmac_ms function
+// @param self Function object
+// @param args Argument list
+// @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 func_pbkdf2_hmac_ms (PyObject *, PyObject *args)
@@ -74,3 +74,5 @@ func_pbkdf2_hmac_ms (PyObject *, PyObject *args)
 
   return ret;
 }
+
+

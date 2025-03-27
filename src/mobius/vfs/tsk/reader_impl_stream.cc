@@ -21,16 +21,12 @@
 #include <stdexcept>
 #include <tsk/libtsk.h>
 
-namespace mobius
-{
-namespace vfs
-{
-namespace tsk
+namespace mobius::vfs::tsk
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param fs_file fs_file object
-//! \param fs_attr_p TSK_FS_ATTR pointer
+// @brief Constructor
+// @param fs_file fs_file object
+// @param fs_attr_p TSK_FS_ATTR pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 reader_impl_stream::reader_impl_stream (
   const fs_file& fs_file,
@@ -43,9 +39,9 @@ reader_impl_stream::reader_impl_stream (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Set reading position
-//! \param offsetOoffset in bytes
-//! \param w Either beginning, current or end
+// @brief Set reading position
+// @param offsetOoffset in bytes
+// @param w Either beginning, current or end
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 reader_impl_stream::seek (offset_type offset, whence_type w)
@@ -68,15 +64,15 @@ reader_impl_stream::seek (offset_type offset, whence_type w)
   // update current pos, if possible
   if (abs_offset < 0)
     throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid offset"));
-  
-  else if (size_type (abs_offset) <= size_)  
+
+  else if (size_type (abs_offset) <= size_)
     pos_ = abs_offset;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Read bytes from stream
-//! \param size Size in bytes
-//! \return Bytearray containing data
+// @brief Read bytes from stream
+// @param size Size in bytes
+// @return Bytearray containing data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 reader_impl_stream::read (size_type size)
@@ -109,6 +105,6 @@ reader_impl_stream::read (size_type size)
   return data;
 }
 
-} // namespace tsk
-} // namespace vfs
-} // namespace mobius
+} // namespace mobius::vfs::tsk
+
+

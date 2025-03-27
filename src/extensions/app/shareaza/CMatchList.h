@@ -27,15 +27,15 @@
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief CMatchList decoder class
+// @brief CMatchList decoder class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class CMatchList
 {
 public:
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get version
-  //! \return Structure version
+  // @brief Get version
+  // @return Structure version
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   int
   get_version () const
@@ -44,8 +44,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get filter name
-  //! \return Filter name
+  // @brief Get filter name
+  // @return Filter name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string
   get_filter_name () const
@@ -54,8 +54,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get filter busy flag
-  //! \return Filter busy flag
+  // @brief Get filter busy flag
+  // @return Filter busy flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_filter_busy () const
@@ -64,8 +64,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get filter push flag
-  //! \return Filter push flag
+  // @brief Get filter push flag
+  // @return Filter push flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_filter_push () const
@@ -74,8 +74,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get filter unstable flag
-  //! \return Filter unstable flag
+  // @brief Get filter unstable flag
+  // @return Filter unstable flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_filter_unstable () const
@@ -84,8 +84,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get filter reject flag
-  //! \return Filter reject flag
+  // @brief Get filter reject flag
+  // @return Filter reject flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_filter_reject () const
@@ -94,8 +94,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get filter local flag
-  //! \return Filter local flag
+  // @brief Get filter local flag
+  // @return Filter local flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_filter_local () const
@@ -104,8 +104,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get filter bogus flag
-  //! \return Filter bogus flag
+  // @brief Get filter bogus flag
+  // @return Filter bogus flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_filter_bogus () const
@@ -114,8 +114,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get filter drm flag
-  //! \return Filter drm flag
+  // @brief Get filter drm flag
+  // @return Filter drm flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_filter_drm () const
@@ -124,8 +124,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get filter adult flag
-  //! \return Filter adult flag
+  // @brief Get filter adult flag
+  // @return Filter adult flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_filter_adult () const
@@ -134,8 +134,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get filter suspicious flag
-  //! \return Filter suspicious flag
+  // @brief Get filter suspicious flag
+  // @return Filter suspicious flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_filter_suspicious () const
@@ -144,8 +144,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get regexp flag
-  //! \return Regexp flag
+  // @brief Get regexp flag
+  // @return Regexp flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_regexp () const
@@ -154,8 +154,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get filter min. size
-  //! \return Min. size in bytes
+  // @brief Get filter min. size
+  // @return Min. size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t
   get_filter_min_size () const
@@ -164,8 +164,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get filter max. size
-  //! \return Max. size in bytes
+  // @brief Get filter max. size
+  // @return Max. size in bytes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t
   get_filter_max_size () const
@@ -174,8 +174,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get filter sources
-  //! \return Number of sources
+  // @brief Get filter sources
+  // @return Number of sources
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t
   get_filter_sources () const
@@ -184,8 +184,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get sort column
-  //! \return Sort column number
+  // @brief Get sort column
+  // @return Sort column number
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   int
   get_sort_column () const
@@ -194,8 +194,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get sort dir flag
-  //! \return Sort dir flag
+  // @brief Get sort dir flag
+  // @return Sort dir flag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
   get_sort_dir () const
@@ -204,8 +204,8 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  //! \brief Get match files
-  //! \return Match files
+  // @brief Get match files
+  // @return Match files
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto
   get_match_files () const
@@ -219,61 +219,64 @@ public:
   void decode (mobius::decoder::mfc&);
 
 private:
-  //! \brief Structure version
+  // @brief Structure version
   int version_;
 
-  //! \brief Filter name
+  // @brief Filter name
   std::string filter_name_;
 
-  //! \brief Filter busy flag
+  // @brief Filter busy flag
   bool filter_busy_ = false;
 
-  //! \brief Filter push flag
+  // @brief Filter push flag
   bool filter_push_ = false;
 
-  //! \brief Filter unstable flag
+  // @brief Filter unstable flag
   bool filter_unstable_ = false;
 
-  //! \brief Filter reject flag
+  // @brief Filter reject flag
   bool filter_reject_ = false;
 
-  //! \brief Filter local flag
+  // @brief Filter local flag
   bool filter_local_ = false;
 
-  //! \brief Filter bogus flag
+  // @brief Filter bogus flag
   bool filter_bogus_ = false;
 
-  //! \brief Filter drm flag
+  // @brief Filter drm flag
   bool filter_drm_ = false;
 
-  //! \brief Filter adult flag
+  // @brief Filter adult flag
   bool filter_adult_ = false;
 
-  //! \brief Filter suspicious flag
+  // @brief Filter suspicious flag
   bool filter_suspicious_ = false;
 
-  //! \brief Regexp flag
+  // @brief Regexp flag
   bool regexp_ = false;
 
-  //! \brief Filter min. size
+  // @brief Filter min. size
   std::uint64_t filter_min_size_ = 0;
 
-  //! \brief Filter max. size
+  // @brief Filter max. size
   std::uint64_t filter_max_size_ = 0;
 
-  //! \brief Filter sources
+  // @brief Filter sources
   std::uint32_t filter_sources_ = 0;
 
-  //! \brief Sort column
+  // @brief Sort column
   int sort_column_ = -1;
 
-  //! \brief Sort dir flag
+  // @brief Sort dir flag
   bool sort_dir_ = false;
 
-  //! \brief Match files
+  // @brief Match files
   std::vector <CMatchFile> match_files_;
 };
 
 } // namespace mobius::extension::app::shareaza
 
 #endif
+
+
+

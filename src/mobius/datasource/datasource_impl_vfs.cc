@@ -22,8 +22,8 @@
 namespace mobius::datasource
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param state Object state
+// @brief Constructor
+// @param state Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datasource_impl_vfs::datasource_impl_vfs (const mobius::pod::map& state)
   : vfs_ (state.get<mobius::pod::map> ("state"))
@@ -35,8 +35,8 @@ datasource_impl_vfs::datasource_impl_vfs (const mobius::pod::map& state)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param vfs VFS object
+// @brief Constructor
+// @param vfs VFS object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datasource_impl_vfs::datasource_impl_vfs (const mobius::vfs::vfs& vfs)
   : vfs_ (vfs)
@@ -44,8 +44,8 @@ datasource_impl_vfs::datasource_impl_vfs (const mobius::vfs::vfs& vfs)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get object state
-//! \return Object state
+// @brief Get object state
+// @return Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::pod::map
 datasource_impl_vfs::get_state () const
@@ -57,8 +57,8 @@ datasource_impl_vfs::get_state () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if datasource is available
-//! \return True/False
+// @brief Check if datasource is available
+// @return True/False
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 datasource_impl_vfs::is_available () const
@@ -67,3 +67,5 @@ datasource_impl_vfs::is_available () const
 }
 
 } // namespace mobius::datasource
+
+

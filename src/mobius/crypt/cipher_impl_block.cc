@@ -20,9 +20,9 @@
 namespace mobius::crypt
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Encrypt data
-//! \param data Data
-//! \return Encrypted data
+// @brief Encrypt data
+// @param data Data
+// @return Encrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 cipher_impl_block::encrypt (const mobius::bytearray& data)
@@ -40,9 +40,9 @@ cipher_impl_block::encrypt (const mobius::bytearray& data)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decrypt data
-//! \param data Data
-//! \return Decrypted data
+// @brief Decrypt data
+// @param data Data
+// @return Decrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 cipher_impl_block::decrypt (const mobius::bytearray& data)
@@ -60,3 +60,5 @@ cipher_impl_block::decrypt (const mobius::bytearray& data)
 }
 
 } // namespace mobius::crypt
+
+

@@ -22,8 +22,8 @@
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode CXMLElement structure
-//! \see CXMLElement::Serialize@XML.cpp
+// @brief Decode CXMLElement structure
+// @see CXMLElement::Serialize@XML.cpp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 CXMLElement::decode (mobius::decoder::mfc& decoder)
@@ -54,8 +54,8 @@ CXMLElement::decode (mobius::decoder::mfc& decoder)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get metadata from element
-//! \return Metadata
+// @brief Get metadata from element
+// @return Metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::map <std::string, std::string>
 CXMLElement::get_metadata () const
@@ -78,3 +78,7 @@ CXMLElement::get_metadata () const
 }
 
 } // namespace mobius::extension::app::shareaza
+
+
+
+

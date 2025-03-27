@@ -24,7 +24,7 @@ namespace
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-//! \brief Shareaza 2.7.10.2
+// @brief Shareaza 2.7.10.2
 static constexpr int SER_VERSION = 15;
 
 } // namespace
@@ -32,8 +32,8 @@ static constexpr int SER_VERSION = 15;
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode CMatchList structure
-//! \see MatchObjects.cpp - CMatchList::Serialize
+// @brief Decode CMatchList structure
+// @see MatchObjects.cpp - CMatchList::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 CMatchList::decode (mobius::decoder::mfc& decoder)
@@ -98,3 +98,7 @@ CMatchList::decode (mobius::decoder::mfc& decoder)
 }
 
 } // namespace mobius::extension::app::shareaza
+
+
+
+

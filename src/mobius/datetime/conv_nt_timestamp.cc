@@ -18,16 +18,14 @@
 #include <mobius/datetime/datetime.h>
 #include <mobius/datetime/timedelta.h>
 
-namespace mobius
-{
-namespace datetime
+namespace mobius::datetime
 {
 static constexpr datetime EPOCH_NT_DATETIME (1601, 1, 1, 0, 0, 0);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert NT timestamp to datetime
-//! \param timestamp NT timestamp (64 bits)
-//! \return datetime
+// @brief Convert NT timestamp to datetime
+// @param timestamp NT timestamp (64 bits)
+// @return datetime
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datetime
 new_datetime_from_nt_timestamp (std::uint64_t timestamp)
@@ -45,5 +43,6 @@ new_datetime_from_nt_timestamp (std::uint64_t timestamp)
   return dt;
 }
 
-} // namespace datetime
-} // namespace mobius
+} // namespace mobius::datetime
+
+

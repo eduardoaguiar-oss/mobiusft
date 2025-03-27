@@ -20,7 +20,7 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief CRC-32 table, CRCPOLY = 0xedb88320
+// @brief CRC-32 table, CRCPOLY = 0xedb88320
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static constexpr std::uint32_t CRCTAB[256] =
 {
@@ -64,10 +64,10 @@ namespace mobius::crypt
 {
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief update CRC-32 by one byte
-//! \param value CRC-32 value
-//! \param b byte
-//! \return new CRC-32 value
+// @brief update CRC-32 by one byte
+// @param value CRC-32 value
+// @param b byte
+// @return new CRC-32 value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint32_t
 crc32 (std::uint32_t value, std::uint8_t b) noexcept
@@ -76,3 +76,5 @@ crc32 (std::uint32_t value, std::uint8_t b) noexcept
 }
 
 } // namespace mobius::crypt
+
+

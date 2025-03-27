@@ -26,9 +26,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace mobius
-{
-namespace kff
+namespace mobius::kff
 {
 namespace
 {
@@ -36,20 +34,20 @@ namespace
 // KFF data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-//! \brief Hashsets
+// @brief Hashsets
 static std::unordered_map <std::string, hashset> hashsets_;
 
-//! \brief Hashsets mutex
+// @brief Hashsets mutex
 static std::mutex mutex_;
 
-//! \brief Is data loaded
+// @brief Is data loaded
 static std::once_flag is_loaded_;
 
-//! \brief Database schema version
+// @brief Database schema version
 static constexpr int SCHEMA_VERSION = 1;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Initialize kff data
+// @brief Initialize kff data
 // Read .sqlite files from kff config dir
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
@@ -58,10 +56,10 @@ _init ()
   mobius::core::application app;
   auto path = app.get_config_path ("kff");
   auto folder = mobius::io::new_folder_by_path (path);
-  
+
   if (!folder.exists ())
     folder.create ();
-    
+
   else
     {
       for (const auto& c : folder.get_children ())
@@ -79,7 +77,7 @@ _init ()
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
+// @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 kff::kff ()
 {
@@ -87,7 +85,7 @@ kff::kff ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create connection_set object to hashset databases
+// @brief Create connection_set object to hashset databases
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::database::connection_set
 kff::new_connection ()
@@ -98,15 +96,15 @@ kff::new_connection ()
 
   for (auto& p : hashsets_)
     cs.add (p.second.new_connection ());
-  
+
   return cs;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create hash set
-//! \param id Hash set ID
-//! \param is_alert If hash set is alert type
-//! \return hash set object
+// @brief Create hash set
+// @param id Hash set ID
+// @param is_alert If hash set is alert type
+// @return hash set object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hashset
 kff::new_hashset (const std::string& id, bool is_alert)
@@ -134,13 +132,13 @@ kff::new_hashset (const std::string& id, bool is_alert)
     const std::lock_guard <std::mutex> lock (mutex_);
     hashsets_.emplace (id, h);
   }
-  
+
   return h;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Remove hash set
-//! \param id Hash set ID
+// @brief Remove hash set
+// @param id Hash set ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 kff::remove_hashset (const std::string& id)
@@ -163,8 +161,8 @@ kff::remove_hashset (const std::string& id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get hashsets
-//! \return hashsets
+// @brief Get hashsets
+// @return hashsets
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <std::pair <std::string, hashset>>
 kff::get_hashsets () const
@@ -175,10 +173,10 @@ kff::get_hashsets () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Lookup hash in alert hashset
-//! \param type Hash type
-//! \param value Hash value
-//! \return Hash sets
+// @brief Lookup hash in alert hashset
+// @param type Hash type
+// @param value Hash value
+// @return Hash sets
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <std::string>
 kff::alert_lookup (const std::string& type, const std::string& value) const
@@ -198,16 +196,16 @@ kff::alert_lookup (const std::string& type, const std::string& value) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Lookup hash in all hash sets
-//! \param type Hash type
-//! \param value Hash value
-//! \return 'A' alert, 'I' ignored, 'N' not found
+// @brief Lookup hash in all hash sets
+// @param type Hash type
+// @param value Hash value
+// @return 'A' alert, 'I' ignored, 'N' not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 char
 kff::lookup (const std::string& type, const std::string& value) const
 {
   auto hashsets = get_hashsets ();
-  
+
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // search first into is_alert hashsets
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -235,5 +233,6 @@ kff::lookup (const std::string& type, const std::string& value) const
   return 'N';
 }
 
-} // namespace kff
-} // namespace mobius
+} // namespace mobius::kff
+
+

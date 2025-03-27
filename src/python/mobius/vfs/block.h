@@ -22,7 +22,7 @@
 #include <mobius/vfs/block.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_vfs_block_to_pyobject (const mobius::vfs::block&);
 mobius::vfs::block pymobius_vfs_block_from_pyobject (PyObject *);
 
 #endif
+
+

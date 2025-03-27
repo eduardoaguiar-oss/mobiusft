@@ -22,7 +22,7 @@
 #include <mobius/io/sequential_reader_adaptor.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -40,3 +40,5 @@ PyObject *pymobius_io_sequential_reader_adaptor_to_pyobject (const mobius::io::s
 mobius::io::sequential_reader_adaptor pymobius_io_sequential_reader_adaptor_from_pyobject (PyObject *);
 
 #endif
+
+

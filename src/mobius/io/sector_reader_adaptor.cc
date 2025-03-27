@@ -17,14 +17,12 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/io/sector_reader_adaptor.h>
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief constructor
-//! \param reader generic io::reader
-//! \param sector_size sector size in bytes (default = 512)
+// @brief constructor
+// @param reader generic io::reader
+// @param sector_size sector size in bytes (default = 512)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 sector_reader_adaptor::sector_reader_adaptor (
   mobius::io::reader reader,
@@ -36,8 +34,8 @@ sector_reader_adaptor::sector_reader_adaptor (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief set current sector to be read
-//! \param sector sector (positive from the start, negative from the end of read stream)
+// @brief set current sector to be read
+// @param sector sector (positive from the start, negative from the end of read stream)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 sector_reader_adaptor::seek (offset_type sector)
@@ -49,9 +47,9 @@ sector_reader_adaptor::seek (offset_type sector)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief read sectors from stream
-//! \param sectors number of sectors (default = 1)
-//! \return bytearray
+// @brief read sectors from stream
+// @param sectors number of sectors (default = 1)
+// @return bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 sector_reader_adaptor::read (sector_type sectors)
@@ -59,5 +57,6 @@ sector_reader_adaptor::read (sector_type sectors)
   return reader_.read (sector_size_ * sectors);
 }
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
+
+

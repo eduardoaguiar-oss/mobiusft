@@ -29,7 +29,7 @@ namespace
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-//! \brief Shareaza 2.7.10.2
+// @brief Shareaza 2.7.10.2
 static constexpr int SER_VERSION = 11;
 
 } // namespace
@@ -37,10 +37,10 @@ static constexpr int SER_VERSION = 11;
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode CBTFile structure
-//! \param decoder MFC decoder object
-//! \param version Structure version
-//! \see CBTFile::Serialize@BTInfo.cpp
+// @brief Decode CBTFile structure
+// @param decoder MFC decoder object
+// @param version Structure version
+// @see CBTFile::Serialize@BTInfo.cpp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 CBTInfo::decode_CBTFile (mobius::decoder::mfc& decoder, int version)
@@ -76,9 +76,9 @@ CBTInfo::decode_CBTFile (mobius::decoder::mfc& decoder, int version)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Decode tracker structure
-//! \param decoder MFC decoder object
-//! \see CBTTracker::Serialize@BTInfo.cpp
+// @brief Decode tracker structure
+// @param decoder MFC decoder object
+// @see CBTTracker::Serialize@BTInfo.cpp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 CBTInfo::decode_CBTTracker (mobius::decoder::mfc& decoder)
@@ -97,8 +97,8 @@ CBTInfo::decode_CBTTracker (mobius::decoder::mfc& decoder)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param decoder MFC decoder object
+// @brief Constructor
+// @param decoder MFC decoder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 CBTInfo::CBTInfo (mobius::decoder::mfc& decoder)
 {
@@ -215,8 +215,8 @@ CBTInfo::CBTInfo (mobius::decoder::mfc& decoder)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get metadata from torrent data
-//! \return Torrent metadata
+// @brief Get metadata from torrent data
+// @return Torrent metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::map <std::string, std::string>
 CBTInfo::get_metadata () const
@@ -267,3 +267,7 @@ CBTInfo::get_metadata () const
 }
 
 } // namespace mobius::extension::app::shareaza
+
+
+
+

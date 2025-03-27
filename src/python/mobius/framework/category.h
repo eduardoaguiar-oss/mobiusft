@@ -23,7 +23,7 @@
 #include <mobius/framework/category.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Data structure
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
@@ -51,3 +51,5 @@ PyObject* func_framework_get_categories (PyObject *, PyObject *);
 PyObject* func_framework_remove_categories (PyObject *, PyObject *);
 
 #endif
+
+

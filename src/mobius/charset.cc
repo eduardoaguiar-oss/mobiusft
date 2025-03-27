@@ -25,10 +25,10 @@
 namespace mobius
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert bytearray from charset to UTF-8
-//! \param data bytearray
-//! \param charset charset
-//! \return string encoded as UTF-8
+// @brief Convert bytearray from charset to UTF-8
+// @param data bytearray
+// @param charset charset
+// @return string encoded as UTF-8
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 conv_charset_to_utf8 (const mobius::bytearray& data, const std::string& charset)
@@ -52,10 +52,10 @@ conv_charset_to_utf8 (const mobius::bytearray& data, const std::string& charset)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert bytearray from charset to UTF-8, with partial convertion
-//! \param data bytearray
-//! \param charset charset
-//! \return string encoded as UTF-8 and remaining bytearray
+// @brief Convert bytearray from charset to UTF-8, with partial convertion
+// @param data bytearray
+// @param charset charset
+// @return string encoded as UTF-8 and remaining bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::pair <std::string, mobius::bytearray>
 conv_charset_to_utf8_partial (const mobius::bytearray& data, const std::string& charset)
@@ -73,11 +73,11 @@ conv_charset_to_utf8_partial (const mobius::bytearray& data, const std::string& 
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert a bytearray from one charset to other charset
-//! \param data bytearray
-//! \param f_charset from charset
-//! \param t_charset to charset
-//! \return new bytearray
+// @brief Convert a bytearray from one charset to other charset
+// @param data bytearray
+// @param f_charset from charset
+// @param t_charset to charset
+// @return new bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 conv_charset (
@@ -86,7 +86,7 @@ conv_charset (
   const std::string& t_charset
 )
 {
-  // allocate descriptor 
+  // allocate descriptor
   const std::string uf_charset = mobius::string::toupper (f_charset);
   const std::string ut_charset = mobius::string::toupper (t_charset);
   iconv_t cd = iconv_open (ut_charset.c_str (), uf_charset.c_str ());
@@ -102,7 +102,7 @@ conv_charset (
   char *inbuf = (char *) data.data ();
   auto outbuf = std::make_unique<char[]> (outsize);
   char *p_out = outbuf.get ();
-  
+
   if (::iconv (cd, &inbuf, &insize, &p_out, &outsize) != (size_t) -1)
     {
       // flush out partially converted input
@@ -110,19 +110,19 @@ conv_charset (
 
       out = mobius::bytearray (reinterpret_cast <const uint8_t *> (outbuf.get ()), p_out - outbuf.get ());
     }
-  
+
   // deallocate descriptor
   iconv_close (cd);
-  
+
   return out;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Convert bytearray from one charset to other, with partial convertion
-//! \param data bytearray
-//! \param f_charset from charset
-//! \param t_charset to charset
-//! \return new bytearray and remaining bytearray
+// @brief Convert bytearray from one charset to other, with partial convertion
+// @param data bytearray
+// @param f_charset from charset
+// @param t_charset to charset
+// @return new bytearray and remaining bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::pair <mobius::bytearray, mobius::bytearray>
 conv_charset_partial (
@@ -131,7 +131,7 @@ conv_charset_partial (
   const std::string& t_charset
 )
 {
-  // allocate descriptor 
+  // allocate descriptor
   const std::string uf_charset = mobius::string::toupper (f_charset);
   const std::string ut_charset = mobius::string::toupper (t_charset);
   iconv_t cd = iconv_open (ut_charset.c_str (), uf_charset.c_str ());
@@ -148,7 +148,7 @@ conv_charset_partial (
   char *inbuf = (char *) data.data ();
   auto outbuf = std::make_unique <char[]> (outsize);
   char *p_out = outbuf.get ();
-  
+
   size_t rc = ::iconv (cd, &inbuf, &insize, &p_out, &outsize);
 
   if (rc != (size_t) -1 || errno == EINVAL)
@@ -158,11 +158,13 @@ conv_charset_partial (
       if (inbuf < (char *) data.end ())
         rest = mobius::bytearray (reinterpret_cast <const uint8_t *> (inbuf), (char *) data.end () - inbuf);
     }
-  
+
   // deallocate descriptor
   iconv_close (cd);
-  
+
   return std::make_pair (out, rest);
 }
 
 } // namespace mobius
+
+

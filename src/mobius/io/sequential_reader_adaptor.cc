@@ -19,14 +19,12 @@
 #include <mobius/exception.inc>
 #include <mobius/string_functions.h>
 
-namespace mobius
-{
-namespace io
+namespace mobius::io
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param reader Generic reader object
-//! \param block_size Read ahead block size in bytes
+// @brief Constructor
+// @param reader Generic reader object
+// @param block_size Read ahead block size in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 sequential_reader_adaptor::sequential_reader_adaptor (
   const mobius::io::reader& reader,
@@ -37,8 +35,8 @@ sequential_reader_adaptor::sequential_reader_adaptor (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get one byte
-//! \return Byte read
+// @brief Get one byte
+// @return Byte read
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 sequential_reader_adaptor::byte_type
 sequential_reader_adaptor::get ()
@@ -47,13 +45,13 @@ sequential_reader_adaptor::get ()
 
   if (data.empty ())
     throw std::runtime_error ("EOF reached");
-  
+
   return data[0];
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Peek one byte, without moving reading position
-//! \return Byte read
+// @brief Peek one byte, without moving reading position
+// @return Byte read
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 sequential_reader_adaptor::byte_type
 sequential_reader_adaptor::peek ()
@@ -64,28 +62,28 @@ sequential_reader_adaptor::peek ()
     throw std::runtime_error (
        MOBIUS_EXCEPTION_MSG (std::string ("EOF reached at position ") + mobius::string::to_string (tell ()))
     );
-  
+
   return data[0];
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get <i>size</i> bytes
-//! \param size Size in bytes
-//! \return Bytes read
+// @brief Get <i>size</i> bytes
+// @param size Size in bytes
+// @return Bytes read
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 sequential_reader_adaptor::get (size_type size)
 {
   mobius::bytearray data = peek (size);
   skip (size);
-  
+
   return data;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Peek <i>size</i> bytes, without moving reading position
-//! \param size Size in bytes
-//! \return Bytes read
+// @brief Peek <i>size</i> bytes, without moving reading position
+// @param size Size in bytes
+// @return Bytes read
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::bytearray
 sequential_reader_adaptor::peek (size_type size)
@@ -96,22 +94,22 @@ sequential_reader_adaptor::peek (size_type size)
       const size_type bytes_to_read = std::max (size - (buffer_.size () - pos_), block_size_);  // read at least block_size bytes
       buffer_ += reader_.read (bytes_to_read);
     }
-  
+
   // return data
   mobius::bytearray data;
-  
+
   if (pos_ < buffer_.size ())
     {
       const size_type bytes_available = std::min (buffer_.size () - pos_, size);
       data = buffer_.slice (pos_, pos_ + bytes_available - 1);
     }
-  
+
   return data;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Skip ahead <i>size</i> bytes
-//! \param size Size in bytes
+// @brief Skip ahead <i>size</i> bytes
+// @param size Size in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 sequential_reader_adaptor::skip (size_type size)
@@ -133,8 +131,8 @@ sequential_reader_adaptor::skip (size_type size)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Get current reading position
-//! \return Reading position from the beginning of the reader
+// @brief Get current reading position
+// @return Reading position from the beginning of the reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 sequential_reader_adaptor::size_type
 sequential_reader_adaptor::tell () const
@@ -143,8 +141,8 @@ sequential_reader_adaptor::tell () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if end-of-file (EOF) is reached
-//! \return True/false
+// @brief Check if end-of-file (EOF) is reached
+// @return True/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 sequential_reader_adaptor::eof () const
@@ -152,5 +150,6 @@ sequential_reader_adaptor::eof () const
   return buffer_.empty () && reader_.eof ();
 }
 
-} // namespace io
-} // namespace mobius
+} // namespace mobius::io
+
+

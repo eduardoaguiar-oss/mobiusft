@@ -18,7 +18,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \file vfs.cc C++ API <i>mobius.vfs.vfs</i> class wrapper
-//! \author Eduardo Aguiar
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.h>
 #include <pylist.h>
@@ -31,9 +31,9 @@
 #include "pod/map.h"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Check if value is an instance of <i>vfs</i>
-//! \param value Python value
-//! \return true/false
+// @brief Check if value is an instance of <i>vfs</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_vfs_vfs_check (PyObject *value)
@@ -42,9 +42,9 @@ pymobius_vfs_vfs_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>vfs</i> Python object from C++ object
-//! \param obj C++ object
-//! \return New vfs object
+// @brief Create <i>vfs</i> Python object from C++ object
+// @param obj C++ object
+// @return New vfs object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_vfs_vfs_to_pyobject (const mobius::vfs::vfs& obj)
@@ -53,9 +53,9 @@ pymobius_vfs_vfs_to_pyobject (const mobius::vfs::vfs& obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Create <i>vfs</i> C++ object from Python object
-//! \param value Python value
-//! \return Vfs object
+// @brief Create <i>vfs</i> C++ object from Python object
+// @param value Python value
+// @return Vfs object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::vfs::vfs
 pymobius_vfs_vfs_from_pyobject (PyObject *value)
@@ -64,10 +64,10 @@ pymobius_vfs_vfs_from_pyobject (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_state</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Object state
+// @brief <i>get_state</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_state (vfs_vfs_o *self, PyObject *)
@@ -89,9 +89,9 @@ tp_f_get_state (vfs_vfs_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>clear</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>clear</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_clear (vfs_vfs_o *self, PyObject *)
@@ -112,9 +112,9 @@ tp_f_clear (vfs_vfs_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>rescan</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>rescan</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_rescan (vfs_vfs_o *self, PyObject *)
@@ -135,10 +135,10 @@ tp_f_rescan (vfs_vfs_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>is_available</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return True/False
+// @brief <i>is_available</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return True/False
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_is_available (vfs_vfs_o *self, PyObject *)
@@ -160,10 +160,10 @@ tp_f_is_available (vfs_vfs_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>add_disk</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Datasource index
+// @brief <i>add_disk</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Datasource index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_add_disk (vfs_vfs_o *self, PyObject *args)
@@ -198,9 +198,9 @@ tp_f_add_disk (vfs_vfs_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>remove_disk</i> method implementation
-//! \param self Object
-//! \param args Argument list
+// @brief <i>remove_disk</i> method implementation
+// @param self Object
+// @param args Argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_remove_disk (vfs_vfs_o *self, PyObject *args)
@@ -234,10 +234,10 @@ tp_f_remove_disk (vfs_vfs_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_disks</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Datasources
+// @brief <i>get_disks</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Datasources
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_disks (vfs_vfs_o *self, PyObject *)
@@ -260,10 +260,10 @@ tp_f_get_disks (vfs_vfs_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_blocks</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Blocks
+// @brief <i>get_blocks</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Blocks
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_blocks (vfs_vfs_o *self, PyObject *)
@@ -286,10 +286,10 @@ tp_f_get_blocks (vfs_vfs_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>get_root_entries</i> method implementation
-//! \param self Object
-//! \param args Argument list
-//! \return Root entries
+// @brief <i>get_root_entries</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Root entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_f_get_root_entries (vfs_vfs_o *self, PyObject *)
@@ -314,7 +314,7 @@ tp_f_get_root_entries (vfs_vfs_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Methods structure
+// @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] =
 {
@@ -376,11 +376,11 @@ static PyMethodDef tp_methods[] =
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>vfs</i> Constructor
-//! \param type Type object
-//! \param args Argument list
-//! \param kwds Keywords dict
-//! \return new <i>vfs</i> object
+// @brief <i>vfs</i> Constructor
+// @param type Type object
+// @param args Argument list
+// @param kwds Keywords dict
+// @return new <i>vfs</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *, PyObject *)
@@ -405,8 +405,8 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief <i>vfs</i> deallocator
-//! \param self Object
+// @brief <i>vfs</i> deallocator
+// @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (vfs_vfs_o *self)
@@ -416,7 +416,7 @@ tp_dealloc (vfs_vfs_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Type structure
+// @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject vfs_vfs_t =
 {
@@ -469,3 +469,5 @@ PyTypeObject vfs_vfs_t =
   0,                                       		// tp_version_tag
   0,                                       		// tp_finalize
 };
+
+

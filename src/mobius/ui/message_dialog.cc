@@ -21,8 +21,8 @@
 namespace mobius::ui
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Constructor
-//! \param t Message type
+// @brief Constructor
+// @param t Message type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 message_dialog::message_dialog (type t)
   : impl_ (get_implementation ()->new_message_dialog (t))
@@ -30,3 +30,5 @@ message_dialog::message_dialog (type t)
 }
 
 } // namespace mobius::ui
+
+
