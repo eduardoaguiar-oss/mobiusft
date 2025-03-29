@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_EMULE_FILE_STORED_SEARCHES_MET_H
-#define MOBIUS_EXTENSION_APP_EMULE_FILE_STORED_SEARCHES_MET_H
+#ifndef MOBIUS_EXTENSION_APP_EMULE_CTAG_H
+#define MOBIUS_EXTENSION_APP_EMULE_CTAG_H
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,98 +18,87 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "ctag.hpp"
 #include <mobius/decoder/data_decoder.h>
+#include <mobius/pod/data.h>
 #include <cstdint>
 #include <string>
-#include <vector>
 
 namespace mobius::extension::app::emule
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief StoredSearches.met file decoder
+// @brief CTag file decoder
 // @author Eduardo Aguiar
-// @see CSearchList::LoadSearches - srchybrid/SearchList.cpp
+// @see CTag::CTag - srchybrid/packets.cpp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class file_stored_searches_met
+class ctag
 {
 public:
+  explicit ctag (mobius::decoder::data_decoder&);
+  
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief CSearchFile structure
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  struct CSearchFile
-  {
-    std::string hash_ed2k;
-    std::string user_ip;
-    std::uint16_t user_port = 0;
-    std::vector <ctag> tags;
-  };
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Search data
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  struct search
-  {
-    std::string id;
-    std::uint8_t e_type;
-    bool b_client_search_files = false;
-    std::string special_title;
-    std::string expression;
-    std::string filetype;
-    std::vector <CSearchFile> files;
-  };
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  file_stored_searches_met (const mobius::io::reader&);
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Check if stream is an instance of StoredSearches.met file
-  // @return true/false
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  operator bool () const noexcept
-  {
-    return is_instance_;
-  }
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get file version
-  // @return Version
+  // @brief Get tag ID
+  // @return Tag ID
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint8_t
-  get_version () const
+  get_id () const noexcept
   {
-    return version_;
+    return id_;
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get searches
-  // @return Searches
+  // @brief Get tag type
+  // @return Tag type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::vector <search>
-  get_searches () const
+  std::uint8_t
+  get_type () const noexcept
   {
-    return searches_;
+    return type_;
   }
 
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // @brief Get tag name
+  // @return Tag name
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  std::string
+  get_name () const
+  {
+    return name_;
+  }
+
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // @brief Get tag value
+  // @return Tag value
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  mobius::pod::data
+  get_value () const
+  {
+    return value_;
+  }
+
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // @brief Get tag value
+  // @return Tag value
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  template <typename T> T
+  get_value () const
+  {
+    return static_cast <T> (value_);
+  }
+  
 private:
-  // @brief Flag is instance
-  bool is_instance_ = false;
 
-  // @brief File version
-  std::uint8_t version_ = 0;
+  // @brief Tag ID
+  std::uint8_t id_ = 0;
 
-  // @brief Searches
-  std::vector <search> searches_;
-
-  // Helper functions
-  search _decode_ssearch_params (mobius::decoder::data_decoder&);
-  CSearchFile _decode_csearch_file (mobius::decoder::data_decoder&);
+  // @brief Tag type
+  std::uint8_t type_ = 0;
+  
+  // @brief Tag name
+  std::string name_;
+  
+  // @brief Tag value
+  mobius::pod::data value_;
 };
 
 } // namespace mobius::extension::app::emule
-
 #endif
-
-

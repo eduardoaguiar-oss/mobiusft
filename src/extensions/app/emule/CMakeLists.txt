@@ -23,7 +23,10 @@ include_directories(${TOP_SRC_DIR}/src)
 # Define source files
 set(SOURCES
     main.cpp
-    evidence_loader_impl.cpp)
+    ctag.cpp
+    file_stored_searches_met.cpp
+    evidence_loader_impl.cpp
+)
 
 # Build the library as a dynamically loadable module
 add_library(app_emule MODULE ${SOURCES})
@@ -51,6 +54,7 @@ install(TARGETS app_emule LIBRARY DESTINATION share/mobiusft/extensions)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 set(STORED_SEARCHES_MET_SOURCES
     tools/emule_stored_searches_met.cpp
+    ctag.cpp
     file_stored_searches_met.cpp
 )
 

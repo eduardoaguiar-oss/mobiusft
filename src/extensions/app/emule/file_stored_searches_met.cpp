@@ -38,13 +38,13 @@ constexpr std::uint8_t MET_LAST_VERSION = 1;
 static std::string
 read_string (mobius::decoder::data_decoder& decoder)
 {
-  std::string s;
+    std::string s;
 
-  auto l = decoder.get_uint16_le ();
-  if (l > 0)
-    s = decoder.get_string_by_size (l);
+    auto l = decoder.get_uint16_le ();
+    if (l > 0)
+        s = decoder.get_string_by_size (l);
 
-  return s;
+    return s;
 }
 
 } // namespace
@@ -53,40 +53,41 @@ namespace mobius::extension::app::emule
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
+// @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_stored_searches_met::file_stored_searches_met (const mobius::io::reader& reader)
 {
-  mobius::core::log log (__FILE__, __FUNCTION__);
+    mobius::core::log log (__FILE__, __FUNCTION__);
 
-  if (!reader || reader.get_size () < 4)
-    return;
+    if (!reader || reader.get_size () < 4)
+        return;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Decode header
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto decoder = mobius::decoder::data_decoder (reader);
-  auto header = decoder.get_uint8 ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode header
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto decoder = mobius::decoder::data_decoder (reader);
+    auto header = decoder.get_uint8 ();
 
-  if (header != MET_HEADER_I64TAGS)
-    return;
+    if (header != MET_HEADER_I64TAGS)
+        return;
 
-  version_ = decoder.get_uint8 ();
+    version_ = decoder.get_uint8 ();
 
-  if (version_ > MET_LAST_VERSION)
-    log.development (__LINE__, "Unhandled version: " + std::to_string (version_));
+    if (version_ > MET_LAST_VERSION)
+        log.development (__LINE__, "Unhandled version: " + std::to_string (version_));
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Decode entries
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  int count = decoder.get_uint16_le ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode entries
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    int count = decoder.get_uint16_le ();
 
-  for (int i = 0;i < count;i++)
-    searches_.push_back (_decode_ssearch_params (decoder));
+    for (int i = 0;i < count;i++)
+        searches_.push_back (_decode_ssearch_params (decoder));
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // End decoding
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  is_instance_ = true;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // End decoding
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    is_instance_ = true;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -98,27 +99,24 @@ file_stored_searches_met::file_stored_searches_met (const mobius::io::reader& re
 file_stored_searches_met::search
 file_stored_searches_met::_decode_ssearch_params (mobius::decoder::data_decoder& decoder)
 {
-  search s;
+    search s;
 
-  // decoder data
-  s.id = mobius::string::to_hex (decoder.get_uint32_le (), 8);
-  s.e_type = decoder.get_uint8 ();
-  s.b_client_search_files = decoder.get_uint8 () > 0;
-  s.special_title = read_string (decoder);
-  s.expression = read_string (decoder);
-  s.filetype = read_string (decoder);
+    // decoder data
+    s.id = mobius::string::to_hex (decoder.get_uint32_le (), 8);
+    s.e_type = decoder.get_uint8 ();
+    s.b_client_search_files = decoder.get_uint8 () > 0;
+    s.special_title = read_string (decoder);
+    s.expression = read_string (decoder);
+    s.filetype = read_string (decoder);
 
-  // decode files
-  auto file_count = decoder.get_uint32_le ();
+    // decode files
+    auto file_count = decoder.get_uint32_le ();
 
-  for (std::uint32_t i = 0;i < file_count;i++)
-  {
-    s.files.push_back (_decode_csearch_file (decoder));
-    break;
-  }
+    for (std::uint32_t i = 0;i < file_count;i++)
+        s.files.push_back (_decode_csearch_file (decoder));
 
-  // return struct
-  return s;
+    // return struct
+    return s;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -129,22 +127,20 @@ file_stored_searches_met::_decode_ssearch_params (mobius::decoder::data_decoder&
 file_stored_searches_met::CSearchFile
 file_stored_searches_met::_decode_csearch_file (mobius::decoder::data_decoder& decoder)
 {
-  CSearchFile f;
+    CSearchFile f;
 
-  // decode data
-  f.hash_ed2k = decoder.get_hex_string_by_size (16);
-  f.user_ip = decoder.get_ipv4_le ();
-  f.user_port = decoder.get_uint16_le ();
+    // decode data
+    f.hash_ed2k = decoder.get_hex_string_by_size (16);
+    f.user_ip = decoder.get_ipv4_le ();
+    f.user_port = decoder.get_uint16_le ();
 
-  // decoder tags
-  auto tag_count = decoder.get_uint32_le ();
+    // decoder tags
+    auto tag_count = decoder.get_uint32_le ();
 
-  for (std::uint32_t i = 0;i < tag_count;i++)
-    ; //f.tags.push_back (_decoder_ctag (decoder));
+    for (std::uint32_t i = 0;i < tag_count;i++)
+        f.tags.emplace_back (decoder);
 
-  return f;
+    return f;
 }
 
 } // namespace mobius::extension::app::emule
-
-

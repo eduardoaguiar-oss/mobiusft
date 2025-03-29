@@ -17,7 +17,9 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "../file_stored_searches_met.hpp"
 #include <mobius/core/application.h>
+#include <mobius/core/log.h>
 #include <mobius/io/file.h>
+#include <mobius/string_functions.h>
 #include <iostream>
 #include <unistd.h>
 
@@ -36,12 +38,37 @@ usage ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Show CSearchFile data
+// @param sf CSearchFile data
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static void
+show_file (const mobius::extension::app::emule::file_stored_searches_met::CSearchFile& sf)
+{
+  std::cerr << std::endl;
+  std::cerr << "\t\t>> File" << std::endl;
+  std::cerr << "\t\tHash ED2K: " << sf.hash_ed2k << std::endl;
+  std::cerr << "\t\tUser IP: " << sf.user_ip << std::endl;
+  std::cerr << "\t\tUser port: " << sf.user_port << std::endl;
+  std::cerr << "\t\t\tTags: " << sf.tags.size () << std::endl;
+
+  for (const auto& tag : sf.tags)
+    {
+        std::cerr   << "\t\t\t\t"
+                    << int (tag.get_id ()) << '\t'
+                    << mobius::string::to_hex (tag.get_type (), 2) << '\t'
+                    << tag.get_name () << '\t'
+                    << tag.get_value ().to_string () << std::endl;
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Show search data
 // @param s Search data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 show_search (const mobius::extension::app::emule::file_stored_searches_met::search& s)
 {
+  std::cerr << std::endl;
   std::cerr << "\t>> Search" << std::endl;
   std::cerr << "\t\tID: " << s.id << std::endl;
   std::cerr << "\t\tE-type: " << int (s.e_type) << std::endl;
@@ -50,8 +77,8 @@ show_search (const mobius::extension::app::emule::file_stored_searches_met::sear
   std::cerr << "\t\tExpression: " << s.expression << std::endl;
   std::cerr << "\t\tFile type: " << s.filetype << std::endl;
 
-  //for (const auto& ms : ws.get_searches ())
-  //  show_cmanagedsearch (ms, 2);
+  for (const auto& sf : s.files)
+      show_file (sf);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -89,6 +116,10 @@ int
 main (int argc, char **argv)
 {
   mobius::core::application app;
+  mobius::core::set_logfile_path ("mobius.log");
+
+  app.start ();
+
   std::cerr << app.get_name () << " v" << app.get_version () << std::endl;
   std::cerr << app.get_copyright () << std::endl;
   std::cerr << "Emule StoredSearches.met viewer v1.0" << std::endl;
@@ -139,6 +170,8 @@ main (int argc, char **argv)
 
       optind++;
     }
+
+  app.stop ();
 
   return EXIT_SUCCESS;
 }
