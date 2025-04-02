@@ -57,7 +57,6 @@ class ApplicationView(object):
         column.is_sortable = True
 
         column = self.__tableview.add_column('version', 'Version')
-        column = self.__tableview.add_column('search', 'Search Terms')
         column = self.__tableview.add_column('local_files', 'Local files')
         column = self.__tableview.add_column('remote_files', 'Remote files')
 
@@ -91,7 +90,7 @@ class ApplicationView(object):
                 version = '(not installed)'
 
             self.__tableview.add_row(
-                (app.name, version, app.total_searches, app.total_local_files, app.total_remote_files))
+                (app.name, version, app.total_local_files, app.total_remote_files))
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief save current state

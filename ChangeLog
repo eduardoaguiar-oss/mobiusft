@@ -11,6 +11,9 @@ Mobius Forensic Toolkit 2.14
 	* date-code: All source files renamed from .h/.cc to .hpp/.cpp
 	* date-code: Using CMake to build, install and package
 	* event-viewer: Using CMake to build, install and package
+	* p2p-viewer: Using CMake to build, install and package
+	* p2p-viewer: Removed "User accounts" panel
+	* p2p-viewer: Removed "Search history" panel
 	* tools: All source files renamed from .h/.cc to .hpp/.cpp
 	* benchmark: Removed module
 	* unittest: Removed module

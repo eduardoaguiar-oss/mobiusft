@@ -21,12 +21,10 @@ import mobius
 import pymobius
 import pymobius.p2p
 
-from account_view import AccountView
 from application_view import ApplicationView
 from local_files_view import LocalFilesView
 from metadata import *
 from remote_files_view import RemoteFilesView
-from search_history_view import SearchHistoryView
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Hash names
@@ -64,12 +62,6 @@ class P2PView(object):
 
         view = ApplicationView()
         self.__view_selector.add('applications', view)
-
-        view = AccountView()
-        self.__view_selector.add('accounts', view)
-
-        view = SearchHistoryView()
-        self.__view_selector.add('search', view)
 
         view = LocalFilesView()
         self.__view_selector.add('local-files', view)
@@ -121,7 +113,6 @@ class P2PView(object):
         data = pymobius.Data()
         data.applications = []
         data.accounts = []
-        data.searches = []
         data.local_files = []
         data.remote_files = []
         data.count = 0
@@ -142,7 +133,6 @@ class P2PView(object):
                 data.count += 1
                 data.applications += item_data.applications
                 data.accounts += item_data.accounts
-                data.searches += item_data.searches
                 data.local_files += item_data.local_files
                 data.remote_files += item_data.remote_files
 
@@ -162,10 +152,3 @@ def pvt_start():
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def pvt_stop():
     mobius.core.remove_resource('view.p2p')
-
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# API initialization
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-def pvt_start_api():
-    pass

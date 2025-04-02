@@ -72,26 +72,11 @@ struct autofill
   std::string username;
   std::string value;
   std::string id;
-  mobius::io::file f;
-};
-/*
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Searched text
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-struct search
-{
-  // attributes
-  mobius::datetime::datetime timestamp;
-  std::string text;
-  std::string username;
-
-  // metadata
   mobius::pod::map metadata;
-
-  // files
   mobius::io::file f;
 };
 
+/*
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Local file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -227,6 +212,7 @@ private:
   void _decode_preferenceskad_dat_file (const mobius::io::file&);
   void _decode_statistics_ini_file (const mobius::io::file&);
   void _decode_ac_searchstrings_dat_file (const mobius::io::file&);
+  void _decode_storedsearches_met_file (const mobius::io::file&);
   //void _decode_ntuser_dat_file (const mobius::io::file&);
 
   void _save_evidences ();
