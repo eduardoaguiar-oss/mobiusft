@@ -1,24 +1,23 @@
-app_aresdir = $(datadir)/$(PACKAGE)/extensions
-app_ares_LTLIBRARIES = app-ares.la
+.PHONY: all cmake-clean cmake-install
 
-app_ares_la_CXXFLAGS = -I$(top_srcdir)/src
+all:
+	mkdir -p build
+	cd build && cmake .. -DCMAKE_INSTALL_PREFIX=$(prefix)
+	+cd build && make
 
-app_ares_la_SOURCES =							\
-	*.h								\
-	main.cc								\
-	common.cc							\
-	decoder_impl_arestra.cc						\
-	decoder_impl_pbthash.cc						\
-	decoder_impl_phash.cc						\
-	decoder_impl_shareh.cc						\
-	decoder_impl_sharel.cc						\
-	decoder_impl_torrenth.cc					\
-	evidence_loader_impl.cc						\
-	file_arestra.cc							\
-	file_pbthash.cc							\
-	file_phash.cc							\
-	file_shareh.cc							\
-	file_sharel.cc							\
-	file_torrenth.cc
+cmake-clean:
+	rm -rf build
 
-app_ares_la_LDFLAGS = -module -avoid-version -shared -L$(top_srcdir)/src/mobius -L$(top_srcdir)/src/mobius/framework -lmobius_framework -lmobius
+cmake-install:
+	+cd build && make install
+
+# Hook into Automake's standard targets
+clean-local: cmake-clean
+
+install-exec-local: cmake-install
+
+# Include CMakeLists.txt and source files in the distribution
+EXTRA_DIST =				\
+	CMakeLists.txt			\
+	*.cpp				\
+	*.hpp

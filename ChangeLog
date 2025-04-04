@@ -5,12 +5,23 @@ Mobius Forensic Toolkit 2.14
 	* Libmobius: Namespaces using C++17 nested convention
 	* Python API: Using doxygen tags with '@'
 	* C++ extensions: Using doxygen tags with '@'
+	* app/ares: All source files renamed from .h/.cc to .hpp/.cpp
+	* app/ares: Using CMake to build, install and package
+	* app/emuletorrent: All source files renamed from .h/.cc to .hpp/.cpp
+	* app/emuletorrent: Using CMake to build, install and package
+	* app/shareaza: All source files renamed from .h/.cc to .hpp/.cpp
+	* app/shareaza: Using CMake to build, install and package
 	* attribute-viewer: Using CMake to build, install and package
+	* category-manager: Using CMake to build, install and package
 	* datasource-ufdr: Using CMake to build, install and package
 	* datasource-vfs: Using CMake to build, install and package
+	* datasource-viewer: Using CMake to build, install and package
 	* date-code: All source files renamed from .h/.cc to .hpp/.cpp
 	* date-code: Using CMake to build, install and package
 	* event-viewer: Using CMake to build, install and package
+	* evidence-password-hashes: Using CMake to build, install and package
+	* evidence-viewer: Using CMake to build, install and package
+	* extension-manager: Using CMake to build, install and package
 	* p2p-viewer: Using CMake to build, install and package
 	* p2p-viewer: Removed "User accounts" panel
 	* p2p-viewer: Removed "Search history" panel

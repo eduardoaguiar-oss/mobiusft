@@ -1,13 +1,23 @@
-app_emuletorrentdir = $(datadir)/$(PACKAGE)/extensions
-app_emuletorrent_LTLIBRARIES = app-emuletorrent.la
+.PHONY: all cmake-clean cmake-install
 
-app_emuletorrent_la_CXXFLAGS = -I$(top_srcdir)/src
+all:
+	mkdir -p build
+	cd build && cmake .. -DCMAKE_INSTALL_PREFIX=$(prefix)
+	+cd build && make
 
-app_emuletorrent_la_SOURCES =						\
-	*.h								\
-	main.cc								\
-	evidence_loader_impl.cc						\
-	file_bt_fastresume.cc						\
-	file_ed2k_fastresume.cc
+cmake-clean:
+	rm -rf build
 
-app_emuletorrent_la_LDFLAGS = -module -avoid-version -shared -L$(top_srcdir)/src/mobius -L$(top_srcdir)/src/mobius/framework -lmobius_framework -lmobius
+cmake-install:
+	+cd build && make install
+
+# Hook into Automake's standard targets
+clean-local: cmake-clean
+
+install-exec-local: cmake-install
+
+# Include CMakeLists.txt and source files in the distribution
+EXTRA_DIST =				\
+	CMakeLists.txt			\
+	*.cpp
+	*.hpp
