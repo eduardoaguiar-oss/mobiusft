@@ -24,6 +24,7 @@ include_directories(${TOP_SRC_DIR}/src)
 set(SOURCES
     main.cpp
     ctag.cpp
+    file_known_met.cpp
     file_stored_searches_met.cpp
     evidence_loader_impl.cpp
 )
@@ -50,7 +51,19 @@ target_link_libraries(app_emule PRIVATE ${MOBIUS_LIB} ${MOBIUS_FRAMEWORK_LIB})
 install(TARGETS app_emule LIBRARY DESTINATION share/mobiusft/extensions)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# TOOLS
+# Tools: emule_known_met
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+set(STORED_KNOWN_MET_SOURCES
+    tools/emule_known_met.cpp
+    ctag.cpp
+    file_known_met.cpp
+)
+
+add_executable(emule_known_met ${STORED_KNOWN_MET_SOURCES})
+target_link_libraries(emule_known_met PRIVATE ${MOBIUS_LIB} ${MOBIUS_FRAMEWORK_LIB})
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: emule_stored_searches_met
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 set(STORED_SEARCHES_MET_SOURCES
     tools/emule_stored_searches_met.cpp
@@ -61,4 +74,10 @@ set(STORED_SEARCHES_MET_SOURCES
 add_executable(emule_stored_searches_met ${STORED_SEARCHES_MET_SOURCES})
 target_link_libraries(emule_stored_searches_met PRIVATE ${MOBIUS_LIB} ${MOBIUS_FRAMEWORK_LIB})
 
-install(TARGETS emule_stored_searches_met RUNTIME DESTINATION share/mobiusft/tools)
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: Installation
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+install(TARGETS
+    emule_known_met
+    emule_stored_searches_met
+    RUNTIME DESTINATION share/mobiusft/tools)

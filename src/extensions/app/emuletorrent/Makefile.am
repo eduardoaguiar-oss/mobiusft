@@ -19,5 +19,5 @@ install-exec-local: cmake-install
 # Include CMakeLists.txt and source files in the distribution
 EXTRA_DIST =				\
 	CMakeLists.txt			\
-	*.cpp
+	*.cpp				\
 	*.hpp

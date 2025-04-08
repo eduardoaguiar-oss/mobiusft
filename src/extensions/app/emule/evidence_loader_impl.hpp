@@ -76,7 +76,6 @@ struct autofill
   mobius::io::file f;
 };
 
-/*
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Local file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -93,20 +92,18 @@ struct local_file
   // hashes
   mobius::pod::data hashes;
 
-  // thumbnail_data
-  mobius::bytearray thumbnail_data;
-
   // flags
-  bool flag_downloaded = false;
-  bool flag_uploaded = false;
-  bool flag_shared = false;
-  bool flag_completed = false;
+  mobius::framework::evidence_flag flag_downloaded;
+  mobius::framework::evidence_flag flag_uploaded;
+  mobius::framework::evidence_flag flag_shared;
+  mobius::framework::evidence_flag flag_completed;
+  mobius::framework::evidence_flag flag_corrupted;
 
   // files
   mobius::io::file f;
-  mobius::io::file shareaza_db3_f;
 };
 
+/*
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Remote file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -189,15 +186,11 @@ private:
   // @brief Autofills found
   std::vector <autofill> autofills_;
 
-/*  // @brief Searched texts
-  std::vector <search> searches_;
-
-  // @brief Library files
+  // @brief Local files
   std::vector <local_file> local_files_;
 
   // @brief Remote files
-  std::vector <remote_file> remote_files_;
-*/
+  //std::vector <remote_file> remote_files_;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Helper functions
@@ -212,17 +205,17 @@ private:
   void _decode_preferenceskad_dat_file (const mobius::io::file&);
   void _decode_statistics_ini_file (const mobius::io::file&);
   void _decode_ac_searchstrings_dat_file (const mobius::io::file&);
+  void _decode_known_met_file (const mobius::io::file&);
   void _decode_storedsearches_met_file (const mobius::io::file&);
-  //void _decode_ntuser_dat_file (const mobius::io::file&);
 
   void _save_evidences ();
   void _save_accounts ();
   void _save_autofills ();
-  //void _save_local_files ();
+  void _save_local_files ();
   //void _save_p2p_remote_files ();
-  //void _save_received_files ();
-  //void _save_sent_files ();
-  //void _save_shared_files ();
+  void _save_received_files ();
+  void _save_sent_files ();
+  void _save_shared_files ();
 };
 
 } // namespace mobius::extension::app::emule

@@ -16,6 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "evidence_loader_impl.hpp"
+#include "file_known_met.hpp"
 #include "file_stored_searches_met.hpp"
 #include <mobius/core/log.h>
 #include <mobius/datasource/datasource_vfs.h>
@@ -24,9 +25,8 @@
 #include <mobius/io/line_reader.h>
 #include <mobius/io/walker.h>
 #include <mobius/model/evidence.h>
+#include <mobius/pod/data.h>
 #include <mobius/string_functions.h>
-
-#include <iostream>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Versions examined: Emule 0.50a and DreaMule 3.2
@@ -89,21 +89,20 @@ static const std::string ANT_VERSION = "1.0";
 template <typename T> std::vector <mobius::pod::data>
 get_file_hashes (const T& f)
 {
-    std::vector <std::pair <std::string, std::string>> values =
-    {
-        {"sha1", f.get_hash_sha1 ()},
-        {"tiger", f.get_hash_tiger ()},
-        {"md5", f.get_hash_md5 ()},
-        {"ed2k", f.get_hash_ed2k ()},
-        {"bth", f.get_hash_bth ()},
+    std::vector <mobius::pod::data> hashes = {
+        {"ed2k", mobius::string::toupper (f.hash_ed2k)}
     };
 
-    std::vector <mobius::pod::data> hashes;
+    auto iter = std::find_if (
+        f.tags.begin (),
+        f.tags.end (),
+        [](const auto& t){ return t.get_id () == 0x27; }
+    );
 
-    for (const auto& [k, v] : values)
+    if (iter != f.tags.end ())
       {
-        if (!v.empty ())
-            hashes.push_back ({k, v});
+        auto hash_value = iter->get_value ();
+        hashes.push_back ({"aich", static_cast <std::string> (hash_value)});
       }
 
     return hashes;
@@ -308,6 +307,9 @@ evidence_loader_impl::_scan_canonical_emule_config_folder (const mobius::io::fol
         if (lname == "ac_searchstrings.dat")
             _decode_ac_searchstrings_dat_file (f);
             
+        else if (lname == "known.met")
+            _decode_known_met_file (f);
+
         else if (lname == "storedsearches.met")
             _decode_storedsearches_met_file (f);
       }
@@ -532,6 +534,71 @@ evidence_loader_impl::_decode_ac_searchstrings_dat_file (const mobius::io::file&
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode Known.met file
+// @param f File object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_loader_impl::_decode_known_met_file (const mobius::io::file& f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+      {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Decode file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        file_known_met known_met (f.new_reader ());
+
+        if (!known_met)
+          {
+            log.info (__LINE__, "File is not an instance of Known.met. Path: " + f.get_path ());
+            return;
+          }
+
+        log.info (__LINE__, "Known.met file decoded. Path: " + f.get_path ());
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Add local files
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (const auto& kf : known_met.get_known_files ())
+          {
+            auto metadata = get_metadata_from_tags (kf.tags);
+
+            local_file lf;
+
+            lf.username = username_;
+            lf.filename = metadata.get <std::string> ("name");
+            
+            if (!account_.incoming_dir.empty ())
+                lf.path = account_.incoming_dir + '\\' + lf.filename;
+  
+            lf.flag_downloaded = true;
+            lf.flag_uploaded = metadata.get <std::int64_t> ("uploaded_bytes") > 0;
+            lf.flag_shared = mobius::framework::evidence_flag::always;
+            lf.flag_corrupted = metadata.get <bool> ("is_corrupted");
+            lf.flag_completed = true; // @see CPartFile::PerformFileCompleteEnd
+
+            metadata.set ("flag_downloaded", to_string (lf.flag_downloaded));
+            metadata.set ("flag_uploaded", to_string (lf.flag_uploaded));
+            metadata.set ("flag_shared", to_string (lf.flag_shared));
+            metadata.set ("flag_corrupted", to_string (lf.flag_corrupted));
+            metadata.set ("flag_completed", to_string (lf.flag_completed));
+            metadata.set ("last_modification_time", kf.last_modification_time);
+            metadata.set ("network", "eDonkey");
+
+            lf.metadata = metadata;
+            lf.hashes = get_file_hashes (kf);
+
+            local_files_.push_back (lf);
+          }
+      }
+    catch (const std::exception& e)
+      {
+        log.warning (__LINE__, e.what ());
+      }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Decode StoredSearches.met file
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -586,80 +653,6 @@ evidence_loader_impl::_decode_storedsearches_met_file (const mobius::io::file& f
       }
 }
 
-/*
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode Searches.dat file
-// @param f File object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_decode_searches_dat_file (const mobius::io::file& f)
-{
-  mobius::core::log log (__FILE__, __FUNCTION__);
-
-  try
-    {
-      // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-      // Decode file
-      // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-      file_searches_dat searches_dat (f.new_reader ());
-
-      if (!searches_dat)
-        {
-          log.info (__LINE__, "File is not an instance of Searches.dat. Path: " + f.get_path ());
-          return;
-        }
-
-      log.info (__LINE__, "Searches.dat file decoded. Path: " + f.get_path ());
-
-        
-      // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-      // Add searches
-      // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-      for (const auto& s : searches_dat.get_searches ())
-        {
-          auto cmanagedsearch = s.obj;
-          auto qs = cmanagedsearch.get_query_search ();
-
-          search st;
-
-          // Attributes
-          st.timestamp = s.timestamp;
-          st.text = s.text;
-          st.username = username_;
-          st.f = f;
-
-          // Metadata
-          st.metadata.set ("search_id", qs.get_guid ());
-          st.metadata.set ("first_hit_time", s.first_hit_time);
-          st.metadata.set ("last_hit_time", s.last_hit_time);
-          st.metadata.set ("file_count", s.file_count);
-          st.metadata.set ("schema_uri", qs.get_uri ());
-          st.metadata.set ("priority", cmanagedsearch.get_priority ());
-          st.metadata.set ("flag_active", cmanagedsearch.get_flag_active ());
-          st.metadata.set ("flag_receive", cmanagedsearch.get_flag_receive ());
-          st.metadata.set ("flag_allow_g1", cmanagedsearch.get_allow_g1 ());
-          st.metadata.set ("flag_allow_g2", cmanagedsearch.get_allow_g2 ());
-          st.metadata.set ("flag_allow_ed2k", cmanagedsearch.get_allow_ed2k ());
-          st.metadata.set ("flag_allow_dc", cmanagedsearch.get_allow_dc ());
-          st.metadata.set ("flag_want_url", qs.get_flag_want_url ());
-          st.metadata.set ("flag_want_dn", qs.get_flag_want_dn ());
-          st.metadata.set ("flag_want_xml", qs.get_flag_want_xml ());
-          st.metadata.set ("flag_want_com", qs.get_flag_want_com ());
-          st.metadata.set ("flag_want_pfs", qs.get_flag_want_pfs ());
-          st.metadata.set ("min_size", qs.get_min_size ());
-          st.metadata.set ("max_size", qs.get_max_size ());
-          st.metadata.set ("cmanagedsearch_version", cmanagedsearch.get_version ());
-          st.metadata.set ("cquerysearch_version", qs.get_version ());
-
-          searches_.push_back (st);
-        }
-    }
-  catch (const std::exception& e)
-    {
-      log.warning (__LINE__, e.what ());
-    }
-}*/
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save evidences
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -670,11 +663,11 @@ evidence_loader_impl::_save_evidences ()
 
   _save_accounts ();
   _save_autofills ();
-  //_save_local_files ();
+  _save_local_files ();
   //_save_p2p_remote_files ();
-  //_save_received_files ();
-  //_save_sent_files ();
-  //_save_shared_files ();
+  _save_received_files ();
+  _save_sent_files ();
+  _save_shared_files ();
 
   item_.set_ant (ANT_ID, ANT_NAME, ANT_VERSION);
   transaction.commit ();
@@ -767,7 +760,7 @@ evidence_loader_impl::_save_autofills ()
       e.add_source (af.f);
     }
 }
-/*
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save local files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -788,7 +781,6 @@ evidence_loader_impl::_save_local_files ()
 
       e.set_tag ("p2p");
       e.add_source (lf.f);
-      e.add_source (lf.shareaza_db3_f);
     }
 }
 
@@ -800,7 +792,7 @@ evidence_loader_impl::_save_received_files ()
 {
   for (const auto& lf : local_files_)
     {
-      if (lf.flag_downloaded)
+      if (lf.flag_downloaded.is_yes ())
         {
           auto e = item_.new_evidence ("received-file");
 
@@ -817,7 +809,7 @@ evidence_loader_impl::_save_received_files ()
         }
     }
 }
-
+/*
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save remote files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -841,9 +833,9 @@ evidence_loader_impl::_save_p2p_remote_files ()
 
       e.set_tag ("p2p");
       e.add_source (rf.f);
-      e.add_source (rf.shareaza_db3_f);
     }
 }
+*/
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save sent files
@@ -853,7 +845,7 @@ evidence_loader_impl::_save_sent_files ()
 {
   for (const auto& lf : local_files_)
     {
-      if (lf.flag_uploaded)
+      if (lf.flag_uploaded.is_yes ())
         {
           auto e = item_.new_evidence ("sent-file");
 
@@ -867,7 +859,6 @@ evidence_loader_impl::_save_sent_files ()
 
           e.set_tag ("p2p");
           e.add_source (lf.f);
-          e.add_source (lf.shareaza_db3_f);
         }
     }
 }
@@ -880,7 +871,7 @@ evidence_loader_impl::_save_shared_files ()
 {
   for (const auto& lf : local_files_)
     {
-      if (lf.flag_shared)
+      if (lf.flag_shared.is_yes () || lf.flag_shared.is_always ())
         {
           auto e = item_.new_evidence ("shared-file");
 
@@ -894,11 +885,9 @@ evidence_loader_impl::_save_shared_files ()
 
           e.set_tag ("p2p");
           e.add_source (lf.f);
-          e.add_source (lf.shareaza_db3_f);
         }
     }
 }
-*/
 
 } // namespace mobius::extension::app::emule
 

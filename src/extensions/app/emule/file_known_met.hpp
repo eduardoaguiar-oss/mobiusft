@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_EMULE_CTAG_H
-#define MOBIUS_EXTENSION_APP_EMULE_CTAG_H
+#ifndef MOBIUS_EXTENSION_APP_EMULE_FILE_KNOWN_MET_H
+#define MOBIUS_EXTENSION_APP_EMULE_FILE_KNOWN_MET_H
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,9 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/decoder/data_decoder.h>
-#include <mobius/pod/data.h>
-#include <mobius/pod/map.h>
+#include "ctag.hpp"
+#include <mobius/datetime/datetime.h>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -28,84 +27,56 @@
 namespace mobius::extension::app::emule
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief CTag file decoder
+// @brief Known.met file decoder
 // @author Eduardo Aguiar
-// @see CTag::CTag - srchybrid/packets.cpp
+// @see CKnownFileList::LoadKnownFiles (srchybrid/KnownFileList.cpp)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class ctag
+class file_known_met
 {
 public:
-  explicit ctag (mobius::decoder::data_decoder&);
-  
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get tag ID
-  // @return Tag ID
+  // @brief CKnownFile structure
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::uint8_t
-  get_id () const noexcept
+  struct CKnownFile
   {
-    return id_;
+    mobius::datetime::datetime last_modification_time;
+    std::string hash_ed2k;
+    std::vector <std::string> chunk_hashes;
+    std::vector <ctag> tags;
+  };
+
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // Prototypes
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  file_known_met (const mobius::io::reader&);
+
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // @brief Check if stream is an instance of Known.met file
+  // @return true/false
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  operator bool () const noexcept
+  {
+    return is_instance_;
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get tag type
-  // @return Tag type
+  // @brief Get known files
+  // @return Known files
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::uint8_t
-  get_type () const noexcept
+  std::vector <CKnownFile>
+  get_known_files () const
   {
-    return type_;
+    return known_files_;
   }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get tag name
-  // @return Tag name
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::string
-  get_name () const
-  {
-    return name_;
-  }
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get tag value
-  // @return Tag value
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::data
-  get_value () const
-  {
-    return value_;
-  }
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get tag value
-  // @return Tag value
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  template <typename T> T
-  get_value () const
-  {
-    return static_cast <T> (value_);
-  }
-  
 private:
+  // @brief Flag is instance
+  bool is_instance_ = false;
 
-  // @brief Tag ID
-  std::uint8_t id_ = 0;
-
-  // @brief Tag type
-  std::uint8_t type_ = 0;
-  
-  // @brief Tag name
-  std::string name_;
-  
-  // @brief Tag value
-  mobius::pod::data value_;
+  // @brief Known files
+  std::vector <CKnownFile> known_files_;
 };
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Functions
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::map get_metadata_from_tags (const std::vector<ctag>&);
-
 } // namespace mobius::extension::app::emule
+
 #endif
