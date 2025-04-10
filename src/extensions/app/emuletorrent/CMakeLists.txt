@@ -1,26 +1,30 @@
-# Specify the minimum CMake version required
-cmake_minimum_required(VERSION 3.10)
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Mobius Forensic Toolkit
+# Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 2, or (at your option) any later
+# version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
+# Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-# Define the project and language (C++)
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Project
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+cmake_minimum_required(VERSION 3.10)
 project(app_emuletorrent LANGUAGES CXX)
 
-# When every extension is build by cmake, move this variables to src/extension/CMakeLists.txt
-# Set C++ standard
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-# Set project variables
-set(TOP_SRC_DIR ${CMAKE_SOURCE_DIR}/../../../..)
-set(TOP_BUILD_DIR ${CMAKE_BINARY_DIR}/../../../../..)
-
-# Add include directories
-include_directories(${TOP_SRC_DIR}/src)
-
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# EXTENSION
+# Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Define source files
 set(SOURCES
     main.cpp
     evidence_loader_impl.cpp
@@ -28,27 +32,12 @@ set(SOURCES
     file_ed2k_fastresume.cpp
 )
 
-# Build the library as a dynamically loadable module
 add_library(app_emuletorrent MODULE ${SOURCES})
 set_target_properties(app_emuletorrent PROPERTIES OUTPUT_NAME "app-emuletorrent" PREFIX "")
+target_include_directories(app_emuletorrent PRIVATE ${MOBIUS_INCLUDE_DIRS})
+target_link_libraries(app_emuletorrent PRIVATE ${MOBIUS_LIBRARIES})
 
-# Find Autotools-built libraries in their .libs/ directories
-find_library(MOBIUS_LIB mobius HINTS ${TOP_BUILD_DIR}/src/mobius/.libs NO_DEFAULT_PATH)
-find_library(MOBIUS_FRAMEWORK_LIB mobius_framework HINTS ${TOP_BUILD_DIR}/src/mobius/framework/.libs NO_DEFAULT_PATH)
-
-if(NOT MOBIUS_LIB)
-    message(FATAL_ERROR "libmobius not found in ${TOP_BUILD_DIR}/src/mobius/.libs")
-endif()
-if(NOT MOBIUS_FRAMEWORK_LIB)
-    message(FATAL_ERROR "libmobius_framework not found in ${TOP_BUILD_DIR}/src/mobius/framework/.libs")
-endif()
-
-# Link the libraries
-target_link_libraries(app_emuletorrent PRIVATE ${MOBIUS_LIB} ${MOBIUS_FRAMEWORK_LIB})
-
-# Install to the same location as the original
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Installation
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 install(TARGETS app_emuletorrent LIBRARY DESTINATION share/mobiusft/extensions)
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# TOOLS
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

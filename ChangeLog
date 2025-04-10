@@ -46,8 +46,39 @@ Mobius Forensic Toolkit 2.14
 	* turing: Using CMake to build, install and package
 	* vfs-block-view-bitlocker: Using CMake to build, install and package
 	* vfs-block-view-partition-system: Using CMake to build, install and package
+	* vfs-item-attributes: Using CMake to build, install and package
 	* ui/gtk3: All source files renamed from .h/.cc to .hpp/.cpp
 	* ui/gtk3: Using CMake to build, install and package
+	* vfs/filesystem/exfat: All source files renamed from .h/.cc to .hpp/.cpp
+	* vfs/filesystem/exfat: Using CMake to build, install and package
+	* vfs/filesystem/ext2: All source files renamed from .h/.cc to .hpp/.cpp
+	* vfs/filesystem/ext2: Using CMake to build, install and package
+	* vfs/filesystem/hfs: All source files renamed from .h/.cc to .hpp/.cpp
+	* vfs/filesystem/hfs: Using CMake to build, install and package
+	* vfs/filesystem/iso: All source files renamed from .h/.cc to .hpp/.cpp
+	* vfs/filesystem/iso: Using CMake to build, install and package
+	* vfs/filesystem/ntfs: All source files renamed from .h/.cc to .hpp/.cpp
+	* vfs/filesystem/ntfs: Using CMake to build, install and package
+	* vfs/filesystem/vfat: All source files renamed from .h/.cc to .hpp/.cpp
+	* vfs/filesystem/vfat: Using CMake to build, install and package
+	* vfs/imagefile/dossier: All source files renamed from .h/.cc to .hpp/.cpp
+	* vfs/imagefile/dossier: Using CMake to build, install and package
+	* vfs/imagefile/ewf: All source files renamed from .h/.cc to .hpp/.cpp
+	* vfs/imagefile/ewf: Using CMake to build, install and package
+	* vfs/imagefile/msr: All source files renamed from .h/.cc to .hpp/.cpp
+	* vfs/imagefile/msr: Using CMake to build, install and package
+	* vfs/imagefile/raw: All source files renamed from .h/.cc to .hpp/.cpp
+	* vfs/imagefile/raw: Using CMake to build, install and package
+	* vfs/imagefile/solo: All source files renamed from .h/.cc to .hpp/.cpp
+	* vfs/imagefile/solo: Using CMake to build, install and package
+	* vfs/imagefile/split: All source files renamed from .h/.cc to .hpp/.cpp
+	* vfs/imagefile/split: Using CMake to build, install and package
+	* vfs/imagefile/vhd: All source files renamed from .h/.cc to .hpp/.cpp
+	* vfs/imagefile/vhd: Using CMake to build, install and package
+	* vfs/imagefile/vhdx: All source files renamed from .h/.cc to .hpp/.cpp
+	* vfs/imagefile/vhdx: Using CMake to build, install and package
+	* src/extension: Using both CMake and Makefile.am (hybrid)
+	* src/tools: Using both CMake and Makefile.am (hybrid)
 	* tools: All source files renamed from .h/.cc to .hpp/.cpp
 	* benchmark: Removed module
 	* unittest: Removed module

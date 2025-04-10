@@ -1,42 +1,30 @@
-# Specify the minimum CMake version required
-cmake_minimum_required(VERSION 3.10)
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Mobius Forensic Toolkit
+# Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 2, or (at your option) any later
+# version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
+# Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-# Define the project and language (C++)
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Project
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+cmake_minimum_required(VERSION 3.10)
 project(ui_gtk3 LANGUAGES CXX)
 
-# When every extension is build by cmake, move this variables to src/extension/CMakeLists.txt
-# Set C++ standard
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-# Set project variables
-set(TOP_SRC_DIR ${CMAKE_SOURCE_DIR}/../../../..)
-set(TOP_BUILD_DIR ${CMAKE_BINARY_DIR}/../../../../..)
-
-# Add include directories
-include_directories(${TOP_SRC_DIR}/src)
-
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Find dependencies
+# Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
-
-find_library(MOBIUS_LIB mobius HINTS ${TOP_BUILD_DIR}/src/mobius/.libs NO_DEFAULT_PATH)
-find_library(MOBIUS_FRAMEWORK_LIB mobius_framework HINTS ${TOP_BUILD_DIR}/src/mobius/framework/.libs NO_DEFAULT_PATH)
-
-if(NOT MOBIUS_LIB)
-    message(FATAL_ERROR "libmobius not found in ${TOP_BUILD_DIR}/src/mobius/.libs")
-endif()
-if(NOT MOBIUS_FRAMEWORK_LIB)
-    message(FATAL_ERROR "libmobius_framework not found in ${TOP_BUILD_DIR}/src/mobius/framework/.libs")
-endif()
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# EXTENSION
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Define source files
 set(SOURCES
     main.cpp
     box_impl.cpp
@@ -51,10 +39,10 @@ set(SOURCES
 
 add_library(ui_gtk3 MODULE ${SOURCES})
 set_target_properties(ui_gtk3 PROPERTIES OUTPUT_NAME "ui-gtk3" PREFIX "")
-target_include_directories(ui_gtk3 PRIVATE ${GTK3_INCLUDE_DIRS})
-target_link_libraries(ui_gtk3 PRIVATE ${MOBIUS_LIB} ${MOBIUS_FRAMEWORK_LIB} ${GTK3_LIBRARIES})
+target_include_directories(ui_gtk3 PRIVATE ${MOBIUS_INCLUDE_DIRS} ${GTK3_INCLUDE_DIRS})
+target_link_libraries(ui_gtk3 PRIVATE ${MOBIUS_LIBRARIES} ${GTK3_LIBRARIES})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Install
+# Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 install(TARGETS ui_gtk3 LIBRARY DESTINATION share/mobiusft/extensions)

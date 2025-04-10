@@ -27,9 +27,7 @@ Makefile
 .deps
 .libs
 .dirstamp
-src/extensions/app/shareaza/shareaza_library_dat
-src/extensions/app/shareaza/shareaza_sd
-src/extensions/app/shareaza/shareaza_searches_dat
+src/extensions/build/
 src/extensions/vfs/imagefile/ewf/ewf_decoder
 src/mobius/core/application.cc
 src/tools/casetree
@@ -46,9 +44,6 @@ src/tools/imagefile_convert
 src/tools/imagefile_info
 src/tools/list_resources
 src/tools/vfs_info
-src/unittest/cpp/benchmark/benchmark
-src/unittest/cpp/unittest
 .idea/
-src/extensions/*/build/
 src/extensions/*/*/build/
 src/tools/build/

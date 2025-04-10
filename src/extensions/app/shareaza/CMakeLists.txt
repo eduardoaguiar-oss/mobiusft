@@ -1,26 +1,30 @@
-# Specify the minimum CMake version required
-cmake_minimum_required(VERSION 3.10)
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Mobius Forensic Toolkit
+# Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 2, or (at your option) any later
+# version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
+# Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-# Define the project and language (C++)
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Project
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+cmake_minimum_required(VERSION 3.10)
 project(app_shareaza LANGUAGES CXX)
 
-# When every extension is build by cmake, move this variables to src/extension/CMakeLists.txt
-# Set C++ standard
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-# Set project variables
-set(TOP_SRC_DIR ${CMAKE_SOURCE_DIR}/../../../..)
-set(TOP_BUILD_DIR ${CMAKE_BINARY_DIR}/../../../../..)
-
-# Add include directories
-include_directories(${TOP_SRC_DIR}/src)
-
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# EXTENSION
+# Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Define source files
 set(SOURCES
     main.cpp
     CBTInfo.cpp
@@ -43,26 +47,10 @@ set(SOURCES
     file_searches_dat.cpp
 )
 
-# Build the library as a dynamically loadable module
 add_library(app_shareaza MODULE ${SOURCES})
 set_target_properties(app_shareaza PROPERTIES OUTPUT_NAME "app-shareaza" PREFIX "")
-
-# Find Autotools-built libraries in their .libs/ directories
-find_library(MOBIUS_LIB mobius HINTS ${TOP_BUILD_DIR}/src/mobius/.libs NO_DEFAULT_PATH)
-find_library(MOBIUS_FRAMEWORK_LIB mobius_framework HINTS ${TOP_BUILD_DIR}/src/mobius/framework/.libs NO_DEFAULT_PATH)
-
-if(NOT MOBIUS_LIB)
-    message(FATAL_ERROR "libmobius not found in ${TOP_BUILD_DIR}/src/mobius/.libs")
-endif()
-if(NOT MOBIUS_FRAMEWORK_LIB)
-    message(FATAL_ERROR "libmobius_framework not found in ${TOP_BUILD_DIR}/src/mobius/framework/.libs")
-endif()
-
-# Link the libraries
-target_link_libraries(app_shareaza PRIVATE ${MOBIUS_LIB} ${MOBIUS_FRAMEWORK_LIB})
-
-# Install to the same location as the original
-install(TARGETS app_shareaza LIBRARY DESTINATION share/mobiusft/extensions)
+target_include_directories(app_shareaza PRIVATE ${MOBIUS_INCLUDE_DIRS})
+target_link_libraries(app_shareaza PRIVATE ${MOBIUS_LIBRARIES})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: shareaza_library_dat
@@ -77,8 +65,8 @@ set(SHAREAZA_LIBRARY_DAT_SOURCES
 )
 
 add_executable(shareaza_library_dat ${SHAREAZA_LIBRARY_DAT_SOURCES})
-target_include_directories(shareaza_library_dat PRIVATE ${CMAKE_SOURCE_DIR})
-target_link_libraries(shareaza_library_dat PRIVATE ${MOBIUS_LIB} ${MOBIUS_FRAMEWORK_LIB})
+target_include_directories(shareaza_library_dat PRIVATE ${MOBIUS_INCLUDE_DIRS})
+target_link_libraries(shareaza_library_dat PRIVATE ${MOBIUS_LIBRARIES})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: shareaza_sd
@@ -93,8 +81,8 @@ set(SHAREAZA_SD_SOURCES
 )
 
 add_executable(shareaza_sd ${SHAREAZA_SD_SOURCES})
-target_include_directories(shareaza_sd PRIVATE ${CMAKE_SOURCE_DIR})
-target_link_libraries(shareaza_sd PRIVATE ${MOBIUS_LIB} ${MOBIUS_FRAMEWORK_LIB})
+target_include_directories(shareaza_sd PRIVATE ${MOBIUS_INCLUDE_DIRS})
+target_link_libraries(shareaza_sd PRIVATE ${MOBIUS_LIBRARIES})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: shareaza_searches_dat
@@ -112,12 +100,14 @@ set(SHAREAZA_SEARCHES_DAT_SOURCES
 )
 
 add_executable(shareaza_searches_dat ${SHAREAZA_SEARCHES_DAT_SOURCES})
-target_include_directories(shareaza_searches_dat PRIVATE ${CMAKE_SOURCE_DIR})
-target_link_libraries(shareaza_searches_dat PRIVATE ${MOBIUS_LIB} ${MOBIUS_FRAMEWORK_LIB})
+target_include_directories(shareaza_searches_dat PRIVATE ${MOBIUS_INCLUDE_DIRS})
+target_link_libraries(shareaza_searches_dat PRIVATE ${MOBIUS_LIBRARIES})
 
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Tools installation
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Installation
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+install(TARGETS app_shareaza LIBRARY DESTINATION share/mobiusft/extensions)
+
 install(TARGETS
 	shareaza_library_dat
 	shareaza_sd

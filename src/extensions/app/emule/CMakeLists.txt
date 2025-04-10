@@ -1,26 +1,30 @@
-# Specify the minimum CMake version required
-cmake_minimum_required(VERSION 3.10)
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Mobius Forensic Toolkit
+# Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 2, or (at your option) any later
+# version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
+# Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-# Define the project and language (C++)
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Project
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+cmake_minimum_required(VERSION 3.10)
 project(app_emule LANGUAGES CXX)
 
-# When every extension is build by cmake, move this variables to src/extension/CMakeLists.txt
-# Set C++ standard
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-# Set project variables
-set(TOP_SRC_DIR ${CMAKE_SOURCE_DIR}/../../../..)
-set(TOP_BUILD_DIR ${CMAKE_BINARY_DIR}/../../../../..)
-
-# Add include directories
-include_directories(${TOP_SRC_DIR}/src)
-
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# EXTENSION
+# Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Define source files
 set(SOURCES
     main.cpp
     ctag.cpp
@@ -30,26 +34,10 @@ set(SOURCES
     evidence_loader_impl.cpp
 )
 
-# Build the library as a dynamically loadable module
 add_library(app_emule MODULE ${SOURCES})
 set_target_properties(app_emule PROPERTIES OUTPUT_NAME "app-emule" PREFIX "")
-
-# Find Autotools-built libraries in their .libs/ directories
-find_library(MOBIUS_LIB mobius HINTS ${TOP_BUILD_DIR}/src/mobius/.libs NO_DEFAULT_PATH)
-find_library(MOBIUS_FRAMEWORK_LIB mobius_framework HINTS ${TOP_BUILD_DIR}/src/mobius/framework/.libs NO_DEFAULT_PATH)
-
-if(NOT MOBIUS_LIB)
-    message(FATAL_ERROR "libmobius not found in ${TOP_BUILD_DIR}/src/mobius/.libs")
-endif()
-if(NOT MOBIUS_FRAMEWORK_LIB)
-    message(FATAL_ERROR "libmobius_framework not found in ${TOP_BUILD_DIR}/src/mobius/framework/.libs")
-endif()
-
-# Link the libraries
-target_link_libraries(app_emule PRIVATE ${MOBIUS_LIB} ${MOBIUS_FRAMEWORK_LIB})
-
-# Install to the same location as the original
-install(TARGETS app_emule LIBRARY DESTINATION share/mobiusft/extensions)
+target_include_directories(app_emule PRIVATE ${MOBIUS_INCLUDE_DIRS})
+target_link_libraries(app_emule PRIVATE ${MOBIUS_LIBRARIES})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: emule_cancelled_met
@@ -61,7 +49,8 @@ set(STORED_CANCELLED_MET_SOURCES
 )
 
 add_executable(emule_cancelled_met ${STORED_CANCELLED_MET_SOURCES})
-target_link_libraries(emule_cancelled_met PRIVATE ${MOBIUS_LIB} ${MOBIUS_FRAMEWORK_LIB})
+target_link_libraries(emule_cancelled_met PRIVATE ${MOBIUS_LIBRARIES})
+target_include_directories(emule_cancelled_met PRIVATE ${MOBIUS_INCLUDE_DIRS})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: emule_known_met
@@ -73,7 +62,8 @@ set(STORED_KNOWN_MET_SOURCES
 )
 
 add_executable(emule_known_met ${STORED_KNOWN_MET_SOURCES})
-target_link_libraries(emule_known_met PRIVATE ${MOBIUS_LIB} ${MOBIUS_FRAMEWORK_LIB})
+target_link_libraries(emule_known_met PRIVATE ${MOBIUS_LIBRARIES})
+target_include_directories(emule_known_met PRIVATE ${MOBIUS_INCLUDE_DIRS})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: emule_stored_searches_met
@@ -85,11 +75,16 @@ set(STORED_SEARCHES_MET_SOURCES
 )
 
 add_executable(emule_stored_searches_met ${STORED_SEARCHES_MET_SOURCES})
-target_link_libraries(emule_stored_searches_met PRIVATE ${MOBIUS_LIB} ${MOBIUS_FRAMEWORK_LIB})
+target_link_libraries(emule_stored_searches_met PRIVATE ${MOBIUS_LIBRARIES})
+target_include_directories(emule_stored_searches_met PRIVATE ${MOBIUS_INCLUDE_DIRS})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+install(TARGETS
+    app_emule LIBRARY DESTINATION share/mobiusft/extensions
+)
+
 install(TARGETS
     emule_cancelled_met
     emule_known_met

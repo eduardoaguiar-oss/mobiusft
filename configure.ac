@@ -498,43 +498,6 @@ AC_CONFIG_FILES([Makefile
                  src/python/pymobius/registry/Makefile
                  src/python/examples/Makefile
 		 src/extensions/Makefile
-                 src/extensions/app/Makefile
-                 src/extensions/app/ares/Makefile
-                 src/extensions/app/emule/Makefile
-                 src/extensions/app/emuletorrent/Makefile
-                 src/extensions/app/shareaza/Makefile
-                 src/extensions/attribute-viewer/Makefile
-                 src/extensions/category-manager/Makefile
-                 src/extensions/datasource-viewer/Makefile
-                 src/extensions/datasource-ufdr/Makefile
-                 src/extensions/datasource-vfs/Makefile
-                 src/extensions/date_code/Makefile
-                 src/extensions/event-viewer/Makefile
-                 src/extensions/evidence-password-hashes/Makefile
-                 src/extensions/evidence-viewer/Makefile
-                 src/extensions/extension-manager/Makefile
-                 src/extensions/file-explorer/Makefile
-                 src/extensions/floppy-imager/Makefile
-                 src/extensions/gigatribe-agent/Makefile
-                 src/extensions/gtk-ui/Makefile
-                 src/extensions/hive/Makefile
-                 src/extensions/hive-report/Makefile
-                 src/extensions/ice/Makefile
-                 src/extensions/imagefile-dnd/Makefile
-                 src/extensions/iped-frontend/Makefile
-                 src/extensions/kff-manager/Makefile
-                 src/extensions/lshw-agent/Makefile
-                 src/extensions/p2p-viewer/Makefile
-                 src/extensions/part-catalogue/Makefile
-                 src/extensions/part-model/Makefile
-                 src/extensions/report-model/Makefile
-                 src/extensions/report-wizard/Makefile
-                 src/extensions/sdi-window-manager/Makefile
-                 src/extensions/skype-agent/Makefile
-                 src/extensions/skype-agent-sqlite/Makefile
-                 src/extensions/turing/Makefile
-		 src/extensions/ui/Makefile
-		 src/extensions/ui/gtk3/Makefile
 		 src/extensions/vfs/Makefile
 		 src/extensions/vfs/block/Makefile
 		 src/extensions/vfs/block/bitlocker/Makefile
@@ -542,26 +505,6 @@ AC_CONFIG_FILES([Makefile
 		 src/extensions/vfs/block/partition_system_apm/Makefile
 		 src/extensions/vfs/block/partition_system_dos/Makefile
 		 src/extensions/vfs/block/partition_system_gpt/Makefile
-		 src/extensions/vfs/filesystem/Makefile
-		 src/extensions/vfs/filesystem/exfat/Makefile
-		 src/extensions/vfs/filesystem/ext2/Makefile
-		 src/extensions/vfs/filesystem/hfs/Makefile
-		 src/extensions/vfs/filesystem/iso/Makefile
-		 src/extensions/vfs/filesystem/ntfs/Makefile
-		 src/extensions/vfs/filesystem/vfat/Makefile
-		 src/extensions/vfs/imagefile/Makefile
-		 src/extensions/vfs/imagefile/dossier/Makefile
-		 src/extensions/vfs/imagefile/ewf/Makefile
-		 src/extensions/vfs/imagefile/msr/Makefile
-		 src/extensions/vfs/imagefile/raw/Makefile
-		 src/extensions/vfs/imagefile/solo/Makefile
-		 src/extensions/vfs/imagefile/split/Makefile
-		 src/extensions/vfs/imagefile/talon/Makefile
-		 src/extensions/vfs/imagefile/vhd/Makefile
-		 src/extensions/vfs/imagefile/vhdx/Makefile
-                 src/extensions/vfs-block-view-bitlocker/Makefile
-                 src/extensions/vfs-block-view-partition-system/Makefile
-                 src/extensions/vfs-item-attributes/Makefile
                  src/tools/Makefile
                  data/Makefile
                  data/data/Makefile

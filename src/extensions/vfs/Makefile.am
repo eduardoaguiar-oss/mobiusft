@@ -1,4 +1,2 @@
 SUBDIRS = 								\
-		block							\
-		filesystem						\
-		imagefile
+		block
