@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_UI_GTK3_LABEL_IMPL_H
-#define MOBIUS_EXTENSION_UI_GTK3_LABEL_IMPL_H
+#ifndef MOBIUS_EXTENSION_UI_GTK3_LABEL_IMPL_HPP
+#define MOBIUS_EXTENSION_UI_GTK3_LABEL_IMPL_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

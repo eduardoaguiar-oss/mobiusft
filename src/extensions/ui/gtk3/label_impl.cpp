@@ -15,42 +15,26 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "button_impl.h"
-#include <mobius/exception.inc>
-#include <stdexcept>
+#include "label_impl.hpp"
 #include <gtk/gtk.h>
-
-namespace
-{
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Callback for <i>clicked</i>
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static bool
-_callback_clicked (GtkWidget*, gpointer data)
-{
-  return static_cast <mobius::core::functor<bool> *> (data)->operator ()();
-}
-
-} //  namespace
+#include <pango/pango.h>
 
 namespace mobius::extension::ui::gtk3
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-button_impl::button_impl ()
-  : widget_ (gtk_button_new ())
+label_impl::label_impl ()
+  : widget_ (gtk_label_new (""))
 {
   g_object_ref_sink (G_OBJECT (widget_));
-  gtk_button_set_use_underline (reinterpret_cast <GtkButton *> (widget_), true);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-button_impl::~button_impl ()
+label_impl::~label_impl ()
 {
-  reset_callback ("clicked");
   g_object_unref (G_OBJECT (widget_));
 }
 
@@ -59,7 +43,7 @@ button_impl::~button_impl ()
 // @param flag true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-button_impl::set_sensitive (bool flag)
+label_impl::set_sensitive (bool flag)
 {
   gtk_widget_set_sensitive (widget_, flag);
 }
@@ -69,7 +53,7 @@ button_impl::set_sensitive (bool flag)
 // @param flag Flag (true/false)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-button_impl::set_visible (bool flag)
+label_impl::set_visible (bool flag)
 {
   gtk_widget_set_visible (widget_, flag);
 }
@@ -79,66 +63,79 @@ button_impl::set_visible (bool flag)
 // @param text Text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-button_impl::set_text (const std::string& text)
+label_impl::set_text (const std::string& text)
 {
-  gtk_button_set_label (reinterpret_cast <GtkButton *> (widget_), text.c_str ());
+  gtk_label_set_text (reinterpret_cast <GtkLabel *> (widget_), text.c_str ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set button icon
-// @param icon Icon object
+// @brief Set markup
+// @param text Markup text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-button_impl::set_icon (const mobius::ui::icon& icon)
+label_impl::set_markup (const std::string& text)
 {
-  gtk_button_set_image (reinterpret_cast <GtkButton *> (widget_), icon.get_ui_widget <GtkWidget *>());
+  gtk_label_set_markup (reinterpret_cast <GtkLabel *> (widget_), text.c_str ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set callback to event
-// @param event_id Event ID
-// @param f Function or functor
+// @brief Set widget selectable
+// @param flag Flag (true/false)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-button_impl::set_callback (const std::string& event_id, const mobius::core::functor<bool>& f)
+label_impl::set_selectable (bool flag)
 {
-  if (event_id == "clicked")
+  gtk_label_set_selectable (reinterpret_cast <GtkLabel *> (widget_), flag);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set horizontal alignment
+// @param halign Alignment type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+label_impl::set_halign (halign_type halign)
+{
+  switch (halign)
+  {
+    case halign_type::left: gtk_widget_set_halign (widget_, GTK_ALIGN_START); break;
+    case halign_type::center: gtk_widget_set_halign (widget_, GTK_ALIGN_CENTER); break;
+    case halign_type::right: gtk_widget_set_halign (widget_, GTK_ALIGN_END); break;
+  }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set vertical alignment
+// @param valign Alignment type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+label_impl::set_valign (valign_type valign)
+{
+  switch (valign)
+  {
+    case valign_type::top: gtk_widget_set_valign (widget_, GTK_ALIGN_START); break;
+    case valign_type::center: gtk_widget_set_valign (widget_, GTK_ALIGN_CENTER); break;
+    case valign_type::bottom: gtk_widget_set_valign (widget_, GTK_ALIGN_END); break;
+  }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set elide mode
+// @param mode Elide mode
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+label_impl::set_elide_mode (elide_type mode)
+{
+  PangoEllipsizeMode pango_mode = PANGO_ELLIPSIZE_NONE;
+
+  switch (mode)
     {
-      if (on_clicked_callback_)
-        g_object_disconnect (G_OBJECT (widget_), "clicked", nullptr);
-
-      on_clicked_callback_ = f;
-
-      g_signal_connect (
-          G_OBJECT (widget_),
-          "clicked",
-          G_CALLBACK (_callback_clicked),
-          &on_clicked_callback_
-      );
+      case elide_type::none: pango_mode = PANGO_ELLIPSIZE_NONE; break;
+      case elide_type::start: pango_mode = PANGO_ELLIPSIZE_START; break;
+      case elide_type::middle: pango_mode = PANGO_ELLIPSIZE_MIDDLE; break;
+      case elide_type::end: pango_mode = PANGO_ELLIPSIZE_END; break;
     }
 
-  else
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid event: " + event_id));
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Reset callback to event
-// @param event_id Event ID
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-button_impl::reset_callback (const std::string& event_id)
-{
-  if (event_id == "clicked")
-    {
-      if (on_clicked_callback_)
-        {
-          g_signal_handlers_disconnect_by_data (widget_, &on_clicked_callback_);
-          on_clicked_callback_ = {};
-        }
-    }
-
-  else
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid event: " + event_id));
+  gtk_label_set_ellipsize (reinterpret_cast <GtkLabel *> (widget_), pango_mode);
 }
 
 } // namespace mobius::extension::ui::gtk3

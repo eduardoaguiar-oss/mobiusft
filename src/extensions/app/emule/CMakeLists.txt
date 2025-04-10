@@ -24,6 +24,7 @@ include_directories(${TOP_SRC_DIR}/src)
 set(SOURCES
     main.cpp
     ctag.cpp
+    file_cancelled_met.cpp
     file_known_met.cpp
     file_stored_searches_met.cpp
     evidence_loader_impl.cpp
@@ -49,6 +50,18 @@ target_link_libraries(app_emule PRIVATE ${MOBIUS_LIB} ${MOBIUS_FRAMEWORK_LIB})
 
 # Install to the same location as the original
 install(TARGETS app_emule LIBRARY DESTINATION share/mobiusft/extensions)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: emule_cancelled_met
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+set(STORED_CANCELLED_MET_SOURCES
+    tools/emule_cancelled_met.cpp
+    ctag.cpp
+    file_cancelled_met.cpp
+)
+
+add_executable(emule_cancelled_met ${STORED_CANCELLED_MET_SOURCES})
+target_link_libraries(emule_cancelled_met PRIVATE ${MOBIUS_LIB} ${MOBIUS_FRAMEWORK_LIB})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: emule_known_met
@@ -78,6 +91,7 @@ target_link_libraries(emule_stored_searches_met PRIVATE ${MOBIUS_LIB} ${MOBIUS_F
 # Tools: Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 install(TARGETS
+    emule_cancelled_met
     emule_known_met
     emule_stored_searches_met
     RUNTIME DESTINATION share/mobiusft/tools)

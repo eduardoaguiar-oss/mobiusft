@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_UI_GTK3_BOX_IMPL_H
-#define MOBIUS_EXTENSION_UI_GTK3_BOX_IMPL_H
+#ifndef MOBIUS_UI_GTK3_UI_IMPL_HPP
+#define MOBIUS_UI_GTK3_UI_IMPL_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,52 +18,59 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/ui/box_impl_base.h>
-#include <gtk/gtk.h>
-#include <vector>
+#include <mobius/ui/ui_impl_base.h>
+#include <memory>
+#include <string>
 
 namespace mobius::extension::ui::gtk3
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>gtk3 box</i> implementation class
+// @brief GTK3 UI implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class box_impl : public mobius::ui::box_impl_base
+class ui_impl : public mobius::ui::ui_impl_base
 {
 public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors and destructor
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit box_impl (orientation_type);
-  ~box_impl ();
+  ui_impl ();
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get low level widget
-  // @return Low level widget
+  // @brief Get UI implementation ID
+  // @return ID
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::any
-  get_ui_widget () const final
+  static std::string
+  get_id ()
   {
-    return widget_;
+    return "gtk3";
+  }
+
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // @brief Get UI implementation description
+  // @return Description
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  static std::string
+  get_description ()
+  {
+    return "GTK v3";
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Function prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void set_sensitive (bool) final;
-  void set_visible (bool) final;
-  void set_spacing (std::uint32_t) final;
-  void set_border_width (std::uint32_t) final;
-  void add_child (const mobius::ui::widget&, fill_type) final;
-  void remove_child (const mobius::ui::widget&) final;
-  void clear () final;
+  void start () final;
+  void stop () final;
+  void flush () final;
 
-private:
-  // @brief Low level widget
-  GtkWidget *widget_ = nullptr;
-
-  // @brief Children widget
-  std::vector <mobius::ui::widget> children_;
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // Builders prototypes
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  std::shared_ptr <mobius::ui::box_impl_base> new_box (mobius::ui::box_impl_base::orientation_type) const final;
+  std::shared_ptr <mobius::ui::button_impl_base> new_button () const final;
+  std::shared_ptr <mobius::ui::icon_impl_base> new_icon_by_name (const std::string&, mobius::ui::icon_impl_base::size_type) const final;
+  std::shared_ptr <mobius::ui::icon_impl_base> new_icon_from_data (const mobius::bytearray&, mobius::ui::icon_impl_base::size_type) const final;
+  std::shared_ptr <mobius::ui::label_impl_base> new_label () const final;
+  std::shared_ptr <mobius::ui::message_dialog_impl_base> new_message_dialog (mobius::ui::message_dialog_impl_base::type) const final;
+  std::shared_ptr <mobius::ui::widget_impl_base> new_widget (std::any, bool) const final;
+  std::shared_ptr <mobius::ui::window_impl_base> new_window () const final;
 };
 
 } // namespace mobius::extension::ui::gtk3

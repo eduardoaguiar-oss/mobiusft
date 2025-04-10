@@ -15,14 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "box_impl.h"
-#include "button_impl.h"
-#include "icon_impl.h"
-#include "label_impl.h"
-#include "message_dialog_impl.h"
-#include "ui_impl.h"
-#include "widget_impl.h"
-#include "window_impl.h"
+#include "box_impl.hpp"
+#include "button_impl.hpp"
+#include "icon_impl.hpp"
+#include "label_impl.hpp"
+#include "message_dialog_impl.hpp"
+#include "ui_impl.hpp"
+#include "widget_impl.hpp"
+#include "window_impl.hpp"
 #include <gtk/gtk.h>
 
 namespace mobius::extension::ui::gtk3

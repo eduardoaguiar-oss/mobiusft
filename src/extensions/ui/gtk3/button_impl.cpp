@@ -15,43 +15,42 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "box_impl.h"
+#include "button_impl.hpp"
 #include <mobius/exception.inc>
-#include <algorithm>
 #include <stdexcept>
+#include <gtk/gtk.h>
+
+namespace
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Callback for <i>clicked</i>
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static bool
+_callback_clicked (GtkWidget*, gpointer data)
+{
+  return static_cast <mobius::core::functor<bool> *> (data)->operator ()();
+}
+
+} //  namespace
 
 namespace mobius::extension::ui::gtk3
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
-// @param orientation Widget orientation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-box_impl::box_impl (orientation_type orientation)
+button_impl::button_impl ()
+  : widget_ (gtk_button_new ())
 {
-  switch (orientation)
-    {
-      case orientation_type::vertical:
-          widget_ = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-          break;
-
-      case orientation_type::horizontal:
-          widget_ = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-          break;
-
-      default:
-          throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid orientation type"));
-    }
-
   g_object_ref_sink (G_OBJECT (widget_));
-  gtk_widget_set_no_show_all (widget_, true);
+  gtk_button_set_use_underline (reinterpret_cast <GtkButton *> (widget_), true);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-box_impl::~box_impl ()
+button_impl::~button_impl ()
 {
-  children_.clear ();
+  reset_callback ("clicked");
   g_object_unref (G_OBJECT (widget_));
 }
 
@@ -60,7 +59,7 @@ box_impl::~box_impl ()
 // @param flag true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-box_impl::set_sensitive (bool flag)
+button_impl::set_sensitive (bool flag)
 {
   gtk_widget_set_sensitive (widget_, flag);
 }
@@ -70,96 +69,76 @@ box_impl::set_sensitive (bool flag)
 // @param flag Flag (true/false)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-box_impl::set_visible (bool flag)
+button_impl::set_visible (bool flag)
 {
   gtk_widget_set_visible (widget_, flag);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set spacing between widgets
-// @param siz Size in pixels
+// @brief Set text
+// @param text Text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-box_impl::set_spacing (std::uint32_t siz)
+button_impl::set_text (const std::string& text)
 {
-  gtk_box_set_spacing (reinterpret_cast <GtkBox *> (widget_), siz);
+  gtk_button_set_label (reinterpret_cast <GtkButton *> (widget_), text.c_str ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set border width
-// @param siz Size in pixels
+// @brief Set button icon
+// @param icon Icon object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-box_impl::set_border_width (std::uint32_t siz)
+button_impl::set_icon (const mobius::ui::icon& icon)
 {
-  gtk_container_set_border_width (reinterpret_cast <GtkContainer *> (widget_), siz);
+  gtk_button_set_image (reinterpret_cast <GtkButton *> (widget_), icon.get_ui_widget <GtkWidget *>());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Add child widget
-// @param w Widget to be added
-// @param filling Child widget filling mode
+// @brief Set callback to event
+// @param event_id Event ID
+// @param f Function or functor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-box_impl::add_child (const mobius::ui::widget& w, fill_type filling)
+button_impl::set_callback (const std::string& event_id, const mobius::core::functor<bool>& f)
 {
-  bool expand = false;
-  bool fill = false;
-
-  switch (filling)
+  if (event_id == "clicked")
     {
-      case fill_type::fill_none: break;
-      case fill_type::fill_with_space: expand = true; break;
-      case fill_type::fill_with_widget: expand = true; fill = true; break;
-    };
+      if (on_clicked_callback_)
+        g_object_disconnect (G_OBJECT (widget_), "clicked", nullptr);
 
-  gtk_box_pack_start (
-      reinterpret_cast <GtkBox *> (widget_),
-      w.get_ui_widget <GtkWidget *>(),
-      expand,
-      fill,
-      0
-  );
+      on_clicked_callback_ = f;
 
-  children_.push_back (w);
+      g_signal_connect (
+          G_OBJECT (widget_),
+          "clicked",
+          G_CALLBACK (_callback_clicked),
+          &on_clicked_callback_
+      );
+    }
+
+  else
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid event: " + event_id));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Remove child widget
-// @param w Widget to be removed
+// @brief Reset callback to event
+// @param event_id Event ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-box_impl::remove_child (const mobius::ui::widget& w)
+button_impl::reset_callback (const std::string& event_id)
 {
-  children_.erase (
-    std::find_if (
-       children_.begin (),
-       children_.end (),
-       [w](const mobius::ui::widget& item){
-           return item.get_ui_widget <GtkWidget *>() == w.get_ui_widget <GtkWidget *>();
-       }
-    )
-  );
+  if (event_id == "clicked")
+    {
+      if (on_clicked_callback_)
+        {
+          g_signal_handlers_disconnect_by_data (widget_, &on_clicked_callback_);
+          on_clicked_callback_ = {};
+        }
+    }
 
-  gtk_container_remove (
-      reinterpret_cast <GtkContainer *> (widget_),
-      w.get_ui_widget<GtkWidget *>()
-  );
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Clear widget
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-box_impl::clear ()
-{
-  children_.clear ();
-
-  gtk_container_foreach (
-    reinterpret_cast <GtkContainer *> (widget_),
-    reinterpret_cast <GtkCallback> (gtk_widget_destroy),
-    nullptr
-  );
+  else
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid event: " + event_id));
 }
 
 } // namespace mobius::extension::ui::gtk3

@@ -1,5 +1,5 @@
-#ifndef MOBIUS_UI_GTK3_UI_IMPL_H
-#define MOBIUS_UI_GTK3_UI_IMPL_H
+#ifndef MOBIUS_EXTENSION_APP_EMULE_FILE_CANCELLED_MET_H
+#define MOBIUS_EXTENSION_APP_EMULE_FILE_CANCELLED_MET_H
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,63 +18,89 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/ui/ui_impl_base.h>
-#include <memory>
+#include "ctag.hpp"
+#include <mobius/datetime/datetime.h>
+#include <cstdint>
 #include <string>
+#include <vector>
 
-namespace mobius::extension::ui::gtk3
+namespace mobius::extension::app::emule
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief GTK3 UI implementation class
+// @brief Cancelled.met file decoder
 // @author Eduardo Aguiar
+// @see CKnownFileList::LoadCancelledFiles (srchybrid/KnownFileList.cpp)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class ui_impl : public mobius::ui::ui_impl_base
+class file_cancelled_met
 {
 public:
-  ui_impl ();
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // @brief CCancelledFile structure
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  struct CCancelledFile
+  {
+    std::string hash_ed2k;
+    std::vector <ctag> tags;
+  };
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get UI implementation ID
-  // @return ID
+  // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  static std::string
-  get_id ()
+  file_cancelled_met (const mobius::io::reader&);
+
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // @brief Check if stream is an instance of Cancelled.met file
+  // @return true/false
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  operator bool () const noexcept
   {
-    return "gtk3";
+    return is_instance_;
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get UI implementation description
-  // @return Description
+  // @brief Get file version
+  // @return Version
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  static std::string
-  get_description ()
+  std::uint8_t
+  get_version () const
   {
-    return "GTK v3";
+    return version_;
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Function prototypes
+  // @brief Get seed
+  // @return Seed
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void start () final;
-  void stop () final;
-  void flush () final;
+  std::uint32_t
+  get_seed () const
+  {
+    return seed_;
+  }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Builders prototypes
+  // @brief Get cancelled files
+  // @return Cancelled files
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::shared_ptr <mobius::ui::box_impl_base> new_box (mobius::ui::box_impl_base::orientation_type) const final;
-  std::shared_ptr <mobius::ui::button_impl_base> new_button () const final;
-  std::shared_ptr <mobius::ui::icon_impl_base> new_icon_by_name (const std::string&, mobius::ui::icon_impl_base::size_type) const final;
-  std::shared_ptr <mobius::ui::icon_impl_base> new_icon_from_data (const mobius::bytearray&, mobius::ui::icon_impl_base::size_type) const final;
-  std::shared_ptr <mobius::ui::label_impl_base> new_label () const final;
-  std::shared_ptr <mobius::ui::message_dialog_impl_base> new_message_dialog (mobius::ui::message_dialog_impl_base::type) const final;
-  std::shared_ptr <mobius::ui::widget_impl_base> new_widget (std::any, bool) const final;
-  std::shared_ptr <mobius::ui::window_impl_base> new_window () const final;
+  std::vector <CCancelledFile>
+  get_cancelled_files () const
+  {
+    return cancelled_files_;
+  }
+
+private:
+  // @brief Flag is instance
+  bool is_instance_ = false;
+
+  // @brief File version
+  std::uint8_t version_ = 0;
+
+  // @brief Seed
+  std::uint32_t seed_ = 0;
+
+  // @brief Cancelled files
+  std::vector <CCancelledFile> cancelled_files_;
 };
 
-} // namespace mobius::extension::ui::gtk3
+} // namespace mobius::extension::app::emule
 
 #endif
-
-

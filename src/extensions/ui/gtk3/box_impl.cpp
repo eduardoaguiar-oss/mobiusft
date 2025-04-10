@@ -15,26 +15,43 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "label_impl.h"
-#include <gtk/gtk.h>
-#include <pango/pango.h>
+#include "box_impl.hpp"
+#include <mobius/exception.inc>
+#include <algorithm>
+#include <stdexcept>
 
 namespace mobius::extension::ui::gtk3
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
+// @param orientation Widget orientation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-label_impl::label_impl ()
-  : widget_ (gtk_label_new (""))
+box_impl::box_impl (orientation_type orientation)
 {
+  switch (orientation)
+    {
+      case orientation_type::vertical:
+          widget_ = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+          break;
+
+      case orientation_type::horizontal:
+          widget_ = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+          break;
+
+      default:
+          throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid orientation type"));
+    }
+
   g_object_ref_sink (G_OBJECT (widget_));
+  gtk_widget_set_no_show_all (widget_, true);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-label_impl::~label_impl ()
+box_impl::~box_impl ()
 {
+  children_.clear ();
   g_object_unref (G_OBJECT (widget_));
 }
 
@@ -43,7 +60,7 @@ label_impl::~label_impl ()
 // @param flag true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-label_impl::set_sensitive (bool flag)
+box_impl::set_sensitive (bool flag)
 {
   gtk_widget_set_sensitive (widget_, flag);
 }
@@ -53,89 +70,96 @@ label_impl::set_sensitive (bool flag)
 // @param flag Flag (true/false)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-label_impl::set_visible (bool flag)
+box_impl::set_visible (bool flag)
 {
   gtk_widget_set_visible (widget_, flag);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set text
-// @param text Text
+// @brief Set spacing between widgets
+// @param siz Size in pixels
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-label_impl::set_text (const std::string& text)
+box_impl::set_spacing (std::uint32_t siz)
 {
-  gtk_label_set_text (reinterpret_cast <GtkLabel *> (widget_), text.c_str ());
+  gtk_box_set_spacing (reinterpret_cast <GtkBox *> (widget_), siz);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set markup
-// @param text Markup text
+// @brief Set border width
+// @param siz Size in pixels
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-label_impl::set_markup (const std::string& text)
+box_impl::set_border_width (std::uint32_t siz)
 {
-  gtk_label_set_markup (reinterpret_cast <GtkLabel *> (widget_), text.c_str ());
+  gtk_container_set_border_width (reinterpret_cast <GtkContainer *> (widget_), siz);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set widget selectable
-// @param flag Flag (true/false)
+// @brief Add child widget
+// @param w Widget to be added
+// @param filling Child widget filling mode
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-label_impl::set_selectable (bool flag)
+box_impl::add_child (const mobius::ui::widget& w, fill_type filling)
 {
-  gtk_label_set_selectable (reinterpret_cast <GtkLabel *> (widget_), flag);
-}
+  bool expand = false;
+  bool fill = false;
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set horizontal alignment
-// @param halign Alignment type
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-label_impl::set_halign (halign_type halign)
-{
-  switch (halign)
-  {
-    case halign_type::left: gtk_widget_set_halign (widget_, GTK_ALIGN_START); break;
-    case halign_type::center: gtk_widget_set_halign (widget_, GTK_ALIGN_CENTER); break;
-    case halign_type::right: gtk_widget_set_halign (widget_, GTK_ALIGN_END); break;
-  }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set vertical alignment
-// @param valign Alignment type
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-label_impl::set_valign (valign_type valign)
-{
-  switch (valign)
-  {
-    case valign_type::top: gtk_widget_set_valign (widget_, GTK_ALIGN_START); break;
-    case valign_type::center: gtk_widget_set_valign (widget_, GTK_ALIGN_CENTER); break;
-    case valign_type::bottom: gtk_widget_set_valign (widget_, GTK_ALIGN_END); break;
-  }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set elide mode
-// @param mode Elide mode
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-label_impl::set_elide_mode (elide_type mode)
-{
-  PangoEllipsizeMode pango_mode = PANGO_ELLIPSIZE_NONE;
-
-  switch (mode)
+  switch (filling)
     {
-      case elide_type::none: pango_mode = PANGO_ELLIPSIZE_NONE; break;
-      case elide_type::start: pango_mode = PANGO_ELLIPSIZE_START; break;
-      case elide_type::middle: pango_mode = PANGO_ELLIPSIZE_MIDDLE; break;
-      case elide_type::end: pango_mode = PANGO_ELLIPSIZE_END; break;
-    }
+      case fill_type::fill_none: break;
+      case fill_type::fill_with_space: expand = true; break;
+      case fill_type::fill_with_widget: expand = true; fill = true; break;
+    };
 
-  gtk_label_set_ellipsize (reinterpret_cast <GtkLabel *> (widget_), pango_mode);
+  gtk_box_pack_start (
+      reinterpret_cast <GtkBox *> (widget_),
+      w.get_ui_widget <GtkWidget *>(),
+      expand,
+      fill,
+      0
+  );
+
+  children_.push_back (w);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Remove child widget
+// @param w Widget to be removed
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+box_impl::remove_child (const mobius::ui::widget& w)
+{
+  children_.erase (
+    std::find_if (
+       children_.begin (),
+       children_.end (),
+       [w](const mobius::ui::widget& item){
+           return item.get_ui_widget <GtkWidget *>() == w.get_ui_widget <GtkWidget *>();
+       }
+    )
+  );
+
+  gtk_container_remove (
+      reinterpret_cast <GtkContainer *> (widget_),
+      w.get_ui_widget<GtkWidget *>()
+  );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Clear widget
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+box_impl::clear ()
+{
+  children_.clear ();
+
+  gtk_container_foreach (
+    reinterpret_cast <GtkContainer *> (widget_),
+    reinterpret_cast <GtkCallback> (gtk_widget_destroy),
+    nullptr
+  );
 }
 
 } // namespace mobius::extension::ui::gtk3

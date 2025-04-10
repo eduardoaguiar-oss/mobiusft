@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_UI_GTK3_BUTTON_IMPL_H
-#define MOBIUS_EXTENSION_UI_GTK3_BUTTON_IMPL_H
+#ifndef MOBIUS_EXTENSION_UI_GTK3_BOX_IMPL_HPP
+#define MOBIUS_EXTENSION_UI_GTK3_BOX_IMPL_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,32 +18,24 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/ui/button_impl_base.h>
+#include <mobius/ui/box_impl_base.h>
 #include <gtk/gtk.h>
+#include <vector>
 
 namespace mobius::extension::ui::gtk3
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>gtk3 button</i> implementation class
+// @brief <i>gtk3 box</i> implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class button_impl : public mobius::ui::button_impl_base
+class box_impl : public mobius::ui::box_impl_base
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Constructors and destructor
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  button_impl ();
-  ~button_impl ();
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Check whether widget object is valid
-  // @return true/false
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit operator bool () const noexcept final
-  {
-    return true;
-  }
+  explicit box_impl (orientation_type);
+  ~box_impl ();
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief Get low level widget
@@ -60,17 +52,18 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void set_sensitive (bool) final;
   void set_visible (bool) final;
-  void set_text (const std::string&) final;
-  void set_icon (const mobius::ui::icon&) final;
-  void set_callback (const std::string&, const mobius::core::functor<bool>&) final;
-  void reset_callback (const std::string&) final;
+  void set_spacing (std::uint32_t) final;
+  void set_border_width (std::uint32_t) final;
+  void add_child (const mobius::ui::widget&, fill_type) final;
+  void remove_child (const mobius::ui::widget&) final;
+  void clear () final;
 
 private:
   // @brief Low level widget
   GtkWidget *widget_ = nullptr;
 
-  // @brief Callback for clicked event
-  mobius::core::functor <bool> on_clicked_callback_;
+  // @brief Children widget
+  std::vector <mobius::ui::widget> children_;
 };
 
 } // namespace mobius::extension::ui::gtk3
