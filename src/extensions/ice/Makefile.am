@@ -1,7 +1,23 @@
-built_extensiondir = $(datadir)/$(PACKAGE)/extensions
-built_extension_DATA = ice.mobius
-dist_noinst_DATA = *.py icon.png resource/gpl.txt resource/*.png resource/*.svg
+.PHONY: all cmake-clean cmake-install
 
-ice.mobius: $(dist_noinst_DATA)
-	$(RM) -f $@
-	zip $@ $^
+all:
+	mkdir -p build
+	cd build && cmake .. -DCMAKE_INSTALL_PREFIX=$(prefix)
+	+cd build && make
+
+cmake-clean:
+	rm -rf build
+
+cmake-install: all
+	+cd build && make install
+
+clean-local: cmake-clean
+install-exec-local: cmake-install
+
+EXTRA_DIST = 		\
+    CMakeLists.txt 	\
+    *.py 		\
+    icon.png 		\
+    resource/*.png	\
+    resource/*.svg	\
+    resource/*.txt

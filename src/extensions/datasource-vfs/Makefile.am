@@ -14,8 +14,8 @@ cmake-install: all
 clean-local: cmake-clean
 install-exec-local: cmake-install
 
-EXTRA_DIST = \
-    CMakeLists.txt \
-    *.py \
-    icon.png \
+EXTRA_DIST = 		\
+    CMakeLists.txt 	\
+    *.py 		\
+    icon.png 		\
     resource/*.png

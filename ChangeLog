@@ -26,9 +26,26 @@ Mobius Forensic Toolkit 2.14
 	* floppy-imager: Using CMake to build, install and package
 	* gigatribe-agent: Using CMake to build, install and package
 	* gtk-ui: Using CMake to build, install and package
+	* hive: Using CMake to build, install and package
+	* hive-report: Using CMake to build, install and package
+	* ice: Using CMake to build, install and package
+	* imagefile-dnd: Using CMake to build, install and package
+	* iped-frontend: Using CMake to build, install and package
+	* kff-manager: Using CMake to build, install and package
+	* lshw-agent: Using CMake to build, install and package
 	* p2p-viewer: Using CMake to build, install and package
 	* p2p-viewer: Removed "User accounts" panel
 	* p2p-viewer: Removed "Search history" panel
+	* part-catalogue: Using CMake to build, install and package
+	* part-model: Using CMake to build, install and package
+	* report-model: Using CMake to build, install and package
+	* report-wizard: Using CMake to build, install and package
+	* sdi-window-manager: Using CMake to build, install and package
+	* skype-agent: Using CMake to build, install and package
+	* skype-agent-sqlite: Using CMake to build, install and package
+	* turing: Using CMake to build, install and package
+	* vfs-block-view-bitlocker: Using CMake to build, install and package
+	* vfs-block-view-partition-system: Using CMake to build, install and package
 	* ui/gtk3: All source files renamed from .h/.cc to .hpp/.cpp
 	* ui/gtk3: Using CMake to build, install and package
 	* tools: All source files renamed from .h/.cc to .hpp/.cpp

@@ -200,12 +200,13 @@ private:
   void _scan_canonical_user_folder (const mobius::io::folder&);
   void _scan_canonical_emule_config_folder (const mobius::io::folder&);
 
+  void _decode_ac_searchstrings_dat_file (const mobius::io::file&);
+  void _decode_cancelled_met_file (const mobius::io::file&);
+  void _decode_known_met_file (const mobius::io::file&);
   void _decode_preferences_dat_file (const mobius::io::file&);
   void _decode_preferences_ini_file (const mobius::io::file&);
   void _decode_preferenceskad_dat_file (const mobius::io::file&);
   void _decode_statistics_ini_file (const mobius::io::file&);
-  void _decode_ac_searchstrings_dat_file (const mobius::io::file&);
-  void _decode_known_met_file (const mobius::io::file&);
   void _decode_storedsearches_met_file (const mobius::io::file&);
 
   void _save_evidences ();
