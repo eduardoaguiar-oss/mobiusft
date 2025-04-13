@@ -498,13 +498,6 @@ AC_CONFIG_FILES([Makefile
                  src/python/pymobius/registry/Makefile
                  src/python/examples/Makefile
 		 src/extensions/Makefile
-		 src/extensions/vfs/Makefile
-		 src/extensions/vfs/block/Makefile
-		 src/extensions/vfs/block/bitlocker/Makefile
-		 src/extensions/vfs/block/filesystems/Makefile
-		 src/extensions/vfs/block/partition_system_apm/Makefile
-		 src/extensions/vfs/block/partition_system_dos/Makefile
-		 src/extensions/vfs/block/partition_system_gpt/Makefile
                  src/tools/Makefile
                  data/Makefile
                  data/data/Makefile

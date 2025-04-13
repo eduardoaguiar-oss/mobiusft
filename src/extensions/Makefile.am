@@ -156,6 +156,3 @@ EXTRA_DIST =								\
 	vfs-item-attributes/*.py					\
 	vfs-item-attributes/icon.png					\
 	vfs-item-attributes/resource/*.png
-
-SUBDIRS =								\
-	vfs

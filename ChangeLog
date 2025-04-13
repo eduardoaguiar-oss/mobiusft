@@ -49,6 +49,16 @@ Mobius Forensic Toolkit 2.14
 	* vfs-item-attributes: Using CMake to build, install and package
 	* ui/gtk3: All source files renamed from .h/.cc to .hpp/.cpp
 	* ui/gtk3: Using CMake to build, install and package
+	* vfs/block/bitlocker: All source files renamed from .h/.cc to .hpp/.cpp
+	* vfs/block/bitlocker: Using CMake to build, install and package
+	* vfs/block/filesystems: All source files renamed from .h/.cc to .hpp/.cpp
+	* vfs/block/filesystems: Using CMake to build, install and package
+	* vfs/block/partition_system_apm: All source files renamed from .h/.cc to .hpp/.cpp
+	* vfs/block/partition_system_apm: Using CMake to build, install and package
+	* vfs/block/partition_system_dos: All source files renamed from .h/.cc to .hpp/.cpp
+	* vfs/block/partition_system_dos: Using CMake to build, install and package
+	* vfs/block/partition_system_gpt: All source files renamed from .h/.cc to .hpp/.cpp
+	* vfs/block/partition_system_gpt: Using CMake to build, install and package
 	* vfs/filesystem/exfat: All source files renamed from .h/.cc to .hpp/.cpp
 	* vfs/filesystem/exfat: Using CMake to build, install and package
 	* vfs/filesystem/ext2: All source files renamed from .h/.cc to .hpp/.cpp

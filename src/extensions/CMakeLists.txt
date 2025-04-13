@@ -17,17 +17,17 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Set CMake variables (@todo move to main CMakeLists.txt)
+# Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.10)
 project(extensions LANGUAGES CXX)
 
-# Set C++ standard
+# Set C++ standard (@todo move to main CMakeLists.txt)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Define top-level source and build directories
+# Define top-level source and build directories (@todo move to main CMakeLists.txt)
 set(TOP_SRC_DIR ${CMAKE_SOURCE_DIR}/../..)
 set(TOP_BUILD_DIR ${CMAKE_BINARY_DIR}/../..)
 
@@ -98,6 +98,11 @@ add_subdirectory(ui/gtk3)
 add_subdirectory(vfs-block-view-bitlocker)
 add_subdirectory(vfs-block-view-partition-system)
 add_subdirectory(vfs-item-attributes)
+add_subdirectory(vfs/block/bitlocker)
+add_subdirectory(vfs/block/filesystems)
+add_subdirectory(vfs/block/partition_system_apm)
+add_subdirectory(vfs/block/partition_system_dos)
+add_subdirectory(vfs/block/partition_system_gpt)
 add_subdirectory(vfs/filesystem/exfat)
 add_subdirectory(vfs/filesystem/ext2)
 add_subdirectory(vfs/filesystem/hfs)
@@ -159,6 +164,11 @@ set(EXTENSION_TARGETS
     vfs-block-view-bitlocker
     vfs-block-view-partition-system
     vfs-item-attributes
+    vfs_block_bitlocker
+    vfs_block_filesystems
+    vfs_block_partition_system_apm
+    vfs_block_partition_system_dos
+    vfs_block_partition_system_gpt
     vfs_filesystem_exfat
     vfs_filesystem_ext2
     vfs_filesystem_hfs
