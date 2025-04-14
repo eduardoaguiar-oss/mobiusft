@@ -4,6 +4,7 @@ Mobius Forensic Toolkit 2.14
 	* Libmobius: Using doxygen tags with '@'
 	* Libmobius: Namespaces using C++17 nested convention
 	* Python API: Using doxygen tags with '@'
+	* mobius::py::pymodule: register modules in sys.modules
 	* C++ extensions: Using doxygen tags with '@'
 	* app/ares: All source files renamed from .h/.cc to .hpp/.cpp
 	* app/ares: Using CMake to build, install and package
@@ -88,7 +89,6 @@ Mobius Forensic Toolkit 2.14
 	* vfs/imagefile/vhdx: All source files renamed from .h/.cc to .hpp/.cpp
 	* vfs/imagefile/vhdx: Using CMake to build, install and package
 	* src/extension: Using both CMake and Makefile.am (hybrid)
-	* src/tools: Using both CMake and Makefile.am (hybrid)
 	* tools: All source files renamed from .h/.cc to .hpp/.cpp
 	* benchmark: Removed module
 	* unittest: Removed module

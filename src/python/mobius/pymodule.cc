@@ -83,10 +83,18 @@ private:
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 pymodule::impl::impl (PyModuleDef *p)
 {
-  obj_ = PyModule_Create (p);
-
-  if (!obj_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("could not create Python module '" + std::string (p->m_name) + "'"));
+    // create module object
+    obj_ = PyModule_Create (p);
+    if (!obj_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("could not create Python module '" + std::string (p->m_name) + "'"));
+    
+    // register module into sys.modules
+    PyObject *sys_modules = PyImport_GetModuleDict ();
+    if (!sys_modules)
+        throw std::runtime_error ("Failed to get sys.modules");
+        
+    if (PyDict_SetItemString(sys_modules, p->m_name, obj_) < 0)
+        throw std::runtime_error ("Failed to register " + std::string (p->m_name) + " in sys.modules");
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
