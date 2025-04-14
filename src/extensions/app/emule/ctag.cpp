@@ -55,6 +55,12 @@ constexpr std::uint8_t TAGTYPE_STR13 = 0x1D;
 constexpr std::uint8_t TAGTYPE_STR14 = 0x1E;
 constexpr std::uint8_t TAGTYPE_STR15 = 0x1F;
 constexpr std::uint8_t TAGTYPE_STR16 = 0x20;
+constexpr std::uint8_t TAGTYPE_STR17 = 0x21;
+constexpr std::uint8_t TAGTYPE_STR18 = 0x22;
+constexpr std::uint8_t TAGTYPE_STR19 = 0x23;
+constexpr std::uint8_t TAGTYPE_STR20 = 0x24;
+constexpr std::uint8_t TAGTYPE_STR21 = 0x25;
+constexpr std::uint8_t TAGTYPE_STR22 = 0x26;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Tag metadata names
@@ -155,6 +161,8 @@ namespace mobius::extension::app::emule
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // @param decoder Decoder object
+// @see CTag::CTag (srchybrid/packets.cpp)
+// @see ConvertED2KTag (srchybrid/SearchFile.cpp)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ctag::ctag (mobius::decoder::data_decoder& decoder)
 {
@@ -258,7 +266,13 @@ ctag::ctag (mobius::decoder::data_decoder& decoder)
       case TAGTYPE_STR13: [[fallthrough]]
       case TAGTYPE_STR14: [[fallthrough]]
       case TAGTYPE_STR15: [[fallthrough]]
-      case TAGTYPE_STR16:
+      case TAGTYPE_STR16: [[fallthrough]]
+      case TAGTYPE_STR17: [[fallthrough]]
+      case TAGTYPE_STR18: [[fallthrough]]
+      case TAGTYPE_STR19: [[fallthrough]]
+      case TAGTYPE_STR20: [[fallthrough]]
+      case TAGTYPE_STR21: [[fallthrough]]
+      case TAGTYPE_STR22:
         {
             std::uint32_t length = type_ - TAGTYPE_STR1 + 1;
             value_ = decoder.get_string_by_size (length);

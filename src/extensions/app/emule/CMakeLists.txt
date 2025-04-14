@@ -30,6 +30,7 @@ set(SOURCES
     ctag.cpp
     file_cancelled_met.cpp
     file_known_met.cpp
+    file_part_met.cpp
     file_stored_searches_met.cpp
     evidence_loader_impl.cpp
 )
@@ -55,15 +56,28 @@ target_include_directories(emule_cancelled_met PRIVATE ${MOBIUS_INCLUDE_DIRS})
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: emule_known_met
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(STORED_KNOWN_MET_SOURCES
+set(KNOWN_MET_SOURCES
     tools/emule_known_met.cpp
     ctag.cpp
     file_known_met.cpp
 )
 
-add_executable(emule_known_met ${STORED_KNOWN_MET_SOURCES})
+add_executable(emule_known_met ${KNOWN_MET_SOURCES})
 target_link_libraries(emule_known_met PRIVATE ${MOBIUS_LIBRARIES})
 target_include_directories(emule_known_met PRIVATE ${MOBIUS_INCLUDE_DIRS})
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: emule_part_met
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+set(PART_MET_SOURCES
+    tools/emule_part_met.cpp
+    ctag.cpp
+    file_part_met.cpp
+)
+
+add_executable(emule_part_met ${PART_MET_SOURCES})
+target_link_libraries(emule_part_met PRIVATE ${MOBIUS_LIBRARIES})
+target_include_directories(emule_part_met PRIVATE ${MOBIUS_INCLUDE_DIRS})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: emule_stored_searches_met
