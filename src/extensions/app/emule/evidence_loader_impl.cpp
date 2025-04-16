@@ -16,7 +16,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "evidence_loader_impl.hpp"
+#include "file_key_index_dat.hpp"
 #include "file_known_met.hpp"
+#include "file_part_met.hpp"
 #include "file_stored_searches_met.hpp"
 #include <mobius/core/log.h>
 #include <mobius/datasource/datasource_vfs.h>
@@ -41,6 +43,8 @@
 // . Clients.met: Credit control file. Control credits of each peer (dl and ul)
 //
 // . Downloads.txt/bak: Summary of .part.met files (part name and url)
+//
+// . KeyIndex.dat: Kamdelia search result file, with sources, IPs and filenames
 //
 // . Known.met: Shared files, downloading files, downloaded files
 //
@@ -96,7 +100,7 @@ get_file_hashes (const T& f)
     auto iter = std::find_if (
         f.tags.begin (),
         f.tags.end (),
-        [](const auto& t){ return t.get_id () == 0x27; }
+        [](const auto& t){ return t.get_id () == 0x27; }    // FT_AICH_HASH
     );
 
     if (iter != f.tags.end ())
@@ -107,6 +111,7 @@ get_file_hashes (const T& f)
 
     return hashes;
 }
+
 
 } // namespace
 
@@ -245,18 +250,14 @@ evidence_loader_impl::_scan_canonical_user_folder (const mobius::io::folder& fol
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Scan evidence files
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//  for (const auto& f : w.get_files_by_name ("ntuser.dat"))
-//    _decode_ntuser_dat_file (f);
-
     for (const auto& f : w.get_folders_by_path ("appdata/local/emule/config"))
         _scan_canonical_emule_config_folder (f);
-/*
-  for (const auto& f : w.get_folders_by_path ("downloads/emule/incoming"))
-    _scan_canonical_emule_download_folder (f);
 
-  for (const auto& f : w.get_folders_by_path ("downloads/emule/temp"))
-    _scan_canonical_emule_download_folder (f);
-*/
+    for (const auto& f : w.get_folders_by_path ("downloads/emule/incoming"))
+        _scan_canonical_emule_download_folder (f);
+
+    for (const auto& f : w.get_folders_by_path ("downloads/emule/temp"))
+        _scan_canonical_emule_download_folder (f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -307,6 +308,9 @@ evidence_loader_impl::_scan_canonical_emule_config_folder (const mobius::io::fol
         if (lname == "ac_searchstrings.dat")
             _decode_ac_searchstrings_dat_file (f);
             
+        else if (lname == "key_index.dat")
+            _decode_key_index_dat_file (f);
+
         else if (lname == "known.met")
             _decode_known_met_file (f);
 
@@ -319,6 +323,22 @@ evidence_loader_impl::_scan_canonical_emule_config_folder (const mobius::io::fol
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     if (!account_.emule_guid.empty () || !account_.kamdelia_guid.empty ())
         accounts_.push_back (account_);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Scan Download/emule folder
+// @param folder Download/emule folder
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_loader_impl::_scan_canonical_emule_download_folder (const mobius::io::folder& folder)
+{
+    mobius::io::walker w (folder);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decoder .part.met files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto& f : w.get_files_by_pattern ("*.part.met"))
+        _decode_part_met_file (f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -534,6 +554,82 @@ evidence_loader_impl::_decode_ac_searchstrings_dat_file (const mobius::io::file&
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode KeyIndex.dat file
+// @param f File object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_loader_impl::_decode_key_index_dat_file (const mobius::io::file& f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+      {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Decode file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        file_key_index_dat key_index (f.new_reader ());
+
+        if (!key_index)
+          {
+            log.info (__LINE__, "File is not an instance of KeyIndex.dat. Path: " + f.get_path ());
+            return;
+          }
+
+        log.info (__LINE__, "KeyIndex.dat file decoded. Path: " + f.get_path ());
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Add local files
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (const auto& k : key_index.get_keys ())
+          {
+            for (const auto& source : k.sources)
+              {
+                auto hash_ed2k = mobius::string::toupper (source.id);
+
+                for (const auto& name : source.names)
+                  {
+                    auto metadata = get_metadata_from_tags (name.tags);
+                    metadata.set ("network", "Kamdelia");
+                    metadata.set ("key_id", k.id);
+                    metadata.set ("lifetime", name.lifetime);
+
+                    for (const auto& ip : name.ips)
+                      {
+                        remote_file rf;
+                        rf.timestamp = ip.last_published;
+                        rf.ip = ip.value;
+                        rf.username = username_;
+                        rf.f = f;
+                        rf.metadata = metadata.clone ();
+                        rf.filename = metadata.get <std::string> ("name");
+  
+                        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+                        // Content hashes
+                        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+                        std::vector <mobius::pod::data> hashes = {
+                            {"ed2k", hash_ed2k}
+                        };
+
+                        auto aich_hash = metadata.get <std::string> ("hash_aich");
+
+                        if (!aich_hash.empty ())
+                            hashes.push_back ({"aich", aich_hash});
+
+                        rf.hashes = hashes;
+
+                        remote_files_.push_back (rf);
+                      }
+                  }
+              }
+          }
+      }
+    catch (const std::exception& e)
+      {
+        log.warning (__LINE__, e.what ());
+      }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Decode Known.met file
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -588,9 +684,94 @@ evidence_loader_impl::_decode_known_met_file (const mobius::io::file& f)
 
             lf.metadata = metadata;
             lf.hashes = get_file_hashes (kf);
+            lf.f = f;
 
             local_files_.push_back (lf);
           }
+      }
+    catch (const std::exception& e)
+      {
+        log.warning (__LINE__, e.what ());
+      }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode .part.met file
+// @param f File object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_loader_impl::_decode_part_met_file (const mobius::io::file& f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+      {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Decode file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        file_part_met part_met (f.new_reader ());
+
+        if (!part_met)
+          {
+            log.info (__LINE__, "File is not an instance of .part.met. Path: " + f.get_path ());
+            return;
+          }
+
+        log.info (__LINE__, ".part.met file decoded. Path: " + f.get_path ());
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Create local file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto metadata = get_metadata_from_tags (part_met.get_tags ());
+
+        local_file lf;
+
+        lf.username = username_;
+        lf.path = f.get_path ();
+        lf.path.erase (lf.path.size () - 4);
+        lf.filename = metadata.get <std::string> ("name");
+        lf.f = f;
+        
+
+        lf.flag_downloaded = true;
+        lf.flag_uploaded = metadata.get <std::int64_t> ("uploaded_bytes") > 0;
+        lf.flag_shared = mobius::framework::evidence_flag::always;
+        lf.flag_corrupted = metadata.get <bool> ("is_corrupted");
+        lf.flag_completed = part_met.get_total_gap_size () == 0;
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Metadata
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        metadata.set ("file_version", part_met.get_version ());
+        metadata.set ("flag_downloaded", to_string (lf.flag_downloaded));
+        metadata.set ("flag_uploaded", to_string (lf.flag_uploaded));
+        metadata.set ("flag_shared", to_string (lf.flag_shared));
+        metadata.set ("flag_corrupted", to_string (lf.flag_corrupted));
+        metadata.set ("flag_completed", to_string (lf.flag_completed));
+        metadata.set ("timestamp", part_met.get_timestamp ());
+        metadata.set ("total_gap_size", part_met.get_total_gap_size ());
+        metadata.set ("network", "eDonkey");
+
+        lf.metadata = metadata;
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Content hashes
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        std::vector <mobius::pod::data> hashes = {
+            {"ed2k", mobius::string::toupper (part_met.get_hash_ed2k ())}
+        };
+
+        auto aich_hash = metadata.get <std::string> ("hash_aich");
+
+        if (!aich_hash.empty ())
+            hashes.push_back ({"aich", aich_hash});
+
+        lf.hashes = hashes;
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Add local file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        local_files_.push_back (lf);
       }
     catch (const std::exception& e)
       {
@@ -664,7 +845,7 @@ evidence_loader_impl::_save_evidences ()
   _save_accounts ();
   _save_autofills ();
   _save_local_files ();
-  //_save_p2p_remote_files ();
+  _save_p2p_remote_files ();
   _save_received_files ();
   _save_sent_files ();
   _save_shared_files ();
@@ -809,7 +990,7 @@ evidence_loader_impl::_save_received_files ()
         }
     }
 }
-/*
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save remote files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -828,14 +1009,12 @@ evidence_loader_impl::_save_p2p_remote_files ()
       e.set_attribute ("app_id", APP_ID);
       e.set_attribute ("app_name", APP_NAME);
       e.set_attribute ("hashes", rf.hashes);
-      e.set_attribute ("thumbnail_data", rf.thumbnail_data);
       e.set_attribute ("metadata", rf.metadata);
 
       e.set_tag ("p2p");
       e.add_source (rf.f);
     }
 }
-*/
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save sent files

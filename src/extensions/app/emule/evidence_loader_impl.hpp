@@ -33,34 +33,34 @@ namespace mobius::extension::app::emule
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct account
 {
-  bool is_deleted = false;
+    bool is_deleted = false;
 
-  // from preferences.dat
-  std::string username;
-  std::string emule_guid;
-  std::uint8_t preferences_dat_version = 0;
+    // from preferences.dat
+    std::string username;
+    std::string emule_guid;
+    std::uint8_t preferences_dat_version = 0;
 
-  // from preferenceskad.dat
-  std::string kamdelia_guid;
-  std::string kamdelia_ip;
+    // from preferenceskad.dat
+    std::string kamdelia_guid;
+    std::string kamdelia_ip;
 
-  // from preferences.ini
-  std::string incoming_dir;
-  std::string temp_dir;
-  std::string nick;
-  std::string app_version;
-  mobius::framework::evidence_flag auto_start;
+    // from preferences.ini
+    std::string incoming_dir;
+    std::string temp_dir;
+    std::string nick;
+    std::string app_version;
+    mobius::framework::evidence_flag auto_start;
 
-  // from statistics.ini
-  std::uint64_t total_downloaded_bytes = 0;
-  std::uint64_t total_uploaded_bytes = 0;
-  std::uint64_t download_completed_files = 0;
+    // from statistics.ini
+    std::uint64_t total_downloaded_bytes = 0;
+    std::uint64_t total_uploaded_bytes = 0;
+    std::uint64_t download_completed_files = 0;
 
-  // source files
-  mobius::io::file preferences_dat_f;
-  mobius::io::file preferences_ini_f;
-  mobius::io::file preferenceskad_dat_f;
-  mobius::io::file statistics_ini_f;
+    // source files
+    mobius::io::file preferences_dat_f;
+    mobius::io::file preferences_ini_f;
+    mobius::io::file preferenceskad_dat_f;
+    mobius::io::file statistics_ini_f;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -68,12 +68,12 @@ struct account
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct autofill
 {
-  bool is_deleted = false;
-  std::string username;
-  std::string value;
-  std::string id;
-  mobius::pod::map metadata;
-  mobius::io::file f;
+    bool is_deleted = false;
+    std::string username;
+    std::string value;
+    std::string id;
+    mobius::pod::map metadata;
+    mobius::io::file f;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -81,55 +81,49 @@ struct autofill
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct local_file
 {
-  // attributes
-  std::string path;
-  std::string filename;
-  std::string username;
+    // attributes
+    std::string path;
+    std::string filename;
+    std::string username;
 
-  // metadata
-  mobius::pod::map metadata;
+    // metadata
+    mobius::pod::map metadata;
 
-  // hashes
-  mobius::pod::data hashes;
+    // hashes
+    mobius::pod::data hashes;
 
-  // flags
-  mobius::framework::evidence_flag flag_downloaded;
-  mobius::framework::evidence_flag flag_uploaded;
-  mobius::framework::evidence_flag flag_shared;
-  mobius::framework::evidence_flag flag_completed;
-  mobius::framework::evidence_flag flag_corrupted;
+    // flags
+    mobius::framework::evidence_flag flag_downloaded;
+    mobius::framework::evidence_flag flag_uploaded;
+    mobius::framework::evidence_flag flag_shared;
+    mobius::framework::evidence_flag flag_completed;
+    mobius::framework::evidence_flag flag_corrupted;
 
-  // files
-  mobius::io::file f;
+    // files
+    mobius::io::file f;
 };
 
-/*
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Remote file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct remote_file
 {
-  // attributes
-  mobius::datetime::datetime timestamp;
-  std::string ip;
-  std::uint16_t port = 0;
-  std::string filename;
-  std::string username;
+    // attributes
+    mobius::datetime::datetime timestamp;
+    std::string ip;
+    std::uint16_t port = 0;
+    std::string filename;
+    std::string username;
 
-  // metadata
-  mobius::pod::map metadata;
+    // metadata
+    mobius::pod::map metadata;
 
-  // hashes
-  mobius::pod::data hashes;
+    // hashes
+    mobius::pod::data hashes;
 
-  // thumbnail_data
-  mobius::bytearray thumbnail_data;
-
-  // files
-  mobius::io::file f;
-  mobius::io::file shareaza_db3_f;
+    // files
+    mobius::io::file f;
 };
-*/
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>Emule evidence_loader</i> implementation class
@@ -138,89 +132,90 @@ struct remote_file
 class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
 {
 public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit evidence_loader_impl (const mobius::model::item&, scan_type);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    explicit evidence_loader_impl (const mobius::model::item&, scan_type);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Function prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void run () final;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Function prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void run () final;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Check if object is valid
-  // @return true/false
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit operator bool () const noexcept final
-  {
-    return true;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if object is valid
+    // @return true/false
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    explicit operator bool () const noexcept final
+    {
+        return true;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get evidence_loader type
-  // @return Type as string
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::string
-  get_type () const final
-  {
-    return "app-emule";
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get evidence_loader type
+    // @return Type as string
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_type () const final
+    {
+        return "app-emule";
+    }
 
 private:
-  // @brief Case item
-  mobius::model::item item_;
+    // @brief Case item
+    mobius::model::item item_;
 
-  // @brief Scan type
-  scan_type scan_type_;
+    // @brief Scan type
+    scan_type scan_type_;
 
-  // @brief User name
-  std::string username_;
+    // @brief User name
+    std::string username_;
 
-  // @brief Account data
-  account account_;
+    // @brief Account data
+    account account_;
 
-  // @brief Accounts found
-  std::vector <account> accounts_;
+    // @brief Accounts found
+    std::vector <account> accounts_;
 
-  // @brief Autofills found
-  std::vector <autofill> autofills_;
+    // @brief Autofills found
+    std::vector <autofill> autofills_;
 
-  // @brief Local files
-  std::vector <local_file> local_files_;
+    // @brief Local files
+    std::vector <local_file> local_files_;
 
-  // @brief Remote files
-  //std::vector <remote_file> remote_files_;
+    // @brief Remote files
+    std::vector <remote_file> remote_files_;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Helper functions
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void _scan_canonical_folders ();
-  void _scan_canonical_root_folder (const mobius::io::folder&);
-  void _scan_canonical_user_folder (const mobius::io::folder&);
-  void _scan_canonical_emule_config_folder (const mobius::io::folder&);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Helper functions
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void _scan_canonical_folders ();
+    void _scan_canonical_root_folder (const mobius::io::folder&);
+    void _scan_canonical_user_folder (const mobius::io::folder&);
+    void _scan_canonical_emule_config_folder (const mobius::io::folder&);
+    void _scan_canonical_emule_download_folder (const mobius::io::folder&);
 
-  void _decode_ac_searchstrings_dat_file (const mobius::io::file&);
-  void _decode_cancelled_met_file (const mobius::io::file&);
-  void _decode_known_met_file (const mobius::io::file&);
-  void _decode_preferences_dat_file (const mobius::io::file&);
-  void _decode_preferences_ini_file (const mobius::io::file&);
-  void _decode_preferenceskad_dat_file (const mobius::io::file&);
-  void _decode_statistics_ini_file (const mobius::io::file&);
-  void _decode_storedsearches_met_file (const mobius::io::file&);
+    void _decode_ac_searchstrings_dat_file (const mobius::io::file&);
+    void _decode_cancelled_met_file (const mobius::io::file&);
+    void _decode_key_index_dat_file (const mobius::io::file&);
+    void _decode_known_met_file (const mobius::io::file&);
+    void _decode_part_met_file (const mobius::io::file&);
+    void _decode_preferences_dat_file (const mobius::io::file&);
+    void _decode_preferences_ini_file (const mobius::io::file&);
+    void _decode_preferenceskad_dat_file (const mobius::io::file&);
+    void _decode_statistics_ini_file (const mobius::io::file&);
+    void _decode_storedsearches_met_file (const mobius::io::file&);
 
-  void _save_evidences ();
-  void _save_accounts ();
-  void _save_autofills ();
-  void _save_local_files ();
-  //void _save_p2p_remote_files ();
-  void _save_received_files ();
-  void _save_sent_files ();
-  void _save_shared_files ();
+    void _save_evidences ();
+    void _save_accounts ();
+    void _save_autofills ();
+    void _save_local_files ();
+    void _save_p2p_remote_files ();
+    void _save_received_files ();
+    void _save_sent_files ();
+    void _save_shared_files ();
 };
 
 } // namespace mobius::extension::app::emule
 
 #endif
-
-

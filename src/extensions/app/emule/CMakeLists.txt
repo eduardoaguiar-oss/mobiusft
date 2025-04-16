@@ -29,6 +29,7 @@ set(SOURCES
     main.cpp
     ctag.cpp
     file_cancelled_met.cpp
+    file_key_index_dat.cpp
     file_known_met.cpp
     file_part_met.cpp
     file_stored_searches_met.cpp
@@ -52,6 +53,19 @@ set(STORED_CANCELLED_MET_SOURCES
 add_executable(emule_cancelled_met ${STORED_CANCELLED_MET_SOURCES})
 target_link_libraries(emule_cancelled_met PRIVATE ${MOBIUS_LIBRARIES})
 target_include_directories(emule_cancelled_met PRIVATE ${MOBIUS_INCLUDE_DIRS})
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: emule_key_index_dat
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+set(KEY_INDEX_DAT_SOURCES
+    tools/emule_key_index_dat.cpp
+    ctag.cpp
+    file_key_index_dat.cpp
+)
+
+add_executable(emule_key_index_dat ${KEY_INDEX_DAT_SOURCES})
+target_link_libraries(emule_key_index_dat PRIVATE ${MOBIUS_LIBRARIES})
+target_include_directories(emule_key_index_dat PRIVATE ${MOBIUS_INCLUDE_DIRS})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: emule_known_met
