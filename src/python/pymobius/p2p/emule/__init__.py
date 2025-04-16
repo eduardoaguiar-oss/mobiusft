@@ -20,7 +20,6 @@ import urllib.parse
 
 import mobius
 import pymobius
-import pymobius.app.emule
 import pymobius.operating_system
 import pymobius.p2p
 import pymobius.p2p.application
@@ -127,10 +126,6 @@ class Ant(object):
         self.__data.application.name = 'Emule'
 
         # retrieve data
-        for opsys in pymobius.operating_system.scan(self.__item):
-            app_data = pymobius.app.emule.retrieve(opsys)
-            self.__data.application.versions.update(app_data.versions)
-
         self.__retrieve_app_data()
         self.__normalize_data()
 

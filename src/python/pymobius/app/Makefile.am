@@ -4,7 +4,6 @@ mobius_PYTHON = *.py
 SUBDIRS = 								\
 	chromium							\
 	edge								\
-	emule								\
 	gecko								\
 	internet_explorer						\
 	itubego								\

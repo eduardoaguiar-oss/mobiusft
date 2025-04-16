@@ -222,18 +222,24 @@ void
 evidence_loader_impl::_scan_canonical_root_folder (const mobius::io::folder& folder)
 {
     username_ = {};
-
     auto w = mobius::io::walker (folder);
 
+    // Users folders
     for (const auto& f : w.get_folders_by_pattern ("users/*"))
         _scan_canonical_user_folder (f);
 
     // Win XP folders
-    for (const auto& f : w.get_folders_by_path ("program files/dreamule/config"))
-        _scan_canonical_emule_config_folder (f);
+    for (const auto& f : w.get_folders_by_path ("program files/emule"))
+        _scan_canonical_emule_xp_folder (f);
 
-    for (const auto& f : w.get_folders_by_path ("arquivos de programas/dreamule/config"))
-        _scan_canonical_emule_config_folder (f);
+    for (const auto& f : w.get_folders_by_path ("program files/dreamule"))
+        _scan_canonical_emule_xp_folder (f);
+
+    for (const auto& f : w.get_folders_by_path ("arquivos de programas/emule"))
+        _scan_canonical_emule_xp_folder (f);
+
+    for (const auto& f : w.get_folders_by_path ("arquivos de programas/dreamule"))
+        _scan_canonical_emule_xp_folder (f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -244,12 +250,8 @@ void
 evidence_loader_impl::_scan_canonical_user_folder (const mobius::io::folder& folder)
 {
     username_ = folder.get_name ();
-
     auto w = mobius::io::walker (folder);
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Scan evidence files
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     for (const auto& f : w.get_folders_by_path ("appdata/local/emule/config"))
         _scan_canonical_emule_config_folder (f);
 
@@ -259,6 +261,26 @@ evidence_loader_impl::_scan_canonical_user_folder (const mobius::io::folder& fol
     for (const auto& f : w.get_folders_by_path ("downloads/emule/temp"))
         _scan_canonical_emule_download_folder (f);
 }
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Scan emule/dreamule folder for evidences
+// @param folder emule/dreamule folder
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_loader_impl::_scan_canonical_emule_xp_folder (const mobius::io::folder& folder)
+{
+    auto w = mobius::io::walker (folder);
+    
+    for (const auto& f : w.get_folders_by_name ("config"))
+        _scan_canonical_emule_config_folder (f);
+
+    for (const auto& f : w.get_folders_by_name ("incoming"))
+        _scan_canonical_emule_download_folder (f);
+
+    for (const auto& f : w.get_folders_by_name ("temp"))
+        _scan_canonical_emule_download_folder (f);
+}
+
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Scan AppData/Local/eMule/config folder for evidences

@@ -481,7 +481,6 @@ AC_CONFIG_FILES([Makefile
                  src/python/pymobius/app/Makefile
 		 src/python/pymobius/app/chromium/Makefile
 		 src/python/pymobius/app/edge/Makefile
-		 src/python/pymobius/app/emule/Makefile
 		 src/python/pymobius/app/gecko/Makefile
 		 src/python/pymobius/app/internet_explorer/Makefile
 		 src/python/pymobius/app/itubego/Makefile

@@ -192,6 +192,7 @@ private:
     void _scan_canonical_folders ();
     void _scan_canonical_root_folder (const mobius::io::folder&);
     void _scan_canonical_user_folder (const mobius::io::folder&);
+    void _scan_canonical_emule_xp_folder (const mobius::io::folder& folder);
     void _scan_canonical_emule_config_folder (const mobius::io::folder&);
     void _scan_canonical_emule_download_folder (const mobius::io::folder&);
 
