@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_SHAREAZA_FILE_SEARCHES_DAT_H
-#define MOBIUS_EXTENSION_APP_SHAREAZA_FILE_SEARCHES_DAT_H
+#ifndef MOBIUS_EXTENSION_APP_SHAREAZA_FILE_SEARCHES_DAT_HPP
+#define MOBIUS_EXTENSION_APP_SHAREAZA_FILE_SEARCHES_DAT_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

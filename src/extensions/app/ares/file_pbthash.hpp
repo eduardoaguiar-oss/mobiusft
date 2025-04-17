@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_ARES_FILE_PBTHASH_H
-#define MOBIUS_EXTENSION_APP_ARES_FILE_PBTHASH_H
+#ifndef MOBIUS_EXTENSION_APP_ARES_FILE_PBTHASH_HPP
+#define MOBIUS_EXTENSION_APP_ARES_FILE_PBTHASH_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

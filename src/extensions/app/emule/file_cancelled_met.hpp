@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_EMULE_FILE_CANCELLED_MET_H
-#define MOBIUS_EXTENSION_APP_EMULE_FILE_CANCELLED_MET_H
+#ifndef MOBIUS_EXTENSION_APP_EMULE_FILE_CANCELLED_MET_HPP
+#define MOBIUS_EXTENSION_APP_EMULE_FILE_CANCELLED_MET_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

@@ -34,9 +34,7 @@ Mobius Forensic Toolkit 2.14
 	* iped-frontend: Using CMake to build, install and package
 	* kff-manager: Using CMake to build, install and package
 	* lshw-agent: Using CMake to build, install and package
-	* p2p-viewer: Using CMake to build, install and package
-	* p2p-viewer: Removed "User accounts" panel
-	* p2p-viewer: Removed "Search history" panel
+	* p2p-viewer: Removed extension
 	* part-catalogue: Using CMake to build, install and package
 	* part-model: Using CMake to build, install and package
 	* report-model: Using CMake to build, install and package

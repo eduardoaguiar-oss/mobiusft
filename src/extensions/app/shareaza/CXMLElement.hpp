@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_SHAREAZA_CXMLELEMENT_H
-#define MOBIUS_EXTENSION_APP_SHAREAZA_CXMLELEMENT_H
+#ifndef MOBIUS_EXTENSION_APP_SHAREAZA_CXMLELEMENT_HPP
+#define MOBIUS_EXTENSION_APP_SHAREAZA_CXMLELEMENT_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

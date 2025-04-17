@@ -32,6 +32,7 @@ set(SOURCES
     file_key_index_dat.cpp
     file_known_met.cpp
     file_part_met.cpp
+    file_part_met_txtsrc.cpp
     file_stored_searches_met.cpp
     evidence_loader_impl.cpp
 )
@@ -92,6 +93,18 @@ set(PART_MET_SOURCES
 add_executable(emule_part_met ${PART_MET_SOURCES})
 target_link_libraries(emule_part_met PRIVATE ${MOBIUS_LIBRARIES})
 target_include_directories(emule_part_met PRIVATE ${MOBIUS_INCLUDE_DIRS})
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: emule_part_met_txtsrc
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+set(PART_MET_TXTSRC_SOURCES
+    tools/emule_part_met_txtsrc.cpp
+    file_part_met_txtsrc.cpp
+)
+
+add_executable(emule_part_met_txtsrc ${PART_MET_TXTSRC_SOURCES})
+target_link_libraries(emule_part_met_txtsrc PRIVATE ${MOBIUS_LIBRARIES})
+target_include_directories(emule_part_met_txtsrc PRIVATE ${MOBIUS_INCLUDE_DIRS})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: emule_stored_searches_met

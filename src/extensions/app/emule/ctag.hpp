@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_EMULE_CTAG_H
-#define MOBIUS_EXTENSION_APP_EMULE_CTAG_H
+#ifndef MOBIUS_EXTENSION_APP_EMULE_CTAG_HPP
+#define MOBIUS_EXTENSION_APP_EMULE_CTAG_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

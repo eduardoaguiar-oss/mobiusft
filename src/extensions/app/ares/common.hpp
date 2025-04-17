@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_ARES_COMMON_H
-#define MOBIUS_EXTENSION_APP_ARES_COMMON_H
+#ifndef MOBIUS_EXTENSION_APP_ARES_COMMON_HPP
+#define MOBIUS_EXTENSION_APP_ARES_COMMON_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

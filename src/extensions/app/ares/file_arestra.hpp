@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_ARES_FILE_ARESTRA_H
-#define MOBIUS_EXTENSION_APP_ARES_FILE_ARESTRA_H
+#ifndef MOBIUS_EXTENSION_APP_ARES_FILE_ARESTRA_HPP
+#define MOBIUS_EXTENSION_APP_ARES_FILE_ARESTRA_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_SHAREAZA_CTHUMBCACHE_H
-#define MOBIUS_EXTENSION_APP_SHAREAZA_CTHUMBCACHE_H
+#ifndef MOBIUS_EXTENSION_APP_SHAREAZA_CTHUMBCACHE_HPP
+#define MOBIUS_EXTENSION_APP_SHAREAZA_CTHUMBCACHE_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

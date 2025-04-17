@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_ARES_FILE_TORRENTH_H
-#define MOBIUS_EXTENSION_APP_ARES_FILE_TORRENTH_H
+#ifndef MOBIUS_EXTENSION_APP_ARES_FILE_TORRENTH_HPP
+#define MOBIUS_EXTENSION_APP_ARES_FILE_TORRENTH_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

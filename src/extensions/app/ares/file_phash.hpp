@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_ARES_FILE_PHASH_H
-#define MOBIUS_EXTENSION_APP_ARES_FILE_PHASH_H
+#ifndef MOBIUS_EXTENSION_APP_ARES_FILE_PHASH_HPP
+#define MOBIUS_EXTENSION_APP_ARES_FILE_PHASH_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

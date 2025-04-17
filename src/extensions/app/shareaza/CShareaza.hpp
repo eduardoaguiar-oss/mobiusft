@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_SHAREAZA_CSHAREAZA_H
-#define MOBIUS_EXTENSION_APP_SHAREAZA_CSHAREAZA_H
+#ifndef MOBIUS_EXTENSION_APP_SHAREAZA_CSHAREAZA_HPP
+#define MOBIUS_EXTENSION_APP_SHAREAZA_CSHAREAZA_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

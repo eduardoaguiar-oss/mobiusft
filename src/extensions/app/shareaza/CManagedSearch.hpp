@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_SHAREAZA_CMANAGEDSEARCH_H
-#define MOBIUS_EXTENSION_APP_SHAREAZA_CMANAGEDSEARCH_H
+#ifndef MOBIUS_EXTENSION_APP_SHAREAZA_CMANAGEDSEARCH_HPP
+#define MOBIUS_EXTENSION_APP_SHAREAZA_CMANAGEDSEARCH_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_ARES_FILE_SHAREL_H
-#define MOBIUS_EXTENSION_APP_ARES_FILE_SHAREL_H
+#ifndef MOBIUS_EXTENSION_APP_ARES_FILE_SHAREL_HPP
+#define MOBIUS_EXTENSION_APP_ARES_FILE_SHAREL_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

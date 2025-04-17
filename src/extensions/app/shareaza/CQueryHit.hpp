@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_SHAREAZA_CQUERYHIT_H
-#define MOBIUS_EXTENSION_APP_SHAREAZA_CQUERYHIT_H
+#ifndef MOBIUS_EXTENSION_APP_SHAREAZA_CQUERYHIT_HPP
+#define MOBIUS_EXTENSION_APP_SHAREAZA_CQUERYHIT_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
