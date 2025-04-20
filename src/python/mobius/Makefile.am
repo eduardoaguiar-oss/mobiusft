@@ -10,7 +10,6 @@ SUBDIRS =								\
 	datetime							\
 	decoder								\
 	encoder								\
-	decoder								\
 	framework							\
 	kff								\
 	io								\

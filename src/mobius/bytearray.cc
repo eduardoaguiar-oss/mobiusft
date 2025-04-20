@@ -577,5 +577,3 @@ operator!= (const bytearray& a, const bytearray& b)
 }
 
 } // namespace mobius
-
-
