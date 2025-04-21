@@ -232,7 +232,7 @@ tp_dealloc (core_file_decoder_metadata_o *self)
 static PyTypeObject core_file_decoder_metadata_t =
 {
   PyVarObject_HEAD_INIT (NULL, 0)
-  "mobius.core.decoder.metadata",     		// tp_name
+  "mobius.core.file_decoder.metadata",     		// tp_name
   sizeof (core_file_decoder_metadata_o),   		// tp_basicsize
   0,                                       		// tp_itemsize
   (destructor) tp_dealloc,                 		// tp_dealloc

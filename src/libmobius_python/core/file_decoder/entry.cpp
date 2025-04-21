@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \file entry.cc C++ API <i>mobius.core.decoder.entry</i> class wrapper
+// @file entry.cc C++ API <i>mobius.core.decoder.entry</i> class wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
@@ -210,7 +210,7 @@ tp_dealloc (core_file_decoder_entry_o *self)
 static PyTypeObject core_file_decoder_entry_t =
 {
   PyVarObject_HEAD_INIT (NULL, 0)
-  "mobius.core.decoder.entry",        		// tp_name
+  "mobius.core.file_decoder.entry",        		// tp_name
   sizeof (core_file_decoder_entry_o),      		// tp_basicsize
   0,                                       		// tp_itemsize
   (destructor) tp_dealloc,                 		// tp_dealloc

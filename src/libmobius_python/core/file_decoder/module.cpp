@@ -66,8 +66,8 @@ new_core_file_decoder_module ()
   mobius::py::pymodule module (&module_def);
 
   // Add types
-  module.add_type ("decoder", new_core_file_decoder_decoder_type ());
   module.add_type ("entry", new_core_file_decoder_entry_type ());
+  module.add_type ("file_decoder", new_core_file_decoder_decoder_type ());
   module.add_type ("metadata", new_core_file_decoder_metadata_type ());
   module.add_type ("section", new_core_file_decoder_section_type ());
 

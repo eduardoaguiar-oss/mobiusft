@@ -331,7 +331,7 @@ tp_dealloc (core_file_decoder_section_o *self)
 static PyTypeObject core_file_decoder_section_t =
 {
   PyVarObject_HEAD_INIT (NULL, 0)
-  "mobius.core.decoder.section",      		// tp_name
+  "mobius.core.file_decoder.section",      		// tp_name
   sizeof (core_file_decoder_section_o),    		// tp_basicsize
   0,                                       		// tp_itemsize
   (destructor) tp_dealloc,                 		// tp_dealloc
