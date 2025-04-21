@@ -1,7 +1,7 @@
 ---
 title: Mobius Forensic Toolkit
 description: "Open-source forensic framework and tools written in C++/Python"
-version: 2.13
+version: 2.14
 ---
 
 # Mobius Forensic Toolkit

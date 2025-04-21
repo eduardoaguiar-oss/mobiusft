@@ -123,7 +123,9 @@ struct remote_file
     mobius::pod::data hashes;
 
     // files
-    mobius::io::file f;
+    mobius::io::file part_met_f;
+    mobius::io::file part_met_txtsrc_f;
+    mobius::io::file key_index_dat_f;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -187,6 +189,9 @@ private:
     // @brief Remote files
     std::vector <remote_file> remote_files_;
 
+    // @brief Part met files from current directory
+    std::map <std::string, local_file> part_met_files_;
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -201,8 +206,8 @@ private:
     void _decode_cancelled_met_file (const mobius::io::file&);
     void _decode_key_index_dat_file (const mobius::io::file&);
     void _decode_known_met_file (const mobius::io::file&);
-    void _decode_part_met_file (const mobius::io::file&, std::map <std::string, local_file>&);
-    void _decode_part_met_txtsrc_file (const mobius::io::file&, const std::map <std::string, local_file>&);
+    void _decode_part_met_file (const mobius::io::file&);
+    void _decode_part_met_txtsrc_file (const mobius::io::file&);
     void _decode_preferences_dat_file (const mobius::io::file&);
     void _decode_preferences_ini_file (const mobius::io::file&);
     void _decode_preferenceskad_dat_file (const mobius::io::file&);

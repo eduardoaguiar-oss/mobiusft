@@ -356,19 +356,18 @@ void
 evidence_loader_impl::_scan_canonical_emule_download_folder (const mobius::io::folder& folder)
 {
     mobius::io::walker w (folder);
-    std::map <std::string, local_file> part_met_files;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Decoder .part.met files
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     for (const auto& f : w.get_files_by_pattern ("*.part.met"))
-        _decode_part_met_file (f, part_met_files);
+        _decode_part_met_file (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Decoder .part.met.txtsrc files
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     for (const auto& f : w.get_files_by_pattern ("*.part.met.txtsrc"))
-        _decode_part_met_txtsrc_file (f, part_met_files);
+        _decode_part_met_txtsrc_file (f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -629,7 +628,7 @@ evidence_loader_impl::_decode_key_index_dat_file (const mobius::io::file& f)
                         rf.timestamp = ip.last_published;
                         rf.ip = ip.value;
                         rf.username = username_;
-                        rf.f = f;
+                        rf.key_index_dat_f = f;
                         rf.metadata = metadata.clone ();
                         rf.filename = metadata.get <std::string> ("name");
   
@@ -730,10 +729,7 @@ evidence_loader_impl::_decode_known_met_file (const mobius::io::file& f)
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_part_met_file (
-  const mobius::io::file& f,
-  std::map <std::string, local_file>& part_met_files
-)
+evidence_loader_impl::_decode_part_met_file (const mobius::io::file& f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -809,10 +805,10 @@ evidence_loader_impl::_decode_part_met_file (
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Add part.met file to the list of part.met files
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        auto iter = part_met_files.find (f.get_name ());
+        auto iter = part_met_files_.find (f.get_name ());
 
-        if (iter == part_met_files.end () || (iter->second.is_deleted && !f.is_deleted ()))
-            part_met_files[f.get_name ()] = lf;
+        if (iter == part_met_files_.end () || (iter->second.is_deleted && !f.is_deleted ()))
+            part_met_files_[f.get_name ()] = lf;
       }
     catch (const std::exception& e)
       {
@@ -825,10 +821,7 @@ evidence_loader_impl::_decode_part_met_file (
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_part_met_txtsrc_file (
-  const mobius::io::file& f,
-  const std::map <std::string, local_file>& part_met_files
-)
+evidence_loader_impl::_decode_part_met_txtsrc_file (const mobius::io::file& f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -852,12 +845,12 @@ evidence_loader_impl::_decode_part_met_txtsrc_file (
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         auto part_met_txtsrc_name = f.get_name ();
         auto part_met_name = part_met_txtsrc_name.substr (0, part_met_txtsrc_name.size () - 7);
-        auto iter = part_met_files.find (part_met_name);
+        auto iter = part_met_files_.find (part_met_name);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Create remote file if part.met file is found
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        if (iter != part_met_files.end ())
+        if (iter != part_met_files_.end ())
           {
             auto lf = iter->second;
 
@@ -870,7 +863,8 @@ evidence_loader_impl::_decode_part_met_txtsrc_file (
                 rf.ip = source.ip;
                 rf.port = source.port;
                 rf.filename = lf.filename;
-                rf.f = f;
+                rf.part_met_f = lf.f;
+                rf.part_met_txtsrc_f = f;
                 rf.hashes = lf.hashes.clone();
                 rf.metadata = lf.metadata.clone();
 
@@ -1117,7 +1111,10 @@ evidence_loader_impl::_save_p2p_remote_files ()
       e.set_attribute ("metadata", rf.metadata);
 
       e.set_tag ("p2p");
-      e.add_source (rf.f);
+
+      e.add_source (rf.key_index_dat_f);
+      e.add_source (rf.part_met_f);
+      e.add_source (rf.part_met_txtsrc_f);
     }
 }
 
