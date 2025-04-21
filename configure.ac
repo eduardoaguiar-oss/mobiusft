@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.69])
-AC_INIT([mobiusft], [2.14], [aguiar@protonmail.ch])
+AC_INIT([mobiusft], [2.15], [aguiar@protonmail.ch])
 AC_CONFIG_SRCDIR([src/mobius/unittest.cc])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror dist-xz dist-zip no-dist-gzip subdir-objects])
 AC_CONFIG_HEADERS([config.h])
@@ -449,27 +449,27 @@ AC_CONFIG_FILES([Makefile
                  src/mobius/turing/Makefile
                  src/mobius/ui/Makefile
                  src/mobius/vfs/Makefile
+                 src/libmobius_python/Makefile
+                 src/libmobius_python/core/Makefile
+                 src/libmobius_python/core/file_decoder/Makefile
+                 src/libmobius_python/crypt/Makefile
+                 src/libmobius_python/database/Makefile
+                 src/libmobius_python/datasource/Makefile
+                 src/libmobius_python/datetime/Makefile
+                 src/libmobius_python/decoder/Makefile
+                 src/libmobius_python/encoder/Makefile
+                 src/libmobius_python/framework/Makefile
+                 src/libmobius_python/kff/Makefile
+                 src/libmobius_python/io/Makefile
+                 src/libmobius_python/model/Makefile
+                 src/libmobius_python/os/Makefile
+                 src/libmobius_python/os/win/Makefile
+                 src/libmobius_python/pod/Makefile
+                 src/libmobius_python/system/Makefile
+                 src/libmobius_python/turing/Makefile
+                 src/libmobius_python/ui/Makefile
+                 src/libmobius_python/vfs/Makefile
                  src/python/Makefile
-                 src/python/mobius/Makefile
-                 src/python/mobius/core/Makefile
-                 src/python/mobius/core/file_decoder/Makefile
-                 src/python/mobius/crypt/Makefile
-                 src/python/mobius/database/Makefile
-                 src/python/mobius/datasource/Makefile
-                 src/python/mobius/datetime/Makefile
-                 src/python/mobius/decoder/Makefile
-                 src/python/mobius/encoder/Makefile
-                 src/python/mobius/framework/Makefile
-                 src/python/mobius/kff/Makefile
-                 src/python/mobius/io/Makefile
-                 src/python/mobius/model/Makefile
-                 src/python/mobius/os/Makefile
-                 src/python/mobius/os/win/Makefile
-                 src/python/mobius/pod/Makefile
-                 src/python/mobius/system/Makefile
-                 src/python/mobius/turing/Makefile
-                 src/python/mobius/ui/Makefile
-                 src/python/mobius/vfs/Makefile
                  src/python/pymobius/Makefile
                  src/python/pymobius/ant/Makefile
                  src/python/pymobius/ant/evidence/Makefile

@@ -1,3 +1,6 @@
+Mobius Forensic Toolkit 2.15
+	* src/python/mobius package renamed to libmobius_python and moved to src
+
 Mobius Forensic Toolkit 2.14
 	* configure.ac: Check for CMake availability.
 	* Added new C++ extension called "app-emule".

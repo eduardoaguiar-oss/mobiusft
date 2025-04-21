@@ -1,1 +1,1 @@
-SUBDIRS = mobius pymobius examples
+SUBDIRS = pymobius examples
