@@ -5,7 +5,7 @@ libpymobius_turing_la_CXXFLAGS = -I$(top_srcdir)/src -I.. -I../api $(PY_CXXFLAGS
 libpymobius_turing_la_LDFLAGS = $(PY_LIBS)
 
 libpymobius_turing_la_SOURCES =					\
-	module.h						\
-	module.cc						\
-	turing.h						\
-	turing.cc
+	module.hpp						\
+	module.cpp						\
+	turing.hpp						\
+	turing.cpp

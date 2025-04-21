@@ -5,9 +5,9 @@ libpymobius_framework_la_CXXFLAGS = -I$(top_srcdir)/src -I.. -I../api $(PY_CXXFL
 libpymobius_framework_la_LDFLAGS = $(PY_LIBS)
 
 libpymobius_framework_la_SOURCES =					\
-	*.h								\
-	module.cc							\
-	attribute.cc							\
-	category.cc							\
-	evidence_loader.cc						\
-	func_config.cc
+	*.hpp								\
+	module.cpp							\
+	attribute.cpp							\
+	category.cpp							\
+	evidence_loader.cpp						\
+	func_config.cpp

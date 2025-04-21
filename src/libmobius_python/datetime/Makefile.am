@@ -5,9 +5,9 @@ libpymobius_datetime_la_CXXFLAGS = -I$(top_srcdir)/src -I.. $(PY_CXXFLAGS) -fno-
 libpymobius_datetime_la_LDFLAGS = $(PY_LIBS)
 
 libpymobius_datetime_la_SOURCES =			\
-	module.h					\
-	module.cc					\
-	func_new_datetime_from_fat_time.cc		\
-	func_new_datetime_from_iso_string.cc		\
-	func_new_datetime_from_nt_timestamp.cc		\
-	func_new_datetime_from_unix_timestamp.cc
+	module.hpp					\
+	module.cpp					\
+	func_new_datetime_from_fat_time.cpp		\
+	func_new_datetime_from_iso_string.cpp		\
+	func_new_datetime_from_nt_timestamp.cpp		\
+	func_new_datetime_from_unix_timestamp.cpp

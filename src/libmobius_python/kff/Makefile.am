@@ -5,9 +5,9 @@ libpymobius_kff_la_CXXFLAGS = -I$(top_srcdir)/src -I.. -I../api $(PY_CXXFLAGS) -
 libpymobius_kff_la_LDFLAGS = $(PY_LIBS)
 
 libpymobius_kff_la_SOURCES =					\
-	module.h						\
-	module.cc						\
-	hashset.h						\
-	hashset.cc						\
-	kff.h							\
-	kff.cc
+	module.hpp						\
+	module.cpp						\
+	hashset.hpp						\
+	hashset.cpp						\
+	kff.hpp							\
+	kff.cpp

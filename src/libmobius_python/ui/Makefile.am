@@ -5,15 +5,15 @@ libpymobius_ui_la_CXXFLAGS = -I$(top_srcdir)/src -I.. -I../api $(GTK3_CXXFLAGS) 
 libpymobius_ui_la_LDFLAGS = $(PY_LIBS)
 
 libpymobius_ui_la_SOURCES =						\
-	*.h								\
-	module.cc							\
-	func_ui.cc							\
-	box.cc								\
-	button.cc							\
-	container.cc							\
-	icon.cc								\
-	label.cc							\
-	message_dialog.cc						\
-	stacked_container.cc						\
-	widget.cc							\
-	window.cc
+	*.hpp								\
+	module.cpp							\
+	func_ui.cpp							\
+	box.cpp								\
+	button.cpp							\
+	container.cpp							\
+	icon.cpp								\
+	label.cpp							\
+	message_dialog.cpp						\
+	stacked_container.cpp						\
+	widget.cpp							\
+	window.cpp

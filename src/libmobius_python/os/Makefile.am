@@ -8,8 +8,8 @@ libpymobius_os_la_LIBADD =					\
 	win/libpymobius-os-win.la
 
 libpymobius_os_la_SOURCES =					\
-	module.h						\
-	module.cc
+	module.hpp						\
+	module.cpp
 
 SUBDIRS =							\
 	win

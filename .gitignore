@@ -15,6 +15,7 @@ ltmain.sh
 m4
 missing
 mobius_bin.sh
+mobius.code-workspace
 py-compile
 stamp-h1
 *.o

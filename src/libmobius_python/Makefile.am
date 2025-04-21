@@ -22,16 +22,16 @@ SUBDIRS =								\
 	vfs
 
 mobius_la_SOURCES =							\
-	*.h								\
-	module.cc							\
-	pycallback.cc							\
-	pyfunction.cc							\
-	pymodule.cc							\
-	pyobject.cc							\
-	pymobius.cc							\
-	pytypeobject.cc							\
-	api_dataholder.cc						\
-	api_metadata.cc
+	*.hpp								\
+	module.cpp							\
+	pycallback.cpp							\
+	pyfunction.cpp							\
+	pymodule.cpp							\
+	pyobject.cpp							\
+	pymobius.cpp							\
+	pytypeobject.cpp							\
+	api_dataholder.cpp						\
+	api_metadata.cpp
 
 mobius_la_CXXFLAGS = $(PY_CXXFLAGS) -I$(top_srcdir)/src -I$(top_srcdir)/src/python/mobius -fno-strict-aliasing
 

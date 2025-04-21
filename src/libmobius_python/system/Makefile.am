@@ -5,8 +5,8 @@ libpymobius_system_la_CXXFLAGS = -I$(top_srcdir)/src -I.. -I../api $(PY_CXXFLAGS
 libpymobius_system_la_LDFLAGS = $(PY_LIBS)
 
 libpymobius_system_la_SOURCES =			\
-	module.h				\
-	module.cc				\
-	device.h				\
-	device.cc				\
-	func_get_devices.cc
+	module.hpp				\
+	module.cpp				\
+	device.hpp				\
+	device.cpp				\
+	func_get_devices.cpp

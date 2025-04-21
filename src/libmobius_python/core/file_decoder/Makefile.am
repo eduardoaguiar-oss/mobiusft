@@ -7,9 +7,9 @@ libpymobius_core_file_decoder_la_LDFLAGS = $(PY_LIBS)
 libpymobius_core_file_decoder_la_LIBADD =
 
 libpymobius_core_file_decoder_la_SOURCES =				\
-	*.h								\
-	module.cc							\
-	decoder.cc							\
-	entry.cc							\
-	metadata.cc							\
-	section.cc
+	*.hpp								\
+	module.cpp							\
+	decoder.cpp							\
+	entry.cpp							\
+	metadata.cpp							\
+	section.cpp
