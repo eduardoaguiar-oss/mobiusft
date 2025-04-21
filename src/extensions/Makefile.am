@@ -28,12 +28,14 @@ EXTRA_DIST =								\
 	app/emule/CMakeLists.txt					\
 	app/emule/*.hpp							\
 	app/emule/*.cpp							\
+	app/emule/tools/*.cpp						\
 	app/emuletorrent/CMakeLists.txt					\
 	app/emuletorrent/*.hpp						\
 	app/emuletorrent/*.cpp						\
 	app/shareaza/CMakeLists.txt					\
 	app/shareaza/*.hpp						\
 	app/shareaza/*.cpp						\
+	app/shareaza/tools/*.cpp					\
 	attribute-viewer/CMakeLists.txt					\
 	attribute-viewer/*.py						\
 	attribute-viewer/icon.png					\
@@ -150,4 +152,13 @@ EXTRA_DIST =								\
 	vfs-block-view-partition-system/resource/*.png			\
 	vfs-item-attributes/CMakeLists.txt				\
 	vfs-item-attributes/*.py					\
-	vfs-item-attributes/icon.png
+	vfs-item-attributes/icon.png					\
+	vfs/block/*/CMakeLists.txt					\
+	vfs/block/*/*.cpp						\
+	vfs/filesystem/*/CMakeLists.txt					\
+	vfs/filesystem/*/*.hpp						\
+	vfs/filesystem/*/*.cpp						\
+	vfs/imagefile/*/CMakeLists.txt					\
+	vfs/imagefile/*/*.hpp						\
+	vfs/imagefile/*/*.cpp						\
+	vfs/imagefile/ewf/tools/*.cpp
