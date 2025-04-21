@@ -110,10 +110,6 @@ EXTRA_DIST =								\
 	lshw-agent/CMakeLists.txt					\
 	lshw-agent/*.py							\
 	lshw-agent/icon.png						\
-	p2p-viewer/CMakeLists.txt					\
-	p2p-viewer/*.py							\
-	p2p-viewer/icon.png						\
-	p2p-viewer/resource/*.png					\
 	part-catalogue/CMakeLists.txt					\
 	part-catalogue/*.py						\
 	part-catalogue/icon.png						\
@@ -133,7 +129,7 @@ EXTRA_DIST =								\
 	skype-agent/CMakeLists.txt					\
 	skype-agent/*.py						\
 	skype-agent/icon.png						\
-	skype-agent/report/*.png					\
+	skype-agent/resource/*.png					\
 	skype-agent-sqlite/CMakeLists.txt				\
 	skype-agent-sqlite/*.py						\
 	skype-agent-sqlite/icon.png					\
@@ -154,5 +150,4 @@ EXTRA_DIST =								\
 	vfs-block-view-partition-system/resource/*.png			\
 	vfs-item-attributes/CMakeLists.txt				\
 	vfs-item-attributes/*.py					\
-	vfs-item-attributes/icon.png					\
-	vfs-item-attributes/resource/*.png
+	vfs-item-attributes/icon.png

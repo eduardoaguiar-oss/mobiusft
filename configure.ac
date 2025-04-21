@@ -430,7 +430,6 @@ AC_CONFIG_FILES([Makefile
                  mobius_bin.sh
                  src/Makefile
                  src/mobius/Makefile
-                 src/mobius/app/Makefile
                  src/mobius/core/Makefile
                  src/mobius/core/application.cc
                  src/mobius/crypt/Makefile
@@ -492,8 +491,6 @@ AC_CONFIG_FILES([Makefile
                  src/python/pymobius/datasource/Makefile
                  src/python/pymobius/datasource/ufdr/Makefile
                  src/python/pymobius/operating_system/Makefile
-                 src/python/pymobius/p2p/Makefile
-                 src/python/pymobius/p2p/emule/Makefile
                  src/python/pymobius/registry/Makefile
                  src/python/examples/Makefile
 		 src/extensions/Makefile

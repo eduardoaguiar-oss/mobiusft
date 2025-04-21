@@ -85,6 +85,7 @@ struct local_file
     std::string path;
     std::string filename;
     std::string username;
+    bool is_deleted = false;
 
     // metadata
     mobius::pod::map metadata;
@@ -200,7 +201,8 @@ private:
     void _decode_cancelled_met_file (const mobius::io::file&);
     void _decode_key_index_dat_file (const mobius::io::file&);
     void _decode_known_met_file (const mobius::io::file&);
-    void _decode_part_met_file (const mobius::io::file&);
+    void _decode_part_met_file (const mobius::io::file&, std::map <std::string, local_file>&);
+    void _decode_part_met_txtsrc_file (const mobius::io::file&, const std::map <std::string, local_file>&);
     void _decode_preferences_dat_file (const mobius::io::file&);
     void _decode_preferences_ini_file (const mobius::io::file&);
     void _decode_preferenceskad_dat_file (const mobius::io::file&);

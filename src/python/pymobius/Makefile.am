@@ -6,5 +6,4 @@ SUBDIRS =								\
 	app								\
 	datasource							\
 	operating_system						\
-	p2p								\
 	registry

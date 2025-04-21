@@ -19,6 +19,7 @@
 #include "file_key_index_dat.hpp"
 #include "file_known_met.hpp"
 #include "file_part_met.hpp"
+#include "file_part_met_txtsrc.hpp"
 #include "file_stored_searches_met.hpp"
 #include <mobius/core/log.h>
 #include <mobius/datasource/datasource_vfs.h>
@@ -355,12 +356,19 @@ void
 evidence_loader_impl::_scan_canonical_emule_download_folder (const mobius::io::folder& folder)
 {
     mobius::io::walker w (folder);
+    std::map <std::string, local_file> part_met_files;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Decoder .part.met files
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     for (const auto& f : w.get_files_by_pattern ("*.part.met"))
-        _decode_part_met_file (f);
+        _decode_part_met_file (f, part_met_files);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decoder .part.met.txtsrc files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto& f : w.get_files_by_pattern ("*.part.met.txtsrc"))
+        _decode_part_met_txtsrc_file (f, part_met_files);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -722,7 +730,10 @@ evidence_loader_impl::_decode_known_met_file (const mobius::io::file& f)
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_part_met_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_part_met_file (
+  const mobius::io::file& f,
+  std::map <std::string, local_file>& part_met_files
+)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -752,8 +763,8 @@ evidence_loader_impl::_decode_part_met_file (const mobius::io::file& f)
         lf.path = f.get_path ();
         lf.path.erase (lf.path.size () - 4);
         lf.filename = metadata.get <std::string> ("name");
+        lf.is_deleted = f.is_deleted ();
         lf.f = f;
-        
 
         lf.flag_downloaded = true;
         lf.flag_uploaded = metadata.get <std::int64_t> ("uploaded_bytes") > 0;
@@ -794,6 +805,78 @@ evidence_loader_impl::_decode_part_met_file (const mobius::io::file& f)
         // Add local file
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         local_files_.push_back (lf);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Add part.met file to the list of part.met files
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto iter = part_met_files.find (f.get_name ());
+
+        if (iter == part_met_files.end () || (iter->second.is_deleted && !f.is_deleted ()))
+            part_met_files[f.get_name ()] = lf;
+      }
+    catch (const std::exception& e)
+      {
+        log.warning (__LINE__, e.what ());
+      }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode .part.met.txtsrc file
+// @param f File object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_loader_impl::_decode_part_met_txtsrc_file (
+  const mobius::io::file& f,
+  const std::map <std::string, local_file>& part_met_files
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+      {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Decode file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        file_part_met_txtsrc txtsrc (f.new_reader ());
+
+        if (!txtsrc)
+          {
+            log.info (__LINE__, "File is not an instance of .part.met.txtsrc. Path: " + f.get_path ());
+            return;
+          }
+
+        log.info (__LINE__, ".part.met.txtsrc file decoded. Path: " + f.get_path ());
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Get corresponding part.met file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto part_met_txtsrc_name = f.get_name ();
+        auto part_met_name = part_met_txtsrc_name.substr (0, part_met_txtsrc_name.size () - 7);
+        auto iter = part_met_files.find (part_met_name);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Create remote file if part.met file is found
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        if (iter != part_met_files.end ())
+          {
+            auto lf = iter->second;
+
+            for (const auto& source : txtsrc.get_sources())
+              {
+                auto rf = remote_file();
+
+                rf.username = username_;
+                rf.timestamp = f.get_modification_time ();
+                rf.ip = source.ip;
+                rf.port = source.port;
+                rf.filename = lf.filename;
+                rf.f = f;
+                rf.hashes = lf.hashes.clone();
+                rf.metadata = lf.metadata.clone();
+
+                remote_files_.push_back (rf);
+              }
+          }
       }
     catch (const std::exception& e)
       {

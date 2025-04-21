@@ -94,6 +94,8 @@ Mobius Forensic Toolkit 2.14
 	* tools: New tool emule_known_met
 	* tools: New tool emule_stored_searches_met
 	* pymobius.app.emule: Removed module
+	* pymobius.p2p.emule: Removed module
+	* pymobius.p2p: Removed module
 
 Mobius Forensic Toolkit 2.13
 	* Added new extension event-viewer
