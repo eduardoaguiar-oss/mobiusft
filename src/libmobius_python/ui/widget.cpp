@@ -23,11 +23,11 @@
 #include <pymobius.hpp>
 #include <pyobject.hpp>
 #include "widget.hpp"
-#include <mobius/exception.inc>
-#include <stdexcept>
-#include <gtk/gtk.h>            // PyGtk only interface for now
 #include <pygobject.h>
+#include <gtk/gtk.h>            // PyGtk only interface for now
+#include <mobius/exception.inc>
 #include <mutex>
+#include <stdexcept>
 
 namespace
 {

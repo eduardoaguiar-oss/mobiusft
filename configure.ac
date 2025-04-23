@@ -450,25 +450,6 @@ AC_CONFIG_FILES([Makefile
                  src/mobius/ui/Makefile
                  src/mobius/vfs/Makefile
                  src/libmobius_python/Makefile
-                 src/libmobius_python/core/Makefile
-                 src/libmobius_python/core/file_decoder/Makefile
-                 src/libmobius_python/crypt/Makefile
-                 src/libmobius_python/database/Makefile
-                 src/libmobius_python/datasource/Makefile
-                 src/libmobius_python/datetime/Makefile
-                 src/libmobius_python/decoder/Makefile
-                 src/libmobius_python/encoder/Makefile
-                 src/libmobius_python/framework/Makefile
-                 src/libmobius_python/kff/Makefile
-                 src/libmobius_python/io/Makefile
-                 src/libmobius_python/model/Makefile
-                 src/libmobius_python/os/Makefile
-                 src/libmobius_python/os/win/Makefile
-                 src/libmobius_python/pod/Makefile
-                 src/libmobius_python/system/Makefile
-                 src/libmobius_python/turing/Makefile
-                 src/libmobius_python/ui/Makefile
-                 src/libmobius_python/vfs/Makefile
                  src/python/Makefile
                  src/python/pymobius/Makefile
                  src/python/pymobius/ant/Makefile

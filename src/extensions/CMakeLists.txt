@@ -32,7 +32,7 @@ set(TOP_SRC_DIR ${CMAKE_SOURCE_DIR}/../..)
 set(TOP_BUILD_DIR ${CMAKE_BINARY_DIR}/../..)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Find dependencies (@todo move to main CMakeLists.txt)
+# Find dependencies (@todo move to src/CMakeLists.txt)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
