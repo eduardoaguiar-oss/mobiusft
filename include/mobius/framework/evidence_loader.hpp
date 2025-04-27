@@ -1,5 +1,5 @@
-#ifndef MOBIUS_FRAMEWORK_EVIDENCE_LOADER_H
-#define MOBIUS_FRAMEWORK_EVIDENCE_LOADER_H
+#ifndef MOBIUS_FRAMEWORK_EVIDENCE_LOADER_HPP
+#define MOBIUS_FRAMEWORK_EVIDENCE_LOADER_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/framework/evidence_loader_impl_base.h>
+#include <mobius/framework/evidence_loader_impl_base.hpp>
 #include <mobius/model/item.h>
 #include <memory>
 #include <set>

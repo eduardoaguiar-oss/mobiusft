@@ -1,5 +1,5 @@
-#ifndef MOBIUS_FRAMEWORK_CONFIG_H
-#define MOBIUS_FRAMEWORK_CONFIG_H
+#ifndef MOBIUS_FRAMEWORK_CONFIG_HPP
+#define MOBIUS_FRAMEWORK_CONFIG_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

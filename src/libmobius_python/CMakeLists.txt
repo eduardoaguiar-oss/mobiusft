@@ -53,14 +53,24 @@ if(NOT MOBIUS_LIB)
     message(FATAL_ERROR "libmobius not found in ${TOP_SRC_DIR}/src/mobius/.libs")
 endif()
 
-find_library(MOBIUS_FRAMEWORK_LIB mobius_framework HINTS ${TOP_SRC_DIR}/src/mobius/framework/.libs NO_DEFAULT_PATH)
-
-if(NOT MOBIUS_FRAMEWORK_LIB)
-    message(FATAL_ERROR "libmobius_framework not found in ${TOP_SRC_DIR}/src/mobius/framework/.libs")
+find_library(MOBIUS_CORE_LIB mobius_core
+    HINTS ../libmobius_core/build
+    NO_DEFAULT_PATH
+)
+if(NOT MOBIUS_CORE_LIB)
+    message(FATAL_ERROR "libmobius_core not found in ../libmobius_core/build")
 endif()
 
-set(MOBIUS_INCLUDE_DIRS ${TOP_SRC_DIR} ${TOP_SRC_DIR}/src ${TOP_SRC_DIR}/src/libmobius_python)
-set(MOBIUS_LIBRARIES ${MOBIUS_LIB} ${MOBIUS_FRAMEWORK_LIB})
+find_library(MOBIUS_FRAMEWORK_LIB mobius_framework
+    HINTS ../libmobius_framework/build
+    NO_DEFAULT_PATH
+)
+if(NOT MOBIUS_FRAMEWORK_LIB)
+    message(FATAL_ERROR "libmobius_framework not found in ../libmobius_framework/build")
+endif()
+
+set(MOBIUS_INCLUDE_DIRS ${TOP_SRC_DIR}/include ${TOP_SRC_DIR}/src ${TOP_SRC_DIR}/src/libmobius_python)
+set(MOBIUS_LIBRARIES ${MOBIUS_LIB} ${MOBIUS_CORE_LIB} ${MOBIUS_FRAMEWORK_LIB})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Build sub-libraries

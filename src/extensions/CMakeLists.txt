@@ -19,10 +19,10 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20)
 project(extensions LANGUAGES CXX)
 
-# Set C++ standard (@todo move to main CMakeLists.txt)
+# Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -32,11 +32,8 @@ set(TOP_SRC_DIR ${CMAKE_SOURCE_DIR}/../..)
 set(TOP_BUILD_DIR ${CMAKE_BINARY_DIR}/../..)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Find dependencies (@todo move to src/CMakeLists.txt)
+# Find dependencies
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
-
 find_package(ZLIB QUIET)  # QUIET suppresses warnings if not found
 if(ZLIB_FOUND)
     message(STATUS "zlib found: ${ZLIB_LIBRARIES}")
@@ -45,17 +42,29 @@ else()
 endif()
 
 find_library(MOBIUS_LIB mobius HINTS ${TOP_SRC_DIR}/src/mobius/.libs NO_DEFAULT_PATH)
-find_library(MOBIUS_FRAMEWORK_LIB mobius_framework HINTS ${TOP_SRC_DIR}/src/mobius/framework/.libs NO_DEFAULT_PATH)
-
 if(NOT MOBIUS_LIB)
     message(FATAL_ERROR "libmobius not found in ${TOP_SRC_DIR}/src/mobius/.libs")
 endif()
-if(NOT MOBIUS_FRAMEWORK_LIB)
-    message(FATAL_ERROR "libmobius_framework not found in ${TOP_SRC_DIR}/src/mobius/framework/.libs")
+
+find_library(MOBIUS_CORE_LIB mobius_core
+    HINTS ${TOP_SRC_DIR}/src/libmobius_core/build
+    NO_DEFAULT_PATH
+)
+if(NOT MOBIUS_CORE_LIB)
+    message(FATAL_ERROR "libmobius_core not found in ${TOP_SRC_DIR}/src/libmobius_core/build")
 endif()
 
-set(MOBIUS_INCLUDE_DIRS ${TOP_SRC_DIR}/src)
-set(MOBIUS_LIBRARIES ${MOBIUS_LIB} ${MOBIUS_FRAMEWORK_LIB})
+find_library(MOBIUS_FRAMEWORK_LIB mobius_framework
+    HINTS ../libmobius_framework/build
+    NO_DEFAULT_PATH
+)
+if(NOT MOBIUS_FRAMEWORK_LIB)
+    message(FATAL_ERROR "libmobius_framework not found in ../libmobius_framework
+/build")
+endif()
+
+set(MOBIUS_INCLUDE_DIRS ${TOP_SRC_DIR}/include ${TOP_SRC_DIR}/src)
+set(MOBIUS_LIBRARIES ${MOBIUS_CORE_LIB} ${MOBIUS_LIB} ${MOBIUS_FRAMEWORK_LIB})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Build extensions

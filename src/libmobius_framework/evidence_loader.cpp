@@ -1,6 +1,3 @@
-#ifndef MOBIUS_BENCHMARK_H
-#define MOBIUS_BENCHMARK_H
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
 // Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
@@ -18,30 +15,43 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <chrono>
-#include <string>
-#include <cstdint>
+#include <mobius/framework/evidence_loader.hpp>
+#include <mobius/framework/evidence_loader_impl_null.hpp>
+#include <mobius/core/resource.h>
+#include <algorithm>
 
-namespace mobius
+namespace mobius::framework
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief benchmark class
-// @author Eduardo Aguiar
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class benchmark
+evidence_loader::evidence_loader ()
+ : impl_ (std::make_shared <evidence_loader_impl_null> ())
 {
-  std::string title_;
-  std::string unit_;
-  std::chrono::time_point<std::chrono::high_resolution_clock> start_;
+}
 
-public:
-  explicit benchmark (const std::string&, const std::string& = "iB");
-  std::uint64_t mtime () const;
-  void end (std::uint64_t);
-};
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Constructor
+// @param id Evidence loader ID
+// @param item Item object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+evidence_loader::evidence_loader (
+  const std::string& id,
+  const mobius::model::item& item,
+  scan_type type)
+{
+  auto resource = mobius::core::get_resource ("evidence_loader.builder." + id);
 
-} // namespace mobius
+  if (resource)
+    {
+      auto f = resource.get_value <evidence_loader_builder_type> ();
+      impl_ = f (item, type);
+    }
 
-#endif
+  else
+    impl_ = std::make_shared <evidence_loader_impl_null> ();
+}
+
+} // namespace mobius::framework
 
 

@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "category.h"
+#include <mobius/framework/category.hpp>
 #include <mobius/core/application.h>
 #include <mobius/core/thread_guard.h>
 #include <mobius/database/database.h>
@@ -706,5 +706,3 @@ remove_categories ()
 }
 
 } // namespace mobius::framework
-
-

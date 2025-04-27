@@ -20,8 +20,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CThumbCache.hpp"
 #include <mobius/datetime/datetime.h>
-#include <mobius/framework/evidence_flag.h>
-#include <mobius/framework/evidence_loader_impl_base.h>
+#include <mobius/framework/evidence_flag.hpp>
+#include <mobius/framework/evidence_loader_impl_base.hpp>
 #include <mobius/io/file.h>
 #include <map>
 #include <vector>

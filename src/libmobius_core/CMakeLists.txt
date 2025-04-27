@@ -45,14 +45,8 @@ if(NOT MOBIUS_LIB)
     message(FATAL_ERROR "libmobius not found in ${TOP_SRC_DIR}/src/mobius/.libs")
 endif()
 
-find_library(MOBIUS_FRAMEWORK_LIB mobius_framework HINTS ${TOP_SRC_DIR}/src/mobius/framework/.libs NO_DEFAULT_PATH)
-
-if(NOT MOBIUS_FRAMEWORK_LIB)
-    message(FATAL_ERROR "libmobius_framework not found in ${TOP_SRC_DIR}/src/mobius/framework/.libs")
-endif()
-
 set(MOBIUS_INCLUDE_DIRS ${TOP_SRC_DIR}/include ${TOP_SRC_DIR}/src)
-set(MOBIUS_LIBRARIES ${MOBIUS_LIB} ${MOBIUS_FRAMEWORK_LIB})
+set(MOBIUS_LIBRARIES ${MOBIUS_LIB})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Build sub-libraries
@@ -63,10 +57,14 @@ add_subdirectory(jni)
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(mobius_core SHARED
+    benchmark.cpp
+    unittest.cpp
     $<TARGET_OBJECTS:mobius_core_jni>
 )
 
-target_link_libraries(mobius_core PRIVATE
+target_include_directories(mobius_core PUBLIC ${MOBIUS_INCLUDE_DIRS})
+
+target_link_libraries(mobius_core PUBLIC
     ${MOBIUS_LIBRARIES}
     ${JNI_LIBRARIES}
 )
@@ -75,6 +73,6 @@ target_link_libraries(mobius_core PRIVATE
 # Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 install(TARGETS mobius_core
-    LIBRARY DESTINATION ${PYTHON_INSTALL_DIR}
-    RUNTIME DESTINATION ${PYTHON_INSTALL_DIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )

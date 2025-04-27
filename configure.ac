@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.69])
 AC_INIT([mobiusft], [2.15], [aguiar@protonmail.ch])
-AC_CONFIG_SRCDIR([src/mobius/unittest.cc])
+AC_CONFIG_SRCDIR([src/mobius/bytearray.cc])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror dist-xz dist-zip no-dist-gzip subdir-objects])
 AC_CONFIG_HEADERS([config.h])
 AM_PROG_AR
@@ -438,7 +438,6 @@ AC_CONFIG_FILES([Makefile
                  src/mobius/datetime/Makefile
                  src/mobius/decoder/Makefile
                  src/mobius/encoder/Makefile
-                 src/mobius/framework/Makefile
                  src/mobius/kff/Makefile
                  src/mobius/io/Makefile
                  src/mobius/model/Makefile
@@ -450,6 +449,7 @@ AC_CONFIG_FILES([Makefile
                  src/mobius/ui/Makefile
                  src/mobius/vfs/Makefile
                  src/libmobius_core/Makefile
+                 src/libmobius_framework/Makefile
                  src/libmobius_python/Makefile
                  src/python/Makefile
                  src/python/pymobius/Makefile

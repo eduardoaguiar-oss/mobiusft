@@ -22,7 +22,7 @@
 #include <mobius/core/mediator.h>
 #include <mobius/datetime/datetime.h>
 #include <mobius/exception.inc>
-#include <mobius/framework/category.h>
+#include <mobius/framework/category.hpp>
 #include <mobius/io/file.h>
 #include <mobius/io/folder.h>
 #include <cstddef>

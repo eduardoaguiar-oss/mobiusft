@@ -20,11 +20,10 @@
 // @brief  C++ API module wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "config.h"
+#include <mobius/framework/config.hpp>
 #include <pymobius.hpp>
 #include "database/transaction.hpp"
 #include "pod/data.hpp"
-#include <mobius/framework/config.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <b>has_config</b> function implementation

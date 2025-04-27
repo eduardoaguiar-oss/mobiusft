@@ -1,5 +1,5 @@
-#ifndef MOBIUS_UNITTEST_H
-#define MOBIUS_UNITTEST_H
+#ifndef MOBIUS_CORE_UNITTEST_HPP
+#define MOBIUS_CORE_UNITTEST_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -41,10 +41,10 @@
     t.assert_exception (rc, __LINE__, #e, #exc);                        \
   }
 
-namespace mobius
+namespace mobius::core
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief unittest class
+// @brief Unittest class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class unittest
@@ -68,6 +68,6 @@ public:
   static void final_summary ();
 };
 
-} // namespace mobius
+} // namespace mobius::core
 
 #endif

@@ -25,6 +25,7 @@ project(MobiusInclude CXX)
 include(GNUInstallDirs)
 
 file(GLOB HEADER_FILES
+    "mobius/core/*.hpp"
     "mobius/core/jni/*.hpp"
 )
 

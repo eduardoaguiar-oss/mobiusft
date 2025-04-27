@@ -19,47 +19,65 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-cmake_minimum_required(VERSION 3.10)
-project(vfs_imagefile_ewf LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.20)
+project(libmobius-framework LANGUAGES CXX)
+
+include(GNUInstallDirs)
+
+# Set C++ standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+# Define top-level source and build directories (@todo move to main CMakeLists.txt)
+set(TOP_SRC_DIR ${CMAKE_SOURCE_DIR}/../..)
+set(TOP_BUILD_DIR ${CMAKE_BINARY_DIR}/../..)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Find dependencies
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+find_library(MOBIUS_CORE_LIB mobius_core
+    HINTS ../libmobius_core/build
+    NO_DEFAULT_PATH
+)
+if(NOT MOBIUS_CORE_LIB)
+    message(FATAL_ERROR "libmobius_core not found in ../libmobius_core/build")
+endif()
+
+find_library(MOBIUS_LIB mobius HINTS ${TOP_SRC_DIR}/src/mobius/.libs NO_DEFAULT_PATH)
+if(NOT MOBIUS_LIB)
+    message(FATAL_ERROR "libmobius not found in ${TOP_SRC_DIR}/src/mobius/.libs")
+endif()
+
+set(MOBIUS_INCLUDE_DIRS ${TOP_SRC_DIR}/include ${TOP_SRC_DIR}/src)
+set(MOBIUS_LIBRARIES ${MOBIUS_CORE_LIB} ${MOBIUS_LIB})
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Build sub-libraries
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SOURCES
-    main.cpp
-    imagefile_impl.cpp
-    reader_impl.cpp
-    segment_decoder.cpp
-    segment_writer.cpp
-    writer_impl.cpp
+add_library(mobius_framework SHARED
+    attribute.cpp
+    category.cpp
+    config.cpp
+    evidence_flag.cpp
+    evidence_loader.cpp
 )
 
-add_library(vfs_imagefile_ewf MODULE ${SOURCES})
-set_target_properties(vfs_imagefile_ewf PROPERTIES OUTPUT_NAME "vfs-imagefile-ewf" PREFIX "")
-target_include_directories(vfs_imagefile_ewf PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_imagefile_ewf PRIVATE ${MOBIUS_LIBRARIES} ${ZLIB_LIBRARIES})
+target_include_directories(mobius_framework PUBLIC ${MOBIUS_INCLUDE_DIRS})
 
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Tools: ewf_decoder
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(EWF_DECODER_SOURCES
-    tools/ewf_decoder.cpp
-    imagefile_impl.cpp
-    reader_impl.cpp
-    segment_decoder.cpp
-    segment_writer.cpp
-    writer_impl.cpp
+target_link_libraries(mobius_framework PUBLIC
+    ${MOBIUS_LIBRARIES}
 )
-
-add_executable(ewf_decoder ${EWF_DECODER_SOURCES})
-target_link_libraries(ewf_decoder PRIVATE ${MOBIUS_LIBRARIES} ${ZLIB_LIBRARIES})
-target_include_directories(ewf_decoder PRIVATE ${MOBIUS_INCLUDE_DIRS})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-install(TARGETS vfs_imagefile_ewf LIBRARY DESTINATION share/mobiusft/extensions)
-
-install(TARGETS
-    ewf_decoder
-    RUNTIME DESTINATION share/mobiusft/tools)
+install(TARGETS mobius_framework
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)

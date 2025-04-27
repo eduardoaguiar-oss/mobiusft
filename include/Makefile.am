@@ -36,5 +36,6 @@ clean-local:
 
 EXTRA_DIST =								\
     CMakeLists.txt							\
-    mobius/core/jni/local_ref.hpp					\
-    mobius/core/jni/string.hpp
+    mobius/core/*.hpp							\
+    mobius/core/jni/*.hpp						\
+    mobius/framework/*.hpp

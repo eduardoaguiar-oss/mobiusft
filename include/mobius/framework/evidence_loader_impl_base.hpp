@@ -1,5 +1,5 @@
-#ifndef MOBIUS_FRAMEWORK_EVIDENCE_LOADER_IMPL_NULL_H
-#define MOBIUS_FRAMEWORK_EVIDENCE_LOADER_IMPL_NULL_H
+#ifndef MOBIUS_FRAMEWORK_EVIDENCE_LOADER_IMPL_BASE_HPP
+#define MOBIUS_FRAMEWORK_EVIDENCE_LOADER_IMPL_BASE_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,46 +18,42 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/framework/evidence_loader_impl_base.h>
-#include <mobius/exception.inc>
-#include <stdexcept>
+#include <mobius/model/item.h>
 
 namespace mobius::framework
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief evidence_loader null implementation class
+// @brief <i>evidence_loader</i> implementation base class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class evidence_loader_impl_null : public evidence_loader_impl_base
+class evidence_loader_impl_base
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Check if object is valid
-  // @return true/false
+  // Datatypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit operator bool () const noexcept final
-  {
-    return false;
-  }
+  enum class scan_type { canonical_folders = 1, all_folders, all_files };
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get evidence_loader type
-  // @return Type as string
+  // Constructors and destructor
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::string
-  get_type () const final
-  {
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid evidence_loader"));
-  }
+  evidence_loader_impl_base () = default;
+  evidence_loader_impl_base (const evidence_loader_impl_base&) = delete;
+  evidence_loader_impl_base (evidence_loader_impl_base&&) = delete;
+  virtual ~evidence_loader_impl_base () = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Scan item files for evidences
+  // Assignment operators
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void
-  run () final
-  {
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid evidence_loader"));
-  }
+  evidence_loader_impl_base& operator= (const evidence_loader_impl_base&) = delete;
+  evidence_loader_impl_base& operator= (evidence_loader_impl_base&&) = delete;
+
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // Prototypes
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  virtual explicit operator bool () const noexcept = 0;
+  virtual std::string get_type () const = 0;
+  virtual void run () = 0;
 };
 
 } // namespace mobius::framework

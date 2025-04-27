@@ -2,15 +2,13 @@ mobius_includedir = $(includedir)/mobius
 nobase_mobius_include_HEADERS = *.h *.inc
 
 lib_LTLIBRARIES = libmobius.la
-libmobius_la_CXXFLAGS = -I$(top_srcdir)/src
+libmobius_la_CXXFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src
 libmobius_la_SOURCES =						\
-	benchmark.cc						\
 	bytearray.cc						\
 	charset.cc						\
 	exception.cc						\
 	metadata.cc						\
-	string_functions.cc					\
-	unittest.cc
+	string_functions.cc
 
 libmobius_la_LDFLAGS = -avoid-version $(LIBGCRYPT_LIBS) $(LIBXML2_LIBS)
 
@@ -40,7 +38,6 @@ SUBDIRS =							\
 	datetime						\
 	decoder							\
 	encoder							\
-	framework						\
 	kff							\
 	io							\
 	model							\

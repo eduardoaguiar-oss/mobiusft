@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "benchmark.h"
+#include <mobius/core/benchmark.hpp>
 #include <iostream>
 
-namespace mobius
+namespace mobius::core
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief constructor
@@ -65,6 +65,6 @@ benchmark::end (std::uint64_t count)
   std::cout << " \033[1;32m" << throughput << ' ' << units[unit_idx] << unit_ << "/s\033[0m" << std::endl;
 }
 
-} // namespace mobius
+} // namespace mobius::core 
 
 

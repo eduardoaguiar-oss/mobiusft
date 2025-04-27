@@ -20,7 +20,7 @@
 // @brief  C++ API module wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "config.h"
+#include <mobius/framework/config.hpp>
 #include <pymobius.hpp>
 #include <pylist.hpp>
 #include "category.hpp"

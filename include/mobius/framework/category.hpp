@@ -1,5 +1,5 @@
-#ifndef MOBIUS_FRAMEWORK_ATTRIBUTE_H
-#define MOBIUS_FRAMEWORK_ATTRIBUTE_H
+#ifndef MOBIUS_FRAMEWORK_CATEGORY_HPP
+#define MOBIUS_FRAMEWORK_CATEGORY_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,32 +18,36 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/bytearray.h>
+#include <mobius/database/transaction.h>
+#include <mobius/framework/attribute.hpp>
 #include <cstdint>
-#include <memory>
 #include <string>
+#include <memory>
+#include <vector>
 
 namespace mobius::framework
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief attribute class
+// @brief General category class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class attribute
+class category
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  attribute ();
-  explicit attribute (std::int64_t);
-  attribute (attribute&&) noexcept = default;
-  attribute (const attribute&) noexcept = default;
+  category ();
+  explicit category (std::int64_t);
+  category (category&&) noexcept = default;
+  category (const category&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // operators
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  attribute& operator= (const attribute&) noexcept = default;
-  attribute& operator= (attribute&&) noexcept = default;
+  category& operator= (const category&) noexcept = default;
+  category& operator= (category&&) noexcept = default;
   operator bool () const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -52,15 +56,16 @@ public:
   std::string get_id () const;
   std::string get_name () const;
   std::string get_description () const;
-  std::string get_datatype () const;
-  std::string get_value_mask () const;
-  std::uint32_t get_index () const;
-  bool is_editable () const;
+  mobius::bytearray get_icon_data () const;
+
   void set_name (const std::string&);
   void set_description (const std::string&);
-  void set_datatype (const std::string&);
-  void set_value_mask (const std::string&);
-  void set_index (std::uint32_t);
+  void set_icon_data (const mobius::bytearray&);
+
+  attribute get_attribute (const std::string&) const;
+  attribute new_attribute (const std::string&);
+  void remove_attribute (const std::string&);
+  std::vector <attribute> get_attributes () const;
 
 private:
   // @brief implementation class forward declaration
@@ -69,6 +74,17 @@ private:
   // @brief implementation pointer
   std::shared_ptr <impl> impl_;
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Function prototypes
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+category get_category (const std::string&);
+category new_category (const std::string&);
+void remove_category (const std::string&);
+std::vector <category> get_categories ();
+void remove_categories ();
+mobius::database::database get_category_database ();
+mobius::database::transaction new_category_transaction ();
 
 } // namespace mobius::framework
 

@@ -16,9 +16,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <iostream>
-#include <mobius/unittest.h>
+#include <mobius/core/unittest.hpp>
 
-namespace mobius
+namespace mobius::core
 {
 std::size_t unittest::global_count_ = 0;
 std::size_t unittest::global_errors_ = 0;
@@ -51,7 +51,7 @@ unittest::end ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief test whether condition is true
+// @brief Test whether condition is true
 // @param b condition (boolean)
 // @param line code line number
 // @param e expression
@@ -170,6 +170,4 @@ unittest::final_summary ()
   std::cout << "errors   : " << global_errors_ << std::endl;
 }
 
-} // namespace mobius
-
-
+} // namespace mobius::core

@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "attribute.h"
-#include "category.h"
+#include <mobius/framework/attribute.hpp>
+#include <mobius/framework/category.hpp>
 #include <mobius/database/database.h>
 #include <mobius/exception.inc>
 #include <stdexcept>

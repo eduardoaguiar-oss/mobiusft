@@ -1,5 +1,5 @@
-#ifndef MOBIUS_FRAMEWORK_EVIDENCE_FLAG_H
-#define MOBIUS_FRAMEWORK_EVIDENCE_FLAG_H
+#ifndef MOBIUS_FRAMEWORK_EVIDENCE_FLAG_HPP
+#define MOBIUS_FRAMEWORK_EVIDENCE_FLAG_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
