@@ -21,7 +21,7 @@
 #define PY_SSIZE_T_CLEAN        // PEP 353
 
 #include <Python.h>
-#include <mobius/core/mediator.h>
+#include <mobius/core/mediator.hpp>
 #include <functional>
 
 namespace mobius::py

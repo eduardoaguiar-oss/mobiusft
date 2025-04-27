@@ -1,5 +1,5 @@
-#ifndef MOBIUS_CORE_FILE_DECODER_METADATA_H
-#define MOBIUS_CORE_FILE_DECODER_METADATA_H
+#ifndef MOBIUS_CORE_MEDIATOR_HPP
+#define MOBIUS_CORE_MEDIATOR_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,58 +18,51 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/pod/data.h>
-#include <mobius/pod/map.h>
+#include <mobius/core/callback.hpp>
+#include <cstdint>
+#include <functional>
 #include <memory>
 #include <string>
-#include <vector>
 
-namespace mobius::core::file_decoder
+namespace mobius::core
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief metadata class
+// @brief Event mediator class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class metadata
+class mediator
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  metadata ();
-  metadata (metadata&&) noexcept = default;
-  metadata (const metadata&) noexcept = default;
+  mediator ();
+  mediator (mediator&&) noexcept = default;
+  mediator (const mediator&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Operators
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  metadata& operator= (const metadata&) noexcept = default;
-  metadata& operator= (metadata&&) noexcept = default;
+  mediator& operator= (const mediator&) noexcept = default;
+  mediator& operator= (mediator&&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Function prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void set_value (const std::string&, const std::string&, const mobius::pod::data&);
-  mobius::pod::data get_value (const std::string&, const std::string&) const;
-  std::vector<std::string> get_groups () const;
-  mobius::pod::map get_group (const std::string&) const;
+  std::uint64_t subscribe (const std::string&, const callback&);
+  void unsubscribe (std::uint64_t);
+  std::vector <callback> get_callbacks (const std::string&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get metadata value
-  // @param group Group ID
-  // @param Metadata name
-  // @return Metadata value, if any
+  // @brief Emit event
+  // @param id Event ID
+  // @param args Variadic template args, passed to the internal function
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  template <typename T> T
-  get_value (const std::string& group_id, const std::string& name) const
+  template <typename ...Args> void
+  emit (const std::string& id, Args... args)
   {
-    T value;
-
-    mobius::pod::data d = get_value (group_id, name);
-    if (!d.is_null ())
-      value = static_cast <T> (d);
-
-    return value;
+    for (auto& c : get_callbacks (id))
+      c (args...);
   }
 
 private:
@@ -80,7 +73,26 @@ private:
   std::shared_ptr <impl> impl_;
 };
 
-} // namespace mobius::core::file_decoder
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Module mediator functions
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::uint64_t subscribe (const std::string&, const callback&);
+void unsubscribe (std::uint64_t);
+std::vector <callback> get_callbacks (const std::string&);
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Emit event
+// @param id Event ID
+// @param args Variadic template args, passed to the internal function
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <typename ...Args> void
+emit (const std::string& id, Args... args)
+{
+  for (auto& c : get_callbacks (id))
+    c (args...);
+}
+
+} // namespace mobius::core
 
 #endif
 

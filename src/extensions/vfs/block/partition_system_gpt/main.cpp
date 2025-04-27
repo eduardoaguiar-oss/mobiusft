@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/bytearray.h>
-#include <mobius/core/resource.h>
+#include <mobius/core/resource.hpp>
 #include <mobius/decoder/data_decoder.h>
 #include <mobius/exception.inc>
 #include <mobius/string_functions.h>

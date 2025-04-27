@@ -1,5 +1,5 @@
-#ifndef MOBIUS_THREAD_SAFE_FLAG_H
-#define MOBIUS_THREAD_SAFE_FLAG_H
+#ifndef MOBIUS_CORE_FILE_DECODER_ENTRY_HPP
+#define MOBIUS_CORE_FILE_DECODER_ENTRY_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,59 +18,74 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <atomic>
-#include <mutex>
+#include <mobius/pod/data.h>
+#include <mobius/pod/map.h>
+#include <memory>
+#include <string>
 
-namespace mobius
+namespace mobius::core::file_decoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Thread safe flag, analogous to once_flag, but with set/reset methods
+// @brief entry class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class thread_safe_flag
+class entry
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get flag value
+  // Datatypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  operator bool () const
-  {
-    return has_run_;
-  }
+  using idx_type = std::uint64_t;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Set flag value
+  // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  thread_safe_flag& operator= (bool value)
-  {
-    has_run_ = value;
-    return *this;
-  }
+  entry (idx_type, const std::string&);
+  entry (entry&&) noexcept = default;
+  entry (const entry&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Lock
+  // Operators
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void
-  lock ()
-  {
-    mutex_.lock ();
-  }
+  entry& operator= (const entry&) noexcept = default;
+  entry& operator= (entry&&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Unlock
+  // Function prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void
-  unlock ()
+  mobius::pod::data get_metadata (const std::string&) const;
+  mobius::pod::map get_all_metadata () const;
+  void set_metadata (const std::string&, const mobius::pod::data&);
+  idx_type get_idx () const;
+  std::string get_name () const;
+
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // @brief Get metadata
+  // @param Metadata name
+  // @param dvalue Default value
+  // @return Metadata value, if any
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  template <typename T> T
+  get_metadata (const std::string& name, const T& dvalue = {}) const
   {
-    mutex_.unlock ();
+    T value = dvalue;
+
+    mobius::pod::data d = get_metadata (name);
+    if (!d.is_null ())
+      value = static_cast <T> (d);
+
+    return value;
   }
 
 private:
-    mutable std::mutex mutex_;
-    std::atomic_bool has_run_ = false;
+  // @brief Implementation class forward declaration
+  class impl;
+
+  // @brief Implementation pointer
+  std::shared_ptr <impl> impl_;
 };
 
-} // namespace mobius
+} // namespace mobius::core::file_decoder
 
 #endif
 

@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "resource.h"
-#include <mobius/core/mediator.h>
+#include <mobius/core/mediator.hpp>
+#include <mobius/core/resource.hpp>
 #include <mobius/string_functions.h>
 #include <algorithm>
 #include <mutex>

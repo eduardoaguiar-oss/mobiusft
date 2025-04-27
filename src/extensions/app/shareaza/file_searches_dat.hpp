@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CWndSearch.hpp"
-#include <mobius/core/file_decoder/section.h>
+#include <mobius/core/file_decoder/section.hpp>
 #include <mobius/datetime/datetime.h>
 #include <mobius/io/reader.h>
 #include <map>

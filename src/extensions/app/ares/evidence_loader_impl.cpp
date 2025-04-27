@@ -72,7 +72,7 @@
 #include "file_sharel.hpp"
 #include "file_torrenth.hpp"
 #include <mobius/io/walker.h>
-#include <mobius/core/log.h>
+#include <mobius/core/log.hpp>
 #include <mobius/decoder/hexstring.h>
 #include <mobius/datasource/datasource_vfs.h>
 #include <mobius/exception.inc>

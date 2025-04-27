@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/framework/evidence_loader.hpp>
 #include <mobius/framework/evidence_loader_impl_null.hpp>
-#include <mobius/core/resource.h>
+#include <mobius/core/resource.hpp>
 #include <algorithm>
 
 namespace mobius::framework

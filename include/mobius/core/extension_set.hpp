@@ -1,5 +1,5 @@
-#ifndef MOBIUS_CORE_EXTENSION_SET_H
-#define MOBIUS_CORE_EXTENSION_SET_H
+#ifndef MOBIUS_CORE_EXTENSION_SET_HPP
+#define MOBIUS_CORE_EXTENSION_SET_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/extension.h>
+#include <mobius/core/extension.hpp>
 #include <list>
 #include <mutex>
 #include <string>

@@ -431,7 +431,7 @@ AC_CONFIG_FILES([Makefile
                  src/Makefile
                  src/mobius/Makefile
                  src/mobius/core/Makefile
-                 src/mobius/core/application.cc
+                 src/mobius/core/application.cpp
                  src/mobius/crypt/Makefile
                  src/mobius/database/Makefile
                  src/mobius/datasource/Makefile

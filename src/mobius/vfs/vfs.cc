@@ -18,11 +18,11 @@
 #include "vfs.h"
 #include "filesystem.h"
 #include "block_impl_disk.h"
-#include <mobius/core/log.h>
-#include <mobius/core/resource.h>
+#include <mobius/core/log.hpp>
+#include <mobius/core/resource.hpp>
 #include <mobius/exception.inc>
 #include <mobius/string_functions.h>
-#include <mobius/thread_safe_flag.h>
+#include <mobius/core/thread_safe_flag.hpp>
 #include <algorithm>
 #include <stdexcept>
 #include <vector>
@@ -86,10 +86,10 @@ private:
   mutable std::vector <mobius::io::entry> root_entries_;
 
   // @brief Data blocks loaded flag
-  mutable thread_safe_flag blocks_loaded_;
+  mutable mobius::core::thread_safe_flag blocks_loaded_;
 
   // @brief Root entries loaded flag
-  mutable thread_safe_flag root_entries_loaded_;
+  mutable mobius::core::thread_safe_flag root_entries_loaded_;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Helper functions

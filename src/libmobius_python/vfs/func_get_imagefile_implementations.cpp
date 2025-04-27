@@ -22,7 +22,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
 #include <pylist.hpp>
-#include <mobius/core/resource.h>
+#include <mobius/core/resource.hpp>
 #include <mobius/vfs/imagefile.h>
 
 namespace

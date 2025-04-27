@@ -19,7 +19,7 @@
 #include "case.h"
 #include "event.h"
 #include "evidence.h"
-#include <mobius/core/mediator.h>
+#include <mobius/core/mediator.hpp>
 #include <mobius/datetime/datetime.h>
 #include <mobius/exception.inc>
 #include <mobius/framework/category.hpp>

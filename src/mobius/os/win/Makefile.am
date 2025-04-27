@@ -6,7 +6,7 @@ nobase_mobius_os_win_include_HEADERS = 			\
 	trashbin/*.h
 
 noinst_LTLIBRARIES = libmobius-os-win.la
-libmobius_os_win_la_CXXFLAGS = -I$(top_srcdir)/src
+libmobius_os_win_la_CXXFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src
 libmobius_os_win_la_LDFLAGS = -avoid-version
 
 libmobius_os_win_la_SOURCES =				\

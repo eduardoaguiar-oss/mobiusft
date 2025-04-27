@@ -34,7 +34,7 @@
 #include "file_bt_fastresume.hpp"
 #include "file_ed2k_fastresume.hpp"
 #include <mobius/io/walker.h>
-#include <mobius/core/log.h>
+#include <mobius/core/log.hpp>
 #include <mobius/datasource/datasource_vfs.h>
 #include <mobius/decoder/inifile.h>
 #include <mobius/exception.inc>

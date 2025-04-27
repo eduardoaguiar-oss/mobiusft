@@ -1,5 +1,5 @@
-#ifndef MOBIUS_CORE_MEDIATOR_H
-#define MOBIUS_CORE_MEDIATOR_H
+#ifndef MOBIUS_CORE_THREAD_GUARD_HPP
+#define MOBIUS_CORE_THREAD_GUARD_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,78 +18,76 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/callback.h>
-#include <cstdint>
-#include <functional>
+#include <any>
 #include <memory>
 #include <string>
 
 namespace mobius::core
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Event mediator class
+// @brief Thread guard class
 // @author Eduardo Aguiar
+//
+// The <i>thread_guard</i> class and the get/set/has/remove_thread_resource
+// functions are designed to handle resources that are specific for each
+// thread, such as sqlite3 database connections.
+//
+// Usage:
+//   1. When starting a new thread, create an instance of thread_guard:
+//        thread_guard guard;
+//        ...
+//        ...
+//
+//   2. Internal code of Mobius objects and functions calls for
+//      get/set/has/remove_thread_resource functions
+//
+//   3. When thread_guard goes out of scope, its destructor automatically
+//      deletes all resources set in that thread.
+//
+// Main thread must not create thread_guard instances, because a static
+// instance is already created.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class mediator
+class thread_guard
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mediator ();
-  mediator (mediator&&) noexcept = default;
-  mediator (const mediator&) noexcept = default;
+  thread_guard ();
+  thread_guard (const thread_guard&) noexcept = default;
+  thread_guard (thread_guard&&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Operators
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mediator& operator= (const mediator&) noexcept = default;
-  mediator& operator= (mediator&&) noexcept = default;
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Function prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::uint64_t subscribe (const std::string&, const callback&);
-  void unsubscribe (std::uint64_t);
-  std::vector <callback> get_callbacks (const std::string&);
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Emit event
-  // @param id Event ID
-  // @param args Variadic template args, passed to the internal function
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  template <typename ...Args> void
-  emit (const std::string& id, Args... args)
-  {
-    for (auto& c : get_callbacks (id))
-      c (args...);
-  }
+  thread_guard& operator=(const thread_guard&) noexcept = default;
+  thread_guard& operator=(thread_guard&&) noexcept = default;
 
 private:
-  // @brief Implementation class forward declaration
+  // @brief Forward declaration
   class impl;
 
   // @brief Implementation pointer
-  std::shared_ptr <impl> impl_;
+  std::shared_ptr<impl> impl_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Module mediator functions
+// Functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::uint64_t subscribe (const std::string&, const callback&);
-void unsubscribe (std::uint64_t);
-std::vector <callback> get_callbacks (const std::string&);
+bool has_thread_resource (const std::string&);
+std::any get_thread_resource (const std::string&);
+void set_thread_resource (const std::string&, const std::any&);
+void remove_thread_resource (const std::string&);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Emit event
-// @param id Event ID
-// @param args Variadic template args, passed to the internal function
+// @brief Get thread resource
+// @param resource_id Resource ID
+// @return any object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename ...Args> void
-emit (const std::string& id, Args... args)
+template <typename T> T
+get_thread_resource (const std::string& resource_id)
 {
-  for (auto& c : get_callbacks (id))
-    c (args...);
+  return std::any_cast <T> (get_thread_resource (resource_id));
 }
 
 } // namespace mobius::core

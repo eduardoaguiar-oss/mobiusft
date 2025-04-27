@@ -6,7 +6,7 @@ nobase_mobius_decoder_include_HEADERS =			\
 
 noinst_LTLIBRARIES = libmobius-decoder.la
 
-libmobius_decoder_la_CXXFLAGS = -I$(top_srcdir)/src
+libmobius_decoder_la_CXXFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src
 
 libmobius_decoder_la_SOURCES =				\
 	base64.cc					\

@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "ctag.hpp"
-#include <mobius/core/log.h>
+#include <mobius/core/log.hpp>
 #include <mobius/string_functions.h>
 #include <iomanip>
 #include <sstream>

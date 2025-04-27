@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "info2_file.h"
-#include <mobius/core/log.h>
+#include <mobius/core/log.hpp>
 #include <mobius/decoder/data_decoder.h>
 #include <vector>
 

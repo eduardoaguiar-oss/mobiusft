@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CBTInfo.hpp"
 #include "CShareaza.hpp"
-#include <mobius/core/log.h>
+#include <mobius/core/log.hpp>
 #include <mobius/decoder/btencode.h>
 #include <mobius/string_functions.h>
 

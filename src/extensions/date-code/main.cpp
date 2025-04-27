@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <cstdint>
 #include <string>
-#include <mobius/core/mediator.h>
+#include <mobius/core/mediator.hpp>
 #include <mobius/datetime/datetime.h>
 #include <mobius/datetime/timedelta.h>
 #include <mobius/model/item.h>

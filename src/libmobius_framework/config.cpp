@@ -16,8 +16,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/framework/config.hpp>
-#include <mobius/core/application.h>
-#include <mobius/core/thread_guard.h>
+#include <mobius/core/application.hpp>
+#include <mobius/core/thread_guard.hpp>
 #include <mobius/database/database.h>
 
 namespace

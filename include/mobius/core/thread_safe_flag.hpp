@@ -1,5 +1,5 @@
-#ifndef MOBIUS_CORE_FILE_DECODER_SECTION_H
-#define MOBIUS_CORE_FILE_DECODER_SECTION_H
+#ifndef MOBIUS_CORE_THREAD_SAFE_FLAG_HPP
+#define MOBIUS_CORE_THREAD_SAFE_FLAG_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,61 +18,59 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
-#include <mobius/io/reader.h>
-#include <memory>
-#include <string>
-#include <vector>
+#include <atomic>
+#include <mutex>
 
-namespace mobius::core::file_decoder
+namespace mobius::core
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief section class
+// @brief Thread safe flag, analogous to once_flag, but with set/reset methods
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class section
+class thread_safe_flag
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Datatypes
+  // @brief Get flag value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  using size_type = mobius::io::reader::size_type;
+  operator bool () const
+  {
+    return has_run_;
+  }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
+  // @brief Set flag value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  section ();
-  section (const mobius::io::reader&, const std::string&);
-  section (section&&) noexcept = default;
-  section (const section&) noexcept = default;
+  thread_safe_flag& operator= (bool value)
+  {
+    has_run_ = value;
+    return *this;
+  }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Operators
+  // @brief Lock
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  section& operator= (const section&) noexcept = default;
-  section& operator= (section&&) noexcept = default;
+  void
+  lock ()
+  {
+    mutex_.lock ();
+  }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Function prototypes
+  // @brief Unlock
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::string get_name () const;
-  size_type get_offset () const;
-  size_type get_size () const;
-  mobius::io::reader new_reader () const;
-  section new_child (const std::string&);
-  std::vector<section> get_children () const;
-  void set_data (const mobius::bytearray&);
-  void end ();
+  void
+  unlock ()
+  {
+    mutex_.unlock ();
+  }
 
 private:
-  // @brief Implementation class forward declaration
-  class impl;
-
-  // @brief Implementation pointer
-  std::shared_ptr <impl> impl_;
+    mutable std::mutex mutex_;
+    std::atomic_bool has_run_ = false;
 };
 
-} // namespace mobius::core::file_decoder
+} // namespace mobius::core
 
 #endif
 

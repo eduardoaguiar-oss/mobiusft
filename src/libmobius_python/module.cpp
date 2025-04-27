@@ -25,7 +25,7 @@
 #include <pymobius.hpp>
 #include "pymodule.hpp"
 #include <datetime.h>
-#include <mobius/core/log.h>
+#include <mobius/core/log.hpp>
 #include "api_dataholder.hpp"
 
 #include "core/module.hpp"

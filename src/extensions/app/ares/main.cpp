@@ -22,8 +22,8 @@
 #include "decoder_impl_sharel.hpp"
 #include "decoder_impl_torrenth.hpp"
 #include "evidence_loader_impl.hpp"
-#include <mobius/core/resource.h>
-#include <mobius/core/file_decoder/decoder.h>
+#include <mobius/core/resource.hpp>
+#include <mobius/core/file_decoder/decoder.hpp>
 #include <mobius/framework/evidence_loader.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

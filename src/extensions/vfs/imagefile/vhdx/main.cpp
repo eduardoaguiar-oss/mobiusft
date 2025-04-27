@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "imagefile_impl.hpp"
-#include <mobius/core/resource.h>
+#include <mobius/core/resource.hpp>
 #include <mobius/vfs/imagefile.h>
 #include <cstdint>
 

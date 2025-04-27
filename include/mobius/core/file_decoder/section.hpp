@@ -1,5 +1,5 @@
-#ifndef MOBIUS_CORE_FILE_DECODER_ENTRY_H
-#define MOBIUS_CORE_FILE_DECODER_ENTRY_H
+#ifndef MOBIUS_CORE_FILE_DECODER_SECTION_HPP
+#define MOBIUS_CORE_FILE_DECODER_SECTION_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,64 +18,51 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/pod/data.h>
-#include <mobius/pod/map.h>
+#include <mobius/bytearray.h>
+#include <mobius/io/reader.h>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace mobius::core::file_decoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief entry class
+// @brief section class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class entry
+class section
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Datatypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  using idx_type = std::uint64_t;
+  using size_type = mobius::io::reader::size_type;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  entry (idx_type, const std::string&);
-  entry (entry&&) noexcept = default;
-  entry (const entry&) noexcept = default;
+  section ();
+  section (const mobius::io::reader&, const std::string&);
+  section (section&&) noexcept = default;
+  section (const section&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Operators
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  entry& operator= (const entry&) noexcept = default;
-  entry& operator= (entry&&) noexcept = default;
+  section& operator= (const section&) noexcept = default;
+  section& operator= (section&&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Function prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::data get_metadata (const std::string&) const;
-  mobius::pod::map get_all_metadata () const;
-  void set_metadata (const std::string&, const mobius::pod::data&);
-  idx_type get_idx () const;
   std::string get_name () const;
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get metadata
-  // @param Metadata name
-  // @param dvalue Default value
-  // @return Metadata value, if any
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  template <typename T> T
-  get_metadata (const std::string& name, const T& dvalue = {}) const
-  {
-    T value = dvalue;
-
-    mobius::pod::data d = get_metadata (name);
-    if (!d.is_null ())
-      value = static_cast <T> (d);
-
-    return value;
-  }
+  size_type get_offset () const;
+  size_type get_size () const;
+  mobius::io::reader new_reader () const;
+  section new_child (const std::string&);
+  std::vector<section> get_children () const;
+  void set_data (const mobius::bytearray&);
+  void end ();
 
 private:
   // @brief Implementation class forward declaration

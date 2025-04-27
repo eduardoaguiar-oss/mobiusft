@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file_sharel.hpp"
 #include "common.hpp"
-#include <mobius/core/log.h>
+#include <mobius/core/log.hpp>
 #include <mobius/decoder/data_decoder.h>
 #include <mobius/encoder/hexstring.h>
 

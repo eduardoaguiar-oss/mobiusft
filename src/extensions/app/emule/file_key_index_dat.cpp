@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file_key_index_dat.hpp"
-#include <mobius/core/log.h>
+#include <mobius/core/log.hpp>
 #include <mobius/decoder/data_decoder.h>
 #include <mobius/string_functions.h>
 #include <unordered_map>

@@ -5,7 +5,7 @@ nobase_mobius_io_include_HEADERS = 		\
 
 noinst_LTLIBRARIES = libmobius-io.la
 
-libmobius_io_la_CXXFLAGS = -I$(top_srcdir)/src
+libmobius_io_la_CXXFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src
 
 libmobius_io_la_SOURCES =			\
 	bytearray_io.cc				\

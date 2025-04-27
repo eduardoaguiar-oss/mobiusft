@@ -15,9 +15,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "decoder.h"
-#include "decoder_impl_null.h"
-#include <mobius/core/resource.h>
+#include <mobius/core/file_decoder/decoder.hpp>
+#include <mobius/core/file_decoder/decoder_impl_null.hpp>
+#include <mobius/core/resource.hpp>
 
 namespace mobius::core::file_decoder
 {

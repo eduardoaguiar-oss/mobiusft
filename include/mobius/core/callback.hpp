@@ -1,5 +1,5 @@
-#ifndef MOBIUS_CORE_CALLBACK_H
-#define MOBIUS_CORE_CALLBACK_H
+#ifndef MOBIUS_CORE_CALLBACK_HPP
+#define MOBIUS_CORE_CALLBACK_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CLibraryFile.hpp"
 #include "CLibraryFolder.hpp"
-#include <mobius/core/log.h>
+#include <mobius/core/log.hpp>
 
 namespace
 {

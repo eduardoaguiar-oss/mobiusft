@@ -21,7 +21,7 @@
 #include "file_part_met.hpp"
 #include "file_part_met_txtsrc.hpp"
 #include "file_stored_searches_met.hpp"
-#include <mobius/core/log.h>
+#include <mobius/core/log.hpp>
 #include <mobius/datasource/datasource_vfs.h>
 #include <mobius/decoder/data_decoder.h>
 #include <mobius/decoder/inifile.h>

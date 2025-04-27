@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "imagefile.h"
 #include "imagefile_impl_null.h"
-#include <mobius/core/resource.h>
+#include <mobius/core/resource.hpp>
 #include <mobius/exception.inc>
 #include <mobius/io/file.h>
 #include <mobius/string_functions.h>

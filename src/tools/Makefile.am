@@ -40,7 +40,7 @@ hashfs_LDFLAGS = $(LIBTSK_LDFLAGS) -L$(top_srcdir)/src/libmobius_core/build -L$(
 hashfs_LDADD = $(top_srcdir)/src/mobius/libmobius.la
 
 hive_info_SOURCES = hive_info.cpp
-hive_info_CXXFLAGS = $(LIBTSK_CXXFLAGS) -I$(top_srcdir)/src
+hive_info_CXXFLAGS = $(LIBTSK_CXXFLAGS) -I$(top_srcdir)/include -I$(top_srcdir)/src
 hive_info_LDFLAGS = $(LIBTSK_LDFLAGS) -L$(top_srcdir)/src/libmobius_core/build -L$(top_srcdir)/src/libmobius_framework/build -lmobius_core -lmobius_framework
 hive_info_LDADD = $(top_srcdir)/src/mobius/libmobius.la	
 

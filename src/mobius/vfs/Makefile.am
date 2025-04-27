@@ -4,7 +4,7 @@ nobase_mobius_vfs_include_HEADERS =					\
 	tsk/*.h
 
 noinst_LTLIBRARIES = libmobius-vfs.la
-libmobius_vfs_la_CXXFLAGS = -I$(top_srcdir)/src
+libmobius_vfs_la_CXXFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src
 libmobius_vfs_la_LDFLAGS = -avoid-version
 
 libmobius_vfs_la_SOURCES =						\

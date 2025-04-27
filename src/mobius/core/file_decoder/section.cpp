@@ -15,64 +15,31 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "extension.h"
-#include <mobius/core/log.h>
-#include <mobius/exception.inc>
-#include <cstdint>
-#include <stdexcept>
-#include <dlfcn.h>
+#include <mobius/core/file_decoder/section.hpp>
+#include <mobius/io/bytearray_io.h>
 
-namespace mobius::core
-{
-namespace
+namespace mobius::core::file_decoder
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get symbol from dynamic library
-// @param handle Dynamic library handle
-// @param name Symbol name
-// @param var Var reference
+// @brief section implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-get (void *handle, const std::string& name, std::string& var)
-{
-  void *symbol = dlsym (handle, name.c_str ());
-
-  if (symbol)
-    var = *reinterpret_cast <const char**> (symbol);
-}
-
-} // namespace
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief extension implementation class
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class extension::impl
+class section::impl
 {
 public:
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  impl () = default;
   impl (const impl&) = delete;
   impl (impl&&) = delete;
-  explicit impl (const std::string&);
-  ~impl ();
+  impl (const mobius::io::reader&, const std::string&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Operators
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   impl& operator= (const impl&) = delete;
   impl& operator= (impl&&) = delete;
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get id
-  // @return Id
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::string
-  get_id () const
-  {
-    return id_;
-  }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief Get name
@@ -85,201 +52,184 @@ public:
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get version
-  // @return Version
+  // @brief Get offset
+  // @return Offset
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::string
-  get_version () const
+  size_type
+  get_offset () const
   {
-    return version_;
+    return offset_;
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get authors
-  // @return Authors
+  // @brief Get size
+  // @return Size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::string
-  get_authors () const
+  size_type
+  get_size () const
   {
-    return authors_;
+    return size_;
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get description
-  // @return Description
+  // @brief Get children
+  // @return Children sections
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::string
-  get_description () const
+  std::vector <section>
+  get_children () const
   {
-    return description_;
+    return children_;
+  }
+
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // @brief Set alternate data for section
+  // @param data Data
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  void
+  set_data (const mobius::bytearray& data)
+  {
+    data_ = data;
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void start ();
-  void stop ();
-  void install ();
-  void uninstall ();
+  section new_child (const std::string&);
+  mobius::io::reader new_reader () const;
+  void end ();
 
 private:
-  // @brief Dynamic library handle
-  void *handle_ = nullptr;
+  // @brief Reader object
+  mobius::io::reader reader_;
 
-  // @brief ID
-  std::string id_;
+  // @brief Section offset from the beginning of file
+  size_type offset_ = 0;
 
-  // @brief Name
+  // @brief Section size in bytes
+  size_type size_ = 0;
+
+  // @brief Section name
   std::string name_;
 
-  // @brief Version
-  std::string version_;
+  // @brief Children sections
+  std::vector <section> children_;
 
-  // @brief Authors
-  std::string authors_;
-
-  // @brief Description
-  std::string description_;
+  // @brief Alternate data, if any
+  mobius::bytearray data_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
-// @param path Extension path
+// @param reader Reader object
+// @param name Section name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-extension::impl::impl (const std::string& path)
+section::impl::impl (const mobius::io::reader& reader, const std::string& name)
+  : reader_ (reader),
+    offset_ (reader.tell ()),
+    name_ (name)
 {
-  // open dynamic library
-  //handle_ = dlopen (path.c_str (), RTLD_NOW);
-  handle_ = dlopen (path.c_str (), RTLD_LAZY);
-
-  if (!handle_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG (dlerror ()));
-
-  // load extension data
-  get (handle_, "EXTENSION_ID", id_);
-  get (handle_, "EXTENSION_NAME", name_);
-  get (handle_, "EXTENSION_VERSION", version_);
-  get (handle_, "EXTENSION_AUTHORS", authors_);
-  get (handle_, "EXTENSION_DESCRIPTION", description_);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Destructor
+// @brief Create child section
+// @param name Child section name
+// @return Child section
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-extension::impl::~impl ()
+section
+section::impl::new_child (const std::string& name)
 {
-  dlclose (handle_);
+  return children_.emplace_back (reader_, name);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Start extension
+// @brief Create new reader for file section
+// @return Reader object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::io::reader
+section::impl::new_reader () const
+{
+  if (data_)
+    return mobius::io::new_bytearray_reader (data_);
+
+  else
+    return mobius::io::new_slice_reader (reader_, offset_, offset_ + size_ - 1);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief End file section
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-extension::impl::start ()
+section::impl::end ()
 {
-  auto f = reinterpret_cast <void (*)()> (dlsym (handle_, "start"));
-  if (f)
-    f ();
-
-  mobius::core::log log (__FILE__, __FUNCTION__);
-  log.info (__LINE__, "C++ extension '" + id_ + "' started");
+  size_ = reader_.tell () - offset_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Stop extension
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-extension::impl::stop ()
+section::section ()
+  : impl_ (std::make_shared <impl> ())
 {
-  auto f = reinterpret_cast <void (*)()> (dlsym (handle_, "stop"));
-  if (f)
-    f ();
-
-  mobius::core::log log (__FILE__, __FUNCTION__);
-  log.info (__LINE__, "C++ extension '" + id_ + "' stopped");
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Install extension
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-extension::impl::install ()
-{
-  auto f = reinterpret_cast <void (*)()> (dlsym (handle_, "install"));
-  if (f)
-    f ();
-
-  mobius::core::log log (__FILE__, __FUNCTION__);
-  log.info (__LINE__, "C++ extension '" + id_ + "' installed");
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Uninstall extension
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-extension::impl::uninstall ()
-{
-  auto f = reinterpret_cast <void (*)()> (dlsym (handle_, "uninstall"));
-  if (f)
-    f ();
-
-  mobius::core::log log (__FILE__, __FUNCTION__);
-  log.info (__LINE__, "C++ extension '" + id_ + "' uninstalled");
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
-// @param path Extension path
+// @param reader Reader object
+// @param name Section name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-extension::extension (const std::string& path)
-  : impl_ (std::make_shared <impl> (path))
+section::section (const mobius::io::reader& reader, const std::string& name)
+  : impl_ (std::make_shared <impl> (reader, name))
 {
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Start extension
+// @brief Create child section
+// @param name Child section name
+// @return Child section
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+section
+section::new_child (const std::string& name)
+{
+  return impl_->new_child (name);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get children sections
+// @return Children sections
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<section>
+section::get_children () const
+{
+  return impl_->get_children ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create new reader for file section
+// @return Reader object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::io::reader
+section::new_reader () const
+{
+  return impl_->new_reader ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set alternate data stream
+// @param data Data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-extension::start ()
+section::set_data (const mobius::bytearray& data)
 {
-  impl_->start ();
+  impl_->set_data (data);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Stop extension
+// @brief End file section
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-extension::stop ()
+section::end ()
 {
-  impl_->stop ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Install extension
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-extension::install ()
-{
-  impl_->install ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Uninstall extension
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-extension::uninstall ()
-{
-  impl_->uninstall ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get id
-// @return Id
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-extension::get_id () const
-{
-  return impl_->get_id ();
+  impl_->end ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -287,41 +237,31 @@ extension::get_id () const
 // @return Name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-extension::get_name () const
+section::get_name () const
 {
   return impl_->get_name ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get version
-// @return Version
+// @brief Get offset
+// @return Offset
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-extension::get_version () const
+section::size_type
+section::get_offset () const
 {
-  return impl_->get_version ();
+  return impl_->get_offset ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get authors
-// @return Authors
+// @brief Get size
+// @return Size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-extension::get_authors () const
+section::size_type
+section::get_size () const
 {
-  return impl_->get_authors ();
+  return impl_->get_size ();
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get description
-// @return Description
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-extension::get_description () const
-{
-  return impl_->get_description ();
-}
-
-} // namespace mobius::core
+} // namespace mobius::core::file_decoder
 
 

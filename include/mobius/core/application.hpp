@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_ARES_PHASH_HPP
-#define MOBIUS_EXTENSION_APP_ARES_PHASH_HPP
+#ifndef MOBIUS_CORE_APPLICATION_HPP
+#define MOBIUS_CORE_APPLICATION_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,99 +18,58 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/file_decoder/decoder_impl_base.hpp>
+#include <mobius/database/transaction.h>
+#include <mobius/core/extension.hpp>
+#include <string>
 
-namespace mobius::extension::app::ares
+namespace mobius::core
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decoder for Ares Galaxy's PHash.dat files
+// @brief Application main class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class decoder_impl_phash : public mobius::core::file_decoder::decoder_impl_base
+class application
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Check if decoder is valid
-  // @return true/false
+  // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  operator bool () const noexcept final
-  {
-    return true;
-  }
+  application ();
+  application (const application&) noexcept = default;
+  application (application&&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get decoder type
-  // @return Type as string
+  // Operators
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::string
-  get_type () const final
-  {
-    return "app.ares.phash";
-  }
+  application& operator= (const application&) noexcept = default;
+  application& operator= (application&&) noexcept = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Check if stream was decoded
-  // @return true/false
+  // Start/stop
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  bool
-  is_instance () const final
-  {
-    return is_instance_;
-  }
+  void start ();
+  void stop ();
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get file sections
-  // @return Sections
+  // Metadata getters
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::core::file_decoder::section
-  get_section () const final
-  {
-    return section_;
-  }
+  std::string get_id () const;
+  std::string get_name () const;
+  std::string get_version () const;
+  std::string get_title () const;
+  std::string get_copyright () const;
+  std::string get_os_name () const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get file entries
-  // @return Entries
+  // Path getters
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::vector <mobius::core::file_decoder::entry>
-  get_entries () const final
-  {
-    return entries_;
-  }
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get metadata object
-  // @return Metadata value
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::core::file_decoder::metadata
-  get_metadata () const final
-  {
-    return metadata_;
-  }
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void decode (const mobius::io::reader&) final;
-
-private:
-  // @brief Flag is instance
-  bool is_instance_ = false;
-
-  // @brief File main section
-  mobius::core::file_decoder::section section_;
-
-  // @brief File entries
-  std::vector <mobius::core::file_decoder::entry> entries_;
-
-  // @brief File metadata
-  mobius::core::file_decoder::metadata metadata_;
+  std::string get_data_path (const std::string&) const;
+  std::string get_config_path (const std::string&) const;
+  std::string get_cache_path (const std::string&) const;
 };
 
-} // namespace mobius::extension::app::ares
+} // namespace mobius::core
 
 #endif
-
-
 
 

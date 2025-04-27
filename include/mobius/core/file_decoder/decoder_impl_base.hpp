@@ -1,5 +1,5 @@
-#ifndef MOBIUS_CORE_FILE_DECODER_DECODER_IMPL_BASE_H
-#define MOBIUS_CORE_FILE_DECODER_DECODER_IMPL_BASE_H
+#ifndef MOBIUS_CORE_FILE_DECODER_DECODER_IMPL_BASE_HPP
+#define MOBIUS_CORE_FILE_DECODER_DECODER_IMPL_BASE_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,9 +18,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/file_decoder/entry.h>
-#include <mobius/core/file_decoder/metadata.h>
-#include <mobius/core/file_decoder/section.h>
+#include <mobius/core/file_decoder/entry.hpp>
+#include <mobius/core/file_decoder/metadata.hpp>
+#include <mobius/core/file_decoder/section.hpp>
 #include <vector>
 
 namespace mobius::core::file_decoder

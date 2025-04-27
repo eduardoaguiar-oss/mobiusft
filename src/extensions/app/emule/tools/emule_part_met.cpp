@@ -16,8 +16,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "../file_part_met.hpp"
-#include <mobius/core/application.h>
-#include <mobius/core/log.h>
+#include <mobius/core/application.hpp>
+#include <mobius/core/log.hpp>
 #include <mobius/io/file.h>
 #include <mobius/string_functions.h>
 #include <iostream>

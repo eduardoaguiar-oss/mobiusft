@@ -1,5 +1,5 @@
-#ifndef MOBIUS_CORE_FUNCTOR_H
-#define MOBIUS_CORE_FUNCTOR_H
+#ifndef MOBIUS_CORE_FUNCTOR_HPP
+#define MOBIUS_CORE_FUNCTOR_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

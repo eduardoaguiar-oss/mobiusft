@@ -39,13 +39,13 @@
 #include "CLibrary.hpp"
 #include "CThumbCache.hpp"
 #include "file_searches_dat.hpp"
-#include <mobius/io/walker.h>
-#include <mobius/core/log.h>
+#include <mobius/core/log.hpp>
 #include <mobius/datasource/datasource_vfs.h>
 #include <mobius/decoder/mfc.h>
 #include <mobius/decoder/xml/dom.h>
 #include <mobius/exception.inc>
 #include <mobius/io/folder.h>
+#include <mobius/io/walker.h>
 #include <mobius/model/evidence.h>
 #include <mobius/os/win/registry/hive_file.h>
 #include <mobius/os/win/registry/hive_data.h>

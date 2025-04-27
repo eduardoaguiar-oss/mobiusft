@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "filesystem.h"
 #include "filesystem_impl_null.h"
-#include <mobius/core/resource.h>
+#include <mobius/core/resource.hpp>
 
 namespace mobius::vfs
 {

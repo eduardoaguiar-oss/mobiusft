@@ -24,7 +24,7 @@
 #include <pymobius.hpp>
 #include <pylist.hpp>
 #include <pyobject.hpp>
-#include <mobius/core/resource.h>
+#include <mobius/core/resource.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <b>add_resource</b> function implementation

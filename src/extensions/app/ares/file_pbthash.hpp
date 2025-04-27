@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/file_decoder/section.h>
+#include <mobius/core/file_decoder/section.hpp>
 #include <mobius/datetime/datetime.h>
 #include <mobius/decoder/data_decoder.h>
 #include <mobius/io/reader.h>

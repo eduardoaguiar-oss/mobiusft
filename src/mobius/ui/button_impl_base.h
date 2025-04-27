@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/ui/widget_impl_base.h>
-#include <mobius/core/functor.h>
+#include <mobius/core/functor.hpp>
 #include <mobius/ui/icon.h>
 #include <string>
 

@@ -15,10 +15,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "application.h"
-#include "config.h"
-#include "extension_set.h"
-#include "log.h"
+#include <mobius/core/application.hpp>
+#include <mobius/core/extension_set.hpp>
+#include <mobius/core/log.hpp>
 #include <mobius/exception.inc>
 #include <mobius/io/path.h>
 #include <mobius/io/folder.h>
@@ -29,6 +28,7 @@
 #include <stdexcept>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include "config.h"
 
 namespace mobius::core
 {

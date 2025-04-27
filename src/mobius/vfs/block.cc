@@ -19,8 +19,8 @@
 #include "block_impl_null.h"
 #include "block_impl_disk.h"
 #include "block_impl_slice.h"
-#include <mobius/core/log.h>
-#include <mobius/core/resource.h>
+#include <mobius/core/log.hpp>
+#include <mobius/core/resource.hpp>
 #include <mobius/exception.inc>
 #include <stdexcept>
 

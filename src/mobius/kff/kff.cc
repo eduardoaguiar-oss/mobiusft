@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "kff.h"
-#include <mobius/core/application.h>
+#include <mobius/core/application.hpp>
 #include <mobius/exception.inc>
 #include <mobius/io/file.h>
 #include <mobius/io/folder.h>

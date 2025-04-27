@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "../segment_decoder.hpp"
-#include <mobius/core/application.h>
+#include <mobius/core/application.hpp>
 #include <mobius/io/file.h>
 #include <mobius/string_functions.h>
 #include <iostream>

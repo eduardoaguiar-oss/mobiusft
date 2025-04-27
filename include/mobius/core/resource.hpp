@@ -1,5 +1,5 @@
-#ifndef MOBIUS_CORE_RESOURCE_H
-#define MOBIUS_CORE_RESOURCE_H
+#ifndef MOBIUS_CORE_RESOURCE_HPP
+#define MOBIUS_CORE_RESOURCE_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

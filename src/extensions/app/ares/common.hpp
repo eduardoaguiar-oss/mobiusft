@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/bytearray.h>
-#include <mobius/core/file_decoder/entry.h>
+#include <mobius/core/file_decoder/entry.hpp>
 #include <mobius/pod/map.h>
 #include <cstdint>
 #include <map>

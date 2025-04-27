@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "turing.h"
-#include <mobius/core/application.h>
+#include <mobius/core/application.hpp>
 #include <mobius/database/connection_pool.h>
 #include <mobius/string_functions.h>
 #include <string>

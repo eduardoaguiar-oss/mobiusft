@@ -1,5 +1,5 @@
-#ifndef MOBIUS_CORE_FILE_DECODER_DECODER_H
-#define MOBIUS_CORE_FILE_DECODER_DECODER_H
+#ifndef MOBIUS_CORE_LOG_HPP
+#define MOBIUS_CORE_LOG_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,175 +18,161 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/file_decoder/decoder_impl_base.h>
-#include <functional>
+#include <mobius/datetime/datetime.h>
+#include <cstddef>
 #include <memory>
+#include <string>
+#include <vector>
 
-namespace mobius::core::file_decoder
+namespace mobius::core
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief decoder handle class
+// @brief Log event class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class decoder
+class event
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // @brief Event types
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  enum class type { none, error, warning, info, development, debug };
+
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  decoder ();
-  explicit decoder (const std::shared_ptr <decoder_impl_base>&);
-  decoder (decoder&&) noexcept = default;
-  decoder (const decoder&) noexcept = default;
+  event (type, const std::string&, const std::string&, std::size_t, const std::string&);
+  event (event&&) = default;
+  event (const event&) = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Operators
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  decoder& operator= (const decoder&) noexcept = default;
-  decoder& operator= (decoder&&) noexcept = default;
+  event& operator= (event&&) = default;
+  event& operator= (const event&) = default;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Check if decoder is valid
-  // @return true/false
+  // @brief Get event type
+  // @return Event type
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit operator bool () const noexcept
-  {
-    return impl_->operator bool ();
-  }
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get decoder type
-  // @return type as string
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::string
+  type
   get_type () const
   {
-    return impl_->get_type ();
+    return type_;
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Check if stream was decoded
-  // @return true/false
+  // @brief Get event timestamp
+  // @return Event timestamp
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  bool
-  is_instance () const
+  mobius::datetime::datetime
+  get_timestamp () const
   {
-    return impl_->is_instance ();
+    return timestamp_;
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get main section
-  // @return Main section
+  // @brief Get file name
+  // @return File name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  section
-  get_section () const
+  std::string
+  get_filename () const
   {
-    return impl_->get_section ();
+    return filename_;
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get entries
-  // @return Entries
+  // @brief Get function name
+  // @return Function name
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::vector<entry>
-  get_entries () const
+  std::string
+  get_funcname () const
   {
-    return impl_->get_entries ();
+    return funcname_;
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get metadata value
-  // @param group_id Group ID
-  // @param name Metadata name
-  // @return Metadata value
+  // @brief Get line number
+  // @return Line number
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::data
-  get_metadata (const std::string& group_id, const std::string& name) const
+  std::size_t
+  get_line_number () const
   {
-    auto metadata = impl_->get_metadata ();
-    return metadata.get_value (group_id, name);
+    return line_number_;
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get metadata value
-  // @param group_id Group ID
-  // @param name Metadata name
-  // @return Metadata value
+  // @brief Get event text
+  // @return Event text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  template <typename T> T
-  get_metadata (const std::string& group_id, const std::string& name) const
+  std::string
+  get_text () const
   {
-    T value;
-
-    mobius::pod::data d = get_metadata (group_id, name);
-
-    if (!d.is_null ())
-      value = static_cast <T> (d);
-
-    return value;
-  }
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get metadata group
-  // @param group_id Group ID
-  // @return Metadata
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::map
-  get_metadata_group (const std::string& group_id) const
-  {
-    auto metadata = impl_->get_metadata ();
-    return metadata.get_group (group_id);
-  }
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get metadata groups
-  // @return List of group IDs
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::vector<std::string>
-  get_metadata_groups () const
-  {
-    auto metadata = impl_->get_metadata ();
-    return metadata.get_groups ();
-  }
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Decode file
-  // @param reader Reader object
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void
-  decode (const mobius::io::reader& reader)
-  {
-    impl_->decode (reader);
+    return text_;
   }
 
 private:
-  // @brief Implementation pointer
-  std::shared_ptr <decoder_impl_base> impl_;
+  const type type_;
+  const std::string filename_;
+  const std::string funcname_;
+  const std::size_t line_number_;
+  const std::string text_;
+  const mobius::datetime::datetime timestamp_;
 };
 
+// @brief Implementation class forward declaration
+class log_impl;
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Datatypes
+// @brief Log class
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-using decoder_builder_type = std::function <decoder ()>;
+class log
+{
+public:
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // Constructors and destructor
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  log (const std::string&, const std::string&);
+  log (log&&) noexcept = default;
+  log (const log&) = default;
+  ~log ();
+
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // Operators
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  log& operator= (log&&) noexcept = default;
+  log& operator= (const log&) = default;
+
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // Function prototypes
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  void error (std::size_t, const std::string&);
+  void warning (std::size_t, const std::string&);
+  void info (std::size_t, const std::string&);
+  void development (std::size_t, const std::string&);
+  void debug (std::size_t, const std::string&);
+  void set_debug (bool);
+  bool has_errors () const;
+  std::vector <event> get_events () const;
+
+private:
+  // @brief Source filename
+  std::string filename_;
+
+  // @brief Source function name
+  std::string funcname_;
+
+  // @brief Implementation pointer
+  std::shared_ptr <log_impl> impl_;
+};
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Function prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-decoder new_decoder_by_id (const std::string&);
+void set_logfile_path (const std::string&);
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Add decoder builder
-// @param type Filetype
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename T> decoder_builder_type
-make_decoder_builder_resource ()
-{
-  return [] (){
-      return decoder (std::make_shared <T> ());
-  };
-}
-
-} // namespace mobius::core::file_decoder
+} // namespace mobius::core
 
 #endif
 

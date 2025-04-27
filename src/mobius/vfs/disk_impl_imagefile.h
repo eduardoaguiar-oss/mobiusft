@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/vfs/disk_impl_base.h>
 #include <mobius/vfs/imagefile.h>
-#include <mobius/thread_safe_flag.h>
+#include <mobius/core/thread_safe_flag.hpp>
 #include <string>
 
 namespace mobius::vfs
@@ -111,10 +111,10 @@ private:
   mutable mobius::pod::map attributes_;
 
   // @brief imagefile_ loaded flag
-  mutable thread_safe_flag imagefile_loaded_;
+  mutable mobius::core::thread_safe_flag imagefile_loaded_;
 
   // @brief metadata loaded flag
-  mutable thread_safe_flag metadata_loaded_;
+  mutable mobius::core::thread_safe_flag metadata_loaded_;
 
   // Helper functions
   void _load_metadata () const;
