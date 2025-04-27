@@ -19,20 +19,28 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-cmake_minimum_required(VERSION 3.15)
-project(MobiusInclude NONE) # No language, as no compilation
+cmake_minimum_required(VERSION 3.20)
+project(MobiusInclude CXX)
 
 include(GNUInstallDirs)
 
-# Collect all header files
 file(GLOB HEADER_FILES
-    "mobius/*.hpp"
-    "mobius/jni/*.hpp"
+    "mobius/core/jni/*.hpp"
+)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Target
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_custom_target(mobius_headers ALL
+    SOURCES ${HEADER_FILES}
+    COMMENT "Header files for Mobius project"
 )
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-install(FILES ${HEADER_FILES}
+install(DIRECTORY mobius/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/mobius
+    FILES_MATCHING
+    PATTERN "*.hpp"
 )
