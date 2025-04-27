@@ -22,17 +22,13 @@
 CMAKE_BUILD_DIR = build
 
 all-local:
-	@if [ -f CMakeLists.txt ]; then \
-		mkdir -p $(CMAKE_BUILD_DIR); \
-		cd $(CMAKE_BUILD_DIR) && \
+	@mkdir -p $(CMAKE_BUILD_DIR)
+	@cd $(CMAKE_BUILD_DIR) && \
 		$(CMAKE) -DCMAKE_INSTALL_PREFIX=$(prefix) -DCMAKE_BUILD_TYPE=Release .. && \
-		$(MAKE); \
-	fi
+		$(MAKE)
 
 install-exec-local:
-	@if [ -d $(CMAKE_BUILD_DIR) ]; then \
-		cd $(CMAKE_BUILD_DIR) && $(MAKE) install DESTDIR=$(DESTDIR); \
-	fi
+	@cd $(CMAKE_BUILD_DIR) && $(MAKE) install DESTDIR=$(DESTDIR)
 
 clean-local:
 	@rm -rf $(CMAKE_BUILD_DIR)

@@ -30,8 +30,7 @@ Makefile
 .dirstamp
 .vscode
 .idea/
-src/extensions/build/
-src/libmobius_python/build/
+**/build/
 src/mobius/core/application.cc
 src/tools/casetree
 src/tools/device_list
@@ -47,4 +46,3 @@ src/tools/imagefile_convert
 src/tools/imagefile_info
 src/tools/list_resources
 src/tools/vfs_info
-src/tools/build/

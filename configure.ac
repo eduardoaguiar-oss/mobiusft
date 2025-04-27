@@ -449,6 +449,7 @@ AC_CONFIG_FILES([Makefile
                  src/mobius/turing/Makefile
                  src/mobius/ui/Makefile
                  src/mobius/vfs/Makefile
+                 src/libmobius_core/Makefile
                  src/libmobius_python/Makefile
                  src/python/Makefile
                  src/python/pymobius/Makefile
@@ -481,6 +482,7 @@ AC_CONFIG_FILES([Makefile
                  data/icons/Makefile
                  data/icons/evidence/Makefile
                  data/icons/general/Makefile
+                 include/Makefile
                  ])
 AC_OUTPUT
 
