@@ -58,6 +58,12 @@ add_subdirectory(jni)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(mobius_core SHARED
     benchmark.cpp
+    extension.cpp
+    extension_set.cpp
+    log.cpp
+    mediator.cpp
+    resource.cpp
+    thread_guard.cpp
     unittest.cpp
     $<TARGET_OBJECTS:mobius_core_jni>
 )
