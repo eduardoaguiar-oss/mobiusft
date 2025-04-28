@@ -106,13 +106,13 @@ static PyObject *
 tp_f_add_child (ui_box_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::ui::widget arg_w;
-  mobius::ui::box::fill_type arg_filling;
+  mobius::core::ui::widget arg_w;
+  mobius::core::ui::box::fill_type arg_filling;
 
   try
     {
       arg_w = mobius::py::get_arg_as_cpp (args, 0, pymobius_ui_widget_from_pyobject);
-      arg_filling = static_cast <mobius::ui::box::fill_type> (mobius::py::get_arg_as_int (args, 1));
+      arg_filling = static_cast <mobius::core::ui::box::fill_type> (mobius::py::get_arg_as_int (args, 1));
     }
   catch (const std::exception& e)
     {
@@ -167,7 +167,7 @@ static PyObject *
 tp_f_remove_child (ui_box_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::ui::widget arg_w;
+  mobius::core::ui::widget arg_w;
 
   try
     {
@@ -242,11 +242,11 @@ static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
   // Parse input args
-  mobius::ui::box::orientation_type arg_orientation;
+  mobius::core::ui::box::orientation_type arg_orientation;
 
   try
     {
-      arg_orientation = static_cast <mobius::ui::box::orientation_type> (mobius::py::get_arg_as_int (args, 0));
+      arg_orientation = static_cast <mobius::core::ui::box::orientation_type> (mobius::py::get_arg_as_int (args, 0));
     }
   catch (const std::exception& e)
     {
@@ -261,7 +261,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::ui::box (arg_orientation);
+          ret->obj = new mobius::core::ui::box (arg_orientation);
         }
       catch (const std::exception& e)
         {
@@ -376,7 +376,7 @@ pymobius_ui_box_check (PyObject *value)
 // @return New box object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_ui_box_to_pyobject (const mobius::ui::box& obj)
+pymobius_ui_box_to_pyobject (const mobius::core::ui::box& obj)
 {
   return mobius::py::to_pyobject <ui_box_o> (obj, &ui_box_t);
 }
@@ -386,7 +386,7 @@ pymobius_ui_box_to_pyobject (const mobius::ui::box& obj)
 // @param value Python value
 // @return Box object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::ui::box
+mobius::core::ui::box
 pymobius_ui_box_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <ui_box_o> (value, &ui_box_t);

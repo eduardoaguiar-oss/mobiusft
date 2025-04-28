@@ -43,10 +43,10 @@ using entry_impl = folder_impl_base::entry_impl;
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Collection implementation for folder entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class collection_impl : public mobius::collection_impl_base <mobius::io::entry>
+class collection_impl : public mobius::core::collection_impl_base <mobius::io::entry>
 {
 public:
-  using pointer_type = std::shared_ptr <collection_impl_base <entry_impl>>;
+  using pointer_type = std::shared_ptr <mobius::core::collection_impl_base <entry_impl>>;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes

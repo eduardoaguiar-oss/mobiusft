@@ -23,7 +23,7 @@
 #include <Python.h>
 #include <pymobius.hpp>
 #include <pygil.hpp>
-#include <mobius/encoder/base64.h>
+#include <mobius/core/encoder/base64.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief base64url function
@@ -54,7 +54,7 @@ encoder_func_base64url (PyObject *, PyObject *args)
     {
       ret = mobius::py::pystring_from_std_string (
                 mobius::py::GIL () (
-                   mobius::encoder::base64url (arg_data)
+                   mobius::core::encoder::base64url (arg_data)
                 )
             );
     }

@@ -180,7 +180,7 @@ pymobius_model_event_check (PyObject *value)
 // @return New event object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_model_event_to_pyobject (const mobius::model::event& obj)
+pymobius_model_event_to_pyobject (const mobius::framework::model::event& obj)
 {
   return mobius::py::to_pyobject <model_event_o> (obj, &model_event_t);
 }
@@ -190,7 +190,7 @@ pymobius_model_event_to_pyobject (const mobius::model::event& obj)
 // @param value Python value
 // @return Event object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::model::event
+mobius::framework::model::event
 pymobius_model_event_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <model_event_o> (value, &model_event_t);

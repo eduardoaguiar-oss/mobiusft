@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/datasource/datasource.h>
+#include <mobius/core/datasource/datasource.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::datasource::datasource *obj;
+  mobius::core::datasource::datasource *obj;
 } datasource_datasource_o;
 
 extern PyTypeObject datasource_datasource_t;
@@ -36,8 +36,8 @@ extern PyTypeObject datasource_datasource_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_datasource_datasource_check (PyObject *);
-PyObject *pymobius_datasource_datasource_to_pyobject (const mobius::datasource::datasource&);
-mobius::datasource::datasource pymobius_datasource_datasource_from_pyobject (PyObject *);
+PyObject *pymobius_datasource_datasource_to_pyobject (const mobius::core::datasource::datasource&);
+mobius::core::datasource::datasource pymobius_datasource_datasource_from_pyobject (PyObject *);
 
 #endif
 

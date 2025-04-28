@@ -20,6 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/evidence_loader_impl_base.hpp>
+#include <mobius/framework/model/item.hpp>
 #include <mobius/io/file.h>
 #include <map>
 #include <vector>
@@ -135,7 +136,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit evidence_loader_impl (const mobius::model::item&, scan_type);
+  explicit evidence_loader_impl (const mobius::framework::model::item&, scan_type);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Function prototypes
@@ -163,7 +164,7 @@ public:
 
 private:
   // @brief Case item
-  mobius::model::item item_;
+  mobius::framework::model::item item_;
 
   // @brief Scan type
   scan_type scan_type_;
@@ -225,7 +226,3 @@ private:
 } // namespace mobius::extension::app::ares
 
 #endif
-
-
-
-

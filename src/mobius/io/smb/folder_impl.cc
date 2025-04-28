@@ -26,7 +26,7 @@
 #include <mobius/exception_posix.inc>
 #include <mobius/system/user.h>
 #include <mobius/system/group.h>
-#include <mobius/collection_impl_base.h>
+#include <mobius/core/collection_impl_base.hpp>
 #include <memory>
 #include <stdexcept>
 #include <dirent.h>
@@ -41,7 +41,7 @@ using entry_impl = folder_impl_base::entry_impl;
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Collection implementation for folder entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class collection_impl_folder : public mobius::collection_impl_base <entry_impl>
+class collection_impl_folder : public mobius::core::collection_impl_base <entry_impl>
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/ui/ui_impl_base.h>
+#include <mobius/core/ui/ui_impl_base.hpp>
 #include <memory>
 #include <string>
 
@@ -28,7 +28,7 @@ namespace mobius::extension::ui::gtk3
 // @brief GTK3 UI implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class ui_impl : public mobius::ui::ui_impl_base
+class ui_impl : public mobius::core::ui::ui_impl_base
 {
 public:
   ui_impl ();
@@ -63,14 +63,14 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Builders prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::shared_ptr <mobius::ui::box_impl_base> new_box (mobius::ui::box_impl_base::orientation_type) const final;
-  std::shared_ptr <mobius::ui::button_impl_base> new_button () const final;
-  std::shared_ptr <mobius::ui::icon_impl_base> new_icon_by_name (const std::string&, mobius::ui::icon_impl_base::size_type) const final;
-  std::shared_ptr <mobius::ui::icon_impl_base> new_icon_from_data (const mobius::bytearray&, mobius::ui::icon_impl_base::size_type) const final;
-  std::shared_ptr <mobius::ui::label_impl_base> new_label () const final;
-  std::shared_ptr <mobius::ui::message_dialog_impl_base> new_message_dialog (mobius::ui::message_dialog_impl_base::type) const final;
-  std::shared_ptr <mobius::ui::widget_impl_base> new_widget (std::any, bool) const final;
-  std::shared_ptr <mobius::ui::window_impl_base> new_window () const final;
+  std::shared_ptr <mobius::core::ui::box_impl_base> new_box (mobius::core::ui::box_impl_base::orientation_type) const final;
+  std::shared_ptr <mobius::core::ui::button_impl_base> new_button () const final;
+  std::shared_ptr <mobius::core::ui::icon_impl_base> new_icon_by_name (const std::string&, mobius::core::ui::icon_impl_base::size_type) const final;
+  std::shared_ptr <mobius::core::ui::icon_impl_base> new_icon_from_data (const mobius::bytearray&, mobius::core::ui::icon_impl_base::size_type) const final;
+  std::shared_ptr <mobius::core::ui::label_impl_base> new_label () const final;
+  std::shared_ptr <mobius::core::ui::message_dialog_impl_base> new_message_dialog (mobius::core::ui::message_dialog_impl_base::type) const final;
+  std::shared_ptr <mobius::core::ui::widget_impl_base> new_widget (std::any, bool) const final;
+  std::shared_ptr <mobius::core::ui::window_impl_base> new_window () const final;
 };
 
 } // namespace mobius::extension::ui::gtk3

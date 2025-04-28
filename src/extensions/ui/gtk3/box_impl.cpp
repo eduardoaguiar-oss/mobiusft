@@ -101,7 +101,7 @@ box_impl::set_border_width (std::uint32_t siz)
 // @param filling Child widget filling mode
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-box_impl::add_child (const mobius::ui::widget& w, fill_type filling)
+box_impl::add_child (const mobius::core::ui::widget& w, fill_type filling)
 {
   bool expand = false;
   bool fill = false;
@@ -129,13 +129,13 @@ box_impl::add_child (const mobius::ui::widget& w, fill_type filling)
 // @param w Widget to be removed
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-box_impl::remove_child (const mobius::ui::widget& w)
+box_impl::remove_child (const mobius::core::ui::widget& w)
 {
   children_.erase (
     std::find_if (
        children_.begin (),
        children_.end (),
-       [w](const mobius::ui::widget& item){
+       [w](const mobius::core::ui::widget& item){
            return item.get_ui_widget <GtkWidget *>() == w.get_ui_widget <GtkWidget *>();
        }
     )

@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/kff/hashset.h>
+#include <mobius/core/kff/hashset.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::kff::hashset *obj;
+  mobius::core::kff::hashset *obj;
 } kff_hashset_o;
 
 extern PyTypeObject kff_hashset_t;
@@ -36,8 +36,8 @@ extern PyTypeObject kff_hashset_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_kff_hashset_check (PyObject *);
-PyObject *pymobius_kff_hashset_to_pyobject (const mobius::kff::hashset&);
-mobius::kff::hashset pymobius_kff_hashset_from_pyobject (PyObject *);
+PyObject *pymobius_kff_hashset_to_pyobject (const mobius::core::kff::hashset&);
+mobius::core::kff::hashset pymobius_kff_hashset_from_pyobject (PyObject *);
 
 #endif
 

@@ -56,11 +56,11 @@ imagefile::imagefile (const mobius::io::file& f, const std::string& type)
 // @brief Get metadata
 // @return imagefile metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::metadata
+mobius::core::metadata
 imagefile::get_metadata () const
 {
   // imagefile metadata
-  mobius::metadata metadata =
+  mobius::core::metadata metadata =
   {
     {
       "type",

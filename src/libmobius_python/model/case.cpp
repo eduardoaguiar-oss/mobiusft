@@ -46,12 +46,12 @@ pymobius_model_case_check (PyObject *pyobj)
 // @return new Case object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_model_case_to_pyobject (mobius::model::Case obj)
+pymobius_model_case_to_pyobject (const mobius::framework::model::Case& obj)
 {
   PyObject *ret = _PyObject_New (&model_case_t);
 
   if (ret)
-    ((model_case_o *) ret)->obj = new mobius::model::Case (obj);
+    ((model_case_o *) ret)->obj = new mobius::framework::model::Case (obj);
 
   return ret;
 }
@@ -61,7 +61,7 @@ pymobius_model_case_to_pyobject (mobius::model::Case obj)
 // @param value Python object
 // @return reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::model::Case
+mobius::framework::model::Case
 pymobius_model_case_from_pyobject (PyObject *value)
 {
   if (!pymobius_model_case_check (value))
@@ -415,7 +415,7 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
   model_case_o *self = (model_case_o *) type->tp_alloc (type, 0);
 
   if (self)
-    self->obj = new mobius::model::Case ();
+    self->obj = new mobius::framework::model::Case ();
 
   return (PyObject *) self;
 }

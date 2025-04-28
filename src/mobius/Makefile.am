@@ -7,45 +7,30 @@ libmobius_la_SOURCES =						\
 	bytearray.cc						\
 	charset.cc						\
 	exception.cc						\
-	metadata.cc						\
 	string_functions.cc
 
 libmobius_la_LDFLAGS = -avoid-version $(LIBGCRYPT_LIBS) $(LIBXML2_LIBS)
 
 libmobius_la_LIBADD =						\
-	core/libmobius-core.la					\
 	crypt/libmobius-crypt.la				\
 	database/libmobius-database.la				\
-	datasource/libmobius-datasource.la			\
 	datetime/libmobius-datetime.la				\
 	decoder/libmobius-decoder.la				\
-	encoder/libmobius-encoder.la				\
-	kff/libmobius-kff.la					\
 	io/libmobius-io.la					\
-	model/libmobius-model.la				\
 	os/libmobius-os.la					\
 	pod/libmobius-pod.la					\
 	system/libmobius-system.la				\
-	turing/libmobius-turing.la				\
-	ui/libmobius-ui.la					\
 	vfs/libmobius-vfs.la
 
 SUBDIRS =							\
-	core							\
 	crypt							\
 	database						\
-	datasource						\
 	datetime						\
 	decoder							\
-	encoder							\
-	kff							\
 	io							\
-	model							\
 	os							\
 	pod							\
 	system							\
-	turing							\
-	ui							\
 	vfs
 
 if HAVE_LIBZ

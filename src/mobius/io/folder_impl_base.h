@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/datetime/datetime.h>
-#include <mobius/collection_impl_base.h>
+#include <mobius/core/collection_impl_base.hpp>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -67,7 +67,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   using folder_type = std::shared_ptr <folder_impl_base>;
   using file_type = std::shared_ptr <file_impl_base>;
-  using children_type = std::shared_ptr <collection_impl_base <entry_impl>>;
+  using children_type = std::shared_ptr <mobius::core::collection_impl_base <entry_impl>>;
   using stream_type = std::shared_ptr <stream_impl_base>;
   using size_type = std::uint64_t;	//< file size in bytes
   using inode_type = std::uint64_t;	//< inode

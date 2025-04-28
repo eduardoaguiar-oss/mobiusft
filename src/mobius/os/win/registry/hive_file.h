@@ -21,7 +21,7 @@
 #include <mobius/os/win/registry/hive_key.h>
 #include <mobius/datetime/datetime.h>
 #include <mobius/io/reader.h>
-#include <mobius/metadata.h>
+#include <mobius/core/metadata.hpp>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -68,7 +68,7 @@ public:
   std::string get_guid_signature () const;
   mobius::datetime::datetime get_last_reorganization_time () const;
   hive_key get_root_key () const;
-  mobius::metadata get_metadata () const;
+  mobius::core::metadata get_metadata () const;
 
 private:
   // @brief implementation class forward declaration

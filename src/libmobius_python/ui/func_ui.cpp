@@ -22,7 +22,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
 #include <pygil.hpp>
-#include <mobius/ui/ui.h>
+#include <mobius/core/ui/ui.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>set_implementation</i> function
@@ -49,7 +49,7 @@ func_ui_set_implementation (PyObject *, PyObject *args)
   // Execute C++ function
   try
     {
-      mobius::ui::set_implementation (arg_id);
+      mobius::core::ui::set_implementation (arg_id);
     }
   catch (const std::exception& e)
     {
@@ -73,7 +73,7 @@ func_ui_init (PyObject *, PyObject *)
   try
     {
       mobius::py::GIL gil;
-      mobius::ui::init ();
+      mobius::core::ui::init ();
     }
   catch (const std::exception& e)
     {
@@ -97,7 +97,7 @@ func_ui_start (PyObject *, PyObject *)
   try
     {
       mobius::py::GIL gil;
-      mobius::ui::start ();
+      mobius::core::ui::start ();
     }
   catch (const std::exception& e)
     {
@@ -121,7 +121,7 @@ func_ui_stop (PyObject *, PyObject *)
   try
     {
       mobius::py::GIL gil;
-      mobius::ui::stop ();
+      mobius::core::ui::stop ();
     }
   catch (const std::exception& e)
     {
@@ -144,7 +144,7 @@ func_ui_flush (PyObject *, PyObject *)
   // Execute C++ function
   try
     {
-      mobius::ui::flush ();
+      mobius::core::ui::flush ();
     }
   catch (const std::exception& e)
     {

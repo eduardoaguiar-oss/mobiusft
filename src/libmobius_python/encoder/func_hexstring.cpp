@@ -23,7 +23,7 @@
 #include <Python.h>
 #include <pymobius.hpp>
 #include <pygil.hpp>
-#include <mobius/encoder/hexstring.h>
+#include <mobius/core/encoder/hexstring.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief hexstring function
@@ -55,7 +55,7 @@ encoder_func_hexstring (PyObject *, PyObject *args)
   try
     {
       ret = mobius::py::pystring_from_std_string (
-                  mobius::encoder::hexstring (arg_data, arg_sep)
+                  mobius::core::encoder::hexstring (arg_data, arg_sep)
             );
     }
   catch (const std::exception& e)

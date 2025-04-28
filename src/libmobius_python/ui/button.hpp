@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pytypeobject.hpp>
-#include <mobius/ui/button.h>
+#include <mobius/core/ui/button.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -28,7 +28,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::ui::button *obj;
+  mobius::core::ui::button *obj;
 } ui_button_o;
 
 
@@ -37,8 +37,8 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject new_ui_button_type ();
 bool pymobius_ui_button_check (PyObject *);
-PyObject *pymobius_ui_button_to_pyobject (const mobius::ui::button&);
-mobius::ui::button pymobius_ui_button_from_pyobject (PyObject *);
+PyObject *pymobius_ui_button_to_pyobject (const mobius::core::ui::button&);
+mobius::core::ui::button pymobius_ui_button_from_pyobject (PyObject *);
 
 #endif
 

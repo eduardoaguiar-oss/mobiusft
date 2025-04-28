@@ -142,11 +142,11 @@ static PyObject *
 tp_f_set_halign (ui_label_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::ui::label::halign_type arg_halign;
+  mobius::core::ui::label::halign_type arg_halign;
 
   try
     {
-      arg_halign = static_cast <mobius::ui::label::halign_type> (mobius::py::get_arg_as_int (args, 0));
+      arg_halign = static_cast <mobius::core::ui::label::halign_type> (mobius::py::get_arg_as_int (args, 0));
     }
   catch (const std::exception& e)
     {
@@ -178,11 +178,11 @@ static PyObject *
 tp_f_set_valign (ui_label_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::ui::label::valign_type arg_valign;
+  mobius::core::ui::label::valign_type arg_valign;
 
   try
     {
-      arg_valign = static_cast <mobius::ui::label::valign_type> (mobius::py::get_arg_as_int (args, 0));
+      arg_valign = static_cast <mobius::core::ui::label::valign_type> (mobius::py::get_arg_as_int (args, 0));
     }
   catch (const std::exception& e)
     {
@@ -214,11 +214,11 @@ static PyObject *
 tp_f_set_elide_mode (ui_label_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::ui::label::elide_type arg_mode;
+  mobius::core::ui::label::elide_type arg_mode;
 
   try
     {
-      arg_mode = static_cast <mobius::ui::label::elide_type> (mobius::py::get_arg_as_int (args, 0));
+      arg_mode = static_cast <mobius::core::ui::label::elide_type> (mobius::py::get_arg_as_int (args, 0));
     }
   catch (const std::exception& e)
     {
@@ -286,10 +286,10 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
       try
         {
           if (arg_text.empty ())
-            ret->obj = new mobius::ui::label ();
+            ret->obj = new mobius::core::ui::label ();
 
           else
-            ret->obj = new mobius::ui::label (arg_text);
+            ret->obj = new mobius::core::ui::label (arg_text);
         }
       catch (const std::exception& e)
         {
@@ -407,7 +407,7 @@ pymobius_ui_label_check (PyObject *value)
 // @return New label object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_ui_label_to_pyobject (const mobius::ui::label& obj)
+pymobius_ui_label_to_pyobject (const mobius::core::ui::label& obj)
 {
   return mobius::py::to_pyobject <ui_label_o> (obj, &ui_label_t);
 }
@@ -417,7 +417,7 @@ pymobius_ui_label_to_pyobject (const mobius::ui::label& obj)
 // @param value Python value
 // @return Label object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::ui::label
+mobius::core::ui::label
 pymobius_ui_label_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <ui_label_o> (value, &ui_label_t);

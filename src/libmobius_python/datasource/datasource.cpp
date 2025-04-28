@@ -45,16 +45,16 @@ pymobius_datasource_datasource_check (PyObject *value)
 // @return New datasource object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_datasource_datasource_to_pyobject (const mobius::datasource::datasource& obj)
+pymobius_datasource_datasource_to_pyobject (const mobius::core::datasource::datasource& obj)
 {
   if (!obj)
     return mobius::py::pynone ();
 
   else if (obj.get_type () == "ufdr")
-    return mobius::py::to_pyobject <datasource_ufdr_datasource_o> (mobius::datasource::ufdr::datasource (obj), &datasource_ufdr_datasource_t);
+    return mobius::py::to_pyobject <datasource_ufdr_datasource_o> (mobius::core::datasource::ufdr::datasource (obj), &datasource_ufdr_datasource_t);
 
   else if (obj.get_type () == "vfs")
-    return mobius::py::to_pyobject <datasource_datasource_vfs_o> (mobius::datasource::datasource_vfs (obj), &datasource_datasource_vfs_t);
+    return mobius::py::to_pyobject <datasource_datasource_vfs_o> (mobius::core::datasource::datasource_vfs (obj), &datasource_datasource_vfs_t);
 
   else
     return mobius::py::to_pyobject <datasource_datasource_o> (obj, &datasource_datasource_t);
@@ -65,7 +65,7 @@ pymobius_datasource_datasource_to_pyobject (const mobius::datasource::datasource
 // @param value Python value
 // @return Datasource object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datasource::datasource
+mobius::core::datasource::datasource
 pymobius_datasource_datasource_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <datasource_datasource_o> (value, &datasource_datasource_t);

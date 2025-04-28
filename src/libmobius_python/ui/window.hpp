@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pytypeobject.hpp>
-#include <mobius/ui/window.h>
+#include <mobius/core/ui/window.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -28,7 +28,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::ui::window *obj;
+  mobius::core::ui::window *obj;
 } ui_window_o;
 
 
@@ -37,8 +37,8 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject new_ui_window_type ();
 bool pymobius_ui_window_check (PyObject *);
-PyObject *pymobius_ui_window_to_pyobject (const mobius::ui::window&);
-mobius::ui::window pymobius_ui_window_from_pyobject (PyObject *);
+PyObject *pymobius_ui_window_to_pyobject (const mobius::core::ui::window&);
+mobius::core::ui::window pymobius_ui_window_from_pyobject (PyObject *);
 
 #endif
 

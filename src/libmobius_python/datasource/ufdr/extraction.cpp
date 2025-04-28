@@ -44,7 +44,7 @@ pymobius_datasource_ufdr_extraction_check (PyObject *value)
 // @return New extraction object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_datasource_ufdr_extraction_to_pyobject (const mobius::datasource::ufdr::extraction& obj)
+pymobius_datasource_ufdr_extraction_to_pyobject (const mobius::core::datasource::ufdr::extraction& obj)
 {
   return mobius::py::to_pyobject <datasource_ufdr_extraction_o> (obj, &datasource_ufdr_extraction_t);
 }
@@ -54,7 +54,7 @@ pymobius_datasource_ufdr_extraction_to_pyobject (const mobius::datasource::ufdr:
 // @param value Python value
 // @return Extraction object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datasource::ufdr::extraction
+mobius::core::datasource::ufdr::extraction
 pymobius_datasource_ufdr_extraction_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <datasource_ufdr_extraction_o> (value, &datasource_ufdr_extraction_t);
@@ -450,7 +450,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::datasource::ufdr::extraction (arg_id);
+          ret->obj = new mobius::core::datasource::ufdr::extraction (arg_id);
         }
       catch (const std::exception& e)
         {

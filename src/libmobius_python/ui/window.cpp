@@ -246,7 +246,7 @@ static PyObject *
 tp_f_set_icon (ui_window_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::ui::icon arg_icon;
+  mobius::core::ui::icon arg_icon;
 
   try
     {
@@ -318,7 +318,7 @@ static PyObject *
 tp_f_set_content (ui_window_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::ui::widget arg_w;
+  mobius::core::ui::widget arg_w;
 
   try
     {
@@ -649,7 +649,7 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::ui::window ();
+          ret->obj = new mobius::core::ui::window ();
         }
       catch (const std::exception& e)
         {
@@ -757,7 +757,7 @@ pymobius_ui_window_check (PyObject *value)
 // @return New window object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_ui_window_to_pyobject (const mobius::ui::window& obj)
+pymobius_ui_window_to_pyobject (const mobius::core::ui::window& obj)
 {
   return mobius::py::to_pyobject <ui_window_o> (obj, &ui_window_t);
 }
@@ -767,7 +767,7 @@ pymobius_ui_window_to_pyobject (const mobius::ui::window& obj)
 // @param value Python value
 // @return Window object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::ui::window
+mobius::core::ui::window
 pymobius_ui_window_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <ui_window_o> (value, &ui_window_t);

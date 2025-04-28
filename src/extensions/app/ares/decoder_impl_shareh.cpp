@@ -19,7 +19,6 @@
 #include "file_shareh.hpp"
 #include "common.hpp"
 #include <mobius/decoder/data_decoder.h>
-#include <mobius/encoder/hexstring.h>
 
 namespace mobius::extension::app::ares
 {

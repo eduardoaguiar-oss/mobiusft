@@ -18,7 +18,7 @@
 #include "data.h"
 #include "map.h"
 #include <mobius/bytearray.h>
-#include <mobius/encoder/data_encoder.h>
+#include <mobius/core/encoder/data_encoder.hpp>
 #include <cstdint>
 #include <stdexcept>
 #include <vector>
@@ -40,7 +40,7 @@ static constexpr std::uint32_t VERSION = 1;
 // @param d Data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-_serialize_data (mobius::encoder::data_encoder& encoder, const data& data)
+_serialize_data (mobius::core::encoder::data_encoder& encoder, const data& data)
 {
   switch (data.get_type ())
     {
@@ -132,7 +132,7 @@ _serialize_data (mobius::encoder::data_encoder& encoder, const data& data)
 // @return Encoded data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-_serialize (mobius::encoder::data_encoder& encoder, const data& data)
+_serialize (mobius::core::encoder::data_encoder& encoder, const data& data)
 {
   encoder.encode_uint32_le (VERSION);
   _serialize_data (encoder, data);
@@ -149,7 +149,7 @@ mobius::bytearray
 serialize (const data& data)
 {
   mobius::bytearray out;
-  mobius::encoder::data_encoder encoder (out);
+  mobius::core::encoder::data_encoder encoder (out);
 
   encoder.encode_uint32_le (VERSION);
   _serialize_data (encoder, data);
@@ -165,7 +165,7 @@ serialize (const data& data)
 void
 serialize (mobius::io::writer writer, const data& data)
 {
-  mobius::encoder::data_encoder encoder (writer);
+  mobius::core::encoder::data_encoder encoder (writer);
   _serialize (encoder, data);
 }
 

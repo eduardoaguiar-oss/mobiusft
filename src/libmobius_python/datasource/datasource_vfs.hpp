@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/datasource/datasource_vfs.h>
+#include <mobius/core/datasource/datasource_vfs.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::datasource::datasource_vfs *obj;
+  mobius::core::datasource::datasource_vfs *obj;
 } datasource_datasource_vfs_o;
 
 extern PyTypeObject datasource_datasource_vfs_t;
@@ -36,8 +36,8 @@ extern PyTypeObject datasource_datasource_vfs_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_datasource_datasource_vfs_check (PyObject *);
-PyObject *pymobius_datasource_datasource_vfs_to_pyobject (const mobius::datasource::datasource_vfs&);
-mobius::datasource::datasource_vfs pymobius_datasource_datasource_vfs_from_pyobject (PyObject *);
+PyObject *pymobius_datasource_datasource_vfs_to_pyobject (const mobius::core::datasource::datasource_vfs&);
+mobius::core::datasource::datasource_vfs pymobius_datasource_datasource_vfs_from_pyobject (PyObject *);
 
 #endif
 

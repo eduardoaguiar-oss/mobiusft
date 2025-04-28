@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/kff/kff.h>
+#include <mobius/core/kff/kff.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::kff::kff *obj;
+  mobius::core::kff::kff *obj;
 } kff_kff_o;
 
 extern PyTypeObject kff_kff_t;
@@ -36,8 +36,8 @@ extern PyTypeObject kff_kff_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_kff_kff_check (PyObject *);
-PyObject *pymobius_kff_kff_to_pyobject (const mobius::kff::kff&);
-mobius::kff::kff pymobius_kff_kff_from_pyobject (PyObject *);
+PyObject *pymobius_kff_kff_to_pyobject (const mobius::core::kff::kff&);
+mobius::core::kff::kff pymobius_kff_kff_from_pyobject (PyObject *);
 
 #endif
 

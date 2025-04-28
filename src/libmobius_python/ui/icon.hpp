@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pytypeobject.hpp>
-#include <mobius/ui/icon.h>
+#include <mobius/core/ui/icon.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -28,7 +28,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::ui::icon *obj;
+  mobius::core::ui::icon *obj;
 } ui_icon_o;
 
 
@@ -38,8 +38,8 @@ typedef struct
 mobius::py::pytypeobject new_ui_icon_type ();
 
 bool pymobius_ui_icon_check (PyObject *);
-PyObject *pymobius_ui_icon_to_pyobject (const mobius::ui::icon&);
-mobius::ui::icon pymobius_ui_icon_from_pyobject (PyObject *);
+PyObject *pymobius_ui_icon_to_pyobject (const mobius::core::ui::icon&);
+mobius::core::ui::icon pymobius_ui_icon_from_pyobject (PyObject *);
 
 PyObject* func_ui_new_icon_by_name (PyObject *, PyObject *);
 PyObject* func_ui_new_icon_by_path (PyObject *, PyObject *);

@@ -31,7 +31,7 @@
 // @return new ant object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_model_ant_to_pyobject (mobius::model::ant obj)
+pymobius_model_ant_to_pyobject (const mobius::framework::model::ant& obj)
 {
   PyObject *ret = nullptr;
 
@@ -40,7 +40,7 @@ pymobius_model_ant_to_pyobject (mobius::model::ant obj)
       ret = _PyObject_New (&model_ant_t);
 
       if (ret)
-        ((model_ant_o *) ret)->obj = new mobius::model::ant (obj);
+        ((model_ant_o *) ret)->obj = new mobius::framework::model::ant (obj);
     }
   else
     ret = mobius::py::pynone ();

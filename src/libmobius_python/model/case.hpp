@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/model/case.h>
+#include <mobius/framework/model/case.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::model::Case *obj;
+  mobius::framework::model::Case *obj;
 } model_case_o;
 
 extern PyTypeObject model_case_t;
@@ -36,8 +36,8 @@ extern PyTypeObject model_case_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_model_case_check (PyObject *);
-PyObject *pymobius_model_case_to_pyobject (mobius::model::Case);
-mobius::model::Case pymobius_model_case_from_pyobject (PyObject *);
+PyObject *pymobius_model_case_to_pyobject (const mobius::framework::model::Case&);
+mobius::framework::model::Case pymobius_model_case_from_pyobject (PyObject *);
 
 #endif
 

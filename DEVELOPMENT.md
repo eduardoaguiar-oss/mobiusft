@@ -1,6 +1,20 @@
 # Mobius Forensic Toolkit development guide
 
-## 1. Project main directories
+## 1. Project layers
+
+```
+                 +--------------------+
+                 | Python extensions  |
++----------------+--------------------+
+| C++ extensions |  libmobius_python  |
+|       +---------------------+       |
+|       | libmobius_framework |       |
++-------------------------------------+
+|          libmobius_core             |
++-------------------------------------+
+```
+
+## 2. Project main directories
 
 These are the project main directories and main files:
 
@@ -64,3 +78,4 @@ mobius/
 ├── mobius_bin.py
 └── mobius_bin.sh
 ```
+

@@ -89,7 +89,7 @@ button_impl::set_text (const std::string& text)
 // @param icon Icon object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-button_impl::set_icon (const mobius::ui::icon& icon)
+button_impl::set_icon (const mobius::core::ui::icon& icon)
 {
   gtk_button_set_image (reinterpret_cast <GtkButton *> (widget_), icon.get_ui_widget <GtkWidget *>());
 }

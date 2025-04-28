@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/datasource/ufdr/extraction.h>
+#include <mobius/core/datasource/ufdr/extraction.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::datasource::ufdr::extraction *obj;
+  mobius::core::datasource::ufdr::extraction *obj;
 } datasource_ufdr_extraction_o;
 
 extern PyTypeObject datasource_ufdr_extraction_t;
@@ -36,8 +36,8 @@ extern PyTypeObject datasource_ufdr_extraction_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_datasource_ufdr_extraction_check (PyObject *);
-PyObject *pymobius_datasource_ufdr_extraction_to_pyobject (const mobius::datasource::ufdr::extraction&);
-mobius::datasource::ufdr::extraction pymobius_datasource_ufdr_extraction_from_pyobject (PyObject *);
+PyObject *pymobius_datasource_ufdr_extraction_to_pyobject (const mobius::core::datasource::ufdr::extraction&);
+mobius::core::datasource::ufdr::extraction pymobius_datasource_ufdr_extraction_from_pyobject (PyObject *);
 
 #endif
 

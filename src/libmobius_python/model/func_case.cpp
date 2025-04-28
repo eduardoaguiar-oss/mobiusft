@@ -24,7 +24,7 @@
 #include <pylist.hpp>
 #include <pyobject.hpp>
 #include "case.hpp"
-#include <mobius/model/case.h>
+#include <mobius/framework/model/case.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>new_case</i> function implementation
@@ -52,7 +52,7 @@ func_model_new_case (PyObject *, PyObject *args)
 
   try
     {
-      ret = pymobius_model_case_to_pyobject (mobius::model::new_case (arg_path));
+      ret = pymobius_model_case_to_pyobject (mobius::framework::model::new_case (arg_path));
     }
   catch (const std::exception& e)
     {
@@ -89,7 +89,7 @@ func_model_open_case (PyObject *, PyObject *args)
 
   try
     {
-      ret = pymobius_model_case_to_pyobject (mobius::model::open_case (arg_path));
+      ret = pymobius_model_case_to_pyobject (mobius::framework::model::open_case (arg_path));
     }
   catch (const std::exception& e)
     {
@@ -109,7 +109,7 @@ PyObject *
 func_model_close_case (PyObject *, PyObject *args)
 {
   // parse input args
-  mobius::model::Case arg_case;
+  mobius::framework::model::Case arg_case;
 
   try
     {
@@ -126,7 +126,7 @@ func_model_close_case (PyObject *, PyObject *args)
 
   try
     {
-      mobius::model::close_case (arg_case);
+      mobius::framework::model::close_case (arg_case);
       ret = mobius::py::pynone ();
     }
   catch (const std::exception& e)
@@ -150,7 +150,7 @@ func_model_get_cases (PyObject *, PyObject *)
   try
     {
       ret = mobius::py::pylist_from_cpp_container (
-              mobius::model::get_cases (),
+              mobius::framework::model::get_cases (),
               pymobius_model_case_to_pyobject
             );
     }
@@ -175,7 +175,7 @@ func_model_get_case_count (PyObject *, PyObject *)
 
   try
     {
-      ret = mobius::py::pylong_from_int (mobius::model::get_case_count ());
+      ret = mobius::py::pylong_from_int (mobius::framework::model::get_case_count ());
     }
   catch (const std::exception& e)
     {

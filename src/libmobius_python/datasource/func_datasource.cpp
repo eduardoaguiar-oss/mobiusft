@@ -49,7 +49,7 @@ func_datasource_new_datasource_from_vfs (PyObject *, PyObject *args)
 
   try
     {
-      auto datasource = mobius::datasource::new_datasource_from_vfs (arg_vfs);
+      auto datasource = mobius::core::datasource::new_datasource_from_vfs (arg_vfs);
       ret = pymobius_datasource_datasource_to_pyobject (datasource);
     }
   catch (const std::exception& e)
@@ -85,7 +85,7 @@ func_datasource_new_datasource_by_imagefile_path (PyObject *, PyObject *args)
 
   try
     {
-      auto datasource = mobius::datasource::new_datasource_by_imagefile_path (arg_path);
+      auto datasource = mobius::core::datasource::new_datasource_by_imagefile_path (arg_path);
       ret = pymobius_datasource_datasource_to_pyobject (datasource);
     }
   catch (const std::exception& e)
@@ -121,7 +121,7 @@ func_datasource_new_datasource_by_imagefile_url (PyObject *, PyObject *args)
 
   try
     {
-      auto datasource = mobius::datasource::new_datasource_by_imagefile_url (arg_url);
+      auto datasource = mobius::core::datasource::new_datasource_by_imagefile_url (arg_url);
       ret = pymobius_datasource_datasource_to_pyobject (datasource);
     }
   catch (const std::exception& e)
@@ -157,7 +157,7 @@ func_datasource_new_datasource_by_ufdr_path (PyObject *, PyObject *args)
 
   try
     {
-      auto datasource = mobius::datasource::new_datasource_by_ufdr_path (arg_path);
+      auto datasource = mobius::core::datasource::new_datasource_by_ufdr_path (arg_path);
       ret = pymobius_datasource_datasource_to_pyobject (datasource);
     }
   catch (const std::exception& e)
@@ -193,7 +193,7 @@ func_datasource_new_datasource_by_ufdr_url (PyObject *, PyObject *args)
 
   try
     {
-      auto datasource = mobius::datasource::new_datasource_by_ufdr_url (arg_url);
+      auto datasource = mobius::core::datasource::new_datasource_by_ufdr_url (arg_url);
       ret = pymobius_datasource_datasource_to_pyobject (datasource);
     }
   catch (const std::exception& e)

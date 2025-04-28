@@ -19,7 +19,6 @@
 #include "common.hpp"
 #include <mobius/core/log.hpp>
 #include <mobius/decoder/data_decoder.h>
-#include <mobius/encoder/hexstring.h>
 
 namespace
 {

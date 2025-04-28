@@ -19,7 +19,7 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.20)
 project(libmobius-core LANGUAGES CXX)
 
 include(GNUInstallDirs)
@@ -51,24 +51,41 @@ set(MOBIUS_LIBRARIES ${MOBIUS_LIB})
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Build sub-libraries
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_subdirectory(datasource)
+add_subdirectory(encoder)
+add_subdirectory(file_decoder)
 add_subdirectory(jni)
+add_subdirectory(kff)
+add_subdirectory(turing)
+add_subdirectory(ui)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+set(MOBIUS_VERSION "2.15") # @todo move to root/CMakeLists.txt
+configure_file(application.cpp.in application.cpp @ONLY)
+
 add_library(mobius_core SHARED
+    ${CMAKE_CURRENT_BINARY_DIR}/application.cpp
     benchmark.cpp
     extension.cpp
     extension_set.cpp
     log.cpp
     mediator.cpp
+    metadata.cpp
     resource.cpp
     thread_guard.cpp
     unittest.cpp
+    $<TARGET_OBJECTS:mobius_core_datasource>
+    $<TARGET_OBJECTS:mobius_core_encoder>
+    $<TARGET_OBJECTS:mobius_core_file_decoder>
     $<TARGET_OBJECTS:mobius_core_jni>
+    $<TARGET_OBJECTS:mobius_core_kff>
+    $<TARGET_OBJECTS:mobius_core_turing>
+    $<TARGET_OBJECTS:mobius_core_ui>
 )
 
-target_include_directories(mobius_core PUBLIC ${MOBIUS_INCLUDE_DIRS})
+target_include_directories(mobius_core PUBLIC ${MOBIUS_INCLUDE_DIRS} ${TOP_SRC_DIR})
 
 target_link_libraries(mobius_core PUBLIC
     ${MOBIUS_LIBRARIES}

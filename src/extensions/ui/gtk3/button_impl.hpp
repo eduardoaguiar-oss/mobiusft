@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/ui/button_impl_base.h>
+#include <mobius/core/ui/button_impl_base.hpp>
 #include <gtk/gtk.h>
 
 namespace mobius::extension::ui::gtk3
@@ -27,7 +27,7 @@ namespace mobius::extension::ui::gtk3
 // @brief <i>gtk3 button</i> implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class button_impl : public mobius::ui::button_impl_base
+class button_impl : public mobius::core::ui::button_impl_base
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -61,7 +61,7 @@ public:
   void set_sensitive (bool) final;
   void set_visible (bool) final;
   void set_text (const std::string&) final;
-  void set_icon (const mobius::ui::icon&) final;
+  void set_icon (const mobius::core::ui::icon&) final;
   void set_callback (const std::string&, const mobius::core::functor<bool>&) final;
   void reset_callback (const std::string&) final;
 

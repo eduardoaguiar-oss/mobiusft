@@ -54,7 +54,7 @@ PyTuple_from_hash (const std::tuple <std::string, std::string, std::string>& row
 // @return New turing object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_turing_turing_to_pyobject (mobius::turing::turing obj)
+pymobius_turing_turing_to_pyobject (const mobius::core::turing::turing& obj)
 {
   return mobius::py::to_pyobject <turing_turing_o> (obj, &turing_turing_t);
 }
@@ -183,7 +183,7 @@ tp_f_get_hash_password (turing_turing_o *self, PyObject *args)
         {
           PyTuple_SetItem (ret, 0, mobius::py::pylong_from_int (static_cast <int> (p.first)));
 
-          if (p.first == mobius::turing::turing::pwd_status::not_found)
+          if (p.first == mobius::core::turing::turing::pwd_status::not_found)
             PyTuple_SetItem (ret, 1, mobius::py::pynone ());
 
           else
@@ -333,7 +333,7 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
     {
       try
         {
-          self->obj = new mobius::turing::turing ();
+          self->obj = new mobius::core::turing::turing ();
         }
       catch (const std::exception& e)
         {

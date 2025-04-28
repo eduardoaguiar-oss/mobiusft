@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/collection_impl_base.h>
+#include <mobius/core/collection_impl_base.hpp>
 #include <mobius/exception.inc>
 #include <mobius/io/file_impl_null.h>
 #include <mobius/io/folder_impl_null.h>
@@ -34,7 +34,7 @@ using entry_impl = mobius::io::folder_impl_base::entry_impl;
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Collection implementation for folder entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class collection_impl_folder : public mobius::collection_impl_base <entry_impl>
+class collection_impl_folder : public mobius::core::collection_impl_base <entry_impl>
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/vfs/imagefile_impl_base.h>
 #include <mobius/io/file.h>
-#include <mobius/metadata.h>
+#include <mobius/core/metadata.hpp>
 #include <functional>
 #include <memory>
 #include <string>
@@ -169,7 +169,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::metadata get_metadata () const;
+  mobius::core::metadata get_metadata () const;
 
 private:
   std::shared_ptr <imagefile_impl_base> impl_;

@@ -38,4 +38,5 @@ EXTRA_DIST =								\
     CMakeLists.txt							\
     mobius/core/*.hpp							\
     mobius/core/jni/*.hpp						\
-    mobius/framework/*.hpp
+    mobius/framework/*.hpp						\
+    mobius/framework/model/*.hpp

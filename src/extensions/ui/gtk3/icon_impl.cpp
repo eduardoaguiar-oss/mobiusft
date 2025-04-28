@@ -69,10 +69,10 @@ icon_impl::set_icon_by_name (const std::string& name, size_type size)
 
   switch (size)
   {
-    case mobius::ui::icon_impl_base::size_type::menu: gtk_icon_size = GTK_ICON_SIZE_MENU; break;
-    case mobius::ui::icon_impl_base::size_type::toolbar: gtk_icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR; break;
-    case mobius::ui::icon_impl_base::size_type::dnd: gtk_icon_size = GTK_ICON_SIZE_DND; break;
-    case mobius::ui::icon_impl_base::size_type::dialog: gtk_icon_size = GTK_ICON_SIZE_DIALOG; break;
+    case mobius::core::ui::icon_impl_base::size_type::menu: gtk_icon_size = GTK_ICON_SIZE_MENU; break;
+    case mobius::core::ui::icon_impl_base::size_type::toolbar: gtk_icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR; break;
+    case mobius::core::ui::icon_impl_base::size_type::dnd: gtk_icon_size = GTK_ICON_SIZE_DND; break;
+    case mobius::core::ui::icon_impl_base::size_type::dialog: gtk_icon_size = GTK_ICON_SIZE_DIALOG; break;
     default: gtk_icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
   };
 

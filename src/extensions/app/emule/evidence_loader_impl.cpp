@@ -22,12 +22,12 @@
 #include "file_part_met_txtsrc.hpp"
 #include "file_stored_searches_met.hpp"
 #include <mobius/core/log.hpp>
-#include <mobius/datasource/datasource_vfs.h>
+#include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/decoder/data_decoder.h>
 #include <mobius/decoder/inifile.h>
+#include <mobius/framework/model/evidence.hpp>
 #include <mobius/io/line_reader.h>
 #include <mobius/io/walker.h>
-#include <mobius/model/evidence.h>
 #include <mobius/pod/data.h>
 #include <mobius/string_functions.h>
 
@@ -122,7 +122,7 @@ namespace mobius::extension::app::emule
 // @brief Constructor
 // @param item Item object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-evidence_loader_impl::evidence_loader_impl (const mobius::model::item& item, scan_type type)
+evidence_loader_impl::evidence_loader_impl (const mobius::framework::model::item& item, scan_type type)
   : item_ (item),
     scan_type_ (type)
 {
@@ -205,7 +205,7 @@ evidence_loader_impl::run ()
 void
 evidence_loader_impl::_scan_canonical_folders ()
 {
-    auto vfs_datasource = mobius::datasource::datasource_vfs (item_.get_datasource ());
+    auto vfs_datasource = mobius::core::datasource::datasource_vfs (item_.get_datasource ());
     auto vfs = vfs_datasource.get_vfs ();
 
     for (const auto& entry : vfs.get_root_entries ())

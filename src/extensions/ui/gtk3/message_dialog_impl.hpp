@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/ui/message_dialog_impl_base.h>
+#include <mobius/core/ui/message_dialog_impl_base.hpp>
 #include <utility>
 #include <vector>
 
@@ -28,7 +28,7 @@ namespace mobius::extension::ui::gtk3
 // @brief gtk3 message_dialog implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class message_dialog_impl : public mobius::ui::message_dialog_impl_base
+class message_dialog_impl : public mobius::core::ui::message_dialog_impl_base
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

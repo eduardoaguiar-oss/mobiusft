@@ -21,7 +21,7 @@
 #include <mobius/io/folder_impl_base.h>
 #include <mobius/io/entry.h>
 #include <mobius/io/stream.h>
-#include <mobius/collection.h>
+#include <mobius/core/collection.hpp>
 #include <memory>
 
 namespace mobius::io
@@ -40,7 +40,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   using size_type = folder_impl_base::size_type;
   using inode_type = folder_impl_base::inode_type;
-  using children_type = mobius::collection <entry>;
+  using children_type = mobius::core::collection <entry>;
   using user_id_type = folder_impl_base::user_id_type;
   using group_id_type = folder_impl_base::group_id_type;
   using permission_type = folder_impl_base::permission_type;

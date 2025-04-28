@@ -44,7 +44,7 @@ pymobius_datasource_datasource_vfs_check (PyObject *value)
 // @return New datasource_vfs object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_datasource_datasource_vfs_to_pyobject (const mobius::datasource::datasource_vfs& obj)
+pymobius_datasource_datasource_vfs_to_pyobject (const mobius::core::datasource::datasource_vfs& obj)
 {
   return mobius::py::to_pyobject <datasource_datasource_vfs_o> (obj, &datasource_datasource_vfs_t);
 }
@@ -54,7 +54,7 @@ pymobius_datasource_datasource_vfs_to_pyobject (const mobius::datasource::dataso
 // @param value Python value
 // @return Datasource_vfs object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datasource::datasource_vfs
+mobius::core::datasource::datasource_vfs
 pymobius_datasource_datasource_vfs_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <datasource_datasource_vfs_o> (value, &datasource_datasource_vfs_t);

@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pytypeobject.hpp>
-#include <mobius/ui/label.h>
+#include <mobius/core/ui/label.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -28,7 +28,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::ui::label *obj;
+  mobius::core::ui::label *obj;
 } ui_label_o;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -36,8 +36,8 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject new_ui_label_type ();
 bool pymobius_ui_label_check (PyObject *);
-PyObject *pymobius_ui_label_to_pyobject (const mobius::ui::label&);
-mobius::ui::label pymobius_ui_label_from_pyobject (PyObject *);
+PyObject *pymobius_ui_label_to_pyobject (const mobius::core::ui::label&);
+mobius::core::ui::label pymobius_ui_label_from_pyobject (PyObject *);
 
 #endif
 

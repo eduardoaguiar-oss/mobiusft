@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/pod/data_impl_base.h>
-#include <mobius/ordered_map.h>
+#include <mobius/core/ordered_map.hpp>
 #include <memory>
 #include <string>
 
@@ -36,7 +36,7 @@ public:
   // Datatypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   using value_type = std::shared_ptr <data_impl_base>;
-  using map_type = mobius::ordered_map <std::string,value_type>;
+  using map_type = mobius::core::ordered_map <std::string,value_type>;
   using size_type = map_type::size_type;
   using iterator = map_type::iterator;
   using const_iterator = map_type::const_iterator;
@@ -146,7 +146,7 @@ public:
   }
 
 private:
-  mobius::ordered_map <std::string,value_type> map_;
+  mobius::core::ordered_map <std::string,value_type> map_;
 };
 
 } // namespace mobius::pod

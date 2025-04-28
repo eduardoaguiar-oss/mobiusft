@@ -19,8 +19,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/metadata.h>
+#include <mobius/core/metadata.hpp>
 
-PyObject *PyList_FromMetadata (const mobius::metadata&);
+PyObject *PyList_FromMetadata (const mobius::core::metadata&);
 
 #endif

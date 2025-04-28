@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/ui/box_impl_base.h>
+#include <mobius/core/ui/box_impl_base.hpp>
 #include <gtk/gtk.h>
 #include <vector>
 
@@ -28,7 +28,7 @@ namespace mobius::extension::ui::gtk3
 // @brief <i>gtk3 box</i> implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class box_impl : public mobius::ui::box_impl_base
+class box_impl : public mobius::core::ui::box_impl_base
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -54,8 +54,8 @@ public:
   void set_visible (bool) final;
   void set_spacing (std::uint32_t) final;
   void set_border_width (std::uint32_t) final;
-  void add_child (const mobius::ui::widget&, fill_type) final;
-  void remove_child (const mobius::ui::widget&) final;
+  void add_child (const mobius::core::ui::widget&, fill_type) final;
+  void remove_child (const mobius::core::ui::widget&) final;
   void clear () final;
 
 private:
@@ -63,7 +63,7 @@ private:
   GtkWidget *widget_ = nullptr;
 
   // @brief Children widget
-  std::vector <mobius::ui::widget> children_;
+  std::vector <mobius::core::ui::widget> children_;
 };
 
 } // namespace mobius::extension::ui::gtk3

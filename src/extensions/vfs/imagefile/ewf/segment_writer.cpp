@@ -19,7 +19,7 @@
 #include <mobius/core/application.hpp>
 #include <mobius/datetime/datetime.h>
 #include <mobius/datetime/conv_iso_string.h>
-#include <mobius/encoder/data_encoder.h>
+#include <mobius/core/encoder/data_encoder.hpp>
 #include <mobius/string_functions.h>
 #include <mobius/zlib_functions.h>
 #include <mobius/charset.h>
@@ -215,7 +215,7 @@ segment_writer::_write_file_header (std::uint16_t segment_idx)
 {
   const mobius::bytearray EWF_SIGNATURE = {'E', 'V', 'F', 0x09, 0x0d, 0x0a, 0xff, 0x00};
 
-  mobius::encoder::data_encoder encoder (writer_);
+  mobius::core::encoder::data_encoder encoder (writer_);
   encoder.encode_bytearray (EWF_SIGNATURE);
   encoder.encode_uint8 (0x01);
   encoder.encode_uint16_le (segment_idx);
@@ -240,7 +240,7 @@ segment_writer::_write_section_header (const std::string& name, size_type size)
   mobius::crypt::hash_functor hash_functor ("adler32");
   auto writer = mobius::io::writer_evaluator (writer_, hash_functor);
 
-  mobius::encoder::data_encoder encoder (writer);
+  mobius::core::encoder::data_encoder encoder (writer);
   encoder.encode_string_by_size (name, 16);
   encoder.encode_uint64_le (next_offset);
   encoder.encode_uint64_le (HEADER_SIZE + size);
@@ -350,7 +350,7 @@ segment_writer::_write_volume_section (const std::string& section_name)
   auto writer = mobius::io::writer_evaluator (writer_, hash_functor);
 
   // encode metadata
-  mobius::encoder::data_encoder encoder (writer);
+  mobius::core::encoder::data_encoder encoder (writer);
   encoder.encode_uint32_le (1);                         // \todo media type
   encoder.encode_uint32_le (chunk_count);
   encoder.encode_uint32_le (chunk_sectors_);
@@ -385,7 +385,7 @@ segment_writer::_write_hash_section ()
   mobius::crypt::hash_functor hash_functor ("adler32");
   auto writer = mobius::io::writer_evaluator (writer_, hash_functor);
 
-  mobius::encoder::data_encoder encoder (writer);
+  mobius::core::encoder::data_encoder encoder (writer);
   encoder.encode_bytearray (md5_hash_);
   encoder.fill (16, 0);                                 // padding
 
@@ -412,7 +412,7 @@ segment_writer::_write_table_section (const std::string& name)
   mobius::crypt::hash_functor hash_functor ("adler32");
   auto writer = mobius::io::writer_evaluator (writer_, hash_functor);
 
-  mobius::encoder::data_encoder encoder (writer);
+  mobius::core::encoder::data_encoder encoder (writer);
   encoder.encode_uint32_le (entries);
   encoder.fill (4, 0);
   encoder.encode_uint64_le (sector_offset_);
@@ -424,7 +424,7 @@ segment_writer::_write_table_section (const std::string& name)
   // write offsets
   hash_functor = mobius::crypt::hash_functor ("adler32");
   writer = mobius::io::writer_evaluator (writer_, hash_functor);
-  encoder = mobius::encoder::data_encoder (writer);
+  encoder = mobius::core::encoder::data_encoder (writer);
 
   for (auto offset : chunk_offset_list_)
     encoder.encode_uint32_le (offset);
@@ -490,7 +490,7 @@ segment_writer::_write_chunk_data (mobius::bytearray data)
   writer.write (data);
 
   // encode ADLER-32 hash
-  mobius::encoder::data_encoder encoder (writer);
+  mobius::core::encoder::data_encoder encoder (writer);
   std::uint32_t hash_value = digest_to_uint32_t (hash_functor.get_digest ());
   encoder.encode_uint32_le (hash_value);                // Adler-32 CRC
 

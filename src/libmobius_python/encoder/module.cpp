@@ -40,48 +40,13 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef module_methods[] =
 {
-  {
-    "base16",
-    encoder_func_base16,
-    METH_VARARGS,
-    "Encode data into base16"
-  },
-  {
-    "base32",
-    encoder_func_base32,
-    METH_VARARGS,
-    "Encode data into base32"
-  },
-  {
-    "base32hex",
-    encoder_func_base32hex,
-    METH_VARARGS,
-    "Encode data into base32hex"
-  },
-  {
-    "base64",
-    encoder_func_base64,
-    METH_VARARGS,
-    "Encode data into base64"
-  },
-  {
-    "base64url",
-    encoder_func_base64url,
-    METH_VARARGS,
-    "Encode data into base64url"
-  },
-  {
-    "hexstring",
-    encoder_func_hexstring,
-    METH_VARARGS,
-    "Encode data into hexstring"
-  },
-  {
-    NULL,
-    NULL,
-    0,
-    NULL
-  } // sentinel
+  {"base16", encoder_func_base16, METH_VARARGS, "Encode data into base16"},
+  {"base32", encoder_func_base32, METH_VARARGS, "Encode data into base32"},
+  {"base32hex", encoder_func_base32hex, METH_VARARGS, "Encode data into base32hex"},
+  {"base64", encoder_func_base64, METH_VARARGS, "Encode data into base64"},
+  {"base64url", encoder_func_base64url, METH_VARARGS, "Encode data into base64url"},
+  {"hexstring", encoder_func_hexstring, METH_VARARGS, "Encode data into hexstring"},
+  {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

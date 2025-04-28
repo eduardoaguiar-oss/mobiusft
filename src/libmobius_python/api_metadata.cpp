@@ -28,7 +28,7 @@ namespace
 // @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-Metadata_Attr_from_cpp (const mobius::metadata::attribute& attr)
+Metadata_Attr_from_cpp (const mobius::core::metadata::attribute& attr)
 {
   api_dataholder_o *pyobj = api_dataholder_new ();
 
@@ -50,7 +50,7 @@ Metadata_Attr_from_cpp (const mobius::metadata::attribute& attr)
 // @param metadata metadata object
 // @return list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *PyList_FromMetadata (const mobius::metadata& metadata)
+PyObject *PyList_FromMetadata (const mobius::core::metadata& metadata)
 {
   PyObject *ret = nullptr;
 

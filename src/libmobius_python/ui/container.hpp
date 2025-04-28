@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pytypeobject.hpp>
-#include <mobius/ui/container.h>
+#include <mobius/core/ui/container.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -28,7 +28,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::ui::container *obj;
+  mobius::core::ui::container *obj;
 } ui_container_o;
 
 
@@ -37,8 +37,8 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject new_ui_container_type ();
 bool pymobius_ui_container_check (PyObject *);
-PyObject *pymobius_ui_container_to_pyobject (const mobius::ui::container&);
-mobius::ui::container pymobius_ui_container_from_pyobject (PyObject *);
+PyObject *pymobius_ui_container_to_pyobject (const mobius::core::ui::container&);
+mobius::core::ui::container pymobius_ui_container_from_pyobject (PyObject *);
 
 #endif
 

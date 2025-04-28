@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pytypeobject.hpp>
-#include <mobius/ui/widget.h>
+#include <mobius/core/ui/widget.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -28,7 +28,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::ui::widget *obj;
+  mobius::core::ui::widget *obj;
 } ui_widget_o;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -37,8 +37,8 @@ typedef struct
 mobius::py::pytypeobject new_ui_widget_type ();
 PyTypeObject *get_ui_widget_type ();
 bool pymobius_ui_widget_check (PyObject *);
-PyObject *pymobius_ui_widget_to_pyobject (const mobius::ui::widget&);
-mobius::ui::widget pymobius_ui_widget_from_pyobject (PyObject *);
+PyObject *pymobius_ui_widget_to_pyobject (const mobius::core::ui::widget&);
+mobius::core::ui::widget pymobius_ui_widget_from_pyobject (PyObject *);
 
 #endif
 

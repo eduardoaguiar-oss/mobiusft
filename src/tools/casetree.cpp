@@ -16,12 +16,12 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/application.hpp>
-#include <mobius/model/case.h>
+#include <mobius/framework/model/case.hpp>
 #include <unistd.h>
 #include <iostream>
 
 void
-show_item (mobius::model::item item, int level = 0)
+show_item (mobius::framework::model::item item, int level = 0)
 {
   const std::string indent (level * 2, ' ');
 
@@ -50,9 +50,9 @@ show_item (mobius::model::item item, int level = 0)
 void
 show_case (const std::string& path)
 {
-  auto c = mobius::model::open_case (path);
+  auto c = mobius::framework::model::open_case (path);
   show_item (c.get_root_item ());
-  mobius::model::close_case (c);
+  mobius::framework::model::close_case (c);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

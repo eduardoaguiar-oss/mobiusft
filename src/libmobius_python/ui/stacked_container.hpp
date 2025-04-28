@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pytypeobject.hpp>
-#include <mobius/ui/stacked_container.h>
+#include <mobius/core/ui/stacked_container.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -28,7 +28,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::ui::stacked_container *obj;
+  mobius::core::ui::stacked_container *obj;
 } ui_stacked_container_o;
 
 
@@ -37,8 +37,8 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject new_ui_stacked_container_type ();
 bool pymobius_ui_stacked_container_check (PyObject *);
-PyObject *pymobius_ui_stacked_container_to_pyobject (const mobius::ui::stacked_container&);
-mobius::ui::stacked_container pymobius_ui_stacked_container_from_pyobject (PyObject *);
+PyObject *pymobius_ui_stacked_container_to_pyobject (const mobius::core::ui::stacked_container&);
+mobius::core::ui::stacked_container pymobius_ui_stacked_container_from_pyobject (PyObject *);
 
 #endif
 

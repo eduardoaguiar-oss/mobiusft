@@ -102,7 +102,7 @@ static PyObject *
 tp_f_set_icon (ui_button_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::ui::icon arg_icon;
+  mobius::core::ui::icon arg_icon;
 
   try
     {
@@ -275,7 +275,7 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::ui::button ();
+          ret->obj = new mobius::core::ui::button ();
         }
       catch (const std::exception& e)
         {
@@ -383,7 +383,7 @@ pymobius_ui_button_check (PyObject *value)
 // @return New button object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_ui_button_to_pyobject (const mobius::ui::button& obj)
+pymobius_ui_button_to_pyobject (const mobius::core::ui::button& obj)
 {
   return mobius::py::to_pyobject <ui_button_o> (obj, &ui_button_t);
 }
@@ -393,7 +393,7 @@ pymobius_ui_button_to_pyobject (const mobius::ui::button& obj)
 // @param value Python value
 // @return Button object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::ui::button
+mobius::core::ui::button
 pymobius_ui_button_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <ui_button_o> (value, &ui_button_t);

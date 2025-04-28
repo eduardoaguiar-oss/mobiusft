@@ -70,7 +70,7 @@ static PyObject *
 tp_f_set_content (ui_container_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::ui::widget arg_w;
+  mobius::core::ui::widget arg_w;
 
   try
     {
@@ -221,7 +221,7 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::ui::container ();
+          ret->obj = new mobius::core::ui::container ();
         }
       catch (const std::exception& e)
         {
@@ -329,7 +329,7 @@ pymobius_ui_container_check (PyObject *value)
 // @return New container object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_ui_container_to_pyobject (const mobius::ui::container& obj)
+pymobius_ui_container_to_pyobject (const mobius::core::ui::container& obj)
 {
   return mobius::py::to_pyobject <ui_container_o> (obj, &ui_container_t);
 }
@@ -339,7 +339,7 @@ pymobius_ui_container_to_pyobject (const mobius::ui::container& obj)
 // @param value Python value
 // @return Container object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::ui::container
+mobius::core::ui::container
 pymobius_ui_container_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <ui_container_o> (value, &ui_container_t);

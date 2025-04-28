@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/functor.hpp>
-#include <mobius/ui/window_impl_base.h>
+#include <mobius/core/ui/window_impl_base.hpp>
 #include <gtk/gtk.h>
 
 namespace mobius::extension::ui::gtk3
@@ -28,7 +28,7 @@ namespace mobius::extension::ui::gtk3
 // @brief <i>gtk3 window</i> implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class window_impl : public mobius::ui::window_impl_base
+class window_impl : public mobius::core::ui::window_impl_base
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -42,10 +42,10 @@ public:
   void destroy () final;
   void set_title (const std::string&) final;
   std::string get_title () const final;
-  void set_icon (const mobius::ui::icon&) final;
+  void set_icon (const mobius::core::ui::icon&) final;
   void set_border_width (std::uint32_t) final;
-  void set_content (const mobius::ui::widget&) final;
-  mobius::ui::widget get_content () const final;
+  void set_content (const mobius::core::ui::widget&) final;
+  mobius::core::ui::widget get_content () const final;
   void remove_content () final;
   void set_position (std::uint32_t, std::uint32_t) final;
   std::pair<std::uint32_t, std::uint32_t> get_position () const final;
@@ -62,7 +62,7 @@ private:
   GtkAccelGroup *accel_group_ = nullptr;
 
   // @brief Content widget
-  mobius::ui::widget content_;
+  mobius::core::ui::widget content_;
 
   // @brief Callback for closing event
   mobius::core::functor <bool> closing_callback_;

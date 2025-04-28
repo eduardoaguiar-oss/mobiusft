@@ -220,7 +220,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
   std::call_once (is_initialized_, _initialize);
 
   // Parse input args
-  mobius::ui::widget arg_w;
+  mobius::core::ui::widget arg_w;
   //bool arg_is_owner = false;
 
   try
@@ -243,7 +243,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::ui::widget (arg_w);
+          ret->obj = new mobius::core::ui::widget (arg_w);
         }
       catch (const std::exception& e)
         {
@@ -360,7 +360,7 @@ pymobius_ui_widget_check (PyObject *value)
 // @return New widget object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_ui_widget_to_pyobject (const mobius::ui::widget& obj)
+pymobius_ui_widget_to_pyobject (const mobius::core::ui::widget& obj)
 {
   return mobius::py::to_pyobject_nullable <ui_widget_o> (obj, &ui_widget_t);
 }
@@ -375,10 +375,10 @@ pymobius_ui_widget_to_pyobject (const mobius::ui::widget& obj)
 //    2. pygtk widget
 //    3. any object with get_widget method returning mobius.ui.widget object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::ui::widget
+mobius::core::ui::widget
 pymobius_ui_widget_from_pyobject (PyObject *value)
 {
-  mobius::ui::widget w;
+  mobius::core::ui::widget w;
   std::call_once (is_initialized_, _initialize);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -403,7 +403,7 @@ pymobius_ui_widget_from_pyobject (PyObject *value)
       if (!wp)
         throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("could not convert argument to GtkWidget"));
 
-      w = mobius::ui::widget (wp);
+      w = mobius::core::ui::widget (wp);
     }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

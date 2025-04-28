@@ -131,7 +131,7 @@ window_impl::get_title () const
 // @param icon Iocn object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-window_impl::set_icon (const mobius::ui::icon& icon)
+window_impl::set_icon (const mobius::core::ui::icon& icon)
 {
   auto gtk_widget = icon.get_ui_widget <GtkWidget *> ();
 
@@ -156,7 +156,7 @@ window_impl::set_border_width (std::uint32_t width)
 // @param w Widget
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-window_impl::set_content (const mobius::ui::widget& w)
+window_impl::set_content (const mobius::core::ui::widget& w)
 {
   if (content_)
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("window content already set"));
@@ -173,7 +173,7 @@ window_impl::set_content (const mobius::ui::widget& w)
 // @brief Get content
 // @return Contained widget
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::ui::widget
+mobius::core::ui::widget
 window_impl::get_content () const
 {
   return content_;

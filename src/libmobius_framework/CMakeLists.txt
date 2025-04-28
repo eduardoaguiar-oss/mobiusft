@@ -56,6 +56,7 @@ set(MOBIUS_LIBRARIES ${MOBIUS_CORE_LIB} ${MOBIUS_LIB})
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Build sub-libraries
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_subdirectory(model)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
@@ -66,6 +67,7 @@ add_library(mobius_framework SHARED
     config.cpp
     evidence_flag.cpp
     evidence_loader.cpp
+    $<TARGET_OBJECTS:mobius_framework_model>
 )
 
 target_include_directories(mobius_framework PUBLIC ${MOBIUS_INCLUDE_DIRS})

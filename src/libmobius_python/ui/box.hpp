@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pytypeobject.hpp>
-#include <mobius/ui/box.h>
+#include <mobius/core/ui/box.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -28,7 +28,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::ui::box *obj;
+  mobius::core::ui::box *obj;
 } ui_box_o;
 
 
@@ -37,8 +37,8 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject new_ui_box_type ();
 bool pymobius_ui_box_check (PyObject *);
-PyObject *pymobius_ui_box_to_pyobject (const mobius::ui::box&);
-mobius::ui::box pymobius_ui_box_from_pyobject (PyObject *);
+PyObject *pymobius_ui_box_to_pyobject (const mobius::core::ui::box&);
+mobius::core::ui::box pymobius_ui_box_from_pyobject (PyObject *);
 
 #endif
 

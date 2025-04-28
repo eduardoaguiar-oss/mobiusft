@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pytypeobject.hpp>
-#include <mobius/ui/message_dialog.h>
+#include <mobius/core/ui/message_dialog.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -28,7 +28,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::ui::message_dialog *obj;
+  mobius::core::ui::message_dialog *obj;
 } ui_message_dialog_o;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -36,8 +36,8 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject new_ui_message_dialog_type ();
 bool pymobius_ui_message_dialog_check (PyObject *);
-PyObject *pymobius_ui_message_dialog_to_pyobject (const mobius::ui::message_dialog&);
-mobius::ui::message_dialog pymobius_ui_message_dialog_from_pyobject (PyObject *);
+PyObject *pymobius_ui_message_dialog_to_pyobject (const mobius::core::ui::message_dialog&);
+mobius::core::ui::message_dialog pymobius_ui_message_dialog_from_pyobject (PyObject *);
 
 #endif
 

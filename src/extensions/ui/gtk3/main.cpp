@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/resource.hpp>
-#include <mobius/ui/ui.h>
+#include <mobius/core/ui/ui.hpp>
 #include "ui_impl.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -40,7 +40,7 @@ start ()
   mobius::core::add_resource (
      "ui.implementation.gtk3",
      "GTK v3",
-     mobius::ui::make_resource <mobius::extension::ui::gtk3::ui_impl> ()
+     mobius::core::ui::make_resource <mobius::extension::ui::gtk3::ui_impl> ()
   );
 }
 

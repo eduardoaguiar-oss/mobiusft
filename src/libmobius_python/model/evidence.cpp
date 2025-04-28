@@ -47,7 +47,7 @@ pymobius_model_evidence_check (PyObject *value)
 // @return New evidence object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_model_evidence_to_pyobject (const mobius::model::evidence& obj)
+pymobius_model_evidence_to_pyobject (const mobius::framework::model::evidence& obj)
 {
   return mobius::py::to_pyobject_nullable <model_evidence_o> (obj, &model_evidence_t);
 }
@@ -57,7 +57,7 @@ pymobius_model_evidence_to_pyobject (const mobius::model::evidence& obj)
 // @param value Python value
 // @return Evidence object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::model::evidence
+mobius::framework::model::evidence
 pymobius_model_evidence_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <model_evidence_o> (value, &model_evidence_t);

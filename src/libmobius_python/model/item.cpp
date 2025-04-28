@@ -263,7 +263,7 @@ tp_f_move (model_item_o *self, PyObject *args)
 {
   // parse input args
   int arg_idx;
-  mobius::model::item arg_parent;
+  mobius::framework::model::item arg_parent;
 
   try
     {
@@ -627,7 +627,7 @@ static PyObject *
 tp_f_set_datasource (model_item_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::datasource::datasource arg_datasource;
+  mobius::core::datasource::datasource arg_datasource;
 
   try
     {
@@ -892,7 +892,7 @@ static PyObject *
 tp_f_add_evidence (model_item_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::model::evidence arg_evidence;
+  mobius::framework::model::evidence arg_evidence;
 
   try
     {
@@ -1210,7 +1210,7 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
   model_item_o *self = (model_item_o *) type->tp_alloc (type, 0);
 
   if (self)
-    self->obj = new mobius::model::item ();
+    self->obj = new mobius::framework::model::item ();
 
   return (PyObject *) self;
 }
@@ -1385,7 +1385,7 @@ tp_hash (model_item_o *self)
   // As negative value indicates error, return non-negative value
   return std::abs (
     static_cast <Py_hash_t> (
-       std::hash <mobius::model::item> {} (*(self->obj))
+       std::hash <mobius::framework::model::item> {} (*(self->obj))
     )
   );
 }
@@ -1474,7 +1474,7 @@ pymobius_model_item_check (PyObject *value)
 // @return New item object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_model_item_to_pyobject (const mobius::model::item& obj)
+pymobius_model_item_to_pyobject (const mobius::framework::model::item& obj)
 {
   return mobius::py::to_pyobject_nullable <model_item_o> (obj, &model_item_t);
 }
@@ -1484,7 +1484,7 @@ pymobius_model_item_to_pyobject (const mobius::model::item& obj)
 // @param value Python value
 // @return Item object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::model::item
+mobius::framework::model::item
 pymobius_model_item_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <model_item_o> (value, &model_item_t);
@@ -1505,7 +1505,7 @@ public:
 
   void
   operator () (
-    const mobius::model::item& item,
+    const mobius::framework::model::item& item,
     const std::string& id,
     const mobius::pod::data& old_value,
     const mobius::pod::data& new_value)
@@ -1537,7 +1537,7 @@ public:
 
   void
   operator () (
-    const mobius::model::item& item,
+    const mobius::framework::model::item& item,
     const std::string& id,
     const mobius::pod::data& old_value)
   {
@@ -1567,8 +1567,8 @@ public:
 
   void
   operator () (
-    const mobius::model::item& item,
-    const mobius::datasource::datasource& datasource)
+    const mobius::framework::model::item& item,
+    const mobius::core::datasource::datasource& datasource)
   {
     f_.call (
       pymobius_model_item_to_pyobject (item),
@@ -1595,7 +1595,7 @@ public:
 
   void
   operator () (
-    const mobius::model::item& item)
+    const mobius::framework::model::item& item)
   {
     f_.call (
       pymobius_model_item_to_pyobject (item)

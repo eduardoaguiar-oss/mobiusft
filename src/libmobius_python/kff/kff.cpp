@@ -46,7 +46,7 @@ pymobius_kff_kff_check (PyObject *value)
 // @return New kff object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_kff_kff_to_pyobject (const mobius::kff::kff& obj)
+pymobius_kff_kff_to_pyobject (const mobius::core::kff::kff& obj)
 {
   return mobius::py::to_pyobject <kff_kff_o> (obj, &kff_kff_t);
 }
@@ -56,7 +56,7 @@ pymobius_kff_kff_to_pyobject (const mobius::kff::kff& obj)
 // @param value Python value
 // @return Kff object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::kff::kff
+mobius::core::kff::kff
 pymobius_kff_kff_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <kff_kff_o> (value, &kff_kff_t);
@@ -330,7 +330,7 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
     {
       try
         {
-          ((kff_kff_o *) ret)->obj = new mobius::kff::kff ();
+          ((kff_kff_o *) ret)->obj = new mobius::core::kff::kff ();
         }
       catch (const std::exception& e)
         {

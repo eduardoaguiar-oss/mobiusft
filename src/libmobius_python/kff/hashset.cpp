@@ -45,7 +45,7 @@ pymobius_kff_hashset_check (PyObject *value)
 // @return New hashset object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_kff_hashset_to_pyobject (const mobius::kff::hashset& obj)
+pymobius_kff_hashset_to_pyobject (const mobius::core::kff::hashset& obj)
 {
   return mobius::py::to_pyobject <kff_hashset_o> (obj, &kff_hashset_t);
 }
@@ -55,7 +55,7 @@ pymobius_kff_hashset_to_pyobject (const mobius::kff::hashset& obj)
 // @param value Python value
 // @return Hashset object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::kff::hashset
+mobius::core::kff::hashset
 pymobius_kff_hashset_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <kff_hashset_o> (value, &kff_hashset_t);

@@ -31,6 +31,20 @@ clean-local:
 
 EXTRA_DIST = 								\
     CMakeLists.txt							\
+    application.cpp.in							\
     *.cpp								\
+    datasource/CMakeLists.txt						\
+    datasource/*.cpp							\
+    datasource/ufdr/*.cpp						\
+    encoder/CMakeLists.txt						\
+    encoder/*.cpp							\
+    file_decoder/CMakeLists.txt						\
+    file_decoder/*.cpp							\
     jni/CMakeLists.txt							\
-    jni/*.cpp
+    jni/*.cpp								\
+    kff/CMakeLists.txt							\
+    kff/*.cpp								\
+    turing/CMakeLists.txt						\
+    turing/*.cpp							\
+    ui/CMakeLists.txt							\
+    ui/*.cpp

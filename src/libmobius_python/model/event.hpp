@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pytypeobject.hpp>
-#include <mobius/model/event.h>
+#include <mobius/framework/model/event.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -28,7 +28,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::model::event *obj;
+  mobius::framework::model::event *obj;
 } model_event_o;
 
 
@@ -37,8 +37,8 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject new_model_event_type ();
 bool pymobius_model_event_check (PyObject *);
-PyObject *pymobius_model_event_to_pyobject (const mobius::model::event&);
-mobius::model::event pymobius_model_event_from_pyobject (PyObject *);
+PyObject *pymobius_model_event_to_pyobject (const mobius::framework::model::event&);
+mobius::framework::model::event pymobius_model_event_from_pyobject (PyObject *);
 
 #endif
 

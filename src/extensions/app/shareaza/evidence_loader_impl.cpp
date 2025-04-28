@@ -40,13 +40,13 @@
 #include "CThumbCache.hpp"
 #include "file_searches_dat.hpp"
 #include <mobius/core/log.hpp>
-#include <mobius/datasource/datasource_vfs.h>
+#include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/decoder/mfc.h>
 #include <mobius/decoder/xml/dom.h>
 #include <mobius/exception.inc>
+#include <mobius/framework/model/evidence.hpp>
 #include <mobius/io/folder.h>
 #include <mobius/io/walker.h>
-#include <mobius/model/evidence.h>
 #include <mobius/os/win/registry/hive_file.h>
 #include <mobius/os/win/registry/hive_data.h>
 #include <mobius/pod/map.h>
@@ -120,7 +120,7 @@ namespace mobius::extension::app::shareaza
 // @brief Constructor
 // @param item Item object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-evidence_loader_impl::evidence_loader_impl (const mobius::model::item& item, scan_type type)
+evidence_loader_impl::evidence_loader_impl (const mobius::framework::model::item& item, scan_type type)
   : item_ (item),
     scan_type_ (type)
 {
@@ -203,7 +203,7 @@ evidence_loader_impl::run ()
 void
 evidence_loader_impl::_scan_canonical_folders ()
 {
-  auto vfs_datasource = mobius::datasource::datasource_vfs (item_.get_datasource ());
+  auto vfs_datasource = mobius::core::datasource::datasource_vfs (item_.get_datasource ());
   auto vfs = vfs_datasource.get_vfs ();
 
   for (const auto& entry : vfs.get_root_entries ())

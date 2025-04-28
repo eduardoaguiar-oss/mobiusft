@@ -430,23 +430,15 @@ AC_CONFIG_FILES([Makefile
                  mobius_bin.sh
                  src/Makefile
                  src/mobius/Makefile
-                 src/mobius/core/Makefile
-                 src/mobius/core/application.cpp
                  src/mobius/crypt/Makefile
                  src/mobius/database/Makefile
-                 src/mobius/datasource/Makefile
                  src/mobius/datetime/Makefile
                  src/mobius/decoder/Makefile
-                 src/mobius/encoder/Makefile
-                 src/mobius/kff/Makefile
                  src/mobius/io/Makefile
-                 src/mobius/model/Makefile
                  src/mobius/os/Makefile
                  src/mobius/os/win/Makefile
                  src/mobius/pod/Makefile
                  src/mobius/system/Makefile
-                 src/mobius/turing/Makefile
-                 src/mobius/ui/Makefile
                  src/mobius/vfs/Makefile
                  src/libmobius_core/Makefile
                  src/libmobius_framework/Makefile

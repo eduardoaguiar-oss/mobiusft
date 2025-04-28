@@ -18,7 +18,7 @@
 #include "tdf.h"
 #include <mobius/crypt/hash.h>
 #include <mobius/decoder/data_decoder.h>
-#include <mobius/encoder/data_encoder.h>
+#include <mobius/core/encoder/data_encoder.hpp>
 #include <sstream>
 
 namespace mobius::decoder
@@ -126,7 +126,7 @@ tdf::impl::impl (const mobius::io::reader& reader)
   md5.update (payload_);
 
   mobius::bytearray encoded_data;
-  mobius::encoder::data_encoder encoder (encoded_data);
+  mobius::core::encoder::data_encoder encoder (encoded_data);
   encoder.encode_uint32_le (payload_.size ());
   encoder.encode_uint32_le (version_);
   md5.update (encoded_data);

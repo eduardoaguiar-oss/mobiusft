@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pytypeobject.hpp>
-#include <mobius/model/item.h>
+#include <mobius/framework/model/item.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -28,7 +28,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::model::item *obj;
+  mobius::framework::model::item *obj;
 } model_item_o;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -36,8 +36,8 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject new_model_item_type ();
 bool pymobius_model_item_check (PyObject *);
-PyObject *pymobius_model_item_to_pyobject (const mobius::model::item&);
-mobius::model::item pymobius_model_item_from_pyobject (PyObject *);
+PyObject *pymobius_model_item_to_pyobject (const mobius::framework::model::item&);
+mobius::framework::model::item pymobius_model_item_from_pyobject (PyObject *);
 
 #endif
 

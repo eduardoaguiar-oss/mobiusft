@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/framework/evidence_loader_impl_base.hpp>
-#include <mobius/model/item.h>
+#include <mobius/framework/model/item.hpp>
 #include <memory>
 #include <set>
 #include <vector>
@@ -42,7 +42,7 @@ public:
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   evidence_loader ();
-  evidence_loader (const std::string&, const mobius::model::item&, scan_type = scan_type::canonical_folders);
+  evidence_loader (const std::string&, const mobius::framework::model::item&, scan_type = scan_type::canonical_folders);
   evidence_loader (evidence_loader&&) noexcept = default;
   evidence_loader (const evidence_loader&) noexcept = default;
 
@@ -91,7 +91,7 @@ private:
 using evidence_loader_builder_type =
    std::function <
       std::shared_ptr <evidence_loader_impl_base> (
-          const mobius::model::item&,
+          const mobius::framework::model::item&,
           evidence_loader::scan_type
       )
    >;
@@ -103,7 +103,7 @@ using evidence_loader_builder_type =
 template <typename T> evidence_loader_builder_type
 new_evidence_loader_builder_resource ()
 {
-  return [] (const mobius::model::item& item, evidence_loader::scan_type type){
+  return [] (const mobius::framework::model::item& item, evidence_loader::scan_type type){
       return std::make_shared <T> (item, type);
   };
 }

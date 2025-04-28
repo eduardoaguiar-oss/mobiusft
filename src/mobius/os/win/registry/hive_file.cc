@@ -237,7 +237,7 @@ public:
   // function prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t eval_header_checksum () const;
-  mobius::metadata get_metadata () const;
+  mobius::core::metadata get_metadata () const;
 
 private:
   // @brief whether file is a hive file
@@ -360,10 +360,10 @@ hive_file::impl::eval_header_checksum () const
 // @brief get metadata from hive_file
 // @return metadata list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::metadata
+mobius::core::metadata
 hive_file::impl::get_metadata () const
 {
-  return mobius::metadata
+  return mobius::core::metadata
   {
     {
       "is_instance",
@@ -701,7 +701,7 @@ hive_file::get_root_key () const
 // @brief get metadata from hive_file
 // @return metadata list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::metadata
+mobius::core::metadata
 hive_file::get_metadata () const
 {
   return impl_->get_metadata ();

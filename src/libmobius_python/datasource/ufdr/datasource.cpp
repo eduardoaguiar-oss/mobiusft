@@ -46,7 +46,7 @@ pymobius_datasource_ufdr_datasource_check (PyObject *value)
 // @return New ufdr_datasource object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_datasource_ufdr_datasource_to_pyobject (const mobius::datasource::ufdr::datasource& obj)
+pymobius_datasource_ufdr_datasource_to_pyobject (const mobius::core::datasource::ufdr::datasource& obj)
 {
   return mobius::py::to_pyobject <datasource_ufdr_datasource_o> (obj, &datasource_ufdr_datasource_t);
 }
@@ -56,7 +56,7 @@ pymobius_datasource_ufdr_datasource_to_pyobject (const mobius::datasource::ufdr:
 // @param value Python value
 // @return Datasource_ufdr object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datasource::ufdr::datasource
+mobius::core::datasource::ufdr::datasource
 pymobius_datasource_ufdr_datasource_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <datasource_ufdr_datasource_o> (value, &datasource_ufdr_datasource_t);
@@ -182,7 +182,7 @@ static PyObject *
 tp_f_add_extraction (datasource_ufdr_datasource_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::datasource::ufdr::extraction arg_extraction;
+  mobius::core::datasource::ufdr::extraction arg_extraction;
 
   try
     {

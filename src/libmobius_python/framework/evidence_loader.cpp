@@ -72,7 +72,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
   // Parse input args
   std::string arg_id;
-  mobius::model::item arg_item;
+  mobius::framework::model::item arg_item;
   mobius::framework::evidence_loader::scan_type arg_type;
 
   try

@@ -23,5 +23,3 @@
 mobius::py::pymodule new_model_module ();
 
 #endif
-
-

@@ -103,7 +103,7 @@ public:
   // @brief get metadata
   // @return metadata list
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::metadata
+  mobius::core::metadata
   get_metadata () const
   {
     return hivefile_.get_metadata ();
@@ -214,12 +214,10 @@ registry_file::get_root_key () const
 // @brief get metadata
 // @return metadata list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::metadata
+mobius::core::metadata
 registry_file::get_metadata () const
 {
   return impl_->get_metadata ();
 }
 
 } // namespace mobius::os::win::registry
-
-

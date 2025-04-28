@@ -295,7 +295,7 @@ tp_f_add_button (ui_message_dialog_o *self, PyObject *args)
     {
       if (mobius::py::pylong_check (obj))
         {
-          auto button_id = static_cast <mobius::ui::message_dialog::button> (mobius::py::pylong_as_int (obj));
+          auto button_id = static_cast <mobius::core::ui::message_dialog::button> (mobius::py::pylong_as_int (obj));
           ret = mobius::py::pylong_from_int (self->obj->add_button (button_id));
         }
       else if (mobius::py::pystring_check (obj))
@@ -324,11 +324,11 @@ static PyObject *
 tp_f_set_default_response (ui_message_dialog_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::ui::message_dialog::response_type arg_response_id;
+  mobius::core::ui::message_dialog::response_type arg_response_id;
 
   try
     {
-      arg_response_id = static_cast <mobius::ui::message_dialog::response_type> (mobius::py::get_arg_as_int (args, 0));
+      arg_response_id = static_cast <mobius::core::ui::message_dialog::response_type> (mobius::py::get_arg_as_int (args, 0));
     }
   catch (const std::exception& e)
     {
@@ -413,11 +413,11 @@ static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
   // Parse input args
-  mobius::ui::message_dialog::type arg_type;
+  mobius::core::ui::message_dialog::type arg_type;
 
   try
     {
-      arg_type = static_cast <mobius::ui::message_dialog::type> (mobius::py::get_arg_as_int (args, 0));
+      arg_type = static_cast <mobius::core::ui::message_dialog::type> (mobius::py::get_arg_as_int (args, 0));
     }
   catch (const std::exception& e)
     {
@@ -432,7 +432,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::ui::message_dialog (arg_type);
+          ret->obj = new mobius::core::ui::message_dialog (arg_type);
         }
       catch (const std::exception& e)
         {
@@ -564,12 +564,12 @@ pymobius_ui_message_dialog_check (PyObject *value)
 // @return New message_dialog object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_ui_message_dialog_to_pyobject (const mobius::ui::message_dialog& obj)
+pymobius_ui_message_dialog_to_pyobject (const mobius::core::ui::message_dialog& obj)
 {
   PyObject *ret = _PyObject_New (&ui_message_dialog_t);
 
   if (ret)
-    ((ui_message_dialog_o *) ret)->obj = new mobius::ui::message_dialog (obj);
+    ((ui_message_dialog_o *) ret)->obj = new mobius::core::ui::message_dialog (obj);
 
   return ret;
 }
@@ -579,7 +579,7 @@ pymobius_ui_message_dialog_to_pyobject (const mobius::ui::message_dialog& obj)
 // @param value Python value
 // @return Message_dialog object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::ui::message_dialog
+mobius::core::ui::message_dialog
 pymobius_ui_message_dialog_from_pyobject (PyObject *value)
 {
   if (!pymobius_ui_message_dialog_check (value))

@@ -23,7 +23,7 @@
 #include <Python.h>
 #include <pymobius.hpp>
 #include <pygil.hpp>
-#include <mobius/encoder/base64.h>
+#include <mobius/core/encoder/base64.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief base32 function
@@ -53,7 +53,7 @@ encoder_func_base32 (PyObject *, PyObject *args)
     {
       ret = mobius::py::pystring_from_std_string (
                mobius::py::GIL () (
-                  mobius::encoder::base32 (arg_data)
+                  mobius::core::encoder::base32 (arg_data)
                )
             );
 

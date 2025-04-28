@@ -70,8 +70,8 @@ ui_impl::flush ()
 // @brief Create new box
 // @param orientation Orientation type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::shared_ptr <mobius::ui::box_impl_base>
-ui_impl::new_box (mobius::ui::box_impl_base::orientation_type orientation) const
+std::shared_ptr <mobius::core::ui::box_impl_base>
+ui_impl::new_box (mobius::core::ui::box_impl_base::orientation_type orientation) const
 {
   return std::make_shared <box_impl> (orientation);
 }
@@ -79,7 +79,7 @@ ui_impl::new_box (mobius::ui::box_impl_base::orientation_type orientation) const
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create new button
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::shared_ptr <mobius::ui::button_impl_base>
+std::shared_ptr <mobius::core::ui::button_impl_base>
 ui_impl::new_button () const
 {
   return std::make_shared <button_impl> ();
@@ -91,17 +91,17 @@ ui_impl::new_button () const
 // @param size Icon size
 // @return Pointer to icon implementation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::shared_ptr <mobius::ui::icon_impl_base>
-ui_impl::new_icon_by_name (const std::string& name, mobius::ui::icon_impl_base::size_type size) const
+std::shared_ptr <mobius::core::ui::icon_impl_base>
+ui_impl::new_icon_by_name (const std::string& name, mobius::core::ui::icon_impl_base::size_type size) const
 {
   GtkIconSize gtk_icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
 
   switch (size)
   {
-    case mobius::ui::icon_impl_base::size_type::menu: gtk_icon_size = GTK_ICON_SIZE_MENU; break;
-    case mobius::ui::icon_impl_base::size_type::toolbar: gtk_icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR; break;
-    case mobius::ui::icon_impl_base::size_type::dnd: gtk_icon_size = GTK_ICON_SIZE_DND; break;
-    case mobius::ui::icon_impl_base::size_type::dialog: gtk_icon_size = GTK_ICON_SIZE_DIALOG; break;
+    case mobius::core::ui::icon_impl_base::size_type::menu: gtk_icon_size = GTK_ICON_SIZE_MENU; break;
+    case mobius::core::ui::icon_impl_base::size_type::toolbar: gtk_icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR; break;
+    case mobius::core::ui::icon_impl_base::size_type::dnd: gtk_icon_size = GTK_ICON_SIZE_DND; break;
+    case mobius::core::ui::icon_impl_base::size_type::dialog: gtk_icon_size = GTK_ICON_SIZE_DIALOG; break;
     default: gtk_icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
   };
 
@@ -116,8 +116,8 @@ ui_impl::new_icon_by_name (const std::string& name, mobius::ui::icon_impl_base::
 // @param size Icon size
 // @return Pointer to icon implementation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::shared_ptr <mobius::ui::icon_impl_base>
-ui_impl::new_icon_from_data (const mobius::bytearray& data, mobius::ui::icon_impl_base::size_type size) const
+std::shared_ptr <mobius::core::ui::icon_impl_base>
+ui_impl::new_icon_from_data (const mobius::bytearray& data, mobius::core::ui::icon_impl_base::size_type size) const
 {
   GdkPixbufLoader *loader = gdk_pixbuf_loader_new ();
   gdk_pixbuf_loader_set_size (loader, static_cast <int> (size), static_cast <int> (size));
@@ -134,7 +134,7 @@ ui_impl::new_icon_from_data (const mobius::bytearray& data, mobius::ui::icon_imp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create new Label
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::shared_ptr <mobius::ui::label_impl_base>
+std::shared_ptr <mobius::core::ui::label_impl_base>
 ui_impl::new_label () const
 {
   return std::make_shared <label_impl> ();
@@ -144,8 +144,8 @@ ui_impl::new_label () const
 // @brief Create new Message Dialog
 // @param t Message type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::shared_ptr <mobius::ui::message_dialog_impl_base>
-ui_impl::new_message_dialog (mobius::ui::message_dialog_impl_base::type t) const
+std::shared_ptr <mobius::core::ui::message_dialog_impl_base>
+ui_impl::new_message_dialog (mobius::core::ui::message_dialog_impl_base::type t) const
 {
   return std::make_shared <message_dialog_impl> (t);
 }
@@ -154,7 +154,7 @@ ui_impl::new_message_dialog (mobius::ui::message_dialog_impl_base::type t) const
 // @brief Create new Widget
 // @param w Low level widget object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::shared_ptr <mobius::ui::widget_impl_base>
+std::shared_ptr <mobius::core::ui::widget_impl_base>
 ui_impl::new_widget (std::any w, bool) const
 {
   return std::make_shared <widget_impl> (w);
@@ -163,7 +163,7 @@ ui_impl::new_widget (std::any w, bool) const
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create new Window
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::shared_ptr <mobius::ui::window_impl_base>
+std::shared_ptr <mobius::core::ui::window_impl_base>
 ui_impl::new_window () const
 {
   return std::make_shared <window_impl> ();

@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/ui/widget_impl_base.h>
+#include <mobius/core/ui/widget_impl_base.hpp>
 #include <memory>
 #include <gtk/gtk.h>
 
@@ -28,7 +28,7 @@ namespace mobius::extension::ui::gtk3
 // @brief GTK3 widget implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class widget_impl : public mobius::ui::widget_impl_base
+class widget_impl : public mobius::core::ui::widget_impl_base
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

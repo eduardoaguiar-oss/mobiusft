@@ -102,7 +102,3 @@ stop ()
   mobius::core::remove_resource ("file_decoder.builder.app-ares-sharel");
   mobius::core::remove_resource ("file_decoder.builder.app-ares-torrenth");
 }
-
-
-
-

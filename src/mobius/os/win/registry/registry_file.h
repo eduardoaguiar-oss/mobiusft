@@ -18,10 +18,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/core/metadata.hpp>
 #include <mobius/os/win/registry/registry_key.h>
 #include <mobius/datetime/datetime.h>
 #include <mobius/io/reader.h>
-#include <mobius/metadata.h>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -50,7 +50,7 @@ public:
   std::string get_path () const;
   mobius::datetime::datetime get_last_modification_time () const;
   registry_key get_root_key () const;
-  mobius::metadata get_metadata () const;
+  mobius::core::metadata get_metadata () const;
 
 private:
   // @brief implementation class forward declaration

@@ -20,7 +20,7 @@
 #include <mobius/core/mediator.hpp>
 #include <mobius/datetime/datetime.h>
 #include <mobius/datetime/timedelta.h>
-#include <mobius/model/item.h>
+#include <mobius/framework/model/item.hpp>
 #include <mobius/pod/data.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -56,7 +56,7 @@ static std::uint64_t subscription_id_ = -1;
 static void
 _callback
 (
-  mobius::model::item item,
+  mobius::framework::model::item item,
   const std::string& attr_id,
   const mobius::pod::data&,
   const mobius::pod::data& new_value

@@ -37,7 +37,7 @@ evidence_loader::evidence_loader ()
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 evidence_loader::evidence_loader (
   const std::string& id,
-  const mobius::model::item& item,
+  const mobius::framework::model::item& item,
   scan_type type)
 {
   auto resource = mobius::core::get_resource ("evidence_loader.builder." + id);

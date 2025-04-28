@@ -35,7 +35,7 @@ tp_f_add_child (ui_stacked_container_o *self, PyObject *args)
 {
   // Parse input args
   std::string arg_widget_id;
-  mobius::ui::widget arg_w;
+  mobius::core::ui::widget arg_w;
 
   try
     {
@@ -252,7 +252,7 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::ui::stacked_container ();
+          ret->obj = new mobius::core::ui::stacked_container ();
         }
       catch (const std::exception& e)
         {
@@ -360,7 +360,7 @@ pymobius_ui_stacked_container_check (PyObject *value)
 // @return New stacked_container object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_ui_stacked_container_to_pyobject (const mobius::ui::stacked_container& obj)
+pymobius_ui_stacked_container_to_pyobject (const mobius::core::ui::stacked_container& obj)
 {
   return mobius::py::to_pyobject <ui_stacked_container_o> (obj, &ui_stacked_container_t);
 }
@@ -370,7 +370,7 @@ pymobius_ui_stacked_container_to_pyobject (const mobius::ui::stacked_container& 
 // @param value Python value
 // @return Stacked_container object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::ui::stacked_container
+mobius::core::ui::stacked_container
 pymobius_ui_stacked_container_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <ui_stacked_container_o> (value, &ui_stacked_container_t);

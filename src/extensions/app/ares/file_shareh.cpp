@@ -19,7 +19,7 @@
 #include "common.hpp"
 #include <mobius/core/log.hpp>
 #include <mobius/decoder/data_decoder.h>
-#include <mobius/encoder/hexstring.h>
+#include <mobius/core/encoder/hexstring.hpp>
 
 namespace
 {
@@ -120,7 +120,7 @@ file_shareh::file_shareh (const mobius::io::reader& reader)
       // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
       entry e;
       e.idx = idx;
-      e.hash_sha1 = mobius::encoder::hexstring (data.slice (0,19));
+      e.hash_sha1 = mobius::core::encoder::hexstring (data.slice (0,19));
       e.is_shared = (data[20] == 1);
       shared_count_ += e.is_shared;
 
