@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "text_reader.h"
-#include <mobius/charset.h>
+#include <mobius/core/charset.hpp>
 #include <mobius/string_functions.h>
 
 namespace mobius::io
@@ -93,7 +93,7 @@ text_reader::_read_chars (reader::size_type size)
         {
           // convert data encoding
           data_ += data;
-          auto p = conv_charset_to_utf8_partial (data_, encoding_);
+          auto p = mobius::core::conv_charset_to_utf8_partial (data_, encoding_);
 
           // update buffers
           str_ += p.first;

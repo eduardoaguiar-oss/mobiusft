@@ -21,7 +21,7 @@
 #include <mobius/bytearray.h>
 #include <mobius/datetime/datetime.h>
 #include <mobius/io/file.h>
-#include <mobius/vfs/imagefile_impl_base.h>
+#include <mobius/core/vfs/imagefile_impl_base.hpp>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -31,7 +31,7 @@
 // @author Eduardo Aguiar
 // @see https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-VHDX/%5bMS-VHDX%5d.pd
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class imagefile_impl : public mobius::vfs::imagefile_impl_base
+class imagefile_impl : public mobius::core::vfs::imagefile_impl_base
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -50,9 +50,9 @@ public:
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit imagefile_impl (const mobius::io::file&);
-  mobius::pod::data get_attribute (const std::string&) const override;
-  void set_attribute (const std::string&, const mobius::pod::data&) override;
-  mobius::pod::map get_attributes () const override;
+  mobius::core::pod::data get_attribute (const std::string&) const override;
+  void set_attribute (const std::string&, const mobius::core::pod::data&) override;
+  mobius::core::pod::map get_attributes () const override;
   mobius::io::reader new_reader () const override;
   mobius::io::writer new_writer () const override;
   bat_type get_block_allocation_table () const;
@@ -180,7 +180,7 @@ private:
   mutable bat_type block_allocation_table_;
 
   // @brief attributes
-  mutable mobius::pod::map attributes_;
+  mutable mobius::core::pod::map attributes_;
 
   // @brief flag: metadata loaded
   mutable bool metadata_loaded_ = false;

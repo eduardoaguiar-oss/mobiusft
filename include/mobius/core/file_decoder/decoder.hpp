@@ -100,7 +100,7 @@ public:
   // @param name Metadata name
   // @return Metadata value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::data
+  mobius::core::pod::data
   get_metadata (const std::string& group_id, const std::string& name) const
   {
     auto metadata = impl_->get_metadata ();
@@ -118,7 +118,7 @@ public:
   {
     T value;
 
-    mobius::pod::data d = get_metadata (group_id, name);
+    mobius::core::pod::data d = get_metadata (group_id, name);
 
     if (!d.is_null ())
       value = static_cast <T> (d);
@@ -131,7 +131,7 @@ public:
   // @param group_id Group ID
   // @return Metadata
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::map
+  mobius::core::pod::map
   get_metadata_group (const std::string& group_id) const
   {
     auto metadata = impl_->get_metadata ();

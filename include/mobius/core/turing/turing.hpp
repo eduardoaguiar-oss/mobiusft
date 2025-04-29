@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/database/transaction.h>
+#include <mobius/core/database/transaction.hpp>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -61,7 +61,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::database::transaction new_transaction ();
+  mobius::core::database::transaction new_transaction ();
 
   bool has_hash (const std::string&, const std::string&);
   void set_hash (const std::string&, const std::string&, const std::string&);

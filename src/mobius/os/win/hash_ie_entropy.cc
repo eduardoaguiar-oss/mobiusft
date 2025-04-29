@@ -16,8 +16,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "hash_ie_entropy.h"
-#include <mobius/charset.h>
-#include <mobius/crypt/hash.h>
+#include <mobius/core/charset.hpp>
+#include <mobius/core/crypt/hash.hpp>
 #include <numeric>
 
 namespace mobius::os::win
@@ -30,8 +30,8 @@ namespace mobius::os::win
 mobius::bytearray
 hash_ie_entropy (const std::string& url)
 {
-  mobius::crypt::hash h ("sha1");
-  h.update (mobius::conv_charset (url + '\0', "UTF-8", "UTF-16LE"));
+  mobius::core::crypt::hash h ("sha1");
+  h.update (mobius::core::conv_charset (url + '\0', "UTF-8", "UTF-16LE"));
   auto digest = h.get_digest ();
 
   mobius::bytearray sum = {std::accumulate (digest.begin (), digest.end (), std::uint8_t (0))};

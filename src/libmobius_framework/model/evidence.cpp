@@ -76,11 +76,11 @@ public:
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool has_attribute (const std::string&) const;
-  mobius::pod::data get_attribute (const std::string&) const;
-  void set_attribute (const std::string&, const mobius::pod::data&);
-  void set_attributes (const std::map <std::string, mobius::pod::data>&);
+  mobius::core::pod::data get_attribute (const std::string&) const;
+  void set_attribute (const std::string&, const mobius::core::pod::data&);
+  void set_attributes (const std::map <std::string, mobius::core::pod::data>&);
   void remove_attribute (const std::string&);
-  std::map <std::string, mobius::pod::data> get_attributes () const;
+  std::map <std::string, mobius::core::pod::data> get_attributes () const;
 
   bool has_tag (const std::string&) const;
   void set_tag (const std::string&);
@@ -96,7 +96,7 @@ private:
   // @brief Get database
   // @return database
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::database::database
+  mobius::core::database::database
   _get_database () const
   {
     return case_.get_database ();
@@ -157,7 +157,7 @@ evidence::impl::has_attribute (const std::string& id) const
 // @param id Attribute ID
 // @return Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::data
+mobius::core::pod::data
 evidence::impl::get_attribute (const std::string& id) const
 {
   auto db = _get_database ();
@@ -183,10 +183,10 @@ evidence::impl::get_attribute (const std::string& id) const
 // @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence::impl::set_attribute (const std::string& id, const mobius::pod::data& value)
+evidence::impl::set_attribute (const std::string& id, const mobius::core::pod::data& value)
 {
   auto db = _get_database ();
-  mobius::database::statement stmt;
+  mobius::core::database::statement stmt;
 
   if (has_attribute (id))
     {
@@ -238,7 +238,7 @@ evidence::impl::remove_attribute (const std::string& id)
 // @brief Get attributes
 // @return Map with ID -> value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::map <std::string, mobius::pod::data>
+std::map <std::string, mobius::core::pod::data>
 evidence::impl::get_attributes () const
 {
   auto db = _get_database ();
@@ -249,7 +249,7 @@ evidence::impl::get_attributes () const
                  "WHERE evidence_uid = ?");
 
   stmt.bind (1, get_uid ());
-  std::map <std::string, mobius::pod::data> values;
+  std::map <std::string, mobius::core::pod::data> values;
 
   while (stmt.fetch_row ())
     {
@@ -292,7 +292,7 @@ evidence::impl::set_tag (const std::string& name)
 {
   auto db = _get_database ();
 
-  mobius::database::statement stmt = db.new_statement (
+  mobius::core::database::statement stmt = db.new_statement (
            "INSERT OR IGNORE INTO evidence_tag "
                           "VALUES (NULL, ?, ?)");
 
@@ -375,7 +375,7 @@ evidence::impl::add_source (
 {
   auto db = _get_database ();
 
-  mobius::database::statement stmt = db.new_statement (
+  mobius::core::database::statement stmt = db.new_statement (
            "INSERT INTO evidence_source "
                 "VALUES (NULL, ?, ?, ?, ?)");
 
@@ -487,7 +487,7 @@ evidence::has_attribute (const std::string& id) const
 // @param id Attribute ID
 // @return Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::data
+mobius::core::pod::data
 evidence::get_attribute (const std::string& id) const
 {
   if (!impl_)
@@ -502,7 +502,7 @@ evidence::get_attribute (const std::string& id) const
 // @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence::set_attribute (const std::string& id, const mobius::pod::data& value)
+evidence::set_attribute (const std::string& id, const mobius::core::pod::data& value)
 {
   if (!impl_)
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("evidence object is null"));
@@ -515,7 +515,7 @@ evidence::set_attribute (const std::string& id, const mobius::pod::data& value)
 // @param attributes Map of attr_id -> attr_value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence::set_attributes (const std::map <std::string, mobius::pod::data>& attributes)
+evidence::set_attributes (const std::map <std::string, mobius::core::pod::data>& attributes)
 {
   if (!impl_)
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("evidence object is null"));
@@ -544,7 +544,7 @@ evidence::remove_attribute (const std::string& id)
 // @brief Get attributes
 // @return Map with ID -> value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::map <std::string, mobius::pod::data>
+std::map <std::string, mobius::core::pod::data>
 evidence::get_attributes () const
 {
   if (!impl_)

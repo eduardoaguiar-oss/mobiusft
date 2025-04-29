@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "imagefile_impl.hpp"
 #include <mobius/core/resource.hpp>
-#include <mobius/vfs/imagefile.h>
+#include <mobius/core/vfs/imagefile.hpp>
 #include <cstdint>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -41,7 +41,7 @@ start ()
   mobius::core::add_resource (
      "vfs.imagefile.vhdx",
      "VHDX image file",
-     mobius::vfs::make_imagefile_resource <imagefile_impl> ()
+     mobius::core::vfs::make_imagefile_resource <imagefile_impl> ()
   );
 }
 

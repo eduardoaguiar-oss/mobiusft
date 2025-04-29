@@ -18,7 +18,7 @@
 #include "btencode.h"
 #include <mobius/io/bytearray_io.h>
 #include <mobius/io/sequential_reader_adaptor.h>
-#include <mobius/pod/map.h>
+#include <mobius/core/pod/map.hpp>
 #include <mobius/string_functions.h>
 #include <mobius/exception.inc>
 #include <stdexcept>
@@ -31,20 +31,20 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::pod::map _decode_dict (mobius::io::sequential_reader_adaptor&);
-static std::vector <mobius::pod::data> _decode_list (mobius::io::sequential_reader_adaptor&);
-static mobius::pod::data _decode_string (mobius::io::sequential_reader_adaptor&);
-static mobius::pod::data _decode_integer (mobius::io::sequential_reader_adaptor&);
+static mobius::core::pod::map _decode_dict (mobius::io::sequential_reader_adaptor&);
+static std::vector <mobius::core::pod::data> _decode_list (mobius::io::sequential_reader_adaptor&);
+static mobius::core::pod::data _decode_string (mobius::io::sequential_reader_adaptor&);
+static mobius::core::pod::data _decode_integer (mobius::io::sequential_reader_adaptor&);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Decode btencode data, according to type
 // @param adaptor Reader adaptor object
 // @return Pod object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::pod::data
+static mobius::core::pod::data
 _decode_data (mobius::io::sequential_reader_adaptor& adaptor)
 {
-  mobius::pod::data data;
+  mobius::core::pod::data data;
 
   auto b = adaptor.peek ();
 
@@ -73,10 +73,10 @@ _decode_data (mobius::io::sequential_reader_adaptor& adaptor)
 // @param adaptor sequential_reader_adaptor object
 // @return Dict object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::pod::map
+static mobius::core::pod::map
 _decode_dict (mobius::io::sequential_reader_adaptor& adaptor)
 {
-  mobius::pod::map m;
+  mobius::core::pod::map m;
 
   adaptor.skip (1);	// 'd'
 
@@ -98,10 +98,10 @@ _decode_dict (mobius::io::sequential_reader_adaptor& adaptor)
 // @param adaptor sequential_reader_adaptor object
 // @return Vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static std::vector <mobius::pod::data>
+static std::vector <mobius::core::pod::data>
 _decode_list (mobius::io::sequential_reader_adaptor& adaptor)
 {
-  std::vector <mobius::pod::data> v;
+  std::vector <mobius::core::pod::data> v;
 
   adaptor.skip (1);	// 'l'
 
@@ -121,10 +121,10 @@ _decode_list (mobius::io::sequential_reader_adaptor& adaptor)
 // @param adaptor sequential_reader_adaptor object
 // @return Dict object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::pod::data
+static mobius::core::pod::data
 _decode_string (mobius::io::sequential_reader_adaptor& adaptor)
 {
-  mobius::pod::data data;
+  mobius::core::pod::data data;
 
   // get string size
   std::string s_siz;
@@ -140,7 +140,7 @@ _decode_string (mobius::io::sequential_reader_adaptor& adaptor)
   auto size = std::strtoull (s_siz.c_str (), nullptr, 10);
   auto value = adaptor.get (size);
 
-  return mobius::pod::data (value);
+  return mobius::core::pod::data (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -148,10 +148,10 @@ _decode_string (mobius::io::sequential_reader_adaptor& adaptor)
 // @param adaptor sequential_reader_adaptor object
 // @return Integer as pod::data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::pod::data
+static mobius::core::pod::data
 _decode_integer (mobius::io::sequential_reader_adaptor& adaptor)
 {
-  mobius::pod::data data;
+  mobius::core::pod::data data;
 
   adaptor.skip (1);	// 'i'
   std::string s_value;
@@ -165,7 +165,7 @@ _decode_integer (mobius::io::sequential_reader_adaptor& adaptor)
     }
 
   std::uint64_t value = std::strtoull (s_value.c_str (), nullptr, 10);
-  return mobius::pod::data (value);
+  return mobius::core::pod::data (value);
 }
 
 } // namespace
@@ -175,7 +175,7 @@ _decode_integer (mobius::io::sequential_reader_adaptor& adaptor)
 // @param reader Reader object
 // @return Pod object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::data
+mobius::core::pod::data
 btencode (const mobius::io::reader& reader)
 {
   mobius::io::sequential_reader_adaptor adaptor (reader);
@@ -187,7 +187,7 @@ btencode (const mobius::io::reader& reader)
 // @param data Data
 // @return Pod object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::data
+mobius::core::pod::data
 btencode (const mobius::bytearray& data)
 {
   return btencode (mobius::io::new_bytearray_reader (data));

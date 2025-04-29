@@ -19,8 +19,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/decoder/data_decoder.h>
-#include <mobius/pod/data.h>
-#include <mobius/pod/map.h>
+#include <mobius/core/pod/data.hpp>
+#include <mobius/core/pod/map.hpp>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -71,7 +71,7 @@ public:
   // @brief Get tag value
   // @return Tag value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::data
+  mobius::core::pod::data
   get_value () const
   {
     return value_;
@@ -99,13 +99,13 @@ private:
   std::string name_;
   
   // @brief Tag value
-  mobius::pod::data value_;
+  mobius::core::pod::data value_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::map get_metadata_from_tags (const std::vector<ctag>&);
+mobius::core::pod::map get_metadata_from_tags (const std::vector<ctag>&);
 
 } // namespace mobius::extension::app::emule
 #endif

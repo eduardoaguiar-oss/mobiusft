@@ -19,7 +19,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/bytearray.h>
-#include <mobius/database/transaction.h>
+#include <mobius/core/database/database.hpp>
+#include <mobius/core/database/transaction.hpp>
 #include <mobius/framework/attribute.hpp>
 #include <cstdint>
 #include <string>
@@ -83,8 +84,8 @@ category new_category (const std::string&);
 void remove_category (const std::string&);
 std::vector <category> get_categories ();
 void remove_categories ();
-mobius::database::database get_category_database ();
-mobius::database::transaction new_category_transaction ();
+mobius::core::database::database get_category_database ();
+mobius::core::database::transaction new_category_transaction ();
 
 } // namespace mobius::framework
 

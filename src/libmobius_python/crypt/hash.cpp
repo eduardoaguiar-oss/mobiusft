@@ -41,7 +41,7 @@ pymobius_crypt_hash_check (PyObject *value)
 // @return New hash object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_crypt_hash_to_pyobject (const mobius::crypt::hash& obj)
+pymobius_crypt_hash_to_pyobject (const mobius::core::crypt::hash& obj)
 {
   return mobius::py::to_pyobject_nullable <crypt_hash_o> (obj, &crypt_hash_t);
 }
@@ -51,7 +51,7 @@ pymobius_crypt_hash_to_pyobject (const mobius::crypt::hash& obj)
 // @param value Python value
 // @return Hash object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::crypt::hash
+mobius::core::crypt::hash
 pymobius_crypt_hash_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <crypt_hash_o> (value, &crypt_hash_t);
@@ -350,7 +350,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ((crypt_hash_o *) ret)->obj = new mobius::crypt::hash (arg_type);
+          ((crypt_hash_o *) ret)->obj = new mobius::core::crypt::hash (arg_type);
         }
 
       catch (const std::exception& e)

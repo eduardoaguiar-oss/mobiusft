@@ -65,7 +65,7 @@ public:
   // @param name Metadata name
   // @return Metadata value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::data
+  mobius::core::pod::data
   get_metadata (const std::string& name) const
   {
     return metadata_.get (name);
@@ -77,7 +77,7 @@ public:
   // @param value Metadata value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
-  set_metadata (const std::string& name, const mobius::pod::data& value)
+  set_metadata (const std::string& name, const mobius::core::pod::data& value)
   {
     metadata_.set (name, value);
   }
@@ -86,7 +86,7 @@ public:
   // @brief Get all metadata
   // @return Metadata map
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::map
+  mobius::core::pod::map
   get_all_metadata () const
   {
     return metadata_.clone ();
@@ -100,7 +100,7 @@ private:
   std::string name_;
 
   // @brief Metadata
-  mobius::pod::map metadata_;
+  mobius::core::pod::map metadata_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -129,7 +129,7 @@ entry::entry (idx_type idx, const std::string& name)
 // @param name Metadata name
 // @return Metadata value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::data
+mobius::core::pod::data
 entry::get_metadata (const std::string& name) const
 {
   return impl_->get_metadata (name);
@@ -139,7 +139,7 @@ entry::get_metadata (const std::string& name) const
 // @brief Get metadata
 // @return Metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::map
+mobius::core::pod::map
 entry::get_all_metadata () const
 {
   return impl_->get_all_metadata ();
@@ -151,7 +151,7 @@ entry::get_all_metadata () const
 // @param value Metadata value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-entry::set_metadata (const std::string& name, const mobius::pod::data& value)
+entry::set_metadata (const std::string& name, const mobius::core::pod::data& value)
 {
   impl_->set_metadata (name, value);
 }

@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "registry_data_impl_lsa_polseckey.h"
-#include <mobius/crypt/cipher.h>
+#include <mobius/core/crypt/cipher.hpp>
 #include <mobius/decoder/data_decoder.h>
 
 namespace mobius::os::win::registry
@@ -39,7 +39,7 @@ decrypt_sysfcn5 (const mobius::bytearray& lsa_key, const mobius::bytearray& data
 
   while (i < l)
     {
-      auto des = mobius::crypt::new_cipher_ecb ("des", lsa_key.slice (j, j + 6));
+      auto des = mobius::core::crypt::new_cipher_ecb ("des", lsa_key.slice (j, j + 6));
       plaintext += des.decrypt (ciphertext.slice (i, i + 7));
       i += 8;
       j += 7;

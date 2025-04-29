@@ -32,13 +32,13 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_database_connection_set_to_pyobject (
-  const mobius::database::connection_set& obj
+  const mobius::core::database::connection_set& obj
 )
 {
   PyObject *ret = _PyObject_New (&database_connection_set_t);
 
   if (ret)
-    ((database_connection_set_o *) ret)->obj = new mobius::database::connection_set (obj);
+    ((database_connection_set_o *) ret)->obj = new mobius::core::database::connection_set (obj);
 
   return ret;
 }
@@ -52,7 +52,7 @@ static PyObject *
 tp_f_add (database_connection_set_o *self, PyObject *args)
 {
   // parse input args
-  mobius::database::connection arg_connection;
+  mobius::core::database::connection arg_connection;
 
   try
     {

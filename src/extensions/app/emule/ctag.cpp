@@ -113,7 +113,7 @@ std::unordered_map <std::uint8_t, std::string> TAG_METADATA_NAMES =
 // @param value Tag UINT32 value
 // @return Get value formatted
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::data
+mobius::core::pod::data
 _get_tag_uint32_value (std::uint8_t id, std::uint32_t value)
 {
     switch (id)
@@ -290,10 +290,10 @@ ctag::ctag (mobius::decoder::data_decoder& decoder)
 // @param ctags CTag list
 // @return Metadata map
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::map
+mobius::core::pod::map
 get_metadata_from_tags (const std::vector<ctag>& ctags)
 {
-    mobius::pod::map metadata;
+    mobius::core::pod::map metadata;
     mobius::core::log log (__FILE__, __FUNCTION__);
 
     std::uint64_t uploaded_bytes = 0;

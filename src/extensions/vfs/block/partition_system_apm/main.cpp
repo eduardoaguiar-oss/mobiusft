@@ -18,7 +18,7 @@
 #include <mobius/core/resource.hpp>
 #include <mobius/decoder/data_decoder.h>
 #include <mobius/string_functions.h>
-#include <mobius/vfs/block.h>
+#include <mobius/core/vfs/block.hpp>
 #include <map>
 
 namespace
@@ -72,9 +72,9 @@ static const std::map <const std::string, const std::string> PARTITION_DESCRIPTI
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static bool
 decoder (
-  const mobius::vfs::block& block,
-  std::vector <mobius::vfs::block>& new_blocks,
-  std::vector <mobius::vfs::block>&
+  const mobius::core::vfs::block& block,
+  std::vector <mobius::core::vfs::block>& new_blocks,
+  std::vector <mobius::core::vfs::block>&
 )
 {
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -122,7 +122,7 @@ decoder (
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Create partition system block
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto ps_block = mobius::vfs::new_slice_block (block, "partition_system");
+  auto ps_block = mobius::core::vfs::new_slice_block (block, "partition_system");
   sector_size_type sector_size = sb_blk_size;
   sector_type sectors = (block.get_size () + sector_size - 1) / sector_size;
 
@@ -280,7 +280,7 @@ start ()
   mobius::core::add_resource (
      "vfs.block.decoder.partition_system_apm",
      "APM partition system block decoder",
-     static_cast <mobius::vfs::block_decoder_resource_type> (decoder)
+     static_cast <mobius::core::vfs::block_decoder_resource_type> (decoder)
   );
 }
 

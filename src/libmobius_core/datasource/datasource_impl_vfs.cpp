@@ -25,8 +25,8 @@ namespace mobius::core::datasource
 // @brief Constructor
 // @param state Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-datasource_impl_vfs::datasource_impl_vfs (const mobius::pod::map& state)
-  : vfs_ (state.get<mobius::pod::map> ("state"))
+datasource_impl_vfs::datasource_impl_vfs (const mobius::core::pod::map& state)
+  : vfs_ (state.get<mobius::core::pod::map> ("state"))
 {
   auto type = state.get<std::string> ("type");
 
@@ -38,7 +38,7 @@ datasource_impl_vfs::datasource_impl_vfs (const mobius::pod::map& state)
 // @brief Constructor
 // @param vfs VFS object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-datasource_impl_vfs::datasource_impl_vfs (const mobius::vfs::vfs& vfs)
+datasource_impl_vfs::datasource_impl_vfs (const mobius::core::vfs::vfs& vfs)
   : vfs_ (vfs)
 {
 }
@@ -47,7 +47,7 @@ datasource_impl_vfs::datasource_impl_vfs (const mobius::vfs::vfs& vfs)
 // @brief Get object state
 // @return Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::map
+mobius::core::pod::map
 datasource_impl_vfs::get_state () const
 {
   return {

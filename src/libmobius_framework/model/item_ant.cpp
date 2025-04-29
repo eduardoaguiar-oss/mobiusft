@@ -56,7 +56,7 @@ item::set_ant (
 )
 {
   auto db = get_database ();
-  mobius::database::statement stmt;
+  mobius::core::database::statement stmt;
 
   if (has_ant (id))
     {

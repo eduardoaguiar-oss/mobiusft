@@ -16,9 +16,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "imagefile_impl.hpp"
-#include <mobius/vfs/imagefile.h>
-#include <mobius/vfs/util.h>
-#include <mobius/charset.h>
+#include <mobius/core/charset.hpp>
+#include <mobius/core/vfs/imagefile.hpp>
+#include <mobius/core/vfs/util.hpp>
 #include <mobius/exception.inc>
 #include <mobius/string_functions.h>
 #include <cctype>
@@ -56,7 +56,7 @@ imagefile_impl::is_instance (const mobius::io::file& f)
 imagefile_impl::imagefile_impl (const mobius::io::file& f)
   : file_ (f),
     split_imagefile_impl_ (
-       mobius::vfs::build_imagefile_implementation (
+       mobius::core::vfs::build_imagefile_implementation (
           f.new_sibling_by_extension ("001"),
           "split"
        )
@@ -69,7 +69,7 @@ imagefile_impl::imagefile_impl (const mobius::io::file& f)
 // @param name Attribute name
 // @return Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::data
+mobius::core::pod::data
 imagefile_impl::get_attribute (const std::string& name) const
 {
   _load_metadata ();
@@ -84,7 +84,7 @@ imagefile_impl::get_attribute (const std::string& name) const
 void
 imagefile_impl::set_attribute (
   const std::string&,
-  const mobius::pod::data&
+  const mobius::core::pod::data&
 )
 {
   throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("set_attribute not implemented"));
@@ -94,7 +94,7 @@ imagefile_impl::set_attribute (
 // @brief Get attributes
 // @return Attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::map
+mobius::core::pod::map
 imagefile_impl::get_attributes () const
 {
   _load_metadata ();
@@ -152,7 +152,7 @@ imagefile_impl::_load_metadata () const
   // parse .txt file
   auto reader = file_.new_reader ();
   mobius::bytearray data = reader.read (file_.get_size ());
-  const std::string text = conv_charset_to_utf8 (data, "ASCII");
+  const std::string text = mobius::core::conv_charset_to_utf8 (data, "ASCII");
   std::smatch match;
 
   std::string acquisition_platform;
@@ -218,7 +218,7 @@ imagefile_impl::_load_metadata () const
   size_type segment_size = std::int64_t (split_imagefile_impl_->get_attribute ("segment_size"));
   std::string acquisition_user = file_.get_user_name ();
 
-  mobius::vfs::normalize_drive_info (drive_vendor, drive_model, drive_serial_number);
+  mobius::core::vfs::normalize_drive_info (drive_vendor, drive_model, drive_serial_number);
 
   // fill attributes
   attributes_.set ("drive_vendor", drive_vendor);

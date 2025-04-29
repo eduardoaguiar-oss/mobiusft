@@ -72,20 +72,20 @@ decoder_impl_arestra::decode (const mobius::io::reader& reader)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Get alt_sources
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::vector <mobius::pod::data> alt_sources;
+  std::vector <mobius::core::pod::data> alt_sources;
 
   for (const auto& [ip, port] : arestra.get_alt_sources ())
-    alt_sources.emplace_back (mobius::pod::data {ip, port});
+    alt_sources.emplace_back (mobius::core::pod::data {ip, port});
 
   metadata_.set_value ("general", "alt_sources", alt_sources);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Get gaps
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::vector <mobius::pod::data> gaps;
+  std::vector <mobius::core::pod::data> gaps;
 
   for (const auto& [start, end] : arestra.get_gaps ())
-    gaps.emplace_back (mobius::pod::data {start, end});
+    gaps.emplace_back (mobius::core::pod::data {start, end});
 
   metadata_.set_value ("general", "gaps", gaps);
 

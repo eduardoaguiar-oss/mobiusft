@@ -16,8 +16,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "registry_data_impl_lsa_poleklist.h"
-#include <mobius/crypt/cipher.h>
-#include <mobius/crypt/hash.h>
+#include <mobius/core/crypt/cipher.hpp>
+#include <mobius/core/crypt/hash.hpp>
 #include <mobius/decoder/data_decoder.h>
 
 namespace mobius::os::win::registry
@@ -32,7 +32,7 @@ mobius::bytearray
 decrypt_aes (const mobius::bytearray& key, const mobius::bytearray& ciphertext)
 {
   // generate AES key
-  mobius::crypt::hash sha256 ("sha2-256");
+  mobius::core::crypt::hash sha256 ("sha2-256");
   sha256.update (key);
 
   const mobius::bytearray iv = ciphertext.slice (28, 59);
@@ -47,7 +47,7 @@ decrypt_aes (const mobius::bytearray& key, const mobius::bytearray& ciphertext)
 
   for (std::uint64_t i = 60; i < ciphertext.size (); i += 16)
     {
-      auto c = mobius::crypt::new_cipher_cbc ("aes", aes_key);
+      auto c = mobius::core::crypt::new_cipher_cbc ("aes", aes_key);
       mobius::bytearray buffer = ciphertext.slice (i, i + 15);
 
       if (buffer.size () < 16)

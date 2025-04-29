@@ -15,10 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/database/database.h>
-#include <mobius/database/meta_table.h>
-#include <mobius/pod/data.h>
-#include <mobius/pod/map.h>
+#include <mobius/core/database/database.hpp>
+#include <mobius/core/database/meta_table.hpp>
+#include <mobius/core/pod/data.hpp>
+#include <mobius/core/pod/map.hpp>
 #include <mobius/string_functions.h>
 
 namespace mobius::framework::model
@@ -78,7 +78,7 @@ static constexpr int SCHEMA_VERSION = 13;
 // @param db Case database object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-_case_schema_upgrade_v11 (mobius::database::database db)
+_case_schema_upgrade_v11 (mobius::core::database::database db)
 {
   db.execute ("ALTER TABLE datasource "
                "ADD COLUMN revision INTEGER NOT NULL DEFAULT 1");
@@ -91,7 +91,7 @@ _case_schema_upgrade_v11 (mobius::database::database db)
 // @param db Case database object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-case_schema (mobius::database::database db)
+case_schema (mobius::core::database::database db)
 {
   db.execute ("PRAGMA foreign_keys = OFF;");
   auto transaction = db.new_transaction ();
@@ -253,7 +253,7 @@ case_schema (mobius::database::database db)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // upgrade database, if necessary
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::database::meta_table meta_table (db);
+  mobius::core::database::meta_table meta_table (db);
   int version = meta_table.get_version ();
 
   if (version == 0)

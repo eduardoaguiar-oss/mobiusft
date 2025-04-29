@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/datasource/datasource_impl_base.hpp>
-#include <mobius/vfs/vfs.h>
+#include <mobius/core/vfs/vfs.hpp>
 
 namespace mobius::core::datasource
 {
@@ -33,13 +33,13 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit datasource_impl_vfs (const mobius::pod::map&);
-  explicit datasource_impl_vfs (const mobius::vfs::vfs&);
+  explicit datasource_impl_vfs (const mobius::core::pod::map&);
+  explicit datasource_impl_vfs (const mobius::core::vfs::vfs&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Function prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::map get_state () const final;
+  mobius::core::pod::map get_state () const final;
   bool is_available () const final;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -65,7 +65,7 @@ public:
   // @brief Get VFS object
   // @return VFS object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::vfs::vfs
+  mobius::core::vfs::vfs
   get_vfs () const
   {
     return vfs_;
@@ -74,7 +74,7 @@ public:
 private:
 
   //! VFS object
-  mobius::vfs::vfs vfs_;
+  mobius::core::vfs::vfs vfs_;
 };
 
 } // namespace mobius::core::datasource

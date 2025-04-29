@@ -20,7 +20,7 @@
 #include <mobius/decoder/btencode.h>
 #include <mobius/decoder/data_decoder.h>
 #include <mobius/io/path.h>
-#include <mobius/pod/map.h>
+#include <mobius/core/pod/map.hpp>
 #include <mobius/string_functions.h>
 #include <algorithm>
 
@@ -53,7 +53,7 @@ file_bt_fastresume::file_bt_fastresume (const mobius::io::reader& reader)
   auto metadata = mobius::decoder::btencode (reader);
 
   if (metadata.is_map ())
-    _load_metadata (mobius::pod::map (metadata));
+    _load_metadata (mobius::core::pod::map (metadata));
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Derived attributes
@@ -75,7 +75,7 @@ file_bt_fastresume::file_bt_fastresume (const mobius::io::reader& reader)
 // @see write_resume_data@write_resume_data.cpp (libtorrent)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-file_bt_fastresume::_load_metadata (const mobius::pod::map& metadata)
+file_bt_fastresume::_load_metadata (const mobius::core::pod::map& metadata)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -149,7 +149,7 @@ file_bt_fastresume::_load_metadata (const mobius::pod::map& metadata)
   // Get files
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto mapped_files = std::vector <std::string> (metadata.get ("mapped_files"));
-  auto file_sizes = std::vector <mobius::pod::data> (metadata.get ("file sizes"));
+  auto file_sizes = std::vector <mobius::core::pod::data> (metadata.get ("file sizes"));
   size_ = 0;
 
   for (std::size_t i = 0;i < file_sizes.size ();i++)
@@ -169,7 +169,7 @@ file_bt_fastresume::_load_metadata (const mobius::pod::map& metadata)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Get trackers
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  for (const auto& tracker_data : metadata.get <std::vector <mobius::pod::data>> ("trackers"))
+  for (const auto& tracker_data : metadata.get <std::vector <mobius::core::pod::data>> ("trackers"))
     {
       auto trackers = std::vector <std::string> (tracker_data);
       std::copy (trackers.begin (), trackers.end (), std::back_inserter (trackers_));

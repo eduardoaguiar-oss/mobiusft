@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "registry_data_impl_msdcc.h"
 #include <mobius/decoder/data_decoder.h>
-#include <mobius/crypt/cipher.h>
-#include <mobius/crypt/hmac.h>
+#include <mobius/core/crypt/cipher.hpp>
+#include <mobius/core/crypt/hmac.hpp>
 
 namespace mobius::os::win::registry
 {
@@ -49,7 +49,7 @@ mobius::bytearray decrypt_cts_aes_128 (
       // decrypt Cn-1 (second to last block)
       if (padsize < block_size)
         {
-          auto aes1 = mobius::crypt::new_cipher_ecb ("aes", key);
+          auto aes1 = mobius::core::crypt::new_cipher_ecb ("aes", key);
           mobius::bytearray::size_type pos = ciphertext.size () - block_size * 2 + padsize;
           mobius::bytearray dn = aes1.decrypt (ciphertext.slice (pos, pos + block_size - 1));
 
@@ -63,7 +63,7 @@ mobius::bytearray decrypt_cts_aes_128 (
     }
 
   // decrypt data
-  auto c = mobius::crypt::new_cipher_cbc ("aes", key, iv);
+  auto c = mobius::core::crypt::new_cipher_cbc ("aes", key, iv);
   plaintext = c.decrypt (l_ciphertext);
   plaintext.resize (ciphertext.size ());
 
@@ -114,11 +114,11 @@ registry_data_impl_msdcc::_load_data () const
       // MSDCC1 - MS domain Cached Credentials v1
       if (algorithm == 0)
         {
-          mobius::crypt::hmac hmac ("md5", nlkm_);
+          mobius::core::crypt::hmac hmac ("md5", nlkm_);
           hmac.update (iv);
           auto rc4_key = hmac.get_digest ();
 
-          auto rc4 = mobius::crypt::new_cipher_stream ("rc4", rc4_key);
+          auto rc4 = mobius::core::crypt::new_cipher_stream ("rc4", rc4_key);
           data_ = encrypted_data_.slice (0, 95) + rc4.decrypt (data);
         }
 

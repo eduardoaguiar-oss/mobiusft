@@ -19,7 +19,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/datetime/datetime.h>
-#include <mobius/pod/data.h>
 #include <memory>
 #include <string>
 #include <vector>

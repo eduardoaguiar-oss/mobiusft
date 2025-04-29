@@ -36,10 +36,10 @@ namespace
 // @param py_value Python object
 // @return C++ vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static std::vector <mobius::pod::data>
+static std::vector <mobius::core::pod::data>
 pymobius_pod_data_vector_from_pytuple (PyObject *py_value)
 {
-  std::vector <mobius::pod::data> v;
+  std::vector <mobius::core::pod::data> v;
 
   Py_ssize_t siz = PyTuple_Size (py_value);
 
@@ -61,10 +61,10 @@ pymobius_pod_data_vector_from_pytuple (PyObject *py_value)
 // @param py_value Python object
 // @return C++ vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static std::vector <mobius::pod::data>
+static std::vector <mobius::core::pod::data>
 pymobius_pod_data_vector_from_pyset (PyObject *py_value)
 {
-  std::vector <mobius::pod::data> v;
+  std::vector <mobius::core::pod::data> v;
 
   mobius::py::pyobject iter = PyObject_GetIter (py_value);
   if (!iter)
@@ -99,10 +99,10 @@ pymobius_pod_data_check (PyObject *pyobj)
 // @param py_value Python object
 // @return mobius.pod.data value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::data
+mobius::core::pod::data
 pymobius_pod_data_from_pyobject (PyObject *py_value)
 {
-  mobius::pod::data data;
+  mobius::core::pod::data data;
 
   if (pymobius_pod_data_check (py_value))
     data = * (reinterpret_cast <pod_data_o *>(py_value)->obj);
@@ -111,22 +111,22 @@ pymobius_pod_data_from_pyobject (PyObject *py_value)
     ;
 
   else if (mobius::py::pybool_check (py_value))
-    data = mobius::pod::data (py_value == Py_True);
+    data = mobius::core::pod::data (py_value == Py_True);
 
   else if (mobius::py::pylong_check (py_value))
-    data = mobius::pod::data (mobius::py::pylong_as_std_int64_t (py_value));
+    data = mobius::core::pod::data (mobius::py::pylong_as_std_int64_t (py_value));
 
   else if (mobius::py::pyfloat_check (py_value))
-    data = mobius::pod::data (PyFloat_AS_DOUBLE ( (py_value)));
+    data = mobius::core::pod::data (PyFloat_AS_DOUBLE ( (py_value)));
 
   else if (mobius::py::pydatetime_check (py_value))
-    data = mobius::pod::data (mobius::py::pydatetime_as_datetime (py_value));
+    data = mobius::core::pod::data (mobius::py::pydatetime_as_datetime (py_value));
 
   else if (mobius::py::pybytes_check (py_value))
-    data = mobius::pod::data (mobius::py::pybytes_as_bytearray (py_value));
+    data = mobius::core::pod::data (mobius::py::pybytes_as_bytearray (py_value));
 
   else if (mobius::py::pystring_check (py_value))
-    data = mobius::pod::data (mobius::py::pystring_as_std_string (py_value));
+    data = mobius::core::pod::data (mobius::py::pystring_as_std_string (py_value));
 
   else if (PyList_Check (py_value))
     data = mobius::py::pylist_to_cpp_container (py_value, pymobius_pod_data_from_pyobject);
@@ -152,7 +152,7 @@ pymobius_pod_data_from_pyobject (PyObject *py_value)
 // @return New Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_pod_data_to_pyobject (const mobius::pod::data& value)
+pymobius_pod_data_to_pyobject (const mobius::core::pod::data& value)
 {
   PyObject *ret = nullptr;
 
@@ -179,12 +179,12 @@ pymobius_pod_data_to_pyobject (const mobius::pod::data& value)
 
   else if (value.is_list ())
     ret = mobius::py::pylist_from_cpp_container (
-             std::vector <mobius::pod::data> (value),
+             std::vector <mobius::core::pod::data> (value),
              pymobius_pod_data_to_pyobject
           );
 
   else if (value.is_map ())
-    ret = pymobius_pod_map_to_pyobject (mobius::pod::map (value));
+    ret = pymobius_pod_map_to_pyobject (mobius::core::pod::map (value));
 
   else
     throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("unknown mobius.pod.data type"));
@@ -198,18 +198,18 @@ pymobius_pod_data_to_pyobject (const mobius::pod::data& value)
 // @return New Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_pod_data_to_python (const mobius::pod::data& value)
+pymobius_pod_data_to_python (const mobius::core::pod::data& value)
 {
   PyObject *ret = nullptr;
 
   if (value.is_list ())
     ret = mobius::py::pylist_from_cpp_container (
-            std::vector <mobius::pod::data> (value),
+            std::vector <mobius::core::pod::data> (value),
             pymobius_pod_data_to_python
           );
 
   else if (value.is_map ())
-    ret = pymobius_pod_map_to_python (mobius::pod::map (value));
+    ret = pymobius_pod_map_to_python (mobius::core::pod::map (value));
 
   else
     ret = pymobius_pod_data_to_pyobject (value);

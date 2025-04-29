@@ -16,13 +16,13 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "segment_decoder.hpp"
+#include <mobius/core/charset.hpp>
+#include <mobius/core/crypt/hash_functor.hpp>
 #include <mobius/datetime/datetime.h>
 #include <mobius/decoder/data_decoder.h>
 #include <mobius/io/reader_evaluator.h>
-#include <mobius/crypt/hash_functor.h>
 #include <mobius/string_functions.h>
 #include <mobius/core/zlib_functions.hpp>
-#include <mobius/charset.h>
 
 namespace
 {
@@ -135,7 +135,7 @@ segment_decoder::end () const
 section
 segment_decoder::decode_section (offset_type offset) const
 {
-  mobius::crypt::hash_functor hash_functor ("adler32");
+  mobius::core::crypt::hash_functor hash_functor ("adler32");
   auto reader = mobius::io::reader_evaluator (reader_, hash_functor);
 
   mobius::decoder::data_decoder decoder (reader);
@@ -174,7 +174,7 @@ segment_decoder::decode_header_section (const section& arg_section) const
   mobius::bytearray data = decoder.get_bytearray_by_size (section.get_size () - SECTION_HEADER_SIZE);
   data = mobius::core::zlib_decompress (data);
 
-  const std::string text = conv_charset_to_utf8 (data, section.get_name () == "header2" ? "UTF-16" : "ASCII");
+  const std::string text = mobius::core::conv_charset_to_utf8 (data, section.get_name () == "header2" ? "UTF-16" : "ASCII");
 
   // format header metadata lines
   auto lines = mobius::string::split (text, "\n");

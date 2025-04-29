@@ -32,7 +32,7 @@ PyObject*
 func_datasource_new_datasource_from_vfs (PyObject *, PyObject *args)
 {
   // parse arguments
-  mobius::vfs::vfs arg_vfs;
+  mobius::core::vfs::vfs arg_vfs;
 
   try
     {

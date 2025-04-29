@@ -19,14 +19,14 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/io/file.h>
-#include <mobius/vfs/imagefile_impl_base.h>
+#include <mobius/core/vfs/imagefile_impl_base.hpp>
 #include <memory>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Solo imagefile implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class imagefile_impl : public mobius::vfs::imagefile_impl_base
+class imagefile_impl : public mobius::core::vfs::imagefile_impl_base
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -40,9 +40,9 @@ public:
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit imagefile_impl (const mobius::io::file&);
-  mobius::pod::data get_attribute (const std::string&) const override;
-  void set_attribute (const std::string&, const mobius::pod::data&) override;
-  mobius::pod::map get_attributes () const override;
+  mobius::core::pod::data get_attribute (const std::string&) const override;
+  void set_attribute (const std::string&, const mobius::core::pod::data&) override;
+  mobius::core::pod::map get_attributes () const override;
   mobius::io::reader new_reader () const override;
   mobius::io::writer new_writer () const override;
 
@@ -122,7 +122,7 @@ private:
   mutable size_type sector_size_ = 512;
 
     // @brief Attributes
-  mutable mobius::pod::map attributes_;
+  mutable mobius::core::pod::map attributes_;
 
   // @brief Metadata loaded flag
   mutable bool metadata_loaded_ = false;

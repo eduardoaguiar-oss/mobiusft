@@ -20,15 +20,15 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/datetime/datetime.h>
 #include <mobius/io/file.h>
-#include <mobius/vfs/imagefile_impl_base.h>
-#include <mobius/vfs/segment_array.h>
+#include <mobius/core/vfs/imagefile_impl_base.hpp>
+#include <mobius/core/vfs/segment_array.hpp>
 #include <string>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Split image file implementation
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class imagefile_impl : public mobius::vfs::imagefile_impl_base
+class imagefile_impl : public mobius::core::vfs::imagefile_impl_base
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -42,9 +42,9 @@ public:
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit imagefile_impl (const mobius::io::file&);
-  mobius::pod::data get_attribute (const std::string&) const override;
-  void set_attribute (const std::string&, const mobius::pod::data&) override;
-  mobius::pod::map get_attributes () const override;
+  mobius::core::pod::data get_attribute (const std::string&) const override;
+  void set_attribute (const std::string&, const mobius::core::pod::data&) override;
+  mobius::core::pod::map get_attributes () const override;
   mobius::io::reader new_reader () const override;
   mobius::io::writer new_writer () const override;
 
@@ -124,7 +124,7 @@ public:
   // @brief Get segment array
   // @return Segment array
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::vfs::segment_array
+  mobius::core::vfs::segment_array
   get_segment_array () const
   {
     _load_metadata ();
@@ -145,10 +145,10 @@ private:
   mutable size_type sector_size_ = 512;
 
   // @brief segment files array
-  mutable mobius::vfs::segment_array segments_;
+  mutable mobius::core::vfs::segment_array segments_;
 
   // @brief attributes
-  mutable mobius::pod::map attributes_;
+  mutable mobius::core::pod::map attributes_;
 
   // @brief flag: metadata loaded
   mutable bool metadata_loaded_ = false;

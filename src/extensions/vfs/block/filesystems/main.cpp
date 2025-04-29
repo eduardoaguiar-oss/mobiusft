@@ -16,8 +16,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/resource.hpp>
-#include <mobius/vfs/block.h>
-#include <mobius/vfs/filesystem.h>
+#include <mobius/core/vfs/block.hpp>
+#include <mobius/core/vfs/filesystem.hpp>
 
 namespace
 {
@@ -26,11 +26,11 @@ namespace
 // @param parent_block Parent block
 // @param fs_type Filesystem type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::vfs::block
-_create_filesystem_block (const mobius::vfs::block& parent_block, const std::string& fs_type)
+static mobius::core::vfs::block
+_create_filesystem_block (const mobius::core::vfs::block& parent_block, const std::string& fs_type)
 {
-  auto block = mobius::vfs::new_slice_block (parent_block, "filesystem");
-  mobius::vfs::filesystem fs (block.new_reader (), 0, fs_type);
+  auto block = mobius::core::vfs::new_slice_block (parent_block, "filesystem");
+  mobius::core::vfs::filesystem fs (block.new_reader (), 0, fs_type);
 
   block.set_attribute ("impl_type", fs_type);
   block.set_attribute ("name", fs.get_name ());
@@ -54,16 +54,16 @@ _create_filesystem_block (const mobius::vfs::block& parent_block, const std::str
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static bool
 decoder (
-  const mobius::vfs::block& block,
-  std::vector <mobius::vfs::block>& new_blocks,
-  std::vector <mobius::vfs::block>&
+  const mobius::core::vfs::block& block,
+  std::vector <mobius::core::vfs::block>& new_blocks,
+  std::vector <mobius::core::vfs::block>&
 )
 {
   bool rc = false;
 
   for (const auto& resource : mobius::core::get_resources ("vfs.filesystem"))
     {
-      auto fs_resource = resource.get_value <mobius::vfs::filesystem_resource_type> ();
+      auto fs_resource = resource.get_value <mobius::core::vfs::filesystem_resource_type> ();
 
       if (fs_resource.is_instance (block.new_reader (), 0))
         {
@@ -99,7 +99,7 @@ start ()
   mobius::core::add_resource (
      "vfs.block.decoder.filesystems",
      "Filesystems VFS block decoder",
-     static_cast <mobius::vfs::block_decoder_resource_type> (decoder)
+     static_cast <mobius::core::vfs::block_decoder_resource_type> (decoder)
   );
 }
 

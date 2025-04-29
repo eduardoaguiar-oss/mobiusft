@@ -45,7 +45,7 @@ pymobius_vfs_disk_check (PyObject *value)
 // @return New disk object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_vfs_disk_to_pyobject (const mobius::vfs::disk& obj)
+pymobius_vfs_disk_to_pyobject (const mobius::core::vfs::disk& obj)
 {
   return mobius::py::to_pyobject <vfs_disk_o> (obj, &vfs_disk_t);
 }
@@ -55,7 +55,7 @@ pymobius_vfs_disk_to_pyobject (const mobius::vfs::disk& obj)
 // @param value Python value
 // @return Datasource object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::vfs::disk
+mobius::core::vfs::disk
 pymobius_vfs_disk_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <vfs_disk_o> (value, &vfs_disk_t);
@@ -229,7 +229,7 @@ tp_f_set_attribute (vfs_disk_o *self, PyObject *args)
 {
   // Parse input args
   std::string arg_id;
-  mobius::pod::data arg_value;
+  mobius::core::pod::data arg_value;
 
   try
     {

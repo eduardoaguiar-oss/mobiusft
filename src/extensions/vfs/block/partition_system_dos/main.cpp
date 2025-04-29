@@ -18,7 +18,7 @@
 #include <mobius/core/resource.hpp>
 #include <mobius/decoder/data_decoder.h>
 #include <mobius/string_functions.h>
-#include <mobius/vfs/block.h>
+#include <mobius/core/vfs/block.hpp>
 #include <map>
 
 namespace
@@ -92,7 +92,7 @@ chs_to_string (const mobius::bytearray& chs)
 // @see Linux source code: block/partitions/msdos.c
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static bool
-_is_instance (const mobius::vfs::block& block)
+_is_instance (const mobius::core::vfs::block& block)
 {
   auto reader = block.new_reader ();
   auto data = reader.read (SECTOR_SIZE);
@@ -132,7 +132,7 @@ _is_instance (const mobius::vfs::block& block)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 _scan_partitions (
-  mobius::vfs::block& ps_block,
+  mobius::core::vfs::block& ps_block,
   sector_size_type sector_size,
   sector_type sector = 0
 )
@@ -268,9 +268,9 @@ _scan_partitions (
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static bool
 decoder (
-  const mobius::vfs::block& block,
-  std::vector <mobius::vfs::block>& new_blocks,
-  std::vector <mobius::vfs::block>&
+  const mobius::core::vfs::block& block,
+  std::vector <mobius::core::vfs::block>& new_blocks,
+  std::vector <mobius::core::vfs::block>&
 )
 {
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -282,7 +282,7 @@ decoder (
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Create partition system block
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto ps_block = mobius::vfs::new_slice_block (block, "partition_system");
+  auto ps_block = mobius::core::vfs::new_slice_block (block, "partition_system");
   std::uint32_t sector_size = SECTOR_SIZE;
   std::uint64_t sectors = (block.get_size () + SECTOR_SIZE - 1) / SECTOR_SIZE;
 
@@ -370,7 +370,7 @@ start ()
   mobius::core::add_resource (
      "vfs.block.decoder.partition_system_dos",
      "DOS partition system block decoder",
-     static_cast <mobius::vfs::block_decoder_resource_type> (decoder)
+     static_cast <mobius::core::vfs::block_decoder_resource_type> (decoder)
   );
 }
 

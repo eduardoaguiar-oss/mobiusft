@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "imagefile_impl.hpp"
 #include <mobius/io/reader_impl_base.h>
-#include <mobius/vfs/segment_array.h>
+#include <mobius/core/vfs/segment_array.hpp>
 #include <vector>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -103,7 +103,7 @@ private:
   size_type pos_ = 0;
   size_type chunk_size_ = 0;
 
-  mobius::vfs::segment_array segments_;
+  mobius::core::vfs::segment_array segments_;
   const std::vector <imagefile_impl::chunk_offset_table>& chunk_offset_table_;
 
   int segment_idx_;              //!< current segment index

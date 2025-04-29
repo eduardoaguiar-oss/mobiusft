@@ -41,6 +41,7 @@
 #include "file_searches_dat.hpp"
 #include <mobius/core/log.hpp>
 #include <mobius/core/datasource/datasource_vfs.hpp>
+#include <mobius/core/pod/map.hpp>
 #include <mobius/decoder/mfc.h>
 #include <mobius/decoder/xml/dom.h>
 #include <mobius/exception.inc>
@@ -49,7 +50,6 @@
 #include <mobius/io/walker.h>
 #include <mobius/os/win/registry/hive_file.h>
 #include <mobius/os/win/registry/hive_data.h>
-#include <mobius/pod/map.h>
 #include <mobius/string_functions.h>
 #include <algorithm>
 #include <stdexcept>
@@ -70,7 +70,7 @@ static const std::string ANT_VERSION = "1.2";
 // @param f File structure
 // @return Vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename T> std::vector <mobius::pod::data>
+template <typename T> std::vector <mobius::core::pod::data>
 get_file_hashes (const T& f)
 {
   std::vector <std::pair <std::string, std::string>> values =
@@ -82,7 +82,7 @@ get_file_hashes (const T& f)
     {"bth", f.get_hash_bth ()},
   };
 
-  std::vector <mobius::pod::data> hashes;
+  std::vector <mobius::core::pod::data> hashes;
 
   for (const auto& [k, v] : values)
     {
@@ -883,7 +883,7 @@ evidence_loader_impl::_save_accounts ()
 {
   for (const auto& a : accounts_)
     {
-      mobius::pod::map metadata;
+      mobius::core::pod::map metadata;
       metadata.set ("app_id", APP_ID);
       metadata.set ("app_name", APP_NAME);
       metadata.set ("username", a.username);
@@ -929,7 +929,7 @@ evidence_loader_impl::_save_autofills ()
 {
   for (const auto& a : autofills_)
     {
-      mobius::pod::map metadata;
+      mobius::core::pod::map metadata;
       metadata.set ("id", a.id);
 
       auto e = item_.new_evidence ("autofill");

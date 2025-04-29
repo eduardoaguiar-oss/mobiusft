@@ -52,7 +52,7 @@ filesystem_impl::filesystem_impl (const mobius::io::reader& reader,
 // @param name Item name
 // @return Data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::data
+mobius::core::pod::data
 filesystem_impl::get_metadata (const std::string& name) const
 {
   _load_data ();

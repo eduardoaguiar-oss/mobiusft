@@ -51,9 +51,9 @@ static const std::map <std::uint32_t, hash_info> HASHES =
 namespace mobius::os::win::dpapi
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get mobius::crypt hash ID from MS alg ID
+// @brief Get mobius::core::crypt hash ID from MS alg ID
 // @param ms_alg_id MS alg ID
-// @return mobius::crypt::hash ID
+// @return mobius::core::crypt::hash ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
 get_hash_id (std::uint32_t ms_alg_id)

@@ -24,7 +24,7 @@ namespace mobius::core::datasource::ufdr
 // @brief Constructor
 // @param state Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-datasource_impl::datasource_impl (const mobius::pod::map& state)
+datasource_impl::datasource_impl (const mobius::core::pod::map& state)
 {
   auto type = state.get<std::string> ("type");
 
@@ -34,18 +34,18 @@ datasource_impl::datasource_impl (const mobius::pod::map& state)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Get UFDR state
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto ufdr_state = state.get<mobius::pod::map> ("state");
+  auto ufdr_state = state.get<mobius::core::pod::map> ("state");
   url_ = ufdr_state.get<std::string> ("url");
-  file_info_ = ufdr_state.get<mobius::pod::map> ("file_info");
-  case_info_ = ufdr_state.get<mobius::pod::map> ("case_info");
+  file_info_ = ufdr_state.get<mobius::core::pod::map> ("file_info");
+  case_info_ = ufdr_state.get<mobius::core::pod::map> ("case_info");
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Get metadata
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto extractions = ufdr_state.get<std::vector<mobius::pod::data>>("extractions");
+  auto extractions = ufdr_state.get<std::vector<mobius::core::pod::data>>("extractions");
 
   for(const auto& extraction_state : extractions)
-    extractions_.emplace_back(mobius::pod::map(extraction_state));
+    extractions_.emplace_back(mobius::core::pod::map(extraction_state));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -69,15 +69,15 @@ datasource_impl::datasource_impl (const std::string& url)
 // @brief Get object state
 // @return Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::map
+mobius::core::pod::map
 datasource_impl::get_state () const
 {
-  std::vector <mobius::pod::data> metadata;
+  std::vector <mobius::core::pod::data> metadata;
 
   for (const auto& extraction : extractions_)
     metadata.push_back (extraction.get_state ());
 
-  mobius::pod::map state = {
+  mobius::core::pod::map state = {
     {"url", url_},
     {"file_info", file_info_},
     {"case_info", case_info_},

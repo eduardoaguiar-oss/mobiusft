@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/database/connection_set.h>
+#include <mobius/core/database/connection_set.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::database::connection_set *obj;
+  mobius::core::database::connection_set *obj;
 } database_connection_set_o;
 
 extern PyTypeObject database_connection_set_t;
@@ -35,7 +35,7 @@ extern PyTypeObject database_connection_set_t;
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *pymobius_database_connection_set_to_pyobject (const mobius::database::connection_set&);
+PyObject *pymobius_database_connection_set_to_pyobject (const mobius::core::database::connection_set&);
 
 #endif
 

@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/database/connection_pool.h>
-#include <mobius/database/transaction.h>
+#include <mobius/core/database/connection_pool.hpp>
+#include <mobius/core/database/transaction.hpp>
 #include <mobius/framework/model/item.hpp>
 #include <mobius/framework/model/evidence.hpp>
 #include <cstdint>
@@ -60,9 +60,9 @@ public:
   item get_root_item () const;
   std::uint32_t get_uid () const;
 
-  mobius::database::connection new_connection ();
-  mobius::database::transaction new_transaction ();
-  mobius::database::database get_database () const;
+  mobius::core::database::connection new_connection ();
+  mobius::core::database::transaction new_transaction ();
+  mobius::core::database::database get_database () const;
 
   std::vector <evidence> get_passwords () const;
   std::vector <evidence> get_password_hashes () const;

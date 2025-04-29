@@ -233,10 +233,10 @@ qdatastream::get_qpixmap ()
 // @brief Decode QVariant
 // @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::data
+mobius::core::pod::data
 qdatastream::get_qvariant ()
 {
-  mobius::pod::data data;
+  mobius::core::pod::data data;
 
   auto datatype = decoder_.get_uint32_be ();
   bool is_null = decoder_.get_uint8 ();

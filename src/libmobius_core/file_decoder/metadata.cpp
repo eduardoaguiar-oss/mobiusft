@@ -44,13 +44,13 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void set_value (const std::string&, const std::string&, const mobius::pod::data&);
-  mobius::pod::data get_value (const std::string&, const std::string&) const;
+  void set_value (const std::string&, const std::string&, const mobius::core::pod::data&);
+  mobius::core::pod::data get_value (const std::string&, const std::string&) const;
   std::vector<std::string> get_groups () const;
-  mobius::pod::map get_group (const std::string&) const;
+  mobius::core::pod::map get_group (const std::string&) const;
 
 private:
-  std::unordered_map <std::string, mobius::pod::map> metadata_;
+  std::unordered_map <std::string, mobius::core::pod::map> metadata_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -60,7 +60,7 @@ private:
 // @param value Metadata value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-metadata::impl::set_value (const std::string& group, const std::string& name, const mobius::pod::data& value)
+metadata::impl::set_value (const std::string& group, const std::string& name, const mobius::core::pod::data& value)
 {
   auto [iter, rc] = metadata_.try_emplace (group);
   std::ignore = rc;
@@ -74,10 +74,10 @@ metadata::impl::set_value (const std::string& group, const std::string& name, co
 // @param name Metadata name
 // @return Metadata value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::data
+mobius::core::pod::data
 metadata::impl::get_value (const std::string& group, const std::string& name) const
 {
-  mobius::pod::data value;
+  mobius::core::pod::data value;
 
   auto iter = metadata_.find (group);
 
@@ -111,10 +111,10 @@ metadata::impl::get_groups () const
 // @param group_id Group ID
 // @return Metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::map
+mobius::core::pod::map
 metadata::impl::get_group (const std::string& group_id) const
 {
-  mobius::pod::map value;
+  mobius::core::pod::map value;
 
   auto iter = metadata_.find (group_id);
 
@@ -139,7 +139,7 @@ metadata::metadata ()
 // @param value Metadata value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-metadata::set_value (const std::string& group, const std::string& name, const mobius::pod::data& value)
+metadata::set_value (const std::string& group, const std::string& name, const mobius::core::pod::data& value)
 {
   impl_->set_value (group, name, value);
 }
@@ -150,7 +150,7 @@ metadata::set_value (const std::string& group, const std::string& name, const mo
 // @param name Metadata name
 // @return Metadata value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::data
+mobius::core::pod::data
 metadata::get_value (const std::string& group, const std::string& name) const
 {
   return impl_->get_value (group, name);
@@ -171,7 +171,7 @@ metadata::get_groups () const
 // @param group Group ID
 // @return Metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::map
+mobius::core::pod::map
 metadata::get_group (const std::string& group) const
 {
   return impl_->get_group (group);

@@ -52,7 +52,7 @@ func_vfs_new_imagefile_from_file (PyObject *, PyObject *args)
   try
     {
       auto imagefile = mobius::py::GIL () (
-                    mobius::vfs::imagefile (arg_file, arg_type)
+                    mobius::core::vfs::imagefile (arg_file, arg_type)
                   );
       ret = pymobius_vfs_imagefile_to_pyobject (imagefile);
     }

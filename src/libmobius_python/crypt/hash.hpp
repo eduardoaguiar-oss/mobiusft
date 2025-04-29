@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/crypt/hash.h>
+#include <mobius/core/crypt/hash.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::crypt::hash *obj;
+  mobius::core::crypt::hash *obj;
 } crypt_hash_o;
 
 extern PyTypeObject crypt_hash_t;
@@ -36,8 +36,8 @@ extern PyTypeObject crypt_hash_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_crypt_hash_check (PyObject *);
-PyObject *pymobius_crypt_hash_to_pyobject (const mobius::crypt::hash&);
-mobius::crypt::hash pymobius_crypt_hash_from_pyobject (PyObject *);
+PyObject *pymobius_crypt_hash_to_pyobject (const mobius::core::crypt::hash&);
+mobius::core::crypt::hash pymobius_crypt_hash_from_pyobject (PyObject *);
 
 #endif
 

@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "credential.h"
-#include <mobius/charset.h>
+#include <mobius/core/charset.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/decoder/data_decoder.h>
 
@@ -195,7 +195,7 @@ credential::impl::impl (mobius::io::reader reader)
   // try to decode password
   try
     {
-      password_ = conv_charset_to_utf8 (password_data_, "utf-16le");
+      password_ = mobius::core::conv_charset_to_utf8 (password_data_, "utf-16le");
     }
   catch (const std::exception& e)
     {

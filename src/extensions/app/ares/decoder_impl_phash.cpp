@@ -82,10 +82,10 @@ decoder_impl_phash::decode (const mobius::io::reader& reader)
       // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
       // Get pieces
       // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-      std::vector <mobius::pod::data> pieces;
+      std::vector <mobius::core::pod::data> pieces;
 
       for (const auto& p : entry.pieces)
-        pieces.emplace_back (mobius::pod::data {p.hash_sha1, p.progress, p.is_completed});
+        pieces.emplace_back (mobius::core::pod::data {p.hash_sha1, p.progress, p.is_completed});
 
       e.set_metadata ("pieces", pieces);
 

@@ -41,7 +41,7 @@ pymobius_database_connection_check (PyObject *value)
 // @return new connection object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_database_connection_to_pyobject (const mobius::database::connection& obj)
+pymobius_database_connection_to_pyobject (const mobius::core::database::connection& obj)
 {
   PyObject *ret = nullptr;
 
@@ -50,7 +50,7 @@ pymobius_database_connection_to_pyobject (const mobius::database::connection& ob
       ret = _PyObject_New (&database_connection_t);
 
       if (ret)
-        ((database_connection_o *) ret)->obj = new mobius::database::connection (obj);
+        ((database_connection_o *) ret)->obj = new mobius::core::database::connection (obj);
     }
   else
     ret = mobius::py::pynone ();
@@ -63,7 +63,7 @@ pymobius_database_connection_to_pyobject (const mobius::database::connection& ob
 // @param value Python value
 // @return Opened_file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::database::connection
+mobius::core::database::connection
 pymobius_database_connection_from_pyobject (PyObject *value)
 {
   if (!pymobius_database_connection_check (value))
@@ -123,7 +123,7 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
   database_connection_o *self = (database_connection_o *) type->tp_alloc (type, 0);
 
   if (self)
-    self->obj = new mobius::database::connection ();
+    self->obj = new mobius::core::database::connection ();
 
   return (PyObject *) self;
 }

@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/io/writer_impl_base.h>
-#include <mobius/vfs/segment_array.h>
+#include <mobius/core/vfs/segment_array.hpp>
 
 class imagefile_impl;
 
@@ -76,7 +76,7 @@ private:
   size_type size_ = 0;
   size_type segment_idx_;
 
-  mobius::vfs::segment_array segments_;      // control each segment created
+  mobius::core::vfs::segment_array segments_;      // control each segment created
   mobius::io::writer stream_;           // current stream
 
   size_type _write_data (size_type, const mobius::bytearray&);

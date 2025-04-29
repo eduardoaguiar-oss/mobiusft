@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/framework/config.hpp>
 #include <mobius/core/application.hpp>
+#include <mobius/core/database/database.hpp>
 #include <mobius/core/thread_guard.hpp>
-#include <mobius/database/database.h>
 
 namespace
 {
@@ -28,16 +28,16 @@ static const std::string RESOURCE_ID = "database.config";
 // @brief Get database instance
 // @return Database object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::database::database
+static mobius::core::database::database
 _get_database ()
 {
-  mobius::database::database db;
+  mobius::core::database::database db;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // If DB instance is already opened for current thread, simply return it
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   if (mobius::core::has_thread_resource (RESOURCE_ID))
-    db = mobius::core::get_thread_resource <mobius::database::database> (RESOURCE_ID);
+    db = mobius::core::get_thread_resource <mobius::core::database::database> (RESOURCE_ID);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Otherwise, create a new DB instance and associate to current thread
@@ -48,7 +48,7 @@ _get_database ()
       mobius::core::application app;
       auto path = app.get_config_path ("mobiusft.sqlite");
 
-      db = mobius::database::database (path);
+      db = mobius::core::database::database (path);
 
       // create db tables, if necessary
       auto transaction = db.new_transaction ();
@@ -77,7 +77,7 @@ namespace mobius::framework
 // @brief Create new transaction to config database
 // @return New database transaction
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::database::transaction
+mobius::core::database::transaction
 new_config_transaction ()
 {
   auto db = _get_database ();
@@ -110,7 +110,7 @@ has_config (const std::string& name)
 // @param name Value name
 // @return Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::data
+mobius::core::pod::data
 get_config (const std::string& name)
 {
   auto db = _get_database ();
@@ -123,7 +123,7 @@ get_config (const std::string& name)
 
   statement.bind (1, name);
 
-  mobius::pod::data value;
+  mobius::core::pod::data value;
 
   if (statement.fetch_row ())
     value = statement.get_column_pod (0);
@@ -137,7 +137,7 @@ get_config (const std::string& name)
 // @param value Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-set_config (const std::string& name, const mobius::pod::data& value)
+set_config (const std::string& name, const mobius::core::pod::data& value)
 {
   auto db = _get_database ();
 

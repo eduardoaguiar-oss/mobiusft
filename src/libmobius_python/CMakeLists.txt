@@ -43,10 +43,6 @@ find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 set(PYTHON_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/site-packages")
 message(STATUS "PYTHON_INSTALL_DIR: ${PYTHON_INSTALL_DIR}")
 
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
-pkg_check_modules(PYGOBJECT REQUIRED pygobject-3.0)
-
 find_library(MOBIUS_LIB mobius HINTS ${TOP_SRC_DIR}/src/mobius/.libs NO_DEFAULT_PATH)
 
 if(NOT MOBIUS_LIB)
@@ -127,8 +123,6 @@ set_target_properties(mobius PROPERTIES
     SUFFIX ".so"
 )
 
-#add_custom_target(mobius DEPENDS libmobius-python-framework)
-
 target_link_libraries(mobius PRIVATE
     libmobius-python-core
     libmobius-python-crypt
@@ -145,7 +139,7 @@ target_link_libraries(mobius PRIVATE
     libmobius-python-pod
     libmobius-python-system
     libmobius-python-turing
-    libmobius-python-ui
+    mobius_python_ui
     libmobius-python-vfs
     ${MOBIUS_LIBRARIES}
     Python3::Module

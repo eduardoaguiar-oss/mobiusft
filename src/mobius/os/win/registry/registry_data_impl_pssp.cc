@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "registry_data_impl_pssp.h"
-#include <mobius/crypt/cipher.h>
+#include <mobius/core/crypt/cipher.hpp>
 #include <mobius/io/bytearray_io.h>
 #include <mobius/decoder/data_decoder.h>
 
@@ -54,10 +54,10 @@ registry_data_impl_pssp::_load_data () const
   auto enc_data = item_data_decoder.get_bytearray_by_size (size);
 
   // decrypt data
-  auto des = mobius::crypt::new_cipher_cbc ("des", des_key_);
+  auto des = mobius::core::crypt::new_cipher_cbc ("des", des_key_);
   auto des_key2 = des.decrypt (enc_des_key2).slice (0, 7);
 
-  auto des2 = mobius::crypt::new_cipher_cbc ("des", des_key2);
+  auto des2 = mobius::core::crypt::new_cipher_cbc ("des", des_key2);
   auto data = des2.decrypt (enc_data);
 
   // decode data

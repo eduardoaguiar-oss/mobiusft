@@ -19,8 +19,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/io/file.h>
+#include <mobius/core/pod/data.hpp>
 #include <mobius/framework/model/item.hpp>
-#include <mobius/pod/data.h>
 #include <cstdint>
 #include <map>
 #include <memory>
@@ -73,11 +73,11 @@ public:
   std::string get_type () const;
 
   bool has_attribute (const std::string&) const;
-  mobius::pod::data get_attribute (const std::string&) const;
-  void set_attribute (const std::string&, const mobius::pod::data&);
-  void set_attributes (const std::map <std::string, mobius::pod::data>&);
+  mobius::core::pod::data get_attribute (const std::string&) const;
+  void set_attribute (const std::string&, const mobius::core::pod::data&);
+  void set_attributes (const std::map <std::string, mobius::core::pod::data>&);
   void remove_attribute (const std::string&);
-  std::map <std::string, mobius::pod::data> get_attributes () const;
+  std::map <std::string, mobius::core::pod::data> get_attributes () const;
 
   bool has_tag (const std::string&) const;
   void set_tag (const std::string&);

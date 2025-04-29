@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "pbkdf2_hmac_ms.h"
-#include <mobius/crypt/hmac.h>
+#include <mobius/core/crypt/hmac.hpp>
 #include <mobius/exception.inc>
 #include <stdexcept>
 
@@ -46,7 +46,7 @@ pbkdf2_hmac_ms (
   // Calculate derived key
   std::uint32_t i = 1;
   mobius::bytearray dk;
-  mobius::crypt::hmac hmac (hash_id, password);
+  mobius::core::crypt::hmac hmac (hash_id, password);
 
   while (dk.size () < dklen)
     {

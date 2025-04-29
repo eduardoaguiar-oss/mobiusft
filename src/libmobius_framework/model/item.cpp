@@ -31,7 +31,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Rationale:
-// 1. Every item attribute is stored as serialized mobius::pod::data
+// 1. Every item attribute is stored as serialized mobius::core::pod::data
 // 2. SQLite limits BLOB size to 1 GB (see https://www.sqlite.org/limits.html)
 // 3. If serialized data size is greater than ATTRIBUTE_FILE_THRESHOLD,
 //    this data is saved in an attribute file at item/data/attrs/<id>.pod and
@@ -128,10 +128,10 @@ public:
   // function prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool has_attribute (const std::string&) const;
-  mobius::pod::data get_attribute (const std::string&) const;
-  void set_attribute (const std::string&, const mobius::pod::data&);
+  mobius::core::pod::data get_attribute (const std::string&) const;
+  void set_attribute (const std::string&, const mobius::core::pod::data&);
   void remove_attribute (const std::string&);
-  std::unordered_map <std::string, mobius::pod::data> get_attributes () const;
+  std::unordered_map <std::string, mobius::core::pod::data> get_attributes () const;
 
   bool has_datasource () const;
   mobius::core::datasource::datasource get_datasource () const;
@@ -183,7 +183,7 @@ public:
   // @brief Get database
   // @return database
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::database::database
+  mobius::core::database::database
   get_database () const
   {
     return case_.get_database ();
@@ -300,10 +300,10 @@ item::impl::has_attribute (const std::string& id) const
 // @param id Attribute ID
 // @return Attribute value or pod::null if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::data
+mobius::core::pod::data
 item::impl::get_attribute (const std::string& id) const
 {
-  mobius::pod::data value;
+  mobius::core::pod::data value;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Build query
@@ -328,7 +328,7 @@ item::impl::get_attribute (const std::string& id) const
       if (bytes == ATTRIBUTE_FILE_ID)
         bytes = _load_attribute_file (id);
 
-      value = mobius::pod::unserialize (bytes);
+      value = mobius::core::pod::unserialize (bytes);
     }
 
   return value;
@@ -340,7 +340,7 @@ item::impl::get_attribute (const std::string& id) const
 // @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-item::impl::set_attribute (const std::string& id, const mobius::pod::data& value)
+item::impl::set_attribute (const std::string& id, const mobius::core::pod::data& value)
 {
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Remove old attribute file, if any
@@ -353,7 +353,7 @@ item::impl::set_attribute (const std::string& id, const mobius::pod::data& value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Serialize value and check if size is greater than threshold
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray bytes = mobius::pod::serialize (value);
+  mobius::bytearray bytes = mobius::core::pod::serialize (value);
 
   if (bytes.size () > ATTRIBUTE_FILE_THRESHOLD)
     {
@@ -365,7 +365,7 @@ item::impl::set_attribute (const std::string& id, const mobius::pod::data& value
   // Add to database
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto db = get_database ();
-  mobius::database::statement stmt;
+  mobius::core::database::statement stmt;
 
   if (has_attribute (id))
     {
@@ -427,10 +427,10 @@ item::impl::remove_attribute (const std::string& id)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Load attributes on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::unordered_map <std::string, mobius::pod::data>
+std::unordered_map <std::string, mobius::core::pod::data>
 item::impl::get_attributes () const
 {
-  std::unordered_map <std::string, mobius::pod::data> attributes;
+  std::unordered_map <std::string, mobius::core::pod::data> attributes;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Build query
@@ -454,7 +454,7 @@ item::impl::get_attributes () const
       if (bytes == ATTRIBUTE_FILE_ID)
         bytes = _load_attribute_file (id);
 
-      auto value = mobius::pod::unserialize (bytes);
+      auto value = mobius::core::pod::unserialize (bytes);
       attributes[id] = value;
     }
 
@@ -514,7 +514,7 @@ item::impl::get_datasource () const
 
       if (revision != datasource_revision_)
         {
-          mobius::pod::map state (stmt.get_column_pod (1));
+          mobius::core::pod::map state (stmt.get_column_pod (1));
           datasource_revision_ = revision;
           datasource_ = mobius::core::datasource::datasource (state);
         }
@@ -774,7 +774,7 @@ item::impl::add_event (const std::string& text)
 {
   auto db = get_database ();
 
-  mobius::database::statement stmt = db.new_statement (
+  mobius::core::database::statement stmt = db.new_statement (
                "INSERT INTO event "
                     "VALUES (NULL, ?, ?, ?)");
 
@@ -964,7 +964,7 @@ item::item (const Case& c, uid_type uid)
 // @brief Get database object
 // @return Database object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::database::database
+mobius::core::database::database
 item::get_database () const
 {
   if (!impl_)
@@ -1031,7 +1031,7 @@ item::has_attribute (const std::string& id) const
 // @param id attribute ID
 // @return attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::data
+mobius::core::pod::data
 item::get_attribute (const std::string& id) const
 {
   if (!impl_)
@@ -1046,7 +1046,7 @@ item::get_attribute (const std::string& id) const
 // @param value attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-item::set_attribute (const std::string& id, const mobius::pod::data& value)
+item::set_attribute (const std::string& id, const mobius::core::pod::data& value)
 {
   if (!impl_)
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
@@ -1080,7 +1080,7 @@ item::remove_attribute (const std::string& id)
 // @brief Get attributes
 // @return Map containing attributes' IDs and values
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::unordered_map <std::string, mobius::pod::data>
+std::unordered_map <std::string, mobius::core::pod::data>
 item::get_attributes () const
 {
   if (!impl_)
@@ -1559,7 +1559,7 @@ item::get_events () const
 // @brief Create new connection
 // @return New connection object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::database::connection
+mobius::core::database::connection
 item::new_connection ()
 {
   auto c = get_case ();
@@ -1570,7 +1570,7 @@ item::new_connection ()
 // @brief Create new transaction
 // @return New transaction object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::database::transaction
+mobius::core::database::transaction
 item::new_transaction ()
 {
   auto c = get_case ();

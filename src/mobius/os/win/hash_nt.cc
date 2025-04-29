@@ -16,8 +16,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "hash_nt.h"
-#include <mobius/charset.h>
-#include <mobius/crypt/hash.h>
+#include <mobius/core/charset.hpp>
+#include <mobius/core/crypt/hash.hpp>
 
 namespace mobius::os::win
 {
@@ -29,8 +29,8 @@ namespace mobius::os::win
 mobius::bytearray
 hash_nt (const std::string& password)
 {
-  mobius::crypt::hash md4 ("md4");
-  md4.update (mobius::conv_charset (password, "UTF-8", "UTF-16LE"));
+  mobius::core::crypt::hash md4 ("md4");
+  md4.update (mobius::core::conv_charset (password, "UTF-8", "UTF-16LE"));
   return md4.get_digest ();
 }
 

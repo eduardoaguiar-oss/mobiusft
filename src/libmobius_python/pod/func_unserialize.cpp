@@ -54,7 +54,7 @@ func_pod_unserialize (PyObject *, PyObject *args)
     {
       ret = pymobius_pod_data_to_pyobject (
                mobius::py::GIL () (
-                  mobius::pod::unserialize (arg_reader)
+                  mobius::core::pod::unserialize (arg_reader)
                )
             );
     }

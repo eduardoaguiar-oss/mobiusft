@@ -17,7 +17,6 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/framework/attribute.hpp>
 #include <mobius/framework/category.hpp>
-#include <mobius/database/database.h>
 #include <mobius/exception.inc>
 #include <stdexcept>
 

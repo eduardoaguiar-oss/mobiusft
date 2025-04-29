@@ -17,9 +17,9 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/kff/hashset.hpp>
 #include <mobius/core/collection_impl_base.hpp>
-#include <mobius/database/connection_pool.h>
-#include <mobius/database/database.h>
-#include <mobius/database/meta_table.h>
+#include <mobius/core/database/connection_pool.hpp>
+#include <mobius/core/database/database.hpp>
+#include <mobius/core/database/meta_table.hpp>
 #include <mobius/string_functions.h>
 
 namespace mobius::core::kff
@@ -43,7 +43,7 @@ public:
   // @brief Constructor
   // @param stmt Select statamente
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  collection_impl (const mobius::database::statement& stmt)
+  collection_impl (const mobius::core::database::statement& stmt)
     : stmt_ (stmt)
   {
   }
@@ -77,7 +77,7 @@ public:
   }
 
 private:
-  mobius::database::statement stmt_;
+  mobius::core::database::statement stmt_;
 };
 
 } // namespace
@@ -138,7 +138,7 @@ public:
   // @brief Create new connection for database
   // @return New connection object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::database::connection
+  mobius::core::database::connection
   new_connection ()
   {
     return connection_pool_.acquire ();
@@ -148,7 +148,7 @@ public:
   // @brief Create new database transaction
   // @return new transaction object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::database::transaction
+  mobius::core::database::transaction
   new_transaction ()
   {
     auto db = connection_pool_.get_database ();
@@ -168,7 +168,7 @@ public:
 
 private:
   // @brief Database connection pool
-  mobius::database::connection_pool connection_pool_;
+  mobius::core::database::connection_pool connection_pool_;
 
   // @brief Description
   mutable std::string description_;
@@ -279,7 +279,7 @@ hashset::impl::create (bool flag)
   auto db = connection_pool_.get_database ();
   auto transaction = db.new_transaction ();
 
-  mobius::database::meta_table meta_table (db);
+  mobius::core::database::meta_table meta_table (db);
   meta_table.set_version (SCHEMA_VERSION);
 
   db.execute (
@@ -451,7 +451,7 @@ hashset::hashset (const std::string& path)
 // @brief Create new connection for database
 // @return New connection object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::database::connection
+mobius::core::database::connection
 hashset::new_connection ()
 {
   return impl_->new_connection ();
@@ -461,7 +461,7 @@ hashset::new_connection ()
 // @brief Create new database transaction
 // @return new transaction object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::database::transaction
+mobius::core::database::transaction
 hashset::new_transaction ()
 {
   return impl_->new_transaction ();

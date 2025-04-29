@@ -22,7 +22,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
 #include <pygil.hpp>
-#include <mobius/crypt/hash_digest.h>
+#include <mobius/core/crypt/hash_digest.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief hash_digest function
@@ -54,7 +54,7 @@ func_hash_digest (PyObject *, PyObject *args)
   try
     {
       auto digest = mobius::py::GIL () (
-		      mobius::crypt::hash_digest (
+		      mobius::core::crypt::hash_digest (
 			      arg_hash_id,
 			      arg_data
 		      )

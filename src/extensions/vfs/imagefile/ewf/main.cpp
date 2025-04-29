@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/resource.hpp>
-#include <mobius/vfs/imagefile.h>
+#include <mobius/core/vfs/imagefile.hpp>
 #include "imagefile_impl.hpp"
 #include <cstdint>
 
@@ -41,7 +41,7 @@ start ()
   mobius::core::add_resource (
      "vfs.imagefile.ewf",
      "EWF image file",
-     mobius::vfs::make_imagefile_resource <imagefile_impl> ()
+     mobius::core::vfs::make_imagefile_resource <imagefile_impl> ()
   );
 
 }

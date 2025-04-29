@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/pod/map.h>
+#include <mobius/core/pod/map.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::pod::map *obj;
+  mobius::core::pod::map *obj;
 } pod_map_o;
 
 extern PyTypeObject pod_map_t;
@@ -36,9 +36,9 @@ extern PyTypeObject pod_map_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_pod_map_check (PyObject *);
-mobius::pod::map pymobius_pod_map_from_pyobject (PyObject *);
-PyObject *pymobius_pod_map_to_pyobject (const mobius::pod::map&);
-PyObject *pymobius_pod_map_to_python (const mobius::pod::map&);
+mobius::core::pod::map pymobius_pod_map_from_pyobject (PyObject *);
+PyObject *pymobius_pod_map_to_pyobject (const mobius::core::pod::map&);
+PyObject *pymobius_pod_map_to_python (const mobius::core::pod::map&);
 
 #endif
 

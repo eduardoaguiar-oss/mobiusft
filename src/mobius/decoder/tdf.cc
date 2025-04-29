@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "tdf.h"
-#include <mobius/crypt/hash.h>
+#include <mobius/core/crypt/hash.hpp>
 #include <mobius/decoder/data_decoder.h>
 #include <mobius/core/encoder/data_encoder.hpp>
 #include <sstream>
@@ -122,7 +122,7 @@ tdf::impl::impl (const mobius::io::reader& reader)
   hash_value_ = decoder.get_hex_string_by_size (16);
 
   // Calculate MD5 hash value
-  mobius::crypt::hash md5 ("md5");
+  mobius::core::crypt::hash md5 ("md5");
   md5.update (payload_);
 
   mobius::bytearray encoded_data;

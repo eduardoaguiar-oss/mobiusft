@@ -19,7 +19,7 @@
 #include <mobius/datetime/datetime.h>
 #include <mobius/datetime/timedelta.h>
 #include <mobius/io/bytearray_io.h>
-#include <mobius/charset.h>
+#include <mobius/core/charset.hpp>
 #include <mobius/exception.inc>
 #include <string>
 #include <cstdio>
@@ -425,7 +425,7 @@ data_decoder::get_string_by_size (std::size_t size, const std::string& encoding)
     result = std::string (data.begin (), data.end ());
 
   else
-    result = conv_charset_to_utf8 (data, encoding);
+    result = mobius::core::conv_charset_to_utf8 (data, encoding);
 
   auto pos = result.find ('\0');
 
@@ -479,7 +479,7 @@ data_decoder::get_c_string (const std::string& encoding)
     result = std::string (data.begin (), data.end ());
 
   else
-    result = conv_charset_to_utf8 (data, encoding);
+    result = mobius::core::conv_charset_to_utf8 (data, encoding);
 
   return result;
 }

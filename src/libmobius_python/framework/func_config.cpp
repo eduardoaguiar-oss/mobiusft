@@ -68,7 +68,7 @@ func_framework_set_config (PyObject *, PyObject *args)
 {
   // Parse input args
   std::string arg_name;
-  mobius::pod::data arg_value;
+  mobius::core::pod::data arg_value;
 
   try
     {

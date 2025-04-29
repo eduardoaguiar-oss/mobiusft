@@ -18,7 +18,7 @@
 #include <mobius/core/application.hpp>
 #include <mobius/core/resource.hpp>
 #include <mobius/string_functions.h>
-#include <mobius/vfs/vfs.h>
+#include <mobius/core/vfs/vfs.hpp>
 #include <iostream>
 #include <unistd.h>
 
@@ -101,8 +101,8 @@ main (int argc, char **argv)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Create VFS
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::vfs::vfs vfs;
-  vfs.add_disk (mobius::vfs::new_disk_by_url (argv[optind], type));
+  mobius::core::vfs::vfs vfs;
+  vfs.add_disk (mobius::core::vfs::new_disk_by_url (argv[optind], type));
 
   if (!vfs.is_available ())
     {

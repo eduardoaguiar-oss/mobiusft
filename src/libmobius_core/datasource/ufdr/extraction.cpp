@@ -33,7 +33,7 @@ public:
   impl (const impl&) = delete;
   impl (impl&&) = delete;
   explicit impl (int);
-  explicit impl (const mobius::pod::map&);
+  explicit impl (const mobius::core::pod::map&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Operators
@@ -135,7 +135,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::map get_state () const;
+  mobius::core::pod::map get_state () const;
 
 private:
   // @brief Extraction ID
@@ -158,18 +158,18 @@ private:
 // @brief Constructor
 // @param state Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-extraction::impl::impl (const mobius::pod::map& state)
+extraction::impl::impl (const mobius::core::pod::map& state)
 {
   id_ = state.get<std::int64_t>("id");
   type_ = state.get<std::string>("type");
   name_ = state.get<std::string>("name");
   device_name_ = state.get<std::string>("device_name");
 
-  auto metadata = state.get<std::vector<mobius::pod::data>>("metadata");
+  auto metadata = state.get<std::vector<mobius::core::pod::data>>("metadata");
 
   for (const auto& data : metadata)
     {
-      auto values = std::vector<mobius::pod::data>(data);
+      auto values = std::vector<mobius::core::pod::data>(data);
       metadata_.emplace_back(std::string(values[0]), std::string(values[1]));
     }
 }
@@ -204,7 +204,7 @@ extraction::extraction (int id)
 // @brief Constructor
 // @param state Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-extraction::extraction (const mobius::pod::map& state)
+extraction::extraction (const mobius::core::pod::map& state)
   : impl_ (std::make_shared <impl> (state))
 {
 }
@@ -213,17 +213,17 @@ extraction::extraction (const mobius::pod::map& state)
 // @brief Get object state
 // @return Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::map
+mobius::core::pod::map
 extraction::impl::get_state () const
 {
-  std::vector<mobius::pod::data> metadata;
+  std::vector<mobius::core::pod::data> metadata;
   for (const auto& [k, v] : metadata_)
     {
-      std::vector<mobius::pod::data> values = {k, v};
+      std::vector<mobius::core::pod::data> values = {k, v};
       metadata.push_back (values);
     }
 
-  mobius::pod::map state;
+  mobius::core::pod::map state;
   state.set("id", id_);
   state.set("type", type_);
   state.set("name", name_);
@@ -237,7 +237,7 @@ extraction::impl::get_state () const
 // @brief Get object state
 // @return Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::map
+mobius::core::pod::map
 extraction::get_state () const
 {
   return impl_->get_state ();

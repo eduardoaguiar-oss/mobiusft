@@ -18,15 +18,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/vfs/filesystem_impl_base.h>
-#include <mobius/vfs/tsk/adaptor.h>
+#include <mobius/core/vfs/filesystem_impl_base.hpp>
+#include <mobius/core/vfs/tsk/adaptor.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief VFAT filesystem implementation class
 // @author Eduardo Aguiar
 // @see ECMA-107
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class filesystem_impl : public mobius::vfs::filesystem_impl_base
+class filesystem_impl : public mobius::core::vfs::filesystem_impl_base
 {
 public:
   // Class functions
@@ -36,7 +36,7 @@ public:
   filesystem_impl (const mobius::io::reader&, size_type);
 
   // Function prototypes
-  mobius::pod::data get_metadata (const std::string&) const override;
+  mobius::core::pod::data get_metadata (const std::string&) const override;
   mobius::io::folder get_root_folder () const override;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -105,11 +105,11 @@ public:
   // @brief Get metadata
   // @return Metadata
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::map
+  mobius::core::pod::map
   get_metadata () const override
   {
     _load_data ();
-    return static_cast <mobius::pod::map> (metadata_.clone ());
+    return static_cast <mobius::core::pod::map> (metadata_.clone ());
   }
 
 private:
@@ -129,10 +129,10 @@ private:
   mutable std::string name_;
 
   // @brief Metadata
-  mutable mobius::pod::map metadata_;
+  mutable mobius::core::pod::map metadata_;
 
   // @brief TSK adaptor class
-  mobius::vfs::tsk::adaptor tsk_adaptor_;
+  mobius::core::vfs::tsk::adaptor tsk_adaptor_;
 
   // @brief data loaded flag
   mutable bool data_loaded_ = false;

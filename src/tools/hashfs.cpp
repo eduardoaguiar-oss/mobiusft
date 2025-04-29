@@ -16,9 +16,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/application.hpp>
-#include <mobius/crypt/hash.h>
+#include <mobius/core/crypt/hash.hpp>
 #include <mobius/io/file.h>
-#include <mobius/vfs/vfs.h>
+#include <mobius/core/vfs/vfs.hpp>
 #include <iostream>
 #include <unistd.h>
 
@@ -91,7 +91,7 @@ process_file (
       if (!reader)
         return;
 
-      mobius::crypt::hash h (hash_type);
+      mobius::core::crypt::hash h (hash_type);
 
       constexpr int BLOCK_SIZE = 65536;
       auto data = reader.read (BLOCK_SIZE);
@@ -184,8 +184,8 @@ main (int argc, char **argv)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Create VFS and check if it is available
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::vfs::vfs vfs;
-  vfs.add_disk (mobius::vfs::new_disk_by_url (argv[optind]));
+  mobius::core::vfs::vfs vfs;
+  vfs.add_disk (mobius::core::vfs::new_disk_by_url (argv[optind]));
 
   if (!vfs.is_available ())
     {

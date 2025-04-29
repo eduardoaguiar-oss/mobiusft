@@ -80,7 +80,7 @@ struct file
   mobius::datetime::datetime download_completed_time;
 
   // metadata
-  mobius::pod::map metadata;
+  mobius::core::pod::map metadata;
 
   // remote sources
   std::vector <remote_source> remote_sources;

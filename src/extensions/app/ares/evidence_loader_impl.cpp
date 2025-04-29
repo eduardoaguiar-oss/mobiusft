@@ -75,13 +75,13 @@
 #include <mobius/core/log.hpp>
 #include <mobius/decoder/hexstring.h>
 #include <mobius/core/datasource/datasource_vfs.hpp>
+#include <mobius/core/pod/map.hpp>
 #include <mobius/exception.inc>
 #include <mobius/framework/model/evidence.hpp>
 #include <mobius/io/folder.h>
 #include <mobius/io/path.h>
 #include <mobius/os/win/registry/hive_file.h>
 #include <mobius/os/win/registry/hive_data.h>
-#include <mobius/pod/map.h>
 #include <mobius/string_functions.h>
 #include <algorithm>
 #include <stdexcept>
@@ -140,7 +140,7 @@ to_hex_string (const mobius::os::win::registry::hive_data& data)
 // @param other Other metadata map
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-update_metadata (mobius::pod::map& metadata, const mobius::pod::map& other)
+update_metadata (mobius::core::pod::map& metadata, const mobius::core::pod::map& other)
 {
   for (const auto& [k, v] : other)
     {
@@ -156,10 +156,10 @@ update_metadata (mobius::pod::map& metadata, const mobius::pod::map& other)
 // @param f File structure
 // @return Vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <mobius::pod::data>
+std::vector <mobius::core::pod::data>
 get_file_hashes (const mobius::extension::app::ares::file& f)
 {
-  std::vector <mobius::pod::data> hashes;
+  std::vector <mobius::core::pod::data> hashes;
 
   if (!f.hash_sha1.empty ())
     hashes.push_back ({"sha1", f.hash_sha1});
@@ -1224,7 +1224,7 @@ evidence_loader_impl::_save_accounts ()
 {
   for (const auto& a : accounts_)
     {
-      mobius::pod::map metadata;
+      mobius::core::pod::map metadata;
       metadata.set ("app_id", APP_ID);
       metadata.set ("app_name", APP_NAME);
       metadata.set ("username", a.username);
@@ -1255,7 +1255,7 @@ evidence_loader_impl::_save_autofills ()
 {
   for (const auto& a : autofills_)
     {
-      mobius::pod::map metadata;
+      mobius::core::pod::map metadata;
       metadata.set ("category", a.category);
       metadata.set ("network", "Ares");
       metadata.set ("ares_account_guid", a.account_guid);
@@ -1298,7 +1298,7 @@ evidence_loader_impl::_save_local_files ()
           // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
           // Metadata
           // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          mobius::pod::map metadata;
+          mobius::core::pod::map metadata;
 
           metadata.set ("size", f.size);
           metadata.set ("flag_downloaded", to_string (f.flag_downloaded));
@@ -1374,7 +1374,7 @@ evidence_loader_impl::_save_received_files ()
           // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
           // Metadata
           // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          mobius::pod::map metadata;
+          mobius::core::pod::map metadata;
           metadata.set ("flag_downloaded", to_string (f.flag_downloaded));
           metadata.set ("flag_uploaded", to_string (f.flag_uploaded));
           metadata.set ("flag_shared", to_string (f.flag_shared));
@@ -1444,7 +1444,7 @@ evidence_loader_impl::_save_p2p_remote_files ()
           // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
           // Metadata
           // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          mobius::pod::map metadata;
+          mobius::core::pod::map metadata;
 
           metadata.set ("size", f.size);
           metadata.set ("network", "Ares");
@@ -1500,7 +1500,7 @@ evidence_loader_impl::_save_sent_files ()
           // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
           // Metadata
           // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          mobius::pod::map metadata;
+          mobius::core::pod::map metadata;
           metadata.set ("flag_downloaded", to_string (f.flag_downloaded));
           metadata.set ("flag_uploaded", to_string (f.flag_uploaded));
           metadata.set ("flag_shared", to_string (f.flag_shared));
@@ -1565,13 +1565,13 @@ evidence_loader_impl::_save_shared_files ()
           e.set_attribute ("app_id", APP_ID);
           e.set_attribute ("app_name", APP_NAME);
 
-          std::vector <mobius::pod::data> hashes = {{"sha1", f.hash_sha1}};
+          std::vector <mobius::core::pod::data> hashes = {{"sha1", f.hash_sha1}};
           e.set_attribute ("hashes", hashes);
 
           // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
           // Metadata
           // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          mobius::pod::map metadata;
+          mobius::core::pod::map metadata;
 
           metadata.set ("size", f.size);
           metadata.set ("flag_downloaded", to_string (f.flag_downloaded));

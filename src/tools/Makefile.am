@@ -1,7 +1,9 @@
 tools_PROGRAMS =							\
 	casetree							\
+	device_list							\
 	dirfs								\
 	dirtree								\
+	disk_list							\
 	filesystem_scan							\
 	hashfs								\
 	hive_info							\
@@ -74,9 +76,6 @@ vfs_info_CXXFLAGS = $(LIBTSK_CXXFLAGS) -I$(top_srcdir)/include -I$(top_srcdir)/s
 vfs_info_LDFLAGS = $(LIBTSK_LDFLAGS) -L$(top_srcdir)/src/libmobius_core/build -L$(top_srcdir)/src/libmobius_framework/build -lmobius_core -lmobius_framework
 vfs_info_LDADD = $(top_srcdir)/src/mobius/libmobius.la
 
-if HAVE_LIBUDEV
-tools_PROGRAMS += device_list disk_list
-
 device_list_SOURCES = device_list.cpp
 device_list_CXXFLAGS = $(LIBUDEV_CXXFLAGS) -I$(top_srcdir)/include -I$(top_srcdir)/src
 device_list_LDFLAGS = $(LIBUDEV_FLAGS) -L$(top_srcdir)/src/libmobius_core/build -L$(top_srcdir)/src/libmobius_framework/build -lmobius_core -lmobius_framework
@@ -86,4 +85,3 @@ disk_list_SOURCES = disk_list.cpp
 disk_list_CXXFLAGS = $(LIBUDEV_CXXFLAGS) -I$(top_srcdir)/include -I$(top_srcdir)/src
 disk_list_LDFLAGS = $(LIBUDEV_FLAGS) -L$(top_srcdir)/src/libmobius_core/build -L$(top_srcdir)/src/libmobius_framework/build -lmobius_core -lmobius_framework
 disk_list_LDADD = $(top_srcdir)/src/mobius/libmobius.la
-endif

@@ -18,7 +18,7 @@
 #include <mobius/core/application.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/resource.hpp>
-#include <mobius/vfs/vfs.h>
+#include <mobius/core/vfs/vfs.hpp>
 #include <iostream>
 #include <unistd.h>
 
@@ -50,7 +50,7 @@ usage ()
 //! \param block Block object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-show_block (const mobius::vfs::block& block)
+show_block (const mobius::core::vfs::block& block)
 {
   std::cout << std::endl;
   std::cout << "  UID: " << block.get_uid () << std::endl;
@@ -93,7 +93,7 @@ show_block (const mobius::vfs::block& block)
 //! \param vfs VFS object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-show_vfs (const mobius::vfs::vfs& vfs)
+show_vfs (const mobius::core::vfs::vfs& vfs)
 {
   std::cout << std::endl;
   std::cout << "Is available: " << vfs.is_available () << std::endl;
@@ -179,8 +179,8 @@ main (int argc, char **argv)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Create VFS
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::vfs::vfs vfs;
-  vfs.add_disk (mobius::vfs::new_disk_by_url (argv[optind], type));
+  mobius::core::vfs::vfs vfs;
+  vfs.add_disk (mobius::core::vfs::new_disk_by_url (argv[optind], type));
 
   if (!vfs.is_available ())
     {

@@ -20,7 +20,7 @@
 #include <mobius/decoder/btencode.h>
 #include <mobius/decoder/data_decoder.h>
 #include <mobius/io/path.h>
-#include <mobius/pod/map.h>
+#include <mobius/core/pod/map.hpp>
 #include <mobius/string_functions.h>
 #include <algorithm>
 
@@ -80,7 +80,7 @@ file_ed2k_fastresume::file_ed2k_fastresume (const mobius::io::reader& reader)
   auto metadata = mobius::decoder::btencode (metadata_data);
 
   if (metadata.is_map ())
-    _load_metadata (mobius::pod::map (metadata));
+    _load_metadata (mobius::core::pod::map (metadata));
 
   metadata_section.end ();
   section_.end ();
@@ -91,12 +91,12 @@ file_ed2k_fastresume::file_ed2k_fastresume (const mobius::io::reader& reader)
 // @param metadata Map object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-file_ed2k_fastresume::_load_metadata (const mobius::pod::map& metadata)
+file_ed2k_fastresume::_load_metadata (const mobius::core::pod::map& metadata)
 {
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Get data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::map m (metadata);
+  mobius::core::pod::map m (metadata);
 
   is_paused_ = m.get <std::int64_t> ("paused", 0);
   downloaded_bytes_ = m.get <std::int64_t> ("total_downloaded", 0);

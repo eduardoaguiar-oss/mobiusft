@@ -18,10 +18,10 @@
 #include "credhist_entry.h"
 #include "cipher_info.h"
 #include "hash_info.h"
-#include <mobius/charset.h>
-#include <mobius/crypt/cipher.h>
-#include <mobius/crypt/hash.h>
-#include <mobius/crypt/hmac.h>
+#include <mobius/core/charset.hpp>
+#include <mobius/core/crypt/cipher.hpp>
+#include <mobius/core/crypt/hash.hpp>
+#include <mobius/core/crypt/hmac.hpp>
 #include <mobius/decoder/data_decoder.h>
 #include <mobius/exception.inc>
 #include <mobius/os/win/pbkdf2_hmac_ms.h>
@@ -292,7 +292,7 @@ credhist_entry::impl::decrypt_with_key (const mobius::bytearray& key)
 
       // decrypt cipher text
       auto cipher_id = mobius::os::win::dpapi::get_cipher_id (cipher_id_);
-      auto c = mobius::crypt::new_cipher_cbc (cipher_id, prekey, presalt);
+      auto c = mobius::core::crypt::new_cipher_cbc (cipher_id, prekey, presalt);
       auto cleartxt = c.decrypt (cipher_text_);
 
       // check decryption
@@ -328,8 +328,8 @@ credhist_entry::impl::decrypt_with_password_hash (const mobius::bytearray& h)
 
   if (!is_decrypted_)
     {
-      mobius::crypt::hmac hmac ("sha1", h);
-      hmac.update (conv_charset (bytearray (sid_) + bytearray ({0}), "ASCII", "UTF-16LE"));
+      mobius::core::crypt::hmac hmac ("sha1", h);
+      hmac.update (mobius::core::conv_charset (bytearray (sid_) + bytearray ({0}), "ASCII", "UTF-16LE"));
       rc = decrypt_with_key (hmac.get_digest ());
     }
 
@@ -348,8 +348,8 @@ credhist_entry::impl::decrypt_with_password (const std::string& password)
 
   if (!is_decrypted_)
     {
-      mobius::crypt::hash h ("sha1");
-      h.update (conv_charset (password, "UTF-8", "UTF-16LE"));
+      mobius::core::crypt::hash h ("sha1");
+      h.update (mobius::core::conv_charset (password, "UTF-8", "UTF-16LE"));
       rc = decrypt_with_password_hash (h.get_digest ());
     }
 

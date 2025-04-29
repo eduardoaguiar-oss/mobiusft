@@ -20,7 +20,7 @@ CMAKE_BUILD_DIR = build
 all-local:
 	@mkdir -p $(CMAKE_BUILD_DIR)
 	@cd $(CMAKE_BUILD_DIR) && \
-		$(CMAKE) -DCMAKE_INSTALL_PREFIX=$(prefix) -DCMAKE_BUILD_TYPE=Release .. && \
+		$(CMAKE) -DCMAKE_INSTALL_PREFIX=$(prefix) -DCMAKE_BUILD_TYPE=Release -DLIBTSK_DIR=$(LIBTSK_DIR) .. && \
 		$(MAKE)
 
 install-exec-local:
@@ -33,6 +33,8 @@ EXTRA_DIST = 								\
     CMakeLists.txt							\
     application.cpp.in							\
     *.cpp								\
+    crypt/CMakeLists.txt						\
+    crypt/*.cpp								\
     datasource/CMakeLists.txt						\
     datasource/*.cpp							\
     datasource/ufdr/*.cpp						\
@@ -44,7 +46,13 @@ EXTRA_DIST = 								\
     jni/*.cpp								\
     kff/CMakeLists.txt							\
     kff/*.cpp								\
+    pod/CMakeLists.txt							\
+    pod/*.cpp								\
+    system/CMakeLists.txt						\
+    system/*.cpp							\
     turing/CMakeLists.txt						\
     turing/*.cpp							\
     ui/CMakeLists.txt							\
-    ui/*.cpp
+    ui/*.cpp								\
+    vfs/CMakeLists.txt							\
+    vfs/*.cpp

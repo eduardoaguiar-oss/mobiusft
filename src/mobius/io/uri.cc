@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "uri.h"
 #include "path.h"
-#include <mobius/charset.h>
+#include <mobius/core/charset.hpp>
 #include <mobius/string_functions.h>
 #include <mobius/exception.inc>
 #include <cstdlib>
@@ -410,7 +410,7 @@ uri::get_path (const std::string& encoding) const
   if (encoding.empty ())
     return path_;
 
-  return conv_charset_to_utf8 (_decode_triplets (path_), encoding);
+  return mobius::core::conv_charset_to_utf8 (_decode_triplets (path_), encoding);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -424,7 +424,7 @@ uri::get_query (const std::string& encoding) const
   if (encoding.empty ())
     return query_;
 
-  return conv_charset_to_utf8 (_decode_triplets (query_), encoding);
+  return mobius::core::conv_charset_to_utf8 (_decode_triplets (query_), encoding);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -438,7 +438,7 @@ uri::get_fragment (const std::string& encoding) const
   if (encoding.empty ())
     return fragment_;
 
-  return conv_charset_to_utf8 (_decode_triplets (fragment_), encoding);
+  return mobius::core::conv_charset_to_utf8 (_decode_triplets (fragment_), encoding);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -533,7 +533,7 @@ uri::get_filename (const std::string& encoding) const
   if (encoding.empty ())
     return value;
 
-  return conv_charset_to_utf8 (_decode_triplets (value), encoding);
+  return mobius::core::conv_charset_to_utf8 (_decode_triplets (value), encoding);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

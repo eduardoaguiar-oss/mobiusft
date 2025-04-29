@@ -24,9 +24,9 @@
 #include "init.h"
 #include <mobius/exception.inc>
 #include <mobius/exception_posix.inc>
-#include <mobius/system/user.h>
-#include <mobius/system/group.h>
 #include <mobius/core/collection_impl_base.hpp>
+#include <mobius/core/system/user.hpp>
+#include <mobius/core/system/group.hpp>
 #include <memory>
 #include <stdexcept>
 #include <dirent.h>

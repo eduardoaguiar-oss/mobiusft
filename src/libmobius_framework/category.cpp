@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/framework/category.hpp>
 #include <mobius/core/application.hpp>
+#include <mobius/core/database/database.hpp>
 #include <mobius/core/thread_guard.hpp>
-#include <mobius/database/database.h>
 
 namespace
 {
@@ -28,16 +28,16 @@ static const std::string RESOURCE_ID = "database.category";
 // @brief Get database instance
 // @return Database object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::database::database
+static mobius::core::database::database
 _get_database ()
 {
-  mobius::database::database db;
+  mobius::core::database::database db;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // If DB instance is already opened for current thread, simply return it
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   if (mobius::core::has_thread_resource (RESOURCE_ID))
-    db = mobius::core::get_thread_resource <mobius::database::database> (RESOURCE_ID);
+    db = mobius::core::get_thread_resource <mobius::core::database::database> (RESOURCE_ID);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Otherwise, create a new DB instance and associate to current thread
@@ -48,7 +48,7 @@ _get_database ()
       mobius::core::application app;
       auto path = app.get_config_path ("category.sqlite");
 
-      db = mobius::database::database (path);
+      db = mobius::core::database::database (path);
 
       // create db tables, if necessary
       auto transaction = db.new_transaction ();
@@ -574,7 +574,7 @@ category::get_attributes () const
 // @brief Get category database
 // @return Database
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::database::database
+mobius::core::database::database
 get_category_database ()
 {
   return _get_database ();
@@ -584,7 +584,7 @@ get_category_database ()
 // @brief Create new transaction to category database
 // @return New database transaction
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::database::transaction
+mobius::core::database::transaction
 new_category_transaction ()
 {
   auto db = _get_database ();

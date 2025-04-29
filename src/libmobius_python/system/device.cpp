@@ -30,12 +30,12 @@
 // @return new device object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_system_device_to_pyobject (mobius::system::device obj)
+pymobius_system_device_to_pyobject (mobius::core::system::device obj)
 {
   PyObject *ret = _PyObject_New (&system_device_t);
 
   if (ret)
-    ((system_device_o *) ret)->obj = new mobius::system::device (obj);
+    ((system_device_o *) ret)->obj = new mobius::core::system::device (obj);
 
   return ret;
 }

@@ -18,7 +18,7 @@
 #include <mobius/core/application.hpp>
 #include <mobius/core/resource.hpp>
 #include <mobius/string_functions.h>
-#include <mobius/vfs/imagefile.h>
+#include <mobius/core/vfs/imagefile.hpp>
 #include <iostream>
 #include <unistd.h>
 
@@ -95,7 +95,7 @@ main (int argc, char **argv)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // check if imagefile is available
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto image = mobius::vfs::new_imagefile_by_url (argv[optind], type);
+  auto image = mobius::core::vfs::new_imagefile_by_url (argv[optind], type);
 
   if (!image.is_available ())
     {

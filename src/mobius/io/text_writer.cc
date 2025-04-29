@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "text_writer.h"
-#include <mobius/charset.h>
+#include <mobius/core/charset.hpp>
 #include <mobius/string_functions.h>
 
 namespace mobius::io
@@ -46,7 +46,7 @@ text_writer::write (const std::string& text)
     writer_.write (text);
 
   else
-    writer_.write (conv_charset (text, "UTF-8", encoding_));
+    writer_.write (mobius::core::conv_charset (text, "UTF-8", encoding_));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

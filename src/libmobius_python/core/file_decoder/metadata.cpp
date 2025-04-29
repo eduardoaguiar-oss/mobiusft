@@ -39,7 +39,7 @@ tp_f_set_value (core_file_decoder_metadata_o *self, PyObject *args)
   // Parse input args
   std::string arg_group;
   std::string arg_name;
-  mobius::pod::data arg_value;
+  mobius::core::pod::data arg_value;
 
   try
     {

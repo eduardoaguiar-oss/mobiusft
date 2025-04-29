@@ -64,7 +64,7 @@ if(NOT MOBIUS_FRAMEWORK_LIB)
 endif()
 
 set(MOBIUS_INCLUDE_DIRS ${TOP_SRC_DIR}/include ${TOP_SRC_DIR}/src)
-set(MOBIUS_LIBRARIES ${MOBIUS_FRAMEWORK_LIB} ${MOBIUS_CORE_LIB} ${MOBIUS_LIB})
+set(MOBIUS_LIBRARIES ${MOBIUS_FRAMEWORK_LIB} ${MOBIUS_LIB} ${MOBIUS_CORE_LIB})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Build extensions

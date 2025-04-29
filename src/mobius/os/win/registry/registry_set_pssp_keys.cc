@@ -18,10 +18,10 @@
 #include "registry_key.h"
 #include "registry_key_impl_pssp.h"
 #include "pssp_data2.h"
-#include <mobius/crypt/hash.h>
-#include <mobius/crypt/cipher.h>
+#include <mobius/core/charset.hpp>
+#include <mobius/core/crypt/hash.hpp>
+#include <mobius/core/crypt/cipher.hpp>
 #include <mobius/decoder/data_decoder.h>
-#include <mobius/charset.h>
 
 namespace mobius::os::win::registry
 {
@@ -43,9 +43,9 @@ get_data2 (registry_key sid_key)
   if (data2_key)
     {
       // evaluate SID based hash value
-      mobius::crypt::hash sid_hash ("sha1");
+      mobius::core::crypt::hash sid_hash ("sha1");
       sid_hash.update ({0x66, 0x41, 0xa3, 0x29});
-      sid_hash.update (mobius::conv_charset (sid_key.get_name (), "UTF-8", "UTF-16LE"));
+      sid_hash.update (mobius::core::conv_charset (sid_key.get_name (), "UTF-8", "UTF-16LE"));
 
       if (sid_key.get_name ().length () % 2)
         sid_hash.update ({0x14, 0x9a});
@@ -66,7 +66,7 @@ get_data2 (registry_key sid_key)
           auto salt = decoder.get_bytearray_by_size (16);		// 40 - 55
 
           // build DES key
-          mobius::crypt::hash data_hash ("sha1");
+          mobius::core::crypt::hash data_hash ("sha1");
 
           data_hash.update (salt);
 
@@ -79,7 +79,7 @@ get_data2 (registry_key sid_key)
           auto des_key = data_hash.get_digest ().slice (0, 7);
 
           // decrypt cryptographic key
-          auto des = mobius::crypt::new_cipher_cbc ("des", des_key);
+          auto des = mobius::core::crypt::new_cipher_cbc ("des", des_key);
           auto key_name = subkey.get_name ();
           auto key_value = des.decrypt (encrypted_key).slice (0, 7);
 

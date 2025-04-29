@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "bytearray.h"
-#include "charset.h"
+#include <mobius/core/charset.hpp>
 #include <algorithm>
 #include <cstdio>
 #include <cstdlib>
@@ -429,7 +429,7 @@ bytearray::to_string (const std::string& encoding) const
   if (encoding.empty ())
     return std::string (data_.begin (), data_.end ());
 
-  return conv_charset_to_utf8 (*this, encoding);
+  return mobius::core::conv_charset_to_utf8 (*this, encoding);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -21,7 +21,7 @@
 #include <mobius/io/reader_impl_base.h>
 #include <mobius/io/reader.h>
 #include <mobius/bytearray.h>
-#include <mobius/crypt/cipher.h>
+#include <mobius/core/crypt/cipher.hpp>
 
 class imagefile_impl;
 
@@ -102,7 +102,7 @@ public:
 
 private:
   const size_type size_;
-  mobius::crypt::cipher cipher_;
+  mobius::core::crypt::cipher cipher_;
   mobius::io::reader stream_;
   size_type pos_ = 0;
   size_type chunk_idx_ = 1;

@@ -23,9 +23,16 @@ cmake_minimum_required(VERSION 3.10)
 project(libmobius-python-ui LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Find dependencies
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GTK3 IMPORTED_TARGET REQUIRED gtk+-3.0)
+pkg_check_modules(PYGOBJECT IMPORTED_TARGET REQUIRED pygobject-3.0)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target: libmobius-python-ui.la
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(libmobius-python-ui STATIC
+add_library(mobius_python_ui STATIC
     module.cpp
     box.cpp
     button.cpp
@@ -39,7 +46,7 @@ add_library(libmobius-python-ui STATIC
     window.cpp
 )
 
-target_include_directories(libmobius-python-ui PRIVATE
+target_include_directories(mobius_python_ui PRIVATE
     ${MOBIUS_INCLUDE_DIRS}
     ${CMAKE_SOURCE_DIR}
     ${GTK3_INCLUDE_DIRS}
@@ -47,4 +54,9 @@ target_include_directories(libmobius-python-ui PRIVATE
     ${Python3_INCLUDE_DIRS}
 )
 
-target_compile_options(libmobius-python-ui PRIVATE -fno-strict-aliasing -fPIC)
+target_link_libraries(mobius_python_ui PUBLIC
+    PkgConfig::GTK3
+    PkgConfig::PYGOBJECT
+)
+
+target_compile_options(mobius_python_ui PRIVATE -fno-strict-aliasing -fPIC)

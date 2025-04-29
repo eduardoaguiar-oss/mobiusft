@@ -66,13 +66,13 @@ decoder_impl_torrenth::decode (const mobius::io::reader& reader)
       // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
       // Set trackers
       // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-      std::vector <mobius::pod::data> trackers (entry.trackers.size ());
+      std::vector <mobius::core::pod::data> trackers (entry.trackers.size ());
 
       std::transform (
           entry.trackers.begin (),
           entry.trackers.end (),
           trackers.begin (),
-          [](const auto& t){ return mobius::pod::data (t); }
+          [](const auto& t){ return mobius::core::pod::data (t); }
       );
 
       e.set_metadata ("trackers", trackers);

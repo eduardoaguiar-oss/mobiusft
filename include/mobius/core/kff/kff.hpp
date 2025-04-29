@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/kff/hashset.hpp>
-#include <mobius/database/connection_set.h>
+#include <mobius/core/database/connection_set.hpp>
 #include <string>
 #include <utility>
 #include <vector>
@@ -49,7 +49,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Function prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::database::connection_set new_connection ();
+  mobius::core::database::connection_set new_connection ();
 
   hashset new_hashset (const std::string&, bool);
   void remove_hashset (const std::string&);

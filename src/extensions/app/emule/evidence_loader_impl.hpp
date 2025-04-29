@@ -19,11 +19,11 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/datetime/datetime.h>
+#include <mobius/core/pod/map.hpp>
 #include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/evidence_loader_impl_base.hpp>
 #include <mobius/framework/model/item.hpp>
 #include <mobius/io/file.h>
-#include <mobius/pod/map.h>
 #include <map>
 #include <vector>
 
@@ -74,7 +74,7 @@ struct autofill
     std::string username;
     std::string value;
     std::string id;
-    mobius::pod::map metadata;
+    mobius::core::pod::map metadata;
     mobius::io::file f;
 };
 
@@ -90,10 +90,10 @@ struct local_file
     bool is_deleted = false;
 
     // metadata
-    mobius::pod::map metadata;
+    mobius::core::pod::map metadata;
 
     // hashes
-    mobius::pod::data hashes;
+    mobius::core::pod::data hashes;
 
     // flags
     mobius::framework::evidence_flag flag_downloaded;
@@ -119,10 +119,10 @@ struct remote_file
     std::string username;
 
     // metadata
-    mobius::pod::map metadata;
+    mobius::core::pod::map metadata;
 
     // hashes
-    mobius::pod::data hashes;
+    mobius::core::pod::data hashes;
 
     // files
     mobius::io::file part_met_f;

@@ -41,7 +41,7 @@ pymobius_crypt_hmac_check (PyObject *value)
 // @return New hmac object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_crypt_hmac_to_pyobject (const mobius::crypt::hmac& obj)
+pymobius_crypt_hmac_to_pyobject (const mobius::core::crypt::hmac& obj)
 {
   return mobius::py::to_pyobject_nullable <crypt_hmac_o> (obj, &crypt_hmac_t);
 }
@@ -51,7 +51,7 @@ pymobius_crypt_hmac_to_pyobject (const mobius::crypt::hmac& obj)
 // @param value Python value
 // @return Hmac object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::crypt::hmac
+mobius::core::crypt::hmac
 pymobius_crypt_hmac_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <crypt_hmac_o> (value, &crypt_hmac_t);
@@ -349,7 +349,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
   crypt_hmac_o *self = (crypt_hmac_o *) type->tp_alloc (type, 0);
 
   if (self)
-    self->obj = new mobius::crypt::hmac (arg_hash_id, arg_key);
+    self->obj = new mobius::core::crypt::hmac (arg_hash_id, arg_key);
 
   return (PyObject *) self;
 }

@@ -18,10 +18,10 @@
 #include "master_key.h"
 #include "cipher_info.h"
 #include "hash_info.h"
-#include <mobius/charset.h>
-#include <mobius/crypt/cipher.h>
-#include <mobius/crypt/hash.h>
-#include <mobius/crypt/hmac.h>
+#include <mobius/core/charset.hpp>
+#include <mobius/core/crypt/cipher.hpp>
+#include <mobius/core/crypt/hash.hpp>
+#include <mobius/core/crypt/hmac.hpp>
 #include <mobius/decoder/data_decoder.h>
 #include <mobius/exception.inc>
 #include <mobius/os/win/pbkdf2_hmac_ms.h>
@@ -328,7 +328,7 @@ master_key::impl::decrypt_with_key (const mobius::bytearray& key)
 
   // decrypt cipher text
   auto cipher_id = mobius::os::win::dpapi::get_cipher_id (cipher_id_);
-  auto c = mobius::crypt::new_cipher_cbc (cipher_id, prekey, presalt);
+  auto c = mobius::core::crypt::new_cipher_cbc (cipher_id, prekey, presalt);
   auto cleartxt = c.decrypt (cipher_text_);
 
   // evaluate HMAC
@@ -336,10 +336,10 @@ master_key::impl::decrypt_with_key (const mobius::bytearray& key)
   auto hmac_value = cleartxt.slice (16, 16 + hash_digest_size - 1);
   cleartxt = cleartxt.slice (cleartxt.size () - 64, cleartxt.size () - 1);
 
-  auto hmac_1 = mobius::crypt::hmac (hash_id, key);
+  auto hmac_1 = mobius::core::crypt::hmac (hash_id, key);
   hmac_1.update (hmac_salt);
 
-  auto hmac_2 = mobius::crypt::hmac (hash_id, hmac_1.get_digest ());
+  auto hmac_2 = mobius::core::crypt::hmac (hash_id, hmac_1.get_digest ());
   hmac_2.update (cleartxt);
 
   // check if decryption is successful
@@ -365,8 +365,8 @@ master_key::impl::decrypt_with_password_hash (
   const std::string& sid,
   const mobius::bytearray& h)
 {
-  mobius::crypt::hmac hmac ("sha1", h);
-  hmac.update (conv_charset (bytearray (sid) + bytearray ({0}), "ASCII", "UTF-16LE"));
+  mobius::core::crypt::hmac hmac ("sha1", h);
+  hmac.update (mobius::core::conv_charset (bytearray (sid) + bytearray ({0}), "ASCII", "UTF-16LE"));
   return decrypt_with_key (hmac.get_digest ());
 }
 
@@ -383,8 +383,8 @@ master_key::impl::decrypt_with_password (
 {
   constexpr std::uint32_t DPAPI_MASTER_KEY_SHA1 = 0x00000004;
 
-  mobius::crypt::hash h (flags_ & DPAPI_MASTER_KEY_SHA1 ? "sha1" : "md4");
-  h.update (conv_charset (pwd, "UTF-8", "UTF-16LE"));
+  mobius::core::crypt::hash h (flags_ & DPAPI_MASTER_KEY_SHA1 ? "sha1" : "md4");
+  h.update (mobius::core::conv_charset (pwd, "UTF-8", "UTF-16LE"));
 
   return decrypt_with_password_hash (sid, h.get_digest ());
 }

@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CThumbCache.hpp"
-#include <mobius/database/database.h>
+#include <mobius/core/database/database.hpp>
 #include <mobius/io/tempfile.h>
 #include <mobius/string_functions.h>
 
@@ -37,7 +37,7 @@ CThumbCache::CThumbCache (const mobius::io::reader& reader)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Read cache from db file
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::database::database db (tfile.get_path ());
+  mobius::core::database::database db (tfile.get_path ());
 
   auto stmt = db.new_statement (
                 "SELECT Filename, FileSize, LastWriteTime, Image "

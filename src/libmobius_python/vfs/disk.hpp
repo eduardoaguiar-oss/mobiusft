@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/vfs/disk.h>
+#include <mobius/core/vfs/disk.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::vfs::disk *obj;
+  mobius::core::vfs::disk *obj;
 } vfs_disk_o;
 
 extern PyTypeObject vfs_disk_t;
@@ -36,8 +36,8 @@ extern PyTypeObject vfs_disk_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_vfs_disk_check (PyObject *);
-PyObject *pymobius_vfs_disk_to_pyobject (const mobius::vfs::disk&);
-mobius::vfs::disk pymobius_vfs_disk_from_pyobject (PyObject *);
+PyObject *pymobius_vfs_disk_to_pyobject (const mobius::core::vfs::disk&);
+mobius::core::vfs::disk pymobius_vfs_disk_from_pyobject (PyObject *);
 
 #endif
 

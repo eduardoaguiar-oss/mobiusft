@@ -79,7 +79,7 @@ imagefile_impl::imagefile_impl (const mobius::io::file& f)
 // @param name Attribute name
 // @return Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::data
+mobius::core::pod::data
 imagefile_impl::get_attribute (const std::string& name) const
 {
   _load_metadata ();
@@ -94,7 +94,7 @@ imagefile_impl::get_attribute (const std::string& name) const
 void
 imagefile_impl::set_attribute (
   const std::string&,
-  const mobius::pod::data&
+  const mobius::core::pod::data&
 )
 {
   throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("set_attribute not implemented"));
@@ -104,7 +104,7 @@ imagefile_impl::set_attribute (
 // @brief Get attributes
 // @return Attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::map
+mobius::core::pod::map
 imagefile_impl::get_attributes () const
 {
   _load_metadata ();

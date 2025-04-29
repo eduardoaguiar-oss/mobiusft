@@ -146,7 +146,7 @@ static PyObject *
 tp_f_set_case_info (datasource_ufdr_datasource_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::pod::map arg_case_info;
+  mobius::core::pod::map arg_case_info;
 
   try
     {

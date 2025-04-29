@@ -23,12 +23,12 @@
 #include "file_stored_searches_met.hpp"
 #include <mobius/core/log.hpp>
 #include <mobius/core/datasource/datasource_vfs.hpp>
+#include <mobius/core/pod/data.hpp>
 #include <mobius/decoder/data_decoder.h>
 #include <mobius/decoder/inifile.h>
 #include <mobius/framework/model/evidence.hpp>
 #include <mobius/io/line_reader.h>
 #include <mobius/io/walker.h>
-#include <mobius/pod/data.h>
 #include <mobius/string_functions.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -91,10 +91,10 @@ static const std::string ANT_VERSION = "1.0";
 // @param f File structure
 // @return Vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename T> std::vector <mobius::pod::data>
+template <typename T> std::vector <mobius::core::pod::data>
 get_file_hashes (const T& f)
 {
-    std::vector <mobius::pod::data> hashes = {
+    std::vector <mobius::core::pod::data> hashes = {
         {"ed2k", mobius::string::toupper (f.hash_ed2k)}
     };
 
@@ -635,7 +635,7 @@ evidence_loader_impl::_decode_key_index_dat_file (const mobius::io::file& f)
                         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
                         // Content hashes
                         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-                        std::vector <mobius::pod::data> hashes = {
+                        std::vector <mobius::core::pod::data> hashes = {
                             {"ed2k", hash_ed2k}
                         };
 
@@ -786,7 +786,7 @@ evidence_loader_impl::_decode_part_met_file (const mobius::io::file& f)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Content hashes
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        std::vector <mobius::pod::data> hashes = {
+        std::vector <mobius::core::pod::data> hashes = {
             {"ed2k", mobius::string::toupper (part_met.get_hash_ed2k ())}
         };
 
@@ -916,7 +916,7 @@ evidence_loader_impl::_decode_storedsearches_met_file (const mobius::io::file& f
             af.id = "search";
             af.f = f;
             
-            af.metadata = mobius::pod::map ();
+            af.metadata = mobius::core::pod::map ();
             af.metadata.set("stored_searches_version", version);
             af.metadata.set("search_id", s.id);
             af.metadata.set("e_type", s.e_type);
@@ -961,7 +961,7 @@ evidence_loader_impl::_save_accounts ()
 {
   for (const auto& a : accounts_)
     {
-      mobius::pod::map metadata;
+      mobius::core::pod::map metadata;
       metadata.set ("app_id", APP_ID);
       metadata.set ("app_name", APP_NAME);
       metadata.set ("username", a.username);
@@ -1023,7 +1023,7 @@ evidence_loader_impl::_save_autofills ()
 {
   for (const auto& af : autofills_)
     {
-      mobius::pod::map metadata = af.metadata.clone ();
+      mobius::core::pod::map metadata = af.metadata.clone ();
       metadata.set ("id", af.id);
 
       auto e = item_.new_evidence ("autofill");

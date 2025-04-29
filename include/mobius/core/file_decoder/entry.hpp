@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/pod/data.h>
-#include <mobius/pod/map.h>
+#include <mobius/core/pod/data.hpp>
+#include <mobius/core/pod/map.hpp>
 #include <memory>
 #include <string>
 
@@ -53,9 +53,9 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Function prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::data get_metadata (const std::string&) const;
-  mobius::pod::map get_all_metadata () const;
-  void set_metadata (const std::string&, const mobius::pod::data&);
+  mobius::core::pod::data get_metadata (const std::string&) const;
+  mobius::core::pod::map get_all_metadata () const;
+  void set_metadata (const std::string&, const mobius::core::pod::data&);
   idx_type get_idx () const;
   std::string get_name () const;
 
@@ -70,7 +70,7 @@ public:
   {
     T value = dvalue;
 
-    mobius::pod::data d = get_metadata (name);
+    mobius::core::pod::data d = get_metadata (name);
     if (!d.is_null ())
       value = static_cast <T> (d);
 

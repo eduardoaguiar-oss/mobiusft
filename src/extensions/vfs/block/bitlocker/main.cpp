@@ -20,7 +20,7 @@
 #include <mobius/core/resource.hpp>
 #include <mobius/decoder/data_decoder.h>
 #include <mobius/string_functions.h>
-#include <mobius/vfs/block.h>
+#include <mobius/core/vfs/block.hpp>
 #include <map>
 #include <vector>
 
@@ -91,7 +91,7 @@ static const std::map <std::uint16_t, const std::string> ENCRYPTION_DESCRIPTION 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Function declarations
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static std::vector <mobius::pod::map> _decode_fve_metadata_entries (const mobius::bytearray&);
+static std::vector <mobius::core::pod::map> _decode_fve_metadata_entries (const mobius::bytearray&);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get protection description
@@ -131,10 +131,10 @@ _get_encryption_description (std::uint16_t type)
 // @param data Data
 // @return Map containing attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::pod::map
+static mobius::core::pod::map
 _decode_fve_metadata_0005 (const mobius::bytearray& data)
 {
-  mobius::pod::map m;
+  mobius::core::pod::map m;
 
   auto decoder = mobius::decoder::data_decoder (data);
 
@@ -150,10 +150,10 @@ _decode_fve_metadata_0005 (const mobius::bytearray& data)
 // @param data Data
 // @return Map containing attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::pod::map
+static mobius::core::pod::map
 _decode_fve_metadata_0008 (const mobius::bytearray& data)
 {
-  mobius::pod::map m;
+  mobius::core::pod::map m;
 
   auto decoder = mobius::decoder::data_decoder (data);
 
@@ -189,10 +189,10 @@ _decode_fve_metadata_0008 (const mobius::bytearray& data)
 // @param decoder Data decoder object
 // @return Entry as map
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::pod::map
+static mobius::core::pod::map
 _decode_fve_metadata_entry (mobius::decoder::data_decoder& decoder)
 {
-  mobius::pod::map entry;
+  mobius::core::pod::map entry;
 
   auto size = decoder.get_uint16_le ();
   if (!size)
@@ -266,10 +266,10 @@ _decode_fve_metadata_entry (mobius::decoder::data_decoder& decoder)
 // @param data Data
 // @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static std::vector <mobius::pod::map>
+static std::vector <mobius::core::pod::map>
 _decode_fve_metadata_entries (const mobius::bytearray& data)
 {
-  std::vector <mobius::pod::map> entries;
+  std::vector <mobius::core::pod::map> entries;
   auto decoder = mobius::decoder::data_decoder (data);
 
   while (decoder)
@@ -293,7 +293,7 @@ _decode_fve_metadata_entries (const mobius::bytearray& data)
 //   3. metadata entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static bool
-_decode_fve_metadata (mobius::vfs::block& bde_block, std::uint64_t offset)
+_decode_fve_metadata (mobius::core::vfs::block& bde_block, std::uint64_t offset)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -379,7 +379,7 @@ _decode_fve_metadata (mobius::vfs::block& bde_block, std::uint64_t offset)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         case 0x0002:
           {
-            auto v = bde_block.get_attribute <std::vector <mobius::pod::data>> ("vmk");
+            auto v = bde_block.get_attribute <std::vector <mobius::core::pod::data>> ("vmk");
             v.push_back (entry);
             bde_block.set_attribute ("vmk", v);
           }
@@ -424,7 +424,7 @@ _decode_fve_metadata (mobius::vfs::block& bde_block, std::uint64_t offset)
 static void
 _decode_bpb_fields (
   mobius::decoder::data_decoder& decoder,
-  mobius::vfs::block& bde_block
+  mobius::core::vfs::block& bde_block
 )
 {
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -460,7 +460,7 @@ _decode_bpb_fields (
 static void
 _decode_fat32_info (
   mobius::decoder::data_decoder& decoder,
-  mobius::vfs::block& bde_block
+  mobius::core::vfs::block& bde_block
 )
 {
   bde_block.set_attribute ("sector_per_fat", decoder.get_uint32_le ());
@@ -480,7 +480,7 @@ _decode_fat32_info (
 static void
 _decode_extended_bpb_fields (
   mobius::decoder::data_decoder& decoder,
-  mobius::vfs::block& bde_block
+  mobius::core::vfs::block& bde_block
 )
 {
   bde_block.set_attribute ("logical_drive_number", "0x" + mobius::string::to_hex (decoder.get_uint8 (), 2));
@@ -503,7 +503,7 @@ _decode_extended_bpb_fields (
 static void
 _decode_fve_metadata_offset_block (
   mobius::decoder::data_decoder& decoder,
-  mobius::vfs::block& bde_block
+  mobius::core::vfs::block& bde_block
 )
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
@@ -556,8 +556,8 @@ _decode_fve_metadata_offset_block (
 // @param block Block object
 // @return BDE block object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::vfs::block
-_decode_win7 (const mobius::vfs::block& block)
+static mobius::core::vfs::block
+_decode_win7 (const mobius::core::vfs::block& block)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
   log.info (__LINE__, "Bitlocker Win7-11 found");
@@ -565,7 +565,7 @@ _decode_win7 (const mobius::vfs::block& block)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Create bde_block
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto bde_block = mobius::vfs::new_slice_block (block, "bitlocker");
+  auto bde_block = mobius::core::vfs::new_slice_block (block, "bitlocker");
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Create decoder
@@ -597,8 +597,8 @@ _decode_win7 (const mobius::vfs::block& block)
 // @param block Block object
 // @return BDE block object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::vfs::block
-_decode_to_go (const mobius::vfs::block& block)
+static mobius::core::vfs::block
+_decode_to_go (const mobius::core::vfs::block& block)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
   log.info (__LINE__, "Bitlocker To Go found");
@@ -607,7 +607,7 @@ _decode_to_go (const mobius::vfs::block& block)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Create BDE block
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto bde_block = mobius::vfs::new_slice_block (block, "bitlocker");
+  auto bde_block = mobius::core::vfs::new_slice_block (block, "bitlocker");
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Create decoder
@@ -646,13 +646,13 @@ _decode_to_go (const mobius::vfs::block& block)
 // @param block Block object
 // @return BDE block object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::vfs::block
-_decode_unknown_bitlocker (const mobius::vfs::block& block)
+static mobius::core::vfs::block
+_decode_unknown_bitlocker (const mobius::core::vfs::block& block)
 {
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Create BDE block
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto bde_block = mobius::vfs::new_slice_block (block, "bitlocker");
+  auto bde_block = mobius::core::vfs::new_slice_block (block, "bitlocker");
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Create decoder
@@ -694,9 +694,9 @@ _decode_unknown_bitlocker (const mobius::vfs::block& block)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static bool
 decoder (
-  const mobius::vfs::block& block,
-  std::vector <mobius::vfs::block>& new_blocks,
-  std::vector <mobius::vfs::block>&
+  const mobius::core::vfs::block& block,
+  std::vector <mobius::core::vfs::block>& new_blocks,
+  std::vector <mobius::core::vfs::block>&
 )
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
@@ -719,7 +719,7 @@ decoder (
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Check if block is an instance of Bitlocker volume
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::vfs::block bde_block;
+  mobius::core::vfs::block bde_block;
 
   if (signature == BDE_SIGNATURE)       // Vista, Win7 up to Win11
     {
@@ -776,7 +776,7 @@ start ()
   mobius::core::add_resource (
      "vfs.block.decoder.bitlocker",
      "Bitlocker VFS block decoder",
-     static_cast <mobius::vfs::block_decoder_resource_type> (decoder)
+     static_cast <mobius::core::vfs::block_decoder_resource_type> (decoder)
   );
 }
 

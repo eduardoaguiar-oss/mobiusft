@@ -19,9 +19,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/collection.hpp>
-#include <mobius/database/connection.h>
-#include <mobius/database/statement.h>
-#include <mobius/database/transaction.h>
+#include <mobius/core/database/connection.hpp>
+#include <mobius/core/database/statement.hpp>
+#include <mobius/core/database/transaction.hpp>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -58,8 +58,8 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Function prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::database::connection new_connection ();
-  mobius::database::transaction new_transaction ();
+  mobius::core::database::connection new_connection ();
+  mobius::core::database::transaction new_transaction ();
   std::string get_description () const;
   void set_description (const std::string&);
   bool is_alert () const;

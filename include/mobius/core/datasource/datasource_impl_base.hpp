@@ -18,7 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/pod/map.h>
+#include <mobius/core/pod/map.hpp>
+#include <string>
 
 namespace mobius::core::datasource
 {
@@ -48,7 +49,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   virtual explicit operator bool () const noexcept = 0;
   virtual std::string get_type () const = 0;
-  virtual mobius::pod::map get_state () const = 0;
+  virtual mobius::core::pod::map get_state () const = 0;
   virtual bool is_available () const = 0;
 };
 

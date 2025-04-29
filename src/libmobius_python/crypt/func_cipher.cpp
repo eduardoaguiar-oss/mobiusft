@@ -51,7 +51,7 @@ func_new_cipher_cbc (PyObject *, PyObject *args)
 
   try
     {
-      auto cm =  mobius::crypt::new_cipher_cbc (arg_cipher_id, arg_key, arg_iv);
+      auto cm =  mobius::core::crypt::new_cipher_cbc (arg_cipher_id, arg_key, arg_iv);
       ret = pymobius_crypt_cipher_to_pyobject (cm);
     }
   catch (const std::exception& e)
@@ -91,7 +91,7 @@ func_new_cipher_cbc_cts (PyObject *, PyObject *args)
 
   try
     {
-      auto cm =  mobius::crypt::new_cipher_cbc_cts (arg_cipher_id, arg_key, arg_iv);
+      auto cm =  mobius::core::crypt::new_cipher_cbc_cts (arg_cipher_id, arg_key, arg_iv);
       ret = pymobius_crypt_cipher_to_pyobject (cm);
     }
   catch (const std::exception& e)
@@ -131,7 +131,7 @@ func_new_cipher_ctr (PyObject *, PyObject *args)
 
   try
     {
-      auto cm =  mobius::crypt::new_cipher_ctr (arg_cipher_id, arg_key, arg_cv);
+      auto cm =  mobius::core::crypt::new_cipher_ctr (arg_cipher_id, arg_key, arg_cv);
       ret = pymobius_crypt_cipher_to_pyobject (cm);
     }
   catch (const std::exception& e)
@@ -169,7 +169,7 @@ func_new_cipher_ecb (PyObject *, PyObject *args)
 
   try
     {
-      auto cm =  mobius::crypt::new_cipher_ecb (arg_cipher_id, arg_key);
+      auto cm =  mobius::core::crypt::new_cipher_ecb (arg_cipher_id, arg_key);
       ret = pymobius_crypt_cipher_to_pyobject (cm);
     }
   catch (const std::exception& e)
@@ -209,7 +209,7 @@ func_new_cipher_gcm (PyObject *, PyObject *args)
 
   try
     {
-      auto cm = mobius::crypt::new_cipher_gcm (arg_cipher_id, arg_key, arg_iv);
+      auto cm = mobius::core::crypt::new_cipher_gcm (arg_cipher_id, arg_key, arg_iv);
       ret = pymobius_crypt_cipher_to_pyobject (cm);
     }
   catch (const std::exception& e)
@@ -249,7 +249,7 @@ func_new_cipher_ige (PyObject *, PyObject *args)
 
   try
     {
-      auto cm =  mobius::crypt::new_cipher_ige (arg_cipher_id, arg_key, arg_iv);
+      auto cm =  mobius::core::crypt::new_cipher_ige (arg_cipher_id, arg_key, arg_iv);
       ret = pymobius_crypt_cipher_to_pyobject (cm);
     }
   catch (const std::exception& e)
@@ -289,7 +289,7 @@ func_new_cipher_ofb (PyObject *, PyObject *args)
 
   try
     {
-      auto cm =  mobius::crypt::new_cipher_ofb (arg_cipher_id, arg_key, arg_iv);
+      auto cm =  mobius::core::crypt::new_cipher_ofb (arg_cipher_id, arg_key, arg_iv);
       ret = pymobius_crypt_cipher_to_pyobject (cm);
     }
   catch (const std::exception& e)
@@ -327,7 +327,7 @@ func_new_cipher_stream (PyObject *, PyObject *args)
 
   try
     {
-      auto cm =  mobius::crypt::new_cipher_stream (arg_cipher_id, arg_key);
+      auto cm =  mobius::core::crypt::new_cipher_stream (arg_cipher_id, arg_key);
       ret = pymobius_crypt_cipher_to_pyobject (cm);
     }
   catch (const std::exception& e)

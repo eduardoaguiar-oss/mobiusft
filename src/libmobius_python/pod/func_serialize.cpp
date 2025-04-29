@@ -37,7 +37,7 @@ static PyObject *
 _serialize_to_bytearray (PyObject *args)
 {
   // parse arguments
-  mobius::pod::data arg_data;
+  mobius::core::pod::data arg_data;
 
   try
     {
@@ -56,7 +56,7 @@ _serialize_to_bytearray (PyObject *args)
     {
       ret = mobius::py::pybytes_from_bytearray (
                mobius::py::GIL () (
-                  mobius::pod::serialize (arg_data)
+                  mobius::core::pod::serialize (arg_data)
                )
             );
     }
@@ -78,7 +78,7 @@ _serialize_to_writer (PyObject *args)
 {
   // parse arguments
   mobius::io::writer arg_writer;
-  mobius::pod::data arg_data;
+  mobius::core::pod::data arg_data;
 
   try
     {
@@ -98,7 +98,7 @@ _serialize_to_writer (PyObject *args)
     {
       {
         mobius::py::GIL gil;
-        mobius::pod::serialize (arg_writer, arg_data);
+        mobius::core::pod::serialize (arg_writer, arg_data);
       }
       ret = mobius::py::pynone ();
     }

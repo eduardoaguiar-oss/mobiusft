@@ -35,7 +35,7 @@
 // @return new imagefile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_vfs_imagefile_to_pyobject (mobius::vfs::imagefile obj)
+pymobius_vfs_imagefile_to_pyobject (mobius::core::vfs::imagefile obj)
 {
   PyObject *ret = nullptr;
 
@@ -44,7 +44,7 @@ pymobius_vfs_imagefile_to_pyobject (mobius::vfs::imagefile obj)
       ret = _PyObject_New (&vfs_imagefile_t);
 
       if (ret)
-        ((vfs_imagefile_o *) ret)->obj = new mobius::vfs::imagefile (obj);
+        ((vfs_imagefile_o *) ret)->obj = new mobius::core::vfs::imagefile (obj);
     }
   catch (const std::exception& e)
     {
@@ -250,7 +250,7 @@ tp_f_set_attribute (vfs_imagefile_o *self, PyObject *args)
 {
   // parse input args
   std::string arg_id;
-  mobius::pod::data arg_value;
+  mobius::core::pod::data arg_value;
 
   try
     {

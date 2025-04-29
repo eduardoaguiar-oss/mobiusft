@@ -19,12 +19,12 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CThumbCache.hpp"
+#include <mobius/core/pod/map.hpp>
 #include <mobius/datetime/datetime.h>
 #include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/evidence_loader_impl_base.hpp>
 #include <mobius/framework/model/item.hpp>
 #include <mobius/io/file.h>
-#include <mobius/pod/map.h>
 #include <map>
 #include <vector>
 
@@ -76,7 +76,7 @@ struct search
   std::string username;
 
   // metadata
-  mobius::pod::map metadata;
+  mobius::core::pod::map metadata;
 
   // files
   mobius::io::file f;
@@ -93,10 +93,10 @@ struct local_file
   std::string username;
 
   // metadata
-  mobius::pod::map metadata;
+  mobius::core::pod::map metadata;
 
   // hashes
-  mobius::pod::data hashes;
+  mobius::core::pod::data hashes;
 
   // thumbnail_data
   mobius::bytearray thumbnail_data;
@@ -125,10 +125,10 @@ struct remote_file
   std::string username;
 
   // metadata
-  mobius::pod::map metadata;
+  mobius::core::pod::map metadata;
 
   // hashes
-  mobius::pod::data hashes;
+  mobius::core::pod::data hashes;
 
   // thumbnail_data
   mobius::bytearray thumbnail_data;

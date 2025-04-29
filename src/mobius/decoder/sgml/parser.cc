@@ -39,7 +39,7 @@ _parse_tag_with_attributes (parser::element::type type, const std::string& text)
   std::string tag_name;
   std::string attr_name;
   std::string attr_value;
-  mobius::pod::map attributes;
+  mobius::core::pod::map attributes;
   char attr_value_char = 0;
 
   int state = 0;

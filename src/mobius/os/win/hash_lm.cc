@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "hash_lm.h"
-#include <mobius/crypt/cipher.h>
+#include <mobius/core/crypt/cipher.hpp>
 #include <mobius/string_functions.h>
 
 namespace mobius::os::win
@@ -34,12 +34,12 @@ hash_lm (const std::string& password)
 
   mobius::bytearray key1 (u_password.substr (0, 7));
   key1.rpad (7);
-  auto des1 = mobius::crypt::new_cipher_ecb ("des", key1);
+  auto des1 = mobius::core::crypt::new_cipher_ecb ("des", key1);
   lm_hash = des1.encrypt ("KGS!@#$%");
 
   mobius::bytearray key2 (u_password.length () > 7 ? u_password.substr (7, 7) : "");
   key2.rpad (7);
-  auto des2 = mobius::crypt::new_cipher_ecb ("des", key2);
+  auto des2 = mobius::core::crypt::new_cipher_ecb ("des", key2);
   lm_hash += des2.encrypt ("KGS!@#$%");
 
   return lm_hash;

@@ -122,15 +122,6 @@ else
 fi
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Checking for libgtk-3.0
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-AM_PATH_GTK_3_0([3.16.0],,AC_MSG_ERROR([Gtk+ 3.16.0 or higher required.]))
-GTK3_CXXFLAGS=$GTK_CFLAGS
-GTK3_LDFLAGS=$GTK_LIBS
-AC_SUBST([GTK3_CXXFLAGS])
-AC_SUBST([GTK3_LDFLAGS])
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Checking for libxml2
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PKG_CHECK_MODULES(LIBXML2, [libxml-2.0])
@@ -154,6 +145,7 @@ elif test "x${with_libtsk}" = "xyes"; then
 
 else
   have_libtsk=yes
+  LIBTSK_DIR="${with_libtsk}"
   LIBTSK_CXXFLAGS="-I${with_libtsk}/include"
 
   if test -d ${with_libtsk}/lib64; then
@@ -196,59 +188,10 @@ if test "x${have_libtsk}" != "xyes"; then
   AC_MSG_ERROR([LIBTSK development files not found. See https://www.sleuthkit.org/sleuthkit])
 fi
 
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Checking for libudev
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-AC_ARG_WITH(libudev,
-    [AS_HELP_STRING([--with-libudev=DIR],[specify prefix directory for installed libudev package.])],
-    [with_libudev=${withval}],
-    [with_libudev=yes])
-
-if test "x${with_libudev}" = "xno"; then
-  have_libudev=no
-
-elif test "x${with_libudev}" = "xyes"; then
-  have_libudev=yes
-
-else
-  have_libudev=yes
-  LIBUDEV_CXXFLAGS="-I${with_libudev}/include"
-
-  if test -d ${with_libudev}/lib64; then
-    LIBUDEV_LDFLAGS="-L${with_libudev}/lib64"
-
-  elif test -d ${with_libudev}/lib; then
-    LIBUDEV_LDFLAGS="-L${with_libudev}/lib"
-
-  else
-    AC_MSG_WARN([no /lib dir found at directory "${with_libudev}"])
-  fi
+if test -n "$LIBTSK_DIR"; then
+    AC_SUBST([LIBTSK_DIR])
+    AC_MSG_NOTICE([Using libtsk directory: $LIBTSK_DIR])
 fi
-
-# checks if libudev is really available
-if test "x${have_libudev}" = "xyes"; then
-  OLD_CPPFLAGS=$CPPFLAGS
-  OLD_LDFLAGS=$LDFLAGS
-  CPPFLAGS="$LIBUDEV_CXXFLAGS $CPPFLAGS"
-  LDFLAGS="$LIBUDEV_LDFLAGS $LDFLAGS"
-
-  AC_SEARCH_LIBS([udev_device_unref], [udev], [have_libudev=yes], [have_libudev=no])
-  AC_CHECK_HEADERS([libudev.h], [], [have_libudev=no])
-
-  if test "x${have_libudev}" = "xyes"; then
-    MSG_SUPPORT_LIBUDEV=yes
-    AC_SUBST([LIBUDEV_CXXFLAGS])
-    AC_SUBST([LIBUDEV_LDFLAGS])
-  else
-    MSG_SUPPORT_LIBUDEV="no (libudev not found. See www.kernel.org.)"
-    CPPFLAGS=$OLD_CPPFLAGS
-    LDFLAGS=$OLD_LDFLAGS
-  fi
-else
-  MSG_SUPPORT_LIBUDEV=no
-fi
-
-AM_CONDITIONAL([HAVE_LIBUDEV], [test x${have_libudev} = xyes])
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Checking for libsmbclient
@@ -284,40 +227,17 @@ AC_SUBST([LIBSMBCLIENT_LIBS])
 AM_CONDITIONAL([HAVE_LIBSMBCLIENT], [test x${have_libsmbclient} = xyes])
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Checking for sqlite3
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-AX_LIB_SQLITE3
-
-if test "x${SQLITE3_VERSION}" = "x"; then
-  MSG_SUPPORT_SQLITE3=no
-  AC_MSG_ERROR([SQLITE3 development files not found. See https://sqlite3.org])
-else
-  MSG_SUPPORT_SQLITE3=yes
-fi
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Checking for libgcrypt
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-AM_PATH_LIBGCRYPT([1.9.0],,AC_MSG_ERROR([Libgcrypt 1.9.0 or higher is required.]))
-MSG_SUPPORT_LIBGCRYPT=yes
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Generate files
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 AC_CONFIG_FILES([Makefile
                  mobius_bin.sh
                  src/Makefile
                  src/mobius/Makefile
-                 src/mobius/crypt/Makefile
-                 src/mobius/database/Makefile
                  src/mobius/datetime/Makefile
                  src/mobius/decoder/Makefile
                  src/mobius/io/Makefile
                  src/mobius/os/Makefile
                  src/mobius/os/win/Makefile
-                 src/mobius/pod/Makefile
-                 src/mobius/system/Makefile
-                 src/mobius/vfs/Makefile
                  src/libmobius_core/Makefile
                  src/libmobius_framework/Makefile
                  src/libmobius_python/Makefile
@@ -360,11 +280,6 @@ AC_OUTPUT
 # Print summary
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 AC_MSG_NOTICE([
-   Python API...................: $MSG_SUPPORT_PYTHON_API
-   mobius::crypt................: $MSG_SUPPORT_LIBGCRYPT
-   mobius::database.............: $MSG_SUPPORT_SQLITE3
    mobius::filesystem::tsk......: $MSG_SUPPORT_LIBTSK
    mobius::io::smb..............: $MSG_SUPPORT_LIBSMBCLIENT
-   mobius::system::device.......: $MSG_SUPPORT_LIBUDEV
-   mobius::system::dynamic_lib..: $MSG_SUPPORT_DL
 ]);

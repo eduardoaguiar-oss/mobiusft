@@ -54,7 +54,7 @@ public:
   // @brief Get object state
   // @return Object state
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::map
+  mobius::core::pod::map
   get_state () const final
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid datasource"));

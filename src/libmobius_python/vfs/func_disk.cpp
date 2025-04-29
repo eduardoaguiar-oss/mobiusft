@@ -49,7 +49,7 @@ func_vfs_new_disk_by_device_uid (PyObject *, PyObject *args)
 
   try
     {
-      auto disk = mobius::vfs::new_disk_by_device_uid (arg_uid);
+      auto disk = mobius::core::vfs::new_disk_by_device_uid (arg_uid);
       ret = pymobius_vfs_disk_to_pyobject (disk);
     }
   catch (const std::exception& e)
@@ -86,7 +86,7 @@ func_vfs_new_disk_by_path (PyObject *, PyObject *args)
 
   try
     {
-      auto disk = mobius::vfs::new_disk_by_path (arg_path);
+      auto disk = mobius::core::vfs::new_disk_by_path (arg_path);
       ret = pymobius_vfs_disk_to_pyobject (disk);
     }
   catch (const std::exception& e)
@@ -123,7 +123,7 @@ func_vfs_new_disk_by_url (PyObject *, PyObject *args)
 
   try
     {
-      auto disk = mobius::vfs::new_disk_by_url (arg_url);
+      auto disk = mobius::core::vfs::new_disk_by_url (arg_url);
       ret = pymobius_vfs_disk_to_pyobject (disk);
     }
   catch (const std::exception& e)

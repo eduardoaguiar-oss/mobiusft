@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/pod/data.h>
+#include <mobius/core/pod/data.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::pod::data *obj;
+  mobius::core::pod::data *obj;
 } pod_data_o;
 
 extern PyTypeObject pod_data_t;
@@ -36,9 +36,9 @@ extern PyTypeObject pod_data_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_pod_data_check (PyObject *);
-mobius::pod::data pymobius_pod_data_from_pyobject (PyObject *);
-PyObject *pymobius_pod_data_to_pyobject (const mobius::pod::data&);
-PyObject *pymobius_pod_data_to_python (const mobius::pod::data&);
+mobius::core::pod::data pymobius_pod_data_from_pyobject (PyObject *);
+PyObject *pymobius_pod_data_to_pyobject (const mobius::core::pod::data&);
+PyObject *pymobius_pod_data_to_python (const mobius::core::pod::data&);
 
 #endif
 

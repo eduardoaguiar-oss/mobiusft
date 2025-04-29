@@ -45,13 +45,8 @@ if(NOT MOBIUS_CORE_LIB)
     message(FATAL_ERROR "libmobius_core not found in ../libmobius_core/build")
 endif()
 
-find_library(MOBIUS_LIB mobius HINTS ${TOP_SRC_DIR}/src/mobius/.libs NO_DEFAULT_PATH)
-if(NOT MOBIUS_LIB)
-    message(FATAL_ERROR "libmobius not found in ${TOP_SRC_DIR}/src/mobius/.libs")
-endif()
-
 set(MOBIUS_INCLUDE_DIRS ${TOP_SRC_DIR}/include ${TOP_SRC_DIR}/src)
-set(MOBIUS_LIBRARIES ${MOBIUS_CORE_LIB} ${MOBIUS_LIB})
+set(MOBIUS_LIBRARIES ${MOBIUS_CORE_LIB})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Build sub-libraries

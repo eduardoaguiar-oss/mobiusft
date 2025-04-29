@@ -18,10 +18,10 @@
 #include <cstdint>
 #include <string>
 #include <mobius/core/mediator.hpp>
+#include <mobius/core/pod/data.hpp>
 #include <mobius/datetime/datetime.h>
 #include <mobius/datetime/timedelta.h>
 #include <mobius/framework/model/item.hpp>
-#include <mobius/pod/data.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Extension data
@@ -58,8 +58,8 @@ _callback
 (
   mobius::framework::model::item item,
   const std::string& attr_id,
-  const mobius::pod::data&,
-  const mobius::pod::data& new_value
+  const mobius::core::pod::data&,
+  const mobius::core::pod::data& new_value
 )
 {
   // check if attribute being modified is "manufacturing_date"

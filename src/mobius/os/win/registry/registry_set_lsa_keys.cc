@@ -18,8 +18,8 @@
 #include "registry_key.h"
 #include "registry_key_impl_lsa.h"
 #include "registry_data_impl_lsa_poleklist.h"
-#include <mobius/crypt/cipher.h>
-#include <mobius/crypt/hash.h>
+#include <mobius/core/crypt/cipher.hpp>
+#include <mobius/core/crypt/hash.hpp>
 
 namespace mobius::os::win::registry
 {
@@ -36,14 +36,14 @@ get_lsa_key_from_polseckey (
   const mobius::bytearray& syskey,
   const mobius::bytearray& data)
 {
-  mobius::crypt::hash md5 ("md5");
+  mobius::core::crypt::hash md5 ("md5");
   md5.update (syskey);
 
   auto salt = data.slice (60, 75);
   for (int i = 0; i < 1000; i++)
     md5.update (salt);
 
-  auto rc4 = mobius::crypt::new_cipher_stream ("rc4", md5.get_digest ());
+  auto rc4 = mobius::core::crypt::new_cipher_stream ("rc4", md5.get_digest ());
   auto rc4_key = data.slice (12, 59);
 
   return rc4.decrypt (rc4_key).slice (16, 31);

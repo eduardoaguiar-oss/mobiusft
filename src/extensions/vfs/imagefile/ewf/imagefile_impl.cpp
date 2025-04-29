@@ -20,8 +20,8 @@
 #include "reader_impl.hpp"
 #include "writer_impl.hpp"
 #include <mobius/io/file.h>
-#include <mobius/vfs/imagefile.h>
-#include <mobius/vfs/util.h>
+#include <mobius/core/vfs/imagefile.hpp>
+#include <mobius/core/vfs/util.hpp>
 #include <mobius/exception.inc>
 #include <mobius/string_functions.h>
 #include <stdexcept>
@@ -37,7 +37,7 @@ namespace
 // @return File extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
-get_segment_extension (mobius::vfs::segment_array::idx_type idx)
+get_segment_extension (mobius::core::vfs::segment_array::idx_type idx)
 {
   if (idx < 99)
     return std::string ("E") + mobius::string::to_string (idx + 1, 2);
@@ -98,7 +98,7 @@ imagefile_impl::imagefile_impl (const mobius::io::file& f)
 // @param name Attribute name
 // @return Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::data
+mobius::core::pod::data
 imagefile_impl::get_attribute (const std::string& name) const
 {
   _load_metadata ();
@@ -113,7 +113,7 @@ imagefile_impl::get_attribute (const std::string& name) const
 void
 imagefile_impl::set_attribute (
   const std::string& name,
-  const mobius::pod::data& value
+  const mobius::core::pod::data& value
 )
 {
   attributes_.set (name, value);
@@ -124,7 +124,7 @@ imagefile_impl::set_attribute (
 // @brief Get attributes
 // @return Attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::pod::map
+mobius::core::pod::map
 imagefile_impl::get_attributes () const
 {
   _load_metadata ();
@@ -181,7 +181,7 @@ imagefile_impl::_load_metadata () const
   // walk through segment files
   bool header_loaded = false;
 
-  for (mobius::vfs::segment_array::idx_type i = 0;i < segments_.get_size ();i++)
+  for (mobius::core::vfs::segment_array::idx_type i = 0;i < segments_.get_size ();i++)
     {
       segment_decoder decoder (segments_.new_reader (i));
 
@@ -219,7 +219,7 @@ imagefile_impl::_load_metadata () const
         }
     }
 
-  mobius::vfs::normalize_drive_info (drive_vendor, drive_model, drive_serial_number);
+  mobius::core::vfs::normalize_drive_info (drive_vendor, drive_model, drive_serial_number);
 
   // if there is only one segment, segment_size equals to size
   if (segments_.get_size () == 1)
@@ -260,7 +260,7 @@ imagefile_impl::_load_chunk_offset_table () const
   // walk through segment files
   size_type next_offset = 0;
 
-  for (mobius::vfs::segment_array::idx_type i = 0;i < segments_.get_size ();i++)
+  for (mobius::core::vfs::segment_array::idx_type i = 0;i < segments_.get_size ();i++)
     {
       segment_decoder decoder (segments_.new_reader (i));
 

@@ -22,7 +22,7 @@
 #include <mobius/datetime/datetime.h>
 #include <mobius/decoder/mfc.h>
 #include <mobius/io/reader.h>
-#include <mobius/pod/map.h>
+#include <mobius/core/pod/map.hpp>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -354,7 +354,7 @@ private:
   std::uint32_t info_size_ = 0;
 
   // @brief Torrent data
-  mobius::pod::map data_;
+  mobius::core::pod::map data_;
 
   // @brief Files
   std::vector <CBTFile> files_;

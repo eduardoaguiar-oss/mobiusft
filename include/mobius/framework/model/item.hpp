@@ -19,10 +19,10 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/bytearray.h>
-#include <mobius/database/connection.h>
-#include <mobius/database/database.h>
+#include <mobius/core/database/connection.hpp>
+#include <mobius/core/database/database.hpp>
 #include <mobius/core/datasource/datasource.hpp>
-#include <mobius/pod/data.h>
+#include <mobius/core/pod/data.hpp>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -68,8 +68,8 @@ public:
   uid_type get_uid () const;
   std::string get_category () const;
   Case get_case () const;
-  mobius::database::connection new_connection ();
-  mobius::database::transaction new_transaction ();
+  mobius::core::database::connection new_connection ();
+  mobius::core::database::transaction new_transaction ();
 
   std::string get_data_path (const std::string&) const;
   std::string create_data_path (const std::string&) const;
@@ -88,10 +88,10 @@ public:
   // Attributes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool has_attribute (const std::string&) const;
-  mobius::pod::data get_attribute (const std::string&) const;
-  void set_attribute (const std::string&, const mobius::pod::data&);
+  mobius::core::pod::data get_attribute (const std::string&) const;
+  void set_attribute (const std::string&, const mobius::core::pod::data&);
   void remove_attribute (const std::string&);
-  std::unordered_map <std::string, mobius::pod::data> get_attributes () const;
+  std::unordered_map <std::string, mobius::core::pod::data> get_attributes () const;
   void expand_masks ();
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -171,7 +171,7 @@ private:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Helper functions
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::database::database get_database () const;
+  mobius::core::database::database get_database () const;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

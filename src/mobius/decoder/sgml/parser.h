@@ -19,8 +19,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/decoder/sgml/tokenizer.h>
-#include <mobius/pod/data.h>
-#include <mobius/pod/map.h>
+#include <mobius/core/pod/data.hpp>
+#include <mobius/core/pod/map.hpp>
 #include <string>
 #include <vector>
 
@@ -63,7 +63,7 @@ public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Constructor
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    explicit element (type t, const std::string& text, const mobius::pod::map& attributes = {})
+    explicit element (type t, const std::string& text, const mobius::core::pod::map& attributes = {})
       : type_ (t), text_ (text), attributes_ (attributes)
     {
     }
@@ -89,7 +89,7 @@ public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get attribute
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::pod::data
+    mobius::core::pod::data
     get_attribute (const std::string& name) const
     {
       return attributes_.get (name);
@@ -98,16 +98,16 @@ public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get attributes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::pod::map
+    mobius::core::pod::map
     get_attributes () const
     {
-      return static_cast <mobius::pod::map> (attributes_.clone ());
+      return static_cast <mobius::core::pod::map> (attributes_.clone ());
     }
 
   private:
     type type_ = type::end;
     std::string text_;
-    mobius::pod::map attributes_;
+    mobius::core::pod::map attributes_;
   };
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -21,7 +21,7 @@
 #include <mobius/core/file_decoder/section.hpp>
 #include <mobius/datetime/datetime.h>
 #include <mobius/io/reader.h>
-#include <mobius/pod/map.h>
+#include <mobius/core/pod/map.hpp>
 #include <string>
 #include <utility>
 #include <vector>
@@ -256,7 +256,7 @@ public:
   // @brief Get metadata
   // @return Metadata
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::map
+  mobius::core::pod::map
   get_metadata () const
   {
     return metadata_;
@@ -368,7 +368,7 @@ private:
   std::uint64_t pieces_downloaded_ = 0;
 
   // @brief Metadata
-  mobius::pod::map metadata_;
+  mobius::core::pod::map metadata_;
 
   // @brief Files
   std::vector <file> files_;
@@ -386,7 +386,7 @@ private:
   mobius::core::file_decoder::section section_;
 
   // Helper functions
-  void _load_metadata (const mobius::pod::map&);
+  void _load_metadata (const mobius::core::pod::map&);
 };
 
 } // namespace mobius::extension::app::emuletorrent

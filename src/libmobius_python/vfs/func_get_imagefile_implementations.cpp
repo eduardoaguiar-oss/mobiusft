@@ -23,7 +23,7 @@
 #include <pymobius.hpp>
 #include <pylist.hpp>
 #include <mobius/core/resource.hpp>
-#include <mobius/vfs/imagefile.h>
+#include <mobius/core/vfs/imagefile.hpp>
 
 namespace
 {
@@ -37,7 +37,7 @@ PyTuple_from_imagefile_info (const mobius::core::resource& r)
 
   if (ret)
     {
-      auto img_resource = r.get_value <mobius::vfs::imagefile_resource_type> ();
+      auto img_resource = r.get_value <mobius::core::vfs::imagefile_resource_type> ();
 
       PyTuple_SetItem (ret, 0, mobius::py::pystring_from_std_string (r.get_id ()));
       PyTuple_SetItem (ret, 1, mobius::py::pystring_from_std_string (r.get_description ()));

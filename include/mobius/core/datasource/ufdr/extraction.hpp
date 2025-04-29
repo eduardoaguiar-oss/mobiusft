@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/pod/map.h>
+#include <mobius/core/pod/map.hpp>
 #include <memory>
 #include <string>
 #include <utility>
@@ -38,7 +38,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   extraction();
   explicit extraction (int);
-  explicit extraction (const mobius::pod::map&);
+  explicit extraction (const mobius::core::pod::map&);
   extraction (extraction&&) noexcept = default;
   extraction (const extraction&) noexcept = default;
 
@@ -51,7 +51,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Function prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::map get_state () const;
+  mobius::core::pod::map get_state () const;
   int get_id () const;
   std::string get_type () const;
   void set_type (const std::string&);

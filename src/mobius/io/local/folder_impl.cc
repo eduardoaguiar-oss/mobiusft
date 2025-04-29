@@ -23,8 +23,8 @@
 #include "uri.h"
 #include <mobius/exception.inc>
 #include <mobius/exception_posix.inc>
-#include <mobius/system/user.h>
-#include <mobius/system/group.h>
+#include <mobius/core/system/user.hpp>
+#include <mobius/core/system/group.hpp>
 #include <mobius/core/collection_impl_base.hpp>
 #include <memory>
 #include <stdexcept>
@@ -620,12 +620,12 @@ folder_impl::_load_stat () const
       metadata_time_ = mobius::datetime::new_datetime_from_unix_timestamp (st.st_ctime);
 
       // get user name
-      mobius::system::user user (user_id_);
+      mobius::core::system::user user (user_id_);
       if (user)
         user_name_ = user.get_name ();
 
       // get group name
-      mobius::system::group group (group_id_);
+      mobius::core::system::group group (group_id_);
       if (group)
         group_name_ = group.get_name ();
     }

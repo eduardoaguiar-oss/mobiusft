@@ -66,7 +66,7 @@ public:
   // @brief Get .ufdr file info
   // @return Map with .ufdr file attributes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::map
+  mobius::core::pod::map
   get_file_info () const
   {
     return _impl <ufdr::datasource_impl> ()->get_file_info ();
@@ -76,7 +76,7 @@ public:
   // @brief Get case info
   // @return Map with case attributes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::map
+  mobius::core::pod::map
   get_case_info () const
   {
     return _impl <ufdr::datasource_impl> ()->get_case_info ();
@@ -87,7 +87,7 @@ public:
   // @param case_info Map with case info
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
-  set_case_info (const mobius::pod::map& case_info)
+  set_case_info (const mobius::core::pod::map& case_info)
   {
     _impl <ufdr::datasource_impl> ()->set_case_info (case_info);
   }

@@ -19,7 +19,7 @@
 #include <mobius/core/resource.hpp>
 #include <mobius/io/uri.h>
 #include <mobius/string_functions.h>
-#include <mobius/vfs/imagefile.h>
+#include <mobius/core/vfs/imagefile.hpp>
 #include <iostream>
 #include <cstdint>
 #include <unistd.h>
@@ -52,7 +52,7 @@ usage ()
 
   for (const auto& r : mobius::core::get_resources ("vfs.imagefile"))
     {
-      auto img_resource = r.get_value <mobius::vfs::imagefile_resource_type> ();
+      auto img_resource = r.get_value <mobius::core::vfs::imagefile_resource_type> ();
 
       if (img_resource.is_writeable)
         std::cerr << "       " << r.get_id () << "\t\t" << r.get_description () << std::endl;
@@ -218,7 +218,7 @@ main (int argc, char **argv)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // check if input imagefile is available
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto image_in = mobius::vfs::new_imagefile_by_url (input_url, input_type_arg);
+  auto image_in = mobius::core::vfs::new_imagefile_by_url (input_url, input_type_arg);
 
   if (!image_in.is_available ())
     {
@@ -231,7 +231,7 @@ main (int argc, char **argv)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // create output imagefile
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto image_out = mobius::vfs::new_imagefile_by_url (output_url, output_type_arg);
+  auto image_out = mobius::core::vfs::new_imagefile_by_url (output_url, output_type_arg);
 
   if (image_out.get_type () == "ewf")
     {

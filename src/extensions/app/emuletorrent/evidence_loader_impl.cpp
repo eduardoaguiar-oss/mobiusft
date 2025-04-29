@@ -62,7 +62,7 @@ static const std::string ANT_VERSION = "1.2";
 // @param other Other metadata map
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-_update_metadata (mobius::pod::map& metadata, const mobius::pod::map& other)
+_update_metadata (mobius::core::pod::map& metadata, const mobius::core::pod::map& other)
 {
   for (const auto& [k, v] : other)
     {
@@ -78,10 +78,10 @@ _update_metadata (mobius::pod::map& metadata, const mobius::pod::map& other)
 // @param f File structure
 // @return Vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <mobius::pod::data>
+std::vector <mobius::core::pod::data>
 _get_file_hashes (const mobius::extension::app::emuletorrent::file& f)
 {
-  std::vector <mobius::pod::data> hashes;
+  std::vector <mobius::core::pod::data> hashes;
 
   if (!f.hash_ed2k.empty ())
     hashes.push_back ({"ed2k", f.hash_ed2k});
@@ -487,7 +487,7 @@ evidence_loader_impl::_save_accounts ()
 {
   for (const auto& a : accounts_)
     {
-      mobius::pod::map metadata;
+      mobius::core::pod::map metadata;
       metadata.set ("app_id", APP_ID);
       metadata.set ("app_name", APP_NAME);
       metadata.set ("username", a.username);
@@ -538,7 +538,7 @@ evidence_loader_impl::_save_local_files ()
           // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
           // Metadata
           // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          mobius::pod::map metadata;
+          mobius::core::pod::map metadata;
 
           metadata.set ("size", f.size);
           metadata.set ("flag_downloaded", to_string (f.flag_downloaded));
@@ -589,7 +589,7 @@ evidence_loader_impl::_save_received_files ()
           // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
           // Metadata
           // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          mobius::pod::map metadata;
+          mobius::core::pod::map metadata;
           metadata.set ("flag_downloaded", to_string (f.flag_downloaded));
           metadata.set ("flag_uploaded", to_string (f.flag_uploaded));
           metadata.set ("flag_shared", to_string (f.flag_shared));
@@ -639,7 +639,7 @@ evidence_loader_impl::_save_p2p_remote_files ()
           // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
           // Metadata
           // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          mobius::pod::map metadata;
+          mobius::core::pod::map metadata;
 
           metadata.set ("size", f.size);
           _update_metadata (metadata, f.metadata);
@@ -685,7 +685,7 @@ evidence_loader_impl::_save_sent_files ()
           // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
           // Metadata
           // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          mobius::pod::map metadata;
+          mobius::core::pod::map metadata;
 
           metadata.set ("flag_downloaded", to_string (f.flag_downloaded));
           metadata.set ("flag_uploaded", to_string (f.flag_uploaded));
@@ -735,7 +735,7 @@ evidence_loader_impl::_save_shared_files ()
           // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
           // Metadata
           // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          mobius::pod::map metadata;
+          mobius::core::pod::map metadata;
 
           metadata.set ("size", f.size);
           metadata.set ("flag_downloaded", to_string (f.flag_downloaded));

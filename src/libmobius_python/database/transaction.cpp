@@ -30,12 +30,12 @@
 // @return new transaction object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_database_transaction_to_pyobject (mobius::database::transaction obj)
+pymobius_database_transaction_to_pyobject (mobius::core::database::transaction obj)
 {
   PyObject *ret = _PyObject_New (&database_transaction_t);
 
   if (ret)
-    ((database_transaction_o *) ret)->obj = new mobius::database::transaction (obj);
+    ((database_transaction_o *) ret)->obj = new mobius::core::database::transaction (obj);
 
   return ret;
 }

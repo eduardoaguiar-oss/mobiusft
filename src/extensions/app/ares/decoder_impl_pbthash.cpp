@@ -65,20 +65,20 @@ decoder_impl_pbthash::decode (const mobius::io::reader& reader)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Get pieces
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::vector <mobius::pod::data> pieces;
+  std::vector <mobius::core::pod::data> pieces;
 
   for (const auto& p : pbthash.get_pieces ())
-    pieces.emplace_back (mobius::pod::data {p.hash_sha1, p.is_checked});
+    pieces.emplace_back (mobius::core::pod::data {p.hash_sha1, p.is_checked});
 
   metadata_.set_value ("general", "pieces", pieces);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Get files
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::vector <mobius::pod::data> files;
+  std::vector <mobius::core::pod::data> files;
 
   for (const auto& f : pbthash.get_files ())
-    files.emplace_back (mobius::pod::data {f.name, f.path, f.size, f.last_modification_time});
+    files.emplace_back (mobius::core::pod::data {f.name, f.path, f.size, f.last_modification_time});
 
   metadata_.set_value ("general", "files", files);
 }

@@ -19,8 +19,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/datasource/datasource_impl_base.hpp>
+#include <mobius/core/vfs/vfs.hpp>
 #include <memory>
-#include <mobius/vfs/vfs.h>
 
 namespace mobius::core::datasource
 {
@@ -35,7 +35,7 @@ public:
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   datasource ();
-  explicit datasource (const mobius::pod::map&);
+  explicit datasource (const mobius::core::pod::map&);
   explicit datasource (const std::shared_ptr <datasource_impl_base>&);
   datasource (datasource&&) noexcept = default;
   datasource (const datasource&) noexcept = default;
@@ -69,7 +69,7 @@ public:
   // @brief Get object state
   // @return Object state
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::map
+  mobius::core::pod::map
   get_state () const
   {
     return impl_->get_state ();
@@ -104,7 +104,7 @@ private:
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-datasource new_datasource_from_vfs (const mobius::vfs::vfs&);
+datasource new_datasource_from_vfs (const mobius::core::vfs::vfs&);
 datasource new_datasource_by_imagefile_path (const std::string&);
 datasource new_datasource_by_imagefile_url (const std::string&);
 datasource new_datasource_by_ufdr_path (const std::string&);

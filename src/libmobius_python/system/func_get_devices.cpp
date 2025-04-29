@@ -23,7 +23,7 @@
 #include <pymobius.hpp>
 #include <pylist.hpp>
 #include "device.hpp"
-#include <mobius/system/device_list.h>
+#include <mobius/core/system/device_list.hpp>
 #include <algorithm>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -53,9 +53,9 @@ func_get_devices (PyObject *, PyObject *args)
   // populate list
   try
     {
-      mobius::system::device_list dev_list;
+      mobius::core::system::device_list dev_list;
 
-      std::vector <mobius::system::device> selected_dev_list;
+      std::vector <mobius::core::system::device> selected_dev_list;
       std::copy_if (
               dev_list.begin (),
               dev_list.end (),

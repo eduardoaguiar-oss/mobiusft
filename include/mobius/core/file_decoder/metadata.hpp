@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/pod/data.h>
-#include <mobius/pod/map.h>
+#include <mobius/core/pod/data.hpp>
+#include <mobius/core/pod/map.hpp>
 #include <memory>
 #include <string>
 #include <vector>
@@ -49,10 +49,10 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Function prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void set_value (const std::string&, const std::string&, const mobius::pod::data&);
-  mobius::pod::data get_value (const std::string&, const std::string&) const;
+  void set_value (const std::string&, const std::string&, const mobius::core::pod::data&);
+  mobius::core::pod::data get_value (const std::string&, const std::string&) const;
   std::vector<std::string> get_groups () const;
-  mobius::pod::map get_group (const std::string&) const;
+  mobius::core::pod::map get_group (const std::string&) const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief Get metadata value
@@ -65,7 +65,7 @@ public:
   {
     T value;
 
-    mobius::pod::data d = get_value (group_id, name);
+    mobius::core::pod::data d = get_value (group_id, name);
     if (!d.is_null ())
       value = static_cast <T> (d);
 

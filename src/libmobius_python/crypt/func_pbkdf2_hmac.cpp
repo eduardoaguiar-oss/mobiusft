@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
 #include <pygil.hpp>
-#include <mobius/crypt/pkcs5.h>
+#include <mobius/core/crypt/pkcs5.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief pbkdf2_hmac function implementation
@@ -56,7 +56,7 @@ func_pbkdf2_hmac (PyObject *, PyObject *args)
     {
       ret = mobius::py::pybytes_from_bytearray (
                mobius::py::GIL () (
-                  mobius::crypt::pbkdf2_hmac (
+                  mobius::core::crypt::pbkdf2_hmac (
                     arg_hash_id,
                     arg_key,
                     arg_salt,

@@ -53,7 +53,7 @@ func_vfs_new_imagefile_by_url (PyObject *, PyObject *args)
   try
     {
       auto imagefile = mobius::py::GIL () (
-                          mobius::vfs::new_imagefile_by_url (arg_url, arg_type)
+                          mobius::core::vfs::new_imagefile_by_url (arg_url, arg_type)
                        );
       ret = pymobius_vfs_imagefile_to_pyobject (imagefile);
     }

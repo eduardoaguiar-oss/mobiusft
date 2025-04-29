@@ -46,7 +46,7 @@ datasource::datasource (const std::shared_ptr <datasource_impl_base>& impl)
 // @brief Constructor
 // @param state Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-datasource::datasource (const mobius::pod::map& state)
+datasource::datasource (const mobius::core::pod::map& state)
 {
   auto type = state.get <std::string> ("type");
 
@@ -66,7 +66,7 @@ datasource::datasource (const mobius::pod::map& state)
 // @return Datasource object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datasource
-new_datasource_from_vfs (const mobius::vfs::vfs& vfs)
+new_datasource_from_vfs (const mobius::core::vfs::vfs& vfs)
 {
   return datasource (std::make_shared <datasource_impl_vfs> (vfs));
 }
@@ -79,8 +79,8 @@ new_datasource_from_vfs (const mobius::vfs::vfs& vfs)
 datasource
 new_datasource_by_imagefile_path (const std::string& path)
 {
-  mobius::vfs::vfs vfs;
-  vfs.add_disk (mobius::vfs::new_disk_by_path (path));
+  mobius::core::vfs::vfs vfs;
+  vfs.add_disk (mobius::core::vfs::new_disk_by_path (path));
 
   return new_datasource_from_vfs (vfs);
 }
@@ -93,8 +93,8 @@ new_datasource_by_imagefile_path (const std::string& path)
 datasource
 new_datasource_by_imagefile_url (const std::string& url)
 {
-  mobius::vfs::vfs vfs;
-  vfs.add_disk (mobius::vfs::new_disk_by_url (url));
+  mobius::core::vfs::vfs vfs;
+  vfs.add_disk (mobius::core::vfs::new_disk_by_url (url));
 
   return new_datasource_from_vfs (vfs);
 }

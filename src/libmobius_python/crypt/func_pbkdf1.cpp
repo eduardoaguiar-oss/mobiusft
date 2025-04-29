@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
 #include <pygil.hpp>
-#include <mobius/crypt/pkcs5.h>
+#include <mobius/core/crypt/pkcs5.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief pbkdf1 function implementation
@@ -56,7 +56,7 @@ func_pbkdf1 (PyObject *, PyObject *args)
     {
       ret = mobius::py::pybytes_from_bytearray (
                mobius::py::GIL () (
-                  mobius::crypt::pbkdf1 (
+                  mobius::core::crypt::pbkdf1 (
                      arg_hash_id,
 		     arg_key,
 		     arg_salt,

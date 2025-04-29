@@ -15,11 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/core/database/database.hpp>
 #include <mobius/framework/model/case.hpp>
 #include <mobius/framework/model/item.hpp>
 #include <mobius/exception.inc>
 #include <mobius/exception_posix.inc>
-#include <mobius/database/database.h>
 #include <mobius/io/path.h>
 #include <mutex>
 #include <stdexcept>
@@ -29,7 +29,7 @@
 
 namespace mobius::framework::model
 {
-void case_schema (mobius::database::database);
+void case_schema (mobius::core::database::database);
 
 namespace
 {
@@ -114,9 +114,9 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::string get_path (const std::string&) const;
   std::string create_path (const std::string&) const;
-  mobius::database::connection new_connection ();
-  mobius::database::transaction new_transaction ();
-  mobius::database::database get_database () const;
+  mobius::core::database::connection new_connection ();
+  mobius::core::database::transaction new_transaction ();
+  mobius::core::database::database get_database () const;
   bool has_item_by_uid (std::int64_t) const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -150,7 +150,7 @@ private:
   std::string base_dir_;
 
   // @brief database connection pool
-  mobius::database::connection_pool pool_;
+  mobius::core::database::connection_pool pool_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -241,7 +241,7 @@ Case::impl::create_path (const std::string& rpath) const
 // @brief create new connection for case database
 // @return new connection object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::database::connection
+mobius::core::database::connection
 Case::impl::new_connection ()
 {
   return pool_.acquire ();
@@ -251,7 +251,7 @@ Case::impl::new_connection ()
 // @brief create new transaction
 // @return new transaction object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::database::transaction
+mobius::core::database::transaction
 Case::impl::new_transaction ()
 {
   auto db = pool_.get_database ();
@@ -262,7 +262,7 @@ Case::impl::new_transaction ()
 // @brief get database object
 // @return database object for current thread
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::database::database
+mobius::core::database::database
 Case::impl::get_database () const
 {
   return pool_.get_database ();
@@ -324,7 +324,7 @@ Case::create_path (const std::string& rpath) const
 // @brief create new connection for case database
 // @return new connection object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::database::connection
+mobius::core::database::connection
 Case::new_connection ()
 {
   return impl_->new_connection ();
@@ -334,7 +334,7 @@ Case::new_connection ()
 // @brief create new transaction
 // @return new transaction object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::database::transaction
+mobius::core::database::transaction
 Case::new_transaction ()
 {
   return impl_->new_transaction ();
@@ -344,7 +344,7 @@ Case::new_transaction ()
 // @brief get database object
 // @return database object for current thread
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::database::database
+mobius::core::database::database
 Case::get_database () const
 {
   return impl_->get_database ();

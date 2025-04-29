@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "filesystem_impl.hpp"
 #include <mobius/core/resource.hpp>
-#include <mobius/vfs/filesystem.h>
+#include <mobius/core/vfs/filesystem.hpp>
 #include <cstdint>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -41,7 +41,7 @@ start ()
   mobius::core::add_resource (
      "vfs.filesystem.ntfs",
      "New Technology File System (NTFS)",
-     mobius::vfs::make_filesystem_resource <filesystem_impl> ()
+     mobius::core::vfs::make_filesystem_resource <filesystem_impl> ()
   );
 }
 

@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/datasource/datasource_impl_base.hpp>
 #include <mobius/core/datasource/ufdr/extraction.hpp>
-#include <mobius/pod/map.h>
+#include <mobius/core/pod/map.hpp>
 #include <string>
 #include <vector>
 
@@ -36,7 +36,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit datasource_impl (const mobius::pod::map&);
+  explicit datasource_impl (const mobius::core::pod::map&);
   explicit datasource_impl (const std::string&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -51,7 +51,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Function prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::map get_state () const final;
+  mobius::core::pod::map get_state () const final;
   bool is_available () const final;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -78,7 +78,7 @@ public:
   // @brief Get UFDR file info
   // @return File info
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::map
+  mobius::core::pod::map
   get_file_info () const
   {
     return file_info_.clone ();
@@ -88,7 +88,7 @@ public:
   // @brief Get case info
   // @return Map with case attributes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::pod::map
+  mobius::core::pod::map
   get_case_info () const
   {
     return case_info_.clone ();
@@ -99,7 +99,7 @@ public:
   // @param case_info Map with case info
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
-  set_case_info (const mobius::pod::map& case_info)
+  set_case_info (const mobius::core::pod::map& case_info)
   {
     case_info_ = case_info.clone ();
   }
@@ -130,10 +130,10 @@ private:
   std::string url_;
 
   //! UFDR file info
-  mobius::pod::map file_info_;
+  mobius::core::pod::map file_info_;
 
   //! Case info
-  mobius::pod::map case_info_;
+  mobius::core::pod::map case_info_;
 
   //! Extractions
   std::vector<extraction> extractions_;

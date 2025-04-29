@@ -229,7 +229,7 @@ CBTInfo::get_metadata () const
   if (!info.is_map ())
     return {};
 
-  mobius::pod::map m (info);
+  mobius::core::pod::map m (info);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Get data from info

@@ -47,7 +47,7 @@ pymobius_vfs_vfs_check (PyObject *value)
 // @return New vfs object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_vfs_vfs_to_pyobject (const mobius::vfs::vfs& obj)
+pymobius_vfs_vfs_to_pyobject (const mobius::core::vfs::vfs& obj)
 {
   return mobius::py::to_pyobject <vfs_vfs_o> (obj, &vfs_vfs_t);
 }
@@ -57,7 +57,7 @@ pymobius_vfs_vfs_to_pyobject (const mobius::vfs::vfs& obj)
 // @param value Python value
 // @return Vfs object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::vfs::vfs
+mobius::core::vfs::vfs
 pymobius_vfs_vfs_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <vfs_vfs_o> (value, &vfs_vfs_t);
@@ -169,7 +169,7 @@ static PyObject *
 tp_f_add_disk (vfs_vfs_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::vfs::disk arg_d;
+  mobius::core::vfs::disk arg_d;
 
   try
     {
@@ -391,7 +391,7 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::vfs::vfs ();
+          ret->obj = new mobius::core::vfs::vfs ();
         }
       catch (const std::exception& e)
         {

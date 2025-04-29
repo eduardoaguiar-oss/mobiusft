@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "registry_key_impl_user_assist.h"
-#include <mobius/crypt/rot13.h>
+#include <mobius/core/crypt/rot13.hpp>
 
 namespace mobius::os::win::registry
 {
@@ -49,7 +49,7 @@ registry_key_impl_user_assist::_load_values () const
   for (auto& v: values)
     {
       // decode ROT-13 value name
-      auto b = mobius::crypt::rot13 (v.get_name ());
+      auto b = mobius::core::crypt::rot13 (v.get_name ());
       v.set_name (b.to_string ());
 
       // add value to list

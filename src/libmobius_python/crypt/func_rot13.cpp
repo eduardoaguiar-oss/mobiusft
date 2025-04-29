@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
-#include <mobius/crypt/rot13.h>
+#include <mobius/core/crypt/rot13.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>rot13</i> function implementation
@@ -46,7 +46,7 @@ func_rot13 (PyObject *, PyObject *args)
   try
     {
       ret = mobius::py::pybytes_from_bytearray (
-              mobius::crypt::rot13 (arg_data)
+              mobius::core::crypt::rot13 (arg_data)
             );
     }
   catch (const std::exception& e)

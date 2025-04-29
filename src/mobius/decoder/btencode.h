@@ -19,12 +19,12 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/io/reader.h>
-#include <mobius/pod/data.h>
+#include <mobius/core/pod/data.hpp>
 
 namespace mobius::decoder
 {
-mobius::pod::data btencode (const mobius::io::reader&);
-mobius::pod::data btencode (const mobius::bytearray&);
+mobius::core::pod::data btencode (const mobius::io::reader&);
+mobius::core::pod::data btencode (const mobius::bytearray&);
 
 } // namespace mobius::decoder
 

@@ -16,8 +16,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "credhist_file.h"
-#include <mobius/charset.h>
-#include <mobius/crypt/hash.h>
+#include <mobius/core/charset.hpp>
+#include <mobius/core/crypt/hash.hpp>
 #include <mobius/exception.inc>
 #include <stdexcept>
 #include <set>
@@ -148,8 +148,8 @@ credhist_file::decrypt_with_password_hash (const mobius::bytearray& h)
 bool
 credhist_file::decrypt_with_password (const std::string& password)
 {
-  mobius::crypt::hash h ("sha1");
-  h.update (conv_charset (password, "UTF-8", "UTF-16LE"));
+  mobius::core::crypt::hash h ("sha1");
+  h.update (mobius::core::conv_charset (password, "UTF-8", "UTF-16LE"));
 
   return decrypt_with_password_hash (h.get_digest ());
 }

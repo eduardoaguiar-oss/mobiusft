@@ -43,7 +43,7 @@ endif()
 find_package(JNI REQUIRED)
 
 if(JNI_FOUND)
-    message(STATUS "JNI found: ${JNI_LIBRARIES}")
+    message(STATUS "Found JNI: ${JNI_LIBRARIES}")
 else()
     message(FATAL_ERROR "JNI not found! Tried JAVA_HOME=${JAVA_HOME}")
 endif()
@@ -59,6 +59,10 @@ add_library(mobius_core_jni STATIC
 target_include_directories(mobius_core_jni PRIVATE
     ${MOBIUS_INCLUDE_DIRS}
     ${JNI_INCLUDE_DIRS}
+)
+
+target_link_libraries(mobius_core_jni PUBLIC
+    ${JNI_LIBRARIES}
 )
 
 target_compile_options(mobius_core_jni PRIVATE -fno-strict-aliasing -fPIC)

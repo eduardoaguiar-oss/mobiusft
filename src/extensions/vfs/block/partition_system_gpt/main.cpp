@@ -20,7 +20,7 @@
 #include <mobius/decoder/data_decoder.h>
 #include <mobius/exception.inc>
 #include <mobius/string_functions.h>
-#include <mobius/vfs/block.h>
+#include <mobius/core/vfs/block.hpp>
 #include <cstdint>
 #include <map>
 #include <stdexcept>
@@ -92,7 +92,7 @@ static const std::map <const std::string, const std::string> PARTITION_DESCRIPTI
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 _decode_protective_mbr (
-  mobius::vfs::block& ps_block,
+  mobius::core::vfs::block& ps_block,
   sector_size_type sector_size
 )
 {
@@ -133,14 +133,14 @@ _decode_protective_mbr (
 // @return Block object
 // @see UEFI 2.9 - section 5.3.2
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::vfs::block
+static mobius::core::vfs::block
 _decode_gpt_header (
-  mobius::vfs::block& ps_block,
+  mobius::core::vfs::block& ps_block,
   sector_size_type sector_size,
   sector_type sector
 )
 {
-  mobius::vfs::block block;
+  mobius::core::vfs::block block;
 
   try
     {
@@ -195,14 +195,14 @@ _decode_gpt_header (
 // @param sector_size Sector size
 // @return Block
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::vfs::block
+static mobius::core::vfs::block
 _create_gpt_partition_table (
-  mobius::vfs::block& ps_block,
-  const mobius::vfs::block& header_block,
+  mobius::core::vfs::block& ps_block,
+  const mobius::core::vfs::block& header_block,
   sector_size_type sector_size
 )
 {
-  mobius::vfs::block block;
+  mobius::core::vfs::block block;
 
   if (header_block)
     {
@@ -238,8 +238,8 @@ _create_gpt_partition_table (
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::uint32_t
 _decode_gpt_partition_table (
-  mobius::vfs::block& ps_block,
-  const mobius::vfs::block& header_block,
+  mobius::core::vfs::block& ps_block,
+  const mobius::core::vfs::block& header_block,
   sector_size_type sector_size
 )
 {
@@ -356,15 +356,15 @@ _decode_gpt_partition_table (
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 _decode_gpt (
-  const mobius::vfs::block& block,
-  std::vector <mobius::vfs::block>& new_blocks,
+  const mobius::core::vfs::block& block,
+  std::vector <mobius::core::vfs::block>& new_blocks,
   sector_size_type sector_size
 )
 {
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Create partition system block
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto ps_block = mobius::vfs::new_slice_block (block, "partition_system");
+  auto ps_block = mobius::core::vfs::new_slice_block (block, "partition_system");
   std::uint64_t sectors = (block.get_size () + sector_size - 1) / sector_size;
 
   ps_block.set_attribute ("sector_size", sector_size);
@@ -383,7 +383,7 @@ _decode_gpt (
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto primary_header_block = _decode_gpt_header (ps_block, sector_size, 1);
   auto backup_header_block = _decode_gpt_header (ps_block, sector_size, sectors - 1);
-  mobius::vfs::block header_block;
+  mobius::core::vfs::block header_block;
 
   if (primary_header_block)
     {
@@ -472,9 +472,9 @@ _decode_gpt (
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static bool
 decoder (
-  const mobius::vfs::block& block,
-  std::vector <mobius::vfs::block>& new_blocks,
-  std::vector <mobius::vfs::block>&
+  const mobius::core::vfs::block& block,
+  std::vector <mobius::core::vfs::block>& new_blocks,
+  std::vector <mobius::core::vfs::block>&
 )
 {
   auto reader = block.new_reader ();
@@ -536,7 +536,7 @@ start ()
   mobius::core::add_resource (
      "vfs.block.decoder.partition_system_gpt",
      "GPT partition system block decoder",
-     static_cast <mobius::vfs::block_decoder_resource_type> (decoder)
+     static_cast <mobius::core::vfs::block_decoder_resource_type> (decoder)
   );
 }
 

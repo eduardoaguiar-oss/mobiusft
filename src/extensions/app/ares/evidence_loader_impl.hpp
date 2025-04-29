@@ -102,7 +102,7 @@ struct file
   mobius::datetime::datetime upload_started_time;
 
   // metadata
-  mobius::pod::map metadata;
+  mobius::core::pod::map metadata;
 
   // torrent files
   std::vector <torrent_file> torrent_files;

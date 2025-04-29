@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/crypt/cipher.h>
+#include <mobius/core/crypt/cipher.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::crypt::cipher *obj;
+  mobius::core::crypt::cipher *obj;
 } crypt_cipher_o;
 
 extern PyTypeObject crypt_cipher_t;
@@ -36,8 +36,8 @@ extern PyTypeObject crypt_cipher_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_crypt_cipher_check (PyObject *);
-PyObject *pymobius_crypt_cipher_to_pyobject (const mobius::crypt::cipher&);
-mobius::crypt::cipher pymobius_crypt_cipher_from_pyobject (PyObject *);
+PyObject *pymobius_crypt_cipher_to_pyobject (const mobius::core::crypt::cipher&);
+mobius::core::crypt::cipher pymobius_crypt_cipher_from_pyobject (PyObject *);
 
 #endif
 

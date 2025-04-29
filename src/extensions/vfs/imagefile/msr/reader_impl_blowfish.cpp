@@ -33,7 +33,7 @@ constexpr int HEADER_SIZE = 16384;
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 reader_impl_blowfish::reader_impl_blowfish (const imagefile_impl& impl)
   : size_ (impl.get_size ()),
-    cipher_ (mobius::crypt::new_cipher_ecb ("blowfish", impl.get_encryption_key ()))
+    cipher_ (mobius::core::crypt::new_cipher_ecb ("blowfish", impl.get_encryption_key ()))
 {
   auto f = impl.get_file ();
   stream_ = f.new_reader ();

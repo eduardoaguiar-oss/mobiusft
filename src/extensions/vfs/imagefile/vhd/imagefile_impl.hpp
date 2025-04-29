@@ -21,7 +21,7 @@
 #include <mobius/bytearray.h>
 #include <mobius/datetime/datetime.h>
 #include <mobius/io/file.h>
-#include <mobius/vfs/imagefile_impl_base.h>
+#include <mobius/core/vfs/imagefile_impl_base.hpp>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -31,7 +31,7 @@
 // @author Eduardo Aguiar
 // @see http://download.microsoft.com/download/f/f/e/ffef50a5-07dd-4cf8-aaa3-442c0673a029/Virtual%20Hard%20Disk%20Format%20Spec_10_18_06.doc
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class imagefile_impl : public mobius::vfs::imagefile_impl_base
+class imagefile_impl : public mobius::core::vfs::imagefile_impl_base
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -52,9 +52,9 @@ public:
   explicit imagefile_impl (const mobius::io::file&);
   table_type get_block_allocation_table () const;
   std::uint32_t get_block_size () const;
-  mobius::pod::data get_attribute (const std::string&) const override;
-  void set_attribute (const std::string&, const mobius::pod::data&) override;
-  mobius::pod::map get_attributes () const override;
+  mobius::core::pod::data get_attribute (const std::string&) const override;
+  void set_attribute (const std::string&, const mobius::core::pod::data&) override;
+  mobius::core::pod::map get_attributes () const override;
   mobius::io::reader new_reader () const override;
   mobius::io::writer new_writer () const override;
 
@@ -153,7 +153,7 @@ private:
   mutable std::vector <std::uint32_t> block_allocation_table_;
 
   // @brief attributes
-  mutable mobius::pod::map attributes_;
+  mutable mobius::core::pod::map attributes_;
 
   // @brief flag: metadata loaded
   mutable bool metadata_loaded_ = false;

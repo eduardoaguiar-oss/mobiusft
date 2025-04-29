@@ -47,7 +47,7 @@ pymobius_vfs_filesystem_check (PyObject *value)
 // @return New filesystem object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_vfs_filesystem_to_pyobject (const mobius::vfs::filesystem& obj)
+pymobius_vfs_filesystem_to_pyobject (const mobius::core::vfs::filesystem& obj)
 {
   return mobius::py::to_pyobject_nullable <vfs_filesystem_o> (obj, &vfs_filesystem_t);
 }
@@ -57,7 +57,7 @@ pymobius_vfs_filesystem_to_pyobject (const mobius::vfs::filesystem& obj)
 // @param value Python value
 // @return Filesystem object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::vfs::filesystem
+mobius::core::vfs::filesystem
 pymobius_vfs_filesystem_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <vfs_filesystem_o> (value, &vfs_filesystem_t);
@@ -360,11 +360,11 @@ tp_new (PyTypeObject *, PyObject *args, PyObject *)
 
   try
     {
-      mobius::vfs::filesystem fs;
+      mobius::core::vfs::filesystem fs;
 
       {
         mobius::py::GIL gil;
-        fs = mobius::vfs::filesystem (arg_reader, arg_offset, arg_type);
+        fs = mobius::core::vfs::filesystem (arg_reader, arg_offset, arg_type);
       }
 
       ret = pymobius_vfs_filesystem_to_pyobject (fs);

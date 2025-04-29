@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/io/reader_impl_base.h>
 #include <mobius/io/reader.h>
-#include <mobius/vfs/segment_array.h>
+#include <mobius/core/vfs/segment_array.hpp>
 
 class imagefile_impl;
 
@@ -105,7 +105,7 @@ private:
   size_type segment_idx_;       // current segment idx
   size_type pos_ = 0;
 
-  mobius::vfs::segment_array segments_;      // segment files
+  mobius::core::vfs::segment_array segments_;      // segment files
   mobius::io::reader stream_;   // current stream
 
   void _set_stream ();

@@ -56,7 +56,7 @@ public:
   // @brief Get VFS object
   // @return VFS object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::vfs::vfs
+  mobius::core::vfs::vfs
   get_vfs () const
   {
     return _impl <datasource_impl_vfs> ()->get_vfs ();

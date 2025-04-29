@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/application.hpp>
 #include <mobius/core/turing/turing.hpp>
-#include <mobius/database/connection_pool.h>
+#include <mobius/core/database/connection_pool.hpp>
 #include <mobius/string_functions.h>
 #include <string>
 #include <tuple>
@@ -78,7 +78,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::database::transaction new_transaction ();
+  mobius::core::database::transaction new_transaction ();
   bool has_hash (const std::string&, const std::string&);
   void set_hash (const std::string&, const std::string&, const std::string&);
   std::pair <pwd_status, std::string> get_hash_password (const std::string&, const std::string&) const;
@@ -90,7 +90,7 @@ private:
   mutable bool is_database_loaded_ = false;
 
   // @brief database object
-  mutable mobius::database::database db_;
+  mutable mobius::core::database::database db_;
 
   // Helper functions
   void _load_database () const;
@@ -101,7 +101,7 @@ private:
 // @brief Create new transaction for Turing database
 // @return New database transaction
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::database::transaction
+mobius::core::database::transaction
 turing::impl::new_transaction ()
 {
   _load_database();
@@ -317,7 +317,7 @@ turing::impl::_load_database () const
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::core::application app;
   const auto path = app.get_config_path ("turing.sqlite");
-  db_ = mobius::database::database (path);
+  db_ = mobius::core::database::database (path);
   db_.execute ("PRAGMA foreign_keys = OFF;");
 
   auto transaction = db_.new_transaction ();
@@ -399,7 +399,7 @@ turing::turing ()
 // @brief Create new transaction for Turing database
 // @return new database transaction
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::database::transaction
+mobius::core::database::transaction
 turing::new_transaction ()
 {
   return impl_->new_transaction ();

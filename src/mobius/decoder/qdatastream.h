@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/decoder/data_decoder.h>
-#include <mobius/pod/data.h>
+#include <mobius/core/pod/data.hpp>
 
 namespace mobius::decoder
 {
@@ -146,7 +146,7 @@ public:
   mobius::bytearray get_qbytearray ();
   mobius::bytearray get_qimage ();
   mobius::bytearray get_qpixmap ();
-  pod::data get_qvariant ();
+  mobius::core::pod::data get_qvariant ();
 
 private:
   // @brief Internal data decoder object

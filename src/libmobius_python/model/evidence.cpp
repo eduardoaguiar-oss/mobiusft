@@ -244,7 +244,7 @@ tp_f_set_attribute (model_evidence_o *self, PyObject *args)
 {
   // Parse input args
   std::string arg_id;
-  mobius::pod::data arg_value;
+  mobius::core::pod::data arg_value;
 
   try
     {
@@ -281,7 +281,7 @@ static PyObject *
 tp_f_set_attributes (model_evidence_o *self, PyObject *args)
 {
   // Parse input args
-  std::map <std::string, mobius::pod::data> arg_attributes;
+  std::map <std::string, mobius::core::pod::data> arg_attributes;
 
   try
     {

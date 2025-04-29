@@ -41,7 +41,7 @@ pymobius_crypt_cipher_check (PyObject *value)
 // @return New cipher object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_crypt_cipher_to_pyobject (const mobius::crypt::cipher& obj)
+pymobius_crypt_cipher_to_pyobject (const mobius::core::crypt::cipher& obj)
 {
   return mobius::py::to_pyobject <crypt_cipher_o> (obj, &crypt_cipher_t);
 }
@@ -51,7 +51,7 @@ pymobius_crypt_cipher_to_pyobject (const mobius::crypt::cipher& obj)
 // @param value Python value
 // @return Cipher object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::crypt::cipher
+mobius::core::crypt::cipher
 pymobius_crypt_cipher_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <crypt_cipher_o> (value, &crypt_cipher_t);

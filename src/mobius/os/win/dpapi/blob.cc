@@ -18,11 +18,11 @@
 #include "blob.h"
 #include "cipher_info.h"
 #include "hash_info.h"
+#include <mobius/core/crypt/cipher.hpp>
+#include <mobius/core/crypt/hash.hpp>
+#include <mobius/core/crypt/hmac.hpp>
+#include <mobius/core/crypt/pkcs5.hpp>
 #include <mobius/decoder/data_decoder.h>
-#include <mobius/crypt/cipher.h>
-#include <mobius/crypt/hash.h>
-#include <mobius/crypt/hmac.h>
-#include <mobius/crypt/pkcs5.h>
 
 namespace mobius::os::win::dpapi
 {
@@ -307,7 +307,7 @@ _generate_session_key (
 
   else
     {
-      mobius::crypt::hash h ("sha1");
+      mobius::core::crypt::hash h ("sha1");
       h.update (key);
       prekey = h.get_digest ();
     }
@@ -328,11 +328,11 @@ _generate_session_key (
       opad.fill (0x5c);
       opad ^= prekey;
 
-      mobius::crypt::hash h1 ("sha1");
+      mobius::core::crypt::hash h1 ("sha1");
       h1.update (ipad);
       h1.update (salt);
 
-      mobius::crypt::hash h2 ("sha1");
+      mobius::core::crypt::hash h2 ("sha1");
       h2.update (opad);
       h2.update (h1.get_digest ());
 
@@ -347,7 +347,7 @@ _generate_session_key (
 
   else
     {
-      mobius::crypt::hmac hmac_signature (hash_id, prekey);
+      mobius::core::crypt::hmac hmac_signature (hash_id, prekey);
       hmac_signature.update (salt);
 
       if (entropy)
@@ -471,7 +471,7 @@ blob::impl::decrypt (const mobius::bytearray& key, const mobius::bytearray& entr
 
   if (session_key.size () > hash_digest_size)
     {
-      mobius::crypt::hash h (hash_id);
+      mobius::core::crypt::hash h (hash_id);
       h.update (session_key);
       session_key = h.get_digest ();
     }
@@ -486,13 +486,13 @@ blob::impl::decrypt (const mobius::bytearray& key, const mobius::bytearray& entr
       mobius::bytearray ipad (hash_block_size);
       ipad.fill (0x36);
 
-      mobius::crypt::hash h1 (hash_id);
+      mobius::core::crypt::hash h1 (hash_id);
       h1.update (ipad ^ session_key);
 
       mobius::bytearray opad (hash_block_size);
       opad.fill (0x5c);
 
-      mobius::crypt::hash h2 (hash_id);
+      mobius::core::crypt::hash h2 (hash_id);
       h2.update (opad ^ session_key);
 
       derived_key = h1.get_digest () + h2.get_digest ();
@@ -500,8 +500,8 @@ blob::impl::decrypt (const mobius::bytearray& key, const mobius::bytearray& entr
 
   // decrypt cipher text
   const auto cipher_id = mobius::os::win::dpapi::get_cipher_id (cipher_id_);
-  auto c = mobius::crypt::new_cipher_cbc (cipher_id, derived_key.slice (0, cipher_key_length - 1));
-  plain_text_ = mobius::crypt::pkcs5_unpad (c.decrypt (cipher_text_));
+  auto c = mobius::core::crypt::new_cipher_cbc (cipher_id, derived_key.slice (0, cipher_key_length - 1));
+  plain_text_ = mobius::core::crypt::pkcs5_unpad (c.decrypt (cipher_text_));
 
   return true;
 }

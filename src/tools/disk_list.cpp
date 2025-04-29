@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/application.hpp>
-#include <mobius/system/device_list.h>
+#include <mobius/core/system/device_list.hpp>
 #include <iostream>
 #include <iomanip>
 #include <unistd.h>
@@ -68,7 +68,7 @@ main (int argc, char **argv)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // show disks information
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::system::device_list dev_list;
+  mobius::core::system::device_list dev_list;
 
   for (auto dev : dev_list)
     {

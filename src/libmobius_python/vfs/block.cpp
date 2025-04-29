@@ -46,7 +46,7 @@ pymobius_vfs_block_check (PyObject *value)
 // @return New block object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_vfs_block_to_pyobject (const mobius::vfs::block& obj)
+pymobius_vfs_block_to_pyobject (const mobius::core::vfs::block& obj)
 {
   return mobius::py::to_pyobject_nullable <vfs_block_o> (obj, &vfs_block_t);
 }
@@ -56,7 +56,7 @@ pymobius_vfs_block_to_pyobject (const mobius::vfs::block& obj)
 // @param value Python value
 // @return Block object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::vfs::block
+mobius::core::vfs::block
 pymobius_vfs_block_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <vfs_block_o> (value, &vfs_block_t);
@@ -230,7 +230,7 @@ static PyObject *
 tp_f_add_parent (vfs_block_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::vfs::block arg_parent;
+  mobius::core::vfs::block arg_parent;
 
   try
     {
@@ -291,7 +291,7 @@ static PyObject *
 tp_f_add_child (vfs_block_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::vfs::block arg_parent;
+  mobius::core::vfs::block arg_parent;
 
   try
     {
@@ -432,7 +432,7 @@ tp_f_set_attribute (vfs_block_o *self, PyObject *args)
 {
   // Parse input args
   std::string arg_name;
-  mobius::pod::data arg_value;
+  mobius::core::pod::data arg_value;
 
   try
     {

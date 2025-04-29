@@ -36,7 +36,6 @@
 #include "database/transaction.hpp"
 #include "datasource/datasource.hpp"
 #include "pod/data.hpp"
-#include <mobius/crypt/hash.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>uid</i> attribute getter
@@ -475,7 +474,7 @@ tp_f_set_attribute (model_item_o *self, PyObject *args)
 {
   // parse input args
   std::string arg_id;
-  mobius::pod::data arg_value;
+  mobius::core::pod::data arg_value;
 
   try
     {
@@ -1507,8 +1506,8 @@ public:
   operator () (
     const mobius::framework::model::item& item,
     const std::string& id,
-    const mobius::pod::data& old_value,
-    const mobius::pod::data& new_value)
+    const mobius::core::pod::data& old_value,
+    const mobius::core::pod::data& new_value)
   {
     f_.call (
       pymobius_model_item_to_pyobject (item),
@@ -1539,7 +1538,7 @@ public:
   operator () (
     const mobius::framework::model::item& item,
     const std::string& id,
-    const mobius::pod::data& old_value)
+    const mobius::core::pod::data& old_value)
   {
     f_.call (
       pymobius_model_item_to_pyobject (item),

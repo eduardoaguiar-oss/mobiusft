@@ -87,10 +87,10 @@ kff::kff ()
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create connection_set object to hashset databases
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::database::connection_set
+mobius::core::database::connection_set
 kff::new_connection ()
 {
-  mobius::database::connection_set cs;
+  mobius::core::database::connection_set cs;
 
   const std::lock_guard <std::mutex> lock (mutex_);
 

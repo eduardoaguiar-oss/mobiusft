@@ -20,9 +20,9 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "imagefile_impl.hpp"
 #include "segment_writer.hpp"
-#include <mobius/crypt/hash.h>
+#include <mobius/core/crypt/hash.hpp>
 #include <mobius/io/writer_impl_base.h>
-#include <mobius/vfs/segment_array.h>
+#include <mobius/core/vfs/segment_array.hpp>
 #include <vector>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -80,11 +80,11 @@ private:
   std::uint8_t compression_level_ = 0;  // compression level (0 - none, 1 - fast, 9 - best)
 
   size_type size_ = 0;                  // imagefile size in bytes
-  mobius::vfs::segment_array segments_;
+  mobius::core::vfs::segment_array segments_;
 
   std::vector <segment_writer> segment_writer_list_;
   mobius::bytearray guid_;              // imagefile GUID
-  mobius::crypt::hash hash_;            // hash function for data written
+  mobius::core::crypt::hash hash_;      // hash function for data written
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Private prototypes

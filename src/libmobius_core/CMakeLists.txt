@@ -35,19 +35,20 @@ set(TOP_SRC_DIR ${CMAKE_SOURCE_DIR}/../..)
 set(TOP_BUILD_DIR ${CMAKE_BINARY_DIR}/../..)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Find dependencies
+# Find zlib
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# find_package(PkgConfig REQUIRED)
-
 # libz
 find_package(ZLIB QUIET)
+
 if(ZLIB_FOUND)
-    message(STATUS "zlib found: ${ZLIB_LIBRARIES}")
+    message(STATUS "Found zlib: ${ZLIB_LIBRARIES}")
 else()
     message(SEND_ERROR "zlib not found. See www.zlib.net")
 endif()
 
-# libdl
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Find libdl
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 find_package(dl QUIET)
 
 if(TARGET dl::dl)
@@ -62,7 +63,20 @@ else()
     endif()
 endif()
 
-# old mobius library
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Find libiconv
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+find_package(Iconv QUIET)
+
+if(Iconv_FOUND)
+    message(STATUS "Found libiconv: ${Iconv_LIBRARIES}")
+else()
+    message(SEND_ERROR "Libiconv not found.")
+endif()
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Find old mobius library (@deprecated)
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 find_library(MOBIUS_LIB mobius HINTS ${TOP_SRC_DIR}/src/mobius/.libs NO_DEFAULT_PATH)
 
 if(NOT MOBIUS_LIB)
@@ -75,13 +89,18 @@ set(MOBIUS_LIBRARIES ${MOBIUS_LIB})
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Build sub-libraries
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_subdirectory(crypt)
+add_subdirectory(database)
 add_subdirectory(datasource)
 add_subdirectory(encoder)
 add_subdirectory(file_decoder)
 add_subdirectory(jni)
 add_subdirectory(kff)
+add_subdirectory(pod)
+add_subdirectory(system)
 add_subdirectory(turing)
 add_subdirectory(ui)
+add_subdirectory(vfs)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
@@ -92,6 +111,7 @@ configure_file(application.cpp.in application.cpp @ONLY)
 add_library(mobius_core SHARED
     ${CMAKE_CURRENT_BINARY_DIR}/application.cpp
     benchmark.cpp
+    charset.cpp
     extension.cpp
     extension_set.cpp
     log.cpp
@@ -101,22 +121,29 @@ add_library(mobius_core SHARED
     thread_guard.cpp
     unittest.cpp
     zlib_functions.cpp
-    $<TARGET_OBJECTS:mobius_core_datasource>
-    $<TARGET_OBJECTS:mobius_core_encoder>
-    $<TARGET_OBJECTS:mobius_core_file_decoder>
-    $<TARGET_OBJECTS:mobius_core_jni>
-    $<TARGET_OBJECTS:mobius_core_kff>
-    $<TARGET_OBJECTS:mobius_core_turing>
-    $<TARGET_OBJECTS:mobius_core_ui>
 )
 
 target_include_directories(mobius_core PUBLIC ${MOBIUS_INCLUDE_DIRS} ${TOP_SRC_DIR})
 
 target_link_libraries(mobius_core PUBLIC
+    -Wl,--whole-archive
+    mobius_core_crypt
+    mobius_core_database
+    mobius_core_datasource
+    mobius_core_encoder
+    mobius_core_file_decoder
+    mobius_core_jni
+    mobius_core_kff
+    mobius_core_pod
+    mobius_core_system
+    mobius_core_turing
+    mobius_core_ui
+    mobius_core_vfs
+    -Wl,--no-whole-archive
     ${MOBIUS_LIBRARIES}
-    ${ZLIB_LIBRARIES}
-    ${JNI_LIBRARIES}
     ${DL_LIBRARY}
+    ZLIB::ZLIB
+    Iconv::Iconv
 )
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "registry_data.h"
 #include "registry_data_impl_null.h"
+#include <mobius/core/charset.hpp>
 #include <mobius/exception.inc>
-#include <mobius/charset.h>
 #include <stdexcept>
 
 namespace mobius::os::win::registry
@@ -109,7 +109,7 @@ registry_data::get_data_as_qword () const
 std::string
 registry_data::get_data_as_string (const std::string& encoding) const
 {
-  return mobius::conv_charset_to_utf8 (get_data (), encoding);
+  return mobius::core::conv_charset_to_utf8 (get_data (), encoding);
 }
 
 } // namespace mobius::os::win::registry
