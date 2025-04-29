@@ -160,7 +160,7 @@ api_dataholder_setattr (api_dataholder_o *obj, const std::string& name, std::int
 // @param value value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-api_dataholder_setattr (api_dataholder_o *obj, const std::string& name, const mobius::datetime::datetime& value)
+api_dataholder_setattr (api_dataholder_o *obj, const std::string& name, const mobius::core::datetime::datetime& value)
 {
   PyObject_GenericSetAttr ((PyObject *) obj,
                            mobius::py::pystring_from_std_string (name),

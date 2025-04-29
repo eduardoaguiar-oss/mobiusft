@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/resource.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/string_functions.h>
 #include <mobius/core/vfs/block.hpp>
 #include <map>
@@ -159,7 +159,7 @@ _scan_partitions (
   // Read MBR
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto reader = mbr_block.new_reader ();
-  mobius::decoder::data_decoder decoder (reader);
+  mobius::core::decoder::data_decoder decoder (reader);
   decoder.skip (440);   // bootcode
   bool is_copy_protected = false;
 

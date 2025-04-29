@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/bytearray.h>
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/pod/data.hpp>
 #include <memory>
 #include <string>
@@ -61,7 +61,7 @@ public:
   void bind (int, const char *);
   void bind (int, const std::string&);
   void bind (int, const mobius::bytearray&);
-  void bind (int, const mobius::datetime::datetime&);
+  void bind (int, const mobius::core::datetime::datetime&);
   void bind (int, const mobius::core::pod::data&);
   void bind_null (int);
 
@@ -78,7 +78,7 @@ public:
   double get_column_double (int);
   std::string get_column_string (int);
   mobius::bytearray get_column_bytearray (int);
-  mobius::datetime::datetime get_column_datetime (int);
+  mobius::core::datetime::datetime get_column_datetime (int);
   mobius::core::pod::data get_column_pod (int);
 
 private:

@@ -36,7 +36,7 @@ namespace mobius::extension::app::shareaza
 // @see QuerySearch.cpp - CQuerySearch::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CQuerySearch::decode (mobius::decoder::mfc& decoder)
+CQuerySearch::decode (mobius::core::decoder::mfc& decoder)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 

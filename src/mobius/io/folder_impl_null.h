@@ -1,5 +1,5 @@
-#ifndef MOBIUS_IO_FOLDER_IMPL_NULL_H
-#define MOBIUS_IO_FOLDER_IMPL_NULL_H
+#ifndef MOBIUS_CORE_IO_FOLDER_IMPL_NULL_HPP
+#define MOBIUS_CORE_IO_FOLDER_IMPL_NULL_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -214,7 +214,7 @@ public:
   // @brief Get last access timestamp
   // @return Last access date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_access_time () const override
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid folder"));
@@ -224,7 +224,7 @@ public:
   // @brief Get last data modification timestamp
   // @return Last data modification date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_modification_time () const override
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid folder"));
@@ -234,7 +234,7 @@ public:
   // @brief Get last metadata modification timestamp
   // @return Last metadata modification date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_metadata_time () const override
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid folder"));
@@ -244,7 +244,7 @@ public:
   // @brief Get creation timestamp
   // @return Creation date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_creation_time () const override
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid folder"));
@@ -254,7 +254,7 @@ public:
   // @brief Get deletion timestamp
   // @return Deletion date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_deletion_time () const override
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid folder"));
@@ -264,7 +264,7 @@ public:
   // @brief Get backup timestamp
   // @return Backup date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_backup_time () const override
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid folder"));

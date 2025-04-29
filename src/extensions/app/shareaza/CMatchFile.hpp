@@ -19,8 +19,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CQueryHit.hpp"
-#include <mobius/datetime/datetime.h>
-#include <mobius/decoder/mfc.h>
+#include <mobius/core/datetime/datetime.hpp>
+#include <mobius/core/decoder/mfc.hpp>
 #include <cstdint>
 #include <string>
 
@@ -166,7 +166,7 @@ public:
   // @brief Get found time
   // @return Found time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_found_time () const
   {
     return found_time_;
@@ -226,7 +226,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void decode (mobius::decoder::mfc&, int);
+  void decode (mobius::core::decoder::mfc&, int);
 
 private:
   // @brief File size
@@ -269,7 +269,7 @@ private:
   mobius::bytearray preview_;
 
   // @brief Found time
-  mobius::datetime::datetime found_time_;
+  mobius::core::datetime::datetime found_time_;
 
   // @brief Flag expanded
   bool flag_expanded_ = false;

@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "imagefile_impl.hpp"
 #include "reader_impl.hpp"
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/exception.inc>
 #include <mobius/io/file.h>
 #include <mobius/io/reader.h>
@@ -175,7 +175,7 @@ imagefile_impl::_load_metadata () const
   _load_region_table (reader);
 
   // other data
-  mobius::datetime::datetime acquisition_time = file_.get_modification_time ();
+  mobius::core::datetime::datetime acquisition_time = file_.get_modification_time ();
   sectors_ = size_ / sector_size_;
 
   // fill attributes
@@ -198,7 +198,7 @@ imagefile_impl::_load_metadata () const
 void
 imagefile_impl::_load_file_type_identifier (mobius::io::reader reader) const
 {
-  mobius::decoder::data_decoder decoder (reader);
+  mobius::core::decoder::data_decoder decoder (reader);
 
   // test signature
   auto signature = decoder.get_string_by_size (8);
@@ -224,7 +224,7 @@ imagefile_impl::_load_file_type_identifier (mobius::io::reader reader) const
 void
 imagefile_impl::_load_header (mobius::io::reader reader) const
 {
-  mobius::decoder::data_decoder decoder (reader);
+  mobius::core::decoder::data_decoder decoder (reader);
   decoder.seek (65536);
 
   std::uint64_t h1_sequence_number = 0;
@@ -275,7 +275,7 @@ imagefile_impl::_load_header (mobius::io::reader reader) const
 void
 imagefile_impl::_load_region_table (mobius::io::reader reader) const
 {
-  mobius::decoder::data_decoder decoder (reader);
+  mobius::core::decoder::data_decoder decoder (reader);
   decoder.seek (196608);
 
   // test signature
@@ -320,7 +320,7 @@ imagefile_impl::_load_metadata_region (
   std::uint64_t file_offset
 ) const
 {
-  mobius::decoder::data_decoder decoder (reader);
+  mobius::core::decoder::data_decoder decoder (reader);
   decoder.seek (file_offset);
 
   // test signature
@@ -397,7 +397,7 @@ imagefile_impl::_load_block_allocation_table () const
 
   // decode BAT
   auto reader = file_.new_reader ();
-  mobius::decoder::data_decoder decoder (reader);
+  mobius::core::decoder::data_decoder decoder (reader);
   decoder.seek (bat_offset_);
 
   auto chunk_ratio = (std::uint64_t (sector_size_) << 23) / block_size_;

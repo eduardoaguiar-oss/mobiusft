@@ -154,7 +154,7 @@ show_clibrary (const std::string& path)
   std::cout << ">> " << path << std::endl;
 
   auto f = mobius::io::new_file_by_path (path);
-  auto decoder = mobius::decoder::mfc (f.new_reader ());
+  auto decoder = mobius::core::decoder::mfc (f.new_reader ());
   auto clib = mobius::extension::app::shareaza::CLibrary (decoder);
 
   std::cout << std::endl;

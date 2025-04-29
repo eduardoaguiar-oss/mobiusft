@@ -19,8 +19,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CXMLElement.hpp"
-#include <mobius/datetime/datetime.h>
-#include <mobius/decoder/mfc.h>
+#include <mobius/core/datetime/datetime.hpp>
+#include <mobius/core/decoder/mfc.hpp>
 #include <mobius/io/reader.h>
 #include <mobius/core/pod/map.hpp>
 #include <cstdint>
@@ -60,9 +60,9 @@ public:
     int type = 0;
     int tier = 0;
     std::string address;
-    mobius::datetime::datetime last_access_time;
-    mobius::datetime::datetime last_success_time;
-    mobius::datetime::datetime next_try_time;
+    mobius::core::datetime::datetime last_access_time;
+    mobius::core::datetime::datetime last_success_time;
+    mobius::core::datetime::datetime next_try_time;
     std::uint32_t failures = 0;
   };
 
@@ -70,7 +70,7 @@ public:
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   CBTInfo () = default;
-  explicit CBTInfo (mobius::decoder::mfc&);
+  explicit CBTInfo (mobius::core::decoder::mfc&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief Get version
@@ -177,7 +177,7 @@ public:
   // @brief Get creation time
   // @return Date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_creation_time () const
   {
     return creation_time_;
@@ -330,7 +330,7 @@ private:
   std::string comments_;
 
   // @brief Creation time
-  mobius::datetime::datetime creation_time_;
+  mobius::core::datetime::datetime creation_time_;
 
   // @brief Created by
   std::string created_by_;
@@ -368,8 +368,8 @@ private:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Helper functions
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void decode_CBTFile (mobius::decoder::mfc&, int);
-  void decode_CBTTracker (mobius::decoder::mfc&);
+  void decode_CBTFile (mobius::core::decoder::mfc&, int);
+  void decode_CBTTracker (mobius::core::decoder::mfc&);
 };
 
 } // namespace mobius::extension::app::shareaza

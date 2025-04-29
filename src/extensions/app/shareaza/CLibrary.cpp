@@ -36,7 +36,7 @@ namespace mobius::extension::app::shareaza
 // @see Library.cpp - CLibrary::Serialize
 //! \todo AlbumFolder, LibraryHistory and LibraryMaps
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-CLibrary::CLibrary (mobius::decoder::mfc& decoder)
+CLibrary::CLibrary (mobius::core::decoder::mfc& decoder)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 

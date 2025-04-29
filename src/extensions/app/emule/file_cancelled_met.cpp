@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file_cancelled_met.hpp"
 #include <mobius/core/log.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 
 namespace
 {
@@ -35,7 +35,7 @@ constexpr std::uint8_t LAST_VERSION = 0x01;
 // @return New CCancelled struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::extension::app::emule::file_cancelled_met::CCancelledFile
-_decode_ccancelledfile (mobius::decoder::data_decoder& decoder)
+_decode_ccancelledfile (mobius::core::decoder::data_decoder& decoder)
 {
     mobius::extension::app::emule::file_cancelled_met::CCancelledFile f;
 
@@ -70,7 +70,7 @@ file_cancelled_met::file_cancelled_met (const mobius::io::reader& reader)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Decode header
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto decoder = mobius::decoder::data_decoder (reader);
+    auto decoder = mobius::core::decoder::data_decoder (reader);
     auto header = decoder.get_uint8 ();
 
     if (header != MET_HEADER_I64TAGS && header != MET_HEADER)

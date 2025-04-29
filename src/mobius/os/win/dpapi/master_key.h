@@ -1,5 +1,5 @@
-#ifndef MOBIUS_OS_WIN_DPAPI_MASTER_KEY_H
-#define MOBIUS_OS_WIN_DPAPI_MASTER_KEY_H
+#ifndef MOBIUS_CORE_OS_WIN_DPAPI_MASTER_KEY_HPP
+#define MOBIUS_CORE_OS_WIN_DPAPI_MASTER_KEY_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

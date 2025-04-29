@@ -1,5 +1,5 @@
-#ifndef MOBIUS_IO_SMB_NEW_ENTRY_BY_URL_H
-#define MOBIUS_IO_SMB_NEW_ENTRY_BY_URL_H
+#ifndef MOBIUS_CORE_IO_SMB_NEW_ENTRY_BY_URL_HPP
+#define MOBIUS_CORE_IO_SMB_NEW_ENTRY_BY_URL_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

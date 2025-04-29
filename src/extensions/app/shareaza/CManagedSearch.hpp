@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CQuerySearch.hpp"
-#include <mobius/decoder/mfc.h>
+#include <mobius/core/decoder/mfc.hpp>
 
 namespace mobius::extension::app::shareaza
 {
@@ -123,7 +123,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void decode (mobius::decoder::mfc&);
+  void decode (mobius::core::decoder::mfc&);
 
 private:
   // @brief Structure version

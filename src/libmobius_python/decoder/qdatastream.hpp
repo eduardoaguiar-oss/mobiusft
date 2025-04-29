@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pytypeobject.hpp>
-#include <mobius/decoder/qdatastream.h>
+#include <mobius/core/decoder/qdatastream.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -28,14 +28,14 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::decoder::qdatastream *obj;
+  mobius::core::decoder::qdatastream *obj;
 } decoder_qdatastream_o;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject new_decoder_qdatastream_type ();
-PyObject *pymobius_decoder_qdatastream_to_pyobject (const mobius::decoder::qdatastream&);
+PyObject *pymobius_decoder_qdatastream_to_pyobject (const mobius::core::decoder::qdatastream&);
 
 #endif
 

@@ -193,7 +193,7 @@ public:
   // @brief Get creation time
   // @return Creation date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_creation_time () const override
   {
     return fs_file_.get_creation_time ();
@@ -203,7 +203,7 @@ public:
   // @brief Get last access timestamp
   // @return Last file access date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_access_time () const override
   {
     return fs_file_.get_access_time ();
@@ -213,7 +213,7 @@ public:
   // @brief Get last metadata modification timestamp
   // @return Last file metadata modification date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_modification_time () const override
   {
     return fs_file_.get_modification_time ();
@@ -223,7 +223,7 @@ public:
   // @brief Get last metadata modification timestamp
   // @return Last file metadata modification date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_metadata_time () const override
   {
     return fs_file_.get_metadata_time ();
@@ -233,7 +233,7 @@ public:
   // @brief Get deletion time
   // @return Deletion date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_deletion_time () const override
   {
     return fs_file_.get_deletion_time ();
@@ -243,7 +243,7 @@ public:
   // @brief Get backup time
   // @return Backup date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_backup_time () const override
   {
     return fs_file_.get_backup_time ();

@@ -18,7 +18,7 @@
 #include "file_torrenth.hpp"
 #include "common.hpp"
 #include <mobius/core/log.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <algorithm>
 
 namespace
@@ -81,7 +81,7 @@ file_torrenth::file_torrenth (const mobius::io::reader& reader)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Create main section
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto decoder = mobius::decoder::data_decoder (reader);
+  auto decoder = mobius::core::decoder::data_decoder (reader);
   decoder.seek (0);
 
   section_ = mobius::core::file_decoder::section (reader, "File");
@@ -127,7 +127,7 @@ file_torrenth::file_torrenth (const mobius::io::reader& reader)
       // @see DHT/thread_dht.pas (line 338)
       // @see https://en.wikipedia.org/wiki/Magnet_URI_scheme
       // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-      mobius::decoder::data_decoder entry_decoder (data);
+      mobius::core::decoder::data_decoder entry_decoder (data);
 
       entry e;
       e.idx = idx;

@@ -19,8 +19,8 @@
 #include <mobius/core/application.hpp>
 #include <mobius/core/charset.hpp>
 #include <mobius/core/crypt/hash_functor.hpp>
-#include <mobius/datetime/datetime.h>
-#include <mobius/datetime/conv_iso_string.h>
+#include <mobius/core/datetime/datetime.hpp>
+#include <mobius/core/datetime/conv_iso_string.hpp>
 #include <mobius/core/encoder/data_encoder.hpp>
 #include <mobius/string_functions.h>
 #include <mobius/core/zlib_functions.hpp>
@@ -271,13 +271,13 @@ segment_writer::_write_header_section ()
 {
   // format header metadata
   mobius::core::application app;
-  mobius::datetime::datetime dt_now = mobius::datetime::now ();
+  mobius::core::datetime::datetime dt_now = mobius::core::datetime::now ();
 
   std::string acquisition_tool = app.get_title ();
   std::string acquisition_platform = app.get_os_name ();
   std::string drive_model = drive_vendor_ + ' ' + drive_model_;
 
-  std::string acquisition_datetime = mobius::datetime::datetime_to_iso_string (dt_now);
+  std::string acquisition_datetime = mobius::core::datetime::datetime_to_iso_string (dt_now);
   acquisition_datetime = mobius::string::replace (acquisition_datetime, "-", " ");
   acquisition_datetime = mobius::string::replace (acquisition_datetime, ":", " ");
   acquisition_datetime = mobius::string::replace (acquisition_datetime, "T", " ");

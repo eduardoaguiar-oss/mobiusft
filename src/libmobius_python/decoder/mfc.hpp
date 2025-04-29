@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/decoder/mfc.h>
+#include <mobius/core/decoder/mfc.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::decoder::mfc *obj;
+  mobius::core::decoder::mfc *obj;
 } decoder_mfc_o;
 
 extern PyTypeObject decoder_mfc_t;
@@ -35,7 +35,7 @@ extern PyTypeObject decoder_mfc_t;
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *pymobius_decoder_mfc_to_pyobject (mobius::decoder::mfc);
+PyObject *pymobius_decoder_mfc_to_pyobject (mobius::core::decoder::mfc);
 
 #endif
 

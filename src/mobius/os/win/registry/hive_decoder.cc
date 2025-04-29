@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "hive_decoder.h"
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 
 namespace mobius::os::win::registry
 {
@@ -32,7 +32,7 @@ static constexpr std::uint32_t HIVE_BASE_OFFSET = 4096;
 // @return absolute offset
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::uint32_t
-get_offset (mobius::decoder::data_decoder& decoder)
+get_offset (mobius::core::decoder::data_decoder& decoder)
 {
   auto offset = decoder.get_uint32_le ();
 
@@ -66,7 +66,7 @@ hive_decoder::decode_header ()
   header_data data;
 
   reader_.seek (0);
-  mobius::decoder::data_decoder decoder (reader_);
+  mobius::core::decoder::data_decoder decoder (reader_);
 
   data.signature = decoder.get_string_by_size (4);
   data.sequence_1 = decoder.get_uint32_le ();
@@ -109,7 +109,7 @@ hive_decoder::decode_vk (offset_type offset)
 
   // create decoder
   reader_.seek (offset);
-  mobius::decoder::data_decoder decoder (reader_);
+  mobius::core::decoder::data_decoder decoder (reader_);
 
   // get cell size
   std::int32_t cellsize = decoder.get_int32_le ();
@@ -179,7 +179,7 @@ hive_decoder::decode_values_list (offset_type offset, std::uint32_t count)
 
   // create decoder
   reader_.seek (offset);
-  mobius::decoder::data_decoder decoder (reader_);
+  mobius::core::decoder::data_decoder decoder (reader_);
 
   // get cell size
   std::int32_t cellsize = decoder.get_int32_le ();
@@ -213,7 +213,7 @@ hive_decoder::_retrieve_subkeys (std::vector <offset_type>& offsets, offset_type
 
   // create decoder
   reader_.seek (offset);
-  mobius::decoder::data_decoder decoder (reader_);
+  mobius::core::decoder::data_decoder decoder (reader_);
 
   // get cell size
   std::int32_t cellsize = decoder.get_int32_le ();
@@ -292,7 +292,7 @@ hive_decoder::decode_data (offset_type offset, std::uint32_t size)
 
   // decode cell
   reader_.seek (offset);
-  mobius::decoder::data_decoder decoder (reader_);
+  mobius::core::decoder::data_decoder decoder (reader_);
   std::int32_t cellsize = decoder.get_int32_le ();
 
   if (cellsize >= 0)
@@ -336,7 +336,7 @@ hive_decoder::decode_data_cell (offset_type offset)
 
   // create decoder
   reader_.seek (offset);
-  mobius::decoder::data_decoder decoder (reader_);
+  mobius::core::decoder::data_decoder decoder (reader_);
 
   // get cell size
   std::int32_t cellsize = decoder.get_int32_le ();
@@ -364,7 +364,7 @@ hive_decoder::decode_data_db (offset_type offset)
 
   // decode "db" cell
   reader_.seek (offset);
-  mobius::decoder::data_decoder decoder (reader_);
+  mobius::core::decoder::data_decoder decoder (reader_);
 
   std::int32_t cellsize = decoder.get_int32_le ();
   if (cellsize >= 0)

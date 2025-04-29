@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/file_decoder/section.hpp>
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/io/reader.h>
 #include <string>
 #include <vector>
@@ -50,7 +50,7 @@ public:
     std::string language;
     std::string url;
     std::string comment;
-    mobius::datetime::datetime download_completed_time;
+    mobius::core::datetime::datetime download_completed_time;
   };
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

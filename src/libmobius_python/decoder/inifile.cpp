@@ -226,7 +226,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = mobius::py::GIL () (new mobius::decoder::inifile (arg_reader, arg_encoding, arg_separator));
+          ret->obj = mobius::py::GIL () (new mobius::core::decoder::inifile (arg_reader, arg_encoding, arg_separator));
         }
       catch (const std::exception& e)
         {
@@ -334,7 +334,7 @@ pymobius_decoder_inifile_check (PyObject *value)
 // @return New inifile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_decoder_inifile_to_pyobject (const mobius::decoder::inifile& obj)
+pymobius_decoder_inifile_to_pyobject (const mobius::core::decoder::inifile& obj)
 {
   return mobius::py::to_pyobject <decoder_inifile_o> (obj, &decoder_inifile_t);
 }
@@ -344,7 +344,7 @@ pymobius_decoder_inifile_to_pyobject (const mobius::decoder::inifile& obj)
 // @param value Python value
 // @return Inifile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::decoder::inifile
+mobius::core::decoder::inifile
 pymobius_decoder_inifile_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <decoder_inifile_o> (value, &decoder_inifile_t);

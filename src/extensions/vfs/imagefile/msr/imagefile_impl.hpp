@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/bytearray.h>
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/io/file.h>
 #include <mobius/core/vfs/imagefile_impl_base.hpp>
 #include <cstdint>

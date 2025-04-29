@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "filesystem_impl.hpp"
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/string_functions.h>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -82,7 +82,7 @@ filesystem_impl::_load_data () const
 
   mobius::io::reader reader = reader_;
   reader.seek (offset_);
-  mobius::decoder::data_decoder decoder (reader);
+  mobius::core::decoder::data_decoder decoder (reader);
 
   // decode BPB
   decoder.skip (3);

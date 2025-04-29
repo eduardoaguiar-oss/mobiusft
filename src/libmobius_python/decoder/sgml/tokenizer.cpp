@@ -43,12 +43,12 @@ pymobius_decoder_sgml_tokenizer_check (PyObject *pyobj)
 // @return new tokenizer object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_decoder_sgml_tokenizer_to_pyobject (const mobius::decoder::sgml::tokenizer& obj)
+pymobius_decoder_sgml_tokenizer_to_pyobject (const mobius::core::decoder::sgml::tokenizer& obj)
 {
   PyObject *ret = _PyObject_New (&decoder_sgml_tokenizer_t);
 
   if (ret)
-    ((decoder_sgml_tokenizer_o *) ret)->obj = new mobius::decoder::sgml::tokenizer (obj);
+    ((decoder_sgml_tokenizer_o *) ret)->obj = new mobius::core::decoder::sgml::tokenizer (obj);
 
   return ret;
 }
@@ -58,7 +58,7 @@ pymobius_decoder_sgml_tokenizer_to_pyobject (const mobius::decoder::sgml::tokeni
 // @param pyobj Python object
 // @return tokenizer object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::decoder::sgml::tokenizer
+mobius::core::decoder::sgml::tokenizer
 pymobius_decoder_sgml_tokenizer_from_pyobject (PyObject *pyobj)
 {
   if (!PyObject_IsInstance (pyobj, (PyObject *) &decoder_sgml_tokenizer_t))
@@ -140,7 +140,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::decoder::sgml::tokenizer (arg_reader);
+          ret->obj = new mobius::core::decoder::sgml::tokenizer (arg_reader);
         }
       catch (const std::exception& e)
         {

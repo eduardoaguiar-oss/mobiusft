@@ -45,12 +45,12 @@ pymobius_decoder_sgml_parser_check (PyObject *pyobj)
 // @return new parser object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_decoder_sgml_parser_to_pyobject (const mobius::decoder::sgml::parser& obj)
+pymobius_decoder_sgml_parser_to_pyobject (const mobius::core::decoder::sgml::parser& obj)
 {
   PyObject *ret = _PyObject_New (&decoder_sgml_parser_t);
 
   if (ret)
-    ((decoder_sgml_parser_o *) ret)->obj = new mobius::decoder::sgml::parser (obj);
+    ((decoder_sgml_parser_o *) ret)->obj = new mobius::core::decoder::sgml::parser (obj);
 
   return ret;
 }
@@ -60,7 +60,7 @@ pymobius_decoder_sgml_parser_to_pyobject (const mobius::decoder::sgml::parser& o
 // @param pyobj Python object
 // @return parser object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::decoder::sgml::parser
+mobius::core::decoder::sgml::parser
 pymobius_decoder_sgml_parser_from_pyobject (PyObject *pyobj)
 {
   if (!PyObject_IsInstance (pyobj, (PyObject *) &decoder_sgml_parser_t))
@@ -149,7 +149,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::decoder::sgml::parser (arg_reader);
+          ret->obj = new mobius::core::decoder::sgml::parser (arg_reader);
         }
       catch (const std::exception& e)
         {

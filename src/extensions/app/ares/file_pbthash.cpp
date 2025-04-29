@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file_pbthash.hpp"
 #include <mobius/core/log.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 
 namespace mobius::extension::app::ares
 {
@@ -38,7 +38,7 @@ file_pbthash::file_pbthash (const mobius::io::reader& reader)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Decode
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto decoder = mobius::decoder::data_decoder (reader);
+  auto decoder = mobius::core::decoder::data_decoder (reader);
   decoder.seek (0);
 
   section_ = mobius::core::file_decoder::section (reader, "File");
@@ -63,7 +63,7 @@ file_pbthash::file_pbthash (const mobius::io::reader& reader)
 // @see BitTorrentDb_load@BitTorrent/BitTorrentDlDb.pas (line 69)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-file_pbthash::_decode_header (mobius::decoder::data_decoder& decoder)
+file_pbthash::_decode_header (mobius::core::decoder::data_decoder& decoder)
 {
   auto header_section = section_.new_child ("header");
   version_ = decoder.get_uint8 ();
@@ -92,7 +92,7 @@ file_pbthash::_decode_header (mobius::decoder::data_decoder& decoder)
 // @see BitTorrentDb_load - BitTorrent/BitTorrentDlDb.pas (line 163)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-file_pbthash::_decode_pieces (mobius::decoder::data_decoder& decoder)
+file_pbthash::_decode_pieces (mobius::core::decoder::data_decoder& decoder)
 {
   pieces_count_ = decoder.get_uint32_le ();
   auto pieces_section = section_.new_child ("pieces");
@@ -116,7 +116,7 @@ file_pbthash::_decode_pieces (mobius::decoder::data_decoder& decoder)
 // @see BitTorrentDb_load - BitTorrent/BitTorrentDlDb.pas (line 193)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-file_pbthash::_decode_metadata (mobius::decoder::data_decoder& decoder)
+file_pbthash::_decode_metadata (mobius::core::decoder::data_decoder& decoder)
 {
   auto metadata_section = section_.new_child ("metadata");
 
@@ -140,7 +140,7 @@ file_pbthash::_decode_metadata (mobius::decoder::data_decoder& decoder)
 // @see BitTorrentDb_load - BitTorrent/BitTorrentDlDb.pas (line 211)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-file_pbthash::_decode_files (mobius::decoder::data_decoder& decoder)
+file_pbthash::_decode_files (mobius::core::decoder::data_decoder& decoder)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -183,7 +183,7 @@ file_pbthash::_decode_files (mobius::decoder::data_decoder& decoder)
 // @see BitTorrentDb_load - BitTorrent/BitTorrentDlDb.pas (line 296)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-file_pbthash::_decode_tags (mobius::decoder::data_decoder& decoder)
+file_pbthash::_decode_tags (mobius::core::decoder::data_decoder& decoder)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 

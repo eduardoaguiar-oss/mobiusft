@@ -1,5 +1,5 @@
-#ifndef MOBIUS_URI_H
-#define MOBIUS_URI_H
+#ifndef MOBIUS_CORE_URI_HPP
+#define MOBIUS_CORE_URI_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

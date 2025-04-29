@@ -1,5 +1,5 @@
-#ifndef MOBIUS_REGISTRY_REGISTRY_DATA_IMPL_POLEKLIST_H
-#define MOBIUS_REGISTRY_REGISTRY_DATA_IMPL_POLEKLIST_H
+#ifndef MOBIUS_CORE_REGISTRY_REGISTRY_DATA_IMPL_POLEKLIST_HPP
+#define MOBIUS_CORE_REGISTRY_REGISTRY_DATA_IMPL_POLEKLIST_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

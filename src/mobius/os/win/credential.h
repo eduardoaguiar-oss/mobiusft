@@ -1,5 +1,5 @@
-#ifndef MOBIUS_OS_WIN_CREDENTIAL_H
-#define MOBIUS_OS_WIN_CREDENTIAL_H
+#ifndef MOBIUS_CORE_OS_WIN_CREDENTIAL_HPP
+#define MOBIUS_CORE_OS_WIN_CREDENTIAL_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/bytearray.h>
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/io/reader.h>
 #include <cstdint>
 #include <memory>
@@ -57,7 +57,7 @@ public:
   std::string get_password () const;
   mobius::bytearray get_password_data () const;
   std::uint32_t get_flags () const;
-  mobius::datetime::datetime get_last_update_time () const;
+  mobius::core::datetime::datetime get_last_update_time () const;
   std::vector <std::pair <std::string, mobius::bytearray>> get_data () const;
 
 private:

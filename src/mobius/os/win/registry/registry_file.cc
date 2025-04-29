@@ -83,7 +83,7 @@ public:
   // @brief get last modification time
   // @return last modification time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_last_modification_time () const
   {
     return hivefile_.get_last_modification_time ();
@@ -194,7 +194,7 @@ registry_file::get_role () const
 // @brief get last modification time
 // @return last modification time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 registry_file::get_last_modification_time () const
 {
   return impl_->get_last_modification_time ();

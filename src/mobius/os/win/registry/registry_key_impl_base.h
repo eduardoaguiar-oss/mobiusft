@@ -1,5 +1,5 @@
-#ifndef MOBIUS_REGISTRY_REGISTRY_KEY_IMPL_BASE_H
-#define MOBIUS_REGISTRY_REGISTRY_KEY_IMPL_BASE_H
+#ifndef MOBIUS_CORE_REGISTRY_REGISTRY_KEY_IMPL_BASE_HPP
+#define MOBIUS_CORE_REGISTRY_REGISTRY_KEY_IMPL_BASE_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <string>
 #include <vector>
 
@@ -47,7 +47,7 @@ public:
   virtual std::string get_name () const = 0;
   virtual void set_name (const std::string&) = 0;
   virtual std::string get_classname () const = 0;
-  virtual mobius::datetime::datetime get_last_modification_time () const = 0;
+  virtual mobius::core::datetime::datetime get_last_modification_time () const = 0;
   virtual const_iterator_type begin () const = 0;
   virtual const_iterator_type end () const = 0;
   virtual void add_key (registry_key) = 0;

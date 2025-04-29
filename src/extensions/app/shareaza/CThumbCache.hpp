@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/io/reader.h>
 #include <map>
 #include <optional>
@@ -42,7 +42,7 @@ public:
     bool is_valid = false;
     std::string path;
     std::uint64_t size = 0;
-    mobius::datetime::datetime last_write_time;
+    mobius::core::datetime::datetime last_write_time;
     mobius::bytearray image_data;
   };
 

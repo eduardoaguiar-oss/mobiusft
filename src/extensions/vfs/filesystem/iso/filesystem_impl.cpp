@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "filesystem_impl.hpp"
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/string_functions.h>
 
 namespace
@@ -92,7 +92,7 @@ filesystem_impl::_load_data () const
   // create decoder
   mobius::io::reader reader = reader_;
   reader.seek (offset_ + SYSTEM_AREA_SIZE);
-  mobius::decoder::data_decoder decoder (reader);
+  mobius::core::decoder::data_decoder decoder (reader);
 
   // decode Primary Volume Descriptor (ECMA-119 8.4)
   decoder.skip (6);

@@ -1,5 +1,5 @@
-#ifndef MOBIUS_IO_FOLDER_IMPL_BASE_H
-#define MOBIUS_IO_FOLDER_IMPL_BASE_H
+#ifndef MOBIUS_CORE_IO_FOLDER_IMPL_BASE_HPP
+#define MOBIUS_CORE_IO_FOLDER_IMPL_BASE_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/collection_impl_base.hpp>
 #include <cstdint>
 #include <memory>
@@ -97,12 +97,12 @@ public:
   virtual group_id_type get_group_id () const = 0;
   virtual std::string get_group_name () const = 0;
   virtual permission_type get_permissions () const = 0;
-  virtual mobius::datetime::datetime get_access_time () const = 0;
-  virtual mobius::datetime::datetime get_modification_time () const = 0;
-  virtual mobius::datetime::datetime get_metadata_time () const = 0;
-  virtual mobius::datetime::datetime get_creation_time () const = 0;
-  virtual mobius::datetime::datetime get_deletion_time () const = 0;
-  virtual mobius::datetime::datetime get_backup_time () const = 0;
+  virtual mobius::core::datetime::datetime get_access_time () const = 0;
+  virtual mobius::core::datetime::datetime get_modification_time () const = 0;
+  virtual mobius::core::datetime::datetime get_metadata_time () const = 0;
+  virtual mobius::core::datetime::datetime get_creation_time () const = 0;
+  virtual mobius::core::datetime::datetime get_deletion_time () const = 0;
+  virtual mobius::core::datetime::datetime get_backup_time () const = 0;
   virtual folder_type get_parent () const = 0;
   virtual children_type get_children () const = 0;
   virtual file_type new_file (const std::string&) const = 0;

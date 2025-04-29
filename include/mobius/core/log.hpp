@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <cstddef>
 #include <memory>
 #include <string>
@@ -65,7 +65,7 @@ public:
   // @brief Get event timestamp
   // @return Event timestamp
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_timestamp () const
   {
     return timestamp_;
@@ -117,7 +117,7 @@ private:
   const std::string funcname_;
   const std::size_t line_number_;
   const std::string text_;
-  const mobius::datetime::datetime timestamp_;
+  const mobius::core::datetime::datetime timestamp_;
 };
 
 // @brief Implementation class forward declaration

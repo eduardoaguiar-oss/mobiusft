@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "hive_file.h"
 #include "hive_decoder.h"
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/string_functions.h>
 
 namespace mobius::os::win::registry
@@ -77,7 +77,7 @@ public:
   // @brief get last modification time
   // @return last modification time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_last_modification_time () const
   {
     return last_modification_time_;
@@ -217,7 +217,7 @@ public:
   // @brief get last reorganization time
   // @return last reorganization time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_last_reorganization_time () const
   {
     return last_reorganization_time_;
@@ -253,7 +253,7 @@ private:
   std::uint32_t sequence_2_;
 
   // @brief last written timestamp
-  mobius::datetime::datetime last_modification_time_;
+  mobius::core::datetime::datetime last_modification_time_;
 
   // @brief major version of the hivefile
   std::uint32_t major_version_;
@@ -295,7 +295,7 @@ private:
   std::string guid_signature_;
 
   // @brief last reorganization timestamp
-  mobius::datetime::datetime last_reorganization_time_;
+  mobius::core::datetime::datetime last_reorganization_time_;
 
   // @brief root key
   hive_key root_key_;
@@ -347,7 +347,7 @@ std::uint32_t
 hive_file::impl::eval_header_checksum () const
 {
   reader_.rewind ();
-  mobius::decoder::data_decoder decoder (reader_);
+  mobius::core::decoder::data_decoder decoder (reader_);
 
   std::uint32_t checksum = 0;
   for (auto i = 0; i < 127; i++)
@@ -398,7 +398,7 @@ hive_file::impl::get_metadata () const
     {
       "last_modification_time",
       "Last modification date/time (UTC)",
-      "mobius::datetime::datetime",
+      "mobius::core::datetime::datetime",
       to_string (get_last_modification_time ())
     },
     {
@@ -464,7 +464,7 @@ hive_file::impl::get_metadata () const
     {
       "last_reorganization_time",
       "Last reorganization date/time (UTC)",
-      "mobius::datetime::datetime",
+      "mobius::core::datetime::datetime",
       to_string (get_last_reorganization_time ())
     },
     {
@@ -541,7 +541,7 @@ hive_file::get_sequence_2 () const
 // @brief get last modification time
 // @return last modification time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 hive_file::get_last_modification_time () const
 {
   return impl_->get_last_modification_time ();
@@ -681,7 +681,7 @@ hive_file::get_guid_signature () const
 // @brief get last reorganization time
 // @return last reorganization time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 hive_file::get_last_reorganization_time () const
 {
   return impl_->get_last_reorganization_time ();

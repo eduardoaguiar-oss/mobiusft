@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "imagefile_impl.hpp"
 #include <mobius/core/charset.hpp>
-#include <mobius/datetime/timedelta.h>
+#include <mobius/core/datetime/timedelta.hpp>
 #include <mobius/core/vfs/imagefile.hpp>
 #include <mobius/core/vfs/util.hpp>
 #include <mobius/exception.inc>
@@ -162,7 +162,7 @@ imagefile_impl::_load_metadata () const
   std::string acquisition_platform;
   std::string acquisition_tool;
   std::string acquisition_user;
-  mobius::datetime::datetime acquisition_time;
+  mobius::core::datetime::datetime acquisition_time;
 
   if (std::regex_search (text, match, REGEX_TIME_ZONE))
     timezone = stoi (match[1].str ());
@@ -187,7 +187,7 @@ imagefile_impl::_load_metadata () const
 
   if (std::regex_search (text, match, REGEX_COMPLETION_TIME))
     {
-      mobius::datetime::datetime d (stoi (match[3].str ()),
+      mobius::core::datetime::datetime d (stoi (match[3].str ()),
                                     stoi (match[1].str ()),
                                     stoi (match[2].str ()),
                                     stoi (match[4].str ()),
@@ -196,7 +196,7 @@ imagefile_impl::_load_metadata () const
 
       if (timezone)
         {
-          mobius::datetime::timedelta delta;
+          mobius::core::datetime::timedelta delta;
           delta.set_seconds (-timezone * 3600);
           d = d + delta;
         }

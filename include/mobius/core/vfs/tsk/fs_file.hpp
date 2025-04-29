@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/io/stream_impl_base.h>
 #include <cstdint>
 #include <memory>
@@ -91,12 +91,12 @@ public:
   int get_user_id () const;
   int get_group_id () const;
   int get_permissions () const;
-  mobius::datetime::datetime get_creation_time () const;
-  mobius::datetime::datetime get_access_time () const;
-  mobius::datetime::datetime get_modification_time () const;
-  mobius::datetime::datetime get_metadata_time () const;
-  mobius::datetime::datetime get_deletion_time () const;
-  mobius::datetime::datetime get_backup_time () const;
+  mobius::core::datetime::datetime get_creation_time () const;
+  mobius::core::datetime::datetime get_access_time () const;
+  mobius::core::datetime::datetime get_modification_time () const;
+  mobius::core::datetime::datetime get_metadata_time () const;
+  mobius::core::datetime::datetime get_deletion_time () const;
+  mobius::core::datetime::datetime get_backup_time () const;
   void reload ();
   fs_file get_parent () const;
   std::vector <stream_type> get_streams () const;
@@ -155,22 +155,22 @@ private:
   mutable int permissions_ = 0;
 
   // @brief creation date/time
-  mutable mobius::datetime::datetime creation_time_;
+  mutable mobius::core::datetime::datetime creation_time_;
 
   // @brief last modification date/time
-  mutable mobius::datetime::datetime modification_time_;
+  mutable mobius::core::datetime::datetime modification_time_;
 
   // @brief last access date/time
-  mutable mobius::datetime::datetime access_time_;
+  mutable mobius::core::datetime::datetime access_time_;
 
   // @brief last metadata modification date/time
-  mutable mobius::datetime::datetime metadata_time_;
+  mutable mobius::core::datetime::datetime metadata_time_;
 
   // @brief deletion date/time
-  mutable mobius::datetime::datetime deletion_time_;
+  mutable mobius::core::datetime::datetime deletion_time_;
 
   // @brief last backup date/time
-  mutable mobius::datetime::datetime backup_time_;
+  mutable mobius::core::datetime::datetime backup_time_;
 
   // @brief Streams
   mutable std::vector <stream_type> streams_;

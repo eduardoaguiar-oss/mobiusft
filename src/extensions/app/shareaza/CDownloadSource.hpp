@@ -19,8 +19,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CXMLElement.hpp"
-#include <mobius/datetime/datetime.h>
-#include <mobius/decoder/mfc.h>
+#include <mobius/core/datetime/datetime.hpp>
+#include <mobius/core/decoder/mfc.hpp>
 #include <mobius/io/reader.h>
 #include <cstdint>
 #include <string>
@@ -50,7 +50,7 @@ public:
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   CDownloadSource () = default;
-  CDownloadSource (mobius::decoder::mfc&, int);
+  CDownloadSource (mobius::core::decoder::mfc&, int);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief Get URL
@@ -96,7 +96,7 @@ public:
   // @brief Get last seen time
   // @return Date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_last_seen_time () const
   {
     return last_seen_time_;
@@ -346,7 +346,7 @@ private:
   std::uint16_t port_ = 0;
 
   // @brief Last seen time
-  mobius::datetime::datetime last_seen_time_;
+  mobius::core::datetime::datetime last_seen_time_;
 
   // @brief Peer nickname
   std::string nick_;
@@ -420,8 +420,8 @@ private:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Helper functions
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void decode_fragment (mobius::decoder::mfc&, int);
-  void decode_fragments (mobius::decoder::mfc&, int);
+  void decode_fragment (mobius::core::decoder::mfc&, int);
+  void decode_fragments (mobius::core::decoder::mfc&, int);
 };
 
 } // namespace mobius::extension::app::shareaza

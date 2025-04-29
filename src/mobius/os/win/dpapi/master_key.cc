@@ -22,7 +22,7 @@
 #include <mobius/core/crypt/cipher.hpp>
 #include <mobius/core/crypt/hash.hpp>
 #include <mobius/core/crypt/hmac.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/exception.inc>
 #include <mobius/os/win/pbkdf2_hmac_ms.h>
 #include <map>
@@ -280,7 +280,7 @@ private:
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 master_key::impl::impl (mobius::io::reader reader, std::uint32_t flags)
 {
-  mobius::decoder::data_decoder decoder (reader);
+  mobius::core::decoder::data_decoder decoder (reader);
   constexpr std::uint64_t SALT_SIZE = 16;
 
   revision_ = decoder.get_uint32_le ();

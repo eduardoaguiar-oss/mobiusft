@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file_ed2k_fastresume.hpp"
 #include <mobius/core/log.hpp>
-#include <mobius/decoder/btencode.h>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/btencode.hpp>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/io/path.h>
 #include <mobius/core/pod/map.hpp>
 #include <mobius/string_functions.h>
@@ -40,7 +40,7 @@ file_ed2k_fastresume::file_ed2k_fastresume (const mobius::io::reader& reader)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Create main section
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto decoder = mobius::decoder::data_decoder (reader);
+  auto decoder = mobius::core::decoder::data_decoder (reader);
   decoder.seek (0);
 
   section_ = mobius::core::file_decoder::section (reader, "File");
@@ -77,7 +77,7 @@ file_ed2k_fastresume::file_ed2k_fastresume (const mobius::io::reader& reader)
 
   auto metadata_size = decoder.get_uint32_le ();
   auto metadata_data = decoder.get_bytearray_by_size (metadata_size);
-  auto metadata = mobius::decoder::btencode (metadata_data);
+  auto metadata = mobius::core::decoder::btencode (metadata_data);
 
   if (metadata.is_map ())
     _load_metadata (mobius::core::pod::map (metadata));

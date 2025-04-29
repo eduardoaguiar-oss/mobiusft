@@ -18,8 +18,8 @@
 #include "segment_decoder.hpp"
 #include <mobius/core/charset.hpp>
 #include <mobius/core/crypt/hash_functor.hpp>
-#include <mobius/datetime/datetime.h>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/datetime/datetime.hpp>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/io/reader_evaluator.h>
 #include <mobius/string_functions.h>
 #include <mobius/core/zlib_functions.hpp>
@@ -97,7 +97,7 @@ segment_decoder::segment_decoder (mobius::io::reader reader)
 {
   const mobius::bytearray EWF_SIGNATURE = {'E', 'V', 'F', 0x09, 0x0d, 0x0a, 0xff, 0x00};
 
-  mobius::decoder::data_decoder decoder (reader);
+  mobius::core::decoder::data_decoder decoder (reader);
   mobius::bytearray signature = decoder.get_bytearray_by_size (EWF_SIGNATURE.size ());
 
   if (signature == EWF_SIGNATURE)
@@ -138,7 +138,7 @@ segment_decoder::decode_section (offset_type offset) const
   mobius::core::crypt::hash_functor hash_functor ("adler32");
   auto reader = mobius::io::reader_evaluator (reader_, hash_functor);
 
-  mobius::decoder::data_decoder decoder (reader);
+  mobius::core::decoder::data_decoder decoder (reader);
   decoder.seek (offset);
 
   section sec;
@@ -164,7 +164,7 @@ segment_decoder::decode_section (offset_type offset) const
 header_section
 segment_decoder::decode_header_section (const section& arg_section) const
 {
-  mobius::decoder::data_decoder decoder (reader_);
+  mobius::core::decoder::data_decoder decoder (reader_);
   decoder.seek (arg_section.get_offset () + SECTION_HEADER_SIZE);
 
   // create header_section
@@ -222,11 +222,11 @@ segment_decoder::decode_header_section (const section& arg_section) const
               if (value.find (' ') != std::string::npos)
                 {
                   auto d = mobius::string::split (value);
-                  section.set_acquisition_time (mobius::datetime::datetime (
+                  section.set_acquisition_time (mobius::core::datetime::datetime (
                                                   stoi (d[0]), stoi (d[1]), stoi (d[2]), stoi (d[3]), stoi (d[4]), stoi (d[5])));
                 }
               else
-                section.set_acquisition_time (mobius::datetime::new_datetime_from_unix_timestamp (stol (value)));
+                section.set_acquisition_time (mobius::core::datetime::new_datetime_from_unix_timestamp (stol (value)));
             }
         }
       section.set_text (section_text);
@@ -244,7 +244,7 @@ segment_decoder::decode_header_section (const section& arg_section) const
 hash_section
 segment_decoder::decode_hash_section (const section& arg_section) const
 {
-  mobius::decoder::data_decoder decoder (reader_);
+  mobius::core::decoder::data_decoder decoder (reader_);
   decoder.seek (arg_section.get_offset () + SECTION_HEADER_SIZE);
 
   hash_section section (arg_section);
@@ -264,7 +264,7 @@ segment_decoder::decode_hash_section (const section& arg_section) const
 volume_section
 segment_decoder::decode_volume_section (const section& arg_section) const
 {
-  mobius::decoder::data_decoder decoder (reader_);
+  mobius::core::decoder::data_decoder decoder (reader_);
   decoder.seek (arg_section.get_offset () + SECTION_HEADER_SIZE);
 
   volume_section section (arg_section);
@@ -294,7 +294,7 @@ segment_decoder::decode_volume_section (const section& arg_section) const
 table_section
 segment_decoder::decode_table_section (const section& arg_section) const
 {
-  mobius::decoder::data_decoder decoder (reader_);
+  mobius::core::decoder::data_decoder decoder (reader_);
   decoder.seek (arg_section.get_offset () + SECTION_HEADER_SIZE);
 
   table_section section (arg_section);

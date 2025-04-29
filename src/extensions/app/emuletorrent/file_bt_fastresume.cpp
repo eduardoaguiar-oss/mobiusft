@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file_bt_fastresume.hpp"
 #include <mobius/core/log.hpp>
-#include <mobius/decoder/btencode.h>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/btencode.hpp>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/io/path.h>
 #include <mobius/core/pod/map.hpp>
 #include <mobius/string_functions.h>
@@ -42,7 +42,7 @@ file_bt_fastresume::file_bt_fastresume (const mobius::io::reader& reader)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Create main section
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto decoder = mobius::decoder::data_decoder (reader);
+  auto decoder = mobius::core::decoder::data_decoder (reader);
   decoder.seek (0);
 
   section_ = mobius::core::file_decoder::section (reader, "File");
@@ -50,7 +50,7 @@ file_bt_fastresume::file_bt_fastresume (const mobius::io::reader& reader)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Decode file
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto metadata = mobius::decoder::btencode (reader);
+  auto metadata = mobius::core::decoder::btencode (reader);
 
   if (metadata.is_map ())
     _load_metadata (mobius::core::pod::map (metadata));
@@ -103,11 +103,11 @@ file_bt_fastresume::_load_metadata (const mobius::core::pod::map& metadata)
   auto last_upload = metadata.get <std::int64_t> ("last_upload", 0);
   auto last_seen_complete = metadata.get <std::int64_t> ("last_seen_complete", 0);
 
-  download_started_time_ = mobius::datetime::new_datetime_from_unix_timestamp (added_time);
-  download_last_time_ = mobius::datetime::new_datetime_from_unix_timestamp (added_time + last_download);
-  download_completed_time_ = mobius::datetime::new_datetime_from_unix_timestamp (completed_time);
-  upload_last_time_ = mobius::datetime::new_datetime_from_unix_timestamp (added_time + last_upload);
-  last_seen_complete_time_ = mobius::datetime::new_datetime_from_unix_timestamp (last_seen_complete);
+  download_started_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (added_time);
+  download_last_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (added_time + last_download);
+  download_completed_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (completed_time);
+  upload_last_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (added_time + last_upload);
+  last_seen_complete_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (last_seen_complete);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Get metadata
@@ -160,7 +160,7 @@ file_bt_fastresume::_load_metadata (const mobius::core::pod::map& metadata)
       f.idx = i + 1;
       f.name = (i < mapped_files.size ()) ? mapped_files[i] : std::string ();
       f.size = data[0];
-      f.last_modification_time = mobius::datetime::new_datetime_from_unix_timestamp (data[1]);
+      f.last_modification_time = mobius::core::datetime::new_datetime_from_unix_timestamp (data[1]);
 
       files_.push_back (f);
       size_ += f.size;
@@ -178,9 +178,9 @@ file_bt_fastresume::_load_metadata (const mobius::core::pod::map& metadata)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Get peers
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto timestamp = mobius::datetime::new_datetime_from_unix_timestamp (added_time + active_time);
+  auto timestamp = mobius::core::datetime::new_datetime_from_unix_timestamp (added_time + active_time);
   auto peers_data = metadata.get <mobius::bytearray> ("peers");
-  mobius::decoder::data_decoder decoder (peers_data);
+  mobius::core::decoder::data_decoder decoder (peers_data);
 
   while (decoder)
     {

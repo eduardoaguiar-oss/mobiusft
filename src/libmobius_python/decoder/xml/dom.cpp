@@ -94,7 +94,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::decoder::xml::dom (arg_reader, arg_encoding);
+          ret->obj = new mobius::core::decoder::xml::dom (arg_reader, arg_encoding);
         }
       catch (const std::exception& e)
         {
@@ -202,7 +202,7 @@ pymobius_decoder_xml_dom_check (PyObject *value)
 // @return New dom object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_decoder_xml_dom_to_pyobject (const mobius::decoder::xml::dom& obj)
+pymobius_decoder_xml_dom_to_pyobject (const mobius::core::decoder::xml::dom& obj)
 {
   return mobius::py::to_pyobject <decoder_xml_dom_o> (obj, &decoder_xml_dom_t);
 }
@@ -212,7 +212,7 @@ pymobius_decoder_xml_dom_to_pyobject (const mobius::decoder::xml::dom& obj)
 // @param value Python value
 // @return Dom object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::decoder::xml::dom
+mobius::core::decoder::xml::dom
 pymobius_decoder_xml_dom_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <decoder_xml_dom_o> (value, &decoder_xml_dom_t);

@@ -18,7 +18,7 @@
 #include "CBTInfo.hpp"
 #include "CShareaza.hpp"
 #include <mobius/core/log.hpp>
-#include <mobius/decoder/btencode.h>
+#include <mobius/core/decoder/btencode.hpp>
 #include <mobius/string_functions.h>
 
 #include <iostream>
@@ -43,7 +43,7 @@ namespace mobius::extension::app::shareaza
 // @see CBTFile::Serialize@BTInfo.cpp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CBTInfo::decode_CBTFile (mobius::decoder::mfc& decoder, int version)
+CBTInfo::decode_CBTFile (mobius::core::decoder::mfc& decoder, int version)
 {
   CBTFile f;
 
@@ -81,7 +81,7 @@ CBTInfo::decode_CBTFile (mobius::decoder::mfc& decoder, int version)
 // @see CBTTracker::Serialize@BTInfo.cpp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CBTInfo::decode_CBTTracker (mobius::decoder::mfc& decoder)
+CBTInfo::decode_CBTTracker (mobius::core::decoder::mfc& decoder)
 {
   CBTTracker tracker;
 
@@ -100,7 +100,7 @@ CBTInfo::decode_CBTTracker (mobius::decoder::mfc& decoder)
 // @brief Constructor
 // @param decoder MFC decoder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-CBTInfo::CBTInfo (mobius::decoder::mfc& decoder)
+CBTInfo::CBTInfo (mobius::core::decoder::mfc& decoder)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -203,7 +203,7 @@ CBTInfo::CBTInfo (mobius::decoder::mfc& decoder)
           auto data = decoder.get_data (length);
 
           if (data)
-            data_ = mobius::decoder::btencode (data);
+            data_ = mobius::core::decoder::btencode (data);
 
           if (version_ >= 11)
             {

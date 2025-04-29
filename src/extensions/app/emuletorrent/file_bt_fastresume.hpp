@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/file_decoder/section.hpp>
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/io/reader.h>
 #include <mobius/core/pod/map.hpp>
 #include <string>
@@ -53,7 +53,7 @@ public:
   {
     std::uint64_t idx;
     std::uint64_t size;
-    mobius::datetime::datetime last_modification_time;
+    mobius::core::datetime::datetime last_modification_time;
     std::string name;
     std::string path;
   };
@@ -63,7 +63,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   struct peer
   {
-    mobius::datetime::datetime timestamp;
+    mobius::core::datetime::datetime timestamp;
     std::string ip;
     std::uint16_t port;
   };
@@ -347,19 +347,19 @@ private:
   std::uint64_t uploaded_bytes_ = 0;
 
   // @brief Download started time
-  mobius::datetime::datetime download_started_time_;
+  mobius::core::datetime::datetime download_started_time_;
 
   // @brief Download last time
-  mobius::datetime::datetime download_last_time_;
+  mobius::core::datetime::datetime download_last_time_;
 
   // @brief Download completed time
-  mobius::datetime::datetime download_completed_time_;
+  mobius::core::datetime::datetime download_completed_time_;
 
   // @brief Upload last time
-  mobius::datetime::datetime upload_last_time_;
+  mobius::core::datetime::datetime upload_last_time_;
 
   // @brief Last seen complete time
-  mobius::datetime::datetime last_seen_complete_time_;
+  mobius::core::datetime::datetime last_seen_complete_time_;
 
   // @brief Pieces count
   std::uint64_t pieces_count_ = 0;

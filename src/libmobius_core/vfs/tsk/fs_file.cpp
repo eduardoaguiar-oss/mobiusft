@@ -227,7 +227,7 @@ fs_file::get_permissions () const
 // @brief Get creation time
 // @return Creation date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 fs_file::get_creation_time () const
 {
   if (!exists ())
@@ -241,7 +241,7 @@ fs_file::get_creation_time () const
 // @brief Get last access timestamp
 // @return Last file access date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 fs_file::get_access_time () const
 {
   if (!exists ())
@@ -255,7 +255,7 @@ fs_file::get_access_time () const
 // @brief Get last metadata modification timestamp
 // @return Last file metadata modification date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 fs_file::get_modification_time () const
 {
   if (!exists ())
@@ -269,7 +269,7 @@ fs_file::get_modification_time () const
 // @brief Get last metadata modification timestamp
 // @return Last file metadata modification date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 fs_file::get_metadata_time () const
 {
   if (!exists ())
@@ -283,7 +283,7 @@ fs_file::get_metadata_time () const
 // @brief Get deletion time
 // @return Deletion date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 fs_file::get_deletion_time () const
 {
   if (!exists ())
@@ -297,7 +297,7 @@ fs_file::get_deletion_time () const
 // @brief Get backup time
 // @return Backup date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 fs_file::get_backup_time () const
 {
   if (!exists ())
@@ -451,16 +451,16 @@ fs_file::_load_fs_meta () const
       permissions_ = p_->meta->mode;
 
       // set timestamps
-      access_time_ = mobius::datetime::new_datetime_from_unix_timestamp (p_->meta->atime);
-      modification_time_ = mobius::datetime::new_datetime_from_unix_timestamp (p_->meta->mtime);
-      metadata_time_ = mobius::datetime::new_datetime_from_unix_timestamp (p_->meta->ctime);
-      creation_time_ = mobius::datetime::new_datetime_from_unix_timestamp (p_->meta->crtime);
+      access_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (p_->meta->atime);
+      modification_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (p_->meta->mtime);
+      metadata_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (p_->meta->ctime);
+      creation_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (p_->meta->crtime);
 
       if (p_->fs_info->ftype & TSK_FS_TYPE_EXT_DETECT)
-        deletion_time_ = mobius::datetime::new_datetime_from_unix_timestamp (p_->meta->time2.ext2.dtime);
+        deletion_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (p_->meta->time2.ext2.dtime);
 
       if (p_->fs_info->ftype & TSK_FS_TYPE_HFS_DETECT)
-        backup_time_ = mobius::datetime::new_datetime_from_unix_timestamp (p_->meta->time2.hfs.bkup_time);
+        backup_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (p_->meta->time2.hfs.bkup_time);
 
       // if file has name, check if it is reallocated
       if (p_->name)

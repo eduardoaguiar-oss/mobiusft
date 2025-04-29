@@ -20,8 +20,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CSharedSource.hpp"
 #include "CXMLElement.hpp"
-#include <mobius/datetime/datetime.h>
-#include <mobius/decoder/mfc.h>
+#include <mobius/core/datetime/datetime.hpp>
+#include <mobius/core/decoder/mfc.hpp>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -49,7 +49,7 @@ private:
   std::uint64_t size_ = 0;
 
   // @brief Last modification date/time
-  mobius::datetime::datetime last_modification_time_;
+  mobius::core::datetime::datetime last_modification_time_;
 
   // @brief Virtual size
   std::uint64_t virtual_size_ = 0;
@@ -85,7 +85,7 @@ private:
   bool b_metadata_auto_ = false;
 
   // @brief Metadata time
-  mobius::datetime::datetime metadata_time_;
+  mobius::core::datetime::datetime metadata_time_;
 
   // @brief XML root element
   CXMLElement pxml_;
@@ -119,7 +119,7 @@ public:
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   CLibraryFile () = default;
-  CLibraryFile (mobius::decoder::mfc&, int, const CLibraryFolder&);
+  CLibraryFile (mobius::core::decoder::mfc&, int, const CLibraryFolder&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief Get file name
@@ -165,7 +165,7 @@ public:
   // @brief Get last modification date/time
   // @return Last modification time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_last_modification_time () const
   {
     return last_modification_time_;
@@ -285,7 +285,7 @@ public:
   // @brief Get metadata date/time
   // @return Date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_metadata_time () const
   {
     return metadata_time_;

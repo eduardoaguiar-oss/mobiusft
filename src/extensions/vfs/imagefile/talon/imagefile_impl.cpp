@@ -181,7 +181,7 @@ imagefile_impl::_load_metadata () const
   size_type segments = std::int64_t (split_imagefile_impl_->get_attribute ("segments"));
   size_type segment_size = std::int64_t (split_imagefile_impl_->get_attribute ("segment_size"));
   std::string acquisition_user = file_.get_user_name ();
-  mobius::datetime::datetime acquisition_time = file_.get_modification_time ();
+  mobius::core::datetime::datetime acquisition_time = file_.get_modification_time ();
 
   mobius::core::vfs::normalize_drive_info (drive_vendor, drive_model, drive_serial_number);
 

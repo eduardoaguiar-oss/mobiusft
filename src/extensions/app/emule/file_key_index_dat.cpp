@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file_key_index_dat.hpp"
 #include <mobius/core/log.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/string_functions.h>
 #include <unordered_map>
 
@@ -31,7 +31,7 @@ namespace
 // @return String
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
-_decode_string (mobius::decoder::data_decoder& decoder)
+_decode_string (mobius::core::decoder::data_decoder& decoder)
 {
     std::string s;
 
@@ -48,7 +48,7 @@ _decode_string (mobius::decoder::data_decoder& decoder)
 // @return KAD ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
-_decode_kad_id (mobius::decoder::data_decoder& decoder)
+_decode_kad_id (mobius::core::decoder::data_decoder& decoder)
 {
     auto kad_id = mobius::string::to_hex (decoder.get_uint32_le (), 8);
     kad_id += mobius::string::to_hex (decoder.get_uint32_le (), 8);
@@ -66,7 +66,7 @@ _decode_kad_id (mobius::decoder::data_decoder& decoder)
 // @see CKeyEntry::ReadPublishTrackingDataFromFile (srchybrid/kademlia/kademlia/Entry.cpp)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static file_key_index_dat::name
-_decode_name (mobius::decoder::data_decoder& decoder, std::uint32_t version)
+_decode_name (mobius::core::decoder::data_decoder& decoder, std::uint32_t version)
 {
     auto name = file_key_index_dat::name ();
     name.lifetime = decoder.get_unix_datetime ();
@@ -128,7 +128,7 @@ _decode_name (mobius::decoder::data_decoder& decoder, std::uint32_t version)
 // @return Source struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static file_key_index_dat::source
-_decode_source (mobius::decoder::data_decoder& decoder, std::uint32_t version)
+_decode_source (mobius::core::decoder::data_decoder& decoder, std::uint32_t version)
 {
     auto source = file_key_index_dat::source ();
     source.id = _decode_kad_id (decoder);      // ED2K HASH !!!!!!
@@ -147,7 +147,7 @@ _decode_source (mobius::decoder::data_decoder& decoder, std::uint32_t version)
 // @return Key struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static file_key_index_dat::key
-_decode_key (mobius::decoder::data_decoder& decoder, std::uint32_t version)
+_decode_key (mobius::core::decoder::data_decoder& decoder, std::uint32_t version)
 {
     auto k = file_key_index_dat::key ();
     k.id = _decode_kad_id (decoder);
@@ -176,7 +176,7 @@ file_key_index_dat::file_key_index_dat (const mobius::io::reader& reader)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Decode file
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto decoder = mobius::decoder::data_decoder (reader);
+    auto decoder = mobius::core::decoder::data_decoder (reader);
     version_ = decoder.get_uint32_le ();
     
     if (version_ < 5)

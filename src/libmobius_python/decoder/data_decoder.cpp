@@ -31,12 +31,12 @@
 // @return new data_decoder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_decoder_data_decoder_to_pyobject (mobius::decoder::data_decoder obj)
+pymobius_decoder_data_decoder_to_pyobject (mobius::core::decoder::data_decoder obj)
 {
   PyObject *ret = _PyObject_New (&decoder_data_decoder_t);
 
   if (ret)
-    ((decoder_data_decoder_o *) ret)->obj = new mobius::decoder::data_decoder (obj);
+    ((decoder_data_decoder_o *) ret)->obj = new mobius::core::decoder::data_decoder (obj);
 
   return ret;
 }
@@ -1105,7 +1105,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::decoder::data_decoder (arg_reader);
+          ret->obj = new mobius::core::decoder::data_decoder (arg_reader);
         }
       catch (const std::exception& e)
         {

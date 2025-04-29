@@ -18,7 +18,7 @@
 #include "imagefile_impl.hpp"
 #include "reader_impl_fixed.hpp"
 #include "reader_impl_dynamic.hpp"
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/exception.inc>
 #include <mobius/io/file.h>
 #include <stdexcept>
@@ -37,13 +37,13 @@ static constexpr int DISK_TYPE_DIFFERENCING = 4;
 // @brief Decode timestamp
 // @return datetime object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 decode_timestamp (std::uint32_t timestamp)
 {
-  mobius::datetime::datetime dt;
+  mobius::core::datetime::datetime dt;
 
   if (timestamp)
-    dt = mobius::datetime::datetime (2000, 1, 1, 0, 0, 0) + mobius::datetime::timedelta (0, 0, timestamp, 0);
+    dt = mobius::core::datetime::datetime (2000, 1, 1, 0, 0, 0) + mobius::core::datetime::timedelta (0, 0, timestamp, 0);
 
   return dt;
 }
@@ -200,7 +200,7 @@ imagefile_impl::_load_metadata () const
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto reader = file_.new_reader ();
   reader.seek (-SECTOR_SIZE, mobius::io::reader::whence_type::end);
-  mobius::decoder::data_decoder decoder (reader);
+  mobius::core::decoder::data_decoder decoder (reader);
 
   // test signature
   auto signature = decoder.get_string_by_size (8);
@@ -219,7 +219,7 @@ imagefile_impl::_load_metadata () const
   auto data_offset = decoder.get_uint64_be ();
 
   // acquisition info
-  mobius::datetime::datetime acquisition_time = decode_timestamp (decoder.get_uint32_be ());
+  mobius::core::datetime::datetime acquisition_time = decode_timestamp (decoder.get_uint32_be ());
 
   std::string acquisition_tool = decoder.get_string_by_size (4) + " v";
   acquisition_tool += std::to_string (decoder.get_uint16_be ());

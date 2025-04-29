@@ -18,7 +18,7 @@
 #include "registry_data_impl_lsa_poleklist.h"
 #include <mobius/core/crypt/cipher.hpp>
 #include <mobius/core/crypt/hash.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 
 namespace mobius::os::win::registry
 {
@@ -57,7 +57,7 @@ decrypt_aes (const mobius::bytearray& key, const mobius::bytearray& ciphertext)
     }
 
   // decode plaintext
-  auto decoder = mobius::decoder::data_decoder (tmp);
+  auto decoder = mobius::core::decoder::data_decoder (tmp);
   auto size = decoder.get_uint64_le ();
   auto control = decoder.get_uint64_le ();
 

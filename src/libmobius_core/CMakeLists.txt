@@ -92,6 +92,8 @@ set(MOBIUS_LIBRARIES ${MOBIUS_LIB})
 add_subdirectory(crypt)
 add_subdirectory(database)
 add_subdirectory(datasource)
+add_subdirectory(datetime)
+add_subdirectory(decoder)
 add_subdirectory(encoder)
 add_subdirectory(file_decoder)
 add_subdirectory(jni)
@@ -130,6 +132,8 @@ target_link_libraries(mobius_core PUBLIC
     mobius_core_crypt
     mobius_core_database
     mobius_core_datasource
+    mobius_core_datetime
+    mobius_core_decoder
     mobius_core_encoder
     mobius_core_file_decoder
     mobius_core_jni

@@ -358,12 +358,12 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
   // Parse input args
   mobius::io::reader arg_reader;
-  std::uint32_t version = mobius::decoder::qdatastream::QT_NEWEST;
+  std::uint32_t version = mobius::core::decoder::qdatastream::QT_NEWEST;
 
   try
     {
       arg_reader = mobius::py::get_arg_as_cpp (args, 0, pymobius_io_reader_from_pyobject);
-      version = mobius::py::get_arg_as_uint32_t (args, 1, mobius::decoder::qdatastream::QT_NEWEST);
+      version = mobius::py::get_arg_as_uint32_t (args, 1, mobius::core::decoder::qdatastream::QT_NEWEST);
     }
   catch (const std::exception& e)
     {
@@ -378,7 +378,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::decoder::qdatastream (arg_reader, version);
+          ret->obj = new mobius::core::decoder::qdatastream (arg_reader, version);
         }
       catch (const std::exception& e)
         {
@@ -466,40 +466,40 @@ new_decoder_qdatastream_type ()
   mobius::py::pytypeobject type (&decoder_qdatastream_t);
   type.create ();
 
-  type.add_constant ("QT_1_0", mobius::decoder::qdatastream::QT_1_0);
-  type.add_constant ("QT_2_0", mobius::decoder::qdatastream::QT_2_0);
-  type.add_constant ("QT_2_1", mobius::decoder::qdatastream::QT_2_1);
-  type.add_constant ("QT_3_0", mobius::decoder::qdatastream::QT_3_0);
-  type.add_constant ("QT_3_1", mobius::decoder::qdatastream::QT_3_1);
-  type.add_constant ("QT_3_3", mobius::decoder::qdatastream::QT_3_3);
-  type.add_constant ("QT_4_0", mobius::decoder::qdatastream::QT_4_0);
-  type.add_constant ("QT_4_1", mobius::decoder::qdatastream::QT_4_1);
-  type.add_constant ("QT_4_2", mobius::decoder::qdatastream::QT_4_2);
-  type.add_constant ("QT_4_3", mobius::decoder::qdatastream::QT_4_3);
-  type.add_constant ("QT_4_4", mobius::decoder::qdatastream::QT_4_4);
-  type.add_constant ("QT_4_5", mobius::decoder::qdatastream::QT_4_5);
-  type.add_constant ("QT_4_6", mobius::decoder::qdatastream::QT_4_6);
-  type.add_constant ("QT_4_7", mobius::decoder::qdatastream::QT_4_7);
-  type.add_constant ("QT_4_8", mobius::decoder::qdatastream::QT_4_8);
-  type.add_constant ("QT_4_9", mobius::decoder::qdatastream::QT_4_9);
-  type.add_constant ("QT_5_0", mobius::decoder::qdatastream::QT_5_0);
-  type.add_constant ("QT_5_1", mobius::decoder::qdatastream::QT_5_1);
-  type.add_constant ("QT_5_2", mobius::decoder::qdatastream::QT_5_2);
-  type.add_constant ("QT_5_3", mobius::decoder::qdatastream::QT_5_3);
-  type.add_constant ("QT_5_4", mobius::decoder::qdatastream::QT_5_4);
-  type.add_constant ("QT_5_5", mobius::decoder::qdatastream::QT_5_5);
-  type.add_constant ("QT_5_6", mobius::decoder::qdatastream::QT_5_6);
-  type.add_constant ("QT_5_7", mobius::decoder::qdatastream::QT_5_7);
-  type.add_constant ("QT_5_8", mobius::decoder::qdatastream::QT_5_8);
-  type.add_constant ("QT_5_9", mobius::decoder::qdatastream::QT_5_9);
-  type.add_constant ("QT_5_10", mobius::decoder::qdatastream::QT_5_10);
-  type.add_constant ("QT_5_11", mobius::decoder::qdatastream::QT_5_11);
-  type.add_constant ("QT_5_12", mobius::decoder::qdatastream::QT_5_12);
-  type.add_constant ("QT_5_13", mobius::decoder::qdatastream::QT_5_13);
-  type.add_constant ("QT_5_14", mobius::decoder::qdatastream::QT_5_14);
-  type.add_constant ("QT_5_15", mobius::decoder::qdatastream::QT_5_15);
-  type.add_constant ("QT_6_0", mobius::decoder::qdatastream::QT_6_0);
-  type.add_constant ("QT_NEWEST", mobius::decoder::qdatastream::QT_NEWEST);
+  type.add_constant ("QT_1_0", mobius::core::decoder::qdatastream::QT_1_0);
+  type.add_constant ("QT_2_0", mobius::core::decoder::qdatastream::QT_2_0);
+  type.add_constant ("QT_2_1", mobius::core::decoder::qdatastream::QT_2_1);
+  type.add_constant ("QT_3_0", mobius::core::decoder::qdatastream::QT_3_0);
+  type.add_constant ("QT_3_1", mobius::core::decoder::qdatastream::QT_3_1);
+  type.add_constant ("QT_3_3", mobius::core::decoder::qdatastream::QT_3_3);
+  type.add_constant ("QT_4_0", mobius::core::decoder::qdatastream::QT_4_0);
+  type.add_constant ("QT_4_1", mobius::core::decoder::qdatastream::QT_4_1);
+  type.add_constant ("QT_4_2", mobius::core::decoder::qdatastream::QT_4_2);
+  type.add_constant ("QT_4_3", mobius::core::decoder::qdatastream::QT_4_3);
+  type.add_constant ("QT_4_4", mobius::core::decoder::qdatastream::QT_4_4);
+  type.add_constant ("QT_4_5", mobius::core::decoder::qdatastream::QT_4_5);
+  type.add_constant ("QT_4_6", mobius::core::decoder::qdatastream::QT_4_6);
+  type.add_constant ("QT_4_7", mobius::core::decoder::qdatastream::QT_4_7);
+  type.add_constant ("QT_4_8", mobius::core::decoder::qdatastream::QT_4_8);
+  type.add_constant ("QT_4_9", mobius::core::decoder::qdatastream::QT_4_9);
+  type.add_constant ("QT_5_0", mobius::core::decoder::qdatastream::QT_5_0);
+  type.add_constant ("QT_5_1", mobius::core::decoder::qdatastream::QT_5_1);
+  type.add_constant ("QT_5_2", mobius::core::decoder::qdatastream::QT_5_2);
+  type.add_constant ("QT_5_3", mobius::core::decoder::qdatastream::QT_5_3);
+  type.add_constant ("QT_5_4", mobius::core::decoder::qdatastream::QT_5_4);
+  type.add_constant ("QT_5_5", mobius::core::decoder::qdatastream::QT_5_5);
+  type.add_constant ("QT_5_6", mobius::core::decoder::qdatastream::QT_5_6);
+  type.add_constant ("QT_5_7", mobius::core::decoder::qdatastream::QT_5_7);
+  type.add_constant ("QT_5_8", mobius::core::decoder::qdatastream::QT_5_8);
+  type.add_constant ("QT_5_9", mobius::core::decoder::qdatastream::QT_5_9);
+  type.add_constant ("QT_5_10", mobius::core::decoder::qdatastream::QT_5_10);
+  type.add_constant ("QT_5_11", mobius::core::decoder::qdatastream::QT_5_11);
+  type.add_constant ("QT_5_12", mobius::core::decoder::qdatastream::QT_5_12);
+  type.add_constant ("QT_5_13", mobius::core::decoder::qdatastream::QT_5_13);
+  type.add_constant ("QT_5_14", mobius::core::decoder::qdatastream::QT_5_14);
+  type.add_constant ("QT_5_15", mobius::core::decoder::qdatastream::QT_5_15);
+  type.add_constant ("QT_6_0", mobius::core::decoder::qdatastream::QT_6_0);
+  type.add_constant ("QT_NEWEST", mobius::core::decoder::qdatastream::QT_NEWEST);
 
   return type;
 }
@@ -510,12 +510,12 @@ new_decoder_qdatastream_type ()
 // @return new qdatastream object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_decoder_qdatastream_to_pyobject (const mobius::decoder::qdatastream& obj)
+pymobius_decoder_qdatastream_to_pyobject (const mobius::core::decoder::qdatastream& obj)
 {
   PyObject *ret = _PyObject_New (&decoder_qdatastream_t);
 
   if (ret)
-    ((decoder_qdatastream_o *) ret)->obj = new mobius::decoder::qdatastream (obj);
+    ((decoder_qdatastream_o *) ret)->obj = new mobius::core::decoder::qdatastream (obj);
 
   return ret;
 }

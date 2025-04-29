@@ -233,8 +233,6 @@ AC_CONFIG_FILES([Makefile
                  mobius_bin.sh
                  src/Makefile
                  src/mobius/Makefile
-                 src/mobius/datetime/Makefile
-                 src/mobius/decoder/Makefile
                  src/mobius/io/Makefile
                  src/mobius/os/Makefile
                  src/mobius/os/win/Makefile

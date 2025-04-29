@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pytypeobject.hpp>
-#include <mobius/decoder/xml/element.h>
+#include <mobius/core/decoder/xml/element.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -28,7 +28,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::decoder::xml::element *obj;
+  mobius::core::decoder::xml::element *obj;
 } decoder_xml_element_o;
 
 
@@ -37,8 +37,8 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject new_decoder_xml_element_type ();
 bool pymobius_decoder_xml_element_check (PyObject *);
-PyObject *pymobius_decoder_xml_element_to_pyobject (const mobius::decoder::xml::element&);
-mobius::decoder::xml::element pymobius_decoder_xml_element_from_pyobject (PyObject *);
+PyObject *pymobius_decoder_xml_element_to_pyobject (const mobius::core::decoder::xml::element&);
+mobius::core::decoder::xml::element pymobius_decoder_xml_element_from_pyobject (PyObject *);
 
 #endif
 

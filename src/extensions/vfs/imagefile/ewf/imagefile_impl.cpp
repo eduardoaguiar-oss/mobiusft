@@ -174,7 +174,7 @@ imagefile_impl::_load_metadata () const
   std::string drive_model;
   std::string drive_serial_number;
   std::string hash_md5;
-  mobius::datetime::datetime acquisition_time = file_.get_modification_time ();
+  mobius::core::datetime::datetime acquisition_time = file_.get_modification_time ();
   size_type segment_size = 4 * 1024 * 1024 * 1024L;   // 4 GiB
   std::uint32_t compression_level = 0;
 

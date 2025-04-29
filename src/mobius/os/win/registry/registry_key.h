@@ -1,5 +1,5 @@
-#ifndef MOBIUS_OS_WIN_REGISTRY_REGISTRY_KEY_H
-#define MOBIUS_OS_WIN_REGISTRY_REGISTRY_KEY_H
+#ifndef MOBIUS_CORE_OS_WIN_REGISTRY_REGISTRY_KEY_HPP
+#define MOBIUS_CORE_OS_WIN_REGISTRY_REGISTRY_KEY_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -114,7 +114,7 @@ public:
   // @brief get last modification time
   // @return last modification time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_last_modification_time () const
   {
     return impl_->get_last_modification_time ();

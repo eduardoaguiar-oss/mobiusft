@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <cstddef>
 #include <string>
 
@@ -40,7 +40,7 @@ extern PyTypeObject api_dataholder_t;
 api_dataholder_o *api_dataholder_new ();
 void api_dataholder_setattr (api_dataholder_o *, const std::string&, std::int64_t);
 void api_dataholder_setattr (api_dataholder_o *, const std::string&, const std::string&);
-void api_dataholder_setattr (api_dataholder_o *, const std::string&, const mobius::datetime::datetime&);
+void api_dataholder_setattr (api_dataholder_o *, const std::string&, const mobius::core::datetime::datetime&);
 void api_dataholder_setattr (api_dataholder_o *, const std::string&, PyObject *);
 
 #endif

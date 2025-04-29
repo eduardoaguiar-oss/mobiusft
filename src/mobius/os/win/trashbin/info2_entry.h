@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/io/reader.h>
 #include <cstdint>
 #include <memory>
@@ -53,7 +53,7 @@ public:
   std::string get_path () const;
   std::uint32_t get_drive_number () const;
   std::int32_t get_file_idx () const;
-  mobius::datetime::datetime get_deletion_time () const;
+  mobius::core::datetime::datetime get_deletion_time () const;
   std::uint32_t get_size () const;
 
 private:

@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file_searches_dat.hpp"
 #include "CWndSearch.hpp"
-#include <mobius/decoder/mfc.h>
+#include <mobius/core/decoder/mfc.hpp>
 #include <unordered_map>
 
 namespace mobius::extension::app::shareaza
@@ -33,7 +33,7 @@ file_searches_dat::file_searches_dat (const mobius::io::reader& reader)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Create main section
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto decoder = mobius::decoder::mfc (reader);
+  auto decoder = mobius::core::decoder::mfc (reader);
   decoder.seek (0);
 
   section_ = mobius::core::file_decoder::section (reader, "File");
@@ -77,8 +77,8 @@ file_searches_dat::process_cwndsearch_ (const CWndSearch& cwndsearch)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   struct remote_file_stats
   {
-    mobius::datetime::datetime first_hit_time;
-    mobius::datetime::datetime last_hit_time;
+    mobius::core::datetime::datetime first_hit_time;
+    mobius::core::datetime::datetime last_hit_time;
     std::uint32_t count = 0;
   };
 

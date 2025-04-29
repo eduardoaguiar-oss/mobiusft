@@ -1,5 +1,5 @@
-#ifndef MOBIUS_OS_WIN_TRASHBIN_IFILE_H
-#define MOBIUS_OS_WIN_TRASHBIN_IFILE_H
+#ifndef MOBIUS_CORE_OS_WIN_TRASHBIN_IFILE_HPP
+#define MOBIUS_CORE_OS_WIN_TRASHBIN_IFILE_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/io/reader.h>
 #include <cstdint>
 #include <memory>
@@ -51,7 +51,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint64_t get_version () const;
   std::uint64_t get_size () const;
-  mobius::datetime::datetime get_deletion_time () const;
+  mobius::core::datetime::datetime get_deletion_time () const;
   std::string get_path () const;
 
 private:

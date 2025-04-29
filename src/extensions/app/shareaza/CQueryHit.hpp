@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CXMLElement.hpp"
-#include <mobius/decoder/mfc.h>
+#include <mobius/core/decoder/mfc.hpp>
 #include <cstdint>
 #include <string>
 
@@ -484,7 +484,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void decode (mobius::decoder::mfc&, int);
+  void decode (mobius::core::decoder::mfc&, int);
 
 private:
   // @brief File name

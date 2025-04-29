@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/datetime/datetime.h>
-#include <mobius/decoder/mfc.h>
+#include <mobius/core/datetime/datetime.hpp>
+#include <mobius/core/decoder/mfc.hpp>
 #include <cstdint>
 #include <string>
 
@@ -41,7 +41,7 @@ private:
   std::uint16_t port_ = 0;
 
   // @brief Timestamp
-  mobius::datetime::datetime timestamp_;
+  mobius::core::datetime::datetime timestamp_;
 
 
 public:
@@ -49,7 +49,7 @@ public:
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   CSharedSource () = default;
-  CSharedSource (mobius::decoder::mfc&, int);
+  CSharedSource (mobius::core::decoder::mfc&, int);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief Get URL
@@ -85,7 +85,7 @@ public:
   // @brief Get timestamp
   // @return Date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_timestamp () const
   {
     return timestamp_;

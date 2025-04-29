@@ -157,8 +157,8 @@ imagefile_impl::_load_metadata () const
 
   std::string acquisition_platform;
   std::string acquisition_tool;
-  mobius::datetime::date acquisition_date;
-  mobius::datetime::datetime acquisition_time;
+  mobius::core::datetime::date acquisition_date;
+  mobius::core::datetime::datetime acquisition_time;
   std::string product;
   std::string serial;
   std::string drive_vendor;
@@ -175,7 +175,7 @@ imagefile_impl::_load_metadata () const
 
   if (std::regex_search (text, match, REGEX_SEIZE_DATE))
     {
-      acquisition_date = mobius::datetime::date (
+      acquisition_date = mobius::core::datetime::date (
                             stoi (match[3].str ()),
                             stoi (match[1].str ()),
                             stoi (match[2].str ()));
@@ -184,13 +184,13 @@ imagefile_impl::_load_metadata () const
 
   if (std::regex_search (text, match, REGEX_SEIZE_TIME))
     {
-      mobius::datetime::time time = mobius::datetime::time (
+      mobius::core::datetime::time time = mobius::core::datetime::time (
                                       stoi (match[1].str ()),
                                       stoi (match[2].str ()),
                                       stoi (match[3].str ()));
 
       if (acquisition_date)
-        acquisition_time = mobius::datetime::datetime (acquisition_date, time);
+        acquisition_time = mobius::core::datetime::datetime (acquisition_date, time);
     }
 
   if (std::regex_search (text, match, REGEX_TOTAL_SECTORS))

@@ -19,8 +19,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CLibraryFolder.hpp"
-#include <mobius/datetime/datetime.h>
-#include <mobius/decoder/mfc.h>
+#include <mobius/core/datetime/datetime.hpp>
+#include <mobius/core/decoder/mfc.hpp>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -37,7 +37,7 @@ public:
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   CLibrary () = default;
-  explicit CLibrary (mobius::decoder::mfc&);
+  explicit CLibrary (mobius::core::decoder::mfc&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief Check if file is instance of Library.dat
@@ -62,7 +62,7 @@ public:
   // @brief Get last modification date/time
   // @return Last modification time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_last_modification_time () const
   {
     return last_modification_time_;
@@ -143,7 +143,7 @@ private:
   int version_;
 
   // @brief Last modification date/time
-  mobius::datetime::datetime last_modification_time_;
+  mobius::core::datetime::datetime last_modification_time_;
 
   // @brief Words count
   std::uint32_t words_count_ = 0;

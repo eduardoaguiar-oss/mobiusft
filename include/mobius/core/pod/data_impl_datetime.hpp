@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/pod/data_impl_base.hpp>
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 
 namespace mobius::core::pod
 {
@@ -34,7 +34,7 @@ public:
   // @brief Constructor
   // @param value Value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit data_impl_datetime (const mobius::datetime::datetime& value)
+  explicit data_impl_datetime (const mobius::core::datetime::datetime& value)
     : value_ (value)
   {
   }
@@ -53,14 +53,14 @@ public:
   // @brief Get value
   // @return Value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_value () const
   {
     return value_;
   }
 
 private:
-  mobius::datetime::datetime value_;
+  mobius::core::datetime::datetime value_;
 };
 
 } // namespace mobius::core::pod

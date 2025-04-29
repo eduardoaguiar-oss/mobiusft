@@ -1,5 +1,5 @@
-#ifndef MOBIUS_REGISTRY_REGISTRY_DATA_IMPL_POLSECKEY_H
-#define MOBIUS_REGISTRY_REGISTRY_DATA_IMPL_POLSECKEY_H
+#ifndef MOBIUS_CORE_REGISTRY_REGISTRY_DATA_IMPL_POLSECKEY_HPP
+#define MOBIUS_CORE_REGISTRY_REGISTRY_DATA_IMPL_POLSECKEY_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

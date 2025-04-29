@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/bytearray.h>
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/io/reader.h>
 #include <mobius/io/writer.h>
 #include <mobius/core/pod/data_impl_base.hpp>
@@ -59,7 +59,7 @@ public:
   data (std::uint32_t);
   data (double);
   data (long double);
-  data (const mobius::datetime::datetime&);
+  data (const mobius::core::datetime::datetime&);
   data (const char *);
   data (const std::string&);
   data (const mobius::bytearray&);
@@ -77,7 +77,7 @@ public:
   data& operator= (std::int64_t);
   data& operator= (double);
   data& operator= (long double);
-  data& operator= (const mobius::datetime::datetime&);
+  data& operator= (const mobius::core::datetime::datetime&);
   data& operator= (const char *);
   data& operator= (const std::string&);
   data& operator= (const mobius::bytearray&);
@@ -87,7 +87,7 @@ public:
   explicit operator bool () const;
   explicit operator std::int64_t () const;
   explicit operator long double () const;
-  explicit operator mobius::datetime::datetime () const;
+  explicit operator mobius::core::datetime::datetime () const;
   explicit operator std::string () const;
   explicit operator mobius::bytearray () const;
   explicit operator std::vector <data> () const;

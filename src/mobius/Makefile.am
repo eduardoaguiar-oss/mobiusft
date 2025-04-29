@@ -11,13 +11,9 @@ libmobius_la_SOURCES =						\
 libmobius_la_LDFLAGS = -avoid-version $(LIBGCRYPT_LIBS) $(LIBXML2_LIBS)
 
 libmobius_la_LIBADD =						\
-	datetime/libmobius-datetime.la				\
-	decoder/libmobius-decoder.la				\
 	io/libmobius-io.la					\
 	os/libmobius-os.la
 
 SUBDIRS =							\
-	datetime						\
-	decoder							\
 	io							\
 	os

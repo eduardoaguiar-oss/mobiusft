@@ -31,12 +31,12 @@
 // @return new mfc object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_decoder_mfc_to_pyobject (mobius::decoder::mfc obj)
+pymobius_decoder_mfc_to_pyobject (mobius::core::decoder::mfc obj)
 {
   PyObject *ret = _PyObject_New (&decoder_mfc_t);
 
   if (ret)
-    ((decoder_mfc_o *) ret)->obj = new mobius::decoder::mfc (obj);
+    ((decoder_mfc_o *) ret)->obj = new mobius::core::decoder::mfc (obj);
 
   return ret;
 }
@@ -582,7 +582,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::decoder::mfc (arg_reader);
+          ret->obj = new mobius::core::decoder::mfc (arg_reader);
         }
       catch (const std::exception& e)
         {

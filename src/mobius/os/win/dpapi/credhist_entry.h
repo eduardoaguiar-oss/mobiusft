@@ -1,5 +1,5 @@
-#ifndef MOBIUS_OS_WIN_DPAPI_CREDHIST_ENTRY_H
-#define MOBIUS_OS_WIN_DPAPI_CREDHIST_ENTRY_H
+#ifndef MOBIUS_CORE_OS_WIN_DPAPI_CREDHIST_ENTRY_HPP
+#define MOBIUS_CORE_OS_WIN_DPAPI_CREDHIST_ENTRY_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

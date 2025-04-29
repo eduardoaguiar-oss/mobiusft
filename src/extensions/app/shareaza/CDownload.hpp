@@ -21,8 +21,8 @@
 #include "CBTInfo.hpp"
 #include "CDownloadSource.hpp"
 #include "CXMLElement.hpp"
-#include <mobius/datetime/datetime.h>
-#include <mobius/decoder/mfc.h>
+#include <mobius/core/datetime/datetime.hpp>
+#include <mobius/core/decoder/mfc.hpp>
 #include <mobius/io/reader.h>
 #include <cstdint>
 #include <string>
@@ -449,13 +449,13 @@ private:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Helper functions
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void decode_CDownloadWithExtras (mobius::decoder::mfc&, int);
-  void decode_CDownloadWithTiger (mobius::decoder::mfc&, int);
-  void decode_CDownloadWithTorrent (mobius::decoder::mfc&, int);
-  void decode_CDownloadWithFile (mobius::decoder::mfc&, int);
-  void decode_CDownloadWithSources (mobius::decoder::mfc&, int);
-  void decode_CDownloadBase (mobius::decoder::mfc&, int);
-  void decode_CFragmentedFile (mobius::decoder::mfc&, int);
+  void decode_CDownloadWithExtras (mobius::core::decoder::mfc&, int);
+  void decode_CDownloadWithTiger (mobius::core::decoder::mfc&, int);
+  void decode_CDownloadWithTorrent (mobius::core::decoder::mfc&, int);
+  void decode_CDownloadWithFile (mobius::core::decoder::mfc&, int);
+  void decode_CDownloadWithSources (mobius::core::decoder::mfc&, int);
+  void decode_CDownloadBase (mobius::core::decoder::mfc&, int);
+  void decode_CFragmentedFile (mobius::core::decoder::mfc&, int);
 };
 
 } // namespace mobius::extension::app::shareaza

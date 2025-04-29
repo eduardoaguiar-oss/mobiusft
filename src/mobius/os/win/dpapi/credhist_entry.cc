@@ -22,7 +22,7 @@
 #include <mobius/core/crypt/cipher.hpp>
 #include <mobius/core/crypt/hash.hpp>
 #include <mobius/core/crypt/hmac.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/exception.inc>
 #include <mobius/os/win/pbkdf2_hmac_ms.h>
 #include <stdexcept>
@@ -241,7 +241,7 @@ credhist_entry::impl::impl (mobius::io::reader reader, std::uint32_t size)
   constexpr std::uint32_t FOOTER_SIZE = 24;
 
   // read entry footer
-  mobius::decoder::data_decoder decoder (reader);
+  mobius::core::decoder::data_decoder decoder (reader);
   auto end_pos = decoder.tell () + size;
 
   revision_ = decoder.get_uint32_le ();

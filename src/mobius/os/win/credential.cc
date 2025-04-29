@@ -18,7 +18,7 @@
 #include "credential.h"
 #include <mobius/core/charset.hpp>
 #include <mobius/core/log.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 
 namespace mobius::os::win
 {
@@ -95,7 +95,7 @@ public:
   // @brief Get last update time
   // @return Last update time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_last_update_time () const
   {
     return last_update_time_;
@@ -128,7 +128,7 @@ private:
   std::uint32_t flags_;
 
   // @brief Last update date/time
-  mobius::datetime::datetime last_update_time_;
+  mobius::core::datetime::datetime last_update_time_;
 
   // @brief Credential data
   std::vector <std::pair <std::string, mobius::bytearray>> data_;
@@ -141,7 +141,7 @@ private:
 credential::impl::impl (mobius::io::reader reader)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
-  mobius::decoder::data_decoder decoder (reader);
+  mobius::core::decoder::data_decoder decoder (reader);
 
   // check header size
   auto header_size = decoder.get_uint32_le ();
@@ -283,7 +283,7 @@ credential::get_flags () const
 // @brief Get last update time
 // @return Last update time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 credential::get_last_update_time () const
 {
   return impl_->get_last_update_time ();

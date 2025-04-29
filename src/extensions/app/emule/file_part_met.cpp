@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file_part_met.hpp"
 #include <mobius/core/log.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <algorithm>
 
 namespace
@@ -47,7 +47,7 @@ file_part_met::file_part_met (const mobius::io::reader& reader)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Decode header
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto decoder = mobius::decoder::data_decoder (reader);
+    auto decoder = mobius::core::decoder::data_decoder (reader);
     version_ = decoder.get_uint8 ();
 
     if (version_ != PARTFILE_VERSION &&
@@ -139,7 +139,7 @@ file_part_met::file_part_met (const mobius::io::reader& reader)
 // For now, ignore hash set and return only ED2K hash
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-file_part_met::_decode_md4_hashset (mobius::decoder::data_decoder& decoder)
+file_part_met::_decode_md4_hashset (mobius::core::decoder::data_decoder& decoder)
 {
     hash_ed2k_ = decoder.get_hex_string_by_size (16);
     std::uint32_t count = decoder.get_uint16_le ();

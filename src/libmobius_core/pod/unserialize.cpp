@@ -18,7 +18,7 @@
 #include <mobius/core/pod/data.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <mobius/bytearray.h>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <cstdint>
 #include <stdexcept>
 #include <vector>
@@ -40,7 +40,7 @@ static constexpr std::uint32_t VERSION = 1;
 // @return Data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data
-_unserialize_data (mobius::decoder::data_decoder& decoder)
+_unserialize_data (mobius::core::decoder::data_decoder& decoder)
 {
   mobius::core::pod::data data;
   auto type = decoder.get_uint8 ();
@@ -69,10 +69,10 @@ _unserialize_data (mobius::decoder::data_decoder& decoder)
         auto text = decoder.get_string_by_size (siz);
 
         if (text.empty ())
-          data = mobius::datetime::datetime ();
+          data = mobius::core::datetime::datetime ();
 
         else
-          data = mobius::datetime::new_datetime_from_iso_string (text);
+          data = mobius::core::datetime::new_datetime_from_iso_string (text);
       }
       break;
 
@@ -132,7 +132,7 @@ _unserialize_data (mobius::decoder::data_decoder& decoder)
 // @return Data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data
-_unserialize (mobius::decoder::data_decoder& decoder)
+_unserialize (mobius::core::decoder::data_decoder& decoder)
 {
   // check serialization version
   auto version = decoder.get_uint32_le ();
@@ -154,7 +154,7 @@ _unserialize (mobius::decoder::data_decoder& decoder)
 data
 unserialize (const mobius::bytearray& b)
 {
-  mobius::decoder::data_decoder decoder (b);
+  mobius::core::decoder::data_decoder decoder (b);
   return _unserialize (decoder);
 }
 
@@ -166,7 +166,7 @@ unserialize (const mobius::bytearray& b)
 data
 unserialize (mobius::io::reader reader)
 {
-  mobius::decoder::data_decoder decoder (reader);
+  mobius::core::decoder::data_decoder decoder (reader);
   return _unserialize (decoder);
 }
 

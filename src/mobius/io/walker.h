@@ -1,5 +1,5 @@
-#ifndef MOBIUS_IO_WALKER_H
-#define MOBIUS_IO_WALKER_H
+#ifndef MOBIUS_CORE_IO_WALKER_HPP
+#define MOBIUS_CORE_IO_WALKER_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

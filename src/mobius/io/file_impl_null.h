@@ -1,5 +1,5 @@
-#ifndef MOBIUS_IO_FILE_IMPL_NULL_H
-#define MOBIUS_IO_FILE_IMPL_NULL_H
+#ifndef MOBIUS_CORE_IO_FILE_IMPL_NULL_HPP
+#define MOBIUS_CORE_IO_FILE_IMPL_NULL_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -204,7 +204,7 @@ public:
   // @brief get last access timestamp
   // @return last file access time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_access_time () const override
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid file"));
@@ -214,7 +214,7 @@ public:
   // @brief Get last data modification timestamp
   // @return last file data modification time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_modification_time () const override
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid file"));
@@ -224,7 +224,7 @@ public:
   // @brief Get last metadata modification timestamp
   // @return last file metadata modification time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_metadata_time () const override
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid file"));
@@ -234,7 +234,7 @@ public:
   // @brief Get creation timestamp
   // @return Creation date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_creation_time () const override
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid file"));
@@ -244,7 +244,7 @@ public:
   // @brief Get deletion timestamp
   // @return Deletion date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_deletion_time () const override
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid file"));
@@ -254,7 +254,7 @@ public:
   // @brief Get backup timestamp
   // @return Backup date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_backup_time () const override
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid file"));

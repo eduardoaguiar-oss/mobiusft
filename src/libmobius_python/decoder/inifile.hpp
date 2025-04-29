@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pytypeobject.hpp>
-#include <mobius/decoder/inifile.h>
+#include <mobius/core/decoder/inifile.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -28,7 +28,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::decoder::inifile *obj;
+  mobius::core::decoder::inifile *obj;
 } decoder_inifile_o;
 
 
@@ -37,8 +37,8 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject new_decoder_inifile_type ();
 bool pymobius_decoder_inifile_check (PyObject *);
-PyObject *pymobius_decoder_inifile_to_pyobject (const mobius::decoder::inifile&);
-mobius::decoder::inifile pymobius_decoder_inifile_from_pyobject (PyObject *);
+PyObject *pymobius_decoder_inifile_to_pyobject (const mobius::core::decoder::inifile&);
+mobius::core::decoder::inifile pymobius_decoder_inifile_from_pyobject (PyObject *);
 
 #endif
 

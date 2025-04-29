@@ -19,8 +19,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/file_decoder/section.hpp>
-#include <mobius/datetime/datetime.h>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/datetime/datetime.hpp>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/io/reader.h>
 #include <string>
 #include <vector>
@@ -52,7 +52,7 @@ public:
   {
     std::uint64_t idx;
     std::uint64_t size;
-    mobius::datetime::datetime last_modification_time;
+    mobius::core::datetime::datetime last_modification_time;
     std::string name;
     std::string path;
   };
@@ -338,10 +338,10 @@ private:
   std::string comment_;
 
   // @brief Started time
-  mobius::datetime::datetime download_started_time_;
+  mobius::core::datetime::datetime download_started_time_;
 
   // @brief DB time
-  mobius::datetime::datetime db_time_;
+  mobius::core::datetime::datetime db_time_;
 
   // @brief Elapsed time
   std::uint32_t elapsed_time_;
@@ -361,11 +361,11 @@ private:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Helper functions
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void _decode_header (mobius::decoder::data_decoder&);
-  void _decode_metadata (mobius::decoder::data_decoder&);
-  void _decode_pieces (mobius::decoder::data_decoder&);
-  void _decode_files (mobius::decoder::data_decoder&);
-  void _decode_tags (mobius::decoder::data_decoder&);
+  void _decode_header (mobius::core::decoder::data_decoder&);
+  void _decode_metadata (mobius::core::decoder::data_decoder&);
+  void _decode_pieces (mobius::core::decoder::data_decoder&);
+  void _decode_files (mobius::core::decoder::data_decoder&);
+  void _decode_tags (mobius::core::decoder::data_decoder&);
 };
 
 } // namespace mobius::extension::app::ares

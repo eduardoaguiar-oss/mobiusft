@@ -225,7 +225,7 @@ file_impl::get_permissions () const
 // @brief Get last access timestamp
 // @return Last file access date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 file_impl::get_access_time () const
 {
   if (!exists ())
@@ -238,7 +238,7 @@ file_impl::get_access_time () const
 // @brief Get last metadata modification timestamp
 // @return Last file metadata modification date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 file_impl::get_modification_time () const
 {
   if (!exists ())
@@ -251,7 +251,7 @@ file_impl::get_modification_time () const
 // @brief Get last metadata modification timestamp
 // @return Last file metadata modification date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 file_impl::get_metadata_time () const
 {
   if (!exists ())
@@ -264,39 +264,39 @@ file_impl::get_metadata_time () const
 // @brief Get creation time
 // @return Creation date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 file_impl::get_creation_time () const
 {
   if (!exists ())
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return mobius::datetime::datetime (); // smb files don't have creation time
+  return mobius::core::datetime::datetime (); // smb files don't have creation time
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get deletion time
 // @return Deletion date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 file_impl::get_deletion_time () const
 {
   if (!exists ())
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return mobius::datetime::datetime (); // smb files don't have deletion time
+  return mobius::core::datetime::datetime (); // smb files don't have deletion time
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get backup time
 // @return Backup date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 file_impl::get_backup_time () const
 {
   if (!exists ())
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return mobius::datetime::datetime (); // smb files don't have backup time
+  return mobius::core::datetime::datetime (); // smb files don't have backup time
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -437,9 +437,9 @@ file_impl::_load_stat () const
       user_id_ = st.st_uid;
       group_id_ = st.st_gid;
       permissions_ = st.st_mode & 0777;
-      access_time_ = mobius::datetime::new_datetime_from_unix_timestamp (st.st_atime);
-      modification_time_ = mobius::datetime::new_datetime_from_unix_timestamp (st.st_mtime);
-      metadata_time_ = mobius::datetime::new_datetime_from_unix_timestamp (st.st_ctime);
+      access_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (st.st_atime);
+      modification_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (st.st_mtime);
+      metadata_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (st.st_ctime);
 
       switch (st.st_mode & S_IFMT)
         {

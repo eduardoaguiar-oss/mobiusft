@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CThumbCache.hpp"
 #include <mobius/core/pod/map.hpp>
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/evidence_loader_impl_base.hpp>
 #include <mobius/framework/model/item.hpp>
@@ -71,7 +71,7 @@ struct autofill
 struct search
 {
   // attributes
-  mobius::datetime::datetime timestamp;
+  mobius::core::datetime::datetime timestamp;
   std::string text;
   std::string username;
 
@@ -118,7 +118,7 @@ struct local_file
 struct remote_file
 {
   // attributes
-  mobius::datetime::datetime timestamp;
+  mobius::core::datetime::datetime timestamp;
   std::string ip;
   std::uint16_t port = 0;
   std::string filename;

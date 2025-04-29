@@ -1,5 +1,5 @@
-#ifndef MOBIUS_IO_SMB_INIT_H
-#define MOBIUS_IO_SMB_INIT_H
+#ifndef MOBIUS_CORE_IO_SMB_INIT_HPP
+#define MOBIUS_CORE_IO_SMB_INIT_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

@@ -19,8 +19,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "ctag.hpp"
-#include <mobius/datetime/datetime.h>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/datetime/datetime.hpp>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <cstdint>
 #include <string>
 #include <utility>
@@ -64,7 +64,7 @@ public:
     // @brief Get timestamp
     // @return Timestamp
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::datetime::datetime
+    mobius::core::datetime::datetime
     get_timestamp () const
     {
         return timestamp_;
@@ -128,7 +128,7 @@ private:
     std::uint8_t version_ = 0;
 
     // @brief Timestamp
-    mobius::datetime::datetime timestamp_;
+    mobius::core::datetime::datetime timestamp_;
 
     // @brief File ED2K hash
     std::string hash_ed2k_;
@@ -146,7 +146,7 @@ private:
     std::uint64_t total_gap_size_ = 0;
     
     // Helper functions
-    void _decode_md4_hashset (mobius::decoder::data_decoder&);
+    void _decode_md4_hashset (mobius::core::decoder::data_decoder&);
 };
 
 } // namespace mobius::extension::app::emule

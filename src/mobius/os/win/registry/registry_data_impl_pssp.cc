@@ -18,7 +18,7 @@
 #include "registry_data_impl_pssp.h"
 #include <mobius/core/crypt/cipher.hpp>
 #include <mobius/io/bytearray_io.h>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 
 namespace mobius::os::win::registry
 {
@@ -47,7 +47,7 @@ registry_data_impl_pssp::_load_data () const
 
   // decode "Item Data" data
   auto item_data_reader = mobius::io::new_bytearray_reader (item_data_);
-  auto item_data_decoder = mobius::decoder::data_decoder (item_data_reader);
+  auto item_data_decoder = mobius::core::decoder::data_decoder (item_data_reader);
   item_data_decoder.skip (8);
   auto enc_des_key2 = item_data_decoder.get_bytearray_by_size (24);
   auto size = item_data_decoder.get_uint32_le ();
@@ -62,7 +62,7 @@ registry_data_impl_pssp::_load_data () const
 
   // decode data
   auto data_reader = mobius::io::new_bytearray_reader (data);
-  auto data_decoder = mobius::decoder::data_decoder (data_reader);
+  auto data_decoder = mobius::core::decoder::data_decoder (data_reader);
   auto data_size = data_decoder.get_uint32_le ();
   data_ = data_decoder.get_bytearray_by_size (data_size);
 

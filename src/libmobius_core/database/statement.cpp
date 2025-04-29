@@ -18,7 +18,7 @@
 #include <mobius/core/database/statement.hpp>
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/database/exception.inc>
-#include <mobius/datetime/conv_iso_string.h>
+#include <mobius/core/datetime/conv_iso_string.hpp>
 #include <mobius/exception.inc>
 #include <sqlite3.h>
 #include <chrono>
@@ -173,7 +173,7 @@ statement::bind (int idx, const mobius::bytearray& value)
 // @param v Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-statement::bind (int idx, const mobius::datetime::datetime& value)
+statement::bind (int idx, const mobius::core::datetime::datetime& value)
 {
   if (value)
     {
@@ -360,15 +360,15 @@ statement::get_column_bytearray (int idx)
 // @brief Get datetime column value
 // @param idx Value index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 statement::get_column_datetime (int idx)
 {
-  mobius::datetime::datetime value;
+  mobius::core::datetime::datetime value;
 
   const char *p_text = reinterpret_cast <const char *> (sqlite3_column_text (impl_->stmt, idx));
 
   if (p_text != nullptr)
-    value = mobius::datetime::new_datetime_from_iso_string (p_text);
+    value = mobius::core::datetime::new_datetime_from_iso_string (p_text);
 
   return value;
 }

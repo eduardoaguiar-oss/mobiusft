@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "registry_data_impl_msdcc.h"
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/core/crypt/cipher.hpp>
 #include <mobius/core/crypt/hmac.hpp>
 
@@ -99,7 +99,7 @@ registry_data_impl_msdcc::_load_data () const
     return;
 
   // decode encrypted data
-  mobius::decoder::data_decoder decoder (encrypted_data_);
+  mobius::core::decoder::data_decoder decoder (encrypted_data_);
   decoder.skip (48);
   std::uint16_t encrypted = decoder.get_uint16_le ();
   std::uint16_t algorithm = decoder.get_uint16_le ();
@@ -132,7 +132,7 @@ registry_data_impl_msdcc::_load_data () const
       // crop data
       if (data_.size () >= 0x8b)
         {
-          mobius::decoder::data_decoder decoder (data_);
+          mobius::core::decoder::data_decoder decoder (data_);
           decoder.skip (0x88);
           std::uint32_t size = decoder.get_uint32_le ();
           data_.resize (size);

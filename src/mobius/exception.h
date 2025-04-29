@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXCEPTION_H
-#define MOBIUS_EXCEPTION_H
+#ifndef MOBIUS_CORE_EXCEPTION_HPP
+#define MOBIUS_CORE_EXCEPTION_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

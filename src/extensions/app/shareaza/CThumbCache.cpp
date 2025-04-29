@@ -50,7 +50,7 @@ CThumbCache::CThumbCache (const mobius::io::reader& reader)
       e.is_valid = true;
       e.path = stmt.get_column_string (0);
       e.size = stmt.get_column_int64 (1);
-      e.last_write_time = mobius::datetime::new_datetime_from_nt_timestamp (stmt.get_column_int64 (2));
+      e.last_write_time = mobius::core::datetime::new_datetime_from_nt_timestamp (stmt.get_column_int64 (2));
       e.image_data = stmt.get_column_bytearray (3);
 
       cache_[e.path] = e;

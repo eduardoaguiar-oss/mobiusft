@@ -43,12 +43,12 @@ pymobius_decoder_lnk_check (PyObject *value)
 // @return New lnk object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_decoder_lnk_to_pyobject (const mobius::decoder::lnk& obj)
+pymobius_decoder_lnk_to_pyobject (const mobius::core::decoder::lnk& obj)
 {
   PyObject *ret = _PyObject_New (&decoder_lnk_t);
 
   if (ret)
-    ((decoder_lnk_o *) ret)->obj = new mobius::decoder::lnk (obj);
+    ((decoder_lnk_o *) ret)->obj = new mobius::core::decoder::lnk (obj);
 
   return ret;
 }
@@ -58,7 +58,7 @@ pymobius_decoder_lnk_to_pyobject (const mobius::decoder::lnk& obj)
 // @param value Python value
 // @return Lnk object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::decoder::lnk
+mobius::core::decoder::lnk
 pymobius_decoder_lnk_from_pyobject (PyObject *value)
 {
   if (!pymobius_decoder_lnk_check (value))
@@ -1360,7 +1360,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::decoder::lnk (arg_reader);
+          ret->obj = new mobius::core::decoder::lnk (arg_reader);
         }
       catch (const std::exception& e)
         {

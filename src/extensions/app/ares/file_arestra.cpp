@@ -18,7 +18,7 @@
 #include "file_arestra.hpp"
 #include "common.hpp"
 #include <mobius/core/log.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 
 namespace mobius::extension::app::ares
 {
@@ -34,7 +34,7 @@ file_arestra::file_arestra (const mobius::io::reader& reader)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Create main section
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto decoder = mobius::decoder::data_decoder (reader);
+  auto decoder = mobius::core::decoder::data_decoder (reader);
   decoder.seek (reader.get_size () - 4096);
 
   section_ = mobius::core::file_decoder::section (reader, "File");
@@ -157,7 +157,7 @@ file_arestra::_populate_metadata (const mobius::bytearray& data)
 
   for (const auto& [i, v] : decode_metadata (data))
     {
-      mobius::decoder::data_decoder decoder (v);
+      mobius::core::decoder::data_decoder decoder (v);
 
       switch (i)
         {

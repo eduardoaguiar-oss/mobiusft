@@ -36,7 +36,7 @@ namespace mobius::extension::app::shareaza
 // @see WndSearch.cpp - CSearchWnd::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CWndSearch::decode (mobius::decoder::mfc& decoder)
+CWndSearch::decode (mobius::core::decoder::mfc& decoder)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 

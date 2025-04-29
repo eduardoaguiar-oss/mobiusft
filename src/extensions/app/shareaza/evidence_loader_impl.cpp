@@ -42,8 +42,8 @@
 #include <mobius/core/log.hpp>
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/pod/map.hpp>
-#include <mobius/decoder/mfc.h>
-#include <mobius/decoder/xml/dom.h>
+#include <mobius/core/decoder/mfc.hpp>
+#include <mobius/core/decoder/xml/dom.hpp>
 #include <mobius/exception.inc>
 #include <mobius/framework/model/evidence.hpp>
 #include <mobius/io/folder.h>
@@ -98,14 +98,14 @@ get_file_hashes (const T& f)
 // @param f File object
 // @return Timestamp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 get_library_timestamp (const mobius::io::file& f)
 {
-  mobius::datetime::datetime timestamp;
+  mobius::core::datetime::datetime timestamp;
 
   if (f)
     {
-      mobius::decoder::mfc decoder (f.new_reader ());
+      mobius::core::decoder::mfc decoder (f.new_reader ());
       timestamp = decoder.get_nt_time ();
     }
 
@@ -311,7 +311,7 @@ evidence_loader_impl::_decode_library_dat_file (const mobius::io::file& f)
       // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
       // Decode file
       // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-      auto decoder = mobius::decoder::mfc (f.new_reader ());
+      auto decoder = mobius::core::decoder::mfc (f.new_reader ());
       CLibrary clib (decoder);
 
       if (!clib)
@@ -445,7 +445,7 @@ evidence_loader_impl::_decode_profile_xml_file (const mobius::io::file& f)
     {
       if (!account_.f || (account_.f.is_deleted () && !f.is_deleted ()))
         {
-          mobius::decoder::xml::dom dom (f.new_reader ());
+          mobius::core::decoder::xml::dom dom (f.new_reader ());
           auto root = dom.get_root_element ();
 
           account acc;

@@ -1,5 +1,5 @@
-#ifndef MOBIUS_IO_STREAM_H
-#define MOBIUS_IO_STREAM_H
+#ifndef MOBIUS_CORE_IO_STREAM_HPP
+#define MOBIUS_CORE_IO_STREAM_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

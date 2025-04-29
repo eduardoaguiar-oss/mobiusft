@@ -21,7 +21,7 @@
 #include "reader_impl_plaintext.hpp"
 #include <mobius/bytearray.h>
 #include <mobius/core/crypt/cipher.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/exception.inc>
 #include <mobius/io/reader.h>
 #include <mobius/string_functions.h>
@@ -187,9 +187,9 @@ imagefile_impl::_load_metadata () const
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // file metadata
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime last_metadata_time = file_.get_metadata_time ();
-  mobius::datetime::datetime last_modification_time = file_.get_modification_time ();
-  mobius::datetime::datetime last_access_time = file_.get_access_time ();
+  mobius::core::datetime::datetime last_metadata_time = file_.get_metadata_time ();
+  mobius::core::datetime::datetime last_modification_time = file_.get_modification_time ();
+  mobius::core::datetime::datetime last_access_time = file_.get_access_time ();
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // header metadata
@@ -205,7 +205,7 @@ imagefile_impl::_load_metadata () const
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto reader = file_.new_reader ();
   const mobius::bytearray data = read_header_data (reader);
-  mobius::decoder::data_decoder decoder (data);
+  mobius::core::decoder::data_decoder decoder (data);
 
   decoder.skip (8192);
   std::uint32_t signature = decoder.get_uint32_le ();

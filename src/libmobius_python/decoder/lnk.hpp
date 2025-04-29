@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/decoder/lnk.h>
+#include <mobius/core/decoder/lnk.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::decoder::lnk *obj;
+  mobius::core::decoder::lnk *obj;
 } decoder_lnk_o;
 
 extern PyTypeObject decoder_lnk_t;
@@ -36,8 +36,8 @@ extern PyTypeObject decoder_lnk_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_decoder_lnk_check (PyObject *);
-PyObject *pymobius_decoder_lnk_to_pyobject (const mobius::decoder::lnk&);
-mobius::decoder::lnk pymobius_decoder_lnk_from_pyobject (PyObject *);
+PyObject *pymobius_decoder_lnk_to_pyobject (const mobius::core::decoder::lnk&);
+mobius::core::decoder::lnk pymobius_decoder_lnk_from_pyobject (PyObject *);
 
 #endif
 

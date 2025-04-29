@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "section.hpp"
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief header_section data class
@@ -154,7 +154,7 @@ public:
   // @brief get imagefile acquisition date and time
   // @return imagefile acquisition date and time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_acquisition_time () const
   {
     return acquisition_time_;
@@ -165,7 +165,7 @@ public:
   // @param acquisition_time imagefile acquisition date and time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
-  set_acquisition_time (const mobius::datetime::datetime& acquisition_time)
+  set_acquisition_time (const mobius::core::datetime::datetime& acquisition_time)
   {
     acquisition_time_ = acquisition_time;
   }
@@ -208,7 +208,7 @@ private:
   std::string acquisition_platform_;
 
   // @brief imagefile acquisition date and time
-  mobius::datetime::datetime acquisition_time_;
+  mobius::core::datetime::datetime acquisition_time_;
 
   // @brief section text
   std::string text_;

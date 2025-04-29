@@ -1,5 +1,5 @@
-#ifndef MOBIUS_IO_SEQUENTIAL_READER_ADAPTOR_H
-#define MOBIUS_IO_SEQUENTIAL_READER_ADAPTOR_H
+#ifndef MOBIUS_CORE_IO_SEQUENTIAL_READER_ADAPTOR_HPP
+#define MOBIUS_CORE_IO_SEQUENTIAL_READER_ADAPTOR_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

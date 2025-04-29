@@ -43,12 +43,12 @@ pymobius_decoder_sourcecode_check (PyObject *pyobj)
 // @return new sourcecode object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_decoder_sourcecode_to_pyobject (mobius::decoder::sourcecode obj)
+pymobius_decoder_sourcecode_to_pyobject (mobius::core::decoder::sourcecode obj)
 {
   PyObject *ret = _PyObject_New (&decoder_sourcecode_t);
 
   if (ret)
-    ((decoder_sourcecode_o *) ret)->obj = new mobius::decoder::sourcecode (obj);
+    ((decoder_sourcecode_o *) ret)->obj = new mobius::core::decoder::sourcecode (obj);
 
   return ret;
 }
@@ -58,7 +58,7 @@ pymobius_decoder_sourcecode_to_pyobject (mobius::decoder::sourcecode obj)
 // @param pyobj Python object
 // @return sourcecode object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::decoder::sourcecode
+mobius::core::decoder::sourcecode
 pymobius_decoder_sourcecode_from_pyobject (PyObject *pyobj)
 {
   if (!PyObject_IsInstance (pyobj, (PyObject *) &decoder_sourcecode_t))
@@ -168,7 +168,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::decoder::sourcecode (arg_reader);
+          ret->obj = new mobius::core::decoder::sourcecode (arg_reader);
         }
       catch (const std::exception& e)
         {

@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -55,7 +55,7 @@ public:
   std::string get_id () const;
   std::string get_name () const;
   std::string get_version () const;
-  mobius::datetime::datetime get_last_execution_time () const;
+  mobius::core::datetime::datetime get_last_execution_time () const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief Check if object is valid

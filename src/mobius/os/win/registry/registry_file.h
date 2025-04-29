@@ -1,5 +1,5 @@
-#ifndef MOBIUS_OS_WIN_REGISTRY_REGISTRY_FILE_H
-#define MOBIUS_OS_WIN_REGISTRY_REGISTRY_FILE_H
+#ifndef MOBIUS_CORE_OS_WIN_REGISTRY_REGISTRY_FILE_HPP
+#define MOBIUS_CORE_OS_WIN_REGISTRY_REGISTRY_FILE_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/metadata.hpp>
 #include <mobius/os/win/registry/registry_key.h>
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/io/reader.h>
 #include <cstdint>
 #include <memory>
@@ -48,7 +48,7 @@ public:
   std::uint32_t get_uid () const;
   std::string get_role () const;
   std::string get_path () const;
-  mobius::datetime::datetime get_last_modification_time () const;
+  mobius::core::datetime::datetime get_last_modification_time () const;
   registry_key get_root_key () const;
   mobius::core::metadata get_metadata () const;
 

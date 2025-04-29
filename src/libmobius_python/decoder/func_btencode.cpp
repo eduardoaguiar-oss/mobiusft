@@ -23,7 +23,7 @@
 #include <Python.h>
 #include <pymobius.hpp>
 #include <pygil.hpp>
-#include <mobius/decoder/btencode.h>
+#include <mobius/core/decoder/btencode.hpp>
 #include "io/reader.hpp"
 #include "pod/data.hpp"
 
@@ -55,7 +55,7 @@ decoder_func_btencode (PyObject *, PyObject *args)
   try
     {
       auto data = mobius::py::GIL () (
-                       mobius::decoder::btencode (arg_reader)
+                       mobius::core::decoder::btencode (arg_reader)
                   );
 
       ret = pymobius_pod_data_to_python (data);

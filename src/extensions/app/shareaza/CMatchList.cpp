@@ -36,7 +36,7 @@ namespace mobius::extension::app::shareaza
 // @see MatchObjects.cpp - CMatchList::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CMatchList::decode (mobius::decoder::mfc& decoder)
+CMatchList::decode (mobius::core::decoder::mfc& decoder)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 

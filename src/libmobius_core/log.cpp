@@ -123,7 +123,7 @@ _write_log (
   const std::string& text
 )
 {
-  auto now = mobius::datetime::now ();
+  auto now = mobius::core::datetime::now ();
 
   std::lock_guard <std::mutex> lock (log_mutex_);
 
@@ -169,7 +169,7 @@ event::event (
    funcname_ (funcname),
    line_number_ (line_number),
    text_ (text),
-   timestamp_ (mobius::datetime::now ())
+   timestamp_ (mobius::core::datetime::now ())
 {
 }
 

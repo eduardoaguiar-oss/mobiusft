@@ -267,7 +267,7 @@ show_searches_dat (const std::string& path)
 
   auto f = mobius::io::new_file_by_path (path);
   auto reader = f.new_reader ();
-  auto decoder = mobius::decoder::mfc (reader);
+  auto decoder = mobius::core::decoder::mfc (reader);
 
   std::uint32_t count = decoder.get_count ();
 

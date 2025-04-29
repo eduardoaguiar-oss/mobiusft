@@ -36,7 +36,7 @@ namespace mobius::extension::app::shareaza
 // @see ManagedSearch.cpp - CManagedSearch::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CManagedSearch::decode (mobius::decoder::mfc& decoder)
+CManagedSearch::decode (mobius::core::decoder::mfc& decoder)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 

@@ -1,5 +1,5 @@
-#ifndef MOBIUS_IO_FOLDER_H
-#define MOBIUS_IO_FOLDER_H
+#ifndef MOBIUS_CORE_IO_FOLDER_HPP
+#define MOBIUS_CORE_IO_FOLDER_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -242,7 +242,7 @@ public:
   // @brief Get last access timestamp
   // @return Last folder access date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_access_time () const
   {
     return impl_->get_access_time ();
@@ -252,7 +252,7 @@ public:
   // @brief Get last data modification timestamp
   // @return Last folder data modification date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_modification_time () const
   {
     return impl_->get_modification_time ();
@@ -262,7 +262,7 @@ public:
   // @brief Get last metadata modification timestamp
   // @return Last folder metadata modification date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_metadata_time () const
   {
     return impl_->get_metadata_time ();
@@ -272,7 +272,7 @@ public:
   // @brief Get creation timestamp
   // @return Creation date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_creation_time () const
   {
     return impl_->get_creation_time ();
@@ -282,7 +282,7 @@ public:
   // @brief Get deletion timestamp
   // @return Deletion date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_deletion_time () const
   {
     return impl_->get_deletion_time ();
@@ -292,7 +292,7 @@ public:
   // @brief Get backup timestamp
   // @return Backup date/time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_backup_time () const
   {
     return impl_->get_backup_time ();

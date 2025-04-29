@@ -1,5 +1,5 @@
-#ifndef MOBIUS_OS_WIN_REGISTRY_HIVE_KEY_H
-#define MOBIUS_OS_WIN_REGISTRY_HIVE_KEY_H
+#ifndef MOBIUS_CORE_OS_WIN_REGISTRY_HIVE_KEY_HPP
+#define MOBIUS_CORE_OS_WIN_REGISTRY_HIVE_KEY_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/os/win/registry/hive_value.h>
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/io/reader.h>
 #include <cstdint>
 #include <memory>
@@ -58,7 +58,7 @@ public:
   bool is_root_key () const;
   std::string get_signature () const;
   std::uint16_t get_flags () const;
-  mobius::datetime::datetime get_last_modification_time () const;
+  mobius::core::datetime::datetime get_last_modification_time () const;
   std::uint32_t get_access_bits () const;
   std::uint32_t get_subkeys_count () const;
   std::uint32_t get_volatile_subkeys_count () const;

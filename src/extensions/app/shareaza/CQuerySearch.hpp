@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CXMLElement.hpp"
-#include <mobius/decoder/mfc.h>
+#include <mobius/core/decoder/mfc.hpp>
 #include <map>
 #include <string>
 #include <vector>
@@ -207,7 +207,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void decode (mobius::decoder::mfc&);
+  void decode (mobius::core::decoder::mfc&);
 
 private:
   // @brief Structure version

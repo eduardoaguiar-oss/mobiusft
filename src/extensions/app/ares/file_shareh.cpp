@@ -18,7 +18,7 @@
 #include "file_shareh.hpp"
 #include "common.hpp"
 #include <mobius/core/log.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/core/encoder/hexstring.hpp>
 
 namespace
@@ -48,7 +48,7 @@ _populate_metadata (mobius::extension::app::ares::file_shareh::entry& e, const m
           case 10: e.comment = v.to_string (); break;
           case 11:
             {
-              mobius::decoder::data_decoder decoder (v);
+              mobius::core::decoder::data_decoder decoder (v);
               e.download_completed_time = decoder.get_unix_datetime ();
             }
             break;
@@ -75,7 +75,7 @@ file_shareh::file_shareh (const mobius::io::reader& reader)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Create main section
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto decoder = mobius::decoder::data_decoder (reader);
+  auto decoder = mobius::core::decoder::data_decoder (reader);
   decoder.seek (0);
 
   section_ = mobius::core::file_decoder::section (reader, "File");

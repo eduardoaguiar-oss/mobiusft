@@ -73,7 +73,7 @@
 #include "file_torrenth.hpp"
 #include <mobius/io/walker.h>
 #include <mobius/core/log.hpp>
-#include <mobius/decoder/hexstring.h>
+#include <mobius/core/decoder/hexstring.hpp>
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <mobius/exception.inc>
@@ -1117,7 +1117,7 @@ evidence_loader_impl::_decode_ntuser_dat_file (const mobius::io::file& f)
                 {
                   autofill af;
 
-                  af.value = mobius::decoder::hexstring (value.get_name ()).to_string ();
+                  af.value = mobius::core::decoder::hexstring (value.get_name ()).to_string ();
                   af.username = username_;
                   af.category = category;
                   af.account_guid = acc.guid;

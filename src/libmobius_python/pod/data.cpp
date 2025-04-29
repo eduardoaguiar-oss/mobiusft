@@ -169,7 +169,7 @@ pymobius_pod_data_to_pyobject (const mobius::core::pod::data& value)
     ret = mobius::py::pyfloat_from_cpp (static_cast <long double> (value));
 
   else if (value.is_datetime ())
-    ret = mobius::py::pydatetime_from_datetime (mobius::datetime::datetime (value));
+    ret = mobius::py::pydatetime_from_datetime (mobius::core::datetime::datetime (value));
 
   else if (value.is_string ())
     ret = mobius::py::pystring_from_std_string (std::string (value));

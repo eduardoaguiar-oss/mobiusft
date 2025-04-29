@@ -21,7 +21,7 @@
 #include <mobius/core/charset.hpp>
 #include <mobius/core/crypt/hash.hpp>
 #include <mobius/core/crypt/cipher.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 
 namespace mobius::os::win::registry
 {
@@ -57,7 +57,7 @@ get_data2 (registry_key sid_key)
         {
           // decode "Value" data
           auto data = subkey.get_data_by_name ("Value").get_data ();
-          auto decoder = mobius::decoder::data_decoder (data);
+          auto decoder = mobius::core::decoder::data_decoder (data);
 
           decoder.skip (8);
           auto flag = decoder.get_uint32_le ();				//  8 - 11

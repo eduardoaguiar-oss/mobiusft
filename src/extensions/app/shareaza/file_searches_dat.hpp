@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CWndSearch.hpp"
 #include <mobius/core/file_decoder/section.hpp>
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/io/reader.h>
 #include <map>
 #include <string>
@@ -44,9 +44,9 @@ public:
     CManagedSearch obj;
     std::string id;
     std::string text;
-    mobius::datetime::datetime timestamp;
-    mobius::datetime::datetime first_hit_time;
-    mobius::datetime::datetime last_hit_time;
+    mobius::core::datetime::datetime timestamp;
+    mobius::core::datetime::datetime first_hit_time;
+    mobius::core::datetime::datetime last_hit_time;
     std::uint32_t file_count = 0;
   };
 

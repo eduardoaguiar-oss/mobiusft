@@ -1,5 +1,5 @@
-#ifndef MOBIUS_STRING_H
-#define MOBIUS_STRING_H
+#ifndef MOBIUS_CORE_STRING_HPP
+#define MOBIUS_CORE_STRING_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

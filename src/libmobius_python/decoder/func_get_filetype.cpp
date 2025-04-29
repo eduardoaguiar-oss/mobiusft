@@ -23,7 +23,7 @@
 #include <Python.h>
 #include <pymobius.hpp>
 #include <pygil.hpp>
-#include <mobius/decoder/filetype.h>
+#include <mobius/core/decoder/filetype.hpp>
 #include "io/reader.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -54,7 +54,7 @@ decoder_func_get_filetype (PyObject *, PyObject *args)
   try
     {
       auto filetype = mobius::py::GIL () (
-                       mobius::decoder::get_filetype (arg_reader)
+                       mobius::core::decoder::get_filetype (arg_reader)
                   );
 
       ret = mobius::py::pystring_from_std_string (filetype);

@@ -162,7 +162,7 @@ data::data (long double v)
 // @brief Constructor
 // @param v Datetime value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data::data (const mobius::datetime::datetime& v)
+data::data (const mobius::core::datetime::datetime& v)
  : impl_ (std::make_shared <data_impl_datetime> (v))
 {
 }
@@ -284,7 +284,7 @@ data::operator= (long double v)
 // @param v Datetime value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data&
-data::operator= (const mobius::datetime::datetime& v)
+data::operator= (const mobius::core::datetime::datetime& v)
 {
   impl_ = std::make_shared <data_impl_datetime> (v);
   return *this;
@@ -400,7 +400,7 @@ data::operator long double () const
 // @brief Convert data to datetime
 // @return Long double value if type == datetime, otherwise exception
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data::operator mobius::datetime::datetime () const
+data::operator mobius::core::datetime::datetime () const
 {
   if (impl_->get_type () == type::datetime)
     return std::static_pointer_cast <data_impl_datetime> (impl_)->get_value ();
@@ -510,7 +510,7 @@ data::to_string () const
     return std::to_string (operator long double ());
 
   else if (is_datetime ())
-    return mobius::datetime::to_string (operator mobius::datetime::datetime ());
+    return mobius::core::datetime::to_string (operator mobius::core::datetime::datetime ());
 
   else if (is_string ())
     return operator std::string ();
@@ -565,7 +565,7 @@ operator== (const data& a, const data& b)
         rc = (static_cast <long double> (a) == static_cast <long double> (b));
 
       else if (a.is_datetime ())
-        rc = (mobius::datetime::datetime (a) == mobius::datetime::datetime (b));
+        rc = (mobius::core::datetime::datetime (a) == mobius::core::datetime::datetime (b));
 
       else if (a.is_string ())
         rc = (std::string (a) == std::string (b));

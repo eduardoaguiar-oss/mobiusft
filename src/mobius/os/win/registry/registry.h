@@ -1,5 +1,5 @@
-#ifndef MOBIUS_REGISTRY_REGISTRY_H
-#define MOBIUS_REGISTRY_REGISTRY_H
+#ifndef MOBIUS_CORE_REGISTRY_REGISTRY_HPP
+#define MOBIUS_CORE_REGISTRY_REGISTRY_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

@@ -48,7 +48,7 @@ struct account
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct remote_source
 {
-  mobius::datetime::datetime timestamp;
+  mobius::core::datetime::datetime timestamp;
   std::string ip;
   std::uint16_t port;
 };
@@ -76,8 +76,8 @@ struct file
   mobius::framework::evidence_flag flag_corrupted;
 
   // transfer info
-  mobius::datetime::datetime download_started_time;
-  mobius::datetime::datetime download_completed_time;
+  mobius::core::datetime::datetime download_started_time;
+  mobius::core::datetime::datetime download_completed_time;
 
   // metadata
   mobius::core::pod::map metadata;

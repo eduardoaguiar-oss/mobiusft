@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CLibraryFile.hpp"
-#include <mobius/decoder/mfc.h>
+#include <mobius/core/decoder/mfc.hpp>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -56,7 +56,7 @@ public:
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   CLibraryFolder () = default;
-  CLibraryFolder (mobius::decoder::mfc&, int, const CLibraryFolder&);
+  CLibraryFolder (mobius::core::decoder::mfc&, int, const CLibraryFolder&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief Check if folder is valid

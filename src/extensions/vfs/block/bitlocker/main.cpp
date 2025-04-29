@@ -18,7 +18,7 @@
 #include <mobius/bytearray.h>
 #include <mobius/core/log.hpp>
 #include <mobius/core/resource.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/string_functions.h>
 #include <mobius/core/vfs/block.hpp>
 #include <map>
@@ -136,7 +136,7 @@ _decode_fve_metadata_0005 (const mobius::bytearray& data)
 {
   mobius::core::pod::map m;
 
-  auto decoder = mobius::decoder::data_decoder (data);
+  auto decoder = mobius::core::decoder::data_decoder (data);
 
   m.set ("datetime", decoder.get_nt_datetime ());
   m.set ("nonce_counter", decoder.get_uint32_le ());
@@ -155,7 +155,7 @@ _decode_fve_metadata_0008 (const mobius::bytearray& data)
 {
   mobius::core::pod::map m;
 
-  auto decoder = mobius::decoder::data_decoder (data);
+  auto decoder = mobius::core::decoder::data_decoder (data);
 
   auto key_guid = decoder.get_guid ();
   auto mtime = decoder.get_nt_datetime ();
@@ -190,7 +190,7 @@ _decode_fve_metadata_0008 (const mobius::bytearray& data)
 // @return Entry as map
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::core::pod::map
-_decode_fve_metadata_entry (mobius::decoder::data_decoder& decoder)
+_decode_fve_metadata_entry (mobius::core::decoder::data_decoder& decoder)
 {
   mobius::core::pod::map entry;
 
@@ -270,7 +270,7 @@ static std::vector <mobius::core::pod::map>
 _decode_fve_metadata_entries (const mobius::bytearray& data)
 {
   std::vector <mobius::core::pod::map> entries;
-  auto decoder = mobius::decoder::data_decoder (data);
+  auto decoder = mobius::core::decoder::data_decoder (data);
 
   while (decoder)
     {
@@ -304,7 +304,7 @@ _decode_fve_metadata (mobius::core::vfs::block& bde_block, std::uint64_t offset)
   reader.seek (offset);
   log.debug (__LINE__, "FVE Block:\n" + reader.read (64).dump ());
 
-  auto decoder = mobius::decoder::data_decoder (reader);
+  auto decoder = mobius::core::decoder::data_decoder (reader);
   decoder.seek (offset);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -423,7 +423,7 @@ _decode_fve_metadata (mobius::core::vfs::block& bde_block, std::uint64_t offset)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 _decode_bpb_fields (
-  mobius::decoder::data_decoder& decoder,
+  mobius::core::decoder::data_decoder& decoder,
   mobius::core::vfs::block& bde_block
 )
 {
@@ -459,7 +459,7 @@ _decode_bpb_fields (
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 _decode_fat32_info (
-  mobius::decoder::data_decoder& decoder,
+  mobius::core::decoder::data_decoder& decoder,
   mobius::core::vfs::block& bde_block
 )
 {
@@ -479,7 +479,7 @@ _decode_fat32_info (
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 _decode_extended_bpb_fields (
-  mobius::decoder::data_decoder& decoder,
+  mobius::core::decoder::data_decoder& decoder,
   mobius::core::vfs::block& bde_block
 )
 {
@@ -502,7 +502,7 @@ _decode_extended_bpb_fields (
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 _decode_fve_metadata_offset_block (
-  mobius::decoder::data_decoder& decoder,
+  mobius::core::decoder::data_decoder& decoder,
   mobius::core::vfs::block& bde_block
 )
 {
@@ -571,7 +571,7 @@ _decode_win7 (const mobius::core::vfs::block& block)
   // Create decoder
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto reader = bde_block.new_reader ();
-  auto decoder = mobius::decoder::data_decoder (reader);
+  auto decoder = mobius::core::decoder::data_decoder (reader);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Decode data
@@ -613,7 +613,7 @@ _decode_to_go (const mobius::core::vfs::block& block)
   // Create decoder
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto reader = block.new_reader ();
-  auto decoder = mobius::decoder::data_decoder (reader);
+  auto decoder = mobius::core::decoder::data_decoder (reader);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Bitlocker To Go support is still experimental. So log out header data
@@ -658,7 +658,7 @@ _decode_unknown_bitlocker (const mobius::core::vfs::block& block)
   // Create decoder
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto reader = bde_block.new_reader ();
-  auto decoder = mobius::decoder::data_decoder (reader);
+  auto decoder = mobius::core::decoder::data_decoder (reader);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Log out header data
@@ -705,7 +705,7 @@ decoder (
   // Get signature and GUIDs
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto reader = block.new_reader ();
-  auto decoder = mobius::decoder::data_decoder (reader);
+  auto decoder = mobius::core::decoder::data_decoder (reader);
 
   decoder.seek (3);
   auto signature = decoder.get_bytearray_by_size (8);

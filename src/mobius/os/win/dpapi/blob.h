@@ -1,5 +1,5 @@
-#ifndef MOBIUS_OS_WIN_DPAPI_BLOB_H
-#define MOBIUS_OS_WIN_DPAPI_BLOB_H
+#ifndef MOBIUS_CORE_OS_WIN_DPAPI_BLOB_HPP
+#define MOBIUS_CORE_OS_WIN_DPAPI_BLOB_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

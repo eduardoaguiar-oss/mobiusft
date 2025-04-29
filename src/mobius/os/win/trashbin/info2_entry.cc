@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "info2_entry.h"
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 
 namespace mobius::os::win::trashbin
 {
@@ -84,7 +84,7 @@ public:
   // @brief Get deletion time
   // @return Deletion time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_deletion_time () const
   {
     return deletion_time_;
@@ -114,7 +114,7 @@ private:
   std::int32_t file_idx_;
 
   // @brief File deletion date/time
-  mobius::datetime::datetime deletion_time_;
+  mobius::core::datetime::datetime deletion_time_;
 
   // @brief File size
   std::uint32_t size_;
@@ -129,7 +129,7 @@ info2_entry::impl::impl (const mobius::io::reader& reader)
 {
   constexpr std::uint64_t PATH_SIZE = 260;
 
-  mobius::decoder::data_decoder decoder (reader);
+  mobius::core::decoder::data_decoder decoder (reader);
   is_deleted_ = decoder.get_uint8 () == '\0';
   decoder.skip (PATH_SIZE - 1);
 
@@ -194,7 +194,7 @@ info2_entry::get_file_idx () const
 // @brief Get deletion time
 // @return Deletion time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 info2_entry::get_deletion_time () const
 {
   return impl_->get_deletion_time ();

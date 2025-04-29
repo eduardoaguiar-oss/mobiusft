@@ -1,5 +1,5 @@
-#ifndef MOBIUS_IO_SMB_FILE_IMPL_H
-#define MOBIUS_IO_SMB_FILE_IMPL_H
+#ifndef MOBIUS_CORE_IO_SMB_FILE_IMPL_HPP
+#define MOBIUS_CORE_IO_SMB_FILE_IMPL_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -60,12 +60,12 @@ public:
   group_id_type get_group_id () const override;
   std::string get_group_name () const override;
   permission_type get_permissions () const override;
-  mobius::datetime::datetime get_access_time () const override;
-  mobius::datetime::datetime get_modification_time () const override;
-  mobius::datetime::datetime get_metadata_time () const override;
-  mobius::datetime::datetime get_creation_time () const override;
-  mobius::datetime::datetime get_deletion_time () const override;
-  mobius::datetime::datetime get_backup_time () const override;
+  mobius::core::datetime::datetime get_access_time () const override;
+  mobius::core::datetime::datetime get_modification_time () const override;
+  mobius::core::datetime::datetime get_metadata_time () const override;
+  mobius::core::datetime::datetime get_creation_time () const override;
+  mobius::core::datetime::datetime get_deletion_time () const override;
+  mobius::core::datetime::datetime get_backup_time () const override;
   folder_type get_parent () const override;
   void reload () override;
   void remove () override;
@@ -147,13 +147,13 @@ private:
   mutable permission_type permissions_;
 
   // @brief Last access date/time
-  mutable mobius::datetime::datetime access_time_;
+  mutable mobius::core::datetime::datetime access_time_;
 
   // @brief Last modification date/time
-  mutable mobius::datetime::datetime modification_time_;
+  mutable mobius::core::datetime::datetime modification_time_;
 
   // @brief Last metadata modification date/time
-  mutable mobius::datetime::datetime metadata_time_;
+  mutable mobius::core::datetime::datetime metadata_time_;
 
   // @brief Is stat loaded flag
   mutable bool is_stat_loaded_ = false;

@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/bytearray.h>
 #include <mobius/core/resource.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/exception.inc>
 #include <mobius/string_functions.h>
 #include <mobius/core/vfs/block.hpp>
@@ -147,7 +147,7 @@ _decode_gpt_header (
       address_type pos = sector * sector_size;
       auto reader = ps_block.new_reader ();
       reader.seek (pos);
-      mobius::decoder::data_decoder decoder (reader);
+      mobius::core::decoder::data_decoder decoder (reader);
       auto signature = decoder.get_bytearray_by_size (8);
 
       if (signature == GPT_SIGNATURE)
@@ -252,7 +252,7 @@ _decode_gpt_partition_table (
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto reader = ps_block.new_reader ();
   reader.seek (partition_entry_lba * sector_size);
-  mobius::decoder::data_decoder decoder (reader);
+  mobius::core::decoder::data_decoder decoder (reader);
 
   for (std::uint32_t i = 0; i < number_of_partition_entries; i++)
     {

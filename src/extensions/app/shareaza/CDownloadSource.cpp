@@ -29,7 +29,7 @@ namespace mobius::extension::app::shareaza
 // @see FileFragments/Compatibility.hpp - SerializeIn
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CDownloadSource::decode_fragment (mobius::decoder::mfc& decoder, int version)
+CDownloadSource::decode_fragment (mobius::core::decoder::mfc& decoder, int version)
 {
   CFragment fragment;
 
@@ -55,7 +55,7 @@ CDownloadSource::decode_fragment (mobius::decoder::mfc& decoder, int version)
 // @see FileFragments/Compatibility.hpp - SerializeIn2
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CDownloadSource::decode_fragments (mobius::decoder::mfc& decoder, int version)
+CDownloadSource::decode_fragments (mobius::core::decoder::mfc& decoder, int version)
 {
   if (version >= 20)
     {
@@ -77,7 +77,7 @@ CDownloadSource::decode_fragments (mobius::decoder::mfc& decoder, int version)
 // @param decoder MFC decoder object
 // @param version Structure version
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-CDownloadSource::CDownloadSource (mobius::decoder::mfc& decoder, int version)
+CDownloadSource::CDownloadSource (mobius::core::decoder::mfc& decoder, int version)
 {
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // version >= 21

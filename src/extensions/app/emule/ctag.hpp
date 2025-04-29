@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/core/pod/data.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <cstdint>
@@ -35,7 +35,7 @@ namespace mobius::extension::app::emule
 class ctag
 {
 public:
-  explicit ctag (mobius::decoder::data_decoder&);
+  explicit ctag (mobius::core::decoder::data_decoder&);
   
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief Get tag ID

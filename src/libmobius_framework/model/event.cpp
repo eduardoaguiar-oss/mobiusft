@@ -24,7 +24,7 @@ namespace mobius::framework::model
 // @param tm Timestamp
 // @param text Text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-event::event (const mobius::datetime::datetime& tm, const std::string& text)
+event::event (const mobius::core::datetime::datetime& tm, const std::string& text)
   : timestamp_ (tm), text_ (text)
 {
 }

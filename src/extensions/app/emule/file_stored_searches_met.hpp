@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "ctag.hpp"
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -104,8 +104,8 @@ private:
   std::vector <search> searches_;
 
   // Helper functions
-  search _decode_ssearch_params (mobius::decoder::data_decoder&);
-  CSearchFile _decode_csearch_file (mobius::decoder::data_decoder&);
+  search _decode_ssearch_params (mobius::core::decoder::data_decoder&);
+  CSearchFile _decode_csearch_file (mobius::core::decoder::data_decoder&);
 };
 
 } // namespace mobius::extension::app::emule

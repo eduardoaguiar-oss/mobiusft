@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/file_decoder/section.hpp>
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/io/reader.h>
 #include <string>
 #include <utility>
@@ -386,7 +386,7 @@ private:
   std::uint64_t phash_verified_;
 
   // @brief Download started time
-  mobius::datetime::datetime download_started_time_;
+  mobius::core::datetime::datetime download_started_time_;
 
   // @brief File gaps
   std::vector <std::pair <std::uint64_t, std::uint64_t>> gaps_;

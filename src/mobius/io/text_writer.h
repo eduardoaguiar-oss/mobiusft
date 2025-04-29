@@ -1,5 +1,5 @@
-#ifndef MOBIUS_IO_TEXT_WRITER_H
-#define MOBIUS_IO_TEXT_WRITER_H
+#ifndef MOBIUS_CORE_IO_TEXT_WRITER_HPP
+#define MOBIUS_CORE_IO_TEXT_WRITER_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

@@ -18,7 +18,7 @@
 #include "file_phash.hpp"
 #include "common.hpp"
 #include <mobius/core/log.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 
 namespace mobius::extension::app::ares
 {
@@ -35,7 +35,7 @@ file_phash::file_phash (const mobius::io::reader& reader)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Create main section
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto decoder = mobius::decoder::data_decoder (reader);
+  auto decoder = mobius::core::decoder::data_decoder (reader);
   decoder.seek (0);
 
   section_ = mobius::core::file_decoder::section (reader, "File");
@@ -84,7 +84,7 @@ file_phash::file_phash (const mobius::io::reader& reader)
 // @return Entry
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_phash::entry
-file_phash::_decode_entry (mobius::decoder::data_decoder& decoder)
+file_phash::_decode_entry (mobius::core::decoder::data_decoder& decoder)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -155,7 +155,7 @@ file_phash::_decode_entry (mobius::decoder::data_decoder& decoder)
 // @return Pieces
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <file_phash::piece>
-file_phash::_decode_pieces (mobius::decoder::data_decoder& decoder, std::uint32_t data_size)
+file_phash::_decode_pieces (mobius::core::decoder::data_decoder& decoder, std::uint32_t data_size)
 {
   std::vector <piece> pieces;
 

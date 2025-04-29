@@ -22,7 +22,7 @@
 #include <mobius/core/crypt/hash.hpp>
 #include <mobius/core/crypt/hmac.hpp>
 #include <mobius/core/crypt/pkcs5.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 
 namespace mobius::os::win::dpapi
 {
@@ -370,7 +370,7 @@ _generate_session_key (
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 blob::impl::impl (mobius::io::reader reader)
 {
-  mobius::decoder::data_decoder decoder (reader);
+  mobius::core::decoder::data_decoder decoder (reader);
 
   revision_ = decoder.get_uint32_le ();
   provider_guid_ = decoder.get_guid ();

@@ -1,5 +1,5 @@
-#ifndef MOBIUS_REGISTRY_HIVE_DECODER_H
-#define MOBIUS_REGISTRY_HIVE_DECODER_H
+#ifndef MOBIUS_CORE_REGISTRY_HIVE_DECODER_HPP
+#define MOBIUS_CORE_REGISTRY_HIVE_DECODER_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/io/reader.h>
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/bytearray.h>
 #include <cstdint>
 #include <string>
@@ -42,7 +42,7 @@ struct header_data
   std::uint32_t sequence_2;
 
   // @brief last written timestamp as NT datetime
-  mobius::datetime::datetime mtime;
+  mobius::core::datetime::datetime mtime;
 
   // @brief major version of the hivefile
   std::uint32_t major_version;
@@ -90,7 +90,7 @@ struct header_data
   std::string guid_signature;
 
   // @brief last reorganization timestamp
-  mobius::datetime::datetime rtime;
+  mobius::core::datetime::datetime rtime;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

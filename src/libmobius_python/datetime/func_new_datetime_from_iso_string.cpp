@@ -22,7 +22,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
 #include <cstdint>
-#include <mobius/datetime/conv_iso_string.h>
+#include <mobius/core/datetime/conv_iso_string.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Function new_datetime_from_iso_string
@@ -49,7 +49,7 @@ func_new_datetime_from_iso_string (PyObject *, PyObject *args)
   try
     {
       ret = mobius::py::pydatetime_from_datetime (
-              mobius::datetime::new_datetime_from_iso_string (arg_str)
+              mobius::core::datetime::new_datetime_from_iso_string (arg_str)
             );
     }
   catch (const std::exception& e)

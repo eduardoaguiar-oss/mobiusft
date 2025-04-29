@@ -1,5 +1,5 @@
-#ifndef MOBIUS_OS_WIN_HASH_IE_ENTROPY_H
-#define MOBIUS_OS_WIN_HASH_IE_ENTROPY_H
+#ifndef MOBIUS_CORE_OS_WIN_HASH_IE_ENTROPY_HPP
+#define MOBIUS_CORE_OS_WIN_HASH_IE_ENTROPY_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

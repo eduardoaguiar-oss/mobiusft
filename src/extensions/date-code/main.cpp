@@ -19,8 +19,8 @@
 #include <string>
 #include <mobius/core/mediator.hpp>
 #include <mobius/core/pod/data.hpp>
-#include <mobius/datetime/datetime.h>
-#include <mobius/datetime/timedelta.h>
+#include <mobius/core/datetime/datetime.hpp>
+#include <mobius/core/datetime/timedelta.hpp>
 #include <mobius/framework/model/item.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -95,7 +95,7 @@ _callback
     Y += 1999;
 
   // fiscal year begins at first saturday of July of the previous year
-  mobius::datetime::date d (Y, 7, 1);
+  mobius::core::datetime::date d (Y, 7, 1);
 
   int days = (W - 1) * 7 + D - 1;
 
@@ -106,7 +106,7 @@ _callback
     days += 6;
 
   // add days to first day of the fiscal year
-  mobius::datetime::timedelta td (0, days);
+  mobius::core::datetime::timedelta td (0, days);
   d = d + td;
 
   // set manufacturing date

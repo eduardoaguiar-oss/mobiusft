@@ -36,7 +36,7 @@
 #include <mobius/io/walker.h>
 #include <mobius/core/log.hpp>
 #include <mobius/core/datasource/datasource_vfs.hpp>
-#include <mobius/decoder/inifile.h>
+#include <mobius/core/decoder/inifile.hpp>
 #include <mobius/exception.inc>
 #include <mobius/framework/model/evidence.hpp>
 #include <mobius/io/folder.h>
@@ -271,7 +271,7 @@ evidence_loader_impl::_decode_emuletorrent_ini_file (const mobius::io::file& f)
 
   try
     {
-      mobius::decoder::inifile inifile (f.new_reader ());
+      mobius::core::decoder::inifile inifile (f.new_reader ());
 
       if (!account_.f || (account_.f.is_deleted () && !f.is_deleted ()))
         {

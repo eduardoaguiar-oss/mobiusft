@@ -59,7 +59,7 @@ struct autofill
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct remote_source
 {
-  mobius::datetime::datetime timestamp;
+  mobius::core::datetime::datetime timestamp;
   std::string ip;
   std::uint16_t port;
 };
@@ -71,7 +71,7 @@ struct torrent_file
 {
     std::uint64_t idx;
     std::uint64_t size;
-    mobius::datetime::datetime last_modification_time;
+    mobius::core::datetime::datetime last_modification_time;
     std::string name;
     std::string path;
 };
@@ -97,9 +97,9 @@ struct file
   mobius::framework::evidence_flag flag_corrupted;
 
   // transfer info
-  mobius::datetime::datetime download_started_time;
-  mobius::datetime::datetime download_completed_time;
-  mobius::datetime::datetime upload_started_time;
+  mobius::core::datetime::datetime download_started_time;
+  mobius::core::datetime::datetime download_completed_time;
+  mobius::core::datetime::datetime upload_started_time;
 
   // metadata
   mobius::core::pod::map metadata;

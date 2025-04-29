@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/decoder/sgml/parser.h>
+#include <mobius/core/decoder/sgml/parser.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::decoder::sgml::parser *obj;
+  mobius::core::decoder::sgml::parser *obj;
 } decoder_sgml_parser_o;
 
 extern PyTypeObject decoder_sgml_parser_t;
@@ -36,8 +36,8 @@ extern PyTypeObject decoder_sgml_parser_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_decoder_sgml_parser_check (PyObject *);
-PyObject *pymobius_decoder_sgml_parser_to_pyobject (const mobius::decoder::sgml::parser&);
-mobius::decoder::sgml::parser pymobius_decoder_sgml_parser_from_pyobject (PyObject *);
+PyObject *pymobius_decoder_sgml_parser_to_pyobject (const mobius::core::decoder::sgml::parser&);
+mobius::core::decoder::sgml::parser pymobius_decoder_sgml_parser_from_pyobject (PyObject *);
 
 #endif
 

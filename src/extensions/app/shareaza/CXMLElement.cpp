@@ -26,7 +26,7 @@ namespace mobius::extension::app::shareaza
 // @see CXMLElement::Serialize@XML.cpp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CXMLElement::decode (mobius::decoder::mfc& decoder)
+CXMLElement::decode (mobius::core::decoder::mfc& decoder)
 {
   name_ = decoder.get_string ();
   value_ = decoder.get_string ();

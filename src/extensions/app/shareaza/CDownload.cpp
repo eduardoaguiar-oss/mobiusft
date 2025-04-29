@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CDownload.hpp"
 #include <mobius/core/log.hpp>
-#include <mobius/decoder/mfc.h>
+#include <mobius/core/decoder/mfc.hpp>
 
 namespace
 {
@@ -39,7 +39,7 @@ namespace mobius::extension::app::shareaza
 // @see FileFragments/Compatibility.hpp - SerializeIn
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CDownload::decode_CFragmentedFile (mobius::decoder::mfc& decoder, int version)
+CDownload::decode_CFragmentedFile (mobius::core::decoder::mfc& decoder, int version)
 {
   if (version >= 29)
     {
@@ -106,7 +106,7 @@ CDownload::decode_CFragmentedFile (mobius::decoder::mfc& decoder, int version)
 // @see DownloadBase.cpp - CDownloadBase::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CDownload::decode_CDownloadBase (mobius::decoder::mfc& decoder, int version)
+CDownload::decode_CDownloadBase (mobius::core::decoder::mfc& decoder, int version)
 {
   name_ = decoder.get_string ();
 
@@ -148,7 +148,7 @@ CDownload::decode_CDownloadBase (mobius::decoder::mfc& decoder, int version)
 // @see DownloadWithSources.cpp - CDownloadWithSources::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CDownload::decode_CDownloadWithSources (mobius::decoder::mfc& decoder, int version)
+CDownload::decode_CDownloadWithSources (mobius::core::decoder::mfc& decoder, int version)
 {
   decode_CDownloadBase (decoder, version);
 
@@ -168,7 +168,7 @@ CDownload::decode_CDownloadWithSources (mobius::decoder::mfc& decoder, int versi
 // @see DownloadWithFile.cpp - CDownloadWithFile::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CDownload::decode_CDownloadWithFile (mobius::decoder::mfc& decoder, int version)
+CDownload::decode_CDownloadWithFile (mobius::core::decoder::mfc& decoder, int version)
 {
   decode_CDownloadWithSources (decoder, version);
 
@@ -184,7 +184,7 @@ CDownload::decode_CDownloadWithFile (mobius::decoder::mfc& decoder, int version)
 // @see DownloadWithTorrent.cpp - CDownloadWithTorrent::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CDownload::decode_CDownloadWithTorrent (mobius::decoder::mfc& decoder, int version)
+CDownload::decode_CDownloadWithTorrent (mobius::core::decoder::mfc& decoder, int version)
 {
   decode_CDownloadWithFile (decoder, version);
 
@@ -219,7 +219,7 @@ CDownload::decode_CDownloadWithTorrent (mobius::decoder::mfc& decoder, int versi
 //! \todo Full implementation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CDownload::decode_CDownloadWithTiger (mobius::decoder::mfc& decoder, int version)
+CDownload::decode_CDownloadWithTiger (mobius::core::decoder::mfc& decoder, int version)
 {
   decode_CDownloadWithTorrent (decoder, version);
 
@@ -256,7 +256,7 @@ CDownload::decode_CDownloadWithTiger (mobius::decoder::mfc& decoder, int version
 //! \todo Full implementation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CDownload::decode_CDownloadWithExtras (mobius::decoder::mfc& decoder, int version)
+CDownload::decode_CDownloadWithExtras (mobius::core::decoder::mfc& decoder, int version)
 {
   decode_CDownloadWithTiger (decoder, version);
 
@@ -293,7 +293,7 @@ CDownload::decode_CDownloadWithExtras (mobius::decoder::mfc& decoder, int versio
 CDownload::CDownload (const mobius::io::reader& reader)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
-  mobius::decoder::mfc decoder (reader);
+  mobius::core::decoder::mfc decoder (reader);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Check file signature

@@ -23,7 +23,7 @@
 #include <Python.h>
 #include <pymobius.hpp>
 #include <pygil.hpp>
-#include <mobius/decoder/base64.h>
+#include <mobius/core/decoder/base64.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief base64 function
@@ -53,7 +53,7 @@ decoder_func_base64 (PyObject *, PyObject *args)
   try
     {
       auto data = mobius::py::GIL () (
-                       mobius::decoder::base64 (arg_s)
+                       mobius::core::decoder::base64 (arg_s)
                   );
 
       ret = mobius::py::pybytes_from_bytearray (data);

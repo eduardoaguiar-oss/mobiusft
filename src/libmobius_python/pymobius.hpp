@@ -22,7 +22,7 @@
 
 #include <Python.h>
 #include <mobius/bytearray.h>
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/exception.inc>
 #include <cstdint>
 #include <string>
@@ -38,7 +38,7 @@ std::uint32_t get_arg_size (PyObject *) noexcept;
 PyObject *get_arg (PyObject *, std::uint32_t);
 std::string get_arg_as_std_string (PyObject *, std::uint32_t);
 mobius::bytearray get_arg_as_bytearray (PyObject *, std::uint32_t);
-mobius::datetime::datetime get_arg_as_datetime (PyObject *, std::uint32_t);
+mobius::core::datetime::datetime get_arg_as_datetime (PyObject *, std::uint32_t);
 bool get_arg_as_bool (PyObject *, std::uint32_t);
 char get_arg_as_char (PyObject *, std::uint32_t);
 int get_arg_as_int (PyObject *, std::uint32_t);
@@ -54,7 +54,7 @@ std::uint64_t get_arg_as_uint64_t (PyObject *, std::uint32_t);
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string get_arg_as_std_string (PyObject *, std::uint32_t, const std::string&);
 mobius::bytearray get_arg_as_bytearray (PyObject *, std::uint32_t, const mobius::bytearray&);
-mobius::datetime::datetime get_arg_as_datetime (PyObject *, std::uint32_t, const mobius::datetime::datetime&);
+mobius::core::datetime::datetime get_arg_as_datetime (PyObject *, std::uint32_t, const mobius::core::datetime::datetime&);
 bool get_arg_as_bool (PyObject *, std::uint32_t, bool);
 char get_arg_as_char (PyObject *, std::uint32_t, char);
 int get_arg_as_int (PyObject *, std::uint32_t, int);
@@ -151,8 +151,8 @@ PyObject *pybytes_from_char (char);
 mobius::bytearray pybytes_as_bytearray (PyObject *);
 
 bool pydatetime_check (PyObject *);
-PyObject *pydatetime_from_datetime (const mobius::datetime::datetime&);
-mobius::datetime::datetime pydatetime_as_datetime (PyObject *);
+PyObject *pydatetime_from_datetime (const mobius::core::datetime::datetime&);
+mobius::core::datetime::datetime pydatetime_as_datetime (PyObject *);
 
 bool pybool_check (PyObject *);
 PyObject *pybool_from_bool (bool);

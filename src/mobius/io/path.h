@@ -1,5 +1,5 @@
-#ifndef MOBIUS_IO_PATH_H
-#define MOBIUS_IO_PATH_H
+#ifndef MOBIUS_CORE_IO_PATH_HPP
+#define MOBIUS_CORE_IO_PATH_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

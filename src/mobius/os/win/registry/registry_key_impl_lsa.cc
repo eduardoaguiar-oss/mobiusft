@@ -19,7 +19,7 @@
 #include "registry_data_impl_lsa_polseckey.h"
 #include "registry_data_impl_lsa_poleklist.h"
 #include "registry_value.h"
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 
 namespace mobius::os::win::registry
 {
@@ -50,7 +50,7 @@ get_lsa_key (const mobius::bytearray& lsa_key_stream, const mobius::bytearray& d
   auto data_key_guid = data.slice (4, 19);
 
   // decoder LSA key header
-  mobius::decoder::data_decoder decoder (lsa_key_stream);
+  mobius::core::decoder::data_decoder decoder (lsa_key_stream);
   decoder.skip (24);
   std::uint32_t key_count = decoder.get_uint32_le ();
 

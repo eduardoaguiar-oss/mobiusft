@@ -25,7 +25,7 @@ namespace mobius::extension::app::shareaza
 // @see MatchObjects.cpp - CMatchFile::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CMatchFile::decode (mobius::decoder::mfc& decoder, int version)
+CMatchFile::decode (mobius::core::decoder::mfc& decoder, int version)
 {
   if (version >= 10)
     size_ = decoder.get_qword ();

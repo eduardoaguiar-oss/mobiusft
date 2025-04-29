@@ -18,7 +18,7 @@
 #include "decoder_impl_shareh.hpp"
 #include "file_shareh.hpp"
 #include "common.hpp"
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 
 namespace mobius::extension::app::ares
 {

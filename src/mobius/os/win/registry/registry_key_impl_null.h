@@ -1,5 +1,5 @@
-#ifndef MOBIUS_REGISTRY_REGISTRY_KEY_IMPL_NULL_H
-#define MOBIUS_REGISTRY_REGISTRY_KEY_IMPL_NULL_H
+#ifndef MOBIUS_CORE_REGISTRY_REGISTRY_KEY_IMPL_NULL_HPP
+#define MOBIUS_CORE_REGISTRY_REGISTRY_KEY_IMPL_NULL_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -112,7 +112,7 @@ public:
   // @brief get last modification time
   // @return last modification time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_last_modification_time () const override
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid registry_key"));

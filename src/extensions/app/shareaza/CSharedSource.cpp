@@ -26,7 +26,7 @@ namespace mobius::extension::app::shareaza
 // @param version Structure version
 // @see SharedFile.cpp - CSharedSource::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-CSharedSource::CSharedSource (mobius::decoder::mfc& decoder, int version)
+CSharedSource::CSharedSource (mobius::core::decoder::mfc& decoder, int version)
 {
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Decode data

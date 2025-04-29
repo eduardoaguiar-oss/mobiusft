@@ -20,12 +20,12 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <mobius/bytearray.h>
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 
 PyObject *PyBytes_from_bytearray (const mobius::bytearray&);
 
-PyObject *PyDateTime_from_datetime (const mobius::datetime::datetime&);
-mobius::datetime::datetime PyDateTime_as_datetime (PyObject *);
+PyObject *PyDateTime_from_datetime (const mobius::core::datetime::datetime&);
+mobius::core::datetime::datetime PyDateTime_as_datetime (PyObject *);
 bool check_PyDateTime (PyObject *);
 
 #endif

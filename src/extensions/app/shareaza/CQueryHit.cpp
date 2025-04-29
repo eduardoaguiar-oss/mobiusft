@@ -25,7 +25,7 @@ namespace mobius::extension::app::shareaza
 // @see QueryHit.cpp - QueryHit::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CQueryHit::decode (mobius::decoder::mfc& decoder, int version)
+CQueryHit::decode (mobius::core::decoder::mfc& decoder, int version)
 {
   search_id_ = decoder.get_guid ();
 

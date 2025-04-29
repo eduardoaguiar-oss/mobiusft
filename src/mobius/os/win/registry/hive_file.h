@@ -1,5 +1,5 @@
-#ifndef MOBIUS_OS_WIN_REGISTRY_HIVE_FILE_H
-#define MOBIUS_OS_WIN_REGISTRY_HIVE_FILE_H
+#ifndef MOBIUS_CORE_OS_WIN_REGISTRY_HIVE_FILE_HPP
+#define MOBIUS_CORE_OS_WIN_REGISTRY_HIVE_FILE_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/os/win/registry/hive_key.h>
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/io/reader.h>
 #include <mobius/core/metadata.hpp>
 #include <cstdint>
@@ -52,7 +52,7 @@ public:
   std::string get_signature () const;
   std::uint32_t get_sequence_1 () const;
   std::uint32_t get_sequence_2 () const;
-  mobius::datetime::datetime get_last_modification_time () const;
+  mobius::core::datetime::datetime get_last_modification_time () const;
   std::uint32_t get_major_version () const;
   std::uint32_t get_minor_version () const;
   std::uint32_t get_file_type () const;
@@ -66,7 +66,7 @@ public:
   std::uint32_t get_flags () const;
   std::string get_tm_guid () const;
   std::string get_guid_signature () const;
-  mobius::datetime::datetime get_last_reorganization_time () const;
+  mobius::core::datetime::datetime get_last_reorganization_time () const;
   hive_key get_root_key () const;
   mobius::core::metadata get_metadata () const;
 

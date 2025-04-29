@@ -68,7 +68,7 @@ _serialize_data (mobius::core::encoder::data_encoder& encoder, const data& data)
 
     case data::type::datetime:
       {
-        auto text = to_string (mobius::datetime::datetime (data));
+        auto text = to_string (mobius::core::datetime::datetime (data));
         encoder.encode_uint8 ('D');
         encoder.encode_uint16_le (text.size ());
         encoder.encode_string_by_size (text, text.size ());

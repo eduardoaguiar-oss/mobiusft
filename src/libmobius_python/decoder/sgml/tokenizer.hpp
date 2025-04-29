@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/decoder/sgml/tokenizer.h>
+#include <mobius/core/decoder/sgml/tokenizer.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::decoder::sgml::tokenizer *obj;
+  mobius::core::decoder::sgml::tokenizer *obj;
 } decoder_sgml_tokenizer_o;
 
 extern PyTypeObject decoder_sgml_tokenizer_t;
@@ -36,8 +36,8 @@ extern PyTypeObject decoder_sgml_tokenizer_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_decoder_sgml_tokenizer_check (PyObject *);
-PyObject *pymobius_decoder_sgml_tokenizer_to_pyobject (const mobius::decoder::sgml::tokenizer&);
-mobius::decoder::sgml::tokenizer pymobius_decoder_sgml_tokenizer_from_pyobject (PyObject *);
+PyObject *pymobius_decoder_sgml_tokenizer_to_pyobject (const mobius::core::decoder::sgml::tokenizer&);
+mobius::core::decoder::sgml::tokenizer pymobius_decoder_sgml_tokenizer_from_pyobject (PyObject *);
 
 #endif
 

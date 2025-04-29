@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "registry_data_impl_lsa_polseckey.h"
 #include <mobius/core/crypt/cipher.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 
 namespace mobius::os::win::registry
 {
@@ -80,7 +80,7 @@ registry_data_impl_lsa_polseckey::_load_data () const
       auto data = decrypt_sysfcn5 (lsa_key_, encrypted_data_);
 
       // decode plaintext
-      auto decoder = mobius::decoder::data_decoder (data);
+      auto decoder = mobius::core::decoder::data_decoder (data);
       auto size = decoder.get_uint32_le ();
       decoder.skip (4);
       data_ = decoder.get_bytearray_by_size (size);

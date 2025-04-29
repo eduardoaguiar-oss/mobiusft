@@ -1,5 +1,5 @@
-#ifndef MOBIUS_OS_WIN_HASH_NT_H
-#define MOBIUS_OS_WIN_HASH_NT_H
+#ifndef MOBIUS_CORE_OS_WIN_HASH_NT_HPP
+#define MOBIUS_CORE_OS_WIN_HASH_NT_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

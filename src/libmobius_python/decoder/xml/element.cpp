@@ -525,7 +525,7 @@ pymobius_decoder_xml_element_check (PyObject *value)
 // @return New element object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_decoder_xml_element_to_pyobject (const mobius::decoder::xml::element& obj)
+pymobius_decoder_xml_element_to_pyobject (const mobius::core::decoder::xml::element& obj)
 {
   return mobius::py::to_pyobject_nullable <decoder_xml_element_o> (obj, &decoder_xml_element_t);
 }
@@ -535,7 +535,7 @@ pymobius_decoder_xml_element_to_pyobject (const mobius::decoder::xml::element& o
 // @param value Python value
 // @return Element object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::decoder::xml::element
+mobius::core::decoder::xml::element
 pymobius_decoder_xml_element_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <decoder_xml_element_o> (value, &decoder_xml_element_t);

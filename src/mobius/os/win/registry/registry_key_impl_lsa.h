@@ -1,5 +1,5 @@
-#ifndef MOBIUS_REGISTRY_REGISTRY_KEY_IMPL_LSA_H
-#define MOBIUS_REGISTRY_REGISTRY_KEY_IMPL_LSA_H
+#ifndef MOBIUS_CORE_REGISTRY_REGISTRY_KEY_IMPL_LSA_HPP
+#define MOBIUS_CORE_REGISTRY_REGISTRY_KEY_IMPL_LSA_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -92,7 +92,7 @@ public:
   // @brief get last modification time
   // @return last modification time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_last_modification_time () const override
   {
     return key_.get_last_modification_time ();

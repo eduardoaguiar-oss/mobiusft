@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "ifile.h"
 #include <mobius/core/log.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 
 namespace mobius::os::win::trashbin
 {
@@ -65,7 +65,7 @@ public:
   // @brief Get deletion time
   // @return Deletion time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_deletion_time () const
   {
     return deletion_time_;
@@ -89,7 +89,7 @@ private:
   std::uint64_t size_;
 
   // @brief File deletion date/time
-  mobius::datetime::datetime deletion_time_;
+  mobius::core::datetime::datetime deletion_time_;
 
   // @brief File path
   std::string path_;
@@ -103,7 +103,7 @@ private:
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ifile::impl::impl (const mobius::io::reader& reader)
 {
-  mobius::decoder::data_decoder decoder (reader);
+  mobius::core::decoder::data_decoder decoder (reader);
 
   version_ = decoder.get_uint64_le ();
   size_ = decoder.get_uint64_le ();
@@ -161,7 +161,7 @@ ifile::get_size () const
 // @brief Get deletion time
 // @return Deletion time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 ifile::get_deletion_time () const
 {
   return impl_->get_deletion_time ();

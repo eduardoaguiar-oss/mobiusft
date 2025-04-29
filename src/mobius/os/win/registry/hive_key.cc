@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "hive_key.h"
 #include "hive_decoder.h"
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/string_functions.h>
 
 namespace mobius::os::win::registry
@@ -37,7 +37,7 @@ static constexpr std::uint32_t HIVE_BASE_OFFSET = 4096;
 // @return absolute offset
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::uint32_t
-decode_offset (mobius::decoder::data_decoder& decoder)
+decode_offset (mobius::core::decoder::data_decoder& decoder)
 {
   auto offset = decoder.get_uint32_le ();
 
@@ -137,7 +137,7 @@ public:
   // @brief get last modification time
   // @return last modification time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_last_modification_time () const
   {
     _load_metadata ();
@@ -332,7 +332,7 @@ private:
   mutable std::uint16_t flags_ = 0;
 
   // @brief last written timestamp
-  mutable mobius::datetime::datetime last_modification_time_;
+  mutable mobius::core::datetime::datetime last_modification_time_;
 
   // @brief access bits (bit mask)
   mutable std::uint32_t access_bits_ = 0;
@@ -417,7 +417,7 @@ hive_key::impl::_load_metadata () const
     return;
 
   // create decoder
-  mobius::decoder::data_decoder decoder (reader_);
+  mobius::core::decoder::data_decoder decoder (reader_);
   decoder.seek (offset_);
 
   // get cell size
@@ -621,7 +621,7 @@ hive_key::get_flags () const
 // @brief get last modification time
 // @return last modification time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 hive_key::get_last_modification_time () const
 {
   return impl_->get_last_modification_time ();

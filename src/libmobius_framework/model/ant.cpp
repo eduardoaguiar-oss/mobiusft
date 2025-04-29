@@ -81,7 +81,7 @@ public:
   // @brief Get last execution time
   // @return Last execution time
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::datetime::datetime
+  mobius::core::datetime::datetime
   get_last_execution_time () const
   {
     _load_data ();
@@ -105,7 +105,7 @@ private:
   mutable std::string version_;
 
   // @brief Last execution date/time
-  mutable mobius::datetime::datetime last_execution_time_;
+  mutable mobius::core::datetime::datetime last_execution_time_;
 
   // @brief data loaded flag
   mutable bool data_loaded_ = false;
@@ -212,7 +212,7 @@ ant::get_version () const
 // @brief Get last execution time
 // @return Last execution time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 ant::get_last_execution_time () const
 {
   return impl_->get_last_execution_time ();

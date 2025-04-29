@@ -132,10 +132,10 @@ pydatetime_check (PyObject *obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create PyDateTime from mobius::datetime::datetime
+// @brief Create PyDateTime from mobius::core::datetime::datetime
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pydatetime_from_datetime (const mobius::datetime::datetime& dt)
+pydatetime_from_datetime (const mobius::core::datetime::datetime& dt)
 {
   PyObject *ret = nullptr;
 
@@ -160,15 +160,15 @@ pydatetime_from_datetime (const mobius::datetime::datetime& dt)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create mobius::datetime::datetime from PyDateTime
+// @brief Create mobius::core::datetime::datetime from PyDateTime
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 pydatetime_as_datetime (PyObject *obj)
 {
-  mobius::datetime::datetime dt;
+  mobius::core::datetime::datetime dt;
 
   if (!mobius::py::pynone_check (obj))
-    dt = mobius::datetime::datetime (
+    dt = mobius::core::datetime::datetime (
            PyDateTime_GET_YEAR (obj),
            PyDateTime_GET_MONTH (obj),
            PyDateTime_GET_DAY (obj),

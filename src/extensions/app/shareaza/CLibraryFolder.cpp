@@ -40,7 +40,7 @@ namespace mobius::extension::app::shareaza
 // @see SharedFolder.cpp - CLibraryFolder::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 CLibraryFolder::CLibraryFolder (
-  mobius::decoder::mfc& decoder,
+  mobius::core::decoder::mfc& decoder,
   int version,
   const CLibraryFolder& parent
 )

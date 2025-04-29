@@ -1,5 +1,5 @@
-#ifndef MOBIUS_IO_WRITER_IMPL_BYTEARRAY_H
-#define MOBIUS_IO_WRITER_IMPL_BYTEARRAY_H
+#ifndef MOBIUS_CORE_IO_WRITER_IMPL_BYTEARRAY_HPP
+#define MOBIUS_CORE_IO_WRITER_IMPL_BYTEARRAY_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

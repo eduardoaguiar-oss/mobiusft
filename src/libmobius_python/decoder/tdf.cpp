@@ -43,12 +43,12 @@ pymobius_decoder_tdf_check (PyObject *value)
 // @return New tdf object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_decoder_tdf_to_pyobject (const mobius::decoder::tdf& obj)
+pymobius_decoder_tdf_to_pyobject (const mobius::core::decoder::tdf& obj)
 {
   PyObject *ret = _PyObject_New (&decoder_tdf_t);
 
   if (ret)
-    ((decoder_tdf_o *) ret)->obj = new mobius::decoder::tdf (obj);
+    ((decoder_tdf_o *) ret)->obj = new mobius::core::decoder::tdf (obj);
 
   return ret;
 }
@@ -58,7 +58,7 @@ pymobius_decoder_tdf_to_pyobject (const mobius::decoder::tdf& obj)
 // @param value Python value
 // @return Tdf object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::decoder::tdf
+mobius::core::decoder::tdf
 pymobius_decoder_tdf_from_pyobject (PyObject *value)
 {
   if (!pymobius_decoder_tdf_check (value))
@@ -350,7 +350,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::decoder::tdf (arg_reader);
+          ret->obj = new mobius::core::decoder::tdf (arg_reader);
         }
       catch (const std::exception& e)
         {

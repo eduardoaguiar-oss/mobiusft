@@ -1,5 +1,5 @@
-#ifndef MOBIUS_IO_LINE_READER_H
-#define MOBIUS_IO_LINE_READER_H
+#ifndef MOBIUS_CORE_IO_LINE_READER_HPP
+#define MOBIUS_CORE_IO_LINE_READER_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

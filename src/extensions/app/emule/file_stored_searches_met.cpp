@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file_stored_searches_met.hpp"
 #include <mobius/core/log.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/string_functions.h>
 #include <unordered_map>
 
@@ -36,7 +36,7 @@ constexpr std::uint8_t MET_LAST_VERSION = 1;
 // @return String
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
-read_string (mobius::decoder::data_decoder& decoder)
+read_string (mobius::core::decoder::data_decoder& decoder)
 {
     std::string s;
 
@@ -65,7 +65,7 @@ file_stored_searches_met::file_stored_searches_met (const mobius::io::reader& re
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Decode header
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto decoder = mobius::decoder::data_decoder (reader);
+    auto decoder = mobius::core::decoder::data_decoder (reader);
     auto header = decoder.get_uint8 ();
 
     if (header != MET_HEADER_I64TAGS)
@@ -97,7 +97,7 @@ file_stored_searches_met::file_stored_searches_met (const mobius::io::reader& re
 // @return New search struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_stored_searches_met::search
-file_stored_searches_met::_decode_ssearch_params (mobius::decoder::data_decoder& decoder)
+file_stored_searches_met::_decode_ssearch_params (mobius::core::decoder::data_decoder& decoder)
 {
     search s;
 
@@ -125,7 +125,7 @@ file_stored_searches_met::_decode_ssearch_params (mobius::decoder::data_decoder&
 // @return New CSearchFile structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_stored_searches_met::CSearchFile
-file_stored_searches_met::_decode_csearch_file (mobius::decoder::data_decoder& decoder)
+file_stored_searches_met::_decode_csearch_file (mobius::core::decoder::data_decoder& decoder)
 {
     CSearchFile f;
 

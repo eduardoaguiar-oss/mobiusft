@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "common.hpp"
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <vector>
 
 namespace mobius::extension::app::ares
@@ -78,7 +78,7 @@ std::vector <std::pair <std::string, std::uint16_t>>
 decode_old_alt_sources (const mobius::bytearray& data)
 {
   std::vector <std::pair <std::string, std::uint16_t>> sources;
-  auto decoder = mobius::decoder::data_decoder (data);
+  auto decoder = mobius::core::decoder::data_decoder (data);
 
   while (decoder)
     {
@@ -101,7 +101,7 @@ std::vector <std::pair <std::string, std::uint16_t>>
 decode_alt_sources (const mobius::bytearray& data)
 {
   std::vector <std::pair <std::string, std::uint16_t>> sources;
-  auto decoder = mobius::decoder::data_decoder (data);
+  auto decoder = mobius::core::decoder::data_decoder (data);
 
   while (decoder)
     {
@@ -128,7 +128,7 @@ decode_metadata (const mobius::bytearray& data)
 {
   std::map <int, mobius::bytearray> metadata;
 
-  auto decoder = mobius::decoder::data_decoder (data);
+  auto decoder = mobius::core::decoder::data_decoder (data);
 
   while (decoder)
     {

@@ -1,5 +1,5 @@
-#ifndef MOBIUS_IO_LOCAL_NEW_ENTRY_BY_PATH_H
-#define MOBIUS_IO_LOCAL_NEW_ENTRY_BY_PATH_H
+#ifndef MOBIUS_CORE_IO_LOCAL_NEW_ENTRY_BY_PATH_HPP
+#define MOBIUS_CORE_IO_LOCAL_NEW_ENTRY_BY_PATH_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

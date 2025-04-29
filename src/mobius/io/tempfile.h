@@ -1,5 +1,5 @@
-#ifndef MOBIUS_IO_TEMPFILE_H
-#define MOBIUS_IO_TEMPFILE_H
+#ifndef MOBIUS_CORE_IO_TEMPFILE_HPP
+#define MOBIUS_CORE_IO_TEMPFILE_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/decoder/tdf.h>
+#include <mobius/core/decoder/tdf.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::decoder::tdf *obj;
+  mobius::core::decoder::tdf *obj;
 } decoder_tdf_o;
 
 extern PyTypeObject decoder_tdf_t;
@@ -36,8 +36,8 @@ extern PyTypeObject decoder_tdf_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_decoder_tdf_check (PyObject *);
-PyObject *pymobius_decoder_tdf_to_pyobject (const mobius::decoder::tdf&);
-mobius::decoder::tdf pymobius_decoder_tdf_from_pyobject (PyObject *);
+PyObject *pymobius_decoder_tdf_to_pyobject (const mobius::core::decoder::tdf&);
+mobius::core::decoder::tdf pymobius_decoder_tdf_from_pyobject (PyObject *);
 
 #endif
 

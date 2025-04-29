@@ -19,8 +19,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/file_decoder/section.hpp>
-#include <mobius/decoder/data_decoder.h>
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/decoder/data_decoder.hpp>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/io/reader.h>
 #include <string>
 #include <vector>
@@ -169,8 +169,8 @@ private:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Helper functions
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  entry _decode_entry (mobius::decoder::data_decoder&);
-  std::vector <piece> _decode_pieces (mobius::decoder::data_decoder&, std::uint32_t);
+  entry _decode_entry (mobius::core::decoder::data_decoder&);
+  std::vector <piece> _decode_pieces (mobius::core::decoder::data_decoder&, std::uint32_t);
 };
 
 } // namespace mobius::extension::app::ares

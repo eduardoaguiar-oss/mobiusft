@@ -24,8 +24,8 @@
 #include <mobius/core/log.hpp>
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/pod/data.hpp>
-#include <mobius/decoder/data_decoder.h>
-#include <mobius/decoder/inifile.h>
+#include <mobius/core/decoder/data_decoder.hpp>
+#include <mobius/core/decoder/inifile.hpp>
 #include <mobius/framework/model/evidence.hpp>
 #include <mobius/io/line_reader.h>
 #include <mobius/io/walker.h>
@@ -392,7 +392,7 @@ evidence_loader_impl::_decode_preferences_dat_file (const mobius::io::file& f)
             return;
 
           // Decode file
-          mobius::decoder::data_decoder decoder (reader);
+          mobius::core::decoder::data_decoder decoder (reader);
 
           account_.is_deleted = f.is_deleted ();
           account_.preferences_dat_version = decoder.get_uint8 ();
@@ -428,7 +428,7 @@ evidence_loader_impl::_decode_preferences_ini_file (const mobius::io::file& f)
             return;
 
           // Decode file
-          mobius::decoder::inifile ini (reader);
+          mobius::core::decoder::inifile ini (reader);
 
           account_.incoming_dir = ini.get_value ("emule", "incomingdir");
           account_.temp_dir = ini.get_value ("emule", "tempdir");
@@ -469,7 +469,7 @@ evidence_loader_impl::_decode_statistics_ini_file (const mobius::io::file& f)
             return;
 
           // Decode file
-          mobius::decoder::inifile ini (reader);
+          mobius::core::decoder::inifile ini (reader);
 
           if (ini.has_value ("statistics", "TotalDownloadedBytes"))
             account_.total_downloaded_bytes = std::stol (ini.get_value ("statistics", "TotalDownloadedBytes"));
@@ -510,7 +510,7 @@ evidence_loader_impl::_decode_preferenceskad_dat_file (const mobius::io::file& f
             return;
 
           // Decode file
-          mobius::decoder::data_decoder decoder (reader);
+          mobius::core::decoder::data_decoder decoder (reader);
 
           account_.preferenceskad_dat_f = f;
           account_.kamdelia_ip = decoder.get_ipv4_le ();

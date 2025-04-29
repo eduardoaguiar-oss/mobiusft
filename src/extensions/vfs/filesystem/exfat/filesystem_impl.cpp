@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "filesystem_impl.hpp"
 #include <mobius/core/log.hpp>
-#include <mobius/decoder/data_decoder.h>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/string_functions.h>
 
 namespace
@@ -142,7 +142,7 @@ filesystem_impl::_load_data () const
 
   // decode data - EXFAT (section 3.1)
   reader.seek (boot_offset);
-  mobius::decoder::data_decoder decoder (reader);
+  mobius::core::decoder::data_decoder decoder (reader);
 
   decoder.skip (64);
   auto partition_offset = decoder.get_uint64_le ();

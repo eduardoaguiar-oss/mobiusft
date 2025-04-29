@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/mediator.hpp>
-#include <mobius/datetime/datetime.h>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/exception.inc>
 #include <mobius/framework/category.hpp>
 #include <mobius/framework/model/item.hpp>
@@ -779,7 +779,7 @@ item::impl::add_event (const std::string& text)
                     "VALUES (NULL, ?, ?, ?)");
 
   stmt.bind (1, uid_);
-  stmt.bind (2, mobius::datetime::now ());
+  stmt.bind (2, mobius::core::datetime::now ());
   stmt.bind (3, text);
 
   stmt.execute ();

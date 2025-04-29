@@ -1,5 +1,5 @@
-#ifndef MOBIUS_IO_LOCAL_GET_CURRENT_FOLDER_H
-#define MOBIUS_IO_LOCAL_GET_CURRENT_FOLDER_H
+#ifndef MOBIUS_CORE_IO_LOCAL_GET_CURRENT_FOLDER_HPP
+#define MOBIUS_CORE_IO_LOCAL_GET_CURRENT_FOLDER_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

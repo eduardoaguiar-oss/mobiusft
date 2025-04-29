@@ -50,7 +50,7 @@ func_new_datetime_from_fat_time (PyObject *, PyObject *args)
   try
     {
       ret = mobius::py::pydatetime_from_datetime (
-              mobius::datetime::new_datetime_from_fat_time (arg_d, arg_t)
+              mobius::core::datetime::new_datetime_from_fat_time (arg_d, arg_t)
             );
     }
   catch (const std::exception& e)

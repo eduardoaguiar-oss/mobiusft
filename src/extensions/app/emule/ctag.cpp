@@ -125,7 +125,7 @@ _get_tag_uint32_value (std::uint8_t id, std::uint32_t value)
         case 0x21: [[fallthrough]]
         case 0x34: [[fallthrough]]
         case 0x92:
-            return mobius::datetime::new_datetime_from_unix_timestamp (value);
+            return mobius::core::datetime::new_datetime_from_unix_timestamp (value);
             break;
             
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -164,7 +164,7 @@ namespace mobius::extension::app::emule
 // @see CTag::CTag (srchybrid/packets.cpp)
 // @see ConvertED2KTag (srchybrid/SearchFile.cpp)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-ctag::ctag (mobius::decoder::data_decoder& decoder)
+ctag::ctag (mobius::core::decoder::data_decoder& decoder)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 

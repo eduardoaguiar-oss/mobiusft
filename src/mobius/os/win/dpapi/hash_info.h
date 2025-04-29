@@ -1,5 +1,5 @@
-#ifndef MOBIUS_OS_WIN_DPAPI_HASH_INFO_H
-#define MOBIUS_OS_WIN_DPAPI_HASH_INFO_H
+#ifndef MOBIUS_CORE_OS_WIN_DPAPI_HASH_INFO_HPP
+#define MOBIUS_CORE_OS_WIN_DPAPI_HASH_INFO_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit

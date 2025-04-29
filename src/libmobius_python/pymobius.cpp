@@ -113,7 +113,7 @@ get_arg_as_bytearray (PyObject *args, std::uint32_t idx, const mobius::bytearray
 // @param idx Argument index
 // @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 get_arg_as_datetime (PyObject *args, std::uint32_t idx)
 {
   PyObject *arg = get_arg (args, idx);
@@ -131,11 +131,11 @@ get_arg_as_datetime (PyObject *args, std::uint32_t idx)
 // @param value Default value
 // @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::datetime::datetime
+mobius::core::datetime::datetime
 get_arg_as_datetime (
   PyObject *args,
   std::uint32_t idx,
-  const mobius::datetime::datetime& value)
+  const mobius::core::datetime::datetime& value)
 {
   if (idx < get_arg_size (args))
     return get_arg_as_datetime (args, idx);

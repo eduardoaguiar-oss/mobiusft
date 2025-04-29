@@ -53,7 +53,7 @@ func_new_datetime_from_unix_timestamp (PyObject *, PyObject *args)
   try
     {
       ret = mobius::py::pydatetime_from_datetime (
-              mobius::datetime::new_datetime_from_unix_timestamp (
+              mobius::core::datetime::new_datetime_from_unix_timestamp (
                 std::min (arg_timestamp, MAX_PYTHON_TIMESTAMP)
               )
             );

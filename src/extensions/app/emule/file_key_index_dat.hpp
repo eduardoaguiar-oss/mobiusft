@@ -40,7 +40,7 @@ public:
     struct ip
     {
         std::string value;
-        mobius::datetime::datetime last_published;
+        mobius::core::datetime::datetime last_published;
         std::uint16_t aich_hash_idx = 0;
     };
 
@@ -49,7 +49,7 @@ public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct name
     {
-        mobius::datetime::datetime lifetime;
+        mobius::core::datetime::datetime lifetime;
         std::vector <std::pair <std::string, std::uint32_t>> filenames;
         std::vector <ip> ips;
         std::vector <ctag> tags;
@@ -102,7 +102,7 @@ public:
     // @brief Get save time
     // @return Save time
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::datetime::datetime
+    mobius::core::datetime::datetime
     get_save_time () const
     {
         return save_time_;
@@ -136,7 +136,7 @@ private:
     std::uint8_t version_ = 0;
 
     // @brief Save time
-    mobius::datetime::datetime save_time_;
+    mobius::core::datetime::datetime save_time_;
 
     // @brief Client ID
     std::string client_id_;
