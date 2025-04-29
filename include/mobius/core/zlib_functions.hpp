@@ -1,5 +1,5 @@
-#ifndef MOBIUS_ZLIB_FUNCTIONS_H
-#define MOBIUS_ZLIB_FUNCTIONS_H
+#ifndef MOBIUS_CORE_ZLIB_FUNCTIONS_HPP
+#define MOBIUS_CORE_ZLIB_FUNCTIONS_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -20,11 +20,11 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/bytearray.h>
 
-namespace mobius
+namespace mobius::core
 {
 mobius::bytearray zlib_compress (const mobius::bytearray&, int = -1);
 mobius::bytearray zlib_decompress (const mobius::bytearray&);
-} // namespace mobius
+} // namespace mobius::core
 
 #endif
 

@@ -139,117 +139,6 @@ AC_SUBST([LIBXML2_CXXFLAGS])
 AC_SUBST([LIBXML2_LIBS])
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Checking zlib
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-AC_MSG_CHECKING(for libz)
-
-AC_ARG_WITH(zlib,
-    [AS_HELP_STRING([--with-zlib=DIR],[specify prefix directory for installed zlib package.])],
-    [with_zlib=${withval}],
-    [with_zlib=yes])
-
-if test "x${with_zlib}" = "xno"; then
-  have_zlib=no
-
-elif test "x${with_zlib}" = "xyes"; then
-  have_zlib=yes
-
-else
-  have_zlib=yes
-  ZLIB_CXXFLAGS="-I${with_zlib}/include"
-
-  if test -d ${with_zlib}/lib64; then
-    ZLIB_LDFLAGS="-L${with_zlib}/lib64"
-
-  elif test -d ${with_zlib}/lib; then
-    ZLIB_LDFLAGS="-L${with_zlib}/lib"
-
-  else
-    AC_MSG_WARN([no /lib dir found at directory "${with_zlib}"])
-  fi
-fi
-
-# checks if zlib is really available
-if test "x${have_zlib}" = "xyes"; then
-  OLD_CPPFLAGS=$CPPFLAGS
-  OLD_LDFLAGS=$LDFLAGS
-  CPPFLAGS="$ZLIB_CXXFLAGS $CPPFLAGS"
-  LDFLAGS="$ZLIB_LDFLAGS $LDFLAGS"
-
-  AC_SEARCH_LIBS([inflateEnd], [z], [have_zlib=yes], [have_zlib=no])
-  AC_CHECK_HEADERS([zlib.h], [], [have_zlib=no])
-
-  if test "x${have_zlib}" = "xyes"; then
-    MSG_SUPPORT_ZLIB=yes
-    AC_SUBST([ZLIB_CXXFLAGS])
-    AC_SUBST([ZLIB_LDFLAGS])
-  else
-    MSG_SUPPORT_ZLIB="no (zlib not found. See www.zlib.net)"
-    CPPFLAGS=$OLD_CPPFLAGS
-    LDFLAGS=$OLD_LDFLAGS
-  fi
-else
-  MSG_SUPPORT_ZLIB=no
-fi
-
-AM_CONDITIONAL([HAVE_LIBZ], [test x${have_zlib} = xyes])
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Checking libdl
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-AC_MSG_CHECKING(for libdl)
-
-AC_ARG_WITH(dl,
-    [AS_HELP_STRING([--with-dl=DIR],[specify prefix directory for installed libdl package.])],
-    [with_dl=${withval}],
-    [with_dl=yes])
-
-if test "x${with_dl}" = "xno"; then
-  have_dl=no
-
-elif test "x${with_dl}" = "xyes"; then
-  have_dl=yes
-
-else
-  have_dl=yes
-  DL_CXXFLAGS="-I${with_dl}/include"
-
-  if test -d ${with_dl}/lib64; then
-    DL_LDFLAGS="-L${with_dl}/lib64"
-
-  elif test -d ${with_dl}/lib; then
-    DL_LDFLAGS="-L${with_dl}/lib"
-
-  else
-    AC_MSG_WARN([no /lib dir found at directory "${with_dl}"])
-  fi
-fi
-
-# checks if dl is really available
-if test "x${have_dl}" = "xyes"; then
-  OLD_CPPFLAGS=$CPPFLAGS
-  OLD_LDFLAGS=$LDFLAGS
-  CPPFLAGS="$DL_CXXFLAGS $CPPFLAGS"
-  LDFLAGS="$DL_LDFLAGS $LDFLAGS"
-
-  AC_SEARCH_LIBS([dlopen], [dl], [have_dl=yes], [have_dl=no])
-
-  if test "x${have_dl}" = "xyes"; then
-    MSG_SUPPORT_DL=yes
-    AC_SUBST([DL_CXXFLAGS])
-    AC_SUBST([DL_LDFLAGS])
-  else
-    MSG_SUPPORT_DL="no (libdl not found)"
-    CPPFLAGS=$OLD_CPPFLAGS
-    LDFLAGS=$OLD_LDFLAGS
-  fi
-else
-  MSG_SUPPORT_DL=no
-fi
-
-AM_CONDITIONAL([HAVE_DL], [test x${have_dl} = xyes])
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Checking for libtsk
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 AC_ARG_WITH(libtsk,
@@ -413,17 +302,6 @@ AM_PATH_LIBGCRYPT([1.9.0],,AC_MSG_ERROR([Libgcrypt 1.9.0 or higher is required.]
 MSG_SUPPORT_LIBGCRYPT=yes
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Checking arg --enable-python-api
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-AC_ARG_ENABLE(python_api,
-        [AS_HELP_STRING([--enable-python-api],[build Python binding to the C++ API (default=yes)])],
-        [enable_python_api=${enableval}],
-        [enable_python_api=yes])
-
-MSG_SUPPORT_PYTHON_API=${enable_python_api}
-AM_CONDITIONAL([HAVE_PYTHON_API], [test x${enable_python_api} = xyes])
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Generate files
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 AC_CONFIG_FILES([Makefile
@@ -486,9 +364,7 @@ AC_MSG_NOTICE([
    mobius::crypt................: $MSG_SUPPORT_LIBGCRYPT
    mobius::database.............: $MSG_SUPPORT_SQLITE3
    mobius::filesystem::tsk......: $MSG_SUPPORT_LIBTSK
-   mobius::imagefile::ewf.......: $MSG_SUPPORT_ZLIB
    mobius::io::smb..............: $MSG_SUPPORT_LIBSMBCLIENT
    mobius::system::device.......: $MSG_SUPPORT_LIBUDEV
    mobius::system::dynamic_lib..: $MSG_SUPPORT_DL
-   mobius::zlib functions.......: $MSG_SUPPORT_ZLIB
 ]);

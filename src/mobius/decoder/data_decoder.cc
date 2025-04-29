@@ -21,7 +21,6 @@
 #include <mobius/io/bytearray_io.h>
 #include <mobius/charset.h>
 #include <mobius/exception.inc>
-#include <config.h>
 #include <string>
 #include <cstdio>
 #include <sstream>

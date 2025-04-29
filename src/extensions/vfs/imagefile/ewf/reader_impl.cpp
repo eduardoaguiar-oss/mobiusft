@@ -18,7 +18,7 @@
 #include "reader_impl.hpp"
 #include "imagefile_impl.hpp"
 #include <mobius/exception.inc>
-#include <mobius/zlib_functions.h>
+#include <mobius/core/zlib_functions.hpp>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -156,7 +156,7 @@ reader_impl::_retrieve_current_chunk ()
   stream_.seek (offset);
 
   if (compressed)
-    chunk_data_ = zlib_decompress (stream_.read (chunk_size_ + 4));
+    chunk_data_ = mobius::core::zlib_decompress (stream_.read (chunk_size_ + 4));
 
   else
     chunk_data_ = stream_.read (chunk_size_);

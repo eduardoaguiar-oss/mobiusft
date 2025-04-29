@@ -21,7 +21,7 @@
 #include <mobius/datetime/conv_iso_string.h>
 #include <mobius/core/encoder/data_encoder.hpp>
 #include <mobius/string_functions.h>
-#include <mobius/zlib_functions.h>
+#include <mobius/core/zlib_functions.hpp>
 #include <mobius/charset.h>
 #include <mobius/exception.inc>
 #include <mobius/io/writer_evaluator.h>
@@ -308,14 +308,14 @@ segment_writer::_write_header_section ()
   // write two "header2" sections
   mobius::bytearray header_utf16 = mobius::conv_charset (header_utf8, "utf-8", "utf-16");
 
-  const mobius::bytearray data_header2 = mobius::zlib_compress (header_utf16);
+  const mobius::bytearray data_header2 = mobius::core::zlib_compress (header_utf16);
   _write_section_header ("header2", data_header2.size ());
   _write_section_data (data_header2);
   _write_section_header ("header2", data_header2.size ());
   _write_section_data (data_header2);
 
   // write "header" section
-  const mobius::bytearray data_header = mobius::zlib_compress (header_utf8);
+  const mobius::bytearray data_header = mobius::core::zlib_compress (header_utf8);
   _write_section_header ("header", data_header.size ());
   _write_section_data (data_header);
 }
@@ -475,7 +475,7 @@ segment_writer::_write_chunk_data (mobius::bytearray data)
   if (compression_level_ > 0)
     {
       int level = (compression_level_ == 2) ? 9 : 1;
-      mobius::bytearray compressed_data = zlib_compress (data, level);
+      mobius::bytearray compressed_data = mobius::core::zlib_compress (data, level);
 
       if (compressed_data.size () < data.size ())
         {

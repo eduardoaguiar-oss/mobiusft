@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/zlib_functions.h>
+#include <mobius/core/zlib_functions.hpp>
 #include <mobius/exception.inc>
 #include <stdexcept>
 
@@ -23,9 +23,14 @@
 #include <zlib.h>
 #define MOBIUS_EXCEPTION_ZLIB exception_msg (__FILE__, __func__, __LINE__, zError (ret))
 
+namespace
+{
+
 static constexpr int CHUNK_SIZE = 512 * 1024;
 
-namespace mobius
+} // namespace
+
+namespace mobius::core
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief compress zlib stream
@@ -125,6 +130,4 @@ zlib_decompress (const mobius::bytearray& array)
   return out;
 }
 
-} // namespace mobius
-
-
+} // namespace mobius::core

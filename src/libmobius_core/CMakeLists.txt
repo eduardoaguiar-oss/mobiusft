@@ -35,10 +35,34 @@ set(TOP_SRC_DIR ${CMAKE_SOURCE_DIR}/../..)
 set(TOP_BUILD_DIR ${CMAKE_BINARY_DIR}/../..)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Find dependencies (@todo move to src/CMakeLists.txt)
+# Find dependencies
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # find_package(PkgConfig REQUIRED)
 
+# libz
+find_package(ZLIB QUIET)
+if(ZLIB_FOUND)
+    message(STATUS "zlib found: ${ZLIB_LIBRARIES}")
+else()
+    message(SEND_ERROR "zlib not found. See www.zlib.net")
+endif()
+
+# libdl
+find_package(dl QUIET)
+
+if(TARGET dl::dl)
+    message(STATUS "Using CMake's built-in dl package")
+    set(DL_LIBRARY dl::dl)
+else()
+    find_library(DL_LIBRARY dl)
+    if(DL_LIBRARY)
+        message(STATUS "Found libdl: ${DL_LIBRARY}")
+    else()
+        message(SEND_ERROR "libdl not found")
+    endif()
+endif()
+
+# old mobius library
 find_library(MOBIUS_LIB mobius HINTS ${TOP_SRC_DIR}/src/mobius/.libs NO_DEFAULT_PATH)
 
 if(NOT MOBIUS_LIB)
@@ -76,6 +100,7 @@ add_library(mobius_core SHARED
     resource.cpp
     thread_guard.cpp
     unittest.cpp
+    zlib_functions.cpp
     $<TARGET_OBJECTS:mobius_core_datasource>
     $<TARGET_OBJECTS:mobius_core_encoder>
     $<TARGET_OBJECTS:mobius_core_file_decoder>
@@ -89,7 +114,9 @@ target_include_directories(mobius_core PUBLIC ${MOBIUS_INCLUDE_DIRS} ${TOP_SRC_D
 
 target_link_libraries(mobius_core PUBLIC
     ${MOBIUS_LIBRARIES}
+    ${ZLIB_LIBRARIES}
     ${JNI_LIBRARIES}
+    ${DL_LIBRARY}
 )
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

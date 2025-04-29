@@ -32,11 +32,3 @@ SUBDIRS =							\
 	pod							\
 	system							\
 	vfs
-
-if HAVE_LIBZ
-libmobius_la_SOURCES +=						\
-	zlib_functions.h					\
-	zlib_functions.cc
-libmobius_la_CXXFLAGS += $(ZLIB_CXXFLAGS)
-libmobius_la_LDFLAGS += $(ZLIB_LDFLAGS)
-endif

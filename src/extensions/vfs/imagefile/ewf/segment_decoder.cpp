@@ -21,7 +21,7 @@
 #include <mobius/io/reader_evaluator.h>
 #include <mobius/crypt/hash_functor.h>
 #include <mobius/string_functions.h>
-#include <mobius/zlib_functions.h>
+#include <mobius/core/zlib_functions.hpp>
 #include <mobius/charset.h>
 
 namespace
@@ -172,7 +172,7 @@ segment_decoder::decode_header_section (const section& arg_section) const
 
   // get data from header section
   mobius::bytearray data = decoder.get_bytearray_by_size (section.get_size () - SECTION_HEADER_SIZE);
-  data = zlib_decompress (data);
+  data = mobius::core::zlib_decompress (data);
 
   const std::string text = conv_charset_to_utf8 (data, section.get_name () == "header2" ? "UTF-16" : "ASCII");
 
