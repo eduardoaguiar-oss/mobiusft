@@ -37,16 +37,18 @@ set(TOP_BUILD_DIR ${CMAKE_BINARY_DIR}/../..)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Find dependencies
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-find_library(MOBIUS_CORE_LIB mobius_core
+find_library(LIBMOBIUS_CORE mobius_core
     HINTS ../libmobius_core/build
     NO_DEFAULT_PATH
 )
-if(NOT MOBIUS_CORE_LIB)
+
+if(LIBMOBIUS_CORE)
+    message(STATUS "libmobius_core found: ${LIBMOBIUS_CORE}")
+else()
     message(FATAL_ERROR "libmobius_core not found in ../libmobius_core/build")
 endif()
 
 set(MOBIUS_INCLUDE_DIRS ${TOP_SRC_DIR}/include ${TOP_SRC_DIR}/src)
-set(MOBIUS_LIBRARIES ${MOBIUS_CORE_LIB})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Build sub-libraries
@@ -62,13 +64,15 @@ add_library(mobius_framework SHARED
     config.cpp
     evidence_flag.cpp
     evidence_loader.cpp
-    $<TARGET_OBJECTS:mobius_framework_model>
 )
 
 target_include_directories(mobius_framework PUBLIC ${MOBIUS_INCLUDE_DIRS})
 
 target_link_libraries(mobius_framework PUBLIC
-    ${MOBIUS_LIBRARIES}
+    -Wl,--whole-archive
+    mobius_framework_model
+    -Wl,--no-whole-archive
+    ${LIBMOBIUS_CORE} #mobius_core
 )
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

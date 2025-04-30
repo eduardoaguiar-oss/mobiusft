@@ -21,7 +21,7 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
-#include <mobius/os/win/hash_nt.h>
+#include <mobius/core/os/win/hash_nt.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief hash_nt function
@@ -50,7 +50,7 @@ func_hash_nt (PyObject *, PyObject *args)
 
   try
     {
-      ret = mobius::py::pybytes_from_bytearray (mobius::os::win::hash_nt (arg_password));
+      ret = mobius::py::pybytes_from_bytearray (mobius::core::os::win::hash_nt (arg_password));
     }
   catch (const std::exception& e)
     {

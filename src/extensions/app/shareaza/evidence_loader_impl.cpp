@@ -48,8 +48,8 @@
 #include <mobius/framework/model/evidence.hpp>
 #include <mobius/io/folder.h>
 #include <mobius/io/walker.h>
-#include <mobius/os/win/registry/hive_file.h>
-#include <mobius/os/win/registry/hive_data.h>
+#include <mobius/core/os/win/registry/hive_file.hpp>
+#include <mobius/core/os/win/registry/hive_data.hpp>
 #include <mobius/string_functions.h>
 #include <algorithm>
 #include <stdexcept>
@@ -782,7 +782,7 @@ evidence_loader_impl::_decode_ntuser_dat_file (const mobius::io::file& f)
       // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
       // Create decoder
       // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-      auto decoder = mobius::os::win::registry::hive_file (f.new_reader ());
+      auto decoder = mobius::core::os::win::registry::hive_file (f.new_reader ());
 
       if (!decoder.is_instance ())
         {

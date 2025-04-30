@@ -80,8 +80,8 @@
 #include <mobius/framework/model/evidence.hpp>
 #include <mobius/io/folder.h>
 #include <mobius/io/path.h>
-#include <mobius/os/win/registry/hive_file.h>
-#include <mobius/os/win/registry/hive_data.h>
+#include <mobius/core/os/win/registry/hive_file.hpp>
+#include <mobius/core/os/win/registry/hive_data.hpp>
 #include <mobius/string_functions.h>
 #include <algorithm>
 #include <stdexcept>
@@ -104,7 +104,7 @@ static const std::string ANT_VERSION = "1.3";
 // @return String
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
-to_string_from_hexstring (const mobius::os::win::registry::hive_data& data, const std::string& encoding = "utf-16le")
+to_string_from_hexstring (const mobius::core::os::win::registry::hive_data& data, const std::string& encoding = "utf-16le")
 {
   std::string value;
 
@@ -124,7 +124,7 @@ to_string_from_hexstring (const mobius::os::win::registry::hive_data& data, cons
 // @return String
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
-to_hex_string (const mobius::os::win::registry::hive_data& data)
+to_hex_string (const mobius::core::os::win::registry::hive_data& data)
 {
   std::string value;
 
@@ -1071,7 +1071,7 @@ evidence_loader_impl::_decode_ntuser_dat_file (const mobius::io::file& f)
       // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
       // Create decoder
       // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-      auto decoder = mobius::os::win::registry::hive_file (f.new_reader ());
+      auto decoder = mobius::core::os::win::registry::hive_file (f.new_reader ());
 
       if (!decoder.is_instance ())
         {

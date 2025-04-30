@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/os/win/dpapi/blob.h>
+#include <mobius/core/os/win/dpapi/blob.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::os::win::dpapi::blob *obj;
+  mobius::core::os::win::dpapi::blob *obj;
 } os_win_dpapi_blob_o;
 
 extern PyTypeObject os_win_dpapi_blob_t;
@@ -36,8 +36,8 @@ extern PyTypeObject os_win_dpapi_blob_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_os_win_dpapi_blob_check (PyObject *);
-PyObject *pymobius_os_win_dpapi_blob_to_pyobject (mobius::os::win::dpapi::blob);
-mobius::os::win::dpapi::blob pymobius_os_win_dpapi_blob_from_pyobject (PyObject *);
+PyObject *pymobius_os_win_dpapi_blob_to_pyobject (mobius::core::os::win::dpapi::blob);
+mobius::core::os::win::dpapi::blob pymobius_os_win_dpapi_blob_from_pyobject (PyObject *);
 
 #endif
 

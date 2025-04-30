@@ -43,7 +43,7 @@ pymobius_os_win_registry_registry_key_check (PyObject *value)
 // @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_os_win_registry_registry_key_to_pyobject (mobius::os::win::registry::registry_key r)
+pymobius_os_win_registry_registry_key_to_pyobject (mobius::core::os::win::registry::registry_key r)
 {
   PyObject *ret = nullptr;
 
@@ -52,7 +52,7 @@ pymobius_os_win_registry_registry_key_to_pyobject (mobius::os::win::registry::re
       ret = _PyObject_New (&os_win_registry_registry_key_t);
 
       if (ret)
-        ((os_win_registry_registry_key_o *) ret)->obj = new mobius::os::win::registry::registry_key (r);
+        ((os_win_registry_registry_key_o *) ret)->obj = new mobius::core::os::win::registry::registry_key (r);
     }
   else
     ret = mobius::py::pynone ();
@@ -65,7 +65,7 @@ pymobius_os_win_registry_registry_key_to_pyobject (mobius::os::win::registry::re
 // @param pyobj Python object
 // @return C++ object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::os::win::registry::registry_key
+mobius::core::os::win::registry::registry_key
 pymobius_os_win_registry_registry_key_from_pyobject (PyObject *pyobj)
 {
   if (!pymobius_os_win_registry_registry_key_check (pyobj))
@@ -274,7 +274,7 @@ static PyObject *
 tp_f_add_key (os_win_registry_registry_key_o *self, PyObject *args)
 {
   // parse input args
-  mobius::os::win::registry::registry_key arg_key;
+  mobius::core::os::win::registry::registry_key arg_key;
 
   try
     {

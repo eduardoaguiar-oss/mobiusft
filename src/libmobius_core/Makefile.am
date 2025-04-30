@@ -38,6 +38,12 @@ EXTRA_DIST = 								\
     datasource/CMakeLists.txt						\
     datasource/*.cpp							\
     datasource/ufdr/*.cpp						\
+    datetime/CMakeLists.txt						\
+    datetime/*.cpp							\
+    decoder/CMakeLists.txt						\
+    decoder/*.cpp							\
+    decoder/sgml/*.cpp							\
+    decoder/xml/*.cpp							\
     encoder/CMakeLists.txt						\
     encoder/*.cpp							\
     file_decoder/CMakeLists.txt						\

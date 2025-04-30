@@ -45,12 +45,12 @@ pymobius_os_win_trashbin_info2_file_check (PyObject *value)
 // @return New info2_file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_os_win_trashbin_info2_file_to_pyobject (const mobius::os::win::trashbin::info2_file& obj)
+pymobius_os_win_trashbin_info2_file_to_pyobject (const mobius::core::os::win::trashbin::info2_file& obj)
 {
   PyObject *ret = _PyObject_New (&os_win_trashbin_info2_file_t);
 
   if (ret)
-    ((os_win_trashbin_info2_file_o *) ret)->obj = new mobius::os::win::trashbin::info2_file (obj);
+    ((os_win_trashbin_info2_file_o *) ret)->obj = new mobius::core::os::win::trashbin::info2_file (obj);
 
   return ret;
 }
@@ -60,7 +60,7 @@ pymobius_os_win_trashbin_info2_file_to_pyobject (const mobius::os::win::trashbin
 // @param value Python value
 // @return Info2_file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::os::win::trashbin::info2_file
+mobius::core::os::win::trashbin::info2_file
 pymobius_os_win_trashbin_info2_file_from_pyobject (PyObject *value)
 {
   if (!pymobius_os_win_trashbin_info2_file_check (value))
@@ -285,7 +285,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::os::win::trashbin::info2_file (arg_reader);
+          ret->obj = new mobius::core::os::win::trashbin::info2_file (arg_reader);
         }
       catch (const std::exception& e)
         {

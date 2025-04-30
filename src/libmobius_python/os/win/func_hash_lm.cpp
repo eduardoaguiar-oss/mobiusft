@@ -21,7 +21,7 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
-#include <mobius/os/win/hash_lm.h>
+#include <mobius/core/os/win/hash_lm.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief hash_lm function
@@ -50,7 +50,7 @@ func_hash_lm (PyObject *, PyObject *args)
 
   try
     {
-      ret = mobius::py::pybytes_from_bytearray (mobius::os::win::hash_lm (arg_password));
+      ret = mobius::py::pybytes_from_bytearray (mobius::core::os::win::hash_lm (arg_password));
     }
   catch (const std::exception& e)
     {

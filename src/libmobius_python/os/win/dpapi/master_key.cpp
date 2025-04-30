@@ -42,7 +42,7 @@ pymobius_os_win_dpapi_master_key_check (PyObject *pyobj)
 // @return new master_key object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_os_win_dpapi_master_key_to_pyobject (mobius::os::win::dpapi::master_key obj)
+pymobius_os_win_dpapi_master_key_to_pyobject (mobius::core::os::win::dpapi::master_key obj)
 {
   PyObject *ret = nullptr;
 
@@ -51,7 +51,7 @@ pymobius_os_win_dpapi_master_key_to_pyobject (mobius::os::win::dpapi::master_key
       ret = _PyObject_New (&os_win_dpapi_master_key_t);
 
       if (ret)
-        ((os_win_dpapi_master_key_o *) ret)->obj = new mobius::os::win::dpapi::master_key (obj);
+        ((os_win_dpapi_master_key_o *) ret)->obj = new mobius::core::os::win::dpapi::master_key (obj);
     }
   else
     ret = mobius::py::pynone ();
@@ -64,7 +64,7 @@ pymobius_os_win_dpapi_master_key_to_pyobject (mobius::os::win::dpapi::master_key
 // @param value Python object
 // @return master_key object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::os::win::dpapi::master_key
+mobius::core::os::win::dpapi::master_key
 pymobius_os_win_dpapi_master_key_from_pyobject (PyObject *value)
 {
   if (!pymobius_os_win_dpapi_master_key_check (value))
@@ -510,7 +510,7 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
   os_win_dpapi_master_key_o *self = (os_win_dpapi_master_key_o *) type->tp_alloc (type, 0);
 
   if (self)
-    self->obj = new mobius::os::win::dpapi::master_key ();
+    self->obj = new mobius::core::os::win::dpapi::master_key ();
 
   return (PyObject *) self;
 }

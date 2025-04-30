@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/os/win/registry/registry_file.h>
+#include <mobius/core/os/win/registry/registry_file.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief registry_file: data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::os::win::registry::registry_file *obj;
+  mobius::core::os::win::registry::registry_file *obj;
 } os_win_registry_registry_file_o;
 
 extern PyTypeObject os_win_registry_registry_file_t;
@@ -35,7 +35,7 @@ extern PyTypeObject os_win_registry_registry_file_t;
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *pymobius_os_win_registry_registry_file_to_pyobject (mobius::os::win::registry::registry_file);
+PyObject *pymobius_os_win_registry_registry_file_to_pyobject (mobius::core::os::win::registry::registry_file);
 
 #endif
 

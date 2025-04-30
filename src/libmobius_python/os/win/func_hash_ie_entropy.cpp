@@ -21,7 +21,7 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
-#include <mobius/os/win/hash_ie_entropy.h>
+#include <mobius/core/os/win/hash_ie_entropy.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief hash_ie_entropy function
@@ -50,7 +50,7 @@ func_hash_ie_entropy (PyObject *, PyObject *args)
 
   try
     {
-      ret = mobius::py::pybytes_from_bytearray (mobius::os::win::hash_ie_entropy (arg_url));
+      ret = mobius::py::pybytes_from_bytearray (mobius::core::os::win::hash_ie_entropy (arg_url));
     }
   catch (const std::exception& e)
     {

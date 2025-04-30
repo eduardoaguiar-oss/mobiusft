@@ -11,9 +11,7 @@ libmobius_la_SOURCES =						\
 libmobius_la_LDFLAGS = -avoid-version $(LIBGCRYPT_LIBS) $(LIBXML2_LIBS)
 
 libmobius_la_LIBADD =						\
-	io/libmobius-io.la					\
-	os/libmobius-os.la
+	io/libmobius-io.la
 
 SUBDIRS =							\
-	io							\
-	os
+	io

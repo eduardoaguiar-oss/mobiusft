@@ -43,12 +43,12 @@ pymobius_os_win_trashbin_info2_entry_check (PyObject *value)
 // @return New info2_entry object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_os_win_trashbin_info2_entry_to_pyobject (const mobius::os::win::trashbin::info2_entry& obj)
+pymobius_os_win_trashbin_info2_entry_to_pyobject (const mobius::core::os::win::trashbin::info2_entry& obj)
 {
   PyObject *ret = _PyObject_New (&os_win_trashbin_info2_entry_t);
 
   if (ret)
-    ((os_win_trashbin_info2_entry_o *) ret)->obj = new mobius::os::win::trashbin::info2_entry (obj);
+    ((os_win_trashbin_info2_entry_o *) ret)->obj = new mobius::core::os::win::trashbin::info2_entry (obj);
 
   return ret;
 }
@@ -58,7 +58,7 @@ pymobius_os_win_trashbin_info2_entry_to_pyobject (const mobius::os::win::trashbi
 // @param value Python value
 // @return Info2_entry object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::os::win::trashbin::info2_entry
+mobius::core::os::win::trashbin::info2_entry
 pymobius_os_win_trashbin_info2_entry_from_pyobject (PyObject *value)
 {
   if (!pymobius_os_win_trashbin_info2_entry_check (value))

@@ -22,7 +22,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
 #include <pygil.hpp>
-#include <mobius/os/win/hash_msdcc1.h>
+#include <mobius/core/os/win/hash_msdcc1.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief hash_msdcc1 function
@@ -54,7 +54,7 @@ func_hash_msdcc1 (PyObject *, PyObject *args)
   try
     {
       auto digest = mobius::py::GIL () (
-		      mobius::os::win::hash_msdcc1 (
+		      mobius::core::os::win::hash_msdcc1 (
 			      arg_password,
 			      arg_username
                       )

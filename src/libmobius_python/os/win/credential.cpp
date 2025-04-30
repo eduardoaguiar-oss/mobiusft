@@ -44,12 +44,12 @@ pymobius_os_win_credential_check (PyObject *pyobj)
 // @return new credential object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_os_win_credential_to_pyobject (mobius::os::win::credential obj)
+pymobius_os_win_credential_to_pyobject (mobius::core::os::win::credential obj)
 {
   PyObject *ret = _PyObject_New (&os_win_credential_t);
 
   if (ret)
-    ((os_win_credential_o *) ret)->obj = new mobius::os::win::credential (obj);
+    ((os_win_credential_o *) ret)->obj = new mobius::core::os::win::credential (obj);
 
   return ret;
 }
@@ -59,7 +59,7 @@ pymobius_os_win_credential_to_pyobject (mobius::os::win::credential obj)
 // @param pyobj Python object
 // @return credential object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::os::win::credential
+mobius::core::os::win::credential
 pymobius_os_win_credential_from_pyobject (PyObject *pyobj)
 {
   return * (reinterpret_cast <os_win_credential_o *>(pyobj)->obj);
@@ -310,7 +310,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::os::win::credential (arg_reader);
+          ret->obj = new mobius::core::os::win::credential (arg_reader);
         }
       catch (const std::exception& e)
         {

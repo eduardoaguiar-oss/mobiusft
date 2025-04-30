@@ -43,12 +43,12 @@ pymobius_os_win_dpapi_master_key_file_check (PyObject *pyobj)
 // @return new master_key_file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_os_win_dpapi_master_key_file_to_pyobject (mobius::os::win::dpapi::master_key_file obj)
+pymobius_os_win_dpapi_master_key_file_to_pyobject (mobius::core::os::win::dpapi::master_key_file obj)
 {
   PyObject *ret = _PyObject_New (&os_win_dpapi_master_key_file_t);
 
   if (ret)
-    ((os_win_dpapi_master_key_file_o *) ret)->obj = new mobius::os::win::dpapi::master_key_file (obj);
+    ((os_win_dpapi_master_key_file_o *) ret)->obj = new mobius::core::os::win::dpapi::master_key_file (obj);
 
   return ret;
 }
@@ -58,7 +58,7 @@ pymobius_os_win_dpapi_master_key_file_to_pyobject (mobius::os::win::dpapi::maste
 // @param pyobj Python object
 // @return master_key_file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::os::win::dpapi::master_key_file
+mobius::core::os::win::dpapi::master_key_file
 pymobius_os_win_dpapi_master_key_file_from_pyobject (PyObject *pyobj)
 {
   return * (reinterpret_cast <os_win_dpapi_master_key_file_o *>(pyobj)->obj);
@@ -276,7 +276,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::os::win::dpapi::master_key_file (arg_reader);
+          ret->obj = new mobius::core::os::win::dpapi::master_key_file (arg_reader);
         }
       catch (const std::exception& e)
         {

@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/application.hpp>
 #include <mobius/io/file.h>
-#include <mobius/os/win/registry/hive_file.h>
+#include <mobius/core/os/win/registry/hive_file.hpp>
 #include <iostream>
 #include <unistd.h>
 
@@ -46,7 +46,7 @@ print_hivefile (const std::string& url)
 
   auto f = mobius::io::new_file_by_url (url);
   auto reader = f.new_reader ();
-  mobius::os::win::registry::hive_file hf (reader);
+  mobius::core::os::win::registry::hive_file hf (reader);
 
   for (const auto attr : hf.get_metadata ())
     std::cout << "   " << attr.description << ": " << attr.value << std::endl;

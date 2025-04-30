@@ -23,6 +23,17 @@ cmake_minimum_required(VERSION 3.20)
 project(libmobius-core-decoder LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Find libxml2
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+find_package(LibXml2 QUIET)
+
+if(LibXml2_FOUND)
+    message(STATUS "Found libxml2: ${LIBXML2_LIBRARIES}")
+else()
+    message(FATAL_ERROR "libxml2 not found")
+endif()
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(mobius_core_decoder STATIC
@@ -45,6 +56,11 @@ add_library(mobius_core_decoder STATIC
 
 target_include_directories(mobius_core_decoder PRIVATE
     ${MOBIUS_INCLUDE_DIRS}
+    ${LIBXML2_INCLUDE_DIRS}
+)
+
+target_link_libraries(mobius_core_decoder PUBLIC
+    LibXml2::LibXml2
 )
 
 target_compile_options(mobius_core_decoder PRIVATE -fno-strict-aliasing -fPIC)

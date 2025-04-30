@@ -37,7 +37,6 @@ set(TOP_BUILD_DIR ${CMAKE_BINARY_DIR}/../..)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Find zlib
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# libz
 find_package(ZLIB QUIET)
 
 if(ZLIB_FOUND)
@@ -59,7 +58,7 @@ else()
     if(DL_LIBRARY)
         message(STATUS "Found libdl: ${DL_LIBRARY}")
     else()
-        message(SEND_ERROR "libdl not found")
+        message(FATAL_ERROR "libdl not found")
     endif()
 endif()
 
@@ -71,7 +70,7 @@ find_package(Iconv QUIET)
 if(Iconv_FOUND)
     message(STATUS "Found libiconv: ${Iconv_LIBRARIES}")
 else()
-    message(SEND_ERROR "Libiconv not found.")
+    message(FATAL_ERROR "Libiconv not found.")
 endif()
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -98,6 +97,7 @@ add_subdirectory(encoder)
 add_subdirectory(file_decoder)
 add_subdirectory(jni)
 add_subdirectory(kff)
+add_subdirectory(os)
 add_subdirectory(pod)
 add_subdirectory(system)
 add_subdirectory(turing)
@@ -138,6 +138,7 @@ target_link_libraries(mobius_core PUBLIC
     mobius_core_file_decoder
     mobius_core_jni
     mobius_core_kff
+    mobius_core_os
     mobius_core_pod
     mobius_core_system
     mobius_core_turing

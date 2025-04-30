@@ -32,7 +32,7 @@
 // @return new registry_value object or None if object is null
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_os_win_registry_registry_value_to_pyobject (mobius::os::win::registry::registry_value r)
+pymobius_os_win_registry_registry_value_to_pyobject (mobius::core::os::win::registry::registry_value r)
 {
   PyObject *ret = nullptr;
 
@@ -41,7 +41,7 @@ pymobius_os_win_registry_registry_value_to_pyobject (mobius::os::win::registry::
       ret = _PyObject_New (&os_win_registry_registry_value_t);
 
       if (ret)
-        ((os_win_registry_registry_value_o *) ret)->obj = new mobius::os::win::registry::registry_value (r);
+        ((os_win_registry_registry_value_o *) ret)->obj = new mobius::core::os::win::registry::registry_value (r);
     }
   else
     ret = mobius::py::pynone ();

@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/application.hpp>
 #include <mobius/io/file.h>
-#include <mobius/os/win/registry/hive_file.h>
+#include <mobius/core/os/win/registry/hive_file.hpp>
 #include <iostream>
 #include <unistd.h>
 
@@ -40,7 +40,7 @@ usage ()
 //! \param indent indentation level
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-print_hive_key (const mobius::os::win::registry::hive_key& key, const std::string path = "")
+print_hive_key (const mobius::core::os::win::registry::hive_key& key, const std::string path = "")
 {
   const std::string key_path = (path.empty ()) ? key.get_name () : path + '/' + key.get_name ();
   const std::string s_indent = "   ";
@@ -111,7 +111,7 @@ print_hivefile (const std::string& url)
 
   auto f = mobius::io::new_file_by_url (url);
   auto reader = f.new_reader ();
-  mobius::os::win::registry::hive_file hf (reader);
+  mobius::core::os::win::registry::hive_file hf (reader);
 
   auto root_key = hf.get_root_key ();
   print_hive_key (root_key);

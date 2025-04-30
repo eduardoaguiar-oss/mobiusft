@@ -26,12 +26,24 @@ include(GNUInstallDirs)
 
 file(GLOB HEADER_FILES
     "mobius/core/*.hpp"
+    "mobius/core/crypt/*.hpp"
+    "mobius/core/database/*.hpp"
+    "mobius/core/datasource/*.hpp"
+    "mobius/core/datetime/*.hpp"
+    "mobius/core/decoder/*.hpp"
+    "mobius/core/decoder/sgml/*.hpp"
+    "mobius/core/decoder/xml/*.hpp"
     "mobius/core/encoder/*.hpp"
     "mobius/core/file_decoder/*.hpp"
-    "mobius/core/kff/*.hpp"
     "mobius/core/jni/*.hpp"
+    "mobius/core/kff/*.hpp"
+    "mobius/core/pod/*.hpp"
+    "mobius/core/system/*.hpp"
     "mobius/core/turing/*.hpp"
     "mobius/core/ui/*.hpp"
+    "mobius/core/vfs/*.hpp"
+    "mobius/framework/*.hpp"
+    "mobius/framework/model/*.hpp"
 )
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -44,12 +44,12 @@ pymobius_os_win_dpapi_blob_check (PyObject *pyobj)
 // @return new blob object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_os_win_dpapi_blob_to_pyobject (mobius::os::win::dpapi::blob obj)
+pymobius_os_win_dpapi_blob_to_pyobject (mobius::core::os::win::dpapi::blob obj)
 {
   PyObject *ret = _PyObject_New (&os_win_dpapi_blob_t);
 
   if (ret)
-    ((os_win_dpapi_blob_o *) ret)->obj = new mobius::os::win::dpapi::blob (obj);
+    ((os_win_dpapi_blob_o *) ret)->obj = new mobius::core::os::win::dpapi::blob (obj);
 
   return ret;
 }
@@ -59,7 +59,7 @@ pymobius_os_win_dpapi_blob_to_pyobject (mobius::os::win::dpapi::blob obj)
 // @param value Python object
 // @return blob object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::os::win::dpapi::blob
+mobius::core::os::win::dpapi::blob
 pymobius_os_win_dpapi_blob_from_pyobject (PyObject *value)
 {
   if (!pymobius_os_win_dpapi_blob_check (value))
@@ -735,7 +735,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::os::win::dpapi::blob (arg_reader);
+          ret->obj = new mobius::core::os::win::dpapi::blob (arg_reader);
         }
       catch (const std::exception& e)
         {

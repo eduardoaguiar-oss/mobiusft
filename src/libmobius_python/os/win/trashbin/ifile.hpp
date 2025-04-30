@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/os/win/trashbin/ifile.h>
+#include <mobius/core/os/win/trashbin/ifile.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::os::win::trashbin::ifile *obj;
+  mobius::core::os::win::trashbin::ifile *obj;
 } os_win_trashbin_ifile_o;
 
 extern PyTypeObject os_win_trashbin_ifile_t;
@@ -36,8 +36,8 @@ extern PyTypeObject os_win_trashbin_ifile_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_os_win_trashbin_ifile_check (PyObject *);
-PyObject *pymobius_os_win_trashbin_ifile_to_pyobject (const mobius::os::win::trashbin::ifile&);
-mobius::os::win::trashbin::ifile pymobius_os_win_trashbin_ifile_from_pyobject (PyObject *);
+PyObject *pymobius_os_win_trashbin_ifile_to_pyobject (const mobius::core::os::win::trashbin::ifile&);
+mobius::core::os::win::trashbin::ifile pymobius_os_win_trashbin_ifile_from_pyobject (PyObject *);
 
 #endif
 

@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/os/win/dpapi/master_key_file.h>
+#include <mobius/core/os/win/dpapi/master_key_file.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::os::win::dpapi::master_key_file *obj;
+  mobius::core::os::win::dpapi::master_key_file *obj;
 } os_win_dpapi_master_key_file_o;
 
 extern PyTypeObject os_win_dpapi_master_key_file_t;
@@ -36,8 +36,8 @@ extern PyTypeObject os_win_dpapi_master_key_file_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_os_win_dpapi_master_key_file_check (PyObject *);
-PyObject *pymobius_os_win_dpapi_master_key_file_to_pyobject (mobius::os::win::dpapi::master_key_file);
-mobius::os::win::dpapi::master_key_file pymobius_os_win_dpapi_master_key_file_from_pyobject (PyObject *);
+PyObject *pymobius_os_win_dpapi_master_key_file_to_pyobject (mobius::core::os::win::dpapi::master_key_file);
+mobius::core::os::win::dpapi::master_key_file pymobius_os_win_dpapi_master_key_file_from_pyobject (PyObject *);
 
 #endif
 

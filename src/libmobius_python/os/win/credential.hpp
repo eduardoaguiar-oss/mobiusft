@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/os/win/credential.h>
+#include <mobius/core/os/win/credential.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::os::win::credential *obj;
+  mobius::core::os::win::credential *obj;
 } os_win_credential_o;
 
 extern PyTypeObject os_win_credential_t;
@@ -36,8 +36,8 @@ extern PyTypeObject os_win_credential_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_os_win_credential_check (PyObject *);
-PyObject *pymobius_os_win_credential_to_pyobject (mobius::os::win::credential);
-mobius::os::win::credential pymobius_os_win_credential_from_pyobject (PyObject *);
+PyObject *pymobius_os_win_credential_to_pyobject (mobius::core::os::win::credential);
+mobius::core::os::win::credential pymobius_os_win_credential_from_pyobject (PyObject *);
 
 #endif
 

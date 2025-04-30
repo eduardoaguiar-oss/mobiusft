@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/os/win/trashbin/info2_file.h>
+#include <mobius/core/os/win/trashbin/info2_file.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::os::win::trashbin::info2_file *obj;
+  mobius::core::os::win::trashbin::info2_file *obj;
 } os_win_trashbin_info2_file_o;
 
 extern PyTypeObject os_win_trashbin_info2_file_t;
@@ -36,8 +36,8 @@ extern PyTypeObject os_win_trashbin_info2_file_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_os_win_trashbin_info2_file_check (PyObject *);
-PyObject *pymobius_os_win_trashbin_info2_file_to_pyobject (const mobius::os::win::trashbin::info2_file&);
-mobius::os::win::trashbin::info2_file pymobius_os_win_trashbin_info2_file_from_pyobject (PyObject *);
+PyObject *pymobius_os_win_trashbin_info2_file_to_pyobject (const mobius::core::os::win::trashbin::info2_file&);
+mobius::core::os::win::trashbin::info2_file pymobius_os_win_trashbin_info2_file_from_pyobject (PyObject *);
 
 #endif
 

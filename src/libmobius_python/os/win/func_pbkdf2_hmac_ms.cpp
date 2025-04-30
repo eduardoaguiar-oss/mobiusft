@@ -21,7 +21,7 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
-#include <mobius/os/win/pbkdf2_hmac_ms.h>
+#include <mobius/core/os/win/pbkdf2_hmac_ms.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief pbkdf2_hmac_ms function
@@ -59,7 +59,7 @@ func_pbkdf2_hmac_ms (PyObject *, PyObject *args)
   try
     {
       ret = mobius::py::pybytes_from_bytearray (
-         mobius::os::win::pbkdf2_hmac_ms (
+         mobius::core::os::win::pbkdf2_hmac_ms (
            arg_key,
            arg_salt,
            arg_iterations,

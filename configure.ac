@@ -102,13 +102,6 @@ else
 fi
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Checking for pygobject
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PKG_CHECK_MODULES(PYGOBJECT, [pygobject-3.0])
-PYGOBJECT_CXXFLAGS=$PYGOBJECT_CFLAGS
-AC_SUBST(PYGOBJECT_CXXFLAGS)
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Checking for cairo
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 AC_MSG_CHECKING(for pycairo)
@@ -120,14 +113,6 @@ else
   AC_MSG_RESULT(no)
   AC_MSG_ERROR([PyCairo required. See https://cairographics.org/pycairo])
 fi
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Checking for libxml2
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PKG_CHECK_MODULES(LIBXML2, [libxml-2.0])
-LIBXML2_CXXFLAGS=$LIBXML2_CFLAGS
-AC_SUBST([LIBXML2_CXXFLAGS])
-AC_SUBST([LIBXML2_LIBS])
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Checking for libtsk
@@ -234,8 +219,6 @@ AC_CONFIG_FILES([Makefile
                  src/Makefile
                  src/mobius/Makefile
                  src/mobius/io/Makefile
-                 src/mobius/os/Makefile
-                 src/mobius/os/win/Makefile
                  src/libmobius_core/Makefile
                  src/libmobius_framework/Makefile
                  src/libmobius_python/Makefile

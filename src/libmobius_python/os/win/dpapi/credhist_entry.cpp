@@ -42,12 +42,12 @@ pymobius_os_win_dpapi_credhist_entry_check (PyObject *pyobj)
 // @return new credhist_entry object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_os_win_dpapi_credhist_entry_to_pyobject (mobius::os::win::dpapi::credhist_entry obj)
+pymobius_os_win_dpapi_credhist_entry_to_pyobject (mobius::core::os::win::dpapi::credhist_entry obj)
 {
   PyObject *ret = _PyObject_New (&os_win_dpapi_credhist_entry_t);
 
   if (ret)
-    ((os_win_dpapi_credhist_entry_o *) ret)->obj = new mobius::os::win::dpapi::credhist_entry (obj);
+    ((os_win_dpapi_credhist_entry_o *) ret)->obj = new mobius::core::os::win::dpapi::credhist_entry (obj);
 
   return ret;
 }
@@ -57,7 +57,7 @@ pymobius_os_win_dpapi_credhist_entry_to_pyobject (mobius::os::win::dpapi::credhi
 // @param value Python object
 // @return credhist_entry object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::os::win::dpapi::credhist_entry
+mobius::core::os::win::dpapi::credhist_entry
 pymobius_os_win_dpapi_credhist_entry_from_pyobject (PyObject *value)
 {
   if (!pymobius_os_win_dpapi_credhist_entry_check (value))

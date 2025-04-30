@@ -32,12 +32,12 @@
 // @return new registry_file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_os_win_registry_registry_file_to_pyobject (mobius::os::win::registry::registry_file r)
+pymobius_os_win_registry_registry_file_to_pyobject (mobius::core::os::win::registry::registry_file r)
 {
   PyObject *ret = _PyObject_New (&os_win_registry_registry_file_t);
 
   if (ret)
-    ((os_win_registry_registry_file_o *) ret)->obj = new mobius::os::win::registry::registry_file (r);
+    ((os_win_registry_registry_file_o *) ret)->obj = new mobius::core::os::win::registry::registry_file (r);
 
   return ret;
 }
