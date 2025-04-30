@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/vfs/segment_array.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace mobius::core::vfs
@@ -33,7 +33,7 @@ public:
   // @param f First segment file
   // @param func <tt>ext = func (idx)</tt> (get file extension for idx)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  impl (const mobius::io::file& f, func_get_extension_type func)
+  impl (const mobius::core::io::file& f, func_get_extension_type func)
     : file_ (f),
       func_extension_ (func)
   {
@@ -64,7 +64,7 @@ public:
   // @param idx Segment index, starting from 0
   // @return New reader object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::io::reader
+  mobius::core::io::reader
   new_reader (idx_type idx)
   {
     if (idx >= segments_.size ())
@@ -76,13 +76,13 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::io::writer new_writer (idx_type);
+  mobius::core::io::writer new_writer (idx_type);
   void scan ();
 
 private:
-  mobius::io::file file_;
+  mobius::core::io::file file_;
   func_get_extension_type func_extension_;
-  std::vector <mobius::io::file> segments_;
+  std::vector <mobius::core::io::file> segments_;
   size_type data_size_ = 0;
 };
 
@@ -113,7 +113,7 @@ segment_array::impl::scan ()
 // @param idx Segment index, starting from 0
 // @return New writer object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::writer
+mobius::core::io::writer
 segment_array::impl::new_writer (idx_type idx)
 {
   bool flag_overwrite = false;
@@ -145,7 +145,7 @@ segment_array::impl::new_writer (idx_type idx)
 // @param func <tt>ext = func (idx)</tt> (get file extension for idx)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 segment_array::segment_array (
-  const mobius::io::file& f,
+  const mobius::core::io::file& f,
   func_get_extension_type func
 )
   : impl_ (std::make_shared <impl> (f, func))
@@ -186,7 +186,7 @@ segment_array::scan ()
 // @param idx Segment index, starting from 0
 // @return New reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::reader
+mobius::core::io::reader
 segment_array::new_reader (idx_type idx)
 {
   return impl_->new_reader (idx);
@@ -197,7 +197,7 @@ segment_array::new_reader (idx_type idx)
 // @param idx Segment index, starting from 0
 // @return New writer object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::writer
+mobius::core::io::writer
 segment_array::new_writer (idx_type idx)
 {
   return impl_->new_writer (idx);

@@ -55,7 +55,7 @@ new_cipher_cbc (const std::string& id, const bytearray& key, const bytearray& iv
   if (iv)
     c->set_iv (iv);
   else
-    c->set_iv (mobius::bytearray (c->get_block_size ()));
+    c->set_iv (mobius::core::bytearray (c->get_block_size ()));
 
   return cipher (c);
 }
@@ -75,7 +75,7 @@ new_cipher_cbc_cts (const std::string& id, const bytearray& key, const bytearray
   if (iv)
     c->set_iv (iv);
   else
-    c->set_iv (mobius::bytearray (c->get_block_size ()));
+    c->set_iv (mobius::core::bytearray (c->get_block_size ()));
 
   return cipher (c);
 }
@@ -97,7 +97,7 @@ new_cipher_ctr (const std::string& id, const bytearray& key, const bytearray& cv
 
   else
     {
-      mobius::bytearray counter (c->get_block_size ());
+      mobius::core::bytearray counter (c->get_block_size ());
       counter[counter.size () - 1] = 1;
       c->set_counter (counter);
     }
@@ -134,7 +134,7 @@ new_cipher_gcm (const std::string& id, const bytearray& key, const bytearray& iv
   if (iv)
     c->set_iv (iv);
   else
-    c->set_iv (mobius::bytearray (c->get_block_size ()));
+    c->set_iv (mobius::core::bytearray (c->get_block_size ()));
 
   return cipher (c);
 }
@@ -166,7 +166,7 @@ new_cipher_ofb (const std::string& id, const bytearray& key, const bytearray& iv
   if (iv)
     c->set_iv (iv);
   else
-    c->set_iv (mobius::bytearray (c->get_block_size ()));
+    c->set_iv (mobius::core::bytearray (c->get_block_size ()));
 
   return cipher (c);
 }

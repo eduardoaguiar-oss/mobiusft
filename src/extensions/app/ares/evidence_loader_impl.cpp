@@ -71,18 +71,18 @@
 #include "file_shareh.hpp"
 #include "file_sharel.hpp"
 #include "file_torrenth.hpp"
-#include <mobius/io/walker.h>
+#include <mobius/core/io/walker.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/decoder/hexstring.hpp>
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/pod/map.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <mobius/framework/model/evidence.hpp>
-#include <mobius/io/folder.h>
-#include <mobius/io/path.h>
+#include <mobius/core/io/folder.hpp>
+#include <mobius/core/io/path.hpp>
 #include <mobius/core/os/win/registry/hive_file.hpp>
 #include <mobius/core/os/win/registry/hive_data.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 #include <algorithm>
 #include <stdexcept>
 
@@ -110,7 +110,7 @@ to_string_from_hexstring (const mobius::core::os::win::registry::hive_data& data
 
   if (data)
     {
-      mobius::bytearray d;
+      mobius::core::bytearray d;
       d.from_hexstring (data.get_data ().to_string (encoding));
       value = d.to_string ();
     }
@@ -129,7 +129,7 @@ to_hex_string (const mobius::core::os::win::registry::hive_data& data)
   std::string value;
 
   if (data)
-    value = mobius::string::toupper (data.get_data ().to_hexstring ());
+    value = mobius::core::string::toupper (data.get_data ().to_hexstring ());
 
   return value;
 }
@@ -280,9 +280,9 @@ evidence_loader_impl::_scan_canonical_folders ()
 // @param folder Root folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_root_folder (const mobius::io::folder& folder)
+evidence_loader_impl::_scan_canonical_root_folder (const mobius::core::io::folder& folder)
 {
-  auto w = mobius::io::walker (folder);
+  auto w = mobius::core::io::walker (folder);
 
   for (const auto& f : w.get_folders_by_pattern ("users/*"))
     _scan_canonical_user_folder (f);
@@ -293,12 +293,12 @@ evidence_loader_impl::_scan_canonical_root_folder (const mobius::io::folder& fol
 // @param folder User folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_user_folder (const mobius::io::folder& folder)
+evidence_loader_impl::_scan_canonical_user_folder (const mobius::core::io::folder& folder)
 {
   username_ = folder.get_name ();
   account_ = {};
 
-  auto w = mobius::io::walker (folder);
+  auto w = mobius::core::io::walker (folder);
 
   for (const auto& f : w.get_files_by_name ("ntuser.dat"))
     _decode_ntuser_dat_file (f);
@@ -312,14 +312,14 @@ evidence_loader_impl::_scan_canonical_user_folder (const mobius::io::folder& fol
 // @param folder Ares folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_ares_folder (const mobius::io::folder& folder)
+evidence_loader_impl::_scan_canonical_ares_folder (const mobius::core::io::folder& folder)
 {
   account_files_.clear ();
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Scan folders
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto w = mobius::io::walker (folder);
+  auto w = mobius::core::io::walker (folder);
 
   for (const auto& f : w.get_folders_by_name ("data"))
     _scan_canonical_ares_data_folder (f);
@@ -366,16 +366,16 @@ evidence_loader_impl::_scan_canonical_ares_folder (const mobius::io::folder& fol
 // @param folder Ares/Data folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_ares_data_folder (const mobius::io::folder& folder)
+evidence_loader_impl::_scan_canonical_ares_data_folder (const mobius::core::io::folder& folder)
 {
-  mobius::io::walker w (folder);
+  mobius::core::io::walker w (folder);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Scan files
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   for (const auto& f : w.get_files ())
     {
-      const std::string lname = mobius::string::tolower (f.get_name ());
+      const std::string lname = mobius::core::string::tolower (f.get_name ());
 
       if (lname == "shareh.dat")
         _decode_shareh_dat_file (f);
@@ -405,22 +405,22 @@ evidence_loader_impl::_scan_canonical_ares_data_folder (const mobius::io::folder
 // @param folder Ares/Data/TempDL folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_ares_data_tempdl_folder (const mobius::io::folder& folder)
+evidence_loader_impl::_scan_canonical_ares_data_tempdl_folder (const mobius::core::io::folder& folder)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
-  mobius::io::walker w (folder);
+  mobius::core::io::walker w (folder);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Scan files
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   for (const auto& f : w.get_files ())
     {
-      const std::string lname = mobius::string::tolower (f.get_name ());
+      const std::string lname = mobius::core::string::tolower (f.get_name ());
 
-      if (mobius::string::startswith (lname, "phash_"))
+      if (mobius::core::string::startswith (lname, "phash_"))
          _scan_canonical_ares_data_tempdl_phash_file (f);
 
-      else if (mobius::string::startswith (lname, "pbthash_"))
+      else if (mobius::core::string::startswith (lname, "pbthash_"))
          _scan_canonical_ares_data_tempdl_pbthash_file (f);
 
       else
@@ -433,19 +433,19 @@ evidence_loader_impl::_scan_canonical_ares_data_tempdl_folder (const mobius::io:
 // @param folder Ares/Data/TempUL folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_ares_data_tempul_folder (const mobius::io::folder& folder)
+evidence_loader_impl::_scan_canonical_ares_data_tempul_folder (const mobius::core::io::folder& folder)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
-  mobius::io::walker w (folder);
+  mobius::core::io::walker w (folder);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Scan files
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   for (const auto& f : w.get_files ())
     {
-      const std::string lname = mobius::string::tolower (f.get_name ());
+      const std::string lname = mobius::core::string::tolower (f.get_name ());
 
-      if (mobius::string::startswith (lname, "udpphash_"))
+      if (mobius::core::string::startswith (lname, "udpphash_"))
           _scan_canonical_ares_data_tempul_udpphash_file (f);
 
       else
@@ -458,7 +458,7 @@ evidence_loader_impl::_scan_canonical_ares_data_tempul_folder (const mobius::io:
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_ares_data_tempdl_pbthash_file (const mobius::io::file& f)
+evidence_loader_impl::_scan_canonical_ares_data_tempdl_pbthash_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -562,7 +562,7 @@ evidence_loader_impl::_scan_canonical_ares_data_tempdl_pbthash_file (const mobiu
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_ares_data_tempdl_phash_file (const mobius::io::file& f)
+evidence_loader_impl::_scan_canonical_ares_data_tempdl_phash_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -625,7 +625,7 @@ evidence_loader_impl::_scan_canonical_ares_data_tempdl_phash_file (const mobius:
 // @see ICH_ExtractDataForUpload@helper_ICH
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_ares_data_tempul_udpphash_file (const mobius::io::file& f)
+evidence_loader_impl::_scan_canonical_ares_data_tempul_udpphash_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -678,7 +678,7 @@ evidence_loader_impl::_scan_canonical_ares_data_tempul_udpphash_file (const mobi
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_phashidx_dat_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_phashidx_dat_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -734,7 +734,7 @@ evidence_loader_impl::_decode_phashidx_dat_file (const mobius::io::file& f)
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_shareh_dat_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_shareh_dat_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -803,7 +803,7 @@ evidence_loader_impl::_decode_shareh_dat_file (const mobius::io::file& f)
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_sharel_dat_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_sharel_dat_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -846,8 +846,8 @@ evidence_loader_impl::_decode_sharel_dat_file (const mobius::io::file& f)
 
               if (!fobj.path.empty ())
                 {
-                  auto cpath = mobius::string::replace (fobj.path, "\\", "/");
-                  fobj.filename = mobius::io::path (cpath).get_filename ();
+                  auto cpath = mobius::core::string::replace (fobj.path, "\\", "/");
+                  fobj.filename = mobius::core::io::path (cpath).get_filename ();
                 }
 
               // flags
@@ -887,7 +887,7 @@ evidence_loader_impl::_decode_sharel_dat_file (const mobius::io::file& f)
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_torrenth_dat_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_torrenth_dat_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -952,12 +952,12 @@ evidence_loader_impl::_decode_torrenth_dat_file (const mobius::io::file& f)
 // @param folder Folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_ares_my_shared_folder (const mobius::io::folder& folder)
+evidence_loader_impl::_scan_canonical_ares_my_shared_folder (const mobius::core::io::folder& folder)
 {
-  mobius::io::walker w (folder);
+  mobius::core::io::walker w (folder);
 
   auto filter = [](const auto& f){
-     return mobius::string::startswith (f.get_name (), "___ARESTRA___");
+     return mobius::core::string::startswith (f.get_name (), "___ARESTRA___");
   };
 
   for (const auto& f : w.find_files (filter))
@@ -969,7 +969,7 @@ evidence_loader_impl::_scan_canonical_ares_my_shared_folder (const mobius::io::f
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_arestra_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_arestra_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -1008,7 +1008,7 @@ evidence_loader_impl::_decode_arestra_file (const mobius::io::file& f)
           fobj.arestra_f = f;
 
           // set filename
-          fobj.filename = mobius::io::path (f.get_path ()).get_filename ();
+          fobj.filename = mobius::core::io::path (f.get_path ()).get_filename ();
           fobj.filename.erase (0, 13);  // remove "___ARESTRA___"
 
           // set flags
@@ -1062,7 +1062,7 @@ evidence_loader_impl::_decode_arestra_file (const mobius::io::file& f)
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_ntuser_dat_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_ntuser_dat_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -1153,13 +1153,13 @@ evidence_loader_impl::_scan_all_folders ()
 }
 
 void
-evidence_loader_impl::_scan_generic_folder (const mobius::io::folder& folder)
+evidence_loader_impl::_scan_generic_folder (const mobius::core::io::folder& folder)
 {
-  mobius::io::walker w (folder);
+  mobius::core::io::walker w (folder);
 
   for (const auto& f : w.get_files ())
     {
-      const std::string lname = mobius::string::tolower (f.get_name ());
+      const std::string lname = mobius::core::string::tolower (f.get_name ());
 
       if (lname == "shareh.dat")
         _decode_shareh_dat_file (f);
@@ -1170,7 +1170,7 @@ evidence_loader_impl::_scan_generic_folder (const mobius::io::folder& folder)
       else if (lname == "phashidx.dat")
         _decode_phashidx_dat_file (f);
 
-      else if (mobius::string::startswith (lname, "___arestra___"))
+      else if (mobius::core::string::startswith (lname, "___arestra___"))
          _decode_arestra_file (f);
     }
 

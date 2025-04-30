@@ -24,7 +24,7 @@ namespace mobius::core::crypt
 // @param hash_type Hash type
 // @param key Key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-hmac_impl_default::hmac_impl_default (const std::string& hash_type, const mobius::bytearray& key)
+hmac_impl_default::hmac_impl_default (const std::string& hash_type, const mobius::core::bytearray& key)
   : h_inner_ (hash_type),
     h_outer_ (hash_type)
 {
@@ -75,7 +75,7 @@ hmac_impl_default::reset ()
 // @brief Get hash digest
 // @return Hash digest
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 hmac_impl_default::get_digest ()
 {
   h_outer_.update (h_inner_.get_digest ());

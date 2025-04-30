@@ -18,7 +18,7 @@
 #include <mobius/core/os/win/dpapi/credhist_file.hpp>
 #include <mobius/core/charset.hpp>
 #include <mobius/core/crypt/hash.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 #include <set>
 
@@ -37,7 +37,7 @@ decrypt_sequence (std::vector <credhist_entry>& entries)
   bool rc = false;
 
   // get hashes from decrypted entries
-  std::set <mobius::bytearray> hashes;
+  std::set <mobius::core::bytearray> hashes;
 
   for (auto entry : entries)
     {
@@ -79,7 +79,7 @@ decrypt_sequence (std::vector <credhist_entry>& entries)
 //    position to the next entry end position.
 // 4. if entry.size > 0 then entry has data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-credhist_file::credhist_file (mobius::io::reader reader)
+credhist_file::credhist_file (mobius::core::io::reader reader)
 {
   // Read first entry (control block only)
   constexpr int FOOTER_SIZE = 24;
@@ -87,7 +87,7 @@ credhist_file::credhist_file (mobius::io::reader reader)
   if (reader.get_size () < FOOTER_SIZE)
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Not enough bytes to read"));
 
-  reader.seek (-FOOTER_SIZE, mobius::io::reader::whence_type::end);
+  reader.seek (-FOOTER_SIZE, mobius::core::io::reader::whence_type::end);
   auto pos = reader.tell ();
   auto entry = credhist_entry (reader, FOOTER_SIZE);
   auto link_size = entry.get_next_link_size ();
@@ -108,7 +108,7 @@ credhist_file::credhist_file (mobius::io::reader reader)
 // @param key Decryption key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-credhist_file::decrypt_with_key (const mobius::bytearray& key)
+credhist_file::decrypt_with_key (const mobius::core::bytearray& key)
 {
   bool rc = false;
 
@@ -126,7 +126,7 @@ credhist_file::decrypt_with_key (const mobius::bytearray& key)
 // @param h Password hash
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-credhist_file::decrypt_with_password_hash (const mobius::bytearray& h)
+credhist_file::decrypt_with_password_hash (const mobius::core::bytearray& h)
 {
   bool rc = false;
 

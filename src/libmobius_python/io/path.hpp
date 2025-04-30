@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/io/path.h>
+#include <mobius/core/io/path.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::io::path *obj;
+  mobius::core::io::path *obj;
 } io_path_o;
 
 extern PyTypeObject io_path_t;
@@ -36,8 +36,8 @@ extern PyTypeObject io_path_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_io_path_check (PyObject *);
-PyObject *pymobius_io_path_to_pyobject (mobius::io::path);
-mobius::io::path pymobius_io_path_from_pyobject (PyObject *);
+PyObject *pymobius_io_path_to_pyobject (mobius::core::io::path);
+mobius::core::io::path pymobius_io_path_from_pyobject (PyObject *);
 
 #endif
 

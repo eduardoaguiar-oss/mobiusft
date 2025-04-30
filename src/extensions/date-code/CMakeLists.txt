@@ -31,7 +31,7 @@ set(SOURCES
 add_library(date_code MODULE ${SOURCES})
 set_target_properties(date_code PROPERTIES OUTPUT_NAME "date-code" PREFIX "")
 target_include_directories(date_code PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(date_code PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(date_code PRIVATE mobius_core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/reader.h>
+#include <mobius/core/io/reader.hpp>
 #include <memory>
 #include <string>
 
@@ -34,7 +34,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  inifile (const mobius::io::reader&, const std::string& = "UTF-8", const std::string& = {});
+  inifile (const mobius::core::io::reader&, const std::string& = "UTF-8", const std::string& = {});
   inifile (inifile&&) noexcept = default;
   inifile (const inifile&) noexcept = default;
 

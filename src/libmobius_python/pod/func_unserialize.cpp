@@ -35,7 +35,7 @@ PyObject *
 func_pod_unserialize (PyObject *, PyObject *args)
 {
   // parse arguments
-  mobius::io::reader arg_reader;
+  mobius::core::io::reader arg_reader;
 
   try
     {

@@ -47,7 +47,7 @@ func_new_uri_from_path (PyObject *, PyObject *args)
 
   try
     {
-      auto p = mobius::io::new_uri_from_path (arg_value);
+      auto p = mobius::core::io::new_uri_from_path (arg_value);
       ret = pymobius_io_uri_to_pyobject (p);
     }
   catch (const std::exception& e)

@@ -33,7 +33,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   impl (const impl&) = delete;
   impl (impl&&) = delete;
-  explicit impl (mobius::io::reader);
+  explicit impl (mobius::core::io::reader);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Operators
@@ -75,7 +75,7 @@ public:
   // @brief Get password data
   // @return Password data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_password_data () const
   {
     return password_data_;
@@ -105,7 +105,7 @@ public:
   // @brief Get data
   // @return data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::vector <std::pair <std::string, mobius::bytearray>>
+  std::vector <std::pair <std::string, mobius::core::bytearray>>
   get_data () const
   {
     return data_;
@@ -122,7 +122,7 @@ private:
   std::string password_;
 
   // @brief Password data
-  mobius::bytearray password_data_;
+  mobius::core::bytearray password_data_;
 
   // @brief Flags
   std::uint32_t flags_;
@@ -131,14 +131,14 @@ private:
   mobius::core::datetime::datetime last_update_time_;
 
   // @brief Credential data
-  std::vector <std::pair <std::string, mobius::bytearray>> data_;
+  std::vector <std::pair <std::string, mobius::core::bytearray>> data_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-credential::impl::impl (mobius::io::reader reader)
+credential::impl::impl (mobius::core::io::reader reader)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
   mobius::core::decoder::data_decoder decoder (reader);
@@ -224,7 +224,7 @@ credential::impl::impl (mobius::io::reader reader)
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-credential::credential (mobius::io::reader reader)
+credential::credential (mobius::core::io::reader reader)
   : impl_ (std::make_shared <impl> (reader))
 {
 }
@@ -263,7 +263,7 @@ credential::get_password () const
 // @brief Get password data
 // @return Password data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 credential::get_password_data () const
 {
   return impl_->get_password_data ();
@@ -293,7 +293,7 @@ credential::get_last_update_time () const
 // @brief Get data
 // @return data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <std::pair <std::string, mobius::bytearray>>
+std::vector <std::pair <std::string, mobius::core::bytearray>>
 credential::get_data () const
 {
   return impl_->get_data ();

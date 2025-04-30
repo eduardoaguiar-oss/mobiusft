@@ -77,7 +77,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Constructor
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit qdatastream (const mobius::io::reader&, std::uint32_t version = 19);
+  explicit qdatastream (const mobius::core::io::reader&, std::uint32_t version = 19);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Operators
@@ -143,9 +143,9 @@ public:
   mobius::core::datetime::date get_qdate ();
   mobius::core::datetime::time get_qtime ();
   mobius::core::datetime::datetime get_qdatetime ();
-  mobius::bytearray get_qbytearray ();
-  mobius::bytearray get_qimage ();
-  mobius::bytearray get_qpixmap ();
+  mobius::core::bytearray get_qbytearray ();
+  mobius::core::bytearray get_qimage ();
+  mobius::core::bytearray get_qpixmap ();
   mobius::core::pod::data get_qvariant ();
 
 private:

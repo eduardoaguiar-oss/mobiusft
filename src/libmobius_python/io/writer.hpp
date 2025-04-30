@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/io/writer.h>
+#include <mobius/core/io/writer.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::io::writer *obj;
+  mobius::core::io::writer *obj;
 } io_writer_o;
 
 extern PyTypeObject io_writer_t;
@@ -36,8 +36,8 @@ extern PyTypeObject io_writer_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_io_writer_check (PyObject *);
-PyObject *pymobius_io_writer_to_pyobject (const mobius::io::writer&);
-mobius::io::writer pymobius_io_writer_from_pyobject (PyObject *);
+PyObject *pymobius_io_writer_to_pyobject (const mobius::core::io::writer&);
+mobius::core::io::writer pymobius_io_writer_from_pyobject (PyObject *);
 
 #endif
 

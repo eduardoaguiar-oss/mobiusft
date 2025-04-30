@@ -34,7 +34,7 @@ set(SOURCES
 add_library(vfs_imagefile_vhdx MODULE ${SOURCES})
 set_target_properties(vfs_imagefile_vhdx PROPERTIES OUTPUT_NAME "vfs-imagefile-vhdx" PREFIX "")
 target_include_directories(vfs_imagefile_vhdx PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_imagefile_vhdx PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(vfs_imagefile_vhdx PRIVATE mobius_core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

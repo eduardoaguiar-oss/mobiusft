@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <mobius/core/os/win/registry/registry_key.hpp>
 #include <memory>
 #include <string>
@@ -42,8 +42,8 @@ public:
   pssp_data2& operator= (pssp_data2&&) = default;
 
   // function prototypes
-  void set_key (const std::string&, mobius::bytearray&);
-  mobius::bytearray get_key (const std::string&) const;
+  void set_key (const std::string&, mobius::core::bytearray&);
+  mobius::core::bytearray get_key (const std::string&) const;
 
 private:
   // @brief implementation class forward declaration

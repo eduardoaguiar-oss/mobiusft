@@ -16,9 +16,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "writer_impl.hpp"
-#include <mobius/io/file.h>
-#include <mobius/io/uri.h>
-#include <mobius/exception.inc>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/io/uri.hpp>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -58,10 +58,10 @@ writer_impl::writer_impl (const imagefile_impl& imagefile_impl)
     DONE_SECTION_SIZE;                        // done section
 
   if (segment_size_ < min_segment_size)
-    throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("segment size too small"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("segment size too small"));
 
   // create imagefile GUID
-  guid_ = mobius::bytearray (16);
+  guid_ = mobius::core::bytearray (16);
   guid_.random ();
 
   // create first segment
@@ -96,7 +96,7 @@ writer_impl::~writer_impl ()
   if (size_ % SECTOR_SIZE)
     {
       auto pad_size = SECTOR_SIZE - (size_ % SECTOR_SIZE);
-      write (mobius::bytearray (pad_size));
+      write (mobius::core::bytearray (pad_size));
     }
 
   // close segments
@@ -119,7 +119,7 @@ writer_impl::~writer_impl ()
 void
 writer_impl::seek (offset_type, whence_type)
 {
-  throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("writer is not seekable"));
+  throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("writer is not seekable"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -128,9 +128,9 @@ writer_impl::seek (offset_type, whence_type)
 // @return Number of bytes written
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl::size_type
-writer_impl::write (const mobius::bytearray& data)
+writer_impl::write (const mobius::core::bytearray& data)
 {
-  mobius::bytearray buffer = data;
+  mobius::core::bytearray buffer = data;
 
   while (!buffer.empty ())
     {
@@ -195,7 +195,7 @@ segment_writer&
 writer_impl::_get_current_segment_writer ()
 {
   if (segment_writer_list_.size () == 0)
-    throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("no segment writer found"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("no segment writer found"));
 
   return segment_writer_list_[segment_writer_list_.size () - 1];
 }

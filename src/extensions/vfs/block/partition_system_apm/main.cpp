@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/resource.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 #include <mobius/core/vfs/block.hpp>
 #include <map>
 
@@ -137,7 +137,7 @@ decoder (
   // Create Driver Descriptor Map
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto ddm_block = ps_block.new_slice_block ("apm.ddm", 0, BLOCK0_SIZE - 1);
-  ddm_block.set_attribute ("signature", "0x" + mobius::string::to_hex (sb_sig, 4));
+  ddm_block.set_attribute ("signature", "0x" + mobius::core::string::to_hex (sb_sig, 4));
   ddm_block.set_attribute ("block_size", sb_blk_size);
   ddm_block.set_attribute ("block_count", sb_blk_count);
   ddm_block.set_attribute ("device_type", sb_dev_type);

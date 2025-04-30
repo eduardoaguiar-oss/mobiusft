@@ -24,7 +24,7 @@
 #include <pydict.hpp>
 #include <pylist.hpp>
 #include "element.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

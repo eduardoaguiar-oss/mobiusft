@@ -24,31 +24,10 @@ project(libmobius-framework LANGUAGES CXX)
 
 include(GNUInstallDirs)
 
-# Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
-# Define top-level source and build directories (@todo move to main CMakeLists.txt)
-set(TOP_SRC_DIR ${CMAKE_SOURCE_DIR}/../..)
-set(TOP_BUILD_DIR ${CMAKE_BINARY_DIR}/../..)
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Find dependencies
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-find_library(LIBMOBIUS_CORE mobius_core
-    HINTS ../libmobius_core/build
-    NO_DEFAULT_PATH
-)
-
-if(LIBMOBIUS_CORE)
-    message(STATUS "libmobius_core found: ${LIBMOBIUS_CORE}")
-else()
-    message(FATAL_ERROR "libmobius_core not found in ../libmobius_core/build")
-endif()
-
-set(MOBIUS_INCLUDE_DIRS ${TOP_SRC_DIR}/include ${TOP_SRC_DIR}/src)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Build sub-libraries
@@ -72,7 +51,7 @@ target_link_libraries(mobius_framework PUBLIC
     -Wl,--whole-archive
     mobius_framework_model
     -Wl,--no-whole-archive
-    ${LIBMOBIUS_CORE} #mobius_core
+    mobius_core
 )
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

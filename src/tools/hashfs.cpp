@@ -17,13 +17,13 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/application.hpp>
 #include <mobius/core/crypt/hash.hpp>
-#include <mobius/io/file.h>
+#include <mobius/core/io/file.hpp>
 #include <mobius/core/vfs/vfs.hpp>
 #include <iostream>
 #include <unistd.h>
 
-void process_file (const mobius::io::file&, const std::string&, const std::string&);
-void process_folder (const mobius::io::folder&, const std::string&, const std::string&);
+void process_file (const mobius::core::io::file&, const std::string&, const std::string&);
+void process_folder (const mobius::core::io::folder&, const std::string&, const std::string&);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \brief Show usage text
@@ -46,7 +46,7 @@ usage ()
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 process_entry (
-  const mobius::io::entry& entry,
+  const mobius::core::io::entry& entry,
   const std::string& hash_type,
   const std::string& path=""
 )
@@ -76,7 +76,7 @@ process_entry (
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 process_file (
-  const mobius::io::file& f,
+  const mobius::core::io::file& f,
   const std::string& hash_type,
   const std::string& path
 )
@@ -115,7 +115,7 @@ process_file (
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 process_folder (
-  const mobius::io::folder& folder,
+  const mobius::core::io::folder& folder,
   const std::string& hash_type,
   const std::string& path=""
 )

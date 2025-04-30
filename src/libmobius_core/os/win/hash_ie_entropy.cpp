@@ -27,14 +27,14 @@ namespace mobius::core::os::win
 // @param url URL
 // @return IE entropy hash
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 hash_ie_entropy (const std::string& url)
 {
   mobius::core::crypt::hash h ("sha1");
   h.update (mobius::core::conv_charset (url + '\0', "UTF-8", "UTF-16LE"));
   auto digest = h.get_digest ();
 
-  mobius::bytearray sum = {std::accumulate (digest.begin (), digest.end (), std::uint8_t (0))};
+  mobius::core::bytearray sum = {std::accumulate (digest.begin (), digest.end (), std::uint8_t (0))};
   return digest + sum;
 }
 

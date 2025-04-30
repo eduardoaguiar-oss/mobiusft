@@ -30,7 +30,7 @@ namespace
 // @see get_trusted_metas@helper_library_db.pas
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-_populate_metadata (mobius::extension::app::ares::file_torrenth::entry& e, const mobius::bytearray& data)
+_populate_metadata (mobius::extension::app::ares::file_torrenth::entry& e, const mobius::core::bytearray& data)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -73,7 +73,7 @@ namespace mobius::extension::app::ares
 // @brief Constructor
 // @see tthread_dht.getMagnetFiles@DHT/thread_dht.pas (line 284)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-file_torrenth::file_torrenth (const mobius::io::reader& reader)
+file_torrenth::file_torrenth (const mobius::core::io::reader& reader)
 {
   if (!reader || reader.get_size () < 14)
     return;

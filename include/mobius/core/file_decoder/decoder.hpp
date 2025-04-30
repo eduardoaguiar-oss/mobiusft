@@ -154,7 +154,7 @@ public:
   // @param reader Reader object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
-  decode (const mobius::io::reader& reader)
+  decode (const mobius::core::io::reader& reader)
   {
     impl_->decode (reader);
   }

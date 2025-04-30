@@ -27,9 +27,9 @@
 #include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/core/decoder/inifile.hpp>
 #include <mobius/framework/model/evidence.hpp>
-#include <mobius/io/line_reader.h>
-#include <mobius/io/walker.h>
-#include <mobius/string_functions.h>
+#include <mobius/core/io/line_reader.hpp>
+#include <mobius/core/io/walker.hpp>
+#include <mobius/core/string_functions.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Versions examined: Emule 0.50a and DreaMule 3.2
@@ -95,7 +95,7 @@ template <typename T> std::vector <mobius::core::pod::data>
 get_file_hashes (const T& f)
 {
     std::vector <mobius::core::pod::data> hashes = {
-        {"ed2k", mobius::string::toupper (f.hash_ed2k)}
+        {"ed2k", mobius::core::string::toupper (f.hash_ed2k)}
     };
 
     auto iter = std::find_if (
@@ -220,10 +220,10 @@ evidence_loader_impl::_scan_canonical_folders ()
 // @param folder Root folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_root_folder (const mobius::io::folder& folder)
+evidence_loader_impl::_scan_canonical_root_folder (const mobius::core::io::folder& folder)
 {
     username_ = {};
-    auto w = mobius::io::walker (folder);
+    auto w = mobius::core::io::walker (folder);
 
     // Users folders
     for (const auto& f : w.get_folders_by_pattern ("users/*"))
@@ -248,10 +248,10 @@ evidence_loader_impl::_scan_canonical_root_folder (const mobius::io::folder& fol
 // @param folder User folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_user_folder (const mobius::io::folder& folder)
+evidence_loader_impl::_scan_canonical_user_folder (const mobius::core::io::folder& folder)
 {
     username_ = folder.get_name ();
-    auto w = mobius::io::walker (folder);
+    auto w = mobius::core::io::walker (folder);
 
     for (const auto& f : w.get_folders_by_path ("appdata/local/emule/config"))
         _scan_canonical_emule_config_folder (f);
@@ -268,9 +268,9 @@ evidence_loader_impl::_scan_canonical_user_folder (const mobius::io::folder& fol
 // @param folder emule/dreamule folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_emule_xp_folder (const mobius::io::folder& folder)
+evidence_loader_impl::_scan_canonical_emule_xp_folder (const mobius::core::io::folder& folder)
 {
-    auto w = mobius::io::walker (folder);
+    auto w = mobius::core::io::walker (folder);
     
     for (const auto& f : w.get_folders_by_name ("config"))
         _scan_canonical_emule_config_folder (f);
@@ -288,19 +288,19 @@ evidence_loader_impl::_scan_canonical_emule_xp_folder (const mobius::io::folder&
 // @param folder Config folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_emule_config_folder (const mobius::io::folder& folder)
+evidence_loader_impl::_scan_canonical_emule_config_folder (const mobius::core::io::folder& folder)
 {
     account_ = {};
     account_.username = username_;
 
-    mobius::io::walker w (folder);
+    mobius::core::io::walker w (folder);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Decode account files
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     for (const auto& f : w.get_files ())
       {
-        const std::string lname = mobius::string::tolower (f.get_name ());
+        const std::string lname = mobius::core::string::tolower (f.get_name ());
 
         if (lname == "preferences.dat")
             _decode_preferences_dat_file (f);
@@ -326,7 +326,7 @@ evidence_loader_impl::_scan_canonical_emule_config_folder (const mobius::io::fol
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     for (const auto& f : w.get_files ())
       {
-        const std::string lname = mobius::string::tolower (f.get_name ());
+        const std::string lname = mobius::core::string::tolower (f.get_name ());
 
         if (lname == "ac_searchstrings.dat")
             _decode_ac_searchstrings_dat_file (f);
@@ -353,9 +353,9 @@ evidence_loader_impl::_scan_canonical_emule_config_folder (const mobius::io::fol
 // @param folder Download/emule folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_emule_download_folder (const mobius::io::folder& folder)
+evidence_loader_impl::_scan_canonical_emule_download_folder (const mobius::core::io::folder& folder)
 {
-    mobius::io::walker w (folder);
+    mobius::core::io::walker w (folder);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Decoder .part.met files
@@ -376,7 +376,7 @@ evidence_loader_impl::_scan_canonical_emule_download_folder (const mobius::io::f
 // @see CPreferences::Init@srchybrid/Preferences.cpp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_preferences_dat_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_preferences_dat_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -412,7 +412,7 @@ evidence_loader_impl::_decode_preferences_dat_file (const mobius::io::file& f)
 // @see CPreferences::LoadPreferences@srchybrid/Preferences.cpp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_preferences_ini_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_preferences_ini_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -453,7 +453,7 @@ evidence_loader_impl::_decode_preferences_ini_file (const mobius::io::file& f)
 // @see CPreferences::LoadStats@srchybrid/Preferences.cpp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_statistics_ini_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_statistics_ini_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -495,7 +495,7 @@ evidence_loader_impl::_decode_statistics_ini_file (const mobius::io::file& f)
 // @see CPrefs::ReadFile@kademlia/kademlia/Prefs.cpp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_preferenceskad_dat_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_preferenceskad_dat_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -523,10 +523,10 @@ evidence_loader_impl::_decode_preferenceskad_dat_file (const mobius::io::file& f
           auto c4 = decoder.get_uint32_le ();
 
           account_.kamdelia_guid =
-                mobius::string::to_hex (c1, 8) +
-                mobius::string::to_hex (c2, 8) +
-                mobius::string::to_hex (c3, 8) +
-                mobius::string::to_hex (c4, 8);
+                mobius::core::string::to_hex (c1, 8) +
+                mobius::core::string::to_hex (c2, 8) +
+                mobius::core::string::to_hex (c3, 8) +
+                mobius::core::string::to_hex (c4, 8);
         }
     }
   catch (const std::exception& e)
@@ -540,7 +540,7 @@ evidence_loader_impl::_decode_preferenceskad_dat_file (const mobius::io::file& f
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_ac_searchstrings_dat_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_ac_searchstrings_dat_file (const mobius::core::io::file& f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -552,7 +552,7 @@ evidence_loader_impl::_decode_ac_searchstrings_dat_file (const mobius::io::file&
             return;
 
         // Decode file
-        mobius::io::line_reader lr (reader, "utf-16", "\r\n");
+        mobius::core::io::line_reader lr (reader, "utf-16", "\r\n");
         std::string line;
         std::size_t rec_number = 0;
 
@@ -587,7 +587,7 @@ evidence_loader_impl::_decode_ac_searchstrings_dat_file (const mobius::io::file&
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_key_index_dat_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_key_index_dat_file (const mobius::core::io::file& f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -613,7 +613,7 @@ evidence_loader_impl::_decode_key_index_dat_file (const mobius::io::file& f)
           {
             for (const auto& source : k.sources)
               {
-                auto hash_ed2k = mobius::string::toupper (source.id);
+                auto hash_ed2k = mobius::core::string::toupper (source.id);
 
                 for (const auto& name : source.names)
                   {
@@ -663,7 +663,7 @@ evidence_loader_impl::_decode_key_index_dat_file (const mobius::io::file& f)
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_known_met_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_known_met_file (const mobius::core::io::file& f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -729,7 +729,7 @@ evidence_loader_impl::_decode_known_met_file (const mobius::io::file& f)
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_part_met_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_part_met_file (const mobius::core::io::file& f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -787,7 +787,7 @@ evidence_loader_impl::_decode_part_met_file (const mobius::io::file& f)
         // Content hashes
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         std::vector <mobius::core::pod::data> hashes = {
-            {"ed2k", mobius::string::toupper (part_met.get_hash_ed2k ())}
+            {"ed2k", mobius::core::string::toupper (part_met.get_hash_ed2k ())}
         };
 
         auto aich_hash = metadata.get <std::string> ("hash_aich");
@@ -821,7 +821,7 @@ evidence_loader_impl::_decode_part_met_file (const mobius::io::file& f)
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_part_met_txtsrc_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_part_met_txtsrc_file (const mobius::core::io::file& f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -883,7 +883,7 @@ evidence_loader_impl::_decode_part_met_txtsrc_file (const mobius::io::file& f)
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_storedsearches_met_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_storedsearches_met_file (const mobius::core::io::file& f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 

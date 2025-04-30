@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/vfs/imagefile_impl_base.hpp>
-#include <mobius/io/file.h>
+#include <mobius/core/io/file.hpp>
 #include <memory>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -32,19 +32,19 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Class metadata functions
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  static bool is_instance (const mobius::io::file&);
+  static bool is_instance (const mobius::core::io::file&);
   static std::string get_file_extensions () { return "LOG"; }
   static bool is_writeable () { return false; }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit imagefile_impl (const mobius::io::file&);
+  explicit imagefile_impl (const mobius::core::io::file&);
   mobius::core::pod::data get_attribute (const std::string&) const override;
   void set_attribute (const std::string&, const mobius::core::pod::data&) override;
   mobius::core::pod::map get_attributes () const override;
-  mobius::io::reader new_reader () const override;
-  mobius::io::writer new_writer () const override;
+  mobius::core::io::reader new_reader () const override;
+  mobius::core::io::writer new_writer () const override;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief Get type
@@ -110,7 +110,7 @@ public:
 
 private:
   // @brief File object
-  mobius::io::file file_;
+  mobius::core::io::file file_;
 
   // @brief Size
   mutable size_type size_ = 0;

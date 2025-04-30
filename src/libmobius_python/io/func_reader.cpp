@@ -34,7 +34,7 @@ PyObject *
 func_io_new_slice_reader (PyObject *, PyObject *args)
 {
   // parse arguments
-  mobius::io::reader arg_reader;
+  mobius::core::io::reader arg_reader;
   std::int64_t arg_pos;
   std::int64_t arg_end = -1;
 
@@ -56,7 +56,7 @@ func_io_new_slice_reader (PyObject *, PyObject *args)
   try
     {
       ret = pymobius_io_reader_to_pyobject (
-               mobius::io::new_slice_reader (arg_reader, arg_pos, arg_end)
+               mobius::core::io::new_slice_reader (arg_reader, arg_pos, arg_end)
             );
     }
   catch (const std::exception& e)

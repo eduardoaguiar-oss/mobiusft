@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/crypt/hash_impl_base.hpp>
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <gcrypt.h>
 
 namespace mobius::core::crypt::gcrypt
@@ -90,8 +90,8 @@ public:
   // Overwritten methods
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void reset () noexcept final;
-  void update (const mobius::bytearray&) noexcept final;
-  mobius::bytearray get_digest () final;
+  void update (const mobius::core::bytearray&) noexcept final;
+  mobius::core::bytearray get_digest () final;
   std::shared_ptr <hash_impl_base> clone () const final;
 
 private:

@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "reader_impl.hpp"
 #include "imagefile_impl.hpp"
-#include <mobius/exception.inc>
-#include <mobius/string_functions.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/string_functions.hpp>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -32,7 +32,7 @@ reader_impl::reader_impl (const imagefile_impl& imagefile_impl)
   segment_idx_ = std::int64_t (imagefile_impl.get_attribute ("segments"));
 
   if (segment_idx_ == 0)
-    throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("segment files not found"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("segment files not found"));
 
   segment_size_ = std::int64_t (imagefile_impl.get_attribute ("segment_size"));
 
@@ -60,11 +60,11 @@ reader_impl::seek (offset_type offset, whence_type w)
     abs_offset = size_ - 1 + offset;
 
   else
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
 
   // update current pos, if possible
   if (abs_offset < 0)
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid offset"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid offset"));
 
   else if (size_type (abs_offset) <= size_)
     {
@@ -78,20 +78,20 @@ reader_impl::seek (offset_type offset, whence_type w)
 // @param size size in bytes
 // @return bytearray containing data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 reader_impl::read (size_type size)
 {
   if (!stream_)
     _set_stream ();
 
-  mobius::bytearray data = stream_.read (size);
+  mobius::core::bytearray data = stream_.read (size);
   pos_ += data.size ();
   size -= data.size ();
 
   while (size > 0 && pos_ < size_)
     {
       _set_stream ();
-      mobius::bytearray tmp = stream_.read (size);
+      mobius::core::bytearray tmp = stream_.read (size);
       pos_ += tmp.size ();
       size -= tmp.size ();
       data += tmp;

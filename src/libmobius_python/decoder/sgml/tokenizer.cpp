@@ -23,7 +23,7 @@
 #include <pymobius.hpp>
 #include "tokenizer.hpp"
 #include "io/reader.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -62,7 +62,7 @@ mobius::core::decoder::sgml::tokenizer
 pymobius_decoder_sgml_tokenizer_from_pyobject (PyObject *pyobj)
 {
   if (!PyObject_IsInstance (pyobj, (PyObject *) &decoder_sgml_tokenizer_t))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object type must be mobius.decoder.sgml.tokenizer"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object type must be mobius.decoder.sgml.tokenizer"));
 
   return * (reinterpret_cast <decoder_sgml_tokenizer_o *>(pyobj)->obj);
 }
@@ -121,7 +121,7 @@ static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
   // Parse input args
-  mobius::io::reader arg_reader;
+  mobius::core::io::reader arg_reader;
 
   try
     {

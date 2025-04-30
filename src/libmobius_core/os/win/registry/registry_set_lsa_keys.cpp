@@ -31,10 +31,10 @@ namespace
 // @param data PolSecKey value's data
 // @return decrypted LSAKEY
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::bytearray
+static mobius::core::bytearray
 get_lsa_key_from_polseckey (
-  const mobius::bytearray& syskey,
-  const mobius::bytearray& data)
+  const mobius::core::bytearray& syskey,
+  const mobius::core::bytearray& data)
 {
   mobius::core::crypt::hash md5 ("md5");
   md5.update (syskey);
@@ -60,7 +60,7 @@ get_lsa_key_from_polseckey (
 // @param root registry root key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-registry_set_lsa_keys (registry_key root, const mobius::bytearray& syskey)
+registry_set_lsa_keys (registry_key root, const mobius::core::bytearray& syskey)
 {
   if (!syskey)
     return;
@@ -78,7 +78,7 @@ registry_set_lsa_keys (registry_key root, const mobius::bytearray& syskey)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // decrypt LSA key
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray lsa_key;
+  mobius::core::bytearray lsa_key;
   registry_key_impl_lsa::type type;
 
   // Vista and newer ones

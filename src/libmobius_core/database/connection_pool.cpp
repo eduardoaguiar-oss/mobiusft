@@ -18,7 +18,7 @@
 #include <mobius/core/database/connection_pool.hpp>
 #include <mobius/core/database/connection.hpp>
 #include <mobius/core/database/database.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <chrono>
 #include <mutex>
 #include <stdexcept>

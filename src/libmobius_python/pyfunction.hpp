@@ -23,7 +23,7 @@
 #include <Python.h>
 #include <pygil.hpp>
 #include <pymobius.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <memory>
 #include <stdexcept>
 

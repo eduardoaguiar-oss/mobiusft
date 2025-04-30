@@ -21,7 +21,7 @@
 #define PY_SSIZE_T_CLEAN        // PEP 353
 
 #include <Python.h>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <set>
 #include <stdexcept>
 
@@ -75,11 +75,11 @@ pyset_to_cpp_container (PyObject *py_set, F cppfunc) -> std::set <decltype (cppf
   std::set <decltype (cppfunc (nullptr))> s;
 
   if (!PyAnySet_Check (py_set))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object is not a set"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object is not a set"));
 
   PyObject *py_iter = PyObject_GetIter (py_set);
   if (!py_iter)
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("could not get iterator for set object"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("could not get iterator for set object"));
 
   PyObject *py_item;
 

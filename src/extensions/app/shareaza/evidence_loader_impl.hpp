@@ -24,7 +24,7 @@
 #include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/evidence_loader_impl_base.hpp>
 #include <mobius/framework/model/item.hpp>
-#include <mobius/io/file.h>
+#include <mobius/core/io/file.hpp>
 #include <map>
 #include <vector>
 
@@ -49,8 +49,8 @@ struct account
 
   CThumbCache thumbcache;
 
-  mobius::io::file f;
-  mobius::io::file shareaza_db3_f;
+  mobius::core::io::file f;
+  mobius::core::io::file shareaza_db3_f;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -62,7 +62,7 @@ struct autofill
   std::string username;
   std::string value;
   std::string id;
-  mobius::io::file f;
+  mobius::core::io::file f;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -79,7 +79,7 @@ struct search
   mobius::core::pod::map metadata;
 
   // files
-  mobius::io::file f;
+  mobius::core::io::file f;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -99,7 +99,7 @@ struct local_file
   mobius::core::pod::data hashes;
 
   // thumbnail_data
-  mobius::bytearray thumbnail_data;
+  mobius::core::bytearray thumbnail_data;
 
   // flags
   bool flag_downloaded = false;
@@ -108,8 +108,8 @@ struct local_file
   bool flag_completed = false;
 
   // files
-  mobius::io::file f;
-  mobius::io::file shareaza_db3_f;
+  mobius::core::io::file f;
+  mobius::core::io::file shareaza_db3_f;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -131,11 +131,11 @@ struct remote_file
   mobius::core::pod::data hashes;
 
   // thumbnail_data
-  mobius::bytearray thumbnail_data;
+  mobius::core::bytearray thumbnail_data;
 
   // files
-  mobius::io::file f;
-  mobius::io::file shareaza_db3_f;
+  mobius::core::io::file f;
+  mobius::core::io::file shareaza_db3_f;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -206,16 +206,16 @@ private:
   // Helper functions
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void _scan_canonical_folders ();
-  void _scan_canonical_root_folder (const mobius::io::folder&);
-  void _scan_canonical_user_folder (const mobius::io::folder&);
-  void _scan_canonical_shareaza_data_folder (const mobius::io::folder&);
+  void _scan_canonical_root_folder (const mobius::core::io::folder&);
+  void _scan_canonical_user_folder (const mobius::core::io::folder&);
+  void _scan_canonical_shareaza_data_folder (const mobius::core::io::folder&);
 
-  void _decode_library_dat_file (const mobius::io::file&);
-  void _decode_ntuser_dat_file (const mobius::io::file&);
-  void _decode_profile_xml_file (const mobius::io::file&);
-  void _decode_sd_file (const mobius::io::file&);
-  void _decode_searches_dat_file (const mobius::io::file&);
-  void _decode_shareaza_db3_file (const mobius::io::file&);
+  void _decode_library_dat_file (const mobius::core::io::file&);
+  void _decode_ntuser_dat_file (const mobius::core::io::file&);
+  void _decode_profile_xml_file (const mobius::core::io::file&);
+  void _decode_sd_file (const mobius::core::io::file&);
+  void _decode_searches_dat_file (const mobius::core::io::file&);
+  void _decode_shareaza_db3_file (const mobius::core::io::file&);
 
   void _save_evidences ();
   void _save_accounts ();

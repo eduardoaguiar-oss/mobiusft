@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "box_impl.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <algorithm>
 #include <stdexcept>
 
@@ -39,7 +39,7 @@ box_impl::box_impl (orientation_type orientation)
           break;
 
       default:
-          throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid orientation type"));
+          throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid orientation type"));
     }
 
   g_object_ref_sink (G_OBJECT (widget_));

@@ -59,7 +59,7 @@ hash_impl_adler32::reset () noexcept
 //   3. The BLOCK_SIZE value assures that 64-bit values can hold a[n] and b[n]
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-hash_impl_adler32::update (const mobius::bytearray& data) noexcept
+hash_impl_adler32::update (const mobius::core::bytearray& data) noexcept
 {
   const std::uint8_t *p = data.begin ();
   const std::uint64_t size = data.size ();
@@ -88,7 +88,7 @@ hash_impl_adler32::update (const mobius::bytearray& data) noexcept
 bytearray
 hash_impl_adler32::get_digest ()
 {
-  return mobius::bytearray (
+  return mobius::core::bytearray (
     {
       std::uint8_t (b_ >> 8),
       std::uint8_t (b_),

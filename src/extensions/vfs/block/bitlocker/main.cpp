@@ -15,11 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/resource.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 #include <mobius/core/vfs/block.hpp>
 #include <map>
 #include <vector>
@@ -58,7 +58,7 @@ namespace
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static constexpr std::size_t BDE_HEADER_SIZE = 512;
-static const mobius::bytearray BDE_SIGNATURE = "-FVE-FS-";
+static const mobius::core::bytearray BDE_SIGNATURE = "-FVE-FS-";
 static const std::string BDE_GUID = "4967D63B-2E29-4AD8-8399-F6A339E3D001";
 static const std::string BDE_USED_DISK_SPACE_ONLY_GUID = "92A84D3B-DD80-4D0E-9E4E-B1E3284EAED8";
 
@@ -91,7 +91,7 @@ static const std::map <std::uint16_t, const std::string> ENCRYPTION_DESCRIPTION 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Function declarations
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static std::vector <mobius::core::pod::map> _decode_fve_metadata_entries (const mobius::bytearray&);
+static std::vector <mobius::core::pod::map> _decode_fve_metadata_entries (const mobius::core::bytearray&);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get protection description
@@ -106,7 +106,7 @@ _get_protection_description (std::uint16_t flag)
   if (iterator != PROTECTION_DESCRIPTION.end ())
     return iterator->second;
 
-  return "Unknown protection type (0x" + mobius::string::to_hex (flag, 4) + ')';
+  return "Unknown protection type (0x" + mobius::core::string::to_hex (flag, 4) + ')';
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -123,7 +123,7 @@ _get_encryption_description (std::uint16_t type)
     return iterator->second;
 
 
-  return "Unknown encryption type (0x" + mobius::string::to_hex (type, 4) + ')';
+  return "Unknown encryption type (0x" + mobius::core::string::to_hex (type, 4) + ')';
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -132,7 +132,7 @@ _get_encryption_description (std::uint16_t type)
 // @return Map containing attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::core::pod::map
-_decode_fve_metadata_0005 (const mobius::bytearray& data)
+_decode_fve_metadata_0005 (const mobius::core::bytearray& data)
 {
   mobius::core::pod::map m;
 
@@ -151,7 +151,7 @@ _decode_fve_metadata_0005 (const mobius::bytearray& data)
 // @return Map containing attributes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::core::pod::map
-_decode_fve_metadata_0008 (const mobius::bytearray& data)
+_decode_fve_metadata_0008 (const mobius::core::bytearray& data)
 {
   mobius::core::pod::map m;
 
@@ -177,7 +177,7 @@ _decode_fve_metadata_0008 (const mobius::bytearray& data)
   log.debug (__LINE__, "Key GUID: " + key_guid);
   log.debug (__LINE__, "Mtime: " + to_string (mtime));
   log.debug (__LINE__, "Unknown_1: " + std::to_string (unknown_1));
-  log.debug (__LINE__, "Protection flag: 0x" + mobius::string::to_hex (protection_flag, 4));
+  log.debug (__LINE__, "Protection flag: 0x" + mobius::core::string::to_hex (protection_flag, 4));
   log.debug (__LINE__, "Protection description: " + protection_description);
   log.debug (__LINE__, "Data:\n" + payload.dump ());
 
@@ -208,8 +208,8 @@ _decode_fve_metadata_entry (mobius::core::decoder::data_decoder& decoder)
   log.debug (__LINE__, "FVE metadata entry");
   log.debug (__LINE__, "Size: " + std::to_string (size));
   log.debug (__LINE__, "Data size: " + std::to_string (size > 8 ? size - 8 : 0));
-  log.debug (__LINE__, "Entry type: 0x" + mobius::string::to_hex (entry_type, 4));
-  log.debug (__LINE__, "Value type: 0x" + mobius::string::to_hex (value_type, 4));
+  log.debug (__LINE__, "Entry type: 0x" + mobius::core::string::to_hex (entry_type, 4));
+  log.debug (__LINE__, "Value type: 0x" + mobius::core::string::to_hex (value_type, 4));
   log.debug (__LINE__, "Version: " + std::to_string (version));
   log.debug (__LINE__, "Data:\n" + data.dump ());
 
@@ -254,7 +254,7 @@ _decode_fve_metadata_entry (mobius::core::decoder::data_decoder& decoder)
     // Unknown value type
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     default:
-      log.development (__LINE__, "New value type found: 0x" + mobius::string::to_hex (value_type, 4));
+      log.development (__LINE__, "New value type found: 0x" + mobius::core::string::to_hex (value_type, 4));
       break;
     };
 
@@ -267,7 +267,7 @@ _decode_fve_metadata_entry (mobius::core::decoder::data_decoder& decoder)
 // @return Entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::vector <mobius::core::pod::map>
-_decode_fve_metadata_entries (const mobius::bytearray& data)
+_decode_fve_metadata_entries (const mobius::core::bytearray& data)
 {
   std::vector <mobius::core::pod::map> entries;
   auto decoder = mobius::core::decoder::data_decoder (data);
@@ -350,7 +350,7 @@ _decode_fve_metadata (mobius::core::vfs::block& bde_block, std::uint64_t offset)
 
   bde_block.set_attribute ("volume_guid", volume_guid);
   bde_block.set_attribute ("nonce_counter", nonce_counter);
-  bde_block.set_attribute ("encryption_method", "0x" + mobius::string::to_hex (encryption_method, 8));
+  bde_block.set_attribute ("encryption_method", "0x" + mobius::core::string::to_hex (encryption_method, 8));
   bde_block.set_attribute ("encryption_description", encryption_description);
   bde_block.set_attribute ("creation_time", to_string (creation_time));
 
@@ -359,7 +359,7 @@ _decode_fve_metadata (mobius::core::vfs::block& bde_block, std::uint64_t offset)
   log.debug (__LINE__, "Version: " + std::to_string (header_version));
   log.debug (__LINE__, "Volume GUID: " + volume_guid);
   log.debug (__LINE__, "Nonce counter: " + std::to_string (nonce_counter));
-  log.debug (__LINE__, "Encryption method: " + encryption_description + " (0x" + mobius::string::to_hex (encryption_method, 8));
+  log.debug (__LINE__, "Encryption method: " + encryption_description + " (0x" + mobius::core::string::to_hex (encryption_method, 8));
   log.debug (__LINE__, "Creation time: " + to_string (creation_time));
   log.debug (__LINE__, "Data size: " + std::to_string (data_size));
   log.debug (__LINE__, "Data:\n" + data.dump ());
@@ -400,7 +400,7 @@ _decode_fve_metadata (mobius::core::vfs::block& bde_block, std::uint64_t offset)
             auto label = entry.get <std::string> ("text");
             bde_block.set_attribute ("label", label);
 
-            auto v = mobius::string::split (label);
+            auto v = mobius::core::string::split (label);
             if (v.size () > 0) bde_block.set_attribute ("computer_name", v[0]);
             if (v.size () > 1) bde_block.set_attribute ("logical_drive", v[1]);
             if (v.size () > 2) bde_block.set_attribute ("creation_date", v[2]);
@@ -408,7 +408,7 @@ _decode_fve_metadata (mobius::core::vfs::block& bde_block, std::uint64_t offset)
           break;
 
         default:
-          log.development (__LINE__, "New entry type found: 0x" + mobius::string::to_hex (entry_type, 4));
+          log.development (__LINE__, "New entry type found: 0x" + mobius::core::string::to_hex (entry_type, 4));
           break;
         };
     }
@@ -483,15 +483,15 @@ _decode_extended_bpb_fields (
   mobius::core::vfs::block& bde_block
 )
 {
-  bde_block.set_attribute ("logical_drive_number", "0x" + mobius::string::to_hex (decoder.get_uint8 (), 2));
+  bde_block.set_attribute ("logical_drive_number", "0x" + mobius::core::string::to_hex (decoder.get_uint8 (), 2));
   bde_block.set_attribute ("is_dirty", decoder.get_uint8 () == 0x01);
   auto extended_signature = decoder.get_uint8 ();
 
   if (extended_signature)
     {
-      bde_block.set_attribute ("volume_id", "0x" + mobius::string::to_hex (decoder.get_uint32_le (), 8));
-      bde_block.set_attribute ("volume_label", mobius::string::rstrip (decoder.get_string_by_size (11)));
-      bde_block.set_attribute ("filesystem_type",  mobius::string::rstrip (decoder.get_string_by_size (8)));
+      bde_block.set_attribute ("volume_id", "0x" + mobius::core::string::to_hex (decoder.get_uint32_le (), 8));
+      bde_block.set_attribute ("volume_label", mobius::core::string::rstrip (decoder.get_string_by_size (11)));
+      bde_block.set_attribute ("filesystem_type",  mobius::core::string::rstrip (decoder.get_string_by_size (8)));
     }
 }
 
@@ -525,7 +525,7 @@ _decode_fve_metadata_offset_block (
                    "FVE block " +
                    std::to_string (i + 1) +
                    " offset: 0x" +
-                   mobius::string::to_hex (fve_block_offset[i], 8)
+                   mobius::core::string::to_hex (fve_block_offset[i], 8)
                 );
     }
 

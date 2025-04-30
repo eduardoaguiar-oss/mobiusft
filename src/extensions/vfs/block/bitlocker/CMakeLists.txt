@@ -32,7 +32,7 @@ set(SOURCES
 add_library(vfs_block_bitlocker MODULE ${SOURCES})
 set_target_properties(vfs_block_bitlocker PROPERTIES OUTPUT_NAME "vfs-block-bitlocker" PREFIX "")
 target_include_directories(vfs_block_bitlocker PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_block_bitlocker PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(vfs_block_bitlocker PRIVATE mobius_core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

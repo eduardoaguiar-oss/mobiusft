@@ -136,7 +136,7 @@ public:
   // @brief Create new reader
   // @return New reader
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::io::reader
+  mobius::core::io::reader
   new_reader () const
   {
     return impl_->new_reader ();

@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
-#include <mobius/io/reader.h>
+#include <mobius/core/bytearray.hpp>
+#include <mobius/core/io/reader.hpp>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -37,7 +37,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit blob (mobius::io::reader);
+  explicit blob (mobius::core::io::reader);
   blob (blob&&) noexcept = default;
   blob (const blob&) noexcept = default;
 
@@ -58,18 +58,18 @@ public:
   std::string get_description () const;
   std::uint32_t get_cipher_id () const;
   std::uint32_t get_key_length () const;
-  mobius::bytearray get_salt () const;
-  mobius::bytearray get_hmac_key () const;
+  mobius::core::bytearray get_salt () const;
+  mobius::core::bytearray get_hmac_key () const;
   std::uint32_t get_hash_id () const;
   std::uint32_t get_hash_length () const;
-  mobius::bytearray get_hmac_value () const;
-  mobius::bytearray get_cipher_text () const;
-  mobius::bytearray get_plain_text () const;
-  mobius::bytearray get_signature () const;
-  mobius::bytearray get_signature_data () const;
+  mobius::core::bytearray get_hmac_value () const;
+  mobius::core::bytearray get_cipher_text () const;
+  mobius::core::bytearray get_plain_text () const;
+  mobius::core::bytearray get_signature () const;
+  mobius::core::bytearray get_signature_data () const;
 
-  bool test_key (const mobius::bytearray&, const mobius::bytearray& = {});
-  bool decrypt (const mobius::bytearray&, const mobius::bytearray& = {});
+  bool test_key (const mobius::core::bytearray&, const mobius::core::bytearray& = {});
+  bool decrypt (const mobius::core::bytearray&, const mobius::core::bytearray& = {});
   bool is_decrypted () const;
 
 private:

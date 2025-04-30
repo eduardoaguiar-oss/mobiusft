@@ -47,7 +47,7 @@ func_new_path_from_win (PyObject *, PyObject *args)
 
   try
     {
-      auto p = mobius::io::new_path_from_win (arg_value);
+      auto p = mobius::core::io::new_path_from_win (arg_value);
       ret = pymobius_io_path_to_pyobject (p);
     }
   catch (const std::exception& e)

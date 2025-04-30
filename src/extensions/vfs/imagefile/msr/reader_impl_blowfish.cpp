@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "reader_impl_blowfish.hpp"
 #include "imagefile_impl.hpp"
-#include <mobius/io/file.h>
-#include <mobius/exception.inc>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace
@@ -61,11 +61,11 @@ reader_impl_blowfish::seek (offset_type offset, whence_type w)
     abs_offset = size_ - 1 + offset;
 
   else
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
 
   // update current pos, if possible
   if (abs_offset < 0)
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid offset"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid offset"));
 
   else if (size_type (abs_offset) <= size_)
     pos_ = abs_offset;
@@ -76,10 +76,10 @@ reader_impl_blowfish::seek (offset_type offset, whence_type w)
 // @param size size in bytes
 // @return bytearray containing data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 reader_impl_blowfish::read (size_type size)
 {
-  mobius::bytearray data;
+  mobius::core::bytearray data;
 
   size = std::min (size_ - pos_, size);
   constexpr int CHUNK_SIZE = 512;

@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pytypeobject.hpp>
-#include <mobius/io/tempfile.h>
+#include <mobius/core/io/tempfile.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -28,7 +28,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::io::tempfile *obj;
+  mobius::core::io::tempfile *obj;
 } io_tempfile_o;
 
 
@@ -37,8 +37,8 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject new_io_tempfile_type ();
 bool pymobius_io_tempfile_check (PyObject *);
-PyObject *pymobius_io_tempfile_to_pyobject (const mobius::io::tempfile&);
-mobius::io::tempfile pymobius_io_tempfile_from_pyobject (PyObject *);
+PyObject *pymobius_io_tempfile_to_pyobject (const mobius::core::io::tempfile&);
+mobius::core::io::tempfile pymobius_io_tempfile_from_pyobject (PyObject *);
 
 #endif
 

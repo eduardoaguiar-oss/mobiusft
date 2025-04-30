@@ -24,7 +24,7 @@
 #include <pylist.hpp>
 #include "extraction.hpp"
 #include "pod/map.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

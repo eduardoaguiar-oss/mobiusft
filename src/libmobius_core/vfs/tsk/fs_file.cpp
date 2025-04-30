@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/exception.inc>
-#include <mobius/io/path.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/io/path.hpp>
 #include <stdexcept>
 #include <mobius/core/vfs/tsk/fs_file.hpp>
 #include <mobius/core/vfs/tsk/stream_impl.hpp>

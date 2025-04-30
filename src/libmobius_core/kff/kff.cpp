@@ -17,10 +17,10 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/kff/kff.hpp>
 #include <mobius/core/application.hpp>
-#include <mobius/exception.inc>
-#include <mobius/io/file.h>
-#include <mobius/io/folder.h>
-#include <mobius/io/path.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/io/folder.hpp>
+#include <mobius/core/io/path.hpp>
 #include <mutex>
 #include <stdexcept>
 #include <string>
@@ -55,7 +55,7 @@ _init ()
 {
   mobius::core::application app;
   auto path = app.get_config_path ("kff");
-  auto folder = mobius::io::new_folder_by_path (path);
+  auto folder = mobius::core::io::new_folder_by_path (path);
 
   if (!folder.exists ())
     folder.create ();
@@ -66,7 +66,7 @@ _init ()
         {
           if (c.is_file () && c.get_extension () == "sqlite")
             {
-              mobius::io::path p (path + '/' + c.get_name ());
+              mobius::core::io::path p (path + '/' + c.get_name ());
               auto id = p.get_filename_prefix ();
               hashsets_.emplace (id, hashset (p.get_value ()));
             }
@@ -156,7 +156,7 @@ kff::remove_hashset (const std::string& id)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   mobius::core::application app;
   auto path = app.get_config_path ("kff/" + id + ".sqlite");
-  auto f = mobius::io::new_file_by_path (path);
+  auto f = mobius::core::io::new_file_by_path (path);
   f.remove ();
 }
 

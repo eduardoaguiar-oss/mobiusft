@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/crypt/cipher_impl_base.hpp>
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <gcrypt.h>
 
 namespace mobius::core::crypt::gcrypt
@@ -91,18 +91,18 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void reset () final;
   void final () final;
-  mobius::bytearray encrypt (const mobius::bytearray&) final;
-  mobius::bytearray decrypt (const mobius::bytearray&) final;
-  void authenticate (const mobius::bytearray&);
-  mobius::bytearray get_tag () const;
-  bool check_tag (const mobius::bytearray&) const;
+  mobius::core::bytearray encrypt (const mobius::core::bytearray&) final;
+  mobius::core::bytearray decrypt (const mobius::core::bytearray&) final;
+  void authenticate (const mobius::core::bytearray&);
+  mobius::core::bytearray get_tag () const;
+  bool check_tag (const mobius::core::bytearray&) const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Internal functions
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void set_key (const mobius::bytearray&);
-  void set_iv (const mobius::bytearray&);
-  void set_counter (const mobius::bytearray&);
+  void set_key (const mobius::core::bytearray&);
+  void set_iv (const mobius::core::bytearray&);
+  void set_counter (const mobius::core::bytearray&);
 
 private:
 
@@ -116,10 +116,10 @@ private:
   std::string type_;
 
   // @brief Initialization vector (IV)
-  mobius::bytearray iv_;
+  mobius::core::bytearray iv_;
 
   // @brief Counter vector (CV)
-  mobius::bytearray cv_;
+  mobius::core::bytearray cv_;
 
   // @brief True if it is a stream cipher
   bool is_stream_ = false;

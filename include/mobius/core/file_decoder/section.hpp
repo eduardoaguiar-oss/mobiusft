@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
-#include <mobius/io/reader.h>
+#include <mobius/core/bytearray.hpp>
+#include <mobius/core/io/reader.hpp>
 #include <memory>
 #include <string>
 #include <vector>
@@ -36,13 +36,13 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Datatypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  using size_type = mobius::io::reader::size_type;
+  using size_type = mobius::core::io::reader::size_type;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   section ();
-  section (const mobius::io::reader&, const std::string&);
+  section (const mobius::core::io::reader&, const std::string&);
   section (section&&) noexcept = default;
   section (const section&) noexcept = default;
 
@@ -58,10 +58,10 @@ public:
   std::string get_name () const;
   size_type get_offset () const;
   size_type get_size () const;
-  mobius::io::reader new_reader () const;
+  mobius::core::io::reader new_reader () const;
   section new_child (const std::string&);
   std::vector<section> get_children () const;
-  void set_data (const mobius::bytearray&);
+  void set_data (const mobius::core::bytearray&);
   void end ();
 
 private:

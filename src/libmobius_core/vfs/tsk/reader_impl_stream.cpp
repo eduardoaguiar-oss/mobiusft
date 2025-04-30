@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/vfs/tsk/reader_impl_stream.hpp>
 #include <mobius/core/vfs/tsk/exception.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 #include <tsk/libtsk.h>
 
@@ -74,13 +74,13 @@ reader_impl_stream::seek (offset_type offset, whence_type w)
 // @param size Size in bytes
 // @return Bytearray containing data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 reader_impl_stream::read (size_type size)
 {
   if (pos_ + size > size_)
     size = size_ - pos_;
 
-  mobius::bytearray data (size);
+  mobius::core::bytearray data (size);
 
   if (size > 0)
     {

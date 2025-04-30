@@ -35,7 +35,7 @@ set(SOURCES
 add_library(vfs_imagefile_split MODULE ${SOURCES})
 set_target_properties(vfs_imagefile_split PROPERTIES OUTPUT_NAME "vfs-imagefile-split" PREFIX "")
 target_include_directories(vfs_imagefile_split PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_imagefile_split PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(vfs_imagefile_split PRIVATE mobius_core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

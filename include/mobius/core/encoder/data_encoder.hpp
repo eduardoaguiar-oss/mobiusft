@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/writer.h>
-#include <mobius/bytearray.h>
+#include <mobius/core/io/writer.hpp>
+#include <mobius/core/bytearray.hpp>
 #include <cstdint>
 
 namespace mobius::core::encoder
@@ -31,8 +31,8 @@ namespace mobius::core::encoder
 class data_encoder
 {
 public:
-  explicit data_encoder (const mobius::io::writer&);
-  explicit data_encoder (mobius::bytearray&);
+  explicit data_encoder (const mobius::core::io::writer&);
+  explicit data_encoder (mobius::core::bytearray&);
   void encode_uint8 (std::uint8_t);
   void encode_uint16_le (std::uint16_t);
   void encode_uint32_le (std::uint32_t);
@@ -40,11 +40,11 @@ public:
 
   void encode_int64_le (std::int64_t);
   void encode_string_by_size (const std::string&, std::size_t);
-  void encode_bytearray (const mobius::bytearray&);
+  void encode_bytearray (const mobius::core::bytearray&);
   void fill (std::size_t, std::uint8_t);
 
 private:
-  mobius::io::writer writer_;
+  mobius::core::io::writer writer_;
 };
 
 } // namespace mobius::core::encoder

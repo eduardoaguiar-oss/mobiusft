@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/vfs/tsk/reader_impl_file.hpp>
 #include <mobius/core/vfs/tsk/exception.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 #include <tsk/libtsk.h>
 
@@ -53,7 +53,7 @@ reader_impl_file::seek (offset_type offset, whence_type w)
     abs_offset = size_ + offset;
 
   else
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
 
   // update current pos, if possible
   if (abs_offset < 0)
@@ -68,13 +68,13 @@ reader_impl_file::seek (offset_type offset, whence_type w)
 // @param size Size in bytes
 // @return Bytearray containing data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 reader_impl_file::read (size_type size)
 {
   if (pos_ + size > size_)
     size = size_ - pos_;
 
-  mobius::bytearray data (size);
+  mobius::core::bytearray data (size);
 
   if (size > 0)
     {

@@ -25,7 +25,7 @@ namespace mobius::extension::app::ares
 // @brief Decode file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-decoder_impl_torrenth::decode (const mobius::io::reader& reader)
+decoder_impl_torrenth::decode (const mobius::core::io::reader& reader)
 {
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Decode file

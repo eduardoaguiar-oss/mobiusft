@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/os/win/registry/registry_data_impl_base.hpp>
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <cstdint>
 #include <string>
 #include <memory>
@@ -84,7 +84,7 @@ public:
   // @brief get data
   // @return data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_data () const
   {
     return impl_->get_data ();

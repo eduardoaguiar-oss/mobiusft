@@ -33,7 +33,7 @@ set(SOURCES
 add_library(vfs_filesystem_iso MODULE ${SOURCES})
 set_target_properties(vfs_filesystem_iso PROPERTIES OUTPUT_NAME "vfs-filesystem-iso" PREFIX "")
 target_include_directories(vfs_filesystem_iso PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_filesystem_iso PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(vfs_filesystem_iso PRIVATE mobius_core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

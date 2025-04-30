@@ -52,7 +52,7 @@ public:
   void set_sensitive (bool) final;
   void set_visible (bool) final;
   void set_icon_by_name (const std::string&, size_type) final;
-  void set_icon_from_data (const mobius::bytearray&, size_type) final;
+  void set_icon_from_data (const mobius::core::bytearray&, size_type) final;
 
 private:
   // @brief Low level widget

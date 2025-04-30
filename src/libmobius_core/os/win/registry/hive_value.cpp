@@ -36,7 +36,7 @@ public:
   // constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   impl () = default;
-  impl (mobius::io::reader, offset_type);
+  impl (mobius::core::io::reader, offset_type);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief check if object is valid
@@ -103,7 +103,7 @@ public:
 
 private:
   // @brief generic reader
-  mobius::io::reader reader_;
+  mobius::core::io::reader reader_;
 
   // @brief offset in bytes
   offset_type offset_ = INVALID_OFFSET;
@@ -132,7 +132,7 @@ private:
 // @param reader generic reader
 // @param offset offset in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-hive_value::impl::impl (mobius::io::reader reader, offset_type offset)
+hive_value::impl::impl (mobius::core::io::reader reader, offset_type offset)
   : reader_ (reader),
     offset_ (offset)
 {
@@ -174,7 +174,7 @@ hive_value::hive_value ()
 // @param reader generic reader
 // @param offset offset in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-hive_value::hive_value (mobius::io::reader reader, offset_type offset)
+hive_value::hive_value (mobius::core::io::reader reader, offset_type offset)
   : impl_ (std::make_shared <impl> (reader, offset))
 {
 }

@@ -73,7 +73,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Overwritten methods
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void update (const mobius::bytearray&) noexcept final;
+  void update (const mobius::core::bytearray&) noexcept final;
   void reset () noexcept final;
   bytearray get_digest () final;
   std::shared_ptr <hash_impl_base> clone () const final;

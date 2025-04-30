@@ -77,7 +77,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Overwritten methods
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void update (const mobius::bytearray&) final;
+  void update (const mobius::core::bytearray&) final;
   void reset () final;
   bytearray get_digest () final;
   std::shared_ptr <hash_impl_base> clone () const final;

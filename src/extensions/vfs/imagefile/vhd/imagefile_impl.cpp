@@ -19,8 +19,8 @@
 #include "reader_impl_fixed.hpp"
 #include "reader_impl_dynamic.hpp"
 #include <mobius/core/decoder/data_decoder.hpp>
-#include <mobius/exception.inc>
-#include <mobius/io/file.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/io/file.hpp>
 #include <stdexcept>
 
 namespace
@@ -56,7 +56,7 @@ decode_timestamp (std::uint32_t timestamp)
 // @return True/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-imagefile_impl::is_instance (const mobius::io::file& f)
+imagefile_impl::is_instance (const mobius::core::io::file& f)
 {
   bool is_instance = false;
 
@@ -66,7 +66,7 @@ imagefile_impl::is_instance (const mobius::io::file& f)
 
       if (reader)
         {
-          reader.seek (-SECTOR_SIZE, mobius::io::reader::whence_type::end);
+          reader.seek (-SECTOR_SIZE, mobius::core::io::reader::whence_type::end);
           auto data = reader.read (8);
           is_instance = data == "conectix";
         }
@@ -79,7 +79,7 @@ imagefile_impl::is_instance (const mobius::io::file& f)
 // @brief Constructor
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-imagefile_impl::imagefile_impl (const mobius::io::file& f)
+imagefile_impl::imagefile_impl (const mobius::core::io::file& f)
   : file_ (f)
 {
 }
@@ -107,7 +107,7 @@ imagefile_impl::set_attribute (
   const mobius::core::pod::data&
 )
 {
-  throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("set_attribute not implemented"));
+  throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("set_attribute not implemented"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -125,29 +125,29 @@ imagefile_impl::get_attributes () const
 // @brief Create new reader for imagefile
 // @return reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::reader
+mobius::core::io::reader
 imagefile_impl::new_reader () const
 {
   _load_metadata ();
 
   if (disk_type_ == DISK_TYPE_FIXED)
-    return mobius::io::reader (std::make_shared <reader_impl_fixed> (*this));
+    return mobius::core::io::reader (std::make_shared <reader_impl_fixed> (*this));
 
   else if (disk_type_ == DISK_TYPE_DYNAMIC)
-    return mobius::io::reader (std::make_shared <reader_impl_dynamic> (*this));
+    return mobius::core::io::reader (std::make_shared <reader_impl_dynamic> (*this));
 
   else
-    throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("unsupported disk type"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("unsupported disk type"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create new writer for imagefile
 // @return writer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::writer
+mobius::core::io::writer
 imagefile_impl::new_writer () const
 {
-  throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("writer not implemented"));
+  throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("writer not implemented"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -160,7 +160,7 @@ imagefile_impl::get_block_allocation_table () const
   _load_metadata ();
 
   if (disk_type_ != DISK_TYPE_DYNAMIC)
-    throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("Disk type has no Block Allocation Table"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Disk type has no Block Allocation Table"));
 
   return block_allocation_table_;
 }
@@ -175,7 +175,7 @@ imagefile_impl::get_block_size () const
   _load_metadata ();
 
   if (disk_type_ != DISK_TYPE_DYNAMIC)
-    throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("Disk type has no block size"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Disk type has no block size"));
 
   return block_size_;
 }
@@ -193,20 +193,20 @@ imagefile_impl::_load_metadata () const
   // Check if imagefile exists
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   if (!file_ || !file_.exists ())
-    throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("Image file not found"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Image file not found"));
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Decode Hard Disk Footer
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto reader = file_.new_reader ();
-  reader.seek (-SECTOR_SIZE, mobius::io::reader::whence_type::end);
+  reader.seek (-SECTOR_SIZE, mobius::core::io::reader::whence_type::end);
   mobius::core::decoder::data_decoder decoder (reader);
 
   // test signature
   auto signature = decoder.get_string_by_size (8);
 
   if (signature != "conectix")
-    throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("Invalid VHD signature"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Invalid VHD signature"));
 
   // features
   decoder.skip (4);
@@ -239,7 +239,7 @@ imagefile_impl::_load_metadata () const
   decoder.skip (4);		// checksum
 
   if (disk_type_ != DISK_TYPE_FIXED && disk_type_ != DISK_TYPE_DYNAMIC)
-    throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("Unsupported disk type"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Unsupported disk type"));
 
   // UUID
   std::string disk_uuid = decoder.get_uuid ();
@@ -255,7 +255,7 @@ imagefile_impl::_load_metadata () const
       auto signature = decoder.get_string_by_size (8);
 
       if (signature != "cxsparse")
-        throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("Invalid VHD Dynamic Disk Header signature"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Invalid VHD Dynamic Disk Header signature"));
 
       // data offset (unused)
       decoder.skip (8);

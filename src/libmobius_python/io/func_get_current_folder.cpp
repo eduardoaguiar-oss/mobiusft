@@ -34,7 +34,7 @@ func_get_current_folder (PyObject *, PyObject *)
 
   try
     {
-      ret = pymobius_io_folder_to_pyobject (mobius::io::get_current_folder ());
+      ret = pymobius_io_folder_to_pyobject (mobius::core::io::get_current_folder ());
     }
   catch (const std::exception& e)
     {

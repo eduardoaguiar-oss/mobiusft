@@ -18,8 +18,8 @@
 #include "../file_part_met_txtsrc.hpp"
 #include <mobius/core/application.hpp>
 #include <mobius/core/log.hpp>
-#include <mobius/io/file.h>
-#include <mobius/string_functions.h>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/string_functions.hpp>
 #include <iostream>
 #include <unistd.h>
 
@@ -47,7 +47,7 @@ show_part_met_txtsrc (const std::string& path)
     std::cout << std::endl;
     std::cout << ">> " << path << std::endl;
 
-    auto f = mobius::io::new_file_by_path (path);
+    auto f = mobius::core::io::new_file_by_path (path);
     auto reader = f.new_reader ();
 
     mobius::extension::app::emule::file_part_met_txtsrc txtsrc (reader);

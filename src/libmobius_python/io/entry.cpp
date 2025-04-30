@@ -31,7 +31,7 @@
 // @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_io_entry_to_pyobject (mobius::io::entry obj)
+pymobius_io_entry_to_pyobject (mobius::core::io::entry obj)
 {
   PyObject *ret = nullptr;
 

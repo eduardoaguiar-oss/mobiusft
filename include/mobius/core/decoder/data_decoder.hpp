@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/reader.h>
+#include <mobius/core/io/reader.hpp>
 #include <mobius/core/datetime/datetime.hpp>
 #include <string>
 
@@ -34,14 +34,14 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Datatypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  using size_type = mobius::io::reader::size_type;
-  using offset_type = mobius::io::reader::offset_type;
+  using size_type = mobius::core::io::reader::size_type;
+  using offset_type = mobius::core::io::reader::offset_type;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit data_decoder (const mobius::io::reader&);
-  explicit data_decoder (const mobius::bytearray&);
+  explicit data_decoder (const mobius::core::io::reader&);
+  explicit data_decoder (const mobius::core::bytearray&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Operators
@@ -101,12 +101,12 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Other types
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray get_bytearray_by_size (std::size_t);
+  mobius::core::bytearray get_bytearray_by_size (std::size_t);
 
   std::string get_ipv4 ();	//! \deprecated
 
 private:
-  mobius::io::reader in_;
+  mobius::core::io::reader in_;
 };
 
 } // namespace mobius::core::decoder

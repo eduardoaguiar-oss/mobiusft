@@ -24,7 +24,7 @@
 #include <pygil.hpp>
 #include "evidence_loader.hpp"
 #include "model/item.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

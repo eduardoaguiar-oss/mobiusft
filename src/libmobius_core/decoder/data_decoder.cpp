@@ -18,9 +18,9 @@
 #include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/datetime/timedelta.hpp>
-#include <mobius/io/bytearray_io.h>
+#include <mobius/core/io/bytearray_io.hpp>
 #include <mobius/core/charset.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <string>
 #include <cstdio>
 #include <sstream>
@@ -36,8 +36,8 @@ namespace
 // @param size Size in bytes
 // @return Bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static inline mobius::bytearray
-read (mobius::io::reader& reader, std::size_t size)
+static inline mobius::core::bytearray
+read (mobius::core::io::reader& reader, std::size_t size)
 {
   auto data = reader.read (size);
 
@@ -53,7 +53,7 @@ read (mobius::io::reader& reader, std::size_t size)
 // @brief Constructor
 // @param in reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data_decoder::data_decoder (const mobius::io::reader& in)
+data_decoder::data_decoder (const mobius::core::io::reader& in)
   : in_ (in)
 {
 }
@@ -62,8 +62,8 @@ data_decoder::data_decoder (const mobius::io::reader& in)
 // @brief Constructor
 // @param data bytearray object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data_decoder::data_decoder (const mobius::bytearray& data)
-  : in_ (mobius::io::new_bytearray_reader (data))
+data_decoder::data_decoder (const mobius::core::bytearray& data)
+  : in_ (mobius::core::io::new_bytearray_reader (data))
 {
 }
 
@@ -393,7 +393,7 @@ data_decoder::get_fat_datetime ()
 // @param size size in bytes
 // @return bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 data_decoder::get_bytearray_by_size (std::size_t size)
 {
   return read (in_, size);

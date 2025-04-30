@@ -55,7 +55,7 @@ public:
   virtual section get_section () const = 0;
   virtual std::vector<entry> get_entries () const = 0;
   virtual metadata get_metadata () const = 0;
-  virtual void decode (const mobius::io::reader&) = 0;
+  virtual void decode (const mobius::core::io::reader&) = 0;
 };
 
 } // namespace mobius::core::file_decoder

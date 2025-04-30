@@ -42,26 +42,26 @@ pymobius_io_text_writer_check (PyObject *pyobj)
 // @return new object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_io_text_writer_to_pyobject (const mobius::io::text_writer& obj)
+pymobius_io_text_writer_to_pyobject (const mobius::core::io::text_writer& obj)
 {
   PyObject *ret =  _PyObject_New (&io_text_writer_t);
 
   if (ret)
-    ((io_text_writer_o *) ret)->obj = new mobius::io::text_writer (obj);
+    ((io_text_writer_o *) ret)->obj = new mobius::core::io::text_writer (obj);
 
   return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>mobius::io::text_writer</i> C++ object from Python object
+// @brief Create <i>mobius::core::io::text_writer</i> C++ object from Python object
 // @param value Python object
 // @return C++ object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::text_writer
+mobius::core::io::text_writer
 pymobius_io_text_writer_from_pyobject (PyObject *value)
 {
   if (!pymobius_io_text_writer_check (value))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.io.text_writer"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.io.text_writer"));
 
   return * (reinterpret_cast <io_text_writer_o *>(value)->obj);
 }
@@ -176,7 +176,7 @@ static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
   // Parse input args
-  mobius::io::writer arg_writer;
+  mobius::core::io::writer arg_writer;
   std::string arg_encoding;
 
   try
@@ -197,7 +197,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::io::text_writer (arg_writer, arg_encoding);
+          ret->obj = new mobius::core::io::text_writer (arg_writer, arg_encoding);
         }
       catch (const std::exception& e)
         {

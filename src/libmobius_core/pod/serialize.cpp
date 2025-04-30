@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/pod/data.hpp>
 #include <mobius/core/pod/map.hpp>
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <mobius/core/encoder/data_encoder.hpp>
 #include <cstdint>
 #include <stdexcept>
@@ -86,7 +86,7 @@ _serialize_data (mobius::core::encoder::data_encoder& encoder, const data& data)
 
     case data::type::bytearray:
       {
-        auto b = mobius::bytearray (data);
+        auto b = mobius::core::bytearray (data);
         encoder.encode_uint8 ('B');
         encoder.encode_uint64_le (b.size ());
         encoder.encode_bytearray (b);
@@ -145,10 +145,10 @@ _serialize (mobius::core::encoder::data_encoder& encoder, const data& data)
 // @param data Data object
 // @return Encoded data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 serialize (const data& data)
 {
-  mobius::bytearray out;
+  mobius::core::bytearray out;
   mobius::core::encoder::data_encoder encoder (out);
 
   encoder.encode_uint32_le (VERSION);
@@ -163,7 +163,7 @@ serialize (const data& data)
 // @return Encoded data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-serialize (mobius::io::writer writer, const data& data)
+serialize (mobius::core::io::writer writer, const data& data)
 {
   mobius::core::encoder::data_encoder encoder (writer);
   _serialize (encoder, data);

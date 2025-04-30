@@ -26,7 +26,7 @@ namespace mobius::core::os::win
 // @param password Password
 // @return NT hash
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 hash_nt (const std::string& password)
 {
   mobius::core::crypt::hash md4 ("md4");

@@ -23,7 +23,7 @@
 #include <pymobius.hpp>
 #include "ifile.hpp"
 #include "io/reader.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -62,7 +62,7 @@ mobius::core::os::win::trashbin::ifile
 pymobius_os_win_trashbin_ifile_from_pyobject (PyObject *value)
 {
   if (!pymobius_os_win_trashbin_ifile_check (value))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.os.win.trashbin.ifile"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.os.win.trashbin.ifile"));
 
   return * (reinterpret_cast <os_win_trashbin_ifile_o *>(value)->obj);
 }
@@ -202,7 +202,7 @@ static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
   // Parse input args
-  mobius::io::reader arg_reader;
+  mobius::core::io::reader arg_reader;
 
   try
     {

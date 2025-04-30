@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/reader.h>
+#include <mobius/core/io/reader.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <string>
 
@@ -61,7 +61,7 @@ public:
   virtual mobius::core::pod::map get_attributes () const = 0;
   virtual mobius::core::pod::map get_state () const = 0;
   virtual std::string get_path () const = 0;
-  virtual mobius::io::reader new_reader () const = 0;
+  virtual mobius::core::io::reader new_reader () const = 0;
   virtual std::string get_type () const = 0;
   virtual size_type get_size () const = 0;
   virtual std::string get_name () const = 0;

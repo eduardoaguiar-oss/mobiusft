@@ -18,7 +18,7 @@
 #include <mobius/core/os/win/registry/registry_key_impl_msdcc.hpp>
 #include <mobius/core/os/win/registry/registry_data_impl_msdcc.hpp>
 #include <mobius/core/os/win/registry/registry_value.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 
 namespace mobius::core::os::win::registry
 {
@@ -27,7 +27,7 @@ namespace mobius::core::os::win::registry
 // @param key \\HKLM\\SECURITY\\Cache key
 // @param nlkm NL$KM value from LSA Secrets
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-registry_key_impl_msdcc::registry_key_impl_msdcc (registry_key key, const mobius::bytearray& nlkm)
+registry_key_impl_msdcc::registry_key_impl_msdcc (registry_key key, const mobius::core::bytearray& nlkm)
   : key_ (key),
     name_ (key.get_name ()),
     nlkm_ (nlkm)
@@ -47,7 +47,7 @@ registry_key_impl_msdcc::_load_values () const
   // load values from Cache key
   for (auto k_value : key_.get_values ())
     {
-      if (mobius::string::fnmatch ("NL$[0-9]*", k_value.get_name ()))
+      if (mobius::core::string::fnmatch ("NL$[0-9]*", k_value.get_name ()))
         {
           auto v_data = k_value.get_data ().get_data ();
 

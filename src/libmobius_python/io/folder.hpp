@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/io/folder.h>
+#include <mobius/core/io/folder.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::io::folder *obj;
+  mobius::core::io::folder *obj;
 } io_folder_o;
 
 extern PyTypeObject io_folder_t;
@@ -36,8 +36,8 @@ extern PyTypeObject io_folder_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_io_folder_check (PyObject *);
-PyObject *pymobius_io_folder_to_pyobject (mobius::io::folder);
-mobius::io::folder pymobius_io_folder_from_pyobject (PyObject *);
+PyObject *pymobius_io_folder_to_pyobject (mobius::core::io::folder);
+mobius::core::io::folder pymobius_io_folder_from_pyobject (PyObject *);
 
 #endif
 

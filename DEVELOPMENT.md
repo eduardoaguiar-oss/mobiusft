@@ -3,10 +3,10 @@
 ## 1. Project layers
 
 ```
-                 +--------------------+
-                 | Python extensions  |
 +----------------+--------------------+
-| C++ extensions |  libmobius_python  |
+| C++ extensions | Python extensions  |
+|                +--------------------+
+|                |  libmobius_python  |
 |       +---------------------+       |
 |       | libmobius_framework |       |
 +-------------------------------------+
@@ -20,62 +20,58 @@ These are the project main directories and main files:
 
 ```text
 mobius/
-├── CMakeLists.txt                # Future top-level CMake file
-├── configure.ac                  # Current Autotools config
-├── Makefile.am                   # Top-level: SUBDIRS = src data
-├── README.md                     # Project overview
-├── DEVELOPMENT.md                # This file
+├── CMakeLists.txt		# Top-level CMake file
+├── configure.ac		# @deprecated Current Autotools config
+├── Makefile.am			# @deprecated Top-level Makefile.am
+├── README.md			# Project overview
+├── DEVELOPMENT.md		# This file
 ├── LICENSE
-├── include/
+├── include/			# mobius_core and mobius_framework include files
 │   ├── mobius/
 │   │   ├── core/
 │   │   │   └── *.hpp
 │   │   ├── framework/
 │   │   │   └── *.hpp
 ├── src/
-│   ├── CMakeLists.txt           # CMake for src/
-│   ├── Makefile.am              # SUBDIRS = libmobius_core ...
-│   ├── libmobius_core/
+│   ├── CMakeLists.txt
+│   ├── libmobius_core/		# Forensic library
 │   │   ├── CMakeLists.txt
-│   │   ├── Makefile.am
+│   │   ├── crypt/
+│   │   ├── database/
+│   │   ├── ...
+│   │   ├── vfs/
+│   │   ├── ...
 │   │   └── *.cpp
-│   ├── libmobius_framework/
+│   ├── libmobius_framework/	# MobiusFT framework library
 │   │   ├── CMakeLists.txt
-│   │   ├── Makefile.am
+│   │   ├── ...
+│   │   ├── model/
+│   │   ├── ...
 │   │   └── *.cpp
-│   ├── libmobius_python/
+│   ├── libmobius_python/	# Python 'mobius' module (import mobius)
 │   │   ├── core
 │   │   │   └── CMakeLists.txt
 │   │   ├── framework
 │   │   │   └── CMakeLists.txt
 │   │   ├── CMakeLists.txt
-│   │   ├── Makefile.am
 │   │   └── *.cpp
-│   ├── extensions/
+│   ├── extensions/		# C++ and Python extensions
 │   │   ├── CMakeLists.txt
-│   │   ├── Makefile.am
 │   │   ├── app/ares/
 │   │   ├── app/emule/
 │   │   ├── ...
 │   │   ├── vfs/
 │   │   └── ...
-│   ├── python/
+│   ├── pymobius/		# Python 'pymobius' module (import pymobius)
 │   │   ├── CMakeLists.txt
-│   │   ├── pymobius/
-│   │   └── scripts/
+│   │   ├── ant/
+│   │   ├── app/
+│   │   ├── ...
 │   ├── tools/                   # C++ tools/examples
-│   │   ├── CMakeLists.txt       # CMake for building tools
-│   │   ├── Makefile.am          # Autotools for current hybrid build
-│   │   ├── mobius-extract/      # Example tool 1
-│   │   │   ├── CMakeLists.txt
-│   │   │   └── *.cpp
-│   │   ├── mobius-analyze/      # Example tool 2
-│   │   │   ├── CMakeLists.txt
-│   │   │   └── *.cpp
-│   │   └── ...                  # Other tools
+│   │   ├── CMakeLists.txt
+│   │   └── *.cpp
 ├── data/
 │   └── Makefile.am
 ├── mobius_bin.py
 └── mobius_bin.sh
 ```
-

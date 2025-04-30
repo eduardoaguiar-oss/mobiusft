@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/io/text_reader.h>
+#include <mobius/core/io/text_reader.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::io::text_reader *obj;
+  mobius::core::io::text_reader *obj;
 } io_text_reader_o;
 
 extern PyTypeObject io_text_reader_t;
@@ -36,8 +36,8 @@ extern PyTypeObject io_text_reader_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_io_text_reader_check (PyObject *);
-PyObject *pymobius_io_text_reader_to_pyobject (const mobius::io::text_reader&);
-mobius::io::text_reader pymobius_io_text_reader_from_pyobject (PyObject *);
+PyObject *pymobius_io_text_reader_to_pyobject (const mobius::core::io::text_reader&);
+mobius::core::io::text_reader pymobius_io_text_reader_from_pyobject (PyObject *);
 
 #endif
 

@@ -29,21 +29,57 @@ project(mobius
     LANGUAGES CXX
 )
 
+include(GNUInstallDirs)
+
 set(MOBIUS_SOURCE_DIR ${CMAKE_SOURCE_DIR})
-set(MOBIUS_INCLUDE_DIRS ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/include)
-set(TOP_SRC_DIR ${CMAKE_SOURCE_DIR})
-set(TOP_BUILD_DIR ${CMAKE_BINARY_DIR})
+set(MOBIUS_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/include)
+set(MOBIUS_SHARE_DIR "${CMAKE_INSTALL_DATADIR}/mobiusft" CACHE PATH "Installation directory for share/mobiusft")
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Set MOBIUS_PYTHON_DIR
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+find_program(Python3_EXECUTABLE NAMES python3 REQUIRED)
+find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+
+set(MOBIUS_PYTHON_DIR "${CMAKE_INSTALL_LIBDIR}/python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/site-packages")
+message(STATUS "MOBIUS_PYTHON_DIR: ${MOBIUS_PYTHON_DIR}")
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Build modules
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#add_subdirectory(data)
+add_subdirectory(data)
 add_subdirectory(include)
 add_subdirectory(src)
 
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Installation
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/mobius_bin.sh.in
+    ${CMAKE_CURRENT_BINARY_DIR}/mobius_bin.sh
+    @ONLY
+    NEWLINE_STYLE UNIX
+    FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+)
+
+install(
+    FILES mobius_bin.py
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+    PERMISSIONS 
+        OWNER_READ OWNER_WRITE OWNER_EXECUTE
+        GROUP_READ GROUP_EXECUTE
+        WORLD_READ WORLD_EXECUTE
+)
+
+install(
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/mobius_bin.sh
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+    PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Package definition
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 set(CPACK_PACKAGE_NAME "mobiusft")
 set(CPACK_PACKAGE_VENDOR "Eduardo Aguiar")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${MOBIUS_DESCRIPTION}")

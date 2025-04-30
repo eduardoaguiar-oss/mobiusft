@@ -18,8 +18,8 @@
 #include "../file_cancelled_met.hpp"
 #include <mobius/core/application.hpp>
 #include <mobius/core/log.hpp>
-#include <mobius/io/file.h>
-#include <mobius/string_functions.h>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/string_functions.hpp>
 #include <iostream>
 #include <unistd.h>
 
@@ -53,7 +53,7 @@ show_file (const mobius::extension::app::emule::file_cancelled_met::CCancelledFi
     {
         std::cerr   << "\t\t\t\t"
                     << int (tag.get_id ()) << '\t'
-                    << mobius::string::to_hex (tag.get_type (), 2) << '\t'
+                    << mobius::core::string::to_hex (tag.get_type (), 2) << '\t'
                     << tag.get_name () << '\t'
                     << tag.get_value ().to_string () << std::endl;
     }
@@ -69,7 +69,7 @@ show_cancelled_met (const std::string& path)
   std::cout << std::endl;
   std::cout << ">> " << path << std::endl;
 
-  auto f = mobius::io::new_file_by_path (path);
+  auto f = mobius::core::io::new_file_by_path (path);
   auto reader = f.new_reader ();
   
   mobius::extension::app::emule::file_cancelled_met met (reader);

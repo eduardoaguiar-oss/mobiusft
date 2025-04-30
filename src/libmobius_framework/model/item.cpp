@@ -17,14 +17,14 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/mediator.hpp>
 #include <mobius/core/datetime/datetime.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <mobius/framework/category.hpp>
 #include <mobius/framework/model/item.hpp>
 #include <mobius/framework/model/case.hpp>
 #include <mobius/framework/model/event.hpp>
 #include <mobius/framework/model/evidence.hpp>
-#include <mobius/io/file.h>
-#include <mobius/io/folder.h>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/io/folder.hpp>
 #include <cstddef>
 #include <stdexcept>
 #include <unordered_map>
@@ -48,7 +48,7 @@ namespace
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 constexpr std::uint64_t ATTRIBUTE_FILE_THRESHOLD = 33554432; // 32 MiB
-const mobius::bytearray ATTRIBUTE_FILE_ID = {0xde, 0xea, 0xbe, 0xef, 0xc0, 0xc0, 0xa0, 'M', 'O', 'B', 'I', 'U', 'S', 'P', 'O', 'D'};
+const mobius::core::bytearray ATTRIBUTE_FILE_ID = {0xde, 0xea, 0xbe, 0xef, 0xc0, 0xc0, 0xa0, 'M', 'O', 'B', 'I', 'U', 'S', 'P', 'O', 'D'};
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Expand value mask, using item attributes
@@ -210,11 +210,11 @@ private:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void _load_data () const;
   int _reserve_index (int) const;
-  void _save_attribute_file (const std::string&, const mobius::bytearray&);
-  mobius::bytearray _load_attribute_file (const std::string&) const;
+  void _save_attribute_file (const std::string&, const mobius::core::bytearray&);
+  mobius::core::bytearray _load_attribute_file (const std::string&) const;
   void _remove_attribute_file (const std::string&);
-  mobius::io::file _get_attribute_file (const std::string&) const;
-  mobius::io::file _create_attribute_file (const std::string&) const;
+  mobius::core::io::file _get_attribute_file (const std::string&) const;
+  mobius::core::io::file _create_attribute_file (const std::string&) const;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -353,7 +353,7 @@ item::impl::set_attribute (const std::string& id, const mobius::core::pod::data&
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Serialize value and check if size is greater than threshold
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray bytes = mobius::core::pod::serialize (value);
+  mobius::core::bytearray bytes = mobius::core::pod::serialize (value);
 
   if (bytes.size () > ATTRIBUTE_FILE_THRESHOLD)
     {
@@ -685,7 +685,7 @@ item::impl::remove ()
   // remove data folder
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto path = get_data_path ("");
-  auto folder = mobius::io::new_folder_by_path (path);
+  auto folder = mobius::core::io::new_folder_by_path (path);
 
   if (folder.exists ())
     folder.remove ();
@@ -890,11 +890,11 @@ item::impl::_reserve_index (int idx) const
 // @param id Attribute ID
 // @return File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::file
+mobius::core::io::file
 item::impl::_get_attribute_file (const std::string& id) const
 {
   auto path = get_data_path ("attrs/" + id + ".pod");
-  return mobius::io::new_file_by_path (path);
+  return mobius::core::io::new_file_by_path (path);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -902,11 +902,11 @@ item::impl::_get_attribute_file (const std::string& id) const
 // @param id Attribute ID
 // @return File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::file
+mobius::core::io::file
 item::impl::_create_attribute_file (const std::string& id) const
 {
   auto path = create_data_path ("attrs/" + id + ".pod");
-  return mobius::io::new_file_by_path (path);
+  return mobius::core::io::new_file_by_path (path);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -917,7 +917,7 @@ item::impl::_create_attribute_file (const std::string& id) const
 void
 item::impl::_save_attribute_file (
   const std::string& id,
-  const mobius::bytearray& bytes)
+  const mobius::core::bytearray& bytes)
 {
   auto f = _create_attribute_file (id);
   auto writer = f.new_writer ();
@@ -929,7 +929,7 @@ item::impl::_save_attribute_file (
 // @param id Attribute ID
 // @return Attribute data serialized
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 item::impl::_load_attribute_file (const std::string& id) const
 {
   auto f = _get_attribute_file (id);

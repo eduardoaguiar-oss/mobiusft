@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/crypt/cipher_impl_base.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace mobius::core::crypt
@@ -84,7 +84,7 @@ public:
   // @param data input data
   // @return Encrypted data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   encrypt (const bytearray&) final
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid cipher"));
@@ -95,7 +95,7 @@ public:
   // @param data input data
   // @return Decrypted data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   decrypt (const bytearray&) final
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid cipher"));
@@ -116,7 +116,7 @@ public:
   // @param data Data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
-  authenticate (const mobius::bytearray&) final
+  authenticate (const mobius::core::bytearray&) final
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid cipher"));
   }
@@ -125,7 +125,7 @@ public:
   // @brief Get authentication tag
   // @return Tag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_tag () const final
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid cipher"));
@@ -137,7 +137,7 @@ public:
   // @return True if tag match
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
-  check_tag (const mobius::bytearray&) const final
+  check_tag (const mobius::core::bytearray&) const final
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid cipher"));
   }

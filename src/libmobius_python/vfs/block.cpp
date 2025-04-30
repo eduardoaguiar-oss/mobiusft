@@ -23,7 +23,7 @@
 #include <pymobius.hpp>
 #include <pylist.hpp>
 #include "block.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 #include "io/reader.hpp"
 #include "pod/data.hpp"

@@ -16,9 +16,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/collection_impl_base.hpp>
-#include <mobius/exception.inc>
-#include <mobius/io/file_impl_null.h>
-#include <mobius/io/folder_impl_null.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/io/file_impl_null.hpp>
+#include <mobius/core/io/folder_impl_null.hpp>
 #include <mobius/core/vfs/tsk/folder_impl.hpp>
 #include <mobius/core/vfs/tsk/file_impl.hpp>
 #include <mobius/core/vfs/tsk/exception.hpp>
@@ -29,7 +29,7 @@ namespace mobius::core::vfs::tsk
 {
 namespace
 {
-using entry_impl = mobius::io::folder_impl_base::entry_impl;
+using entry_impl = mobius::core::io::folder_impl_base::entry_impl;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Collection implementation for folder entries
@@ -250,7 +250,7 @@ folder_impl::move (folder_type)
 folder_impl::file_type
 folder_impl::new_file (const std::string& name) const
 {
-  file_type f = std::make_shared <mobius::io::file_impl_null> ();
+  file_type f = std::make_shared <mobius::core::io::file_impl_null> ();
   auto children = get_children ();
   entry_impl e;
 
@@ -279,7 +279,7 @@ folder_impl::new_file (const std::string& name) const
 folder_impl::folder_type
 folder_impl::new_folder (const std::string& name) const
 {
-  folder_type f = std::make_shared <mobius::io::folder_impl_null> ();
+  folder_type f = std::make_shared <mobius::core::io::folder_impl_null> ();
   auto children = get_children ();
   entry_impl e;
 
@@ -312,7 +312,7 @@ folder_impl::get_parent () const
   if (parent)
     return std::make_shared <folder_impl> (parent);
 
-  return std::make_shared <mobius::io::folder_impl_null> ();
+  return std::make_shared <mobius::core::io::folder_impl_null> ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -32,7 +32,7 @@ set(SOURCES
 add_library(vfs_block_partition_system_dos MODULE ${SOURCES})
 set_target_properties(vfs_block_partition_system_dos PROPERTIES OUTPUT_NAME "vfs-block-partition-system-dos" PREFIX "")
 target_include_directories(vfs_block_partition_system_dos PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_block_partition_system_dos PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(vfs_block_partition_system_dos PRIVATE mobius_core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

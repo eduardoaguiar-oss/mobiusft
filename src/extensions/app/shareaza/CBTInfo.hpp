@@ -21,7 +21,7 @@
 #include "CXMLElement.hpp"
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/decoder/mfc.hpp>
-#include <mobius/io/reader.h>
+#include <mobius/core/io/reader.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <cstdint>
 #include <string>

@@ -21,7 +21,7 @@
 #include <mobius/core/metadata.hpp>
 #include <mobius/core/os/win/registry/registry_key.hpp>
 #include <mobius/core/datetime/datetime.hpp>
-#include <mobius/io/reader.h>
+#include <mobius/core/io/reader.hpp>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -36,7 +36,7 @@ class registry_file
 {
 public:
   // constructors
-  registry_file (std::uint32_t, const std::string&, const std::string&, mobius::io::reader);
+  registry_file (std::uint32_t, const std::string&, const std::string&, mobius::core::io::reader);
   registry_file (registry_file&&) noexcept = default;
   registry_file (const registry_file&) noexcept = default;
 

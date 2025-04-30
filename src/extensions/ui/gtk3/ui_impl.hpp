@@ -66,7 +66,7 @@ public:
   std::shared_ptr <mobius::core::ui::box_impl_base> new_box (mobius::core::ui::box_impl_base::orientation_type) const final;
   std::shared_ptr <mobius::core::ui::button_impl_base> new_button () const final;
   std::shared_ptr <mobius::core::ui::icon_impl_base> new_icon_by_name (const std::string&, mobius::core::ui::icon_impl_base::size_type) const final;
-  std::shared_ptr <mobius::core::ui::icon_impl_base> new_icon_from_data (const mobius::bytearray&, mobius::core::ui::icon_impl_base::size_type) const final;
+  std::shared_ptr <mobius::core::ui::icon_impl_base> new_icon_from_data (const mobius::core::bytearray&, mobius::core::ui::icon_impl_base::size_type) const final;
   std::shared_ptr <mobius::core::ui::label_impl_base> new_label () const final;
   std::shared_ptr <mobius::core::ui::message_dialog_impl_base> new_message_dialog (mobius::core::ui::message_dialog_impl_base::type) const final;
   std::shared_ptr <mobius::core::ui::widget_impl_base> new_widget (std::any, bool) const final;

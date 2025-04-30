@@ -69,7 +69,7 @@ mobius::core::os::win::registry::registry_key
 pymobius_os_win_registry_registry_key_from_pyobject (PyObject *pyobj)
 {
   if (!pymobius_os_win_registry_registry_key_check (pyobj))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.os.win.registry_key"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.os.win.registry_key"));
 
   return * (reinterpret_cast <os_win_registry_registry_key_o *>(pyobj)->obj);
 }

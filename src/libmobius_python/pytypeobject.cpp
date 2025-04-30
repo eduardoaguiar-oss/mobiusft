@@ -18,7 +18,7 @@
 #include "pytypeobject.hpp"
 #include <Python.h>
 #include <stdexcept>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 
 namespace mobius::py
 {

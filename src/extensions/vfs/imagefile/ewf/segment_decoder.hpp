@@ -23,7 +23,7 @@
 #include "volume_section.hpp"
 #include "table_section.hpp"
 #include "hash_section.hpp"
-#include <mobius/io/reader.h>
+#include <mobius/core/io/reader.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief EWF segment file decoder
@@ -35,7 +35,7 @@
 class segment_decoder
 {
 public:
-  using offset_type = mobius::io::reader::offset_type;
+  using offset_type = mobius::core::io::reader::offset_type;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief iterator for EWF sections
@@ -114,7 +114,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit segment_decoder (mobius::io::reader reader);
+  explicit segment_decoder (mobius::core::io::reader reader);
   const_iterator begin () const;
   const_iterator end () const;
 
@@ -125,7 +125,7 @@ public:
   hash_section decode_hash_section (const section&) const;
 
 private:
-  mobius::io::reader reader_;
+  mobius::core::io::reader reader_;
   bool is_valid_ = false;
   std::uint32_t segment_number_ = 0;
 };

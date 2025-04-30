@@ -28,12 +28,12 @@ class pssp_data2::impl
 public:
 
   // function prototypes
-  void set_key (const std::string&, mobius::bytearray&);
-  mobius::bytearray get_key (const std::string&) const;
+  void set_key (const std::string&, mobius::core::bytearray&);
+  mobius::core::bytearray get_key (const std::string&) const;
 
 private:
   // @brief key map
-  std::map <std::string, mobius::bytearray> keys_;
+  std::map <std::string, mobius::core::bytearray> keys_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -42,7 +42,7 @@ private:
 // @param value key value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-pssp_data2::impl::set_key (const std::string& name, mobius::bytearray& value)
+pssp_data2::impl::set_key (const std::string& name, mobius::core::bytearray& value)
 {
   keys_[name] = value;
 }
@@ -52,10 +52,10 @@ pssp_data2::impl::set_key (const std::string& name, mobius::bytearray& value)
 // @param name key name
 // @return None
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 pssp_data2::impl::get_key (const std::string& name) const
 {
-  mobius::bytearray key_value;
+  mobius::core::bytearray key_value;
 
   auto iter = keys_.find (name);
 
@@ -79,7 +79,7 @@ pssp_data2::pssp_data2 ()
 // @param value key value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-pssp_data2::set_key (const std::string& name, mobius::bytearray& value)
+pssp_data2::set_key (const std::string& name, mobius::core::bytearray& value)
 {
   impl_->set_key (name, value);
 }
@@ -89,7 +89,7 @@ pssp_data2::set_key (const std::string& name, mobius::bytearray& value)
 // @param name key name
 // @return key value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 pssp_data2::get_key (const std::string& name) const
 {
   return impl_->get_key (name);

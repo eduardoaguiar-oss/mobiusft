@@ -32,7 +32,7 @@ static constexpr std::uint64_t BLOCK_SIZE = 4096;
 // @brief Create sourcecode object
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-sourcecode::sourcecode (const mobius::io::reader& reader)
+sourcecode::sourcecode (const mobius::core::io::reader& reader)
  : reader_ (reader)
 {
 }

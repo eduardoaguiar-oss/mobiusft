@@ -1,17 +1,22 @@
 Mobius Forensic Toolkit 2.15
-	* src/python/mobius package renamed to libmobius_python
-	* libmobius_python: Moved to src directory
+	* src/mobius package renamed to src/libmobius_core
+	* src/mobius/framework: package renamed to src/libmobius_framework
+	* src/python/mobius package renamed to src/libmobius_python
 	* libmobius_python: All source files renamed from .h/.cc to .hpp/.cpp
 	* libmobius_python: Migrated from autotools to CMake
-	* Created include directory
-	* libmobius_core: Created new package
-	* libmobius_core: Class benchmark moved from src/mobius
-	* libmobius_core: Class unittest moved from src/mobius
-	* libmobius_core: Created new package jni
-	* src/mobius/framework: package renamed to libmobius_framework
-	* libmobius_framework: Moved to src directory
+	* libmobius_core: All source files renamed from .h/.cc to .hpp/.cpp
+	* libmobius_core: Migrated from autotools to CMake
 	* libmobius_framework: All source files renamed from .h/.cc to .hpp/.cpp
 	* libmobius_framework: Migrated from autotools to CMake
+	* src/tools: All source files renamed from .h/.cc to .hpp/.cpp
+	* src/tools: Migrated from autotools to CMake
+	* Created include module
+	* Created include/mobius/core module
+	* Created include/mobius/framework module
+	* Module src/python/examples removed
+	* Module src/python/pymobius moved to src
+	* Module src/python removed
+	* Project fully migrated from Autotools to CMake
 
 Mobius Forensic Toolkit 2.14
 	* configure.ac: Check for CMake availability.

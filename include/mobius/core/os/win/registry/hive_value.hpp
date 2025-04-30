@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/os/win/registry/hive_data.hpp>
-#include <mobius/io/reader.h>
+#include <mobius/core/io/reader.hpp>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -38,7 +38,7 @@ public:
 
   // constructors
   hive_value ();
-  hive_value (mobius::io::reader, offset_type);
+  hive_value (mobius::core::io::reader, offset_type);
   hive_value (hive_value&&) = default;
   hive_value (const hive_value&) = default;
 

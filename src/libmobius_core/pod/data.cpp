@@ -25,7 +25,7 @@
 #include <mobius/core/pod/data_impl_bytearray.hpp>
 #include <mobius/core/pod/data_impl_list.hpp>
 #include <mobius/core/pod/map.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <algorithm>
 #include <stdexcept>
 
@@ -193,7 +193,7 @@ data::data (const std::string& s)
 // @brief Constructor
 // @param b Bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data::data (const mobius::bytearray& b)
+data::data (const mobius::core::bytearray& b)
  : impl_ (std::make_shared <data_impl_bytearray> (b))
 {
 }
@@ -322,7 +322,7 @@ data::operator= (const std::string& s)
 // @param b Bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data&
-data::operator= (const mobius::bytearray& b)
+data::operator= (const mobius::core::bytearray& b)
 {
   impl_ = std::make_shared <data_impl_bytearray> (b);
   return *this;
@@ -430,7 +430,7 @@ data::operator std::string () const
 // @brief Convert data to bytearray
 // @return Bytearray value if type == bytearray, otherwise exception
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data::operator mobius::bytearray () const
+data::operator mobius::core::bytearray () const
 {
   if (impl_->get_type () == type::bytearray)
     return std::static_pointer_cast <data_impl_bytearray> (impl_)->get_value ();
@@ -516,7 +516,7 @@ data::to_string () const
     return operator std::string ();
 
   else if (is_bytearray ())
-    return "0x" + operator mobius::bytearray ().to_hexstring ();
+    return "0x" + operator mobius::core::bytearray ().to_hexstring ();
 
   else if (is_list ())
     return list_to_string (std::vector <data> (*this));

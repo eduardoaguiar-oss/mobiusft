@@ -26,7 +26,7 @@ namespace mobius::extension::app::ares
 // @brief Constructor
 // @see read_details_DB_Download@helper_download_disk.pas (line 722)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-file_arestra::file_arestra (const mobius::io::reader& reader)
+file_arestra::file_arestra (const mobius::core::io::reader& reader)
 {
   if (!reader || reader.get_size () < 4096)
     return;
@@ -151,7 +151,7 @@ file_arestra::file_arestra (const mobius::io::reader& reader)
 // @see read_details_DB_Download@helper_download_disk.pas
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-file_arestra::_populate_metadata (const mobius::bytearray& data)
+file_arestra::_populate_metadata (const mobius::core::bytearray& data)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 

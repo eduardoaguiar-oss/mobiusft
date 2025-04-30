@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/vfs/disk_impl_base.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace mobius::core::vfs
@@ -117,7 +117,7 @@ public:
   // @brief Create new reader
   // @return New reader
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::io::reader
+  mobius::core::io::reader
   new_reader () const override
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Invalid disk"));

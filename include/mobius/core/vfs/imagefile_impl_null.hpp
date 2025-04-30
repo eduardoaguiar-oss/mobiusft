@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/vfs/imagefile_impl_base.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace mobius::core::vfs
@@ -129,7 +129,7 @@ public:
   // @brief Create new reader for imagefile
   // @return reader
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::io::reader
+  mobius::core::io::reader
   new_reader () const override
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid imagefile"));
@@ -139,7 +139,7 @@ public:
   // @brief Create new writer for imagefile
   // @return writer
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::io::writer
+  mobius::core::io::writer
   new_writer () const override
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid imagefile"));

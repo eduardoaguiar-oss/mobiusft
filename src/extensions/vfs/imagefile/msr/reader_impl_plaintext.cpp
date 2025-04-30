@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "reader_impl_plaintext.hpp"
 #include "imagefile_impl.hpp"
-#include <mobius/io/file.h>
-#include <mobius/exception.inc>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace
@@ -60,11 +60,11 @@ reader_impl_plaintext::seek (offset_type offset, whence_type w)
     abs_offset = size_ - 1 + offset;
 
   else
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
 
   // update current pos, if possible
   if (abs_offset < 0)
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid offset"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid offset"));
 
   else if (size_type (abs_offset) <= size_)
     pos_ = abs_offset;
@@ -75,10 +75,10 @@ reader_impl_plaintext::seek (offset_type offset, whence_type w)
 // @param size size in bytes
 // @return bytearray containing data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 reader_impl_plaintext::read (size_type size)
 {
-  mobius::bytearray data = stream_.read (size);
+  mobius::core::bytearray data = stream_.read (size);
   pos_ += data.size ();
 
   return data;

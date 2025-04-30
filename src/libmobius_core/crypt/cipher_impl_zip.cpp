@@ -42,10 +42,10 @@ cipher_impl_zip::cipher_impl_zip (const bytearray& passwd)
 // @param data Data to be encrypted
 // @return Encrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
-cipher_impl_zip::encrypt (const mobius::bytearray& data)
+mobius::core::bytearray
+cipher_impl_zip::encrypt (const mobius::core::bytearray& data)
 {
-  mobius::bytearray out (data.size ());
+  mobius::core::bytearray out (data.size ());
   auto o_iter = out.begin ();
 
   for (std::uint8_t b : data)
@@ -68,10 +68,10 @@ cipher_impl_zip::encrypt (const mobius::bytearray& data)
 // @param data Data to be decrypted
 // @return Decrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
-cipher_impl_zip::decrypt (const mobius::bytearray& data)
+mobius::core::bytearray
+cipher_impl_zip::decrypt (const mobius::core::bytearray& data)
 {
-  mobius::bytearray out (data.size ());
+  mobius::core::bytearray out (data.size ());
   auto o_iter = out.begin ();
 
   for (std::uint8_t b : data)

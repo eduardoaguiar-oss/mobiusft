@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/crypt/gcrypt/hmac_impl.hpp>
 #include <mobius/core/crypt/gcrypt/util.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 #include <unordered_map>
 
@@ -85,7 +85,7 @@ is_hmac_available (const std::string& type)
 // @param hash_type Hash type
 // @param key Key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-hmac_impl::hmac_impl (const std::string& hash_type, const mobius::bytearray& key)
+hmac_impl::hmac_impl (const std::string& hash_type, const mobius::core::bytearray& key)
 {
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // initialize libgcrypt only once, at the first call of any thread
@@ -160,7 +160,7 @@ hmac_impl::reset ()
 // @param data Data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-hmac_impl::update (const mobius::bytearray& data)
+hmac_impl::update (const mobius::core::bytearray& data)
 {
   auto rc = gcry_mac_write (hd_, data.data (), data.size ());
   if (rc)
@@ -171,10 +171,10 @@ hmac_impl::update (const mobius::bytearray& data)
 // @brief Get hash digest
 // @return Hash digest
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 hmac_impl::get_digest ()
 {
-  mobius::bytearray digest (digest_size_);
+  mobius::core::bytearray digest (digest_size_);
   std::size_t length = digest.size ();
 
   auto rc = gcry_mac_read (hd_, digest.data (), &length);

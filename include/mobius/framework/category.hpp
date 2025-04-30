@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/database/transaction.hpp>
 #include <mobius/framework/attribute.hpp>
@@ -57,11 +57,11 @@ public:
   std::string get_id () const;
   std::string get_name () const;
   std::string get_description () const;
-  mobius::bytearray get_icon_data () const;
+  mobius::core::bytearray get_icon_data () const;
 
   void set_name (const std::string&);
   void set_description (const std::string&);
-  void set_icon_data (const mobius::bytearray&);
+  void set_icon_data (const mobius::core::bytearray&);
 
   attribute get_attribute (const std::string&) const;
   attribute new_attribute (const std::string&);

@@ -25,8 +25,8 @@
 #include "line_reader.hpp"
 #include "text_reader.hpp"
 #include "reader.hpp"
-#include <mobius/exception.inc>
-#include <mobius/io/bytearray_io.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/io/bytearray_io.hpp>
 #include <limits>
 #include <stdexcept>
 
@@ -47,12 +47,12 @@ pymobius_io_line_reader_check (PyObject *pyobj)
 // @return new object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_io_line_reader_to_pyobject (const mobius::io::line_reader& obj)
+pymobius_io_line_reader_to_pyobject (const mobius::core::io::line_reader& obj)
 {
   PyObject *ret = _PyObject_New (&io_line_reader_t);
 
   if (ret)
-    ((io_line_reader_o *) ret)->obj = new mobius::io::line_reader (obj);
+    ((io_line_reader_o *) ret)->obj = new mobius::core::io::line_reader (obj);
 
   return ret;
 }
@@ -62,11 +62,11 @@ pymobius_io_line_reader_to_pyobject (const mobius::io::line_reader& obj)
 // @param pyobj Python object
 // @return line_reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::line_reader
+mobius::core::io::line_reader
 pymobius_io_line_reader_from_pyobject (PyObject *pyobj)
 {
   if (!pymobius_io_line_reader_check (pyobj))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("argument must be line_reader"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("argument must be line_reader"));
 
   return * (reinterpret_cast <io_line_reader_o *>(pyobj)->obj);
 }
@@ -143,7 +143,7 @@ static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
   // Parse input args
-  mobius::io::text_reader arg_text_reader;
+  mobius::core::io::text_reader arg_text_reader;
   std::string arg_separator;
 
   try
@@ -161,7 +161,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
           auto arg_reader = mobius::py::get_arg_as_cpp (args, 0, pymobius_io_reader_from_pyobject);
           auto arg_encoding = mobius::py::get_arg_as_std_string (args, 1, "UTF-8");
 
-          arg_text_reader = mobius::io::text_reader (arg_reader, arg_encoding);
+          arg_text_reader = mobius::core::io::text_reader (arg_reader, arg_encoding);
           arg_separator = mobius::py::get_arg_as_std_string (args, 2, "");
         }
     }
@@ -178,7 +178,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::io::line_reader (arg_text_reader, arg_separator);
+          ret->obj = new mobius::core::io::line_reader (arg_text_reader, arg_separator);
         }
       catch (const std::exception& e)
         {

@@ -19,8 +19,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/os/win/dpapi/credhist_entry.hpp>
-#include <mobius/io/reader.h>
-#include <mobius/bytearray.h>
+#include <mobius/core/io/reader.hpp>
+#include <mobius/core/bytearray.hpp>
 #include <vector>
 
 namespace mobius::core::os::win::dpapi
@@ -40,10 +40,10 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit credhist_file (mobius::io::reader);
+  explicit credhist_file (mobius::core::io::reader);
 
-  bool decrypt_with_key (const mobius::bytearray&);
-  bool decrypt_with_password_hash (const mobius::bytearray&);
+  bool decrypt_with_key (const mobius::core::bytearray&);
+  bool decrypt_with_password_hash (const mobius::core::bytearray&);
   bool decrypt_with_password (const std::string&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/os/win/registry/hive_key.hpp>
 #include <mobius/core/datetime/datetime.hpp>
-#include <mobius/io/reader.h>
+#include <mobius/core/io/reader.hpp>
 #include <mobius/core/metadata.hpp>
 #include <cstdint>
 #include <memory>
@@ -38,7 +38,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit hive_file (const mobius::io::reader&);
+  explicit hive_file (const mobius::core::io::reader&);
   hive_file (hive_file&&) noexcept = default;
   hive_file (const hive_file&) noexcept = default;
 

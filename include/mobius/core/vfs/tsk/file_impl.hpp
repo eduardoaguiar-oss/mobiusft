@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/file_impl_base.h>
+#include <mobius/core/io/file_impl_base.hpp>
 #include <mobius/core/vfs/tsk/fs_file.hpp>
 #include <memory>
 #include <string>
@@ -29,7 +29,7 @@ namespace mobius::core::vfs::tsk
 // @brief File implementation class for TSK_FS_FILE
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class file_impl : public mobius::io::file_impl_base
+class file_impl : public mobius::core::io::file_impl_base
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

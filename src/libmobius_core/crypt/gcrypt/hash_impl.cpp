@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/crypt/gcrypt/hash_impl.hpp>
 #include <mobius/core/crypt/gcrypt/util.hpp>
-#include <mobius/exception.inc>
-#include <mobius/string_functions.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/string_functions.hpp>
 #include <mutex>
 #include <stdexcept>
 #include <unordered_map>
@@ -144,7 +144,7 @@ hash_impl::~hash_impl ()
 // @param data Data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-hash_impl::update (const mobius::bytearray& data) noexcept
+hash_impl::update (const mobius::core::bytearray& data) noexcept
 {
   gcry_md_write (md_, data.data (), data.size ());
 }
@@ -185,12 +185,12 @@ hash_impl::clone () const
 // @brief Get digest
 // @return Digest
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 hash_impl::get_digest ()
 {
   unsigned char *digest = gcry_md_read (md_, 0);
 
-  return mobius::bytearray (digest, digest_size_);
+  return mobius::core::bytearray (digest, digest_size_);
 }
 
 } // namespace mobius::core::crypt::gcrypt

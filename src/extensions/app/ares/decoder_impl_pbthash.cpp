@@ -25,7 +25,7 @@ namespace mobius::extension::app::ares
 // @see read_details_DB_Download - helper_download_disk.pas (line 722)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-decoder_impl_pbthash::decode (const mobius::io::reader& reader)
+decoder_impl_pbthash::decode (const mobius::core::io::reader& reader)
 {
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Decode file

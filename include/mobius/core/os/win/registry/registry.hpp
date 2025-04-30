@@ -22,8 +22,8 @@
 #include <mobius/core/os/win/registry/registry_key.hpp>
 #include <mobius/core/os/win/registry/registry_value.hpp>
 #include <mobius/core/os/win/registry/registry_data.hpp>
-#include <mobius/io/reader.h>
-#include <mobius/bytearray.h>
+#include <mobius/core/io/reader.hpp>
+#include <mobius/core/bytearray.hpp>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -57,7 +57,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   registry_file add_file_by_path (const std::string&, const std::string&, const std::string&);
   registry_file add_file_by_url (const std::string&, const std::string&, const std::string&);
-  registry_file add_file_by_reader (const std::string&, const std::string&, mobius::io::reader);
+  registry_file add_file_by_reader (const std::string&, const std::string&, mobius::core::io::reader);
   void remove_file (std::uint32_t);
   std::vector <registry_file> get_files () const;
 
@@ -77,7 +77,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // function prototypes (data)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray get_syskey () const;
+  mobius::core::bytearray get_syskey () const;
 
 private:
   // @brief implementation class forward declaration

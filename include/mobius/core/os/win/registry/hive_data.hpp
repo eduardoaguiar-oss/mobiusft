@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
-#include <mobius/io/reader.h>
+#include <mobius/core/bytearray.hpp>
+#include <mobius/core/io/reader.hpp>
 #include <cstdint>
 #include <memory>
 
@@ -61,7 +61,7 @@ public:
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   hive_data ();
-  hive_data (const mobius::io::reader&, offset_type, std::uint32_t, std::uint32_t);
+  hive_data (const mobius::core::io::reader&, offset_type, std::uint32_t, std::uint32_t);
   hive_data (hive_data&&) = default;
   hive_data (const hive_data&) = default;
 
@@ -78,7 +78,7 @@ public:
   offset_type get_offset () const;
   std::uint32_t get_size () const;
   data_type get_type () const;
-  mobius::bytearray get_data () const;
+  mobius::core::bytearray get_data () const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Data getters

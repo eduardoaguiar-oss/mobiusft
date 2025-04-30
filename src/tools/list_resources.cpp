@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/resource.hpp>
 #include <mobius/core/application.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 #include <iostream>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -55,7 +55,7 @@ main (int argc, char **argv)
       std::string group_id = argv[i];
 
       for (const auto& r : mobius::core::get_resources (group_id))
-        std::cout << mobius::string::rpad (group_id + '.' + r.get_id (), 16) << '\t' << r.get_description () << std::endl;
+        std::cout << mobius::core::string::rpad (group_id + '.' + r.get_id (), 16) << '\t' << r.get_description () << std::endl;
     }
 
   app.stop ();

@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/crypt/gcrypt/cipher_impl.hpp>
 #include <mobius/core/crypt/gcrypt/util.hpp>
-#include <mobius/exception.inc>
-#include <mobius/string_functions.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/string_functions.hpp>
 #include <mutex>
 #include <stdexcept>
 #include <unordered_map>
@@ -72,7 +72,7 @@ _get_algo_id (const std::string& name)
   auto iter = CIPHERS.find (name);
 
   if (iter == CIPHERS.end ())
-    algo_id = gcry_cipher_map_name (mobius::string::toupper (name).c_str ());
+    algo_id = gcry_cipher_map_name (mobius::core::string::toupper (name).c_str ());
 
   else
     algo_id = iter->second;
@@ -104,10 +104,10 @@ _get_mode_id (const std::string& name)
 // @return Key reformatted, if necessary
 // @see https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-samr/ebdb15df-8d0d-4347-9d62-082e6eccac40
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::bytearray
-_des_key (const mobius::bytearray& key)
+static mobius::core::bytearray
+_des_key (const mobius::core::bytearray& key)
 {
-  mobius::bytearray d_key (8);
+  mobius::core::bytearray d_key (8);
 
   d_key[0] = key[0] >> 1;
   d_key[1] = ((key[0] & 1) << 6) | (key[1] >> 2);
@@ -231,7 +231,7 @@ cipher_impl::final ()
 // @param data Data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-cipher_impl::authenticate (const mobius::bytearray& data)
+cipher_impl::authenticate (const mobius::core::bytearray& data)
 {
   auto rc = gcry_cipher_authenticate (hd_, data.data (), data.size ());
   if (rc)
@@ -242,10 +242,10 @@ cipher_impl::authenticate (const mobius::bytearray& data)
 // @brief Get authentication tag
 // @return Tag
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 cipher_impl::get_tag () const
 {
-  mobius::bytearray tag (get_block_size ());
+  mobius::core::bytearray tag (get_block_size ());
 
   auto rc = gcry_cipher_gettag (hd_, tag.data (), tag.size ());
   if (rc)
@@ -260,7 +260,7 @@ cipher_impl::get_tag () const
 // @return True if tag match
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-cipher_impl::check_tag (const mobius::bytearray& tag) const
+cipher_impl::check_tag (const mobius::core::bytearray& tag) const
 {
   auto rc = gcry_cipher_checktag (hd_, tag.data (), tag.size ());
 
@@ -275,9 +275,9 @@ cipher_impl::check_tag (const mobius::bytearray& tag) const
 // @param key Key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-cipher_impl::set_key (const mobius::bytearray& key)
+cipher_impl::set_key (const mobius::core::bytearray& key)
 {
-  mobius::bytearray arg_key = key;
+  mobius::core::bytearray arg_key = key;
 
   // reformat key, if algorithm = "des" and key length = 7
   if (type_ == "des" && key.size () == 7)
@@ -294,7 +294,7 @@ cipher_impl::set_key (const mobius::bytearray& key)
 // @param iv Initialization vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-cipher_impl::set_iv (const mobius::bytearray& iv)
+cipher_impl::set_iv (const mobius::core::bytearray& iv)
 {
   auto rc = gcry_cipher_setiv (hd_, iv.data (), iv.size ());
   if (rc)
@@ -308,7 +308,7 @@ cipher_impl::set_iv (const mobius::bytearray& iv)
 // @param cv Counter vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-cipher_impl::set_counter (const mobius::bytearray& cv)
+cipher_impl::set_counter (const mobius::core::bytearray& cv)
 {
   auto rc = gcry_cipher_setctr (hd_, cv.data (), cv.size ());
   if (rc)
@@ -322,10 +322,10 @@ cipher_impl::set_counter (const mobius::bytearray& cv)
 // @param data Data to be encrypted
 // @return Encrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
-cipher_impl::encrypt (const mobius::bytearray& data)
+mobius::core::bytearray
+cipher_impl::encrypt (const mobius::core::bytearray& data)
 {
-  mobius::bytearray out (data.size ());
+  mobius::core::bytearray out (data.size ());
 
   auto rc = gcry_cipher_encrypt (hd_, out.data (), out.size (), data.data (), data.size ());
   if (rc)
@@ -339,10 +339,10 @@ cipher_impl::encrypt (const mobius::bytearray& data)
 // @param data Data to be decrypted
 // @return Decrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
-cipher_impl::decrypt (const mobius::bytearray& data)
+mobius::core::bytearray
+cipher_impl::decrypt (const mobius::core::bytearray& data)
 {
-  mobius::bytearray out (data.size ());
+  mobius::core::bytearray out (data.size ());
 
   auto rc = gcry_cipher_decrypt (hd_, out.data (), out.size (), data.data (), data.size ());
   if (rc)

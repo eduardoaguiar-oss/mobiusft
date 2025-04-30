@@ -164,7 +164,7 @@ static PyObject *
 tp_f_update (crypt_hmac_o *self, PyObject *args)
 {
   // parse input args
-  mobius::bytearray arg_data;
+  mobius::core::bytearray arg_data;
 
   try
     {
@@ -332,7 +332,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
   // parse input args
   std::string arg_hash_id;
-  mobius::bytearray arg_key;
+  mobius::core::bytearray arg_key;
 
   try
     {

@@ -23,7 +23,7 @@
 #include <pymobius.hpp>
 #include "path.hpp"
 #include "module.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -43,12 +43,12 @@ pymobius_io_path_check (PyObject *pyobj)
 // @return new path object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_io_path_to_pyobject (mobius::io::path obj)
+pymobius_io_path_to_pyobject (mobius::core::io::path obj)
 {
   PyObject *ret = _PyObject_New (&io_path_t);
 
   if (ret)
-    ((io_path_o *) ret)->obj = new mobius::io::path (obj);
+    ((io_path_o *) ret)->obj = new mobius::core::io::path (obj);
 
   return ret;
 }
@@ -58,11 +58,11 @@ pymobius_io_path_to_pyobject (mobius::io::path obj)
 // @param pyobj Python object
 // @return path object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::path
+mobius::core::io::path
 pymobius_io_path_from_pyobject (PyObject *pyobj)
 {
   if (!PyObject_IsInstance (pyobj, (PyObject *) &io_path_t))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object type must be mobius.io.path"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object type must be mobius.io.path"));
 
   return * (reinterpret_cast <io_path_o *>(pyobj)->obj);
 }
@@ -541,7 +541,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::io::path (arg_value);
+          ret->obj = new mobius::core::io::path (arg_value);
         }
       catch (const std::exception& e)
         {

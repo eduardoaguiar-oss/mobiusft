@@ -27,7 +27,7 @@
 #include "credhist_entry.hpp"
 #include "module.hpp"
 #include "io/reader.hpp"
-#include <mobius/io/bytearray_io.h>
+#include <mobius/core/io/bytearray_io.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Check if object type is <i>credhist_file</i>
@@ -65,7 +65,7 @@ mobius::core::os::win::dpapi::credhist_file
 pymobius_os_win_dpapi_credhist_file_from_pyobject (PyObject *value)
 {
   if (!pymobius_os_win_dpapi_credhist_file_check (value))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.os.win.dpapi.credhist_file"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.os.win.dpapi.credhist_file"));
 
   return * (reinterpret_cast <os_win_dpapi_credhist_file_o *>(value)->obj);
 }
@@ -119,7 +119,7 @@ static PyObject *
 tp_f_decrypt_with_key (os_win_dpapi_credhist_file_o *self, PyObject *args)
 {
   // parse input args
-  mobius::bytearray arg_key;
+  mobius::core::bytearray arg_key;
 
   try
     {
@@ -159,7 +159,7 @@ static PyObject *
 tp_f_decrypt_with_password_hash (os_win_dpapi_credhist_file_o *self, PyObject *args)
 {
   // parse input args
-  mobius::bytearray arg_password_hash;
+  mobius::core::bytearray arg_password_hash;
 
   try
     {
@@ -266,7 +266,7 @@ static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
   // parse input args
-  mobius::io::reader arg_reader;
+  mobius::core::io::reader arg_reader;
 
   try
     {

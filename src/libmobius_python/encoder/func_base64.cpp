@@ -35,7 +35,7 @@ PyObject *
 encoder_func_base64 (PyObject *, PyObject *args)
 {
   // parse input args
-  mobius::bytearray arg_data;
+  mobius::core::bytearray arg_data;
 
   try
     {

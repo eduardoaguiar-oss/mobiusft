@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file_part_met_txtsrc.hpp"
 #include <mobius/core/log.hpp>
-#include <mobius/io/line_reader.h>
+#include <mobius/core/io/line_reader.hpp>
 
 namespace mobius::extension::app::emule
 {
@@ -90,7 +90,7 @@ parse_txtsrc_line (const std::string& line)
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-file_part_met_txtsrc::file_part_met_txtsrc (const mobius::io::reader& reader)
+file_part_met_txtsrc::file_part_met_txtsrc (const mobius::core::io::reader& reader)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -100,7 +100,7 @@ file_part_met_txtsrc::file_part_met_txtsrc (const mobius::io::reader& reader)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Decode file
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto line_reader = mobius::io::line_reader (reader, "utf-8", "\r\n");
+    auto line_reader = mobius::core::io::line_reader (reader, "utf-8", "\r\n");
     bool first = true;
     std::string line;
 

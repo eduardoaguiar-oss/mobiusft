@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/io/sequential_reader_adaptor.h>
+#include <mobius/core/io/sequential_reader_adaptor.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::io::sequential_reader_adaptor *obj;
+  mobius::core::io::sequential_reader_adaptor *obj;
 } io_sequential_reader_adaptor_o;
 
 extern PyTypeObject io_sequential_reader_adaptor_t;
@@ -36,8 +36,8 @@ extern PyTypeObject io_sequential_reader_adaptor_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_io_sequential_reader_adaptor_check (PyObject *);
-PyObject *pymobius_io_sequential_reader_adaptor_to_pyobject (const mobius::io::sequential_reader_adaptor&);
-mobius::io::sequential_reader_adaptor pymobius_io_sequential_reader_adaptor_from_pyobject (PyObject *);
+PyObject *pymobius_io_sequential_reader_adaptor_to_pyobject (const mobius::core::io::sequential_reader_adaptor&);
+mobius::core::io::sequential_reader_adaptor pymobius_io_sequential_reader_adaptor_from_pyobject (PyObject *);
 
 #endif
 

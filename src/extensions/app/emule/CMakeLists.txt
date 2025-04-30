@@ -40,7 +40,7 @@ set(SOURCES
 add_library(app_emule MODULE ${SOURCES})
 set_target_properties(app_emule PROPERTIES OUTPUT_NAME "app-emule" PREFIX "")
 target_include_directories(app_emule PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(app_emule PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(app_emule PRIVATE mobius_core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: emule_cancelled_met
@@ -52,7 +52,7 @@ set(STORED_CANCELLED_MET_SOURCES
 )
 
 add_executable(emule_cancelled_met ${STORED_CANCELLED_MET_SOURCES})
-target_link_libraries(emule_cancelled_met PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(emule_cancelled_met PRIVATE mobius_core)
 target_include_directories(emule_cancelled_met PRIVATE ${MOBIUS_INCLUDE_DIRS})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -65,7 +65,7 @@ set(KEY_INDEX_DAT_SOURCES
 )
 
 add_executable(emule_key_index_dat ${KEY_INDEX_DAT_SOURCES})
-target_link_libraries(emule_key_index_dat PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(emule_key_index_dat PRIVATE mobius_core)
 target_include_directories(emule_key_index_dat PRIVATE ${MOBIUS_INCLUDE_DIRS})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -78,7 +78,7 @@ set(KNOWN_MET_SOURCES
 )
 
 add_executable(emule_known_met ${KNOWN_MET_SOURCES})
-target_link_libraries(emule_known_met PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(emule_known_met PRIVATE mobius_core)
 target_include_directories(emule_known_met PRIVATE ${MOBIUS_INCLUDE_DIRS})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -91,7 +91,7 @@ set(PART_MET_SOURCES
 )
 
 add_executable(emule_part_met ${PART_MET_SOURCES})
-target_link_libraries(emule_part_met PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(emule_part_met PRIVATE mobius_core)
 target_include_directories(emule_part_met PRIVATE ${MOBIUS_INCLUDE_DIRS})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -103,7 +103,7 @@ set(PART_MET_TXTSRC_SOURCES
 )
 
 add_executable(emule_part_met_txtsrc ${PART_MET_TXTSRC_SOURCES})
-target_link_libraries(emule_part_met_txtsrc PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(emule_part_met_txtsrc PRIVATE mobius_core)
 target_include_directories(emule_part_met_txtsrc PRIVATE ${MOBIUS_INCLUDE_DIRS})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -116,7 +116,7 @@ set(STORED_SEARCHES_MET_SOURCES
 )
 
 add_executable(emule_stored_searches_met ${STORED_SEARCHES_MET_SOURCES})
-target_link_libraries(emule_stored_searches_met PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(emule_stored_searches_met PRIVATE mobius_core)
 target_include_directories(emule_stored_searches_met PRIVATE ${MOBIUS_INCLUDE_DIRS})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

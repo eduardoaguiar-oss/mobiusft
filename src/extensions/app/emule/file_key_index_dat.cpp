@@ -18,7 +18,7 @@
 #include "file_key_index_dat.hpp"
 #include <mobius/core/log.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 #include <unordered_map>
 
 namespace mobius::extension::app::emule
@@ -50,10 +50,10 @@ _decode_string (mobius::core::decoder::data_decoder& decoder)
 static std::string
 _decode_kad_id (mobius::core::decoder::data_decoder& decoder)
 {
-    auto kad_id = mobius::string::to_hex (decoder.get_uint32_le (), 8);
-    kad_id += mobius::string::to_hex (decoder.get_uint32_le (), 8);
-    kad_id += mobius::string::to_hex (decoder.get_uint32_le (), 8);
-    kad_id += mobius::string::to_hex (decoder.get_uint32_le (), 8);
+    auto kad_id = mobius::core::string::to_hex (decoder.get_uint32_le (), 8);
+    kad_id += mobius::core::string::to_hex (decoder.get_uint32_le (), 8);
+    kad_id += mobius::core::string::to_hex (decoder.get_uint32_le (), 8);
+    kad_id += mobius::core::string::to_hex (decoder.get_uint32_le (), 8);
 
     return kad_id;
 }
@@ -166,7 +166,7 @@ _decode_key (mobius::core::decoder::data_decoder& decoder, std::uint32_t version
 // @param reader Reader object
 // @see CIndexed::CLoadDataThread::Run (srchybrid/kademlia/kademlia/Indexed.cpp)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-file_key_index_dat::file_key_index_dat (const mobius::io::reader& reader)
+file_key_index_dat::file_key_index_dat (const mobius::core::io::reader& reader)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 

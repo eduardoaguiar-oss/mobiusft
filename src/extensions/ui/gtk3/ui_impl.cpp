@@ -117,7 +117,7 @@ ui_impl::new_icon_by_name (const std::string& name, mobius::core::ui::icon_impl_
 // @return Pointer to icon implementation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::shared_ptr <mobius::core::ui::icon_impl_base>
-ui_impl::new_icon_from_data (const mobius::bytearray& data, mobius::core::ui::icon_impl_base::size_type size) const
+ui_impl::new_icon_from_data (const mobius::core::bytearray& data, mobius::core::ui::icon_impl_base::size_type size) const
 {
   GdkPixbufLoader *loader = gdk_pixbuf_loader_new ();
   gdk_pixbuf_loader_set_size (loader, static_cast <int> (size), static_cast <int> (size));

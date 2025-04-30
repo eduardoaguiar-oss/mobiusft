@@ -27,44 +27,16 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Define top-level source and build directories (@todo move to main CMakeLists.txt)
-set(TOP_SRC_DIR ${CMAKE_SOURCE_DIR}/../..)
-set(TOP_BUILD_DIR ${CMAKE_BINARY_DIR}/../..)
-
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Find dependencies
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-find_package(ZLIB QUIET)  # QUIET suppresses warnings if not found
+find_package(ZLIB REQUIRED)
+
 if(ZLIB_FOUND)
     message(STATUS "zlib found: ${ZLIB_LIBRARIES}")
 else()
     message(WARNING "zlib not found; skipping submodules requiring libz")
 endif()
-
-find_library(MOBIUS_LIB mobius HINTS ${TOP_SRC_DIR}/src/mobius/.libs NO_DEFAULT_PATH)
-if(NOT MOBIUS_LIB)
-    message(FATAL_ERROR "libmobius not found in ${TOP_SRC_DIR}/src/mobius/.libs")
-endif()
-
-find_library(MOBIUS_CORE_LIB mobius_core
-    HINTS ${TOP_SRC_DIR}/src/libmobius_core/build
-    NO_DEFAULT_PATH
-)
-if(NOT MOBIUS_CORE_LIB)
-    message(FATAL_ERROR "libmobius_core not found in ${TOP_SRC_DIR}/src/libmobius_core/build")
-endif()
-
-find_library(MOBIUS_FRAMEWORK_LIB mobius_framework
-    HINTS ../libmobius_framework/build
-    NO_DEFAULT_PATH
-)
-if(NOT MOBIUS_FRAMEWORK_LIB)
-    message(FATAL_ERROR "libmobius_framework not found in ../libmobius_framework
-/build")
-endif()
-
-set(MOBIUS_INCLUDE_DIRS ${TOP_SRC_DIR}/include ${TOP_SRC_DIR}/src)
-set(MOBIUS_LIBRARIES ${MOBIUS_FRAMEWORK_LIB} ${MOBIUS_LIB} ${MOBIUS_CORE_LIB})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Build extensions

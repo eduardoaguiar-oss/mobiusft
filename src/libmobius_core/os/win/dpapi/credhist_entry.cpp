@@ -23,7 +23,7 @@
 #include <mobius/core/crypt/hash.hpp>
 #include <mobius/core/crypt/hmac.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <mobius/core/os/win/pbkdf2_hmac_ms.hpp>
 #include <stdexcept>
 
@@ -40,7 +40,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   impl (const impl&) = delete;
   impl (impl&&) = delete;
-  impl (mobius::io::reader, std::uint32_t);
+  impl (mobius::core::io::reader, std::uint32_t);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Operators
@@ -122,7 +122,7 @@ public:
   // @brief Get salt
   // @return Salt
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_salt () const
   {
     return salt_;
@@ -142,7 +142,7 @@ public:
   // @brief Get cipher text
   // @return Cipher text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_cipher_text () const
   {
     return cipher_text_;
@@ -152,7 +152,7 @@ public:
   // @brief Get hash sha1
   // @return Hash sha1
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_hash_sha1 () const
   {
     return hash_sha1_;
@@ -162,7 +162,7 @@ public:
   // @brief Get hash ntlm
   // @return Hash ntlm
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_hash_ntlm () const
   {
     return hash_ntlm_;
@@ -181,8 +181,8 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  bool decrypt_with_key (const mobius::bytearray&);
-  bool decrypt_with_password_hash (const mobius::bytearray&);
+  bool decrypt_with_key (const mobius::core::bytearray&);
+  bool decrypt_with_password_hash (const mobius::core::bytearray&);
   bool decrypt_with_password (const std::string&);
 
 private:
@@ -208,19 +208,19 @@ private:
   std::uint32_t cipher_id_ = 0;
 
   // @brief Salt
-  mobius::bytearray salt_;
+  mobius::core::bytearray salt_;
 
   // @brief SID
   std::string sid_;
 
   // @brief Cipher text
-  mobius::bytearray cipher_text_;
+  mobius::core::bytearray cipher_text_;
 
   // @brief SHA1 hash value
-  mobius::bytearray hash_sha1_;
+  mobius::core::bytearray hash_sha1_;
 
   // @brief MD4 hash value
-  mobius::bytearray hash_ntlm_;
+  mobius::core::bytearray hash_ntlm_;
 
   // @brief SHA1 hash length
   std::uint32_t sha1_length_ = 0;
@@ -236,7 +236,7 @@ private:
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-credhist_entry::impl::impl (mobius::io::reader reader, std::uint32_t size)
+credhist_entry::impl::impl (mobius::core::io::reader reader, std::uint32_t size)
 {
   constexpr std::uint32_t FOOTER_SIZE = 24;
 
@@ -275,7 +275,7 @@ credhist_entry::impl::impl (mobius::io::reader reader, std::uint32_t size)
 // @return true if entry has been decrypted using key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-credhist_entry::impl::decrypt_with_key (const mobius::bytearray& key)
+credhist_entry::impl::decrypt_with_key (const mobius::core::bytearray& key)
 {
   bool rc = false;
 
@@ -322,7 +322,7 @@ credhist_entry::impl::decrypt_with_key (const mobius::bytearray& key)
 // @return true if entry has been decrypted using password hash
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-credhist_entry::impl::decrypt_with_password_hash (const mobius::bytearray& h)
+credhist_entry::impl::decrypt_with_password_hash (const mobius::core::bytearray& h)
 {
   bool rc = false;
 
@@ -361,7 +361,7 @@ credhist_entry::impl::decrypt_with_password (const std::string& password)
 // @param reader Reader object
 // @param size Entry size in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-credhist_entry::credhist_entry (mobius::io::reader reader, std::uint32_t size)
+credhist_entry::credhist_entry (mobius::core::io::reader reader, std::uint32_t size)
   : impl_ (std::make_shared <impl> (reader, size))
 {
 }
@@ -440,7 +440,7 @@ credhist_entry::get_cipher_id () const
 // @brief Get salt
 // @return Salt
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 credhist_entry::get_salt () const
 {
   return impl_->get_salt ();
@@ -460,7 +460,7 @@ credhist_entry::get_sid () const
 // @brief Get cipher text
 // @return Cipher text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 credhist_entry::get_cipher_text () const
 {
   return impl_->get_cipher_text ();
@@ -470,7 +470,7 @@ credhist_entry::get_cipher_text () const
 // @brief Get hash sha1
 // @return Hash sha1
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 credhist_entry::get_hash_sha1 () const
 {
   return impl_->get_hash_sha1 ();
@@ -480,7 +480,7 @@ credhist_entry::get_hash_sha1 () const
 // @brief Get hash ntlm
 // @return Hash ntlm
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 credhist_entry::get_hash_ntlm () const
 {
   return impl_->get_hash_ntlm ();
@@ -491,7 +491,7 @@ credhist_entry::get_hash_ntlm () const
 // @param key Key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-credhist_entry::decrypt_with_key (const mobius::bytearray& key)
+credhist_entry::decrypt_with_key (const mobius::core::bytearray& key)
 {
   return impl_->decrypt_with_key (key);
 }
@@ -501,7 +501,7 @@ credhist_entry::decrypt_with_key (const mobius::bytearray& key)
 // @param h Password hash
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-credhist_entry::decrypt_with_password_hash (const mobius::bytearray& h)
+credhist_entry::decrypt_with_password_hash (const mobius::core::bytearray& h)
 {
   return impl_->decrypt_with_password_hash (h);
 }

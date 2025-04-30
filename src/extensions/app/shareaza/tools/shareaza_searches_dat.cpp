@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "../CWndSearch.hpp"
 #include <mobius/core/application.hpp>
-#include <mobius/io/file.h>
+#include <mobius/core/io/file.hpp>
 #include <iostream>
 #include <unistd.h>
 
@@ -265,7 +265,7 @@ show_searches_dat (const std::string& path)
   std::cout << std::endl;
   std::cout << ">> " << path << std::endl;
 
-  auto f = mobius::io::new_file_by_path (path);
+  auto f = mobius::core::io::new_file_by_path (path);
   auto reader = f.new_reader ();
   auto decoder = mobius::core::decoder::mfc (reader);
 

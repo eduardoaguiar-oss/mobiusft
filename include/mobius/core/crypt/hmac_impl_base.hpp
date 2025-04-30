@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <cstddef>
 #include <memory>
 #include <string>
@@ -54,8 +54,8 @@ public:
   virtual std::size_t get_block_size () const = 0;
   virtual std::size_t get_digest_size () const = 0;
   virtual void reset () = 0;
-  virtual void update (const mobius::bytearray&) = 0;
-  virtual mobius::bytearray get_digest () = 0;
+  virtual void update (const mobius::core::bytearray&) = 0;
+  virtual mobius::core::bytearray get_digest () = 0;
   virtual std::shared_ptr <hmac_impl_base> clone () const = 0;
 };
 

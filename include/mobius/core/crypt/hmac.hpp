@@ -33,7 +33,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  hmac (const std::string&, const mobius::bytearray&);
+  hmac (const std::string&, const mobius::core::bytearray&);
   hmac ();
   explicit hmac (const std::shared_ptr <hmac_impl_base>&);
   hmac (hmac&&) noexcept = default;
@@ -98,7 +98,7 @@ public:
   // @param data Data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
-  update (const mobius::bytearray& data)
+  update (const mobius::core::bytearray& data)
   {
     impl_->update (data);
   }
@@ -107,7 +107,7 @@ public:
   // @brief Get hash digest
   // @return Hash digest
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_digest () const
   {
     return impl_->get_digest ();

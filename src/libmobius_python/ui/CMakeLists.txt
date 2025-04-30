@@ -48,6 +48,7 @@ add_library(mobius_python_ui STATIC
 
 target_include_directories(mobius_python_ui PRIVATE
     ${MOBIUS_INCLUDE_DIRS}
+    ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_SOURCE_DIR}
     ${GTK3_INCLUDE_DIRS}
     ${PYGOBJECT_INCLUDE_DIRS}

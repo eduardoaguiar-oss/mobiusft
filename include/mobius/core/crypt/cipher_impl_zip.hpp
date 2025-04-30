@@ -19,8 +19,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <cstdint>
-#include <mobius/bytearray.h>
-#include <mobius/exception.inc>
+#include <mobius/core/bytearray.hpp>
+#include <mobius/core/exception.inc>
 #include <mobius/core/crypt/cipher_impl_stream.hpp>
 #include <stdexcept>
 
@@ -57,7 +57,7 @@ public:
   // @param data Data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
-  authenticate (const mobius::bytearray&) final
+  authenticate (const mobius::core::bytearray&) final
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("data authentication not supported"));
   }
@@ -66,7 +66,7 @@ public:
   // @brief Get authentication tag
   // @return Tag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_tag () const final
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("data authentication not supported"));
@@ -78,7 +78,7 @@ public:
   // @return True if tag match
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
-  check_tag (const mobius::bytearray&) const final
+  check_tag (const mobius::core::bytearray&) const final
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("data authentication not supported"));
   }
@@ -86,13 +86,13 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Function prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit cipher_impl_zip (const mobius::bytearray&);
-  mobius::bytearray encrypt (const mobius::bytearray&) final;
-  mobius::bytearray decrypt (const mobius::bytearray&) final;
+  explicit cipher_impl_zip (const mobius::core::bytearray&);
+  mobius::core::bytearray encrypt (const mobius::core::bytearray&) final;
+  mobius::core::bytearray decrypt (const mobius::core::bytearray&) final;
   void reset () noexcept final;
 
 private:
-  mobius::bytearray passwd_;
+  mobius::core::bytearray passwd_;
   std::uint32_t k0_, k1_, k2_;
 };
 

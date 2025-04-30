@@ -68,7 +68,7 @@ mobius::core::os::win::dpapi::master_key
 pymobius_os_win_dpapi_master_key_from_pyobject (PyObject *value)
 {
   if (!pymobius_os_win_dpapi_master_key_check (value))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.os.win.dpapi.master_key"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.os.win.dpapi.master_key"));
 
   return * (reinterpret_cast <os_win_dpapi_master_key_o *>(value)->obj);
 }
@@ -323,7 +323,7 @@ static PyObject *
 tp_f_decrypt_with_key (os_win_dpapi_master_key_o *self, PyObject *args)
 {
   // parse input args
-  mobius::bytearray arg_key;
+  mobius::core::bytearray arg_key;
 
   try
     {
@@ -365,7 +365,7 @@ tp_f_decrypt_with_password_hash (os_win_dpapi_master_key_o *self, PyObject *args
 {
   // parse input args
   std::string arg_sid;
-  mobius::bytearray arg_password_hash;
+  mobius::core::bytearray arg_password_hash;
 
   try
     {

@@ -21,7 +21,7 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 
 namespace mobius::core
 {

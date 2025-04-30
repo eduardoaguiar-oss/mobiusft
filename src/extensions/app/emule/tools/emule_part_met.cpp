@@ -18,8 +18,8 @@
 #include "../file_part_met.hpp"
 #include <mobius/core/application.hpp>
 #include <mobius/core/log.hpp>
-#include <mobius/io/file.h>
-#include <mobius/string_functions.h>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/string_functions.hpp>
 #include <iostream>
 #include <unistd.h>
 
@@ -50,7 +50,7 @@ show_part_met (const std::string& path)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Decode file
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto f = mobius::io::new_file_by_path (path);
+    auto f = mobius::core::io::new_file_by_path (path);
     auto reader = f.new_reader ();
 
     mobius::extension::app::emule::file_part_met met (reader);
@@ -78,7 +78,7 @@ show_part_met (const std::string& path)
       {
         std::cerr   << "\t\t"
                     << int (tag.get_id ()) << '\t'
-                    << mobius::string::to_hex (tag.get_type (), 2) << '\t'
+                    << mobius::core::string::to_hex (tag.get_type (), 2) << '\t'
                     << tag.get_name () << '\t'
                     << tag.get_value ().to_string () << std::endl;
       }

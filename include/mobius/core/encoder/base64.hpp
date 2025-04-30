@@ -18,16 +18,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <string>
 
 namespace mobius::core::encoder
 {
-std::string base64 (const mobius::bytearray&);
-std::string base64url (const mobius::bytearray&);
-std::string base32 (const mobius::bytearray&);
-std::string base32hex (const mobius::bytearray&);
-std::string base16 (const mobius::bytearray&);
+std::string base64 (const mobius::core::bytearray&);
+std::string base64url (const mobius::core::bytearray&);
+std::string base32 (const mobius::core::bytearray&);
+std::string base32hex (const mobius::core::bytearray&);
+std::string base16 (const mobius::core::bytearray&);
 
 } // namespace mobius::core::encoder
 

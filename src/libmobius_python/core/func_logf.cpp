@@ -22,7 +22,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
 #include <mobius/core/log.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <b>logf</b> function implementation
@@ -49,19 +49,19 @@ func_logf (PyObject *, PyObject *args)
       mobius::core::log log (mobius::py::get_filename (), mobius::py::get_funcname ());
       auto line_number = mobius::py::get_line_number ();
 
-      if (mobius::string::startswith (arg_text, "ERR "))
+      if (mobius::core::string::startswith (arg_text, "ERR "))
         log.error (line_number, arg_text.substr (4));
 
-      else if (mobius::string::startswith (arg_text, "WRN "))
+      else if (mobius::core::string::startswith (arg_text, "WRN "))
         log.warning (line_number, arg_text.substr (4));
 
-      else if (mobius::string::startswith (arg_text, "INF "))
+      else if (mobius::core::string::startswith (arg_text, "INF "))
         log.info (line_number, arg_text.substr (4));
 
-      else if (mobius::string::startswith (arg_text, "DEV "))
+      else if (mobius::core::string::startswith (arg_text, "DEV "))
         log.development (line_number, arg_text.substr (4));
 
-      else if (mobius::string::startswith (arg_text, "DBG "))
+      else if (mobius::core::string::startswith (arg_text, "DBG "))
         log.debug (line_number, arg_text.substr (4));
 
       else

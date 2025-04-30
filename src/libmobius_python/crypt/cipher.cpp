@@ -163,7 +163,7 @@ static PyObject *
 tp_f_encrypt (crypt_cipher_o *self, PyObject *args)
 {
   // parse input args
-  mobius::bytearray arg_data;
+  mobius::core::bytearray arg_data;
 
   try
     {
@@ -204,7 +204,7 @@ static PyObject *
 tp_f_decrypt (crypt_cipher_o *self, PyObject *args)
 {
   // parse input args
-  mobius::bytearray arg_data;
+  mobius::core::bytearray arg_data;
 
   try
     {
@@ -269,7 +269,7 @@ static PyObject *
 tp_f_authenticate (crypt_cipher_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::bytearray arg_data;
+  mobius::core::bytearray arg_data;
 
   try
     {
@@ -331,7 +331,7 @@ static PyObject *
 tp_f_check_tag (crypt_cipher_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::bytearray arg_tag;
+  mobius::core::bytearray arg_tag;
 
   try
     {

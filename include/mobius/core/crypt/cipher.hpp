@@ -97,7 +97,7 @@ public:
   // @param data input data
   // @return Encrypted data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   encrypt (const bytearray& data)
   {
     return impl_->encrypt (data);
@@ -108,7 +108,7 @@ public:
   // @param data input data
   // @return Decrypted data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   decrypt (const bytearray& data)
   {
     return impl_->decrypt (data);
@@ -129,7 +129,7 @@ public:
   // @param data Data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
-  authenticate (const mobius::bytearray& data)
+  authenticate (const mobius::core::bytearray& data)
   {
     impl_->authenticate (data);
   }
@@ -138,7 +138,7 @@ public:
   // @brief Get authentication tag
   // @return Tag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_tag () const
   {
     return impl_->get_tag ();
@@ -150,7 +150,7 @@ public:
   // @return True if tag match
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
-  check_tag (const mobius::bytearray& tag) const
+  check_tag (const mobius::core::bytearray& tag) const
   {
     return impl_->check_tag (tag);
   }
@@ -162,14 +162,14 @@ private:
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-cipher new_cipher_cbc (const std::string&, const mobius::bytearray&, const mobius::bytearray& = {});
-cipher new_cipher_cbc_cts (const std::string&, const mobius::bytearray&, const mobius::bytearray& = {});
-cipher new_cipher_ctr (const std::string&, const mobius::bytearray&, const mobius::bytearray& = {});
-cipher new_cipher_ecb (const std::string&, const mobius::bytearray&);
-cipher new_cipher_gcm (const std::string&, const mobius::bytearray&, const mobius::bytearray& = {});
-cipher new_cipher_ige (const std::string&, const mobius::bytearray&, const mobius::bytearray&);
-cipher new_cipher_ofb (const std::string&, const mobius::bytearray&, const mobius::bytearray& = {});
-cipher new_cipher_stream (const std::string&, const mobius::bytearray& = {});
+cipher new_cipher_cbc (const std::string&, const mobius::core::bytearray&, const mobius::core::bytearray& = {});
+cipher new_cipher_cbc_cts (const std::string&, const mobius::core::bytearray&, const mobius::core::bytearray& = {});
+cipher new_cipher_ctr (const std::string&, const mobius::core::bytearray&, const mobius::core::bytearray& = {});
+cipher new_cipher_ecb (const std::string&, const mobius::core::bytearray&);
+cipher new_cipher_gcm (const std::string&, const mobius::core::bytearray&, const mobius::core::bytearray& = {});
+cipher new_cipher_ige (const std::string&, const mobius::core::bytearray&, const mobius::core::bytearray&);
+cipher new_cipher_ofb (const std::string&, const mobius::core::bytearray&, const mobius::core::bytearray& = {});
+cipher new_cipher_stream (const std::string&, const mobius::core::bytearray& = {});
 
 } // namespace mobius::core::crypt
 

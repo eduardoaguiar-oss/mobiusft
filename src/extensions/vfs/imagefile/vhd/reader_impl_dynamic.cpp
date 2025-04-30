@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "reader_impl_dynamic.hpp"
 #include "imagefile_impl.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -65,11 +65,11 @@ reader_impl_dynamic::seek (offset_type offset, whence_type w)
     abs_offset = size_ - 1 + offset;
 
   else
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
 
   // update current pos, if possible
   if (abs_offset < 0)
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid offset"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid offset"));
 
   else if (size_type (abs_offset) <= size_)
     pos_ = abs_offset;
@@ -84,10 +84,10 @@ reader_impl_dynamic::seek (offset_type offset, whence_type w)
 // filled with 1's bits, so there is no need to read the bit corresponding to
 // the sector we want to read.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 reader_impl_dynamic::read (size_type size)
 {
-  mobius::bytearray data;
+  mobius::core::bytearray data;
   size = std::min (size_ - pos_, size);
 
   while (size > 0)
@@ -98,7 +98,7 @@ reader_impl_dynamic::read (size_type size)
       std::uint32_t data_size = std::min (size, block_size_ - block_pos);
 
       if (sector_offset == 0xffffffff)
-        data += mobius::bytearray (data_size);
+        data += mobius::core::bytearray (data_size);
 
       else
         {

@@ -16,9 +16,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/vfs/disk_impl_imagefile.hpp>
-#include <mobius/io/file.h>
-#include <mobius/io/uri.h>
-#include <mobius/exception.inc>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/io/uri.hpp>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace mobius::core::vfs
@@ -58,7 +58,7 @@ disk_impl_imagefile::disk_impl_imagefile (const mobius::core::pod::map& state)
 bool
 disk_impl_imagefile::is_available () const
 {
-  auto f = mobius::io::new_file_by_url (url_);
+  auto f = mobius::core::io::new_file_by_url (url_);
   return f.exists ();
 }
 
@@ -134,7 +134,7 @@ disk_impl_imagefile::get_state () const
 std::string
 disk_impl_imagefile::get_path () const
 {
-  auto uri = mobius::io::uri (url_);
+  auto uri = mobius::core::io::uri (url_);
 
   if (uri.get_scheme () != "file")
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot convert URL to path"));
@@ -146,7 +146,7 @@ disk_impl_imagefile::get_path () const
 // @brief Create new reader
 // @return New reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::reader
+mobius::core::io::reader
 disk_impl_imagefile::new_reader () const
 {
   _load_imagefile ();
@@ -202,7 +202,7 @@ disk_impl_imagefile::_load_metadata () const
   imagetype_ = imagefile_.get_type ();
   size_ = imagefile_.get_size ();
 
-  auto uri = mobius::io::uri (url_);
+  auto uri = mobius::core::io::uri (url_);
   name_ = uri.get_filename ("utf-8");
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

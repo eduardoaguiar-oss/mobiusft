@@ -34,8 +34,8 @@ func_pbkdf2_hmac_ms (PyObject *, PyObject *args)
 {
   // parse input args
   std::string arg_hash_id;
-  mobius::bytearray arg_key;
-  mobius::bytearray arg_salt;
+  mobius::core::bytearray arg_key;
+  mobius::core::bytearray arg_salt;
   std::uint32_t arg_iterations;
   std::uint16_t arg_dklen;
 

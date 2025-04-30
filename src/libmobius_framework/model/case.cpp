@@ -18,9 +18,9 @@
 #include <mobius/core/database/database.hpp>
 #include <mobius/framework/model/case.hpp>
 #include <mobius/framework/model/item.hpp>
-#include <mobius/exception.inc>
-#include <mobius/exception_posix.inc>
-#include <mobius/io/path.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/exception_posix.inc>
+#include <mobius/core/io/path.hpp>
 #include <mutex>
 #include <stdexcept>
 #include <unordered_map>
@@ -90,7 +90,7 @@ make_directory (const std::string& path)
 static std::string
 join_path (const std::string& abs_path, const std::string& rel_path)
 {
-  auto path = mobius::io::path (abs_path);
+  auto path = mobius::core::io::path (abs_path);
   return to_string (path.get_child_by_path (rel_path));
 }
 
@@ -231,7 +231,7 @@ Case::impl::create_path (const std::string& rpath) const
 {
   const std::string fullpath = join_path (base_dir_, rpath);
 
-  mobius::io::path path (fullpath);
+  mobius::core::io::path path (fullpath);
   make_directory (path.get_dirname ());
 
   return fullpath;

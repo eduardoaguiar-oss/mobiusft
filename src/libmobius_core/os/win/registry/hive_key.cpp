@@ -18,7 +18,7 @@
 #include <mobius/core/os/win/registry/hive_key.hpp>
 #include <mobius/core/os/win/registry/hive_decoder.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 
 namespace mobius::core::os::win::registry
 {
@@ -55,7 +55,7 @@ class hive_key::impl
 public:
   // constructors
   impl () = default;
-  impl (const mobius::io::reader&, offset_type);
+  impl (const mobius::core::io::reader&, offset_type);
   impl (const impl&) = delete;
   impl (impl&&) = delete;
 
@@ -311,7 +311,7 @@ public:
 
 private:
   // @brief generic reader
-  mobius::io::reader reader_;
+  mobius::core::io::reader reader_;
 
   // @brief offset in bytes
   offset_type offset_ = INVALID_OFFSET;
@@ -393,7 +393,7 @@ private:
 // @param reader generic reader
 // @param offset offset in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-hive_key::impl::impl (const mobius::io::reader& reader, offset_type offset)
+hive_key::impl::impl (const mobius::core::io::reader& reader, offset_type offset)
   : reader_ (reader),
     offset_ (offset)
 {
@@ -543,7 +543,7 @@ hive_key::hive_key ()
 // @param reader Generic reader
 // @param offset Offset in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-hive_key::hive_key (const mobius::io::reader& reader, offset_type offset)
+hive_key::hive_key (const mobius::core::io::reader& reader, offset_type offset)
   : impl_ (std::make_shared <impl> (reader, offset))
 {
 }
@@ -795,10 +795,10 @@ hive_key::has_subkeys () const
 hive_key
 hive_key::get_key_by_name (const std::string& name) const
 {
-  const std::string lname = mobius::string::tolower (name);
+  const std::string lname = mobius::core::string::tolower (name);
 
   for (const auto& sk : *this)
-    if (mobius::string::tolower (sk.get_name ()) == lname)
+    if (mobius::core::string::tolower (sk.get_name ()) == lname)
       return sk;
 
   return hive_key ();
@@ -812,7 +812,7 @@ hive_key::get_key_by_name (const std::string& name) const
 std::vector <hive_key>
 hive_key::get_keys_by_mask (const std::string& a_mask) const
 {
-  const std::string mask = mobius::string::tolower (a_mask);
+  const std::string mask = mobius::core::string::tolower (a_mask);
   std::string::size_type pos = 0;
 
   // skip heading '\'
@@ -848,9 +848,9 @@ hive_key::get_keys_by_mask (const std::string& a_mask) const
         {
           for (auto sk : key)
             {
-              const std::string name = mobius::string::tolower (sk.get_name ());
+              const std::string name = mobius::core::string::tolower (sk.get_name ());
 
-              if (mobius::string::fnmatch (submask, name))
+              if (mobius::core::string::fnmatch (submask, name))
                 tmp_keys.push_back (sk);
             }
         }
@@ -913,10 +913,10 @@ hive_key::get_key_by_path (const std::string& path) const
 hive_value
 hive_key::get_value_by_name (const std::string& name) const
 {
-  const std::string lname = mobius::string::tolower (name);
+  const std::string lname = mobius::core::string::tolower (name);
 
   for (const auto& v : get_values ())
-    if (mobius::string::tolower (v.get_name ()) == lname)
+    if (mobius::core::string::tolower (v.get_name ()) == lname)
       return v;
 
   return hive_value ();
@@ -931,7 +931,7 @@ std::vector <hive_value>
 hive_key::get_values_by_mask (const std::string& a_mask) const
 {
   // parse registry_key.mask + '\' + value.mask
-  const std::string mask = mobius::string::tolower (a_mask);
+  const std::string mask = mobius::core::string::tolower (a_mask);
   std::string key_mask;
   std::string value_mask;
 
@@ -962,9 +962,9 @@ hive_key::get_values_by_mask (const std::string& a_mask) const
     {
       for (auto v : key.get_values ())
         {
-          const std::string name = mobius::string::tolower (v.get_name ());
+          const std::string name = mobius::core::string::tolower (v.get_name ());
 
-          if (mobius::string::fnmatch (value_mask, name))
+          if (mobius::core::string::fnmatch (value_mask, name))
             values.push_back (v);
         }
     }

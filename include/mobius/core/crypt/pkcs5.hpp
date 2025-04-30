@@ -18,18 +18,18 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <string>
 #include <cstdint>
 
 namespace mobius::core::crypt
 {
 
-mobius::bytearray pkcs5_unpad (const mobius::bytearray&);
+mobius::core::bytearray pkcs5_unpad (const mobius::core::bytearray&);
 
-mobius::bytearray pbkdf1 (const std::string&, const mobius::bytearray&, const mobius::bytearray&, std::uint32_t, std::uint16_t);
+mobius::core::bytearray pbkdf1 (const std::string&, const mobius::core::bytearray&, const mobius::core::bytearray&, std::uint32_t, std::uint16_t);
 
-mobius::bytearray pbkdf2_hmac (const std::string&, const mobius::bytearray&, const mobius::bytearray&, std::uint32_t, std::uint16_t);
+mobius::core::bytearray pbkdf2_hmac (const std::string&, const mobius::core::bytearray&, const mobius::core::bytearray&, std::uint32_t, std::uint16_t);
 
 } // namespace mobius::core::crypt
 

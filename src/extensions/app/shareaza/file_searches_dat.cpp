@@ -25,7 +25,7 @@ namespace mobius::extension::app::shareaza
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-file_searches_dat::file_searches_dat (const mobius::io::reader& reader)
+file_searches_dat::file_searches_dat (const mobius::core::io::reader& reader)
 {
   if (!reader || reader.get_size () < 2)
     return;

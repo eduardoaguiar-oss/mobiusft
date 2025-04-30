@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/decoder/hexstring.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 
 namespace mobius::core::decoder
 {
@@ -26,11 +26,11 @@ namespace mobius::core::decoder
 // @param sep Separator
 // @return Bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 hexstring (const std::string& str, const std::string& sep)
 {
-  mobius::bytearray data;
-  data.from_hexstring (mobius::string::replace (str, sep, ""));
+  mobius::core::bytearray data;
+  data.from_hexstring (mobius::core::string::replace (str, sep, ""));
 
   return data;
 }

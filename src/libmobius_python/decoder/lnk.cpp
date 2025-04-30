@@ -23,7 +23,7 @@
 #include <pymobius.hpp>
 #include "lnk.hpp"
 #include "io/reader.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -62,7 +62,7 @@ mobius::core::decoder::lnk
 pymobius_decoder_lnk_from_pyobject (PyObject *value)
 {
   if (!pymobius_decoder_lnk_check (value))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.decoder.lnk"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.decoder.lnk"));
 
   return * (reinterpret_cast <decoder_lnk_o *>(value)->obj);
 }
@@ -1340,7 +1340,7 @@ static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
   // Parse input args
-  mobius::io::reader arg_reader;
+  mobius::core::io::reader arg_reader;
 
   try
     {

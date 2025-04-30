@@ -24,10 +24,10 @@ namespace mobius::core::crypt
 // @param data Data
 // @return Encrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
-cipher_impl_block::encrypt (const mobius::bytearray& data)
+mobius::core::bytearray
+cipher_impl_block::encrypt (const mobius::core::bytearray& data)
 {
-  mobius::bytearray out;
+  mobius::core::bytearray out;
   auto block_size = get_block_size ();
 
   for (std::size_t i = 0;i < data.size ();i += block_size)
@@ -44,10 +44,10 @@ cipher_impl_block::encrypt (const mobius::bytearray& data)
 // @param data Data
 // @return Decrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
-cipher_impl_block::decrypt (const mobius::bytearray& data)
+mobius::core::bytearray
+cipher_impl_block::decrypt (const mobius::core::bytearray& data)
 {
-  mobius::bytearray out;
+  mobius::core::bytearray out;
   auto block_size = get_block_size ();
 
   for (std::size_t i = 0;i < data.size ();i += block_size)

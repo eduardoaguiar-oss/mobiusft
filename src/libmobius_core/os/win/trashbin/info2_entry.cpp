@@ -32,7 +32,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   impl (const impl&) = delete;
   impl (impl&&) = delete;
-  explicit impl (const mobius::io::reader&);
+  explicit impl (const mobius::core::io::reader&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Operators
@@ -125,7 +125,7 @@ private:
 // @param reader Reader object
 // @param size Record size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-info2_entry::impl::impl (const mobius::io::reader& reader)
+info2_entry::impl::impl (const mobius::core::io::reader& reader)
 {
   constexpr std::uint64_t PATH_SIZE = 260;
 
@@ -145,7 +145,7 @@ info2_entry::impl::impl (const mobius::io::reader& reader)
 // @param reader Reader object
 // @param size Record size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-info2_entry::info2_entry (const mobius::io::reader& reader)
+info2_entry::info2_entry (const mobius::core::io::reader& reader)
   : impl_ (std::make_shared <impl> (reader))
 {
 }

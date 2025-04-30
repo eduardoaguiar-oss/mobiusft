@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/file_decoder/section.hpp>
-#include <mobius/io/bytearray_io.h>
+#include <mobius/core/io/bytearray_io.hpp>
 
 namespace mobius::core::file_decoder
 {
@@ -33,7 +33,7 @@ public:
   impl () = default;
   impl (const impl&) = delete;
   impl (impl&&) = delete;
-  impl (const mobius::io::reader&, const std::string&);
+  impl (const mobius::core::io::reader&, const std::string&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Operators
@@ -86,7 +86,7 @@ public:
   // @param data Data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
-  set_data (const mobius::bytearray& data)
+  set_data (const mobius::core::bytearray& data)
   {
     data_ = data;
   }
@@ -95,12 +95,12 @@ public:
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   section new_child (const std::string&);
-  mobius::io::reader new_reader () const;
+  mobius::core::io::reader new_reader () const;
   void end ();
 
 private:
   // @brief Reader object
-  mobius::io::reader reader_;
+  mobius::core::io::reader reader_;
 
   // @brief Section offset from the beginning of file
   size_type offset_ = 0;
@@ -115,7 +115,7 @@ private:
   std::vector <section> children_;
 
   // @brief Alternate data, if any
-  mobius::bytearray data_;
+  mobius::core::bytearray data_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -123,7 +123,7 @@ private:
 // @param reader Reader object
 // @param name Section name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-section::impl::impl (const mobius::io::reader& reader, const std::string& name)
+section::impl::impl (const mobius::core::io::reader& reader, const std::string& name)
   : reader_ (reader),
     offset_ (reader.tell ()),
     name_ (name)
@@ -145,14 +145,14 @@ section::impl::new_child (const std::string& name)
 // @brief Create new reader for file section
 // @return Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::reader
+mobius::core::io::reader
 section::impl::new_reader () const
 {
   if (data_)
-    return mobius::io::new_bytearray_reader (data_);
+    return mobius::core::io::new_bytearray_reader (data_);
 
   else
-    return mobius::io::new_slice_reader (reader_, offset_, offset_ + size_ - 1);
+    return mobius::core::io::new_slice_reader (reader_, offset_, offset_ + size_ - 1);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -177,7 +177,7 @@ section::section ()
 // @param reader Reader object
 // @param name Section name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-section::section (const mobius::io::reader& reader, const std::string& name)
+section::section (const mobius::core::io::reader& reader, const std::string& name)
   : impl_ (std::make_shared <impl> (reader, name))
 {
 }
@@ -207,7 +207,7 @@ section::get_children () const
 // @brief Create new reader for file section
 // @return Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::reader
+mobius::core::io::reader
 section::new_reader () const
 {
   return impl_->new_reader ();
@@ -218,7 +218,7 @@ section::new_reader () const
 // @param data Data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-section::set_data (const mobius::bytearray& data)
+section::set_data (const mobius::core::bytearray& data)
 {
   impl_->set_data (data);
 }

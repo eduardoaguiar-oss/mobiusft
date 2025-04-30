@@ -18,11 +18,11 @@
 #include "imagefile_impl.hpp"
 #include "reader_impl.hpp"
 #include "writer_impl.hpp"
-#include <mobius/exception.inc>
-#include <mobius/io/reader.h>
-#include <mobius/io/writer.h>
-#include <mobius/io/uri.h>
-#include <mobius/string_functions.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/io/reader.hpp>
+#include <mobius/core/io/writer.hpp>
+#include <mobius/core/io/uri.hpp>
+#include <mobius/core/string_functions.hpp>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -31,7 +31,7 @@
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-imagefile_impl::is_instance (const mobius::io::file& f)
+imagefile_impl::is_instance (const mobius::core::io::file& f)
 {
   return f.get_extension () == "001";
 }
@@ -40,10 +40,10 @@ imagefile_impl::is_instance (const mobius::io::file& f)
 // @brief Construct object
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-imagefile_impl::imagefile_impl (const mobius::io::file& f)
+imagefile_impl::imagefile_impl (const mobius::core::io::file& f)
   : file_ (f),
     segments_ (f, [](mobius::core::vfs::segment_array::idx_type idx){
-                    return mobius::string::to_string (idx + 1, 3);
+                    return mobius::core::string::to_string (idx + 1, 3);
                   })
 {
 }
@@ -90,20 +90,20 @@ imagefile_impl::get_attributes () const
 // @brief Create new reader for imagefile
 // @return Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::reader
+mobius::core::io::reader
 imagefile_impl::new_reader () const
 {
-  return mobius::io::reader (std::make_shared <reader_impl> (*this));
+  return mobius::core::io::reader (std::make_shared <reader_impl> (*this));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create new writer for imagefile
 // @return Writer object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::writer
+mobius::core::io::writer
 imagefile_impl::new_writer () const
 {
-  return mobius::io::writer (std::make_shared <writer_impl> (*this));
+  return mobius::core::io::writer (std::make_shared <writer_impl> (*this));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -117,7 +117,7 @@ imagefile_impl::_load_metadata () const
 
   // Check if first segment exists
   if (!file_ || !file_.exists ())
-    throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("Image file not found"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Image file not found"));
 
   // Scan segments
   segments_.scan ();

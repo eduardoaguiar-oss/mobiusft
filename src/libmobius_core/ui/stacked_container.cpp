@@ -18,7 +18,7 @@
 #include <mobius/core/ui/stacked_container.hpp>
 #include <mobius/core/ui/widget_impl_base.hpp>
 #include <mobius/core/ui/box.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <algorithm>
 #include <stdexcept>
 #include <unordered_map>

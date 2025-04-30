@@ -24,7 +24,7 @@
 #include <pylist.hpp>
 #include "credential.hpp"
 #include "io/reader.hpp"
-#include <mobius/io/bytearray_io.h>
+#include <mobius/core/io/bytearray_io.hpp>
 #include <functional>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -291,7 +291,7 @@ static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
   // parse input args
-  mobius::io::reader arg_reader;
+  mobius::core::io::reader arg_reader;
 
   try
     {

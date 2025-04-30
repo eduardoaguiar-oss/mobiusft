@@ -16,9 +16,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/system/device.hpp>
-#include <mobius/io/reader_impl_base.h>
-#include <mobius/exception.inc>
-#include <mobius/exception_posix.inc>
+#include <mobius/core/io/reader_impl_base.hpp>
+#include <mobius/core/exception.inc>
+#include <mobius/core/exception_posix.inc>
 #include <stdexcept>
 #include <libudev.h>
 
@@ -28,7 +28,7 @@ namespace mobius::core::system
 // @brief Device reader implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class reader_impl_device : public mobius::io::reader_impl_base
+class reader_impl_device : public mobius::core::io::reader_impl_base
 {
 public:
   explicit reader_impl_device (const device&);
@@ -96,7 +96,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Virtual methods
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray read (size_type) override;
+  mobius::core::bytearray read (size_type) override;
   void seek (offset_type, whence_type = whence_type::beginning) override;
 
 private:
@@ -164,11 +164,11 @@ reader_impl_device::seek (offset_type offset, whence_type w)
 // @param size size in bytes
 // @return bytearray containing data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 reader_impl_device::read (size_type size)
 {
   size = std::min (size_ - pos_, size);
-  mobius::bytearray buffer (size);
+  mobius::core::bytearray buffer (size);
   size_t count = fread (buffer.data (), 1, size, fp_.get ());
 
   if (count == 0 && ferror (fp_.get ()))
@@ -328,10 +328,10 @@ device::get_sysattr_list () const
 // @brief create new reader for device
 // @return reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::reader
+mobius::core::io::reader
 device::new_reader () const
 {
-  return mobius::io::reader (
+  return mobius::core::io::reader (
            std::make_shared <reader_impl_device> (*this)
          );
 }

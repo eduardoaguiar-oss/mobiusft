@@ -19,7 +19,7 @@
 #include <mobius/core/os/win/hash_nt.hpp>
 #include <mobius/core/charset.hpp>
 #include <mobius/core/crypt/hash.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 
 namespace mobius::core::os::win
 {
@@ -29,12 +29,12 @@ namespace mobius::core::os::win
 // @param username User name
 // @return MSDCC1 hash
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 hash_msdcc1 (const std::string& password, const std::string& username)
 {
   mobius::core::crypt::hash md4 ("md4");
   md4.update (hash_nt (password));
-  md4.update (mobius::core::conv_charset (mobius::string::tolower (username), "UTF-8", "UTF-16LE"));
+  md4.update (mobius::core::conv_charset (mobius::core::string::tolower (username), "UTF-8", "UTF-16LE"));
   return md4.get_digest ();
 }
 

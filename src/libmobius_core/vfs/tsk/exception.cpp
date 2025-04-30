@@ -27,7 +27,7 @@ namespace mobius::core::vfs::tsk
 std::string
 tsk_exception_msg (const char *fname, const char *funcname, std::size_t line)
 {
-  std::string msg = mobius::exception_msg (fname, funcname, line, tsk_error_get ());
+  std::string msg = mobius::core::exception_msg (fname, funcname, line, tsk_error_get ());
   tsk_error_reset ();
 
   return msg;

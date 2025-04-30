@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/application.hpp>
 #include <mobius/core/resource.hpp>
-#include <mobius/io/uri.h>
-#include <mobius/string_functions.h>
+#include <mobius/core/io/uri.hpp>
+#include <mobius/core/string_functions.hpp>
 #include <mobius/core/vfs/imagefile.hpp>
 #include <iostream>
 #include <cstdint>
@@ -70,16 +70,16 @@ get_size (const std::string& text)
 {
   std::uint64_t size = stoll (text);
 
-  if (mobius::string::endswith (text, "KB"))
+  if (mobius::core::string::endswith (text, "KB"))
     size *= 1024;
 
-  else if (mobius::string::endswith (text, "MB"))
+  else if (mobius::core::string::endswith (text, "MB"))
     size *= 1024 * 1024;
 
-  else if (mobius::string::endswith (text, "GB"))
+  else if (mobius::core::string::endswith (text, "GB"))
     size *= 1024L * 1024L * 1024L;
 
-  else if (mobius::string::endswith (text, "TB"))
+  else if (mobius::core::string::endswith (text, "TB"))
     size *= 1024L * 1024L * 1024L * 1024L;
 
   return size;
@@ -93,7 +93,7 @@ get_type_from_url (const std::string& url)
 {
   std::string type;
 
-  mobius::io::uri uri (url);
+  mobius::core::io::uri uri (url);
   std::string extension = uri.get_extension ();
 
   if (extension == "001")
@@ -114,7 +114,7 @@ get_type_from_url (const std::string& url)
 std::string
 get_url_from_type (const std::string& input_url, const std::string& type)
 {
-  mobius::io::uri uri (input_url);
+  mobius::core::io::uri uri (input_url);
   std::string url = input_url.substr (0, input_url.length () - uri.get_extension ().length ());
 
   if (type == "raw")

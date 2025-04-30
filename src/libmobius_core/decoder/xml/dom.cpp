@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/decoder/xml/dom.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <stdexcept>
@@ -64,8 +64,8 @@ public:
   impl (const impl&) = delete;
   impl (impl&&) = delete;
   explicit impl (const std::string&, const std::string&);
-  explicit impl (mobius::io::reader, const std::string&);
-  explicit impl (const mobius::bytearray&, const std::string&);
+  explicit impl (mobius::core::io::reader, const std::string&);
+  explicit impl (const mobius::core::bytearray&, const std::string&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Operators
@@ -93,7 +93,7 @@ private:
 // @param text Text string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 dom::impl::impl (const std::string& text, const std::string& encoding)
-  : impl (mobius::bytearray (text), encoding)
+  : impl (mobius::core::bytearray (text), encoding)
 {
 }
 
@@ -101,7 +101,7 @@ dom::impl::impl (const std::string& text, const std::string& encoding)
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-dom::impl::impl (mobius::io::reader reader, const std::string& encoding)
+dom::impl::impl (mobius::core::io::reader reader, const std::string& encoding)
   : impl (reader.read (reader.get_size ()), encoding)
 {
 }
@@ -110,7 +110,7 @@ dom::impl::impl (mobius::io::reader reader, const std::string& encoding)
 // @brief Constructor
 // @param data Data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-dom::impl::impl (const mobius::bytearray& data, const std::string& encoding)
+dom::impl::impl (const mobius::core::bytearray& data, const std::string& encoding)
 {
   // Parse document
   xmlDocPtr doc = xmlReadMemory (
@@ -158,7 +158,7 @@ dom::dom (const std::string& text, const std::string& encoding)
 // @param reader Reader object
 // @param encoding XML encoding
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-dom::dom (const mobius::io::reader& reader, const std::string& encoding)
+dom::dom (const mobius::core::io::reader& reader, const std::string& encoding)
   : impl_ (std::make_shared <impl> (reader, encoding))
 {
 }

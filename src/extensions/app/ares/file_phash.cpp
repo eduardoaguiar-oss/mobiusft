@@ -27,7 +27,7 @@ namespace mobius::extension::app::ares
 // @see ICH_loadPieces@helper_ICH.pas (line 528)
 // @see ICH_load_phash_indexs@helper_ICH.pas (line 1023)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-file_phash::file_phash (const mobius::io::reader& reader)
+file_phash::file_phash (const mobius::core::io::reader& reader)
 {
   if (!reader || reader.get_size () < 14)
     return;

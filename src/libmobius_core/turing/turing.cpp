@@ -18,7 +18,7 @@
 #include <mobius/core/application.hpp>
 #include <mobius/core/turing/turing.hpp>
 #include <mobius/core/database/connection_pool.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 #include <string>
 #include <tuple>
 
@@ -155,12 +155,12 @@ turing::impl::set_hash (
     {
       set_hash (hash_type,
                 hash_value.substr (0, 16),
-                mobius::string::toupper (password.substr (0, 7)));
+                mobius::core::string::toupper (password.substr (0, 7)));
 
       if (password.length () > 7)
         set_hash (hash_type,
                   hash_value.substr (16),
-                  mobius::string::toupper (password.substr (7)));
+                  mobius::core::string::toupper (password.substr (7)));
     }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

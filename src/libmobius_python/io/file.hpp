@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/io/file.h>
+#include <mobius/core/io/file.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::io::file *obj;
+  mobius::core::io::file *obj;
 } io_file_o;
 
 extern PyTypeObject io_file_t;
@@ -36,8 +36,8 @@ extern PyTypeObject io_file_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_io_file_check (PyObject *);
-PyObject *pymobius_io_file_to_pyobject (mobius::io::file);
-mobius::io::file pymobius_io_file_from_pyobject (PyObject *);
+PyObject *pymobius_io_file_to_pyobject (mobius::core::io::file);
+mobius::core::io::file pymobius_io_file_from_pyobject (PyObject *);
 
 
 #endif

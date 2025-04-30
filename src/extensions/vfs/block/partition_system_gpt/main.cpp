@@ -15,11 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <mobius/core/resource.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
-#include <mobius/exception.inc>
-#include <mobius/string_functions.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/string_functions.hpp>
 #include <mobius/core/vfs/block.hpp>
 #include <cstdint>
 #include <map>
@@ -39,7 +39,7 @@ using address_type = std::uint64_t;
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const std::string GPT_UNUSED_ENTRY = "00000000-0000-0000-0000-000000000000";
 static const std::string GPT_MS_BASIC_DATA = "EBD0A0A2-B9E5-4433-87C0-68B6B72699C7";
-static const mobius::bytearray GPT_SIGNATURE = "EFI PART";
+static const mobius::core::bytearray GPT_SIGNATURE = "EFI PART";
 constexpr std::size_t MBR_PARTITION_OFFSET = 0x1be;
 constexpr std::size_t MBR_SIGNATURE_OFFSET = 0x1fe;
 constexpr std::uint8_t EFI_GPT_TYPE = 0xee;
@@ -333,7 +333,7 @@ _decode_gpt_partition_table (
           block.set_attribute ("unique_guid", unique_guid);
           block.set_attribute ("name", name);
           block.set_attribute ("description", description);
-          block.set_attribute ("attributes", mobius::string::to_hex (attributes, 8));
+          block.set_attribute ("attributes", mobius::core::string::to_hex (attributes, 8));
           block.set_attribute ("is_bootable", is_bootable);
           block.set_attribute ("is_readable", is_readable);
           block.set_attribute ("is_writable", is_writeable);
@@ -400,7 +400,7 @@ _decode_gpt (
     }
 
   if (!header_block)
-    throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("no valid GPT header found"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("no valid GPT header found"));
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Set ps_block attributes from GPT Header

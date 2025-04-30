@@ -18,16 +18,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <cstdint>
 #include <string>
 
 namespace mobius::core::os::win
 {
 
-mobius::bytearray pbkdf2_hmac_ms (
-   const mobius::bytearray&,
-   const mobius::bytearray&,
+mobius::core::bytearray pbkdf2_hmac_ms (
+   const mobius::core::bytearray&,
+   const mobius::core::bytearray&,
    std::uint32_t,
    std::uint16_t,
    const std::string&);

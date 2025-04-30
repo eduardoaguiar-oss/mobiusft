@@ -46,10 +46,10 @@ namespace mobius::core::crypt
 // @param data Data
 // @return Encoded/decoded data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
-rot13 (const mobius::bytearray& data)
+mobius::core::bytearray
+rot13 (const mobius::core::bytearray& data)
 {
-  mobius::bytearray out (data.size ());
+  mobius::core::bytearray out (data.size ());
   std::transform (data.begin (), data.end (), out.begin (), _rot13);
 
   return out;

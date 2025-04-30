@@ -35,7 +35,7 @@ func_hash_digest (PyObject *, PyObject *args)
 {
   // parse input args
   std::string arg_hash_id;
-  mobius::bytearray arg_data;
+  mobius::core::bytearray arg_data;
 
   try
     {

@@ -18,9 +18,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/file.h>
-#include <mobius/io/reader.h>
-#include <mobius/io/writer.h>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/io/reader.hpp>
+#include <mobius/core/io/writer.hpp>
 #include <cstdint>
 #include <functional>
 #include <string>
@@ -45,12 +45,12 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  segment_array (const mobius::io::file&, func_get_extension_type);
+  segment_array (const mobius::core::io::file&, func_get_extension_type);
   void scan ();
   idx_type get_size () const;
   size_type get_data_size () const;
-  mobius::io::reader new_reader (idx_type);
-  mobius::io::writer new_writer (idx_type);
+  mobius::core::io::reader new_reader (idx_type);
+  mobius::core::io::writer new_writer (idx_type);
 
 private:
   class impl;

@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/os/win/registry/registry_key.hpp>
 #include <mobius/core/os/win/registry/registry_key_impl_null.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 
 namespace mobius::core::os::win::registry
 {
@@ -46,10 +46,10 @@ registry_key::registry_key (std::shared_ptr <registry_key_impl_base> impl)
 registry_key
 registry_key::get_key_by_name (const std::string& name) const
 {
-  const std::string lname = mobius::string::tolower (name);
+  const std::string lname = mobius::core::string::tolower (name);
 
   for (const auto& sk : *this)
-    if (mobius::string::tolower (sk.get_name ()) == lname)
+    if (mobius::core::string::tolower (sk.get_name ()) == lname)
       return sk;
 
   return registry_key ();
@@ -105,7 +105,7 @@ registry_key::get_key_by_path (const std::string& path) const
 std::vector <registry_key>
 registry_key::get_key_by_mask (const std::string& a_mask) const
 {
-  const std::string mask = mobius::string::tolower (a_mask);
+  const std::string mask = mobius::core::string::tolower (a_mask);
   std::string::size_type pos = 0;
 
   // skip heading '\'
@@ -141,9 +141,9 @@ registry_key::get_key_by_mask (const std::string& a_mask) const
         {
           for (auto sk : key)
             {
-              const std::string name = mobius::string::tolower (sk.get_name ());
+              const std::string name = mobius::core::string::tolower (sk.get_name ());
 
-              if (mobius::string::fnmatch (submask, name))
+              if (mobius::core::string::fnmatch (submask, name))
                 tmp_keys.push_back (sk);
             }
         }
@@ -164,10 +164,10 @@ registry_key::get_key_by_mask (const std::string& a_mask) const
 registry_value
 registry_key::get_value_by_name (const std::string& name) const
 {
-  const std::string lname = mobius::string::tolower (name);
+  const std::string lname = mobius::core::string::tolower (name);
 
   for (const auto& v : get_values ())
-    if (mobius::string::tolower (v.get_name ()) == lname)
+    if (mobius::core::string::tolower (v.get_name ()) == lname)
       return v;
 
   return registry_value ();
@@ -221,7 +221,7 @@ std::vector <registry_value>
 registry_key::get_value_by_mask (const std::string& a_mask) const
 {
   // parse registry_key.mask + '\' + value.mask
-  const std::string mask = mobius::string::tolower (a_mask);
+  const std::string mask = mobius::core::string::tolower (a_mask);
   std::string key_mask;
   std::string value_mask;
 
@@ -252,9 +252,9 @@ registry_key::get_value_by_mask (const std::string& a_mask) const
     {
       for (auto v : key.get_values ())
         {
-          const std::string name = mobius::string::tolower (v.get_name ());
+          const std::string name = mobius::core::string::tolower (v.get_name ());
 
-          if (mobius::string::fnmatch (value_mask, name))
+          if (mobius::core::string::fnmatch (value_mask, name))
             values.push_back (v);
         }
     }

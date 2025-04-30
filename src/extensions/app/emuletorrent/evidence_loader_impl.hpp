@@ -21,7 +21,7 @@
 #include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/evidence_loader_impl_base.hpp>
 #include <mobius/framework/model/item.hpp>
-#include <mobius/io/file.h>
+#include <mobius/core/io/file.hpp>
 #include <map>
 #include <vector>
 
@@ -40,7 +40,7 @@ struct account
   std::string download_save_path;
   std::string download_save_path_mule;
   bool autorun = false;
-  mobius::io::file f;
+  mobius::core::io::file f;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -86,8 +86,8 @@ struct file
   std::vector <remote_source> remote_sources;
 
   // evidence sources
-  mobius::io::file ed2k_fastresume_f;
-  mobius::io::file bt_fastresume_f;
+  mobius::core::io::file ed2k_fastresume_f;
+  mobius::core::io::file bt_fastresume_f;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -149,17 +149,17 @@ private:
   // Helper functions
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void _scan_canonical_folders ();
-  void _scan_canonical_root_folder (const mobius::io::folder&);
-  void _scan_canonical_user_folder (const mobius::io::folder&);
-  void _scan_canonical_emuletorrent_local_folder (const mobius::io::folder&);
-  void _scan_canonical_emuletorrent_roaming_folder (const mobius::io::folder&);
+  void _scan_canonical_root_folder (const mobius::core::io::folder&);
+  void _scan_canonical_user_folder (const mobius::core::io::folder&);
+  void _scan_canonical_emuletorrent_local_folder (const mobius::core::io::folder&);
+  void _scan_canonical_emuletorrent_roaming_folder (const mobius::core::io::folder&);
 
   void _scan_all_folders ();
-  void _scan_generic_folder (const mobius::io::folder&);
+  void _scan_generic_folder (const mobius::core::io::folder&);
 
-  void _decode_emuletorrent_ini_file (const mobius::io::file&);
-  void _decode_bt_fastresume_file (const mobius::io::file&);
-  void _decode_ed2k_fastresume_file (const mobius::io::file&);
+  void _decode_emuletorrent_ini_file (const mobius::core::io::file&);
+  void _decode_bt_fastresume_file (const mobius::core::io::file&);
+  void _decode_ed2k_fastresume_file (const mobius::core::io::file&);
 
   void _save_evidences ();
   void _save_accounts ();

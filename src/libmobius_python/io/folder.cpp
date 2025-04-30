@@ -28,7 +28,7 @@
 #include "stream.hpp"
 #include "pod/data.hpp"
 #include "pod/map.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -48,7 +48,7 @@ pymobius_io_folder_check (PyObject *pyobj)
 // @return new object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_io_folder_to_pyobject (mobius::io::folder obj)
+pymobius_io_folder_to_pyobject (mobius::core::io::folder obj)
 {
   PyObject *ret = nullptr;
 
@@ -57,7 +57,7 @@ pymobius_io_folder_to_pyobject (mobius::io::folder obj)
       ret = _PyObject_New (&io_folder_t);
 
       if (ret)
-        ((io_folder_o *) ret)->obj = new mobius::io::folder (obj);
+        ((io_folder_o *) ret)->obj = new mobius::core::io::folder (obj);
     }
   else
     {
@@ -72,11 +72,11 @@ pymobius_io_folder_to_pyobject (mobius::io::folder obj)
 // @param pyobj Python object
 // @return folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::folder
+mobius::core::io::folder
 pymobius_io_folder_from_pyobject (PyObject *pyobj)
 {
   if (!PyObject_IsInstance (pyobj, (PyObject *) &io_folder_t))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object type must be mobius.io.folder"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object type must be mobius.io.folder"));
 
   return * (reinterpret_cast <io_folder_o *>(pyobj)->obj);
 }
@@ -1027,7 +1027,7 @@ static PyObject *
 tp_f_copy (io_folder_o *self, PyObject *args)
 {
   // parse input args
-  mobius::io::folder arg_dst;
+  mobius::core::io::folder arg_dst;
 
   try
     {
@@ -1062,7 +1062,7 @@ static PyObject *
 tp_f_move (io_folder_o *self, PyObject *args)
 {
   // parse input args
-  mobius::io::folder arg_dst;
+  mobius::core::io::folder arg_dst;
 
   try
     {

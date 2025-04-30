@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/os/win/pbkdf2_hmac_ms.hpp>
 #include <mobius/core/crypt/hmac.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace mobius::core::os::win
@@ -31,10 +31,10 @@ namespace mobius::core::os::win
 // @param hash_id hash algorithm (e.g. "md2", "md5", "sha1", "sha2-256")
 // This function implements MS version, which is not compatible with RFC 2898
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 pbkdf2_hmac_ms (
-  const mobius::bytearray& password,
-  const mobius::bytearray& salt,
+  const mobius::core::bytearray& password,
+  const mobius::core::bytearray& salt,
   std::uint32_t count,
   std::uint16_t dklen,
   const std::string& hash_id)
@@ -45,7 +45,7 @@ pbkdf2_hmac_ms (
 
   // Calculate derived key
   std::uint32_t i = 1;
-  mobius::bytearray dk;
+  mobius::core::bytearray dk;
   mobius::core::crypt::hmac hmac (hash_id, password);
 
   while (dk.size () < dklen)

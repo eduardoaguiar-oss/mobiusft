@@ -47,7 +47,7 @@ public:
   mobius::core::pod::map get_attributes () const override;
   mobius::core::pod::map get_state () const override;
   std::string get_path () const override;
-  mobius::io::reader new_reader () const override;
+  mobius::core::io::reader new_reader () const override;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief Check if object is valid

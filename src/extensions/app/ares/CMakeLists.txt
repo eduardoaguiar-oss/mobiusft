@@ -46,7 +46,7 @@ set(SOURCES
 add_library(app_ares MODULE ${SOURCES})
 set_target_properties(app_ares PROPERTIES OUTPUT_NAME "app-ares" PREFIX "")
 target_include_directories(app_ares PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(app_ares PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(app_ares PRIVATE mobius_core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

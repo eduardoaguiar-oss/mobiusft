@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <cstddef>
 
 namespace mobius::core::crypt
@@ -52,12 +52,12 @@ public:
   virtual bool is_block () const = 0;
   virtual void reset () = 0;
   virtual void final () = 0;
-  virtual mobius::bytearray encrypt (const mobius::bytearray&) = 0;
-  virtual mobius::bytearray decrypt (const mobius::bytearray&) = 0;
+  virtual mobius::core::bytearray encrypt (const mobius::core::bytearray&) = 0;
+  virtual mobius::core::bytearray decrypt (const mobius::core::bytearray&) = 0;
   virtual std::size_t get_block_size () const = 0;
-  virtual void authenticate (const mobius::bytearray&) = 0;
-  virtual mobius::bytearray get_tag () const = 0;
-  virtual bool check_tag (const mobius::bytearray&) const = 0;
+  virtual void authenticate (const mobius::core::bytearray&) = 0;
+  virtual mobius::core::bytearray get_tag () const = 0;
+  virtual bool check_tag (const mobius::core::bytearray&) const = 0;
 };
 
 } // namespace mobius::core::crypt

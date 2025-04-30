@@ -18,12 +18,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <string>
 
 namespace mobius::core::encoder
 {
-std::string hexstring (const mobius::bytearray&, const std::string& = "");
+std::string hexstring (const mobius::core::bytearray&, const std::string& = "");
 
 } // namespace mobius::core::encoder
 

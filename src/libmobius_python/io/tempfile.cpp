@@ -22,7 +22,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
 #include "tempfile.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 #include "io/reader.hpp"
 #include "io/writer.hpp"
@@ -140,7 +140,7 @@ static PyObject *
 tp_f_copy_from (io_tempfile_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::io::reader arg_reader;
+  mobius::core::io::reader arg_reader;
 
   try
     {
@@ -176,7 +176,7 @@ static PyObject *
 tp_f_copy_to (io_tempfile_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::io::writer arg_writer;
+  mobius::core::io::writer arg_writer;
 
   try
     {
@@ -231,7 +231,7 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::io::tempfile ();
+          ret->obj = new mobius::core::io::tempfile ();
         }
       catch (const std::exception& e)
         {
@@ -339,7 +339,7 @@ pymobius_io_tempfile_check (PyObject *value)
 // @return New tempfile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_io_tempfile_to_pyobject (const mobius::io::tempfile& obj)
+pymobius_io_tempfile_to_pyobject (const mobius::core::io::tempfile& obj)
 {
   return mobius::py::to_pyobject <io_tempfile_o> (obj, &io_tempfile_t);
 }
@@ -349,7 +349,7 @@ pymobius_io_tempfile_to_pyobject (const mobius::io::tempfile& obj)
 // @param value Python value
 // @return Tempfile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::tempfile
+mobius::core::io::tempfile
 pymobius_io_tempfile_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <io_tempfile_o> (value, &io_tempfile_t);
@@ -379,7 +379,7 @@ func_set_tempdir_path (PyObject *, PyObject *args)
 
   try
     {
-      mobius::io::set_tempdir_path (arg_path);
+      mobius::core::io::set_tempdir_path (arg_path);
       ret = mobius::py::pynone ();
     }
   catch (const std::exception& e)

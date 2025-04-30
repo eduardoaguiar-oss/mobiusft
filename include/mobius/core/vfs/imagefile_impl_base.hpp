@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/reader.h>
-#include <mobius/io/writer.h>
+#include <mobius/core/io/reader.hpp>
+#include <mobius/core/io/writer.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <cstdint>
 #include <string>
@@ -66,8 +66,8 @@ public:
   virtual void set_attribute (const std::string&, const mobius::core::pod::data&) = 0;
   virtual mobius::core::pod::map get_attributes () const = 0;
 
-  virtual mobius::io::reader new_reader () const = 0;
-  virtual mobius::io::writer new_writer () const = 0;
+  virtual mobius::core::io::reader new_reader () const = 0;
+  virtual mobius::core::io::writer new_writer () const = 0;
 };
 
 } // namespace mobius::core::vfs

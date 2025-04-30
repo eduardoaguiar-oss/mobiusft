@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/database/exception.inc>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <chrono>
 #include <stdexcept>
 #include <thread>

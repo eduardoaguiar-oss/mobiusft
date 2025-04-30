@@ -37,7 +37,7 @@ set(SOURCES
 add_library(vfs_imagefile_ewf MODULE ${SOURCES})
 set_target_properties(vfs_imagefile_ewf PROPERTIES OUTPUT_NAME "vfs-imagefile-ewf" PREFIX "")
 target_include_directories(vfs_imagefile_ewf PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_imagefile_ewf PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(vfs_imagefile_ewf PRIVATE mobius_core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: ewf_decoder
@@ -52,7 +52,7 @@ set(EWF_DECODER_SOURCES
 )
 
 add_executable(ewf_decoder ${EWF_DECODER_SOURCES})
-target_link_libraries(ewf_decoder PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(ewf_decoder PRIVATE mobius_core)
 target_include_directories(ewf_decoder PRIVATE ${MOBIUS_INCLUDE_DIRS})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

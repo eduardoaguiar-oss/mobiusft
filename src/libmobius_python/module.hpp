@@ -19,10 +19,10 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <mobius/core/datetime/datetime.hpp>
 
-PyObject *PyBytes_from_bytearray (const mobius::bytearray&);
+PyObject *PyBytes_from_bytearray (const mobius::core::bytearray&);
 
 PyObject *PyDateTime_from_datetime (const mobius::core::datetime::datetime&);
 mobius::core::datetime::datetime PyDateTime_as_datetime (PyObject *);

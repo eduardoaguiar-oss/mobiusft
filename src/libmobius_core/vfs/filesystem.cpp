@@ -36,7 +36,7 @@ filesystem::filesystem ()
 // @param type Filesystem type (default = "autodetect")
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 filesystem::filesystem (
-  const mobius::io::reader& reader,
+  const mobius::core::io::reader& reader,
   std::uint64_t offset,
   const std::string& type
 )

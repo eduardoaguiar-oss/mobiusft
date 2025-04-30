@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/mediator.hpp>
 #include <mobius/core/resource.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 #include <algorithm>
 #include <mutex>
 #include <string>
@@ -112,7 +112,7 @@ get_resources (const std::string& group_id)
     std::lock_guard <std::mutex> lock (mutex_);
 
     for (const auto& p : resources_)
-      if (mobius::string::startswith (p.first, prefix))
+      if (mobius::core::string::startswith (p.first, prefix))
         resources.push_back (p.second);
   }
 

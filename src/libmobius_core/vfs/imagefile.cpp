@@ -18,9 +18,9 @@
 #include <mobius/core/vfs/imagefile.hpp>
 #include <mobius/core/vfs/imagefile_impl_null.hpp>
 #include <mobius/core/resource.hpp>
-#include <mobius/exception.inc>
-#include <mobius/io/file.h>
-#include <mobius/string_functions.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/string_functions.hpp>
 #include <stdexcept>
 
 namespace mobius::core::vfs
@@ -47,7 +47,7 @@ imagefile::imagefile (const std::shared_ptr <imagefile_impl_base>& impl)
 // @param f File object
 // @param type Imagefile type (default = "autodetect")
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-imagefile::imagefile (const mobius::io::file& f, const std::string& type)
+imagefile::imagefile (const mobius::core::io::file& f, const std::string& type)
   : impl_ (build_imagefile_implementation (f, type))
 {
 }
@@ -91,7 +91,7 @@ imagefile::get_metadata () const
   // implementation specific metadata
   for (const auto& p : get_attributes ())
     {
-      auto description = mobius::string::capitalize (mobius::string::replace (p.first, "_", " "));
+      auto description = mobius::core::string::capitalize (mobius::core::string::replace (p.first, "_", " "));
       metadata.add (p.first, description, "std::string", p.second.to_string ());
     }
 
@@ -105,7 +105,7 @@ imagefile::get_metadata () const
 // @return shared_ptr to implementation object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::shared_ptr <imagefile_impl_base>
-build_imagefile_implementation (const mobius::io::file& f, const std::string& id)
+build_imagefile_implementation (const mobius::core::io::file& f, const std::string& id)
 {
   // If type == "autodetect", use f_is_instance function to check if file
   // is an instance of this imagefile type.
@@ -144,7 +144,7 @@ build_imagefile_implementation (const mobius::io::file& f, const std::string& id
 imagefile
 new_imagefile_by_url (const std::string& url, const std::string& type)
 {
-  auto f = mobius::io::new_file_by_url (url);
+  auto f = mobius::core::io::new_file_by_url (url);
   return imagefile (f, type);
 }
 
@@ -157,7 +157,7 @@ new_imagefile_by_url (const std::string& url, const std::string& type)
 imagefile
 new_imagefile_by_path (const std::string& path, const std::string& type)
 {
-  auto f = mobius::io::new_file_by_path (path);
+  auto f = mobius::core::io::new_file_by_path (path);
   return imagefile (f, type);
 }
 
@@ -168,7 +168,7 @@ new_imagefile_by_path (const std::string& path, const std::string& type)
 // @return Imagefile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile
-new_imagefile_from_file (const mobius::io::file& f, const std::string& type)
+new_imagefile_from_file (const mobius::core::io::file& f, const std::string& type)
 {
   return imagefile (f, type);
 }

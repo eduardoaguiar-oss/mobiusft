@@ -29,7 +29,7 @@ namespace
 // @see get_cached_metas@helper_library_db.pas
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-_populate_metadata (mobius::extension::app::ares::file_sharel::entry& e, const mobius::bytearray& data)
+_populate_metadata (mobius::extension::app::ares::file_sharel::entry& e, const mobius::core::bytearray& data)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -63,7 +63,7 @@ namespace mobius::extension::app::ares
 // @brief Constructor
 // @see get_trusted_metas function (helper_library_db.pas)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-file_sharel::file_sharel (const mobius::io::reader& reader)
+file_sharel::file_sharel (const mobius::core::io::reader& reader)
 {
   if (!reader || reader.get_size () < 14)
     return;

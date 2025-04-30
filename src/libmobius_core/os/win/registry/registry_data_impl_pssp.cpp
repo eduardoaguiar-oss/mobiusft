@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/os/win/registry/registry_data_impl_pssp.hpp>
 #include <mobius/core/crypt/cipher.hpp>
-#include <mobius/io/bytearray_io.h>
+#include <mobius/core/io/bytearray_io.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
 
 namespace mobius::core::os::win::registry
@@ -28,8 +28,8 @@ namespace mobius::core::os::win::registry
 // @param item_data data from "Item Data" value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_data_impl_pssp::registry_data_impl_pssp (
-  const mobius::bytearray& des_key,
-  const mobius::bytearray& item_data)
+  const mobius::core::bytearray& des_key,
+  const mobius::core::bytearray& item_data)
   : des_key_ (des_key),
     item_data_ (item_data)
 {
@@ -46,7 +46,7 @@ registry_data_impl_pssp::_load_data () const
     return;
 
   // decode "Item Data" data
-  auto item_data_reader = mobius::io::new_bytearray_reader (item_data_);
+  auto item_data_reader = mobius::core::io::new_bytearray_reader (item_data_);
   auto item_data_decoder = mobius::core::decoder::data_decoder (item_data_reader);
   item_data_decoder.skip (8);
   auto enc_des_key2 = item_data_decoder.get_bytearray_by_size (24);
@@ -61,7 +61,7 @@ registry_data_impl_pssp::_load_data () const
   auto data = des2.decrypt (enc_data);
 
   // decode data
-  auto data_reader = mobius::io::new_bytearray_reader (data);
+  auto data_reader = mobius::core::io::new_bytearray_reader (data);
   auto data_decoder = mobius::core::decoder::data_decoder (data_reader);
   auto data_size = data_decoder.get_uint32_le ();
   data_ = data_decoder.get_bytearray_by_size (data_size);

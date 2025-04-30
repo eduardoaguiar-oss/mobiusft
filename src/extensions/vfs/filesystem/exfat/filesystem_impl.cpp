@@ -18,7 +18,7 @@
 #include "filesystem_impl.hpp"
 #include <mobius/core/log.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 
 namespace
 {
@@ -29,7 +29,7 @@ namespace
 static constexpr std::uint32_t SECTOR_SIZE = 512;
 
 // @brief signature
-static const mobius::bytearray SIGNATURE = "EXFAT   ";	// Exfat (section 3.1.2)
+static const mobius::core::bytearray SIGNATURE = "EXFAT   ";	// Exfat (section 3.1.2)
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Check if reader contains an EXFAT boot sector
@@ -37,7 +37,7 @@ static const mobius::bytearray SIGNATURE = "EXFAT   ";	// Exfat (section 3.1.2)
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static bool
-check_boot_sector (mobius::io::reader reader, std::uint64_t offset)
+check_boot_sector (mobius::core::io::reader reader, std::uint64_t offset)
 {
   bool rc = false;
 
@@ -66,7 +66,7 @@ check_boot_sector (mobius::io::reader reader, std::uint64_t offset)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 filesystem_impl::is_instance (
-  mobius::io::reader reader,
+  mobius::core::io::reader reader,
   std::uint64_t offset
 )
 {
@@ -86,7 +86,7 @@ filesystem_impl::is_instance (
 // @param offset Offset from the beginning of volume
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 filesystem_impl::filesystem_impl (
-  const mobius::io::reader& reader,
+  const mobius::core::io::reader& reader,
   size_type offset
 )
  : reader_ (reader),
@@ -111,7 +111,7 @@ filesystem_impl::get_metadata (const std::string& name) const
 // @brief Get root folder
 // @return Root folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::folder
+mobius::core::io::folder
 filesystem_impl::get_root_folder () const
 {
   return tsk_adaptor_.get_root_folder ();
@@ -127,7 +127,7 @@ filesystem_impl::_load_data () const
     return;
 
   // define boot sector offset
-  mobius::io::reader reader = reader_;
+  mobius::core::io::reader reader = reader_;
 
   std::uint64_t boot_offset = 0;
 
@@ -152,7 +152,7 @@ filesystem_impl::_load_data () const
   auto cluster_heap_offset = decoder.get_uint32_le ();
   auto cluster_count = decoder.get_uint32_le ();
   auto root_dir_cluster = decoder.get_uint32_le ();
-  auto serial_number = "0x" + mobius::string::to_hex (decoder.get_uint32_le (), 8);
+  auto serial_number = "0x" + mobius::core::string::to_hex (decoder.get_uint32_le (), 8);
   auto revision_minor = decoder.get_uint8 ();
   auto revision_major = decoder.get_uint8 ();
   auto flags = decoder.get_uint16_le ();

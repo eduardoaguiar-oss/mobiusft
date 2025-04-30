@@ -156,7 +156,7 @@ public:
   // @brief Get preview
   // @return Preview
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_preview () const
   {
     return preview_;
@@ -266,7 +266,7 @@ private:
   std::string hash_md5_;
 
   // @brief Thumbnail
-  mobius::bytearray preview_;
+  mobius::core::bytearray preview_;
 
   // @brief Found time
   mobius::core::datetime::datetime found_time_;

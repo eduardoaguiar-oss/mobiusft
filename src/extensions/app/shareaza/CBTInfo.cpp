@@ -19,7 +19,7 @@
 #include "CShareaza.hpp"
 #include <mobius/core/log.hpp>
 #include <mobius/core/decoder/btencode.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 
 #include <iostream>
 
@@ -258,7 +258,7 @@ CBTInfo::get_metadata () const
 
       if (flag_known)
         {
-          const std::string key = "torrent_info_" + mobius::string::replace (k, " ", "_");
+          const std::string key = "torrent_info_" + mobius::core::string::replace (k, " ", "_");
           metadata[key] = value;
         }
     }

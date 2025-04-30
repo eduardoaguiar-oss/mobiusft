@@ -60,7 +60,7 @@ namespace mobius::extension::app::emule
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-file_cancelled_met::file_cancelled_met (const mobius::io::reader& reader)
+file_cancelled_met::file_cancelled_met (const mobius::core::io::reader& reader)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 

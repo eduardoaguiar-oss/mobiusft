@@ -32,14 +32,14 @@ namespace
 // @return plaintext
 // @see https://en.wikipedia.org/wiki/Ciphertext_stealing
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray decrypt_cts_aes_128 (
-  const mobius::bytearray& key,
-  const mobius::bytearray& iv,
-  const mobius::bytearray& ciphertext)
+mobius::core::bytearray decrypt_cts_aes_128 (
+  const mobius::core::bytearray& key,
+  const mobius::core::bytearray& iv,
+  const mobius::core::bytearray& ciphertext)
 {
-  mobius::bytearray plaintext;
-  mobius::bytearray l_ciphertext = ciphertext;
-  constexpr mobius::bytearray::size_type block_size = 16;
+  mobius::core::bytearray plaintext;
+  mobius::core::bytearray l_ciphertext = ciphertext;
+  constexpr mobius::core::bytearray::size_type block_size = 16;
 
   // if ciphertext data has at least two blocks...
   if (ciphertext.size () >= block_size * 2)
@@ -50,15 +50,15 @@ mobius::bytearray decrypt_cts_aes_128 (
       if (padsize < block_size)
         {
           auto aes1 = mobius::core::crypt::new_cipher_ecb ("aes", key);
-          mobius::bytearray::size_type pos = ciphertext.size () - block_size * 2 + padsize;
-          mobius::bytearray dn = aes1.decrypt (ciphertext.slice (pos, pos + block_size - 1));
+          mobius::core::bytearray::size_type pos = ciphertext.size () - block_size * 2 + padsize;
+          mobius::core::bytearray dn = aes1.decrypt (ciphertext.slice (pos, pos + block_size - 1));
 
           // pad ciphertext with DN
           l_ciphertext += dn.slice (dn.size () - padsize, dn.size () - 1);
         }
 
       // swap last two blocks
-      mobius::bytearray::size_type pos = l_ciphertext.size () - block_size * 2;
+      mobius::core::bytearray::size_type pos = l_ciphertext.size () - block_size * 2;
       l_ciphertext = l_ciphertext.slice (0, pos - 1) + l_ciphertext.slice (pos + block_size, pos + block_size * 2 - 1) + l_ciphertext.slice (pos, pos + block_size - 1);
     }
 
@@ -78,8 +78,8 @@ mobius::bytearray decrypt_cts_aes_128 (
 // @param encrypted_data value's encrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_data_impl_msdcc::registry_data_impl_msdcc (
-  const mobius::bytearray& nlkm,
-  const mobius::bytearray& encrypted_data)
+  const mobius::core::bytearray& nlkm,
+  const mobius::core::bytearray& encrypted_data)
   : nlkm_ (nlkm),
     encrypted_data_ (encrypted_data)
 {
@@ -104,9 +104,9 @@ registry_data_impl_msdcc::_load_data () const
   std::uint16_t encrypted = decoder.get_uint16_le ();
   std::uint16_t algorithm = decoder.get_uint16_le ();
   decoder.skip (12);
-  mobius::bytearray iv = decoder.get_bytearray_by_size (16);
+  mobius::core::bytearray iv = decoder.get_bytearray_by_size (16);
   decoder.skip (16);
-  mobius::bytearray data = decoder.get_bytearray_by_size (encrypted_data_.size () - 96);
+  mobius::core::bytearray data = decoder.get_bytearray_by_size (encrypted_data_.size () - 96);
 
   // decrypt data, if necessary
   if (encrypted)

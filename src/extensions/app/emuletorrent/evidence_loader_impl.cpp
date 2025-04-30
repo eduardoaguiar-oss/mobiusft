@@ -33,15 +33,15 @@
 #include "evidence_loader_impl.hpp"
 #include "file_bt_fastresume.hpp"
 #include "file_ed2k_fastresume.hpp"
-#include <mobius/io/walker.h>
+#include <mobius/core/io/walker.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/decoder/inifile.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <mobius/framework/model/evidence.hpp>
-#include <mobius/io/folder.h>
-#include <mobius/io/path.h>
-#include <mobius/string_functions.h>
+#include <mobius/core/io/folder.hpp>
+#include <mobius/core/io/path.hpp>
+#include <mobius/core/string_functions.hpp>
 #include <algorithm>
 #include <stdexcept>
 
@@ -200,9 +200,9 @@ evidence_loader_impl::_scan_canonical_folders ()
 // @param folder Root folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_root_folder (const mobius::io::folder& folder)
+evidence_loader_impl::_scan_canonical_root_folder (const mobius::core::io::folder& folder)
 {
-  auto w = mobius::io::walker (folder);
+  auto w = mobius::core::io::walker (folder);
 
   for (const auto& f : w.get_folders_by_pattern ("users/*"))
     _scan_canonical_user_folder (f);
@@ -213,12 +213,12 @@ evidence_loader_impl::_scan_canonical_root_folder (const mobius::io::folder& fol
 // @param folder User folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_user_folder (const mobius::io::folder& folder)
+evidence_loader_impl::_scan_canonical_user_folder (const mobius::core::io::folder& folder)
 {
   username_ = folder.get_name ();
   account_ = {};
 
-  auto w = mobius::io::walker (folder);
+  auto w = mobius::core::io::walker (folder);
 
   for (const auto& f : w.get_folders_by_path ("appdata/roaming/mulehome"))
     _scan_canonical_emuletorrent_roaming_folder (f);
@@ -232,9 +232,9 @@ evidence_loader_impl::_scan_canonical_user_folder (const mobius::io::folder& fol
 // @param folder <i>mulehome</i> folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_emuletorrent_roaming_folder (const mobius::io::folder& folder)
+evidence_loader_impl::_scan_canonical_emuletorrent_roaming_folder (const mobius::core::io::folder& folder)
 {
-  mobius::io::walker w (folder);
+  mobius::core::io::walker w (folder);
 
   for (const auto& f : w.get_files_by_name ("emuletorrent.ini"))
     _decode_emuletorrent_ini_file (f);
@@ -245,10 +245,10 @@ evidence_loader_impl::_scan_canonical_emuletorrent_roaming_folder (const mobius:
 // @param folder <i>eMuleTorrent</i> folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_emuletorrent_local_folder (const mobius::io::folder& folder)
+evidence_loader_impl::_scan_canonical_emuletorrent_local_folder (const mobius::core::io::folder& folder)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
-  mobius::io::walker w (folder);
+  mobius::core::io::walker w (folder);
 
   for (const auto& f : w.get_files_by_pattern ("BT_backup/*.fastresume"))
     _decode_bt_fastresume_file (f);
@@ -265,7 +265,7 @@ evidence_loader_impl::_scan_canonical_emuletorrent_local_folder (const mobius::i
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_emuletorrent_ini_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_emuletorrent_ini_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -278,7 +278,7 @@ evidence_loader_impl::_decode_emuletorrent_ini_file (const mobius::io::file& f)
           account acc;
 
           acc.username = username_;
-          acc.edonkey_guid = mobius::string::toupper (inifile.get_value ("Preferences", "eDonkey\\UserHash"));
+          acc.edonkey_guid = mobius::core::string::toupper (inifile.get_value ("Preferences", "eDonkey\\UserHash"));
           acc.edonkey_nickname = inifile.get_value ("Preferences", "eDonkey\\Nick");
           acc.download_temp_path = inifile.get_value ("Preferences", "Downloads\\TempPath");
           acc.download_temp_path_mule = inifile.get_value ("Preferences", "Downloads\\TempPathMule");
@@ -311,7 +311,7 @@ evidence_loader_impl::_decode_emuletorrent_ini_file (const mobius::io::file& f)
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_bt_fastresume_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_bt_fastresume_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -378,7 +378,7 @@ evidence_loader_impl::_decode_bt_fastresume_file (const mobius::io::file& f)
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_ed2k_fastresume_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_ed2k_fastresume_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -444,13 +444,13 @@ evidence_loader_impl::_scan_all_folders ()
 // @param folder Folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_generic_folder (const mobius::io::folder& folder)
+evidence_loader_impl::_scan_generic_folder (const mobius::core::io::folder& folder)
 {
-  mobius::io::walker w (folder);
+  mobius::core::io::walker w (folder);
 
   for (const auto& f : w.get_files ())
     {
-      const std::string lname = mobius::string::tolower (f.get_name ());
+      const std::string lname = mobius::core::string::tolower (f.get_name ());
 
       if (lname == "emuletorrent.ini")
         _decode_emuletorrent_ini_file (f);

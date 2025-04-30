@@ -34,7 +34,7 @@
 PyObject *
 encoder_func_base32 (PyObject *, PyObject *args)
 {
-  mobius::bytearray arg_data;
+  mobius::core::bytearray arg_data;
 
   try
     {

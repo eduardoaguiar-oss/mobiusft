@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "../CLibrary.hpp"
 #include <mobius/core/application.hpp>
-#include <mobius/io/file.h>
+#include <mobius/core/io/file.hpp>
 #include <iostream>
 #include <unistd.h>
 
@@ -153,7 +153,7 @@ show_clibrary (const std::string& path)
   std::cout << std::endl;
   std::cout << ">> " << path << std::endl;
 
-  auto f = mobius::io::new_file_by_path (path);
+  auto f = mobius::core::io::new_file_by_path (path);
   auto decoder = mobius::core::decoder::mfc (f.new_reader ());
   auto clib = mobius::extension::app::shareaza::CLibrary (decoder);
 

@@ -21,7 +21,7 @@
 #include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/evidence_loader_impl_base.hpp>
 #include <mobius/framework/model/item.hpp>
-#include <mobius/io/file.h>
+#include <mobius/core/io/file.hpp>
 #include <map>
 #include <vector>
 
@@ -38,7 +38,7 @@ struct account
   std::string mdht_id;
   std::string nickname;
   std::string username;
-  mobius::io::file f;
+  mobius::core::io::file f;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -51,7 +51,7 @@ struct autofill
   std::string value;
   std::string category;
   std::string account_guid;
-  mobius::io::file f;
+  mobius::core::io::file f;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -111,14 +111,14 @@ struct file
   std::vector <remote_source> remote_sources;
 
   // evidence sources
-  mobius::io::file shareh_f;
-  mobius::io::file sharel_f;
-  mobius::io::file torrenth_f;
-  mobius::io::file phashidx_f;
-  mobius::io::file arestra_f;
-  mobius::io::file tempdl_phash_f;
-  mobius::io::file tempdl_pbthash_f;
-  mobius::io::file tempul_udpphash_f;
+  mobius::core::io::file shareh_f;
+  mobius::core::io::file sharel_f;
+  mobius::core::io::file torrenth_f;
+  mobius::core::io::file phashidx_f;
+  mobius::core::io::file arestra_f;
+  mobius::core::io::file tempdl_phash_f;
+  mobius::core::io::file tempdl_pbthash_f;
+  mobius::core::io::file tempul_udpphash_f;
 
   std::uint64_t shareh_idx = 0;
   std::uint64_t sharel_idx = 0;
@@ -191,27 +191,27 @@ private:
   // Helper functions
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void _scan_canonical_folders ();
-  void _scan_canonical_root_folder (const mobius::io::folder&);
-  void _scan_canonical_user_folder (const mobius::io::folder&);
-  void _scan_canonical_ares_folder (const mobius::io::folder&);
-  void _scan_canonical_ares_my_shared_folder (const mobius::io::folder&);
-  void _scan_canonical_ares_data_folder (const mobius::io::folder&);
-  void _scan_canonical_ares_data_file (const mobius::io::file&);
-  void _scan_canonical_ares_data_tempdl_folder (const mobius::io::folder&);
-  void _scan_canonical_ares_data_tempdl_phash_file (const mobius::io::file&);
-  void _scan_canonical_ares_data_tempdl_pbthash_file (const mobius::io::file&);
-  void _scan_canonical_ares_data_tempul_folder (const mobius::io::folder&);
-  void _scan_canonical_ares_data_tempul_udpphash_file (const mobius::io::file&);
+  void _scan_canonical_root_folder (const mobius::core::io::folder&);
+  void _scan_canonical_user_folder (const mobius::core::io::folder&);
+  void _scan_canonical_ares_folder (const mobius::core::io::folder&);
+  void _scan_canonical_ares_my_shared_folder (const mobius::core::io::folder&);
+  void _scan_canonical_ares_data_folder (const mobius::core::io::folder&);
+  void _scan_canonical_ares_data_file (const mobius::core::io::file&);
+  void _scan_canonical_ares_data_tempdl_folder (const mobius::core::io::folder&);
+  void _scan_canonical_ares_data_tempdl_phash_file (const mobius::core::io::file&);
+  void _scan_canonical_ares_data_tempdl_pbthash_file (const mobius::core::io::file&);
+  void _scan_canonical_ares_data_tempul_folder (const mobius::core::io::folder&);
+  void _scan_canonical_ares_data_tempul_udpphash_file (const mobius::core::io::file&);
 
   void _scan_all_folders ();
-  void _scan_generic_folder (const mobius::io::folder&);
+  void _scan_generic_folder (const mobius::core::io::folder&);
 
-  void _decode_arestra_file (const mobius::io::file&);
-  void _decode_ntuser_dat_file (const mobius::io::file&);
-  void _decode_phashidx_dat_file (const mobius::io::file&);
-  void _decode_shareh_dat_file (const mobius::io::file&);
-  void _decode_sharel_dat_file (const mobius::io::file&);
-  void _decode_torrenth_dat_file (const mobius::io::file&);
+  void _decode_arestra_file (const mobius::core::io::file&);
+  void _decode_ntuser_dat_file (const mobius::core::io::file&);
+  void _decode_phashidx_dat_file (const mobius::core::io::file&);
+  void _decode_shareh_dat_file (const mobius::core::io::file&);
+  void _decode_sharel_dat_file (const mobius::core::io::file&);
+  void _decode_torrenth_dat_file (const mobius::core::io::file&);
 
   void _save_evidences ();
   void _save_accounts ();

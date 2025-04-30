@@ -290,7 +290,7 @@ CDownload::decode_CDownloadWithExtras (mobius::core::decoder::mfc& decoder, int 
 // @param reader Reader object
 // @see Download.cpp - CDownload::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-CDownload::CDownload (const mobius::io::reader& reader)
+CDownload::CDownload (const mobius::core::io::reader& reader)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
   mobius::core::decoder::mfc decoder (reader);

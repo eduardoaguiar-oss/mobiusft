@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/io/uri.h>
+#include <mobius/core/io/uri.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::io::uri *obj;
+  mobius::core::io::uri *obj;
 } io_uri_o;
 
 extern PyTypeObject io_uri_t;
@@ -36,8 +36,8 @@ extern PyTypeObject io_uri_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_io_uri_check (PyObject *);
-PyObject *pymobius_io_uri_to_pyobject (mobius::io::uri);
-mobius::io::uri pymobius_io_uri_from_pyobject (PyObject *);
+PyObject *pymobius_io_uri_to_pyobject (mobius::core::io::uri);
+mobius::core::io::uri pymobius_io_uri_from_pyobject (PyObject *);
 
 #endif
 

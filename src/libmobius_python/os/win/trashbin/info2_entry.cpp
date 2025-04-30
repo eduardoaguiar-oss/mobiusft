@@ -23,7 +23,7 @@
 #include <pymobius.hpp>
 #include "info2_entry.hpp"
 #include "io/reader.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -62,7 +62,7 @@ mobius::core::os::win::trashbin::info2_entry
 pymobius_os_win_trashbin_info2_entry_from_pyobject (PyObject *value)
 {
   if (!pymobius_os_win_trashbin_info2_entry_check (value))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.os.win.trashbin.info2_entry"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.os.win.trashbin.info2_entry"));
 
   return * (reinterpret_cast <os_win_trashbin_info2_entry_o *>(value)->obj);
 }

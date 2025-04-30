@@ -21,7 +21,7 @@
 #define PY_SSIZE_T_CLEAN        // PEP 353
 
 #include <pymobius.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace mobius::py
@@ -69,18 +69,18 @@ pylist_to_cpp_container (PyObject *list, F cppfunc) -> std::vector <decltype (cp
   std::vector <decltype (cppfunc (nullptr))> v;
 
   if (!PyList_Check (list))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object is not a list"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object is not a list"));
 
   Py_ssize_t size = PyList_Size (list);
   if (size == -1)
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG (get_error_message ()));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (get_error_message ()));
 
   for (Py_ssize_t i = 0; i < size; i++)
     {
       PyObject *py_item = PyList_GetItem (list, i);
 
       if (!py_item)
-        throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG (get_error_message ()));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG (get_error_message ()));
 
       v.push_back (cppfunc (py_item));
     }

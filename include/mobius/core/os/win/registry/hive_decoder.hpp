@@ -18,9 +18,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/reader.h>
+#include <mobius/core/io/reader.hpp>
 #include <mobius/core/datetime/datetime.hpp>
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -114,7 +114,7 @@ struct vk_data
   std::uint32_t data_offset;
 
   // @brief data value
-  mobius::bytearray data_value;
+  mobius::core::bytearray data_value;
 
   // @brief value name
   std::string name;
@@ -132,18 +132,18 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit hive_decoder (mobius::io::reader);
+  explicit hive_decoder (mobius::core::io::reader);
   header_data decode_header ();
   vk_data decode_vk (offset_type);
   std::vector <offset_type> decode_subkeys_list (offset_type);
   std::vector <offset_type> decode_values_list (offset_type, std::uint32_t);
-  mobius::bytearray decode_data (offset_type, std::uint32_t);
-  mobius::bytearray decode_data_cell (offset_type);
-  mobius::bytearray decode_data_db (offset_type);
+  mobius::core::bytearray decode_data (offset_type, std::uint32_t);
+  mobius::core::bytearray decode_data_cell (offset_type);
+  mobius::core::bytearray decode_data_db (offset_type);
 
 private:
   // @brief generic reader
-  mobius::io::reader reader_;
+  mobius::core::io::reader reader_;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // helper functions

@@ -42,10 +42,10 @@ func_to_win_path (PyObject *, PyObject *args)
       return nullptr;
     }
 
-  mobius::io::path path;
+  mobius::core::io::path path;
 
   if (mobius::py::pystring_check (arg))
-    path = mobius::io::path (mobius::py::pystring_as_std_string (arg));
+    path = mobius::core::io::path (mobius::py::pystring_as_std_string (arg));
 
   else if (pymobius_io_path_check (arg))
     path = pymobius_io_path_from_pyobject (arg);

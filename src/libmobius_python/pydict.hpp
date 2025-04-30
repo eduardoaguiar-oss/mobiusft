@@ -21,7 +21,7 @@
 #define PY_SSIZE_T_CLEAN        // PEP 353
 
 #include <Python.h>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <cstdint>
 #include <string>
 #include <stdexcept>
@@ -83,7 +83,7 @@ pydict_to_cpp_container (PyObject *py_dict, F1 cppfunc1, F2 cppfunc2) -> std::ma
   std::map <decltype (cppfunc1 (nullptr)), decltype (cppfunc2 (nullptr))> m;
 
   if (!PyDict_Check (py_dict))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("argument is not a dict"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("argument is not a dict"));
 
   PyObject *key, *value;
   Py_ssize_t pos = 0;

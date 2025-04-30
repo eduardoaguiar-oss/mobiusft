@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/ui/widget_impl_base.hpp>
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <string>
 
 namespace mobius::core::ui
@@ -71,7 +71,7 @@ public:
   // Function prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   virtual void set_icon_by_name (const std::string&, size_type) = 0;
-  virtual void set_icon_from_data (const mobius::bytearray&, size_type) = 0;
+  virtual void set_icon_from_data (const mobius::core::bytearray&, size_type) = 0;
 };
 
 } // namespace mobius::core::ui

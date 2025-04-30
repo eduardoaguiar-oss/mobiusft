@@ -22,10 +22,10 @@
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/datetime/conv_iso_string.hpp>
 #include <mobius/core/encoder/data_encoder.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 #include <mobius/core/zlib_functions.hpp>
-#include <mobius/exception.inc>
-#include <mobius/io/writer_evaluator.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/io/writer_evaluator.hpp>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -69,7 +69,7 @@ static constexpr int SECTOR_SIZE = 512;
 // @return std::uint32_t
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::uint32_t
-digest_to_uint32_t (const mobius::bytearray& digest)
+digest_to_uint32_t (const mobius::core::bytearray& digest)
 {
   return std::uint32_t (digest[0]) << 24 |
          std::uint32_t (digest[1]) << 16 |
@@ -81,15 +81,15 @@ digest_to_uint32_t (const mobius::bytearray& digest)
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
-// @param writer generic mobius::io::writer object
+// @param writer generic mobius::core::io::writer object
 // @param segment_idx segment index, starting from 1
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-segment_writer::segment_writer (mobius::io::writer writer, std::uint16_t segment_number)
+segment_writer::segment_writer (mobius::core::io::writer writer, std::uint16_t segment_number)
   : writer_ (writer),
     segment_number_ (segment_number),
     chunk_sectors_ (CHUNK_SECTORS),
     sector_size_ (SECTOR_SIZE),
-    guid_ (mobius::bytearray (16))
+    guid_ (mobius::core::bytearray (16))
 {
 }
 
@@ -117,9 +117,9 @@ segment_writer::create ()
 // @return the number of bytes written
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 segment_writer::size_type
-segment_writer::write (const mobius::bytearray& arg_data)
+segment_writer::write (const mobius::core::bytearray& arg_data)
 {
-  mobius::bytearray data = chunk_data_ + arg_data;
+  mobius::core::bytearray data = chunk_data_ + arg_data;
   size_type bytes = 0;
 
   // write data chunks
@@ -150,7 +150,7 @@ segment_writer::write (const mobius::bytearray& arg_data)
 
   // otherwise, error
   else if (chunk_data_.size () > 0)
-    throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("error writing chunk data"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("error writing chunk data"));
 
   return bytes;
 }
@@ -213,7 +213,7 @@ segment_writer::close ()
 void
 segment_writer::_write_file_header (std::uint16_t segment_idx)
 {
-  const mobius::bytearray EWF_SIGNATURE = {'E', 'V', 'F', 0x09, 0x0d, 0x0a, 0xff, 0x00};
+  const mobius::core::bytearray EWF_SIGNATURE = {'E', 'V', 'F', 0x09, 0x0d, 0x0a, 0xff, 0x00};
 
   mobius::core::encoder::data_encoder encoder (writer_);
   encoder.encode_bytearray (EWF_SIGNATURE);
@@ -238,7 +238,7 @@ segment_writer::_write_section_header (const std::string& name, size_type size)
 
   // encode section header
   mobius::core::crypt::hash_functor hash_functor ("adler32");
-  auto writer = mobius::io::writer_evaluator (writer_, hash_functor);
+  auto writer = mobius::core::io::writer_evaluator (writer_, hash_functor);
 
   mobius::core::encoder::data_encoder encoder (writer);
   encoder.encode_string_by_size (name, 16);
@@ -256,7 +256,7 @@ segment_writer::_write_section_header (const std::string& name, size_type size)
 // @param data section data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-segment_writer::_write_section_data (const mobius::bytearray& data)
+segment_writer::_write_section_data (const mobius::core::bytearray& data)
 {
   writer_.write (data);
 }
@@ -278,10 +278,10 @@ segment_writer::_write_header_section ()
   std::string drive_model = drive_vendor_ + ' ' + drive_model_;
 
   std::string acquisition_datetime = mobius::core::datetime::datetime_to_iso_string (dt_now);
-  acquisition_datetime = mobius::string::replace (acquisition_datetime, "-", " ");
-  acquisition_datetime = mobius::string::replace (acquisition_datetime, ":", " ");
-  acquisition_datetime = mobius::string::replace (acquisition_datetime, "T", " ");
-  acquisition_datetime = mobius::string::replace (acquisition_datetime, "Z", "");
+  acquisition_datetime = mobius::core::string::replace (acquisition_datetime, "-", " ");
+  acquisition_datetime = mobius::core::string::replace (acquisition_datetime, ":", " ");
+  acquisition_datetime = mobius::core::string::replace (acquisition_datetime, "T", " ");
+  acquisition_datetime = mobius::core::string::replace (acquisition_datetime, "Z", "");
 
   std::string header_utf8 = "1\n"
                             "main\n"
@@ -306,16 +306,16 @@ segment_writer::_write_header_section ()
                             "\n\n";
 
   // write two "header2" sections
-  mobius::bytearray header_utf16 = mobius::core::conv_charset (header_utf8, "utf-8", "utf-16");
+  mobius::core::bytearray header_utf16 = mobius::core::conv_charset (header_utf8, "utf-8", "utf-16");
 
-  const mobius::bytearray data_header2 = mobius::core::zlib_compress (header_utf16);
+  const mobius::core::bytearray data_header2 = mobius::core::zlib_compress (header_utf16);
   _write_section_header ("header2", data_header2.size ());
   _write_section_data (data_header2);
   _write_section_header ("header2", data_header2.size ());
   _write_section_data (data_header2);
 
   // write "header" section
-  const mobius::bytearray data_header = mobius::core::zlib_compress (header_utf8);
+  const mobius::core::bytearray data_header = mobius::core::zlib_compress (header_utf8);
   _write_section_header ("header", data_header.size ());
   _write_section_data (data_header);
 }
@@ -347,7 +347,7 @@ segment_writer::_write_volume_section (const std::string& section_name)
   size_type chunk_count = (total_size_ + chunk_size_ - 1) / chunk_size_;
 
   mobius::core::crypt::hash_functor hash_functor ("adler32");
-  auto writer = mobius::io::writer_evaluator (writer_, hash_functor);
+  auto writer = mobius::core::io::writer_evaluator (writer_, hash_functor);
 
   // encode metadata
   mobius::core::encoder::data_encoder encoder (writer);
@@ -383,7 +383,7 @@ segment_writer::_write_hash_section ()
 
   // encode section
   mobius::core::crypt::hash_functor hash_functor ("adler32");
-  auto writer = mobius::io::writer_evaluator (writer_, hash_functor);
+  auto writer = mobius::core::io::writer_evaluator (writer_, hash_functor);
 
   mobius::core::encoder::data_encoder encoder (writer);
   encoder.encode_bytearray (md5_hash_);
@@ -410,7 +410,7 @@ segment_writer::_write_table_section (const std::string& name)
 
   // write section metadata
   mobius::core::crypt::hash_functor hash_functor ("adler32");
-  auto writer = mobius::io::writer_evaluator (writer_, hash_functor);
+  auto writer = mobius::core::io::writer_evaluator (writer_, hash_functor);
 
   mobius::core::encoder::data_encoder encoder (writer);
   encoder.encode_uint32_le (entries);
@@ -423,7 +423,7 @@ segment_writer::_write_table_section (const std::string& name)
 
   // write offsets
   hash_functor = mobius::core::crypt::hash_functor ("adler32");
-  writer = mobius::io::writer_evaluator (writer_, hash_functor);
+  writer = mobius::core::io::writer_evaluator (writer_, hash_functor);
   encoder = mobius::core::encoder::data_encoder (writer);
 
   for (auto offset : chunk_offset_list_)
@@ -459,7 +459,7 @@ segment_writer::_can_write_chunk_data ()
 // @return true/false if chunk could be written
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-segment_writer::_write_chunk_data (mobius::bytearray data)
+segment_writer::_write_chunk_data (mobius::core::bytearray data)
 {
   // create new sectors section, if necessary
   if (sector_offset_ == -1)
@@ -475,7 +475,7 @@ segment_writer::_write_chunk_data (mobius::bytearray data)
   if (compression_level_ > 0)
     {
       int level = (compression_level_ == 2) ? 9 : 1;
-      mobius::bytearray compressed_data = mobius::core::zlib_compress (data, level);
+      mobius::core::bytearray compressed_data = mobius::core::zlib_compress (data, level);
 
       if (compressed_data.size () < data.size ())
         {
@@ -486,7 +486,7 @@ segment_writer::_write_chunk_data (mobius::bytearray data)
 
   // write data
   mobius::core::crypt::hash_functor hash_functor ("adler32");
-  auto writer = mobius::io::writer_evaluator (writer_, hash_functor);
+  auto writer = mobius::core::io::writer_evaluator (writer_, hash_functor);
   writer.write (data);
 
   // encode ADLER-32 hash

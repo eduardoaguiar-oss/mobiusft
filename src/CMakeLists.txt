@@ -22,7 +22,8 @@ project(mobius LANGUAGES CXX)
 # Build modules
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_subdirectory(extensions)
-add_subdirectory(limobius_core)
-add_subdirectory(limobius_framework)
-add_subdirectory(limobius_python)
+add_subdirectory(libmobius_core)
+add_subdirectory(libmobius_framework)
+add_subdirectory(libmobius_python)
 add_subdirectory(tools)
+add_subdirectory(pymobius)

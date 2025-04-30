@@ -16,8 +16,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/decoder/sgml/parser.hpp>
-#include <mobius/exception.inc>
-#include <mobius/string_functions.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/string_functions.hpp>
 #include <stdexcept>
 
 namespace mobius::core::decoder::sgml
@@ -182,16 +182,16 @@ _parse_start_tag (const std::string& text)
   parser::element e;
 
   // comment
-  if (mobius::string::startswith (text, "<!--"))
+  if (mobius::core::string::startswith (text, "<!--"))
     {
-      if (!mobius::string::endswith (text, "-->"))
+      if (!mobius::core::string::endswith (text, "-->"))
         throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("unterminated comment"));
 
       e = parser::element (parser::element::type::comment, text.substr (4, text.size () - 7));
     }
 
   // declaration
-  else if (mobius::string::startswith (text, "<!"))
+  else if (mobius::core::string::startswith (text, "<!"))
     {
       e = parser::element (parser::element::type::declaration, text.substr (2, text.size () - 3));
     }
@@ -211,7 +211,7 @@ _parse_start_tag (const std::string& text)
 // @brief Create parser
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-parser::parser (const mobius::io::reader& reader)
+parser::parser (const mobius::core::io::reader& reader)
  : tokenizer_ (reader)
 {
 }

@@ -35,13 +35,13 @@ public:
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   hmac_impl_default () = default;
-  hmac_impl_default (const std::string&, const mobius::bytearray&);
+  hmac_impl_default (const std::string&, const mobius::core::bytearray&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Function prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void reset () final;
-  mobius::bytearray get_digest () final;
+  mobius::core::bytearray get_digest () final;
   std::shared_ptr <hmac_impl_base> clone () const final;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

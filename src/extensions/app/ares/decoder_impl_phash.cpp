@@ -36,7 +36,7 @@ namespace mobius::extension::app::ares
 // @see ICH_load_phash_index - helper_ICH.pas (line 1024)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-decoder_impl_phash::decode (const mobius::io::reader& reader)
+decoder_impl_phash::decode (const mobius::core::io::reader& reader)
 {
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Decode file

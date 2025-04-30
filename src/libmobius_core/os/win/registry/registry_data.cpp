@@ -18,7 +18,7 @@
 #include <mobius/core/os/win/registry/registry_data.hpp>
 #include <mobius/core/os/win/registry/registry_data_impl_null.hpp>
 #include <mobius/core/charset.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace mobius::core::os::win::registry

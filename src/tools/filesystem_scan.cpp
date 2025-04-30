@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/application.hpp>
 #include <mobius/core/resource.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 #include <mobius/core/vfs/vfs.hpp>
 #include <iostream>
 #include <unistd.h>
@@ -123,7 +123,7 @@ main (int argc, char **argv)
 
           for (const auto& [name, value] : block.get_attributes ())
             {
-              std::string key = mobius::string::replace (mobius::string::capitalize (name), "_", " ");
+              std::string key = mobius::core::string::replace (mobius::core::string::capitalize (name), "_", " ");
               std::cout << "   " << key << ": " << value.to_string () << std::endl;
             }
         }

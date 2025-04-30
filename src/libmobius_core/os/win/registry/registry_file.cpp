@@ -18,7 +18,7 @@
 #include <mobius/core/os/win/registry/registry_file.hpp>
 #include <mobius/core/os/win/registry/registry_key_impl_hkey.hpp>
 #include <mobius/core/os/win/registry/hive_file.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace mobius::core::os::win::registry
@@ -47,7 +47,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  impl (std::uint32_t, const std::string&, const std::string&, mobius::io::reader);
+  impl (std::uint32_t, const std::string&, const std::string&, mobius::core::io::reader);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief get uid
@@ -134,7 +134,7 @@ registry_file::impl::impl (
   std::uint32_t uid,
   const std::string& role,
   const std::string& path,
-  mobius::io::reader reader)
+  mobius::core::io::reader reader)
   : uid_ (uid),
     role_ (role),
     path_ (path),
@@ -155,7 +155,7 @@ registry_file::registry_file (
   std::uint32_t uid,
   const std::string& role,
   const std::string& path,
-  mobius::io::reader reader)
+  mobius::core::io::reader reader)
   : impl_ (std::make_shared <impl> (uid, role, path, reader))
 {
 }

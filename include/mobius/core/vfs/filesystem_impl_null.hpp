@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/vfs/filesystem_impl_base.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace mobius::core::vfs
@@ -55,7 +55,7 @@ public:
   // @brief Get root folder
   // @return Root folder
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::io::folder
+  mobius::core::io::folder
   get_root_folder () const override
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Invalid filesystem"));
@@ -65,7 +65,7 @@ public:
   // @brief Get reader
   // @return Reader
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::io::reader
+  mobius::core::io::reader
   get_reader () const override
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Invalid filesystem"));

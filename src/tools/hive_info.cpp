@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/application.hpp>
-#include <mobius/io/file.h>
+#include <mobius/core/io/file.hpp>
 #include <mobius/core/os/win/registry/hive_file.hpp>
 #include <iostream>
 #include <unistd.h>
@@ -44,7 +44,7 @@ print_hivefile (const std::string& url)
   std::cout << std::endl;
   std::cout << ">> " << url << std::endl;
 
-  auto f = mobius::io::new_file_by_url (url);
+  auto f = mobius::core::io::new_file_by_url (url);
   auto reader = f.new_reader ();
   mobius::core::os::win::registry::hive_file hf (reader);
 

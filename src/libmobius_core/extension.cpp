@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/extension.hpp>
 #include <mobius/core/log.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <cstdint>
 #include <stdexcept>
 #include <dlfcn.h>

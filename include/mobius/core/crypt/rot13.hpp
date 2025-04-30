@@ -18,11 +18,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 
 namespace mobius::core::crypt
 {
-mobius::bytearray rot13 (const mobius::bytearray&);
+mobius::core::bytearray rot13 (const mobius::core::bytearray&);
 
 } // namespace mobius::core::crypt
 

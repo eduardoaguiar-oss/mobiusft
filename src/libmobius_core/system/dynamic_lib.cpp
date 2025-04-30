@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/system/dynamic_lib.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <dlfcn.h>
 #include <stdexcept>
 

@@ -24,8 +24,8 @@
 #include <pygil.hpp>
 #include "text_reader.hpp"
 #include "reader.hpp"
-#include <mobius/exception.inc>
-#include <mobius/io/bytearray_io.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/io/bytearray_io.hpp>
 #include <limits>
 #include <stdexcept>
 
@@ -46,12 +46,12 @@ pymobius_io_text_reader_check (PyObject *pyobj)
 // @return new object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_io_text_reader_to_pyobject (const mobius::io::text_reader& obj)
+pymobius_io_text_reader_to_pyobject (const mobius::core::io::text_reader& obj)
 {
   PyObject *ret = _PyObject_New (&io_text_reader_t);
 
   if (ret)
-    ((io_text_reader_o *) ret)->obj = new mobius::io::text_reader (obj);
+    ((io_text_reader_o *) ret)->obj = new mobius::core::io::text_reader (obj);
 
   return ret;
 }
@@ -61,11 +61,11 @@ pymobius_io_text_reader_to_pyobject (const mobius::io::text_reader& obj)
 // @param pyobj Python object
 // @return text_reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::text_reader
+mobius::core::io::text_reader
 pymobius_io_text_reader_from_pyobject (PyObject *pyobj)
 {
   if (!pymobius_io_text_reader_check (pyobj))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("argument must be text_reader"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("argument must be text_reader"));
 
   return * (reinterpret_cast <io_text_reader_o *>(pyobj)->obj);
 }
@@ -76,7 +76,7 @@ pymobius_io_text_reader_from_pyobject (PyObject *pyobj)
 // @return Data as C++ string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
-_read_all (mobius::io::text_reader* text_reader)
+_read_all (mobius::core::io::text_reader* text_reader)
 {
   std::string ret;
   std::string data = text_reader->read (65536);
@@ -174,7 +174,7 @@ static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
   // Parse input args
-  mobius::io::reader arg_reader;
+  mobius::core::io::reader arg_reader;
   std::string arg_encoding;
 
   try
@@ -195,7 +195,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::io::text_reader (arg_reader, arg_encoding);
+          ret->obj = new mobius::core::io::text_reader (arg_reader, arg_encoding);
         }
       catch (const std::exception& e)
         {

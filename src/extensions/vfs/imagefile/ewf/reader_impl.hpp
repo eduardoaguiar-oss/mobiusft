@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "imagefile_impl.hpp"
-#include <mobius/io/reader_impl_base.h>
+#include <mobius/core/io/reader_impl_base.hpp>
 #include <mobius/core/vfs/segment_array.hpp>
 #include <vector>
 
@@ -27,7 +27,7 @@
 // @brief ewf imagefile reader implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class reader_impl : public mobius::io::reader_impl_base
+class reader_impl : public mobius::core::io::reader_impl_base
 {
 public:
   explicit reader_impl (const imagefile_impl&);
@@ -95,7 +95,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // virtual methods
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray read (size_type) override;
+  mobius::core::bytearray read (size_type) override;
   void seek (offset_type, whence_type) override;
 
 private:
@@ -109,8 +109,8 @@ private:
   int segment_idx_;              //!< current segment index
   size_type chunk_idx_;          //!< current chunk index
   size_type last_chunk_idx_;     //!< last chunk index
-  mobius::io::reader stream_;
-  mobius::bytearray chunk_data_;
+  mobius::core::io::reader stream_;
+  mobius::core::bytearray chunk_data_;
 
   void _retrieve_current_chunk ();
 };

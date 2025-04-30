@@ -26,8 +26,8 @@ namespace mobius::core::crypt
 // @param data Data
 // @return Hash digest
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
-hash_digest (const std::string& hash_id, const mobius::bytearray& data)
+mobius::core::bytearray
+hash_digest (const std::string& hash_id, const mobius::core::bytearray& data)
 {
   mobius::core::crypt::hash h (hash_id);
   h.update (data);

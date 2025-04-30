@@ -36,7 +36,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   impl (const impl&) = delete;
   impl (impl&&) = delete;
-  explicit impl (const mobius::io::reader&);
+  explicit impl (const mobius::core::io::reader&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Operators
@@ -78,7 +78,7 @@ public:
   // @brief Get payload
   // @return Payload
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_payload () const
   {
     return payload_;
@@ -92,7 +92,7 @@ private:
   std::string hash_value_;
 
   // @brief File payload
-  mobius::bytearray payload_;
+  mobius::core::bytearray payload_;
 
   // @brief Is valid flag
   bool is_valid_ = false;
@@ -103,7 +103,7 @@ private:
 // @param reader Reader object
 // @see [TDF]/Telegram/SourceFiles/storage/details/storage_file_utilities.cpp (ReadFile function)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-tdf::impl::impl (const mobius::io::reader& reader)
+tdf::impl::impl (const mobius::core::io::reader& reader)
 {
   // File MUST have at least 24 bytes
   if (reader.get_size () < 24)
@@ -125,7 +125,7 @@ tdf::impl::impl (const mobius::io::reader& reader)
   mobius::core::crypt::hash md5 ("md5");
   md5.update (payload_);
 
-  mobius::bytearray encoded_data;
+  mobius::core::bytearray encoded_data;
   mobius::core::encoder::data_encoder encoder (encoded_data);
   encoder.encode_uint32_le (payload_.size ());
   encoder.encode_uint32_le (version_);
@@ -141,7 +141,7 @@ tdf::impl::impl (const mobius::io::reader& reader)
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-tdf::tdf (const mobius::io::reader& reader)
+tdf::tdf (const mobius::core::io::reader& reader)
   : impl_ (std::make_shared <impl> (reader))
 {
 }
@@ -225,7 +225,7 @@ tdf::get_hash_value () const
 // @brief Get payload
 // @return Payload
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 tdf::get_payload () const
 {
   return impl_->get_payload ();

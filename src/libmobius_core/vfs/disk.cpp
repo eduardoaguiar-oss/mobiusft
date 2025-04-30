@@ -19,8 +19,8 @@
 #include <mobius/core/vfs/disk_impl_null.hpp>
 #include <mobius/core/vfs/disk_impl_device.hpp>
 #include <mobius/core/vfs/disk_impl_imagefile.hpp>
-#include <mobius/exception.inc>
-#include <mobius/io/uri.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/io/uri.hpp>
 #include <stdexcept>
 
 namespace mobius::core::vfs
@@ -92,7 +92,7 @@ new_disk_by_url (const std::string& url, const std::string& type)
 disk
 new_disk_by_path (const std::string& path, const std::string& type)
 {
-  auto uri = mobius::io::new_uri_from_path (path);
+  auto uri = mobius::core::io::new_uri_from_path (path);
   return disk (std::make_shared <disk_impl_imagefile> (uri.get_value (), type));
 }
 

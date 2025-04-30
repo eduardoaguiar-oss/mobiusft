@@ -22,7 +22,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
 #include "stream.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 #include "io/reader.hpp"
 
@@ -43,7 +43,7 @@ pymobius_io_stream_check (PyObject *value)
 // @return New stream object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_io_stream_to_pyobject (const mobius::io::stream& obj)
+pymobius_io_stream_to_pyobject (const mobius::core::io::stream& obj)
 {
   PyObject *ret = nullptr;
 
@@ -52,7 +52,7 @@ pymobius_io_stream_to_pyobject (const mobius::io::stream& obj)
       ret = _PyObject_New (&io_stream_t);
 
       if (ret)
-        ((io_stream_o *) ret)->obj = new mobius::io::stream (obj);
+        ((io_stream_o *) ret)->obj = new mobius::core::io::stream (obj);
     }
   else
     {
@@ -67,11 +67,11 @@ pymobius_io_stream_to_pyobject (const mobius::io::stream& obj)
 // @param value Python value
 // @return Stream object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::stream
+mobius::core::io::stream
 pymobius_io_stream_from_pyobject (PyObject *value)
 {
   if (!pymobius_io_stream_check (value))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.io.stream"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.io.stream"));
 
   return * (reinterpret_cast <io_stream_o *>(value)->obj);
 }

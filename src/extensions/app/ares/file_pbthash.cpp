@@ -25,7 +25,7 @@ namespace mobius::extension::app::ares
 // @brief Constructor
 // @see read_details_DB_Download@helper_download_disk.pas (line 722)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-file_pbthash::file_pbthash (const mobius::io::reader& reader)
+file_pbthash::file_pbthash (const mobius::core::io::reader& reader)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 

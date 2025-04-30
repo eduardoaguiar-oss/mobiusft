@@ -18,7 +18,7 @@
 #include <mobius/core/os/win/registry/hive_file.hpp>
 #include <mobius/core/os/win/registry/hive_decoder.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 
 namespace mobius::core::os::win::registry
 {
@@ -31,7 +31,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit impl (const mobius::io::reader&);
+  explicit impl (const mobius::core::io::reader&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief check if object is instance
@@ -301,14 +301,14 @@ private:
   hive_key root_key_;
 
   // @brief generic reader
-  mutable mobius::io::reader reader_;
+  mutable mobius::core::io::reader reader_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-hive_file::impl::impl (const mobius::io::reader& reader)
+hive_file::impl::impl (const mobius::core::io::reader& reader)
   : reader_ (reader)
 {
   hive_decoder decoder (reader);
@@ -471,19 +471,19 @@ hive_file::impl::get_metadata () const
       "root_key_offset",
       "Root key offset",
       "std::string",
-      std::to_string (root_key_.get_offset ()) + " (0x" + mobius::string::to_hex (root_key_.get_offset (), 8) + ")"
+      std::to_string (root_key_.get_offset ()) + " (0x" + mobius::core::string::to_hex (root_key_.get_offset (), 8) + ")"
     },
     {
       "header_checksum",
       "Header checksum",
       "std::string",
-      "0x" + mobius::string::to_hex (header_checksum_, 8)
+      "0x" + mobius::core::string::to_hex (header_checksum_, 8)
     },
     {
       "eval_header_checksum",
       "Evaluated header checksum",
       "std::string",
-      "0x" + mobius::string::to_hex (eval_header_checksum (), 8)
+      "0x" + mobius::core::string::to_hex (eval_header_checksum (), 8)
     },
   };
 }
@@ -492,7 +492,7 @@ hive_file::impl::get_metadata () const
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-hive_file::hive_file (const mobius::io::reader& reader)
+hive_file::hive_file (const mobius::core::io::reader& reader)
   : impl_ (std::make_shared <impl> (reader))
 {
 }

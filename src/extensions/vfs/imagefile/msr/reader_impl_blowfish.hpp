@@ -18,9 +18,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/reader_impl_base.h>
-#include <mobius/io/reader.h>
-#include <mobius/bytearray.h>
+#include <mobius/core/io/reader_impl_base.hpp>
+#include <mobius/core/io/reader.hpp>
+#include <mobius/core/bytearray.hpp>
 #include <mobius/core/crypt/cipher.hpp>
 
 class imagefile_impl;
@@ -29,7 +29,7 @@ class imagefile_impl;
 // @brief Samsung's Secret Zone imagefile reader implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class reader_impl_blowfish : public mobius::io::reader_impl_base
+class reader_impl_blowfish : public mobius::core::io::reader_impl_base
 {
 public:
   explicit reader_impl_blowfish (const imagefile_impl&);
@@ -97,16 +97,16 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // virtual methods
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray read (size_type) override;
+  mobius::core::bytearray read (size_type) override;
   void seek (offset_type, whence_type = whence_type::beginning) override;
 
 private:
   const size_type size_;
   mobius::core::crypt::cipher cipher_;
-  mobius::io::reader stream_;
+  mobius::core::io::reader stream_;
   size_type pos_ = 0;
   size_type chunk_idx_ = 1;
-  mobius::bytearray chunk_data_;
+  mobius::core::bytearray chunk_data_;
 };
 
 #endif

@@ -21,9 +21,9 @@
 #define PY_SSIZE_T_CLEAN        // PEP 353
 
 #include <Python.h>
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <mobius/core/datetime/datetime.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <cstdint>
 #include <string>
 #include <stdexcept>
@@ -37,7 +37,7 @@ namespace mobius::py
 std::uint32_t get_arg_size (PyObject *) noexcept;
 PyObject *get_arg (PyObject *, std::uint32_t);
 std::string get_arg_as_std_string (PyObject *, std::uint32_t);
-mobius::bytearray get_arg_as_bytearray (PyObject *, std::uint32_t);
+mobius::core::bytearray get_arg_as_bytearray (PyObject *, std::uint32_t);
 mobius::core::datetime::datetime get_arg_as_datetime (PyObject *, std::uint32_t);
 bool get_arg_as_bool (PyObject *, std::uint32_t);
 char get_arg_as_char (PyObject *, std::uint32_t);
@@ -53,7 +53,7 @@ std::uint64_t get_arg_as_uint64_t (PyObject *, std::uint32_t);
 // Parse function arguments (with default value)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string get_arg_as_std_string (PyObject *, std::uint32_t, const std::string&);
-mobius::bytearray get_arg_as_bytearray (PyObject *, std::uint32_t, const mobius::bytearray&);
+mobius::core::bytearray get_arg_as_bytearray (PyObject *, std::uint32_t, const mobius::core::bytearray&);
 mobius::core::datetime::datetime get_arg_as_datetime (PyObject *, std::uint32_t, const mobius::core::datetime::datetime&);
 bool get_arg_as_bool (PyObject *, std::uint32_t, bool);
 char get_arg_as_char (PyObject *, std::uint32_t, char);
@@ -146,9 +146,9 @@ PyObject *pystring_from_std_string (const std::string&);
 std::string pystring_as_std_string (PyObject *);
 
 bool pybytes_check (PyObject *);
-PyObject *pybytes_from_bytearray (const mobius::bytearray&);
+PyObject *pybytes_from_bytearray (const mobius::core::bytearray&);
 PyObject *pybytes_from_char (char);
-mobius::bytearray pybytes_as_bytearray (PyObject *);
+mobius::core::bytearray pybytes_as_bytearray (PyObject *);
 
 bool pydatetime_check (PyObject *);
 PyObject *pydatetime_from_datetime (const mobius::core::datetime::datetime&);
@@ -201,7 +201,7 @@ from_pyobject (PyObject *value, T *type)
   if (isinstance (value, type))
     return * (reinterpret_cast <O *>(value)->obj);
 
-  throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object must be an instance of " + std::string (type->tp_name)));
+  throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of " + std::string (type->tp_name)));
 }
 
 template <typename O, typename Tcpp, typename T>
@@ -250,14 +250,14 @@ check_setter_value (PyObject *value, const char* attr_name, F pycheck)
   if (value == nullptr)
     {
       std::string msg = "cannot delete '" + std::string (attr_name) + "' attribute";
-      throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG (msg.c_str ()));
+      throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (msg.c_str ()));
     }
 
   // Check argument type
   if (!pycheck (value))
     {
       std::string msg = "invalid type for '" + std::string (attr_name) + "' attribute";
-      throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG (msg.c_str ()));
+      throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (msg.c_str ()));
     }
 }
 

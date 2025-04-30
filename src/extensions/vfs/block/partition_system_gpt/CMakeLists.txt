@@ -32,7 +32,7 @@ set(SOURCES
 add_library(vfs_block_partition_system_gpt MODULE ${SOURCES})
 set_target_properties(vfs_block_partition_system_gpt PROPERTIES OUTPUT_NAME "vfs-block-partition-system-gpt" PREFIX "")
 target_include_directories(vfs_block_partition_system_gpt PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_block_partition_system_gpt PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(vfs_block_partition_system_gpt PRIVATE mobius_core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

@@ -17,9 +17,9 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/vfs/disk_impl_device.hpp>
 #include <mobius/core/vfs/util.hpp>
-#include <mobius/io/file.h>
+#include <mobius/core/io/file.hpp>
 #include <mobius/core/system/device_list.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <algorithm>
 #include <stdexcept>
 
@@ -61,7 +61,7 @@ disk_impl_device::is_available () const
 
   if (device_)
     {
-      auto f = mobius::io::new_file_by_path (device_.get_node ());
+      auto f = mobius::core::io::new_file_by_path (device_.get_node ());
       rc = f.exists ();
     }
 
@@ -151,7 +151,7 @@ disk_impl_device::get_path () const
 // @brief Create new reader
 // @return New reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::reader
+mobius::core::io::reader
 disk_impl_device::new_reader () const
 {
   _load_device ();

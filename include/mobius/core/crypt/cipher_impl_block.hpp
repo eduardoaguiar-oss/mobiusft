@@ -54,14 +54,14 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray encrypt (const mobius::bytearray&) final;
-  mobius::bytearray decrypt (const mobius::bytearray&) final;
+  mobius::core::bytearray encrypt (const mobius::core::bytearray&) final;
+  mobius::core::bytearray decrypt (const mobius::core::bytearray&) final;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Abstract methods
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  virtual mobius::bytearray encrypt_block (const mobius::bytearray&) = 0;
-  virtual mobius::bytearray decrypt_block (const mobius::bytearray&) = 0;
+  virtual mobius::core::bytearray encrypt_block (const mobius::core::bytearray&) = 0;
+  virtual mobius::core::bytearray decrypt_block (const mobius::core::bytearray&) = 0;
 };
 
 } // namespace mobius::core::crypt

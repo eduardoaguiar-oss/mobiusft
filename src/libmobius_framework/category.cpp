@@ -157,7 +157,7 @@ public:
   // @brief get icon data
   // @return icon data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_icon_data () const
   {
     _load_data ();
@@ -169,7 +169,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void set_name (const std::string&);
   void set_description (const std::string&);
-  void set_icon_data (const mobius::bytearray&);
+  void set_icon_data (const mobius::core::bytearray&);
   attribute get_attribute (const std::string&) const;
   attribute new_attribute (const std::string&);
   void remove_attribute (const std::string&);
@@ -189,7 +189,7 @@ private:
   mutable std::string description_;
 
   // @brief icon data
-  mutable mobius::bytearray icon_data_;
+  mutable mobius::core::bytearray icon_data_;
 
   // @brief data loaded flag
   mutable bool data_loaded_ = false;
@@ -258,7 +258,7 @@ category::impl::set_description (const std::string& description)
 // @param icon_data icon data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-category::impl::set_icon_data (const mobius::bytearray& icon_data)
+category::impl::set_icon_data (const mobius::core::bytearray& icon_data)
 {
   _load_data ();
 
@@ -512,7 +512,7 @@ category::set_description (const std::string& description)
 // @brief get icon data
 // @return icon data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 category::get_icon_data () const
 {
   return impl_->get_icon_data ();
@@ -523,7 +523,7 @@ category::get_icon_data () const
 // @param icon_data icon data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-category::set_icon_data (const mobius::bytearray& icon_data)
+category::set_icon_data (const mobius::core::bytearray& icon_data)
 {
   impl_->set_icon_data (icon_data);
 }

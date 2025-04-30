@@ -27,11 +27,11 @@ namespace mobius::core::os::win::registry
 // @param data values' data
 // @return plaintext
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static const mobius::bytearray
-decrypt_sysfcn5 (const mobius::bytearray& lsa_key, const mobius::bytearray& data)
+static const mobius::core::bytearray
+decrypt_sysfcn5 (const mobius::core::bytearray& lsa_key, const mobius::core::bytearray& data)
 {
-  mobius::bytearray plaintext;
-  const mobius::bytearray ciphertext = data.slice (12, data.size () - 1);
+  mobius::core::bytearray plaintext;
+  const mobius::core::bytearray ciphertext = data.slice (12, data.size () - 1);
 
   std::uint32_t i = 0;
   std::uint32_t j = 0;
@@ -57,8 +57,8 @@ decrypt_sysfcn5 (const mobius::bytearray& lsa_key, const mobius::bytearray& data
 // @param encrypted_data value's encrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_data_impl_lsa_polseckey::registry_data_impl_lsa_polseckey (
-  const mobius::bytearray& lsa_key,
-  const mobius::bytearray& encrypted_data)
+  const mobius::core::bytearray& lsa_key,
+  const mobius::core::bytearray& encrypted_data)
   : lsa_key_ (lsa_key),
     encrypted_data_ (encrypted_data)
 {

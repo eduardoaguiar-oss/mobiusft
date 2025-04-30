@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
-#include <mobius/io/reader.h>
+#include <mobius/core/bytearray.hpp>
+#include <mobius/core/io/reader.hpp>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -36,7 +36,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit credhist_entry (mobius::io::reader, std::uint32_t);
+  explicit credhist_entry (mobius::core::io::reader, std::uint32_t);
   credhist_entry (credhist_entry&&) noexcept = default;
   credhist_entry (const credhist_entry&) noexcept = default;
 
@@ -56,14 +56,14 @@ public:
   std::uint32_t get_hash_id () const;
   std::uint32_t get_iterations () const;
   std::uint32_t get_cipher_id () const;
-  mobius::bytearray get_salt () const;
+  mobius::core::bytearray get_salt () const;
   std::string get_sid () const;
-  mobius::bytearray get_cipher_text () const;
-  mobius::bytearray get_hash_sha1 () const;
-  mobius::bytearray get_hash_ntlm () const;
+  mobius::core::bytearray get_cipher_text () const;
+  mobius::core::bytearray get_hash_sha1 () const;
+  mobius::core::bytearray get_hash_ntlm () const;
 
-  bool decrypt_with_key (const mobius::bytearray&);
-  bool decrypt_with_password_hash (const mobius::bytearray&);
+  bool decrypt_with_key (const mobius::core::bytearray&);
+  bool decrypt_with_password_hash (const mobius::core::bytearray&);
   bool decrypt_with_password (const std::string&);
   bool is_decrypted () const;
 

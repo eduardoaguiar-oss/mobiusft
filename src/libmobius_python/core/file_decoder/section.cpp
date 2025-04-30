@@ -25,7 +25,7 @@
 #include <pylist.hpp>
 #include "section.hpp"
 #include "io/reader.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -205,7 +205,7 @@ static PyObject *
 tp_f_set_data (core_file_decoder_section_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::bytearray arg_data;
+  mobius::core::bytearray arg_data;
 
   try
     {
@@ -279,7 +279,7 @@ static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
   // Parse input args
-  mobius::io::reader arg_reader;
+  mobius::core::io::reader arg_reader;
   std::string arg_name;
 
   try

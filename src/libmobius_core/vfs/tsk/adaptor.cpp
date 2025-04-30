@@ -25,12 +25,12 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief img_info for mobius::io::reader
+// @brief img_info for mobius::core::io::reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct TSK_IMG_INFO_MOBIUS
 {
   TSK_IMG_INFO img_info;
-  mobius::io::reader reader;
+  mobius::core::io::reader reader;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -85,7 +85,7 @@ namespace mobius::core::vfs::tsk
 // @param reader generic reader
 // @param offset offset in bytes from the beginning of the stream
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-adaptor::adaptor (const mobius::io::reader reader, std::uint64_t offset)
+adaptor::adaptor (const mobius::core::io::reader reader, std::uint64_t offset)
   : reader_ (reader), offset_ (offset)
 {
   // create image info structure
@@ -136,7 +136,7 @@ adaptor::~adaptor ()
 // @brief Get filesystem root folder
 // @return Root folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::folder
+mobius::core::io::folder
 adaptor::get_root_folder () const
 {
   if (!fs_info_)
@@ -148,7 +148,7 @@ adaptor::get_root_folder () const
     throw std::runtime_error (TSK_EXCEPTION_MSG);
 
   fs_file fs_file (p);
-  return mobius::io::folder (std::make_shared <folder_impl> (fs_file));
+  return mobius::core::io::folder (std::make_shared <folder_impl> (fs_file));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

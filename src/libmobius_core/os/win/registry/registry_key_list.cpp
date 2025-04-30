@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/os/win/registry/registry_key_list.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 #include <algorithm>
 
 namespace mobius::core::os::win::registry
@@ -30,7 +30,7 @@ registry_key_list::add (registry_key key)
 {
   auto lambda = [] (registry_key k1, registry_key k2)
   {
-    return mobius::string::tolower (k1.get_name ()) < mobius::string::tolower (k2.get_name ());
+    return mobius::core::string::tolower (k1.get_name ()) < mobius::core::string::tolower (k2.get_name ());
   };
 
   keys_.insert (
@@ -46,11 +46,11 @@ registry_key_list::add (registry_key key)
 void
 registry_key_list::remove (const std::string& name)
 {
-  const std::string lname = mobius::string::tolower (name);
+  const std::string lname = mobius::core::string::tolower (name);
 
   auto lambda = [lname] (registry_key sk)
   {
-    return mobius::string::tolower (sk.get_name ()) == lname;
+    return mobius::core::string::tolower (sk.get_name ()) == lname;
   };
 
   keys_.erase (
@@ -66,11 +66,11 @@ registry_key_list::remove (const std::string& name)
 registry_key
 registry_key_list::get (const std::string& name) const
 {
-  const std::string lname = mobius::string::tolower (name);
+  const std::string lname = mobius::core::string::tolower (name);
 
   auto lambda = [lname] (registry_key sk)
   {
-    return mobius::string::tolower (sk.get_name ()) == lname;
+    return mobius::core::string::tolower (sk.get_name ()) == lname;
   };
 
   auto iter = std::find_if (keys_.begin (), keys_.end (), lambda);

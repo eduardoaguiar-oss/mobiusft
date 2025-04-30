@@ -23,8 +23,8 @@
 #include <pymobius.hpp>
 #include <pygil.hpp>
 #include "reader.hpp"
-#include <mobius/exception.inc>
-#include <mobius/io/bytearray_io.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/io/bytearray_io.hpp>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -44,7 +44,7 @@ pymobius_io_reader_check (PyObject *pyobj)
 // @return new object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_io_reader_to_pyobject (mobius::io::reader obj)
+pymobius_io_reader_to_pyobject (mobius::core::io::reader obj)
 {
   PyObject *ret = nullptr;
 
@@ -53,7 +53,7 @@ pymobius_io_reader_to_pyobject (mobius::io::reader obj)
       ret = _PyObject_New (&io_reader_t);
 
       if (ret)
-        ((io_reader_o *) ret)->obj = new mobius::io::reader (obj);
+        ((io_reader_o *) ret)->obj = new mobius::core::io::reader (obj);
     }
   else
     {
@@ -68,10 +68,10 @@ pymobius_io_reader_to_pyobject (mobius::io::reader obj)
 // @param pyobj Python object
 // @return reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::reader
+mobius::core::io::reader
 pymobius_io_reader_from_pyobject (PyObject *pyobj)
 {
-  mobius::io::reader reader;
+  mobius::core::io::reader reader;
 
   if (pymobius_io_reader_check (pyobj))
     reader = * (reinterpret_cast <io_reader_o *>(pyobj)->obj);
@@ -79,17 +79,17 @@ pymobius_io_reader_from_pyobject (PyObject *pyobj)
   else if (mobius::py::pybytes_check (pyobj))
     {
       auto bytearray = mobius::py::pybytes_as_bytearray (pyobj);
-      reader = mobius::io::new_bytearray_reader (bytearray);
+      reader = mobius::core::io::new_bytearray_reader (bytearray);
     }
 
   else if (mobius::py::pystring_check (pyobj))
     {
-      mobius::bytearray data (mobius::py::pystring_as_std_string (pyobj));
-      reader = mobius::io::new_bytearray_reader (data);
+      mobius::core::bytearray data (mobius::py::pystring_as_std_string (pyobj));
+      reader = mobius::core::io::new_bytearray_reader (data);
     }
 
   else
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("argument must be either reader or bytes"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("argument must be either reader or bytes"));
 
   return reader;
 }
@@ -264,16 +264,16 @@ tp_f_seek (io_reader_o *self, PyObject *args)
     }
 
   // convert 'whence' argument
-  mobius::io::reader::whence_type w;
+  mobius::core::io::reader::whence_type w;
 
   if (arg_whence == 0)
-    w = mobius::io::reader::whence_type::beginning;
+    w = mobius::core::io::reader::whence_type::beginning;
 
   else if (arg_whence == 1)
-    w = mobius::io::reader::whence_type::current;
+    w = mobius::core::io::reader::whence_type::current;
 
   else if (arg_whence == 2)
-    w = mobius::io::reader::whence_type::end;
+    w = mobius::core::io::reader::whence_type::end;
 
   else
     {

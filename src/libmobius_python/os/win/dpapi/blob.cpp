@@ -25,7 +25,7 @@
 #include "blob.hpp"
 #include "module.hpp"
 #include "io/reader.hpp"
-#include <mobius/io/bytearray_io.h>
+#include <mobius/core/io/bytearray_io.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Check if object is an instance of <i>mobius.os.win.dpapi.blob</i>
@@ -63,7 +63,7 @@ mobius::core::os::win::dpapi::blob
 pymobius_os_win_dpapi_blob_from_pyobject (PyObject *value)
 {
   if (!pymobius_os_win_dpapi_blob_check (value))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.os.win.dpapi.blob"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.os.win.dpapi.blob"));
 
   return * (reinterpret_cast <os_win_dpapi_blob_o *>(value)->obj);
 }
@@ -579,13 +579,13 @@ static PyObject *
 tp_f_test_key (os_win_dpapi_blob_o *self, PyObject *args)
 {
   // parse input args
-  mobius::bytearray arg_key;
-  mobius::bytearray arg_entropy;
+  mobius::core::bytearray arg_key;
+  mobius::core::bytearray arg_entropy;
 
   try
     {
       arg_key = mobius::py::get_arg_as_bytearray (args, 0);
-      arg_entropy = mobius::py::get_arg_as_bytearray (args, 1, mobius::bytearray ());
+      arg_entropy = mobius::py::get_arg_as_bytearray (args, 1, mobius::core::bytearray ());
     }
   catch (const std::exception& e)
     {
@@ -622,13 +622,13 @@ static PyObject *
 tp_f_decrypt (os_win_dpapi_blob_o *self, PyObject *args)
 {
   // parse input args
-  mobius::bytearray arg_key;
-  mobius::bytearray arg_entropy;
+  mobius::core::bytearray arg_key;
+  mobius::core::bytearray arg_entropy;
 
   try
     {
       arg_key = mobius::py::get_arg_as_bytearray (args, 0);
-      arg_entropy = mobius::py::get_arg_as_bytearray (args, 1, mobius::bytearray ());
+      arg_entropy = mobius::py::get_arg_as_bytearray (args, 1, mobius::core::bytearray ());
     }
   catch (const std::exception& e)
     {
@@ -716,7 +716,7 @@ static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
   // parse input args
-  mobius::io::reader arg_reader;
+  mobius::core::io::reader arg_reader;
 
   try
     {

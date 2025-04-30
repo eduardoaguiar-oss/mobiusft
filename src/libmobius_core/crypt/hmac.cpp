@@ -44,7 +44,7 @@ hmac::hmac (const std::shared_ptr <hmac_impl_base>& impl)
 // @param hash_type Hash type
 // @param key Key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-hmac::hmac (const std::string& hash_type, const mobius::bytearray& key)
+hmac::hmac (const std::string& hash_type, const mobius::core::bytearray& key)
 {
   if (gcrypt::is_hmac_available (hash_type))
     impl_ = std::make_shared <gcrypt::hmac_impl> (hash_type, key);

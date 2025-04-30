@@ -33,7 +33,7 @@ set(SOURCES
 add_library(vfs_filesystem_hfs MODULE ${SOURCES})
 set_target_properties(vfs_filesystem_hfs PROPERTIES OUTPUT_NAME "vfs-filesystem-hfs" PREFIX "")
 target_include_directories(vfs_filesystem_hfs PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_filesystem_hfs PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(vfs_filesystem_hfs PRIVATE mobius_core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

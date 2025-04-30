@@ -23,7 +23,7 @@
 #include <pymobius.hpp>
 #include "uri.hpp"
 #include "module.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -43,12 +43,12 @@ pymobius_io_uri_check (PyObject *pyobj)
 // @return new uri object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_io_uri_to_pyobject (mobius::io::uri obj)
+pymobius_io_uri_to_pyobject (mobius::core::io::uri obj)
 {
   PyObject *ret = _PyObject_New (&io_uri_t);
 
   if (ret)
-    ((io_uri_o *) ret)->obj = new mobius::io::uri (obj);
+    ((io_uri_o *) ret)->obj = new mobius::core::io::uri (obj);
 
   return ret;
 }
@@ -58,11 +58,11 @@ pymobius_io_uri_to_pyobject (mobius::io::uri obj)
 // @param pyobj Python object
 // @return uri object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::uri
+mobius::core::io::uri
 pymobius_io_uri_from_pyobject (PyObject *pyobj)
 {
   if (!PyObject_IsInstance (pyobj, (PyObject *) &io_uri_t))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object type must be mobius.io.uri"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object type must be mobius.io.uri"));
 
   return * (reinterpret_cast <io_uri_o *>(pyobj)->obj);
 }
@@ -838,10 +838,10 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
       try
         {
           if (!arg_value.empty ())
-            ret->obj = new mobius::io::uri (arg_value);
+            ret->obj = new mobius::core::io::uri (arg_value);
 
           else
-            ret->obj = new mobius::io::uri (arg_scheme, arg_username, arg_password, arg_host, arg_port, arg_path, arg_query, arg_fragment);
+            ret->obj = new mobius::core::io::uri (arg_scheme, arg_username, arg_password, arg_host, arg_port, arg_path, arg_query, arg_fragment);
         }
       catch (const std::exception& e)
         {

@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "filesystem_impl.hpp"
 #include <mobius/core/decoder/data_decoder.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Check if stream contains an instance of NTFS filesystem
@@ -26,7 +26,7 @@
 // @return True/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-filesystem_impl::is_instance (mobius::io::reader reader, std::uint64_t offset)
+filesystem_impl::is_instance (mobius::core::io::reader reader, std::uint64_t offset)
 {
   reader.seek (offset + 3);
   auto data = reader.read (8);
@@ -40,7 +40,7 @@ filesystem_impl::is_instance (mobius::io::reader reader, std::uint64_t offset)
 // @param offset Offset from the beginning of volume
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 filesystem_impl::filesystem_impl (
-  const mobius::io::reader& reader,
+  const mobius::core::io::reader& reader,
   size_type offset
 )
  : reader_ (reader),
@@ -65,7 +65,7 @@ filesystem_impl::get_metadata (const std::string& name) const
 // @brief Get root folder
 // @return Root folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::folder
+mobius::core::io::folder
 filesystem_impl::get_root_folder () const
 {
   return tsk_adaptor_.get_root_folder ();
@@ -80,13 +80,13 @@ filesystem_impl::_load_data () const
   if (data_loaded_)
     return;
 
-  mobius::io::reader reader = reader_;
+  mobius::core::io::reader reader = reader_;
   reader.seek (offset_);
   mobius::core::decoder::data_decoder decoder (reader);
 
   // decode BPB
   decoder.skip (3);
-  auto oem_name = mobius::string::rstrip (decoder.get_string_by_size (8));
+  auto oem_name = mobius::core::string::rstrip (decoder.get_string_by_size (8));
   auto sector_size = decoder.get_uint16_le ();
   auto sectors_per_cluster = decoder.get_uint8 ();
   auto reserved_sectors = decoder.get_uint16_le ();
@@ -104,7 +104,7 @@ filesystem_impl::_load_data () const
   auto mft_mirror_cluster = decoder.get_uint64_le ();
   auto clusters_per_frs = decoder.get_uint32_le ();
   auto clusters_per_index_block = decoder.get_uint32_le ();
-  auto volume_serial_number = mobius::string::to_hex (decoder.get_uint64_le (), 16);
+  auto volume_serial_number = mobius::core::string::to_hex (decoder.get_uint64_le (), 16);
   auto checksum = decoder.get_uint32_le ();
 
   auto cluster_size = sectors_per_cluster * sector_size;

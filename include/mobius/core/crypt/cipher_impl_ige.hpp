@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/crypt/cipher_impl_base.hpp>
 #include <mobius/core/crypt/gcrypt/cipher_impl.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace mobius::core::crypt
@@ -36,7 +36,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Constructors and destructor
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  cipher_impl_ige (const std::string&, const mobius::bytearray&, const mobius::bytearray&);
+  cipher_impl_ige (const std::string&, const mobius::core::bytearray&, const mobius::core::bytearray&);
   cipher_impl_ige (const cipher_impl_ige&) = delete;
   cipher_impl_ige (cipher_impl_ige&&) = delete;
 
@@ -51,8 +51,8 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void reset () final;
   void final () final;
-  mobius::bytearray encrypt (const mobius::bytearray&) final;
-  mobius::bytearray decrypt (const mobius::bytearray&) final;
+  mobius::core::bytearray encrypt (const mobius::core::bytearray&) final;
+  mobius::core::bytearray decrypt (const mobius::core::bytearray&) final;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief Get cipher type
@@ -99,7 +99,7 @@ public:
   // @param data Data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
-  authenticate (const mobius::bytearray&) final
+  authenticate (const mobius::core::bytearray&) final
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("data authentication not supported"));
   }
@@ -108,7 +108,7 @@ public:
   // @brief Get authentication tag
   // @return Tag
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_tag () const final
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("data authentication not supported"));
@@ -120,7 +120,7 @@ public:
   // @return True if tag match
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   bool
-  check_tag (const mobius::bytearray&) const final
+  check_tag (const mobius::core::bytearray&) const final
   {
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("data authentication not supported"));
   }
@@ -130,13 +130,13 @@ private:
   gcrypt::cipher_impl cipher_;
 
   // @brief Initialization vector (IV)
-  const mobius::bytearray iv_;
+  const mobius::core::bytearray iv_;
 
   // @brief Vector v1
-  mobius::bytearray v1_;
+  mobius::core::bytearray v1_;
 
   // @brief Vector v2
-  mobius::bytearray v2_;
+  mobius::core::bytearray v2_;
 };
 
 } // namespace mobius::core::crypt

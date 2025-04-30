@@ -16,8 +16,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/decoder/xml/element.hpp>
-#include <mobius/exception.inc>
-#include <mobius/string_functions.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/string_functions.hpp>
 #include <algorithm>
 #include <stdexcept>
 
@@ -490,7 +490,7 @@ element::get_children_by_path (const std::string& path) const
             children.begin (),
             children.end (),
             std::back_inserter (tmp_elements),
-            [&segment](const auto& c){ return mobius::string::fnmatch (segment, c.get_name ()); }
+            [&segment](const auto& c){ return mobius::core::string::fnmatch (segment, c.get_name ()); }
           );
         }
 

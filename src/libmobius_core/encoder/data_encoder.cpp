@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/encoder/data_encoder.hpp>
-#include <mobius/io/bytearray_io.h>
+#include <mobius/core/io/bytearray_io.hpp>
 
 namespace mobius::core::encoder
 {
@@ -24,7 +24,7 @@ namespace mobius::core::encoder
 // @brief Constructor
 // @param writer Writer object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data_encoder::data_encoder (const mobius::io::writer& writer)
+data_encoder::data_encoder (const mobius::core::io::writer& writer)
   : writer_ (writer)
 {
 }
@@ -33,8 +33,8 @@ data_encoder::data_encoder (const mobius::io::writer& writer)
 // @brief Constructor
 // @param data Reference to bytearray object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data_encoder::data_encoder (mobius::bytearray& data)
-  : writer_ (mobius::io::new_bytearray_writer (data))
+data_encoder::data_encoder (mobius::core::bytearray& data)
+  : writer_ (mobius::core::io::new_bytearray_writer (data))
 {
 }
 
@@ -114,7 +114,7 @@ data_encoder::encode_string_by_size (const std::string& value, std::size_t size)
     {
       writer_.write (value);
 
-      mobius::bytearray pad (size - value.length ());
+      mobius::core::bytearray pad (size - value.length ());
       pad.fill (0);
 
       writer_.write (pad);
@@ -130,7 +130,7 @@ data_encoder::encode_string_by_size (const std::string& value, std::size_t size)
 // @param size size in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-data_encoder::encode_bytearray (const mobius::bytearray& data)
+data_encoder::encode_bytearray (const mobius::core::bytearray& data)
 {
   writer_.write (data);
 }
@@ -147,7 +147,7 @@ data_encoder::fill (std::size_t siz, std::uint8_t value)
 
   if (siz >= BLOCK_SIZE)
     {
-      mobius::bytearray data (BLOCK_SIZE);
+      mobius::core::bytearray data (BLOCK_SIZE);
       data.fill (value);
 
       while (siz >= BLOCK_SIZE)
@@ -159,7 +159,7 @@ data_encoder::fill (std::size_t siz, std::uint8_t value)
 
   if (siz > 0)
     {
-      mobius::bytearray data (siz);
+      mobius::core::bytearray data (siz);
       data.fill (value);
       writer_.write (data);
     }

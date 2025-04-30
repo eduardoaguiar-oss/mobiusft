@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "filesystem_impl.hpp"
 #include <mobius/core/decoder/data_decoder.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 
 namespace
 {
@@ -34,7 +34,7 @@ constexpr std::uint32_t MAX_CLUSTERS_FAT12 = 0xff4;
 // @return True/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static bool
-check_vfat_boot_sector (mobius::io::reader reader, std::uint64_t offset)
+check_vfat_boot_sector (mobius::core::io::reader reader, std::uint64_t offset)
 {
   reader.seek (offset);
   auto data = reader.read (512);
@@ -78,7 +78,7 @@ check_vfat_boot_sector (mobius::io::reader reader, std::uint64_t offset)
 // @return True/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-filesystem_impl::is_instance (mobius::io::reader reader, std::uint64_t offset)
+filesystem_impl::is_instance (mobius::core::io::reader reader, std::uint64_t offset)
 {
   // check sector 0
   bool rc = check_vfat_boot_sector (reader, offset);
@@ -97,7 +97,7 @@ filesystem_impl::is_instance (mobius::io::reader reader, std::uint64_t offset)
 // @param offset Offset from the beginning of volume
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 filesystem_impl::filesystem_impl (
-  const mobius::io::reader& reader,
+  const mobius::core::io::reader& reader,
   size_type offset
 )
  : reader_ (reader),
@@ -122,7 +122,7 @@ filesystem_impl::get_metadata (const std::string& name) const
 // @brief Get root folder
 // @return Root folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::folder
+mobius::core::io::folder
 filesystem_impl::get_root_folder () const
 {
   return tsk_adaptor_.get_root_folder ();
@@ -140,7 +140,7 @@ filesystem_impl::_load_data () const
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Get boot sector offset
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::io::reader reader = reader_;
+  mobius::core::io::reader reader = reader_;
   std::uint64_t boot_offset = 0;
 
   if (check_vfat_boot_sector (reader, offset_))
@@ -159,7 +159,7 @@ filesystem_impl::_load_data () const
   mobius::core::decoder::data_decoder decoder (reader);
 
   decoder.skip (3);
-  auto oem_name = mobius::string::rstrip (decoder.get_string_by_size (8));
+  auto oem_name = mobius::core::string::rstrip (decoder.get_string_by_size (8));
   auto sector_size = decoder.get_uint16_le ();
   auto sectors_per_cluster = decoder.get_uint8 ();
   auto reserved_sectors = decoder.get_uint16_le ();
@@ -221,9 +221,9 @@ filesystem_impl::_load_data () const
 
   if (extended_signature)
     {
-      volume_id = "0x" + mobius::string::to_hex (decoder.get_uint32_le (), 8);
-      volume_label = mobius::string::rstrip (decoder.get_string_by_size (11));
-      filesystem_type = mobius::string::rstrip (decoder.get_string_by_size (8));
+      volume_id = "0x" + mobius::core::string::to_hex (decoder.get_uint32_le (), 8);
+      volume_label = mobius::core::string::rstrip (decoder.get_string_by_size (11));
+      filesystem_type = mobius::core::string::rstrip (decoder.get_string_by_size (8));
     }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

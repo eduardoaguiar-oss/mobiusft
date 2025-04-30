@@ -19,9 +19,9 @@
 #include <mobius/core/log.hpp>
 #include <mobius/core/decoder/btencode.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
-#include <mobius/io/path.h>
+#include <mobius/core/io/path.hpp>
 #include <mobius/core/pod/map.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 #include <algorithm>
 
 #include <iostream>
@@ -32,7 +32,7 @@ namespace mobius::extension::app::emuletorrent
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-file_bt_fastresume::file_bt_fastresume (const mobius::io::reader& reader)
+file_bt_fastresume::file_bt_fastresume (const mobius::core::io::reader& reader)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -59,7 +59,7 @@ file_bt_fastresume::file_bt_fastresume (const mobius::io::reader& reader)
   // Derived attributes
   // @see https://en.wikipedia.org/wiki/Magnet_URI_scheme
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto p = mobius::io::path (path_);
+  auto p = mobius::core::io::path (path_);
   filename_ = p.get_filename ();
   magnet_uri_ = "xt=urn:btih:" + info_hash_;
 
@@ -82,10 +82,10 @@ file_bt_fastresume::_load_metadata (const mobius::core::pod::map& metadata)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Get data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  info_hash_ = metadata.get <mobius::bytearray> ("info-hash").to_hexstring ();
+  info_hash_ = metadata.get <mobius::core::bytearray> ("info-hash").to_hexstring ();
   if (info_hash_.empty ())
-    info_hash_ = metadata.get <mobius::bytearray> ("info-hash2").to_hexstring ();
-  path_ = metadata.get <mobius::bytearray> ("save_path").to_hexstring ();
+    info_hash_ = metadata.get <mobius::core::bytearray> ("info-hash2").to_hexstring ();
+  path_ = metadata.get <mobius::core::bytearray> ("save_path").to_hexstring ();
   is_paused_ = metadata.get <std::int64_t> ("paused", 0);
   is_seeding_ = metadata.get <std::int64_t> ("seed_mode", 0) || metadata.get <std::int64_t> ("super_seeding", 0);
   downloaded_bytes_ = metadata.get <std::int64_t> ("total_downloaded", 0);
@@ -127,8 +127,8 @@ file_bt_fastresume::_load_metadata (const mobius::core::pod::map& metadata)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Get pieces
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto pieces_map = metadata.get <mobius::bytearray> ("pieces");
-  auto pieces_priority = metadata.get <mobius::bytearray> ("piece_priority");
+  auto pieces_map = metadata.get <mobius::core::bytearray> ("pieces");
+  auto pieces_priority = metadata.get <mobius::core::bytearray> ("piece_priority");
 
   pieces_count_ = pieces_map.size ();
   pieces_downloaded_ = pieces_map.count (0x01);
@@ -179,7 +179,7 @@ file_bt_fastresume::_load_metadata (const mobius::core::pod::map& metadata)
   // Get peers
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   auto timestamp = mobius::core::datetime::new_datetime_from_unix_timestamp (added_time + active_time);
-  auto peers_data = metadata.get <mobius::bytearray> ("peers");
+  auto peers_data = metadata.get <mobius::core::bytearray> ("peers");
   mobius::core::decoder::data_decoder decoder (peers_data);
 
   while (decoder)
@@ -192,7 +192,7 @@ file_bt_fastresume::_load_metadata (const mobius::core::pod::map& metadata)
       peers_.push_back (p);
     }
 
-  auto peers6_data = metadata.get <mobius::bytearray> ("peers6");
+  auto peers6_data = metadata.get <mobius::core::bytearray> ("peers6");
   if (peers6_data.size () > 0)
     {
       log.development (__LINE__, "peers6 data found:");

@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/reader.h>
+#include <mobius/core/io/reader.hpp>
 #include <memory>
 #include <map>
 #include <vector>
@@ -65,7 +65,7 @@ public:
   std::string get_sysattr (const std::string&) const;
   property_list_type get_property_list () const;
   sysattr_list_type get_sysattr_list () const;
-  mobius::io::reader new_reader () const;
+  mobius::core::io::reader new_reader () const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief Check if device is valid

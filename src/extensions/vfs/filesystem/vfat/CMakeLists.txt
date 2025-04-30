@@ -33,7 +33,7 @@ set(SOURCES
 add_library(vfs_filesystem_vfat MODULE ${SOURCES})
 set_target_properties(vfs_filesystem_vfat PROPERTIES OUTPUT_NAME "vfs-filesystem-vfat" PREFIX "")
 target_include_directories(vfs_filesystem_vfat PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_filesystem_vfat PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(vfs_filesystem_vfat PRIVATE mobius_core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

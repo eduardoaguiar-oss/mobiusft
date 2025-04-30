@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/resource.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 #include <mobius/core/vfs/block.hpp>
 #include <map>
 
@@ -76,7 +76,7 @@ static const std::map <std::uint8_t, const std::string> PARTITION_DESCRIPTION =
 // @brief Convert CHS information to string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
-chs_to_string (const mobius::bytearray& chs)
+chs_to_string (const mobius::core::bytearray& chs)
 {
   std::uint16_t h = chs[0];
   std::uint16_t s = (chs[1] & 0x3f) + 1;
@@ -165,7 +165,7 @@ _scan_partitions (
 
   if (sector == 0)
     {
-      auto disk_id = "0x" + mobius::string::to_hex (decoder.get_uint32_le (), 8);
+      auto disk_id = "0x" + mobius::core::string::to_hex (decoder.get_uint32_le (), 8);
       is_copy_protected = decoder.get_uint16_le () == DISK_COPY_PROTECTED;
       ps_block.set_attribute ("disk_id", disk_id);
       ps_block.set_attribute ("is_copy_protected", is_copy_protected);
@@ -241,7 +241,7 @@ _scan_partitions (
               partition_block.set_attribute ("is_hidden", is_hidden);
               partition_block.set_attribute ("is_readable", true);
               partition_block.set_attribute ("is_writeable", !is_copy_protected);
-              partition_block.set_attribute ("type", "0x" + mobius::string::to_hex (type, 2));
+              partition_block.set_attribute ("type", "0x" + mobius::core::string::to_hex (type, 2));
               partition_block.set_attribute ("type_description", type_description);
               partition_block.set_attribute ("drive_index", drive_index);
               partition_block.set_attribute ("start_chs", chs_to_string (start_chs));

@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <any>
 #include <memory>
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <mobius/core/ui/box_impl_base.hpp>
 #include <mobius/core/ui/button_impl_base.hpp>
 #include <mobius/core/ui/icon_impl_base.hpp>
@@ -61,7 +61,7 @@ public:
   virtual std::shared_ptr <box_impl_base> new_box (box_impl_base::orientation_type) const = 0;
   virtual std::shared_ptr <button_impl_base> new_button () const = 0;
   virtual std::shared_ptr <icon_impl_base> new_icon_by_name (const std::string&, icon_impl_base::size_type) const = 0;
-  virtual std::shared_ptr <icon_impl_base> new_icon_from_data (const mobius::bytearray&, icon_impl_base::size_type) const = 0;
+  virtual std::shared_ptr <icon_impl_base> new_icon_from_data (const mobius::core::bytearray&, icon_impl_base::size_type) const = 0;
   virtual std::shared_ptr <label_impl_base> new_label () const = 0;
   virtual std::shared_ptr <message_dialog_impl_base> new_message_dialog (message_dialog_impl_base::type) const = 0;
   virtual std::shared_ptr <widget_impl_base> new_widget (std::any, bool=false) const = 0;

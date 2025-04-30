@@ -19,9 +19,9 @@
 #include <mobius/core/log.hpp>
 #include <mobius/core/decoder/btencode.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
-#include <mobius/io/path.h>
+#include <mobius/core/io/path.hpp>
 #include <mobius/core/pod/map.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 #include <algorithm>
 
 namespace mobius::extension::app::emuletorrent
@@ -30,7 +30,7 @@ namespace mobius::extension::app::emuletorrent
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-file_ed2k_fastresume::file_ed2k_fastresume (const mobius::io::reader& reader)
+file_ed2k_fastresume::file_ed2k_fastresume (const mobius::core::io::reader& reader)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -53,7 +53,7 @@ file_ed2k_fastresume::file_ed2k_fastresume (const mobius::io::reader& reader)
   hash_ed2k_ = decoder.get_hex_string_by_size (16);
 
   auto path_size = decoder.get_uint16_le ();
-  path_ = mobius::string::replace (decoder.get_string_by_size (path_size), "\\", "/");
+  path_ = mobius::core::string::replace (decoder.get_string_by_size (path_size), "\\", "/");
 
   file_size_ = decoder.get_uint64_le ();
   auto u1 = decoder.get_uint32_le ();
@@ -65,7 +65,7 @@ file_ed2k_fastresume::file_ed2k_fastresume (const mobius::io::reader& reader)
   // Derived attributes
   // @see https://en.wikipedia.org/wiki/Ed2k_URI_scheme
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto p = mobius::io::path (path_);
+  auto p = mobius::core::io::path (path_);
   filename_ = p.get_filename ();
   url_ = "ed2k://|file|" + filename_ + '|' + std::to_string (file_size_) + '|' + hash_ed2k_ + "|/";
 
@@ -102,8 +102,8 @@ file_ed2k_fastresume::_load_metadata (const mobius::core::pod::map& metadata)
   downloaded_bytes_ = m.get <std::int64_t> ("total_downloaded", 0);
   uploaded_bytes_ = m.get <std::int64_t> ("total_uploaded", 0);
 
-  auto pieces_map = m.get <mobius::bytearray> ("pieces");
-  auto pieces_priority = m.get <mobius::bytearray> ("piece_priority");
+  auto pieces_map = m.get <mobius::core::bytearray> ("pieces");
+  auto pieces_priority = m.get <mobius::core::bytearray> ("piece_priority");
   auto pieces_hashes = m.get <std::vector <std::string>> ("hashset-values");
 
   pieces_count_ = pieces_map.size ();

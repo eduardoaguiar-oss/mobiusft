@@ -19,7 +19,7 @@
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/database/exception.inc>
 #include <mobius/core/datetime/conv_iso_string.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <sqlite3.h>
 #include <chrono>
 #include <cstring>
@@ -156,7 +156,7 @@ statement::bind (int idx, const std::string& value)
 // @param v Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-statement::bind (int idx, const mobius::bytearray& value)
+statement::bind (int idx, const mobius::core::bytearray& value)
 {
   auto rc = sqlite3_bind_blob64 (impl_->stmt, idx, value.begin (), value.size (), SQLITE_TRANSIENT);
 
@@ -342,16 +342,16 @@ statement::get_column_string (int idx)
 // @brief Get bytearray column value
 // @param idx Value index
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 statement::get_column_bytearray (int idx)
 {
-  mobius::bytearray value;
+  mobius::core::bytearray value;
 
   auto size = sqlite3_column_bytes (impl_->stmt, idx);
   const void *p_blob = sqlite3_column_blob (impl_->stmt, idx);
 
   if (p_blob && size > 0)
-    value = mobius::bytearray (reinterpret_cast <const uint8_t *> (p_blob), size);
+    value = mobius::core::bytearray (reinterpret_cast <const uint8_t *> (p_blob), size);
 
   return value;
 }
@@ -387,7 +387,7 @@ statement::get_column_pod (int idx)
 
   if (p_blob && size > 0)
     {
-      mobius::bytearray bytes (reinterpret_cast <const uint8_t *> (p_blob), size);
+      mobius::core::bytearray bytes (reinterpret_cast <const uint8_t *> (p_blob), size);
       value = mobius::core::pod::unserialize (bytes);
     }
 

@@ -18,13 +18,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/reader.h>
+#include <mobius/core/io/reader.hpp>
 #include <mobius/core/pod/data.hpp>
 
 namespace mobius::core::decoder
 {
-mobius::core::pod::data btencode (const mobius::io::reader&);
-mobius::core::pod::data btencode (const mobius::bytearray&);
+mobius::core::pod::data btencode (const mobius::core::io::reader&);
+mobius::core::pod::data btencode (const mobius::core::bytearray&);
 
 } // namespace mobius::core::decoder
 

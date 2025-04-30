@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/os/win/dpapi/master_key_file.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
-#include <mobius/io/bytearray_io.h>
-#include <mobius/string_functions.h>
+#include <mobius/core/io/bytearray_io.hpp>
+#include <mobius/core/string_functions.hpp>
 
 namespace mobius::core::os::win::dpapi
 {
@@ -26,14 +26,14 @@ namespace mobius::core::os::win::dpapi
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-master_key_file::master_key_file (mobius::io::reader reader)
+master_key_file::master_key_file (mobius::core::io::reader reader)
 {
   mobius::core::decoder::data_decoder decoder (reader);
 
   // general data
   revision_ = decoder.get_uint32_le ();
   decoder.skip (8);	// dummy1 and dummy2
-  guid_ = mobius::string::toupper (decoder.get_string_by_size (72, "UTF-16LE"));
+  guid_ = mobius::core::string::toupper (decoder.get_string_by_size (72, "UTF-16LE"));
   decoder.skip (8);	// dummy3 and dummy4
   flags_ = decoder.get_uint32_le ();
 
@@ -47,14 +47,14 @@ master_key_file::master_key_file (mobius::io::reader reader)
   if (master_key_size)
     {
       auto data = decoder.get_bytearray_by_size (master_key_size);
-      auto reader = mobius::io::new_bytearray_reader (data);
+      auto reader = mobius::core::io::new_bytearray_reader (data);
       master_key_ = master_key (reader, flags_);
     }
 
   if (backup_key_size)
     {
       auto data = decoder.get_bytearray_by_size (backup_key_size);
-      auto reader = mobius::io::new_bytearray_reader (data);
+      auto reader = mobius::core::io::new_bytearray_reader (data);
       backup_key_ = master_key (reader, flags_);
     }
 

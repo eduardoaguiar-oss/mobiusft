@@ -51,7 +51,7 @@ get_offset (mobius::core::decoder::data_decoder& decoder)
 // @see http://github.com/msuhanov/regf/blob/master/Windows%20registry%20file%20format%20specification.md
 // @see https://binaryforay.blogspot.com.br/2015/01/registry-hive-basics.html
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-hive_decoder::hive_decoder (mobius::io::reader reader)
+hive_decoder::hive_decoder (mobius::core::io::reader reader)
   : reader_ (reader)
 {
 }
@@ -281,10 +281,10 @@ hive_decoder::_retrieve_subkeys (std::vector <offset_type>& offsets, offset_type
 // @see https://binaryforay.blogspot.com.br/2015/08/registry-hive-basics-part-5-lists.html
 //! \todo big data (db)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 hive_decoder::decode_data (offset_type offset, std::uint32_t size)
 {
-  mobius::bytearray data;
+  mobius::core::bytearray data;
 
   // check offset
   if (offset == INVALID_OFFSET)
@@ -326,10 +326,10 @@ hive_decoder::decode_data (offset_type offset, std::uint32_t size)
 // @param size data size
 // @return data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 hive_decoder::decode_data_cell (offset_type offset)
 {
-  mobius::bytearray data;
+  mobius::core::bytearray data;
 
   if (offset == INVALID_OFFSET)
     return data;
@@ -354,10 +354,10 @@ hive_decoder::decode_data_cell (offset_type offset)
 // @param size data size
 // @return data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 hive_decoder::decode_data_db (offset_type offset)
 {
-  mobius::bytearray data;
+  mobius::core::bytearray data;
 
   if (offset == INVALID_OFFSET)
     return data;

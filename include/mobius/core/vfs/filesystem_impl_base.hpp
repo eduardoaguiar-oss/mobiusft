@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/folder.h>
-#include <mobius/io/reader.h>
+#include <mobius/core/io/folder.hpp>
+#include <mobius/core/io/reader.hpp>
 #include <mobius/core/pod/data.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <cstdint>
@@ -58,8 +58,8 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   virtual explicit operator bool () const noexcept = 0;
   virtual mobius::core::pod::data get_metadata (const std::string&) const = 0;
-  virtual mobius::io::folder get_root_folder () const = 0;
-  virtual mobius::io::reader get_reader () const = 0;
+  virtual mobius::core::io::folder get_root_folder () const = 0;
+  virtual mobius::core::io::reader get_reader () const = 0;
   virtual size_type get_offset () const = 0;
   virtual size_type get_size () const = 0;
   virtual std::string get_type () const = 0;

@@ -25,7 +25,7 @@ namespace mobius::core::decoder
 // @return Filetype
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-get_filetype (mobius::io::reader reader)
+get_filetype (mobius::core::io::reader reader)
 {
   std::string filetype;
 

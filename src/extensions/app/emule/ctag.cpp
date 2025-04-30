@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "ctag.hpp"
 #include <mobius/core/log.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 #include <iomanip>
 #include <sstream>
 #include <unordered_map>
@@ -281,7 +281,7 @@ ctag::ctag (mobius::core::decoder::data_decoder& decoder)
         }
         
       default:
-            log.development (__LINE__, "Unknown tag type: 0x" + mobius::string::to_hex (type_, 2));
+            log.development (__LINE__, "Unknown tag type: 0x" + mobius::core::string::to_hex (type_, 2));
     };
 }
 

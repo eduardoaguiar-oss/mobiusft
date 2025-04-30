@@ -23,7 +23,7 @@
 #include <pymobius.hpp>
 #include <pylist.hpp>
 #include "vfs.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 #include "disk.hpp"
 #include "block.hpp"

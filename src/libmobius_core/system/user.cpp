@@ -16,8 +16,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/system/user.hpp>
-#include <mobius/exception.inc>
-#include <mobius/exception_posix.inc>
+#include <mobius/core/exception.inc>
+#include <mobius/core/exception_posix.inc>
 #include <pwd.h>
 #include <stdexcept>
 

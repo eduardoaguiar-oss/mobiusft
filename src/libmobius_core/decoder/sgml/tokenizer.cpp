@@ -23,7 +23,7 @@ namespace mobius::core::decoder::sgml
 // @brief Create tokenizer
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-tokenizer::tokenizer (const mobius::io::reader& reader)
+tokenizer::tokenizer (const mobius::core::io::reader& reader)
  : sourcecode_ (reader)
 {
 }

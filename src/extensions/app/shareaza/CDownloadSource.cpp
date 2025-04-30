@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CDownloadSource.hpp"
 #include "CShareaza.hpp"
-#include <mobius/io/uri.h>
-#include <mobius/string_functions.h>
+#include <mobius/core/io/uri.hpp>
+#include <mobius/core/string_functions.hpp>
 
 namespace mobius::extension::app::shareaza
 {
@@ -189,9 +189,9 @@ CDownloadSource::CDownloadSource (mobius::core::decoder::mfc& decoder, int versi
   // If IP is empty, try to get IP from ED2KFTP URL
   // @see DownloadWithSources.cpp - CDownloadWithSources::Serialize
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  if (ip_.empty () && mobius::string::startswith (url_, "ed2kftp://"))
+  if (ip_.empty () && mobius::core::string::startswith (url_, "ed2kftp://"))
     {
-      auto uri = mobius::io::uri (url_);
+      auto uri = mobius::core::io::uri (url_);
 
       ip_ = uri.get_host ();
       port_ = uri.get_port_number ();

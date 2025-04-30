@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/system/device_list.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <libudev.h>
 #include <vector>
 #include <stdexcept>

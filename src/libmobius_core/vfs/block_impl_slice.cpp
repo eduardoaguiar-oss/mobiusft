@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/vfs/block_impl_slice.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 #include <vector>
 
@@ -133,7 +133,7 @@ block_impl_slice::add_parent (const block& parent)
 // @brief Create new reader
 // @return New reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::reader
+mobius::core::io::reader
 block_impl_slice::new_reader () const
 {
   if (!parent_)
@@ -142,7 +142,7 @@ block_impl_slice::new_reader () const
   auto reader = parent_.new_reader ();
 
   if (start_ > 0 || end_ < (parent_.get_size () - 1))
-    return mobius::io::new_slice_reader (reader, start_, end_);
+    return mobius::core::io::new_slice_reader (reader, start_, end_);
 
   return reader;
 }

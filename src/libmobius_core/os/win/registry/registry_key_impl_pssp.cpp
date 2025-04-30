@@ -19,7 +19,7 @@
 #include <mobius/core/os/win/registry/registry_value_impl_container.hpp>
 #include <mobius/core/os/win/registry/registry_data_impl_pssp.hpp>
 #include <mobius/core/os/win/registry/registry_value.hpp>
-#include <mobius/io/bytearray_io.h>
+#include <mobius/core/io/bytearray_io.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
 
 namespace mobius::core::os::win::registry
@@ -84,7 +84,7 @@ registry_key_impl_pssp::_load_values () const
         {
           // decode "behavior" value
           auto behavior_data = v_behavior.get_data ().get_data ();
-          auto reader = mobius::io::new_bytearray_reader (behavior_data);
+          auto reader = mobius::core::io::new_bytearray_reader (behavior_data);
           auto decoder = mobius::core::decoder::data_decoder (reader);
 
           decoder.skip (8);

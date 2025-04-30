@@ -65,7 +65,7 @@ mobius::framework::model::Case
 pymobius_model_case_from_pyobject (PyObject *value)
 {
   if (!pymobius_model_case_check (value))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.model.case"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.model.case"));
 
   return * (reinterpret_cast <model_case_o *>(value)->obj);
 }

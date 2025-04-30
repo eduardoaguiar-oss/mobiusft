@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/decoder/qdatastream.hpp>
 #include <mobius/core/datetime/conv_julian.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace
@@ -38,7 +38,7 @@ namespace mobius::core::decoder
 // @param reader Reader object
 // @param version Serialization version
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-qdatastream::qdatastream (const mobius::io::reader& reader, std::uint32_t version)
+qdatastream::qdatastream (const mobius::core::io::reader& reader, std::uint32_t version)
   : decoder_ (reader), version_ (version)
 {
 }
@@ -64,10 +64,10 @@ qdatastream::get_qstring ()
 // @brief Decode Qbytearray
 // @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 qdatastream::get_qbytearray ()
 {
-  mobius::bytearray data;
+  mobius::core::bytearray data;
 
   auto size = decoder_.get_uint32_be ();
 
@@ -178,10 +178,10 @@ qdatastream::get_qdatetime ()
 // @return value
 // @see https://github.com/qt/qtbase/blob/dev/src/gui/image/qimage.cpp (operator>>)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 qdatastream::get_qimage ()
 {
-  mobius::bytearray data;
+  mobius::core::bytearray data;
 
   // check if image is null
   std::int32_t data_marker = 1;
@@ -223,7 +223,7 @@ qdatastream::get_qimage ()
 // @brief Decode QPixmap
 // @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 qdatastream::get_qpixmap ()
 {
   return get_qimage ();
@@ -244,7 +244,7 @@ qdatastream::get_qvariant ()
   switch (datatype)
   {
     case 12:            // QBytearray
-        data = is_null ? mobius::bytearray () : get_qbytearray ();
+        data = is_null ? mobius::core::bytearray () : get_qbytearray ();
         break;
 
     default:

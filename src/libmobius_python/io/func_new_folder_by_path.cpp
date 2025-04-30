@@ -47,7 +47,7 @@ func_new_folder_by_path (PyObject *, PyObject *args)
 
   try
     {
-      ret = pymobius_io_folder_to_pyobject (mobius::io::new_folder_by_path (arg_path));
+      ret = pymobius_io_folder_to_pyobject (mobius::core::io::new_folder_by_path (arg_path));
     }
   catch (const std::exception& e)
     {

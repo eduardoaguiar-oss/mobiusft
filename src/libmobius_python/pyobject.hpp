@@ -21,7 +21,7 @@
 #define PY_SSIZE_T_CLEAN        // PEP 353
 #include <Python.h>
 #include <pymobius.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <map>
 #include <memory>
 #include <stdexcept>
@@ -73,7 +73,7 @@ public:
   call (Args... args) const
   {
     if (!is_callable ())
-      throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object is not callable"));
+      throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object is not callable"));
 
     PyObject *t = PyTuple_Pack (sizeof... (args), args...);
     if (!t)

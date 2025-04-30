@@ -23,7 +23,7 @@
 #include <pymobius.hpp>
 #include "sequential_reader_adaptor.hpp"
 #include "reader.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -43,12 +43,12 @@ pymobius_io_sequential_reader_adaptor_check (PyObject *value)
 // @return New sequential_reader_adaptor object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_io_sequential_reader_adaptor_to_pyobject (const mobius::io::sequential_reader_adaptor& obj)
+pymobius_io_sequential_reader_adaptor_to_pyobject (const mobius::core::io::sequential_reader_adaptor& obj)
 {
   PyObject *ret = _PyObject_New (&io_sequential_reader_adaptor_t);
 
   if (ret)
-    ((io_sequential_reader_adaptor_o *) ret)->obj = new mobius::io::sequential_reader_adaptor (obj);
+    ((io_sequential_reader_adaptor_o *) ret)->obj = new mobius::core::io::sequential_reader_adaptor (obj);
 
   return ret;
 }
@@ -58,11 +58,11 @@ pymobius_io_sequential_reader_adaptor_to_pyobject (const mobius::io::sequential_
 // @param value Python value
 // @return Sequential_reader_adaptor object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::sequential_reader_adaptor
+mobius::core::io::sequential_reader_adaptor
 pymobius_io_sequential_reader_adaptor_from_pyobject (PyObject *value)
 {
   if (!pymobius_io_sequential_reader_adaptor_check (value))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.io.sequential_reader_adaptor"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.io.sequential_reader_adaptor"));
 
   return * (reinterpret_cast <io_sequential_reader_adaptor_o *>(value)->obj);
 }
@@ -323,7 +323,7 @@ static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
   // Parse input args
-  mobius::io::reader arg_reader;
+  mobius::core::io::reader arg_reader;
   std::uint64_t arg_block_size;
 
   try
@@ -345,7 +345,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::io::sequential_reader_adaptor (arg_reader, arg_block_size);
+          ret->obj = new mobius::core::io::sequential_reader_adaptor (arg_reader, arg_block_size);
         }
       catch (const std::exception& e)
         {

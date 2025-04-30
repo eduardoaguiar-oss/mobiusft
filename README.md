@@ -1,7 +1,7 @@
 ---
 title: Mobius Forensic Toolkit
 description: "Open-source forensic framework and tools written in C++/Python"
-version: 2.14
+version: 2.15
 ---
 
 # Mobius Forensic Toolkit
@@ -36,16 +36,39 @@ Whether you're a digital forensics expert or a beginner, the Mobius Forensic Too
 - **Comprehensive Documentation**: Access detailed tutorials, API references, and case studies to maximize your efficiency.
 - **Mailing List**: Stay updated with the latest developments and connect with other users through the official Mobius mailing list.
 
-## Installation and Usage
-
+## Getting project files
 Download the latest version of the Mobius Forensic Toolkit from the official website:  
 [https://www.nongnu.org/mobiusft](https://www.nongnu.org/mobiusft).
 
 You can download the latest development version from GitHub repository:  
 [https://www.github.com/eduardoaguiar-oss/mobiusft](https://www.github.com/eduardoaguiar-oss/mobiusft).
 
+## Installation
+
+Run the following shell commands (replace all `<VAR>` for suitable values):
+
+```bash
+tar xvf <mobius-tar-file>
+cd <mobiusft dir>
+cmake -B build --install-prefix <DIR> [-DLIBTSK_ROOT=<DIR>]
+cmake --build build -j <threads>
+cmake --install build
+```
+
+Example:
+
+```bash
+tar xvf mobiusft-2.15.tar.xz
+cd mobiusft-2.15
+cmake -B build --install-prefix /opt/mobiusft-2.15 -DLIBTSK_ROOT=/opt/sleuthkit-4.12.1
+cmake --build build -j 24
+cmake --install build
+```
+
 For detailed installation instructions, refer to the official installation guide:  
 [https://www.nongnu.org/mobiusft/support/installation_guide/index.html](https://www.nongnu.org/mobiusft/support/installation_guide/index.html).
+
+## Usage
 
 To get started with the Mobius Forensic Toolkit, check out the **Quick Start Guide**:  
 [https://www.nongnu.org/mobiusft/support/getting_started/index.html](https://www.nongnu.org/mobiusft/support/getting_started/index.html).

@@ -23,7 +23,7 @@
 #include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/evidence_loader_impl_base.hpp>
 #include <mobius/framework/model/item.hpp>
-#include <mobius/io/file.h>
+#include <mobius/core/io/file.hpp>
 #include <map>
 #include <vector>
 
@@ -59,10 +59,10 @@ struct account
     std::uint64_t download_completed_files = 0;
 
     // source files
-    mobius::io::file preferences_dat_f;
-    mobius::io::file preferences_ini_f;
-    mobius::io::file preferenceskad_dat_f;
-    mobius::io::file statistics_ini_f;
+    mobius::core::io::file preferences_dat_f;
+    mobius::core::io::file preferences_ini_f;
+    mobius::core::io::file preferenceskad_dat_f;
+    mobius::core::io::file statistics_ini_f;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -75,7 +75,7 @@ struct autofill
     std::string value;
     std::string id;
     mobius::core::pod::map metadata;
-    mobius::io::file f;
+    mobius::core::io::file f;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -103,7 +103,7 @@ struct local_file
     mobius::framework::evidence_flag flag_corrupted;
 
     // files
-    mobius::io::file f;
+    mobius::core::io::file f;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -125,9 +125,9 @@ struct remote_file
     mobius::core::pod::data hashes;
 
     // files
-    mobius::io::file part_met_f;
-    mobius::io::file part_met_txtsrc_f;
-    mobius::io::file key_index_dat_f;
+    mobius::core::io::file part_met_f;
+    mobius::core::io::file part_met_txtsrc_f;
+    mobius::core::io::file key_index_dat_f;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -198,23 +198,23 @@ private:
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _scan_canonical_folders ();
-    void _scan_canonical_root_folder (const mobius::io::folder&);
-    void _scan_canonical_user_folder (const mobius::io::folder&);
-    void _scan_canonical_emule_xp_folder (const mobius::io::folder& folder);
-    void _scan_canonical_emule_config_folder (const mobius::io::folder&);
-    void _scan_canonical_emule_download_folder (const mobius::io::folder&);
+    void _scan_canonical_root_folder (const mobius::core::io::folder&);
+    void _scan_canonical_user_folder (const mobius::core::io::folder&);
+    void _scan_canonical_emule_xp_folder (const mobius::core::io::folder& folder);
+    void _scan_canonical_emule_config_folder (const mobius::core::io::folder&);
+    void _scan_canonical_emule_download_folder (const mobius::core::io::folder&);
 
-    void _decode_ac_searchstrings_dat_file (const mobius::io::file&);
-    void _decode_cancelled_met_file (const mobius::io::file&);
-    void _decode_key_index_dat_file (const mobius::io::file&);
-    void _decode_known_met_file (const mobius::io::file&);
-    void _decode_part_met_file (const mobius::io::file&);
-    void _decode_part_met_txtsrc_file (const mobius::io::file&);
-    void _decode_preferences_dat_file (const mobius::io::file&);
-    void _decode_preferences_ini_file (const mobius::io::file&);
-    void _decode_preferenceskad_dat_file (const mobius::io::file&);
-    void _decode_statistics_ini_file (const mobius::io::file&);
-    void _decode_storedsearches_met_file (const mobius::io::file&);
+    void _decode_ac_searchstrings_dat_file (const mobius::core::io::file&);
+    void _decode_cancelled_met_file (const mobius::core::io::file&);
+    void _decode_key_index_dat_file (const mobius::core::io::file&);
+    void _decode_known_met_file (const mobius::core::io::file&);
+    void _decode_part_met_file (const mobius::core::io::file&);
+    void _decode_part_met_txtsrc_file (const mobius::core::io::file&);
+    void _decode_preferences_dat_file (const mobius::core::io::file&);
+    void _decode_preferences_ini_file (const mobius::core::io::file&);
+    void _decode_preferenceskad_dat_file (const mobius::core::io::file&);
+    void _decode_statistics_ini_file (const mobius::core::io::file&);
+    void _decode_storedsearches_met_file (const mobius::core::io::file&);
 
     void _save_evidences ();
     void _save_accounts ();

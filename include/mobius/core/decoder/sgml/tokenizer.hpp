@@ -48,7 +48,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit tokenizer (const mobius::io::reader&);
+  explicit tokenizer (const mobius::core::io::reader&);
   std::pair <token_type, std::string> get_token ();
 
 private:

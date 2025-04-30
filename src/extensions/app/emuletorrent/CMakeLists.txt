@@ -35,7 +35,7 @@ set(SOURCES
 add_library(app_emuletorrent MODULE ${SOURCES})
 set_target_properties(app_emuletorrent PROPERTIES OUTPUT_NAME "app-emuletorrent" PREFIX "")
 target_include_directories(app_emuletorrent PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(app_emuletorrent PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(app_emuletorrent PRIVATE mobius_core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

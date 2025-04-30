@@ -41,6 +41,7 @@ add_library(libmobius-python-vfs STATIC
 
 target_include_directories(libmobius-python-vfs PRIVATE
     ${MOBIUS_INCLUDE_DIRS}
+    ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )

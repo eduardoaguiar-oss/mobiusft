@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/decoder/mfc.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace mobius::core::decoder
@@ -25,7 +25,7 @@ namespace mobius::core::decoder
 // @brief Constructor
 // @param reader reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mfc::mfc (const mobius::io::reader& reader)
+mfc::mfc (const mobius::core::io::reader& reader)
   : decoder_ (reader)
 {
 }
@@ -128,7 +128,7 @@ mfc::get_hex_string (std::uint64_t siz)
 // @param siz size in bytes
 // @return value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 mfc::get_data (std::uint64_t siz)
 {
   return decoder_.get_bytearray_by_size (siz);

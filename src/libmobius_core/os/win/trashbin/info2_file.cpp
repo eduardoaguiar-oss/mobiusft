@@ -34,7 +34,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   impl (const impl&) = delete;
   impl (impl&&) = delete;
-  explicit impl (const mobius::io::reader&);
+  explicit impl (const mobius::core::io::reader&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Operators
@@ -137,7 +137,7 @@ private:
 // @param reader Reader object
 // @see https://abelcheung.github.io/rifiuti2/assets/Forensics_Recycle_Bin.pdf
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-info2_file::impl::impl (const mobius::io::reader& reader)
+info2_file::impl::impl (const mobius::core::io::reader& reader)
 {
   mobius::core::decoder::data_decoder decoder (reader);
 
@@ -173,7 +173,7 @@ info2_file::impl::impl (const mobius::io::reader& reader)
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-info2_file::info2_file (const mobius::io::reader& reader)
+info2_file::info2_file (const mobius::core::io::reader& reader)
   : impl_ (std::make_shared <impl> (reader))
 {
 }

@@ -30,10 +30,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# Define top-level source and build directories (@todo move to main CMakeLists.txt)
-set(TOP_SRC_DIR ${CMAKE_SOURCE_DIR}/../..)
-set(TOP_BUILD_DIR ${CMAKE_BINARY_DIR}/../..)
-
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Find zlib
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -74,18 +70,6 @@ else()
 endif()
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Find old mobius library (@deprecated)
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-find_library(MOBIUS_LIB mobius HINTS ${TOP_SRC_DIR}/src/mobius/.libs NO_DEFAULT_PATH)
-
-if(NOT MOBIUS_LIB)
-    message(FATAL_ERROR "libmobius not found in ${TOP_SRC_DIR}/src/mobius/.libs")
-endif()
-
-set(MOBIUS_INCLUDE_DIRS ${TOP_SRC_DIR}/include ${TOP_SRC_DIR}/src)
-set(MOBIUS_LIBRARIES ${MOBIUS_LIB})
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Build sub-libraries
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_subdirectory(crypt)
@@ -95,7 +79,7 @@ add_subdirectory(datetime)
 add_subdirectory(decoder)
 add_subdirectory(encoder)
 add_subdirectory(file_decoder)
-add_subdirectory(jni)
+add_subdirectory(io)
 add_subdirectory(kff)
 add_subdirectory(os)
 add_subdirectory(pod)
@@ -113,19 +97,22 @@ configure_file(application.cpp.in application.cpp @ONLY)
 add_library(mobius_core SHARED
     ${CMAKE_CURRENT_BINARY_DIR}/application.cpp
     benchmark.cpp
+    bytearray.cpp
     charset.cpp
+    exception.cpp
     extension.cpp
     extension_set.cpp
     log.cpp
     mediator.cpp
     metadata.cpp
     resource.cpp
+    string_functions.cpp
     thread_guard.cpp
     unittest.cpp
     zlib_functions.cpp
 )
 
-target_include_directories(mobius_core PUBLIC ${MOBIUS_INCLUDE_DIRS} ${TOP_SRC_DIR})
+target_include_directories(mobius_core PUBLIC ${MOBIUS_INCLUDE_DIRS})
 
 target_link_libraries(mobius_core PUBLIC
     -Wl,--whole-archive
@@ -136,7 +123,7 @@ target_link_libraries(mobius_core PUBLIC
     mobius_core_decoder
     mobius_core_encoder
     mobius_core_file_decoder
-    mobius_core_jni
+    mobius_core_io
     mobius_core_kff
     mobius_core_os
     mobius_core_pod
@@ -145,7 +132,6 @@ target_link_libraries(mobius_core PUBLIC
     mobius_core_ui
     mobius_core_vfs
     -Wl,--no-whole-archive
-    ${MOBIUS_LIBRARIES}
     ${DL_LIBRARY}
     ZLIB::ZLIB
     Iconv::Iconv

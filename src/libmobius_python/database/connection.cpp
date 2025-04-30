@@ -67,7 +67,7 @@ mobius::core::database::connection
 pymobius_database_connection_from_pyobject (PyObject *value)
 {
   if (!pymobius_database_connection_check (value))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.database.connection"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.database.connection"));
 
   return * (reinterpret_cast <database_connection_o *>(value)->obj);
 }

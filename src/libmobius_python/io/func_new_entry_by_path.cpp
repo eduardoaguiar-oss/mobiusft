@@ -47,7 +47,7 @@ func_new_entry_by_path (PyObject *, PyObject *args)
 
   try
     {
-      ret = pymobius_io_entry_to_pyobject (mobius::io::new_entry_by_path (arg_path));
+      ret = pymobius_io_entry_to_pyobject (mobius::core::io::new_entry_by_path (arg_path));
     }
   catch (const std::exception& e)
     {

@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/pod/data_impl_base.hpp>
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 
 namespace mobius::core::pod
 {
@@ -34,7 +34,7 @@ public:
   // @brief Constructor
   // @param value Value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit data_impl_bytearray (const mobius::bytearray& value)
+  explicit data_impl_bytearray (const mobius::core::bytearray& value)
     : value_ (value)
   {
   }
@@ -53,14 +53,14 @@ public:
   // @brief Get value
   // @return Value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_value () const
   {
     return value_;
   }
 
 private:
-  mobius::bytearray value_;
+  mobius::core::bytearray value_;
 };
 
 } // namespace mobius::core::pod

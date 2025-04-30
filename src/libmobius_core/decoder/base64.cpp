@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/decoder/base64.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace mobius::core::decoder
@@ -120,7 +120,7 @@ static constexpr std::uint8_t BASE64_URL[] =
 // @return Data
 // @see RFC 4648, section 4
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 base64 (const std::string& s)
 {
   std::uint64_t l = s.size ();
@@ -147,7 +147,7 @@ base64 (const std::string& s)
     }
 
   // convert
-  mobius::bytearray ret (obits >> 3);
+  mobius::core::bytearray ret (obits >> 3);
   std::uint32_t d = 0;
   std::uint64_t idx = 0;
   std::uint32_t bits = 0;
@@ -179,7 +179,7 @@ base64 (const std::string& s)
 // @return Data
 // @see RFC 4648, section 5
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 base64url (const std::string& s)
 {
   // check input size
@@ -198,7 +198,7 @@ base64url (const std::string& s)
     }
 
   // convert
-  mobius::bytearray ret (obits / 8);
+  mobius::core::bytearray ret (obits / 8);
   std::uint64_t i = 0;
   std::uint32_t d = 0;
   std::uint64_t idx = 0;
@@ -231,7 +231,7 @@ base64url (const std::string& s)
 // @return Data
 // @see RFC 4648, section 6
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 base32 (const std::string& s)
 {
   // check input size
@@ -250,7 +250,7 @@ base32 (const std::string& s)
     }
 
   // convert
-  mobius::bytearray ret (obits / 8);
+  mobius::core::bytearray ret (obits / 8);
   std::uint64_t i = 0;
   std::uint32_t d = 0;
   std::uint64_t idx = 0;
@@ -283,7 +283,7 @@ base32 (const std::string& s)
 // @return Data
 // @see RFC 4648, section 7
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 base32hex (const std::string& s)
 {
   // check input size
@@ -302,7 +302,7 @@ base32hex (const std::string& s)
     }
 
   // convert
-  mobius::bytearray ret (obits / 8);
+  mobius::core::bytearray ret (obits / 8);
   std::uint64_t i = 0;
   std::uint32_t d = 0;
   std::uint64_t idx = 0;
@@ -335,7 +335,7 @@ base32hex (const std::string& s)
 // @return Data
 // @see RFC 4648, section 8
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 base16 (const std::string& s)
 {
   // check input size
@@ -345,7 +345,7 @@ base16 (const std::string& s)
     throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid base16 encoded string"));
 
   // convert
-  mobius::bytearray ret (l / 2);
+  mobius::core::bytearray ret (l / 2);
 
   for (std::uint64_t i = 0;i < l;i+=2)
     {

@@ -18,19 +18,19 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <string>
 #include <utility>
 
 namespace mobius::core
 {
-std::string conv_charset_to_utf8 (const mobius::bytearray&, const std::string&);
+std::string conv_charset_to_utf8 (const mobius::core::bytearray&, const std::string&);
 
-std::pair <std::string,mobius::bytearray> conv_charset_to_utf8_partial (const mobius::bytearray&, const std::string&);
+std::pair <std::string,mobius::core::bytearray> conv_charset_to_utf8_partial (const mobius::core::bytearray&, const std::string&);
 
-mobius::bytearray conv_charset (const mobius::bytearray&, const std::string&, const std::string&);
+mobius::core::bytearray conv_charset (const mobius::core::bytearray&, const std::string&, const std::string&);
 
-std::pair <mobius::bytearray,mobius::bytearray> conv_charset_partial (const mobius::bytearray&, const std::string&, const std::string&);
+std::pair <mobius::core::bytearray,mobius::core::bytearray> conv_charset_partial (const mobius::core::bytearray&, const std::string&, const std::string&);
 } // namespace mobius::core
 
 #endif

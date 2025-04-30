@@ -19,8 +19,8 @@
 #include <mobius/core/charset.hpp>
 #include <mobius/core/vfs/imagefile.hpp>
 #include <mobius/core/vfs/util.hpp>
-#include <mobius/exception.inc>
-#include <mobius/string_functions.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/string_functions.hpp>
 #include <cctype>
 #include <regex>
 #include <stdexcept>
@@ -31,7 +31,7 @@
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-imagefile_impl::is_instance (const mobius::io::file& f)
+imagefile_impl::is_instance (const mobius::core::io::file& f)
 {
   bool instance = false;
 
@@ -41,7 +41,7 @@ imagefile_impl::is_instance (const mobius::io::file& f)
 
       if (reader)
         {
-          mobius::bytearray data = reader.read (14);
+          mobius::core::bytearray data = reader.read (14);
           instance = data == "[SEIZE HEADER]";
         }
     }
@@ -53,7 +53,7 @@ imagefile_impl::is_instance (const mobius::io::file& f)
 // @brief Construct object
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-imagefile_impl::imagefile_impl (const mobius::io::file& f)
+imagefile_impl::imagefile_impl (const mobius::core::io::file& f)
   : file_ (f),
     split_imagefile_impl_ (
        mobius::core::vfs::build_imagefile_implementation (
@@ -87,7 +87,7 @@ imagefile_impl::set_attribute (
   const mobius::core::pod::data&
 )
 {
-  throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("set_attribute not implemented"));
+  throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("set_attribute not implemented"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -105,7 +105,7 @@ imagefile_impl::get_attributes () const
 // @brief Create new reader for imagefile
 // @return Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::reader
+mobius::core::io::reader
 imagefile_impl::new_reader () const
 {
   return split_imagefile_impl_->new_reader ();
@@ -115,10 +115,10 @@ imagefile_impl::new_reader () const
 // @brief Create new writer for imagefile
 // @return Writer object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::writer
+mobius::core::io::writer
 imagefile_impl::new_writer () const
 {
-  throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("writer not implemented"));
+  throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("writer not implemented"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -131,13 +131,13 @@ imagefile_impl::_load_metadata () const
     return;
 
   // Check if imagefile exists
-  constexpr mobius::io::file::size_type LOG_MAX_SIZE = 1048576;  // 1 MiB
+  constexpr mobius::core::io::file::size_type LOG_MAX_SIZE = 1048576;  // 1 MiB
 
   if (!file_ || !file_.exists ())
-    throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("Image file not found"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Image file not found"));
 
   if (file_.get_size () > LOG_MAX_SIZE)
-    throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("Image file control file too large"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Image file control file too large"));
 
   // Load metadata
   std::regex REGEX_SEIZE_TIME ("\\nSeize Time = *([0-9]+):([0-9]+):([0-9]+)\\n");
@@ -151,7 +151,7 @@ imagefile_impl::_load_metadata () const
 
   // parse .txt file
   auto reader = file_.new_reader ();
-  mobius::bytearray data = reader.read (file_.get_size ());
+  mobius::core::bytearray data = reader.read (file_.get_size ());
   const std::string text = mobius::core::conv_charset_to_utf8 (data, "ASCII");
   std::smatch match;
 
@@ -201,8 +201,8 @@ imagefile_impl::_load_metadata () const
 
   if (std::regex_search (text, match, REGEX_MD5))
     {
-      std::string value = mobius::string::remove_char (match[1].str (), ' ');
-      hash_md5 = mobius::string::tolower (value);
+      std::string value = mobius::core::string::remove_char (match[1].str (), ' ');
+      hash_md5 = mobius::core::string::tolower (value);
     }
 
   if (std::regex_search (text, match, REGEX_SOLO_PRODUCT))

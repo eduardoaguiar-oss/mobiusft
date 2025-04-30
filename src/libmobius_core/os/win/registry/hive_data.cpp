@@ -35,7 +35,7 @@ public:
   // constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   impl () = default;
-  impl (const mobius::io::reader&, offset_type, std::uint32_t, std::uint32_t);
+  impl (const mobius::core::io::reader&, offset_type, std::uint32_t, std::uint32_t);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief check if object is valid
@@ -80,7 +80,7 @@ public:
   // @brief get data
   // @return data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_data () const
   {
     _load_data ();
@@ -89,7 +89,7 @@ public:
 
 private:
   // @brief generic reader
-  mobius::io::reader reader_;
+  mobius::core::io::reader reader_;
 
   // @brief offset in bytes
   offset_type offset_ = INVALID_OFFSET;
@@ -101,7 +101,7 @@ private:
   data_type type_;
 
   // @brief data buffer
-  mutable mobius::bytearray data_;
+  mutable mobius::core::bytearray data_;
 
   // @brief data loaded flag
   mutable bool data_loaded_ = false;
@@ -118,7 +118,7 @@ private:
 // @param type Data type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_data::impl::impl (
-  const mobius::io::reader& reader,
+  const mobius::core::io::reader& reader,
   offset_type offset,
   std::uint32_t size,
   std::uint32_t type
@@ -137,7 +137,7 @@ hive_data::impl::impl (
 
       if (size_)
         {
-          data_ = mobius::bytearray
+          data_ = mobius::core::bytearray
           {
             std::uint8_t (offset_ & 0xff),
             std::uint8_t ((offset_ >> 8) & 0xff),
@@ -186,7 +186,7 @@ hive_data::hive_data ()
 // @param type Data type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hive_data::hive_data (
-  const mobius::io::reader& reader,
+  const mobius::core::io::reader& reader,
   offset_type offset,
   std::uint32_t size,
   std::uint32_t type
@@ -238,7 +238,7 @@ hive_data::get_type () const
 // @brief get data
 // @return data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 hive_data::get_data () const
 {
   return impl_->get_data ();

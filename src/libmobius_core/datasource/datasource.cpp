@@ -19,8 +19,8 @@
 #include <mobius/core/datasource/datasource_impl_null.hpp>
 #include <mobius/core/datasource/datasource_impl_vfs.hpp>
 #include <mobius/core/datasource/ufdr/datasource_impl.hpp>
-#include <mobius/exception.inc>
-#include <mobius/io/uri.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/io/uri.hpp>
 #include <stdexcept>
 
 namespace mobius::core::datasource
@@ -107,7 +107,7 @@ new_datasource_by_imagefile_url (const std::string& url)
 datasource
 new_datasource_by_ufdr_path (const std::string& path)
 {
-  auto uri = mobius::io::new_uri_from_path (path);
+  auto uri = mobius::core::io::new_uri_from_path (path);
   return mobius::core::datasource::new_datasource_by_ufdr_url (uri.get_value ());
 }
 

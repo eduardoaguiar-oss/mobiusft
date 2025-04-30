@@ -23,7 +23,7 @@
 #include <pymobius.hpp>
 #include <pygil.hpp>
 #include "filesystem.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 #include "io/folder.hpp"
 #include "io/reader.hpp"
@@ -339,7 +339,7 @@ static PyObject *
 tp_new (PyTypeObject *, PyObject *args, PyObject *)
 {
   // Parse input args
-  mobius::io::reader arg_reader;
+  mobius::core::io::reader arg_reader;
   std::uint64_t arg_offset;
   std::string arg_type;
 

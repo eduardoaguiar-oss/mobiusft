@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/io/stream.h>
+#include <mobius/core/io/stream.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,7 +27,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::io::stream *obj;
+  mobius::core::io::stream *obj;
 } io_stream_o;
 
 extern PyTypeObject io_stream_t;
@@ -36,8 +36,8 @@ extern PyTypeObject io_stream_t;
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool pymobius_io_stream_check (PyObject *);
-PyObject *pymobius_io_stream_to_pyobject (const mobius::io::stream&);
-mobius::io::stream pymobius_io_stream_from_pyobject (PyObject *);
+PyObject *pymobius_io_stream_to_pyobject (const mobius::core::io::stream&);
+mobius::core::io::stream pymobius_io_stream_from_pyobject (PyObject *);
 
 #endif
 

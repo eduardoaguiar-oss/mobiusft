@@ -27,10 +27,10 @@ namespace mobius::extension::app::ares
 // @return Decrypted data
 // @see helper_library_db.pas
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
-decrypt (const mobius::bytearray& enc_data, std::uint16_t seed)
+mobius::core::bytearray
+decrypt (const mobius::core::bytearray& enc_data, std::uint16_t seed)
 {
-  mobius::bytearray data (enc_data.size ());
+  mobius::core::bytearray data (enc_data.size ());
   auto iter = data.begin ();
 
   for (auto c : enc_data)
@@ -75,7 +75,7 @@ media_type_to_string (std::uint8_t t)
 // @see add_sources function @helper_altsources (line 106)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <std::pair <std::string, std::uint16_t>>
-decode_old_alt_sources (const mobius::bytearray& data)
+decode_old_alt_sources (const mobius::core::bytearray& data)
 {
   std::vector <std::pair <std::string, std::uint16_t>> sources;
   auto decoder = mobius::core::decoder::data_decoder (data);
@@ -98,7 +98,7 @@ decode_old_alt_sources (const mobius::bytearray& data)
 // @see add_sources function @helper_altsources (line 106)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <std::pair <std::string, std::uint16_t>>
-decode_alt_sources (const mobius::bytearray& data)
+decode_alt_sources (const mobius::core::bytearray& data)
 {
   std::vector <std::pair <std::string, std::uint16_t>> sources;
   auto decoder = mobius::core::decoder::data_decoder (data);
@@ -123,10 +123,10 @@ decode_alt_sources (const mobius::bytearray& data)
 // @see get_trusted_metas@helper_library_db.pas
 // @see read_details_DB_Download@helper_download_disk.pas
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::map <int, mobius::bytearray>
-decode_metadata (const mobius::bytearray& data)
+std::map <int, mobius::core::bytearray>
+decode_metadata (const mobius::core::bytearray& data)
 {
-  std::map <int, mobius::bytearray> metadata;
+  std::map <int, mobius::core::bytearray> metadata;
 
   auto decoder = mobius::core::decoder::data_decoder (data);
 

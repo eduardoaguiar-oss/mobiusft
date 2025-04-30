@@ -32,7 +32,7 @@ PyObject*
 func_vfs_new_imagefile_from_file (PyObject *, PyObject *args)
 {
   // parse input args
-  mobius::io::file arg_file;
+  mobius::core::io::file arg_file;
   std::string arg_type;
 
   try

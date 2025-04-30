@@ -25,7 +25,7 @@
 #include <pyobject.hpp>
 #include "data.hpp"
 #include "map.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 #include <vector>
 
@@ -48,7 +48,7 @@ pymobius_pod_data_vector_from_pytuple (PyObject *py_value)
       PyObject *item = PyTuple_GetItem (py_value, i);
 
       if (!item)
-        throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG (mobius::py::get_error_message ()));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG (mobius::py::get_error_message ()));
 
       v.push_back (pymobius_pod_data_from_pyobject (item));
     }
@@ -68,7 +68,7 @@ pymobius_pod_data_vector_from_pyset (PyObject *py_value)
 
   mobius::py::pyobject iter = PyObject_GetIter (py_value);
   if (!iter)
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG (mobius::py::get_error_message ()));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (mobius::py::get_error_message ()));
 
   mobius::py::pyobject item = PyIter_Next (iter);
 
@@ -175,7 +175,7 @@ pymobius_pod_data_to_pyobject (const mobius::core::pod::data& value)
     ret = mobius::py::pystring_from_std_string (std::string (value));
 
   else if (value.is_bytearray ())
-    ret = mobius::py::pybytes_from_bytearray (mobius::bytearray (value));
+    ret = mobius::py::pybytes_from_bytearray (mobius::core::bytearray (value));
 
   else if (value.is_list ())
     ret = mobius::py::pylist_from_cpp_container (
@@ -187,7 +187,7 @@ pymobius_pod_data_to_pyobject (const mobius::core::pod::data& value)
     ret = pymobius_pod_map_to_pyobject (mobius::core::pod::map (value));
 
   else
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("unknown mobius.pod.data type"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("unknown mobius.pod.data type"));
 
   return ret;
 }

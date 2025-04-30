@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/reader_impl_base.h>
-#include <mobius/io/reader.h>
+#include <mobius/core/io/reader_impl_base.hpp>
+#include <mobius/core/io/reader.hpp>
 
 class imagefile_impl;
 
@@ -27,7 +27,7 @@ class imagefile_impl;
 // @brief VHD imagefile reader (subtype=dynamic) implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class reader_impl_dynamic : public mobius::io::reader_impl_base
+class reader_impl_dynamic : public mobius::core::io::reader_impl_base
 {
 public:
   explicit reader_impl_dynamic (const imagefile_impl&);
@@ -95,7 +95,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Virtual methods
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray read (size_type) override;
+  mobius::core::bytearray read (size_type) override;
   void seek (offset_type, whence_type) override;
 
 private:
@@ -121,7 +121,7 @@ private:
   std::uint32_t bitmap_size_;
 
   // @brief Read stream
-  mobius::io::reader reader_;
+  mobius::core::io::reader reader_;
 };
 
 #endif

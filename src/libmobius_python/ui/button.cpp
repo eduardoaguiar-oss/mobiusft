@@ -25,7 +25,7 @@
 #include "button.hpp"
 #include "icon.hpp"
 #include "widget.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace

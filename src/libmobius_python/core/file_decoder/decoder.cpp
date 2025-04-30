@@ -23,7 +23,7 @@
 #include <pymobius.hpp>
 #include <pylist.hpp>
 #include "decoder.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 #include "section.hpp"
 #include "entry.hpp"
@@ -221,7 +221,7 @@ static PyObject *
 tp_f_decode (core_file_decoder_decoder_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::io::reader arg_reader;
+  mobius::core::io::reader arg_reader;
 
   try
     {

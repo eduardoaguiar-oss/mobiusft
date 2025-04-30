@@ -37,7 +37,7 @@ PyObject *
 decoder_func_btencode (PyObject *, PyObject *args)
 {
   // parse input args
-  mobius::io::reader arg_reader;
+  mobius::core::io::reader arg_reader;
 
   try
     {

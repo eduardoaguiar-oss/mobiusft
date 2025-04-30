@@ -19,7 +19,7 @@
 #include <mobius/core/os/win/hash_msdcc1.hpp>
 #include <mobius/core/charset.hpp>
 #include <mobius/core/crypt/hmac.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 
 namespace mobius::core::os::win
 {
@@ -30,21 +30,21 @@ namespace mobius::core::os::win
 // @param iterations Number of iterations
 // @return MSDCC2 hash
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 hash_msdcc2 (
   const std::string& password,
   const std::string& username,
   std::uint32_t iterations)
 {
-  const mobius::bytearray pass = hash_msdcc1 (password, username);
-  const mobius::bytearray salt = mobius::core::conv_charset (mobius::string::tolower (username), "UTF-8", "UTF-16LE");
+  const mobius::core::bytearray pass = hash_msdcc1 (password, username);
+  const mobius::core::bytearray salt = mobius::core::conv_charset (mobius::core::string::tolower (username), "UTF-8", "UTF-16LE");
 
   mobius::core::crypt::hmac hmac_sha1 ("sha1", pass);
   hmac_sha1.update (salt);
   hmac_sha1.update ({0, 0, 0, 1});
 
-  mobius::bytearray temp = hmac_sha1.get_digest ();
-  mobius::bytearray out = temp.slice (0, 15);
+  mobius::core::bytearray temp = hmac_sha1.get_digest ();
+  mobius::core::bytearray out = temp.slice (0, 15);
 
   for (std::uint32_t i = 1; i < iterations; i++)
     {

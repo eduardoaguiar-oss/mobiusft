@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/crypt/cipher_impl_ige.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 
 namespace mobius::core::crypt
 {
@@ -28,8 +28,8 @@ namespace mobius::core::crypt
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher_impl_ige::cipher_impl_ige (
   const std::string& cipher_id,
-  const mobius::bytearray& key,
-  const mobius::bytearray& iv)
+  const mobius::core::bytearray& key,
+  const mobius::core::bytearray& iv)
 : cipher_ (cipher_id, "ecb"),
   iv_ (iv),
   v1_ (iv.slice (0, iv.size () / 2 - 1)),
@@ -46,10 +46,10 @@ cipher_impl_ige::cipher_impl_ige (
 // @param data Plaintext data
 // @return Encrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
-cipher_impl_ige::encrypt (const mobius::bytearray& data)
+mobius::core::bytearray
+cipher_impl_ige::encrypt (const mobius::core::bytearray& data)
 {
-  mobius::bytearray out;
+  mobius::core::bytearray out;
   const auto block_size = cipher_.get_block_size ();
 
   for (std::size_t i = 0;i < data.size ();i += block_size)
@@ -68,10 +68,10 @@ cipher_impl_ige::encrypt (const mobius::bytearray& data)
 // @param data Ciphertext data
 // @return Decrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
-cipher_impl_ige::decrypt (const mobius::bytearray& data)
+mobius::core::bytearray
+cipher_impl_ige::decrypt (const mobius::core::bytearray& data)
 {
-  mobius::bytearray out;
+  mobius::core::bytearray out;
   const auto block_size = cipher_.get_block_size ();
 
   for (std::size_t i = 0;i < data.size ();i += block_size)

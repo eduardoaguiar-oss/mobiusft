@@ -36,7 +36,7 @@ PyObject *
 decoder_func_get_filetype (PyObject *, PyObject *args)
 {
   // parse input args
-  mobius::io::reader arg_reader;
+  mobius::core::io::reader arg_reader;
 
   try
     {

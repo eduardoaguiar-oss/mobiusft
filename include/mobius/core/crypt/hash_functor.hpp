@@ -43,7 +43,7 @@ public:
   // @param data Data to update digest
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
-  operator () (const mobius::bytearray& data)
+  operator () (const mobius::core::bytearray& data)
   {
     hash_.update (data);
   }
@@ -52,7 +52,7 @@ public:
   // @brief Get hash digest
   // @return Hash digest
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_digest ()
   {
     return hash_.get_digest ();

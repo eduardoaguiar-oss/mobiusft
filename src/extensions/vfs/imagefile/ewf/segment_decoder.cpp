@@ -20,8 +20,8 @@
 #include <mobius/core/crypt/hash_functor.hpp>
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
-#include <mobius/io/reader_evaluator.h>
-#include <mobius/string_functions.h>
+#include <mobius/core/io/reader_evaluator.hpp>
+#include <mobius/core/string_functions.hpp>
 #include <mobius/core/zlib_functions.hpp>
 
 namespace
@@ -38,7 +38,7 @@ static constexpr int SECTION_HEADER_SIZE = 76;
 // @return std::uint32_t
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::uint32_t
-digest_to_uint32_t (const mobius::bytearray& digest)
+digest_to_uint32_t (const mobius::core::bytearray& digest)
 {
   return std::uint32_t (digest[0]) << 24 |
          std::uint32_t (digest[1]) << 16 |
@@ -92,13 +92,13 @@ segment_decoder::const_iterator::operator++ ()
 // @brief Constructor
 // @see EWCF 2.1.1
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-segment_decoder::segment_decoder (mobius::io::reader reader)
+segment_decoder::segment_decoder (mobius::core::io::reader reader)
   : reader_ (reader)
 {
-  const mobius::bytearray EWF_SIGNATURE = {'E', 'V', 'F', 0x09, 0x0d, 0x0a, 0xff, 0x00};
+  const mobius::core::bytearray EWF_SIGNATURE = {'E', 'V', 'F', 0x09, 0x0d, 0x0a, 0xff, 0x00};
 
   mobius::core::decoder::data_decoder decoder (reader);
-  mobius::bytearray signature = decoder.get_bytearray_by_size (EWF_SIGNATURE.size ());
+  mobius::core::bytearray signature = decoder.get_bytearray_by_size (EWF_SIGNATURE.size ());
 
   if (signature == EWF_SIGNATURE)
     {
@@ -136,7 +136,7 @@ section
 segment_decoder::decode_section (offset_type offset) const
 {
   mobius::core::crypt::hash_functor hash_functor ("adler32");
-  auto reader = mobius::io::reader_evaluator (reader_, hash_functor);
+  auto reader = mobius::core::io::reader_evaluator (reader_, hash_functor);
 
   mobius::core::decoder::data_decoder decoder (reader);
   decoder.seek (offset);
@@ -171,21 +171,21 @@ segment_decoder::decode_header_section (const section& arg_section) const
   header_section section (arg_section);
 
   // get data from header section
-  mobius::bytearray data = decoder.get_bytearray_by_size (section.get_size () - SECTION_HEADER_SIZE);
+  mobius::core::bytearray data = decoder.get_bytearray_by_size (section.get_size () - SECTION_HEADER_SIZE);
   data = mobius::core::zlib_decompress (data);
 
   const std::string text = mobius::core::conv_charset_to_utf8 (data, section.get_name () == "header2" ? "UTF-16" : "ASCII");
 
   // format header metadata lines
-  auto lines = mobius::string::split (text, "\n");
+  auto lines = mobius::core::string::split (text, "\n");
   for (auto& line : lines)
-    line = mobius::string::rstrip (line, "\r ");
+    line = mobius::core::string::rstrip (line, "\r ");
 
   // check valid header
   if (lines.size () > 3 && lines[1] == "main")
     {
-      auto vars = mobius::string::split (lines[2], "\t");
-      auto values = mobius::string::split (lines[3], "\t");
+      auto vars = mobius::core::string::split (lines[2], "\t");
+      auto values = mobius::core::string::split (lines[3], "\t");
       std::string section_text;
 
       for (std::size_t i = 0; i < vars.size (); i++)
@@ -221,7 +221,7 @@ segment_decoder::decode_header_section (const section& arg_section) const
             {
               if (value.find (' ') != std::string::npos)
                 {
-                  auto d = mobius::string::split (value);
+                  auto d = mobius::core::string::split (value);
                   section.set_acquisition_time (mobius::core::datetime::datetime (
                                                   stoi (d[0]), stoi (d[1]), stoi (d[2]), stoi (d[3]), stoi (d[4]), stoi (d[5])));
                 }

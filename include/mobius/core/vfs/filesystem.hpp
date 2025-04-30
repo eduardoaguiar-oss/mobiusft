@@ -42,7 +42,7 @@ public:
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   filesystem ();
-  filesystem (const mobius::io::reader&, std::uint64_t, const std::string& ="autodetect");
+  filesystem (const mobius::core::io::reader&, std::uint64_t, const std::string& ="autodetect");
   filesystem (filesystem&&) noexcept = default;
   filesystem (const filesystem&) noexcept = default;
 
@@ -76,7 +76,7 @@ public:
   // @brief Get root folder
   // @return Root folder
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::io::folder
+  mobius::core::io::folder
   get_root_folder () const
   {
     return impl_->get_root_folder ();
@@ -86,7 +86,7 @@ public:
   // @brief Get reader
   // @return Reader
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::io::reader
+  mobius::core::io::reader
   get_reader () const
   {
     return impl_->get_reader ();
@@ -152,8 +152,8 @@ private:
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct filesystem_resource_type
 {
-  std::function <bool (mobius::io::reader, std::uint64_t)> is_instance;
-  std::function <std::shared_ptr <filesystem_impl_base> (const mobius::io::reader&, std::uint64_t)> build;
+  std::function <bool (mobius::core::io::reader, std::uint64_t)> is_instance;
+  std::function <std::shared_ptr <filesystem_impl_base> (const mobius::core::io::reader&, std::uint64_t)> build;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -164,7 +164,7 @@ make_filesystem_resource ()
 {
   return filesystem_resource_type {
     T::is_instance,
-    [] (const mobius::io::reader& reader, std::uint64_t offset){
+    [] (const mobius::core::io::reader& reader, std::uint64_t offset){
       return std::make_shared <T> (reader, offset);
     }
   };

@@ -19,11 +19,11 @@
 #include "segment_decoder.hpp"
 #include "reader_impl.hpp"
 #include "writer_impl.hpp"
-#include <mobius/io/file.h>
+#include <mobius/core/io/file.hpp>
 #include <mobius/core/vfs/imagefile.hpp>
 #include <mobius/core/vfs/util.hpp>
-#include <mobius/exception.inc>
-#include <mobius/string_functions.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/string_functions.hpp>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -40,7 +40,7 @@ static std::string
 get_segment_extension (mobius::core::vfs::segment_array::idx_type idx)
 {
   if (idx < 99)
-    return std::string ("E") + mobius::string::to_string (idx + 1, 2);
+    return std::string ("E") + mobius::core::string::to_string (idx + 1, 2);
 
   else if (idx < 14971)
     {
@@ -52,7 +52,7 @@ get_segment_extension (mobius::core::vfs::segment_array::idx_type idx)
     }
 
   else
-    throw std::out_of_range (mobius::MOBIUS_EXCEPTION_MSG ("Segment index out of range"));
+    throw std::out_of_range (MOBIUS_EXCEPTION_MSG ("Segment index out of range"));
 }
 
 } // namespace
@@ -63,7 +63,7 @@ get_segment_extension (mobius::core::vfs::segment_array::idx_type idx)
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-imagefile_impl::is_instance (const mobius::io::file& f)
+imagefile_impl::is_instance (const mobius::core::io::file& f)
 {
   bool instance = false;
 
@@ -85,7 +85,7 @@ imagefile_impl::is_instance (const mobius::io::file& f)
 // @brief Construct object
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-imagefile_impl::imagefile_impl (const mobius::io::file& f)
+imagefile_impl::imagefile_impl (const mobius::core::io::file& f)
   : file_ (f),
     segments_ (f, get_segment_extension)
 {
@@ -135,20 +135,20 @@ imagefile_impl::get_attributes () const
 // @brief Create new reader for imagefile
 // @return Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::reader
+mobius::core::io::reader
 imagefile_impl::new_reader () const
 {
-  return mobius::io::reader (std::make_shared <reader_impl> (*this));
+  return mobius::core::io::reader (std::make_shared <reader_impl> (*this));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create new writer for imagefile
 // @return Writer object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::writer
+mobius::core::io::writer
 imagefile_impl::new_writer () const
 {
-  return mobius::io::writer (std::make_shared <writer_impl> (*this));
+  return mobius::core::io::writer (std::make_shared <writer_impl> (*this));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

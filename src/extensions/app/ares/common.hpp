@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <mobius/core/file_decoder/entry.hpp>
 #include <cstdint>
 #include <map>
@@ -28,11 +28,11 @@ namespace mobius::extension::app::ares
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray decrypt (const mobius::bytearray&, std::uint16_t);
+mobius::core::bytearray decrypt (const mobius::core::bytearray&, std::uint16_t);
 std::string media_type_to_string (std::uint8_t);
-std::map <int, mobius::bytearray> decode_metadata (const mobius::bytearray&);
-std::vector <std::pair <std::string, std::uint16_t>> decode_old_alt_sources (const mobius::bytearray&);
-std::vector <std::pair <std::string, std::uint16_t>> decode_alt_sources (const mobius::bytearray&);
+std::map <int, mobius::core::bytearray> decode_metadata (const mobius::core::bytearray&);
+std::vector <std::pair <std::string, std::uint16_t>> decode_old_alt_sources (const mobius::core::bytearray&);
+std::vector <std::pair <std::string, std::uint16_t>> decode_alt_sources (const mobius::core::bytearray&);
 
 } // namespace mobius::extension::app::ares
 

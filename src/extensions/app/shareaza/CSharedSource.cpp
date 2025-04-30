@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CSharedSource.hpp"
-#include <mobius/io/uri.h>
+#include <mobius/core/io/uri.hpp>
 
 namespace mobius::extension::app::shareaza
 {
@@ -42,7 +42,7 @@ CSharedSource::CSharedSource (mobius::core::decoder::mfc& decoder, int version)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Get IP and port from URL
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::io::uri uri (url_);
+  mobius::core::io::uri uri (url_);
 
   ip_ = uri.get_host ();
   port_ = uri.get_port_number ();

@@ -41,7 +41,7 @@ pymobius_io_writer_check (PyObject *pyobj)
 // @return new object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_io_writer_to_pyobject (const mobius::io::writer& obj)
+pymobius_io_writer_to_pyobject (const mobius::core::io::writer& obj)
 {
   PyObject *ret = nullptr;
 
@@ -50,7 +50,7 @@ pymobius_io_writer_to_pyobject (const mobius::io::writer& obj)
       ret = _PyObject_New (&io_writer_t);
 
       if (ret)
-        ((io_writer_o *) ret)->obj = new mobius::io::writer (obj);
+        ((io_writer_o *) ret)->obj = new mobius::core::io::writer (obj);
     }
   else
     {
@@ -61,15 +61,15 @@ pymobius_io_writer_to_pyobject (const mobius::io::writer& obj)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>mobius::io::writer</i> C++ object from Python object
+// @brief Create <i>mobius::core::io::writer</i> C++ object from Python object
 // @param value Python object
 // @return C++ object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::writer
+mobius::core::io::writer
 pymobius_io_writer_from_pyobject (PyObject *value)
 {
   if (!pymobius_io_writer_check (value))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.io.writer"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.io.writer"));
 
   return * (reinterpret_cast <io_writer_o *>(value)->obj);
 }
@@ -141,7 +141,7 @@ static PyObject *
 tp_f_write (io_writer_o *self, PyObject *args)
 {
   // parse input args
-  mobius::bytearray arg_data;
+  mobius::core::bytearray arg_data;
 
   try
     {
@@ -215,16 +215,16 @@ tp_f_seek (io_writer_o *self, PyObject *args)
     }
 
   // convert 'whence' argument
-  mobius::io::writer::whence_type w;
+  mobius::core::io::writer::whence_type w;
 
   if (arg_whence == 0)
-    w = mobius::io::writer::whence_type::beginning;
+    w = mobius::core::io::writer::whence_type::beginning;
 
   else if (arg_whence == 1)
-    w = mobius::io::writer::whence_type::current;
+    w = mobius::core::io::writer::whence_type::current;
 
   else if (arg_whence == 2)
-    w = mobius::io::writer::whence_type::end;
+    w = mobius::core::io::writer::whence_type::end;
 
   else
     {

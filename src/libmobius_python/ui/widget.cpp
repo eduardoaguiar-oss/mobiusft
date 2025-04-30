@@ -25,7 +25,7 @@
 #include "widget.hpp"
 #include <pygobject.h>
 #include <gtk/gtk.h>            // PyGtk only interface for now
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <mutex>
 #include <stdexcept>
 
@@ -401,7 +401,7 @@ pymobius_ui_widget_from_pyobject (PyObject *value)
       GtkWidget *wp = reinterpret_cast <GtkWidget *> (pygobject_get (value));
 
       if (!wp)
-        throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("could not convert argument to GtkWidget"));
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("could not convert argument to GtkWidget"));
 
       w = mobius::core::ui::widget (wp);
     }
@@ -415,12 +415,12 @@ pymobius_ui_widget_from_pyobject (PyObject *value)
       auto func = pyobj.get_attribute ("get_widget");
 
       if (!func || !func.is_callable ())
-        throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object has no get_widget method"));
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object has no get_widget method"));
 
       auto rc = func.call ();
 
       if (!pymobius_ui_widget_check (rc))
-        throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid type returned by get_widget function"));
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid type returned by get_widget function"));
 
       w = mobius::py::from_pyobject <ui_widget_o> (rc, &ui_widget_t);
     }

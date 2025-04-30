@@ -20,8 +20,8 @@
 #include <mobius/core/vfs/block_impl_disk.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/resource.hpp>
-#include <mobius/exception.inc>
-#include <mobius/string_functions.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/string_functions.hpp>
 #include <mobius/core/thread_safe_flag.hpp>
 #include <algorithm>
 #include <stdexcept>
@@ -70,7 +70,7 @@ public:
   void remove_disk (std::size_t);
   std::vector <disk> get_disks () const;
   std::vector <block> get_blocks () const;
-  std::vector<mobius::io::entry> get_root_entries () const;
+  std::vector<mobius::core::io::entry> get_root_entries () const;
 
 private:
   // @brief Datasources
@@ -83,7 +83,7 @@ private:
   mutable std::vector <filesystem> filesystems_;
 
   // @brief Root entries
-  mutable std::vector <mobius::io::entry> root_entries_;
+  mutable std::vector <mobius::core::io::entry> root_entries_;
 
   // @brief Data blocks loaded flag
   mutable mobius::core::thread_safe_flag blocks_loaded_;
@@ -301,7 +301,7 @@ vfs::impl::get_blocks () const
 // @brief Get root entries
 // @return Root entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <mobius::io::entry>
+std::vector <mobius::core::io::entry>
 vfs::impl::get_root_entries () const
 {
   _load_root_entries ();
@@ -533,7 +533,7 @@ vfs::impl::_load_root_entries () const
     {
       try
         {
-          const std::string name = "FS" + mobius::string::to_string (idx, 2);
+          const std::string name = "FS" + mobius::core::string::to_string (idx, 2);
 
           auto folder = fs.get_root_folder ();
           folder.set_name (name);
@@ -654,7 +654,7 @@ vfs::get_blocks () const
 // @brief Get root entries
 // @return Root entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector<mobius::io::entry>
+std::vector<mobius::core::io::entry>
 vfs::get_root_entries () const
 {
   return impl_->get_root_entries ();

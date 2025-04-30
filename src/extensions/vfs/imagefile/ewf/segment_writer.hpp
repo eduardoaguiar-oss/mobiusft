@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/writer.h>
+#include <mobius/core/io/writer.hpp>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -40,7 +40,7 @@ public:
   // constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   segment_writer () = default;
-  segment_writer (mobius::io::writer, std::uint16_t);
+  segment_writer (mobius::core::io::writer, std::uint16_t);
   segment_writer (const segment_writer&) = default;
   segment_writer (segment_writer&&) = default;
 
@@ -165,7 +165,7 @@ public:
   // @param guid GUID as bytearray
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
-  set_guid (const mobius::bytearray& guid)
+  set_guid (const mobius::core::bytearray& guid)
   {
     guid_ = guid;
   }
@@ -175,7 +175,7 @@ public:
   // @param hd5_hash MD5 hash as bytearray
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
-  set_md5_hash (const mobius::bytearray& md5_hash)
+  set_md5_hash (const mobius::core::bytearray& md5_hash)
   {
     md5_hash_ = md5_hash;
   }
@@ -183,16 +183,16 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // methods
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  size_type write (const mobius::bytearray&);
+  size_type write (const mobius::core::bytearray&);
   void create ();
   void flush ();
   void close ();
 
 private:
   // control attributes
-  mobius::io::writer writer_;
+  mobius::core::io::writer writer_;
   std::uint16_t segment_number_;
-  mobius::bytearray chunk_data_;
+  mobius::core::bytearray chunk_data_;
   std::vector <std::uint32_t> chunk_offset_list_;
   std::vector <std::pair <std::string, offset_type>> volume_info_list_;
   offset_type sector_offset_ = -1;
@@ -215,10 +215,10 @@ private:
   size_type chunk_sectors_ = 0;
   size_type sector_size_ = 0;
   std::uint16_t segment_count_ = 0;
-  mobius::bytearray guid_;
+  mobius::core::bytearray guid_;
 
   // hash metadata
-  mobius::bytearray md5_hash_;
+  mobius::core::bytearray md5_hash_;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // private prototypes
@@ -230,9 +230,9 @@ private:
   void _write_hash_section ();
   void _write_table_section (const std::string&);
   void _write_section_header (const std::string&, size_type);
-  void _write_section_data (const mobius::bytearray&);
+  void _write_section_data (const mobius::core::bytearray&);
   bool _can_write_chunk_data ();
-  void _write_chunk_data (mobius::bytearray);
+  void _write_chunk_data (mobius::core::bytearray);
   void _write_sectors_stub ();
   void _close_sectors_section ();
 };

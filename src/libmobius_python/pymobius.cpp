@@ -20,7 +20,7 @@
 #include <pymobius.hpp>
 #include <frameobject.h>
 #include <bytesobject.h>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace mobius::py
@@ -85,7 +85,7 @@ get_arg_as_std_string (PyObject *args, std::uint32_t idx, const std::string& val
 // @param idx Argument index
 // @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 get_arg_as_bytearray (PyObject *args, std::uint32_t idx)
 {
   return pybytes_as_bytearray (get_arg (args, idx));
@@ -98,8 +98,8 @@ get_arg_as_bytearray (PyObject *args, std::uint32_t idx)
 // @param value Default value
 // @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
-get_arg_as_bytearray (PyObject *args, std::uint32_t idx, const mobius::bytearray& value)
+mobius::core::bytearray
+get_arg_as_bytearray (PyObject *args, std::uint32_t idx, const mobius::core::bytearray& value)
 {
   if (idx < get_arg_size (args))
     return get_arg_as_bytearray (args, idx);
@@ -186,13 +186,13 @@ get_arg_as_char (PyObject *args, std::uint32_t idx)
   if (buffer)
     {
       if (siz != 1)
-        throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid char"));
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid char"));
 
       return buffer[0];
     }
 
   else
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid Python string"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid Python string"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -631,7 +631,7 @@ pystring_from_std_string (const std::string& s)
   auto ret = PyUnicode_DecodeUTF8 (s.c_str (), s.size (), "replace");
 
   if (!ret)
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid C++ UTF-8 string"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid C++ UTF-8 string"));
 
   return ret;
 }
@@ -651,7 +651,7 @@ pystring_as_std_string (PyObject *value)
     str = buffer;
 
   else
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid Python string"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid Python string"));
 
   return str;
 }
@@ -668,31 +668,31 @@ pybytes_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create PyBytes from mobius::bytearray
+// @brief Create PyBytes from mobius::core::bytearray
 // @param array Bytearray
 // @return Python Bytes object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pybytes_from_bytearray (const mobius::bytearray& array)
+pybytes_from_bytearray (const mobius::core::bytearray& array)
 {
   return PyBytes_FromStringAndSize ((const char *) array.data (), array.size ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create mobius::bytearray from PyBytes
+// @brief Create mobius::core::bytearray from PyBytes
 // @param value Python Object
 // @return Bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 pybytes_as_bytearray (PyObject *value)
 {
   char *buffer;
   Py_ssize_t length;
 
   if (PyBytes_AsStringAndSize (value, &buffer, &length) == -1)
-    throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("invalid bytes"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid bytes"));
 
-  return mobius::bytearray (reinterpret_cast <const std::uint8_t *> (buffer), length);
+  return mobius::core::bytearray (reinterpret_cast <const std::uint8_t *> (buffer), length);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -719,7 +719,7 @@ pybool_check (PyObject *value)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create PyBytes from mobius::bytearray
+// @brief Create PyBytes from mobius::core::bytearray
 // @param b Bool value
 // @return Python Bool object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

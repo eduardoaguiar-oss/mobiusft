@@ -24,7 +24,7 @@
 #include <pylist.hpp>
 #include "log.hpp"
 #include "api_dataholder.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace
@@ -90,7 +90,7 @@ mobius::core::log
 pymobius_core_log_from_pyobject (PyObject *value)
 {
   if (!pymobius_core_log_check (value))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.core.event.log"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.core.event.log"));
 
   return * (reinterpret_cast <core_log_o *>(value)->obj);
 }

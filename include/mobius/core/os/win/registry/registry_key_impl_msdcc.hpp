@@ -34,7 +34,7 @@ class registry_key_impl_msdcc : public registry_key_impl_base
 {
 public:
   // function prototypes
-  explicit registry_key_impl_msdcc (registry_key, const mobius::bytearray&);
+  explicit registry_key_impl_msdcc (registry_key, const mobius::core::bytearray&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief check if object is valid
@@ -163,7 +163,7 @@ private:
   std::string name_;
 
   // @brief NL$KM decrypted key
-  const mobius::bytearray nlkm_;
+  const mobius::core::bytearray nlkm_;
 
   // @brief values loaded flag
   mutable bool values_loaded_ = false;

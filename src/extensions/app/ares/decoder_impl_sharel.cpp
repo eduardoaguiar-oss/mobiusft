@@ -27,7 +27,7 @@ namespace mobius::extension::app::ares
 // @see get_cached_metas (helper_library_db.pas)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-decoder_impl_sharel::decode (const mobius::io::reader& reader)
+decoder_impl_sharel::decode (const mobius::core::io::reader& reader)
 {
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Decode file

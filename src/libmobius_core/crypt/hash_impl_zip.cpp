@@ -56,7 +56,7 @@ hash_impl_zip::reset () noexcept
 // @param data Data block
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-hash_impl_zip::update (const mobius::bytearray& data) noexcept
+hash_impl_zip::update (const mobius::core::bytearray& data) noexcept
 {
   for (std::uint8_t c : data)
     {
@@ -73,7 +73,7 @@ hash_impl_zip::update (const mobius::bytearray& data) noexcept
 bytearray
 hash_impl_zip::get_digest ()
 {
-  return mobius::bytearray
+  return mobius::core::bytearray
   {
     std::uint8_t (k0_ >> 24),
     std::uint8_t (k0_ >> 16),

@@ -34,10 +34,10 @@ reader_impl_fixed::reader_impl_fixed (const imagefile_impl& impl)
 // @param size size in bytes
 // @return Data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 reader_impl_fixed::read (size_type size)
 {
-  mobius::bytearray data;
+  mobius::core::bytearray data;
 
   if (!eof ())
     {

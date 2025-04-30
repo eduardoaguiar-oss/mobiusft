@@ -27,8 +27,8 @@
 #include "pyobject.hpp"
 #include "data.hpp"
 #include "api_dataholder.hpp"
-#include <mobius/exception.inc>
-#include <mobius/string_functions.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/string_functions.hpp>
 #include <stdexcept>
 
 namespace
@@ -65,7 +65,7 @@ map_from_object (PyObject *obj)
 
   for (const auto& [key, value] : py_obj.get_attributes ())
     {
-      if (!mobius::string::startswith (key, "__") &&
+      if (!mobius::core::string::startswith (key, "__") &&
           value &&				// not null
           !value.is_callable () &&		// eliminate functions
           obj != value				// eliminate self references

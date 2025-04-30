@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/crypt/gcrypt/util.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <mutex>
 #include <stdexcept>
 
@@ -38,7 +38,7 @@ static void
 _init_libgcrypt ()
 {
   if (!gcry_check_version (LIBGCRYPT_MIN_VERSION))
-    throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("libgcrypt too old"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("libgcrypt too old"));
 
   gcry_control (GCRYCTL_INITIALIZATION_FINISHED, 0);
 }

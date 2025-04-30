@@ -25,7 +25,7 @@
 #include "io/reader.hpp"
 #include "api_dataholder.hpp"
 #include "pod/map.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -64,7 +64,7 @@ mobius::core::decoder::sgml::parser
 pymobius_decoder_sgml_parser_from_pyobject (PyObject *pyobj)
 {
   if (!PyObject_IsInstance (pyobj, (PyObject *) &decoder_sgml_parser_t))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object type must be mobius.decoder.sgml.parser"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object type must be mobius.decoder.sgml.parser"));
 
   return * (reinterpret_cast <decoder_sgml_parser_o *>(pyobj)->obj);
 }
@@ -129,7 +129,7 @@ static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
   // Parse input args
-  mobius::io::reader arg_reader;
+  mobius::core::io::reader arg_reader;
 
   try
     {

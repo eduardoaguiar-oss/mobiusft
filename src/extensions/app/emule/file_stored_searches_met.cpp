@@ -18,7 +18,7 @@
 #include "file_stored_searches_met.hpp"
 #include <mobius/core/log.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 #include <unordered_map>
 
 namespace
@@ -55,7 +55,7 @@ namespace mobius::extension::app::emule
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-file_stored_searches_met::file_stored_searches_met (const mobius::io::reader& reader)
+file_stored_searches_met::file_stored_searches_met (const mobius::core::io::reader& reader)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -102,7 +102,7 @@ file_stored_searches_met::_decode_ssearch_params (mobius::core::decoder::data_de
     search s;
 
     // decoder data
-    s.id = mobius::string::to_hex (decoder.get_uint32_le (), 8);
+    s.id = mobius::core::string::to_hex (decoder.get_uint32_le (), 8);
     s.e_type = decoder.get_uint8 ();
     s.b_client_search_files = decoder.get_uint8 () > 0;
     s.special_title = read_string (decoder);

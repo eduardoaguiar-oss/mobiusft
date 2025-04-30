@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/exception.inc>
-#include <mobius/io/folder_impl_null.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/io/folder_impl_null.hpp>
 #include <mobius/core/vfs/tsk/file_impl.hpp>
 #include <mobius/core/vfs/tsk/folder_impl.hpp>
 #include <mobius/core/vfs/tsk/reader_impl_file.hpp>
@@ -97,7 +97,7 @@ file_impl::get_parent () const
   if (parent)
     return std::make_shared <folder_impl> (parent);
 
-  return std::make_shared <mobius::io::folder_impl_null> ();
+  return std::make_shared <mobius::core::io::folder_impl_null> ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

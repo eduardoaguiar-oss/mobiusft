@@ -44,7 +44,7 @@ public:
   void add_parent (const mobius::core::vfs::block&) override;
   void set_complete (bool) override;
   void set_available (bool) override;
-  mobius::io::reader new_reader () const override;
+  mobius::core::io::reader new_reader () const override;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief Check if object is valid

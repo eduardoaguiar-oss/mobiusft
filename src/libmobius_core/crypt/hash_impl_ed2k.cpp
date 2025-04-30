@@ -53,7 +53,7 @@ hash_impl_ed2k::reset ()
 // @param data Data block
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-hash_impl_ed2k::update (const mobius::bytearray& data)
+hash_impl_ed2k::update (const mobius::core::bytearray& data)
 {
   if (size_ + data.size () <= BLOCK_SIZE)
     md4_.update (data);
@@ -98,7 +98,7 @@ hash_impl_ed2k::update (const mobius::bytearray& data)
 // If data size > BLOCK_SIZE, hash ED2K is equal to MD4 hash of each block,
 // including the last block, which may be incomplete
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 hash_impl_ed2k::get_digest ()
 {
   if (size_ <= BLOCK_SIZE)

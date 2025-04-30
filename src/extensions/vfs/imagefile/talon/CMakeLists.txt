@@ -33,7 +33,7 @@ set(SOURCES
 add_library(vfs_imagefile_talon MODULE ${SOURCES})
 set_target_properties(vfs_imagefile_talon PROPERTIES OUTPUT_NAME "vfs-imagefile-talon" PREFIX "")
 target_include_directories(vfs_imagefile_talon PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_imagefile_talon PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(vfs_imagefile_talon PRIVATE mobius_core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

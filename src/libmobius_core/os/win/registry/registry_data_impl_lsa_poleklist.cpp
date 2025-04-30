@@ -28,14 +28,14 @@ namespace mobius::core::os::win::registry
 // @param ciphertext Ciphertext
 // @return plaintext
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
-decrypt_aes (const mobius::bytearray& key, const mobius::bytearray& ciphertext)
+mobius::core::bytearray
+decrypt_aes (const mobius::core::bytearray& key, const mobius::core::bytearray& ciphertext)
 {
   // generate AES key
   mobius::core::crypt::hash sha256 ("sha2-256");
   sha256.update (key);
 
-  const mobius::bytearray iv = ciphertext.slice (28, 59);
+  const mobius::core::bytearray iv = ciphertext.slice (28, 59);
 
   for (int i = 0; i < 1000; i++)
     sha256.update (iv);
@@ -43,12 +43,12 @@ decrypt_aes (const mobius::bytearray& key, const mobius::bytearray& ciphertext)
   const auto aes_key = sha256.get_digest ();
 
   // decrypt data
-  mobius::bytearray tmp;
+  mobius::core::bytearray tmp;
 
   for (std::uint64_t i = 60; i < ciphertext.size (); i += 16)
     {
       auto c = mobius::core::crypt::new_cipher_cbc ("aes", aes_key);
-      mobius::bytearray buffer = ciphertext.slice (i, i + 15);
+      mobius::core::bytearray buffer = ciphertext.slice (i, i + 15);
 
       if (buffer.size () < 16)
         buffer.rpad (16);
@@ -64,7 +64,7 @@ decrypt_aes (const mobius::bytearray& key, const mobius::bytearray& ciphertext)
   if (control == 0)
     return decoder.get_bytearray_by_size (size);
 
-  return mobius::bytearray ();
+  return mobius::core::bytearray ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -73,8 +73,8 @@ decrypt_aes (const mobius::bytearray& key, const mobius::bytearray& ciphertext)
 // @param encrypted_data value's encrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_data_impl_lsa_poleklist::registry_data_impl_lsa_poleklist (
-  const mobius::bytearray& lsa_key,
-  const mobius::bytearray& encrypted_data)
+  const mobius::core::bytearray& lsa_key,
+  const mobius::core::bytearray& encrypted_data)
   : lsa_key_ (lsa_key),
     encrypted_data_ (encrypted_data)
 {

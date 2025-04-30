@@ -19,9 +19,9 @@
 #include <mobius/core/extension_set.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/ui/icon.hpp>
-#include <mobius/exception.inc>
-#include <mobius/io/path.h>
-#include <mobius/io/folder.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/io/path.hpp>
+#include <mobius/core/io/folder.hpp>
 #include <atomic>
 #include <cstdlib>
 #include <mutex>
@@ -81,7 +81,7 @@ static std::atomic_bool is_running_ {false};
 static std::string
 _join_path (const std::string& abs_path, const std::string& rel_path)
 {
-  auto path = mobius::io::path (abs_path);
+  auto path = mobius::core::io::path (abs_path);
   return to_string (path.get_child_by_path (rel_path));
 }
 
@@ -105,7 +105,7 @@ _init ()
 
   config_folder_ += std::string ("/") + id_;
 
-  auto config_folder = mobius::io::new_folder_by_path (config_folder_);
+  auto config_folder = mobius::core::io::new_folder_by_path (config_folder_);
   config_folder.create ();
 
   set_logfile_path (config_folder_ + "/mobius.log");
@@ -123,7 +123,7 @@ _init ()
 
   cache_folder_ += std::string ("/") + id_;
 
-  auto cache_folder = mobius::io::new_folder_by_path (cache_folder_);
+  auto cache_folder = mobius::core::io::new_folder_by_path (cache_folder_);
   cache_folder.create ();
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -172,7 +172,7 @@ application::start ()
   log.info (__LINE__, "loading C++ extensions");
 
   auto extensions_path = get_config_path ("extensions");
-  auto folder = mobius::io::new_folder_by_path (extensions_path);
+  auto folder = mobius::core::io::new_folder_by_path (extensions_path);
 
   for (auto& c : folder.get_children ())
     {

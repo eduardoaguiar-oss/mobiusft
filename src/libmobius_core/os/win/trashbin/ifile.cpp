@@ -33,7 +33,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   impl (const impl&) = delete;
   impl (impl&&) = delete;
-  explicit impl (const mobius::io::reader&);
+  explicit impl (const mobius::core::io::reader&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Operators
@@ -101,7 +101,7 @@ private:
 // @see https://www.forensicfocus.com/articles/forensic-analysis-of-the-microsoft-windows-vista-recycle-bin/
 // @see https://www.csee.umbc.edu/courses/undergraduate/FYS102D/Recycle.Bin.Forensics.for.Windows7.and.Windows.Vista.pdf
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-ifile::impl::impl (const mobius::io::reader& reader)
+ifile::impl::impl (const mobius::core::io::reader& reader)
 {
   mobius::core::decoder::data_decoder decoder (reader);
 
@@ -132,7 +132,7 @@ ifile::impl::impl (const mobius::io::reader& reader)
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-ifile::ifile (const mobius::io::reader& reader)
+ifile::ifile (const mobius::core::io::reader& reader)
   : impl_ (std::make_shared <impl> (reader))
 {
 }

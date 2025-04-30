@@ -18,12 +18,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/reader.h>
+#include <mobius/core/io/reader.hpp>
 #include <string>
 
 namespace mobius::core::decoder
 {
-std::string get_filetype (mobius::io::reader);
+std::string get_filetype (mobius::core::io::reader);
 } // namespace mobius::core::decoder
 
 #endif

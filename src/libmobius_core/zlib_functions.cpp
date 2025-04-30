@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/zlib_functions.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 #define ZLIB_CONST
@@ -37,8 +37,8 @@ namespace mobius::core
 // @param bytearray
 // @return compressed bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
-zlib_compress (const mobius::bytearray& array, int level)
+mobius::core::bytearray
+zlib_compress (const mobius::core::bytearray& array, int level)
 {
   // initialize z_stream
   z_stream stream;
@@ -55,7 +55,7 @@ zlib_compress (const mobius::bytearray& array, int level)
     throw std::runtime_error (MOBIUS_EXCEPTION_ZLIB);
 
   // deflate array
-  mobius::bytearray out;
+  mobius::core::bytearray out;
   std::uint8_t buffer[CHUNK_SIZE];
 
   do
@@ -70,7 +70,7 @@ zlib_compress (const mobius::bytearray& array, int level)
           throw std::runtime_error (MOBIUS_EXCEPTION_ZLIB);
         }
 
-      out += mobius::bytearray (buffer, CHUNK_SIZE - stream.avail_out);
+      out += mobius::core::bytearray (buffer, CHUNK_SIZE - stream.avail_out);
     }
   while (stream.avail_out == 0);
 
@@ -86,8 +86,8 @@ zlib_compress (const mobius::bytearray& array, int level)
 // @param compressed bytearray
 // @return decompressed bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
-zlib_decompress (const mobius::bytearray& array)
+mobius::core::bytearray
+zlib_decompress (const mobius::core::bytearray& array)
 {
   // initialize z_stream
   z_stream stream;
@@ -104,7 +104,7 @@ zlib_decompress (const mobius::bytearray& array)
     throw std::runtime_error (MOBIUS_EXCEPTION_ZLIB);
 
   // inflate array
-  mobius::bytearray out;
+  mobius::core::bytearray out;
   std::uint8_t buffer[CHUNK_SIZE];
 
   do
@@ -119,7 +119,7 @@ zlib_decompress (const mobius::bytearray& array)
           throw std::runtime_error (MOBIUS_EXCEPTION_ZLIB);
         }
 
-      out += mobius::bytearray (buffer, CHUNK_SIZE - stream.avail_out);
+      out += mobius::core::bytearray (buffer, CHUNK_SIZE - stream.avail_out);
     }
   while (stream.avail_out == 0);
 

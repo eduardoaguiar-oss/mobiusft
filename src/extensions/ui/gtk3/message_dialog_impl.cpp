@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "message_dialog_impl.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <algorithm>
@@ -172,7 +172,7 @@ message_dialog_impl::_add_button (
 	            buttons_.end (),
 	            [response_id] (auto p) { return p.second == response_id; }
 	           ) != buttons_.end ())
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("response_id already used"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("response_id already used"));
 
   // add button
   buttons_.emplace_back (text, response_id);

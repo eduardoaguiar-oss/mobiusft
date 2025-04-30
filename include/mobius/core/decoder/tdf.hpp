@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
-#include <mobius/io/reader.h>
+#include <mobius/core/bytearray.hpp>
+#include <mobius/core/io/reader.hpp>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -36,7 +36,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit tdf (const mobius::io::reader&);
+  explicit tdf (const mobius::core::io::reader&);
   tdf (tdf&&) noexcept = default;
   tdf (const tdf&) noexcept = default;
 
@@ -56,7 +56,7 @@ public:
   std::uint32_t get_minor_version () const;
   std::uint32_t get_revision () const;
   std::string get_hash_value () const;
-  mobius::bytearray get_payload () const;
+  mobius::core::bytearray get_payload () const;
 
 private:
   // @brief Implementation class forward declaration

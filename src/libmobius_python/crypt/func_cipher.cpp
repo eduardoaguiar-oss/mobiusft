@@ -31,14 +31,14 @@ func_new_cipher_cbc (PyObject *, PyObject *args)
 {
   // parse arguments
   std::string arg_cipher_id;
-  mobius::bytearray arg_key;
-  mobius::bytearray arg_iv;
+  mobius::core::bytearray arg_key;
+  mobius::core::bytearray arg_iv;
 
   try
     {
       arg_cipher_id = mobius::py::get_arg_as_std_string (args, 0);
       arg_key = mobius::py::get_arg_as_bytearray (args, 1);
-      arg_iv = mobius::py::get_arg_as_bytearray (args, 2, mobius::bytearray {});
+      arg_iv = mobius::py::get_arg_as_bytearray (args, 2, mobius::core::bytearray {});
     }
   catch (const std::exception& e)
     {
@@ -71,14 +71,14 @@ func_new_cipher_cbc_cts (PyObject *, PyObject *args)
 {
   // parse arguments
   std::string arg_cipher_id;
-  mobius::bytearray arg_key;
-  mobius::bytearray arg_iv;
+  mobius::core::bytearray arg_key;
+  mobius::core::bytearray arg_iv;
 
   try
     {
       arg_cipher_id = mobius::py::get_arg_as_std_string (args, 0);
       arg_key = mobius::py::get_arg_as_bytearray (args, 1);
-      arg_iv = mobius::py::get_arg_as_bytearray (args, 2, mobius::bytearray {});
+      arg_iv = mobius::py::get_arg_as_bytearray (args, 2, mobius::core::bytearray {});
     }
   catch (const std::exception& e)
     {
@@ -111,14 +111,14 @@ func_new_cipher_ctr (PyObject *, PyObject *args)
 {
   // parse arguments
   std::string arg_cipher_id;
-  mobius::bytearray arg_key;
-  mobius::bytearray arg_cv;
+  mobius::core::bytearray arg_key;
+  mobius::core::bytearray arg_cv;
 
   try
     {
       arg_cipher_id = mobius::py::get_arg_as_std_string (args, 0);
       arg_key = mobius::py::get_arg_as_bytearray (args, 1);
-      arg_cv = mobius::py::get_arg_as_bytearray (args, 2, mobius::bytearray {});
+      arg_cv = mobius::py::get_arg_as_bytearray (args, 2, mobius::core::bytearray {});
     }
   catch (const std::exception& e)
     {
@@ -151,7 +151,7 @@ func_new_cipher_ecb (PyObject *, PyObject *args)
 {
   // parse arguments
   std::string arg_cipher_id;
-  mobius::bytearray arg_key;
+  mobius::core::bytearray arg_key;
 
   try
     {
@@ -189,14 +189,14 @@ func_new_cipher_gcm (PyObject *, PyObject *args)
 {
   // parse arguments
   std::string arg_cipher_id;
-  mobius::bytearray arg_key;
-  mobius::bytearray arg_iv;
+  mobius::core::bytearray arg_key;
+  mobius::core::bytearray arg_iv;
 
   try
     {
       arg_cipher_id = mobius::py::get_arg_as_std_string (args, 0);
       arg_key = mobius::py::get_arg_as_bytearray (args, 1);
-      arg_iv = mobius::py::get_arg_as_bytearray (args, 2, mobius::bytearray {});
+      arg_iv = mobius::py::get_arg_as_bytearray (args, 2, mobius::core::bytearray {});
     }
   catch (const std::exception& e)
     {
@@ -229,8 +229,8 @@ func_new_cipher_ige (PyObject *, PyObject *args)
 {
   // parse arguments
   std::string arg_cipher_id;
-  mobius::bytearray arg_key;
-  mobius::bytearray arg_iv;
+  mobius::core::bytearray arg_key;
+  mobius::core::bytearray arg_iv;
 
   try
     {
@@ -269,14 +269,14 @@ func_new_cipher_ofb (PyObject *, PyObject *args)
 {
   // parse arguments
   std::string arg_cipher_id;
-  mobius::bytearray arg_key;
-  mobius::bytearray arg_iv;
+  mobius::core::bytearray arg_key;
+  mobius::core::bytearray arg_iv;
 
   try
     {
       arg_cipher_id = mobius::py::get_arg_as_std_string (args, 0);
       arg_key = mobius::py::get_arg_as_bytearray (args, 1);
-      arg_iv = mobius::py::get_arg_as_bytearray (args, 2, mobius::bytearray {});
+      arg_iv = mobius::py::get_arg_as_bytearray (args, 2, mobius::core::bytearray {});
     }
   catch (const std::exception& e)
     {
@@ -309,12 +309,12 @@ func_new_cipher_stream (PyObject *, PyObject *args)
 {
   // parse arguments
   std::string arg_cipher_id;
-  mobius::bytearray arg_key;
+  mobius::core::bytearray arg_key;
 
   try
     {
       arg_cipher_id = mobius::py::get_arg_as_std_string (args, 0);
-      arg_key = mobius::py::get_arg_as_bytearray (args, 1, mobius::bytearray {});
+      arg_key = mobius::py::get_arg_as_bytearray (args, 1, mobius::core::bytearray {});
     }
   catch (const std::exception& e)
     {

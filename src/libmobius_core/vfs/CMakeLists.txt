@@ -25,49 +25,48 @@ project(libmobius-core-vfs LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Find libtsk
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-if(LIBTSK_DIR)
-    set(TSK_SEARCH_PATHS ${LIBTSK_DIR}/lib ${LIBTSK_DIR}/lib64)
-    set(TSK_INCLUDE_PATHS ${LIBTSK_DIR}/include)
+set(LIBTSK_ROOT "" CACHE PATH "Custom libtsk installation path")
+if(LIBTSK_ROOT)
+  list(APPEND CMAKE_PREFIX_PATH "${LIBTSK_ROOT}")
+endif()
+
+if(LIBTSK_ROOT)
+    set(TSK_SEARCH_PATHS ${LIBTSK_ROOT}/lib ${LIBTSK_ROOT}/lib64)
+    set(TSK_INCLUDE_PATHS ${LIBTSK_ROOT}/include)
 else()
     set(TSK_SEARCH_PATHS /usr/lib /usr/lib64 /usr/local/lib /usr/local/lib64)
     set(TSK_INCLUDE_PATHS /usr/include /usr/local/include)
 endif()
 
-find_library(TSK_LIBRARY
+find_library(TSK_LIBRARIES
     NAMES tsk libtsk
     PATHS ${TSK_SEARCH_PATHS}
     NO_DEFAULT_PATH
 )
-find_path(TSK_INCLUDE_DIR
+find_path(TSK_INCLUDE_DIRS
     NAMES tsk/libtsk.h
     PATHS ${TSK_INCLUDE_PATHS}
     NO_DEFAULT_PATH
 )
 
-if(NOT TSK_LIBRARY OR NOT TSK_INCLUDE_DIR)
-    find_library(TSK_LIBRARY
+if(NOT TSK_LIBRARIES OR NOT TSK_INCLUDE_DIRS)
+    find_library(TSK_LIBRARIES
         NAMES tsk libtsk
         PATHS /usr/lib /usr/lib64 /usr/local/lib /usr/local/lib64
     )
-    find_path(TSK_INCLUDE_DIR
+    find_path(TSK_INCLUDE_DIRS
         NAMES tsk/libtsk.h
         PATHS /usr/include /usr/local/include
     )
 endif()
 
-if(TSK_LIBRARY AND TSK_INCLUDE_DIR)
+if(TSK_LIBRARIES AND TSK_INCLUDE_DIRS)
     message(STATUS "Found libtsk:")
-    message(STATUS "  Library: ${TSK_LIBRARY}")
-    message(STATUS "  Include dir: ${TSK_INCLUDE_DIR}")
+    message(STATUS "  Library: ${TSK_LIBRARIES}")
+    message(STATUS "  Include dir: ${TSK_INCLUDE_DIRS}")
 else()
-    message(FATAL_ERROR "libtsk not found! Please install libtsk-devel or specify --with-libtsk=DIR.")
+    message(FATAL_ERROR "libtsk not found! Please install libtsk-devel or specify -DLIBTSK_ROOT=DIR.")
 endif()
-
-add_library(TSK::TSK IMPORTED SHARED)
-set_target_properties(TSK::TSK PROPERTIES
-    IMPORTED_LOCATION "${TSK_LIBRARY}"
-    INTERFACE_INCLUDE_DIRECTORIES "${TSK_INCLUDE_DIR}"
-)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
@@ -100,7 +99,7 @@ target_include_directories(mobius_core_vfs PRIVATE
 )
 
 target_link_libraries(mobius_core_vfs PUBLIC
-    TSK::TSK
+    ${TSK_LIBRARIES}
 )
 
 target_compile_options(mobius_core_vfs PRIVATE -fno-strict-aliasing -fPIC)

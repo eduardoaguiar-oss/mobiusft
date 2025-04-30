@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/reader.h>
-#include <mobius/io/folder.h>
+#include <mobius/core/io/reader.hpp>
+#include <mobius/core/io/folder.hpp>
 #include <cstdint>
 
 struct TSK_IMG_INFO;
@@ -34,12 +34,12 @@ namespace mobius::core::vfs::tsk
 class adaptor
 {
 public:
-  adaptor (const mobius::io::reader, std::uint64_t);
+  adaptor (const mobius::core::io::reader, std::uint64_t);
   ~adaptor ();
-  mobius::io::folder get_root_folder () const;
+  mobius::core::io::folder get_root_folder () const;
 
 private:
-  mobius::io::reader reader_;
+  mobius::core::io::reader reader_;
   std::uint64_t offset_;
 
   mutable TSK_IMG_INFO *img_info_ = nullptr;

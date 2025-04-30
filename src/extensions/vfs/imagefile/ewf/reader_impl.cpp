@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "reader_impl.hpp"
 #include "imagefile_impl.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <mobius/core/zlib_functions.hpp>
 #include <stdexcept>
 
@@ -58,11 +58,11 @@ reader_impl::seek (offset_type offset, whence_type w)
     abs_offset = size_ - 1 + offset;
 
   else
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
 
   // update current pos, if possible
   if (abs_offset < 0)
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid offset"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid offset"));
 
   else if (size_type (abs_offset) <= size_)
     pos_ = abs_offset;
@@ -73,11 +73,11 @@ reader_impl::seek (offset_type offset, whence_type w)
 // @param size size in bytes
 // @return bytearray containing data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 reader_impl::read (size_type size)
 {
   size = std::min (size_ - pos_, size);
-  mobius::bytearray data;
+  mobius::core::bytearray data;
 
   while (size > 0)
     {
@@ -89,7 +89,7 @@ reader_impl::read (size_type size)
       if (slice_end < slice_start)
         return data;
 
-      mobius::bytearray tmp = chunk_data_.slice (slice_start, slice_end);
+      mobius::core::bytearray tmp = chunk_data_.slice (slice_start, slice_end);
       data += tmp;
       pos_ += tmp.size ();
       size -= tmp.size ();
@@ -162,7 +162,7 @@ reader_impl::_retrieve_current_chunk ()
     chunk_data_ = stream_.read (chunk_size_);
 
   if (chunk_data_.size () != chunk_size_ && chunk_idx != last_chunk_idx_)
-    throw std::runtime_error (mobius::MOBIUS_EXCEPTION_MSG ("invalid chunk"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid chunk"));
 
   // set new current chunk index
   chunk_idx_ = chunk_idx;

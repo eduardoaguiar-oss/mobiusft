@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/application.hpp>
 #include <mobius/core/resource.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 #include <mobius/core/vfs/imagefile.hpp>
 #include <iostream>
 #include <unistd.h>
@@ -116,7 +116,7 @@ main (int argc, char **argv)
   
   for (const auto& p : image.get_attributes ())
     {
-      auto description = mobius::string::capitalize (mobius::string::replace (p.first, "_", " "));
+      auto description = mobius::core::string::capitalize (mobius::core::string::replace (p.first, "_", " "));
       auto value = p.second;
 
       std::cout << description << ": " << p.second << std::endl;

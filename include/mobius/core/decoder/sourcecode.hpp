@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/reader.h>
-#include <mobius/bytearray.h>
+#include <mobius/core/io/reader.hpp>
+#include <mobius/core/bytearray.hpp>
 #include <cstdint>
 
 namespace mobius::core::decoder
@@ -41,7 +41,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit sourcecode (const mobius::io::reader&);
+  explicit sourcecode (const mobius::core::io::reader&);
   char_type peek ();
   char_type get ();
 
@@ -67,10 +67,10 @@ public:
 
 private:
   // @brief Reader object
-  mobius::io::reader reader_;
+  mobius::core::io::reader reader_;
 
   // @brief Internal buffer
-  mobius::bytearray buffer_;
+  mobius::core::bytearray buffer_;
 
   // @brief Current reading pos
   std::uint64_t pos_ = 0;

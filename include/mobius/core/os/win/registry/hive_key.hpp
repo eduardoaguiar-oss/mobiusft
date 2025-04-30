@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/os/win/registry/hive_value.hpp>
 #include <mobius/core/datetime/datetime.hpp>
-#include <mobius/io/reader.h>
+#include <mobius/core/io/reader.hpp>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -41,7 +41,7 @@ public:
 
   // constructors
   hive_key ();
-  hive_key (const mobius::io::reader&, offset_type);
+  hive_key (const mobius::core::io::reader&, offset_type);
   hive_key (hive_key&&) = default;
   hive_key (const hive_key&) = default;
 

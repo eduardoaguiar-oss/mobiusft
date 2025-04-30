@@ -33,7 +33,7 @@ set(SOURCES
 add_library(vfs_imagefile_solo MODULE ${SOURCES})
 set_target_properties(vfs_imagefile_solo PROPERTIES OUTPUT_NAME "vfs-imagefile-solo" PREFIX "")
 target_include_directories(vfs_imagefile_solo PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_imagefile_solo PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(vfs_imagefile_solo PRIVATE mobius_core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

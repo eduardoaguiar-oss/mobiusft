@@ -18,7 +18,7 @@
 #define PY_SSIZE_T_CLEAN        // PEP 353
 
 #include "pycallback.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>

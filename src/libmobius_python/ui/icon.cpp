@@ -154,7 +154,7 @@ static PyObject *
 tp_f_set_icon_from_data (ui_icon_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::bytearray arg_data;
+  mobius::core::bytearray arg_data;
   mobius::core::ui::icon::size_type arg_size = mobius::core::ui::icon::size_type::toolbar;
 
   try
@@ -488,7 +488,7 @@ PyObject *
 func_ui_new_icon_from_data (PyObject *, PyObject *args)
 {
   // parse input args
-  mobius::bytearray arg_data;
+  mobius::core::bytearray arg_data;
   mobius::core::ui::icon::size_type arg_size = mobius::core::ui::icon::size_type::toolbar;
 
   try

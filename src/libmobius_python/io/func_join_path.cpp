@@ -39,18 +39,18 @@ func_join_path (PyObject *, PyObject *args)
     }
 
   // parse arguments
-  mobius::io::path path;
+  mobius::core::io::path path;
 
   for (std::uint32_t i = 0;i < size; i++)
     {
       PyObject *item = mobius::py::get_arg (args, i);
-      mobius::io::path segment;
+      mobius::core::io::path segment;
 
       if (pymobius_io_path_check (item))
         segment = pymobius_io_path_from_pyobject (item);
 
       else if (mobius::py::pystring_check (item))
-        segment = mobius::io::path (mobius::py::pystring_as_std_string (item));
+        segment = mobius::core::io::path (mobius::py::pystring_as_std_string (item));
 
       else
         {

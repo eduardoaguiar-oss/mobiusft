@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/decoder/xml/element.hpp>
-#include <mobius/io/reader.h>
+#include <mobius/core/io/reader.hpp>
 #include <memory>
 #include <string>
 
@@ -36,7 +36,7 @@ public:
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   explicit dom (const std::string&, const std::string& = {});
-  explicit dom (const mobius::io::reader&, const std::string& = {});
+  explicit dom (const mobius::core::io::reader&, const std::string& = {});
   dom (dom&&) noexcept = default;
   dom (const dom&) noexcept = default;
 

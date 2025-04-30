@@ -24,7 +24,7 @@
 #include "datasource.hpp"
 #include "ufdr/datasource.hpp"
 #include "datasource_vfs.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 #include "pod/map.hpp"
 

@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "../segment_decoder.hpp"
 #include <mobius/core/application.hpp>
-#include <mobius/io/file.h>
-#include <mobius/string_functions.h>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/string_functions.hpp>
 #include <iostream>
 #include <iomanip>
 #include <sstream>
@@ -110,7 +110,7 @@ main (int argc, char **argv)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // show EWF file information
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto f = mobius::io::new_file_by_url (argv[optind]);
+  auto f = mobius::core::io::new_file_by_url (argv[optind]);
   auto reader = f.new_reader ();
 
   segment_decoder decoder (reader);
@@ -165,7 +165,7 @@ main (int argc, char **argv)
       else if (section.get_name () == "header" || section.get_name () == "header2")
         {
           auto header_section = decoder.decode_header_section (section);
-          auto text = mobius::string::replace (header_section.get_text (), "\n", "\n\t\t\t");
+          auto text = mobius::core::string::replace (header_section.get_text (), "\n", "\n\t\t\t");
           std::cout << "\t\tdrive model         : " << header_section.get_drive_model () << std::endl;
           std::cout << "\t\tdrive serial number : " << header_section.get_drive_serial_number () << std::endl;
           std::cout << "\t\tacquisition user    : " << header_section.get_acquisition_user () << std::endl;

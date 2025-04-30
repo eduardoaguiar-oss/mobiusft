@@ -44,13 +44,13 @@
 #include <mobius/core/pod/map.hpp>
 #include <mobius/core/decoder/mfc.hpp>
 #include <mobius/core/decoder/xml/dom.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <mobius/framework/model/evidence.hpp>
-#include <mobius/io/folder.h>
-#include <mobius/io/walker.h>
+#include <mobius/core/io/folder.hpp>
+#include <mobius/core/io/walker.hpp>
 #include <mobius/core/os/win/registry/hive_file.hpp>
 #include <mobius/core/os/win/registry/hive_data.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 #include <algorithm>
 #include <stdexcept>
 
@@ -99,7 +99,7 @@ get_file_hashes (const T& f)
 // @return Timestamp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::datetime::datetime
-get_library_timestamp (const mobius::io::file& f)
+get_library_timestamp (const mobius::core::io::file& f)
 {
   mobius::core::datetime::datetime timestamp;
 
@@ -218,9 +218,9 @@ evidence_loader_impl::_scan_canonical_folders ()
 // @param folder Root folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_root_folder (const mobius::io::folder& folder)
+evidence_loader_impl::_scan_canonical_root_folder (const mobius::core::io::folder& folder)
 {
-  auto w = mobius::io::walker (folder);
+  auto w = mobius::core::io::walker (folder);
 
   for (const auto& f : w.get_folders_by_pattern ("users/*"))
     _scan_canonical_user_folder (f);
@@ -231,12 +231,12 @@ evidence_loader_impl::_scan_canonical_root_folder (const mobius::io::folder& fol
 // @param folder User folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_user_folder (const mobius::io::folder& folder)
+evidence_loader_impl::_scan_canonical_user_folder (const mobius::core::io::folder& folder)
 {
   username_ = folder.get_name ();
   account_ = {};
 
-  auto w = mobius::io::walker (folder);
+  auto w = mobius::core::io::walker (folder);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Scan evidence files
@@ -256,9 +256,9 @@ evidence_loader_impl::_scan_canonical_user_folder (const mobius::io::folder& fol
 // @param folder Data folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_shareaza_data_folder (const mobius::io::folder& folder)
+evidence_loader_impl::_scan_canonical_shareaza_data_folder (const mobius::core::io::folder& folder)
 {
-  mobius::io::walker w (folder);
+  mobius::core::io::walker w (folder);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Get account info first
@@ -302,7 +302,7 @@ evidence_loader_impl::_scan_canonical_shareaza_data_folder (const mobius::io::fo
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_library_dat_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_library_dat_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -437,7 +437,7 @@ evidence_loader_impl::_decode_library_dat_file (const mobius::io::file& f)
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_profile_xml_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_profile_xml_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -450,8 +450,8 @@ evidence_loader_impl::_decode_profile_xml_file (const mobius::io::file& f)
 
           account acc;
           acc.username = username_;
-          acc.gnutella_guid = mobius::string::toupper (root.get_property_by_path ("gnutella/guid"));
-          acc.bittorrent_guid = mobius::string::toupper (root.get_property_by_path ("bittorrent/guid"));
+          acc.gnutella_guid = mobius::core::string::toupper (root.get_property_by_path ("gnutella/guid"));
+          acc.bittorrent_guid = mobius::core::string::toupper (root.get_property_by_path ("bittorrent/guid"));
           acc.identity = root.get_property_by_path ("identity/handle/primary");
           acc.f = f;
 
@@ -470,7 +470,7 @@ evidence_loader_impl::_decode_profile_xml_file (const mobius::io::file& f)
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_searches_dat_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_searches_dat_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -607,7 +607,7 @@ evidence_loader_impl::_decode_searches_dat_file (const mobius::io::file& f)
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_shareaza_db3_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_shareaza_db3_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -646,7 +646,7 @@ evidence_loader_impl::_decode_shareaza_db3_file (const mobius::io::file& f)
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_sd_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_sd_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -773,7 +773,7 @@ evidence_loader_impl::_decode_sd_file (const mobius::io::file& f)
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_ntuser_dat_file (const mobius::io::file& f)
+evidence_loader_impl::_decode_ntuser_dat_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -838,7 +838,7 @@ evidence_loader_impl::_decode_ntuser_dat_file (const mobius::io::file& f)
             {
               autofill af;
 
-              af.value = mobius::string::word (value.get_data ().get_data_as_string ("utf-16le"), 0, "\n");
+              af.value = mobius::core::string::word (value.get_data ().get_data_as_string ("utf-16le"), 0, "\n");
               af.username = username_;
               af.id = value.get_name ().substr(7);
               af.is_deleted = acc.is_deleted;

@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/vfs/util.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 
 namespace mobius::core::vfs
 {
@@ -37,7 +37,7 @@ normalize_drive_info (
 
   if (pos != std::string::npos)
     {
-      vendor = mobius::string::capitalize (model.substr (0, pos));
+      vendor = mobius::core::string::capitalize (model.substr (0, pos));
       ++pos;
     }
 
@@ -51,17 +51,17 @@ normalize_drive_info (
   if (pos != std::string::npos)
     model.erase (pos);
 
-  if (mobius::string::startswith (model, "ST"))
+  if (mobius::core::string::startswith (model, "ST"))
     vendor = "Seagate";
 
-  else if (mobius::string::startswith (model, "WDC_"))
+  else if (mobius::core::string::startswith (model, "WDC_"))
     {
       model = model.substr (4);
       vendor = "Western Digital";
     }
 
   // format serial number
-  if (mobius::string::startswith (serial_number, "WD-"))
+  if (mobius::core::string::startswith (serial_number, "WD-"))
     {
       serial_number = serial_number.substr (3);
       vendor = "Western Digital";

@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pytypeobject.hpp>
-#include <mobius/io/walker.h>
+#include <mobius/core/io/walker.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -28,7 +28,7 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::io::walker *obj;
+  mobius::core::io::walker *obj;
 } io_walker_o;
 
 
@@ -37,8 +37,8 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject new_io_walker_type ();
 bool pymobius_io_walker_check (PyObject *);
-PyObject *pymobius_io_walker_to_pyobject (const mobius::io::walker&);
-mobius::io::walker pymobius_io_walker_from_pyobject (PyObject *);
+PyObject *pymobius_io_walker_to_pyobject (const mobius::core::io::walker&);
+mobius::core::io::walker pymobius_io_walker_from_pyobject (PyObject *);
 
 #endif
 

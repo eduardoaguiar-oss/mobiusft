@@ -20,7 +20,7 @@
 #include <mobius/core/database/connection_pool.hpp>
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/database/meta_table.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 
 namespace mobius::core::kff
 {
@@ -347,7 +347,7 @@ hashset::impl::add (const std::string& type, const std::string& value)
               );
 
   stmt.bind (1, type);
-  stmt.bind (2, mobius::string::tolower (value));
+  stmt.bind (2, mobius::core::string::tolower (value));
   stmt.execute ();
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -382,7 +382,7 @@ hashset::impl::remove (const std::string& type, const std::string& value)
               );
 
   stmt.bind (1, type);
-  stmt.bind (2, mobius::string::tolower (value));
+  stmt.bind (2, mobius::core::string::tolower (value));
   stmt.execute ();
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -416,7 +416,7 @@ hashset::impl::lookup (const std::string& type, const std::string& value) const
               );
 
   stmt.bind (1, type);
-  stmt.bind (2, mobius::string::tolower (value));
+  stmt.bind (2, mobius::core::string::tolower (value));
 
   return stmt.fetch_row ();
 }

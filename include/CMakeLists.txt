@@ -20,38 +20,18 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.20)
-project(MobiusInclude CXX)
+project(mobius_include CXX)
 
 include(GNUInstallDirs)
-
-file(GLOB HEADER_FILES
-    "mobius/core/*.hpp"
-    "mobius/core/crypt/*.hpp"
-    "mobius/core/database/*.hpp"
-    "mobius/core/datasource/*.hpp"
-    "mobius/core/datetime/*.hpp"
-    "mobius/core/decoder/*.hpp"
-    "mobius/core/decoder/sgml/*.hpp"
-    "mobius/core/decoder/xml/*.hpp"
-    "mobius/core/encoder/*.hpp"
-    "mobius/core/file_decoder/*.hpp"
-    "mobius/core/jni/*.hpp"
-    "mobius/core/kff/*.hpp"
-    "mobius/core/pod/*.hpp"
-    "mobius/core/system/*.hpp"
-    "mobius/core/turing/*.hpp"
-    "mobius/core/ui/*.hpp"
-    "mobius/core/vfs/*.hpp"
-    "mobius/framework/*.hpp"
-    "mobius/framework/model/*.hpp"
-)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_custom_target(mobius_headers ALL
-    SOURCES ${HEADER_FILES}
-    COMMENT "Header files for Mobius project"
+add_library(mobius_include INTERFACE)
+
+target_include_directories(mobius_include INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -61,4 +41,5 @@ install(DIRECTORY mobius/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/mobius
     FILES_MATCHING
     PATTERN "*.hpp"
+    PATTERN "*.inc"
 )

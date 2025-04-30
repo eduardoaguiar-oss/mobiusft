@@ -23,7 +23,7 @@
 #include <mobius/core/crypt/hash.hpp>
 #include <mobius/core/crypt/hmac.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <mobius/core/os/win/pbkdf2_hmac_ms.hpp>
 #include <map>
 #include <stdexcept>
@@ -48,7 +48,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  impl (mobius::io::reader, std::uint32_t);
+  impl (mobius::core::io::reader, std::uint32_t);
   impl (const impl&) = delete;
   impl (impl&&) = delete;
 
@@ -61,8 +61,8 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  bool decrypt_with_key (const mobius::bytearray&);
-  bool decrypt_with_password_hash (const std::string&, const mobius::bytearray&);
+  bool decrypt_with_key (const mobius::core::bytearray&);
+  bool decrypt_with_password_hash (const std::string&, const mobius::core::bytearray&);
   bool decrypt_with_password (const std::string&, const std::string&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -90,7 +90,7 @@ public:
   // @brief Get salt
   // @return Salt
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_salt () const
   {
     return salt_;
@@ -101,7 +101,7 @@ public:
   // @param salt Salt
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
-  set_salt (const mobius::bytearray& salt)
+  set_salt (const mobius::core::bytearray& salt)
   {
     salt_ = salt;
     is_valid_ = true;
@@ -174,7 +174,7 @@ public:
   // @brief Get cipher text
   // @return Cipher text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_cipher_text () const
   {
     return cipher_text_;
@@ -185,7 +185,7 @@ public:
   // @param cipher_text Cipher text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
-  set_cipher_text (const mobius::bytearray& cipher_text)
+  set_cipher_text (const mobius::core::bytearray& cipher_text)
   {
     cipher_text_ = cipher_text;
     is_valid_ = true;
@@ -195,7 +195,7 @@ public:
   // @brief Get plain text
   // @return Plain text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_plain_text () const
   {
     return plain_text_;
@@ -206,7 +206,7 @@ public:
   // @param plain_text Plain text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
-  set_plain_text (const mobius::bytearray& plain_text)
+  set_plain_text (const mobius::core::bytearray& plain_text)
   {
     plain_text_ = plain_text;
     is_valid_ = true;
@@ -248,7 +248,7 @@ private:
   std::uint32_t revision_;
 
   // @brief Salt
-  mobius::bytearray salt_;
+  mobius::core::bytearray salt_;
 
   // @brief Number of key iterations
   std::uint32_t iterations_;
@@ -260,13 +260,13 @@ private:
   std::uint32_t cipher_id_;
 
   // @brief Cipher text
-  mobius::bytearray cipher_text_;
+  mobius::core::bytearray cipher_text_;
 
   // @brief Master key file flags
   std::uint32_t flags_;
 
   // @brief Plain text
-  mobius::bytearray plain_text_;
+  mobius::core::bytearray plain_text_;
 
   // @brief True/false if object is valid
   std::uint32_t is_valid_ = false;
@@ -278,7 +278,7 @@ private:
 // @param flags Master key file flags
 // @see https://www.passcape.com/index.php?section=blog&cmd=details&id=20
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-master_key::impl::impl (mobius::io::reader reader, std::uint32_t flags)
+master_key::impl::impl (mobius::core::io::reader reader, std::uint32_t flags)
 {
   mobius::core::decoder::data_decoder decoder (reader);
   constexpr std::uint64_t SALT_SIZE = 16;
@@ -314,7 +314,7 @@ master_key::impl::impl (mobius::io::reader reader, std::uint32_t flags)
 // @see dpapick v0.3
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-master_key::impl::decrypt_with_key (const mobius::bytearray& key)
+master_key::impl::decrypt_with_key (const mobius::core::bytearray& key)
 {
   // generate prekey
   auto hash_id = mobius::core::os::win::dpapi::get_hash_id (hash_id_);
@@ -363,7 +363,7 @@ master_key::impl::decrypt_with_key (const mobius::bytearray& key)
 bool
 master_key::impl::decrypt_with_password_hash (
   const std::string& sid,
-  const mobius::bytearray& h)
+  const mobius::core::bytearray& h)
 {
   mobius::core::crypt::hmac hmac ("sha1", h);
   hmac.update (mobius::core::conv_charset (bytearray (sid) + bytearray ({0}), "ASCII", "UTF-16LE"));
@@ -394,7 +394,7 @@ master_key::impl::decrypt_with_password (
 // @param reader Reader object
 // @param flags Master key file flags
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-master_key::master_key (mobius::io::reader reader, std::uint32_t flags)
+master_key::master_key (mobius::core::io::reader reader, std::uint32_t flags)
   : impl_ (std::make_shared <impl> (reader, flags))
 {
 }
@@ -405,7 +405,7 @@ master_key::master_key (mobius::io::reader reader, std::uint32_t flags)
 // @return True if successful, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-master_key::decrypt_with_key (const mobius::bytearray& key)
+master_key::decrypt_with_key (const mobius::core::bytearray& key)
 {
   return impl_->decrypt_with_key (key);
 }
@@ -419,7 +419,7 @@ master_key::decrypt_with_key (const mobius::bytearray& key)
 bool
 master_key::decrypt_with_password_hash (
   const std::string& sid,
-  const mobius::bytearray& password_hash)
+  const mobius::core::bytearray& password_hash)
 {
   return impl_->decrypt_with_password_hash (sid, password_hash);
 }
@@ -452,7 +452,7 @@ master_key::get_revision () const
 // @brief Get salt
 // @return Salt
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 master_key::get_salt () const
 {
   return impl_->get_salt ();
@@ -492,7 +492,7 @@ master_key::get_cipher_id () const
 // @brief Get cipher text
 // @return Cipher text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 master_key::get_cipher_text () const
 {
   return impl_->get_cipher_text ();
@@ -502,7 +502,7 @@ master_key::get_cipher_text () const
 // @brief Get plain text
 // @return Plain text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 master_key::get_plain_text () const
 {
   return impl_->get_plain_text ();

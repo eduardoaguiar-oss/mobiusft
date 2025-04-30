@@ -37,7 +37,7 @@ public:
   enum class type { polseckey, poleklist };
 
   // function prototypes
-  explicit registry_key_impl_lsa (registry_key, const mobius::bytearray&, type);
+  explicit registry_key_impl_lsa (registry_key, const mobius::core::bytearray&, type);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief check if object is valid
@@ -166,7 +166,7 @@ private:
   std::string name_;
 
   // @brief LSA Secret encryption key
-  const mobius::bytearray lsa_key_;
+  const mobius::core::bytearray lsa_key_;
 
   // @brief values loaded flag
   mutable bool values_loaded_ = false;

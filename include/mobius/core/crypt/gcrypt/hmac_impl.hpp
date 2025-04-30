@@ -34,7 +34,7 @@ public:
   // Constructors and destructor
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   hmac_impl () = default;
-  hmac_impl (const std::string&, const mobius::bytearray&);
+  hmac_impl (const std::string&, const mobius::core::bytearray&);
   hmac_impl (const hmac_impl&) = delete;
   hmac_impl (hmac_impl&&) = delete;
   ~hmac_impl ();
@@ -73,8 +73,8 @@ public:
   // Function prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void reset () final;
-  void update (const mobius::bytearray&) final;
-  mobius::bytearray get_digest () final;
+  void update (const mobius::core::bytearray&) final;
+  mobius::core::bytearray get_digest () final;
   std::shared_ptr <hmac_impl_base> clone () const final;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -97,7 +97,7 @@ private:
   std::string type_;
 
   // @brief Key
-  mobius::bytearray key_;
+  mobius::core::bytearray key_;
 
   // @brief Block size in bytes
   std::size_t block_size_ = 0;

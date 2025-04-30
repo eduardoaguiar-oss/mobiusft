@@ -22,7 +22,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
 #include "sourcecode.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 #include "io/reader.hpp"
 
@@ -62,7 +62,7 @@ mobius::core::decoder::sourcecode
 pymobius_decoder_sourcecode_from_pyobject (PyObject *pyobj)
 {
   if (!PyObject_IsInstance (pyobj, (PyObject *) &decoder_sourcecode_t))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object type must be mobius.decoder.sourcecode"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object type must be mobius.decoder.sourcecode"));
 
   return * (reinterpret_cast <decoder_sourcecode_o *>(pyobj)->obj);
 }
@@ -148,7 +148,7 @@ static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
   // Parse input args
-  mobius::io::reader arg_reader;
+  mobius::core::io::reader arg_reader;
 
   try
     {

@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/framework/model/case.hpp>
 #include <mobius/framework/model/evidence.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <algorithm>
 #include <stdexcept>
 
@@ -624,7 +624,7 @@ evidence::get_tags () const
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence::add_source (const mobius::io::file& f)
+evidence::add_source (const mobius::core::io::file& f)
 {
   if (!impl_)
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("evidence object is null"));

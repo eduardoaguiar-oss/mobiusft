@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/os/win/hash_lm.hpp>
 #include <mobius/core/crypt/cipher.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 
 namespace mobius::core::os::win
 {
@@ -26,18 +26,18 @@ namespace mobius::core::os::win
 // @param password Password
 // @return LM hash
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 hash_lm (const std::string& password)
 {
-  const std::string u_password = mobius::string::toupper (password);
-  mobius::bytearray lm_hash;
+  const std::string u_password = mobius::core::string::toupper (password);
+  mobius::core::bytearray lm_hash;
 
-  mobius::bytearray key1 (u_password.substr (0, 7));
+  mobius::core::bytearray key1 (u_password.substr (0, 7));
   key1.rpad (7);
   auto des1 = mobius::core::crypt::new_cipher_ecb ("des", key1);
   lm_hash = des1.encrypt ("KGS!@#$%");
 
-  mobius::bytearray key2 (u_password.length () > 7 ? u_password.substr (7, 7) : "");
+  mobius::core::bytearray key2 (u_password.length () > 7 ? u_password.substr (7, 7) : "");
   key2.rpad (7);
   auto des2 = mobius::core::crypt::new_cipher_ecb ("des", key2);
   lm_hash += des2.encrypt ("KGS!@#$%");

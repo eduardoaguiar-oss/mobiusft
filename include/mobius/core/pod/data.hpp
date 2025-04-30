@@ -18,10 +18,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <mobius/core/datetime/datetime.hpp>
-#include <mobius/io/reader.h>
-#include <mobius/io/writer.h>
+#include <mobius/core/io/reader.hpp>
+#include <mobius/core/io/writer.hpp>
 #include <mobius/core/pod/data_impl_base.hpp>
 #include <cstdint>
 #include <initializer_list>
@@ -62,7 +62,7 @@ public:
   data (const mobius::core::datetime::datetime&);
   data (const char *);
   data (const std::string&);
-  data (const mobius::bytearray&);
+  data (const mobius::core::bytearray&);
   data (const std::initializer_list <data>&);
   data (const std::vector <data>&);
 
@@ -80,7 +80,7 @@ public:
   data& operator= (const mobius::core::datetime::datetime&);
   data& operator= (const char *);
   data& operator= (const std::string&);
-  data& operator= (const mobius::bytearray&);
+  data& operator= (const mobius::core::bytearray&);
   data& operator= (const std::initializer_list <data>&);
   data& operator= (const std::vector <data>&);
 
@@ -89,7 +89,7 @@ public:
   explicit operator long double () const;
   explicit operator mobius::core::datetime::datetime () const;
   explicit operator std::string () const;
-  explicit operator mobius::bytearray () const;
+  explicit operator mobius::core::bytearray () const;
   explicit operator std::vector <data> () const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -232,10 +232,10 @@ private:
 std::ostream& operator<< (std::ostream&, const data&);
 bool operator== (const data&, const data&);
 bool operator!= (const data&, const data&);
-mobius::bytearray serialize (const data&);
-void serialize (mobius::io::writer, const data&);
-data unserialize (const mobius::bytearray&);
-data unserialize (mobius::io::reader);
+mobius::core::bytearray serialize (const data&);
+void serialize (mobius::core::io::writer, const data&);
+data unserialize (const mobius::core::bytearray&);
+data unserialize (mobius::core::io::reader);
 
 } // namespace mobius::core::pod
 

@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/reader.h>
+#include <mobius/core/io/reader.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <cstdint>
 #include <string>
@@ -84,7 +84,7 @@ public:
   virtual bool is_available () const = 0;
   virtual void set_available (bool) = 0;
 
-  virtual mobius::io::reader new_reader () const = 0;
+  virtual mobius::core::io::reader new_reader () const = 0;
 };
 
 } // namespace mobius::core::vfs

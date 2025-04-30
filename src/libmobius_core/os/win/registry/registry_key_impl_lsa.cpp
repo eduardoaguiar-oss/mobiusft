@@ -43,10 +43,10 @@ namespace
 // identified by a key GUID. We must choose the right key, using the
 // key GUID field from value's data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
-get_lsa_key (const mobius::bytearray& lsa_key_stream, const mobius::bytearray& data)
+mobius::core::bytearray
+get_lsa_key (const mobius::core::bytearray& lsa_key_stream, const mobius::core::bytearray& data)
 {
-  mobius::bytearray lsa_key;
+  mobius::core::bytearray lsa_key;
   auto data_key_guid = data.slice (4, 19);
 
   // decoder LSA key header
@@ -81,7 +81,7 @@ get_lsa_key (const mobius::bytearray& lsa_key_stream, const mobius::bytearray& d
 // @param key delegated key
 // @param lsa_key LSA Secrets encryption key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-registry_key_impl_lsa::registry_key_impl_lsa (registry_key key, const mobius::bytearray& lsa_key, type t)
+registry_key_impl_lsa::registry_key_impl_lsa (registry_key key, const mobius::core::bytearray& lsa_key, type t)
   : key_ (key),
     name_ (key.get_name ()),
     lsa_key_ (lsa_key),

@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/pod/data.hpp>
 #include <mobius/core/pod/map.hpp>
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
 #include <cstdint>
 #include <stdexcept>
@@ -152,7 +152,7 @@ _unserialize (mobius::core::decoder::data_decoder& decoder)
 // @return Data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data
-unserialize (const mobius::bytearray& b)
+unserialize (const mobius::core::bytearray& b)
 {
   mobius::core::decoder::data_decoder decoder (b);
   return _unserialize (decoder);
@@ -164,7 +164,7 @@ unserialize (const mobius::bytearray& b)
 // @return Data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data
-unserialize (mobius::io::reader reader)
+unserialize (mobius::core::io::reader reader)
 {
   mobius::core::decoder::data_decoder decoder (reader);
   return _unserialize (decoder);

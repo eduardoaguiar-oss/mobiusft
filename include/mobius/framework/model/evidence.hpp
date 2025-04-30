@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/file.h>
+#include <mobius/core/io/file.hpp>
 #include <mobius/core/pod/data.hpp>
 #include <mobius/framework/model/item.hpp>
 #include <cstdint>
@@ -85,7 +85,7 @@ public:
   void reset_tag (const std::string&);
   std::set <std::string> get_tags () const;
 
-  void add_source (const mobius::io::file&);
+  void add_source (const mobius::core::io::file&);
   void add_source (const evidence&);
   std::vector <evidence::source> get_sources () const;
 

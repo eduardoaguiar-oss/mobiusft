@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "writer_impl.hpp"
 #include "imagefile_impl.hpp"
-#include <mobius/exception.inc>
-#include <mobius/string_functions.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/string_functions.hpp>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -54,7 +54,7 @@ writer_impl::seek (offset_type offset, whence_type w)
     abs_offset = size_ - 1 + offset;
 
   else
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
 
   // update current pos, if possible
   if (abs_offset >= 0)
@@ -67,7 +67,7 @@ writer_impl::seek (offset_type offset, whence_type w)
 // @return Number of bytes written
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl::size_type
-writer_impl::write (const mobius::bytearray& data)
+writer_impl::write (const mobius::core::bytearray& data)
 {
   // if write position is ahead of size_, fill gap with zeroes
   if (size_ < pos_)
@@ -75,7 +75,7 @@ writer_impl::write (const mobius::bytearray& data)
       constexpr unsigned int BLOCK_SIZE = 65536;    //!< write block size
       size_type count = pos_ - size_;
 
-      mobius::bytearray buffer (BLOCK_SIZE);
+      mobius::core::bytearray buffer (BLOCK_SIZE);
       buffer.fill (0);
 
       while (count >= size_type (BLOCK_SIZE))
@@ -107,9 +107,9 @@ writer_impl::write (const mobius::bytearray& data)
 // @param data data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl::size_type
-writer_impl::_write_data (size_type pos, const mobius::bytearray& data)
+writer_impl::_write_data (size_type pos, const mobius::core::bytearray& data)
 {
-  mobius::bytearray buffer = data;
+  mobius::core::bytearray buffer = data;
 
   while (!buffer.empty ())
     {

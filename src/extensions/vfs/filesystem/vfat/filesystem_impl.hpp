@@ -30,14 +30,14 @@ class filesystem_impl : public mobius::core::vfs::filesystem_impl_base
 {
 public:
   // Class functions
-  static bool is_instance (mobius::io::reader, std::uint64_t);
+  static bool is_instance (mobius::core::io::reader, std::uint64_t);
 
   // Constructors
-  filesystem_impl (const mobius::io::reader&, size_type);
+  filesystem_impl (const mobius::core::io::reader&, size_type);
 
   // Function prototypes
   mobius::core::pod::data get_metadata (const std::string&) const override;
-  mobius::io::folder get_root_folder () const override;
+  mobius::core::io::folder get_root_folder () const override;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief Check if object is valid
@@ -52,7 +52,7 @@ public:
   // @brief Get reader
   // @return Reader
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::io::reader
+  mobius::core::io::reader
   get_reader () const override
   {
     return reader_;
@@ -114,7 +114,7 @@ public:
 
 private:
   // @brief Volume reader object
-  mobius::io::reader reader_;
+  mobius::core::io::reader reader_;
 
   // @brief Offset from the beginning of volume
   size_type offset_;

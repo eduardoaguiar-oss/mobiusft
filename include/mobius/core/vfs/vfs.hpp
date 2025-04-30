@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/entry.h>
+#include <mobius/core/io/entry.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <mobius/core/vfs/block.hpp>
 #include <mobius/core/vfs/disk.hpp>
@@ -59,7 +59,7 @@ public:
   void remove_disk (std::size_t);
   std::vector <disk> get_disks () const;
   std::vector <block> get_blocks () const;
-  std::vector<mobius::io::entry> get_root_entries () const;
+  std::vector<mobius::core::io::entry> get_root_entries () const;
 
 private:
   // @brief Implementation class forward declaration

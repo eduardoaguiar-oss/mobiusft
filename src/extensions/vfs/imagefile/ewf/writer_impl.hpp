@@ -21,7 +21,7 @@
 #include "imagefile_impl.hpp"
 #include "segment_writer.hpp"
 #include <mobius/core/crypt/hash.hpp>
-#include <mobius/io/writer_impl_base.h>
+#include <mobius/core/io/writer_impl_base.hpp>
 #include <mobius/core/vfs/segment_array.hpp>
 #include <vector>
 
@@ -29,7 +29,7 @@
 // @brief EWF imagefile writer implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class writer_impl : public mobius::io::writer_impl_base
+class writer_impl : public mobius::core::io::writer_impl_base
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -49,7 +49,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Virtual methods
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  size_type write (const mobius::bytearray&) override;
+  size_type write (const mobius::core::bytearray&) override;
   void seek (offset_type, whence_type = whence_type::beginning) override;
   void flush () override;
 
@@ -83,7 +83,7 @@ private:
   mobius::core::vfs::segment_array segments_;
 
   std::vector <segment_writer> segment_writer_list_;
-  mobius::bytearray guid_;              // imagefile GUID
+  mobius::core::bytearray guid_;              // imagefile GUID
   mobius::core::crypt::hash hash_;      // hash function for data written
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

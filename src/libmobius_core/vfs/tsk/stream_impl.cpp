@@ -38,10 +38,10 @@ stream_impl::stream_impl (const fs_file& fs_file, const TSK_FS_ATTR *fs_attr_p)
 // @brief Create new reader
 // @return new reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::reader
+mobius::core::io::reader
 stream_impl::new_reader () const
 {
-  return mobius::io::reader (std::make_shared <reader_impl_stream> (fs_file_, fs_attr_));
+  return mobius::core::io::reader (std::make_shared <reader_impl_stream> (fs_file_, fs_attr_));
 }
 
 } // namespace mobius::core::vfs::tsk

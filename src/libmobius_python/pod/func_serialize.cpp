@@ -23,7 +23,7 @@
 #include <pymobius.hpp>
 #include <pygil.hpp>
 #include <io/writer.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include "data.hpp"
 
 namespace
@@ -77,7 +77,7 @@ static PyObject *
 _serialize_to_writer (PyObject *args)
 {
   // parse arguments
-  mobius::io::writer arg_writer;
+  mobius::core::io::writer arg_writer;
   mobius::core::pod::data arg_data;
 
   try
@@ -132,7 +132,7 @@ func_pod_serialize (PyObject *, PyObject *args)
     ret = _serialize_to_writer (args);
 
   else
-    mobius::py::set_invalid_type_error (mobius::MOBIUS_EXCEPTION_MSG ("invalid number of arguments").c_str ());
+    mobius::py::set_invalid_type_error (MOBIUS_EXCEPTION_MSG ("invalid number of arguments").c_str ());
 
   return ret;
 }

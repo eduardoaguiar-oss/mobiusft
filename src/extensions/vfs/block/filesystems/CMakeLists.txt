@@ -32,7 +32,7 @@ set(SOURCES
 add_library(vfs_block_filesystems MODULE ${SOURCES})
 set_target_properties(vfs_block_filesystems PROPERTIES OUTPUT_NAME "vfs-block-filesystems" PREFIX "")
 target_include_directories(vfs_block_filesystems PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_block_filesystems PRIVATE ${MOBIUS_LIBRARIES})
+target_link_libraries(vfs_block_filesystems PRIVATE mobius_core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

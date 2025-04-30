@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/os/win/registry/hive_data.hpp>
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <cstdint>
 
 namespace mobius::core::os::win::registry
@@ -40,7 +40,7 @@ public:
   virtual operator bool () const = 0;
   virtual std::uint32_t get_size () const = 0;
   virtual data_type get_type () const = 0;
-  virtual mobius::bytearray get_data () const = 0;
+  virtual mobius::core::bytearray get_data () const = 0;
 };
 
 } // namespace mobius::core::os::win::registry

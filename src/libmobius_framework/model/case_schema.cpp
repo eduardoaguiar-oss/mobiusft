@@ -19,7 +19,7 @@
 #include <mobius/core/database/meta_table.hpp>
 #include <mobius/core/pod/data.hpp>
 #include <mobius/core/pod/map.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 
 namespace mobius::framework::model
 {

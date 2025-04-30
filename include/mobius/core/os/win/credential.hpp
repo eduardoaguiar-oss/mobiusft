@@ -18,9 +18,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <mobius/core/datetime/datetime.hpp>
-#include <mobius/io/reader.h>
+#include <mobius/core/io/reader.hpp>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -39,7 +39,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit credential (mobius::io::reader);
+  explicit credential (mobius::core::io::reader);
   credential (credential&&) noexcept = default;
   credential (const credential&) noexcept = default;
 
@@ -55,10 +55,10 @@ public:
   std::string get_domain () const;
   std::string get_username () const;
   std::string get_password () const;
-  mobius::bytearray get_password_data () const;
+  mobius::core::bytearray get_password_data () const;
   std::uint32_t get_flags () const;
   mobius::core::datetime::datetime get_last_update_time () const;
-  std::vector <std::pair <std::string, mobius::bytearray>> get_data () const;
+  std::vector <std::pair <std::string, mobius::core::bytearray>> get_data () const;
 
 private:
   // @brief Implementation class forward declaration

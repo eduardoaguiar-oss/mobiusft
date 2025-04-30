@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "filesystem_impl.hpp"
 #include <mobius/core/decoder/data_decoder.hpp>
-#include <mobius/string_functions.h>
+#include <mobius/core/string_functions.hpp>
 
 namespace
 {
@@ -35,7 +35,7 @@ static constexpr int SYSTEM_AREA_SIZE = 32768;
 // @return True/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-filesystem_impl::is_instance (mobius::io::reader reader, std::uint64_t offset)
+filesystem_impl::is_instance (mobius::core::io::reader reader, std::uint64_t offset)
 {
   reader.seek (offset + SYSTEM_AREA_SIZE + 1);
   auto data = reader.read (5);
@@ -49,7 +49,7 @@ filesystem_impl::is_instance (mobius::io::reader reader, std::uint64_t offset)
 // @param offset Offset from the beginning of volume
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 filesystem_impl::filesystem_impl (
-  const mobius::io::reader& reader,
+  const mobius::core::io::reader& reader,
   size_type offset
 )
  : reader_ (reader),
@@ -74,7 +74,7 @@ filesystem_impl::get_metadata (const std::string& name) const
 // @brief Get root folder
 // @return Root folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::folder
+mobius::core::io::folder
 filesystem_impl::get_root_folder () const
 {
   return tsk_adaptor_.get_root_folder ();
@@ -90,7 +90,7 @@ filesystem_impl::_load_data () const
     return;
 
   // create decoder
-  mobius::io::reader reader = reader_;
+  mobius::core::io::reader reader = reader_;
   reader.seek (offset_ + SYSTEM_AREA_SIZE);
   mobius::core::decoder::data_decoder decoder (reader);
 
@@ -98,8 +98,8 @@ filesystem_impl::_load_data () const
   decoder.skip (6);
   auto volume_descr_version = decoder.get_uint8 ();
   decoder.skip (1);
-  auto system_id = mobius::string::strip (decoder.get_string_by_size (32));
-  auto volume_id = mobius::string::strip (decoder.get_string_by_size (32));
+  auto system_id = mobius::core::string::strip (decoder.get_string_by_size (32));
+  auto volume_id = mobius::core::string::strip (decoder.get_string_by_size (32));
   decoder.skip (8);
   auto volume_space_size = decoder.get_uint32_le ();
   decoder.skip (36);
@@ -119,13 +119,13 @@ filesystem_impl::_load_data () const
   decoder.skip (2);
   auto type_m_optional_path_table = decoder.get_uint16_le ();
   decoder.skip (36);
-  auto volume_set_id = mobius::string::strip (decoder.get_string_by_size (128));
-  auto publisher_id = mobius::string::strip (decoder.get_string_by_size (128));
-  auto data_preparer_id = mobius::string::strip (decoder.get_string_by_size (128));
-  auto application_id = mobius::string::strip (decoder.get_string_by_size (128));
-  auto copyright_file_id = mobius::string::strip (decoder.get_string_by_size (37));
-  auto abstract_file_id = mobius::string::strip (decoder.get_string_by_size (37));
-  auto bibliographic_file_id = mobius::string::strip (decoder.get_string_by_size (37));
+  auto volume_set_id = mobius::core::string::strip (decoder.get_string_by_size (128));
+  auto publisher_id = mobius::core::string::strip (decoder.get_string_by_size (128));
+  auto data_preparer_id = mobius::core::string::strip (decoder.get_string_by_size (128));
+  auto application_id = mobius::core::string::strip (decoder.get_string_by_size (128));
+  auto copyright_file_id = mobius::core::string::strip (decoder.get_string_by_size (37));
+  auto abstract_file_id = mobius::core::string::strip (decoder.get_string_by_size (37));
+  auto bibliographic_file_id = mobius::core::string::strip (decoder.get_string_by_size (37));
   auto creation_time = decoder.get_iso9660_datetime ();
   auto last_modification_time = decoder.get_iso9660_datetime ();
   auto expiration_time = decoder.get_iso9660_datetime ();

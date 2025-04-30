@@ -18,8 +18,8 @@
 #include <mobius/core/decoder/lnk.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
-#include <mobius/exception.inc>
-#include <mobius/string_functions.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/string_functions.hpp>
 #include <stdexcept>
 
 namespace mobius::core::decoder
@@ -36,7 +36,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   impl (const impl&) = delete;
   impl (impl&&) = delete;
-  explicit impl (const mobius::io::reader&);
+  explicit impl (const mobius::core::io::reader&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Operators
@@ -375,7 +375,7 @@ public:
 
 private:
   // @brief Reader object
-  mobius::io::reader reader_;
+  mobius::core::io::reader reader_;
 
   // @brief Header size in bytes
   mutable std::uint32_t header_size_ = 0;
@@ -453,19 +453,19 @@ private:
   mutable std::string netbios_name_;
 
   // @brief Header section offset
-  mutable mobius::io::reader::offset_type header_offset_ = 0;
+  mutable mobius::core::io::reader::offset_type header_offset_ = 0;
 
   // @brief LinkTargetIDList section offset
-  mutable mobius::io::reader::offset_type link_target_id_list_offset_ = 0;
+  mutable mobius::core::io::reader::offset_type link_target_id_list_offset_ = 0;
 
   // @brief LinkInfo section offset
-  mutable mobius::io::reader::offset_type link_info_offset_ = 0;
+  mutable mobius::core::io::reader::offset_type link_info_offset_ = 0;
 
   // @brief StringData section offset
-  mutable mobius::io::reader::offset_type string_data_offset_ = 0;
+  mutable mobius::core::io::reader::offset_type string_data_offset_ = 0;
 
   // @brief ExtraData section offset
-  mutable mobius::io::reader::offset_type extra_data_offset_ = 0;
+  mutable mobius::core::io::reader::offset_type extra_data_offset_ = 0;
 
   // @brief Data loaded flag
   mutable bool data_loaded_ = false;
@@ -487,7 +487,7 @@ private:
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-lnk::impl::impl (const mobius::io::reader& reader)
+lnk::impl::impl (const mobius::core::io::reader& reader)
  : reader_ (reader)
 {
 }
@@ -567,7 +567,7 @@ lnk::impl::_load_link_target_id_list (mobius::core::decoder::data_decoder& decod
 
   while (item_id_size > 0)
     {
-      mobius::bytearray data = decoder.get_bytearray_by_size (item_id_size - 2);
+      mobius::core::bytearray data = decoder.get_bytearray_by_size (item_id_size - 2);
       item_id_size = decoder.get_uint16_le ();
     }
 
@@ -770,7 +770,7 @@ lnk::impl::_load_extra_data (mobius::core::decoder::data_decoder& decoder) const
       else
         {
           mobius::core::log log (__FILE__, __FUNCTION__);
-          log.development (__LINE__, "unhandled extra data section (0x" + mobius::string::to_hex (signature, 8) + ")");
+          log.development (__LINE__, "unhandled extra data section (0x" + mobius::core::string::to_hex (signature, 8) + ")");
           decoder.skip (size - 8);
         }
 
@@ -782,7 +782,7 @@ lnk::impl::_load_extra_data (mobius::core::decoder::data_decoder& decoder) const
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-lnk::lnk (const mobius::io::reader& reader)
+lnk::lnk (const mobius::core::io::reader& reader)
   : impl_ (std::make_shared <impl> (reader))
 {
 }

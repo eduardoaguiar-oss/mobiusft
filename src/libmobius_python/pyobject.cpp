@@ -148,7 +148,7 @@ std::string
 pyobject::to_std_string () const
 {
   if (!impl_->pointer ())
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("null Python object"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("null Python object"));
 
   // try to convert object to string
   const char *buffer = PyUnicode_AsUTF8 (impl_->pointer ());
@@ -158,7 +158,7 @@ pyobject::to_std_string () const
     str = buffer;
 
   else
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("Invalid Python string"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("Invalid Python string"));
 
   return str;
 }
@@ -171,7 +171,7 @@ std::vector <std::string>
 pyobject::dir () const
 {
   if (!impl_->pointer ())
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("null Python object"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("null Python object"));
 
   // Get names from PyObject_Dir
   std::vector <std::string> names;
@@ -205,7 +205,7 @@ pyobject::get_attribute (const std::string& name) const
   PyObject *obj = impl_->pointer ();
 
   if (!obj)
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("null Python object"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("null Python object"));
 
   return pyobject (PyObject_GetAttrString (obj, name.c_str ()));
 }
@@ -220,7 +220,7 @@ pyobject::get_attributes () const
   PyObject *obj = impl_->pointer ();
 
   if (!obj)
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("null Python object"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("null Python object"));
 
   // Get attributes
   std::map <std::string, pyobject> attrs;

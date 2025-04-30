@@ -16,15 +16,15 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/application.hpp>
-#include <mobius/io/file.h>
-#include <mobius/io/folder.h>
-#include <mobius/string_functions.h>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/io/folder.hpp>
+#include <mobius/core/string_functions.hpp>
 #include <unistd.h>
 #include <iostream>
 #include <iomanip>
 
 #ifdef HAVE_SMB_SUPPORT
-#include <mobius/io/smb/init.h>
+#include <mobius/core/io/smb/init.hpp>
 #endif
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -57,7 +57,7 @@ void show_metadata (int level, F f)
 //! \brief Show file info
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-show_file (const mobius::io::file& f, const std::string& url, int level = 0)
+show_file (const mobius::core::io::file& f, const std::string& url, int level = 0)
 {
   std::cout << std::endl;
   const std::string indent (level * 2, ' ');
@@ -87,7 +87,7 @@ show_file (const mobius::io::file& f, const std::string& url, int level = 0)
 
           std::cout << indent << "  First 16 bytes:";
           for (auto b : data)
-            std::cout << ' ' << mobius::string::to_hex (b, 2);
+            std::cout << ' ' << mobius::core::string::to_hex (b, 2);
           std::cout << std::endl;
         }
       catch (const std::runtime_error& e)
@@ -101,7 +101,7 @@ show_file (const mobius::io::file& f, const std::string& url, int level = 0)
 //! \brief Show folder info
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-show_folder (const mobius::io::folder& folder, const std::string& url = "/", int level = 0)
+show_folder (const mobius::core::io::folder& folder, const std::string& url = "/", int level = 0)
 {
   std::cout << std::endl;
   const std::string indent (level * 2, ' ');
@@ -222,13 +222,13 @@ main (int argc, char **argv)
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #ifdef HAVE_SMB_SUPPORT
   if (!smb_user.empty () || !smb_password.empty ())
-    mobius::io::smb::init (smb_user, smb_password);
+    mobius::core::io::smb::init (smb_user, smb_password);
 #endif
 
   while (optind < argc)
     {
       const std::string url = argv[optind];
-      auto folder = mobius::io::new_folder_by_url (url);
+      auto folder = mobius::core::io::new_folder_by_url (url);
 
       try
         {

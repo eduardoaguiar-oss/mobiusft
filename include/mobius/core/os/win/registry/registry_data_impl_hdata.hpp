@@ -64,7 +64,7 @@ public:
   // @brief get data
   // @return data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_data () const override
   {
     return hive_data_.get_data ();

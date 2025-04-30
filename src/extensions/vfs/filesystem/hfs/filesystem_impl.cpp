@@ -25,7 +25,7 @@
 // @return True/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-filesystem_impl::is_instance (mobius::io::reader reader, std::uint64_t offset)
+filesystem_impl::is_instance (mobius::core::io::reader reader, std::uint64_t offset)
 {
   reader.seek (offset + 1024);
   auto data = reader.read (2);
@@ -38,7 +38,7 @@ filesystem_impl::is_instance (mobius::io::reader reader, std::uint64_t offset)
 // @param reader Reader object
 // @param offset Offset from the beginning of volume
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-filesystem_impl::filesystem_impl (const mobius::io::reader& reader,
+filesystem_impl::filesystem_impl (const mobius::core::io::reader& reader,
   size_type offset
 )
  : reader_ (reader),
@@ -63,7 +63,7 @@ filesystem_impl::get_metadata (const std::string& name) const
 // @brief Get root folder
 // @return Root folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::folder
+mobius::core::io::folder
 filesystem_impl::get_root_folder () const
 {
   return tsk_adaptor_.get_root_folder ();
@@ -79,7 +79,7 @@ filesystem_impl::_load_data () const
     return;
 
   // create decoder
-  mobius::io::reader reader = reader_;
+  mobius::core::io::reader reader = reader_;
   reader.seek (offset_ + 1024);
   mobius::core::decoder::data_decoder decoder (reader);
 

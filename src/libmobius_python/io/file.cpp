@@ -29,7 +29,7 @@
 #include "stream.hpp"
 #include "pod/data.hpp"
 #include "pod/map.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -49,7 +49,7 @@ pymobius_io_file_check (PyObject *pyobj)
 // @return new object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_io_file_to_pyobject (mobius::io::file obj)
+pymobius_io_file_to_pyobject (mobius::core::io::file obj)
 {
   PyObject *ret = nullptr;
 
@@ -58,7 +58,7 @@ pymobius_io_file_to_pyobject (mobius::io::file obj)
       ret = _PyObject_New (&io_file_t);
 
       if (ret)
-        ((io_file_o *) ret)->obj = new mobius::io::file (obj);
+        ((io_file_o *) ret)->obj = new mobius::core::io::file (obj);
     }
   else
     {
@@ -73,11 +73,11 @@ pymobius_io_file_to_pyobject (mobius::io::file obj)
 // @param pyobj Python object
 // @return file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::file
+mobius::core::io::file
 pymobius_io_file_from_pyobject (PyObject *pyobj)
 {
   if (!PyObject_IsInstance (pyobj, (PyObject *) &io_file_t))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object type must be mobius.io.file"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object type must be mobius.io.file"));
 
   return * (reinterpret_cast <io_file_o *>(pyobj)->obj);
 }

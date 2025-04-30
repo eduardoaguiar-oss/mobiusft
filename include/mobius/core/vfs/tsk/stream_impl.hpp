@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/stream_impl_base.h>
+#include <mobius/core/io/stream_impl_base.hpp>
 #include <mobius/core/vfs/tsk/fs_file.hpp>
 
 struct TSK_FS_ATTR;
@@ -29,7 +29,7 @@ namespace mobius::core::vfs::tsk
 // @brief stream_impl_tsk class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class stream_impl : public mobius::io::stream_impl_base
+class stream_impl : public mobius::core::io::stream_impl_base
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -87,7 +87,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Function prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::io::reader new_reader () const override;
+  mobius::core::io::reader new_reader () const override;
 
 private:
   // @brief fs_file handler object. Must hold while using fs_attr_

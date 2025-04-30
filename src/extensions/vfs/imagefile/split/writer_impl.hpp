@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/io/writer_impl_base.h>
+#include <mobius/core/io/writer_impl_base.hpp>
 #include <mobius/core/vfs/segment_array.hpp>
 
 class imagefile_impl;
@@ -27,7 +27,7 @@ class imagefile_impl;
 // @brief Split imagefile writer implementation
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class writer_impl : public mobius::io::writer_impl_base
+class writer_impl : public mobius::core::io::writer_impl_base
 {
 public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -66,7 +66,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Virtual methods
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  size_type write (const mobius::bytearray&) override;
+  size_type write (const mobius::core::bytearray&) override;
   void seek (offset_type, whence_type = whence_type::beginning) override;
   void flush () override;
 
@@ -77,9 +77,9 @@ private:
   size_type segment_idx_;
 
   mobius::core::vfs::segment_array segments_;      // control each segment created
-  mobius::io::writer stream_;           // current stream
+  mobius::core::io::writer stream_;           // current stream
 
-  size_type _write_data (size_type, const mobius::bytearray&);
+  size_type _write_data (size_type, const mobius::core::bytearray&);
   void _set_stream (size_type);
 };
 

@@ -357,7 +357,7 @@ static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
   // Parse input args
-  mobius::io::reader arg_reader;
+  mobius::core::io::reader arg_reader;
   std::uint32_t version = mobius::core::decoder::qdatastream::QT_NEWEST;
 
   try

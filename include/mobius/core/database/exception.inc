@@ -18,10 +18,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/exception.h>
+#include <mobius/core/exception.hpp>
 #include <stdexcept>
 #include <sqlite3.h>
 
-#define MOBIUS_EXCEPTION_SQLITE mobius::exception_msg (__FILE__, __func__, __LINE__, get_error_message ().c_str ())
+#define MOBIUS_EXCEPTION_SQLITE mobius::core::exception_msg (__FILE__, __func__, __LINE__, get_error_message ().c_str ())
 
 #endif

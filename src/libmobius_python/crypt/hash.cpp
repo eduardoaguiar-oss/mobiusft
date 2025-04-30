@@ -141,7 +141,7 @@ static PyObject *
 tp_f_update (crypt_hash_o *self, PyObject *args)
 {
   // parse input args
-  mobius::bytearray arg_data;
+  mobius::core::bytearray arg_data;
 
   try
     {

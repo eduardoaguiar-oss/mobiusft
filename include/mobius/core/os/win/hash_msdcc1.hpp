@@ -18,13 +18,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <string>
 
 namespace mobius::core::os::win
 {
 
-mobius::bytearray hash_msdcc1 (const std::string&, const std::string&);
+mobius::core::bytearray hash_msdcc1 (const std::string&, const std::string&);
 
 } // namespace mobius::core::os::win
 

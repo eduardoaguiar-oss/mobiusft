@@ -18,7 +18,7 @@
 #include <mobius/core/ui/icon.hpp>
 #include <mobius/core/ui/ui.hpp>
 #include <mobius/core/ui/widget_impl_null.hpp>
-#include <mobius/io/file.h>
+#include <mobius/core/io/file.hpp>
 
 namespace
 {
@@ -59,7 +59,7 @@ icon::set_icon_by_name (const std::string& name, size_type size)
   if (!icon_path_.empty ())
     {
       auto path = icon_path_ + '/' + name + ".png";
-      auto f = mobius::io::new_file_by_path (path);
+      auto f = mobius::core::io::new_file_by_path (path);
 
       if (f.exists ())
         return set_icon_by_path (path, size);
@@ -76,7 +76,7 @@ icon::set_icon_by_name (const std::string& name, size_type size)
 void
 icon::set_icon_by_path (const std::string& path, size_type size)
 {
-  auto f = mobius::io::new_file_by_path (path);
+  auto f = mobius::core::io::new_file_by_path (path);
   auto reader = f.new_reader ();
   auto data = reader.read (reader.get_size ());
 
@@ -91,7 +91,7 @@ icon::set_icon_by_path (const std::string& path, size_type size)
 void
 icon::set_icon_by_url (const std::string& url, size_type size)
 {
-  auto f = mobius::io::new_file_by_url (url);
+  auto f = mobius::core::io::new_file_by_url (url);
   auto reader = f.new_reader ();
   auto data = reader.read (reader.get_size ());
 
@@ -115,7 +115,7 @@ set_icon_path (const std::string& path)
 // @return New icon object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 icon
-new_icon_from_data (const mobius::bytearray& data, icon::size_type size)
+new_icon_from_data (const mobius::core::bytearray& data, icon::size_type size)
 {
   return icon (get_implementation ()->new_icon_from_data (data, size));
 }
@@ -132,7 +132,7 @@ new_icon_by_name (const std::string& name, icon::size_type size)
   if (!icon_path_.empty ())
     {
       auto path = icon_path_ + '/' + name + ".png";
-      auto f = mobius::io::new_file_by_path (path);
+      auto f = mobius::core::io::new_file_by_path (path);
 
       if (f.exists ())
         return new_icon_by_path (path, size);
@@ -150,7 +150,7 @@ new_icon_by_name (const std::string& name, icon::size_type size)
 icon
 new_icon_by_path (const std::string& path, icon::size_type size)
 {
-  auto f = mobius::io::new_file_by_path (path);
+  auto f = mobius::core::io::new_file_by_path (path);
   auto reader = f.new_reader ();
   auto data = reader.read (reader.get_size ());
 
@@ -166,7 +166,7 @@ new_icon_by_path (const std::string& path, icon::size_type size)
 icon
 new_icon_by_url (const std::string& url, icon::size_type size)
 {
-  auto f = mobius::io::new_file_by_url (url);
+  auto f = mobius::core::io::new_file_by_url (url);
   auto reader = f.new_reader ();
   auto data = reader.read (reader.get_size ());
 

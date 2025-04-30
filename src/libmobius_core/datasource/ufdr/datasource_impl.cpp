@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/datasource/ufdr/datasource_impl.hpp>
-#include <mobius/io/file.h>
+#include <mobius/core/io/file.hpp>
 
 namespace mobius::core::datasource::ufdr
 {
@@ -55,7 +55,7 @@ datasource_impl::datasource_impl (const mobius::core::pod::map& state)
 datasource_impl::datasource_impl (const std::string& url)
   : url_ (url)
 {
-  auto f = mobius::io::new_file_by_url (url_);
+  auto f = mobius::core::io::new_file_by_url (url_);
 
   file_info_.set ("name", f.get_name ());
   file_info_.set ("path", f.get_path ());
@@ -97,7 +97,7 @@ datasource_impl::get_state () const
 bool
 datasource_impl::is_available () const
 {
-  auto f = mobius::io::new_file_by_url (url_);
+  auto f = mobius::core::io::new_file_by_url (url_);
   return f.exists ();
 }
 

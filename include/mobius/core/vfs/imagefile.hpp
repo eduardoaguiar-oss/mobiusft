@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/vfs/imagefile_impl_base.hpp>
-#include <mobius/io/file.h>
+#include <mobius/core/io/file.hpp>
 #include <mobius/core/metadata.hpp>
 #include <functional>
 #include <memory>
@@ -45,7 +45,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   imagefile ();
   explicit imagefile (const std::shared_ptr <imagefile_impl_base>&);
-  explicit imagefile (const mobius::io::file&, const std::string& = "autodetect");
+  explicit imagefile (const mobius::core::io::file&, const std::string& = "autodetect");
   imagefile (const imagefile&) noexcept = default;
   imagefile (imagefile&&) noexcept = default;
 
@@ -150,7 +150,7 @@ public:
   // @brief Create new reader for imagefile
   // @return Reader object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::io::reader
+  mobius::core::io::reader
   new_reader () const
   {
     return impl_->new_reader ();
@@ -160,7 +160,7 @@ public:
   // @brief Create new writer for imagefile
   // @return Writer object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::io::writer
+  mobius::core::io::writer
   new_writer () const
   {
     return impl_->new_writer ();
@@ -182,8 +182,8 @@ struct imagefile_resource_type
 {
   std::string file_extensions;
   bool is_writeable;
-  std::function <bool (const mobius::io::file&)> is_instance;
-  std::function <std::shared_ptr <imagefile_impl_base> (const mobius::io::file&)> build;
+  std::function <bool (const mobius::core::io::file&)> is_instance;
+  std::function <std::shared_ptr <imagefile_impl_base> (const mobius::core::io::file&)> build;
 };
 
 template <typename T> constexpr imagefile_resource_type
@@ -193,7 +193,7 @@ make_imagefile_resource ()
     T::get_file_extensions (),
     T::is_writeable (),
     T::is_instance,
-    [] (const mobius::io::file& f){
+    [] (const mobius::core::io::file& f){
       return std::make_shared <T> (f);
     }
   };
@@ -203,7 +203,7 @@ make_imagefile_resource ()
 // Functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::shared_ptr <imagefile_impl_base> build_imagefile_implementation (
-  const mobius::io::file&,
+  const mobius::core::io::file&,
   const std::string&);
 
 imagefile new_imagefile_by_url (
@@ -215,7 +215,7 @@ imagefile new_imagefile_by_path (
   const std::string& = "autodetect");
 
 imagefile new_imagefile_from_file (
-  const mobius::io::file&,
+  const mobius::core::io::file&,
   const std::string& = "autodetect");
 
 } // namespace mobius::core::vfs

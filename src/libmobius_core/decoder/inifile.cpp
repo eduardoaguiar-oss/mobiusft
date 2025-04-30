@@ -16,9 +16,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/decoder/inifile.hpp>
-#include <mobius/exception.inc>
-#include <mobius/io/line_reader.h>
-#include <mobius/string_functions.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/io/line_reader.hpp>
+#include <mobius/core/string_functions.hpp>
 #include <atomic>
 #include <map>
 #include <stdexcept>
@@ -38,7 +38,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   impl (const impl&) = delete;
   impl (impl&&) = delete;
-  impl (const mobius::io::reader&, const std::string&, const std::string&);
+  impl (const mobius::core::io::reader&, const std::string&, const std::string&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Operators
@@ -57,7 +57,7 @@ public:
 private:
 
   // @brief Line reader object
-  mutable mobius::io::line_reader line_reader_;
+  mutable mobius::core::io::line_reader line_reader_;
 
   // @brief Flag is case sensitive
   bool is_case_sensitive_ = false;
@@ -84,7 +84,7 @@ private:
 // @param separator Line separator
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inifile::impl::impl (
-  const mobius::io::reader& reader,
+  const mobius::core::io::reader& reader,
   const std::string& encoding,
   const std::string& separator
 )
@@ -103,8 +103,8 @@ inifile::impl::has_value (const std::string& group, const std::string& key) cons
 {
   _load ();
 
-  std::string a_group = (is_case_sensitive_) ? group : mobius::string::tolower (group);
-  std::string a_key = (is_case_sensitive_) ? key : mobius::string::tolower (key);
+  std::string a_group = (is_case_sensitive_) ? group : mobius::core::string::tolower (group);
+  std::string a_key = (is_case_sensitive_) ? key : mobius::core::string::tolower (key);
 
   return values_.find ({a_group, a_key}) != values_.end ();
 }
@@ -122,8 +122,8 @@ inifile::impl::get_value (const std::string& group, const std::string& key) cons
 
   _load ();
 
-  std::string a_group = (is_case_sensitive_) ? group : mobius::string::tolower (group);
-  std::string a_key = (is_case_sensitive_) ? key : mobius::string::tolower (key);
+  std::string a_group = (is_case_sensitive_) ? group : mobius::core::string::tolower (group);
+  std::string a_key = (is_case_sensitive_) ? key : mobius::core::string::tolower (key);
 
   auto iter = values_.find ({a_group, a_key});
 
@@ -191,7 +191,7 @@ inifile::impl::_load () const
               pos = line.find (']');
 
               if (pos != std::string::npos)
-                group = mobius::string::strip (line.substr (1, pos - 1));
+                group = mobius::core::string::strip (line.substr (1, pos - 1));
             }
 
           // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -203,13 +203,13 @@ inifile::impl::_load () const
 
               if (pos != std::string::npos)
                 {
-                  auto key = mobius::string::strip (line.substr (0, pos));
-                  auto value = mobius::string::strip (line.substr (pos + 1));
+                  auto key = mobius::core::string::strip (line.substr (0, pos));
+                  auto value = mobius::core::string::strip (line.substr (pos + 1));
 
                   if (!is_case_sensitive_)
                     {
-                      group = mobius::string::tolower (group);
-                      key = mobius::string::tolower (key);
+                      group = mobius::core::string::tolower (group);
+                      key = mobius::core::string::tolower (key);
                     }
 
                   values_[{group, key}] = value;
@@ -228,7 +228,7 @@ inifile::impl::_load () const
 // @param separator Line separator
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 inifile::inifile (
-  const mobius::io::reader& reader,
+  const mobius::core::io::reader& reader,
   const std::string& encoding,
   const std::string& separator)
   : impl_ (std::make_shared <impl> (reader, encoding, separator))

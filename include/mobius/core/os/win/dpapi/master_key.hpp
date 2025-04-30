@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
-#include <mobius/io/reader.h>
+#include <mobius/core/bytearray.hpp>
+#include <mobius/core/io/reader.hpp>
 #include <cstdint>
 #include <memory>
 
@@ -36,7 +36,7 @@ public:
   // Constructors
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   master_key () noexcept = default;
-  master_key (mobius::io::reader, std::uint32_t);
+  master_key (mobius::core::io::reader, std::uint32_t);
   master_key (master_key&&) noexcept = default;
   master_key (const master_key&) noexcept = default;
 
@@ -50,16 +50,16 @@ public:
   // Function prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   std::uint32_t get_revision () const;
-  mobius::bytearray get_salt () const;
+  mobius::core::bytearray get_salt () const;
   std::uint32_t get_iterations () const;
   std::uint32_t get_hash_id () const;
   std::uint32_t get_cipher_id () const;
-  mobius::bytearray get_cipher_text () const;
-  mobius::bytearray get_plain_text () const;
+  mobius::core::bytearray get_cipher_text () const;
+  mobius::core::bytearray get_plain_text () const;
   std::uint32_t get_flags () const;
 
-  bool decrypt_with_key (const mobius::bytearray&);
-  bool decrypt_with_password_hash (const std::string&, const mobius::bytearray&);
+  bool decrypt_with_key (const mobius::core::bytearray&);
+  bool decrypt_with_password_hash (const std::string&, const mobius::core::bytearray&);
   bool decrypt_with_password (const std::string&, const std::string&);
   bool is_decrypted () const;
 

@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CThumbCache.hpp"
 #include <mobius/core/database/database.hpp>
-#include <mobius/io/tempfile.h>
-#include <mobius/string_functions.h>
+#include <mobius/core/io/tempfile.hpp>
+#include <mobius/core/string_functions.hpp>
 
 namespace mobius::extension::app::shareaza
 {
@@ -26,12 +26,12 @@ namespace mobius::extension::app::shareaza
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-CThumbCache::CThumbCache (const mobius::io::reader& reader)
+CThumbCache::CThumbCache (const mobius::core::io::reader& reader)
 {
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Copy reader content to temporary file
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::io::tempfile tfile;
+  mobius::core::io::tempfile tfile;
   tfile.copy_from (reader);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -69,7 +69,7 @@ CThumbCache::get (const std::string& path) const
 {
   std::optional <entry> data;
 
-  auto iter = cache_.find (mobius::string::tolower (path));
+  auto iter = cache_.find (mobius::core::string::tolower (path));
 
   if (iter != cache_.end ())
     data = iter->second;

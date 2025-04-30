@@ -19,10 +19,10 @@
 #include <mobius/core/os/win/registry/registry_key_impl_container.hpp>
 #include <mobius/core/os/win/registry/registry_key_impl_link.hpp>
 #include <mobius/core/os/win/registry/registry_file.hpp>
-#include <mobius/io/file.h>
-#include <mobius/io/reader.h>
-#include <mobius/string_functions.h>
-#include <mobius/bytearray.h>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/io/reader.hpp>
+#include <mobius/core/string_functions.hpp>
+#include <mobius/core/bytearray.hpp>
 #include <algorithm>
 #include <map>
 
@@ -32,7 +32,7 @@ namespace mobius::core::os::win::registry
 // helper functions prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void registry_set_msdcc_key (registry_key);
-void registry_set_lsa_keys (registry_key, const mobius::bytearray&);
+void registry_set_lsa_keys (registry_key, const mobius::core::bytearray&);
 void registry_set_pssp_keys (registry_key);
 void registry_set_user_assist_keys (registry_key);
 
@@ -94,7 +94,7 @@ expand_path (const std::string& path)
 
   // replace abbreviated name
   const std::string root_name = path.substr (p1, p2 - p1);
-  const std::string root_lname = mobius::string::tolower (root_name);
+  const std::string root_lname = mobius::core::string::tolower (root_name);
 
   if (root_lname == "hklm")
     ret_path += "HKEY_LOCAL_MACHINE";
@@ -170,7 +170,7 @@ public:
   // @brief get syskey
   // @return registry syskey
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_syskey () const
   {
     return syskey_;
@@ -181,7 +181,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   registry_file add_file_by_path (const std::string&, const std::string&, const std::string&);
   registry_file add_file_by_url (const std::string&, const std::string&, const std::string&);
-  registry_file add_file_by_reader (const std::string&, const std::string&, mobius::io::reader);
+  registry_file add_file_by_reader (const std::string&, const std::string&, mobius::core::io::reader);
   void remove_file (std::uint32_t);
 
   registry_key get_key_by_path (const std::string&) const;
@@ -207,7 +207,7 @@ private:
   mutable bool keys_loaded_ = false;
 
   // @brief syskey
-  mutable mobius::bytearray syskey_;
+  mutable mobius::core::bytearray syskey_;
 
   // helper functions
   void _load_keys () const;
@@ -237,7 +237,7 @@ registry::impl::impl ()
 registry_file
 registry::impl::add_file_by_path (const std::string& role, const std::string& path, const std::string& localpath)
 {
-  auto f = mobius::io::new_file_by_path (localpath);
+  auto f = mobius::core::io::new_file_by_path (localpath);
 
   return add_file_by_reader (role, path, f.new_reader ());
 }
@@ -252,7 +252,7 @@ registry::impl::add_file_by_path (const std::string& role, const std::string& pa
 registry_file
 registry::impl::add_file_by_url (const std::string& role, const std::string& path, const std::string& url)
 {
-  auto f = mobius::io::new_file_by_url (url);
+  auto f = mobius::core::io::new_file_by_url (url);
   auto reader = f.new_reader ();
 
   return add_file_by_reader (role, path, reader);
@@ -266,7 +266,7 @@ registry::impl::add_file_by_url (const std::string& role, const std::string& pat
 // @return new registry file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_file
-registry::impl::add_file_by_reader (const std::string& role, const std::string& path, mobius::io::reader reader)
+registry::impl::add_file_by_reader (const std::string& role, const std::string& path, mobius::core::io::reader reader)
 {
   registry_file r (next_uid_, role, path, reader);
   files_.push_back (r);
@@ -422,9 +422,9 @@ registry::impl::_set_syskey () const
 
       if (jd_key && skew1_key && gbg_key && data_key)
         {
-          mobius::bytearray tmp;
+          mobius::core::bytearray tmp;
           tmp.from_hexstring (jd_key.get_classname () + skew1_key.get_classname () + gbg_key.get_classname () + data_key.get_classname ());
-          syskey_ = mobius::bytearray ({tmp[8], tmp[5], tmp[4], tmp[2], tmp[11], tmp[9], tmp[13], tmp[3], tmp[0], tmp[6], tmp[1], tmp[12], tmp[14], tmp[10], tmp[15], tmp[7]});
+          syskey_ = mobius::core::bytearray ({tmp[8], tmp[5], tmp[4], tmp[2], tmp[11], tmp[9], tmp[13], tmp[3], tmp[0], tmp[6], tmp[1], tmp[12], tmp[14], tmp[10], tmp[15], tmp[7]});
         }
     }
 }
@@ -472,10 +472,10 @@ registry::impl::_set_hkey_users () const
         {
           const std::string sid = k.get_name ();
 
-          std::string p_path = mobius::string::tolower (data.get_data_as_string ("utf-16"));
-          p_path = mobius::string::replace (p_path, "%systemdrive%", "");
-          p_path = mobius::string::replace (p_path, "%systemroot%", "\\windows");
-          p_path = mobius::string::word (p_path, -1, ":");
+          std::string p_path = mobius::core::string::tolower (data.get_data_as_string ("utf-16"));
+          p_path = mobius::core::string::replace (p_path, "%systemdrive%", "");
+          p_path = mobius::core::string::replace (p_path, "%systemroot%", "\\windows");
+          p_path = mobius::core::string::word (p_path, -1, ":");
           p_path += "\\ntuser.dat";
 
           profile_map[p_path] = sid;
@@ -501,7 +501,7 @@ registry::impl::_set_hkey_users () const
           // try to get SID from profile_map
           if (key_name.empty ())
             {
-              const std::string f_path = mobius::string::tolower (mobius::string::word (f.get_path (), -1, ":"));
+              const std::string f_path = mobius::core::string::tolower (mobius::core::string::word (f.get_path (), -1, ":"));
 
               auto iter = profile_map.find (f_path);
               if (iter != profile_map.end ())
@@ -519,7 +519,7 @@ registry::impl::_set_hkey_users () const
 
           // no SID, create one
           if (key_name.empty ())
-            key_name = "UNKNOWN-SID-" + mobius::string::to_string (idx++,  8);
+            key_name = "UNKNOWN-SID-" + mobius::core::string::to_string (idx++,  8);
 
           // add key to HKU
           key.set_name (key_name);
@@ -577,7 +577,7 @@ registry::impl::_set_hkey_current_config () const
         cc_set = cc_set_data.get_data_as_dword ();
 
       //set key HKLM\SYSTEM\CurrentControlSet
-      const std::string name = "ControlSet" + mobius::string::to_string (cc_set, 3);
+      const std::string name = "ControlSet" + mobius::core::string::to_string (cc_set, 3);
       auto ccs_key = system_key.get_key_by_name (name);
 
       if (ccs_key)
@@ -667,7 +667,7 @@ registry::add_file_by_url (const std::string& role, const std::string& path, con
 // @return new registry file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_file
-registry::add_file_by_reader (const std::string& role, const std::string& path, mobius::io::reader reader)
+registry::add_file_by_reader (const std::string& role, const std::string& path, mobius::core::io::reader reader)
 {
   return impl_->add_file_by_reader (role, path, reader);
 }
@@ -772,7 +772,7 @@ registry::get_data_by_mask (const std::string& mask) const
 // @brief get syskey
 // @return registry syskey
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 registry::get_syskey () const
 {
   return impl_->get_syskey ();

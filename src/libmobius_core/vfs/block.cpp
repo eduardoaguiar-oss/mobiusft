@@ -21,7 +21,7 @@
 #include <mobius/core/vfs/block_impl_slice.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/resource.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace mobius::core::vfs

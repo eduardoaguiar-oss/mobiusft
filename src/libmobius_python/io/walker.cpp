@@ -28,7 +28,7 @@
 #include "io/entry.hpp"
 #include "io/file.hpp"
 #include "io/folder.hpp"
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <functional>
 #include <stdexcept>
 
@@ -257,7 +257,7 @@ static PyObject *
 tp_f_get_entries_by_predicate (io_walker_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::py::unary_predicate <mobius::io::entry> arg_f (pymobius_io_entry_to_pyobject);
+  mobius::py::unary_predicate <mobius::core::io::entry> arg_f (pymobius_io_entry_to_pyobject);
 
   try
     {
@@ -296,7 +296,7 @@ static PyObject *
 tp_f_find_entries (io_walker_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::py::unary_predicate <mobius::io::entry> arg_f (pymobius_io_entry_to_pyobject);
+  mobius::py::unary_predicate <mobius::core::io::entry> arg_f (pymobius_io_entry_to_pyobject);
 
   try
     {
@@ -478,7 +478,7 @@ static PyObject *
 tp_f_get_files_by_predicate (io_walker_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::py::unary_predicate <mobius::io::file> arg_f (pymobius_io_file_to_pyobject);
+  mobius::py::unary_predicate <mobius::core::io::file> arg_f (pymobius_io_file_to_pyobject);
 
   try
     {
@@ -517,7 +517,7 @@ static PyObject *
 tp_f_find_files (io_walker_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::py::unary_predicate <mobius::io::file> arg_f (pymobius_io_file_to_pyobject);
+  mobius::py::unary_predicate <mobius::core::io::file> arg_f (pymobius_io_file_to_pyobject);
 
   try
     {
@@ -699,7 +699,7 @@ static PyObject *
 tp_f_get_folders_by_predicate (io_walker_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::py::unary_predicate <mobius::io::folder> arg_f (pymobius_io_folder_to_pyobject);
+  mobius::py::unary_predicate <mobius::core::io::folder> arg_f (pymobius_io_folder_to_pyobject);
 
   try
     {
@@ -738,7 +738,7 @@ static PyObject *
 tp_f_find_folders (io_walker_o *self, PyObject *args)
 {
   // Parse input args
-  mobius::py::unary_predicate <mobius::io::folder> arg_f (pymobius_io_folder_to_pyobject);
+  mobius::py::unary_predicate <mobius::core::io::folder> arg_f (pymobius_io_folder_to_pyobject);
 
   try
     {
@@ -806,7 +806,7 @@ static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
   // Parse input args
-  mobius::io::folder arg_folder;
+  mobius::core::io::folder arg_folder;
 
   try
     {
@@ -826,7 +826,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
       try
         {
-          ret->obj = new mobius::io::walker (arg_folder);
+          ret->obj = new mobius::core::io::walker (arg_folder);
         }
       catch (const std::exception& e)
         {
@@ -934,7 +934,7 @@ pymobius_io_walker_check (PyObject *value)
 // @return New walker object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_io_walker_to_pyobject (const mobius::io::walker& obj)
+pymobius_io_walker_to_pyobject (const mobius::core::io::walker& obj)
 {
   return mobius::py::to_pyobject <io_walker_o> (obj, &io_walker_t);
 }
@@ -944,7 +944,7 @@ pymobius_io_walker_to_pyobject (const mobius::io::walker& obj)
 // @param value Python value
 // @return Walker object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::io::walker
+mobius::core::io::walker
 pymobius_io_walker_from_pyobject (PyObject *value)
 {
   return mobius::py::from_pyobject <io_walker_o> (value, &io_walker_t);

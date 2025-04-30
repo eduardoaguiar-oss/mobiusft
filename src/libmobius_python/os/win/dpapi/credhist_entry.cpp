@@ -61,7 +61,7 @@ mobius::core::os::win::dpapi::credhist_entry
 pymobius_os_win_dpapi_credhist_entry_from_pyobject (PyObject *value)
 {
   if (!pymobius_os_win_dpapi_credhist_entry_check (value))
-    throw std::invalid_argument (mobius::MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.os.win.dpapi.credhist_entry"));
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.os.win.dpapi.credhist_entry"));
 
   return * (reinterpret_cast <os_win_dpapi_credhist_entry_o *>(value)->obj);
 }
@@ -402,7 +402,7 @@ static PyObject *
 tp_f_decrypt_with_key (os_win_dpapi_credhist_entry_o *self, PyObject *args)
 {
   // parse input args
-  mobius::bytearray arg_key;
+  mobius::core::bytearray arg_key;
 
   try
     {
@@ -441,7 +441,7 @@ static PyObject *
 tp_f_decrypt_with_password_hash (os_win_dpapi_credhist_entry_o *self, PyObject *args)
 {
   // parse input args
-  mobius::bytearray arg_password_hash;
+  mobius::core::bytearray arg_password_hash;
 
   try
     {

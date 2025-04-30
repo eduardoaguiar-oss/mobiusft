@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/ui/icon_impl_base.hpp>
 #include <mobius/core/ui/widget.hpp>
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 
 namespace mobius::core::ui
 {
@@ -66,7 +66,7 @@ public:
   // @param size Icon size
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void
-  set_icon_from_data (const mobius::bytearray& data, size_type size)
+  set_icon_from_data (const mobius::core::bytearray& data, size_type size)
   {
     _impl <icon_impl_base> ()->set_icon_from_data (data, size);
   }
@@ -86,7 +86,7 @@ void set_icon_path (const std::string&);
 icon new_icon_by_name (const std::string&, icon::size_type = icon::size_type::toolbar);
 icon new_icon_by_path (const std::string&, icon::size_type = icon::size_type::toolbar);
 icon new_icon_by_url (const std::string&, icon::size_type = icon::size_type::toolbar);
-icon new_icon_from_data (const mobius::bytearray&, icon::size_type = icon::size_type::toolbar);
+icon new_icon_from_data (const mobius::core::bytearray&, icon::size_type = icon::size_type::toolbar);
 
 
 } // namespace mobius::core::ui

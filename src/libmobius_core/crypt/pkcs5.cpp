@@ -18,7 +18,7 @@
 #include <mobius/core/crypt/pkcs5.hpp>
 #include <mobius/core/crypt/hash.hpp>
 #include <mobius/core/crypt/hmac.hpp>
-#include <mobius/exception.inc>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace mobius::core::crypt
@@ -29,10 +29,10 @@ namespace mobius::core::crypt
 // @return Unpadded data
 // @see RFC 2898 (section 6.1.1.4)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
-pkcs5_unpad (const mobius::bytearray& data)
+mobius::core::bytearray
+pkcs5_unpad (const mobius::core::bytearray& data)
 {
-  mobius::bytearray unpad_data;
+  mobius::core::bytearray unpad_data;
 
   if (data)
     {
@@ -54,11 +54,11 @@ pkcs5_unpad (const mobius::bytearray& data)
 // @param dklen Derived key length in bytes
 // @see RFC 2898
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 pbkdf1 (
   const std::string& hash_id,
-  const mobius::bytearray& key,
-  const mobius::bytearray& salt,
+  const mobius::core::bytearray& key,
+  const mobius::core::bytearray& salt,
   std::uint32_t count,
   std::uint16_t dklen
   )
@@ -86,7 +86,7 @@ pbkdf1 (
   mobius::core::crypt::hash h (hash_id);
   h.update (key);
   h.update (salt);
-  mobius::bytearray t = h.get_digest ();
+  mobius::core::bytearray t = h.get_digest ();
 
   for (std::uint32_t i = 1; i < count; i++)
     {
@@ -107,11 +107,11 @@ pbkdf1 (
 // @param dklen Derived key length in bytes
 // @see RFC 2898
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 pbkdf2_hmac (
   const std::string& hash_id,
-  const mobius::bytearray& key,
-  const mobius::bytearray& salt,
+  const mobius::core::bytearray& key,
+  const mobius::core::bytearray& salt,
   std::uint32_t count,
   std::uint16_t dklen
   )
@@ -122,7 +122,7 @@ pbkdf2_hmac (
 
   // Calculate derived key
   std::uint32_t i = 1;
-  mobius::bytearray dk;
+  mobius::core::bytearray dk;
   mobius::core::crypt::hmac hmac (hash_id, key);
 
   while (dk.size () < dklen)

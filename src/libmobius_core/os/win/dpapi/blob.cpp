@@ -35,9 +35,9 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit impl (mobius::io::reader);
-  bool test_key (const mobius::bytearray&, const mobius::bytearray&);
-  bool decrypt (const mobius::bytearray&, const mobius::bytearray&);
+  explicit impl (mobius::core::io::reader);
+  bool test_key (const mobius::core::bytearray&, const mobius::core::bytearray&);
+  bool decrypt (const mobius::core::bytearray&, const mobius::core::bytearray&);
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Operators
@@ -129,7 +129,7 @@ public:
   // @brief Get salt
   // @return Salt
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_salt () const
   {
     return salt_;
@@ -139,7 +139,7 @@ public:
   // @brief Get hmac key
   // @return Hmac key
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_hmac_key () const
   {
     return hmac_key_;
@@ -169,7 +169,7 @@ public:
   // @brief Get hmac value
   // @return Hmac value
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_hmac_value () const
   {
     return hmac_value_;
@@ -179,7 +179,7 @@ public:
   // @brief Get cipher text
   // @return Cipher text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_cipher_text () const
   {
     return cipher_text_;
@@ -189,7 +189,7 @@ public:
   // @brief Get plain text
   // @return Plain text
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_plain_text () const
   {
     return plain_text_;
@@ -199,7 +199,7 @@ public:
   // @brief Get signature
   // @return Signature
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_signature () const
   {
     return signature_;
@@ -209,7 +209,7 @@ public:
   // @brief Get signature data
   // @return Signature data
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::bytearray
+  mobius::core::bytearray
   get_signature_data () const
   {
     return signature_data_;
@@ -251,10 +251,10 @@ private:
   std::uint32_t key_length_;
 
   // @brief Salt
-  mobius::bytearray salt_;
+  mobius::core::bytearray salt_;
 
   // @brief HMAC key value
-  mobius::bytearray hmac_key_;
+  mobius::core::bytearray hmac_key_;
 
   // @brief Hash algorithm ID
   std::uint32_t hash_id_;
@@ -263,19 +263,19 @@ private:
   std::uint32_t hash_length_;
 
   // @brief HMAC value
-  mobius::bytearray hmac_value_;
+  mobius::core::bytearray hmac_value_;
 
   // @brief Cipher text
-  mobius::bytearray cipher_text_;
+  mobius::core::bytearray cipher_text_;
 
   // @brief Plain text
-  mobius::bytearray plain_text_;
+  mobius::core::bytearray plain_text_;
 
   // @brief Signature
-  mobius::bytearray signature_;
+  mobius::core::bytearray signature_;
 
   // @brief Signature data (for signature computation)
-  mobius::bytearray signature_data_;
+  mobius::core::bytearray signature_data_;
 };
 
 namespace
@@ -290,17 +290,17 @@ namespace
 // @return Session key
 // @see https://github.com/mis-team/dpapick
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::bytearray
+static mobius::core::bytearray
 _generate_session_key (
   std::uint32_t ms_hash_id,
-  const mobius::bytearray& key,
-  const mobius::bytearray& salt,
-  const mobius::bytearray& data = {},
-  const mobius::bytearray& entropy = {}
+  const mobius::core::bytearray& key,
+  const mobius::core::bytearray& salt,
+  const mobius::core::bytearray& data = {},
+  const mobius::core::bytearray& entropy = {}
 )
 {
   // generate prekey
-  mobius::bytearray prekey;
+  mobius::core::bytearray prekey;
 
   if (key.size () == 20)
     prekey = key;
@@ -314,17 +314,17 @@ _generate_session_key (
 
   // generate session key
   const auto hash_id = get_hash_id (ms_hash_id);
-  mobius::bytearray session_key;
+  mobius::core::bytearray session_key;
 
   if (hash_id == "sha1")
     {
       const auto hash_block_size = get_hash_block_size (ms_hash_id);
 
-      mobius::bytearray ipad (hash_block_size);
+      mobius::core::bytearray ipad (hash_block_size);
       ipad.fill (0x36);
       ipad ^= prekey;
 
-      mobius::bytearray opad (hash_block_size);
+      mobius::core::bytearray opad (hash_block_size);
       opad.fill (0x5c);
       opad ^= prekey;
 
@@ -368,7 +368,7 @@ _generate_session_key (
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-blob::impl::impl (mobius::io::reader reader)
+blob::impl::impl (mobius::core::io::reader reader)
 {
   mobius::core::decoder::data_decoder decoder (reader);
 
@@ -416,7 +416,7 @@ blob::impl::impl (mobius::io::reader reader)
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-blob::blob (mobius::io::reader reader)
+blob::blob (mobius::core::io::reader reader)
   : impl_ (std::make_shared <impl> (reader))
 {
 }
@@ -429,8 +429,8 @@ blob::blob (mobius::io::reader reader)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 blob::impl::test_key (
-  const mobius::bytearray& key,
-  const mobius::bytearray& entropy)
+  const mobius::core::bytearray& key,
+  const mobius::core::bytearray& entropy)
 {
   auto signature = _generate_session_key (
        hash_id_,
@@ -449,7 +449,7 @@ blob::impl::test_key (
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-blob::impl::decrypt (const mobius::bytearray& key, const mobius::bytearray& entropy)
+blob::impl::decrypt (const mobius::core::bytearray& key, const mobius::core::bytearray& entropy)
 {
   // test if key is the right one
   if (!test_key (key, entropy))
@@ -476,20 +476,20 @@ blob::impl::decrypt (const mobius::bytearray& key, const mobius::bytearray& entr
       session_key = h.get_digest ();
     }
 
-  mobius::bytearray derived_key;
+  mobius::core::bytearray derived_key;
 
   if (session_key.size () >= cipher_key_length)
     derived_key = session_key;
 
   else
     {
-      mobius::bytearray ipad (hash_block_size);
+      mobius::core::bytearray ipad (hash_block_size);
       ipad.fill (0x36);
 
       mobius::core::crypt::hash h1 (hash_id);
       h1.update (ipad ^ session_key);
 
-      mobius::bytearray opad (hash_block_size);
+      mobius::core::bytearray opad (hash_block_size);
       opad.fill (0x5c);
 
       mobius::core::crypt::hash h2 (hash_id);
@@ -513,7 +513,7 @@ blob::impl::decrypt (const mobius::bytearray& key, const mobius::bytearray& entr
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-blob::test_key (const mobius::bytearray& key, const mobius::bytearray& entropy)
+blob::test_key (const mobius::core::bytearray& key, const mobius::core::bytearray& entropy)
 {
   return impl_->test_key (key, entropy);
 }
@@ -525,7 +525,7 @@ blob::test_key (const mobius::bytearray& key, const mobius::bytearray& entropy)
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-blob::decrypt (const mobius::bytearray& key, const mobius::bytearray& entropy)
+blob::decrypt (const mobius::core::bytearray& key, const mobius::core::bytearray& entropy)
 {
   return impl_->decrypt (key, entropy);
 }
@@ -624,7 +624,7 @@ blob::get_key_length () const
 // @brief Get salt
 // @return Salt
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 blob::get_salt () const
 {
   return impl_->get_salt ();
@@ -634,7 +634,7 @@ blob::get_salt () const
 // @brief Get hmac key
 // @return Hmac key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 blob::get_hmac_key () const
 {
   return impl_->get_hmac_key ();
@@ -664,7 +664,7 @@ blob::get_hash_length () const
 // @brief Get hmac value
 // @return Hmac value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 blob::get_hmac_value () const
 {
   return impl_->get_hmac_value ();
@@ -674,7 +674,7 @@ blob::get_hmac_value () const
 // @brief Get cipher text
 // @return Cipher text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 blob::get_cipher_text () const
 {
   return impl_->get_cipher_text ();
@@ -684,7 +684,7 @@ blob::get_cipher_text () const
 // @brief Get plain text
 // @return Plain text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 blob::get_plain_text () const
 {
   return impl_->get_plain_text ();
@@ -694,7 +694,7 @@ blob::get_plain_text () const
 // @brief Get signature
 // @return Signature
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 blob::get_signature () const
 {
   return impl_->get_signature ();
@@ -704,7 +704,7 @@ blob::get_signature () const
 // @brief Get blob data
 // @return BLOB data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::bytearray
+mobius::core::bytearray
 blob::get_signature_data () const
 {
   return impl_->get_signature_data ();

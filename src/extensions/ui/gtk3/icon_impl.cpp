@@ -89,7 +89,7 @@ icon_impl::set_icon_by_name (const std::string& name, size_type size)
 // @param size Icon size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-icon_impl::set_icon_from_data (const mobius::bytearray& data, size_type size)
+icon_impl::set_icon_from_data (const mobius::core::bytearray& data, size_type size)
 {
   GdkPixbufLoader *loader = gdk_pixbuf_loader_new ();
   gdk_pixbuf_loader_set_size (loader, static_cast <int> (size), static_cast <int> (size));

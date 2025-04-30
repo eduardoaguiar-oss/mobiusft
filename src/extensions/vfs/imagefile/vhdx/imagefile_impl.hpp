@@ -18,9 +18,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/bytearray.h>
+#include <mobius/core/bytearray.hpp>
 #include <mobius/core/datetime/datetime.hpp>
-#include <mobius/io/file.h>
+#include <mobius/core/io/file.hpp>
 #include <mobius/core/vfs/imagefile_impl_base.hpp>
 #include <cstdint>
 #include <string>
@@ -37,7 +37,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Class metadata functions
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  static bool is_instance (const mobius::io::file&);
+  static bool is_instance (const mobius::core::io::file&);
   static std::string get_file_extensions () { return "vhdx"; }
   static bool is_writeable () { return false; }
 
@@ -49,12 +49,12 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Prototypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit imagefile_impl (const mobius::io::file&);
+  explicit imagefile_impl (const mobius::core::io::file&);
   mobius::core::pod::data get_attribute (const std::string&) const override;
   void set_attribute (const std::string&, const mobius::core::pod::data&) override;
   mobius::core::pod::map get_attributes () const override;
-  mobius::io::reader new_reader () const override;
-  mobius::io::writer new_writer () const override;
+  mobius::core::io::reader new_reader () const override;
+  mobius::core::io::writer new_writer () const override;
   bat_type get_block_allocation_table () const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -90,7 +90,7 @@ public:
   // @brief Get file object
   // @return File object
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::io::file
+  mobius::core::io::file
   get_file () const
   {
     return file_;
@@ -141,7 +141,7 @@ public:
 
 private:
   // @brief File object
-  mobius::io::file file_;
+  mobius::core::io::file file_;
 
   // @brief version
   mutable std::uint32_t version_ = 0;
@@ -193,10 +193,10 @@ private:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void _load_metadata () const;
   void _load_block_allocation_table () const;
-  void _load_file_type_identifier (mobius::io::reader) const;
-  void _load_header (mobius::io::reader) const;
-  void _load_region_table (mobius::io::reader) const;
-  void _load_metadata_region (mobius::io::reader, std::uint64_t) const;
+  void _load_file_type_identifier (mobius::core::io::reader) const;
+  void _load_header (mobius::core::io::reader) const;
+  void _load_region_table (mobius::core::io::reader) const;
+  void _load_metadata_region (mobius::core::io::reader, std::uint64_t) const;
 };
 
 #endif

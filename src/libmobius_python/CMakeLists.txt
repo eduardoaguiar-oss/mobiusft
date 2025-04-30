@@ -24,49 +24,18 @@ project(LibMobiusPython LANGUAGES CXX)
 
 include(GNUInstallDirs)
 
-# Set C++ standard (@todo move to src/CMakeLists.txt)
+# Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
-# Define top-level source and build directories (@todo move to main CMakeLists.txt)
-set(TOP_SRC_DIR ${CMAKE_SOURCE_DIR}/../..)
-set(TOP_BUILD_DIR ${CMAKE_BINARY_DIR}/../..)
+set(MOBIUS_PYTHON_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Find dependencies (@todo move to src/CMakeLists.txt)
+# Find dependencies
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 find_program(Python3_EXECUTABLE NAMES python3 REQUIRED)
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
-
-set(PYTHON_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/site-packages")
-message(STATUS "PYTHON_INSTALL_DIR: ${PYTHON_INSTALL_DIR}")
-
-find_library(MOBIUS_LIB mobius HINTS ${TOP_SRC_DIR}/src/mobius/.libs NO_DEFAULT_PATH)
-
-if(NOT MOBIUS_LIB)
-    message(FATAL_ERROR "libmobius not found in ${TOP_SRC_DIR}/src/mobius/.libs")
-endif()
-
-find_library(MOBIUS_CORE_LIB mobius_core
-    HINTS ../libmobius_core/build
-    NO_DEFAULT_PATH
-)
-if(NOT MOBIUS_CORE_LIB)
-    message(FATAL_ERROR "libmobius_core not found in ../libmobius_core/build")
-endif()
-
-find_library(MOBIUS_FRAMEWORK_LIB mobius_framework
-    HINTS ../libmobius_framework/build
-    NO_DEFAULT_PATH
-)
-if(NOT MOBIUS_FRAMEWORK_LIB)
-    message(FATAL_ERROR "libmobius_framework not found in ../libmobius_framework/build")
-endif()
-
-set(MOBIUS_INCLUDE_DIRS ${TOP_SRC_DIR}/include ${TOP_SRC_DIR}/src ${TOP_SRC_DIR}/src/libmobius_python)
-set(MOBIUS_LIBRARIES ${MOBIUS_LIB} ${MOBIUS_CORE_LIB} ${MOBIUS_FRAMEWORK_LIB})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Build sub-libraries
@@ -106,7 +75,7 @@ add_library(mobius MODULE
 
 target_include_directories(mobius PRIVATE
     ${MOBIUS_INCLUDE_DIRS}
-    ${CMAKE_SOURCE_DIR}
+    ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${Python3_INCLUDE_DIRS}
 )
 
@@ -114,7 +83,8 @@ target_compile_options(mobius PRIVATE -fno-strict-aliasing -flto)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 target_link_libraries(mobius PRIVATE
-    ${MOBIUS_LIBRARIES}
+    mobius_core
+    mobius_framework
     ${Python_LIBRARIES}
 )
 
@@ -141,7 +111,8 @@ target_link_libraries(mobius PRIVATE
     libmobius-python-turing
     mobius_python_ui
     libmobius-python-vfs
-    ${MOBIUS_LIBRARIES}
+    mobius_core
+    mobius_framework
     Python3::Module
 )
 
@@ -155,6 +126,6 @@ endif()
 # Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 install(TARGETS mobius
-    LIBRARY DESTINATION ${PYTHON_INSTALL_DIR}
-    RUNTIME DESTINATION ${PYTHON_INSTALL_DIR}
+    LIBRARY DESTINATION ${MOBIUS_PYTHON_DIR}
+    RUNTIME DESTINATION ${MOBIUS_PYTHON_DIR}
 )

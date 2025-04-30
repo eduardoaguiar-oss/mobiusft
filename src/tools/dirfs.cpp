@@ -17,21 +17,21 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/application.hpp>
 #include <mobius/core/resource.hpp>
-#include <mobius/io/entry.h>
-#include <mobius/io/file.h>
-#include <mobius/io/folder.h>
-#include <mobius/io/stream.h>
+#include <mobius/core/io/entry.hpp>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/io/folder.hpp>
+#include <mobius/core/io/stream.hpp>
 #include <mobius/core/vfs/vfs.hpp>
 #include <iostream>
 #include <unistd.h>
 
-void show_entry (const mobius::io::entry&, const std::string&);
+void show_entry (const mobius::core::io::entry&, const std::string&);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //! \brief Shows streams
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-show_streams (const std::vector <mobius::io::stream>& streams)
+show_streams (const std::vector <mobius::core::io::stream>& streams)
 {
   int i = 1;
   std::cout << "     streams:" << std::endl;
@@ -66,7 +66,7 @@ show_streams (const std::vector <mobius::io::stream>& streams)
 //! \brief Show file information
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-show_file (const mobius::io::file& f, const std::string& parent_path)
+show_file (const mobius::core::io::file& f, const std::string& parent_path)
 {
   // metadata
   std::cout << std::endl;
@@ -104,7 +104,7 @@ show_file (const mobius::io::file& f, const std::string& parent_path)
 //! \brief Show folder information
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-show_folder (const mobius::io::folder& f, const std::string& parent_path)
+show_folder (const mobius::core::io::folder& f, const std::string& parent_path)
 {
   // metadata
   std::cout << std::endl;
@@ -148,7 +148,7 @@ show_folder (const mobius::io::folder& f, const std::string& parent_path)
 //! \brief Show entry information
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-show_entry (const mobius::io::entry& entry, const std::string& parent_path)
+show_entry (const mobius::core::io::entry& entry, const std::string& parent_path)
 {
   try
     {

@@ -28,7 +28,7 @@ namespace mobius::core::encoder
 // @return Hexstring encoded string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-hexstring (const mobius::bytearray& data, const std::string& sep)
+hexstring (const mobius::core::bytearray& data, const std::string& sep)
 {
   std::ostringstream stream;
   stream << std::hex;
