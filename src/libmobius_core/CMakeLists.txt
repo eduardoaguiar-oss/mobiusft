@@ -91,7 +91,6 @@ add_subdirectory(vfs)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(MOBIUS_VERSION "2.15") # @todo move to root/CMakeLists.txt
 configure_file(application.cpp.in application.cpp @ONLY)
 
 add_library(mobius_core SHARED

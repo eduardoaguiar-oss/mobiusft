@@ -92,5 +92,11 @@ set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
 set(CPACK_SOURCE_GENERATOR "TXZ;ZIP")
 set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
 set(CPACK_SOURCE_STRIP_FILES TRUE)
+set(CPACK_SOURCE_IGNORE_FILES
+    "/\\\\.git/"          # Git directory
+    "\\\\.gitignore"
+    "\\\\.vscode/"
+    "\\\\.idea/"
+)
 
 include(CPack)

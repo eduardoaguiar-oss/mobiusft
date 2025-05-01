@@ -45,7 +45,7 @@ else()
 
       # Version check (>= 1.9.0)
       if(LIBGCRYPT_VERSION VERSION_LESS "1.9.0")
-        message(FATAL_ERROR "libgcrypt version ${LIBGCRYPT_VERSION} found, but >= 2.9.0 required")
+        message(FATAL_ERROR "libgcrypt version ${LIBGCRYPT_VERSION} found, but >= 1.9.0 required")
       else()
         message(STATUS "Found libgcrypt (>= 1.9.0): ${LIBGCRYPT_VERSION}")
         add_library(LibGcrypt::LibGcrypt INTERFACE IMPORTED)
