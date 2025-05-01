@@ -27,98 +27,85 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Tool: casetree - Builds a case tree structure
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_executable(casetree casetree.cpp)
-target_include_directories(casetree PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(casetree PRIVATE mobius_core mobius_framework)
+target_link_libraries(casetree PRIVATE Mobius::Core Mobius::Framework)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: dirfs - Directory filesystem operations
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_executable(dirfs dirfs.cpp)
-target_link_libraries(dirfs PRIVATE mobius_core)
+target_link_libraries(dirfs PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: dirtree - Displays directory tree
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_executable(dirtree dirtree.cpp)
-target_include_directories(dirtree PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(dirtree PRIVATE mobius_core)
+target_link_libraries(dirtree PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: filesystem_scan - Scans filesystem metadata
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_executable(filesystem_scan filesystem_scan.cpp)
-target_include_directories(filesystem_scan PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(filesystem_scan PRIVATE mobius_core)
+target_link_libraries(filesystem_scan PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: hashfs - Hashes each file from disk
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_executable(hashfs hashfs.cpp)
-target_include_directories(hashfs PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(hashfs PRIVATE mobius_core)
+target_link_libraries(hashfs PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: hive_info - Displays Windows Registry hive info
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_executable(hive_info hive_info.cpp)
-target_include_directories(hive_info PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(hive_info PRIVATE mobius_core)
+target_link_libraries(hive_info PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: hive_scan - Scans Windows Registry hives
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_executable(hive_scan hive_scan.cpp)
-target_include_directories(hive_scan PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(hive_scan PRIVATE mobius_core)
+target_link_libraries(hive_scan PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: imagefile_cat - Print image file to the standard output
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_executable(imagefile_cat imagefile_cat.cpp)
-target_include_directories(imagefile_cat PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(imagefile_cat PRIVATE mobius_core)
+target_link_libraries(imagefile_cat PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: imagefile_convert - Converts image file formats
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_executable(imagefile_convert imagefile_convert.cpp)
-target_include_directories(imagefile_convert PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(imagefile_convert PRIVATE mobius_core)
+target_link_libraries(imagefile_convert PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: imagefile_info - Displays image file info
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_executable(imagefile_info imagefile_info.cpp)
-target_include_directories(imagefile_info PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(imagefile_info PRIVATE mobius_core)
+target_link_libraries(imagefile_info PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: list_resources - Lists resources
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_executable(list_resources list_resources.cpp)
-target_include_directories(list_resources PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(list_resources PRIVATE mobius_core)
+target_link_libraries(list_resources PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: vfs_info - Displays virtual filesystem info
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_executable(vfs_info vfs_info.cpp)
-target_include_directories(vfs_info PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_info PRIVATE mobius_core)
+target_link_libraries(vfs_info PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: device_list - Lists devices using libudev 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_executable(device_list device_list.cpp)
-target_include_directories(device_list PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(device_list PRIVATE mobius_core)
+target_link_libraries(device_list PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: disk_list - Lists disks using libudev
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_executable(disk_list disk_list.cpp)
-target_include_directories(disk_list PRIVATE ${MOBIUS_INCLUDE_DIRS} ${LIBUDEV_INCLUDE_DIRS})
-target_link_libraries(disk_list PRIVATE mobius_core)
+target_link_libraries(disk_list PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

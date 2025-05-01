@@ -20,12 +20,12 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.10)
-project(libmobius-python-crypt LANGUAGES CXX)
+project(mobius_python_crypt LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Target: libmobius-python-crypt.la
+# Target: mobius_python_crypt.la
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(libmobius-python-crypt STATIC
+add_library(mobius_python_crypt STATIC
     module.cpp
     cipher.cpp
     func_cipher.cpp
@@ -37,11 +37,12 @@ add_library(libmobius-python-crypt STATIC
     hmac.cpp
 )
 
-target_include_directories(libmobius-python-crypt PRIVATE
-    ${MOBIUS_INCLUDE_DIRS}
+target_include_directories(mobius_python_crypt PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_compile_options(libmobius-python-crypt PRIVATE -fno-strict-aliasing -fPIC)
+target_link_libraries(mobius_python_crypt PUBLIC Mobius::Core)
+
+target_compile_options(mobius_python_crypt PRIVATE -fno-strict-aliasing -fPIC)

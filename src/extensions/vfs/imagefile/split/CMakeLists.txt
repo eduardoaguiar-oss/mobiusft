@@ -25,17 +25,15 @@ project(vfs_imagefile_split LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SOURCES
+add_library(vfs_imagefile_split MODULE
     main.cpp
     imagefile_impl.cpp
     reader_impl.cpp
     writer_impl.cpp
 )
 
-add_library(vfs_imagefile_split MODULE ${SOURCES})
 set_target_properties(vfs_imagefile_split PROPERTIES OUTPUT_NAME "vfs-imagefile-split" PREFIX "")
-target_include_directories(vfs_imagefile_split PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_imagefile_split PRIVATE mobius_core)
+target_link_libraries(vfs_imagefile_split PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

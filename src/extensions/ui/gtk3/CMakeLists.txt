@@ -31,7 +31,7 @@ pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SOURCES
+add_library(ui_gtk3 MODULE
     main.cpp
     box_impl.cpp
     button_impl.cpp
@@ -43,10 +43,9 @@ set(SOURCES
     window_impl.cpp
 )
 
-add_library(ui_gtk3 MODULE ${SOURCES})
 set_target_properties(ui_gtk3 PROPERTIES OUTPUT_NAME "ui-gtk3" PREFIX "")
-target_include_directories(ui_gtk3 PRIVATE ${MOBIUS_INCLUDE_DIRS} ${GTK3_INCLUDE_DIRS})
-target_link_libraries(ui_gtk3 PRIVATE mobius_core ${GTK3_LIBRARIES})
+target_include_directories(ui_gtk3 PRIVATE ${GTK3_INCLUDE_DIRS})
+target_link_libraries(ui_gtk3 PRIVATE Mobius::Core ${GTK3_LIBRARIES})
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

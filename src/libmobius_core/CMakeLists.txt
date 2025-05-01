@@ -136,6 +136,8 @@ target_link_libraries(mobius_core PUBLIC
     Iconv::Iconv
 )
 
+add_library(Mobius::Core ALIAS mobius_core)
+
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

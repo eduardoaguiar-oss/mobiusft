@@ -51,8 +51,10 @@ target_link_libraries(mobius_framework PUBLIC
     -Wl,--whole-archive
     mobius_framework_model
     -Wl,--no-whole-archive
-    mobius_core
+    Mobius::Core
 )
+
+add_library(Mobius::Framework ALIAS mobius_framework)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

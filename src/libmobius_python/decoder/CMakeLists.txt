@@ -20,12 +20,12 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.10)
-project(libmobius-python-decoder LANGUAGES CXX)
+project(mobius_python_decoder LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Target: libmobius-python-decoder.la
+# Target: mobius_python_decoder.la
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(libmobius-python-decoder STATIC
+add_library(mobius_python_decoder STATIC
     module.cpp
     data_decoder.cpp
     func_base16.cpp
@@ -49,11 +49,12 @@ add_library(libmobius-python-decoder STATIC
     xml/element.cpp
 )
 
-target_include_directories(libmobius-python-decoder PRIVATE
-    ${MOBIUS_INCLUDE_DIRS}
+target_include_directories(mobius_python_decoder PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_compile_options(libmobius-python-decoder PRIVATE -fno-strict-aliasing -fPIC)
+target_link_libraries(mobius_python_decoder PUBLIC Mobius::Core)
+
+target_compile_options(mobius_python_decoder PRIVATE -fno-strict-aliasing -fPIC)

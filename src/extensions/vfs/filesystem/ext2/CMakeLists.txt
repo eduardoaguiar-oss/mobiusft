@@ -25,15 +25,13 @@ project(vfs_filesystem_ext2 LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SOURCES
+add_library(vfs_filesystem_ext2 MODULE
     main.cpp
     filesystem_impl.cpp
 )
 
-add_library(vfs_filesystem_ext2 MODULE ${SOURCES})
 set_target_properties(vfs_filesystem_ext2 PROPERTIES OUTPUT_NAME "vfs-filesystem-ext2" PREFIX "")
-target_include_directories(vfs_filesystem_ext2 PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_filesystem_ext2 PRIVATE mobius_core)
+target_link_libraries(vfs_filesystem_ext2 PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

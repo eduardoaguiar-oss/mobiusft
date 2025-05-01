@@ -20,21 +20,22 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.10)
-project(libmobius-python-turing LANGUAGES CXX)
+project(mobius_python_turing LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Target: libmobius-python-turing.la
+# Target: mobius_python_turing.la
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(libmobius-python-turing STATIC
+add_library(mobius_python_turing STATIC
     module.cpp
     turing.cpp
 )
 
-target_include_directories(libmobius-python-turing PRIVATE
-    ${MOBIUS_INCLUDE_DIRS}
+target_include_directories(mobius_python_turing PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_compile_options(libmobius-python-turing PRIVATE -fno-strict-aliasing -fPIC)
+target_link_libraries(mobius_python_turing PUBLIC Mobius::Core)
+
+target_compile_options(mobius_python_turing PRIVATE -fno-strict-aliasing -fPIC)

@@ -25,15 +25,13 @@ project(vfs_imagefile_dossier LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SOURCES
+add_library(vfs_imagefile_dossier MODULE
     main.cpp
     imagefile_impl.cpp
 )
 
-add_library(vfs_imagefile_dossier MODULE ${SOURCES})
 set_target_properties(vfs_imagefile_dossier PROPERTIES OUTPUT_NAME "vfs-imagefile-dossier" PREFIX "")
-target_include_directories(vfs_imagefile_dossier PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_imagefile_dossier PRIVATE mobius_core)
+target_link_libraries(vfs_imagefile_dossier PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

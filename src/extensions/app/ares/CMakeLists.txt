@@ -25,7 +25,7 @@ project(app_ares LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SOURCES
+add_library(app_ares MODULE
     main.cpp
     common.cpp
     decoder_impl_arestra.cpp
@@ -43,10 +43,9 @@ set(SOURCES
     file_torrenth.cpp
 )
 
-add_library(app_ares MODULE ${SOURCES})
 set_target_properties(app_ares PROPERTIES OUTPUT_NAME "app-ares" PREFIX "")
-target_include_directories(app_ares PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(app_ares PRIVATE mobius_core)
+
+target_link_libraries(app_ares PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

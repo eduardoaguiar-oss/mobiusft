@@ -25,15 +25,13 @@ project(vfs_imagefile_talon LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SOURCES
+add_library(vfs_imagefile_talon MODULE
     main.cpp
     imagefile_impl.cpp
 )
 
-add_library(vfs_imagefile_talon MODULE ${SOURCES})
 set_target_properties(vfs_imagefile_talon PROPERTIES OUTPUT_NAME "vfs-imagefile-talon" PREFIX "")
-target_include_directories(vfs_imagefile_talon PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_imagefile_talon PRIVATE mobius_core)
+target_link_libraries(vfs_imagefile_talon PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

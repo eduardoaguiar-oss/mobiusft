@@ -94,25 +94,25 @@ set_target_properties(mobius PROPERTIES
 )
 
 target_link_libraries(mobius PRIVATE
-    libmobius-python-core
-    libmobius-python-crypt
-    libmobius-python-database
-    libmobius-python-datasource
-    libmobius-python-datetime
-    libmobius-python-decoder
-    libmobius-python-encoder
-    libmobius-python-framework
-    libmobius-python-io
-    libmobius-python-kff
-    libmobius-python-model
-    libmobius-python-os
-    libmobius-python-pod
-    libmobius-python-system
-    libmobius-python-turing
+    mobius_python_core
+    mobius_python_crypt
+    mobius_python_database
+    mobius_python_datasource
+    mobius_python_datetime
+    mobius_python_decoder
+    mobius_python_encoder
+    mobius_python_framework
+    mobius_python_io
+    mobius_python_kff
+    mobius_python_model
+    mobius_python_os
+    mobius_python_pod
+    mobius_python_system
+    mobius_python_turing
     mobius_python_ui
-    libmobius-python-vfs
-    mobius_core
-    mobius_framework
+    mobius_python_vfs
+    Mobius::Core
+    Mobius::Framework
     Python3::Module
 )
 

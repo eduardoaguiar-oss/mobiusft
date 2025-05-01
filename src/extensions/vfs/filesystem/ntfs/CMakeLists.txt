@@ -25,15 +25,13 @@ project(vfs_filesystem_ntfs LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SOURCES
+add_library(vfs_filesystem_ntfs MODULE
     main.cpp
     filesystem_impl.cpp
 )
 
-add_library(vfs_filesystem_ntfs MODULE ${SOURCES})
 set_target_properties(vfs_filesystem_ntfs PROPERTIES OUTPUT_NAME "vfs-filesystem-ntfs" PREFIX "")
-target_include_directories(vfs_filesystem_ntfs PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_filesystem_ntfs PRIVATE mobius_core)
+target_link_libraries(vfs_filesystem_ntfs PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

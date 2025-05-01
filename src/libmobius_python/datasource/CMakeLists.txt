@@ -20,12 +20,12 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.10)
-project(libmobius-python-datasource LANGUAGES CXX)
+project(mobius_python_datasource LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Target: libmobius-python-datasource.la
+# Target: mobius_python_datasource.la
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(libmobius-python-datasource STATIC
+add_library(mobius_python_datasource STATIC
     module.cpp
     datasource.cpp
     datasource_vfs.cpp
@@ -35,11 +35,12 @@ add_library(libmobius-python-datasource STATIC
     ufdr/extraction.cpp
 )
 
-target_include_directories(libmobius-python-datasource PRIVATE
-    ${MOBIUS_INCLUDE_DIRS}
+target_include_directories(mobius_python_datasource PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_compile_options(libmobius-python-datasource PRIVATE -fno-strict-aliasing -fPIC)
+target_link_libraries(mobius_python_datasource PUBLIC Mobius::Core)
+
+target_compile_options(mobius_python_datasource PRIVATE -fno-strict-aliasing -fPIC)

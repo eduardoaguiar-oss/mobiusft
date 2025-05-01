@@ -20,12 +20,12 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.10)
-project(libmobius-python-model LANGUAGES CXX)
+project(mobius_python_model LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Target: libmobius-python-model.la
+# Target: mobius_python_model.la
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(libmobius-python-model STATIC
+add_library(mobius_python_model STATIC
     module.cpp
     ant.cpp
     case.cpp
@@ -35,11 +35,12 @@ add_library(libmobius-python-model STATIC
     item.cpp
 )
 
-target_include_directories(libmobius-python-model PRIVATE
-    ${MOBIUS_INCLUDE_DIRS}
+target_include_directories(mobius_python_model PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_compile_options(libmobius-python-model PRIVATE -fno-strict-aliasing -fPIC)
+target_link_libraries(mobius_python_model PUBLIC Mobius::Core)
+
+target_compile_options(mobius_python_model PRIVATE -fno-strict-aliasing -fPIC)

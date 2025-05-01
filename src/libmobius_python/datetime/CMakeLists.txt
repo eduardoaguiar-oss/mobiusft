@@ -20,12 +20,12 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.10)
-project(libmobius-python-datetime LANGUAGES CXX)
+project(mobius_python_datetime LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Target: libmobius-python-datetime.la
+# Target: mobius_python_datetime.la
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(libmobius-python-datetime STATIC
+add_library(mobius_python_datetime STATIC
     module.cpp
     func_new_datetime_from_fat_time.cpp
     func_new_datetime_from_iso_string.cpp
@@ -33,11 +33,12 @@ add_library(libmobius-python-datetime STATIC
     func_new_datetime_from_unix_timestamp.cpp
 )
 
-target_include_directories(libmobius-python-datetime PRIVATE
-    ${MOBIUS_INCLUDE_DIRS}
+target_include_directories(mobius_python_datetime PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_compile_options(libmobius-python-datetime PRIVATE -fno-strict-aliasing -fPIC)
+target_link_libraries(mobius_python_datetime PUBLIC Mobius::Core)
+
+target_compile_options(mobius_python_datetime PRIVATE -fno-strict-aliasing -fPIC)

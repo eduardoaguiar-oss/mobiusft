@@ -25,7 +25,7 @@ project(vfs_imagefile_msr LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SOURCES
+add_library(vfs_imagefile_msr MODULE
     main.cpp
     imagefile_impl.cpp
     reader_impl_aes.cpp
@@ -33,10 +33,8 @@ set(SOURCES
     reader_impl_plaintext.cpp
 )
 
-add_library(vfs_imagefile_msr MODULE ${SOURCES})
 set_target_properties(vfs_imagefile_msr PROPERTIES OUTPUT_NAME "vfs-imagefile-msr" PREFIX "")
-target_include_directories(vfs_imagefile_msr PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_imagefile_msr PRIVATE mobius_core)
+target_link_libraries(vfs_imagefile_msr PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

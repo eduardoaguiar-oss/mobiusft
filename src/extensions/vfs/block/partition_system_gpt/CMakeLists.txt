@@ -25,14 +25,12 @@ project(vfs_block_partition_system_gpt LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SOURCES
+add_library(vfs_block_partition_system_gpt MODULE
     main.cpp
 )
 
-add_library(vfs_block_partition_system_gpt MODULE ${SOURCES})
 set_target_properties(vfs_block_partition_system_gpt PROPERTIES OUTPUT_NAME "vfs-block-partition-system-gpt" PREFIX "")
-target_include_directories(vfs_block_partition_system_gpt PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_block_partition_system_gpt PRIVATE mobius_core)
+target_link_libraries(vfs_block_partition_system_gpt PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

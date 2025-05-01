@@ -25,17 +25,15 @@ project(app_emuletorrent LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SOURCES
+add_library(app_emuletorrent MODULE
     main.cpp
     evidence_loader_impl.cpp
     file_bt_fastresume.cpp
     file_ed2k_fastresume.cpp
 )
 
-add_library(app_emuletorrent MODULE ${SOURCES})
 set_target_properties(app_emuletorrent PROPERTIES OUTPUT_NAME "app-emuletorrent" PREFIX "")
-target_include_directories(app_emuletorrent PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(app_emuletorrent PRIVATE mobius_core)
+target_link_libraries(app_emuletorrent PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

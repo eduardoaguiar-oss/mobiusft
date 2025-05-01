@@ -25,13 +25,12 @@ project(date_code LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SOURCES
-    main.cpp)
+add_library(date_code MODULE
+    main.cpp
+)
 
-add_library(date_code MODULE ${SOURCES})
 set_target_properties(date_code PROPERTIES OUTPUT_NAME "date-code" PREFIX "")
-target_include_directories(date_code PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(date_code PRIVATE mobius_core)
+target_link_libraries(date_code PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

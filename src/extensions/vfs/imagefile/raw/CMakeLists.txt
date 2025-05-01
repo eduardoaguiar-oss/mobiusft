@@ -25,15 +25,13 @@ project(vfs_imagefile_raw LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SOURCES
+add_library(vfs_imagefile_raw MODULE
     main.cpp
     imagefile_impl.cpp
 )
 
-add_library(vfs_imagefile_raw MODULE ${SOURCES})
 set_target_properties(vfs_imagefile_raw PROPERTIES OUTPUT_NAME "vfs-imagefile-raw" PREFIX "")
-target_include_directories(vfs_imagefile_raw PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_imagefile_raw PRIVATE mobius_core)
+target_link_libraries(vfs_imagefile_raw PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

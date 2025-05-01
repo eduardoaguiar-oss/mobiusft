@@ -20,12 +20,12 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.10)
-project(libmobius-python-vfs LANGUAGES CXX)
+project(mobius_python_vfs LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Target: libmobius-python-vfs.la
+# Target: mobius_python_vfs.la
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(libmobius-python-vfs STATIC
+add_library(mobius_python_vfs STATIC
     module.cpp
     block.cpp
     disk.cpp
@@ -39,11 +39,12 @@ add_library(libmobius-python-vfs STATIC
     vfs.cpp
 )
 
-target_include_directories(libmobius-python-vfs PRIVATE
-    ${MOBIUS_INCLUDE_DIRS}
+target_include_directories(mobius_python_vfs PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_compile_options(libmobius-python-vfs PRIVATE -fno-strict-aliasing -fPIC)
+target_link_libraries(mobius_python_vfs PUBLIC Mobius::Core)
+
+target_compile_options(mobius_python_vfs PRIVATE -fno-strict-aliasing -fPIC)

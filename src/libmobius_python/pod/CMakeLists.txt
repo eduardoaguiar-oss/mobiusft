@@ -20,12 +20,12 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.10)
-project(libmobius-python-pod LANGUAGES CXX)
+project(mobius_python_pod LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Target: libmobius-python-pod.la
+# Target: mobius_python_pod.la
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(libmobius-python-pod STATIC
+add_library(mobius_python_pod STATIC
     module.cpp
     data.cpp
     func_serialize.cpp
@@ -33,11 +33,12 @@ add_library(libmobius-python-pod STATIC
     map.cpp
 )
 
-target_include_directories(libmobius-python-pod PRIVATE
-    ${MOBIUS_INCLUDE_DIRS}
+target_include_directories(mobius_python_pod PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_compile_options(libmobius-python-pod PRIVATE -fno-strict-aliasing -fPIC)
+target_link_libraries(mobius_python_pod PUBLIC Mobius::Core)
+
+target_compile_options(mobius_python_pod PRIVATE -fno-strict-aliasing -fPIC)

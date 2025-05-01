@@ -19,20 +19,18 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20)
 project(vfs_block_bitlocker LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SOURCES
+add_library(vfs_block_bitlocker MODULE
     main.cpp
 )
 
-add_library(vfs_block_bitlocker MODULE ${SOURCES})
 set_target_properties(vfs_block_bitlocker PROPERTIES OUTPUT_NAME "vfs-block-bitlocker" PREFIX "")
-target_include_directories(vfs_block_bitlocker PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_block_bitlocker PRIVATE mobius_core)
+target_link_libraries(vfs_block_bitlocker PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

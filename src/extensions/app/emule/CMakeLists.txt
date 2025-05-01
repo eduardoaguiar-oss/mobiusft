@@ -25,7 +25,7 @@ project(app_emule LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SOURCES
+add_library(app_emule MODULE
     main.cpp
     ctag.cpp
     file_cancelled_met.cpp
@@ -37,87 +37,73 @@ set(SOURCES
     evidence_loader_impl.cpp
 )
 
-add_library(app_emule MODULE ${SOURCES})
 set_target_properties(app_emule PROPERTIES OUTPUT_NAME "app-emule" PREFIX "")
-target_include_directories(app_emule PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(app_emule PRIVATE mobius_core)
+target_link_libraries(app_emule PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: emule_cancelled_met
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(STORED_CANCELLED_MET_SOURCES
+add_executable(emule_cancelled_met
     tools/emule_cancelled_met.cpp
     ctag.cpp
     file_cancelled_met.cpp
 )
 
-add_executable(emule_cancelled_met ${STORED_CANCELLED_MET_SOURCES})
-target_link_libraries(emule_cancelled_met PRIVATE mobius_core)
-target_include_directories(emule_cancelled_met PRIVATE ${MOBIUS_INCLUDE_DIRS})
+target_link_libraries(emule_cancelled_met PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: emule_key_index_dat
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(KEY_INDEX_DAT_SOURCES
+add_executable(emule_key_index_dat
     tools/emule_key_index_dat.cpp
     ctag.cpp
     file_key_index_dat.cpp
 )
 
-add_executable(emule_key_index_dat ${KEY_INDEX_DAT_SOURCES})
-target_link_libraries(emule_key_index_dat PRIVATE mobius_core)
-target_include_directories(emule_key_index_dat PRIVATE ${MOBIUS_INCLUDE_DIRS})
+target_link_libraries(emule_key_index_dat PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: emule_known_met
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(KNOWN_MET_SOURCES
+add_executable(emule_known_met
     tools/emule_known_met.cpp
     ctag.cpp
     file_known_met.cpp
 )
 
-add_executable(emule_known_met ${KNOWN_MET_SOURCES})
-target_link_libraries(emule_known_met PRIVATE mobius_core)
-target_include_directories(emule_known_met PRIVATE ${MOBIUS_INCLUDE_DIRS})
+target_link_libraries(emule_known_met PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: emule_part_met
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(PART_MET_SOURCES
+add_executable(emule_part_met
     tools/emule_part_met.cpp
     ctag.cpp
     file_part_met.cpp
 )
 
-add_executable(emule_part_met ${PART_MET_SOURCES})
-target_link_libraries(emule_part_met PRIVATE mobius_core)
-target_include_directories(emule_part_met PRIVATE ${MOBIUS_INCLUDE_DIRS})
+target_link_libraries(emule_part_met PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: emule_part_met_txtsrc
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(PART_MET_TXTSRC_SOURCES
+add_executable(emule_part_met_txtsrc
     tools/emule_part_met_txtsrc.cpp
     file_part_met_txtsrc.cpp
 )
 
-add_executable(emule_part_met_txtsrc ${PART_MET_TXTSRC_SOURCES})
-target_link_libraries(emule_part_met_txtsrc PRIVATE mobius_core)
-target_include_directories(emule_part_met_txtsrc PRIVATE ${MOBIUS_INCLUDE_DIRS})
+target_link_libraries(emule_part_met_txtsrc PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: emule_stored_searches_met
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(STORED_SEARCHES_MET_SOURCES
+add_executable(emule_stored_searches_met
     tools/emule_stored_searches_met.cpp
     ctag.cpp
     file_stored_searches_met.cpp
 )
 
-add_executable(emule_stored_searches_met ${STORED_SEARCHES_MET_SOURCES})
-target_link_libraries(emule_stored_searches_met PRIVATE mobius_core)
-target_include_directories(emule_stored_searches_met PRIVATE ${MOBIUS_INCLUDE_DIRS})
+target_link_libraries(emule_stored_searches_met PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: Installation

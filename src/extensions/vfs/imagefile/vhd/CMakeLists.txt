@@ -25,17 +25,15 @@ project(vfs_imagefile_vhd LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SOURCES
+add_library(vfs_imagefile_vhd MODULE
     main.cpp
     imagefile_impl.cpp
     reader_impl_dynamic.cpp
     reader_impl_fixed.cpp
 )
 
-add_library(vfs_imagefile_vhd MODULE ${SOURCES})
 set_target_properties(vfs_imagefile_vhd PROPERTIES OUTPUT_NAME "vfs-imagefile-vhd" PREFIX "")
-target_include_directories(vfs_imagefile_vhd PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_imagefile_vhd PRIVATE mobius_core)
+target_link_libraries(vfs_imagefile_vhd PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

@@ -25,15 +25,13 @@ project(vfs_filesystem_exfat LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SOURCES
+add_library(vfs_filesystem_exfat MODULE
     main.cpp
     filesystem_impl.cpp
 )
 
-add_library(vfs_filesystem_exfat MODULE ${SOURCES})
 set_target_properties(vfs_filesystem_exfat PROPERTIES OUTPUT_NAME "vfs-filesystem-exfat" PREFIX "")
-target_include_directories(vfs_filesystem_exfat PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_filesystem_exfat PRIVATE mobius_core)
+target_link_libraries(vfs_filesystem_exfat PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

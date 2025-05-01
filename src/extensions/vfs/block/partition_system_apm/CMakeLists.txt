@@ -25,14 +25,12 @@ project(vfs_block_partition_system_apm LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SOURCES
+add_library(vfs_block_partition_system_apm MODULE
     main.cpp
 )
 
-add_library(vfs_block_partition_system_apm MODULE ${SOURCES})
 set_target_properties(vfs_block_partition_system_apm PROPERTIES OUTPUT_NAME "vfs-block-partition-system-apm" PREFIX "")
-target_include_directories(vfs_block_partition_system_apm PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_block_partition_system_apm PRIVATE mobius_core)
+target_link_libraries(vfs_block_partition_system_apm PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

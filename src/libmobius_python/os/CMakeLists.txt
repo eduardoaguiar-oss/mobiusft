@@ -20,12 +20,12 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.10)
-project(libmobius-python-os LANGUAGES CXX)
+project(mobius_python_os LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Target: libmobius-python-os.la
+# Target: mobius_python_os.la
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(libmobius-python-os STATIC
+add_library(mobius_python_os STATIC
     module.cpp
     win/module.cpp
     win/credential.cpp
@@ -53,11 +53,12 @@ add_library(libmobius-python-os STATIC
     win/trashbin/info2_file.cpp
 )
 
-target_include_directories(libmobius-python-os PRIVATE
-    ${MOBIUS_INCLUDE_DIRS}
+target_include_directories(mobius_python_os PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_compile_options(libmobius-python-os PRIVATE -fno-strict-aliasing -fPIC)
+target_link_libraries(mobius_python_os PUBLIC Mobius::Core)
+
+target_compile_options(mobius_python_os PRIVATE -fno-strict-aliasing -fPIC)

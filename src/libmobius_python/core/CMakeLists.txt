@@ -23,9 +23,9 @@ cmake_minimum_required(VERSION 3.10)
 project(libmobius-python-core LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Target: libmobius-python-core.la
+# Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(libmobius-python-core STATIC
+add_library(mobius_python_core STATIC
     module.cpp
     application.cpp
     extension.cpp
@@ -43,11 +43,12 @@ add_library(libmobius-python-core STATIC
     file_decoder/section.cpp
 )
 
-target_include_directories(libmobius-python-core PRIVATE
-    ${MOBIUS_INCLUDE_DIRS}
+target_include_directories(mobius_python_core PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_compile_options(libmobius-python-core PRIVATE -fno-strict-aliasing -fPIC)
+target_link_libraries(mobius_python_core PUBLIC Mobius::Core)
+
+target_compile_options(mobius_python_core PRIVATE -fno-strict-aliasing -fPIC)

@@ -25,7 +25,7 @@ project(app_shareaza LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SOURCES
+add_library(app_shareaza MODULE
     main.cpp
     CBTInfo.cpp
     CDownload.cpp
@@ -47,15 +47,13 @@ set(SOURCES
     file_searches_dat.cpp
 )
 
-add_library(app_shareaza MODULE ${SOURCES})
 set_target_properties(app_shareaza PROPERTIES OUTPUT_NAME "app-shareaza" PREFIX "")
-target_include_directories(app_shareaza PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(app_shareaza PRIVATE mobius_core)
+target_link_libraries(app_shareaza PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: shareaza_library_dat
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SHAREAZA_LIBRARY_DAT_SOURCES
+add_executable(shareaza_library_dat
     tools/shareaza_library_dat.cpp
     CLibrary.cpp
     CLibraryFolder.cpp
@@ -64,14 +62,12 @@ set(SHAREAZA_LIBRARY_DAT_SOURCES
     CXMLElement.cpp
 )
 
-add_executable(shareaza_library_dat ${SHAREAZA_LIBRARY_DAT_SOURCES})
-target_include_directories(shareaza_library_dat PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(shareaza_library_dat PRIVATE mobius_core)
+target_link_libraries(shareaza_library_dat PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: shareaza_sd
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SHAREAZA_SD_SOURCES
+add_executable(shareaza_sd
     tools/shareaza_sd.cpp
     CBTInfo.cpp
     CDownload.cpp
@@ -80,14 +76,12 @@ set(SHAREAZA_SD_SOURCES
     CXMLElement.cpp
 )
 
-add_executable(shareaza_sd ${SHAREAZA_SD_SOURCES})
-target_include_directories(shareaza_sd PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(shareaza_sd PRIVATE mobius_core)
+target_link_libraries(shareaza_sd PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: shareaza_searches_dat
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SHAREAZA_SEARCHES_DAT_SOURCES
+add_executable(shareaza_searches_dat
         tools/shareaza_searches_dat.cpp
         CManagedSearch.cpp
         CMatchFile.cpp
@@ -99,9 +93,7 @@ set(SHAREAZA_SEARCHES_DAT_SOURCES
         CXMLElement.cpp
 )
 
-add_executable(shareaza_searches_dat ${SHAREAZA_SEARCHES_DAT_SOURCES})
-target_include_directories(shareaza_searches_dat PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(shareaza_searches_dat PRIVATE mobius_core)
+target_link_libraries(shareaza_searches_dat PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

@@ -20,12 +20,12 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.10)
-project(libmobius-python-encoder LANGUAGES CXX)
+project(mobius_python_encoder LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Target: libmobius-python-encoder.la
+# Target: mobius_python_encoder.la
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(libmobius-python-encoder STATIC
+add_library(mobius_python_encoder STATIC
     module.cpp
     func_base16.cpp
     func_base32.cpp
@@ -35,11 +35,12 @@ add_library(libmobius-python-encoder STATIC
     func_hexstring.cpp
 )
 
-target_include_directories(libmobius-python-encoder PRIVATE
-    ${MOBIUS_INCLUDE_DIRS}
+target_include_directories(mobius_python_encoder PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_compile_options(libmobius-python-encoder PRIVATE -fno-strict-aliasing -fPIC)
+target_link_libraries(mobius_python_encoder PUBLIC Mobius::Core)
+
+target_compile_options(mobius_python_encoder PRIVATE -fno-strict-aliasing -fPIC)

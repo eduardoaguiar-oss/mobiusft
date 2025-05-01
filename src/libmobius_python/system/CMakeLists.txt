@@ -20,22 +20,23 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.10)
-project(libmobius-python-system LANGUAGES CXX)
+project(mobius_python_system LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Target: libmobius-python-system.la
+# Target: mobius_python_system.la
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(libmobius-python-system STATIC
+add_library(mobius_python_system STATIC
     module.cpp
     device.cpp
     func_get_devices.cpp
 )
 
-target_include_directories(libmobius-python-system PRIVATE
-    ${MOBIUS_INCLUDE_DIRS}
+target_include_directories(mobius_python_system PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_compile_options(libmobius-python-system PRIVATE -fno-strict-aliasing -fPIC)
+target_link_libraries(mobius_python_system PUBLIC Mobius::Core)
+
+target_compile_options(mobius_python_system PRIVATE -fno-strict-aliasing -fPIC)

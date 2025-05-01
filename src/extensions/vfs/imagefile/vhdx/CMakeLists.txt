@@ -25,16 +25,14 @@ project(vfs_imagefile_vhdx LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(SOURCES
+add_library(vfs_imagefile_vhdx MODULE
     main.cpp
     imagefile_impl.cpp
     reader_impl.cpp
 )
 
-add_library(vfs_imagefile_vhdx MODULE ${SOURCES})
 set_target_properties(vfs_imagefile_vhdx PROPERTIES OUTPUT_NAME "vfs-imagefile-vhdx" PREFIX "")
-target_include_directories(vfs_imagefile_vhdx PRIVATE ${MOBIUS_INCLUDE_DIRS})
-target_link_libraries(vfs_imagefile_vhdx PRIVATE mobius_core)
+target_link_libraries(vfs_imagefile_vhdx PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

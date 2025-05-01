@@ -67,6 +67,7 @@ read_header_data (mobius::core::io::reader reader)
 // @brief Check if file is an instance of imagefile msr
 // @param f File object
 // @return true/false
+// https://pt.slideshare.net/realitynet/insecure-secret-zone
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 imagefile_impl::is_instance (const mobius::core::io::file& f)
