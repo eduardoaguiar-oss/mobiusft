@@ -106,7 +106,7 @@ add_executable(emule_stored_searches_met
 target_link_libraries(emule_stored_searches_met PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Tools: Installation
+# Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 install(TARGETS
     app_emule LIBRARY DESTINATION share/mobiusft/extensions

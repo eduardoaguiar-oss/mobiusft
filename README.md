@@ -49,8 +49,7 @@ Run the following shell commands (replace all `<VAR>` for suitable values):
 
 ```bash
 tar xvf <mobius-tar-file>
-cd <mobiusft dir>
-cmake -B build --install-prefix <DIR> [-DLIBTSK_ROOT=<DIR>]
+cmake -B build -S <mobiusft-dir> --install-prefix <DIR> [-DLIBTSK_ROOT=<DIR>]
 cmake --build build -j <threads>
 cmake --install build
 ```
@@ -59,8 +58,7 @@ Example:
 
 ```bash
 tar xvf mobiusft-2.15.tar.xz
-cd mobiusft-2.15
-cmake -B build --install-prefix /opt/mobiusft-2.15 -DLIBTSK_ROOT=/opt/sleuthkit-4.12.1
+cmake -B build -S mobiusft-2.15 --install-prefix /opt/mobiusft-2.15 -DLIBTSK_ROOT=/opt/sleuthkit-4.14.0
 cmake --build build -j 24
 cmake --install build
 ```
@@ -79,23 +77,6 @@ Please, support this project. Here are the ways you can make a donation:
 
 - Buy me a coffee at https://buymeacoffee.com/mobiusft.
 - Send any amount of crypto coins to one of the addresses listed at https://www.nongnu.org/mobiusft.
-
-## Mailing List
-
-Join the Mobius Forensic Toolkit community by subscribing to the official mailing list:  
-**mobiusft-list@nongnu.org**.  
-
-You can manage your subscription and participate in discussions on the Mobius project page at **GNU Savannah**:  
-[https://savannah.gnu.org/projects/mobiusft](http://savannah.gnu.org/projects/mobiusft).
-
-## License
-
-The Mobius Forensic Toolkit is **free software**. You are free to redistribute it and/or modify it under the terms of the **GNU General Public License** as published by the Free Software Foundation, either version 2 or any later version.
-
-This program is distributed in the hope that it will be useful, but **WITHOUT ANY WARRANTY**; without even the implied warranty of **MERCHANTABILITY** or **FITNESS FOR A PARTICULAR PURPOSE**. For more details, see the GNU General Public License.
-
-You should have received a copy of the GNU General Public License along with this program. If not, visit:  
-[https://www.gnu.org/licenses/](http://www.gnu.org/licenses/).
 
 ## Acknowledgments
 

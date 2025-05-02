@@ -97,6 +97,9 @@ set(CPACK_SOURCE_IGNORE_FILES
     "\\\\.gitignore"
     "\\\\.vscode/"
     "\\\\.idea/"
+    "mobius.code-workspace"
+    "mobiusft-*"
+    "screenshots/"
 )
 
 include(CPack)
