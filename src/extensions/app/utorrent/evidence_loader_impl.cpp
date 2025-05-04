@@ -32,47 +32,9 @@
 #include <mobius/core/string_functions.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Versions examined: Emule 0.50a and DreaMule 3.2
-//
-// Emule main forensic files:
-// @see http://www.emule-project.net/home/perl/help.cgi?l=1&rm=show_topic&topic_id=106
-//
-// . AC_SearchStrings.dat: Stores search strings
-//
-// . Cancelled.met: Files cancelled before completing downloading
-//
-// . Clients.met: Credit control file. Control credits of each peer (dl and ul)
-//
-// . Downloads.txt/bak: Summary of .part.met files (part name and url)
-//
-// . KeyIndex.dat: Kamdelia search result file, with sources, IPs and filenames
-//
-// . Known.met: Shared files, downloading files, downloaded files
-//
-// . Preferences.dat: Stores the user GUID for eDonkey network
-//
-// . PreferencesKad.dat: Stores Kademlia network client ID
-//
-// . Sharedir.dat: Stores the paths to all shared directories
-//
-// . Statistics.ini: Stores statistics about program usage
-//
-// . StoredSearches.met: Stores open searches (ongoing searches)
-//
-// . *.part.met: information about a file being downloaded (not in known.met)
-//
-// DreaMule forensic files:
-// . *.part.met.txtsrc: list of sources, with IP and expiration date/time
-//
-// Kademlia forensic files:
-// . key_index.dat: stores a chunk of Kademlia's Distributed Hash Table,
-//   including search hash value, hits (files) and peers sharing those files
-//
-// All Date/Times are stored in Coordinated Universal Time (UTC).
-// @see https://msdn.microsoft.com/pt-br/library/windows/desktop/ms724397(v=vs.85).aspx
-//
-// According to eMule Homepage: "Your Incoming and Temporary directory are always shared"
-// @see https://www.emule-project.net/home/perl/help.cgi?l=1&topic_id=112&rm=show_topic
+// @see https://www.forensicfocus.com/articles/forensic-analysis-of-the-%CE%BCtorrent-peer-to-peer-client-in-windows/
+// @see https://robertpearsonblog.wordpress.com/2016/11/10/utorrent-forensic-artifacts/
+// @see https://robertpearsonblog.wordpress.com/2016/11/11/utorrent-and-windows-10-forensic-nuggets-of-info/
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace

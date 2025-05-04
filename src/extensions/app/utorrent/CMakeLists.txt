@@ -28,10 +28,21 @@ project(app_utorrent LANGUAGES CXX)
 add_library(app_utorrent MODULE
     main.cpp
     evidence_loader_impl.cpp
+    file_settings_dat.cpp
 )
 
 set_target_properties(app_utorrent PROPERTIES OUTPUT_NAME "app-utorrent" PREFIX "")
 target_link_libraries(app_utorrent PRIVATE Mobius::Core)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: utorrent_settings_dat
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_executable(utorrent_settings_dat
+    tools/utorrent_settings_dat.cpp
+    file_settings_dat.cpp
+)
+
+target_link_libraries(utorrent_settings_dat PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation
