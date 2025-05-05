@@ -27,7 +27,6 @@ from . import calls
 from . import chat_messages
 from . import cookies
 from . import installed_programs
-from . import ip_addresses
 from . import opened_files
 from . import received_files
 from . import sent_files
@@ -55,7 +54,6 @@ ANTS = [
     chat_messages.Ant,
     cookies.Ant,
     installed_programs.Ant,
-    ip_addresses.Ant,
     opened_files.Ant,
     received_files.Ant,
     sent_files.Ant,
@@ -70,6 +68,7 @@ LOADERS = [
     "app-emule",
     "app-emuletorrent",
     "app-shareaza",
+    "app-utorrent",
 ]
 
 

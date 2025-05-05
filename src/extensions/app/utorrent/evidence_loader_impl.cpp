@@ -16,11 +16,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "evidence_loader_impl.hpp"
-//#include "file_key_index_dat.hpp"
-//#include "file_known_met.hpp"
-//#include "file_part_met.hpp"
-//#include "file_part_met_txtsrc.hpp"
-//#include "file_stored_searches_met.hpp"
 #include <mobius/core/log.hpp>
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/pod/data.hpp>
@@ -184,30 +179,15 @@ evidence_loader_impl::_scan_canonical_folders ()
 void
 evidence_loader_impl::_scan_canonical_root_folder (const mobius::core::io::folder& folder)
 {
-/*
     username_ = {};
     auto w = mobius::core::io::walker (folder);
 
     // Users folders
     for (const auto& f : w.get_folders_by_pattern ("users/*"))
         _scan_canonical_user_folder (f);
-
-    // Win XP folders
-    for (const auto& f : w.get_folders_by_path ("program files/emule"))
-        _scan_canonical_emule_xp_folder (f);
-
-    for (const auto& f : w.get_folders_by_path ("program files/dreamule"))
-        _scan_canonical_emule_xp_folder (f);
-
-    for (const auto& f : w.get_folders_by_path ("arquivos de programas/emule"))
-        _scan_canonical_emule_xp_folder (f);
-
-    for (const auto& f : w.get_folders_by_path ("arquivos de programas/dreamule"))
-        _scan_canonical_emule_xp_folder (f);
-*/
 }
 
-/*
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Scan user folder for evidences
 // @param folder User folder
@@ -218,152 +198,62 @@ evidence_loader_impl::_scan_canonical_user_folder (const mobius::core::io::folde
     username_ = folder.get_name ();
     auto w = mobius::core::io::walker (folder);
 
-    for (const auto& f : w.get_folders_by_path ("appdata/local/emule/config"))
-        _scan_canonical_emule_config_folder (f);
+    for (const auto& f : w.get_folders_by_path ("appdata/roaming/utorrent"))
+        _scan_canonical_utorrent_folder (f);
 
-    for (const auto& f : w.get_folders_by_path ("downloads/emule/incoming"))
-        _scan_canonical_emule_download_folder (f);
-
-    for (const auto& f : w.get_folders_by_path ("downloads/emule/temp"))
-        _scan_canonical_emule_download_folder (f);
+    for (const auto& f : w.get_folders_by_path ("appdata/roaming/bittorrent"))
+        _scan_canonical_utorrent_folder (f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Scan emule/dreamule folder for evidences
-// @param folder emule/dreamule folder
+// @brief Scan utorrent folder for evidences
+// @param folder utorrent folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_emule_xp_folder (const mobius::core::io::folder& folder)
+evidence_loader_impl::_scan_canonical_utorrent_folder (const mobius::core::io::folder& folder)
 {
+    profile_ = {};
+    profile_.set_username (username_);
+
     auto w = mobius::core::io::walker (folder);
     
-    for (const auto& f : w.get_folders_by_name ("config"))
-        _scan_canonical_emule_config_folder (f);
-
-    for (const auto& f : w.get_folders_by_name ("incoming"))
-        _scan_canonical_emule_download_folder (f);
-
-    for (const auto& f : w.get_folders_by_name ("temp"))
-        _scan_canonical_emule_download_folder (f);
-}
-
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Scan AppData/Local/eMule/config folder for evidences
-// @param folder Config folder
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_scan_canonical_emule_config_folder (const mobius::core::io::folder& folder)
-{
-    account_ = {};
-    account_.username = username_;
-
-    mobius::core::io::walker w (folder);
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Decode account files
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    for (const auto& f : w.get_files ())
+    for (const auto& [name, f] : w.get_files_with_name())
       {
-        const std::string lname = mobius::core::string::tolower (f.get_name ());
+        if (name == "settings.dat")
+            _decode_settings_dat_file (f);
 
-        if (lname == "preferences.dat")
-            _decode_preferences_dat_file (f);
+        else if (name == "settings.dat.old")
+            _decode_settings_dat_file (f);
 
-        else if (lname == "preferences.ini")
-            _decode_preferences_ini_file (f);
+        else if (name == "settings.dat.bak")
+            _decode_settings_dat_file (f);
 
-        else if (lname == "statistics.ini")
-            _decode_statistics_ini_file (f);
+        else if (name == "settings.dat.tmp")
+            _decode_settings_dat_file (f);
 
-        else if (lname == "preferenceskad.dat")
-            _decode_preferenceskad_dat_file (f);
-    }
+        else if (name == "dht.dat")
+            _decode_dht_dat_file (f);
 
-    if (!account_.statistics_ini_f)
-      {
-        for (const auto& f : w.get_files_by_name ("statbkup.ini"))
-            _decode_statistics_ini_file (f);
+        else if (name == "dht.dat.old")
+            _decode_dht_dat_file (f);
       }
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Decoder other config files
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    for (const auto& f : w.get_files ())
-      {
-        const std::string lname = mobius::core::string::tolower (f.get_name ());
-
-        if (lname == "ac_searchstrings.dat")
-            _decode_ac_searchstrings_dat_file (f);
-            
-        else if (lname == "key_index.dat")
-            _decode_key_index_dat_file (f);
-
-        else if (lname == "known.met")
-            _decode_known_met_file (f);
-
-        else if (lname == "storedsearches.met")
-            _decode_storedsearches_met_file (f);
-      }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Add account to accounts list
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    if (!account_.emule_guid.empty () || !account_.kamdelia_guid.empty ())
-        accounts_.push_back (account_);
+    if (profile_)
+        profiles_.push_back(profile_);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Scan Download/emule folder
-// @param folder Download/emule folder
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_scan_canonical_emule_download_folder (const mobius::core::io::folder& folder)
-{
-    mobius::core::io::walker w (folder);
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Decoder .part.met files
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    for (const auto& f : w.get_files_by_pattern ("*.part.met"))
-        _decode_part_met_file (f);
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Decoder .part.met.txtsrc files
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    for (const auto& f : w.get_files_by_pattern ("*.part.met.txtsrc"))
-        _decode_part_met_txtsrc_file (f);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode Preferences.dat file
+// @brief Decode dht.dat file
 // @param f File object
-// @see CPreferences::Init@srchybrid/Preferences.cpp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_preferences_dat_file (const mobius::core::io::file& f)
+evidence_loader_impl::_decode_dht_dat_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
   try
     {
-      // Create account object
-      if (!account_.preferences_dat_f ||
-          (account_.preferences_dat_f.is_deleted () && !f.is_deleted ()))
-        {
-          // Get reader
-          auto reader = f.new_reader ();
-          if (!reader)
-            return;
-
-          // Decode file
-          mobius::core::decoder::data_decoder decoder (reader);
-
-          account_.is_deleted = f.is_deleted ();
-          account_.preferences_dat_version = decoder.get_uint8 ();
-          account_.emule_guid = decoder.get_hex_string_by_size (16);
-          account_.preferences_dat_f = f;
-        }
+      profile_.add_dht_dat_file(f);
     }
   catch (const std::exception& e)
     {
@@ -372,542 +262,35 @@ evidence_loader_impl::_decode_preferences_dat_file (const mobius::core::io::file
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode Preferences.ini file
+// @brief Decode Settings.dat file
 // @param f File object
-// @see CPreferences::LoadPreferences@srchybrid/Preferences.cpp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_preferences_ini_file (const mobius::core::io::file& f)
+evidence_loader_impl::_decode_settings_dat_file (const mobius::core::io::file& f)
 {
   mobius::core::log log (__FILE__, __FUNCTION__);
 
   try
     {
-      // Create account object
-      if (!account_.preferences_ini_f ||
-          (account_.preferences_ini_f.is_deleted () && !f.is_deleted ()))
-        {
-          // Get reader
-          auto reader = f.new_reader ();
-          if (!reader)
-            return;
-
-          // Decode file
-          mobius::core::decoder::inifile ini (reader);
-
-          account_.incoming_dir = ini.get_value ("emule", "incomingdir");
-          account_.temp_dir = ini.get_value ("emule", "tempdir");
-          account_.nick = ini.get_value ("emule", "nick");
-          account_.app_version = ini.get_value ("emule", "appversion");
-
-          if (ini.has_value ("emule", "autostart"))
-            account_.auto_start = ini.get_value ("emule", "autostart") == "1";
-
-          account_.preferences_ini_f = f;
-        }
+      profile_.add_settings_dat_file(f);
     }
   catch (const std::exception& e)
     {
       log.warning (__LINE__, e.what ());
     }
 }
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode statistics.ini file
-// @param f File object
-// @see CPreferences::LoadStats@srchybrid/Preferences.cpp
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_decode_statistics_ini_file (const mobius::core::io::file& f)
-{
-  mobius::core::log log (__FILE__, __FUNCTION__);
-
-  try
-    {
-      // Create account object
-      if (!account_.statistics_ini_f ||
-          (account_.statistics_ini_f.is_deleted () && !f.is_deleted ()))
-        {
-          // Get reader
-          auto reader = f.new_reader ();
-          if (!reader)
-            return;
-
-          // Decode file
-          mobius::core::decoder::inifile ini (reader);
-
-          if (ini.has_value ("statistics", "TotalDownloadedBytes"))
-            account_.total_downloaded_bytes = std::stol (ini.get_value ("statistics", "TotalDownloadedBytes"));
-
-          if (ini.has_value ("statistics", "TotalUploadedBytes"))
-            account_.total_uploaded_bytes = std::stol (ini.get_value ("statistics", "TotalUploadedBytes"));
-
-          if (ini.has_value ("statistics", "DownCompletedFiles"))
-            account_.download_completed_files = std::stol (ini.get_value ("statistics", "DownCompletedFiles"));
-
-          account_.statistics_ini_f = f;
-        }
-    }
-  catch (const std::exception& e)
-    {
-      log.warning (__LINE__, e.what ());
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode PreferencesKad.dat file
-// @param f File object
-// @see CPrefs::ReadFile@kademlia/kademlia/Prefs.cpp
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_decode_preferenceskad_dat_file (const mobius::core::io::file& f)
-{
-  mobius::core::log log (__FILE__, __FUNCTION__);
-
-  try
-    {
-      if (!account_.preferenceskad_dat_f ||
-          (account_.preferenceskad_dat_f.is_deleted () && !f.is_deleted ()))
-        {
-          // Get reader
-          auto reader = f.new_reader ();
-          if (!reader)
-            return;
-
-          // Decode file
-          mobius::core::decoder::data_decoder decoder (reader);
-
-          account_.preferenceskad_dat_f = f;
-          account_.kamdelia_ip = decoder.get_ipv4_le ();
-
-          decoder.skip (2);
-
-          auto c1 = decoder.get_uint32_le ();
-          auto c2 = decoder.get_uint32_le ();
-          auto c3 = decoder.get_uint32_le ();
-          auto c4 = decoder.get_uint32_le ();
-
-          account_.kamdelia_guid =
-                mobius::core::string::to_hex (c1, 8) +
-                mobius::core::string::to_hex (c2, 8) +
-                mobius::core::string::to_hex (c3, 8) +
-                mobius::core::string::to_hex (c4, 8);
-        }
-    }
-  catch (const std::exception& e)
-    {
-      log.warning (__LINE__, e.what ());
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode AC_SearchStrings.dat file
-// @param f File object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_decode_ac_searchstrings_dat_file (const mobius::core::io::file& f)
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    try
-      {
-        // Get reader
-        auto reader = f.new_reader ();
-        if (!reader)
-            return;
-
-        // Decode file
-        mobius::core::io::line_reader lr (reader, "utf-16", "\r\n");
-        std::string line;
-        std::size_t rec_number = 0;
-
-        while (lr.read (line))
-          {
-            ++rec_number;
-
-            if (!line.empty ())
-              {
-                autofill af;
-
-                af.is_deleted = f.is_deleted ();
-                af.username = username_;
-                af.value = line;
-                af.id = "search";
-                af.f = f;
-
-                af.metadata.set("record_number", rec_number);
-
-                autofills_.push_back (af);
-              }
-          }
-      }
-    catch (const std::exception& e)
-      {
-        log.warning (__LINE__, e.what ());
-      }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode KeyIndex.dat file
-// @param f File object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_decode_key_index_dat_file (const mobius::core::io::file& f)
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    try
-      {
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Decode file
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        file_key_index_dat key_index (f.new_reader ());
-
-        if (!key_index)
-          {
-            log.info (__LINE__, "File is not an instance of KeyIndex.dat. Path: " + f.get_path ());
-            return;
-          }
-
-        log.info (__LINE__, "KeyIndex.dat file decoded. Path: " + f.get_path ());
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Add local files
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        for (const auto& k : key_index.get_keys ())
-          {
-            for (const auto& source : k.sources)
-              {
-                auto hash_ed2k = mobius::core::string::toupper (source.id);
-
-                for (const auto& name : source.names)
-                  {
-                    auto metadata = get_metadata_from_tags (name.tags);
-                    metadata.set ("network", "Kamdelia");
-                    metadata.set ("key_id", k.id);
-                    metadata.set ("lifetime", name.lifetime);
-
-                    for (const auto& ip : name.ips)
-                      {
-                        remote_file rf;
-                        rf.timestamp = ip.last_published;
-                        rf.ip = ip.value;
-                        rf.username = username_;
-                        rf.key_index_dat_f = f;
-                        rf.metadata = metadata.clone ();
-                        rf.filename = metadata.get <std::string> ("name");
-  
-                        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-                        // Content hashes
-                        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-                        std::vector <mobius::core::pod::data> hashes = {
-                            {"ed2k", hash_ed2k}
-                        };
-
-                        auto aich_hash = metadata.get <std::string> ("hash_aich");
-
-                        if (!aich_hash.empty ())
-                            hashes.push_back ({"aich", aich_hash});
-
-                        rf.hashes = hashes;
-
-                        remote_files_.push_back (rf);
-                      }
-                  }
-              }
-          }
-      }
-    catch (const std::exception& e)
-      {
-        log.warning (__LINE__, e.what ());
-      }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode Known.met file
-// @param f File object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_decode_known_met_file (const mobius::core::io::file& f)
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    try
-      {
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Decode file
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        file_known_met known_met (f.new_reader ());
-
-        if (!known_met)
-          {
-            log.info (__LINE__, "File is not an instance of Known.met. Path: " + f.get_path ());
-            return;
-          }
-
-        log.info (__LINE__, "Known.met file decoded. Path: " + f.get_path ());
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Add local files
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        for (const auto& kf : known_met.get_known_files ())
-          {
-            auto metadata = get_metadata_from_tags (kf.tags);
-
-            local_file lf;
-
-            lf.username = username_;
-            lf.filename = metadata.get <std::string> ("name");
-            
-            if (!account_.incoming_dir.empty ())
-                lf.path = account_.incoming_dir + '\\' + lf.filename;
-  
-            lf.flag_downloaded = true;
-            lf.flag_uploaded = metadata.get <std::int64_t> ("uploaded_bytes") > 0;
-            lf.flag_shared = mobius::framework::evidence_flag::always;
-            lf.flag_corrupted = metadata.get <bool> ("is_corrupted");
-            lf.flag_completed = true; // @see CPartFile::PerformFileCompleteEnd
-
-            metadata.set ("flag_downloaded", to_string (lf.flag_downloaded));
-            metadata.set ("flag_uploaded", to_string (lf.flag_uploaded));
-            metadata.set ("flag_shared", to_string (lf.flag_shared));
-            metadata.set ("flag_corrupted", to_string (lf.flag_corrupted));
-            metadata.set ("flag_completed", to_string (lf.flag_completed));
-            metadata.set ("last_modification_time", kf.last_modification_time);
-            metadata.set ("network", "eDonkey");
-
-            lf.metadata = metadata;
-            lf.hashes = get_file_hashes (kf);
-            lf.f = f;
-
-            local_files_.push_back (lf);
-          }
-      }
-    catch (const std::exception& e)
-      {
-        log.warning (__LINE__, e.what ());
-      }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode .part.met file
-// @param f File object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_decode_part_met_file (const mobius::core::io::file& f)
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    try
-      {
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Decode file
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        file_part_met part_met (f.new_reader ());
-
-        if (!part_met)
-          {
-            log.info (__LINE__, "File is not an instance of .part.met. Path: " + f.get_path ());
-            return;
-          }
-
-        log.info (__LINE__, ".part.met file decoded. Path: " + f.get_path ());
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Create local file
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        auto metadata = get_metadata_from_tags (part_met.get_tags ());
-
-        local_file lf;
-
-        lf.username = username_;
-        lf.path = f.get_path ();
-        lf.path.erase (lf.path.size () - 4);
-        lf.filename = metadata.get <std::string> ("name");
-        lf.is_deleted = f.is_deleted ();
-        lf.f = f;
-
-        lf.flag_downloaded = true;
-        lf.flag_uploaded = metadata.get <std::int64_t> ("uploaded_bytes") > 0;
-        lf.flag_shared = mobius::framework::evidence_flag::always;
-        lf.flag_corrupted = metadata.get <bool> ("is_corrupted");
-        lf.flag_completed = part_met.get_total_gap_size () == 0;
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Metadata
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        metadata.set ("file_version", part_met.get_version ());
-        metadata.set ("flag_downloaded", to_string (lf.flag_downloaded));
-        metadata.set ("flag_uploaded", to_string (lf.flag_uploaded));
-        metadata.set ("flag_shared", to_string (lf.flag_shared));
-        metadata.set ("flag_corrupted", to_string (lf.flag_corrupted));
-        metadata.set ("flag_completed", to_string (lf.flag_completed));
-        metadata.set ("timestamp", part_met.get_timestamp ());
-        metadata.set ("total_gap_size", part_met.get_total_gap_size ());
-        metadata.set ("network", "eDonkey");
-
-        lf.metadata = metadata;
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Content hashes
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        std::vector <mobius::core::pod::data> hashes = {
-            {"ed2k", mobius::core::string::toupper (part_met.get_hash_ed2k ())}
-        };
-
-        auto aich_hash = metadata.get <std::string> ("hash_aich");
-
-        if (!aich_hash.empty ())
-            hashes.push_back ({"aich", aich_hash});
-
-        lf.hashes = hashes;
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Add local file
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        local_files_.push_back (lf);
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Add part.met file to the list of part.met files
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        auto iter = part_met_files_.find (f.get_name ());
-
-        if (iter == part_met_files_.end () || (iter->second.is_deleted && !f.is_deleted ()))
-            part_met_files_[f.get_name ()] = lf;
-      }
-    catch (const std::exception& e)
-      {
-        log.warning (__LINE__, e.what ());
-      }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode .part.met.txtsrc file
-// @param f File object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_decode_part_met_txtsrc_file (const mobius::core::io::file& f)
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    try
-      {
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Decode file
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        file_part_met_txtsrc txtsrc (f.new_reader ());
-
-        if (!txtsrc)
-          {
-            log.info (__LINE__, "File is not an instance of .part.met.txtsrc. Path: " + f.get_path ());
-            return;
-          }
-
-        log.info (__LINE__, ".part.met.txtsrc file decoded. Path: " + f.get_path ());
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Get corresponding part.met file
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        auto part_met_txtsrc_name = f.get_name ();
-        auto part_met_name = part_met_txtsrc_name.substr (0, part_met_txtsrc_name.size () - 7);
-        auto iter = part_met_files_.find (part_met_name);
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Create remote file if part.met file is found
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        if (iter != part_met_files_.end ())
-          {
-            auto lf = iter->second;
-
-            for (const auto& source : txtsrc.get_sources())
-              {
-                auto rf = remote_file();
-
-                rf.username = username_;
-                rf.timestamp = f.get_modification_time ();
-                rf.ip = source.ip;
-                rf.port = source.port;
-                rf.filename = lf.filename;
-                rf.part_met_f = lf.f;
-                rf.part_met_txtsrc_f = f;
-                rf.hashes = lf.hashes.clone();
-                rf.metadata = lf.metadata.clone();
-
-                remote_files_.push_back (rf);
-              }
-          }
-      }
-    catch (const std::exception& e)
-      {
-        log.warning (__LINE__, e.what ());
-      }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode StoredSearches.met file
-// @param f File object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_decode_storedsearches_met_file (const mobius::core::io::file& f)
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    try
-      {
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Decode file
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        file_stored_searches_met stored_searches (f.new_reader ());
-
-        if (!stored_searches)
-          {
-            log.info (__LINE__, "File is not an instance of StoredSearches.met. Path: " + f.get_path ());
-            return;
-          }
-
-        auto version = stored_searches.get_version ();
-        log.info (__LINE__, "StoredSearches.met file decoded. Path: " + f.get_path ());
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Add searches
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        for (const auto& s : stored_searches.get_searches ())
-          {
-            autofill af;
-
-            af.is_deleted = f.is_deleted ();
-            af.username = username_;
-            af.value = s.expression;
-            af.id = "search";
-            af.f = f;
-            
-            af.metadata = mobius::core::pod::map ();
-            af.metadata.set("stored_searches_version", version);
-            af.metadata.set("search_id", s.id);
-            af.metadata.set("e_type", s.e_type);
-            af.metadata.set("special_title", s.special_title);
-            af.metadata.set("filetype", s.filetype);
-            af.metadata.set("file_count", s.files.size ());
-
-            autofills_.push_back (af);
-          }
-      }
-    catch (const std::exception& e)
-      {
-        log.warning (__LINE__, e.what ());
-      }
-}
-*/
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save evidences
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_save_evidences ()
+evidence_loader_impl::_save_evidences()
 {
-  auto transaction = item_.new_transaction ();
-/*
-  _save_accounts ();
+  auto transaction = item_.new_transaction();
+
+  _save_accounts();
+  _save_ip_addresses();
+  /*
   _save_autofills ();
   _save_local_files ();
   _save_p2p_remote_files ();
@@ -920,69 +303,111 @@ evidence_loader_impl::_save_evidences ()
   transaction.commit ();
 }
 
-/*
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save accounts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_accounts ()
 {
-  for (const auto& a : accounts_)
+    for(const auto& p : profiles_)
     {
-      mobius::core::pod::map metadata;
-      metadata.set ("app_id", APP_ID);
-      metadata.set ("app_name", APP_NAME);
-      metadata.set ("username", a.username);
-      metadata.set ("emule_guid", a.emule_guid);
-      metadata.set ("kamdelia_guid", a.kamdelia_guid);
-      metadata.set ("kamdelia_ip", a.kamdelia_ip);
-      metadata.set ("incoming_dir", a.incoming_dir);
-      metadata.set ("temp_dir", a.temp_dir);
-      metadata.set ("nickname", a.nick);
-      metadata.set ("app_version", a.app_version);
-      metadata.set ("auto_start", to_string (a.auto_start));
-      metadata.set ("total_downloaded_bytes", a.total_downloaded_bytes);
-      metadata.set ("total_uploaded_bytes", a.total_uploaded_bytes);
-      metadata.set ("download_completed_files", a.download_completed_files);
+        auto settings = p.get_main_settings ();
 
-      if (!a.emule_guid.empty ())
+        mobius::core::pod::map metadata;
+        metadata.set("app_id", APP_ID);
+        metadata.set("app_name", APP_NAME);
+        metadata.set("network", "BitTorrent");
+        metadata.set("username", p.get_username ());
+        metadata.set("total_downloaded_bytes", settings.total_bytes_downloaded);
+        metadata.set("total_uploaded_bytes", settings.total_bytes_uploaded);
+        metadata.set("execution_count", settings.execution_count);
+        metadata.set("installation_time", settings.installation_time);
+        metadata.set("last_used_time", settings.last_used_time);
+        metadata.set("last_bin_change_time", settings.last_bin_change_time);
+        metadata.set("version", settings.version);
+        metadata.set("installation_version", settings.installation_version);
+        metadata.set("language", settings.language);
+        metadata.set("computer_id", settings.computer_id);
+        metadata.set("auto_start", settings.auto_start ? "yes" : "no");
+
+        for (const auto& account : p.get_accounts())
         {
-          auto e = item_.new_evidence ("user-account");
+            auto e_metadata = metadata.clone();
+            e_metadata.set("first_dht_timestamp", account.first_dht_timestamp);
+            e_metadata.set("last_dht_timestamp", account.last_dht_timestamp);
 
-          e.set_attribute ("account_type", "p2p.edonkey");
-          e.set_attribute ("id", a.emule_guid);
-          e.set_attribute ("password", {});
-          e.set_attribute ("password_found", "no");
-          e.set_attribute ("is_deleted", a.is_deleted);
-          e.set_attribute ("metadata", metadata.clone ());
-          e.set_tag ("p2p");
+            auto e = item_.new_evidence ("user-account");
 
-          e.add_source (a.preferences_dat_f);
-          e.add_source (a.preferences_ini_f);
-          e.add_source (a.preferenceskad_dat_f);
-          e.add_source (a.statistics_ini_f);
-        }
+            e.set_attribute ("account_type", "p2p.bittorrent");
+            e.set_attribute ("id", account.client_id);
+            e.set_attribute ("password", {});
+            e.set_attribute ("password_found", "no");
+            e.set_attribute ("is_deleted", account.f.is_deleted());
+            e.set_attribute ("metadata", e_metadata);
+            e.set_tag ("p2p");
+  
+            for (const auto& f : account.files)
+                e.add_source (account.f);
 
-      if (!a.kamdelia_guid.empty ())
-        {
-          auto e = item_.new_evidence ("user-account");
-
-          e.set_attribute ("account_type", "p2p.kamdelia");
-          e.set_attribute ("id", a.kamdelia_guid);
-          e.set_attribute ("password", {});
-          e.set_attribute ("password_found", "no");
-          e.set_attribute ("is_deleted", a.is_deleted);
-          e.set_attribute ("metadata", metadata.clone ());
-          e.set_tag ("p2p");
-
-          e.add_source (a.preferences_dat_f);
-          e.add_source (a.preferences_ini_f);
-          e.add_source (a.preferenceskad_dat_f);
-          e.add_source (a.statistics_ini_f);
+            e.add_source (settings.f);
         }
     }
 }
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save IP addresses
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_loader_impl::_save_ip_addresses ()
+{
+    for(const auto& p : profiles_)
+    {
+        auto settings = p.get_main_settings ();
+
+        mobius::core::pod::map metadata;
+        metadata.set("network", "BitTorrent");
+        metadata.set("total_downloaded_bytes", settings.total_bytes_downloaded);
+        metadata.set("total_uploaded_bytes", settings.total_bytes_uploaded);
+        metadata.set("execution_count", settings.execution_count);
+        metadata.set("installation_time", settings.installation_time);
+        metadata.set("last_used_time", settings.last_used_time);
+        metadata.set("last_bin_change_time", settings.last_bin_change_time);
+        metadata.set("version", settings.version);
+        metadata.set("installation_version", settings.installation_version);
+        metadata.set("language", settings.language);
+        metadata.set("computer_id", settings.computer_id);
+        metadata.set("auto_start", settings.auto_start ? "yes" : "no");
+
+        for (const auto& account : p.get_accounts())
+        {
+            auto e_metadata = metadata.clone();
+            e_metadata.set("client_id", account.client_id);
+            e_metadata.set("first_dht_timestamp", account.first_dht_timestamp);
+            e_metadata.set("last_dht_timestamp", account.last_dht_timestamp);
+
+            for (const auto& [ip, timestamp] : account.ip_addresses)
+            {
+                auto e = item_.new_evidence ("ip-address");
+
+                e.set_attribute("timestamp", timestamp);
+                e.set_attribute("address", ip);
+                e.set_attribute("app_id", APP_ID);
+                e.set_attribute("app_name", APP_NAME);
+                e.set_attribute("username", p.get_username ());
+                e.set_attribute ("metadata", e_metadata.clone());
+                e.set_tag ("p2p");
+
+                for (const auto& f : account.files)
+                    e.add_source (f);
+
+                e.add_source (settings.f);
+            }
+        }
+    }
+}
+
+
+/*
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save autofill entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

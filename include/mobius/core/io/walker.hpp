@@ -25,6 +25,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <utility>
 
 namespace mobius::core::io
 {
@@ -75,6 +76,10 @@ public:
   std::vector <mobius::core::io::folder> find_folders (std::function <bool (const mobius::core::io::folder&)>) const;
 
   mobius::core::io::file get_file_by_name (const std::string&) const;
+
+  std::vector <std::pair<std::string, mobius::core::io::entry>> get_entries_with_name () const;
+  std::vector <std::pair<std::string, mobius::core::io::file>> get_files_with_name () const;
+  std::vector <std::pair<std::string, mobius::core::io::folder>> get_folders_with_name () const;
 
 private:
   // @brief Implementation class forward declaration

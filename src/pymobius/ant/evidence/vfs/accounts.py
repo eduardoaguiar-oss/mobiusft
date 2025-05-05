@@ -21,7 +21,6 @@ import mobius
 import pymobius.ant.turing
 import pymobius.app.chromium
 import pymobius.app.skype
-import pymobius.app.utorrent
 
 from . import cookies
 
@@ -124,7 +123,6 @@ class Ant(object):
         self.__retrieve_cookies()
         self.__retrieve_passwords()
         self.__retrieve_skype()
-        self.__retrieve_utorrent()
 
         self.entries = self.__entries
         self.__save_data()
@@ -358,43 +356,6 @@ class Ant(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __retrieve_skype_profile_v2(self, entry, account):
         entry.metadata.set('phones', ' ,'.join(account.phones))
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from µTorrent
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_utorrent(self):
-
-        try:
-            model = pymobius.app.utorrent.model(self.__item)
-
-            for profile in model.get_profiles():
-                self.__retrieve_utorrent_profile(profile)
-
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from µTorrent profile
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_utorrent_profile(self, profile):
-        try:
-            for account in profile.get_accounts():
-                entry = pymobius.Data()
-                entry.type = 'p2p.bittorrent'
-                entry.id = account.guid
-                entry.name = None
-                entry.evidence_source = account.evidence_source
-                entry.password = None
-                entry.metadata = mobius.pod.map()
-                entry.metadata.set('username', account.username)
-                entry.metadata.set('app_id', account.app_id)
-                entry.metadata.set('app_name', account.app_name)
-                entry.metadata.set('network', 'BitTorrent')
-                entry.metadata.set('profile_path', profile.path)
-                self.__entries.append(entry)
-
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Save data into model

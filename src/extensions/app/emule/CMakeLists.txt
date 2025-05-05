@@ -38,7 +38,7 @@ add_library(app_emule MODULE
 )
 
 set_target_properties(app_emule PROPERTIES OUTPUT_NAME "app-emule" PREFIX "")
-target_link_libraries(app_emule PRIVATE Mobius::Core)
+target_link_libraries(app_emule PRIVATE Mobius::Framework Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: emule_cancelled_met

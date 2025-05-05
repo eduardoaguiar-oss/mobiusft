@@ -118,9 +118,26 @@ You can develop custom extensions by following the examples in [`src/extensions`
   - **Virtual disks**: VHD, VHDX  
   - **Proprietary formats**: Logicube Dossier/Talon  
 
----
-
 ### **Next Steps**  
 - **For C++ development**, study the examples in [`src/tools`](src/tools) and [`src/extensions`](src/extensions).  
 - **For Python scripting**, import the `mobius` module and refer to the built-in documentation.  
 - **To contribute a new extension**, follow the existing implementations in [`src/extensions`](src/extensions) and submit a pull request.  
+
+## 5. **Mobius Forensic Toolkit Development Cycle**
+
+```text
+    Version N
++----------------+
+| Implementation |
+|   (30 days)    |
+|                |   Version N+1
++----------------+----------------+
+|    Testing     | Implementation |
+|   (20 days)    |    (30 days)   |
++----------------+                |
+    Release Vn   +----------------+
+                 |    Testing     |
+                 |    (20 days)   |
+                 +----------------+
+                     Release Vn+1
+```

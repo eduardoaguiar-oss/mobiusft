@@ -85,7 +85,7 @@ main (int argc, char **argv)
 
   std::cerr << app.get_name () << " v" << app.get_version () << std::endl;
   std::cerr << app.get_copyright () << std::endl;
-  std::cerr << "Emule Known.met viewer v1.0" << std::endl;
+  std::cerr << "µTorrent settings.dat viewer v1.0" << std::endl;
   std::cerr << "by Eduardo Aguiar" << std::endl;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -111,7 +111,7 @@ main (int argc, char **argv)
   if (optind >= argc)
     {
       std::cerr << std::endl;
-      std::cerr << "Error: you must enter at least one path to Known.met file" << std::endl;
+      std::cerr << "Error: you must enter at least one path to settings.dat file" << std::endl;
       usage ();
       exit (EXIT_FAILURE);
     }

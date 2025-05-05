@@ -33,7 +33,7 @@ add_library(app_emuletorrent MODULE
 )
 
 set_target_properties(app_emuletorrent PROPERTIES OUTPUT_NAME "app-emuletorrent" PREFIX "")
-target_link_libraries(app_emuletorrent PRIVATE Mobius::Core)
+target_link_libraries(app_emuletorrent PRIVATE Mobius::Framework Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

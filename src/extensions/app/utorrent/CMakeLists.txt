@@ -19,7 +19,7 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.25)
 project(app_utorrent LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -28,11 +28,23 @@ project(app_utorrent LANGUAGES CXX)
 add_library(app_utorrent MODULE
     main.cpp
     evidence_loader_impl.cpp
+    profile.cpp
+    file_dht_dat.cpp
     file_settings_dat.cpp
 )
 
 set_target_properties(app_utorrent PROPERTIES OUTPUT_NAME "app-utorrent" PREFIX "")
-target_link_libraries(app_utorrent PRIVATE Mobius::Core)
+target_link_libraries(app_utorrent PRIVATE Mobius::Framework Mobius::Core)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: utorrent_dht_dat
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_executable(utorrent_dht_dat
+    tools/utorrent_dht_dat.cpp
+    file_dht_dat.cpp
+)
+
+target_link_libraries(utorrent_dht_dat PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: utorrent_settings_dat

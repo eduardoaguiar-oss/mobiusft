@@ -45,7 +45,7 @@ add_library(app_ares MODULE
 
 set_target_properties(app_ares PROPERTIES OUTPUT_NAME "app-ares" PREFIX "")
 
-target_link_libraries(app_ares PRIVATE Mobius::Core)
+target_link_libraries(app_ares PRIVATE Mobius::Framework Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

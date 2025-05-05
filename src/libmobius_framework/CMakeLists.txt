@@ -47,10 +47,11 @@ add_library(mobius_framework SHARED
 
 target_include_directories(mobius_framework PUBLIC ${MOBIUS_INCLUDE_DIRS})
 
-target_link_libraries(mobius_framework PUBLIC
-    -Wl,--whole-archive
-    mobius_framework_model
-    -Wl,--no-whole-archive
+target_link_libraries(mobius_framework PRIVATE
+    "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_framework_model>"
+)
+
+target_link_libraries(mobius_framework PRIVATE
     Mobius::Core
 )
 

@@ -48,7 +48,7 @@ add_library(app_shareaza MODULE
 )
 
 set_target_properties(app_shareaza PROPERTIES OUTPUT_NAME "app-shareaza" PREFIX "")
-target_link_libraries(app_shareaza PRIVATE Mobius::Core)
+target_link_libraries(app_shareaza PRIVATE Mobius::Framework Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: shareaza_library_dat
