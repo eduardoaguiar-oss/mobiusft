@@ -218,9 +218,9 @@ public:
   std::vector <mobius::core::io::folder> get_folders_by_predicate (std::function <bool (const mobius::core::io::folder&)>) const;
   std::vector <mobius::core::io::folder> find_folders (std::function <bool (const mobius::core::io::folder&)>) const;
 
-  std::vector <std::pair<std::string, mobius::core::io::entry>> get_entries_with_name () const;
-  std::vector <std::pair<std::string, mobius::core::io::file>> get_files_with_name () const;
-  std::vector <std::pair<std::string, mobius::core::io::folder>> get_folders_with_name () const;
+  std::vector <std::pair<std::string, mobius::core::io::entry>> get_entries_with_names () const;
+  std::vector <std::pair<std::string, mobius::core::io::file>> get_files_with_names () const;
+  std::vector <std::pair<std::string, mobius::core::io::folder>> get_folders_with_names () const;
 
 private:
   // @brief Base folder
@@ -280,7 +280,7 @@ walker::impl::get_entries () const
 // @return (name,entry) pairs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <std::pair<std::string, mobius::core::io::entry>>
-walker::impl::get_entries_with_name () const
+walker::impl::get_entries_with_names () const
 {
   std::vector <std::pair<std::string, mobius::core::io::entry>> entries;
 
@@ -402,7 +402,7 @@ walker::impl::get_files () const
 // @return (name,file) pairs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <std::pair<std::string, mobius::core::io::file>>
-walker::impl::get_files_with_name () const
+walker::impl::get_files_with_names () const
 {
   std::vector <std::pair<std::string, mobius::core::io::file>> files;
 
@@ -505,7 +505,7 @@ walker::impl::get_folders () const
 // @return (name,folder) pairs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <std::pair<std::string, mobius::core::io::folder>>
-walker::impl::get_folders_with_name () const
+walker::impl::get_folders_with_names () const
 {
   std::vector <std::pair<std::string, mobius::core::io::folder>> folders;
 
@@ -637,10 +637,10 @@ walker::get_entries () const
 // @return (name,entry) pairs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 auto
-walker::get_entries_with_name() const
+walker::get_entries_with_names() const
   -> std::vector <std::pair<std::string, mobius::core::io::entry>>
 {
-  return impl_->get_entries_with_name ();
+  return impl_->get_entries_with_names ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -713,10 +713,10 @@ walker::get_files () const
 // @return (name,file) pairs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 auto
-walker::get_files_with_name() const
+walker::get_files_with_names() const
   -> std::vector <std::pair<std::string, mobius::core::io::file>>
 {
-  return impl_->get_files_with_name ();
+  return impl_->get_files_with_names ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -789,10 +789,10 @@ walker::get_folders () const
 // @return (name,folder) pairs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 auto
-walker::get_folders_with_name() const
+walker::get_folders_with_names() const
   -> std::vector <std::pair<std::string, mobius::core::io::folder>>
 {
-  return impl_->get_folders_with_name ();
+  return impl_->get_folders_with_names ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -18,11 +18,16 @@ Mobius Forensic Toolkit 2.15
 	* Module src/python removed
 	* Project fully migrated from Autotools to CMake
 	* Added new C++ extension called "app-utorrent"
+	* libmobius_core: Added new method walker::get_entries_with_names
+	* libmobius_core: Added new method walker::get_files_with_names
+	* libmobius_core: Added new method walker::get_folders_with_names
+	* libmobius_core: Added new method pod::map::pop
+	* libmobius_core: Added new class value_selector
+	* Added new tool: utorrent_dht_dat
+	* Added new tool: utorrent_resume_dat
+	* Added new tool: utorrent_settings_dat
 	* pymobius.ant.evidence.vfs.ip_addresses: Removed module
 	* pymobius.ant.evidence.vfs.account: Removed utorrent support
-	* libmobius_core: New method walker::get_entries_with_name
-	* libmobius_core: New method walker::get_files_with_name
-	* libmobius_core: New method walker::get_folders_with_name
 
 Mobius Forensic Toolkit 2.14
 	* configure.ac: Check for CMake availability.

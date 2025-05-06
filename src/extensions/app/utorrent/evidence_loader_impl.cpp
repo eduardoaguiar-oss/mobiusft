@@ -212,72 +212,38 @@ evidence_loader_impl::_scan_canonical_user_folder (const mobius::core::io::folde
 void
 evidence_loader_impl::_scan_canonical_utorrent_folder (const mobius::core::io::folder& folder)
 {
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
     profile_ = {};
     profile_.set_username (username_);
 
     auto w = mobius::core::io::walker (folder);
     
-    for (const auto& [name, f] : w.get_files_with_name())
-      {
-        if (name == "settings.dat")
-            _decode_settings_dat_file (f);
+    for (const auto& [name, f] : w.get_files_with_names())
+    {
+        try
+        {
+            if (name == "settings.dat" || name == "settings.dat.old")
+                profile_.add_settings_dat_file(f);
 
-        else if (name == "settings.dat.old")
-            _decode_settings_dat_file (f);
+            else if (name == "dht.dat" || name == "dht.dat.old")
+                profile_.add_dht_dat_file(f);
 
-        else if (name == "settings.dat.bak")
-            _decode_settings_dat_file (f);
+            else if (name == "resume.dat" || name == "resume.dat.old")
+                profile_.add_resume_dat_file(f);
 
-        else if (name == "settings.dat.tmp")
-            _decode_settings_dat_file (f);
-
-        else if (name == "dht.dat")
-            _decode_dht_dat_file (f);
-
-        else if (name == "dht.dat.old")
-            _decode_dht_dat_file (f);
-      }
+            else if (mobius::core::string::endswith(name, ".torrent"))
+                profile_.add_torrent_file(f);
+        }
+        catch(const std::exception& e)
+        {
+            log.warning (__LINE__, e.what ());
+        }
+        
+    }
 
     if (profile_)
         profiles_.push_back(profile_);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode dht.dat file
-// @param f File object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_decode_dht_dat_file (const mobius::core::io::file& f)
-{
-  mobius::core::log log (__FILE__, __FUNCTION__);
-
-  try
-    {
-      profile_.add_dht_dat_file(f);
-    }
-  catch (const std::exception& e)
-    {
-      log.warning (__LINE__, e.what ());
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode Settings.dat file
-// @param f File object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_decode_settings_dat_file (const mobius::core::io::file& f)
-{
-  mobius::core::log log (__FILE__, __FUNCTION__);
-
-  try
-    {
-      profile_.add_settings_dat_file(f);
-    }
-  catch (const std::exception& e)
-    {
-      log.warning (__LINE__, e.what ());
-    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -347,7 +313,7 @@ evidence_loader_impl::_save_accounts ()
             e.set_tag ("p2p");
   
             for (const auto& f : account.files)
-                e.add_source (account.f);
+                e.add_source (f);
 
             e.add_source (settings.f);
         }

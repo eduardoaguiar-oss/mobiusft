@@ -71,11 +71,77 @@ public:
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Local file structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct local_file
+    {
+        // @brief Entry name
+        std::string name;
+
+        // @brief Metadata
+        mobius::core::pod::map metadata;
+
+        // @brief Download URL
+        std::string download_url;
+
+        // @brief Caption
+        std::string caption;
+
+        // @brief Path
+        std::string path;
+
+        // @brief Seeded seconds
+        std::int64_t seeded_seconds = 0;
+
+        // @brief Downloaded seconds
+        std::int64_t downloaded_seconds = 0;
+
+        // @brief Block size
+        std::int64_t blocksize = 0;
+
+        // @brief Bytes downloaded
+        std::int64_t bytes_downloaded = 0;
+
+        // @brief Bytes uploaded
+        std::int64_t bytes_uploaded = 0;
+
+        // @brief Metadata time
+        mobius::core::datetime::datetime metadata_time;
+
+        // @brief Added time
+        mobius::core::datetime::datetime added_time;
+
+        // @brief Completed time
+        mobius::core::datetime::datetime completed_time;
+
+        // @brief Last seen complete time
+        mobius::core::datetime::datetime last_seen_complete_time;
+        
+        // @brief Torrent name
+        std::string torrent_name;
+
+        // @brief Peers
+        std::vector<std::pair<std::string, std::uint16_t>> peers;
+
+        // @brief Resume.dat file
+        mobius::core::io::file resume_file;
+
+        // @brief Torrent file
+        mobius::core::io::file torrent_file;
+
+        // @brief Source files
+        std::vector<mobius::core::io::file> files;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::vector<account> get_accounts() const;
+    std::vector<local_file> get_local_files() const;
     void add_dht_dat_file(const mobius::core::io::file&);
+    void add_resume_dat_file(const mobius::core::io::file&);
     void add_settings_dat_file(const mobius::core::io::file&);
+    void add_torrent_file(const mobius::core::io::file&);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Check if profile is valid
@@ -135,6 +201,9 @@ private:
 
     // @brief Accounts
     std::map<std::string, account> accounts_;
+
+    // @brief Local files
+    std::map<std::string, local_file> local_files_;
 
     // @brief Main settings
     settings main_settings_;

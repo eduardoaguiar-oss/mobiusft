@@ -17,8 +17,12 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "profile.hpp"
 #include "file_dht_dat.hpp"
+#include "file_resume_dat.hpp"
 #include "file_settings_dat.hpp"
+#include <mobius/core/file_decoder/torrent.hpp>
 #include <mobius/core/log.hpp>
+#include <mobius/core/value_selector.hpp>
+#include <algorithm>
 
 namespace mobius::extension::app::utorrent
 {
@@ -31,10 +35,41 @@ profile::get_accounts() const
 {
     std::vector<account> accounts;
 
-    for (const auto& [_, acc] : accounts_)
-        accounts.push_back(acc);
+    std::transform(accounts_.begin(), accounts_.end(),
+                 std::back_inserter(accounts),
+                 [](const auto& pair) { return pair.second; })
+    ;
+
+    std::sort(accounts.begin(), accounts.end(),
+              [](const auto& a, const auto& b) {
+                  return a.client_id < b.client_id;
+              }
+    );
 
     return accounts;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get local files
+// @return vector of local files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<profile::local_file>
+profile::get_local_files() const
+{
+    std::vector<local_file> local_files;
+
+    std::transform(local_files_.begin(), local_files_.end(),
+                 std::back_inserter(local_files),
+                 [](const auto& pair) { return pair.second; }
+    );
+    
+    std::sort(local_files.begin(), local_files.end(),
+              [](const auto& a, const auto& b) {
+                  return a.torrent_name < b.torrent_name;
+              }
+    );
+
+    return local_files;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -74,6 +109,7 @@ profile::add_dht_dat_file(const mobius::core::io::file& f)
 
     auto [iter,_] = accounts_.try_emplace(client_id);
     auto& acc = iter->second;
+    std::ignore = _;
 
     acc.client_id = client_id;
 
@@ -104,6 +140,66 @@ profile::add_dht_dat_file(const mobius::core::io::file& f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add resume.dat file
+// @param f Resume.dat file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_resume_dat_file(const mobius::core::io::file& f)
+{
+    mobius::core::log log(__FILE__, __FUNCTION__);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode file
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto reader = f.new_reader();
+    if (!reader)
+        return;
+
+    file_resume_dat resume_dat(reader);
+    if (!resume_dat)
+    {
+        log.warning(__LINE__, "File is not a valid resume.dat file");
+        return;
+    }
+
+    log.info(__LINE__, "File " + f.get_path() + " is a valid resume.dat file");
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Add entries
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto& entry : resume_dat.get_entries())
+    {
+        local_file& lf = local_files_[entry.torrent_name];
+
+        bool overwrite = !lf.resume_file || (lf.resume_file.is_deleted() && !f.is_deleted()) ||
+                        (lf.resume_file.is_deleted() == f.is_deleted() &&
+                         lf.resume_file.get_name() != "resume.dat" && f.get_name() == "resume.dat");
+
+        mobius::core::value_selector vs(overwrite);
+
+        lf.name = vs(lf.name, entry.name);
+        lf.metadata = vs(lf.metadata, entry.metadata);
+        lf.download_url = vs(lf.download_url, entry.download_url);
+        lf.caption = vs(lf.caption, entry.caption);
+        lf.path = vs(lf.path, entry.path);
+        lf.seeded_seconds = vs(lf.seeded_seconds, entry.seeded_seconds);
+        lf.downloaded_seconds = vs(lf.downloaded_seconds, entry.downloaded_seconds);
+        lf.blocksize = vs(lf.blocksize, entry.blocksize);
+        lf.bytes_downloaded = vs(lf.bytes_downloaded, entry.bytes_downloaded);
+        lf.bytes_uploaded = vs(lf.bytes_uploaded, entry.bytes_uploaded);
+        lf.metadata_time = vs(lf.metadata_time, entry.metadata_time);
+        lf.added_time = vs(lf.added_time, entry.added_time);
+        lf.completed_time = vs(lf.completed_time, entry.completed_time);
+        lf.last_seen_complete_time = vs(lf.last_seen_complete_time, entry.last_seen_complete_time);
+        lf.torrent_name = vs(lf.torrent_name, entry.torrent_name);
+        lf.resume_file = vs(lf.resume_file, f);
+        lf.files.push_back(f);
+
+        std::copy(entry.peers.begin(), entry.peers.end(), std::back_inserter(lf.peers));
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Add settings.dat file
 // @param f Settings.dat file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -121,10 +217,10 @@ profile::add_settings_dat_file(const mobius::core::io::file& f)
 
     file_settings_dat settings_dat(reader);
     if (!settings_dat)
-      {
+    {
         log.warning(__LINE__, "File is not a valid settings.dat file");
         return;
-      }
+    }
 
     log.info(__LINE__, "File " + f.get_path() + " is a valid settings.dat file");
 
@@ -160,10 +256,45 @@ profile::add_settings_dat_file(const mobius::core::io::file& f)
           main_settings_.f.get_name() != "settings.dat" &&
           f.get_name() == "settings.dat")
        )
-      {
+    {
         main_settings_ = s;
         is_valid_ = true;
-      }
+    }
 }
-     
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add torrent file
+// @param f Torrent file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_torrent_file(const mobius::core::io::file& f)
+{
+    mobius::core::log log(__FILE__, __FUNCTION__);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode file
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto reader = f.new_reader();
+    if (!reader)
+        return;
+
+    /*mobius::core::file_decoder::torrent torrent(reader);
+    if (!torrent)
+      {
+        log.warning(__LINE__, "File is not a valid torrent file");
+        return;
+      }
+
+    log.info(__LINE__, "File " + f.get_path() + " is a valid torrent file");*/
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Add torrent file
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    local_file& lf = local_files_[f.get_name()];
+
+    bool overwrite = !lf.torrent_file || (lf.torrent_file.is_deleted() && !f.is_deleted());
+    mobius::core::value_selector vs(overwrite);
+
+}
+
 }// namespace mobius::extension::app::utorrent

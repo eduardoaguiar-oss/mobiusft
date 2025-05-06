@@ -30,6 +30,7 @@ add_library(app_utorrent MODULE
     evidence_loader_impl.cpp
     profile.cpp
     file_dht_dat.cpp
+    file_resume_dat.cpp
     file_settings_dat.cpp
 )
 
@@ -39,26 +40,46 @@ target_link_libraries(app_utorrent PRIVATE Mobius::Framework Mobius::Core)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: utorrent_dht_dat
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_executable(utorrent_dht_dat
+add_executable(tools_utorrent_dht_dat
     tools/utorrent_dht_dat.cpp
     file_dht_dat.cpp
 )
 
-target_link_libraries(utorrent_dht_dat PRIVATE Mobius::Core)
+set_target_properties(tools_utorrent_dht_dat PROPERTIES OUTPUT_NAME "utorrent_dht_dat")
+target_link_libraries(tools_utorrent_dht_dat PRIVATE Mobius::Core)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: utorrent_resume_dat
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_executable(tools_utorrent_resume_dat
+    tools/utorrent_resume_dat.cpp
+    file_resume_dat.cpp
+)
+
+set_target_properties(tools_utorrent_resume_dat PROPERTIES OUTPUT_NAME "utorrent_resume_dat")
+target_link_libraries(tools_utorrent_resume_dat PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: utorrent_settings_dat
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_executable(utorrent_settings_dat
+add_executable(tools_utorrent_settings_dat
     tools/utorrent_settings_dat.cpp
     file_settings_dat.cpp
 )
 
-target_link_libraries(utorrent_settings_dat PRIVATE Mobius::Core)
+set_target_properties(tools_utorrent_settings_dat PROPERTIES OUTPUT_NAME "utorrent_settings_dat")
+target_link_libraries(tools_utorrent_settings_dat PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 install(TARGETS
     app_utorrent LIBRARY DESTINATION share/mobiusft/extensions
+)
+
+install(TARGETS
+    tools_utorrent_dht_dat
+    tools_utorrent_resume_dat
+    tools_utorrent_settings_dat
+    RUNTIME DESTINATION share/mobiusft/tools
 )

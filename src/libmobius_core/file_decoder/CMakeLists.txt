@@ -30,6 +30,7 @@ add_library(mobius_core_file_decoder STATIC
     entry.cpp
     metadata.cpp
     section.cpp
+    torrent.cpp
 )
 
 target_include_directories(mobius_core_file_decoder PRIVATE

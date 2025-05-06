@@ -86,9 +86,6 @@ private:
     void _scan_canonical_user_folder (const mobius::core::io::folder&);
     void _scan_canonical_utorrent_folder (const mobius::core::io::folder& folder);
 
-    void _decode_dht_dat_file (const mobius::core::io::file&);
-    void _decode_settings_dat_file (const mobius::core::io::file&);
-
     void _save_evidences ();
     void _save_accounts ();
     void _save_ip_addresses ();
