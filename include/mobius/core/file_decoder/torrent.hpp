@@ -65,6 +65,7 @@ public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Function prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::int64_t get_version() const;
     std::string get_name() const;
     std::uint64_t get_piece_length() const;
     std::uint64_t get_length() const;
@@ -72,7 +73,6 @@ public:
     std::string get_created_by() const;
     std::string get_encoding() const;
     std::string get_comment() const;
-    std::string get_announce() const;
     std::string get_info_hash() const;
     std::vector<std::string> get_announce_list() const;
     std::vector<file> get_files() const;

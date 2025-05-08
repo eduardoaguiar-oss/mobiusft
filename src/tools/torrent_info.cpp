@@ -31,10 +31,10 @@ namespace
 void
 usage ()
 {
-  std::cerr << std::endl;
-  std::cerr << "use: file_torrent [OPTIONS] <path>" << std::endl;
-  std::cerr << "e.g: file_torrent myfile.torrent" << std::endl;
-  std::cerr << std::endl;
+    std::cerr << std::endl;
+    std::cerr << "use: file_torrent [OPTIONS] <path>" << std::endl;
+    std::cerr << "e.g: file_torrent myfile.torrent" << std::endl;
+    std::cerr << std::endl;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -62,7 +62,6 @@ show_torrent_info (const std::string& path)
     std::cout << "\tCreation time: " << torrent.get_creation_time () << std::endl;
     std::cout << "\tCreated by: " << torrent.get_created_by () << std::endl;
     std::cout << "\tEncoding: " << torrent.get_encoding () << std::endl;
-    std::cout << "\tAnnounce: " << torrent.get_announce () << std::endl;
     std::cout << "\tInfo hash: " << torrent.get_info_hash () << std::endl;
     std::cout << "\tPiece length: " << torrent.get_piece_length () << " bytes" << std::endl;
 

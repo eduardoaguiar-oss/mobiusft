@@ -18,6 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/core/is_empty_checker.hpp>
 
 namespace mobius::core
 {
@@ -31,7 +32,7 @@ class value_selector
 public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Constructor
-    // @param overwrite if true, <i>b</i>` values have precedence over <i>a</i>
+    // @param overwrite if true, <i>b</i> values have precedence over <i>a</i>
     // values. If not, it is the other way around.
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     explicit value_selector(bool overwrite = false)
@@ -42,14 +43,14 @@ public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get selected value
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    template <typename T> T
-    operator()(const T& a, const T& b) const
+    template <typename T>
+    T operator()(const T& a, const T& b) const
     {
         if (overwrite_)
-            return (b != T()) ? b : a;
+            return !is_empty_checker<T>::check(b) ? b : a;
 
         else
-            return (a != T()) ? a : b;
+            return !is_empty_checker<T>::check(a) ? a : b;
     }
 
 private:

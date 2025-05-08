@@ -57,19 +57,19 @@ public:
         std::string path;
 
         // @brief Seeded seconds
-        std::int64_t seeded_seconds = 0;
+        std::uint64_t seeded_seconds = 0;
 
         // @brief Downloaded seconds
-        std::int64_t downloaded_seconds = 0;
+        std::uint64_t downloaded_seconds = 0;
 
         // @brief Block size
-        std::int64_t blocksize = 0;
+        std::uint64_t blocksize = 0;
 
         // @brief Bytes downloaded
-        std::int64_t bytes_downloaded = 0;
+        std::uint64_t bytes_downloaded = 0;
 
         // @brief Bytes uploaded
-        std::int64_t bytes_uploaded = 0;
+        std::uint64_t bytes_uploaded = 0;
 
         // @brief Metadata time
         mobius::core::datetime::datetime metadata_time;

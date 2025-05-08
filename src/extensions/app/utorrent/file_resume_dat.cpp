@@ -18,6 +18,7 @@
 #include "file_resume_dat.hpp"
 #include <mobius/core/decoder/btencode.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
+#include <mobius/core/log.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <mobius/core/string_functions.hpp>
 
@@ -32,6 +33,9 @@ namespace
 mobius::extension::app::utorrent::file_resume_dat::entry
 _decode_entry (const std::string& key, const mobius::core::pod::map& c_metadata)
 {
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Create entry object
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::pod::map metadata = c_metadata.clone();
     auto entry = mobius::extension::app::utorrent::file_resume_dat::entry();
 
@@ -40,7 +44,6 @@ _decode_entry (const std::string& key, const mobius::core::pod::map& c_metadata)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     entry.name = mobius::core::string::replace(key, ".torrent", "");
     entry.torrent_name = key;
-    entry.metadata = metadata;
     entry.download_url = metadata.pop<std::string>("download_url");
     entry.caption = metadata.pop<std::string>("caption");
     entry.path = metadata.pop<std::string>("path");
@@ -53,7 +56,7 @@ _decode_entry (const std::string& key, const mobius::core::pod::map& c_metadata)
     entry.added_time = mobius::core::datetime::new_datetime_from_unix_timestamp(metadata.pop<std::int64_t>("added_on", 0));
     entry.completed_time = mobius::core::datetime::new_datetime_from_unix_timestamp(metadata.pop<std::int64_t>("completed_on", 0));
     entry.last_seen_complete_time = mobius::core::datetime::new_datetime_from_unix_timestamp(metadata.pop<std::int64_t>("last seen complete", 0));
-
+    
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Get peers
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -88,6 +91,7 @@ _decode_entry (const std::string& key, const mobius::core::pod::map& c_metadata)
         }
     }
 
+    entry.metadata = metadata;
     return entry;
 }
 
@@ -101,6 +105,8 @@ namespace mobius::extension::app::utorrent
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_resume_dat::file_resume_dat (const mobius::core::io::reader& reader)
 {
+    mobius::core::log log(__FILE__, __FUNCTION__);
+
     if (!reader)
         return;
 
@@ -115,8 +121,15 @@ file_resume_dat::file_resume_dat (const mobius::core::io::reader& reader)
 
     for (const auto& [key, value] : metadata)
     {
-        if (mobius::core::string::endswith(key, ".torrent") && value.is_map())
-            entries_.push_back(_decode_entry(key, mobius::core::pod::map(value)));
+        try
+        {
+            if (mobius::core::string::endswith(key, ".torrent") && value.is_map())
+                entries_.push_back(_decode_entry(key, mobius::core::pod::map(value)));
+        }
+        catch(const std::exception& e)
+        {
+            log.warning(__LINE__, e.what());
+        }
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -24,6 +24,11 @@
 #include <mobius/core/value_selector.hpp>
 #include <algorithm>
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @see https://www.forensicfocus.com/articles/forensic-analysis-of-the-%CE%BCtorrent-peer-to-peer-client-in-windows/
+// @see https://robertpearsonblog.wordpress.com/2016/11/10/utorrent-forensic-artifacts/
+// @see https://robertpearsonblog.wordpress.com/2016/11/11/utorrent-and-windows-10-forensic-nuggets-of-info/
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 namespace mobius::extension::app::utorrent
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -62,7 +67,7 @@ profile::get_local_files() const
                  std::back_inserter(local_files),
                  [](const auto& pair) { return pair.second; }
     );
-    
+
     std::sort(local_files.begin(), local_files.end(),
               [](const auto& a, const auto& b) {
                   return a.torrent_name < b.torrent_name;
@@ -193,7 +198,7 @@ profile::add_resume_dat_file(const mobius::core::io::file& f)
         lf.last_seen_complete_time = vs(lf.last_seen_complete_time, entry.last_seen_complete_time);
         lf.torrent_name = vs(lf.torrent_name, entry.torrent_name);
         lf.resume_file = vs(lf.resume_file, f);
-        lf.files.push_back(f);
+        lf.sources.push_back(f);
 
         std::copy(entry.peers.begin(), entry.peers.end(), std::back_inserter(lf.peers));
     }
@@ -278,14 +283,14 @@ profile::add_torrent_file(const mobius::core::io::file& f)
     if (!reader)
         return;
 
-    /*mobius::core::file_decoder::torrent torrent(reader);
+    mobius::core::file_decoder::torrent torrent(reader);
     if (!torrent)
       {
         log.warning(__LINE__, "File is not a valid torrent file");
         return;
       }
 
-    log.info(__LINE__, "File " + f.get_path() + " is a valid torrent file");*/
+    log.info(__LINE__, "File " + f.get_path() + " is a valid torrent file");
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add torrent file
@@ -295,6 +300,34 @@ profile::add_torrent_file(const mobius::core::io::file& f)
     bool overwrite = !lf.torrent_file || (lf.torrent_file.is_deleted() && !f.is_deleted());
     mobius::core::value_selector vs(overwrite);
 
+    lf.creation_time = vs(lf.creation_time, torrent.get_creation_time());
+    lf.torrent_file = vs(lf.torrent_file, f);
+    lf.blocksize = vs(lf.blocksize, torrent.get_piece_length());
+    lf.torrent_name = vs(lf.torrent_name, torrent.get_name());
+    lf.size = vs(lf.size, torrent.get_length());
+    lf.created_by = vs(lf.created_by, torrent.get_created_by());
+    lf.encoding = vs(lf.encoding, torrent.get_encoding());
+    lf.comment = vs(lf.comment, torrent.get_comment());
+    lf.info_hash = vs(lf.info_hash, torrent.get_info_hash());
+
+    std::vector<torrent_content_file> content_files;
+    auto torrent_files = torrent.get_files();
+
+    std::transform(torrent_files.begin(), torrent_files.end(),
+                 std::back_inserter(content_files),
+                 [](const auto& file) {
+                     return torrent_content_file{
+                         file.name,
+                         file.path,
+                         file.length,
+                         file.offset,
+                         file.piece_length,
+                         file.piece_offset,
+                         file.creation_time
+                     };
+                 }
+    );
+    lf.content_files = vs(lf.content_files, content_files);
 }
 
 }// namespace mobius::extension::app::utorrent
