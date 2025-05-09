@@ -19,10 +19,10 @@
 #include <mobius/core/log.hpp>
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/pod/data.hpp>
-#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/core/decoder/inifile.hpp>
+#include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/model/evidence.hpp>
-#include <mobius/core/io/line_reader.hpp>
+#include <mobius/core/io/path.hpp>
 #include <mobius/core/io/walker.hpp>
 #include <mobius/core/string_functions.hpp>
 
@@ -37,6 +37,7 @@
 // - settings.dat: contains the settings of the µTorrent client
 // - resume.dat: contains the resume data of the torrents
 // - dht.dat: contains the DHT data
+// - *.torrent: contains information about torrents
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 namespace
 {
@@ -50,30 +51,105 @@ static const std::string ANT_NAME = APP_NAME;
 static const std::string ANT_VERSION = "1.0";
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get vector of hashes for a given file
-// @param f File structure
-// @return Vector
+// @brief Get metadata from local_file
+// @param lf Local file structure
+// @return Metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename T> std::vector <mobius::core::pod::data>
-get_file_hashes (const T& f)
+mobius::core::pod::map
+_get_metadata(const mobius::extension::app::utorrent::profile::local_file& lf)
 {
-    std::vector <mobius::core::pod::data> hashes = {
-        {"ed2k", mobius::core::string::toupper (f.hash_ed2k)}
-    };
+    auto lf_metadata = mobius::core::pod::map();
 
-    auto iter = std::find_if (
-        f.tags.begin (),
-        f.tags.end (),
-        [](const auto& t){ return t.get_id () == 0x27; }    // FT_AICH_HASH
-    );
+    lf_metadata.set("app_id", APP_ID);
+    lf_metadata.set("app_name", APP_NAME);
+    lf_metadata.set("download_url", lf.download_url);
+    lf_metadata.set("caption", lf.caption);
+    lf_metadata.set("comment", lf.comment);
+    lf_metadata.set("size", lf.size);
+    lf_metadata.set("seeded_seconds", lf.seeded_seconds);
+    lf_metadata.set("downloaded_seconds", lf.downloaded_seconds);
+    lf_metadata.set("blocksize", lf.blocksize);
+    lf_metadata.set("bytes_downloaded", lf.bytes_downloaded);
+    lf_metadata.set("bytes_uploaded", lf.bytes_uploaded);
+    lf_metadata.set("creation_time", lf.creation_time);
+    lf_metadata.set("metadata_time", lf.metadata_time);
+    lf_metadata.set("added_time", lf.added_time);
+    lf_metadata.set("completed_time", lf.completed_time);
+    lf_metadata.set("last_seen_complete_time", lf.last_seen_complete_time);
+    lf_metadata.set("torrent_name", lf.torrent_name);
+    lf_metadata.set("created_by", lf.created_by);
+    lf_metadata.set("encoding", lf.encoding);
+    lf_metadata.set("info_hash", lf.info_hash);
+    lf_metadata.set("local_file_path", lf.path);
 
-    if (iter != f.tags.end ())
-      {
-        auto hash_value = iter->get_value ();
-        hashes.push_back ({"aich", static_cast <std::string> (hash_value)});
-      }
+    mobius::framework::evidence_flag flag_downloaded;
+    mobius::framework::evidence_flag flag_uploaded;
+    mobius::framework::evidence_flag flag_shared;
+    mobius::framework::evidence_flag flag_completed;
 
-    return hashes;
+    if (lf.resume_file)
+    {
+        flag_downloaded = (lf.bytes_downloaded > 0 || lf.downloaded_seconds > 0);
+        flag_uploaded = (lf.bytes_uploaded > 0);
+        flag_shared = (lf.seeded_seconds > 0);
+        flag_completed = bool(lf.completed_time);
+    }
+
+    lf_metadata.set("flag_downloaded", flag_downloaded.to_string());
+    lf_metadata.set("flag_uploaded", flag_uploaded.to_string());
+    lf_metadata.set("flag_shared", flag_shared.to_string());
+    lf_metadata.set("flag_completed", flag_completed.to_string());
+
+    return lf_metadata;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Join paths
+// @param root Root path
+// @param rpath Relative path
+// @return Joined path
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+_join_paths(const std::string& root, const std::string& rpath)
+{
+    auto path = root;
+
+    if (!rpath.empty())
+    {
+        if (!path.empty())
+            path += '/';
+    
+        path += rpath;
+    }
+
+    if (path.find_first_of ("\\") != std::string::npos)
+        path = mobius::core::string::replace (path, "/", "\\");
+
+    return path;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get filename from path
+// @param path Path
+// @return Filename
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+_get_filename(const std::string& path)
+{
+    auto filename = path;
+
+    auto pos = filename.find_last_of ("\\");
+    if (pos != std::string::npos)
+        filename = filename.substr (pos + 1);
+
+    else
+    {
+        pos = filename.find_last_of ("/");
+        if (pos != std::string::npos)
+            filename = filename.substr (pos + 1);
+    }
+
+    return filename;
 }
 
 } // namespace
@@ -257,21 +333,18 @@ evidence_loader_impl::_scan_canonical_utorrent_folder (const mobius::core::io::f
 void
 evidence_loader_impl::_save_evidences()
 {
-  auto transaction = item_.new_transaction();
+    auto transaction = item_.new_transaction();
 
-  _save_accounts();
-  _save_ip_addresses();
-  _save_local_files ();
+    _save_accounts();
+    _save_ip_addresses();
+    _save_local_files ();
+    _save_p2p_remote_files ();
+    _save_received_files ();
+    _save_sent_files ();
+    _save_shared_files ();
 
-  /*
-  _save_p2p_remote_files ();
-  _save_received_files ();
-  _save_sent_files ();
-  _save_shared_files ();
-*/
-
-  item_.set_ant (ANT_ID, ANT_NAME, ANT_VERSION);
-  transaction.commit ();
+    item_.set_ant (ANT_ID, ANT_NAME, ANT_VERSION);
+    transaction.commit ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -387,89 +460,87 @@ evidence_loader_impl::_save_local_files ()
     {
         for (const auto& lf : profile.get_local_files())
         {
-            if (lf.path.empty())
-                continue;
-
-            auto lf_metadata = mobius::core::pod::map();
-            lf_metadata.set("app_id", APP_ID);
-            lf_metadata.set("app_name", APP_NAME);
-            lf_metadata.set("username", profile.get_username ());
-            lf_metadata.set("download_url", lf.download_url);
-            lf_metadata.set("caption", lf.caption);
-            lf_metadata.set("comment", lf.comment);
-            lf_metadata.set("size", lf.size);
-            lf_metadata.set("seeded_seconds", lf.seeded_seconds);
-            lf_metadata.set("downloaded_seconds", lf.downloaded_seconds);
-            lf_metadata.set("blocksize", lf.blocksize);
-            lf_metadata.set("bytes_downloaded", lf.bytes_downloaded);
-            lf_metadata.set("bytes_uploaded", lf.bytes_uploaded);
-            lf_metadata.set("creation_time", lf.creation_time);
-            lf_metadata.set("metadata_time", lf.metadata_time);
-            lf_metadata.set("added_time", lf.added_time);
-            lf_metadata.set("completed_time", lf.completed_time);
-            lf_metadata.set("last_seen_complete_time", lf.last_seen_complete_time);
-            lf_metadata.set("torrent_name", lf.torrent_name);
-            lf_metadata.set("created_by", lf.created_by);
-            lf_metadata.set("encoding", lf.encoding);
-            lf_metadata.set("info_hash", lf.info_hash);
-            lf_metadata.set("local_file_path", lf.path);
-            lf_metadata.set("flag_downloaded", (lf.bytes_downloaded > 0 || lf.downloaded_seconds > 0) ? "yes" : "no");
-            lf_metadata.set("flag_uploaded", lf.bytes_uploaded > 0 ? "yes" : "no");
-            lf_metadata.set("flag_shared", lf.seeded_seconds > 0 ? "yes" : "no");
-            lf_metadata.set("flag_completed", bool(lf.completed_time) ? "yes" : "no");
-
-            for (const auto& tf : lf.content_files)
+            if (!lf.path.empty())
             {
-                auto e = item_.new_evidence ("local-file");
+                auto lf_metadata = _get_metadata(lf);
+                lf_metadata.set("username", profile.get_username ());
 
-                e.set_attribute ("username", profile.get_username ());
-                e.set_attribute ("filename", tf.name);
-                e.set_attribute ("path", lf.path + '/' + tf.path);
-                e.set_attribute ("app_id", APP_ID);
-                e.set_attribute ("app_name", APP_NAME);
-                //e.set_attribute ("hashes", get_file_hashes (tf));
+                for (const auto& tf : lf.content_files)
+                {
+                    auto path = _join_paths(lf.path, tf.path);
+                    auto filename = _get_filename(path);
 
-                auto tf_metadata = lf_metadata.clone();
-                tf_metadata.set("filename", tf.name);
-                tf_metadata.set("torrent_path", tf.path);
-                tf_metadata.set("torrent_offset", tf.offset);
-                tf_metadata.set("torrent_length", tf.length);
-                tf_metadata.set("torrent_piece_length", tf.piece_length);
-                tf_metadata.set("torrent_piece_offset", tf.piece_offset);
+                    auto e = item_.new_evidence ("local-file");
 
-                e.set_attribute ("metadata", tf_metadata);
+                    e.set_attribute ("username", profile.get_username ());
+                    e.set_attribute ("filename", filename);
+                    e.set_attribute ("path", path);
+                    e.set_attribute ("app_id", APP_ID);
+                    e.set_attribute ("app_name", APP_NAME);
+                    //e.set_attribute ("hashes", get_file_hashes (tf));
 
-                e.set_tag ("p2p");
-                for (const auto& f : lf.sources)
-                    e.add_source (f);
+                    auto tf_metadata = lf_metadata.clone();
+                    tf_metadata.set("torrent_path", tf.path);
+                    tf_metadata.set("torrent_offset", tf.offset);
+                    tf_metadata.set("torrent_length", tf.length);
+                    tf_metadata.set("torrent_piece_length", tf.piece_length);
+                    tf_metadata.set("torrent_piece_offset", tf.piece_offset);
+
+                    e.set_attribute ("metadata", tf_metadata);
+
+                    e.set_tag ("p2p");
+                    for (const auto& f : lf.sources)
+                        e.add_source (f);
+                }
             }
         }
     }
 }
 
-/*
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save received files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_received_files ()
 {
-  for (const auto& lf : local_files_)
+    for (const auto& profile : profiles_)
     {
-      if (lf.flag_downloaded.is_yes ())
+        for (const auto& lf : profile.get_local_files())
         {
-          auto e = item_.new_evidence ("received-file");
+            if (lf.bytes_downloaded > 0 || lf.downloaded_seconds > 0)
+            {
+                auto lf_metadata = _get_metadata(lf);
+                lf_metadata.set("username", profile.get_username ());
 
-          e.set_attribute ("username", lf.username);
-          e.set_attribute ("filename", lf.filename);
-          e.set_attribute ("path", lf.path);
-          e.set_attribute ("app_id", APP_ID);
-          e.set_attribute ("app_name", APP_NAME);
-          e.set_attribute ("hashes", lf.hashes);
-          e.set_attribute ("metadata", lf.metadata);
+                for (const auto& tf : lf.content_files)
+                {
+                    auto path = _join_paths(lf.path, tf.path);
+                    auto filename = _get_filename(path);
 
-          e.set_tag ("p2p");
-          e.add_source (lf.f);
+                    auto e = item_.new_evidence ("received-file");
+
+                    e.set_attribute ("timestamp", lf.added_time);
+                    e.set_attribute ("username", profile.get_username ());
+                    e.set_attribute ("filename", filename);
+                    e.set_attribute ("path", path);
+                    e.set_attribute ("app_id", APP_ID);
+                    e.set_attribute ("app_name", APP_NAME);
+                    //e.set_attribute ("hashes", get_file_hashes (tf));
+
+                    auto tf_metadata = lf_metadata.clone();
+                    tf_metadata.set("torrent_path", tf.path);
+                    tf_metadata.set("torrent_offset", tf.offset);
+                    tf_metadata.set("torrent_length", tf.length);
+                    tf_metadata.set("torrent_piece_length", tf.piece_length);
+                    tf_metadata.set("torrent_piece_offset", tf.piece_offset);
+
+                    e.set_attribute ("metadata", tf_metadata);
+
+                    e.set_tag ("p2p");
+                    for (const auto& f : lf.sources)
+                        e.add_source (f);
+                }
+            }
         }
     }
 }
@@ -480,25 +551,51 @@ evidence_loader_impl::_save_received_files ()
 void
 evidence_loader_impl::_save_p2p_remote_files ()
 {
-  for (const auto& rf : remote_files_)
+    for (const auto& profile : profiles_)
     {
-      auto e = item_.new_evidence ("p2p-remote-file");
+        for (const auto& lf : profile.get_local_files())
+        {
+            auto username = profile.get_username ();
 
-      e.set_attribute ("timestamp", rf.timestamp);
-      e.set_attribute ("ip", rf.ip);
-      e.set_attribute ("port", rf.port);
-      e.set_attribute ("filename", rf.filename);
-      e.set_attribute ("username", rf.username);
-      e.set_attribute ("app_id", APP_ID);
-      e.set_attribute ("app_name", APP_NAME);
-      e.set_attribute ("hashes", rf.hashes);
-      e.set_attribute ("metadata", rf.metadata);
+            if (lf.metadata_time && !lf.peers.empty())
+            {
+                auto lf_metadata = _get_metadata(lf);
 
-      e.set_tag ("p2p");
+                for (const auto& tf : lf.content_files)
+                {
+                    auto path = _join_paths(lf.path, tf.path);
+                    auto filename = _get_filename(path);
 
-      e.add_source (rf.key_index_dat_f);
-      e.add_source (rf.part_met_f);
-      e.add_source (rf.part_met_txtsrc_f);
+                    for (const auto& [ip, port] : lf.peers)
+                    {
+                        auto e = item_.new_evidence ("p2p-remote-file");
+
+                        e.set_attribute ("timestamp", lf.metadata_time);
+                        e.set_attribute ("ip", ip);
+                        e.set_attribute ("port", port);
+                        e.set_attribute ("filename", filename);
+                        e.set_attribute ("username", username);
+                        e.set_attribute ("app_id", APP_ID);
+                        e.set_attribute ("app_name", APP_NAME);
+                        e.set_attribute ("path", path);
+                        //e.set_attribute ("hashes", get_file_hashes (tf));
+
+                        auto tf_metadata = lf_metadata.clone();
+                        tf_metadata.set("torrent_path", tf.path);
+                        tf_metadata.set("torrent_offset", tf.offset);
+                        tf_metadata.set("torrent_length", tf.length);
+                        tf_metadata.set("torrent_piece_length", tf.piece_length);
+                        tf_metadata.set("torrent_piece_offset", tf.piece_offset);
+
+                        e.set_attribute ("metadata", tf_metadata);
+
+                        e.set_tag ("p2p");
+                        for (const auto& f : lf.sources)
+                            e.add_source (f);
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -508,22 +605,44 @@ evidence_loader_impl::_save_p2p_remote_files ()
 void
 evidence_loader_impl::_save_sent_files ()
 {
-  for (const auto& lf : local_files_)
+    for (const auto& profile : profiles_)
     {
-      if (lf.flag_uploaded.is_yes ())
+        for (const auto& lf : profile.get_local_files())
         {
-          auto e = item_.new_evidence ("sent-file");
+            if (lf.bytes_uploaded > 0)
+            {
+                auto lf_metadata = _get_metadata(lf);
+                lf_metadata.set("username", profile.get_username ());
 
-          e.set_attribute ("username", lf.username);
-          e.set_attribute ("filename", lf.filename);
-          e.set_attribute ("path", lf.path);
-          e.set_attribute ("app_id", APP_ID);
-          e.set_attribute ("app_name", APP_NAME);
-          e.set_attribute ("hashes", lf.hashes);
-          e.set_attribute ("metadata", lf.metadata);
+                for (const auto& tf : lf.content_files)
+                {
+                    auto path = _join_paths(lf.path, tf.path);
+                    auto filename = _get_filename(path);
 
-          e.set_tag ("p2p");
-          e.add_source (lf.f);
+                    auto e = item_.new_evidence ("sent-file");
+
+                    e.set_attribute ("timestamp", lf.added_time);
+                    e.set_attribute ("username", profile.get_username ());
+                    e.set_attribute ("filename", filename);
+                    e.set_attribute ("path", path);
+                    e.set_attribute ("app_id", APP_ID);
+                    e.set_attribute ("app_name", APP_NAME);
+                    //e.set_attribute ("hashes", get_file_hashes (tf));
+
+                    auto tf_metadata = lf_metadata.clone();
+                    tf_metadata.set("torrent_path", tf.path);
+                    tf_metadata.set("torrent_offset", tf.offset);
+                    tf_metadata.set("torrent_length", tf.length);
+                    tf_metadata.set("torrent_piece_length", tf.piece_length);
+                    tf_metadata.set("torrent_piece_offset", tf.piece_offset);
+
+                    e.set_attribute ("metadata", tf_metadata);
+
+                    e.set_tag ("p2p");
+                    for (const auto& f : lf.sources)
+                        e.add_source (f);
+                }
+            }
         }
     }
 }
@@ -534,26 +653,45 @@ evidence_loader_impl::_save_sent_files ()
 void
 evidence_loader_impl::_save_shared_files ()
 {
-  for (const auto& lf : local_files_)
+    for (const auto& profile : profiles_)
     {
-      if (lf.flag_shared.is_yes () || lf.flag_shared.is_always ())
+        for (const auto& lf : profile.get_local_files())
         {
-          auto e = item_.new_evidence ("shared-file");
+            if (lf.seeded_seconds > 0)
+            {
+                auto lf_metadata = _get_metadata(lf);
+                lf_metadata.set("username", profile.get_username ());
 
-          e.set_attribute ("username", lf.username);
-          e.set_attribute ("filename", lf.filename);
-          e.set_attribute ("path", lf.path);
-          e.set_attribute ("app_id", APP_ID);
-          e.set_attribute ("app_name", APP_NAME);
-          e.set_attribute ("hashes", lf.hashes);
-          e.set_attribute ("metadata", lf.metadata);
+                for (const auto& tf : lf.content_files)
+                {
+                    auto path = _join_paths(lf.path, tf.path);
+                    auto filename = _get_filename(path);
 
-          e.set_tag ("p2p");
-          e.add_source (lf.f);
+                    auto e = item_.new_evidence ("shared-file");
+
+                    e.set_attribute ("username", profile.get_username ());
+                    e.set_attribute ("filename", filename);
+                    e.set_attribute ("path", path);
+                    e.set_attribute ("app_id", APP_ID);
+                    e.set_attribute ("app_name", APP_NAME);
+                    //e.set_attribute ("hashes", get_file_hashes (tf));
+
+                    auto tf_metadata = lf_metadata.clone();
+                    tf_metadata.set("torrent_path", tf.path);
+                    tf_metadata.set("torrent_offset", tf.offset);
+                    tf_metadata.set("torrent_length", tf.length);
+                    tf_metadata.set("torrent_piece_length", tf.piece_length);
+                    tf_metadata.set("torrent_piece_offset", tf.piece_offset);
+
+                    e.set_attribute ("metadata", tf_metadata);
+
+                    e.set_tag ("p2p");
+                    for (const auto& f : lf.sources)
+                        e.add_source (f);
+                }
+            }
         }
     }
 }
-
-*/
 
 } // namespace mobius::extension::app::utorrent

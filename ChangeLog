@@ -25,6 +25,7 @@ Mobius Forensic Toolkit 2.15
 	* libmobius_core: Added new class value_selector
 	* libmobius_core: Added new class is_empty_checker
 	* libmobius_core: Added new method pod::map::empty
+	* libmobius_framework: Added new method evidence_flag::to_string
 	* Added new tool: utorrent_dht_dat
 	* Added new tool: utorrent_resume_dat
 	* Added new tool: utorrent_settings_dat

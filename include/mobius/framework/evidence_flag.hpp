@@ -136,6 +136,35 @@ public:
       value_ = b ? value::yes : value::no;
   }
 
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  // @brief Convert to string
+  // @return String representation
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  std::string
+  to_string () const
+  {
+    switch (value_)
+    {
+        case value::no:
+            return "no";
+            break;
+
+        case value::yes:
+            return "yes";
+            break;
+
+        case value::always:
+            return "always";
+            break;
+
+        case value::unknown:
+            return "unknown";
+            break;
+    }
+
+    return "unknown";
+  }
+
 private:
   value value_ = value::unknown;
 };
@@ -148,5 +177,3 @@ std::string to_string (evidence_flag);
 } // namespace mobius::framework
 
 #endif
-
-

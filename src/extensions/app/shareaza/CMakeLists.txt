@@ -53,7 +53,7 @@ target_link_libraries(app_shareaza PRIVATE Mobius::Framework Mobius::Core)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: shareaza_library_dat
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_executable(shareaza_library_dat
+add_executable(tools_shareaza_library_dat
     tools/shareaza_library_dat.cpp
     CLibrary.cpp
     CLibraryFolder.cpp
@@ -62,12 +62,13 @@ add_executable(shareaza_library_dat
     CXMLElement.cpp
 )
 
-target_link_libraries(shareaza_library_dat PRIVATE Mobius::Core)
+set_target_properties(tools_shareaza_library_dat PROPERTIES OUTPUT_NAME "shareaza_library_dat")
+target_link_libraries(tools_shareaza_library_dat PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: shareaza_sd
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_executable(shareaza_sd
+add_executable(tools_shareaza_sd
     tools/shareaza_sd.cpp
     CBTInfo.cpp
     CDownload.cpp
@@ -76,12 +77,13 @@ add_executable(shareaza_sd
     CXMLElement.cpp
 )
 
-target_link_libraries(shareaza_sd PRIVATE Mobius::Core)
+set_target_properties(tools_shareaza_sd PROPERTIES OUTPUT_NAME "shareaza_sd")
+target_link_libraries(tools_shareaza_sd PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: shareaza_searches_dat
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_executable(shareaza_searches_dat
+add_executable(tools_shareaza_searches_dat
         tools/shareaza_searches_dat.cpp
         CManagedSearch.cpp
         CMatchFile.cpp
@@ -93,7 +95,8 @@ add_executable(shareaza_searches_dat
         CXMLElement.cpp
 )
 
-target_link_libraries(shareaza_searches_dat PRIVATE Mobius::Core)
+set_target_properties(tools_shareaza_searches_dat PROPERTIES OUTPUT_NAME "shareaza_searches_dat")
+target_link_libraries(tools_shareaza_searches_dat PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation
@@ -101,8 +104,8 @@ target_link_libraries(shareaza_searches_dat PRIVATE Mobius::Core)
 install(TARGETS app_shareaza LIBRARY DESTINATION share/mobiusft/extensions)
 
 install(TARGETS
-	shareaza_library_dat
-	shareaza_sd
-	shareaza_searches_dat
+	tools_shareaza_library_dat
+	tools_shareaza_sd
+	tools_shareaza_searches_dat
         RUNTIME DESTINATION share/mobiusft/tools
 )

@@ -40,7 +40,7 @@ target_link_libraries(vfs_imagefile_ewf PRIVATE Mobius::Core)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: ewf_decoder
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_executable(ewf_decoder
+add_executable(tools_ewf_decoder
     tools/ewf_decoder.cpp
     imagefile_impl.cpp
     reader_impl.cpp
@@ -49,7 +49,8 @@ add_executable(ewf_decoder
     writer_impl.cpp
 )
 
-target_link_libraries(ewf_decoder PRIVATE Mobius::Core)
+set_target_properties(tools_ewf_decoder PROPERTIES OUTPUT_NAME "ewf_decoder")
+target_link_libraries(tools_ewf_decoder PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation
@@ -57,5 +58,5 @@ target_link_libraries(ewf_decoder PRIVATE Mobius::Core)
 install(TARGETS vfs_imagefile_ewf LIBRARY DESTINATION share/mobiusft/extensions)
 
 install(TARGETS
-    ewf_decoder
+    tools_ewf_decoder
     RUNTIME DESTINATION share/mobiusft/tools)
