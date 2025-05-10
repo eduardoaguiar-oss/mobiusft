@@ -4,5 +4,6 @@ mobius.code-workspace
 *.swp
 .libs
 .vscode
+.clang-format
 .idea/
 **/build/

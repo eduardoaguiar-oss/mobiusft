@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -34,10 +36,10 @@ _decode_version (const std::uint32_t value)
     std::string version;
 
     if (value)
-        version = std::to_string((value >> 25) & 0x0f) + '.' +
-                  std::to_string((value >> 21) & 0x0f) + '.' +
-                  std::to_string((value >> 17) & 0x0f) + '.' +
-                  std::to_string(value & 0xffff);
+        version = std::to_string ((value >> 25) & 0x0f) + '.' +
+                  std::to_string ((value >> 21) & 0x0f) + '.' +
+                  std::to_string ((value >> 17) & 0x0f) + '.' +
+                  std::to_string (value & 0xffff);
 
     return version;
 }
@@ -50,7 +52,7 @@ namespace mobius::extension::app::utorrent
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-file_settings_dat::file_settings_dat (const mobius::core::io::reader& reader)
+file_settings_dat::file_settings_dat (const mobius::core::io::reader &reader)
 {
     if (!reader)
         return;
@@ -58,22 +60,30 @@ file_settings_dat::file_settings_dat (const mobius::core::io::reader& reader)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Decode btencode data
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::core::pod::map data (mobius::core::decoder::btencode(reader));
+    mobius::core::pod::map data (mobius::core::decoder::btencode (reader));
 
     total_bytes_downloaded_ = data.get<std::int64_t> ("td");
     total_bytes_uploaded_ = data.get<std::int64_t> ("tu");
-    flag_autostart_ = data.get<std::int64_t>("autostart", 1) == 1;
-    computer_id_ = mobius::core::encoder::hexstring (data.get<mobius::core::bytearray> ("cid"));
-    installation_time_ = mobius::core::datetime::new_datetime_from_nt_timestamp (data.get<std::int64_t> ("born_on", 0) * 10000000);
-    last_used_time_ = mobius::core::datetime::new_datetime_from_nt_timestamp (data.get<std::int64_t> ("cold_on", 0) * 10000000);
-    last_bin_change_time_ = mobius::core::datetime::new_datetime_from_nt_timestamp (data.get<std::int64_t> ("bin_change", 0) * 10000000);
+    flag_autostart_ = data.get<std::int64_t> ("autostart", 1) == 1;
+    computer_id_ = mobius::core::encoder::hexstring (
+        data.get<mobius::core::bytearray> ("cid"));
+    installation_time_ =
+        mobius::core::datetime::new_datetime_from_nt_timestamp (
+            data.get<std::int64_t> ("born_on", 0) * 10000000);
+    last_used_time_ = mobius::core::datetime::new_datetime_from_nt_timestamp (
+        data.get<std::int64_t> ("cold_on", 0) * 10000000);
+    last_bin_change_time_ =
+        mobius::core::datetime::new_datetime_from_nt_timestamp (
+            data.get<std::int64_t> ("bin_change", 0) * 10000000);
     execution_count_ = data.get<std::int64_t> ("runs_since_born", 0);
     version_ = _decode_version (data.get<std::int64_t> ("v"));
-    installation_version_ = _decode_version (data.get<std::int64_t> ("initial_install_version"));
+    installation_version_ =
+        _decode_version (data.get<std::int64_t> ("initial_install_version"));
 
-    auto lang = data.get<std::int64_t>("language", 0);
+    auto lang = data.get<std::int64_t> ("language", 0);
     if (lang)
-        language_= std::string() + char(lang & 0xff) + char((lang >> 8) & 0xff); 
+        language_ =
+            std::string () + char (lang & 0xff) + char ((lang >> 8) & 0xff);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // End decoding

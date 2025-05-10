@@ -3,7 +3,9 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -18,12 +20,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <cstdint>
+#include <map>
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/reader.hpp>
 #include <mobius/core/pod/map.hpp>
-#include <cstdint>
-#include <map>
 #include <set>
 #include <string>
 #include <vector>
@@ -33,11 +35,12 @@ namespace mobius::extension::app::utorrent
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief uTorrent profile class
 // @author Eduardo Aguiar
-// @see https://robertpearsonblog.wordpress.com/2016/11/10/utorrent-forensic-artifacts/
+// @see
+// https://robertpearsonblog.wordpress.com/2016/11/10/utorrent-forensic-artifacts/
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class profile
 {
-public:
+  public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Account structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -47,7 +50,8 @@ public:
         std::string client_id;
 
         // @brief IP Addresses
-        std::set<std::pair<std::string,mobius::core::datetime::datetime>> ip_addresses;
+        std::set<std::pair<std::string, mobius::core::datetime::datetime>>
+            ip_addresses;
 
         // @brief First DHT timestamp
         mobius::core::datetime::datetime first_dht_timestamp;
@@ -183,7 +187,7 @@ public:
 
         // @brief Last seen complete time
         mobius::core::datetime::datetime last_seen_complete_time;
-        
+
         // @brief Torrent name
         std::string torrent_name;
 
@@ -218,28 +222,25 @@ public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector<account> get_accounts() const;
-    std::vector<local_file> get_local_files() const;
-    void add_dht_dat_file(const mobius::core::io::file&);
-    void add_resume_dat_file(const mobius::core::io::file&);
-    void add_settings_dat_file(const mobius::core::io::file&);
-    void add_torrent_file(const mobius::core::io::file&);
+    std::vector<account> get_accounts () const;
+    std::vector<local_file> get_local_files () const;
+    void add_dht_dat_file (const mobius::core::io::file &);
+    void add_resume_dat_file (const mobius::core::io::file &);
+    void add_settings_dat_file (const mobius::core::io::file &);
+    void add_torrent_file (const mobius::core::io::file &);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Check if profile is valid
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const noexcept
-    {
-      return is_valid_;
-    }
+    operator bool () const noexcept { return is_valid_; }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get username
     // @return username
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::string
-    get_username() const
+    get_username () const
     {
         return username_;
     }
@@ -249,7 +250,7 @@ public:
     // @param username username
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void
-    set_username(const std::string& username)
+    set_username (const std::string &username)
     {
         username_ = username;
     }
@@ -259,22 +260,22 @@ public:
     // @return settings
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     settings
-    get_main_settings() const
+    get_main_settings () const
     {
         return main_settings_;
     }
-    
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get all settings found
     // @return settings
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::vector<settings>
-    get_settings() const
+    get_settings () const
     {
         return settings_;
     }
 
-private:
+  private:
     // @brief Check if profile is valid
     bool is_valid_ = false;
 

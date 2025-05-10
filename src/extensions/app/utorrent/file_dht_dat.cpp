@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -30,7 +32,7 @@ namespace mobius::extension::app::utorrent
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-file_dht_dat::file_dht_dat (const mobius::core::io::reader& reader)
+file_dht_dat::file_dht_dat (const mobius::core::io::reader &reader)
 {
     if (!reader)
         return;
@@ -38,23 +40,25 @@ file_dht_dat::file_dht_dat (const mobius::core::io::reader& reader)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Decode btencode data
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto data = mobius::core::decoder::btencode(reader);
-    if (!data.is_map())
+    auto data = mobius::core::decoder::btencode (reader);
+    if (!data.is_map ())
         return;
 
-    metadata_ = mobius::core::pod::map(data);
-    timestamp_ = mobius::core::datetime::new_datetime_from_unix_timestamp(metadata_.get<std::int64_t>("age"));
+    metadata_ = mobius::core::pod::map (data);
+    timestamp_ = mobius::core::datetime::new_datetime_from_unix_timestamp (
+        metadata_.get<std::int64_t> ("age"));
 
-    if (metadata_.contains("ip"))
-      {
-        auto decoder = mobius::core::decoder::data_decoder(metadata_.get<mobius::core::bytearray>("ip"));
-        ip_ = decoder.get_ipv4_be();
-      }
+    if (metadata_.contains ("ip"))
+    {
+        auto decoder = mobius::core::decoder::data_decoder (
+            metadata_.get<mobius::core::bytearray> ("ip"));
+        ip_ = decoder.get_ipv4_be ();
+    }
 
-    if (metadata_.contains("id"))
-        client_id_ = mobius::core::string::toupper(
-            mobius::core::encoder::hexstring(metadata_.get<mobius::core::bytearray>("id"))
-        );
+    if (metadata_.contains ("id"))
+        client_id_ =
+            mobius::core::string::toupper (mobius::core::encoder::hexstring (
+                metadata_.get<mobius::core::bytearray> ("id")));
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // End decoding

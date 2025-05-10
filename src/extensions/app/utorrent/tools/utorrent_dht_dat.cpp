@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -16,11 +18,11 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "../file_dht_dat.hpp"
-#include <mobius/core/application.hpp>
-#include <mobius/core/log.hpp>
-#include <mobius/core/io/file.hpp>
-#include <mobius/core/string_functions.hpp>
 #include <iostream>
+#include <mobius/core/application.hpp>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/log.hpp>
+#include <mobius/core/string_functions.hpp>
 #include <unistd.h>
 
 namespace
@@ -42,7 +44,7 @@ usage ()
 // @param path dht.dat path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-show_settings_dat (const std::string& path)
+show_settings_dat (const std::string &path)
 {
     std::cout << std::endl;
     std::cout << ">> " << path << std::endl;
@@ -52,10 +54,10 @@ show_settings_dat (const std::string& path)
 
     mobius::extension::app::utorrent::file_dht_dat settings (reader);
     if (!settings)
-      {
+    {
         std::cerr << "\tFile is not an instance of dht.dat" << std::endl;
         return;
-      }
+    }
 
     std::cout << "\tTimestamp: " << settings.get_timestamp () << std::endl;
     std::cout << "\tIP Address: " << settings.get_ip_address () << std::endl;
@@ -87,45 +89,47 @@ main (int argc, char **argv)
     int opt;
 
     while ((opt = getopt (argc, argv, "h")) != EOF)
-      {
+    {
         switch (opt)
-          {
-          case 'h':
-              usage ();
-              exit (EXIT_SUCCESS);
-              break;
+        {
+        case 'h':
+            usage ();
+            exit (EXIT_SUCCESS);
+            break;
 
-          default:
-              usage ();
-              exit (EXIT_FAILURE);
-          }
-      }
+        default:
+            usage ();
+            exit (EXIT_FAILURE);
+        }
+    }
 
     if (optind >= argc)
-      {
+    {
         std::cerr << std::endl;
-        std::cerr << "Error: you must enter at least one path to settings.dat file" << std::endl;
+        std::cerr
+            << "Error: you must enter at least one path to settings.dat file"
+            << std::endl;
         usage ();
         exit (EXIT_FAILURE);
-      }
+    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Show hive info
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     while (optind < argc)
-      {
+    {
         try
-          {
-            show_settings_dat(argv[optind]);
-          }
-        catch (const std::exception& e)
-          {
-            std::cerr <<  "Error: " << e.what () << std::endl;
+        {
+            show_settings_dat (argv[optind]);
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << "Error: " << e.what () << std::endl;
             exit (EXIT_FAILURE);
-          }
+        }
 
         optind++;
-      }
+    }
 
     app.stop ();
 

@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,12 +17,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/file_decoder/torrent.hpp>
-#include <mobius/core/log.hpp>
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/decoder/btencode.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/core/exception.inc>
+#include <mobius/core/file_decoder/torrent.hpp>
+#include <mobius/core/log.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <stdexcept>
@@ -33,19 +35,20 @@ namespace
 // @return Path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
-_get_path (const mobius::core::pod::data& data)
+_get_path (const mobius::core::pod::data &data)
 {
     std::string path;
 
-    if (data.is_list())
+    if (data.is_list ())
     {
-        std::vector<mobius::core::pod::data> path_list(data);
+        std::vector<mobius::core::pod::data> path_list (data);
 
-        for(const auto& path_item : path_list)
+        for (const auto &path_item : path_list)
         {
-            if(!path.empty())
+            if (!path.empty ())
                 path += "/";
-            path += static_cast<mobius::core::bytearray>(path_item).to_string();
+            path +=
+                static_cast<mobius::core::bytearray> (path_item).to_string ();
         }
     }
 
@@ -58,24 +61,24 @@ _get_path (const mobius::core::pod::data& data)
 // @return File structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::core::file_decoder::torrent::file
-_get_file (const mobius::core::pod::data& data)
+_get_file (const mobius::core::pod::data &data)
 {
     mobius::core::file_decoder::torrent::file file;
 
-    if (data.is_map())
+    if (data.is_map ())
     {
-        auto file_map = static_cast<mobius::core::pod::map>(data);
+        auto file_map = static_cast<mobius::core::pod::map> (data);
 
-        file.length = file_map.get<std::int64_t>("length", 0);
-        file.offset = file_map.get<std::int64_t>("offset", 0);
-        file.piece_length = file_map.get<std::int64_t>("piece length", 0);
-        file.piece_offset = file_map.get<std::int64_t>("piece offset", 0);
-        
-        auto path_data = file_map.get("path.utf-8");
-        if (path_data.is_null())
-            path_data = file_map.get("path");
+        file.length = file_map.get<std::int64_t> ("length", 0);
+        file.offset = file_map.get<std::int64_t> ("offset", 0);
+        file.piece_length = file_map.get<std::int64_t> ("piece length", 0);
+        file.piece_offset = file_map.get<std::int64_t> ("piece offset", 0);
 
-        file.path = _get_path(path_data);
+        auto path_data = file_map.get ("path.utf-8");
+        if (path_data.is_null ())
+            path_data = file_map.get ("path");
+
+        file.path = _get_path (path_data);
     }
 
     return file;
@@ -90,25 +93,25 @@ namespace mobius::core::file_decoder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class torrent::impl
 {
-public:
+  public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    impl() = default;
-    impl(const impl&) = delete;
-    impl(impl&&) = delete;
+    impl () = default;
+    impl (const impl &) = delete;
+    impl (impl &&) = delete;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Operators
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    impl& operator= (const impl&) = delete;
-    impl& operator= (impl&&) = delete;
+    impl &operator= (const impl &) = delete;
+    impl &operator= (impl &&) = delete;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Constructor
     // @param reader Reader object
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    explicit impl (const mobius::core::io::reader& reader)
+    explicit impl (const mobius::core::io::reader &reader)
         : reader_ (reader)
     {
     }
@@ -118,9 +121,9 @@ public:
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     bool
-    is_instance() const
+    is_instance () const
     {
-        _load_data();
+        _load_data ();
         return is_instance_;
     }
 
@@ -129,9 +132,9 @@ public:
     // @return File name
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::string
-    get_name() const
+    get_name () const
     {
-        _load_data();
+        _load_data ();
         return name_;
     }
 
@@ -140,9 +143,9 @@ public:
     // @return Piece length
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::uint64_t
-    get_piece_length() const
+    get_piece_length () const
     {
-        _load_data();
+        _load_data ();
         return piece_length_;
     }
 
@@ -151,9 +154,9 @@ public:
     // @return Length
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::uint64_t
-    get_length() const
+    get_length () const
     {
-        _load_data();
+        _load_data ();
         return length_;
     }
 
@@ -162,9 +165,9 @@ public:
     // @return Creation time
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::datetime::datetime
-    get_creation_time() const
+    get_creation_time () const
     {
-        _load_data();
+        _load_data ();
         return creation_time_;
     }
 
@@ -173,9 +176,9 @@ public:
     // @return Created by
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::string
-    get_created_by() const
+    get_created_by () const
     {
-        _load_data();
+        _load_data ();
         return created_by_;
     }
 
@@ -184,9 +187,9 @@ public:
     // @return Encoding
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::string
-    get_encoding() const
+    get_encoding () const
     {
-        _load_data();
+        _load_data ();
         return encoding_;
     }
 
@@ -195,9 +198,9 @@ public:
     // @return Comment
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::string
-    get_comment() const
+    get_comment () const
     {
-        _load_data();
+        _load_data ();
         return comment_;
     }
 
@@ -206,9 +209,9 @@ public:
     // @return Version
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::int64_t
-    get_version() const
+    get_version () const
     {
-        _load_data();
+        _load_data ();
         return version_;
     }
 
@@ -217,9 +220,9 @@ public:
     // @return Announce list
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::vector<std::string>
-    get_announce_list() const
+    get_announce_list () const
     {
-        _load_data();
+        _load_data ();
         return announce_list_;
     }
 
@@ -228,9 +231,9 @@ public:
     // @return Info hash
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::string
-    get_info_hash() const
+    get_info_hash () const
     {
-        _load_data();
+        _load_data ();
         return info_hash_;
     }
 
@@ -238,10 +241,10 @@ public:
     // @brief Get files
     // @return Files
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector <file>
-    get_files() const
+    std::vector<file>
+    get_files () const
     {
-        _load_data();
+        _load_data ();
         return files_;
     }
 
@@ -249,14 +252,14 @@ public:
     // @brief Get pieces
     // @return Pieces
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector <std::string>
-    get_pieces() const
+    std::vector<std::string>
+    get_pieces () const
     {
-        _load_data();
+        _load_data ();
         return pieces_;
     }
 
-private:
+  private:
     // @brief Reader object
     mobius::core::io::reader reader_;
 
@@ -297,10 +300,10 @@ private:
     mutable std::vector<std::string> announce_list_;
 
     // @brief Files
-    mutable std::vector <file> files_;
+    mutable std::vector<file> files_;
 
     // @brief Pieces
-    mutable std::vector <std::string> pieces_;
+    mutable std::vector<std::string> pieces_;
 
     // Helper functions
     void _load_data () const;
@@ -326,112 +329,114 @@ torrent::impl::_load_data () const
     // Decode data
     // @see torrent_info::parse_torrent_file@torrent_info.cpp (libtorrent)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    if (!reader_ || reader_.get_size() < 2)
+    if (!reader_ || reader_.get_size () < 2)
         return;
 
-    auto data = mobius::core::decoder::btencode(reader_);
-    if (!data.is_map())
+    auto data = mobius::core::decoder::btencode (reader_);
+    if (!data.is_map ())
         return;
 
-    auto metadata = static_cast<mobius::core::pod::map>(data);
+    auto metadata = static_cast<mobius::core::pod::map> (data);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Get file data
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    created_by_ = metadata.pop<std::string>("created by.utf-8");
-    if (created_by_.empty())
-        created_by_ = metadata.pop<std::string>("created by");
+    created_by_ = metadata.pop<std::string> ("created by.utf-8");
+    if (created_by_.empty ())
+        created_by_ = metadata.pop<std::string> ("created by");
 
-    comment_ = metadata.pop<std::string>("comment.utf-8");
-    if (comment_.empty())
-        comment_ = metadata.pop<std::string>("comment");
+    comment_ = metadata.pop<std::string> ("comment.utf-8");
+    if (comment_.empty ())
+        comment_ = metadata.pop<std::string> ("comment");
 
-    creation_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp(
-        metadata.pop<std::int64_t>("creation date", 0)
-    );
+    creation_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (
+        metadata.pop<std::int64_t> ("creation date", 0));
 
-    info_hash_ = metadata.get<std::string>("info hash");
-    if (info_hash_.empty())
-        info_hash_ = metadata.get<std::string>("infohash");
-    if (info_hash_.empty())
-        info_hash_ = metadata.get<std::string>("info_hash");
+    info_hash_ = metadata.get<std::string> ("info hash");
+    if (info_hash_.empty ())
+        info_hash_ = metadata.get<std::string> ("infohash");
+    if (info_hash_.empty ())
+        info_hash_ = metadata.get<std::string> ("info_hash");
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Get announce list
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto announce_list_data = metadata.pop("announce-list");
-    if (announce_list_data.is_list())
+    auto announce_list_data = metadata.pop ("announce-list");
+    if (announce_list_data.is_list ())
     {
-        std::vector<mobius::core::pod::data> announce_list(announce_list_data);
-        for (const auto& announce : announce_list)
+        std::vector<mobius::core::pod::data> announce_list (announce_list_data);
+        for (const auto &announce : announce_list)
         {
-            if (announce.is_list())
+            if (announce.is_list ())
             {
-                std::vector<mobius::core::pod::data> announce_items(announce);
-                for (const auto& item : announce_items)
-                    announce_list_.emplace_back(static_cast<mobius::core::bytearray>(item).to_string());
+                std::vector<mobius::core::pod::data> announce_items (announce);
+                for (const auto &item : announce_items)
+                    announce_list_.emplace_back (
+                        static_cast<mobius::core::bytearray> (item)
+                            .to_string ());
             }
         }
     }
 
-    auto announce = metadata.pop<std::string>("announce");
-    if (!announce.empty())
-        announce_list_.push_back(static_cast<mobius::core::bytearray>(announce).to_string());
+    auto announce = metadata.pop<std::string> ("announce");
+    if (!announce.empty ())
+        announce_list_.push_back (
+            static_cast<mobius::core::bytearray> (announce).to_string ());
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Get 'info' data
     // @see torrent_info::parse_info_section@torrent_info.cpp (libtorrent)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto info_data = metadata.get("info");
-    if (!info_data.is_map())
+    auto info_data = metadata.get ("info");
+    if (!info_data.is_map ())
         return;
 
-    auto info = static_cast<mobius::core::pod::map>(info_data);
+    auto info = static_cast<mobius::core::pod::map> (info_data);
 
     // Get data from info dict
-    name_ = info.get<std::string>("name.utf-8");
-    if (name_.empty())
-        name_ = info.get<std::string>("name");
+    name_ = info.get<std::string> ("name.utf-8");
+    if (name_.empty ())
+        name_ = info.get<std::string> ("name");
 
-    version_ = info.get<std::int64_t>("meta version", 0);
-    piece_length_ = info.get<std::int64_t>("piece length", 0);
+    version_ = info.get<std::int64_t> ("meta version", 0);
+    piece_length_ = info.get<std::int64_t> ("piece length", 0);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Get files
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto files_data = info.get("files");
-    if(files_data.is_list())
+    auto files_data = info.get ("files");
+    if (files_data.is_list ())
     {
-        std::vector<mobius::core::pod::data> files(files_data);
+        std::vector<mobius::core::pod::data> files (files_data);
         length_ = 0;
 
-        for (const auto& file_data : files)
+        for (const auto &file_data : files)
         {
-            auto f = _get_file(file_data);
+            auto f = _get_file (file_data);
             length_ += f.length;
-            files_.push_back(f);
+            files_.push_back (f);
         }
     }
     else
     {
-        auto f = _get_file(info_data);
+        auto f = _get_file (info_data);
         f.name = name_;
         length_ = f.length;
-        files_.push_back(f);
+        files_.push_back (f);
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Get pieces
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto pieces_data = info.get("pieces");
-    if (pieces_data.is_bytearray())
+    auto pieces_data = info.get ("pieces");
+    if (pieces_data.is_bytearray ())
     {
-        auto pieces = static_cast<mobius::core::bytearray>(pieces_data);
+        auto pieces = static_cast<mobius::core::bytearray> (pieces_data);
 
-        for(std::size_t i = 0; i < pieces.size(); i += 20)
+        for (std::size_t i = 0; i < pieces.size (); i += 20)
         {
-            auto piece = pieces.slice(i, i + 19);
-            pieces_.push_back(piece.to_hexstring());
+            auto piece = pieces.slice (i, i + 19);
+            pieces_.push_back (piece.to_hexstring ());
         }
     }
 
@@ -443,7 +448,7 @@ torrent::impl::_load_data () const
 // @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 torrent::torrent ()
-  : impl_ (std::make_shared <impl> ())
+    : impl_ (std::make_shared<impl> ())
 {
 }
 
@@ -451,8 +456,8 @@ torrent::torrent ()
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-torrent::torrent (const mobius::core::io::reader& reader)
-  : impl_ (std::make_shared <impl> (reader))
+torrent::torrent (const mobius::core::io::reader &reader)
+    : impl_ (std::make_shared<impl> (reader))
 {
 }
 
@@ -460,9 +465,10 @@ torrent::torrent (const mobius::core::io::reader& reader)
 // @brief Check if object is valid
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-torrent::operator bool () const
+torrent::
+operator bool () const
 {
-    return impl_->is_instance();
+    return impl_->is_instance ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -470,9 +476,9 @@ torrent::operator bool () const
 // @return File name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-torrent::get_name() const
+torrent::get_name () const
 {
-    return impl_->get_name();
+    return impl_->get_name ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -482,7 +488,7 @@ torrent::get_name() const
 std::uint64_t
 torrent::get_piece_length () const
 {
-    return impl_->get_piece_length();
+    return impl_->get_piece_length ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -492,7 +498,7 @@ torrent::get_piece_length () const
 std::uint64_t
 torrent::get_length () const
 {
-    return impl_->get_length();
+    return impl_->get_length ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -502,7 +508,7 @@ torrent::get_length () const
 mobius::core::datetime::datetime
 torrent::get_creation_time () const
 {
-    return impl_->get_creation_time();
+    return impl_->get_creation_time ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -512,7 +518,7 @@ torrent::get_creation_time () const
 std::string
 torrent::get_created_by () const
 {
-    return impl_->get_created_by();
+    return impl_->get_created_by ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -522,7 +528,7 @@ torrent::get_created_by () const
 std::string
 torrent::get_encoding () const
 {
-    return impl_->get_encoding();
+    return impl_->get_encoding ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -532,7 +538,7 @@ torrent::get_encoding () const
 std::string
 torrent::get_comment () const
 {
-    return impl_->get_comment();
+    return impl_->get_comment ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -542,7 +548,7 @@ torrent::get_comment () const
 std::int64_t
 torrent::get_version () const
 {
-    return impl_->get_version();
+    return impl_->get_version ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -552,7 +558,7 @@ torrent::get_version () const
 std::vector<std::string>
 torrent::get_announce_list () const
 {
-    return impl_->get_announce_list();
+    return impl_->get_announce_list ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -562,29 +568,27 @@ torrent::get_announce_list () const
 std::string
 torrent::get_info_hash () const
 {
-    return impl_->get_info_hash();
+    return impl_->get_info_hash ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get files
 // @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <torrent::file>
+std::vector<torrent::file>
 torrent::get_files () const
 {
-    return impl_->get_files();
+    return impl_->get_files ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get pieces
 // @return Pieces
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <std::string>
+std::vector<std::string>
 torrent::get_pieces () const
 {
-    return impl_->get_pieces();
+    return impl_->get_pieces ();
 }
 
 } // namespace mobius::core::file_decoder
-
-

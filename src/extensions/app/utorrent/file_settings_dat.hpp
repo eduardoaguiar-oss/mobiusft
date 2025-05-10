@@ -3,7 +3,9 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -18,9 +20,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <cstdint>
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/io/reader.hpp>
-#include <cstdint>
 #include <string>
 
 namespace mobius::extension::app::utorrent
@@ -32,27 +34,24 @@ namespace mobius::extension::app::utorrent
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class file_settings_dat
 {
-public:
+  public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    file_settings_dat (const mobius::core::io::reader&);
+    file_settings_dat (const mobius::core::io::reader &);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Check if stream is an instance of Settings.dat file
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const noexcept
-    {
-      return is_instance_;
-    }
+    operator bool () const noexcept { return is_instance_; }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get total bytes downloaded
-    // @return total bytes downloaded   
+    // @return total bytes downloaded
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::uint64_t
-    get_total_bytes_downloaded() const noexcept
+    get_total_bytes_downloaded () const noexcept
     {
         return total_bytes_downloaded_;
     }
@@ -62,7 +61,7 @@ public:
     // @return total bytes uploaded
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::uint64_t
-    get_total_bytes_uploaded() const noexcept
+    get_total_bytes_uploaded () const noexcept
     {
         return total_bytes_uploaded_;
     }
@@ -72,7 +71,7 @@ public:
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     bool
-    get_autostart() const noexcept
+    get_autostart () const noexcept
     {
         return flag_autostart_;
     }
@@ -82,7 +81,7 @@ public:
     // @return computer ID
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::string
-    get_computer_id() const
+    get_computer_id () const
     {
         return computer_id_;
     }
@@ -92,7 +91,7 @@ public:
     // @return installation time
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::datetime::datetime
-    get_installation_time() const
+    get_installation_time () const
     {
         return installation_time_;
     }
@@ -102,7 +101,7 @@ public:
     // @return last used time
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::datetime::datetime
-    get_last_used_time() const
+    get_last_used_time () const
     {
         return last_used_time_;
     }
@@ -112,7 +111,7 @@ public:
     // @return last bin change time
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::datetime::datetime
-    get_last_bin_change_time() const
+    get_last_bin_change_time () const
     {
         return last_bin_change_time_;
     }
@@ -122,7 +121,7 @@ public:
     // @return execution count
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::uint32_t
-    get_execution_count() const noexcept
+    get_execution_count () const noexcept
     {
         return execution_count_;
     }
@@ -132,7 +131,7 @@ public:
     // @return version
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::string
-    get_version() const
+    get_version () const
     {
         return version_;
     }
@@ -142,7 +141,7 @@ public:
     // @return installation version
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::string
-    get_installation_version() const
+    get_installation_version () const
     {
         return installation_version_;
     }
@@ -152,12 +151,12 @@ public:
     // @return language
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::string
-    get_language() const
+    get_language () const
     {
         return language_;
     }
 
-private:
+  private:
     // @brief Flag is instance
     bool is_instance_ = false;
 

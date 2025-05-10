@@ -3,7 +3,9 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -32,11 +34,12 @@ namespace mobius::extension::app::utorrent
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
 {
-public:
+  public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    explicit evidence_loader_impl (const mobius::framework::model::item&, scan_type);
+    explicit evidence_loader_impl (const mobius::framework::model::item &,
+                                   scan_type);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Function prototypes
@@ -47,7 +50,8 @@ public:
     // @brief Check if object is valid
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    explicit operator bool () const noexcept final
+    explicit
+    operator bool () const noexcept final
     {
         return true;
     }
@@ -62,7 +66,7 @@ public:
         return "app-utorrent";
     }
 
-private:
+  private:
     // @brief Case item
     mobius::framework::model::item item_;
 
@@ -76,15 +80,15 @@ private:
     profile profile_;
 
     // @brief Profiles found
-    std::vector <profile> profiles_;
+    std::vector<profile> profiles_;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _scan_canonical_folders ();
-    void _scan_canonical_root_folder (const mobius::core::io::folder&);
-    void _scan_canonical_user_folder (const mobius::core::io::folder&);
-    void _scan_canonical_utorrent_folder (const mobius::core::io::folder& folder);
+    void _scan_canonical_root_folder (const mobius::core::io::folder &);
+    void _scan_canonical_user_folder (const mobius::core::io::folder &);
+    void _scan_canonical_utorrent_folder (const mobius::core::io::folder &);
 
     void _save_evidences ();
     void _save_accounts ();
