@@ -99,6 +99,7 @@ set(CPACK_SOURCE_IGNORE_FILES
     "\\\\.idea/"
     "mobius.code-workspace"
     "mobiusft-*"
+    "FEATURES.md"
     "screenshots/"
 )
 

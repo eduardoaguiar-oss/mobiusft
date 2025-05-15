@@ -58,7 +58,7 @@ Example:
 
 ```bash
 tar xvf mobiusft-2.15.tar.xz
-cmake -B build -S mobiusft-2.15 --install-prefix /opt/mobiusft-2.15 -DLIBTSK_ROOT=/opt/sleuthkit-4.14.0
+cmake -B build -S mobiusft-2.15 --install-prefix /opt/mobiusft-2.15 -DLIBTSK_ROOT=/opt/sleuthkit-4.14.0 -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j 24
 cmake --install build
 ```
