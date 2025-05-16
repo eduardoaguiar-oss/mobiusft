@@ -50,7 +50,6 @@ add_subdirectory(encoder)
 add_subdirectory(framework)
 add_subdirectory(io)
 add_subdirectory(kff)
-add_subdirectory(model)
 add_subdirectory(os)
 add_subdirectory(pod)
 add_subdirectory(system)
@@ -104,7 +103,6 @@ target_link_libraries(mobius PRIVATE
     mobius_python_framework
     mobius_python_io
     mobius_python_kff
-    mobius_python_model
     mobius_python_os
     mobius_python_pod
     mobius_python_system

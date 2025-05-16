@@ -1,9 +1,11 @@
-#ifndef LIBMOBIUS_PYTHON_MODEL_ANT_HPP
-#define LIBMOBIUS_PYTHON_MODEL_ANT_HPP
+#ifndef LIBMOBIUS_PYTHON_FRAMEWORK_MODEL_EVIDENCE_HPP
+#define LIBMOBIUS_PYTHON_FRAMEWORK_MODEL_EVIDENCE_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -19,22 +21,25 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/framework/model/ant.hpp>
+#include <mobius/framework/model/evidence.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
-  PyObject_HEAD
-  mobius::framework::model::ant *obj;
-} model_ant_o;
+    PyObject_HEAD mobius::framework::model::evidence *obj;
+} framework_model_evidence_o;
 
-extern PyTypeObject model_ant_t;
+extern PyTypeObject framework_model_evidence_t;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *pymobius_model_ant_to_pyobject (const mobius::framework::model::ant&);
+bool pymobius_framework_model_evidence_check (PyObject *);
+PyObject *pymobius_framework_model_evidence_to_pyobject (
+    const mobius::framework::model::evidence &);
+mobius::framework::model::evidence
+pymobius_framework_model_evidence_from_pyobject (PyObject *);
 
 #endif

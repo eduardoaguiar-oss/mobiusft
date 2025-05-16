@@ -187,7 +187,7 @@ class ICEWindow(object):
     def __on_window_closing(self):
 
         # if there is at most one case opened, performs like a file->quit
-        if mobius.model.get_case_count() < 2:
+        if mobius.framework.model.get_case_count() < 2:
             return self.__on_file_quit(self.__widget)
 
         # otherwise, performs like a file->close
@@ -288,7 +288,7 @@ class ICEWindow(object):
 
         # if user hit OK, create a new case
         if response == Gtk.ResponseType.OK:
-            case = mobius.model.new_case(case_folder)
+            case = mobius.framework.model.new_case(case_folder)
             case.root_item.id = case_id
             case.root_item.name = case_name
 
@@ -322,7 +322,7 @@ class ICEWindow(object):
             return
 
         # open case
-        case = mobius.model.open_case(folder)
+        case = mobius.framework.model.open_case(folder)
         window = self.__get_window_case()
         window.__set_case(case)
 
@@ -346,10 +346,10 @@ class ICEWindow(object):
             return True
 
         # close case
-        mobius.model.close_case(self.__case)
+        mobius.framework.model.close_case(self.__case)
 
         # close working area
-        if mobius.model.get_case_count() > 0:
+        if mobius.framework.model.get_case_count() > 0:
             self.__destroy()
 
         else:

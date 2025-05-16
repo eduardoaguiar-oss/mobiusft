@@ -1,7 +1,7 @@
 ---
 title: Mobius Forensic Toolkit
 description: "Open-source forensic framework and tools written in C++/Python"
-version: 2.15
+version: 2.16
 ---
 
 # Mobius Forensic Toolkit
@@ -57,8 +57,8 @@ cmake --install build
 Example:
 
 ```bash
-tar xvf mobiusft-2.15.tar.xz
-cmake -B build -S mobiusft-2.15 --install-prefix /opt/mobiusft-2.15 -DLIBTSK_ROOT=/opt/sleuthkit-4.14.0 -DCMAKE_BUILD_TYPE=Release
+tar xvf mobiusft-2.16.tar.xz
+cmake -B build -S mobiusft-2.16 --install-prefix /opt/mobiusft-2.16 -DLIBTSK_ROOT=/opt/sleuthkit-4.14.0 -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j 24
 cmake --install build
 ```

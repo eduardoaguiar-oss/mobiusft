@@ -38,7 +38,6 @@
 #include "framework/module.hpp"
 #include "kff/module.hpp"
 #include "io/module.hpp"
-#include "model/module.hpp"
 #include "os/module.hpp"
 #include "pod/module.hpp"
 #include "system/module.hpp"
@@ -94,7 +93,6 @@ PyInit_mobius (void)
       module.add_submodule ("framework", new_framework_module ());
       module.add_submodule ("kff", new_kff_module ());
       module.add_submodule ("io", new_io_module ());
-      module.add_submodule ("model", new_model_module ());
       module.add_submodule ("os", new_os_module ());
       module.add_submodule ("pod", new_pod_module ());
       module.add_submodule ("system", new_system_module ());

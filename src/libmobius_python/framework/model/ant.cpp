@@ -19,108 +19,174 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \file evidence_loader.cc C++ API <i>mobius.framework.evidence_loader</i>
-//! class wrapper
+//! \file ant.cc C++ API <i>mobius.framework.model.ant</i> class wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "evidence_loader.hpp"
-#include "model/item.hpp"
-#include <mobius/core/exception.inc>
-#include <pygil.hpp>
+#include "ant.hpp"
+#include "item.hpp"
+#include "module.hpp"
 #include <pymobius.hpp>
-#include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>run</i> method implementation
+// @brief Create <i>ant</i> Python object from C++ object
+// @param obj C++ object
+// @return new ant object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_framework_model_ant_to_pyobject (
+    const mobius::framework::model::ant &obj)
+{
+    PyObject *ret = nullptr;
+
+    if (obj)
+    {
+        ret = _PyObject_New (&framework_model_ant_t);
+
+        if (ret)
+            ((framework_model_ant_o *) ret)->obj =
+                new mobius::framework::model::ant (obj);
+    }
+    else
+        ret = mobius::py::pynone ();
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>item</i> Attribute getter
 // @param self Object
-// @param args Argument list
+// @return <i>item</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_run (framework_evidence_loader_o *self, PyObject *)
+tp_getter_item (framework_model_ant_o *self)
 {
-    // Execute C++ function
+    PyObject *ret = nullptr;
+
     try
     {
-        mobius::py::GIL GIL;
-        self->obj->run ();
+        ret =
+            pymobius_framework_model_item_to_pyobject (self->obj->get_item ());
     }
     catch (const std::exception &e)
     {
         mobius::py::set_runtime_error (e.what ());
-        return nullptr;
     }
 
-    // return None
-    return mobius::py::pynone ();
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Methods structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyMethodDef tp_methods[] = {
-    {"run", (PyCFunction) tp_f_run, METH_VARARGS,
-     "Scan item files for evidences"},
-    {nullptr, nullptr, 0, nullptr}, // sentinel
-};
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>evidence_loader</i> Constructor
-// @param type Type object
-// @param args Argument list
-// @param kwds Keywords dict
-// @return new <i>evidence_loader</i> object
+// @brief <i>id</i> Attribute getter
+// @param self Object
+// @return <i>id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_new (PyTypeObject *type, PyObject *args, PyObject *)
+tp_getter_id (framework_model_ant_o *self)
 {
-    // Parse input args
-    std::string arg_id;
-    mobius::framework::model::item arg_item;
-    mobius::framework::evidence_loader::scan_type arg_type;
+    PyObject *ret = nullptr;
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
-        arg_item = mobius::py::get_arg_as_cpp (
-            args, 1, pymobius_framework_model_item_from_pyobject);
-        arg_type = static_cast<mobius::framework::evidence_loader::scan_type> (
-            mobius::py::get_arg_as_int (args, 2, 1));
+        ret = mobius::py::pystring_from_std_string (self->obj->get_id ());
     }
     catch (const std::exception &e)
     {
-        mobius::py::set_invalid_type_error (e.what ());
-        return nullptr;
+        mobius::py::set_runtime_error (e.what ());
     }
 
-    // Create Python object
-    framework_evidence_loader_o *ret =
-        reinterpret_cast<framework_evidence_loader_o *> (
-            type->tp_alloc (type, 0));
-
-    if (ret)
-    {
-        try
-        {
-            ret->obj = new mobius::framework::evidence_loader (arg_id, arg_item,
-                                                               arg_type);
-        }
-        catch (const std::exception &e)
-        {
-            Py_DECREF (ret);
-            mobius::py::set_runtime_error (e.what ());
-            ret = nullptr;
-        }
-    }
-
-    return reinterpret_cast<PyObject *> (ret);
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>evidence_loader</i> deallocator
+// @brief <i>name</i> Attribute getter
+// @param self Object
+// @return <i>name</i> attribute
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_getter_name (framework_model_ant_o *self)
+{
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pystring_from_std_string (self->obj->get_name ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>version</i> Attribute getter
+// @param self Object
+// @return <i>version</i> attribute
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_getter_version (framework_model_ant_o *self)
+{
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pystring_from_std_string (self->obj->get_version ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>last_execution_time</i> Attribute getter
+// @param self Object
+// @return <i>last_execution_time</i> attribute
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_getter_last_execution_time (framework_model_ant_o *self)
+{
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pydatetime_from_datetime (
+            self->obj->get_last_execution_time ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Getters and setters structure
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyGetSetDef tp_getset[] = {
+    {(char *) "item", (getter) tp_getter_item, (setter) 0, (char *) "Case item",
+     nullptr},
+    {(char *) "id", (getter) tp_getter_id, (setter) 0, (char *) "ANT ID",
+     nullptr},
+    {(char *) "name", (getter) tp_getter_name, (setter) 0, (char *) "Name",
+     nullptr},
+    {(char *) "version", (getter) tp_getter_version, (setter) 0,
+     (char *) "Version", nullptr},
+    {(char *) "last_execution_time", (getter) tp_getter_last_execution_time,
+     (setter) 0, (char *) "Last execution date/time", nullptr},
+    {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>ant</i> deallocator
 // @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-tp_dealloc (framework_evidence_loader_o *self)
+tp_dealloc (framework_model_ant_o *self)
 {
     delete self->obj;
     Py_TYPE (self)->tp_free ((PyObject *) self);
@@ -129,10 +195,9 @@ tp_dealloc (framework_evidence_loader_o *self)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyTypeObject framework_evidence_loader_t = {
-    PyVarObject_HEAD_INIT (NULL,
-                           0) "mobius.framework.evidence_loader", // tp_name
-    sizeof (framework_evidence_loader_o),     // tp_basicsize
+PyTypeObject framework_model_ant_t = {
+    PyVarObject_HEAD_INIT (nullptr, 0) "mobius.framework.model.ant", // tp_name
+    sizeof (framework_model_ant_o),           // tp_basicsize
     0,                                        // tp_itemsize
     (destructor) tp_dealloc,                  // tp_dealloc
     0,                                        // tp_print
@@ -150,16 +215,16 @@ static PyTypeObject framework_evidence_loader_t = {
     0,                                        // tp_setattro
     0,                                        // tp_as_buffer
     Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "evidence_loader class",                  // tp_doc
+    "ANT executed",                           // tp_doc
     0,                                        // tp_traverse
     0,                                        // tp_clear
     0,                                        // tp_richcompare
     0,                                        // tp_weaklistoffset
     0,                                        // tp_iter
     0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
+    0,                                        // tp_methods
     0,                                        // tp_members
-    0,                                        // tp_getset
+    tp_getset,                                // tp_getset
     0,                                        // tp_base
     0,                                        // tp_dict
     0,                                        // tp_descr_get
@@ -167,7 +232,7 @@ static PyTypeObject framework_evidence_loader_t = {
     0,                                        // tp_dictoffset
     0,                                        // tp_init
     0,                                        // tp_alloc
-    tp_new,                                   // tp_new
+    0,                                        // tp_new
     0,                                        // tp_free
     0,                                        // tp_is_gc
     0,                                        // tp_bases
@@ -179,51 +244,3 @@ static PyTypeObject framework_evidence_loader_t = {
     0,                                        // tp_version_tag
     0,                                        // tp_finalize
 };
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>mobius.framework.evidence_loader</i> type
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pytypeobject
-new_framework_evidence_loader_type ()
-{
-    mobius::py::pytypeobject type (&framework_evidence_loader_t);
-    type.create ();
-
-    return type;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if value is an instance of <i>evidence_loader</i>
-// @param value Python value
-// @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-pymobius_framework_evidence_loader_check (PyObject *value)
-{
-    return mobius::py::isinstance (value, &framework_evidence_loader_t);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>evidence_loader</i> Python object from C++ object
-// @param obj C++ object
-// @return New evidence_loader object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_framework_evidence_loader_to_pyobject (
-    const mobius::framework::evidence_loader &obj)
-{
-    return mobius::py::to_pyobject_nullable<framework_evidence_loader_o> (
-        obj, &framework_evidence_loader_t);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>evidence_loader</i> C++ object from Python object
-// @param value Python value
-// @return Evidence_loader object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::framework::evidence_loader
-pymobius_framework_evidence_loader_from_pyobject (PyObject *value)
-{
-    return mobius::py::from_pyobject<framework_evidence_loader_o> (
-        value, &framework_evidence_loader_t);
-}

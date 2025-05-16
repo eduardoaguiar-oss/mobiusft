@@ -23,6 +23,11 @@ cmake_minimum_required(VERSION 3.10)
 project(mobius_python_framework LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Build sub-libraries
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_subdirectory(model)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target: mobius_python_framework.la
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(mobius_python_framework STATIC
@@ -39,6 +44,10 @@ target_include_directories(mobius_python_framework PRIVATE
     ${Python3_INCLUDE_DIRS}
 )
 
-target_link_libraries(mobius_python_framework PUBLIC Mobius::Framework)
+target_link_libraries(mobius_python_framework
+   PRIVATE
+     "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_python_framework_model>"
+   PUBLIC Mobius::Framework
+)
 
 target_compile_options(mobius_python_framework PRIVATE -fno-strict-aliasing -fPIC)

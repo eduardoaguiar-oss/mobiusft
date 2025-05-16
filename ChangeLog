@@ -1,3 +1,6 @@
+Mobius Forensic Toolkit 2.16
+	* libmobius_python: Module model moved to framework
+
 Mobius Forensic Toolkit 2.15
 	* src/mobius package renamed to src/libmobius_core
 	* src/mobius/framework: package renamed to src/libmobius_framework
