@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,9 +17,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/os/win/pbkdf2_hmac_ms.hpp>
 #include <mobius/core/crypt/hmac.hpp>
 #include <mobius/core/exception.inc>
+#include <mobius/core/os/win/pbkdf2_hmac_ms.hpp>
 #include <stdexcept>
 
 namespace mobius::core::os::win
@@ -32,51 +34,43 @@ namespace mobius::core::os::win
 // This function implements MS version, which is not compatible with RFC 2898
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
-pbkdf2_hmac_ms (
-  const mobius::core::bytearray& password,
-  const mobius::core::bytearray& salt,
-  std::uint32_t count,
-  std::uint16_t dklen,
-  const std::string& hash_id)
+pbkdf2_hmac_ms (const mobius::core::bytearray &password,
+                const mobius::core::bytearray &salt, std::uint32_t count,
+                std::uint16_t dklen, const std::string &hash_id)
 {
-  // Validate input parameters
-  if (dklen == 0)
-    throw std::out_of_range (MOBIUS_EXCEPTION_MSG ("derived key length must be > 0"));
+    // Validate input parameters
+    if (dklen == 0)
+        throw std::out_of_range (
+            MOBIUS_EXCEPTION_MSG ("derived key length must be > 0"));
 
-  // Calculate derived key
-  std::uint32_t i = 1;
-  mobius::core::bytearray dk;
-  mobius::core::crypt::hmac hmac (hash_id, password);
+    // Calculate derived key
+    std::uint32_t i = 1;
+    mobius::core::bytearray dk;
+    mobius::core::crypt::hmac hmac (hash_id, password);
 
-  while (dk.size () < dklen)
+    while (dk.size () < dklen)
     {
-      hmac.reset ();
-      hmac.update (salt);
-      hmac.update (
-      {
-        static_cast <uint8_t> (i >> 24),
-        static_cast <uint8_t> (i >> 16),
-        static_cast <uint8_t> (i >> 8),
-        static_cast <uint8_t> (i)
-      });
+        hmac.reset ();
+        hmac.update (salt);
+        hmac.update ({static_cast<uint8_t> (i >> 24),
+                      static_cast<uint8_t> (i >> 16),
+                      static_cast<uint8_t> (i >> 8), static_cast<uint8_t> (i)});
 
-      auto t = hmac.get_digest ();
-      auto u = t;
+        auto t = hmac.get_digest ();
+        auto u = t;
 
-      for (std::uint32_t j = 1; j < count; j++)
+        for (std::uint32_t j = 1; j < count; j++)
         {
-          hmac.reset ();
-          hmac.update (u);
-          u ^= hmac.get_digest ();
+            hmac.reset ();
+            hmac.update (u);
+            u ^= hmac.get_digest ();
         }
 
-      dk += u;
-      ++i;
+        dk += u;
+        ++i;
     }
 
-  return dk.slice (0, dklen - 1);
+    return dk.slice (0, dklen - 1);
 }
 
 } // namespace mobius::core::os::win
-
-

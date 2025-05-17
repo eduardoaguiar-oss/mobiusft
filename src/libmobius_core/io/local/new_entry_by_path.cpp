@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,13 +17,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/io/local/new_entry_by_path.hpp>
 #include <mobius/core/exception_posix.inc>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/folder.hpp>
+#include <mobius/core/io/local/new_entry_by_path.hpp>
 #include <stdexcept>
-#include <unistd.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 namespace mobius::core::io::local
 {
@@ -31,28 +33,26 @@ namespace mobius::core::io::local
 // @return Entry object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::io::entry
-new_entry_by_path (const std::string& path)
+new_entry_by_path (const std::string &path)
 {
-  struct stat st;
-  mobius::core::io::entry e;
+    struct stat st;
+    mobius::core::io::entry e;
 
-  if (!stat (path.c_str (), &st))
+    if (!stat (path.c_str (), &st))
     {
-      if (S_ISDIR (st.st_mode))
-        e = entry (mobius::core::io::new_folder_by_path (path));
-      else
-        e = entry (mobius::core::io::new_file_by_path (path));
+        if (S_ISDIR (st.st_mode))
+            e = entry (mobius::core::io::new_folder_by_path (path));
+        else
+            e = entry (mobius::core::io::new_file_by_path (path));
     }
 
-  else // error
+    else // error
     {
-      if (errno != ENOENT && errno != ENOTDIR)
-        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+        if (errno != ENOENT && errno != ENOTDIR)
+            throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
     }
 
-  return e;
+    return e;
 }
 
 } // namespace mobius::core::io::local
-
-

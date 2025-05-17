@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,21 +17,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/benchmark.hpp>
 #include <iostream>
+#include <mobius/core/benchmark.hpp>
 
 namespace mobius::core
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-benchmark::benchmark (const std::string& title, const std::string& unit)
-  : title_ (title),
-    unit_ (unit),
-    start_ (std::chrono::high_resolution_clock::now ())
+benchmark::benchmark (const std::string &title, const std::string &unit)
+    : title_ (title),
+      unit_ (unit),
+      start_ (std::chrono::high_resolution_clock::now ())
 {
-  std::size_t dots = title_.length() > 60 ? 0 : 60 - title_.length();
-  std::cout << "\033[1;39m" << title_ << "\033[0m " << std::string (dots, '.') << std::flush;
+    std::size_t dots = title_.length () > 60 ? 0 : 60 - title_.length ();
+    std::cout << "\033[1;39m" << title_ << "\033[0m " << std::string (dots, '.')
+              << std::flush;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -39,8 +42,9 @@ benchmark::benchmark (const std::string& title, const std::string& unit)
 std::uint64_t
 benchmark::mtime () const
 {
-  auto now = std::chrono::high_resolution_clock::now ();
-  return std::chrono::duration_cast<std::chrono::milliseconds> (now - start_).count ();
+    auto now = std::chrono::high_resolution_clock::now ();
+    return std::chrono::duration_cast<std::chrono::milliseconds> (now - start_)
+        .count ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -50,21 +54,20 @@ benchmark::mtime () const
 void
 benchmark::end (std::uint64_t count)
 {
-  std::uint64_t time_ms = mtime ();
+    std::uint64_t time_ms = mtime ();
 
-  double throughput = double (count) / (double (time_ms) / 100.0);
-  const std::string units[] = {"", "K", "M", "G", "T"};
-  int unit_idx = 0;
+    double throughput = double (count) / (double (time_ms) / 100.0);
+    const std::string units[] = {"", "K", "M", "G", "T"};
+    int unit_idx = 0;
 
-  while (throughput > 3160)		// sqrt (10) * 1000
+    while (throughput > 3160) // sqrt (10) * 1000
     {
-      throughput /= 1000;
-      unit_idx++;
+        throughput /= 1000;
+        unit_idx++;
     }
 
-  std::cout << " \033[1;32m" << throughput << ' ' << units[unit_idx] << unit_ << "/s\033[0m" << std::endl;
+    std::cout << " \033[1;32m" << throughput << ' ' << units[unit_idx] << unit_
+              << "/s\033[0m" << std::endl;
 }
 
-} // namespace mobius::core 
-
-
+} // namespace mobius::core

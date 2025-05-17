@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -16,23 +18,23 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <cstdint>
-#include <string>
-#include <mobius/core/mediator.hpp>
-#include <mobius/core/pod/data.hpp>
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/datetime/timedelta.hpp>
+#include <mobius/core/mediator.hpp>
+#include <mobius/core/pod/data.hpp>
 #include <mobius/framework/model/item.hpp>
+#include <string>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Extension data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extern "C"
 {
-const char *EXTENSION_ID = "date-code";
-const char *EXTENSION_NAME = "Date Code";
-const char *EXTENSION_VERSION = "1.0";
-const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
-const char *EXTENSION_DESCRIPTION = "Seagate date-code automatic decoding";
+    const char *EXTENSION_ID = "date-code";
+    const char *EXTENSION_NAME = "Date Code";
+    const char *EXTENSION_VERSION = "1.0";
+    const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
+    const char *EXTENSION_DESCRIPTION = "Seagate date-code automatic decoding";
 } // extern "C"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -50,67 +52,64 @@ static std::uint64_t subscription_id_ = -1;
 //! \param attr_id Attribute ID
 //! \param old_value Old value
 //! \param new_value New value
-//! \see https://www.digital-detective.net/data-recovery-documents/SeagateDateCode_NoteTechnique03-v1.01.pdf
+//! \see
+//! https://www.digital-detective.net/data-recovery-documents/SeagateDateCode_NoteTechnique03-v1.01.pdf
 //! \see https://www.os2museum.com/wp/decoding-seagate-date-codes/
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-_callback
-(
-  mobius::framework::model::item item,
-  const std::string& attr_id,
-  const mobius::core::pod::data&,
-  const mobius::core::pod::data& new_value
-)
+_callback (mobius::framework::model::item item, const std::string &attr_id,
+           const mobius::core::pod::data &,
+           const mobius::core::pod::data &new_value)
 {
-  // check if attribute being modified is "manufacturing_date"
-  if (attr_id != "manufacturing_date" || !new_value.is_string ())
-    return;
+    // check if attribute being modified is "manufacturing_date"
+    if (attr_id != "manufacturing_date" || !new_value.is_string ())
+        return;
 
-  // check if value has length 4 or 5
-  std::string value = std::string (new_value);
+    // check if value has length 4 or 5
+    std::string value = std::string (new_value);
 
-  if (value.length () < 4 || value.length () > 5)
-    return;
+    if (value.length () < 4 || value.length () > 5)
+        return;
 
-  // decode year, week and day  
-  int Y = std::stoi (value.substr (0, 2));
-  int W, D;
+    // decode year, week and day
+    int Y = std::stoi (value.substr (0, 2));
+    int W, D;
 
-  if (value.length () == 4)
+    if (value.length () == 4)
     {
-      W = std::stoi (value.substr (2, 1));
-      D = std::stoi (value.substr (3, 1));
+        W = std::stoi (value.substr (2, 1));
+        D = std::stoi (value.substr (3, 1));
     }
-  else
+    else
     {
-      W = std::stoi (value.substr (2, 2));
-      D = std::stoi (value.substr (4, 1));
+        W = std::stoi (value.substr (2, 2));
+        D = std::stoi (value.substr (4, 1));
     }
 
-  // calculate full year
-  if (Y > 80)
-    Y += 1899;
-  
-  else
-    Y += 1999;
+    // calculate full year
+    if (Y > 80)
+        Y += 1899;
 
-  // fiscal year begins at first saturday of July of the previous year
-  mobius::core::datetime::date d (Y, 7, 1);
+    else
+        Y += 1999;
 
-  int days = (W - 1) * 7 + D - 1;
+    // fiscal year begins at first saturday of July of the previous year
+    mobius::core::datetime::date d (Y, 7, 1);
 
-  if (d.get_weekday () < 6)
-    days += 5 - d.get_weekday ();
-  
-  else
-    days += 6;
+    int days = (W - 1) * 7 + D - 1;
 
-  // add days to first day of the fiscal year
-  mobius::core::datetime::timedelta td (0, days);
-  d = d + td;
+    if (d.get_weekday () < 6)
+        days += 5 - d.get_weekday ();
 
-  // set manufacturing date
-  item.set_attribute ("manufacturing_date", to_string (d));
+    else
+        days += 6;
+
+    // add days to first day of the fiscal year
+    mobius::core::datetime::timedelta td (0, days);
+    d = d + td;
+
+    // set manufacturing date
+    item.set_attribute ("manufacturing_date", to_string (d));
 }
 
 } // namespace
@@ -121,7 +120,8 @@ _callback
 extern "C" void
 start ()
 {
-  subscription_id_ = mobius::core::subscribe ("attribute-modified", _callback);
+    subscription_id_ =
+        mobius::core::subscribe ("attribute-modified", _callback);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -130,5 +130,5 @@ start ()
 extern "C" void
 stop ()
 {
-  mobius::core::unsubscribe (subscription_id_);
+    mobius::core::unsubscribe (subscription_id_);
 }

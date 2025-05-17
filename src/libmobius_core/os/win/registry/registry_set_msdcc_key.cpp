@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -29,20 +31,19 @@ namespace mobius::core::os::win::registry
 void
 registry_set_msdcc_key (registry_key root)
 {
-  auto security_key = root.get_key_by_path ("\\HKEY_LOCAL_MACHINE\\SECURITY");
+    auto security_key = root.get_key_by_path ("\\HKEY_LOCAL_MACHINE\\SECURITY");
 
-  if (security_key)
+    if (security_key)
     {
-      auto nlkm = security_key.get_data_by_path ("Policy\\Secrets\\NL$KM\\Currval\\(default)");
-      auto key = security_key.get_key_by_name ("Cache");
+        auto nlkm = security_key.get_data_by_path (
+            "Policy\\Secrets\\NL$KM\\Currval\\(default)");
+        auto key = security_key.get_key_by_name ("Cache");
 
-      if (key && nlkm)
-        security_key.add_key (
-          registry_key (std::make_shared <registry_key_impl_msdcc> (key, nlkm.get_data ()))
-        );
+        if (key && nlkm)
+            security_key.add_key (
+                registry_key (std::make_shared<registry_key_impl_msdcc> (
+                    key, nlkm.get_data ())));
     }
 }
 
 } // namespace mobius::core::os::win::registry
-
-

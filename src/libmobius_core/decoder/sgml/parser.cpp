@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -31,144 +33,151 @@ namespace
 // @return Start tag element
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static parser::element
-_parse_tag_with_attributes (parser::element::type type, const std::string& text)
+_parse_tag_with_attributes (parser::element::type type, const std::string &text)
 {
-  std::size_t pos = 1;
-  std::size_t len = (type == parser::element::type::start_tag) ? text.size () - 1 : text.size () - 2;
+    std::size_t pos = 1;
+    std::size_t len = (type == parser::element::type::start_tag)
+                          ? text.size () - 1
+                          : text.size () - 2;
 
-  std::string tag_name;
-  std::string attr_name;
-  std::string attr_value;
-  mobius::core::pod::map attributes;
-  char attr_value_char = 0;
+    std::string tag_name;
+    std::string attr_name;
+    std::string attr_value;
+    mobius::core::pod::map attributes;
+    char attr_value_char = 0;
 
-  int state = 0;
+    int state = 0;
 
-  while (pos < len)
+    while (pos < len)
     {
-      char c = text[pos];
+        char c = text[pos];
 
-      // state: beginning
-      if (state == 0)
+        // state: beginning
+        if (state == 0)
         {
 
-          if (isupper (c) || islower (c))
+            if (isupper (c) || islower (c))
             {
-              tag_name.push_back (c);
-              state = 1;
+                tag_name.push_back (c);
+                state = 1;
             }
 
-          else
-            throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid tag"));
+            else
+                throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid tag"));
         }
 
-      // state: tag_name
-      else if (state == 1)
+        // state: tag_name
+        else if (state == 1)
         {
-          if (islower (c) || isupper (c) || isdigit (c) || c == '.' || c == '-' || c == '_')
-            tag_name.push_back (c);
+            if (islower (c) || isupper (c) || isdigit (c) || c == '.' ||
+                c == '-' || c == '_')
+                tag_name.push_back (c);
 
-          else if (isspace (c))
-            state = 2;
+            else if (isspace (c))
+                state = 2;
 
-          else
-            throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid tag"));
+            else
+                throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid tag"));
         }
 
-      // state: attr start
-      else if (state == 2)
+        // state: attr start
+        else if (state == 2)
         {
-          attr_name.clear ();
-          attr_value.clear ();
+            attr_name.clear ();
+            attr_value.clear ();
 
-          if (islower (c) || isupper (c) || c == '_')
+            if (islower (c) || isupper (c) || c == '_')
             {
-              attr_name.push_back (c);
-              state = 3;
+                attr_name.push_back (c);
+                state = 3;
             }
 
-          else if (!isspace (c))
-            throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid attribute"));
+            else if (!isspace (c))
+                throw std::runtime_error (
+                    MOBIUS_EXCEPTION_MSG ("invalid attribute"));
         }
 
-      // state: in attr_name
-      else if (state == 3)
+        // state: in attr_name
+        else if (state == 3)
         {
-          if (islower (c) || isupper (c) || isdigit (c) || c == '-' || c == ':' || c == '.' || c == '_')
-            attr_name.push_back (c);
+            if (islower (c) || isupper (c) || isdigit (c) || c == '-' ||
+                c == ':' || c == '.' || c == '_')
+                attr_name.push_back (c);
 
-          else if (c == '=')
-            state = 5;
+            else if (c == '=')
+                state = 5;
 
-          else if (isspace (c))
-            state = 4;
+            else if (isspace (c))
+                state = 4;
 
-          else
-            throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid attribute"));
+            else
+                throw std::runtime_error (
+                    MOBIUS_EXCEPTION_MSG ("invalid attribute"));
         }
 
-      // state: after attr_name
-      else if (state == 4)
+        // state: after attr_name
+        else if (state == 4)
         {
-          if (c == '=')
-            state = 5;
+            if (c == '=')
+                state = 5;
 
-          else if (!isspace (c))
-            state = 2;
+            else if (!isspace (c))
+                state = 2;
         }
 
-      // state: after '='
-      else if (state == 5)
+        // state: after '='
+        else if (state == 5)
         {
-          if (c == '\'' || c == '"')
+            if (c == '\'' || c == '"')
             {
-              attr_value_char = c;
-              state = 6;
+                attr_value_char = c;
+                state = 6;
             }
 
-          else if (!isspace (c))
+            else if (!isspace (c))
             {
-              attr_value.push_back (c);
-              state = 7;
+                attr_value.push_back (c);
+                state = 7;
             }
         }
 
-      // state: in "" or ''
-      else if (state == 6)
+        // state: in "" or ''
+        else if (state == 6)
         {
-          if (c == attr_value_char)
+            if (c == attr_value_char)
             {
-              attributes.set (attr_name, attr_value);
-              state = 2;
+                attributes.set (attr_name, attr_value);
+                state = 2;
             }
 
-          else
-            attr_value.push_back (c);
+            else
+                attr_value.push_back (c);
         }
 
-      // state: in attr_value without " or '
-      else if (state == 7)
+        // state: in attr_value without " or '
+        else if (state == 7)
         {
-          if (isspace (c))
+            if (isspace (c))
             {
-              attributes.set (attr_name, attr_value);
-              state = 2;
+                attributes.set (attr_name, attr_value);
+                state = 2;
             }
 
-          else if (c == '\'' || c == '"' || c == '=')
-            throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid attribute value"));
+            else if (c == '\'' || c == '"' || c == '=')
+                throw std::runtime_error (
+                    MOBIUS_EXCEPTION_MSG ("invalid attribute value"));
 
-          else
-            attr_value.push_back (c);
+            else
+                attr_value.push_back (c);
         }
 
-     pos++;
-   }
+        pos++;
+    }
 
-  if (tag_name.empty ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("unname tag"));
+    if (tag_name.empty ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("unname tag"));
 
-  return parser::element (type, tag_name, attributes);
+    return parser::element (type, tag_name, attributes);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -177,32 +186,35 @@ _parse_tag_with_attributes (parser::element::type type, const std::string& text)
 // @return Start tag element
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static parser::element
-_parse_start_tag (const std::string& text)
+_parse_start_tag (const std::string &text)
 {
-  parser::element e;
+    parser::element e;
 
-  // comment
-  if (mobius::core::string::startswith (text, "<!--"))
+    // comment
+    if (mobius::core::string::startswith (text, "<!--"))
     {
-      if (!mobius::core::string::endswith (text, "-->"))
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("unterminated comment"));
+        if (!mobius::core::string::endswith (text, "-->"))
+            throw std::runtime_error (
+                MOBIUS_EXCEPTION_MSG ("unterminated comment"));
 
-      e = parser::element (parser::element::type::comment, text.substr (4, text.size () - 7));
+        e = parser::element (parser::element::type::comment,
+                             text.substr (4, text.size () - 7));
     }
 
-  // declaration
-  else if (mobius::core::string::startswith (text, "<!"))
+    // declaration
+    else if (mobius::core::string::startswith (text, "<!"))
     {
-      e = parser::element (parser::element::type::declaration, text.substr (2, text.size () - 3));
+        e = parser::element (parser::element::type::declaration,
+                             text.substr (2, text.size () - 3));
     }
 
-  // proper start tag <tag[ value1 value2]>
-  else
+    // proper start tag <tag[ value1 value2]>
+    else
     {
-      e = _parse_tag_with_attributes (parser::element::type::start_tag, text);
+        e = _parse_tag_with_attributes (parser::element::type::start_tag, text);
     }
 
-  return e;
+    return e;
 }
 
 } // namespace
@@ -211,8 +223,8 @@ _parse_start_tag (const std::string& text)
 // @brief Create parser
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-parser::parser (const mobius::core::io::reader& reader)
- : tokenizer_ (reader)
+parser::parser (const mobius::core::io::reader &reader)
+    : tokenizer_ (reader)
 {
 }
 
@@ -223,43 +235,41 @@ parser::parser (const mobius::core::io::reader& reader)
 parser::element
 parser::get ()
 {
-  element e;
+    element e;
 
-  auto p = tokenizer_.get_token ();
-  auto type = p.first;
-  auto text = p.second;
+    auto p = tokenizer_.get_token ();
+    auto type = p.first;
+    auto text = p.second;
 
-  using token_type = mobius::core::decoder::sgml::tokenizer::token_type;
+    using token_type = mobius::core::decoder::sgml::tokenizer::token_type;
 
-  switch (type)
-  {
+    switch (type)
+    {
     case token_type::text:
-      e = element (element::type::text, text);
-      break;
+        e = element (element::type::text, text);
+        break;
 
     case token_type::start_tag:
-      e = _parse_start_tag (text);
-      break;
+        e = _parse_start_tag (text);
+        break;
 
     case token_type::end_tag:
-      e = element (element::type::end_tag, text.substr (2, text.size () - 3));
-      break;
+        e = element (element::type::end_tag, text.substr (2, text.size () - 3));
+        break;
 
     case token_type::empty_tag:
-      e = _parse_tag_with_attributes (element::type::empty_tag, text);
-      break;
+        e = _parse_tag_with_attributes (element::type::empty_tag, text);
+        break;
 
     case token_type::entity:
-      e = element (element::type::entity, text.substr (1, text.size () - 2));
-      break;
+        e = element (element::type::entity, text.substr (1, text.size () - 2));
+        break;
 
     case token_type::end:
-      break;
-  }
+        break;
+    }
 
-  return e;
+    return e;
 }
 
 } // namespace mobius::core::decoder::sgml
-
-

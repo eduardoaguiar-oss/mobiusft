@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,10 +17,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/system/group.hpp>
+#include <grp.h>
 #include <mobius/core/exception.inc>
 #include <mobius/core/exception_posix.inc>
-#include <grp.h>
+#include <mobius/core/system/group.hpp>
 #include <stdexcept>
 
 namespace mobius::core::system
@@ -27,19 +29,20 @@ namespace mobius::core::system
 // @brief construct object
 // @param gid group ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-group::group (gid_t gid) : gid_ (gid)
+group::group (gid_t gid)
+    : gid_ (gid)
 {
-  struct ::group grp;
-  struct ::group *result;
-  char buffer[1024];
+    struct ::group grp;
+    struct ::group *result;
+    char buffer[1024];
 
-  if (getgrgid_r (gid, &grp, buffer, sizeof (buffer), &result))
-    throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+    if (getgrgid_r (gid, &grp, buffer, sizeof (buffer), &result))
+        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
 
-  if (result)
+    if (result)
     {
-      name_ = grp.gr_name;
-      is_valid_ = true;
+        name_ = grp.gr_name;
+        is_valid_ = true;
     }
 }
 
@@ -50,10 +53,10 @@ group::group (gid_t gid) : gid_ (gid)
 gid_t
 group::get_id () const
 {
-  if (!is_valid_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid group"));
+    if (!is_valid_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid group"));
 
-  return gid_;
+    return gid_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -63,12 +66,10 @@ group::get_id () const
 std::string
 group::get_name () const
 {
-  if (!is_valid_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid group"));
+    if (!is_valid_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid group"));
 
-  return name_;
+    return name_;
 }
 
 } // namespace mobius::core::system
-
-

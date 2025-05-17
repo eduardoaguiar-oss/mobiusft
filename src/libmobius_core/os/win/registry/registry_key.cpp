@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -25,7 +27,7 @@ namespace mobius::core::os::win::registry
 // @brief default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_key::registry_key ()
-  : impl_ (std::make_shared <registry_key_impl_null> ())
+    : impl_ (std::make_shared<registry_key_impl_null> ())
 {
 }
 
@@ -33,8 +35,8 @@ registry_key::registry_key ()
 // @brief constructor from implementation pointer
 // @param impl implementation pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-registry_key::registry_key (std::shared_ptr <registry_key_impl_base> impl)
-  : impl_ (impl)
+registry_key::registry_key (std::shared_ptr<registry_key_impl_base> impl)
+    : impl_ (impl)
 {
 }
 
@@ -44,15 +46,15 @@ registry_key::registry_key (std::shared_ptr <registry_key_impl_base> impl)
 // @return subkey or empty key, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_key
-registry_key::get_key_by_name (const std::string& name) const
+registry_key::get_key_by_name (const std::string &name) const
 {
-  const std::string lname = mobius::core::string::tolower (name);
+    const std::string lname = mobius::core::string::tolower (name);
 
-  for (const auto& sk : *this)
-    if (mobius::core::string::tolower (sk.get_name ()) == lname)
-      return sk;
+    for (const auto &sk : *this)
+        if (mobius::core::string::tolower (sk.get_name ()) == lname)
+            return sk;
 
-  return registry_key ();
+    return registry_key ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -61,40 +63,40 @@ registry_key::get_key_by_name (const std::string& name) const
 // @return subkey or empty key, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_key
-registry_key::get_key_by_path (const std::string& path) const
+registry_key::get_key_by_path (const std::string &path) const
 {
-  std::string::size_type pos = 0;
+    std::string::size_type pos = 0;
 
-  // skip heading '\'
-  while (pos < path.size () && path[pos] == '\\')
-    ++pos;
+    // skip heading '\'
+    while (pos < path.size () && path[pos] == '\\')
+        ++pos;
 
-  // seek each subkey which name is limited by '\\'
-  registry_key key = *this;
-  std::string::size_type end = path.find ('\\', pos);
+    // seek each subkey which name is limited by '\\'
+    registry_key key = *this;
+    std::string::size_type end = path.find ('\\', pos);
 
-  while (pos != std::string::npos && key)
+    while (pos != std::string::npos && key)
     {
-      std::string name;
+        std::string name;
 
-      if (end == std::string::npos)
+        if (end == std::string::npos)
         {
-          name = path.substr (pos);
-          pos = std::string::npos;
+            name = path.substr (pos);
+            pos = std::string::npos;
         }
 
-      else
+        else
         {
-          name = path.substr (pos, end - pos);
-          pos = end + 1;
-          end = path.find ('\\', pos);
+            name = path.substr (pos, end - pos);
+            pos = end + 1;
+            end = path.find ('\\', pos);
         }
 
-      key = key.get_key_by_name (name);
+        key = key.get_key_by_name (name);
     }
 
-  // return key
-  return key;
+    // return key
+    return key;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -102,58 +104,59 @@ registry_key::get_key_by_path (const std::string& path) const
 // @param a_mask fnmatch mask
 // @return subkeys or empty vector, if no keys were found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <registry_key>
-registry_key::get_key_by_mask (const std::string& a_mask) const
+std::vector<registry_key>
+registry_key::get_key_by_mask (const std::string &a_mask) const
 {
-  const std::string mask = mobius::core::string::tolower (a_mask);
-  std::string::size_type pos = 0;
+    const std::string mask = mobius::core::string::tolower (a_mask);
+    std::string::size_type pos = 0;
 
-  // skip heading '\'
-  while (pos < mask.size () && mask[pos] == '\\')
-    ++pos;
+    // skip heading '\'
+    while (pos < mask.size () && mask[pos] == '\\')
+        ++pos;
 
-  // seek each subkey which name is limited by '\\'
-  std::vector <registry_key> subkeys = {*this};
-  std::string::size_type end = mask.find ('\\', pos);
+    // seek each subkey which name is limited by '\\'
+    std::vector<registry_key> subkeys = {*this};
+    std::string::size_type end = mask.find ('\\', pos);
 
-  while (pos != std::string::npos && !subkeys.empty ())
+    while (pos != std::string::npos && !subkeys.empty ())
     {
-      // get sub mask
-      std::string submask;
+        // get sub mask
+        std::string submask;
 
-      if (end == std::string::npos)
+        if (end == std::string::npos)
         {
-          submask = mask.substr (pos);
-          pos = std::string::npos;
+            submask = mask.substr (pos);
+            pos = std::string::npos;
         }
 
-      else
+        else
         {
-          submask = mask.substr (pos, end - pos);
-          pos = end + 1;
-          end = mask.find ('\\', pos);
+            submask = mask.substr (pos, end - pos);
+            pos = end + 1;
+            end = mask.find ('\\', pos);
         }
 
-      // create new vector with all subkeys whose name matches the sub mask
-      std::vector <registry_key> tmp_keys;
+        // create new vector with all subkeys whose name matches the sub mask
+        std::vector<registry_key> tmp_keys;
 
-      for (auto key : subkeys)
+        for (auto key : subkeys)
         {
-          for (auto sk : key)
+            for (auto sk : key)
             {
-              const std::string name = mobius::core::string::tolower (sk.get_name ());
+                const std::string name =
+                    mobius::core::string::tolower (sk.get_name ());
 
-              if (mobius::core::string::fnmatch (submask, name))
-                tmp_keys.push_back (sk);
+                if (mobius::core::string::fnmatch (submask, name))
+                    tmp_keys.push_back (sk);
             }
         }
 
-      // overwrite the candidate vector
-      subkeys = tmp_keys;
+        // overwrite the candidate vector
+        subkeys = tmp_keys;
     }
 
-  // return subkeys
-  return subkeys;
+    // return subkeys
+    return subkeys;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -162,15 +165,15 @@ registry_key::get_key_by_mask (const std::string& a_mask) const
 // @return value or empty value, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_value
-registry_key::get_value_by_name (const std::string& name) const
+registry_key::get_value_by_name (const std::string &name) const
 {
-  const std::string lname = mobius::core::string::tolower (name);
+    const std::string lname = mobius::core::string::tolower (name);
 
-  for (const auto& v : get_values ())
-    if (mobius::core::string::tolower (v.get_name ()) == lname)
-      return v;
+    for (const auto &v : get_values ())
+        if (mobius::core::string::tolower (v.get_name ()) == lname)
+            return v;
 
-  return registry_value ();
+    return registry_value ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -179,37 +182,37 @@ registry_key::get_value_by_name (const std::string& name) const
 // @return value or empty value, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_value
-registry_key::get_value_by_path (const std::string& path) const
+registry_key::get_value_by_path (const std::string &path) const
 {
-  // parse registry_key.path + '\' + value_name
-  std::string key_path;
-  std::string value_name;
+    // parse registry_key.path + '\' + value_name
+    std::string key_path;
+    std::string value_name;
 
-  auto pos = path.rfind ('\\');
+    auto pos = path.rfind ('\\');
 
-  if (pos == std::string::npos)
-    value_name = path;
+    if (pos == std::string::npos)
+        value_name = path;
 
-  else
+    else
     {
-      key_path = path.substr (0, pos);
-      value_name = path.substr (pos + 1);
+        key_path = path.substr (0, pos);
+        value_name = path.substr (pos + 1);
     }
 
-  // search key
-  registry_key key;
+    // search key
+    registry_key key;
 
-  if (key_path.empty ())
-    key = *this;
+    if (key_path.empty ())
+        key = *this;
 
-  else
-    key = get_key_by_path (key_path);
+    else
+        key = get_key_by_path (key_path);
 
-  // if key found, return value
-  if (key)
-    return key.get_value_by_name (value_name);
+    // if key found, return value
+    if (key)
+        return key.get_value_by_name (value_name);
 
-  return registry_value ();
+    return registry_value ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -217,49 +220,50 @@ registry_key::get_value_by_path (const std::string& path) const
 // @param a_mask value mask
 // @return values or empty vector, if no values were found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <registry_value>
-registry_key::get_value_by_mask (const std::string& a_mask) const
+std::vector<registry_value>
+registry_key::get_value_by_mask (const std::string &a_mask) const
 {
-  // parse registry_key.mask + '\' + value.mask
-  const std::string mask = mobius::core::string::tolower (a_mask);
-  std::string key_mask;
-  std::string value_mask;
+    // parse registry_key.mask + '\' + value.mask
+    const std::string mask = mobius::core::string::tolower (a_mask);
+    std::string key_mask;
+    std::string value_mask;
 
-  auto pos = mask.rfind ('\\');
+    auto pos = mask.rfind ('\\');
 
-  if (pos == std::string::npos)
-    value_mask = mask;
+    if (pos == std::string::npos)
+        value_mask = mask;
 
-  else
+    else
     {
-      key_mask = mask.substr (0, pos);
-      value_mask = mask.substr (pos + 1);
+        key_mask = mask.substr (0, pos);
+        value_mask = mask.substr (pos + 1);
     }
 
-  // search keys
-  std::vector <registry_key> keys;
+    // search keys
+    std::vector<registry_key> keys;
 
-  if (key_mask.empty ())
-    keys.push_back (*this);
+    if (key_mask.empty ())
+        keys.push_back (*this);
 
-  else
-    keys = get_key_by_mask (key_mask);
+    else
+        keys = get_key_by_mask (key_mask);
 
-  // search for values
-  std::vector <registry_value> values;
+    // search for values
+    std::vector<registry_value> values;
 
-  for (const auto& key : keys)
+    for (const auto &key : keys)
     {
-      for (auto v : key.get_values ())
+        for (auto v : key.get_values ())
         {
-          const std::string name = mobius::core::string::tolower (v.get_name ());
+            const std::string name =
+                mobius::core::string::tolower (v.get_name ());
 
-          if (mobius::core::string::fnmatch (value_mask, name))
-            values.push_back (v);
+            if (mobius::core::string::fnmatch (value_mask, name))
+                values.push_back (v);
         }
     }
 
-  return values;
+    return values;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -268,15 +272,15 @@ registry_key::get_value_by_mask (const std::string& a_mask) const
 // @return data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_data
-registry_key::get_data_by_name (const std::string& name) const
+registry_key::get_data_by_name (const std::string &name) const
 {
-  registry_data data;
+    registry_data data;
 
-  auto v = get_value_by_name (name);
-  if (v)
-    data = v.get_data ();
+    auto v = get_value_by_name (name);
+    if (v)
+        data = v.get_data ();
 
-  return data;
+    return data;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -285,15 +289,15 @@ registry_key::get_data_by_name (const std::string& name) const
 // @return value or empty value, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_data
-registry_key::get_data_by_path (const std::string& path) const
+registry_key::get_data_by_path (const std::string &path) const
 {
-  registry_data data;
+    registry_data data;
 
-  auto v = get_value_by_path (path);
-  if (v)
-    data = v.get_data ();
+    auto v = get_value_by_path (path);
+    if (v)
+        data = v.get_data ();
 
-  return data;
+    return data;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -301,17 +305,15 @@ registry_key::get_data_by_path (const std::string& path) const
 // @param mask value mask
 // @return data or empty vector, if no values were found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <registry_data>
-registry_key::get_data_by_mask (const std::string& mask) const
+std::vector<registry_data>
+registry_key::get_data_by_mask (const std::string &mask) const
 {
-  std::vector <registry_data> data_list;
+    std::vector<registry_data> data_list;
 
-  for (const auto& v : get_value_by_mask (mask))
-    data_list.push_back (v.get_data ());
+    for (const auto &v : get_value_by_mask (mask))
+        data_list.push_back (v.get_data ());
 
-  return data_list;
+    return data_list;
 }
 
 } // namespace mobius::core::os::win::registry
-
-

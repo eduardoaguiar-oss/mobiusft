@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,11 +17,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/io/local/get_current_folder.hpp>
+#include <limits.h>
 #include <mobius/core/exception_posix.inc>
+#include <mobius/core/io/local/get_current_folder.hpp>
 #include <stdexcept>
 #include <unistd.h>
-#include <limits.h>
 
 namespace mobius::core::io::local
 {
@@ -30,14 +32,12 @@ namespace mobius::core::io::local
 mobius::core::io::folder
 get_current_folder ()
 {
-  char buffer[PATH_MAX];
+    char buffer[PATH_MAX];
 
-  if (!getcwd (buffer, PATH_MAX))
-    throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+    if (!getcwd (buffer, PATH_MAX))
+        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
 
-  return mobius::core::io::new_folder_by_path (buffer);
+    return mobius::core::io::new_folder_by_path (buffer);
 }
 
 } // namespace mobius::core::io::local
-
-

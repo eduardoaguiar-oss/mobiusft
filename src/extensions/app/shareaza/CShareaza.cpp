@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -24,82 +26,45 @@ namespace
 // @brief List of protocols
 // @see StdAfx.h
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static const std::unordered_map <int, std::string> PROTOCOLS =
-{
-  {-1, "Any"},
-  {0, "Null"},
-  {1, "Gnutella v1"},
-  {2, "Gnutella v2"},
-  {3, "EDonkey"},
-  {4, "HTTP"},
-  {5, "FTP"},
-  {6, "BitTorrent"},
-  {7, "KAD"},
-  {8, "DC"},
+static const std::unordered_map<int, std::string> PROTOCOLS = {
+    {-1, "Any"},    {0, "Null"}, {1, "Gnutella v1"}, {2, "Gnutella v2"},
+    {3, "EDonkey"}, {4, "HTTP"}, {5, "FTP"},         {6, "BitTorrent"},
+    {7, "KAD"},     {8, "DC"},
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief List of vendors
 // @see Vendors.xml
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static const std::unordered_map <std::string, std::string> VENDORS =
-{
-  {"RAZA", "Shareaza"},
-  {"RAZB", "ShareazaBeta"},
-  {"RZCB", "ShareazaPlus"},
-  {"ACQL", "Acqlite"},
-  {"ACQX", "Acquisition"},
-  {"AGIO", "Adagio"},
-  {"AGNT", "Agentella"},
-  {"ARES", "Ares"},
-  {"ATOM", "AtomWire"},
-  {"BEAR", "BearShare"},
-  {"CULT", "Cultiv8r"},
-  {"DC++", "DC++"},
-  {"ED2K", "eDonkey2000"},
-  {"ENVY", "Envy"},
-  {"FOXY", "Foxy"},
-  {"FUST", "Fusteeno"},
-  {"GDNA", "GnucDNA"},
-  {"GIFT", "giFT-Gnutella"},
-  {"GNEW", "GNewtellium"},
-  {"GNOT", "Gnotella"},
-  {"GNTD", "Gtk-Gnutella"},
-  {"GNTG", "Gnutelligentsia"},
-  {"GNUC", "Gnucleus"},
-  {"GNUT", "Gnut"},
-  {"GNZL", "Gnoozle"},
-  {"GTKG", "Gtk-Gnutella"},
-  {"HSLG", "Hagelslag"},
-  {"HYDR", "Hydranode"},
-  {"JOET", "Joetella"},
-  {"LIME", "LimeWire"},
-  {"MACT", "Mactella"},
-  {"MESH", "iMesh"},
-  {"MLDK", "MLdonkey"},
-  {"MMMM", "Morpheus"},
-  {"MNAP", "MyNapster"},
-  {"MOOD", "MoodAmp"},
-  {"MRPH", "Morpheus"},
-  {"MUTE", "Mutella"},
-  {"MXIE", "Mxie"},
-  {"NAPS", "NapShare"},
-  {"OCFG", "OpenCola"},
-  {"OPRA", "Opera"},
-  {"PEER", "PeerProject"},
-  {"PHEX", "Phex"},
-  {"QTEL", "Qtella"},
-  {"SHLN", "Sharelin"},
-  {"SNOW", "FrostWire"},
-  {"SNUT", "SwapNut"},
-  {"SWAP", "Swapper.NET"},
-  {"SWFT", "SwiftPeer"},
-  {"TFLS", "TrustyFiles"},
-  {"TOAD", "ToadNode"},
-  {"WSHR", "WireShare"},
-  {"XOLO", "Xolox"},
-  {"XTLA", "XTella"},
-  {"ZIGA", "Ziga"},
+static const std::unordered_map<std::string, std::string> VENDORS = {
+    {"RAZA", "Shareaza"},     {"RAZB", "ShareazaBeta"},
+    {"RZCB", "ShareazaPlus"}, {"ACQL", "Acqlite"},
+    {"ACQX", "Acquisition"},  {"AGIO", "Adagio"},
+    {"AGNT", "Agentella"},    {"ARES", "Ares"},
+    {"ATOM", "AtomWire"},     {"BEAR", "BearShare"},
+    {"CULT", "Cultiv8r"},     {"DC++", "DC++"},
+    {"ED2K", "eDonkey2000"},  {"ENVY", "Envy"},
+    {"FOXY", "Foxy"},         {"FUST", "Fusteeno"},
+    {"GDNA", "GnucDNA"},      {"GIFT", "giFT-Gnutella"},
+    {"GNEW", "GNewtellium"},  {"GNOT", "Gnotella"},
+    {"GNTD", "Gtk-Gnutella"}, {"GNTG", "Gnutelligentsia"},
+    {"GNUC", "Gnucleus"},     {"GNUT", "Gnut"},
+    {"GNZL", "Gnoozle"},      {"GTKG", "Gtk-Gnutella"},
+    {"HSLG", "Hagelslag"},    {"HYDR", "Hydranode"},
+    {"JOET", "Joetella"},     {"LIME", "LimeWire"},
+    {"MACT", "Mactella"},     {"MESH", "iMesh"},
+    {"MLDK", "MLdonkey"},     {"MMMM", "Morpheus"},
+    {"MNAP", "MyNapster"},    {"MOOD", "MoodAmp"},
+    {"MRPH", "Morpheus"},     {"MUTE", "Mutella"},
+    {"MXIE", "Mxie"},         {"NAPS", "NapShare"},
+    {"OCFG", "OpenCola"},     {"OPRA", "Opera"},
+    {"PEER", "PeerProject"},  {"PHEX", "Phex"},
+    {"QTEL", "Qtella"},       {"SHLN", "Sharelin"},
+    {"SNOW", "FrostWire"},    {"SNUT", "SwapNut"},
+    {"SWAP", "Swapper.NET"},  {"SWFT", "SwiftPeer"},
+    {"TFLS", "TrustyFiles"},  {"TOAD", "ToadNode"},
+    {"WSHR", "WireShare"},    {"XOLO", "Xolox"},
+    {"XTLA", "XTella"},       {"ZIGA", "Ziga"},
 };
 
 } // namespace
@@ -114,14 +79,14 @@ namespace mobius::extension::app::shareaza
 std::string
 get_protocol_name (int id)
 {
-  std::string name;
+    std::string name;
 
-  auto iter = PROTOCOLS.find (id);
+    auto iter = PROTOCOLS.find (id);
 
-  if (iter != PROTOCOLS.end ())
-    name = iter->second;
+    if (iter != PROTOCOLS.end ())
+        name = iter->second;
 
-  return name;
+    return name;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -130,20 +95,16 @@ get_protocol_name (int id)
 // @return Vendor name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-get_vendor_name (const std::string& code)
+get_vendor_name (const std::string &code)
 {
-  std::string name;
+    std::string name;
 
-  auto iter = VENDORS.find (code);
+    auto iter = VENDORS.find (code);
 
-  if (iter != VENDORS.end ())
-    name = iter->second;
+    if (iter != VENDORS.end ())
+        name = iter->second;
 
-  return name;
+    return name;
 }
 
 } // namespace mobius::extension::app::shareaza
-
-
-
-

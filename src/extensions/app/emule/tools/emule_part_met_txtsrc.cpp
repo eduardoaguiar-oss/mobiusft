@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -16,11 +18,11 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "../file_part_met_txtsrc.hpp"
-#include <mobius/core/application.hpp>
-#include <mobius/core/log.hpp>
-#include <mobius/core/io/file.hpp>
-#include <mobius/core/string_functions.hpp>
 #include <iostream>
+#include <mobius/core/application.hpp>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/log.hpp>
+#include <mobius/core/string_functions.hpp>
 #include <unistd.h>
 
 namespace
@@ -42,7 +44,7 @@ usage ()
 // @param path File path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-show_part_met_txtsrc (const std::string& path)
+show_part_met_txtsrc (const std::string &path)
 {
     std::cout << std::endl;
     std::cout << ">> " << path << std::endl;
@@ -53,13 +55,15 @@ show_part_met_txtsrc (const std::string& path)
     mobius::extension::app::emule::file_part_met_txtsrc txtsrc (reader);
 
     if (!txtsrc)
-      {
-        std::cerr << "\tFile is not an instance of .part.met.txtsrc" << std::endl;
+    {
+        std::cerr << "\tFile is not an instance of .part.met.txtsrc"
+                  << std::endl;
         return;
-      }
+    }
 
-    for (const auto& source : txtsrc.get_sources ())
-        std::cerr << '\t' << source.ip << '\t' << source.port << '\t' << source.datetime << std::endl;
+    for (const auto &source : txtsrc.get_sources ())
+        std::cerr << '\t' << source.ip << '\t' << source.port << '\t'
+                  << source.datetime << std::endl;
 }
 
 } // namespace
@@ -86,45 +90,47 @@ main (int argc, char **argv)
     int opt;
 
     while ((opt = getopt (argc, argv, "h")) != EOF)
-      {
+    {
         switch (opt)
-          {
-            case 'h':
-                usage ();
-                exit (EXIT_SUCCESS);
-                break;
+        {
+        case 'h':
+            usage ();
+            exit (EXIT_SUCCESS);
+            break;
 
-            default:
-                usage ();
-                exit (EXIT_FAILURE);
-          }
-      }
+        default:
+            usage ();
+            exit (EXIT_FAILURE);
+        }
+    }
 
     if (optind >= argc)
-      {
+    {
         std::cerr << std::endl;
-        std::cerr << "Error: you must enter at least one path to .part.met.txtsrc file" << std::endl;
+        std::cerr << "Error: you must enter at least one path to "
+                     ".part.met.txtsrc file"
+                  << std::endl;
         usage ();
         exit (EXIT_FAILURE);
-      }
+    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Show info
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     while (optind < argc)
-      {
+    {
         try
-          {
+        {
             show_part_met_txtsrc (argv[optind]);
-          }
-        catch (const std::exception& e)
-          {
-            std::cerr <<  "Error: " << e.what () << std::endl;
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << "Error: " << e.what () << std::endl;
             exit (EXIT_FAILURE);
-          }
+        }
 
         optind++;
-      }
+    }
 
     app.stop ();
 

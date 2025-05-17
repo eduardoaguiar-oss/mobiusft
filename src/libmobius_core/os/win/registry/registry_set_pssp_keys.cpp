@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,13 +17,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/core/charset.hpp>
+#include <mobius/core/crypt/cipher.hpp>
+#include <mobius/core/crypt/hash.hpp>
+#include <mobius/core/decoder/data_decoder.hpp>
+#include <mobius/core/os/win/registry/pssp_data2.hpp>
 #include <mobius/core/os/win/registry/registry_key.hpp>
 #include <mobius/core/os/win/registry/registry_key_impl_pssp.hpp>
-#include <mobius/core/os/win/registry/pssp_data2.hpp>
-#include <mobius/core/charset.hpp>
-#include <mobius/core/crypt/hash.hpp>
-#include <mobius/core/crypt/cipher.hpp>
-#include <mobius/core/decoder/data_decoder.hpp>
 
 namespace mobius::core::os::win::registry
 {
@@ -35,63 +37,64 @@ namespace
 pssp_data2
 get_data2 (registry_key sid_key)
 {
-  pssp_data2 data2;
+    pssp_data2 data2;
 
-  // get "Data 2" key
-  auto data2_key = sid_key.get_key_by_name ("Data 2");
+    // get "Data 2" key
+    auto data2_key = sid_key.get_key_by_name ("Data 2");
 
-  if (data2_key)
+    if (data2_key)
     {
-      // evaluate SID based hash value
-      mobius::core::crypt::hash sid_hash ("sha1");
-      sid_hash.update ({0x66, 0x41, 0xa3, 0x29});
-      sid_hash.update (mobius::core::conv_charset (sid_key.get_name (), "UTF-8", "UTF-16LE"));
+        // evaluate SID based hash value
+        mobius::core::crypt::hash sid_hash ("sha1");
+        sid_hash.update ({0x66, 0x41, 0xa3, 0x29});
+        sid_hash.update (mobius::core::conv_charset (sid_key.get_name (),
+                                                     "UTF-8", "UTF-16LE"));
 
-      if (sid_key.get_name ().length () % 2)
-        sid_hash.update ({0x14, 0x9a});
+        if (sid_key.get_name ().length () % 2)
+            sid_hash.update ({0x14, 0x9a});
 
-      auto sid_hash_value = sid_hash.get_digest ();
+        auto sid_hash_value = sid_hash.get_digest ();
 
-      // decrypt all cryptographic keys in "Data 2"
-      for (auto subkey : data2_key)
+        // decrypt all cryptographic keys in "Data 2"
+        for (auto subkey : data2_key)
         {
-          // decode "Value" data
-          auto data = subkey.get_data_by_name ("Value").get_data ();
-          auto decoder = mobius::core::decoder::data_decoder (data);
+            // decode "Value" data
+            auto data = subkey.get_data_by_name ("Value").get_data ();
+            auto decoder = mobius::core::decoder::data_decoder (data);
 
-          decoder.skip (8);
-          auto flag = decoder.get_uint32_le ();				//  8 - 11
-          auto encrypted_key = decoder.get_bytearray_by_size (24);	// 12 - 35
-          decoder.skip (4);
-          auto salt = decoder.get_bytearray_by_size (16);		// 40 - 55
+            decoder.skip (8);
+            auto flag = decoder.get_uint32_le ();                    //  8 - 11
+            auto encrypted_key = decoder.get_bytearray_by_size (24); // 12 - 35
+            decoder.skip (4);
+            auto salt = decoder.get_bytearray_by_size (16); // 40 - 55
 
-          // build DES key
-          mobius::core::crypt::hash data_hash ("sha1");
+            // build DES key
+            mobius::core::crypt::hash data_hash ("sha1");
 
-          data_hash.update (salt);
+            data_hash.update (salt);
 
-          if (flag == 2)
-            data_hash.update (sid_hash_value.slice (0, 3));
+            if (flag == 2)
+                data_hash.update (sid_hash_value.slice (0, 3));
 
-          else if (flag == 3)
-            data_hash.update (sid_hash_value);
+            else if (flag == 3)
+                data_hash.update (sid_hash_value);
 
-          auto des_key = data_hash.get_digest ().slice (0, 7);
+            auto des_key = data_hash.get_digest ().slice (0, 7);
 
-          // decrypt cryptographic key
-          auto des = mobius::core::crypt::new_cipher_cbc ("des", des_key);
-          auto key_name = subkey.get_name ();
-          auto key_value = des.decrypt (encrypted_key).slice (0, 7);
+            // decrypt cryptographic key
+            auto des = mobius::core::crypt::new_cipher_cbc ("des", des_key);
+            auto key_name = subkey.get_name ();
+            auto key_value = des.decrypt (encrypted_key).slice (0, 7);
 
-          // add cryptographic key to collection
-          data2.set_key (key_name, key_value);
+            // add cryptographic key to collection
+            data2.set_key (key_name, key_value);
         }
     }
 
-  return data2;
+    return data2;
 }
 
-} // local namespace
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief set Protected Storage System Provider (PSSP) keys
@@ -101,24 +104,25 @@ get_data2 (registry_key sid_key)
 void
 registry_set_pssp_keys (registry_key root)
 {
-  for (auto sid_key : root.get_key_by_mask ("HKEY_USERS\\*\\Software\\Microsoft\\Protected Storage System Provider\\*"))
+    for (auto sid_key :
+         root.get_key_by_mask ("HKEY_USERS\\*\\Software\\Microsoft\\Protected "
+                               "Storage System Provider\\*"))
     {
-      auto data_key = sid_key.get_key_by_name ("Data");
-      auto data2_key = sid_key.get_key_by_name ("Data 2");
+        auto data_key = sid_key.get_key_by_name ("Data");
+        auto data2_key = sid_key.get_key_by_name ("Data 2");
 
-      if (data_key && data2_key)
+        if (data_key && data2_key)
         {
-          auto data2 = get_data2 (sid_key);
+            auto data2 = get_data2 (sid_key);
 
-          for (auto subkey : data_key)
+            for (auto subkey : data_key)
             {
-              auto key = registry_key (std::make_shared <registry_key_impl_pssp> (subkey, data2));
-              data_key.add_key (key);
+                auto key = registry_key (
+                    std::make_shared<registry_key_impl_pssp> (subkey, data2));
+                data_key.add_key (key);
             }
         }
     }
 }
 
 } // namespace mobius::core::os::win::registry
-
-

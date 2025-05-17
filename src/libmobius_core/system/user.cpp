@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,9 +17,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/system/user.hpp>
 #include <mobius/core/exception.inc>
 #include <mobius/core/exception_posix.inc>
+#include <mobius/core/system/user.hpp>
 #include <pwd.h>
 #include <stdexcept>
 
@@ -27,24 +29,25 @@ namespace mobius::core::system
 // @brief Constructor
 // @param uid user ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-user::user (uid_t uid) : uid_ (uid)
+user::user (uid_t uid)
+    : uid_ (uid)
 {
-  struct passwd pw;
-  struct passwd *result;
-  char buffer[1024];
+    struct passwd pw;
+    struct passwd *result;
+    char buffer[1024];
 
-  if (getpwuid_r (uid, &pw, buffer, sizeof (buffer), &result))
-    throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+    if (getpwuid_r (uid, &pw, buffer, sizeof (buffer), &result))
+        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
 
-  if (result)
+    if (result)
     {
-      name_ = pw.pw_name;
-      passwd_ = pw.pw_passwd;
-      gid_ = pw.pw_gid;
-      info_ = pw.pw_gecos;
-      home_folder_ = pw.pw_dir;
-      shell_ = pw.pw_shell;
-      is_valid_ = true;
+        name_ = pw.pw_name;
+        passwd_ = pw.pw_passwd;
+        gid_ = pw.pw_gid;
+        info_ = pw.pw_gecos;
+        home_folder_ = pw.pw_dir;
+        shell_ = pw.pw_shell;
+        is_valid_ = true;
     }
 }
 
@@ -55,10 +58,10 @@ user::user (uid_t uid) : uid_ (uid)
 uid_t
 user::get_id () const
 {
-  if (!is_valid_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid user"));
+    if (!is_valid_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid user"));
 
-  return uid_;
+    return uid_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -68,10 +71,10 @@ user::get_id () const
 std::string
 user::get_name () const
 {
-  if (!is_valid_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid user"));
+    if (!is_valid_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid user"));
 
-  return name_;
+    return name_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -81,10 +84,10 @@ user::get_name () const
 std::string
 user::get_passwd () const
 {
-  if (!is_valid_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid user"));
+    if (!is_valid_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid user"));
 
-  return passwd_;
+    return passwd_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -94,10 +97,10 @@ user::get_passwd () const
 std::string
 user::get_info () const
 {
-  if (!is_valid_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid user"));
+    if (!is_valid_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid user"));
 
-  return info_;
+    return info_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -107,10 +110,10 @@ user::get_info () const
 std::string
 user::get_home_folder () const
 {
-  if (!is_valid_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid user"));
+    if (!is_valid_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid user"));
 
-  return home_folder_;
+    return home_folder_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -120,10 +123,10 @@ user::get_home_folder () const
 std::string
 user::get_shell () const
 {
-  if (!is_valid_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid user"));
+    if (!is_valid_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid user"));
 
-  return shell_;
+    return shell_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -133,12 +136,10 @@ user::get_shell () const
 group
 user::get_group () const
 {
-  if (!is_valid_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid user"));
+    if (!is_valid_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid user"));
 
-  return group (gid_);
+    return group (gid_);
 }
 
 } // namespace mobius::core::system
-
-

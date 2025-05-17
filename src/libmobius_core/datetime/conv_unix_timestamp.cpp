@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -32,16 +34,16 @@ static constexpr datetime EPOCH_UNIX_DATETIME (1970, 1, 1, 0, 0, 0);
 datetime
 new_datetime_from_unix_timestamp (std::uint64_t timestamp)
 {
-  datetime dt;
+    datetime dt;
 
-  if (timestamp)
+    if (timestamp)
     {
-      timedelta delta;
-      delta.set_seconds (timestamp);
-      dt = EPOCH_UNIX_DATETIME + delta;
+        timedelta delta;
+        delta.set_seconds (timestamp);
+        dt = EPOCH_UNIX_DATETIME + delta;
     }
 
-  return dt;
+    return dt;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -54,7 +56,8 @@ std::uint64_t
 datetime_from_unix_timestamp (const datetime& dt)
 {
   if (dt < EPOCH_UNIX_DATETIME)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot convert datetime to Unix timestamp"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot convert datetime to
+Unix timestamp"));
 
   // ! \todo waiting for datetime.operator-
   //timedelta delta = dt - EPOCH_UNIX_DATETIME;
@@ -63,5 +66,3 @@ datetime_from_unix_timestamp (const datetime& dt)
 }*/
 
 } // namespace mobius::core::datetime
-
-

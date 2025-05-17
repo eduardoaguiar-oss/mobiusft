@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,12 +17,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/vfs/imagefile.hpp>
-#include <mobius/core/vfs/imagefile_impl_null.hpp>
-#include <mobius/core/resource.hpp>
 #include <mobius/core/exception.inc>
 #include <mobius/core/io/file.hpp>
+#include <mobius/core/resource.hpp>
 #include <mobius/core/string_functions.hpp>
+#include <mobius/core/vfs/imagefile.hpp>
+#include <mobius/core/vfs/imagefile_impl_null.hpp>
 #include <stdexcept>
 
 namespace mobius::core::vfs
@@ -28,17 +30,14 @@ namespace mobius::core::vfs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Construct object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-imagefile::imagefile ()
-{
-  impl_ = std::make_shared <imagefile_impl_null> ();
-}
+imagefile::imagefile () { impl_ = std::make_shared<imagefile_impl_null> (); }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor from implementation pointer
 // @param impl implementation pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-imagefile::imagefile (const std::shared_ptr <imagefile_impl_base>& impl)
-  : impl_ (impl)
+imagefile::imagefile (const std::shared_ptr<imagefile_impl_base> &impl)
+    : impl_ (impl)
 {
 }
 
@@ -47,8 +46,8 @@ imagefile::imagefile (const std::shared_ptr <imagefile_impl_base>& impl)
 // @param f File object
 // @param type Imagefile type (default = "autodetect")
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-imagefile::imagefile (const mobius::core::io::file& f, const std::string& type)
-  : impl_ (build_imagefile_implementation (f, type))
+imagefile::imagefile (const mobius::core::io::file &f, const std::string &type)
+    : impl_ (build_imagefile_implementation (f, type))
 {
 }
 
@@ -59,43 +58,25 @@ imagefile::imagefile (const mobius::core::io::file& f, const std::string& type)
 mobius::core::metadata
 imagefile::get_metadata () const
 {
-  // imagefile metadata
-  mobius::core::metadata metadata =
-  {
-    {
-      "type",
-      "Type",
-      "std::string",
-      get_type ()
-    },
-    {
-      "size",
-      "Size",
-      "size_type",
-      std::to_string (get_size ()) + " bytes"
-    },
-    {
-      "sectors",
-      "Number of sectors",
-      "size_type",
-      std::to_string (get_sectors ())
-    },
-    {
-      "sector_size",
-      "Sector size",
-      "size_type",
-      std::to_string (get_sector_size ()) + " bytes"
-    }
-  };
+    // imagefile metadata
+    mobius::core::metadata metadata = {
+        {"type", "Type", "std::string", get_type ()},
+        {"size", "Size", "size_type", std::to_string (get_size ()) + " bytes"},
+        {"sectors", "Number of sectors", "size_type",
+         std::to_string (get_sectors ())},
+        {"sector_size", "Sector size", "size_type",
+         std::to_string (get_sector_size ()) + " bytes"}};
 
-  // implementation specific metadata
-  for (const auto& p : get_attributes ())
+    // implementation specific metadata
+    for (const auto &p : get_attributes ())
     {
-      auto description = mobius::core::string::capitalize (mobius::core::string::replace (p.first, "_", " "));
-      metadata.add (p.first, description, "std::string", p.second.to_string ());
+        auto description = mobius::core::string::capitalize (
+            mobius::core::string::replace (p.first, "_", " "));
+        metadata.add (p.first, description, "std::string",
+                      p.second.to_string ());
     }
 
-  return metadata;
+    return metadata;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -104,34 +85,38 @@ imagefile::get_metadata () const
 // @param id Implementation ID
 // @return shared_ptr to implementation object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::shared_ptr <imagefile_impl_base>
-build_imagefile_implementation (const mobius::core::io::file& f, const std::string& id)
+std::shared_ptr<imagefile_impl_base>
+build_imagefile_implementation (const mobius::core::io::file &f,
+                                const std::string &id)
 {
-  // If type == "autodetect", use f_is_instance function to check if file
-  // is an instance of this imagefile type.
-  if (id == "autodetect")
+    // If type == "autodetect", use f_is_instance function to check if file
+    // is an instance of this imagefile type.
+    if (id == "autodetect")
     {
-      for (const auto& resource : mobius::core::get_resources ("vfs.imagefile"))
+        for (const auto &resource :
+             mobius::core::get_resources ("vfs.imagefile"))
         {
-          auto img_resource = resource.get_value <imagefile_resource_type> ();
+            auto img_resource = resource.get_value<imagefile_resource_type> ();
 
-          if (img_resource.is_instance (f))
+            if (img_resource.is_instance (f))
             {
-              // Use f_builder function to create imagefile implementation from
-              // file <i>f</i>
-              return img_resource.build (f);
+                // Use f_builder function to create imagefile implementation
+                // from file <i>f</i>
+                return img_resource.build (f);
             }
         }
 
-      // fallback: raw imagefile
-      return build_imagefile_implementation (f, "raw");
+        // fallback: raw imagefile
+        return build_imagefile_implementation (f, "raw");
     }
 
-  // Otherwise, if type is given, create imagefile using type implementation
-  else
+    // Otherwise, if type is given, create imagefile using type implementation
+    else
     {
-      auto img_resource = mobius::core::get_resource_value <imagefile_resource_type> ("vfs.imagefile." + id);
-      return img_resource.build (f);
+        auto img_resource =
+            mobius::core::get_resource_value<imagefile_resource_type> (
+                "vfs.imagefile." + id);
+        return img_resource.build (f);
     }
 }
 
@@ -142,10 +127,10 @@ build_imagefile_implementation (const mobius::core::io::file& f, const std::stri
 // @return Imagefile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile
-new_imagefile_by_url (const std::string& url, const std::string& type)
+new_imagefile_by_url (const std::string &url, const std::string &type)
 {
-  auto f = mobius::core::io::new_file_by_url (url);
-  return imagefile (f, type);
+    auto f = mobius::core::io::new_file_by_url (url);
+    return imagefile (f, type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -155,10 +140,10 @@ new_imagefile_by_url (const std::string& url, const std::string& type)
 // @return Imagefile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile
-new_imagefile_by_path (const std::string& path, const std::string& type)
+new_imagefile_by_path (const std::string &path, const std::string &type)
 {
-  auto f = mobius::core::io::new_file_by_path (path);
-  return imagefile (f, type);
+    auto f = mobius::core::io::new_file_by_path (path);
+    return imagefile (f, type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -168,11 +153,10 @@ new_imagefile_by_path (const std::string& path, const std::string& type)
 // @return Imagefile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile
-new_imagefile_from_file (const mobius::core::io::file& f, const std::string& type)
+new_imagefile_from_file (const mobius::core::io::file &f,
+                         const std::string &type)
 {
-  return imagefile (f, type);
+    return imagefile (f, type);
 }
 
 } // namespace mobius::core::vfs
-
-

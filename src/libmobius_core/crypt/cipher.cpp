@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -16,10 +18,10 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/crypt/cipher.hpp>
-#include <mobius/core/crypt/cipher_impl_null.hpp>
-#include <mobius/core/crypt/gcrypt/cipher_impl.hpp>
 #include <mobius/core/crypt/cipher_impl_ige.hpp>
+#include <mobius/core/crypt/cipher_impl_null.hpp>
 #include <mobius/core/crypt/cipher_impl_zip.hpp>
+#include <mobius/core/crypt/gcrypt/cipher_impl.hpp>
 
 namespace mobius::core::crypt
 {
@@ -27,7 +29,7 @@ namespace mobius::core::crypt
 // @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher::cipher ()
-  : impl_ (std::make_shared <cipher_impl_null> ())
+    : impl_ (std::make_shared<cipher_impl_null> ())
 {
 }
 
@@ -35,8 +37,8 @@ cipher::cipher ()
 // @brief Constructor from implementation pointer
 // @param impl Implementation pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-cipher::cipher (const std::shared_ptr <cipher_impl_base>& impl)
-  : impl_ (impl)
+cipher::cipher (const std::shared_ptr<cipher_impl_base> &impl)
+    : impl_ (impl)
 {
 }
 
@@ -47,17 +49,18 @@ cipher::cipher (const std::shared_ptr <cipher_impl_base>& impl)
 // @param iv Initialization vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher
-new_cipher_cbc (const std::string& id, const bytearray& key, const bytearray& iv)
+new_cipher_cbc (const std::string &id, const bytearray &key,
+                const bytearray &iv)
 {
-  auto c = std::make_shared <gcrypt::cipher_impl> (id, "cbc");
-  c->set_key (key);
+    auto c = std::make_shared<gcrypt::cipher_impl> (id, "cbc");
+    c->set_key (key);
 
-  if (iv)
-    c->set_iv (iv);
-  else
-    c->set_iv (mobius::core::bytearray (c->get_block_size ()));
+    if (iv)
+        c->set_iv (iv);
+    else
+        c->set_iv (mobius::core::bytearray (c->get_block_size ()));
 
-  return cipher (c);
+    return cipher (c);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -67,17 +70,18 @@ new_cipher_cbc (const std::string& id, const bytearray& key, const bytearray& iv
 // @param iv Initialization vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher
-new_cipher_cbc_cts (const std::string& id, const bytearray& key, const bytearray& iv)
+new_cipher_cbc_cts (const std::string &id, const bytearray &key,
+                    const bytearray &iv)
 {
-  auto c = std::make_shared <gcrypt::cipher_impl> (id, "cbc-cts");
-  c->set_key (key);
+    auto c = std::make_shared<gcrypt::cipher_impl> (id, "cbc-cts");
+    c->set_key (key);
 
-  if (iv)
-    c->set_iv (iv);
-  else
-    c->set_iv (mobius::core::bytearray (c->get_block_size ()));
+    if (iv)
+        c->set_iv (iv);
+    else
+        c->set_iv (mobius::core::bytearray (c->get_block_size ()));
 
-  return cipher (c);
+    return cipher (c);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -87,22 +91,23 @@ new_cipher_cbc_cts (const std::string& id, const bytearray& key, const bytearray
 // @param cv Counter vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher
-new_cipher_ctr (const std::string& id, const bytearray& key, const bytearray& cv)
+new_cipher_ctr (const std::string &id, const bytearray &key,
+                const bytearray &cv)
 {
-  auto c = std::make_shared <gcrypt::cipher_impl> (id, "ctr");
-  c->set_key (key);
+    auto c = std::make_shared<gcrypt::cipher_impl> (id, "ctr");
+    c->set_key (key);
 
-  if (cv)
-    c->set_counter (cv);
+    if (cv)
+        c->set_counter (cv);
 
-  else
+    else
     {
-      mobius::core::bytearray counter (c->get_block_size ());
-      counter[counter.size () - 1] = 1;
-      c->set_counter (counter);
+        mobius::core::bytearray counter (c->get_block_size ());
+        counter[counter.size () - 1] = 1;
+        c->set_counter (counter);
     }
 
-  return cipher (c);
+    return cipher (c);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -111,12 +116,12 @@ new_cipher_ctr (const std::string& id, const bytearray& key, const bytearray& cv
 // @param key Cipher key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher
-new_cipher_ecb (const std::string& id, const bytearray& key)
+new_cipher_ecb (const std::string &id, const bytearray &key)
 {
-  auto c = std::make_shared <gcrypt::cipher_impl> (id, "ecb");
-  c->set_key (key);
+    auto c = std::make_shared<gcrypt::cipher_impl> (id, "ecb");
+    c->set_key (key);
 
-  return cipher (c);
+    return cipher (c);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -126,17 +131,18 @@ new_cipher_ecb (const std::string& id, const bytearray& key)
 // @param iv Initialization vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher
-new_cipher_gcm (const std::string& id, const bytearray& key, const bytearray& iv)
+new_cipher_gcm (const std::string &id, const bytearray &key,
+                const bytearray &iv)
 {
-  auto c = std::make_shared <gcrypt::cipher_impl> (id, "gcm");
-  c->set_key (key);
+    auto c = std::make_shared<gcrypt::cipher_impl> (id, "gcm");
+    c->set_key (key);
 
-  if (iv)
-    c->set_iv (iv);
-  else
-    c->set_iv (mobius::core::bytearray (c->get_block_size ()));
+    if (iv)
+        c->set_iv (iv);
+    else
+        c->set_iv (mobius::core::bytearray (c->get_block_size ()));
 
-  return cipher (c);
+    return cipher (c);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -146,9 +152,10 @@ new_cipher_gcm (const std::string& id, const bytearray& key, const bytearray& iv
 // @param iv Initialization vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher
-new_cipher_ige (const std::string& id, const bytearray& key, const bytearray& iv)
+new_cipher_ige (const std::string &id, const bytearray &key,
+                const bytearray &iv)
 {
-  return cipher (std::make_shared <cipher_impl_ige> (id, key, iv));
+    return cipher (std::make_shared<cipher_impl_ige> (id, key, iv));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -158,17 +165,18 @@ new_cipher_ige (const std::string& id, const bytearray& key, const bytearray& iv
 // @param iv Initialization vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher
-new_cipher_ofb (const std::string& id, const bytearray& key, const bytearray& iv)
+new_cipher_ofb (const std::string &id, const bytearray &key,
+                const bytearray &iv)
 {
-  auto c = std::make_shared <gcrypt::cipher_impl> (id, "ofb");
-  c->set_key (key);
+    auto c = std::make_shared<gcrypt::cipher_impl> (id, "ofb");
+    c->set_key (key);
 
-  if (iv)
-    c->set_iv (iv);
-  else
-    c->set_iv (mobius::core::bytearray (c->get_block_size ()));
+    if (iv)
+        c->set_iv (iv);
+    else
+        c->set_iv (mobius::core::bytearray (c->get_block_size ()));
 
-  return cipher (c);
+    return cipher (c);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -177,19 +185,17 @@ new_cipher_ofb (const std::string& id, const bytearray& key, const bytearray& iv
 // @param key Cipher key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher
-new_cipher_stream (const std::string& id, const bytearray& key)
+new_cipher_stream (const std::string &id, const bytearray &key)
 {
-  if (id == "zip")
-    return cipher (std::make_shared <cipher_impl_zip> (key));
+    if (id == "zip")
+        return cipher (std::make_shared<cipher_impl_zip> (key));
 
-  else
+    else
     {
-      auto c = std::make_shared <gcrypt::cipher_impl> (id, "stream");
-      c->set_key (key);
-      return cipher (c);
+        auto c = std::make_shared<gcrypt::cipher_impl> (id, "stream");
+        c->set_key (key);
+        return cipher (c);
     }
 }
 
 } // namespace mobius::core::crypt
-
-

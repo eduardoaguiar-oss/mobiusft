@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,10 +17,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/framework/config.hpp>
 #include <mobius/core/application.hpp>
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/thread_guard.hpp>
+#include <mobius/framework/config.hpp>
 
 namespace
 {
@@ -31,45 +33,43 @@ static const std::string RESOURCE_ID = "database.config";
 static mobius::core::database::database
 _get_database ()
 {
-  mobius::core::database::database db;
+    mobius::core::database::database db;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // If DB instance is already opened for current thread, simply return it
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  if (mobius::core::has_thread_resource (RESOURCE_ID))
-    db = mobius::core::get_thread_resource <mobius::core::database::database> (RESOURCE_ID);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // If DB instance is already opened for current thread, simply return it
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (mobius::core::has_thread_resource (RESOURCE_ID))
+        db = mobius::core::get_thread_resource<
+            mobius::core::database::database> (RESOURCE_ID);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Otherwise, create a new DB instance and associate to current thread
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  else
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Otherwise, create a new DB instance and associate to current thread
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    else
     {
-      // create database instance
-      mobius::core::application app;
-      auto path = app.get_config_path ("mobiusft.sqlite");
+        // create database instance
+        mobius::core::application app;
+        auto path = app.get_config_path ("mobiusft.sqlite");
 
-      db = mobius::core::database::database (path);
+        db = mobius::core::database::database (path);
 
-      // create db tables, if necessary
-      auto transaction = db.new_transaction ();
+        // create db tables, if necessary
+        auto transaction = db.new_transaction ();
 
-      db.execute (
-         "CREATE TABLE IF NOT EXISTS configuration"
-                               "(var TEXT PRIMARY KEY,"
-                              "value BLOB NULL);"
-                 );
+        db.execute ("CREATE TABLE IF NOT EXISTS configuration"
+                    "(var TEXT PRIMARY KEY,"
+                    "value BLOB NULL);");
 
-      transaction.commit ();
+        transaction.commit ();
 
-      // save DB instance for future reuse
-      mobius::core::set_thread_resource (RESOURCE_ID, db);
+        // save DB instance for future reuse
+        mobius::core::set_thread_resource (RESOURCE_ID, db);
     }
 
-  return db;
+    return db;
 }
 
 } // namespace
-
 
 namespace mobius::framework
 {
@@ -80,8 +80,8 @@ namespace mobius::framework
 mobius::core::database::transaction
 new_config_transaction ()
 {
-  auto db = _get_database ();
-  return db.new_transaction ();
+    auto db = _get_database ();
+    return db.new_transaction ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -90,19 +90,17 @@ new_config_transaction ()
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-has_config (const std::string& name)
+has_config (const std::string &name)
 {
-  auto db = _get_database ();
+    auto db = _get_database ();
 
-  auto statement = db.new_statement (
-         "SELECT 1 "
-           "FROM configuration "
-          "WHERE var = ?"
-       );
+    auto statement = db.new_statement ("SELECT 1 "
+                                       "FROM configuration "
+                                       "WHERE var = ?");
 
-  statement.bind (1, name);
+    statement.bind (1, name);
 
-  return statement.fetch_row ();
+    return statement.fetch_row ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -111,24 +109,22 @@ has_config (const std::string& name)
 // @return Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::pod::data
-get_config (const std::string& name)
+get_config (const std::string &name)
 {
-  auto db = _get_database ();
+    auto db = _get_database ();
 
-  auto statement = db.new_statement (
-         "SELECT value "
-           "FROM configuration "
-          "WHERE var = ?"
-       );
+    auto statement = db.new_statement ("SELECT value "
+                                       "FROM configuration "
+                                       "WHERE var = ?");
 
-  statement.bind (1, name);
+    statement.bind (1, name);
 
-  mobius::core::pod::data value;
+    mobius::core::pod::data value;
 
-  if (statement.fetch_row ())
-    value = statement.get_column_pod (0);
+    if (statement.fetch_row ())
+        value = statement.get_column_pod (0);
 
-  return value;
+    return value;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -137,18 +133,16 @@ get_config (const std::string& name)
 // @param value Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-set_config (const std::string& name, const mobius::core::pod::data& value)
+set_config (const std::string &name, const mobius::core::pod::data &value)
 {
-  auto db = _get_database ();
+    auto db = _get_database ();
 
-  auto statement = db.new_statement (
-         "INSERT OR REPLACE INTO configuration "
-                         "VALUES (?, ?)"
-       );
+    auto statement = db.new_statement ("INSERT OR REPLACE INTO configuration "
+                                       "VALUES (?, ?)");
 
-  statement.bind (1, name);
-  statement.bind (2, value);
-  statement.execute ();
+    statement.bind (1, name);
+    statement.bind (2, value);
+    statement.execute ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -156,19 +150,15 @@ set_config (const std::string& name, const mobius::core::pod::data& value)
 // @param name Value name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-remove_config (const std::string& name)
+remove_config (const std::string &name)
 {
-  auto db = _get_database ();
+    auto db = _get_database ();
 
-  auto statement = db.new_statement (
-         "DELETE FROM configuration "
-          "WHERE var = ?"
-       );
+    auto statement = db.new_statement ("DELETE FROM configuration "
+                                       "WHERE var = ?");
 
-  statement.bind (1, name);
-  statement.execute ();
+    statement.bind (1, name);
+    statement.execute ();
 }
 
 } // namespace mobius::framework
-
-

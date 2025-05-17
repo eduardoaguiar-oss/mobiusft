@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -36,42 +38,39 @@ namespace mobius::extension::app::shareaza
 // @see ManagedSearch.cpp - CManagedSearch::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CManagedSearch::decode (mobius::core::decoder::mfc& decoder)
+CManagedSearch::decode (mobius::core::decoder::mfc &decoder)
 {
-  mobius::core::log log (__FILE__, __FUNCTION__);
+    mobius::core::log log (__FILE__, __FUNCTION__);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Check version
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  version_ = decoder.get_int ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Check version
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    version_ = decoder.get_int ();
 
-  if (version_ > SER_VERSION)
+    if (version_ > SER_VERSION)
     {
-      log.development (__LINE__, "Unhandled version: " + std::to_string (version_));
-      return;
+        log.development (__LINE__,
+                         "Unhandled version: " + std::to_string (version_));
+        return;
     }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Decode data
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  qs_.decode (decoder);
-  priority_ = decoder.get_int ();
-  flag_active_ = decoder.get_bool ();
-  flag_receive_ = decoder.get_bool ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode data
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    qs_.decode (decoder);
+    priority_ = decoder.get_int ();
+    flag_active_ = decoder.get_bool ();
+    flag_receive_ = decoder.get_bool ();
 
-  if (version_ >= 3)
+    if (version_ >= 3)
     {
-      allow_g2_ = decoder.get_bool ();
-      allow_g1_ = decoder.get_bool ();
-      allow_ed2k_ = decoder.get_bool ();
+        allow_g2_ = decoder.get_bool ();
+        allow_g1_ = decoder.get_bool ();
+        allow_ed2k_ = decoder.get_bool ();
     }
 
-  if (version_ >= 4)
-    allow_dc_ = decoder.get_bool ();
+    if (version_ >= 4)
+        allow_dc_ = decoder.get_bool ();
 }
 
 } // namespace mobius::extension::app::shareaza
-
-
-
-

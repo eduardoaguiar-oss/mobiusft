@@ -19,7 +19,7 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.20)
 project(LibMobiusPython LANGUAGES CXX)
 
 include(GNUInstallDirs)
@@ -60,7 +60,7 @@ add_subdirectory(vfs)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target: 'mobius' python module
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius MODULE
+add_library(libmobius_python MODULE
     module.cpp
     pycallback.cpp
     pyfunction.cpp
@@ -72,27 +72,21 @@ add_library(mobius MODULE
     api_metadata.cpp
 )
 
-target_include_directories(mobius PRIVATE
-    ${MOBIUS_INCLUDE_DIRS}
+target_include_directories(libmobius_python PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_compile_options(mobius PRIVATE -fno-strict-aliasing -flto)
+target_compile_options(libmobius_python PRIVATE -fno-strict-aliasing -flto)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
-target_link_libraries(mobius PRIVATE
-    mobius_core
-    mobius_framework
-    ${Python_LIBRARIES}
-)
-
-set_target_properties(mobius PROPERTIES
+set_target_properties(libmobius_python PROPERTIES
     PREFIX ""
+    OUTPUT_NAME "mobius"
     SUFFIX ".so"
 )
 
-target_link_libraries(mobius PRIVATE
+target_link_libraries(libmobius_python PRIVATE
     mobius_python_core
     mobius_python_crypt
     mobius_python_database
@@ -109,21 +103,21 @@ target_link_libraries(mobius PRIVATE
     mobius_python_turing
     mobius_python_ui
     mobius_python_vfs
-    Mobius::Core
     Mobius::Framework
+    Mobius::Core
     Python3::Module
 )
 
 if(UNIX AND NOT APPLE)
-    target_link_options(mobius PRIVATE -Wl,--export-dynamic-symbol=PyInit_mobius)
+    target_link_options(libmobius_python PRIVATE -Wl,--export-dynamic-symbol=PyInit_mobius)
 elseif(APPLE)
-    target_link_options(mobius PRIVATE -Wl,-exported_symbol,_PyInit_mobius)
+    target_link_options(libmobius_python PRIVATE -Wl,-exported_symbol,_PyInit_mobius)
 endif()
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-install(TARGETS mobius
+install(TARGETS libmobius_python
     LIBRARY DESTINATION ${MOBIUS_PYTHON_DIR}
     RUNTIME DESTINATION ${MOBIUS_PYTHON_DIR}
 )

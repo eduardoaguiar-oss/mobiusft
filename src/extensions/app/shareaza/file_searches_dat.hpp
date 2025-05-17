@@ -3,7 +3,9 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -19,10 +21,10 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CWndSearch.hpp"
-#include <mobius/core/file_decoder/section.hpp>
-#include <mobius/core/datetime/datetime.hpp>
-#include <mobius/core/io/reader.hpp>
 #include <map>
+#include <mobius/core/datetime/datetime.hpp>
+#include <mobius/core/file_decoder/section.hpp>
+#include <mobius/core/io/reader.hpp>
 #include <string>
 #include <vector>
 
@@ -35,95 +37,88 @@ namespace mobius::extension::app::shareaza
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class file_searches_dat
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Search data
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  struct search
-  {
-    CManagedSearch obj;
-    std::string id;
-    std::string text;
-    mobius::core::datetime::datetime timestamp;
-    mobius::core::datetime::datetime first_hit_time;
-    mobius::core::datetime::datetime last_hit_time;
-    std::uint32_t file_count = 0;
-  };
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Search data
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct search
+    {
+        CManagedSearch obj;
+        std::string id;
+        std::string text;
+        mobius::core::datetime::datetime timestamp;
+        mobius::core::datetime::datetime first_hit_time;
+        mobius::core::datetime::datetime last_hit_time;
+        std::uint32_t file_count = 0;
+    };
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Remote file data
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  struct remote_file
-  {
-    CMatchFile match_file;
-    CQueryHit query_hit;
-  };
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Remote file data
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct remote_file
+    {
+        CMatchFile match_file;
+        CQueryHit query_hit;
+    };
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  file_searches_dat (const mobius::core::io::reader&);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    file_searches_dat (const mobius::core::io::reader &);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Check if stream is an instance of ShareH.dat file
-  // @return true/false
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  operator bool () const noexcept
-  {
-    return is_instance_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if stream is an instance of ShareH.dat file
+    // @return true/false
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    operator bool () const noexcept { return is_instance_; }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get searches
-  // @return Searches
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::vector <search>
-  get_searches () const
-  {
-    return searches_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get searches
+    // @return Searches
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<search>
+    get_searches () const
+    {
+        return searches_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get remote files
-  // @return Remote files
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::vector <remote_file>
-  get_remote_files () const
-  {
-    return remote_files_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get remote files
+    // @return Remote files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<remote_file>
+    get_remote_files () const
+    {
+        return remote_files_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get file sections
-  // @return Sections
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::core::file_decoder::section
-  get_section () const
-  {
-    return section_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get file sections
+    // @return Sections
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::file_decoder::section
+    get_section () const
+    {
+        return section_;
+    }
 
-private:
-  // @brief Flag is instance
-  bool is_instance_ = false;
+  private:
+    // @brief Flag is instance
+    bool is_instance_ = false;
 
-  // @brief File main section
-  mobius::core::file_decoder::section section_;
+    // @brief File main section
+    mobius::core::file_decoder::section section_;
 
-  // @brief Searches
-  std::vector <search> searches_;
+    // @brief Searches
+    std::vector<search> searches_;
 
-  // @brief Remote files
-  std::vector <remote_file> remote_files_;
+    // @brief Remote files
+    std::vector<remote_file> remote_files_;
 
-  // Helper functions
-  void process_cwndsearch_ (const CWndSearch&);
+    // Helper functions
+    void process_cwndsearch_ (const CWndSearch &);
 };
 
 } // namespace mobius::extension::app::shareaza
 
 #endif
-
-
-
-

@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -39,61 +41,54 @@ namespace mobius::extension::app::shareaza
 // @param parent Parent CLibraryFolder, if any
 // @see SharedFolder.cpp - CLibraryFolder::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-CLibraryFolder::CLibraryFolder (
-  mobius::core::decoder::mfc& decoder,
-  int version,
-  const CLibraryFolder& parent
-)
+CLibraryFolder::CLibraryFolder (mobius::core::decoder::mfc &decoder,
+                                int version, const CLibraryFolder &parent)
 {
-  mobius::core::log log (__FILE__, __FUNCTION__);
+    mobius::core::log log (__FILE__, __FUNCTION__);
 
-  path_ = decoder.get_string ();
+    path_ = decoder.get_string ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // is_shared_ (true/false)
-  // @see SharedFolder.cpp - CLibraryFolder::IsShared
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::uint32_t b_shared;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // is_shared_ (true/false)
+    // @see SharedFolder.cpp - CLibraryFolder::IsShared
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::uint32_t b_shared;
 
-  if (version >= 5)
-    b_shared = decoder.get_dword ();
+    if (version >= 5)
+        b_shared = decoder.get_dword ();
 
-  else
-    b_shared = decoder.get_bool () ? TRI_UNKNOWN : TRI_FALSE;
+    else
+        b_shared = decoder.get_bool () ? TRI_UNKNOWN : TRI_FALSE;
 
-  if (b_shared == TRI_UNKNOWN)
-    is_shared_ = parent ? parent.is_shared () : true;
+    if (b_shared == TRI_UNKNOWN)
+        is_shared_ = parent ? parent.is_shared () : true;
 
-  else
-    is_shared_ = (b_shared == TRI_TRUE);
+    else
+        is_shared_ = (b_shared == TRI_TRUE);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // is_expanded
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  if (version >= 3)
-    is_expanded_ = decoder.get_bool ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // is_expanded
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (version >= 3)
+        is_expanded_ = decoder.get_bool ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // sub-folders
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto count = decoder.get_count ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // sub-folders
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto count = decoder.get_count ();
 
-  for (std::uint32_t i = 0;i < count;i++)
-    children_.emplace_back (decoder, version, *this);
+    for (std::uint32_t i = 0; i < count; i++)
+        children_.emplace_back (decoder, version, *this);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // files
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  count = decoder.get_count ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    count = decoder.get_count ();
 
-  for (std::uint32_t i = 0;i < count;i++)
-     files_.emplace_back (decoder, version, *this);
+    for (std::uint32_t i = 0; i < count; i++)
+        files_.emplace_back (decoder, version, *this);
 
-  is_valid_ = true;
+    is_valid_ = true;
 }
 
 } // namespace mobius::extension::app::shareaza
-
-
-
-

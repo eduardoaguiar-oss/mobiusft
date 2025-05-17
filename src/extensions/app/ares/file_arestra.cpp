@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -17,8 +19,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file_arestra.hpp"
 #include "common.hpp"
-#include <mobius/core/log.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
+#include <mobius/core/log.hpp>
 
 namespace mobius::extension::app::ares
 {
@@ -26,122 +28,122 @@ namespace mobius::extension::app::ares
 // @brief Constructor
 // @see read_details_DB_Download@helper_download_disk.pas (line 722)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-file_arestra::file_arestra (const mobius::core::io::reader& reader)
+file_arestra::file_arestra (const mobius::core::io::reader &reader)
 {
-  if (!reader || reader.get_size () < 4096)
-    return;
+    if (!reader || reader.get_size () < 4096)
+        return;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Create main section
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto decoder = mobius::core::decoder::data_decoder (reader);
-  decoder.seek (reader.get_size () - 4096);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Create main section
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto decoder = mobius::core::decoder::data_decoder (reader);
+    decoder.seek (reader.get_size () - 4096);
 
-  section_ = mobius::core::file_decoder::section (reader, "File");
+    section_ = mobius::core::file_decoder::section (reader, "File");
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Decode header signature
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto header_section = section_.new_child ("header");
-  auto signature = decoder.get_bytearray_by_size (13);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode header signature
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto header_section = section_.new_child ("header");
+    auto signature = decoder.get_bytearray_by_size (13);
 
-  if (signature == "___ARESTRA___")
-    version_ = 1;
+    if (signature == "___ARESTRA___")
+        version_ = 1;
 
-  else if (signature == "___ARESTRA__2")
-    version_ = 2;
+    else if (signature == "___ARESTRA__2")
+        version_ = 2;
 
-  else if (signature == "___ARESTRA__3")
-    version_ = 3;
+    else if (signature == "___ARESTRA__3")
+        version_ = 3;
 
-  else
-    return;
+    else
+        return;
 
-  is_instance_ = true;
-  signature_ = signature.to_string ();
+    is_instance_ = true;
+    signature_ = signature.to_string ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Decode file size and progress
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  file_size_ = 0;
-  progress_ = 0;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode file size and progress
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    file_size_ = 0;
+    progress_ = 0;
 
-  if (version_ == 1)
+    if (version_ == 1)
     {
-      file_size_ = decoder.get_uint32_le ();
-      progress_ = decoder.get_uint32_le ();
+        file_size_ = decoder.get_uint32_le ();
+        progress_ = decoder.get_uint32_le ();
     }
-  else
+    else
     {
-      file_size_ = decoder.get_uint64_le ();
-      progress_ = decoder.get_uint64_le ();
+        file_size_ = decoder.get_uint64_le ();
+        progress_ = decoder.get_uint64_le ();
     }
 
-  header_section.end ();
+    header_section.end ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Decode gaps
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto gaps_section = section_.new_child ("gaps");
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode gaps
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto gaps_section = section_.new_child ("gaps");
 
-  std::uint64_t start_pchunk = 0;
-  std::uint64_t end_pchunk = 0xffffffffffffffff;
+    std::uint64_t start_pchunk = 0;
+    std::uint64_t end_pchunk = 0xffffffffffffffff;
 
-  while (end_pchunk)
+    while (end_pchunk)
     {
-      if (version_ == 1)
+        if (version_ == 1)
         {
-          end_pchunk = decoder.get_uint32_le ();
-          start_pchunk = decoder.get_uint32_le ();
+            end_pchunk = decoder.get_uint32_le ();
+            start_pchunk = decoder.get_uint32_le ();
         }
-      else
+        else
         {
-          start_pchunk = decoder.get_uint64_le ();
-          end_pchunk = decoder.get_uint64_le ();
+            start_pchunk = decoder.get_uint64_le ();
+            end_pchunk = decoder.get_uint64_le ();
         }
 
-      if (end_pchunk)
-        gaps_.emplace_back (start_pchunk, end_pchunk);
+        if (end_pchunk)
+            gaps_.emplace_back (start_pchunk, end_pchunk);
     }
 
-  gaps_section.end ();
+    gaps_section.end ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Decode params
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto params_section = section_.new_child ("params");
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode params
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto params_section = section_.new_child ("params");
 
-  media_type_ = media_type_to_string (decoder.get_uint8 ());
-  is_paused_ = (decoder.get_uint8 () == 1);
-  param1_ = decoder.get_uint32_le ();
-  param2_ = decoder.get_uint32_le ();
-  param3_ = decoder.get_uint32_le ();
+    media_type_ = media_type_to_string (decoder.get_uint8 ());
+    is_paused_ = (decoder.get_uint8 () == 1);
+    param1_ = decoder.get_uint32_le ();
+    param2_ = decoder.get_uint32_le ();
+    param3_ = decoder.get_uint32_le ();
 
-  params_section.end ();
+    params_section.end ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Decode metadata, if any
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto data_size = decoder.get_uint16_le ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode metadata, if any
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto data_size = decoder.get_uint16_le ();
 
-  if (data_size > 0 && data_size != 3500)
+    if (data_size > 0 && data_size != 3500)
     {
-      auto metadata_section = section_.new_child ("metadata");
+        auto metadata_section = section_.new_child ("metadata");
 
-      auto data = decoder.get_bytearray_by_size (data_size);
-      _populate_metadata (data);
+        auto data = decoder.get_bytearray_by_size (data_size);
+        _populate_metadata (data);
 
-      metadata_section.end ();
+        metadata_section.end ();
     }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Padding section
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto padding_section = section_.new_child ("padding");
-  decoder.seek (reader.get_size ());
-  padding_section.end ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Padding section
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto padding_section = section_.new_child ("padding");
+    decoder.seek (reader.get_size ());
+    padding_section.end ();
 
-  section_.end ();
+    section_.end ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -151,39 +153,66 @@ file_arestra::file_arestra (const mobius::core::io::reader& reader)
 // @see read_details_DB_Download@helper_download_disk.pas
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-file_arestra::_populate_metadata (const mobius::core::bytearray& data)
+file_arestra::_populate_metadata (const mobius::core::bytearray &data)
 {
-  mobius::core::log log (__FILE__, __FUNCTION__);
+    mobius::core::log log (__FILE__, __FUNCTION__);
 
-  for (const auto& [i, v] : decode_metadata (data))
+    for (const auto &[i, v] : decode_metadata (data))
     {
-      mobius::core::decoder::data_decoder decoder (v);
+        mobius::core::decoder::data_decoder decoder (v);
 
-      switch (i)
+        switch (i)
         {
-          case 1: kw_genre_ = v.to_string (); break;
-          case 2: title_ = v.to_string (); break;
-          case 3: artist_ = v.to_string (); break;
-          case 4: album_ = v.to_string (); break;
-          case 5: category_ = v.to_string (); break;
-          case 6: year_ = v.to_string (); break;
-          case 7: alt_sources_ = decode_old_alt_sources (v); break;
-          case 8: language_ = v.to_string (); break;
-          case 9: url_ = v.to_string (); break;
-          case 10: comment_ = v.to_string (); break;
-          case 13: alt_sources_ = decode_alt_sources (v); break;
-          case 15: hash_sha1_ = v.to_hexstring (); break;
-          case 19: subfolder_ = v.to_string (); break;
-          case 20: phash_verified_ = decoder.get_uint64_le (); break;
-          case 25: download_started_time_ = decoder.get_unix_datetime (); break;
-          default:
-              log.development (__LINE__, "unhandled field_type: " + std::to_string (i));
+        case 1:
+            kw_genre_ = v.to_string ();
+            break;
+        case 2:
+            title_ = v.to_string ();
+            break;
+        case 3:
+            artist_ = v.to_string ();
+            break;
+        case 4:
+            album_ = v.to_string ();
+            break;
+        case 5:
+            category_ = v.to_string ();
+            break;
+        case 6:
+            year_ = v.to_string ();
+            break;
+        case 7:
+            alt_sources_ = decode_old_alt_sources (v);
+            break;
+        case 8:
+            language_ = v.to_string ();
+            break;
+        case 9:
+            url_ = v.to_string ();
+            break;
+        case 10:
+            comment_ = v.to_string ();
+            break;
+        case 13:
+            alt_sources_ = decode_alt_sources (v);
+            break;
+        case 15:
+            hash_sha1_ = v.to_hexstring ();
+            break;
+        case 19:
+            subfolder_ = v.to_string ();
+            break;
+        case 20:
+            phash_verified_ = decoder.get_uint64_le ();
+            break;
+        case 25:
+            download_started_time_ = decoder.get_unix_datetime ();
+            break;
+        default:
+            log.development (__LINE__,
+                             "unhandled field_type: " + std::to_string (i));
         }
     }
 }
 
 } // namespace mobius::extension::app::ares
-
-
-
-

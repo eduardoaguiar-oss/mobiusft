@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,9 +17,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/system/dynamic_lib.hpp>
-#include <mobius/core/exception.inc>
 #include <dlfcn.h>
+#include <mobius/core/exception.inc>
+#include <mobius/core/system/dynamic_lib.hpp>
 #include <stdexcept>
 
 namespace mobius::core::system
@@ -27,13 +29,13 @@ namespace mobius::core::system
 // @param filename Dynamic library path/filename (according to dlopen function)
 // @param flag Open flag (according to dlopen function)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-dynamic_lib::dynamic_lib (const std::string& filename, bool lazy_binding)
+dynamic_lib::dynamic_lib (const std::string &filename, bool lazy_binding)
 {
-  int flags = (lazy_binding) ? RTLD_LAZY : RTLD_NOW;
-  handle_ = dlopen (filename.c_str (), flags);
+    int flags = (lazy_binding) ? RTLD_LAZY : RTLD_NOW;
+    handle_ = dlopen (filename.c_str (), flags);
 
-  if (!handle_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG (dlerror ()));
+    if (!handle_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG (dlerror ()));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -41,10 +43,10 @@ dynamic_lib::dynamic_lib (const std::string& filename, bool lazy_binding)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 dynamic_lib::~dynamic_lib ()
 {
-  if (handle_)
+    if (handle_)
     {
-      dlclose (handle_);
-      handle_ = nullptr;
+        dlclose (handle_);
+        handle_ = nullptr;
     }
 }
 
@@ -53,14 +55,13 @@ dynamic_lib::~dynamic_lib ()
 // @return Pointer to symbol or nullptr if symbol does not exist
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void *
-dynamic_lib::get_symbol (const std::string& name) const
+dynamic_lib::get_symbol (const std::string &name) const
 {
-  if (!handle_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("dynamic library is not initialized"));
+    if (!handle_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("dynamic library is not initialized"));
 
-  return dlsym (handle_, name.c_str ());
+    return dlsym (handle_, name.c_str ());
 }
 
 } // namespace mobius::core::system
-
-

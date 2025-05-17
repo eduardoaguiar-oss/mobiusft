@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,10 +17,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/core/exception.inc>
+#include <mobius/core/os/win/registry/hive_file.hpp>
 #include <mobius/core/os/win/registry/registry_file.hpp>
 #include <mobius/core/os/win/registry/registry_key_impl_hkey.hpp>
-#include <mobius/core/os/win/registry/hive_file.hpp>
-#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace mobius::core::os::win::registry
@@ -33,7 +35,7 @@ namespace
 inline const registry_key
 new_registry_key (hive_key hkey)
 {
-  return registry_key (std::make_shared <registry_key_impl_hkey> (hkey));
+    return registry_key (std::make_shared<registry_key_impl_hkey> (hkey));
 }
 
 } // namespace
@@ -43,84 +45,85 @@ new_registry_key (hive_key hkey)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class registry_file::impl
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  impl (std::uint32_t, const std::string&, const std::string&, mobius::core::io::reader);
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl (std::uint32_t, const std::string &, const std::string &,
+          mobius::core::io::reader);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief get uid
-  // @return uid
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::uint32_t
-  get_uid () const
-  {
-    return uid_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief get uid
+    // @return uid
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::uint32_t
+    get_uid () const
+    {
+        return uid_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief get path
-  // @return path
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::string
-  get_path () const
-  {
-    return path_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief get path
+    // @return path
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_path () const
+    {
+        return path_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief get role
-  // @return role
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::string
-  get_role () const
-  {
-    return role_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief get role
+    // @return role
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_role () const
+    {
+        return role_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief get last modification time
-  // @return last modification time
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::core::datetime::datetime
-  get_last_modification_time () const
-  {
-    return hivefile_.get_last_modification_time ();
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief get last modification time
+    // @return last modification time
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::datetime::datetime
+    get_last_modification_time () const
+    {
+        return hivefile_.get_last_modification_time ();
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief get root key
-  // @return root key
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  registry_key
-  get_root_key () const
-  {
-    return new_registry_key (hivefile_.get_root_key ());
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief get root key
+    // @return root key
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    registry_key
+    get_root_key () const
+    {
+        return new_registry_key (hivefile_.get_root_key ());
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief get metadata
-  // @return metadata list
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::core::metadata
-  get_metadata () const
-  {
-    return hivefile_.get_metadata ();
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief get metadata
+    // @return metadata list
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::metadata
+    get_metadata () const
+    {
+        return hivefile_.get_metadata ();
+    }
 
-private:
-  // @brief unique identifier
-  std::uint32_t uid_;
+  private:
+    // @brief unique identifier
+    std::uint32_t uid_;
 
-  // @brief file role
-  std::string role_;
+    // @brief file role
+    std::string role_;
 
-  // @brief original path
-  std::string path_;
+    // @brief original path
+    std::string path_;
 
-  // @brief hive file
-  hive_file hivefile_;
+    // @brief hive file
+    hive_file hivefile_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -130,18 +133,16 @@ private:
 // @param path original path
 // @param reader generic reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-registry_file::impl::impl (
-  std::uint32_t uid,
-  const std::string& role,
-  const std::string& path,
-  mobius::core::io::reader reader)
-  : uid_ (uid),
-    role_ (role),
-    path_ (path),
-    hivefile_ (reader)
+registry_file::impl::impl (std::uint32_t uid, const std::string &role,
+                           const std::string &path,
+                           mobius::core::io::reader reader)
+    : uid_ (uid),
+      role_ (role),
+      path_ (path),
+      hivefile_ (reader)
 {
-  if (!hivefile_.is_instance ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid hive file"));
+    if (!hivefile_.is_instance ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid hive file"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -151,12 +152,10 @@ registry_file::impl::impl (
 // @param path original path
 // @param reader generic reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-registry_file::registry_file (
-  std::uint32_t uid,
-  const std::string& role,
-  const std::string& path,
-  mobius::core::io::reader reader)
-  : impl_ (std::make_shared <impl> (uid, role, path, reader))
+registry_file::registry_file (std::uint32_t uid, const std::string &role,
+                              const std::string &path,
+                              mobius::core::io::reader reader)
+    : impl_ (std::make_shared<impl> (uid, role, path, reader))
 {
 }
 
@@ -167,7 +166,7 @@ registry_file::registry_file (
 std::uint32_t
 registry_file::get_uid () const
 {
-  return impl_->get_uid ();
+    return impl_->get_uid ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -177,7 +176,7 @@ registry_file::get_uid () const
 std::string
 registry_file::get_path () const
 {
-  return impl_->get_path ();
+    return impl_->get_path ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -187,7 +186,7 @@ registry_file::get_path () const
 std::string
 registry_file::get_role () const
 {
-  return impl_->get_role ();
+    return impl_->get_role ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -197,7 +196,7 @@ registry_file::get_role () const
 mobius::core::datetime::datetime
 registry_file::get_last_modification_time () const
 {
-  return impl_->get_last_modification_time ();
+    return impl_->get_last_modification_time ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -207,7 +206,7 @@ registry_file::get_last_modification_time () const
 registry_key
 registry_file::get_root_key () const
 {
-  return impl_->get_root_key ();
+    return impl_->get_root_key ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -217,7 +216,7 @@ registry_file::get_root_key () const
 mobius::core::metadata
 registry_file::get_metadata () const
 {
-  return impl_->get_metadata ();
+    return impl_->get_metadata ();
 }
 
 } // namespace mobius::core::os::win::registry

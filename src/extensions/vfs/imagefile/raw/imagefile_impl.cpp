@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -22,8 +24,8 @@
 // @brief Construct object
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-imagefile_impl::imagefile_impl (const mobius::core::io::file& f)
-  : file_ (f)
+imagefile_impl::imagefile_impl (const mobius::core::io::file &f)
+    : file_ (f)
 {
 }
 
@@ -33,10 +35,10 @@ imagefile_impl::imagefile_impl (const mobius::core::io::file& f)
 // @return Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::pod::data
-imagefile_impl::get_attribute (const std::string& name) const
+imagefile_impl::get_attribute (const std::string &name) const
 {
-  _load_metadata ();
-  return attributes_.get (name);
+    _load_metadata ();
+    return attributes_.get (name);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -45,13 +47,11 @@ imagefile_impl::get_attribute (const std::string& name) const
 // @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-imagefile_impl::set_attribute (
-  const std::string& name,
-  const mobius::core::pod::data& value
-)
+imagefile_impl::set_attribute (const std::string &name,
+                               const mobius::core::pod::data &value)
 {
-  attributes_.set (name, value);
-  metadata_loaded_ = true;
+    attributes_.set (name, value);
+    metadata_loaded_ = true;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -61,8 +61,8 @@ imagefile_impl::set_attribute (
 mobius::core::pod::map
 imagefile_impl::get_attributes () const
 {
-  _load_metadata ();
-  return attributes_;
+    _load_metadata ();
+    return attributes_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -72,7 +72,7 @@ imagefile_impl::get_attributes () const
 mobius::core::io::reader
 imagefile_impl::new_reader () const
 {
-  return file_.new_reader ();
+    return file_.new_reader ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -82,7 +82,7 @@ imagefile_impl::new_reader () const
 mobius::core::io::writer
 imagefile_impl::new_writer () const
 {
-  return file_.new_writer ();
+    return file_.new_writer ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -91,23 +91,22 @@ imagefile_impl::new_writer () const
 void
 imagefile_impl::_load_metadata () const
 {
-  if (metadata_loaded_)
-    return;
+    if (metadata_loaded_)
+        return;
 
-  if (file_ && file_.exists ())
+    if (file_ && file_.exists ())
     {
-      size_ = file_.get_size ();
-      sectors_ = (size_ + sector_size_ - 1) / sector_size_;
+        size_ = file_.get_size ();
+        sectors_ = (size_ + sector_size_ - 1) / sector_size_;
 
-      // fill attributes
-      attributes_.set ("last_metadata_time", file_.get_metadata_time ());
-      attributes_.set ("last_modification_time", file_.get_modification_time ());
-      attributes_.set ("last_access_time", file_.get_access_time ());
-      attributes_.set ("user_name", file_.get_user_name ());
-      attributes_.set ("group_name", file_.get_group_name ());
+        // fill attributes
+        attributes_.set ("last_metadata_time", file_.get_metadata_time ());
+        attributes_.set ("last_modification_time",
+                         file_.get_modification_time ());
+        attributes_.set ("last_access_time", file_.get_access_time ());
+        attributes_.set ("user_name", file_.get_user_name ());
+        attributes_.set ("group_name", file_.get_group_name ());
     }
 
-  metadata_loaded_ = true;
+    metadata_loaded_ = true;
 }
-
-

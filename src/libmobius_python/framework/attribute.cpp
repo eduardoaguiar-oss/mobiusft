@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -20,9 +22,9 @@
 //! \file attribute.cc C++ API <i>mobius.framework.attribute</i> class wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <pymobius.hpp>
 #include "attribute.hpp"
 #include <mobius/core/exception.inc>
+#include <pymobius.hpp>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -33,18 +35,18 @@
 static PyObject *
 tp_getter_id (framework_attribute_o *self)
 {
-  PyObject *ret = nullptr;
+    PyObject *ret = nullptr;
 
-  try
+    try
     {
-      ret = mobius::py::pystring_from_std_string (self->obj->get_id ());
+        ret = mobius::py::pystring_from_std_string (self->obj->get_id ());
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
+        mobius::py::set_runtime_error (e.what ());
     }
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -55,18 +57,18 @@ tp_getter_id (framework_attribute_o *self)
 static PyObject *
 tp_getter_name (framework_attribute_o *self)
 {
-  PyObject *ret = nullptr;
+    PyObject *ret = nullptr;
 
-  try
+    try
     {
-      ret = mobius::py::pystring_from_std_string (self->obj->get_name ());
+        ret = mobius::py::pystring_from_std_string (self->obj->get_name ());
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
+        mobius::py::set_runtime_error (e.what ());
     }
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -78,34 +80,31 @@ tp_getter_name (framework_attribute_o *self)
 static int
 tp_setter_name (framework_attribute_o *self, PyObject *value, void *)
 {
-  // Check value
-  try
+    // Check value
+    try
     {
-      mobius::py::check_setter_value (
-              value,
-              "name",
-              mobius::py::pystring_check
-      );
+        mobius::py::check_setter_value (value, "name",
+                                        mobius::py::pystring_check);
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_invalid_type_error (e.what ());
-      return -1;
+        mobius::py::set_invalid_type_error (e.what ());
+        return -1;
     }
 
-  // Set name attribute
-  try
+    // Set name attribute
+    try
     {
-      self->obj->set_name (mobius::py::pystring_as_std_string (value));
+        self->obj->set_name (mobius::py::pystring_as_std_string (value));
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
-      return -1;
+        mobius::py::set_runtime_error (e.what ());
+        return -1;
     }
 
-  // Return success
-  return 0;
+    // Return success
+    return 0;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -116,18 +115,19 @@ tp_setter_name (framework_attribute_o *self, PyObject *value, void *)
 static PyObject *
 tp_getter_description (framework_attribute_o *self)
 {
-  PyObject *ret = nullptr;
+    PyObject *ret = nullptr;
 
-  try
+    try
     {
-      ret = mobius::py::pystring_from_std_string (self->obj->get_description ());
+        ret = mobius::py::pystring_from_std_string (
+            self->obj->get_description ());
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
+        mobius::py::set_runtime_error (e.what ());
     }
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -139,34 +139,31 @@ tp_getter_description (framework_attribute_o *self)
 static int
 tp_setter_description (framework_attribute_o *self, PyObject *value, void *)
 {
-  // Check value
-  try
+    // Check value
+    try
     {
-      mobius::py::check_setter_value (
-              value,
-              "description",
-              mobius::py::pystring_check
-      );
+        mobius::py::check_setter_value (value, "description",
+                                        mobius::py::pystring_check);
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_invalid_type_error (e.what ());
-      return -1;
+        mobius::py::set_invalid_type_error (e.what ());
+        return -1;
     }
 
-  // Set description attribute
-  try
+    // Set description attribute
+    try
     {
-      self->obj->set_description (mobius::py::pystring_as_std_string (value));
+        self->obj->set_description (mobius::py::pystring_as_std_string (value));
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
-      return -1;
+        mobius::py::set_runtime_error (e.what ());
+        return -1;
     }
 
-  // Return success
-  return 0;
+    // Return success
+    return 0;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -177,18 +174,18 @@ tp_setter_description (framework_attribute_o *self, PyObject *value, void *)
 static PyObject *
 tp_getter_datatype (framework_attribute_o *self)
 {
-  PyObject *ret = nullptr;
+    PyObject *ret = nullptr;
 
-  try
+    try
     {
-      ret = mobius::py::pystring_from_std_string (self->obj->get_datatype ());
+        ret = mobius::py::pystring_from_std_string (self->obj->get_datatype ());
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
+        mobius::py::set_runtime_error (e.what ());
     }
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -200,34 +197,31 @@ tp_getter_datatype (framework_attribute_o *self)
 static int
 tp_setter_datatype (framework_attribute_o *self, PyObject *value, void *)
 {
-  // Check value
-  try
+    // Check value
+    try
     {
-      mobius::py::check_setter_value (
-              value,
-              "datatype",
-              mobius::py::pystring_check
-      );
+        mobius::py::check_setter_value (value, "datatype",
+                                        mobius::py::pystring_check);
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_invalid_type_error (e.what ());
-      return -1;
+        mobius::py::set_invalid_type_error (e.what ());
+        return -1;
     }
 
-  // Set datatype attribute
-  try
+    // Set datatype attribute
+    try
     {
-      self->obj->set_datatype (mobius::py::pystring_as_std_string (value));
+        self->obj->set_datatype (mobius::py::pystring_as_std_string (value));
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
-      return -1;
+        mobius::py::set_runtime_error (e.what ());
+        return -1;
     }
 
-  // Return success
-  return 0;
+    // Return success
+    return 0;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -238,18 +232,19 @@ tp_setter_datatype (framework_attribute_o *self, PyObject *value, void *)
 static PyObject *
 tp_getter_value_mask (framework_attribute_o *self)
 {
-  PyObject *ret = nullptr;
+    PyObject *ret = nullptr;
 
-  try
+    try
     {
-      ret = mobius::py::pystring_from_std_string (self->obj->get_value_mask ());
+        ret =
+            mobius::py::pystring_from_std_string (self->obj->get_value_mask ());
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
+        mobius::py::set_runtime_error (e.what ());
     }
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -261,34 +256,31 @@ tp_getter_value_mask (framework_attribute_o *self)
 static int
 tp_setter_value_mask (framework_attribute_o *self, PyObject *value, void *)
 {
-  // Check value
-  try
+    // Check value
+    try
     {
-      mobius::py::check_setter_value (
-              value,
-              "value_mask",
-              mobius::py::pystring_check
-      );
+        mobius::py::check_setter_value (value, "value_mask",
+                                        mobius::py::pystring_check);
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_invalid_type_error (e.what ());
-      return -1;
+        mobius::py::set_invalid_type_error (e.what ());
+        return -1;
     }
 
-  // Set value_mask attribute
-  try
+    // Set value_mask attribute
+    try
     {
-      self->obj->set_value_mask (mobius::py::pystring_as_std_string (value));
+        self->obj->set_value_mask (mobius::py::pystring_as_std_string (value));
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
-      return -1;
+        mobius::py::set_runtime_error (e.what ());
+        return -1;
     }
 
-  // Return success
-  return 0;
+    // Return success
+    return 0;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -299,18 +291,18 @@ tp_setter_value_mask (framework_attribute_o *self, PyObject *value, void *)
 static PyObject *
 tp_getter_index (framework_attribute_o *self)
 {
-  PyObject *ret = nullptr;
+    PyObject *ret = nullptr;
 
-  try
+    try
     {
-      ret = mobius::py::pylong_from_std_uint32_t (self->obj->get_index ());
+        ret = mobius::py::pylong_from_std_uint32_t (self->obj->get_index ());
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
+        mobius::py::set_runtime_error (e.what ());
     }
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -322,34 +314,31 @@ tp_getter_index (framework_attribute_o *self)
 static int
 tp_setter_index (framework_attribute_o *self, PyObject *value, void *)
 {
-  // Check value
-  try
+    // Check value
+    try
     {
-      mobius::py::check_setter_value (
-              value,
-              "index",
-              mobius::py::pylong_check
-      );
+        mobius::py::check_setter_value (value, "index",
+                                        mobius::py::pylong_check);
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_invalid_type_error (e.what ());
-      return -1;
+        mobius::py::set_invalid_type_error (e.what ());
+        return -1;
     }
 
-  // Set index attribute
-  try
+    // Set index attribute
+    try
     {
-      self->obj->set_index (mobius::py::pylong_as_std_uint32_t (value));
+        self->obj->set_index (mobius::py::pylong_as_std_uint32_t (value));
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
-      return -1;
+        mobius::py::set_runtime_error (e.what ());
+        return -1;
     }
 
-  // Return success
-  return 0;
+    // Return success
+    return 0;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -360,33 +349,39 @@ tp_setter_index (framework_attribute_o *self, PyObject *value, void *)
 static PyObject *
 tp_getter_is_editable (framework_attribute_o *self)
 {
-  PyObject *ret = nullptr;
+    PyObject *ret = nullptr;
 
-  try
+    try
     {
-      ret = mobius::py::pybool_from_bool (self->obj->is_editable ());
+        ret = mobius::py::pybool_from_bool (self->obj->is_editable ());
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
+        mobius::py::set_runtime_error (e.what ());
     }
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyGetSetDef tp_getset[] =
-{
-  {(char *) "id", (getter) tp_getter_id, nullptr, (char *) "attribute ID", nullptr},
-  {(char *) "name", (getter) tp_getter_name, (setter) tp_setter_name, (char *) "name", nullptr},
-  {(char *) "description", (getter) tp_getter_description, (setter) tp_setter_description, (char *) "description", nullptr},
-  {(char *) "datatype", (getter) tp_getter_datatype, (setter) tp_setter_datatype, (char *) "datatype", nullptr},
-  {(char *) "value_mask", (getter) tp_getter_value_mask, (setter) tp_setter_value_mask, (char *) "value_mask", nullptr},
-  {(char *) "index", (getter) tp_getter_index, (setter) tp_setter_index, (char *) "index", nullptr},
-  {(char *) "is_editable", (getter) tp_getter_is_editable, nullptr, (char *) "flag: is editable", nullptr},
-  {nullptr, nullptr, nullptr, nullptr, nullptr}, // sentinel
+static PyGetSetDef tp_getset[] = {
+    {(char *) "id", (getter) tp_getter_id, nullptr, (char *) "attribute ID",
+     nullptr},
+    {(char *) "name", (getter) tp_getter_name, (setter) tp_setter_name,
+     (char *) "name", nullptr},
+    {(char *) "description", (getter) tp_getter_description,
+     (setter) tp_setter_description, (char *) "description", nullptr},
+    {(char *) "datatype", (getter) tp_getter_datatype,
+     (setter) tp_setter_datatype, (char *) "datatype", nullptr},
+    {(char *) "value_mask", (getter) tp_getter_value_mask,
+     (setter) tp_setter_value_mask, (char *) "value_mask", nullptr},
+    {(char *) "index", (getter) tp_getter_index, (setter) tp_setter_index,
+     (char *) "index", nullptr},
+    {(char *) "is_editable", (getter) tp_getter_is_editable, nullptr,
+     (char *) "flag: is editable", nullptr},
+    {nullptr, nullptr, nullptr, nullptr, nullptr}, // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -396,63 +391,62 @@ static PyGetSetDef tp_getset[] =
 static void
 tp_dealloc (framework_attribute_o *self)
 {
-  delete self->obj;
-  Py_TYPE (self)->tp_free ((PyObject*) self);
+    delete self->obj;
+    Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyTypeObject framework_attribute_t =
-{
-  PyVarObject_HEAD_INIT (NULL, 0)
-  "mobius.framework.attribute",            		// tp_name
-  sizeof (framework_attribute_o),          		// tp_basicsize
-  0,                                       		// tp_itemsize
-  (destructor) tp_dealloc,                 		// tp_dealloc
-  0,                                       		// tp_print
-  0,                                       		// tp_getattr
-  0,                                       		// tp_setattr
-  0,                                       		// tp_compare
-  0,                                       		// tp_repr
-  0,                                       		// tp_as_number
-  0,                                       		// tp_as_sequence
-  0,                                       		// tp_as_mapping
-  0,                                       		// tp_hash
-  0,                                       		// tp_call
-  0,                                       		// tp_str
-  0,                                       		// tp_getattro
-  0,                                       		// tp_setattro
-  0,                                       		// tp_as_buffer
-  Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,		// tp_flags
-  "attribute class",                       		// tp_doc
-  0,                                       		// tp_traverse
-  0,                                       		// tp_clear
-  0,                                       		// tp_richcompare
-  0,                                       		// tp_weaklistoffset
-  0,                                       		// tp_iter
-  0,                                       		// tp_iternext
-  0,                                       		// tp_methods
-  0,                                       		// tp_members
-  tp_getset,                               		// tp_getset
-  0,                                       		// tp_base
-  0,                                       		// tp_dict
-  0,                                       		// tp_descr_get
-  0,                                       		// tp_descr_set
-  0,                                       		// tp_dictoffset
-  0,                                       		// tp_init
-  0,                                       		// tp_alloc
-  0,                                       		// tp_new
-  0,                                       		// tp_free
-  0,                                       		// tp_is_gc
-  0,                                       		// tp_bases
-  0,                                       		// tp_mro
-  0,                                       		// tp_cache
-  0,                                       		// tp_subclasses
-  0,                                       		// tp_weaklist
-  0,                                       		// tp_del
-  0,                                       		// tp_version_tag
-  0,                                       		// tp_finalize
+static PyTypeObject framework_attribute_t = {
+    PyVarObject_HEAD_INIT (NULL, 0)           // header
+    "mobius.framework.attribute",             // tp_name
+    sizeof (framework_attribute_o),           // tp_basicsize
+    0,                                        // tp_itemsize
+    (destructor) tp_dealloc,                  // tp_dealloc
+    0,                                        // tp_print
+    0,                                        // tp_getattr
+    0,                                        // tp_setattr
+    0,                                        // tp_compare
+    0,                                        // tp_repr
+    0,                                        // tp_as_number
+    0,                                        // tp_as_sequence
+    0,                                        // tp_as_mapping
+    0,                                        // tp_hash
+    0,                                        // tp_call
+    0,                                        // tp_str
+    0,                                        // tp_getattro
+    0,                                        // tp_setattro
+    0,                                        // tp_as_buffer
+    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
+    "attribute class",                        // tp_doc
+    0,                                        // tp_traverse
+    0,                                        // tp_clear
+    0,                                        // tp_richcompare
+    0,                                        // tp_weaklistoffset
+    0,                                        // tp_iter
+    0,                                        // tp_iternext
+    0,                                        // tp_methods
+    0,                                        // tp_members
+    tp_getset,                                // tp_getset
+    0,                                        // tp_base
+    0,                                        // tp_dict
+    0,                                        // tp_descr_get
+    0,                                        // tp_descr_set
+    0,                                        // tp_dictoffset
+    0,                                        // tp_init
+    0,                                        // tp_alloc
+    0,                                        // tp_new
+    0,                                        // tp_free
+    0,                                        // tp_is_gc
+    0,                                        // tp_bases
+    0,                                        // tp_mro
+    0,                                        // tp_cache
+    0,                                        // tp_subclasses
+    0,                                        // tp_weaklist
+    0,                                        // tp_del
+    0,                                        // tp_version_tag
+    0,                                        // tp_finalize
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -461,10 +455,10 @@ static PyTypeObject framework_attribute_t =
 mobius::py::pytypeobject
 new_framework_attribute_type ()
 {
-  mobius::py::pytypeobject type (&framework_attribute_t);
-  type.create ();
+    mobius::py::pytypeobject type (&framework_attribute_t);
+    type.create ();
 
-  return type;
+    return type;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -475,7 +469,7 @@ new_framework_attribute_type ()
 bool
 pymobius_framework_attribute_check (PyObject *value)
 {
-  return mobius::py::isinstance (value, &framework_attribute_t);
+    return mobius::py::isinstance (value, &framework_attribute_t);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -484,9 +478,11 @@ pymobius_framework_attribute_check (PyObject *value)
 // @return New attribute object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_framework_attribute_to_pyobject (const mobius::framework::attribute& obj)
+pymobius_framework_attribute_to_pyobject (
+    const mobius::framework::attribute &obj)
 {
-  return mobius::py::to_pyobject <framework_attribute_o> (obj, &framework_attribute_t);
+    return mobius::py::to_pyobject<framework_attribute_o> (
+        obj, &framework_attribute_t);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -497,7 +493,6 @@ pymobius_framework_attribute_to_pyobject (const mobius::framework::attribute& ob
 mobius::framework::attribute
 pymobius_framework_attribute_from_pyobject (PyObject *value)
 {
-  return mobius::py::from_pyobject <framework_attribute_o> (value, &framework_attribute_t);
+    return mobius::py::from_pyobject<framework_attribute_o> (
+        value, &framework_attribute_t);
 }
-
-

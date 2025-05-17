@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,10 +17,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/os/win/registry/registry_data_impl_lsa_poleklist.hpp>
 #include <mobius/core/crypt/cipher.hpp>
 #include <mobius/core/crypt/hash.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
+#include <mobius/core/os/win/registry/registry_data_impl_lsa_poleklist.hpp>
 
 namespace mobius::core::os::win::registry
 {
@@ -29,42 +31,43 @@ namespace mobius::core::os::win::registry
 // @return plaintext
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
-decrypt_aes (const mobius::core::bytearray& key, const mobius::core::bytearray& ciphertext)
+decrypt_aes (const mobius::core::bytearray &key,
+             const mobius::core::bytearray &ciphertext)
 {
-  // generate AES key
-  mobius::core::crypt::hash sha256 ("sha2-256");
-  sha256.update (key);
+    // generate AES key
+    mobius::core::crypt::hash sha256 ("sha2-256");
+    sha256.update (key);
 
-  const mobius::core::bytearray iv = ciphertext.slice (28, 59);
+    const mobius::core::bytearray iv = ciphertext.slice (28, 59);
 
-  for (int i = 0; i < 1000; i++)
-    sha256.update (iv);
+    for (int i = 0; i < 1000; i++)
+        sha256.update (iv);
 
-  const auto aes_key = sha256.get_digest ();
+    const auto aes_key = sha256.get_digest ();
 
-  // decrypt data
-  mobius::core::bytearray tmp;
+    // decrypt data
+    mobius::core::bytearray tmp;
 
-  for (std::uint64_t i = 60; i < ciphertext.size (); i += 16)
+    for (std::uint64_t i = 60; i < ciphertext.size (); i += 16)
     {
-      auto c = mobius::core::crypt::new_cipher_cbc ("aes", aes_key);
-      mobius::core::bytearray buffer = ciphertext.slice (i, i + 15);
+        auto c = mobius::core::crypt::new_cipher_cbc ("aes", aes_key);
+        mobius::core::bytearray buffer = ciphertext.slice (i, i + 15);
 
-      if (buffer.size () < 16)
-        buffer.rpad (16);
+        if (buffer.size () < 16)
+            buffer.rpad (16);
 
-      tmp += c.decrypt (buffer);
+        tmp += c.decrypt (buffer);
     }
 
-  // decode plaintext
-  auto decoder = mobius::core::decoder::data_decoder (tmp);
-  auto size = decoder.get_uint64_le ();
-  auto control = decoder.get_uint64_le ();
+    // decode plaintext
+    auto decoder = mobius::core::decoder::data_decoder (tmp);
+    auto size = decoder.get_uint64_le ();
+    auto control = decoder.get_uint64_le ();
 
-  if (control == 0)
-    return decoder.get_bytearray_by_size (size);
+    if (control == 0)
+        return decoder.get_bytearray_by_size (size);
 
-  return mobius::core::bytearray ();
+    return mobius::core::bytearray ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -73,10 +76,10 @@ decrypt_aes (const mobius::core::bytearray& key, const mobius::core::bytearray& 
 // @param encrypted_data value's encrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_data_impl_lsa_poleklist::registry_data_impl_lsa_poleklist (
-  const mobius::core::bytearray& lsa_key,
-  const mobius::core::bytearray& encrypted_data)
-  : lsa_key_ (lsa_key),
-    encrypted_data_ (encrypted_data)
+    const mobius::core::bytearray &lsa_key,
+    const mobius::core::bytearray &encrypted_data)
+    : lsa_key_ (lsa_key),
+      encrypted_data_ (encrypted_data)
 {
 }
 
@@ -86,20 +89,18 @@ registry_data_impl_lsa_poleklist::registry_data_impl_lsa_poleklist (
 void
 registry_data_impl_lsa_poleklist::_load_data () const
 {
-  // return if data is loaded
-  if (data_loaded_)
-    return;
+    // return if data is loaded
+    if (data_loaded_)
+        return;
 
-  // decrypt data
-  if (encrypted_data_.size () >= 60)
+    // decrypt data
+    if (encrypted_data_.size () >= 60)
     {
-      data_ = decrypt_aes (lsa_key_, encrypted_data_);
+        data_ = decrypt_aes (lsa_key_, encrypted_data_);
     }
 
-  // set subkeys loaded
-  data_loaded_ = true;
+    // set subkeys loaded
+    data_loaded_ = true;
 }
 
 } // namespace mobius::core::os::win::registry
-
-

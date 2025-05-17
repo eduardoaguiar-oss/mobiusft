@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,11 +17,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/io/smb/reader_impl.hpp>
-#include <mobius/core/exception_posix.inc>
-#include <stdexcept>
-#include <libsmbclient.h>
 #include <fcntl.h>
+#include <libsmbclient.h>
+#include <mobius/core/exception_posix.inc>
+#include <mobius/core/io/smb/reader_impl.hpp>
+#include <stdexcept>
 
 namespace mobius::core::io::smb
 {
@@ -27,24 +29,24 @@ namespace mobius::core::io::smb
 // @brief Constructor
 // @param url URL to SMB file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-reader_impl::reader_impl (const std::string& url)
+reader_impl::reader_impl (const std::string &url)
 {
-  fd_ = smbc_open (url.c_str (), O_RDONLY, 0);
+    fd_ = smbc_open (url.c_str (), O_RDONLY, 0);
 
-  if (fd_ < 0)
-    throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+    if (fd_ < 0)
+        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
 
-  // evaluate file size
-  struct stat st;
+    // evaluate file size
+    struct stat st;
 
-  if (smbc_fstat (fd_, &st) < 0)
+    if (smbc_fstat (fd_, &st) < 0)
     {
-      smbc_close (fd_);
-      fd_ = -1;
-      throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+        smbc_close (fd_);
+        fd_ = -1;
+        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
     }
 
-  size_ = st.st_size;
+    size_ = st.st_size;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -52,8 +54,8 @@ reader_impl::reader_impl (const std::string& url)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 reader_impl::~reader_impl ()
 {
-  if (fd_ != -1)
-    smbc_close (fd_);
+    if (fd_ != -1)
+        smbc_close (fd_);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -64,19 +66,19 @@ reader_impl::~reader_impl ()
 void
 reader_impl::seek (offset_type offset, whence_type w)
 {
-  int whence = 0;
+    int whence = 0;
 
-  if (w == whence_type::beginning)
-    whence = SEEK_SET;
+    if (w == whence_type::beginning)
+        whence = SEEK_SET;
 
-  else if (w == whence_type::current)
-    whence = SEEK_CUR;
+    else if (w == whence_type::current)
+        whence = SEEK_CUR;
 
-  else if (w == whence_type::end)
-    whence = SEEK_END;
+    else if (w == whence_type::end)
+        whence = SEEK_END;
 
-  if (smbc_lseek (fd_, offset, whence) < 0)
-    throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+    if (smbc_lseek (fd_, offset, whence) < 0)
+        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -86,12 +88,12 @@ reader_impl::seek (offset_type offset, whence_type w)
 reader_impl::offset_type
 reader_impl::tell () const
 {
-  offset_type off = smbc_lseek (fd_, 0, SEEK_CUR);
+    offset_type off = smbc_lseek (fd_, 0, SEEK_CUR);
 
-  if (off < 0)
-    throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+    if (off < 0)
+        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
 
-  return off;
+    return off;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -102,14 +104,14 @@ reader_impl::tell () const
 mobius::core::bytearray
 reader_impl::read (size_type size)
 {
-  mobius::core::bytearray buffer (size);
-  ssize_t count = smbc_read (fd_, buffer.data (), size);
+    mobius::core::bytearray buffer (size);
+    ssize_t count = smbc_read (fd_, buffer.data (), size);
 
-  if (count < 0)
-    throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+    if (count < 0)
+        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
 
-  buffer.resize (count);
-  return buffer;
+    buffer.resize (count);
+    return buffer;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -119,9 +121,7 @@ reader_impl::read (size_type size)
 bool
 reader_impl::eof () const
 {
-  return static_cast <size_type> (tell ()) >= size_;
+    return static_cast<size_type> (tell ()) >= size_;
 }
 
 } // namespace mobius::core::io::smb
-
-

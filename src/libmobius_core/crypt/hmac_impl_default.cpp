@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -24,41 +26,43 @@ namespace mobius::core::crypt
 // @param hash_type Hash type
 // @param key Key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-hmac_impl_default::hmac_impl_default (const std::string& hash_type, const mobius::core::bytearray& key)
-  : h_inner_ (hash_type),
-    h_outer_ (hash_type)
+hmac_impl_default::hmac_impl_default (const std::string &hash_type,
+                                      const mobius::core::bytearray &key)
+    : h_inner_ (hash_type),
+      h_outer_ (hash_type)
 {
-  std::size_t block_size = h_inner_.get_block_size ();
+    std::size_t block_size = h_inner_.get_block_size ();
 
-  bytearray K (block_size);
-  K.fill (0);
+    bytearray K (block_size);
+    K.fill (0);
 
-  // keys longer than H::block_size are first hashed using H (RFC 2104 - section 3)
-  if (key.size () > block_size)
+    // keys longer than H::block_size are first hashed using H (RFC 2104 -
+    // section 3)
+    if (key.size () > block_size)
     {
-      hash h (hash_type);
-      h.update (key);
-      auto digest = h.get_digest ();
-      std::copy (digest.begin (), digest.end (), K.begin ());
+        hash h (hash_type);
+        h.update (key);
+        auto digest = h.get_digest ();
+        std::copy (digest.begin (), digest.end (), K.begin ());
     }
 
-  else
+    else
     {
-      std::copy (key.begin (), key.end (), K.begin ());
+        std::copy (key.begin (), key.end (), K.begin ());
     }
 
-  // initialize inner hash object (RFC 2104 - section 2)
-  bytearray ipad (block_size);
-  ipad.fill (0x36);
-  h_inner_.update (K ^ ipad);
+    // initialize inner hash object (RFC 2104 - section 2)
+    bytearray ipad (block_size);
+    ipad.fill (0x36);
+    h_inner_.update (K ^ ipad);
 
-  // initialize outer hash object (RFC 2104 - section 2)
-  bytearray opad (block_size);
-  opad.fill (0x5c);
-  h_outer_.update (K ^ opad);
+    // initialize outer hash object (RFC 2104 - section 2)
+    bytearray opad (block_size);
+    opad.fill (0x5c);
+    h_outer_.update (K ^ opad);
 
-  h_inner_0_ = h_inner_.clone ();
-  h_outer_0_ = h_outer_.clone ();
+    h_inner_0_ = h_inner_.clone ();
+    h_outer_0_ = h_outer_.clone ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -67,8 +71,8 @@ hmac_impl_default::hmac_impl_default (const std::string& hash_type, const mobius
 void
 hmac_impl_default::reset ()
 {
-  h_inner_ = h_inner_0_.clone ();
-  h_outer_ = h_outer_0_.clone ();
+    h_inner_ = h_inner_0_.clone ();
+    h_outer_ = h_outer_0_.clone ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -78,27 +82,25 @@ hmac_impl_default::reset ()
 mobius::core::bytearray
 hmac_impl_default::get_digest ()
 {
-  h_outer_.update (h_inner_.get_digest ());
-  return h_outer_.get_digest ();
+    h_outer_.update (h_inner_.get_digest ());
+    return h_outer_.get_digest ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Clone object
 // @return Pointer to newly created object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::shared_ptr <hmac_impl_base>
+std::shared_ptr<hmac_impl_base>
 hmac_impl_default::clone () const
 {
-  auto hmac = std::make_shared <hmac_impl_default> ();
+    auto hmac = std::make_shared<hmac_impl_default> ();
 
-  hmac->h_inner_ = h_inner_.clone ();
-  hmac->h_outer_ = h_outer_.clone ();
-  hmac->h_inner_0_ = h_inner_0_.clone ();
-  hmac->h_outer_0_ = h_outer_0_.clone ();
+    hmac->h_inner_ = h_inner_.clone ();
+    hmac->h_outer_ = h_outer_.clone ();
+    hmac->h_inner_0_ = h_inner_0_.clone ();
+    hmac->h_outer_0_ = h_outer_0_.clone ();
 
-  return hmac;
+    return hmac;
 }
 
 } // namespace mobius::core::crypt
-
-

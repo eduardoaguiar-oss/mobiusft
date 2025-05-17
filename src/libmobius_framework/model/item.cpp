@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,17 +17,17 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/mediator.hpp>
+#include <cstddef>
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/exception.inc>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/io/folder.hpp>
+#include <mobius/core/mediator.hpp>
 #include <mobius/framework/category.hpp>
-#include <mobius/framework/model/item.hpp>
 #include <mobius/framework/model/case.hpp>
 #include <mobius/framework/model/event.hpp>
 #include <mobius/framework/model/evidence.hpp>
-#include <mobius/core/io/file.hpp>
-#include <mobius/core/io/folder.hpp>
-#include <cstddef>
+#include <mobius/framework/model/item.hpp>
 #include <stdexcept>
 #include <unordered_map>
 
@@ -48,7 +50,9 @@ namespace
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 constexpr std::uint64_t ATTRIBUTE_FILE_THRESHOLD = 33554432; // 32 MiB
-const mobius::core::bytearray ATTRIBUTE_FILE_ID = {0xde, 0xea, 0xbe, 0xef, 0xc0, 0xc0, 0xa0, 'M', 'O', 'B', 'I', 'U', 'S', 'P', 'O', 'D'};
+const mobius::core::bytearray ATTRIBUTE_FILE_ID = {
+    0xde, 0xea, 0xbe, 0xef, 0xc0, 0xc0, 0xa0, 'M',
+    'O',  'B',  'I',  'U',  'S',  'P',  'O',  'D'};
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Expand value mask, using item attributes
@@ -57,49 +61,51 @@ const mobius::core::bytearray ATTRIBUTE_FILE_ID = {0xde, 0xea, 0xbe, 0xef, 0xc0,
 // @return expanded string value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-expand_value_mask (const std::string& value_mask, const mobius::framework::model::item& item)
+expand_value_mask (const std::string &value_mask,
+                   const mobius::framework::model::item &item)
 {
-  std::size_t len = value_mask.length ();
-  std::size_t pos = 0;
-  std::string out;
+    std::size_t len = value_mask.length ();
+    std::size_t pos = 0;
+    std::string out;
 
-  while (pos < len)
+    while (pos < len)
     {
-      auto start_pos = value_mask.find ("${", pos);
+        auto start_pos = value_mask.find ("${", pos);
 
-      if (start_pos == std::string::npos)
+        if (start_pos == std::string::npos)
         {
-          out += value_mask.substr (pos);
-          pos = len;
+            out += value_mask.substr (pos);
+            pos = len;
         }
 
-      else
+        else
         {
-          out += value_mask.substr (pos, start_pos - pos);
-          pos = start_pos;
+            out += value_mask.substr (pos, start_pos - pos);
+            pos = start_pos;
 
-          auto end_pos = value_mask.find ("}", start_pos + 2);
+            auto end_pos = value_mask.find ("}", start_pos + 2);
 
-          if (end_pos == std::string::npos)
+            if (end_pos == std::string::npos)
             {
-              out += value_mask.substr (pos);
-              pos = len;
+                out += value_mask.substr (pos);
+                pos = len;
             }
 
-          else
+            else
             {
-              std::string var = value_mask.substr (start_pos + 2, end_pos - start_pos - 2);
-              auto value = item.get_attribute (var);
+                std::string var =
+                    value_mask.substr (start_pos + 2, end_pos - start_pos - 2);
+                auto value = item.get_attribute (var);
 
-              if (!value.is_null ())
-                out += item.get_attribute (var).to_string ();
+                if (!value.is_null ())
+                    out += item.get_attribute (var).to_string ();
 
-              pos = end_pos + 1;
+                pos = end_pos + 1;
             }
         }
     }
 
-  return out;
+    return out;
 }
 
 } // namespace
@@ -109,120 +115,122 @@ expand_value_mask (const std::string& value_mask, const mobius::framework::model
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class item::impl
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  impl (const impl&) = delete;
-  impl (impl&&) = delete;
-  explicit impl (const Case&);
-  impl (const Case&, uid_type);
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl (const impl &) = delete;
+    impl (impl &&) = delete;
+    explicit impl (const Case &);
+    impl (const Case &, uid_type);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Operators
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  impl& operator= (const impl&) = delete;
-  impl& operator= (impl&&) = delete;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl &operator= (const impl &) = delete;
+    impl &operator= (impl &&) = delete;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // function prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  bool has_attribute (const std::string&) const;
-  mobius::core::pod::data get_attribute (const std::string&) const;
-  void set_attribute (const std::string&, const mobius::core::pod::data&);
-  void remove_attribute (const std::string&);
-  std::unordered_map <std::string, mobius::core::pod::data> get_attributes () const;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // function prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool has_attribute (const std::string &) const;
+    mobius::core::pod::data get_attribute (const std::string &) const;
+    void set_attribute (const std::string &, const mobius::core::pod::data &);
+    void remove_attribute (const std::string &);
+    std::unordered_map<std::string, mobius::core::pod::data>
+    get_attributes () const;
 
-  bool has_datasource () const;
-  mobius::core::datasource::datasource get_datasource () const;
-  void set_datasource (const mobius::core::datasource::datasource&);
-  void remove_datasource ();
+    bool has_datasource () const;
+    mobius::core::datasource::datasource get_datasource () const;
+    void set_datasource (const mobius::core::datasource::datasource &);
+    void remove_datasource ();
 
-  std::vector <event> get_events () const;
-  void add_event (const std::string&);
+    std::vector<event> get_events () const;
+    void add_event (const std::string &);
 
-  item new_child (const std::string&, int);
-  void remove ();
-  void move (int, const item&);
+    item new_child (const std::string &, int);
+    void remove ();
+    void move (int, const item &);
 
-  std::string get_data_path (const std::string&) const;
-  std::string create_data_path (const std::string&) const;
+    std::string get_data_path (const std::string &) const;
+    std::string create_data_path (const std::string &) const;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get uid
-  // @return uid
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  uid_type
-  get_uid () const
-  {
-    return uid_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get uid
+    // @return uid
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    uid_type
+    get_uid () const
+    {
+        return uid_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get category
-  // @return category
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::string
-  get_category () const
-  {
-    _load_data ();
-    return category_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get category
+    // @return category
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_category () const
+    {
+        _load_data ();
+        return category_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get case
-  // @return case
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  Case
-  get_case () const
-  {
-    return case_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get case
+    // @return case
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    Case
+    get_case () const
+    {
+        return case_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get database
-  // @return database
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::core::database::database
-  get_database () const
-  {
-    return case_.get_database ();
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get database
+    // @return database
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::database::database
+    get_database () const
+    {
+        return case_.get_database ();
+    }
 
-private:
-  // @brief Case object
-  Case case_;
+  private:
+    // @brief Case object
+    Case case_;
 
-  // @brief Unique ID
-  uid_type uid_ = -1;
+    // @brief Unique ID
+    uid_type uid_ = -1;
 
-  // @brief Category
-  mutable std::string category_;
+    // @brief Category
+    mutable std::string category_;
 
-  // @brief Datasource revision
-  mutable std::int64_t datasource_revision_ = 0;
+    // @brief Datasource revision
+    mutable std::int64_t datasource_revision_ = 0;
 
-  // @brief Datasource object
-  mutable mobius::core::datasource::datasource datasource_;
+    // @brief Datasource object
+    mutable mobius::core::datasource::datasource datasource_;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Helper functions
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void _load_data () const;
-  int _reserve_index (int) const;
-  void _save_attribute_file (const std::string&, const mobius::core::bytearray&);
-  mobius::core::bytearray _load_attribute_file (const std::string&) const;
-  void _remove_attribute_file (const std::string&);
-  mobius::core::io::file _get_attribute_file (const std::string&) const;
-  mobius::core::io::file _create_attribute_file (const std::string&) const;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Helper functions
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void _load_data () const;
+    int _reserve_index (int) const;
+    void _save_attribute_file (const std::string &,
+                               const mobius::core::bytearray &);
+    mobius::core::bytearray _load_attribute_file (const std::string &) const;
+    void _remove_attribute_file (const std::string &);
+    mobius::core::io::file _get_attribute_file (const std::string &) const;
+    mobius::core::io::file _create_attribute_file (const std::string &) const;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // @param c case object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-item::impl::impl (const Case& c)
-  : case_ (c)
+item::impl::impl (const Case &c)
+    : case_ (c)
 {
 }
 
@@ -231,9 +239,9 @@ item::impl::impl (const Case& c)
 // @param c case object
 // @param uid Unique ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-item::impl::impl (const Case& c, uid_type uid)
-  : case_ (c),
-    uid_ (uid)
+item::impl::impl (const Case &c, uid_type uid)
+    : case_ (c),
+      uid_ (uid)
 {
 }
 
@@ -243,15 +251,15 @@ item::impl::impl (const Case& c, uid_type uid)
 // @return Fullpath
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-item::impl::get_data_path (const std::string& rpath) const
+item::impl::get_data_path (const std::string &rpath) const
 {
-  if (uid_ == -1)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (uid_ == -1)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  char s_uid[32];
-  sprintf (s_uid, "%04ld", uid_);
+    char s_uid[32];
+    sprintf (s_uid, "%04ld", uid_);
 
-  return case_.get_path ("data/" + std::string (s_uid) + '/' + rpath);
+    return case_.get_path ("data/" + std::string (s_uid) + '/' + rpath);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -260,12 +268,12 @@ item::impl::get_data_path (const std::string& rpath) const
 // @return Fullpath
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-item::impl::create_data_path (const std::string& rpath) const
+item::impl::create_data_path (const std::string &rpath) const
 {
-  char s_uid[32];
-  sprintf (s_uid, "%04ld", get_uid ());
+    char s_uid[32];
+    sprintf (s_uid, "%04ld", get_uid ());
 
-  return case_.create_path ("data/" + std::string (s_uid) + '/' + rpath);
+    return case_.create_path ("data/" + std::string (s_uid) + '/' + rpath);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -274,25 +282,24 @@ item::impl::create_data_path (const std::string& rpath) const
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-item::impl::has_attribute (const std::string& id) const
+item::impl::has_attribute (const std::string &id) const
 {
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Build query
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto db = get_database ();
-  auto stmt = db.new_statement (
-                "SELECT 1 "
-                  "FROM attribute "
-                 "WHERE item_uid = ? "
-                   "AND id = ?");
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Build query
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto db = get_database ();
+    auto stmt = db.new_statement ("SELECT 1 "
+                                  "FROM attribute "
+                                  "WHERE item_uid = ? "
+                                  "AND id = ?");
 
-  stmt.bind (1, uid_);
-  stmt.bind (2, id);
+    stmt.bind (1, uid_);
+    stmt.bind (2, id);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Return result
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  return bool (stmt.fetch_row ());
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Return result
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    return bool (stmt.fetch_row ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -301,37 +308,36 @@ item::impl::has_attribute (const std::string& id) const
 // @return Attribute value or pod::null if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::pod::data
-item::impl::get_attribute (const std::string& id) const
+item::impl::get_attribute (const std::string &id) const
 {
-  mobius::core::pod::data value;
+    mobius::core::pod::data value;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Build query
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto db = get_database ();
-  auto stmt = db.new_statement (
-                "SELECT value "
-                  "FROM attribute "
-                 "WHERE item_uid = ? "
-                   "AND id = ?");
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Build query
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto db = get_database ();
+    auto stmt = db.new_statement ("SELECT value "
+                                  "FROM attribute "
+                                  "WHERE item_uid = ? "
+                                  "AND id = ?");
 
-  stmt.bind (1, uid_);
-  stmt.bind (2, id);
+    stmt.bind (1, uid_);
+    stmt.bind (2, id);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Return result
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  if (stmt.fetch_row ())
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Return result
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (stmt.fetch_row ())
     {
-      auto bytes = stmt.get_column_bytearray (0);
+        auto bytes = stmt.get_column_bytearray (0);
 
-      if (bytes == ATTRIBUTE_FILE_ID)
-        bytes = _load_attribute_file (id);
+        if (bytes == ATTRIBUTE_FILE_ID)
+            bytes = _load_attribute_file (id);
 
-      value = mobius::core::pod::unserialize (bytes);
+        value = mobius::core::pod::unserialize (bytes);
     }
 
-  return value;
+    return value;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -340,60 +346,59 @@ item::impl::get_attribute (const std::string& id) const
 // @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-item::impl::set_attribute (const std::string& id, const mobius::core::pod::data& value)
+item::impl::set_attribute (const std::string &id,
+                           const mobius::core::pod::data &value)
 {
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Remove old attribute file, if any
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto f = _get_attribute_file (id);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Remove old attribute file, if any
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto f = _get_attribute_file (id);
 
-  if (f.exists ())
-    f.remove ();
+    if (f.exists ())
+        f.remove ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Serialize value and check if size is greater than threshold
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::core::bytearray bytes = mobius::core::pod::serialize (value);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Serialize value and check if size is greater than threshold
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::bytearray bytes = mobius::core::pod::serialize (value);
 
-  if (bytes.size () > ATTRIBUTE_FILE_THRESHOLD)
+    if (bytes.size () > ATTRIBUTE_FILE_THRESHOLD)
     {
-      _save_attribute_file (id, bytes);
-      bytes = ATTRIBUTE_FILE_ID;
+        _save_attribute_file (id, bytes);
+        bytes = ATTRIBUTE_FILE_ID;
     }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Add to database
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto db = get_database ();
-  mobius::core::database::statement stmt;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Add to database
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto db = get_database ();
+    mobius::core::database::statement stmt;
 
-  if (has_attribute (id))
+    if (has_attribute (id))
     {
-      stmt = db.new_statement (
-               "UPDATE attribute "
-                  "SET value = ? "
-                "WHERE item_uid = ? "
-                  "AND id = ?");
+        stmt = db.new_statement ("UPDATE attribute "
+                                 "SET value = ? "
+                                 "WHERE item_uid = ? "
+                                 "AND id = ?");
 
-      stmt.bind (1, bytes);
-      stmt.bind (2, uid_);
-      stmt.bind (3, id);
+        stmt.bind (1, bytes);
+        stmt.bind (2, uid_);
+        stmt.bind (3, id);
     }
 
-  else
+    else
     {
-      stmt = db.new_statement (
-               "INSERT INTO attribute "
-                    "VALUES (NULL, ?, ?, ?)");
+        stmt = db.new_statement ("INSERT INTO attribute "
+                                 "VALUES (NULL, ?, ?, ?)");
 
-      stmt.bind (1, uid_);
-      stmt.bind (2, id);
-      stmt.bind (3, bytes);
+        stmt.bind (1, uid_);
+        stmt.bind (2, id);
+        stmt.bind (3, bytes);
     }
 
-  stmt.execute ();
+    stmt.execute ();
 
-  add_event ("attribute '" + id + "' set");
+    add_event ("attribute '" + id + "' set");
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -401,64 +406,62 @@ item::impl::set_attribute (const std::string& id, const mobius::core::pod::data&
 // @param id Attribute ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-item::impl::remove_attribute (const std::string& id)
+item::impl::remove_attribute (const std::string &id)
 {
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Remove from database
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto db = get_database ();
-  auto stmt = db.new_statement (
-                "DELETE FROM attribute "
-                      "WHERE item_uid = ? "
-                        "AND id = ?");
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Remove from database
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto db = get_database ();
+    auto stmt = db.new_statement ("DELETE FROM attribute "
+                                  "WHERE item_uid = ? "
+                                  "AND id = ?");
 
-  stmt.bind (1, get_uid ());
-  stmt.bind (2, id);
-  stmt.execute ();
+    stmt.bind (1, get_uid ());
+    stmt.bind (2, id);
+    stmt.execute ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Remove attribute file, if any
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  _remove_attribute_file (id);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Remove attribute file, if any
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    _remove_attribute_file (id);
 
-  add_event ("attribute '" + id + "' removed");
+    add_event ("attribute '" + id + "' removed");
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Load attributes on demand
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::unordered_map <std::string, mobius::core::pod::data>
+std::unordered_map<std::string, mobius::core::pod::data>
 item::impl::get_attributes () const
 {
-  std::unordered_map <std::string, mobius::core::pod::data> attributes;
+    std::unordered_map<std::string, mobius::core::pod::data> attributes;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Build query
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto db = get_database ();
-  auto stmt = db.new_statement (
-                "SELECT id, value "
-                  "FROM attribute "
-                 "WHERE item_uid = ?");
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Build query
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto db = get_database ();
+    auto stmt = db.new_statement ("SELECT id, value "
+                                  "FROM attribute "
+                                  "WHERE item_uid = ?");
 
-  stmt.bind (1, uid_);
+    stmt.bind (1, uid_);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Fetch rows
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  while (stmt.fetch_row ())
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Fetch rows
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    while (stmt.fetch_row ())
     {
-      auto id = stmt.get_column_string (0);
-      auto bytes = stmt.get_column_bytearray (1);
+        auto id = stmt.get_column_string (0);
+        auto bytes = stmt.get_column_bytearray (1);
 
-      if (bytes == ATTRIBUTE_FILE_ID)
-        bytes = _load_attribute_file (id);
+        if (bytes == ATTRIBUTE_FILE_ID)
+            bytes = _load_attribute_file (id);
 
-      auto value = mobius::core::pod::unserialize (bytes);
-      attributes[id] = value;
+        auto value = mobius::core::pod::unserialize (bytes);
+        attributes[id] = value;
     }
 
-  return attributes;
+    return attributes;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -468,22 +471,21 @@ item::impl::get_attributes () const
 bool
 item::impl::has_datasource () const
 {
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Build query
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto db = get_database ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Build query
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto db = get_database ();
 
-  auto stmt = db.new_statement (
-                "SELECT 1 "
-                  "FROM datasource "
-                 "WHERE item_uid = ?");
+    auto stmt = db.new_statement ("SELECT 1 "
+                                  "FROM datasource "
+                                  "WHERE item_uid = ?");
 
-  stmt.bind (1, uid_);
+    stmt.bind (1, uid_);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Return result
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  return stmt.fetch_row ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Return result
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    return stmt.fetch_row ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -493,34 +495,33 @@ item::impl::has_datasource () const
 mobius::core::datasource::datasource
 item::impl::get_datasource () const
 {
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Build query
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto db = get_database ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Build query
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto db = get_database ();
 
-  auto stmt = db.new_statement (
-                "SELECT revision, state "
-                  "FROM datasource "
-                 "WHERE item_uid = ?");
+    auto stmt = db.new_statement ("SELECT revision, state "
+                                  "FROM datasource "
+                                  "WHERE item_uid = ?");
 
-  stmt.bind (1, uid_);
+    stmt.bind (1, uid_);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Return result
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  if (stmt.fetch_row ())
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Return result
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (stmt.fetch_row ())
     {
-      auto revision = stmt.get_column_int64 (0);
+        auto revision = stmt.get_column_int64 (0);
 
-      if (revision != datasource_revision_)
+        if (revision != datasource_revision_)
         {
-          mobius::core::pod::map state (stmt.get_column_pod (1));
-          datasource_revision_ = revision;
-          datasource_ = mobius::core::datasource::datasource (state);
+            mobius::core::pod::map state (stmt.get_column_pod (1));
+            datasource_revision_ = revision;
+            datasource_ = mobius::core::datasource::datasource (state);
         }
     }
 
-  return datasource_;
+    return datasource_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -528,42 +529,41 @@ item::impl::get_datasource () const
 // @param datasource Datasource object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-item::impl::set_datasource (const mobius::core::datasource::datasource& datasource)
+item::impl::set_datasource (
+    const mobius::core::datasource::datasource &datasource)
 {
-  auto db = get_database ();
-  auto state = datasource.get_state ();
+    auto db = get_database ();
+    auto state = datasource.get_state ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Try to update VFS
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto stmt = db.new_statement (
-               "UPDATE datasource "
-                  "SET state = ?, "
-                      "revision = revision + 1 "
-                "WHERE item_uid = ?");
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Try to update VFS
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto stmt = db.new_statement ("UPDATE datasource "
+                                  "SET state = ?, "
+                                  "revision = revision + 1 "
+                                  "WHERE item_uid = ?");
 
-  stmt.bind (1, state);
-  stmt.bind (2, uid_);
-  stmt.execute ();
+    stmt.bind (1, state);
+    stmt.bind (2, uid_);
+    stmt.execute ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // If there is no row affected by UPDATE, INSERT data
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  if (!db.get_changes ())
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // If there is no row affected by UPDATE, INSERT data
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (!db.get_changes ())
     {
-      stmt = db.new_statement (
-               "INSERT INTO datasource "
-                    "VALUES (?, ?, 1)");
+        stmt = db.new_statement ("INSERT INTO datasource "
+                                 "VALUES (?, ?, 1)");
 
-      stmt.bind (1, uid_);
-      stmt.bind (2, state);
-      stmt.execute ();
+        stmt.bind (1, uid_);
+        stmt.bind (2, state);
+        stmt.execute ();
     }
 
-  datasource_ = datasource;
-  datasource_revision_ = 1;
+    datasource_ = datasource;
+    datasource_revision_ = 1;
 
-  add_event ("datasource set");
+    add_event ("datasource set");
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -572,19 +572,18 @@ item::impl::set_datasource (const mobius::core::datasource::datasource& datasour
 void
 item::impl::remove_datasource ()
 {
-  auto db = get_database ();
+    auto db = get_database ();
 
-  auto stmt = db.new_statement (
-                "DELETE FROM datasource "
-                      "WHERE item_uid = ?");
+    auto stmt = db.new_statement ("DELETE FROM datasource "
+                                  "WHERE item_uid = ?");
 
-  stmt.bind (1, get_uid ());
-  stmt.execute ();
+    stmt.bind (1, get_uid ());
+    stmt.execute ();
 
-  datasource_ = mobius::core::datasource::datasource ();
-  datasource_revision_ = 0;
+    datasource_ = mobius::core::datasource::datasource ();
+    datasource_revision_ = 0;
 
-  add_event ("datasource removed");
+    add_event ("datasource removed");
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -594,39 +593,38 @@ item::impl::remove_datasource ()
 // @return new item
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 item
-item::impl::new_child (const std::string& category, int idx)
+item::impl::new_child (const std::string &category, int idx)
 {
-  if (uid_ == -1)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (uid_ == -1)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  auto db = case_.get_database ();
+    auto db = case_.get_database ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // get item index
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  idx = _reserve_index (idx);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // get item index
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    idx = _reserve_index (idx);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // create item
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto stmt = db.new_statement (
-                "INSERT INTO item "
-                     "VALUES (NULL, ?, ?, ?, DATETIME ('NOW'))");
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // create item
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto stmt = db.new_statement ("INSERT INTO item "
+                                  "VALUES (NULL, ?, ?, ?, DATETIME ('NOW'))");
 
-  stmt.bind (1, uid_);
-  stmt.bind (2, idx);
-  stmt.bind (3, category);
-  stmt.execute ();
+    stmt.bind (1, uid_);
+    stmt.bind (2, idx);
+    stmt.bind (3, category);
+    stmt.execute ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // return item
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto uid = db.get_last_insert_row_id ();
-  auto i = item (case_, uid);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // return item
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto uid = db.get_last_insert_row_id ();
+    auto i = item (case_, uid);
 
-  i.add_event ("item created");
+    i.add_event ("item created");
 
-  return i;
+    return i;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -635,66 +633,64 @@ item::impl::new_child (const std::string& category, int idx)
 void
 item::impl::remove ()
 {
-  if (uid_ == -1)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (uid_ == -1)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  if (uid_ == 1)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot remove root item"));
+    if (uid_ == 1)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("cannot remove root item"));
 
-  auto db = case_.get_database ();
+    auto db = case_.get_database ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // get item index
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto stmt = db.new_statement (
-                "SELECT idx, parent_uid "
-                  "FROM item "
-                 "WHERE uid = ?");
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // get item index
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto stmt = db.new_statement ("SELECT idx, parent_uid "
+                                  "FROM item "
+                                  "WHERE uid = ?");
 
-  stmt.bind (1, uid_);
+    stmt.bind (1, uid_);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // if item exists, delete it
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  if (stmt.fetch_row ())
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // if item exists, delete it
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (stmt.fetch_row ())
     {
-      auto idx = stmt.get_column_int (0);
-      auto parent_uid = stmt.get_column_int64 (1);
+        auto idx = stmt.get_column_int (0);
+        auto parent_uid = stmt.get_column_int64 (1);
 
-      // delete item
-      auto stmt = db.new_statement (
-                    "DELETE FROM item "
-                          "WHERE uid = ?");
+        // delete item
+        auto stmt = db.new_statement ("DELETE FROM item "
+                                      "WHERE uid = ?");
 
-      stmt.bind (1, uid_);
-      stmt.execute ();
+        stmt.bind (1, uid_);
+        stmt.execute ();
 
-      // update idx for remaining items
-      stmt = db.new_statement (
-               "UPDATE item "
-                  "SET idx = idx - 1 "
-                "WHERE parent_uid = ? "
-                  "AND idx > ?");
+        // update idx for remaining items
+        stmt = db.new_statement ("UPDATE item "
+                                 "SET idx = idx - 1 "
+                                 "WHERE parent_uid = ? "
+                                 "AND idx > ?");
 
-      stmt.bind (1, parent_uid);
-      stmt.bind (2, idx);
-      stmt.execute ();
+        stmt.bind (1, parent_uid);
+        stmt.bind (2, idx);
+        stmt.execute ();
     }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // remove data folder
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto path = get_data_path ("");
-  auto folder = mobius::core::io::new_folder_by_path (path);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // remove data folder
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto path = get_data_path ("");
+    auto folder = mobius::core::io::new_folder_by_path (path);
 
-  if (folder.exists ())
-    folder.remove ();
+    if (folder.exists ())
+        folder.remove ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // reset attributes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  uid_ = -1;
-  category_.clear ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // reset attributes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    uid_ = -1;
+    category_.clear ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -703,66 +699,65 @@ item::impl::remove ()
 // @param parent parent item
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-item::impl::move (int idx, const item& parent)
+item::impl::move (int idx, const item &parent)
 {
-  if (uid_ == -1)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (uid_ == -1)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  if (uid_ == 1)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot move root item"));
+    if (uid_ == 1)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("cannot move root item"));
 
-  if (!parent)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("new parent cannot be null"));
+    if (!parent)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("new parent cannot be null"));
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // get current idx and parent
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto db = case_.get_database ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // get current idx and parent
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto db = case_.get_database ();
 
-  auto stmt = db.new_statement (
-                "SELECT idx, parent_uid "
-                "FROM item "
-                "WHERE uid = ?");
+    auto stmt = db.new_statement ("SELECT idx, parent_uid "
+                                  "FROM item "
+                                  "WHERE uid = ?");
 
-  stmt.bind (1, uid_);
+    stmt.bind (1, uid_);
 
-  if (!stmt.fetch_row ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Item not found"));
+    if (!stmt.fetch_row ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Item not found"));
 
-  auto old_idx = stmt.get_column_int (0);
-  auto old_parent_uid = stmt.get_column_int64 (1);
+    auto old_idx = stmt.get_column_int (0);
+    auto old_parent_uid = stmt.get_column_int64 (1);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // open slot into new parent for item
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  idx = parent.impl_->_reserve_index (idx);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // open slot into new parent for item
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    idx = parent.impl_->_reserve_index (idx);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // set item's idx and parent
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  stmt = db.new_statement (
-           "UPDATE item "
-              "SET parent_uid = ?, "
-                  "idx = ? "
-            "WHERE uid = ?");
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // set item's idx and parent
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    stmt = db.new_statement ("UPDATE item "
+                             "SET parent_uid = ?, "
+                             "idx = ? "
+                             "WHERE uid = ?");
 
-  stmt.bind (1, parent.get_uid ());
-  stmt.bind (2, idx);
-  stmt.bind (3, uid_);
-  stmt.execute ();
+    stmt.bind (1, parent.get_uid ());
+    stmt.bind (2, idx);
+    stmt.bind (3, uid_);
+    stmt.execute ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // close slot on old parent
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  stmt = db.new_statement (
-           "UPDATE item "
-              "SET idx = idx - 1 "
-            "WHERE parent_uid = ? "
-              "AND idx > ?");
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // close slot on old parent
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    stmt = db.new_statement ("UPDATE item "
+                             "SET idx = idx - 1 "
+                             "WHERE parent_uid = ? "
+                             "AND idx > ?");
 
-  stmt.bind (1, old_parent_uid);
-  stmt.bind (2, old_idx);
-  stmt.execute ();
+    stmt.bind (1, old_parent_uid);
+    stmt.bind (2, old_idx);
+    stmt.execute ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -770,47 +765,46 @@ item::impl::move (int idx, const item& parent)
 // @param text Event text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-item::impl::add_event (const std::string& text)
+item::impl::add_event (const std::string &text)
 {
-  auto db = get_database ();
+    auto db = get_database ();
 
-  mobius::core::database::statement stmt = db.new_statement (
-               "INSERT INTO event "
-                    "VALUES (NULL, ?, ?, ?)");
+    mobius::core::database::statement stmt =
+        db.new_statement ("INSERT INTO event "
+                          "VALUES (NULL, ?, ?, ?)");
 
-  stmt.bind (1, uid_);
-  stmt.bind (2, mobius::core::datetime::now ());
-  stmt.bind (3, text);
+    stmt.bind (1, uid_);
+    stmt.bind (2, mobius::core::datetime::now ());
+    stmt.bind (3, text);
 
-  stmt.execute ();
+    stmt.execute ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get events
 // @return Events
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <event>
+std::vector<event>
 item::impl::get_events () const
 {
-  std::vector <event> events;
+    std::vector<event> events;
 
-  auto db = get_database ();
+    auto db = get_database ();
 
-  auto stmt = db.new_statement (
-                "SELECT timestamp, text "
-                  "FROM event "
-                 "WHERE item_uid = ?");
+    auto stmt = db.new_statement ("SELECT timestamp, text "
+                                  "FROM event "
+                                  "WHERE item_uid = ?");
 
-  stmt.bind (1, uid_);
+    stmt.bind (1, uid_);
 
-  while (stmt.fetch_row ())
+    while (stmt.fetch_row ())
     {
-      const auto timestamp = stmt.get_column_datetime (0);
-      const auto text = stmt.get_column_string (1);
-      events.emplace_back (timestamp, text);
+        const auto timestamp = stmt.get_column_datetime (0);
+        const auto text = stmt.get_column_string (1);
+        events.emplace_back (timestamp, text);
     }
 
-  return events;
+    return events;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -819,17 +813,16 @@ item::impl::get_events () const
 void
 item::impl::_load_data () const
 {
-  auto db = case_.get_database ();
+    auto db = case_.get_database ();
 
-  auto stmt = db.new_statement (
-                "SELECT category "
-                  "FROM item "
-                 "WHERE uid = ?");
+    auto stmt = db.new_statement ("SELECT category "
+                                  "FROM item "
+                                  "WHERE uid = ?");
 
-  stmt.bind (1, uid_);
+    stmt.bind (1, uid_);
 
-  if (stmt.fetch_row ())
-    category_ = stmt.get_column_string (0);
+    if (stmt.fetch_row ())
+        category_ = stmt.get_column_string (0);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -840,49 +833,47 @@ item::impl::_load_data () const
 int
 item::impl::_reserve_index (int idx) const
 {
-  if (uid_ == -1)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (uid_ == -1)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Get last idx
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto db = case_.get_database ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Get last idx
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto db = case_.get_database ();
 
-  auto stmt = db.new_statement (
-                "SELECT MAX (idx) "
-                  "FROM item "
-                 "WHERE parent_uid = ?");
+    auto stmt = db.new_statement ("SELECT MAX (idx) "
+                                  "FROM item "
+                                  "WHERE parent_uid = ?");
 
-  stmt.bind (1, uid_);
+    stmt.bind (1, uid_);
 
-  int max_idx = 0;
+    int max_idx = 0;
 
-  if (stmt.fetch_row ())
-    max_idx = stmt.get_column_int (0);
+    if (stmt.fetch_row ())
+        max_idx = stmt.get_column_int (0);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Reserve slot, if necessary
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  if (idx == -1)
-    idx = max_idx + 1;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Reserve slot, if necessary
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (idx == -1)
+        idx = max_idx + 1;
 
-  else if (idx < 1 || idx > max_idx + 1)
-    throw std::out_of_range (MOBIUS_EXCEPTION_MSG ("Index out of range"));
+    else if (idx < 1 || idx > max_idx + 1)
+        throw std::out_of_range (MOBIUS_EXCEPTION_MSG ("Index out of range"));
 
-  else
+    else
     {
-      auto stmt = db.new_statement (
-                    "UPDATE item "
-                       "SET idx = idx + 1 "
-                     "WHERE parent_uid = ? "
-                       "AND idx >= ?");
+        auto stmt = db.new_statement ("UPDATE item "
+                                      "SET idx = idx + 1 "
+                                      "WHERE parent_uid = ? "
+                                      "AND idx >= ?");
 
-      stmt.bind (1, uid_);
-      stmt.bind (2, idx);
-      stmt.execute ();
+        stmt.bind (1, uid_);
+        stmt.bind (2, idx);
+        stmt.execute ();
     }
 
-  return idx;
+    return idx;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -891,10 +882,10 @@ item::impl::_reserve_index (int idx) const
 // @return File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::io::file
-item::impl::_get_attribute_file (const std::string& id) const
+item::impl::_get_attribute_file (const std::string &id) const
 {
-  auto path = get_data_path ("attrs/" + id + ".pod");
-  return mobius::core::io::new_file_by_path (path);
+    auto path = get_data_path ("attrs/" + id + ".pod");
+    return mobius::core::io::new_file_by_path (path);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -903,10 +894,10 @@ item::impl::_get_attribute_file (const std::string& id) const
 // @return File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::io::file
-item::impl::_create_attribute_file (const std::string& id) const
+item::impl::_create_attribute_file (const std::string &id) const
 {
-  auto path = create_data_path ("attrs/" + id + ".pod");
-  return mobius::core::io::new_file_by_path (path);
+    auto path = create_data_path ("attrs/" + id + ".pod");
+    return mobius::core::io::new_file_by_path (path);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -915,13 +906,12 @@ item::impl::_create_attribute_file (const std::string& id) const
 // @param bytes Attribute data serialized
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-item::impl::_save_attribute_file (
-  const std::string& id,
-  const mobius::core::bytearray& bytes)
+item::impl::_save_attribute_file (const std::string &id,
+                                  const mobius::core::bytearray &bytes)
 {
-  auto f = _create_attribute_file (id);
-  auto writer = f.new_writer ();
-  writer.write (bytes);
+    auto f = _create_attribute_file (id);
+    auto writer = f.new_writer ();
+    writer.write (bytes);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -930,11 +920,11 @@ item::impl::_save_attribute_file (
 // @return Attribute data serialized
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
-item::impl::_load_attribute_file (const std::string& id) const
+item::impl::_load_attribute_file (const std::string &id) const
 {
-  auto f = _get_attribute_file (id);
-  auto reader = f.new_reader ();
-  return reader.read (reader.get_size ());
+    auto f = _get_attribute_file (id);
+    auto reader = f.new_reader ();
+    return reader.read (reader.get_size ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -942,12 +932,12 @@ item::impl::_load_attribute_file (const std::string& id) const
 // @param id Attribute ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-item::impl::_remove_attribute_file (const std::string& id)
+item::impl::_remove_attribute_file (const std::string &id)
 {
-  auto f = _get_attribute_file (id);
+    auto f = _get_attribute_file (id);
 
-  if (f.exists ())
-    f.remove ();
+    if (f.exists ())
+        f.remove ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -955,8 +945,8 @@ item::impl::_remove_attribute_file (const std::string& id)
 // @param c case object
 // @param uid Unique ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-item::item (const Case& c, uid_type uid)
-  : impl_ (std::make_shared <impl> (c, uid))
+item::item (const Case &c, uid_type uid)
+    : impl_ (std::make_shared<impl> (c, uid))
 {
 }
 
@@ -967,10 +957,10 @@ item::item (const Case& c, uid_type uid)
 mobius::core::database::database
 item::get_database () const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  return impl_->get_database ();
+    return impl_->get_database ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -980,10 +970,10 @@ item::get_database () const
 item::uid_type
 item::get_uid () const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  return impl_->get_uid ();
+    return impl_->get_uid ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -993,10 +983,10 @@ item::get_uid () const
 std::string
 item::get_category () const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  return impl_->get_category ();
+    return impl_->get_category ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1006,10 +996,10 @@ item::get_category () const
 Case
 item::get_case () const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  return impl_->get_case ();
+    return impl_->get_case ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1018,12 +1008,12 @@ item::get_case () const
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-item::has_attribute (const std::string& id) const
+item::has_attribute (const std::string &id) const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  return impl_->has_attribute (id);
+    return impl_->has_attribute (id);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1032,12 +1022,12 @@ item::has_attribute (const std::string& id) const
 // @return attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::pod::data
-item::get_attribute (const std::string& id) const
+item::get_attribute (const std::string &id) const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  return impl_->get_attribute (id);
+    return impl_->get_attribute (id);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1046,17 +1036,18 @@ item::get_attribute (const std::string& id) const
 // @param value attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-item::set_attribute (const std::string& id, const mobius::core::pod::data& value)
+item::set_attribute (const std::string &id,
+                     const mobius::core::pod::data &value)
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  auto old_value = impl_->get_attribute (id);
+    auto old_value = impl_->get_attribute (id);
 
-  if (value != old_value)
+    if (value != old_value)
     {
-      impl_->set_attribute (id, value);
-      mobius::core::emit ("attribute-modified", *this, id, old_value, value);
+        impl_->set_attribute (id, value);
+        mobius::core::emit ("attribute-modified", *this, id, old_value, value);
     }
 }
 
@@ -1065,28 +1056,28 @@ item::set_attribute (const std::string& id, const mobius::core::pod::data& value
 // @param id attribute ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-item::remove_attribute (const std::string& id)
+item::remove_attribute (const std::string &id)
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  auto old_value = impl_->get_attribute (id);
-  impl_->remove_attribute (id);
+    auto old_value = impl_->get_attribute (id);
+    impl_->remove_attribute (id);
 
-  mobius::core::emit ("attribute-removed", *this, id, old_value);
+    mobius::core::emit ("attribute-removed", *this, id, old_value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get attributes
 // @return Map containing attributes' IDs and values
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::unordered_map <std::string, mobius::core::pod::data>
+std::unordered_map<std::string, mobius::core::pod::data>
 item::get_attributes () const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  return impl_->get_attributes ();
+    return impl_->get_attributes ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1096,10 +1087,10 @@ item::get_attributes () const
 bool
 item::has_datasource () const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  return impl_->has_datasource ();
+    return impl_->has_datasource ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1109,10 +1100,10 @@ item::has_datasource () const
 mobius::core::datasource::datasource
 item::get_datasource () const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  return impl_->get_datasource ();
+    return impl_->get_datasource ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1120,16 +1111,16 @@ item::get_datasource () const
 // @param datasource Datasource object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-item::set_datasource (const mobius::core::datasource::datasource& datasource)
+item::set_datasource (const mobius::core::datasource::datasource &datasource)
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  impl_->set_datasource (datasource);
+    impl_->set_datasource (datasource);
 
-  remove_ants ();
+    remove_ants ();
 
-  mobius::core::emit ("datasource-modified", *this, datasource);
+    mobius::core::emit ("datasource-modified", *this, datasource);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1138,14 +1129,14 @@ item::set_datasource (const mobius::core::datasource::datasource& datasource)
 void
 item::remove_datasource ()
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  impl_->remove_datasource ();
+    impl_->remove_datasource ();
 
-  remove_ants ();
+    remove_ants ();
 
-  mobius::core::emit ("datasource-removed", *this);
+    mobius::core::emit ("datasource-removed", *this);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1155,68 +1146,66 @@ item::remove_datasource ()
 int
 item::get_child_count () const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // run query
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto db = impl_->get_database ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // run query
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto db = impl_->get_database ();
 
-  auto stmt = db.new_statement (
-                "SELECT count (*) "
-                  "FROM item "
-                 "WHERE parent_uid = ?");
+    auto stmt = db.new_statement ("SELECT count (*) "
+                                  "FROM item "
+                                  "WHERE parent_uid = ?");
 
-  stmt.bind (1, impl_->get_uid ());
+    stmt.bind (1, impl_->get_uid ());
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // get result
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  int count = 0;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // get result
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    int count = 0;
 
-  if (stmt.fetch_row ())
-    count = stmt.get_column_int (0);
+    if (stmt.fetch_row ())
+        count = stmt.get_column_int (0);
 
-  return count;
+    return count;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get children items
 // @return children
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <item>
+std::vector<item>
 item::get_children () const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // run query
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto db = impl_->get_database ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // run query
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto db = impl_->get_database ();
 
-  auto stmt = db.new_statement (
-                "SELECT uid "
-                  "FROM item "
-                 "WHERE parent_uid = ? "
-              "ORDER BY idx");
+    auto stmt = db.new_statement ("SELECT uid "
+                                  "FROM item "
+                                  "WHERE parent_uid = ? "
+                                  "ORDER BY idx");
 
-  stmt.bind (1, impl_->get_uid ());
+    stmt.bind (1, impl_->get_uid ());
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // fill vector
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto c = impl_->get_case ();
-  std::vector <item> items;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // fill vector
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto c = impl_->get_case ();
+    std::vector<item> items;
 
-  while (stmt.fetch_row ())
+    while (stmt.fetch_row ())
     {
-      auto uid = stmt.get_column_int64 (0);
-      items.emplace_back (c, uid);
+        auto uid = stmt.get_column_int64 (0);
+        items.emplace_back (c, uid);
     }
 
-  return items;
+    return items;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1226,36 +1215,35 @@ item::get_children () const
 item
 item::get_parent () const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // get parent_uid
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto db = impl_->get_database ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // get parent_uid
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto db = impl_->get_database ();
 
-  auto stmt = db.new_statement (
-                "SELECT parent_uid "
-                  "FROM item "
-                 "WHERE uid = ?");
+    auto stmt = db.new_statement ("SELECT parent_uid "
+                                  "FROM item "
+                                  "WHERE uid = ?");
 
-  stmt.bind (1, impl_->get_uid ());
+    stmt.bind (1, impl_->get_uid ());
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // if item exists, get parent
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  item parent;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // if item exists, get parent
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    item parent;
 
-  if (stmt.fetch_row ())
+    if (stmt.fetch_row ())
     {
-      if (!stmt.is_column_null (0))
+        if (!stmt.is_column_null (0))
         {
-          auto c = impl_->get_case ();
-          parent = c.get_item_by_uid (stmt.get_column_int64 (0));
+            auto c = impl_->get_case ();
+            parent = c.get_item_by_uid (stmt.get_column_int64 (0));
         }
     }
 
-  return parent;
+    return parent;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1265,12 +1253,12 @@ item::get_parent () const
 // @return new item
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 item
-item::new_child (const std::string& category, int idx)
+item::new_child (const std::string &category, int idx)
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  return impl_->new_child (category, idx);
+    return impl_->new_child (category, idx);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1279,10 +1267,10 @@ item::new_child (const std::string& category, int idx)
 void
 item::remove ()
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  impl_->remove ();
+    impl_->remove ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1291,12 +1279,12 @@ item::remove ()
 // @param parent parent item
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-item::move (int idx, const item& parent)
+item::move (int idx, const item &parent)
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  impl_->move (idx, parent);
+    impl_->move (idx, parent);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1305,20 +1293,20 @@ item::move (int idx, const item& parent)
 void
 item::expand_masks ()
 {
-  auto category = mobius::framework::get_category (get_category ());
+    auto category = mobius::framework::get_category (get_category ());
 
-  if (!category)
-    return;
+    if (!category)
+        return;
 
-  for (const auto& attr : category.get_attributes ())
+    for (const auto &attr : category.get_attributes ())
     {
-      const std::string value_mask = attr.get_value_mask ();
+        const std::string value_mask = attr.get_value_mask ();
 
-      if (!value_mask.empty ())
+        if (!value_mask.empty ())
         {
-          auto old_value = get_attribute (attr.get_id ());
-          std::string value = expand_value_mask (value_mask, *this);
-          set_attribute (attr.get_id (), value);
+            auto old_value = get_attribute (attr.get_id ());
+            std::string value = expand_value_mask (value_mask, *this);
+            set_attribute (attr.get_id (), value);
         }
     }
 }
@@ -1329,12 +1317,12 @@ item::expand_masks ()
 // @return Fullpath
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-item::get_data_path (const std::string& rpath) const
+item::get_data_path (const std::string &rpath) const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  return impl_->get_data_path (rpath);
+    return impl_->get_data_path (rpath);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1343,12 +1331,12 @@ item::get_data_path (const std::string& rpath) const
 // @return fullpath
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-item::create_data_path (const std::string& rpath) const
+item::create_data_path (const std::string &rpath) const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  return impl_->create_data_path (rpath);
+    return impl_->create_data_path (rpath);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1357,23 +1345,22 @@ item::create_data_path (const std::string& rpath) const
 // @return Evidence
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 evidence
-item::new_evidence (const std::string& type)
+item::new_evidence (const std::string &type)
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  auto db = get_database ();
+    auto db = get_database ();
 
-  auto stmt = db.new_statement (
-                "INSERT INTO evidence "
-                     "VALUES (NULL, ?, ?)");
+    auto stmt = db.new_statement ("INSERT INTO evidence "
+                                  "VALUES (NULL, ?, ?)");
 
-  stmt.bind (1, get_uid ());
-  stmt.bind (2, type);
-  stmt.execute ();
+    stmt.bind (1, get_uid ());
+    stmt.bind (2, type);
+    stmt.execute ();
 
-  auto uid = db.get_last_insert_row_id ();
-  return evidence (*this, uid, type);
+    auto uid = db.get_last_insert_row_id ();
+    return evidence (*this, uid, type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1381,16 +1368,16 @@ item::new_evidence (const std::string& type)
 // @param e Evidence object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 evidence
-item::add_evidence (const evidence& e)
+item::add_evidence (const evidence &e)
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  auto evidence = new_evidence (e.get_type ());
-  evidence.set_attributes (e.get_attributes ());
-  evidence.set_tags (e.get_tags ());
+    auto evidence = new_evidence (e.get_type ());
+    evidence.set_attributes (e.get_attributes ());
+    evidence.set_tags (e.get_tags ());
 
-  return evidence;
+    return evidence;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1398,32 +1385,31 @@ item::add_evidence (const evidence& e)
 // @param type Evidence type
 // @return Vector of evidences of that type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <evidence>
-item::get_evidences (const std::string& type) const
+std::vector<evidence>
+item::get_evidences (const std::string &type) const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  auto db = get_database ();
+    auto db = get_database ();
 
-  auto stmt = db.new_statement (
-                  "SELECT uid "
-                    "FROM evidence "
-                   "WHERE item_uid = ? "
-                     "AND type = ?");
+    auto stmt = db.new_statement ("SELECT uid "
+                                  "FROM evidence "
+                                  "WHERE item_uid = ? "
+                                  "AND type = ?");
 
-  stmt.bind (1, get_uid ());
-  stmt.bind (2, type);
+    stmt.bind (1, get_uid ());
+    stmt.bind (2, type);
 
-  std::vector <evidence> evidences;
+    std::vector<evidence> evidences;
 
-  while (stmt.fetch_row ())
+    while (stmt.fetch_row ())
     {
-      auto uid = stmt.get_column_int64 (0);
-      evidences.emplace_back (*this, uid, type);
+        auto uid = stmt.get_column_int64 (0);
+        evidences.emplace_back (*this, uid, type);
     }
 
-  return evidences;
+    return evidences;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1431,21 +1417,20 @@ item::get_evidences (const std::string& type) const
 // @param type Evidence type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-item::remove_evidences (const std::string& type)
+item::remove_evidences (const std::string &type)
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  auto db = get_database ();
+    auto db = get_database ();
 
-  auto stmt = db.new_statement (
-                "DELETE FROM evidence "
-                      "WHERE item_uid = ? "
-                        "AND type = ?");
+    auto stmt = db.new_statement ("DELETE FROM evidence "
+                                  "WHERE item_uid = ? "
+                                  "AND type = ?");
 
-  stmt.bind (1, get_uid ());
-  stmt.bind (2, type);
-  stmt.execute ();
+    stmt.bind (1, get_uid ());
+    stmt.bind (2, type);
+    stmt.execute ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1454,17 +1439,16 @@ item::remove_evidences (const std::string& type)
 void
 item::remove_evidences ()
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  auto db = get_database ();
+    auto db = get_database ();
 
-  auto stmt = db.new_statement (
-                "DELETE FROM evidence "
-                      "WHERE item_uid = ?");
+    auto stmt = db.new_statement ("DELETE FROM evidence "
+                                  "WHERE item_uid = ?");
 
-  stmt.bind (1, get_uid ());
-  stmt.execute ();
+    stmt.bind (1, get_uid ());
+    stmt.execute ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1472,61 +1456,59 @@ item::remove_evidences ()
 // @param type Evidence type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::int64_t
-item::count_evidences (const std::string& type) const
+item::count_evidences (const std::string &type) const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  auto db = get_database ();
+    auto db = get_database ();
 
-  auto stmt = db.new_statement (
-                "SELECT count (*) "
-                  "FROM evidence "
-                 "WHERE item_uid = ? "
-                   "AND type = ?");
+    auto stmt = db.new_statement ("SELECT count (*) "
+                                  "FROM evidence "
+                                  "WHERE item_uid = ? "
+                                  "AND type = ?");
 
-  stmt.bind (1, get_uid ());
-  stmt.bind (2, type);
+    stmt.bind (1, get_uid ());
+    stmt.bind (2, type);
 
-  std::int64_t count = 0;
+    std::int64_t count = 0;
 
-  if (stmt.fetch_row ())
-    count = stmt.get_column_int64 (0);
+    if (stmt.fetch_row ())
+        count = stmt.get_column_int64 (0);
 
-  return count;
+    return count;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Count all evidences
 // @return map of type -> count
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::unordered_map <std::string, std::int64_t>
+std::unordered_map<std::string, std::int64_t>
 item::count_evidences () const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  auto db = get_database ();
+    auto db = get_database ();
 
-  auto stmt = db.new_statement (
-                "SELECT type, count (*) "
-                  "FROM evidence "
-                 "WHERE item_uid = ? "
-              "GROUP BY type "
-              "ORDER BY type");
+    auto stmt = db.new_statement ("SELECT type, count (*) "
+                                  "FROM evidence "
+                                  "WHERE item_uid = ? "
+                                  "GROUP BY type "
+                                  "ORDER BY type");
 
-  stmt.bind (1, get_uid ());
+    stmt.bind (1, get_uid ());
 
-  std::unordered_map <std::string, std::int64_t> counters;
+    std::unordered_map<std::string, std::int64_t> counters;
 
-  while (stmt.fetch_row ())
+    while (stmt.fetch_row ())
     {
-      auto type = stmt.get_column_string (0);
-      auto count = stmt.get_column_int64 (1);
-      counters[type] = count;
+        auto type = stmt.get_column_string (0);
+        auto count = stmt.get_column_int64 (1);
+        counters[type] = count;
     }
 
-  return counters;
+    return counters;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1534,25 +1516,25 @@ item::count_evidences () const
 // @param text Event text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-item::add_event (const std::string& text)
+item::add_event (const std::string &text)
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  impl_->add_event (text);
+    impl_->add_event (text);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get events
 // @return Events
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <event>
+std::vector<event>
 item::get_events () const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
 
-  return impl_->get_events ();
+    return impl_->get_events ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1562,8 +1544,8 @@ item::get_events () const
 mobius::core::database::connection
 item::new_connection ()
 {
-  auto c = get_case ();
-  return c.new_connection ();
+    auto c = get_case ();
+    return c.new_connection ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1573,8 +1555,8 @@ item::new_connection ()
 mobius::core::database::transaction
 item::new_transaction ()
 {
-  auto c = get_case ();
-  return c.new_transaction ();
+    auto c = get_case ();
+    return c.new_transaction ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1584,9 +1566,9 @@ item::new_transaction ()
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator== (const item& a, const item& b)
+operator== (const item &a, const item &b)
 {
-  return a.get_uid () == b.get_uid () && a.get_case () == b.get_case ();
+    return a.get_uid () == b.get_uid () && a.get_case () == b.get_case ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1596,9 +1578,9 @@ operator== (const item& a, const item& b)
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator!= (const item& a, const item& b)
+operator!= (const item &a, const item &b)
 {
-  return a.get_uid () != b.get_uid () || a.get_case () != b.get_case ();
+    return a.get_uid () != b.get_uid () || a.get_case () != b.get_case ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1608,9 +1590,9 @@ operator!= (const item& a, const item& b)
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator< (const item& a, const item& b)
+operator< (const item &a, const item &b)
 {
-  return a.get_case () == b.get_case () && a.get_uid () < b.get_uid ();
+    return a.get_case () == b.get_case () && a.get_uid () < b.get_uid ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1620,9 +1602,9 @@ operator< (const item& a, const item& b)
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator<= (const item& a, const item& b)
+operator<= (const item &a, const item &b)
 {
-  return a.get_case () == b.get_case () && a.get_uid () <= b.get_uid ();
+    return a.get_case () == b.get_case () && a.get_uid () <= b.get_uid ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1632,9 +1614,9 @@ operator<= (const item& a, const item& b)
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator> (const item& a, const item& b)
+operator> (const item &a, const item &b)
 {
-  return a.get_case () == b.get_case () && a.get_uid () > b.get_uid ();
+    return a.get_case () == b.get_case () && a.get_uid () > b.get_uid ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1644,9 +1626,9 @@ operator> (const item& a, const item& b)
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator>= (const item& a, const item& b)
+operator>= (const item &a, const item &b)
 {
-  return a.get_case () == b.get_case () && a.get_uid () >= b.get_uid ();
+    return a.get_case () == b.get_case () && a.get_uid () >= b.get_uid ();
 }
 
 } // namespace mobius::framework::model
@@ -1657,18 +1639,19 @@ namespace std
 // std::hash specialization for mobius::model::item
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 size_t
-std::hash <mobius::framework::model::item>::operator () (const mobius::framework::model::item& item) const
+std::hash<mobius::framework::model::item>::operator() (
+    const mobius::framework::model::item &item) const
 {
-  constexpr std::uint64_t MUL = 0x9e3779b97f4a7c15ull; // 2^64/phi
-  auto item_uid = item.get_uid ();
-  auto case_uid = item.get_case ().get_uid ();
+    constexpr std::uint64_t MUL = 0x9e3779b97f4a7c15ull; // 2^64/phi
+    auto item_uid = item.get_uid ();
+    auto case_uid = item.get_case ().get_uid ();
 
-  // Combine item UID and case UID
-  std::uint64_t seed = case_uid * MUL;
-  seed ^= (item_uid >> 32) * MUL + (seed << 6) + (seed >> 2);
-  seed ^= (item_uid & 0xffffffff) * MUL + (seed << 6) + (seed >> 2);
+    // Combine item UID and case UID
+    std::uint64_t seed = case_uid * MUL;
+    seed ^= (item_uid >> 32) * MUL + (seed << 6) + (seed >> 2);
+    seed ^= (item_uid & 0xffffffff) * MUL + (seed << 6) + (seed >> 2);
 
-  return seed;
+    return seed;
 }
 
 } // namespace std

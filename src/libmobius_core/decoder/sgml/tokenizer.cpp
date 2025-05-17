@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -23,8 +25,8 @@ namespace mobius::core::decoder::sgml
 // @brief Create tokenizer
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-tokenizer::tokenizer (const mobius::core::io::reader& reader)
- : sourcecode_ (reader)
+tokenizer::tokenizer (const mobius::core::io::reader &reader)
+    : sourcecode_ (reader)
 {
 }
 
@@ -32,44 +34,44 @@ tokenizer::tokenizer (const mobius::core::io::reader& reader)
 // @brief Get token
 // @return Token type and token text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::pair <tokenizer::token_type, std::string>
+std::pair<tokenizer::token_type, std::string>
 tokenizer::get_token ()
 {
-  token_type type = token_type::end;
-  std::string text;
+    token_type type = token_type::end;
+    std::string text;
 
-  auto c = sourcecode_.peek ();
+    auto c = sourcecode_.peek ();
 
-  // entity
-  if (c == '&')
+    // entity
+    if (c == '&')
     {
-      type = token_type::entity;
-      text = _get_entity_token ();
+        type = token_type::entity;
+        text = _get_entity_token ();
     }
 
-  // tag
-  else if (c == '<')
+    // tag
+    else if (c == '<')
     {
-      text = _get_tag_token ();
+        text = _get_tag_token ();
 
-      if (text.size () > 1 && text[1] == '/')
-        type = token_type::end_tag;
+        if (text.size () > 1 && text[1] == '/')
+            type = token_type::end_tag;
 
-      else if (text.size () > 1 && text[text.size () - 2] == '/')
-       type = token_type::empty_tag;
+        else if (text.size () > 1 && text[text.size () - 2] == '/')
+            type = token_type::empty_tag;
 
-      else
-        type = token_type::start_tag;
+        else
+            type = token_type::start_tag;
     }
 
-  // general text
-  else if (c != 0)
+    // general text
+    else if (c != 0)
     {
-      type = token_type::text;
-      text = _get_text_token ();
+        type = token_type::text;
+        text = _get_text_token ();
     }
 
-  return std::make_pair (type, text);
+    return std::make_pair (type, text);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -79,20 +81,20 @@ tokenizer::get_token ()
 std::string
 tokenizer::_get_entity_token ()
 {
-  std::string text (1, sourcecode_.get ());
+    std::string text (1, sourcecode_.get ());
 
-  auto c = sourcecode_.get ();
+    auto c = sourcecode_.get ();
 
-  while (c && c != ';')
+    while (c && c != ';')
     {
-      text.push_back (c);
-      c = sourcecode_.get ();
+        text.push_back (c);
+        c = sourcecode_.get ();
     }
 
-  if (c == ';')
-    text.push_back (c);
+    if (c == ';')
+        text.push_back (c);
 
-  return text;
+    return text;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -102,19 +104,19 @@ tokenizer::_get_entity_token ()
 std::string
 tokenizer::_get_tag_token ()
 {
-  std::string text (1, sourcecode_.get ());
+    std::string text (1, sourcecode_.get ());
 
-  auto c = sourcecode_.get ();
-  while (c && c != '>')
+    auto c = sourcecode_.get ();
+    while (c && c != '>')
     {
-      text.push_back (c);
-      c = sourcecode_.get ();
+        text.push_back (c);
+        c = sourcecode_.get ();
     }
 
-  if (c == '>')
-    text.push_back (c);
+    if (c == '>')
+        text.push_back (c);
 
-  return text;
+    return text;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -124,19 +126,17 @@ tokenizer::_get_tag_token ()
 std::string
 tokenizer::_get_text_token ()
 {
-  std::string text (1, sourcecode_.get ());
+    std::string text (1, sourcecode_.get ());
 
-  auto c = sourcecode_.peek ();
+    auto c = sourcecode_.peek ();
 
-  while (c && c != '<' && c != '&')
+    while (c && c != '<' && c != '&')
     {
-      text.push_back (sourcecode_.get ());
-      c = sourcecode_.peek ();
+        text.push_back (sourcecode_.get ());
+        c = sourcecode_.peek ();
     }
 
-  return text;
+    return text;
 }
 
 } // namespace mobius::core::decoder::sgml
-
-

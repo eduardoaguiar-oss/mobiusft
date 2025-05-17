@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -25,21 +27,22 @@ namespace mobius::core::datasource
 // @brief Constructor
 // @param state Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-datasource_impl_vfs::datasource_impl_vfs (const mobius::core::pod::map& state)
-  : vfs_ (state.get<mobius::core::pod::map> ("state"))
+datasource_impl_vfs::datasource_impl_vfs (const mobius::core::pod::map &state)
+    : vfs_ (state.get<mobius::core::pod::map> ("state"))
 {
-  auto type = state.get<std::string> ("type");
+    auto type = state.get<std::string> ("type");
 
-  if (type != get_type ())
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid datasource type: " + type));
+    if (type != get_type ())
+        throw std::invalid_argument (
+            MOBIUS_EXCEPTION_MSG ("invalid datasource type: " + type));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // @param vfs VFS object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-datasource_impl_vfs::datasource_impl_vfs (const mobius::core::vfs::vfs& vfs)
-  : vfs_ (vfs)
+datasource_impl_vfs::datasource_impl_vfs (const mobius::core::vfs::vfs &vfs)
+    : vfs_ (vfs)
 {
 }
 
@@ -50,10 +53,10 @@ datasource_impl_vfs::datasource_impl_vfs (const mobius::core::vfs::vfs& vfs)
 mobius::core::pod::map
 datasource_impl_vfs::get_state () const
 {
-  return {
-    {"type", get_type ()},
-    {"state", vfs_.get_state ()},
-  };
+    return {
+        {"type", get_type ()},
+        {"state", vfs_.get_state ()},
+    };
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -63,9 +66,7 @@ datasource_impl_vfs::get_state () const
 bool
 datasource_impl_vfs::is_available () const
 {
-  return vfs_.is_available ();
+    return vfs_.is_available ();
 }
 
 } // namespace mobius::core::datasource
-
-

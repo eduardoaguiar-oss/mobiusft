@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,39 +17,33 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <chrono>
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/database/exception.inc>
 #include <mobius/core/exception.inc>
-#include <chrono>
+#include <sqlite3.h>
 #include <stdexcept>
 #include <thread>
-#include <sqlite3.h>
 
 namespace
 {
-static constexpr int SLEEP_TIME = 200;        // microseconds
+static constexpr int SLEEP_TIME = 200; // microseconds
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief libsqlite3 initialization class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class sqlite3_init
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Initialize libsqlite3
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  sqlite3_init ()
-  {
-    sqlite3_initialize ();
-  }
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Initialize libsqlite3
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    sqlite3_init () { sqlite3_initialize (); }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Cleanup libsqlite3
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  ~sqlite3_init ()
-  {
-    sqlite3_shutdown ();
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Cleanup libsqlite3
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    ~sqlite3_init () { sqlite3_shutdown (); }
 };
 
 static sqlite3_init sqlite3_instance;
@@ -62,11 +58,11 @@ namespace mobius::core::database
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct database_impl
 {
-  sqlite3 *db = nullptr;
-  int transaction_level = 0;
-  bool is_null = true;
+    sqlite3 *db = nullptr;
+    int transaction_level = 0;
+    bool is_null = true;
 
-  ~database_impl ();
+    ~database_impl ();
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -74,9 +70,9 @@ struct database_impl
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 database_impl::~database_impl ()
 {
-  if (db != nullptr)
+    if (db != nullptr)
     {
-      sqlite3_close (db);
+        sqlite3_close (db);
     }
 }
 
@@ -84,7 +80,7 @@ database_impl::~database_impl ()
 // @brief Create null database object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 database::database ()
-  : impl_ (std::make_shared <database_impl> ())
+    : impl_ (std::make_shared<database_impl> ())
 {
 }
 
@@ -92,52 +88,50 @@ database::database ()
 // @brief Create database object
 // @param path database file path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-database::database (const std::string& path)
-  : impl_ (std::make_shared <database_impl> ())
+database::database (const std::string &path)
+    : impl_ (std::make_shared<database_impl> ())
 {
-  // define flags, including multi-thread support
-  int flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE;
+    // define flags, including multi-thread support
+    int flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE;
 
-  if (sqlite3_threadsafe () != 0)
-    flags |= SQLITE_OPEN_NOMUTEX;
+    if (sqlite3_threadsafe () != 0)
+        flags |= SQLITE_OPEN_NOMUTEX;
 
-  // open database
-  int rc = sqlite3_open_v2 (path.c_str (), &(impl_->db), flags, nullptr);
+    // open database
+    int rc = sqlite3_open_v2 (path.c_str (), &(impl_->db), flags, nullptr);
 
-  if (rc != SQLITE_OK)
-    throw std::runtime_error (MOBIUS_EXCEPTION_SQLITE);
+    if (rc != SQLITE_OK)
+        throw std::runtime_error (MOBIUS_EXCEPTION_SQLITE);
 
-  impl_->is_null = false;
+    impl_->is_null = false;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Check whether database is not null
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-database::operator bool () const
-{
-  return !impl_->is_null;
-}
+database::operator bool () const { return !impl_->is_null; }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Execute SQL command
 // @param sql SQL statement
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-database::execute (const std::string& sql)
+database::execute (const std::string &sql)
 {
-  int rc = SQLITE_BUSY;
+    int rc = SQLITE_BUSY;
 
-  while (rc == SQLITE_BUSY)
+    while (rc == SQLITE_BUSY)
     {
-      rc = sqlite3_exec (impl_->db, sql.c_str (), nullptr, nullptr, nullptr);
+        rc = sqlite3_exec (impl_->db, sql.c_str (), nullptr, nullptr, nullptr);
 
-      if (rc == SQLITE_BUSY)
-        std::this_thread::sleep_for (std::chrono::microseconds (SLEEP_TIME));
+        if (rc == SQLITE_BUSY)
+            std::this_thread::sleep_for (
+                std::chrono::microseconds (SLEEP_TIME));
     }
 
-  if (rc != SQLITE_OK)
-    throw std::runtime_error (MOBIUS_EXCEPTION_SQLITE);
+    if (rc != SQLITE_OK)
+        throw std::runtime_error (MOBIUS_EXCEPTION_SQLITE);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -147,9 +141,9 @@ database::execute (const std::string& sql)
 transaction
 database::new_transaction ()
 {
-  bool is_master = impl_->transaction_level++ == 0;
+    bool is_master = impl_->transaction_level++ == 0;
 
-  return transaction (*this, is_master);
+    return transaction (*this, is_master);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -158,7 +152,7 @@ database::new_transaction ()
 void
 database::end_transaction ()
 {
-  impl_->transaction_level--;
+    impl_->transaction_level--;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -167,23 +161,24 @@ database::end_transaction ()
 // @return statement object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 statement
-database::new_statement (const std::string& sql)
+database::new_statement (const std::string &sql)
 {
-  sqlite3_stmt *stmt = nullptr;
-  int rc = SQLITE_BUSY;
+    sqlite3_stmt *stmt = nullptr;
+    int rc = SQLITE_BUSY;
 
-  while (rc == SQLITE_BUSY)
+    while (rc == SQLITE_BUSY)
     {
-      rc = sqlite3_prepare_v2 (impl_->db, sql.c_str (), -1, &stmt, nullptr);
+        rc = sqlite3_prepare_v2 (impl_->db, sql.c_str (), -1, &stmt, nullptr);
 
-      if (rc == SQLITE_BUSY)
-        std::this_thread::sleep_for (std::chrono::microseconds (SLEEP_TIME));
+        if (rc == SQLITE_BUSY)
+            std::this_thread::sleep_for (
+                std::chrono::microseconds (SLEEP_TIME));
     }
 
-  if (rc != SQLITE_OK)
-    throw std::runtime_error (MOBIUS_EXCEPTION_SQLITE);
+    if (rc != SQLITE_OK)
+        throw std::runtime_error (MOBIUS_EXCEPTION_SQLITE);
 
-  return statement (*this, stmt);
+    return statement (*this, stmt);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -193,7 +188,7 @@ database::new_statement (const std::string& sql)
 std::string
 database::get_error_message () const
 {
-  return sqlite3_errmsg (impl_->db);
+    return sqlite3_errmsg (impl_->db);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -203,7 +198,7 @@ database::get_error_message () const
 std::int64_t
 database::get_last_insert_row_id () const
 {
-  return sqlite3_last_insert_rowid (impl_->db);
+    return sqlite3_last_insert_rowid (impl_->db);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -213,7 +208,7 @@ database::get_last_insert_row_id () const
 std::int64_t
 database::get_changes () const
 {
-  return sqlite3_changes (impl_->db);
+    return sqlite3_changes (impl_->db);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -223,21 +218,19 @@ database::get_changes () const
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-database::table_has_column (const std::string& table, const std::string& column) const
+database::table_has_column (const std::string &table,
+                            const std::string &column) const
 {
-  return sqlite3_table_column_metadata (
-       impl_->db,		// db
-       nullptr,			// zDbName
-       table.c_str (),		// zTableName
-       column.c_str (),		// zColumnName
-       nullptr,			// pzDataType
-       nullptr,			// pzCollSeq
-       nullptr,			// pNotNull
-       nullptr,			// pPrimaryKey
-       nullptr			// pAutoinc
- ) == SQLITE_OK;
+    return sqlite3_table_column_metadata (impl_->db,       // db
+                                          nullptr,         // zDbName
+                                          table.c_str (),  // zTableName
+                                          column.c_str (), // zColumnName
+                                          nullptr,         // pzDataType
+                                          nullptr,         // pzCollSeq
+                                          nullptr,         // pNotNull
+                                          nullptr,         // pPrimaryKey
+                                          nullptr          // pAutoinc
+                                          ) == SQLITE_OK;
 }
 
 } // namespace mobius::core::database
-
-

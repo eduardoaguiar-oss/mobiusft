@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,10 +17,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/vfs/disk_impl_imagefile.hpp>
+#include <mobius/core/exception.inc>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/uri.hpp>
-#include <mobius/core/exception.inc>
+#include <mobius/core/vfs/disk_impl_imagefile.hpp>
 #include <stdexcept>
 
 namespace mobius::core::vfs
@@ -28,11 +30,10 @@ namespace mobius::core::vfs
 // @param url Image file URL
 // @param type Image type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-disk_impl_imagefile::disk_impl_imagefile (
-  const std::string& url,
-  const std::string& type)
-  : url_ (url),
-    imagetype_ (type)
+disk_impl_imagefile::disk_impl_imagefile (const std::string &url,
+                                          const std::string &type)
+    : url_ (url),
+      imagetype_ (type)
 {
 }
 
@@ -40,15 +41,15 @@ disk_impl_imagefile::disk_impl_imagefile (
 // @brief Constructor
 // @param state Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-disk_impl_imagefile::disk_impl_imagefile (const mobius::core::pod::map& state)
+disk_impl_imagefile::disk_impl_imagefile (const mobius::core::pod::map &state)
 {
-  url_ = std::string (state.get ("url"));
-  imagetype_ = std::string (state.get ("imagetype"));
-  name_ = std::string (state.get ("name"));
-  size_ = std::int64_t (state.get ("size"));
-  attributes_ = state.get ("attrs");
+    url_ = std::string (state.get ("url"));
+    imagetype_ = std::string (state.get ("imagetype"));
+    name_ = std::string (state.get ("name"));
+    size_ = std::int64_t (state.get ("size"));
+    attributes_ = state.get ("attrs");
 
-  metadata_loaded_ = true;
+    metadata_loaded_ = true;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -58,8 +59,8 @@ disk_impl_imagefile::disk_impl_imagefile (const mobius::core::pod::map& state)
 bool
 disk_impl_imagefile::is_available () const
 {
-  auto f = mobius::core::io::new_file_by_url (url_);
-  return f.exists ();
+    auto f = mobius::core::io::new_file_by_url (url_);
+    return f.exists ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -68,9 +69,9 @@ disk_impl_imagefile::is_available () const
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-disk_impl_imagefile::has_attribute (const std::string& id) const
+disk_impl_imagefile::has_attribute (const std::string &id) const
 {
-  return attributes_.contains (id);
+    return attributes_.contains (id);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -79,9 +80,10 @@ disk_impl_imagefile::has_attribute (const std::string& id) const
 // @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-disk_impl_imagefile::set_attribute (const std::string& id, const mobius::core::pod::data& value)
+disk_impl_imagefile::set_attribute (const std::string &id,
+                                    const mobius::core::pod::data &value)
 {
-  attributes_.set (id, value);
+    attributes_.set (id, value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -90,9 +92,9 @@ disk_impl_imagefile::set_attribute (const std::string& id, const mobius::core::p
 // @return Data object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::pod::data
-disk_impl_imagefile::get_attribute (const std::string& id) const
+disk_impl_imagefile::get_attribute (const std::string &id) const
 {
-  return attributes_.get (id);
+    return attributes_.get (id);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -102,8 +104,8 @@ disk_impl_imagefile::get_attribute (const std::string& id) const
 mobius::core::pod::map
 disk_impl_imagefile::get_attributes () const
 {
-  _load_metadata ();
-  return attributes_;
+    _load_metadata ();
+    return attributes_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -113,18 +115,18 @@ disk_impl_imagefile::get_attributes () const
 mobius::core::pod::map
 disk_impl_imagefile::get_state () const
 {
-  _load_metadata ();
+    _load_metadata ();
 
-  mobius::core::pod::map state;
+    mobius::core::pod::map state;
 
-  state.set ("type", get_type ());
-  state.set ("url", url_);
-  state.set ("imagetype", imagetype_);
-  state.set ("name", name_);
-  state.set ("size", size_);
-  state.set ("attrs", attributes_);
+    state.set ("type", get_type ());
+    state.set ("url", url_);
+    state.set ("imagetype", imagetype_);
+    state.set ("name", name_);
+    state.set ("size", size_);
+    state.set ("attrs", attributes_);
 
-  return state;
+    return state;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -134,12 +136,13 @@ disk_impl_imagefile::get_state () const
 std::string
 disk_impl_imagefile::get_path () const
 {
-  auto uri = mobius::core::io::uri (url_);
+    auto uri = mobius::core::io::uri (url_);
 
-  if (uri.get_scheme () != "file")
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot convert URL to path"));
+    if (uri.get_scheme () != "file")
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("cannot convert URL to path"));
 
-  return uri.get_path ("utf-8");
+    return uri.get_path ("utf-8");
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -149,8 +152,8 @@ disk_impl_imagefile::get_path () const
 mobius::core::io::reader
 disk_impl_imagefile::new_reader () const
 {
-  _load_imagefile ();
-  return imagefile_.new_reader ();
+    _load_imagefile ();
+    return imagefile_.new_reader ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -159,22 +162,23 @@ disk_impl_imagefile::new_reader () const
 void
 disk_impl_imagefile::_load_imagefile () const
 {
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Check if imagefile is already loaded
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  if (imagefile_loaded_)
-    return;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Check if imagefile is already loaded
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (imagefile_loaded_)
+        return;
 
-  std::lock_guard lock (imagefile_loaded_);
+    std::lock_guard lock (imagefile_loaded_);
 
-  if (imagefile_loaded_)           // check again
-    return;
+    if (imagefile_loaded_) // check again
+        return;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Load imagefile
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  imagefile_ = new_imagefile_by_url (url_, imagetype_.empty () ? "autodetect" : imagetype_);
-  imagefile_loaded_ = true;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Load imagefile
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    imagefile_ = new_imagefile_by_url (url_, imagetype_.empty () ? "autodetect"
+                                                                 : imagetype_);
+    imagefile_loaded_ = true;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -183,44 +187,42 @@ disk_impl_imagefile::_load_imagefile () const
 void
 disk_impl_imagefile::_load_metadata () const
 {
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Check if metadata is already loaded
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  if (metadata_loaded_)
-    return;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Check if metadata is already loaded
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (metadata_loaded_)
+        return;
 
-  std::lock_guard lock (metadata_loaded_);
+    std::lock_guard lock (metadata_loaded_);
 
-  if (metadata_loaded_)           // check again
-    return;
+    if (metadata_loaded_) // check again
+        return;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Load imagefile
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  _load_imagefile ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Load imagefile
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    _load_imagefile ();
 
-  imagetype_ = imagefile_.get_type ();
-  size_ = imagefile_.get_size ();
+    imagetype_ = imagefile_.get_type ();
+    size_ = imagefile_.get_size ();
 
-  auto uri = mobius::core::io::uri (url_);
-  name_ = uri.get_filename ("utf-8");
+    auto uri = mobius::core::io::uri (url_);
+    name_ = uri.get_filename ("utf-8");
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Set attributes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  attributes_.set ("url", url_);
-  attributes_.set ("imagetype", imagetype_);
-  attributes_.set ("size", imagefile_.get_size ());
-  attributes_.set ("sectors", imagefile_.get_sectors ());
-  attributes_.set ("sector_size", imagefile_.get_sector_size ());
-  attributes_.update (imagefile_.get_attributes ());
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Set attributes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    attributes_.set ("url", url_);
+    attributes_.set ("imagetype", imagetype_);
+    attributes_.set ("size", imagefile_.get_size ());
+    attributes_.set ("sectors", imagefile_.get_sectors ());
+    attributes_.set ("sector_size", imagefile_.get_sector_size ());
+    attributes_.update (imagefile_.get_attributes ());
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Set flag loaded
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  metadata_loaded_ = true;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Set flag loaded
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    metadata_loaded_ = true;
 }
 
 } // namespace mobius::core::vfs
-
-

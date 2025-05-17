@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,10 +17,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/os/win/hash_msdcc1.hpp>
-#include <mobius/core/os/win/hash_nt.hpp>
 #include <mobius/core/charset.hpp>
 #include <mobius/core/crypt/hash.hpp>
+#include <mobius/core/os/win/hash_msdcc1.hpp>
+#include <mobius/core/os/win/hash_nt.hpp>
 #include <mobius/core/string_functions.hpp>
 
 namespace mobius::core::os::win
@@ -30,14 +32,13 @@ namespace mobius::core::os::win
 // @return MSDCC1 hash
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
-hash_msdcc1 (const std::string& password, const std::string& username)
+hash_msdcc1 (const std::string &password, const std::string &username)
 {
-  mobius::core::crypt::hash md4 ("md4");
-  md4.update (hash_nt (password));
-  md4.update (mobius::core::conv_charset (mobius::core::string::tolower (username), "UTF-8", "UTF-16LE"));
-  return md4.get_digest ();
+    mobius::core::crypt::hash md4 ("md4");
+    md4.update (hash_nt (password));
+    md4.update (mobius::core::conv_charset (
+        mobius::core::string::tolower (username), "UTF-8", "UTF-16LE"));
+    return md4.get_digest ();
 }
 
 } // namespace mobius::core::os::win
-
-

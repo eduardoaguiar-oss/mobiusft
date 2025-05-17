@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -27,12 +29,11 @@ namespace mobius::core::vfs::tsk
 std::string
 tsk_exception_msg (const char *fname, const char *funcname, std::size_t line)
 {
-  std::string msg = mobius::core::exception_msg (fname, funcname, line, tsk_error_get ());
-  tsk_error_reset ();
+    std::string msg =
+        mobius::core::exception_msg (fname, funcname, line, tsk_error_get ());
+    tsk_error_reset ();
 
-  return msg;
+    return msg;
 }
 
 } // namespace mobius::core::vfs::tsk
-
-

@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,9 +17,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/io/tempfile.hpp>
-#include <mobius/core/exception.inc>
 #include <algorithm>
+#include <mobius/core/exception.inc>
+#include <mobius/core/io/tempfile.hpp>
 #include <stdexcept>
 
 namespace
@@ -33,11 +35,11 @@ namespace mobius::core::io
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 tempfile::tempfile ()
 {
-  mobius::core::bytearray uuid (16);
-  uuid.random ();
+    mobius::core::bytearray uuid (16);
+    uuid.random ();
 
-  const std::string path = TMPDIR + '/' + uuid.to_hexstring ();
-  f_ = mobius::core::io::new_file_by_path (path);
+    const std::string path = TMPDIR + '/' + uuid.to_hexstring ();
+    f_ = mobius::core::io::new_file_by_path (path);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -45,8 +47,8 @@ tempfile::tempfile ()
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 tempfile::~tempfile ()
 {
-  if (f_.exists ())
-    f_.remove ();
+    if (f_.exists ())
+        f_.remove ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -56,15 +58,15 @@ tempfile::~tempfile ()
 void
 tempfile::copy_from (mobius::core::io::reader reader) const
 {
-  constexpr std::uint64_t BLOCK_SIZE = 65536;
+    constexpr std::uint64_t BLOCK_SIZE = 65536;
 
-  auto writer = new_writer ();
-  auto data = reader.read (BLOCK_SIZE);
+    auto writer = new_writer ();
+    auto data = reader.read (BLOCK_SIZE);
 
-  while (data)
+    while (data)
     {
-      writer.write (data);
-      data = reader.read (BLOCK_SIZE);
+        writer.write (data);
+        data = reader.read (BLOCK_SIZE);
     }
 }
 
@@ -75,15 +77,15 @@ tempfile::copy_from (mobius::core::io::reader reader) const
 void
 tempfile::copy_to (mobius::core::io::writer writer) const
 {
-  constexpr std::uint64_t BLOCK_SIZE = 65536;
+    constexpr std::uint64_t BLOCK_SIZE = 65536;
 
-  auto reader = new_reader ();
-  auto data = reader.read (BLOCK_SIZE);
+    auto reader = new_reader ();
+    auto data = reader.read (BLOCK_SIZE);
 
-  while (data)
+    while (data)
     {
-      writer.write (data);
-      data = reader.read (BLOCK_SIZE);
+        writer.write (data);
+        data = reader.read (BLOCK_SIZE);
     }
 }
 
@@ -92,11 +94,9 @@ tempfile::copy_to (mobius::core::io::writer writer) const
 // @param path Directory path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-set_tempdir_path (const std::string& path)
+set_tempdir_path (const std::string &path)
 {
-  TMPDIR = path;
+    TMPDIR = path;
 }
 
 } // namespace mobius::core::io
-
-

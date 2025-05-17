@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -25,18 +27,18 @@ namespace mobius::core::crypt
 // @return Encrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
-cipher_impl_block::encrypt (const mobius::core::bytearray& data)
+cipher_impl_block::encrypt (const mobius::core::bytearray &data)
 {
-  mobius::core::bytearray out;
-  auto block_size = get_block_size ();
+    mobius::core::bytearray out;
+    auto block_size = get_block_size ();
 
-  for (std::size_t i = 0;i < data.size ();i += block_size)
+    for (std::size_t i = 0; i < data.size (); i += block_size)
     {
-      auto block_data = data.slice (i, i + block_size - 1);
-      out += encrypt_block (block_data);
+        auto block_data = data.slice (i, i + block_size - 1);
+        out += encrypt_block (block_data);
     }
 
-  return out;
+    return out;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -45,20 +47,18 @@ cipher_impl_block::encrypt (const mobius::core::bytearray& data)
 // @return Decrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
-cipher_impl_block::decrypt (const mobius::core::bytearray& data)
+cipher_impl_block::decrypt (const mobius::core::bytearray &data)
 {
-  mobius::core::bytearray out;
-  auto block_size = get_block_size ();
+    mobius::core::bytearray out;
+    auto block_size = get_block_size ();
 
-  for (std::size_t i = 0;i < data.size ();i += block_size)
+    for (std::size_t i = 0; i < data.size (); i += block_size)
     {
-      auto block_data = data.slice (i, i + block_size - 1);
-      out += decrypt_block (block_data);
+        auto block_data = data.slice (i, i + block_size - 1);
+        out += decrypt_block (block_data);
     }
 
-  return out;
+    return out;
 }
 
 } // namespace mobius::core::crypt
-
-

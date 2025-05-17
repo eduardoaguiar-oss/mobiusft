@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,11 +17,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/system/device_list.hpp>
-#include <mobius/core/exception.inc>
 #include <libudev.h>
-#include <vector>
+#include <mobius/core/exception.inc>
+#include <mobius/core/system/device_list.hpp>
 #include <stdexcept>
+#include <vector>
 
 namespace mobius::core::system
 {
@@ -28,12 +30,12 @@ namespace mobius::core::system
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct device_list_impl
 {
-  struct udev *udev = nullptr;
-  struct udev_enumerate *udev_enumerate = nullptr;
-  std::vector <device> devices;
+    struct udev *udev = nullptr;
+    struct udev_enumerate *udev_enumerate = nullptr;
+    std::vector<device> devices;
 
-  device_list_impl ();
-  ~device_list_impl ();
+    device_list_impl ();
+    ~device_list_impl ();
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -41,15 +43,17 @@ struct device_list_impl
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 device_list_impl::device_list_impl ()
 {
-  udev = udev_new ();
+    udev = udev_new ();
 
-  if (!udev)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Could not allocate udev struct"));
+    if (!udev)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("Could not allocate udev struct"));
 
-  udev_enumerate = udev_enumerate_new (udev);
+    udev_enumerate = udev_enumerate_new (udev);
 
-  if (!udev_enumerate)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Could not allocate udev_enumerate struct"));
+    if (!udev_enumerate)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("Could not allocate udev_enumerate struct"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -57,11 +61,11 @@ device_list_impl::device_list_impl ()
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 device_list_impl::~device_list_impl ()
 {
-  if (udev_enumerate)
-    udev_enumerate_unref (udev_enumerate);
+    if (udev_enumerate)
+        udev_enumerate_unref (udev_enumerate);
 
-  if (udev)
-    udev_unref (udev);
+    if (udev)
+        udev_unref (udev);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -69,8 +73,8 @@ device_list_impl::~device_list_impl ()
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 device_list::device_list ()
 {
-  impl_ = std::make_shared <device_list_impl>();
-  scan ();
+    impl_ = std::make_shared<device_list_impl> ();
+    scan ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -79,16 +83,17 @@ device_list::device_list ()
 void
 device_list::scan ()
 {
-  udev_enumerate_scan_devices (impl_->udev_enumerate);
-  struct udev_list_entry *entry = udev_enumerate_get_list_entry (impl_->udev_enumerate);
-  impl_->devices.clear ();
+    udev_enumerate_scan_devices (impl_->udev_enumerate);
+    struct udev_list_entry *entry =
+        udev_enumerate_get_list_entry (impl_->udev_enumerate);
+    impl_->devices.clear ();
 
-  while (entry)
+    while (entry)
     {
-      const char *path = udev_list_entry_get_name (entry);
-      device dev (udev_device_new_from_syspath (impl_->udev, path));
-      impl_->devices.push_back (dev);
-      entry = udev_list_entry_get_next (entry);
+        const char *path = udev_list_entry_get_name (entry);
+        device dev (udev_device_new_from_syspath (impl_->udev, path));
+        impl_->devices.push_back (dev);
+        entry = udev_list_entry_get_next (entry);
     }
 }
 
@@ -99,7 +104,7 @@ device_list::scan ()
 device_list::const_iterator
 device_list::begin () const
 {
-  return impl_->devices.begin ();
+    return impl_->devices.begin ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -109,9 +114,7 @@ device_list::begin () const
 device_list::const_iterator
 device_list::end () const
 {
-  return impl_->devices.end ();
+    return impl_->devices.end ();
 }
 
 } // namespace mobius::core::system
-
-

@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -28,8 +30,8 @@ namespace mobius::core::vfs::tsk
 // @brief Initialize object
 // @param fp fs_file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-file_impl::file_impl (const fs_file& fp)
-  : fs_file_ (fp)
+file_impl::file_impl (const fs_file &fp)
+    : fs_file_ (fp)
 {
 }
 
@@ -40,10 +42,10 @@ file_impl::file_impl (const fs_file& fp)
 file_impl::type
 file_impl::get_type () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return static_cast <file_impl::type> (fs_file_.get_type ());
+    return static_cast<file_impl::type> (fs_file_.get_type ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -53,10 +55,10 @@ file_impl::get_type () const
 std::string
 file_impl::get_user_name () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return std::string (); // libtsk has no user name
+    return std::string (); // libtsk has no user name
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -66,10 +68,10 @@ file_impl::get_user_name () const
 std::string
 file_impl::get_group_name () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return std::string (); // libtsk has no group name
+    return std::string (); // libtsk has no group name
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -79,10 +81,10 @@ file_impl::get_group_name () const
 bool
 file_impl::is_hidden () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return false; //!name_.empty () && name_[0] == '.';
+    return false; //! name_.empty () && name_[0] == '.';
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -92,12 +94,12 @@ file_impl::is_hidden () const
 file_impl::folder_type
 file_impl::get_parent () const
 {
-  fs_file parent = fs_file_.get_parent ();
+    fs_file parent = fs_file_.get_parent ();
 
-  if (parent)
-    return std::make_shared <folder_impl> (parent);
+    if (parent)
+        return std::make_shared<folder_impl> (parent);
 
-  return std::make_shared <mobius::core::io::folder_impl_null> ();
+    return std::make_shared<mobius::core::io::folder_impl_null> ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -106,7 +108,7 @@ file_impl::get_parent () const
 void
 file_impl::remove ()
 {
-  throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot remove file"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot remove file"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -114,9 +116,9 @@ file_impl::remove ()
 // @param filename New filename
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-file_impl::rename (const std::string&)
+file_impl::rename (const std::string &)
 {
-  throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot rename file"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot rename file"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -127,7 +129,7 @@ file_impl::rename (const std::string&)
 bool
 file_impl::move (file_type)
 {
-  throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot move file"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot move file"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -137,10 +139,10 @@ file_impl::move (file_type)
 file_impl::reader_type
 file_impl::new_reader () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return std::make_shared <reader_impl_file> (fs_file_);
+    return std::make_shared<reader_impl_file> (fs_file_);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -151,9 +153,7 @@ file_impl::new_reader () const
 file_impl::writer_type
 file_impl::new_writer (bool) const
 {
-  throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot create writer"));
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot create writer"));
 }
 
 } // namespace mobius::core::vfs::tsk
-
-

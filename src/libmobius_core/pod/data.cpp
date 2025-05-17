@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,18 +17,18 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/pod/data.hpp>
-#include <mobius/core/pod/data_impl_null.hpp>
-#include <mobius/core/pod/data_impl_bool.hpp>
-#include <mobius/core/pod/data_impl_integer.hpp>
-#include <mobius/core/pod/data_impl_float.hpp>
-#include <mobius/core/pod/data_impl_datetime.hpp>
-#include <mobius/core/pod/data_impl_string.hpp>
-#include <mobius/core/pod/data_impl_bytearray.hpp>
-#include <mobius/core/pod/data_impl_list.hpp>
-#include <mobius/core/pod/map.hpp>
-#include <mobius/core/exception.inc>
 #include <algorithm>
+#include <mobius/core/exception.inc>
+#include <mobius/core/pod/data.hpp>
+#include <mobius/core/pod/data_impl_bool.hpp>
+#include <mobius/core/pod/data_impl_bytearray.hpp>
+#include <mobius/core/pod/data_impl_datetime.hpp>
+#include <mobius/core/pod/data_impl_float.hpp>
+#include <mobius/core/pod/data_impl_integer.hpp>
+#include <mobius/core/pod/data_impl_list.hpp>
+#include <mobius/core/pod/data_impl_null.hpp>
+#include <mobius/core/pod/data_impl_string.hpp>
+#include <mobius/core/pod/map.hpp>
 #include <stdexcept>
 
 namespace
@@ -36,15 +38,15 @@ namespace
 // @param v Data vector
 // @return New data data vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <mobius::core::pod::data>
-list_clone (const std::vector <mobius::core::pod::data>& v)
+std::vector<mobius::core::pod::data>
+list_clone (const std::vector<mobius::core::pod::data> &v)
 {
-  std::vector <mobius::core::pod::data> v2;
+    std::vector<mobius::core::pod::data> v2;
 
-  for (const auto& d : v)
-    v2.push_back (d.clone ());
+    for (const auto &d : v)
+        v2.push_back (d.clone ());
 
-  return v2;
+    return v2;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -53,25 +55,25 @@ list_clone (const std::vector <mobius::core::pod::data>& v)
 // @return String representation of data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
-list_to_string (const std::vector <mobius::core::pod::data>& v)
+list_to_string (const std::vector<mobius::core::pod::data> &v)
 {
-  std::string text = "[";
-  bool first = true;
+    std::string text = "[";
+    bool first = true;
 
-  for (const auto& child : v)
+    for (const auto &child : v)
     {
-      if (first)
-        first = false;
+        if (first)
+            first = false;
 
-      else
-        text += ',';
+        else
+            text += ',';
 
-      text += child.to_string ();
+        text += child.to_string ();
     }
 
-  text += ']';
+    text += ']';
 
-  return text;
+    return text;
 }
 
 } // namespace
@@ -82,7 +84,7 @@ namespace mobius::core::pod
 // @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data ()
- : impl_ (std::make_shared <data_impl_null> ())
+    : impl_ (std::make_shared<data_impl_null> ())
 {
 }
 
@@ -90,8 +92,8 @@ data::data ()
 // @brief Constructor
 // @param p shared_ptr to data_impl_base
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data::data (const std::shared_ptr <data_impl_base>& p)
- : impl_ (p)
+data::data (const std::shared_ptr<data_impl_base> &p)
+    : impl_ (p)
 {
 }
 
@@ -100,7 +102,7 @@ data::data (const std::shared_ptr <data_impl_base>& p)
 // @param b Boolean value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (bool b)
- : impl_ (std::make_shared <data_impl_bool> (b))
+    : impl_ (std::make_shared<data_impl_bool> (b))
 {
 }
 
@@ -109,7 +111,7 @@ data::data (bool b)
 // @param i Integer value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (int i)
- : impl_ (std::make_shared <data_impl_integer> (i))
+    : impl_ (std::make_shared<data_impl_integer> (i))
 {
 }
 
@@ -118,7 +120,7 @@ data::data (int i)
 // @param i Integer value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (std::int64_t i)
- : impl_ (std::make_shared <data_impl_integer> (i))
+    : impl_ (std::make_shared<data_impl_integer> (i))
 {
 }
 
@@ -127,7 +129,8 @@ data::data (std::int64_t i)
 // @param i Integer value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (std::uint64_t i)
- : impl_ (std::make_shared <data_impl_integer> (static_cast <std::int64_t> (i)))
+    : impl_ (
+          std::make_shared<data_impl_integer> (static_cast<std::int64_t> (i)))
 {
 }
 
@@ -136,7 +139,8 @@ data::data (std::uint64_t i)
 // @param i Integer value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (std::uint32_t i)
- : impl_ (std::make_shared <data_impl_integer> (static_cast <std::int64_t> (i)))
+    : impl_ (
+          std::make_shared<data_impl_integer> (static_cast<std::int64_t> (i)))
 {
 }
 
@@ -145,7 +149,7 @@ data::data (std::uint32_t i)
 // @param v Float value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (double v)
- : impl_ (std::make_shared <data_impl_float> (v))
+    : impl_ (std::make_shared<data_impl_float> (v))
 {
 }
 
@@ -154,7 +158,7 @@ data::data (double v)
 // @param v Float value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (long double v)
- : impl_ (std::make_shared <data_impl_float> (v))
+    : impl_ (std::make_shared<data_impl_float> (v))
 {
 }
 
@@ -162,8 +166,8 @@ data::data (long double v)
 // @brief Constructor
 // @param v Datetime value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data::data (const mobius::core::datetime::datetime& v)
- : impl_ (std::make_shared <data_impl_datetime> (v))
+data::data (const mobius::core::datetime::datetime &v)
+    : impl_ (std::make_shared<data_impl_datetime> (v))
 {
 }
 
@@ -173,19 +177,19 @@ data::data (const mobius::core::datetime::datetime& v)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (const char *s)
 {
-  if (s)
-    impl_ = std::make_shared <data_impl_string> (s);
+    if (s)
+        impl_ = std::make_shared<data_impl_string> (s);
 
-  else
-    impl_ = std::make_shared <data_impl_null> ();
+    else
+        impl_ = std::make_shared<data_impl_null> ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // @param s C++ string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data::data (const std::string& s)
- : impl_ (std::make_shared <data_impl_string> (s))
+data::data (const std::string &s)
+    : impl_ (std::make_shared<data_impl_string> (s))
 {
 }
 
@@ -193,8 +197,8 @@ data::data (const std::string& s)
 // @brief Constructor
 // @param b Bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data::data (const mobius::core::bytearray& b)
- : impl_ (std::make_shared <data_impl_bytearray> (b))
+data::data (const mobius::core::bytearray &b)
+    : impl_ (std::make_shared<data_impl_bytearray> (b))
 {
 }
 
@@ -202,162 +206,162 @@ data::data (const mobius::core::bytearray& b)
 // @brief Constructor
 // @param l initializer_list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data::data (const std::initializer_list <data>& l)
- : impl_ (std::make_shared <data_impl_list> ())
+data::data (const std::initializer_list<data> &l)
+    : impl_ (std::make_shared<data_impl_list> ())
 {
-  auto p = std::static_pointer_cast <data_impl_list> (impl_);
+    auto p = std::static_pointer_cast<data_impl_list> (impl_);
 
-  for (const auto& d : l)
-    p->append (d.impl_);
+    for (const auto &d : l)
+        p->append (d.impl_);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // @param v Vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data::data (const std::vector <data>& v)
- : impl_ (std::make_shared <data_impl_list> ())
+data::data (const std::vector<data> &v)
+    : impl_ (std::make_shared<data_impl_list> ())
 {
-  auto p = std::static_pointer_cast <data_impl_list> (impl_);
+    auto p = std::static_pointer_cast<data_impl_list> (impl_);
 
-  for (const auto& d : v)
-    p->append (d.impl_);
+    for (const auto &d : v)
+        p->append (d.impl_);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Assignment operator
 // @param b Boolean value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data&
+data &
 data::operator= (bool b)
 {
-  impl_ = std::make_shared <data_impl_bool> (b);
-  return *this;
+    impl_ = std::make_shared<data_impl_bool> (b);
+    return *this;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Assignment operator
 // @param i Integer value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data&
+data &
 data::operator= (int i)
 {
-  impl_ = std::make_shared <data_impl_integer> (i);
-  return *this;
+    impl_ = std::make_shared<data_impl_integer> (i);
+    return *this;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Assignment operator
 // @param i Integer value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data&
+data &
 data::operator= (std::int64_t i)
 {
-  impl_ = std::make_shared <data_impl_integer> (i);
-  return *this;
+    impl_ = std::make_shared<data_impl_integer> (i);
+    return *this;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Assignment operator
 // @param v Real value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data&
+data &
 data::operator= (double v)
 {
-  impl_ = std::make_shared <data_impl_float> (v);
-  return *this;
+    impl_ = std::make_shared<data_impl_float> (v);
+    return *this;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Assignment operator
 // @param v Real value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data&
+data &
 data::operator= (long double v)
 {
-  impl_ = std::make_shared <data_impl_float> (v);
-  return *this;
+    impl_ = std::make_shared<data_impl_float> (v);
+    return *this;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Assignment operator
 // @param v Datetime value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data&
-data::operator= (const mobius::core::datetime::datetime& v)
+data &
+data::operator= (const mobius::core::datetime::datetime &v)
 {
-  impl_ = std::make_shared <data_impl_datetime> (v);
-  return *this;
+    impl_ = std::make_shared<data_impl_datetime> (v);
+    return *this;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Assignment operator
 // @param s C string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data&
+data &
 data::operator= (const char *s)
 {
-  if (s)
-    impl_ = std::make_shared <data_impl_string> (s);
+    if (s)
+        impl_ = std::make_shared<data_impl_string> (s);
 
-  else
-    impl_ = std::make_shared <data_impl_null> ();
+    else
+        impl_ = std::make_shared<data_impl_null> ();
 
-  return *this;
+    return *this;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Assignment operator
 // @param s C++ string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data&
-data::operator= (const std::string& s)
+data &
+data::operator= (const std::string &s)
 {
-  impl_ = std::make_shared <data_impl_string> (s);
-  return *this;
+    impl_ = std::make_shared<data_impl_string> (s);
+    return *this;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Assignment operator
 // @param b Bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data&
-data::operator= (const mobius::core::bytearray& b)
+data &
+data::operator= (const mobius::core::bytearray &b)
 {
-  impl_ = std::make_shared <data_impl_bytearray> (b);
-  return *this;
+    impl_ = std::make_shared<data_impl_bytearray> (b);
+    return *this;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Assignment operator
 // @param l initializer_list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data&
-data::operator= (const std::initializer_list <data>& l)
+data &
+data::operator= (const std::initializer_list<data> &l)
 {
-  auto p = std::make_shared <data_impl_list> ();
-  impl_ = p;
+    auto p = std::make_shared<data_impl_list> ();
+    impl_ = p;
 
-  for (const auto& d : l)
-    p->append (d.impl_);
+    for (const auto &d : l)
+        p->append (d.impl_);
 
-  return *this;
+    return *this;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Assignment operator
 // @param v Vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data&
-data::operator= (const std::vector <data>& v)
+data &
+data::operator= (const std::vector<data> &v)
 {
-  auto p = std::make_shared <data_impl_list> ();
-  impl_ = p;
+    auto p = std::make_shared<data_impl_list> ();
+    impl_ = p;
 
-  for (const auto& d : v)
-    p->append (d.impl_);
+    for (const auto &d : v)
+        p->append (d.impl_);
 
-  return *this;
+    return *this;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -366,10 +370,11 @@ data::operator= (const std::vector <data>& v)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::operator bool () const
 {
-  if (impl_->get_type () == type::boolean)
-    return std::static_pointer_cast <data_impl_bool> (impl_)->get_value ();
+    if (impl_->get_type () == type::boolean)
+        return std::static_pointer_cast<data_impl_bool> (impl_)->get_value ();
 
-  throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot convert data to bool"));
+    throw std::runtime_error (
+        MOBIUS_EXCEPTION_MSG ("cannot convert data to bool"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -378,10 +383,12 @@ data::operator bool () const
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::operator std::int64_t () const
 {
-  if (impl_->get_type () == type::integer)
-    return std::static_pointer_cast <data_impl_integer> (impl_)->get_value ();
+    if (impl_->get_type () == type::integer)
+        return std::static_pointer_cast<data_impl_integer> (impl_)
+            ->get_value ();
 
-  throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot convert data to std::int64_t"));
+    throw std::runtime_error (
+        MOBIUS_EXCEPTION_MSG ("cannot convert data to std::int64_t"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -390,10 +397,11 @@ data::operator std::int64_t () const
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::operator long double () const
 {
-  if (impl_->get_type () == type::floatn)
-    return std::static_pointer_cast <data_impl_float> (impl_)->get_value ();
+    if (impl_->get_type () == type::floatn)
+        return std::static_pointer_cast<data_impl_float> (impl_)->get_value ();
 
-  throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot convert data to long double"));
+    throw std::runtime_error (
+        MOBIUS_EXCEPTION_MSG ("cannot convert data to long double"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -402,10 +410,12 @@ data::operator long double () const
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::operator mobius::core::datetime::datetime () const
 {
-  if (impl_->get_type () == type::datetime)
-    return std::static_pointer_cast <data_impl_datetime> (impl_)->get_value ();
+    if (impl_->get_type () == type::datetime)
+        return std::static_pointer_cast<data_impl_datetime> (impl_)
+            ->get_value ();
 
-  throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot convert data to datetime"));
+    throw std::runtime_error (
+        MOBIUS_EXCEPTION_MSG ("cannot convert data to datetime"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -414,16 +424,20 @@ data::operator mobius::core::datetime::datetime () const
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::operator std::string () const
 {
-  if (impl_->get_type () == type::string)
-    return std::static_pointer_cast <data_impl_string> (impl_)->get_value ();
+    if (impl_->get_type () == type::string)
+        return std::static_pointer_cast<data_impl_string> (impl_)->get_value ();
 
-  else if (impl_->get_type () == type::bytearray)
-    return std::static_pointer_cast <data_impl_bytearray> (impl_)->get_value ().to_string ();
+    else if (impl_->get_type () == type::bytearray)
+        return std::static_pointer_cast<data_impl_bytearray> (impl_)
+            ->get_value ()
+            .to_string ();
 
-  else if (impl_->get_type () == type::integer)
-    return std::to_string (std::static_pointer_cast <data_impl_integer> (impl_)->get_value ());
+    else if (impl_->get_type () == type::integer)
+        return std::to_string (
+            std::static_pointer_cast<data_impl_integer> (impl_)->get_value ());
 
-  throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot convert data to string"));
+    throw std::runtime_error (
+        MOBIUS_EXCEPTION_MSG ("cannot convert data to string"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -432,25 +446,28 @@ data::operator std::string () const
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::operator mobius::core::bytearray () const
 {
-  if (impl_->get_type () == type::bytearray)
-    return std::static_pointer_cast <data_impl_bytearray> (impl_)->get_value ();
+    if (impl_->get_type () == type::bytearray)
+        return std::static_pointer_cast<data_impl_bytearray> (impl_)
+            ->get_value ();
 
-  throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot convert data to bytearray"));
+    throw std::runtime_error (
+        MOBIUS_EXCEPTION_MSG ("cannot convert data to bytearray"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Convert data to std::vector <data>
 // @return Vector value if type == list, otherwise exception
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data::operator std::vector <data> () const
+data::operator std::vector<data> () const
 {
-  if (impl_->get_type () == type::list)
+    if (impl_->get_type () == type::list)
     {
-      auto p = std::static_pointer_cast <data_impl_list> (impl_);
-      return std::vector <data> (p->begin (), p->end ());
+        auto p = std::static_pointer_cast<data_impl_list> (impl_);
+        return std::vector<data> (p->begin (), p->end ());
     }
 
-  throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot convert data to list"));
+    throw std::runtime_error (
+        MOBIUS_EXCEPTION_MSG ("cannot convert data to list"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -460,34 +477,40 @@ data::operator std::vector <data> () const
 data
 data::clone () const
 {
-  if (is_null ())
-    return data ();
+    if (is_null ())
+        return data ();
 
-  else if (is_bool ())
-    return data (std::static_pointer_cast <data_impl_bool> (impl_)->get_value ());
+    else if (is_bool ())
+        return data (
+            std::static_pointer_cast<data_impl_bool> (impl_)->get_value ());
 
-  else if (is_integer ())
-    return data (std::static_pointer_cast <data_impl_integer> (impl_)->get_value ());
+    else if (is_integer ())
+        return data (
+            std::static_pointer_cast<data_impl_integer> (impl_)->get_value ());
 
-  else if (is_float ())
-    return data (std::static_pointer_cast <data_impl_float> (impl_)->get_value ());
+    else if (is_float ())
+        return data (
+            std::static_pointer_cast<data_impl_float> (impl_)->get_value ());
 
-  else if (is_datetime ())
-    return data (std::static_pointer_cast <data_impl_datetime> (impl_)->get_value ());
+    else if (is_datetime ())
+        return data (
+            std::static_pointer_cast<data_impl_datetime> (impl_)->get_value ());
 
-  else if (is_string ())
-    return data (std::static_pointer_cast <data_impl_string> (impl_)->get_value ());
+    else if (is_string ())
+        return data (
+            std::static_pointer_cast<data_impl_string> (impl_)->get_value ());
 
-  else if (is_bytearray ())
-    return data (std::static_pointer_cast <data_impl_bytearray> (impl_)->get_value ());
+    else if (is_bytearray ())
+        return data (std::static_pointer_cast<data_impl_bytearray> (impl_)
+                         ->get_value ());
 
-  else if (is_list ())
-    return list_clone (std::vector <data> (*this));
+    else if (is_list ())
+        return list_clone (std::vector<data> (*this));
 
-  else if (is_map ())
-    return data (map (*this).clone ());
+    else if (is_map ())
+        return data (map (*this).clone ());
 
-  throw std::out_of_range (MOBIUS_EXCEPTION_MSG ("unknown data type"));
+    throw std::out_of_range (MOBIUS_EXCEPTION_MSG ("unknown data type"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -497,34 +520,35 @@ data::clone () const
 std::string
 data::to_string () const
 {
-  if (is_null ())
-    return "null";
+    if (is_null ())
+        return "null";
 
-  else if (is_bool ())
-    return operator bool () ? "true" : "false";
+    else if (is_bool ())
+        return operator bool () ? "true" : "false";
 
-  else if (is_integer ())
-    return std::to_string (operator std::int64_t ());
+    else if (is_integer ())
+        return std::to_string (operator std::int64_t ());
 
-  else if (is_float ())
-    return std::to_string (operator long double ());
+    else if (is_float ())
+        return std::to_string (operator long double ());
 
-  else if (is_datetime ())
-    return mobius::core::datetime::to_string (operator mobius::core::datetime::datetime ());
+    else if (is_datetime ())
+        return mobius::core::datetime::to_string (
+            operator mobius::core::datetime::datetime ());
 
-  else if (is_string ())
-    return operator std::string ();
+    else if (is_string ())
+        return operator std::string ();
 
-  else if (is_bytearray ())
-    return "0x" + operator mobius::core::bytearray ().to_hexstring ();
+    else if (is_bytearray ())
+        return "0x" + operator mobius::core::bytearray ().to_hexstring ();
 
-  else if (is_list ())
-    return list_to_string (std::vector <data> (*this));
+    else if (is_list ())
+        return list_to_string (std::vector<data> (*this));
 
-  else if (is_map ())
-    return map (*this).to_string ();
+    else if (is_map ())
+        return map (*this).to_string ();
 
-  return "<unknown value>";
+    return "<unknown value>";
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -533,10 +557,10 @@ data::to_string () const
 // @param d Data object
 // @return Ostream reference
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::ostream&
-operator<< (std::ostream& os, const mobius::core::pod::data& d)
+std::ostream &
+operator<< (std::ostream &os, const mobius::core::pod::data &d)
 {
-  return os << d.to_string ();
+    return os << d.to_string ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -546,41 +570,42 @@ operator<< (std::ostream& os, const mobius::core::pod::data& d)
 // @return <b>true</b> if objects are equal <b>false<b> otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator== (const data& a, const data& b)
+operator== (const data &a, const data &b)
 {
-  bool rc = false;
+    bool rc = false;
 
-  if (a.get_type () == b.get_type ())
+    if (a.get_type () == b.get_type ())
     {
-      if (a.is_null ())
-        rc = true;
+        if (a.is_null ())
+            rc = true;
 
-      else if (a.is_bool ())
-        rc = (bool (a) == bool (b));
+        else if (a.is_bool ())
+            rc = (bool (a) == bool (b));
 
-      else if (a.is_integer ())
-        rc = (std::int64_t (a) == std::int64_t (b));
+        else if (a.is_integer ())
+            rc = (std::int64_t (a) == std::int64_t (b));
 
-      else if (a.is_float ())
-        rc = (static_cast <long double> (a) == static_cast <long double> (b));
+        else if (a.is_float ())
+            rc = (static_cast<long double> (a) == static_cast<long double> (b));
 
-      else if (a.is_datetime ())
-        rc = (mobius::core::datetime::datetime (a) == mobius::core::datetime::datetime (b));
+        else if (a.is_datetime ())
+            rc = (mobius::core::datetime::datetime (a) ==
+                  mobius::core::datetime::datetime (b));
 
-      else if (a.is_string ())
-        rc = (std::string (a) == std::string (b));
+        else if (a.is_string ())
+            rc = (std::string (a) == std::string (b));
 
-      else if (a.is_bytearray ())
-        rc = (bytearray (a) == bytearray (b));
+        else if (a.is_bytearray ())
+            rc = (bytearray (a) == bytearray (b));
 
-      else if (a.is_list ())
-        rc = (std::vector <data> (a) == std::vector <data> (b));
+        else if (a.is_list ())
+            rc = (std::vector<data> (a) == std::vector<data> (b));
 
-      else if (a.is_map ())
-        rc = (map (a) == map (b));
+        else if (a.is_map ())
+            rc = (map (a) == map (b));
     }
 
-  return rc;
+    return rc;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -590,11 +615,9 @@ operator== (const data& a, const data& b)
 // @return <b>true</b> if objects are different <b>false<b> otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator!= (const data& a, const data& b)
+operator!= (const data &a, const data &b)
 {
-  return ! (a == b);
+    return !(a == b);
 }
 
 } // namespace mobius::core::pod
-
-

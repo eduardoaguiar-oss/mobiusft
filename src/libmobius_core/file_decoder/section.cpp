@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -25,97 +27,96 @@ namespace mobius::core::file_decoder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class section::impl
 {
-public:
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl () = default;
+    impl (const impl &) = delete;
+    impl (impl &&) = delete;
+    impl (const mobius::core::io::reader &, const std::string &);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  impl () = default;
-  impl (const impl&) = delete;
-  impl (impl&&) = delete;
-  impl (const mobius::core::io::reader&, const std::string&);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl &operator= (const impl &) = delete;
+    impl &operator= (impl &&) = delete;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Operators
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  impl& operator= (const impl&) = delete;
-  impl& operator= (impl&&) = delete;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get name
+    // @return Name
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_name () const
+    {
+        return name_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get name
-  // @return Name
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::string
-  get_name () const
-  {
-    return name_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get offset
+    // @return Offset
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    size_type
+    get_offset () const
+    {
+        return offset_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get offset
-  // @return Offset
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  size_type
-  get_offset () const
-  {
-    return offset_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get size
+    // @return Size
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    size_type
+    get_size () const
+    {
+        return size_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get size
-  // @return Size
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  size_type
-  get_size () const
-  {
-    return size_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get children
+    // @return Children sections
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<section>
+    get_children () const
+    {
+        return children_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get children
-  // @return Children sections
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::vector <section>
-  get_children () const
-  {
-    return children_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Set alternate data for section
+    // @param data Data
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void
+    set_data (const mobius::core::bytearray &data)
+    {
+        data_ = data;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Set alternate data for section
-  // @param data Data
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void
-  set_data (const mobius::core::bytearray& data)
-  {
-    data_ = data;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    section new_child (const std::string &);
+    mobius::core::io::reader new_reader () const;
+    void end ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  section new_child (const std::string&);
-  mobius::core::io::reader new_reader () const;
-  void end ();
+  private:
+    // @brief Reader object
+    mobius::core::io::reader reader_;
 
-private:
-  // @brief Reader object
-  mobius::core::io::reader reader_;
+    // @brief Section offset from the beginning of file
+    size_type offset_ = 0;
 
-  // @brief Section offset from the beginning of file
-  size_type offset_ = 0;
+    // @brief Section size in bytes
+    size_type size_ = 0;
 
-  // @brief Section size in bytes
-  size_type size_ = 0;
+    // @brief Section name
+    std::string name_;
 
-  // @brief Section name
-  std::string name_;
+    // @brief Children sections
+    std::vector<section> children_;
 
-  // @brief Children sections
-  std::vector <section> children_;
-
-  // @brief Alternate data, if any
-  mobius::core::bytearray data_;
+    // @brief Alternate data, if any
+    mobius::core::bytearray data_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -123,10 +124,11 @@ private:
 // @param reader Reader object
 // @param name Section name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-section::impl::impl (const mobius::core::io::reader& reader, const std::string& name)
-  : reader_ (reader),
-    offset_ (reader.tell ()),
-    name_ (name)
+section::impl::impl (const mobius::core::io::reader &reader,
+                     const std::string &name)
+    : reader_ (reader),
+      offset_ (reader.tell ()),
+      name_ (name)
 {
 }
 
@@ -136,9 +138,9 @@ section::impl::impl (const mobius::core::io::reader& reader, const std::string& 
 // @return Child section
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 section
-section::impl::new_child (const std::string& name)
+section::impl::new_child (const std::string &name)
 {
-  return children_.emplace_back (reader_, name);
+    return children_.emplace_back (reader_, name);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -148,11 +150,12 @@ section::impl::new_child (const std::string& name)
 mobius::core::io::reader
 section::impl::new_reader () const
 {
-  if (data_)
-    return mobius::core::io::new_bytearray_reader (data_);
+    if (data_)
+        return mobius::core::io::new_bytearray_reader (data_);
 
-  else
-    return mobius::core::io::new_slice_reader (reader_, offset_, offset_ + size_ - 1);
+    else
+        return mobius::core::io::new_slice_reader (reader_, offset_,
+                                                   offset_ + size_ - 1);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -161,14 +164,14 @@ section::impl::new_reader () const
 void
 section::impl::end ()
 {
-  size_ = reader_.tell () - offset_;
+    size_ = reader_.tell () - offset_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 section::section ()
-  : impl_ (std::make_shared <impl> ())
+    : impl_ (std::make_shared<impl> ())
 {
 }
 
@@ -177,8 +180,9 @@ section::section ()
 // @param reader Reader object
 // @param name Section name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-section::section (const mobius::core::io::reader& reader, const std::string& name)
-  : impl_ (std::make_shared <impl> (reader, name))
+section::section (const mobius::core::io::reader &reader,
+                  const std::string &name)
+    : impl_ (std::make_shared<impl> (reader, name))
 {
 }
 
@@ -188,9 +192,9 @@ section::section (const mobius::core::io::reader& reader, const std::string& nam
 // @return Child section
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 section
-section::new_child (const std::string& name)
+section::new_child (const std::string &name)
 {
-  return impl_->new_child (name);
+    return impl_->new_child (name);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -200,7 +204,7 @@ section::new_child (const std::string& name)
 std::vector<section>
 section::get_children () const
 {
-  return impl_->get_children ();
+    return impl_->get_children ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -210,7 +214,7 @@ section::get_children () const
 mobius::core::io::reader
 section::new_reader () const
 {
-  return impl_->new_reader ();
+    return impl_->new_reader ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -218,9 +222,9 @@ section::new_reader () const
 // @param data Data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-section::set_data (const mobius::core::bytearray& data)
+section::set_data (const mobius::core::bytearray &data)
 {
-  impl_->set_data (data);
+    impl_->set_data (data);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -229,7 +233,7 @@ section::set_data (const mobius::core::bytearray& data)
 void
 section::end ()
 {
-  impl_->end ();
+    impl_->end ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -239,7 +243,7 @@ section::end ()
 std::string
 section::get_name () const
 {
-  return impl_->get_name ();
+    return impl_->get_name ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -249,7 +253,7 @@ section::get_name () const
 section::size_type
 section::get_offset () const
 {
-  return impl_->get_offset ();
+    return impl_->get_offset ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -259,9 +263,7 @@ section::get_offset () const
 section::size_type
 section::get_size () const
 {
-  return impl_->get_size ();
+    return impl_->get_size ();
 }
 
 } // namespace mobius::core::file_decoder
-
-

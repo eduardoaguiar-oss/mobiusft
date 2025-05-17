@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,16 +17,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/io/smb/file_impl.hpp>
-#include <mobius/core/io/smb/folder_impl.hpp>
-#include <mobius/core/io/smb/reader_impl.hpp>
-#include <mobius/core/io/smb/writer_impl.hpp>
-#include <mobius/core/io/smb/init.hpp>
-#include <mobius/core/io/uri.hpp>
+#include <cstring>
+#include <libsmbclient.h>
 #include <mobius/core/exception.inc>
 #include <mobius/core/exception_posix.inc>
-#include <libsmbclient.h>
-#include <cstring>
+#include <mobius/core/io/smb/file_impl.hpp>
+#include <mobius/core/io/smb/folder_impl.hpp>
+#include <mobius/core/io/smb/init.hpp>
+#include <mobius/core/io/smb/reader_impl.hpp>
+#include <mobius/core/io/smb/writer_impl.hpp>
+#include <mobius/core/io/uri.hpp>
 #include <stdexcept>
 
 namespace mobius::core::io::smb
@@ -33,13 +35,13 @@ namespace mobius::core::io::smb
 // @brief Initialize object
 // @param url File URL
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-file_impl::file_impl (const std::string& url)
-  : url_ (url)
+file_impl::file_impl (const std::string &url)
+    : url_ (url)
 {
-  init ();      // initialize SMB if necessary
+    init (); // initialize SMB if necessary
 
-  mobius::core::io::uri uri (url);
-  name_ = uri.get_filename ();
+    mobius::core::io::uri uri (url);
+    name_ = uri.get_filename ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -49,7 +51,7 @@ file_impl::file_impl (const std::string& url)
 std::string
 file_impl::get_name () const
 {
-  return name_;
+    return name_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -59,10 +61,10 @@ file_impl::get_name () const
 bool
 file_impl::exists () const
 {
-  if (!is_stat_loaded_)
-    _load_stat ();
+    if (!is_stat_loaded_)
+        _load_stat ();
 
-  return exists_;
+    return exists_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -72,10 +74,10 @@ file_impl::exists () const
 bool
 file_impl::is_deleted () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return false;  // smb files are never deleted
+    return false; // smb files are never deleted
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -85,10 +87,10 @@ file_impl::is_deleted () const
 bool
 file_impl::is_reallocated () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return false;  // smb files are never reallocated
+    return false; // smb files are never reallocated
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -98,10 +100,10 @@ file_impl::is_reallocated () const
 bool
 file_impl::is_hidden () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return !name_.empty () && name_[0] == '.';
+    return !name_.empty () && name_[0] == '.';
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -111,10 +113,10 @@ file_impl::is_hidden () const
 std::string
 file_impl::get_short_name () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return std::string (); // smb files don't have short names
+    return std::string (); // smb files don't have short names
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -124,10 +126,10 @@ file_impl::get_short_name () const
 file_impl::inode_type
 file_impl::get_inode () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return inode_;
+    return inode_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -137,10 +139,10 @@ file_impl::get_inode () const
 file_impl::size_type
 file_impl::get_size () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return size_;
+    return size_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -150,10 +152,10 @@ file_impl::get_size () const
 file_impl::type
 file_impl::get_type () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return type_;
+    return type_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -163,10 +165,10 @@ file_impl::get_type () const
 file_impl::user_id_type
 file_impl::get_user_id () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return user_id_;
+    return user_id_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -176,10 +178,10 @@ file_impl::get_user_id () const
 std::string
 file_impl::get_user_name () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return user_name_;
+    return user_name_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -189,10 +191,10 @@ file_impl::get_user_name () const
 file_impl::group_id_type
 file_impl::get_group_id () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return group_id_;
+    return group_id_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -202,10 +204,10 @@ file_impl::get_group_id () const
 std::string
 file_impl::get_group_name () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return group_name_;
+    return group_name_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -215,10 +217,10 @@ file_impl::get_group_name () const
 file_impl::permission_type
 file_impl::get_permissions () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return permissions_;
+    return permissions_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -228,10 +230,10 @@ file_impl::get_permissions () const
 mobius::core::datetime::datetime
 file_impl::get_access_time () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return access_time_;
+    return access_time_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -241,10 +243,10 @@ file_impl::get_access_time () const
 mobius::core::datetime::datetime
 file_impl::get_modification_time () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return modification_time_;
+    return modification_time_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -254,10 +256,10 @@ file_impl::get_modification_time () const
 mobius::core::datetime::datetime
 file_impl::get_metadata_time () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return metadata_time_;
+    return metadata_time_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -267,10 +269,11 @@ file_impl::get_metadata_time () const
 mobius::core::datetime::datetime
 file_impl::get_creation_time () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return mobius::core::datetime::datetime (); // smb files don't have creation time
+    return mobius::core::datetime::datetime (); // smb files don't have creation
+                                                // time
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -280,10 +283,11 @@ file_impl::get_creation_time () const
 mobius::core::datetime::datetime
 file_impl::get_deletion_time () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return mobius::core::datetime::datetime (); // smb files don't have deletion time
+    return mobius::core::datetime::datetime (); // smb files don't have deletion
+                                                // time
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -293,10 +297,11 @@ file_impl::get_deletion_time () const
 mobius::core::datetime::datetime
 file_impl::get_backup_time () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return mobius::core::datetime::datetime (); // smb files don't have backup time
+    return mobius::core::datetime::datetime (); // smb files don't have backup
+                                                // time
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -306,10 +311,10 @@ file_impl::get_backup_time () const
 file_impl::folder_type
 file_impl::get_parent () const
 {
-  mobius::core::io::uri uri (url_);
-  auto parent = uri.get_parent ();
+    mobius::core::io::uri uri (url_);
+    auto parent = uri.get_parent ();
 
-  return std::make_shared <folder_impl> (parent.get_value ());
+    return std::make_shared<folder_impl> (parent.get_value ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -318,7 +323,7 @@ file_impl::get_parent () const
 void
 file_impl::reload ()
 {
-  is_stat_loaded_ = false;
+    is_stat_loaded_ = false;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -327,13 +332,13 @@ file_impl::reload ()
 void
 file_impl::remove ()
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  if (smbc_unlink (url_.c_str ()) < 0)
-    throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+    if (smbc_unlink (url_.c_str ()) < 0)
+        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
 
-  is_stat_loaded_ = false;  // force reload of attributes
+    is_stat_loaded_ = false; // force reload of attributes
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -341,24 +346,24 @@ file_impl::remove ()
 // @param filename New filename
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-file_impl::rename (const std::string& filename)
+file_impl::rename (const std::string &filename)
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  // create new URI
-  mobius::core::io::uri old_uri (url_);
-  mobius::core::io::uri new_uri = old_uri.get_sibling_by_name (filename);
+    // create new URI
+    mobius::core::io::uri old_uri (url_);
+    mobius::core::io::uri new_uri = old_uri.get_sibling_by_name (filename);
 
-  // rename file
-  if (smbc_rename (url_.c_str (), new_uri.get_value ().c_str ()) < 0)
-    throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+    // rename file
+    if (smbc_rename (url_.c_str (), new_uri.get_value ().c_str ()) < 0)
+        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
 
-  // update attributes
-  url_ = new_uri.get_value ();
-  name_ = filename;
+    // update attributes
+    url_ = new_uri.get_value ();
+    name_ = filename;
 
-  is_stat_loaded_ = false;  // force reload of attributes
+    is_stat_loaded_ = false; // force reload of attributes
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -369,21 +374,21 @@ file_impl::rename (const std::string& filename)
 bool
 file_impl::move (file_type impl)
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  // if destination file impl is also smb, use rename function
-  auto pimpl = std::dynamic_pointer_cast <file_impl> (impl);
+    // if destination file impl is also smb, use rename function
+    auto pimpl = std::dynamic_pointer_cast<file_impl> (impl);
 
-  if (pimpl)
+    if (pimpl)
     {
-      if (smbc_rename (url_.c_str (), pimpl->url_.c_str ()) < 0)
-        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+        if (smbc_rename (url_.c_str (), pimpl->url_.c_str ()) < 0)
+            throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
 
-      return true;
+        return true;
     }
 
-  return false;
+    return false;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -393,10 +398,10 @@ file_impl::move (file_type impl)
 file_impl::reader_type
 file_impl::new_reader () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("file does not exist"));
 
-  return std::make_shared <reader_impl> (url_);
+    return std::make_shared<reader_impl> (url_);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -407,7 +412,7 @@ file_impl::new_reader () const
 file_impl::writer_type
 file_impl::new_writer (bool overwrite) const
 {
-  return std::make_shared <writer_impl> (url_, overwrite);
+    return std::make_shared<writer_impl> (url_, overwrite);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -416,46 +421,64 @@ file_impl::new_writer (bool overwrite) const
 void
 file_impl::_load_stat () const
 {
-  if (is_stat_loaded_)
-    return;
+    if (is_stat_loaded_)
+        return;
 
-  struct stat st;
+    struct stat st;
 
-  if (smbc_stat (url_.c_str (), &st) < 0)   // error
+    if (smbc_stat (url_.c_str (), &st) < 0) // error
     {
-      exists_ = false;
+        exists_ = false;
 
-      if (errno != ENOENT && errno != ENOTDIR)
-        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+        if (errno != ENOENT && errno != ENOTDIR)
+            throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
     }
 
-  else
+    else
     {
-      exists_ = true;
-      inode_ = st.st_ino;
-      size_ = st.st_size;
-      user_id_ = st.st_uid;
-      group_id_ = st.st_gid;
-      permissions_ = st.st_mode & 0777;
-      access_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (st.st_atime);
-      modification_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (st.st_mtime);
-      metadata_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (st.st_ctime);
+        exists_ = true;
+        inode_ = st.st_ino;
+        size_ = st.st_size;
+        user_id_ = st.st_uid;
+        group_id_ = st.st_gid;
+        permissions_ = st.st_mode & 0777;
+        access_time_ =
+            mobius::core::datetime::new_datetime_from_unix_timestamp (
+                st.st_atime);
+        modification_time_ =
+            mobius::core::datetime::new_datetime_from_unix_timestamp (
+                st.st_mtime);
+        metadata_time_ =
+            mobius::core::datetime::new_datetime_from_unix_timestamp (
+                st.st_ctime);
 
-      switch (st.st_mode & S_IFMT)
+        switch (st.st_mode & S_IFMT)
         {
-        case S_IFBLK: type_ = type::block_device; break;
-        case S_IFCHR: type_ = type::char_device; break;
-        case S_IFIFO: type_ = type::fifo; break;
-        case S_IFLNK: type_ = type::symlink; break;
-        case S_IFREG: type_ = type::regular; break;
-        case S_IFSOCK: type_ = type::socket; break;
-        default: type_ = type::none; break;
+        case S_IFBLK:
+            type_ = type::block_device;
+            break;
+        case S_IFCHR:
+            type_ = type::char_device;
+            break;
+        case S_IFIFO:
+            type_ = type::fifo;
+            break;
+        case S_IFLNK:
+            type_ = type::symlink;
+            break;
+        case S_IFREG:
+            type_ = type::regular;
+            break;
+        case S_IFSOCK:
+            type_ = type::socket;
+            break;
+        default:
+            type_ = type::none;
+            break;
         }
     }
 
-  is_stat_loaded_ = true;
+    is_stat_loaded_ = true;
 }
 
 } // namespace mobius::core::io::smb
-
-

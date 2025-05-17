@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -16,16 +18,16 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/database/database.hpp>
-#include <mobius/framework/model/case.hpp>
-#include <mobius/framework/model/item.hpp>
 #include <mobius/core/exception.inc>
 #include <mobius/core/exception_posix.inc>
 #include <mobius/core/io/path.hpp>
+#include <mobius/framework/model/case.hpp>
+#include <mobius/framework/model/item.hpp>
 #include <mutex>
 #include <stdexcept>
-#include <unordered_map>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <unordered_map>
 
 namespace mobius::framework::model
 {
@@ -48,7 +50,7 @@ static std::mutex mutex_;
 static uid_type next_uid_ = 1;
 
 // @brief opened cases
-static std::unordered_map <uid_type, Case> cases_;
+static std::unordered_map<uid_type, Case> cases_;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Constants
@@ -60,24 +62,25 @@ static constexpr char DIR_SEPARATOR = '/';
 // @param path directory path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-make_directory (const std::string& path)
+make_directory (const std::string &path)
 {
-  if (mkdir (path.c_str (), 0700) == -1)
+    if (mkdir (path.c_str (), 0700) == -1)
     {
-      if (errno == ENOENT)
+        if (errno == ENOENT)
         {
-          auto idx = path.rfind (DIR_SEPARATOR);
+            auto idx = path.rfind (DIR_SEPARATOR);
 
-          if (idx == std::string::npos)
-            throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Cannot create directory"));
+            if (idx == std::string::npos)
+                throw std::runtime_error (
+                    MOBIUS_EXCEPTION_MSG ("Cannot create directory"));
 
-          std::string head = path.substr (0, idx);
-          make_directory (head);
-          make_directory (path);
+            std::string head = path.substr (0, idx);
+            make_directory (head);
+            make_directory (path);
         }
 
-      else if (errno != EEXIST)
-        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+        else if (errno != EEXIST)
+            throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
     }
 }
 
@@ -88,10 +91,10 @@ make_directory (const std::string& path)
 // @return Full path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
-join_path (const std::string& abs_path, const std::string& rel_path)
+join_path (const std::string &abs_path, const std::string &rel_path)
 {
-  auto path = mobius::core::io::path (abs_path);
-  return to_string (path.get_child_by_path (rel_path));
+    auto path = mobius::core::io::path (abs_path);
+    return to_string (path.get_child_by_path (rel_path));
 }
 
 } // namespace
@@ -101,56 +104,56 @@ join_path (const std::string& abs_path, const std::string& rel_path)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class Case::impl
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  impl (const impl&) = delete;
-  impl (impl&&) = delete;
-  impl (const std::string&, std::uint32_t);
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl (const impl &) = delete;
+    impl (impl &&) = delete;
+    impl (const std::string &, std::uint32_t);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // function prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::string get_path (const std::string&) const;
-  std::string create_path (const std::string&) const;
-  mobius::core::database::connection new_connection ();
-  mobius::core::database::transaction new_transaction ();
-  mobius::core::database::database get_database () const;
-  bool has_item_by_uid (std::int64_t) const;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // function prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string get_path (const std::string &) const;
+    std::string create_path (const std::string &) const;
+    mobius::core::database::connection new_connection ();
+    mobius::core::database::transaction new_transaction ();
+    mobius::core::database::database get_database () const;
+    bool has_item_by_uid (std::int64_t) const;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief get root item
-  // @return root item
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::int64_t
-  get_root_item_uid () const
-  {
-    return root_item_uid_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief get root item
+    // @return root item
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::int64_t
+    get_root_item_uid () const
+    {
+        return root_item_uid_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief get uid
-  // @return uid
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::uint32_t
-  get_uid () const
-  {
-    return uid_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief get uid
+    // @return uid
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::uint32_t
+    get_uid () const
+    {
+        return uid_;
+    }
 
-private:
-  // @brief case UID
-  std::uint32_t uid_;
+  private:
+    // @brief case UID
+    std::uint32_t uid_;
 
-  // @brief root item UID
-  std::int64_t root_item_uid_;
+    // @brief root item UID
+    std::int64_t root_item_uid_;
 
-  // @brief base directory
-  std::string base_dir_;
+    // @brief base directory
+    std::string base_dir_;
 
-  // @brief database connection pool
-  mobius::core::database::connection_pool pool_;
+    // @brief database connection pool
+    mobius::core::database::connection_pool pool_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -158,56 +161,53 @@ private:
 // @param path case folder path
 // @param uid case UID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-Case::impl::impl (const std::string& path, std::uint32_t uid)
-  : uid_ (uid),
-    base_dir_ (path),
-    pool_ (join_path (path, "case.sqlite"))
+Case::impl::impl (const std::string &path, std::uint32_t uid)
+    : uid_ (uid),
+      base_dir_ (path),
+      pool_ (join_path (path, "case.sqlite"))
 
 {
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Create tables
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto db = pool_.get_database ();
-  db.execute ("pragma foreign_keys=ON");
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Create tables
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto db = pool_.get_database ();
+    db.execute ("pragma foreign_keys=ON");
 
-  auto transaction = db.new_transaction ();
-  case_schema (db);
+    auto transaction = db.new_transaction ();
+    case_schema (db);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // get root item UID, if any
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto stmt = db.new_statement (
-           "SELECT uid "
-             "FROM item "
-            "WHERE parent_uid IS NULL");
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // get root item UID, if any
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto stmt = db.new_statement ("SELECT uid "
+                                  "FROM item "
+                                  "WHERE parent_uid IS NULL");
 
-  if (stmt.fetch_row ())
-    root_item_uid_ = stmt.get_column_int64 (0);
+    if (stmt.fetch_row ())
+        root_item_uid_ = stmt.get_column_int64 (0);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // otherwise, populate case and root item
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  else
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // otherwise, populate case and root item
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    else
     {
-      // create case row
-      stmt = db.new_statement (
-               "INSERT INTO 'case'"
-                    "VALUES (1, DATETIME ('NOW'))");
+        // create case row
+        stmt = db.new_statement ("INSERT INTO 'case'"
+                                 "VALUES (1, DATETIME ('NOW'))");
 
-      stmt.execute ();
+        stmt.execute ();
 
+        // create root item
+        stmt = db.new_statement (
+            "INSERT INTO item "
+            "VALUES (NULL, NULL, 1, 'case', DATETIME ('NOW'))");
 
-      // create root item
-      stmt = db.new_statement (
-               "INSERT INTO item "
-                    "VALUES (NULL, NULL, 1, 'case', DATETIME ('NOW'))");
+        stmt.execute ();
 
-      stmt.execute ();
-
-      root_item_uid_ = db.get_last_insert_row_id ();
+        root_item_uid_ = db.get_last_insert_row_id ();
     }
 
-  transaction.commit ();
+    transaction.commit ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -216,9 +216,9 @@ Case::impl::impl (const std::string& path, std::uint32_t uid)
 // @return Full path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-Case::impl::get_path (const std::string& rpath) const
+Case::impl::get_path (const std::string &rpath) const
 {
-  return join_path (base_dir_, rpath);
+    return join_path (base_dir_, rpath);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -227,14 +227,14 @@ Case::impl::get_path (const std::string& rpath) const
 // @return full path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-Case::impl::create_path (const std::string& rpath) const
+Case::impl::create_path (const std::string &rpath) const
 {
-  const std::string fullpath = join_path (base_dir_, rpath);
+    const std::string fullpath = join_path (base_dir_, rpath);
 
-  mobius::core::io::path path (fullpath);
-  make_directory (path.get_dirname ());
+    mobius::core::io::path path (fullpath);
+    make_directory (path.get_dirname ());
 
-  return fullpath;
+    return fullpath;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -244,7 +244,7 @@ Case::impl::create_path (const std::string& rpath) const
 mobius::core::database::connection
 Case::impl::new_connection ()
 {
-  return pool_.acquire ();
+    return pool_.acquire ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -254,8 +254,8 @@ Case::impl::new_connection ()
 mobius::core::database::transaction
 Case::impl::new_transaction ()
 {
-  auto db = pool_.get_database ();
-  return db.new_transaction ();
+    auto db = pool_.get_database ();
+    return db.new_transaction ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -265,7 +265,7 @@ Case::impl::new_transaction ()
 mobius::core::database::database
 Case::impl::get_database () const
 {
-  return pool_.get_database ();
+    return pool_.get_database ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -276,16 +276,15 @@ Case::impl::get_database () const
 bool
 Case::impl::has_item_by_uid (std::int64_t uid) const
 {
-  auto db = pool_.get_database ();
+    auto db = pool_.get_database ();
 
-  auto stmt = db.new_statement (
-                "SELECT 1 "
-                  "FROM item "
-                 "WHERE uid = ?");
+    auto stmt = db.new_statement ("SELECT 1 "
+                                  "FROM item "
+                                  "WHERE uid = ?");
 
-  stmt.bind (1, uid);
+    stmt.bind (1, uid);
 
-  return stmt.fetch_row ();
+    return stmt.fetch_row ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -293,8 +292,8 @@ Case::impl::has_item_by_uid (std::int64_t uid) const
 // @param path case folder path
 // @param uid case UID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-Case::Case (const std::string& path, std::uint32_t uid)
-  : impl_ (std::make_shared <impl> (path, uid))
+Case::Case (const std::string &path, std::uint32_t uid)
+    : impl_ (std::make_shared<impl> (path, uid))
 {
 }
 
@@ -304,9 +303,9 @@ Case::Case (const std::string& path, std::uint32_t uid)
 // @return full path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-Case::get_path (const std::string& rpath) const
+Case::get_path (const std::string &rpath) const
 {
-  return impl_->get_path (rpath);
+    return impl_->get_path (rpath);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -315,9 +314,9 @@ Case::get_path (const std::string& rpath) const
 // @return full path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-Case::create_path (const std::string& rpath) const
+Case::create_path (const std::string &rpath) const
 {
-  return impl_->create_path (rpath);
+    return impl_->create_path (rpath);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -327,7 +326,7 @@ Case::create_path (const std::string& rpath) const
 mobius::core::database::connection
 Case::new_connection ()
 {
-  return impl_->new_connection ();
+    return impl_->new_connection ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -337,7 +336,7 @@ Case::new_connection ()
 mobius::core::database::transaction
 Case::new_transaction ()
 {
-  return impl_->new_transaction ();
+    return impl_->new_transaction ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -347,7 +346,7 @@ Case::new_transaction ()
 mobius::core::database::database
 Case::get_database () const
 {
-  return impl_->get_database ();
+    return impl_->get_database ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -358,12 +357,12 @@ Case::get_database () const
 item
 Case::get_item_by_uid (std::int64_t uid) const
 {
-  item it;
+    item it;
 
-  if (impl_->has_item_by_uid (uid))
-    it = item (*this, uid);
+    if (impl_->has_item_by_uid (uid))
+        it = item (*this, uid);
 
-  return it;
+    return it;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -373,7 +372,7 @@ Case::get_item_by_uid (std::int64_t uid) const
 item
 Case::get_root_item () const
 {
-  return item (*this, impl_->get_root_item_uid ());
+    return item (*this, impl_->get_root_item_uid ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -383,71 +382,69 @@ Case::get_root_item () const
 std::uint32_t
 Case::get_uid () const
 {
-  return impl_->get_uid ();
+    return impl_->get_uid ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get passwords
 // @return Passwords
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <evidence>
+std::vector<evidence>
 Case::get_passwords () const
 {
-  auto db = impl_->get_database ();
+    auto db = impl_->get_database ();
 
-  auto stmt = db.new_statement (
-                "SELECT item_uid, uid "
-                  "FROM evidence "
-                 "WHERE type = 'password' "
-              "ORDER BY item_uid");
+    auto stmt = db.new_statement ("SELECT item_uid, uid "
+                                  "FROM evidence "
+                                  "WHERE type = 'password' "
+                                  "ORDER BY item_uid");
 
-  std::vector <evidence> passwords;
-  item i (*this, -1);
+    std::vector<evidence> passwords;
+    item i (*this, -1);
 
-  while (stmt.fetch_row ())
+    while (stmt.fetch_row ())
     {
-      auto item_uid = stmt.get_column_int64 (0);
-      auto uid = stmt.get_column_int64 (1);
+        auto item_uid = stmt.get_column_int64 (0);
+        auto uid = stmt.get_column_int64 (1);
 
-      if (i.get_uid () != item_uid)
-        i = item (*this, item_uid);
+        if (i.get_uid () != item_uid)
+            i = item (*this, item_uid);
 
-      passwords.emplace_back (i, uid, "password");
+        passwords.emplace_back (i, uid, "password");
     }
 
-  return passwords;
+    return passwords;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get password hashes
 // @return Password hashes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <evidence>
+std::vector<evidence>
 Case::get_password_hashes () const
 {
-  auto db = impl_->get_database ();
+    auto db = impl_->get_database ();
 
-  auto stmt = db.new_statement (
-                "SELECT item_uid, uid "
-                  "FROM evidence "
-                 "WHERE type = 'password_hash' "
-              "ORDER BY item_uid");
+    auto stmt = db.new_statement ("SELECT item_uid, uid "
+                                  "FROM evidence "
+                                  "WHERE type = 'password_hash' "
+                                  "ORDER BY item_uid");
 
-  std::vector <evidence> password_hashes;
-  item i (*this, -1);
+    std::vector<evidence> password_hashes;
+    item i (*this, -1);
 
-  while (stmt.fetch_row ())
+    while (stmt.fetch_row ())
     {
-      auto item_uid = stmt.get_column_int64 (0);
-      auto uid = stmt.get_column_int64 (1);
+        auto item_uid = stmt.get_column_int64 (0);
+        auto uid = stmt.get_column_int64 (1);
 
-      if (i.get_uid () != item_uid)
-        i = item (*this, item_uid);
+        if (i.get_uid () != item_uid)
+            i = item (*this, item_uid);
 
-      password_hashes.emplace_back (i, uid, "password_hash");
+        password_hashes.emplace_back (i, uid, "password_hash");
     }
 
-  return password_hashes;
+    return password_hashes;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -457,9 +454,9 @@ Case::get_password_hashes () const
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator== (const Case& a, const Case& b)
+operator== (const Case &a, const Case &b)
 {
-  return a.get_uid () == b.get_uid ();
+    return a.get_uid () == b.get_uid ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -469,9 +466,9 @@ operator== (const Case& a, const Case& b)
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator!= (const Case& a, const Case& b)
+operator!= (const Case &a, const Case &b)
 {
-  return a.get_uid () != b.get_uid ();
+    return a.get_uid () != b.get_uid ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -481,9 +478,9 @@ operator!= (const Case& a, const Case& b)
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator< (const Case& a, const Case& b)
+operator< (const Case &a, const Case &b)
 {
-  return a.get_uid () < b.get_uid ();
+    return a.get_uid () < b.get_uid ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -493,9 +490,9 @@ operator< (const Case& a, const Case& b)
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator<= (const Case& a, const Case& b)
+operator<= (const Case &a, const Case &b)
 {
-  return a.get_uid () <= b.get_uid ();
+    return a.get_uid () <= b.get_uid ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -505,9 +502,9 @@ operator<= (const Case& a, const Case& b)
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator> (const Case& a, const Case& b)
+operator> (const Case &a, const Case &b)
 {
-  return a.get_uid () > b.get_uid ();
+    return a.get_uid () > b.get_uid ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -517,9 +514,9 @@ operator> (const Case& a, const Case& b)
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator>= (const Case& a, const Case& b)
+operator>= (const Case &a, const Case &b)
 {
-  return a.get_uid () >= b.get_uid ();
+    return a.get_uid () >= b.get_uid ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -528,15 +525,15 @@ operator>= (const Case& a, const Case& b)
 // @return new case
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 Case
-new_case (const std::string& path)
+new_case (const std::string &path)
 {
-  std::lock_guard <std::mutex> lock (mutex_);
+    std::lock_guard<std::mutex> lock (mutex_);
 
-  Case c (path, next_uid_);
-  cases_[c.get_uid ()] = c;
-  ++next_uid_;
+    Case c (path, next_uid_);
+    cases_[c.get_uid ()] = c;
+    ++next_uid_;
 
-  return c;
+    return c;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -545,15 +542,15 @@ new_case (const std::string& path)
 // @return opened case
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 Case
-open_case (const std::string& path)
+open_case (const std::string &path)
 {
-  std::lock_guard <std::mutex> lock (mutex_);
+    std::lock_guard<std::mutex> lock (mutex_);
 
-  Case c (path, next_uid_);
-  cases_[c.get_uid ()] = c;
-  ++next_uid_;
+    Case c (path, next_uid_);
+    cases_[c.get_uid ()] = c;
+    ++next_uid_;
 
-  return c;
+    return c;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -561,26 +558,26 @@ open_case (const std::string& path)
 // @param c case object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-close_case (const Case& c)
+close_case (const Case &c)
 {
-  std::lock_guard <std::mutex> lock (mutex_);
-  cases_.erase (c.get_uid ());
+    std::lock_guard<std::mutex> lock (mutex_);
+    cases_.erase (c.get_uid ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get opened cases
 // @return opened cases
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <Case>
+std::vector<Case>
 get_cases ()
 {
-  std::vector <Case> cases;
-  std::lock_guard <std::mutex> lock (mutex_);
+    std::vector<Case> cases;
+    std::lock_guard<std::mutex> lock (mutex_);
 
-  for (const auto& p : cases_)
-    cases.push_back (p.second);
+    for (const auto &p : cases_)
+        cases.push_back (p.second);
 
-  return cases;
+    return cases;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -590,8 +587,8 @@ get_cases ()
 int
 get_case_count ()
 {
-  std::lock_guard <std::mutex> lock (mutex_);
-  return cases_.size ();
+    std::lock_guard<std::mutex> lock (mutex_);
+    return cases_.size ();
 }
 
 } // namespace mobius::framework::model

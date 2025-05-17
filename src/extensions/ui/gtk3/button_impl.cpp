@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -16,9 +18,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "button_impl.hpp"
+#include <gtk/gtk.h>
 #include <mobius/core/exception.inc>
 #include <stdexcept>
-#include <gtk/gtk.h>
 
 namespace
 {
@@ -26,9 +28,9 @@ namespace
 // @brief Callback for <i>clicked</i>
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static bool
-_callback_clicked (GtkWidget*, gpointer data)
+_callback_clicked (GtkWidget *, gpointer data)
 {
-  return static_cast <mobius::core::functor<bool> *> (data)->operator ()();
+    return static_cast<mobius::core::functor<bool> *> (data)->operator() ();
 }
 
 } //  namespace
@@ -39,10 +41,11 @@ namespace mobius::extension::ui::gtk3
 // @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 button_impl::button_impl ()
-  : widget_ (gtk_button_new ())
+    : widget_ (gtk_button_new ())
 {
-  g_object_ref_sink (G_OBJECT (widget_));
-  gtk_button_set_use_underline (reinterpret_cast <GtkButton *> (widget_), true);
+    g_object_ref_sink (G_OBJECT (widget_));
+    gtk_button_set_use_underline (reinterpret_cast<GtkButton *> (widget_),
+                                  true);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -50,8 +53,8 @@ button_impl::button_impl ()
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 button_impl::~button_impl ()
 {
-  reset_callback ("clicked");
-  g_object_unref (G_OBJECT (widget_));
+    reset_callback ("clicked");
+    g_object_unref (G_OBJECT (widget_));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -61,7 +64,7 @@ button_impl::~button_impl ()
 void
 button_impl::set_sensitive (bool flag)
 {
-  gtk_widget_set_sensitive (widget_, flag);
+    gtk_widget_set_sensitive (widget_, flag);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -71,7 +74,7 @@ button_impl::set_sensitive (bool flag)
 void
 button_impl::set_visible (bool flag)
 {
-  gtk_widget_set_visible (widget_, flag);
+    gtk_widget_set_visible (widget_, flag);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -79,9 +82,10 @@ button_impl::set_visible (bool flag)
 // @param text Text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-button_impl::set_text (const std::string& text)
+button_impl::set_text (const std::string &text)
 {
-  gtk_button_set_label (reinterpret_cast <GtkButton *> (widget_), text.c_str ());
+    gtk_button_set_label (reinterpret_cast<GtkButton *> (widget_),
+                          text.c_str ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -89,9 +93,10 @@ button_impl::set_text (const std::string& text)
 // @param icon Icon object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-button_impl::set_icon (const mobius::core::ui::icon& icon)
+button_impl::set_icon (const mobius::core::ui::icon &icon)
 {
-  gtk_button_set_image (reinterpret_cast <GtkButton *> (widget_), icon.get_ui_widget <GtkWidget *>());
+    gtk_button_set_image (reinterpret_cast<GtkButton *> (widget_),
+                          icon.get_ui_widget<GtkWidget *> ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -100,25 +105,24 @@ button_impl::set_icon (const mobius::core::ui::icon& icon)
 // @param f Function or functor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-button_impl::set_callback (const std::string& event_id, const mobius::core::functor<bool>& f)
+button_impl::set_callback (const std::string &event_id,
+                           const mobius::core::functor<bool> &f)
 {
-  if (event_id == "clicked")
+    if (event_id == "clicked")
     {
-      if (on_clicked_callback_)
-        g_object_disconnect (G_OBJECT (widget_), "clicked", nullptr);
+        if (on_clicked_callback_)
+            g_object_disconnect (G_OBJECT (widget_), "clicked", nullptr);
 
-      on_clicked_callback_ = f;
+        on_clicked_callback_ = f;
 
-      g_signal_connect (
-          G_OBJECT (widget_),
-          "clicked",
-          G_CALLBACK (_callback_clicked),
-          &on_clicked_callback_
-      );
+        g_signal_connect (G_OBJECT (widget_), "clicked",
+                          G_CALLBACK (_callback_clicked),
+                          &on_clicked_callback_);
     }
 
-  else
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid event: " + event_id));
+    else
+        throw std::invalid_argument (
+            MOBIUS_EXCEPTION_MSG ("invalid event: " + event_id));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -126,21 +130,21 @@ button_impl::set_callback (const std::string& event_id, const mobius::core::func
 // @param event_id Event ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-button_impl::reset_callback (const std::string& event_id)
+button_impl::reset_callback (const std::string &event_id)
 {
-  if (event_id == "clicked")
+    if (event_id == "clicked")
     {
-      if (on_clicked_callback_)
+        if (on_clicked_callback_)
         {
-          g_signal_handlers_disconnect_by_data (widget_, &on_clicked_callback_);
-          on_clicked_callback_ = {};
+            g_signal_handlers_disconnect_by_data (widget_,
+                                                  &on_clicked_callback_);
+            on_clicked_callback_ = {};
         }
     }
 
-  else
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid event: " + event_id));
+    else
+        throw std::invalid_argument (
+            MOBIUS_EXCEPTION_MSG ("invalid event: " + event_id));
 }
 
 } // namespace mobius::extension::ui::gtk3
-
-

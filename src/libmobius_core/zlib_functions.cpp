@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,13 +17,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/zlib_functions.hpp>
 #include <mobius/core/exception.inc>
+#include <mobius/core/zlib_functions.hpp>
 #include <stdexcept>
 
 #define ZLIB_CONST
 #include <zlib.h>
-#define MOBIUS_EXCEPTION_ZLIB exception_msg (__FILE__, __func__, __LINE__, zError (ret))
+#define MOBIUS_EXCEPTION_ZLIB                                                  \
+    exception_msg (__FILE__, __func__, __LINE__, zError (ret))
 
 namespace
 {
@@ -38,47 +41,46 @@ namespace mobius::core
 // @return compressed bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
-zlib_compress (const mobius::core::bytearray& array, int level)
+zlib_compress (const mobius::core::bytearray &array, int level)
 {
-  // initialize z_stream
-  z_stream stream;
-  stream.zalloc = Z_NULL;
-  stream.zfree = Z_NULL;
-  stream.opaque = Z_NULL;
-  stream.avail_in = array.size ();
-  stream.next_in = array.data ();
+    // initialize z_stream
+    z_stream stream;
+    stream.zalloc = Z_NULL;
+    stream.zfree = Z_NULL;
+    stream.opaque = Z_NULL;
+    stream.avail_in = array.size ();
+    stream.next_in = array.data ();
 
-  // init deflate
-  int ret;
-  ret = deflateInit (&stream, level);
-  if (ret != Z_OK)
-    throw std::runtime_error (MOBIUS_EXCEPTION_ZLIB);
+    // init deflate
+    int ret;
+    ret = deflateInit (&stream, level);
+    if (ret != Z_OK)
+        throw std::runtime_error (MOBIUS_EXCEPTION_ZLIB);
 
-  // deflate array
-  mobius::core::bytearray out;
-  std::uint8_t buffer[CHUNK_SIZE];
+    // deflate array
+    mobius::core::bytearray out;
+    std::uint8_t buffer[CHUNK_SIZE];
 
-  do
+    do
     {
-      stream.avail_out = CHUNK_SIZE;
-      stream.next_out = buffer;
-      ret = deflate (&stream, Z_FINISH);
+        stream.avail_out = CHUNK_SIZE;
+        stream.next_out = buffer;
+        ret = deflate (&stream, Z_FINISH);
 
-      if (ret == Z_STREAM_ERROR)
+        if (ret == Z_STREAM_ERROR)
         {
-          deflateEnd (&stream);
-          throw std::runtime_error (MOBIUS_EXCEPTION_ZLIB);
+            deflateEnd (&stream);
+            throw std::runtime_error (MOBIUS_EXCEPTION_ZLIB);
         }
 
-      out += mobius::core::bytearray (buffer, CHUNK_SIZE - stream.avail_out);
-    }
-  while (stream.avail_out == 0);
+        out += mobius::core::bytearray (buffer, CHUNK_SIZE - stream.avail_out);
+    } while (stream.avail_out == 0);
 
-  // end deflate
-  deflateEnd (&stream);
+    // end deflate
+    deflateEnd (&stream);
 
-  // return bytearray
-  return out;
+    // return bytearray
+    return out;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -87,47 +89,46 @@ zlib_compress (const mobius::core::bytearray& array, int level)
 // @return decompressed bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
-zlib_decompress (const mobius::core::bytearray& array)
+zlib_decompress (const mobius::core::bytearray &array)
 {
-  // initialize z_stream
-  z_stream stream;
-  stream.zalloc = Z_NULL;
-  stream.zfree = Z_NULL;
-  stream.opaque = Z_NULL;
-  stream.avail_in = array.size ();
-  stream.next_in = array.data ();
+    // initialize z_stream
+    z_stream stream;
+    stream.zalloc = Z_NULL;
+    stream.zfree = Z_NULL;
+    stream.opaque = Z_NULL;
+    stream.avail_in = array.size ();
+    stream.next_in = array.data ();
 
-  // init inflate
-  int ret = inflateInit (&stream);
+    // init inflate
+    int ret = inflateInit (&stream);
 
-  if (ret != Z_OK)
-    throw std::runtime_error (MOBIUS_EXCEPTION_ZLIB);
+    if (ret != Z_OK)
+        throw std::runtime_error (MOBIUS_EXCEPTION_ZLIB);
 
-  // inflate array
-  mobius::core::bytearray out;
-  std::uint8_t buffer[CHUNK_SIZE];
+    // inflate array
+    mobius::core::bytearray out;
+    std::uint8_t buffer[CHUNK_SIZE];
 
-  do
+    do
     {
-      stream.avail_out = CHUNK_SIZE;
-      stream.next_out = buffer;
-      ret = inflate (&stream, Z_NO_FLUSH);
+        stream.avail_out = CHUNK_SIZE;
+        stream.next_out = buffer;
+        ret = inflate (&stream, Z_NO_FLUSH);
 
-      if (ret != Z_STREAM_END && ret != Z_OK)
+        if (ret != Z_STREAM_END && ret != Z_OK)
         {
-          inflateEnd (&stream);
-          throw std::runtime_error (MOBIUS_EXCEPTION_ZLIB);
+            inflateEnd (&stream);
+            throw std::runtime_error (MOBIUS_EXCEPTION_ZLIB);
         }
 
-      out += mobius::core::bytearray (buffer, CHUNK_SIZE - stream.avail_out);
-    }
-  while (stream.avail_out == 0);
+        out += mobius::core::bytearray (buffer, CHUNK_SIZE - stream.avail_out);
+    } while (stream.avail_out == 0);
 
-  // end inflate
-  inflateEnd (&stream);
+    // end inflate
+    inflateEnd (&stream);
 
-  // return bytearray
-  return out;
+    // return bytearray
+    return out;
 }
 
 } // namespace mobius::core

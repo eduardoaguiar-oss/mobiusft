@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,12 +17,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/kff/kff.hpp>
 #include <mobius/core/application.hpp>
 #include <mobius/core/exception.inc>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/folder.hpp>
 #include <mobius/core/io/path.hpp>
+#include <mobius/core/kff/kff.hpp>
 #include <mutex>
 #include <stdexcept>
 #include <string>
@@ -35,7 +37,7 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // @brief Hashsets
-static std::unordered_map <std::string, hashset> hashsets_;
+static std::unordered_map<std::string, hashset> hashsets_;
 
 // @brief Hashsets mutex
 static std::mutex mutex_;
@@ -53,22 +55,22 @@ static constexpr int SCHEMA_VERSION = 1;
 static void
 _init ()
 {
-  mobius::core::application app;
-  auto path = app.get_config_path ("kff");
-  auto folder = mobius::core::io::new_folder_by_path (path);
+    mobius::core::application app;
+    auto path = app.get_config_path ("kff");
+    auto folder = mobius::core::io::new_folder_by_path (path);
 
-  if (!folder.exists ())
-    folder.create ();
+    if (!folder.exists ())
+        folder.create ();
 
-  else
+    else
     {
-      for (const auto& c : folder.get_children ())
+        for (const auto &c : folder.get_children ())
         {
-          if (c.is_file () && c.get_extension () == "sqlite")
+            if (c.is_file () && c.get_extension () == "sqlite")
             {
-              mobius::core::io::path p (path + '/' + c.get_name ());
-              auto id = p.get_filename_prefix ();
-              hashsets_.emplace (id, hashset (p.get_value ()));
+                mobius::core::io::path p (path + '/' + c.get_name ());
+                auto id = p.get_filename_prefix ();
+                hashsets_.emplace (id, hashset (p.get_value ()));
             }
         }
     }
@@ -79,10 +81,7 @@ _init ()
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-kff::kff ()
-{
-  std::call_once (is_loaded_, _init);
-}
+kff::kff () { std::call_once (is_loaded_, _init); }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create connection_set object to hashset databases
@@ -90,14 +89,14 @@ kff::kff ()
 mobius::core::database::connection_set
 kff::new_connection ()
 {
-  mobius::core::database::connection_set cs;
+    mobius::core::database::connection_set cs;
 
-  const std::lock_guard <std::mutex> lock (mutex_);
+    const std::lock_guard<std::mutex> lock (mutex_);
 
-  for (auto& p : hashsets_)
-    cs.add (p.second.new_connection ());
+    for (auto &p : hashsets_)
+        cs.add (p.second.new_connection ());
 
-  return cs;
+    return cs;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -107,33 +106,34 @@ kff::new_connection ()
 // @return hash set object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 hashset
-kff::new_hashset (const std::string& id, bool is_alert)
+kff::new_hashset (const std::string &id, bool is_alert)
 {
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // check if hashset already exists
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  {
-    const std::lock_guard <std::mutex> lock (mutex_);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // check if hashset already exists
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    {
+        const std::lock_guard<std::mutex> lock (mutex_);
 
-    if (hashsets_.find (id) != hashsets_.end ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("hashset '" + id + "' already exists"));
-  }
+        if (hashsets_.find (id) != hashsets_.end ())
+            throw std::runtime_error (
+                MOBIUS_EXCEPTION_MSG ("hashset '" + id + "' already exists"));
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // create database
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::core::application app;
-  auto path = app.get_config_path ("kff/" + id + ".sqlite");
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // create database
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::application app;
+    auto path = app.get_config_path ("kff/" + id + ".sqlite");
 
-  hashset h (path);
-  h.create (is_alert);
+    hashset h (path);
+    h.create (is_alert);
 
-  {
-    const std::lock_guard <std::mutex> lock (mutex_);
-    hashsets_.emplace (id, h);
-  }
+    {
+        const std::lock_guard<std::mutex> lock (mutex_);
+        hashsets_.emplace (id, h);
+    }
 
-  return h;
+    return h;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -141,35 +141,36 @@ kff::new_hashset (const std::string& id, bool is_alert)
 // @param id Hash set ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-kff::remove_hashset (const std::string& id)
+kff::remove_hashset (const std::string &id)
 {
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // remove from hashset_
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  {
-    const std::lock_guard <std::mutex> lock (mutex_);
-    hashsets_.erase (id);
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // remove from hashset_
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    {
+        const std::lock_guard<std::mutex> lock (mutex_);
+        hashsets_.erase (id);
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // delete database file
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::core::application app;
-  auto path = app.get_config_path ("kff/" + id + ".sqlite");
-  auto f = mobius::core::io::new_file_by_path (path);
-  f.remove ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // delete database file
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::application app;
+    auto path = app.get_config_path ("kff/" + id + ".sqlite");
+    auto f = mobius::core::io::new_file_by_path (path);
+    f.remove ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get hashsets
 // @return hashsets
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <std::pair <std::string, hashset>>
+std::vector<std::pair<std::string, hashset>>
 kff::get_hashsets () const
 {
-  const std::lock_guard <std::mutex> lock (mutex_);
+    const std::lock_guard<std::mutex> lock (mutex_);
 
-  return std::vector <std::pair <std::string, hashset>> (hashsets_.begin (), hashsets_.end ());
+    return std::vector<std::pair<std::string, hashset>> (hashsets_.begin (),
+                                                         hashsets_.end ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -178,21 +179,21 @@ kff::get_hashsets () const
 // @param value Hash value
 // @return Hash sets
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <std::string>
-kff::alert_lookup (const std::string& type, const std::string& value) const
+std::vector<std::string>
+kff::alert_lookup (const std::string &type, const std::string &value) const
 {
-  std::vector <std::string> hashset_ids;
+    std::vector<std::string> hashset_ids;
 
-  for (const auto& p : get_hashsets ())
+    for (const auto &p : get_hashsets ())
     {
-      auto id = p.first;
-      auto hashset = p.second;
+        auto id = p.first;
+        auto hashset = p.second;
 
-      if (hashset.is_alert () && hashset.lookup (type, value))
-        hashset_ids.push_back (id);
+        if (hashset.is_alert () && hashset.lookup (type, value))
+            hashset_ids.push_back (id);
     }
 
-  return hashset_ids;
+    return hashset_ids;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -202,35 +203,35 @@ kff::alert_lookup (const std::string& type, const std::string& value) const
 // @return 'A' alert, 'I' ignored, 'N' not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 char
-kff::lookup (const std::string& type, const std::string& value) const
+kff::lookup (const std::string &type, const std::string &value) const
 {
-  auto hashsets = get_hashsets ();
+    auto hashsets = get_hashsets ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // search first into is_alert hashsets
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  for (const auto& p : get_hashsets ())
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // search first into is_alert hashsets
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &p : get_hashsets ())
     {
-      auto id = p.first;
-      auto hashset = p.second;
+        auto id = p.first;
+        auto hashset = p.second;
 
-      if (hashset.is_alert () && hashset.lookup (type, value))
-        return 'A';
+        if (hashset.is_alert () && hashset.lookup (type, value))
+            return 'A';
     }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // then, search into non is_alert hashsets
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  for (const auto& p : get_hashsets ())
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // then, search into non is_alert hashsets
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &p : get_hashsets ())
     {
-      auto id = p.first;
-      auto hashset = p.second;
+        auto id = p.first;
+        auto hashset = p.second;
 
-      if (!hashset.is_alert () && hashset.lookup (type, value))
-        return 'I';
+        if (!hashset.is_alert () && hashset.lookup (type, value))
+            return 'I';
     }
 
-  return 'N';
+    return 'N';
 }
 
 } // namespace mobius::core::kff

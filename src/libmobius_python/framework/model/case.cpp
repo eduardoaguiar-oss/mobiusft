@@ -460,7 +460,8 @@ tp_richcompare (PyObject *py_a, PyObject *py_b, int op)
 // @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject framework_model_case_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0) "mobius.framework.model.case", // tp_name
+    PyVarObject_HEAD_INIT (nullptr, 0)        // header
+    "mobius.framework.model.case",            // tp_name
     sizeof (framework_model_case_o),          // tp_basicsize
     0,                                        // tp_itemsize
     (destructor) tp_dealloc,                  // tp_dealloc

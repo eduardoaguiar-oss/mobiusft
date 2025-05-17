@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,8 +17,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/datetime/date.hpp>
 #include <mobius/core/datetime/conv_julian.hpp>
+#include <mobius/core/datetime/date.hpp>
 
 namespace mobius::core::datetime
 {
@@ -27,8 +29,8 @@ namespace mobius::core::datetime
 bool
 date::is_leap_year () const noexcept
 {
-  return ((year_ % 4) == 0) &&
-         (!(((year_ % 100) == 0) && ((year_ % 400) != 0)));
+    return ((year_ % 4) == 0) &&
+           (!(((year_ % 100) == 0) && ((year_ % 400) != 0)));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -38,7 +40,7 @@ date::is_leap_year () const noexcept
 int
 date::get_weekday () const noexcept
 {
-  return (static_cast <resolution_type> (date_to_julian (*this)) + 1) % 7;
+    return (static_cast<resolution_type> (date_to_julian (*this)) + 1) % 7;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -48,12 +50,11 @@ date::get_weekday () const noexcept
 // @return true if the two dates are equal
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator== (const mobius::core::datetime::date& d1, const mobius::core::datetime::date& d2) noexcept
+operator== (const mobius::core::datetime::date &d1,
+            const mobius::core::datetime::date &d2) noexcept
 {
-  return bool (d1) == bool (d2) &&
-         d1.get_year () == d2.get_year () &&
-         d1.get_month () == d2.get_month () &&
-         d1.get_day () == d2.get_day ();
+    return bool (d1) == bool (d2) && d1.get_year () == d2.get_year () &&
+           d1.get_month () == d2.get_month () && d1.get_day () == d2.get_day ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -63,16 +64,14 @@ operator== (const mobius::core::datetime::date& d1, const mobius::core::datetime
 // @return true if the d1 < d2
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator< (const mobius::core::datetime::date& d1, const mobius::core::datetime::date& d2) noexcept
+operator< (const mobius::core::datetime::date &d1,
+           const mobius::core::datetime::date &d2) noexcept
 {
-  return bool (d1) == bool (d2) &&
-         (d1.get_year () < d2.get_year () ||
-          (d1.get_year () == d2.get_year () &&
-           (d1.get_month () < d2.get_month () ||
-            (d1.get_month () == d2.get_month () && d1.get_day () < d2.get_day ())
-           )
-          )
-         );
+    return bool (d1) == bool (d2) && (d1.get_year () < d2.get_year () ||
+                                      (d1.get_year () == d2.get_year () &&
+                                       (d1.get_month () < d2.get_month () ||
+                                        (d1.get_month () == d2.get_month () &&
+                                         d1.get_day () < d2.get_day ()))));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -80,12 +79,12 @@ operator< (const mobius::core::datetime::date& d1, const mobius::core::datetime:
 // @return timedelta object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 timedelta
-operator- (const date& d1, const date& d2) noexcept
+operator- (const date &d1, const date &d2) noexcept
 {
-  timedelta delta;
-  delta.set_days (date_to_julian (d1) - date_to_julian (d2));
+    timedelta delta;
+    delta.set_days (date_to_julian (d1) - date_to_julian (d2));
 
-  return delta;
+    return delta;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -93,12 +92,12 @@ operator- (const date& d1, const date& d2) noexcept
 // @return date object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 date
-operator+ (const date& d, const timedelta& delta) noexcept
+operator+ (const date &d, const timedelta &delta) noexcept
 {
-  date d2 (d);
-  d2.set_year (d2.get_year () + delta.get_years ());
+    date d2 (d);
+    d2.set_year (d2.get_year () + delta.get_years ());
 
-  return date_from_julian (date_to_julian (d2) + delta.get_days ());
+    return date_from_julian (date_to_julian (d2) + delta.get_days ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -106,14 +105,10 @@ operator+ (const date& d, const timedelta& delta) noexcept
 // @return date object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 date
-operator- (const date& d, const timedelta& delta) noexcept
+operator- (const date &d, const timedelta &delta) noexcept
 {
-  return d + timedelta (
-           -delta.get_years (),
-           -delta.get_days (),
-           -delta.get_seconds (),
-           -delta.get_nanoseconds ()
-         );
+    return d + timedelta (-delta.get_years (), -delta.get_days (),
+                          -delta.get_seconds (), -delta.get_nanoseconds ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -122,23 +117,21 @@ operator- (const date& d, const timedelta& delta) noexcept
 // @return string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-to_string (const date& d)
+to_string (const date &d)
 {
-  std::string str;
+    std::string str;
 
-  if (d)
+    if (d)
     {
-      char buffer[64] = {0};
+        char buffer[64] = {0};
 
-      sprintf (buffer, "%04d-%02d-%02d",
-               d.get_year (),
-               d.get_month (),
-               d.get_day ());
+        sprintf (buffer, "%04d-%02d-%02d", d.get_year (), d.get_month (),
+                 d.get_day ());
 
-      str = buffer;
+        str = buffer;
     }
 
-  return str;
+    return str;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -147,14 +140,12 @@ to_string (const date& d)
 // @param dt datetime object
 // @return reference to ostream
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::ostream&
-operator<< (std::ostream& stream, const date& d)
+std::ostream &
+operator<< (std::ostream &stream, const date &d)
 {
-  stream << to_string (d);
+    stream << to_string (d);
 
-  return stream;
+    return stream;
 }
 
 } // namespace mobius::core::datetime
-
-

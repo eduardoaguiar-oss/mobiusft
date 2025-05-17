@@ -3,7 +3,9 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -21,8 +23,8 @@
 #include "ctag.hpp"
 #include <cstdint>
 #include <string>
-#include <vector>
 #include <utility>
+#include <vector>
 
 namespace mobius::extension::app::emule
 {
@@ -33,7 +35,7 @@ namespace mobius::extension::app::emule
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class file_key_index_dat
 {
-public:
+  public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief IP structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -50,10 +52,10 @@ public:
     struct name
     {
         mobius::core::datetime::datetime lifetime;
-        std::vector <std::pair <std::string, std::uint32_t>> filenames;
-        std::vector <ip> ips;
-        std::vector <ctag> tags;
-        std::vector <std::string> aich_hashes;
+        std::vector<std::pair<std::string, std::uint32_t>> filenames;
+        std::vector<ip> ips;
+        std::vector<ctag> tags;
+        std::vector<std::string> aich_hashes;
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -62,7 +64,7 @@ public:
     struct source
     {
         std::string id;
-        std::vector <name> names;
+        std::vector<name> names;
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -71,22 +73,19 @@ public:
     struct key
     {
         std::string id;
-        std::vector <source> sources;
+        std::vector<source> sources;
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    file_key_index_dat (const mobius::core::io::reader&);
+    file_key_index_dat (const mobius::core::io::reader &);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Check if stream is an instance of KeyIndex.dat file
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const noexcept
-    {
-        return is_instance_;
-    }
+    operator bool () const noexcept { return is_instance_; }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get file version
@@ -122,13 +121,13 @@ public:
     // @brief Get keys
     // @return Keys
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector <key>
+    std::vector<key>
     get_keys () const
     {
         return keys_;
     }
 
-private:
+  private:
     // @brief Flag is instance
     bool is_instance_ = false;
 
@@ -142,7 +141,7 @@ private:
     std::string client_id_;
 
     // @brief Keys
-    std::vector <key> keys_;
+    std::vector<key> keys_;
 };
 
 } // namespace mobius::extension::app::emule

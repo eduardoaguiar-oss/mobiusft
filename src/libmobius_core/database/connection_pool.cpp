@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,11 +17,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/database/connection_pool.hpp>
+#include <chrono>
 #include <mobius/core/database/connection.hpp>
+#include <mobius/core/database/connection_pool.hpp>
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/exception.inc>
-#include <chrono>
 #include <mutex>
 #include <stdexcept>
 #include <thread>
@@ -40,35 +42,35 @@ static std::thread::id main_thread_id = std::this_thread::get_id ();
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class connection_pool::impl
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  impl () = default;
-  impl (const std::string&, unsigned int);
-  impl (impl&&) = delete;
-  impl (const impl&) = delete;
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl () = default;
+    impl (const std::string &, unsigned int);
+    impl (impl &&) = delete;
+    impl (const impl &) = delete;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  database get_database ();
-  void set_path (const std::string&);
-  void acquire ();
-  void release ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    database get_database ();
+    void set_path (const std::string &);
+    void acquire ();
+    void release ();
 
-private:
-  // @brief database file path
-  std::string path_;
+  private:
+    // @brief database file path
+    std::string path_;
 
-  // @brief max connections for this pool
-  unsigned int max_ = 32;
+    // @brief max connections for this pool
+    unsigned int max_ = 32;
 
-  // @brief pool mutex
-  std::mutex mutex_;
+    // @brief pool mutex
+    std::mutex mutex_;
 
-  // @brief pool of database objects
-  std::unordered_map <std::thread::id, database> pool_;
+    // @brief pool of database objects
+    std::unordered_map<std::thread::id, database> pool_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -76,8 +78,9 @@ private:
 // @param path Database path
 // @param max Maximum number of simultaneous connections
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-connection_pool::impl::impl (const std::string& path, unsigned int max)
-  : path_ (path), max_ (max)
+connection_pool::impl::impl (const std::string &path, unsigned int max)
+    : path_ (path),
+      max_ (max)
 {
 }
 
@@ -86,12 +89,13 @@ connection_pool::impl::impl (const std::string& path, unsigned int max)
 // @param path Database path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-connection_pool::impl::set_path (const std::string& path)
+connection_pool::impl::set_path (const std::string &path)
 {
-  if (!path_.empty ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Database path cannot be changed"));
+    if (!path_.empty ())
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("Database path cannot be changed"));
 
-  path_ = path;
+    path_ = path;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -101,24 +105,26 @@ connection_pool::impl::set_path (const std::string& path)
 database
 connection_pool::impl::get_database ()
 {
-  if (path_.empty ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Database path not set"));
+    if (path_.empty ())
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("Database path not set"));
 
-  // main thread: acquire connection if necessary
-  auto thread_id = std::this_thread::get_id ();
+    // main thread: acquire connection if necessary
+    auto thread_id = std::this_thread::get_id ();
 
-  if (thread_id == main_thread_id)
-    acquire ();
+    if (thread_id == main_thread_id)
+        acquire ();
 
-  // get database object
-  std::lock_guard <std::mutex> lock (mutex_);
+    // get database object
+    std::lock_guard<std::mutex> lock (mutex_);
 
-  auto iter = pool_.find (thread_id);
+    auto iter = pool_.find (thread_id);
 
-  if (iter == pool_.end ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("No acquired connection found"));
+    if (iter == pool_.end ())
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("No acquired connection found"));
 
-  return iter->second;
+    return iter->second;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -128,28 +134,30 @@ connection_pool::impl::get_database ()
 void
 connection_pool::impl::acquire ()
 {
-  if (path_.empty ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Database path not set"));
+    if (path_.empty ())
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("Database path not set"));
 
-  auto thread_id = std::this_thread::get_id ();
+    auto thread_id = std::this_thread::get_id ();
 
-  std::lock_guard <std::mutex> lock (mutex_);
-  auto iter = pool_.find (thread_id);
+    std::lock_guard<std::mutex> lock (mutex_);
+    auto iter = pool_.find (thread_id);
 
-  // main thread: create connection if necessary
-  if (thread_id == main_thread_id)
+    // main thread: create connection if necessary
+    if (thread_id == main_thread_id)
     {
-      if (iter == pool_.end ())
-        pool_[thread_id] = database (path_);
+        if (iter == pool_.end ())
+            pool_[thread_id] = database (path_);
     }
 
-  // secondary threads: create only one connection per thread
-  else
+    // secondary threads: create only one connection per thread
+    else
     {
-      if (iter != pool_.end ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("Connection has already been acquired"));
+        if (iter != pool_.end ())
+            throw std::runtime_error (
+                MOBIUS_EXCEPTION_MSG ("Connection has already been acquired"));
 
-      pool_[thread_id] = database (path_);
+        pool_[thread_id] = database (path_);
     }
 }
 
@@ -159,13 +167,13 @@ connection_pool::impl::acquire ()
 void
 connection_pool::impl::release ()
 {
-  auto thread_id = std::this_thread::get_id ();
+    auto thread_id = std::this_thread::get_id ();
 
-  // release only connections from secondary threads
-  if (thread_id != main_thread_id)
+    // release only connections from secondary threads
+    if (thread_id != main_thread_id)
     {
-      std::lock_guard <std::mutex> lock (mutex_);
-      pool_.erase (thread_id);
+        std::lock_guard<std::mutex> lock (mutex_);
+        pool_.erase (thread_id);
     }
 }
 
@@ -173,7 +181,7 @@ connection_pool::impl::release ()
 // @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 connection_pool::connection_pool ()
-  : impl_ (std::make_shared <impl> ())
+    : impl_ (std::make_shared<impl> ())
 {
 }
 
@@ -182,10 +190,8 @@ connection_pool::connection_pool ()
 // @param path database file path
 // @param max maximum number of connections opened
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-connection_pool::connection_pool (
-  const std::string& path,
-  unsigned int max)
-  : impl_ (std::make_shared <impl> (path, max))
+connection_pool::connection_pool (const std::string &path, unsigned int max)
+    : impl_ (std::make_shared<impl> (path, max))
 {
 }
 
@@ -194,9 +200,9 @@ connection_pool::connection_pool (
 // @param path database file path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-connection_pool::set_path (const std::string& path)
+connection_pool::set_path (const std::string &path)
 {
-  impl_->set_path (path);
+    impl_->set_path (path);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -206,8 +212,8 @@ connection_pool::set_path (const std::string& path)
 connection
 connection_pool::acquire ()
 {
-  impl_->acquire ();
-  return connection (*this);
+    impl_->acquire ();
+    return connection (*this);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -217,7 +223,7 @@ connection_pool::acquire ()
 database
 connection_pool::get_database () const
 {
-  return impl_->get_database ();
+    return impl_->get_database ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -226,9 +232,7 @@ connection_pool::get_database () const
 void
 connection_pool::release ()
 {
-  impl_->release ();
+    impl_->release ();
 }
 
 } // namespace mobius::core::database
-
-

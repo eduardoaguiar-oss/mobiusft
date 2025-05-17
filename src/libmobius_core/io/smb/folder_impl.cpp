@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,22 +17,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/io/smb/folder_impl.hpp>
-#include <mobius/core/io/smb/file_impl.hpp>
-#include <mobius/core/io/folder.hpp>
-#include <mobius/core/io/file.hpp>
-#include <mobius/core/io/path.hpp>
-#include <mobius/core/io/uri.hpp>
-#include <mobius/core/io/smb/init.hpp>
-#include <mobius/core/exception.inc>
-#include <mobius/core/exception_posix.inc>
-#include <mobius/core/collection_impl_base.hpp>
-#include <mobius/core/system/user.hpp>
-#include <mobius/core/system/group.hpp>
-#include <memory>
-#include <stdexcept>
 #include <dirent.h>
 #include <libsmbclient.h>
+#include <memory>
+#include <mobius/core/collection_impl_base.hpp>
+#include <mobius/core/exception.inc>
+#include <mobius/core/exception_posix.inc>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/io/folder.hpp>
+#include <mobius/core/io/path.hpp>
+#include <mobius/core/io/smb/file_impl.hpp>
+#include <mobius/core/io/smb/folder_impl.hpp>
+#include <mobius/core/io/smb/init.hpp>
+#include <mobius/core/io/uri.hpp>
+#include <mobius/core/system/group.hpp>
+#include <mobius/core/system/user.hpp>
+#include <stdexcept>
 
 namespace mobius::core::io::smb
 {
@@ -41,33 +43,34 @@ using entry_impl = folder_impl_base::entry_impl;
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Collection implementation for folder entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class collection_impl_folder : public mobius::core::collection_impl_base <entry_impl>
+class collection_impl_folder
+    : public mobius::core::collection_impl_base<entry_impl>
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit collection_impl_folder (const std::string&);
-  ~collection_impl_folder ();
-  bool get (entry_impl&) override;
-  void reset () override;
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    explicit collection_impl_folder (const std::string &);
+    ~collection_impl_folder ();
+    bool get (entry_impl &) override;
+    void reset () override;
 
-private:
-  const std::string url_;
-  int fd_ = -1;
+  private:
+    const std::string url_;
+    int fd_ = -1;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Initialize object
 // @param url URL to folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-collection_impl_folder::collection_impl_folder (const std::string& url)
-  : url_ (url)
+collection_impl_folder::collection_impl_folder (const std::string &url)
+    : url_ (url)
 {
-  fd_ = smbc_opendir (url.c_str ());
+    fd_ = smbc_opendir (url.c_str ());
 
-  if (fd_ < 0)
-    throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+    if (fd_ < 0)
+        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -75,8 +78,8 @@ collection_impl_folder::collection_impl_folder (const std::string& url)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 collection_impl_folder::~collection_impl_folder ()
 {
-  if (fd_ != -1)
-    smbc_closedir (fd_);
+    if (fd_ != -1)
+        smbc_closedir (fd_);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -85,31 +88,32 @@ collection_impl_folder::~collection_impl_folder ()
 // @return true/false if entry was found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-collection_impl_folder::get (entry_impl& e)
+collection_impl_folder::get (entry_impl &e)
 {
-  errno = 0;
-  auto *p_entry = smbc_readdir (fd_);
+    errno = 0;
+    auto *p_entry = smbc_readdir (fd_);
 
-  while (p_entry && (!strcmp (p_entry->name, ".") || !strcmp (p_entry->name, "..")))
-    p_entry = smbc_readdir (fd_);
+    while (p_entry &&
+           (!strcmp (p_entry->name, ".") || !strcmp (p_entry->name, "..")))
+        p_entry = smbc_readdir (fd_);
 
-  if (p_entry)
+    if (p_entry)
     {
-      const std::string url = url_ + '/' + p_entry->name;
+        const std::string url = url_ + '/' + p_entry->name;
 
-      if (p_entry->smbc_type == SMBC_DIR)
-        e.folder_p = std::make_shared <folder_impl> (url);
+        if (p_entry->smbc_type == SMBC_DIR)
+            e.folder_p = std::make_shared<folder_impl> (url);
 
-      else  // everything else is file...
-        e.file_p = std::make_shared <file_impl> (url);
+        else // everything else is file...
+            e.file_p = std::make_shared<file_impl> (url);
 
-      return true;
+        return true;
     }
 
-  else if (errno)
-    throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+    else if (errno)
+        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
 
-  return false;
+    return false;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -118,8 +122,8 @@ collection_impl_folder::get (entry_impl& e)
 void
 collection_impl_folder::reset ()
 {
-  if (smbc_lseekdir (fd_, 0) < 0)
-    throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+    if (smbc_lseekdir (fd_, 0) < 0)
+        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
 }
 
 } // namespace
@@ -128,13 +132,13 @@ collection_impl_folder::reset ()
 // @brief Initialize object
 // @param url Folder URL
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-folder_impl::folder_impl (const std::string& url)
- : url_ (url)
+folder_impl::folder_impl (const std::string &url)
+    : url_ (url)
 {
-  init ();      // initialize SMB if necessary
+    init (); // initialize SMB if necessary
 
-  mobius::core::io::uri uri (url);
-  name_ = uri.get_filename ();
+    mobius::core::io::uri uri (url);
+    name_ = uri.get_filename ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -144,10 +148,10 @@ folder_impl::folder_impl (const std::string& url)
 bool
 folder_impl::exists () const
 {
-  if (!is_stat_loaded_)
-    _load_stat ();
+    if (!is_stat_loaded_)
+        _load_stat ();
 
-  return exists_;
+    return exists_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -157,10 +161,11 @@ folder_impl::exists () const
 bool
 folder_impl::is_deleted () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+    if (!exists ())
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
 
-  return false;  // local folders are never deleted
+    return false; // local folders are never deleted
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -170,10 +175,11 @@ folder_impl::is_deleted () const
 bool
 folder_impl::is_reallocated () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+    if (!exists ())
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
 
-  return false;  // local folders are never reallocated
+    return false; // local folders are never reallocated
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -183,10 +189,11 @@ folder_impl::is_reallocated () const
 bool
 folder_impl::is_hidden () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+    if (!exists ())
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
 
-  return !name_.empty () && name_[0] == '.';
+    return !name_.empty () && name_[0] == '.';
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -196,10 +203,11 @@ folder_impl::is_hidden () const
 std::string
 folder_impl::get_name () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+    if (!exists ())
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
 
-  return name_;
+    return name_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -209,10 +217,11 @@ folder_impl::get_name () const
 std::string
 folder_impl::get_short_name () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+    if (!exists ())
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
 
-  return std::string (); // local files don't have short names
+    return std::string (); // local files don't have short names
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -222,10 +231,11 @@ folder_impl::get_short_name () const
 folder_impl::inode_type
 folder_impl::get_inode () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+    if (!exists ())
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
 
-  return inode_;
+    return inode_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -235,10 +245,11 @@ folder_impl::get_inode () const
 folder_impl::size_type
 folder_impl::get_size () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+    if (!exists ())
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
 
-  return size_;
+    return size_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -248,13 +259,14 @@ folder_impl::get_size () const
 folder_impl::user_id_type
 folder_impl::get_user_id () const
 {
-  if (!is_stat_loaded_)
-    _load_stat ();
+    if (!is_stat_loaded_)
+        _load_stat ();
 
-  if (!exists_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+    if (!exists_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
 
-  return user_id_;
+    return user_id_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -264,13 +276,14 @@ folder_impl::get_user_id () const
 std::string
 folder_impl::get_user_name () const
 {
-  if (!is_stat_loaded_)
-    _load_stat ();
+    if (!is_stat_loaded_)
+        _load_stat ();
 
-  if (!exists_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+    if (!exists_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
 
-  return user_name_;
+    return user_name_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -280,13 +293,14 @@ folder_impl::get_user_name () const
 folder_impl::group_id_type
 folder_impl::get_group_id () const
 {
-  if (!is_stat_loaded_)
-    _load_stat ();
+    if (!is_stat_loaded_)
+        _load_stat ();
 
-  if (!exists_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+    if (!exists_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
 
-  return group_id_;
+    return group_id_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -296,13 +310,14 @@ folder_impl::get_group_id () const
 std::string
 folder_impl::get_group_name () const
 {
-  if (!is_stat_loaded_)
-    _load_stat ();
+    if (!is_stat_loaded_)
+        _load_stat ();
 
-  if (!exists_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+    if (!exists_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
 
-  return group_name_;
+    return group_name_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -312,13 +327,14 @@ folder_impl::get_group_name () const
 folder_impl::permission_type
 folder_impl::get_permissions () const
 {
-  if (!is_stat_loaded_)
-    _load_stat ();
+    if (!is_stat_loaded_)
+        _load_stat ();
 
-  if (!exists_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+    if (!exists_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
 
-  return permissions_;
+    return permissions_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -328,13 +344,14 @@ folder_impl::get_permissions () const
 mobius::core::datetime::datetime
 folder_impl::get_access_time () const
 {
-  if (!is_stat_loaded_)
-    _load_stat ();
+    if (!is_stat_loaded_)
+        _load_stat ();
 
-  if (!exists_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+    if (!exists_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
 
-  return access_time_;
+    return access_time_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -344,13 +361,14 @@ folder_impl::get_access_time () const
 mobius::core::datetime::datetime
 folder_impl::get_modification_time () const
 {
-  if (!is_stat_loaded_)
-    _load_stat ();
+    if (!is_stat_loaded_)
+        _load_stat ();
 
-  if (!exists_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+    if (!exists_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
 
-  return modification_time_;
+    return modification_time_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -360,13 +378,14 @@ folder_impl::get_modification_time () const
 mobius::core::datetime::datetime
 folder_impl::get_metadata_time () const
 {
-  if (!is_stat_loaded_)
-    _load_stat ();
+    if (!is_stat_loaded_)
+        _load_stat ();
 
-  if (!exists_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+    if (!exists_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
 
-  return metadata_time_;
+    return metadata_time_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -376,10 +395,12 @@ folder_impl::get_metadata_time () const
 mobius::core::datetime::datetime
 folder_impl::get_creation_time () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+    if (!exists ())
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
 
-  return mobius::core::datetime::datetime (); // local files don't have creation time
+    return mobius::core::datetime::datetime (); // local files don't have
+                                                // creation time
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -389,10 +410,12 @@ folder_impl::get_creation_time () const
 mobius::core::datetime::datetime
 folder_impl::get_deletion_time () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+    if (!exists ())
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
 
-  return mobius::core::datetime::datetime (); // local files don't have deletion time
+    return mobius::core::datetime::datetime (); // local files don't have
+                                                // deletion time
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -402,10 +425,12 @@ folder_impl::get_deletion_time () const
 mobius::core::datetime::datetime
 folder_impl::get_backup_time () const
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+    if (!exists ())
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
 
-  return mobius::core::datetime::datetime (); // local files don't have backup time
+    return mobius::core::datetime::datetime (); // local files don't have backup
+                                                // time
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -415,10 +440,10 @@ folder_impl::get_backup_time () const
 folder_impl::folder_type
 folder_impl::get_parent () const
 {
-  mobius::core::io::uri uri (url_);
-  auto parent = uri.get_parent ();
+    mobius::core::io::uri uri (url_);
+    auto parent = uri.get_parent ();
 
-  return std::make_shared <folder_impl> (parent.get_value ());
+    return std::make_shared<folder_impl> (parent.get_value ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -428,7 +453,7 @@ folder_impl::get_parent () const
 folder_impl::children_type
 folder_impl::get_children () const
 {
-  return std::make_shared <collection_impl_folder> (url_);
+    return std::make_shared<collection_impl_folder> (url_);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -437,13 +462,12 @@ folder_impl::get_children () const
 // @return Pointer to file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder_impl::file_type
-folder_impl::new_file (const std::string& name) const
+folder_impl::new_file (const std::string &name) const
 {
-  mobius::core::io::uri uri (url_);
-  auto child_url = uri.get_child_by_name (name);
+    mobius::core::io::uri uri (url_);
+    auto child_url = uri.get_child_by_name (name);
 
-  return std::make_shared <file_impl> (child_url.get_value ());
-
+    return std::make_shared<file_impl> (child_url.get_value ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -452,12 +476,12 @@ folder_impl::new_file (const std::string& name) const
 // @return Pointer to folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 folder_impl::folder_type
-folder_impl::new_folder (const std::string& name) const
+folder_impl::new_folder (const std::string &name) const
 {
-  mobius::core::io::uri uri (url_);
-  auto child_url = uri.get_child_by_name (name);
+    mobius::core::io::uri uri (url_);
+    auto child_url = uri.get_child_by_name (name);
 
-  return std::make_shared <folder_impl> (child_url.get_value ());
+    return std::make_shared<folder_impl> (child_url.get_value ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -466,22 +490,22 @@ folder_impl::new_folder (const std::string& name) const
 void
 folder_impl::create ()
 {
-  if (smbc_mkdir (url_.c_str (), 0755) < 0)
+    if (smbc_mkdir (url_.c_str (), 0755) < 0)
     {
-      if (errno == ENOENT)
+        if (errno == ENOENT)
         {
-          auto parent = get_parent ();
-          parent->create ();
+            auto parent = get_parent ();
+            parent->create ();
 
-          if (smbc_mkdir (url_.c_str (), 0755) < 0 && errno != EEXIST)
-            throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+            if (smbc_mkdir (url_.c_str (), 0755) < 0 && errno != EEXIST)
+                throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
         }
 
-      else if (errno != EEXIST)
-        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+        else if (errno != EEXIST)
+            throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
     }
 
-  is_stat_loaded_ = false;
+    is_stat_loaded_ = false;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -490,19 +514,20 @@ folder_impl::create ()
 void
 folder_impl::clear ()
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+    if (!exists ())
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
 
-  auto col = get_children ();
-  entry_impl e;
+    auto col = get_children ();
+    entry_impl e;
 
-  while (col->get (e))
+    while (col->get (e))
     {
-      if (e.folder_p)
-        e.folder_p->remove ();
+        if (e.folder_p)
+            e.folder_p->remove ();
 
-      else
-        e.file_p->remove ();
+        else
+            e.file_p->remove ();
     }
 }
 
@@ -512,7 +537,7 @@ folder_impl::clear ()
 void
 folder_impl::reload ()
 {
-  is_stat_loaded_ = false;
+    is_stat_loaded_ = false;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -521,10 +546,10 @@ folder_impl::reload ()
 void
 folder_impl::remove ()
 {
-  clear ();
-  smbc_rmdir (url_.c_str ());
+    clear ();
+    smbc_rmdir (url_.c_str ());
 
-  is_stat_loaded_ = false;
+    is_stat_loaded_ = false;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -532,24 +557,25 @@ folder_impl::remove ()
 // @param name New folder name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-folder_impl::rename (const std::string& name)
+folder_impl::rename (const std::string &name)
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+    if (!exists ())
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
 
-  // create new URI
-  mobius::core::io::uri old_uri (url_);
-  mobius::core::io::uri new_uri = old_uri.get_sibling_by_name (name);
+    // create new URI
+    mobius::core::io::uri old_uri (url_);
+    mobius::core::io::uri new_uri = old_uri.get_sibling_by_name (name);
 
-  // rename file
-  if (smbc_rename (url_.c_str (), new_uri.get_value ().c_str ()) < 0)
-    throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+    // rename file
+    if (smbc_rename (url_.c_str (), new_uri.get_value ().c_str ()) < 0)
+        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
 
-  // update attributes
-  url_ = new_uri.get_value ();
-  name_ = name;
+    // update attributes
+    url_ = new_uri.get_value ();
+    name_ = name;
 
-  is_stat_loaded_ = false;  // force reload of attributes
+    is_stat_loaded_ = false; // force reload of attributes
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -560,21 +586,22 @@ folder_impl::rename (const std::string& name)
 bool
 folder_impl::move (folder_type impl)
 {
-  if (!exists ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+    if (!exists ())
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
 
-  // if destination folder impl is also local, use rename function
-  auto pimpl = std::dynamic_pointer_cast <folder_impl> (impl);
+    // if destination folder impl is also local, use rename function
+    auto pimpl = std::dynamic_pointer_cast<folder_impl> (impl);
 
-  if (pimpl)
+    if (pimpl)
     {
-      if (smbc_rename (url_.c_str (), pimpl->url_.c_str ()) < 0)
-        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+        if (smbc_rename (url_.c_str (), pimpl->url_.c_str ()) < 0)
+            throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
 
-      return true;
+        return true;
     }
 
-  return false;
+    return false;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -583,38 +610,43 @@ folder_impl::move (folder_type impl)
 void
 folder_impl::_load_stat () const
 {
-  if (is_stat_loaded_)
-    return;
+    if (is_stat_loaded_)
+        return;
 
-  struct stat st;
+    struct stat st;
 
-  if (smbc_stat (url_.c_str (), &st) < 0)   // error
+    if (smbc_stat (url_.c_str (), &st) < 0) // error
     {
-      exists_ = false;
+        exists_ = false;
 
-      if (errno != ENOENT && errno != ENOTDIR)
-        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+        if (errno != ENOENT && errno != ENOTDIR)
+            throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
     }
 
-  else
+    else
     {
-      if ((st.st_mode & S_IFMT) != S_IFDIR)
-        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("entry is not folder"));
+        if ((st.st_mode & S_IFMT) != S_IFDIR)
+            throw std::invalid_argument (
+                MOBIUS_EXCEPTION_MSG ("entry is not folder"));
 
-      exists_ = true;
-      inode_ = st.st_ino;
-      size_ = st.st_size;
-      user_id_ = st.st_uid;
-      group_id_ = st.st_gid;
-      permissions_ = st.st_mode & 0777;
-      access_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (st.st_atime);
-      modification_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (st.st_mtime);
-      metadata_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (st.st_ctime);
+        exists_ = true;
+        inode_ = st.st_ino;
+        size_ = st.st_size;
+        user_id_ = st.st_uid;
+        group_id_ = st.st_gid;
+        permissions_ = st.st_mode & 0777;
+        access_time_ =
+            mobius::core::datetime::new_datetime_from_unix_timestamp (
+                st.st_atime);
+        modification_time_ =
+            mobius::core::datetime::new_datetime_from_unix_timestamp (
+                st.st_mtime);
+        metadata_time_ =
+            mobius::core::datetime::new_datetime_from_unix_timestamp (
+                st.st_ctime);
     }
 
-  is_stat_loaded_ = true;
+    is_stat_loaded_ = true;
 }
 
 } // namespace mobius::core::io::smb
-
-

@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -25,18 +27,15 @@ namespace mobius::extension::ui::gtk3
 // @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 label_impl::label_impl ()
-  : widget_ (gtk_label_new (""))
+    : widget_ (gtk_label_new (""))
 {
-  g_object_ref_sink (G_OBJECT (widget_));
+    g_object_ref_sink (G_OBJECT (widget_));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-label_impl::~label_impl ()
-{
-  g_object_unref (G_OBJECT (widget_));
-}
+label_impl::~label_impl () { g_object_unref (G_OBJECT (widget_)); }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Set widget sensitive
@@ -45,7 +44,7 @@ label_impl::~label_impl ()
 void
 label_impl::set_sensitive (bool flag)
 {
-  gtk_widget_set_sensitive (widget_, flag);
+    gtk_widget_set_sensitive (widget_, flag);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -55,7 +54,7 @@ label_impl::set_sensitive (bool flag)
 void
 label_impl::set_visible (bool flag)
 {
-  gtk_widget_set_visible (widget_, flag);
+    gtk_widget_set_visible (widget_, flag);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -63,9 +62,9 @@ label_impl::set_visible (bool flag)
 // @param text Text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-label_impl::set_text (const std::string& text)
+label_impl::set_text (const std::string &text)
 {
-  gtk_label_set_text (reinterpret_cast <GtkLabel *> (widget_), text.c_str ());
+    gtk_label_set_text (reinterpret_cast<GtkLabel *> (widget_), text.c_str ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -73,9 +72,10 @@ label_impl::set_text (const std::string& text)
 // @param text Markup text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-label_impl::set_markup (const std::string& text)
+label_impl::set_markup (const std::string &text)
 {
-  gtk_label_set_markup (reinterpret_cast <GtkLabel *> (widget_), text.c_str ());
+    gtk_label_set_markup (reinterpret_cast<GtkLabel *> (widget_),
+                          text.c_str ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -85,7 +85,7 @@ label_impl::set_markup (const std::string& text)
 void
 label_impl::set_selectable (bool flag)
 {
-  gtk_label_set_selectable (reinterpret_cast <GtkLabel *> (widget_), flag);
+    gtk_label_set_selectable (reinterpret_cast<GtkLabel *> (widget_), flag);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -95,12 +95,18 @@ label_impl::set_selectable (bool flag)
 void
 label_impl::set_halign (halign_type halign)
 {
-  switch (halign)
-  {
-    case halign_type::left: gtk_widget_set_halign (widget_, GTK_ALIGN_START); break;
-    case halign_type::center: gtk_widget_set_halign (widget_, GTK_ALIGN_CENTER); break;
-    case halign_type::right: gtk_widget_set_halign (widget_, GTK_ALIGN_END); break;
-  }
+    switch (halign)
+    {
+    case halign_type::left:
+        gtk_widget_set_halign (widget_, GTK_ALIGN_START);
+        break;
+    case halign_type::center:
+        gtk_widget_set_halign (widget_, GTK_ALIGN_CENTER);
+        break;
+    case halign_type::right:
+        gtk_widget_set_halign (widget_, GTK_ALIGN_END);
+        break;
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -110,12 +116,18 @@ label_impl::set_halign (halign_type halign)
 void
 label_impl::set_valign (valign_type valign)
 {
-  switch (valign)
-  {
-    case valign_type::top: gtk_widget_set_valign (widget_, GTK_ALIGN_START); break;
-    case valign_type::center: gtk_widget_set_valign (widget_, GTK_ALIGN_CENTER); break;
-    case valign_type::bottom: gtk_widget_set_valign (widget_, GTK_ALIGN_END); break;
-  }
+    switch (valign)
+    {
+    case valign_type::top:
+        gtk_widget_set_valign (widget_, GTK_ALIGN_START);
+        break;
+    case valign_type::center:
+        gtk_widget_set_valign (widget_, GTK_ALIGN_CENTER);
+        break;
+    case valign_type::bottom:
+        gtk_widget_set_valign (widget_, GTK_ALIGN_END);
+        break;
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -125,19 +137,26 @@ label_impl::set_valign (valign_type valign)
 void
 label_impl::set_elide_mode (elide_type mode)
 {
-  PangoEllipsizeMode pango_mode = PANGO_ELLIPSIZE_NONE;
+    PangoEllipsizeMode pango_mode = PANGO_ELLIPSIZE_NONE;
 
-  switch (mode)
+    switch (mode)
     {
-      case elide_type::none: pango_mode = PANGO_ELLIPSIZE_NONE; break;
-      case elide_type::start: pango_mode = PANGO_ELLIPSIZE_START; break;
-      case elide_type::middle: pango_mode = PANGO_ELLIPSIZE_MIDDLE; break;
-      case elide_type::end: pango_mode = PANGO_ELLIPSIZE_END; break;
+    case elide_type::none:
+        pango_mode = PANGO_ELLIPSIZE_NONE;
+        break;
+    case elide_type::start:
+        pango_mode = PANGO_ELLIPSIZE_START;
+        break;
+    case elide_type::middle:
+        pango_mode = PANGO_ELLIPSIZE_MIDDLE;
+        break;
+    case elide_type::end:
+        pango_mode = PANGO_ELLIPSIZE_END;
+        break;
     }
 
-  gtk_label_set_ellipsize (reinterpret_cast <GtkLabel *> (widget_), pango_mode);
+    gtk_label_set_ellipsize (reinterpret_cast<GtkLabel *> (widget_),
+                             pango_mode);
 }
 
 } // namespace mobius::extension::ui::gtk3
-
-

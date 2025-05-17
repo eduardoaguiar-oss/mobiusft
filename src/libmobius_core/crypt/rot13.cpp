@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,8 +17,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/crypt/rot13.hpp>
 #include <algorithm>
+#include <mobius/core/crypt/rot13.hpp>
 
 namespace
 {
@@ -28,13 +30,13 @@ namespace
 static constexpr std::uint8_t
 _rot13 (std::uint8_t c) noexcept
 {
-  if ((c >= 'A' && c < 'N') || (c >= 'a' && c < 'n'))
-    c += 13;
+    if ((c >= 'A' && c < 'N') || (c >= 'a' && c < 'n'))
+        c += 13;
 
-  else if ((c >= 'N' && c <= 'Z') || (c >= 'n' && c <= 'z'))
-    c -= 13;
+    else if ((c >= 'N' && c <= 'Z') || (c >= 'n' && c <= 'z'))
+        c -= 13;
 
-  return c;
+    return c;
 }
 
 } // namespace
@@ -47,14 +49,12 @@ namespace mobius::core::crypt
 // @return Encoded/decoded data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
-rot13 (const mobius::core::bytearray& data)
+rot13 (const mobius::core::bytearray &data)
 {
-  mobius::core::bytearray out (data.size ());
-  std::transform (data.begin (), data.end (), out.begin (), _rot13);
+    mobius::core::bytearray out (data.size ());
+    std::transform (data.begin (), data.end (), out.begin (), _rot13);
 
-  return out;
+    return out;
 }
 
 } // namespace mobius::core::crypt
-
-

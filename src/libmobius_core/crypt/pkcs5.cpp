@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,9 +17,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/crypt/pkcs5.hpp>
 #include <mobius/core/crypt/hash.hpp>
 #include <mobius/core/crypt/hmac.hpp>
+#include <mobius/core/crypt/pkcs5.hpp>
 #include <mobius/core/exception.inc>
 #include <stdexcept>
 
@@ -30,19 +32,19 @@ namespace mobius::core::crypt
 // @see RFC 2898 (section 6.1.1.4)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
-pkcs5_unpad (const mobius::core::bytearray& data)
+pkcs5_unpad (const mobius::core::bytearray &data)
 {
-  mobius::core::bytearray unpad_data;
+    mobius::core::bytearray unpad_data;
 
-  if (data)
+    if (data)
     {
-      auto pad_size = data[data.size () - 1];
+        auto pad_size = data[data.size () - 1];
 
-      if (pad_size < data.size ())
-        unpad_data = data.slice (0, data.size () - pad_size - 1);
+        if (pad_size < data.size ())
+            unpad_data = data.slice (0, data.size () - pad_size - 1);
     }
 
-  return unpad_data;
+    return unpad_data;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -55,47 +57,47 @@ pkcs5_unpad (const mobius::core::bytearray& data)
 // @see RFC 2898
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
-pbkdf1 (
-  const std::string& hash_id,
-  const mobius::core::bytearray& key,
-  const mobius::core::bytearray& salt,
-  std::uint32_t count,
-  std::uint16_t dklen
-  )
+pbkdf1 (const std::string &hash_id, const mobius::core::bytearray &key,
+        const mobius::core::bytearray &salt, std::uint32_t count,
+        std::uint16_t dklen)
 {
-  // Validate input parameters
-  if (dklen == 0)
-    throw std::out_of_range (MOBIUS_EXCEPTION_MSG ("Derived key length must be > 0"));
+    // Validate input parameters
+    if (dklen == 0)
+        throw std::out_of_range (
+            MOBIUS_EXCEPTION_MSG ("Derived key length must be > 0"));
 
-  if (hash_id == "sha1")
+    if (hash_id == "sha1")
     {
-      if (dklen > 20)
-        throw std::out_of_range (MOBIUS_EXCEPTION_MSG ("Derived key too long"));
+        if (dklen > 20)
+            throw std::out_of_range (
+                MOBIUS_EXCEPTION_MSG ("Derived key too long"));
     }
 
-  else if (hash_id == "md2" || hash_id == "md5")
+    else if (hash_id == "md2" || hash_id == "md5")
     {
-      if (dklen > 16)
-        throw std::out_of_range (MOBIUS_EXCEPTION_MSG ("Derived key too long"));
+        if (dklen > 16)
+            throw std::out_of_range (
+                MOBIUS_EXCEPTION_MSG ("Derived key too long"));
     }
 
-  else
-    throw std::out_of_range (MOBIUS_EXCEPTION_MSG ("Invalid hash algorithm"));
+    else
+        throw std::out_of_range (
+            MOBIUS_EXCEPTION_MSG ("Invalid hash algorithm"));
 
-  // Calculate derived key
-  mobius::core::crypt::hash h (hash_id);
-  h.update (key);
-  h.update (salt);
-  mobius::core::bytearray t = h.get_digest ();
+    // Calculate derived key
+    mobius::core::crypt::hash h (hash_id);
+    h.update (key);
+    h.update (salt);
+    mobius::core::bytearray t = h.get_digest ();
 
-  for (std::uint32_t i = 1; i < count; i++)
+    for (std::uint32_t i = 1; i < count; i++)
     {
-      mobius::core::crypt::hash h2 (hash_id);
-      h2.update (t);
-      t = h2.get_digest ();
+        mobius::core::crypt::hash h2 (hash_id);
+        h2.update (t);
+        t = h2.get_digest ();
     }
 
-  return t.slice (0, dklen - 1);
+    return t.slice (0, dklen - 1);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -108,53 +110,44 @@ pbkdf1 (
 // @see RFC 2898
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
-pbkdf2_hmac (
-  const std::string& hash_id,
-  const mobius::core::bytearray& key,
-  const mobius::core::bytearray& salt,
-  std::uint32_t count,
-  std::uint16_t dklen
-  )
+pbkdf2_hmac (const std::string &hash_id, const mobius::core::bytearray &key,
+             const mobius::core::bytearray &salt, std::uint32_t count,
+             std::uint16_t dklen)
 {
-  // Validate input parameters
-  if (dklen == 0)
-    throw std::out_of_range (MOBIUS_EXCEPTION_MSG ("Derived key length must be > 0"));
+    // Validate input parameters
+    if (dklen == 0)
+        throw std::out_of_range (
+            MOBIUS_EXCEPTION_MSG ("Derived key length must be > 0"));
 
-  // Calculate derived key
-  std::uint32_t i = 1;
-  mobius::core::bytearray dk;
-  mobius::core::crypt::hmac hmac (hash_id, key);
+    // Calculate derived key
+    std::uint32_t i = 1;
+    mobius::core::bytearray dk;
+    mobius::core::crypt::hmac hmac (hash_id, key);
 
-  while (dk.size () < dklen)
+    while (dk.size () < dklen)
     {
-      hmac.reset ();
-      hmac.update (salt);
-      hmac.update (
-      {
-        static_cast <uint8_t> (i >> 24),
-        static_cast <uint8_t> (i >> 16),
-        static_cast <uint8_t> (i >> 8),
-        static_cast <uint8_t> (i)
-      });
+        hmac.reset ();
+        hmac.update (salt);
+        hmac.update ({static_cast<uint8_t> (i >> 24),
+                      static_cast<uint8_t> (i >> 16),
+                      static_cast<uint8_t> (i >> 8), static_cast<uint8_t> (i)});
 
-      auto t = hmac.get_digest ();
-      auto u = t;
+        auto t = hmac.get_digest ();
+        auto u = t;
 
-      for (std::uint32_t j = 1; j < count; j++)
+        for (std::uint32_t j = 1; j < count; j++)
         {
-          hmac.reset ();
-          hmac.update (u);
-          u = hmac.get_digest ();
-          t ^= u;
+            hmac.reset ();
+            hmac.update (u);
+            u = hmac.get_digest ();
+            t ^= u;
         }
 
-      dk += t;
-      ++i;
+        dk += t;
+        ++i;
     }
 
-  return dk.slice (0, dklen - 1);
+    return dk.slice (0, dklen - 1);
 }
 
 } // namespace mobius::core::crypt
-
-

@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -26,37 +28,39 @@ namespace mobius::extension::app::shareaza
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-CThumbCache::CThumbCache (const mobius::core::io::reader& reader)
+CThumbCache::CThumbCache (const mobius::core::io::reader &reader)
 {
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Copy reader content to temporary file
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::core::io::tempfile tfile;
-  tfile.copy_from (reader);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Copy reader content to temporary file
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::io::tempfile tfile;
+    tfile.copy_from (reader);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Read cache from db file
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::core::database::database db (tfile.get_path ());
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Read cache from db file
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::database::database db (tfile.get_path ());
 
-  auto stmt = db.new_statement (
-                "SELECT Filename, FileSize, LastWriteTime, Image "
-                  "FROM Files");
+    auto stmt =
+        db.new_statement ("SELECT Filename, FileSize, LastWriteTime, Image "
+                          "FROM Files");
 
-  while (stmt.fetch_row ())
+    while (stmt.fetch_row ())
     {
-      entry e;
+        entry e;
 
-      e.is_valid = true;
-      e.path = stmt.get_column_string (0);
-      e.size = stmt.get_column_int64 (1);
-      e.last_write_time = mobius::core::datetime::new_datetime_from_nt_timestamp (stmt.get_column_int64 (2));
-      e.image_data = stmt.get_column_bytearray (3);
+        e.is_valid = true;
+        e.path = stmt.get_column_string (0);
+        e.size = stmt.get_column_int64 (1);
+        e.last_write_time =
+            mobius::core::datetime::new_datetime_from_nt_timestamp (
+                stmt.get_column_int64 (2));
+        e.image_data = stmt.get_column_bytearray (3);
 
-      cache_[e.path] = e;
+        cache_[e.path] = e;
     }
 
-  is_instance_ = true;
+    is_instance_ = true;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -64,21 +68,17 @@ CThumbCache::CThumbCache (const mobius::core::io::reader& reader)
 // @param Path
 // @return Cache entry, if any
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::optional <CThumbCache::entry>
-CThumbCache::get (const std::string& path) const
+std::optional<CThumbCache::entry>
+CThumbCache::get (const std::string &path) const
 {
-  std::optional <entry> data;
+    std::optional<entry> data;
 
-  auto iter = cache_.find (mobius::core::string::tolower (path));
+    auto iter = cache_.find (mobius::core::string::tolower (path));
 
-  if (iter != cache_.end ())
-    data = iter->second;
+    if (iter != cache_.end ())
+        data = iter->second;
 
-  return data;
+    return data;
 }
 
 } // namespace mobius::extension::app::shareaza
-
-
-
-

@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -24,7 +26,7 @@ namespace mobius::core::io
 // @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 stream::stream ()
-  : impl_ (std::make_shared <stream_impl_null> ())
+    : impl_ (std::make_shared<stream_impl_null> ())
 {
 }
 
@@ -32,11 +34,9 @@ stream::stream ()
 // @brief Constructor from implementation pointer
 // @param impl implementation pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-stream::stream (const std::shared_ptr <stream_impl_base>& impl)
-  : impl_ (impl)
+stream::stream (const std::shared_ptr<stream_impl_base> &impl)
+    : impl_ (impl)
 {
 }
 
 } // namespace mobius::core::io
-
-

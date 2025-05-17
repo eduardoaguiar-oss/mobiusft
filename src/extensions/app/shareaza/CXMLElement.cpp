@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -26,30 +28,30 @@ namespace mobius::extension::app::shareaza
 // @see CXMLElement::Serialize@XML.cpp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CXMLElement::decode (mobius::core::decoder::mfc& decoder)
+CXMLElement::decode (mobius::core::decoder::mfc &decoder)
 {
-  name_ = decoder.get_string ();
-  value_ = decoder.get_string ();
+    name_ = decoder.get_string ();
+    value_ = decoder.get_string ();
 
-  // attributes
-  auto count = decoder.get_count ();
+    // attributes
+    auto count = decoder.get_count ();
 
-  for (std::uint32_t i = 0; i < count; i++)
+    for (std::uint32_t i = 0; i < count; i++)
     {
-      auto name = decoder.get_string ();
-      auto value = decoder.get_string ();
-      attributes_[name] = value;
+        auto name = decoder.get_string ();
+        auto value = decoder.get_string ();
+        attributes_[name] = value;
     }
 
-  // child elements
-  count = decoder.get_count ();
+    // child elements
+    count = decoder.get_count ();
 
-  for (std::uint32_t i = 0; i < count; i++)
+    for (std::uint32_t i = 0; i < count; i++)
     {
-      CXMLElement child;
-      child.decode (decoder);
+        CXMLElement child;
+        child.decode (decoder);
 
-      children_.push_back (child);
+        children_.push_back (child);
     }
 }
 
@@ -57,28 +59,23 @@ CXMLElement::decode (mobius::core::decoder::mfc& decoder)
 // @brief Get metadata from element
 // @return Metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::map <std::string, std::string>
+std::map<std::string, std::string>
 CXMLElement::get_metadata () const
 {
-  std::map <std::string, std::string> metadata;
+    std::map<std::string, std::string> metadata;
 
-  if (!name_.empty ())
+    if (!name_.empty ())
     {
-      const std::string name = name_;
+        const std::string name = name_;
 
-      std::transform (
-         attributes_.begin (),
-         attributes_.end (),
-         std::inserter (metadata, metadata.end ()),
-         [name](const auto& p){ return std::make_pair (name + '.' + p.first, p.second); }
-      );
+        std::transform (
+            attributes_.begin (), attributes_.end (),
+            std::inserter (metadata, metadata.end ()),
+            [name] (const auto &p)
+            { return std::make_pair (name + '.' + p.first, p.second); });
     }
 
-  return metadata;
+    return metadata;
 }
 
 } // namespace mobius::extension::app::shareaza
-
-
-
-

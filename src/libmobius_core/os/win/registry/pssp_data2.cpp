@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,8 +17,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/os/win/registry/pssp_data2.hpp>
 #include <map>
+#include <mobius/core/os/win/registry/pssp_data2.hpp>
 
 namespace mobius::core::os::win::registry
 {
@@ -25,15 +27,14 @@ namespace mobius::core::os::win::registry
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class pssp_data2::impl
 {
-public:
+  public:
+    // function prototypes
+    void set_key (const std::string &, mobius::core::bytearray &);
+    mobius::core::bytearray get_key (const std::string &) const;
 
-  // function prototypes
-  void set_key (const std::string&, mobius::core::bytearray&);
-  mobius::core::bytearray get_key (const std::string&) const;
-
-private:
-  // @brief key map
-  std::map <std::string, mobius::core::bytearray> keys_;
+  private:
+    // @brief key map
+    std::map<std::string, mobius::core::bytearray> keys_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -42,9 +43,10 @@ private:
 // @param value key value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-pssp_data2::impl::set_key (const std::string& name, mobius::core::bytearray& value)
+pssp_data2::impl::set_key (const std::string &name,
+                           mobius::core::bytearray &value)
 {
-  keys_[name] = value;
+    keys_[name] = value;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -53,23 +55,23 @@ pssp_data2::impl::set_key (const std::string& name, mobius::core::bytearray& val
 // @return None
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
-pssp_data2::impl::get_key (const std::string& name) const
+pssp_data2::impl::get_key (const std::string &name) const
 {
-  mobius::core::bytearray key_value;
+    mobius::core::bytearray key_value;
 
-  auto iter = keys_.find (name);
+    auto iter = keys_.find (name);
 
-  if (iter != keys_.end ())
-    key_value = iter->second;
+    if (iter != keys_.end ())
+        key_value = iter->second;
 
-  return key_value;
+    return key_value;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 pssp_data2::pssp_data2 ()
-  : impl_ (std::make_shared <impl> ())
+    : impl_ (std::make_shared<impl> ())
 {
 }
 
@@ -79,9 +81,9 @@ pssp_data2::pssp_data2 ()
 // @param value key value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-pssp_data2::set_key (const std::string& name, mobius::core::bytearray& value)
+pssp_data2::set_key (const std::string &name, mobius::core::bytearray &value)
 {
-  impl_->set_key (name, value);
+    impl_->set_key (name, value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -90,11 +92,9 @@ pssp_data2::set_key (const std::string& name, mobius::core::bytearray& value)
 // @return key value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
-pssp_data2::get_key (const std::string& name) const
+pssp_data2::get_key (const std::string &name) const
 {
-  return impl_->get_key (name);
+    return impl_->get_key (name);
 }
 
 } // namespace mobius::core::os::win::registry
-
-

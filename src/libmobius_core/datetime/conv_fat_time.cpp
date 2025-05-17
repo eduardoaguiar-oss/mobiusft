@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -29,20 +31,14 @@ namespace mobius::core::datetime
 datetime
 new_datetime_from_fat_time (std::uint16_t d, std::uint16_t t)
 {
-  mobius::core::datetime::datetime dt;
+    mobius::core::datetime::datetime dt;
 
-  if (d != 0 && d != 0xffff && t != 0 && t != 0xffff)
-    dt = mobius::core::datetime::datetime (
-           ((d >> 9) & 127) + 1980,
-           (d >> 5) & 15,
-           d & 31,
-           (t >> 11) & 31,
-           (t >> 5) & 63,
-           (t & 31) * 2);
+    if (d != 0 && d != 0xffff && t != 0 && t != 0xffff)
+        dt = mobius::core::datetime::datetime (
+            ((d >> 9) & 127) + 1980, (d >> 5) & 15, d & 31, (t >> 11) & 31,
+            (t >> 5) & 63, (t & 31) * 2);
 
-  return dt;
+    return dt;
 }
 
 } // namespace mobius::core::datetime
-
-

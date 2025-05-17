@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -26,19 +28,19 @@ namespace mobius::core::crypt
 // @param key Cipher key
 // @param iv Initialization vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-cipher_impl_ige::cipher_impl_ige (
-  const std::string& cipher_id,
-  const mobius::core::bytearray& key,
-  const mobius::core::bytearray& iv)
-: cipher_ (cipher_id, "ecb"),
-  iv_ (iv),
-  v1_ (iv.slice (0, iv.size () / 2 - 1)),
-  v2_ (iv.slice (iv.size () / 2, iv.size () - 1))
+cipher_impl_ige::cipher_impl_ige (const std::string &cipher_id,
+                                  const mobius::core::bytearray &key,
+                                  const mobius::core::bytearray &iv)
+    : cipher_ (cipher_id, "ecb"),
+      iv_ (iv),
+      v1_ (iv.slice (0, iv.size () / 2 - 1)),
+      v2_ (iv.slice (iv.size () / 2, iv.size () - 1))
 {
-  if (cipher_.is_stream ())
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("cannot use cipher mode with stream cipher"));
+    if (cipher_.is_stream ())
+        throw std::invalid_argument (
+            MOBIUS_EXCEPTION_MSG ("cannot use cipher mode with stream cipher"));
 
-  cipher_.set_key (key);
+    cipher_.set_key (key);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -47,20 +49,20 @@ cipher_impl_ige::cipher_impl_ige (
 // @return Encrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
-cipher_impl_ige::encrypt (const mobius::core::bytearray& data)
+cipher_impl_ige::encrypt (const mobius::core::bytearray &data)
 {
-  mobius::core::bytearray out;
-  const auto block_size = cipher_.get_block_size ();
+    mobius::core::bytearray out;
+    const auto block_size = cipher_.get_block_size ();
 
-  for (std::size_t i = 0;i < data.size ();i += block_size)
+    for (std::size_t i = 0; i < data.size (); i += block_size)
     {
-      const auto block_data = data.slice (i, i + block_size - 1);
-      v1_ = cipher_.encrypt (block_data ^ v1_) ^ v2_;
-      v2_ = block_data;
-      out += v1_;
+        const auto block_data = data.slice (i, i + block_size - 1);
+        v1_ = cipher_.encrypt (block_data ^ v1_) ^ v2_;
+        v2_ = block_data;
+        out += v1_;
     }
 
-  return out;
+    return out;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -69,20 +71,20 @@ cipher_impl_ige::encrypt (const mobius::core::bytearray& data)
 // @return Decrypted data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
-cipher_impl_ige::decrypt (const mobius::core::bytearray& data)
+cipher_impl_ige::decrypt (const mobius::core::bytearray &data)
 {
-  mobius::core::bytearray out;
-  const auto block_size = cipher_.get_block_size ();
+    mobius::core::bytearray out;
+    const auto block_size = cipher_.get_block_size ();
 
-  for (std::size_t i = 0;i < data.size ();i += block_size)
+    for (std::size_t i = 0; i < data.size (); i += block_size)
     {
-      const auto block_data = data.slice (i, i + block_size - 1);
-      v2_ = cipher_.decrypt (block_data ^ v2_) ^ v1_;
-      v1_ = block_data;
-      out += v2_;
+        const auto block_data = data.slice (i, i + block_size - 1);
+        v2_ = cipher_.decrypt (block_data ^ v2_) ^ v1_;
+        v1_ = block_data;
+        out += v2_;
     }
 
-  return out;
+    return out;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -91,9 +93,9 @@ cipher_impl_ige::decrypt (const mobius::core::bytearray& data)
 void
 cipher_impl_ige::reset ()
 {
-  v1_ = iv_.slice (0, iv_.size () / 2 - 1);
-  v2_ = iv_.slice (iv_.size () / 2, iv_.size () - 1);
-  cipher_.reset ();
+    v1_ = iv_.slice (0, iv_.size () / 2 - 1);
+    v2_ = iv_.slice (iv_.size () / 2, iv_.size () - 1);
+    cipher_.reset ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -102,8 +104,7 @@ cipher_impl_ige::reset ()
 void
 cipher_impl_ige::final ()
 {
-  cipher_.final ();
+    cipher_.final ();
 }
 
 } // namespace mobius::core::crypt
-

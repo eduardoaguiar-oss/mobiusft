@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,10 +17,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <algorithm>
+#include <mobius/core/resource.hpp>
 #include <mobius/framework/evidence_loader.hpp>
 #include <mobius/framework/evidence_loader_impl_null.hpp>
-#include <mobius/core/resource.hpp>
-#include <algorithm>
 
 namespace mobius::framework
 {
@@ -26,7 +28,7 @@ namespace mobius::framework
 // @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 evidence_loader::evidence_loader ()
- : impl_ (std::make_shared <evidence_loader_impl_null> ())
+    : impl_ (std::make_shared<evidence_loader_impl_null> ())
 {
 }
 
@@ -35,23 +37,21 @@ evidence_loader::evidence_loader ()
 // @param id Evidence loader ID
 // @param item Item object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-evidence_loader::evidence_loader (
-  const std::string& id,
-  const mobius::framework::model::item& item,
-  scan_type type)
+evidence_loader::evidence_loader (const std::string &id,
+                                  const mobius::framework::model::item &item,
+                                  scan_type type)
 {
-  auto resource = mobius::core::get_resource ("evidence_loader.builder." + id);
+    auto resource =
+        mobius::core::get_resource ("evidence_loader.builder." + id);
 
-  if (resource)
+    if (resource)
     {
-      auto f = resource.get_value <evidence_loader_builder_type> ();
-      impl_ = f (item, type);
+        auto f = resource.get_value<evidence_loader_builder_type> ();
+        impl_ = f (item, type);
     }
 
-  else
-    impl_ = std::make_shared <evidence_loader_impl_null> ();
+    else
+        impl_ = std::make_shared<evidence_loader_impl_null> ();
 }
 
 } // namespace mobius::framework
-
-

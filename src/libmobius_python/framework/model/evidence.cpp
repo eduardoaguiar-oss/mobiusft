@@ -679,7 +679,7 @@ tp_setattro (PyObject *o, PyObject *name, PyObject *value)
 // @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject framework_model_evidence_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)
+    PyVarObject_HEAD_INIT (nullptr, 0)        // header
     "mobius.framework.model.evidence",        // tp_name
     sizeof (framework_model_evidence_o),      // tp_basicsize
     0,                                        // tp_itemsize

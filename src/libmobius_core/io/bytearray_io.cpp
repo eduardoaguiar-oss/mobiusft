@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -27,9 +29,10 @@ namespace mobius::core::io
 // @return Reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::io::reader
-new_bytearray_reader (const mobius::core::bytearray& data)
+new_bytearray_reader (const mobius::core::bytearray &data)
 {
-  return mobius::core::io::reader (std::make_shared <reader_impl_bytearray> (data));
+    return mobius::core::io::reader (
+        std::make_shared<reader_impl_bytearray> (data));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -38,11 +41,10 @@ new_bytearray_reader (const mobius::core::bytearray& data)
 // @return Writer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::io::writer
-new_bytearray_writer (mobius::core::bytearray& data)
+new_bytearray_writer (mobius::core::bytearray &data)
 {
-  return mobius::core::io::writer (std::make_shared <writer_impl_bytearray> (data));
+    return mobius::core::io::writer (
+        std::make_shared<writer_impl_bytearray> (data));
 }
 
 } // namespace mobius::core::io
-
-

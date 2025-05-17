@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -22,11 +24,11 @@
 // @brief Constructor
 // @param impl imagefile_impl object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-reader_impl_fixed::reader_impl_fixed (const imagefile_impl& impl)
-  : size_ (impl.get_size ())
+reader_impl_fixed::reader_impl_fixed (const imagefile_impl &impl)
+    : size_ (impl.get_size ())
 {
-  auto f = impl.get_file ();
-  reader_ = f.new_reader ();
+    auto f = impl.get_file ();
+    reader_ = f.new_reader ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -37,17 +39,15 @@ reader_impl_fixed::reader_impl_fixed (const imagefile_impl& impl)
 mobius::core::bytearray
 reader_impl_fixed::read (size_type size)
 {
-  mobius::core::bytearray data;
+    mobius::core::bytearray data;
 
-  if (!eof ())
+    if (!eof ())
     {
-      if (reader_.tell () + size >= size_)
-        size = size_ - reader_.tell ();
+        if (reader_.tell () + size >= size_)
+            size = size_ - reader_.tell ();
 
-      data = reader_.read (size);
+        data = reader_.read (size);
     }
 
-  return data;
+    return data;
 }
-
-

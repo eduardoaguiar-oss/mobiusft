@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,8 +17,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/os/win/registry/registry_value_impl_hvalue.hpp>
 #include <mobius/core/os/win/registry/registry_data_impl_hdata.hpp>
+#include <mobius/core/os/win/registry/registry_value_impl_hvalue.hpp>
 
 namespace mobius::core::os::win::registry
 {
@@ -25,12 +27,11 @@ namespace mobius::core::os::win::registry
 // @param hvalue hive_value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_value_impl_hvalue::registry_value_impl_hvalue (hive_value hvalue)
-  : hive_value_ (hvalue),
-    name_ (hvalue.get_name ()),
-    data_ (registry_data (std::make_shared <registry_data_impl_hdata> (hive_value_.get_data ())))
+    : hive_value_ (hvalue),
+      name_ (hvalue.get_name ()),
+      data_ (registry_data (
+          std::make_shared<registry_data_impl_hdata> (hive_value_.get_data ())))
 {
 }
 
 } // namespace mobius::core::os::win::registry
-
-

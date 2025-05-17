@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -24,11 +26,11 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extern "C"
 {
-const char *EXTENSION_ID = "app-emuletorrent";
-const char *EXTENSION_NAME = "EmuleTorrent";
-const char *EXTENSION_VERSION = "1.2";
-const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
-const char *EXTENSION_DESCRIPTION = "EmuleTorrent support";
+    const char *EXTENSION_ID = "app-emuletorrent";
+    const char *EXTENSION_NAME = "EmuleTorrent";
+    const char *EXTENSION_VERSION = "1.2";
+    const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
+    const char *EXTENSION_DESCRIPTION = "EmuleTorrent support";
 } // extern "C"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -37,11 +39,11 @@ const char *EXTENSION_DESCRIPTION = "EmuleTorrent support";
 extern "C" void
 start ()
 {
-  mobius::core::add_resource (
-     "evidence_loader.builder.app-emuletorrent",
-     "Emule Torrent evidence loader",
-     mobius::framework::new_evidence_loader_builder_resource <mobius::extension::app::emuletorrent::evidence_loader_impl> ()
-  );
+    mobius::core::add_resource (
+        "evidence_loader.builder.app-emuletorrent",
+        "Emule Torrent evidence loader",
+        mobius::framework::new_evidence_loader_builder_resource<
+            mobius::extension::app::emuletorrent::evidence_loader_impl> ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -50,9 +52,5 @@ start ()
 extern "C" void
 stop ()
 {
-  mobius::core::remove_resource ("evidence_loader.builder.app-emuletorrent");
+    mobius::core::remove_resource ("evidence_loader.builder.app-emuletorrent");
 }
-
-
-
-

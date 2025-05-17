@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -17,8 +19,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "CBTInfo.hpp"
 #include "CShareaza.hpp"
-#include <mobius/core/log.hpp>
 #include <mobius/core/decoder/btencode.hpp>
+#include <mobius/core/log.hpp>
 #include <mobius/core/string_functions.hpp>
 
 #include <iostream>
@@ -43,36 +45,36 @@ namespace mobius::extension::app::shareaza
 // @see CBTFile::Serialize@BTInfo.cpp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CBTInfo::decode_CBTFile (mobius::core::decoder::mfc& decoder, int version)
+CBTInfo::decode_CBTFile (mobius::core::decoder::mfc &decoder, int version)
 {
-  CBTFile f;
+    CBTFile f;
 
-  if (version >= 2)
-    f.size = decoder.get_qword ();
+    if (version >= 2)
+        f.size = decoder.get_qword ();
 
-  else
-    f.size = decoder.get_dword ();
+    else
+        f.size = decoder.get_dword ();
 
-  f.path = decoder.get_string ();
+    f.path = decoder.get_string ();
 
-  if (version >= 9)
-    f.name = decoder.get_string ();
+    if (version >= 9)
+        f.name = decoder.get_string ();
 
-  f.hash_sha1 = decoder.get_hex_string (20);
+    f.hash_sha1 = decoder.get_hex_string (20);
 
-  if (version >= 4)
+    if (version >= 4)
     {
-      f.hash_ed2k = decoder.get_hex_string (16);
-      f.hash_tiger = decoder.get_hex_string (24);
+        f.hash_ed2k = decoder.get_hex_string (16);
+        f.hash_tiger = decoder.get_hex_string (24);
 
-      if (version < 8)
-        f.priority = decoder.get_int ();
+        if (version < 8)
+            f.priority = decoder.get_int ();
     }
 
-  if (version >= 6)
-    f.hash_md5 = decoder.get_hex_string (16);
+    if (version >= 6)
+        f.hash_md5 = decoder.get_hex_string (16);
 
-  files_.push_back (f);
+    files_.push_back (f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -81,134 +83,135 @@ CBTInfo::decode_CBTFile (mobius::core::decoder::mfc& decoder, int version)
 // @see CBTTracker::Serialize@BTInfo.cpp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CBTInfo::decode_CBTTracker (mobius::core::decoder::mfc& decoder)
+CBTInfo::decode_CBTTracker (mobius::core::decoder::mfc &decoder)
 {
-  CBTTracker tracker;
+    CBTTracker tracker;
 
-  tracker.address = decoder.get_string ();
-  tracker.last_access_time = decoder.get_unix_time ();
-  tracker.last_success_time = decoder.get_unix_time ();
-  tracker.next_try_time = decoder.get_unix_time ();
-  tracker.failures = decoder.get_dword ();
-  tracker.tier = decoder.get_int ();
-  tracker.type = decoder.get_int ();
+    tracker.address = decoder.get_string ();
+    tracker.last_access_time = decoder.get_unix_time ();
+    tracker.last_success_time = decoder.get_unix_time ();
+    tracker.next_try_time = decoder.get_unix_time ();
+    tracker.failures = decoder.get_dword ();
+    tracker.tier = decoder.get_int ();
+    tracker.type = decoder.get_int ();
 
-  trackers_.push_back (tracker);
+    trackers_.push_back (tracker);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // @param decoder MFC decoder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-CBTInfo::CBTInfo (mobius::core::decoder::mfc& decoder)
+CBTInfo::CBTInfo (mobius::core::decoder::mfc &decoder)
 {
-  mobius::core::log log (__FILE__, __FUNCTION__);
+    mobius::core::log log (__FILE__, __FUNCTION__);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Check version
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  version_ = decoder.get_int ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Check version
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    version_ = decoder.get_int ();
 
-  if (version_ > SER_VERSION)
+    if (version_ > SER_VERSION)
     {
-      log.development (__LINE__, "Unhandled version: " + std::to_string (version_));
-      return;
+        log.development (__LINE__,
+                         "Unhandled version: " + std::to_string (version_));
+        return;
     }
 
-  if (version_ < 1)
-    return;
+    if (version_ < 1)
+        return;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Get BTH hash
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  hash_bth_ = decoder.get_hex_string (20);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Get BTH hash
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    hash_bth_ = decoder.get_hex_string (20);
 
-  if (hash_bth_.empty ())
-    return;
+    if (hash_bth_.empty ())
+        return;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Decode data
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  if (version_ >= 2)
-    size_ = decoder.get_qword ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode data
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (version_ >= 2)
+        size_ = decoder.get_qword ();
 
-  else
-    size_ = decoder.get_dword ();
+    else
+        size_ = decoder.get_dword ();
 
-  block_size_ = decoder.get_dword ();
-  block_count_ = decoder.get_dword ();
+    block_size_ = decoder.get_dword ();
+    block_count_ = decoder.get_dword ();
 
-  for (std::uint32_t i = 0; i < block_count_; i++)
-    block_hashes_.push_back (decoder.get_data (20).to_hexstring ());
+    for (std::uint32_t i = 0; i < block_count_; i++)
+        block_hashes_.push_back (decoder.get_data (20).to_hexstring ());
 
-  if (version_ >= 4)
-    total_uploaded_ = decoder.get_qword ();
+    if (version_ >= 4)
+        total_uploaded_ = decoder.get_qword ();
 
-  if (version_ >= 6)
-    total_downloaded_ = decoder.get_qword ();
+    if (version_ >= 6)
+        total_downloaded_ = decoder.get_qword ();
 
-  name_ = decoder.get_string ();
+    name_ = decoder.get_string ();
 
-  if (version_ >= 3)
+    if (version_ >= 3)
     {
-      encoding_ = decoder.get_dword ();
-      comments_ = decoder.get_string ();
-      creation_time_ = decoder.get_unix_time ();
-      created_by_ = decoder.get_string ();
+        encoding_ = decoder.get_dword ();
+        comments_ = decoder.get_string ();
+        creation_time_ = decoder.get_unix_time ();
+        created_by_ = decoder.get_string ();
     }
 
-  if (version_ >= 5)
-    b_private_ = decoder.get_bool ();
+    if (version_ >= 5)
+        b_private_ = decoder.get_bool ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Decode files
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto count = decoder.get_count ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto count = decoder.get_count ();
 
-  for (std::uint32_t i = 0; i < count; i++)
-    decode_CBTFile (decoder, version_);
+    for (std::uint32_t i = 0; i < count; i++)
+        decode_CBTFile (decoder, version_);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Decode trackers
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  if (version_ < 7)
-    tracker_ = decoder.get_string ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode trackers
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (version_ < 7)
+        tracker_ = decoder.get_string ();
 
-  if (version_ >= 4)
+    if (version_ >= 4)
     {
-      tracker_index_ = decoder.get_int ();
-      tracker_mode_ = decoder.get_int ();
+        tracker_index_ = decoder.get_int ();
+        tracker_mode_ = decoder.get_int ();
 
-      if (version_ < 7)
+        if (version_ < 7)
         {
-          if (decoder.get_count ())
-            decode_CBTTracker (decoder);
+            if (decoder.get_count ())
+                decode_CBTTracker (decoder);
         }
 
-      count = decoder.get_count ();
+        count = decoder.get_count ();
 
-      for (std::uint32_t i = 0; i < count; i++)
-        decode_CBTTracker (decoder);
+        for (std::uint32_t i = 0; i < count; i++)
+            decode_CBTTracker (decoder);
     }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Decode .torrent data
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  if (version_ >= 10)
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode .torrent data
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (version_ >= 10)
     {
-      auto length = decoder.get_dword ();
+        auto length = decoder.get_dword ();
 
-      if (length > 0)
+        if (length > 0)
         {
-          auto data = decoder.get_data (length);
+            auto data = decoder.get_data (length);
 
-          if (data)
-            data_ = mobius::core::decoder::btencode (data);
+            if (data)
+                data_ = mobius::core::decoder::btencode (data);
 
-          if (version_ >= 11)
+            if (version_ >= 11)
             {
-              info_start_ = decoder.get_dword ();       // info section start?
-              info_size_ = decoder.get_dword ();        // info section size
+                info_start_ = decoder.get_dword (); // info section start?
+                info_size_ = decoder.get_dword ();  // info section size
             }
         }
     }
@@ -218,56 +221,53 @@ CBTInfo::CBTInfo (mobius::core::decoder::mfc& decoder)
 // @brief Get metadata from torrent data
 // @return Torrent metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::map <std::string, std::string>
+std::map<std::string, std::string>
 CBTInfo::get_metadata () const
 {
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Get info sub-dictionary
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto info = data_.get ("info");
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Get info sub-dictionary
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto info = data_.get ("info");
 
-  if (!info.is_map ())
-    return {};
+    if (!info.is_map ())
+        return {};
 
-  mobius::core::pod::map m (info);
+    mobius::core::pod::map m (info);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Get data from info
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::map <std::string, std::string> metadata;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Get data from info
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::map<std::string, std::string> metadata;
 
-  for (const auto& [k, v] : m)
+    for (const auto &[k, v] : m)
     {
-      bool flag_known = true;
-      std::string value;
+        bool flag_known = true;
+        std::string value;
 
-      if (k == "length")
-        value = v.to_string ();
+        if (k == "length")
+            value = v.to_string ();
 
-      else if (k == "name")
-        value = std::string (v);
+        else if (k == "name")
+            value = std::string (v);
 
-      else if (k == "name.utf-8")
-        value = std::string (v);
+        else if (k == "name.utf-8")
+            value = std::string (v);
 
-      else if (k == "piece length")
-        value = v.to_string ();
+        else if (k == "piece length")
+            value = v.to_string ();
 
-      else
-        flag_known = false;
+        else
+            flag_known = false;
 
-      if (flag_known)
+        if (flag_known)
         {
-          const std::string key = "torrent_info_" + mobius::core::string::replace (k, " ", "_");
-          metadata[key] = value;
+            const std::string key =
+                "torrent_info_" + mobius::core::string::replace (k, " ", "_");
+            metadata[key] = value;
         }
     }
 
-  return metadata;
+    return metadata;
 }
 
 } // namespace mobius::extension::app::shareaza
-
-
-
-

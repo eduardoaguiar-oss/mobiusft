@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,12 +17,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/io/smb/writer_impl.hpp>
+#include <fcntl.h>
+#include <libsmbclient.h>
 #include <mobius/core/exception.inc>
 #include <mobius/core/exception_posix.inc>
+#include <mobius/core/io/smb/writer_impl.hpp>
 #include <stdexcept>
-#include <libsmbclient.h>
-#include <fcntl.h>
 
 namespace mobius::core::io::smb
 {
@@ -29,17 +31,17 @@ namespace mobius::core::io::smb
 // @param url URL to SMB file
 // @param overwrite Overwrite flag
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-writer_impl::writer_impl (const std::string& url, bool overwrite)
+writer_impl::writer_impl (const std::string &url, bool overwrite)
 {
-  int flags = O_WRONLY | O_CREAT;
+    int flags = O_WRONLY | O_CREAT;
 
-  if (overwrite)
-    flags |= O_TRUNC;
+    if (overwrite)
+        flags |= O_TRUNC;
 
-  fd_ = smbc_open (url.c_str (), flags, 0644);
+    fd_ = smbc_open (url.c_str (), flags, 0644);
 
-  if (fd_ < 0)
-    throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+    if (fd_ < 0)
+        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -47,8 +49,8 @@ writer_impl::writer_impl (const std::string& url, bool overwrite)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl::~writer_impl ()
 {
-  if (fd_ != -1)
-    smbc_close (fd_);
+    if (fd_ != -1)
+        smbc_close (fd_);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -59,19 +61,19 @@ writer_impl::~writer_impl ()
 void
 writer_impl::seek (offset_type offset, whence_type w)
 {
-  int whence = 0;
+    int whence = 0;
 
-  if (w == whence_type::beginning)
-    whence = SEEK_SET;
+    if (w == whence_type::beginning)
+        whence = SEEK_SET;
 
-  else if (w == whence_type::current)
-    whence = SEEK_CUR;
+    else if (w == whence_type::current)
+        whence = SEEK_CUR;
 
-  else if (w == whence_type::end)
-    whence = SEEK_END;
+    else if (w == whence_type::end)
+        whence = SEEK_END;
 
-  if (smbc_lseek (fd_, offset, whence) < 0)
-    throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+    if (smbc_lseek (fd_, offset, whence) < 0)
+        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -81,12 +83,12 @@ writer_impl::seek (offset_type offset, whence_type w)
 writer_impl::offset_type
 writer_impl::tell () const
 {
-  offset_type off = smbc_lseek (fd_, 0, SEEK_CUR);
+    offset_type off = smbc_lseek (fd_, 0, SEEK_CUR);
 
-  if (off < 0)
-    throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+    if (off < 0)
+        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
 
-  return off;
+    return off;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -95,17 +97,18 @@ writer_impl::tell () const
 // @return Number of bytes written
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl::size_type
-writer_impl::write (const mobius::core::bytearray& data)
+writer_impl::write (const mobius::core::bytearray &data)
 {
-  auto count = smbc_write (fd_, data.data (), data.size ());
+    auto count = smbc_write (fd_, data.data (), data.size ());
 
-  if (count < 0)
-    throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
+    if (count < 0)
+        throw std::runtime_error (MOBIUS_EXCEPTION_POSIX);
 
-  else if (static_cast <size_type> (count) != data.size ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("could not write bytearray"));
+    else if (static_cast<size_type> (count) != data.size ())
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("could not write bytearray"));
 
-  return count;
+    return count;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -117,5 +120,3 @@ writer_impl::flush ()
 }
 
 } // namespace mobius::core::io::smb
-
-

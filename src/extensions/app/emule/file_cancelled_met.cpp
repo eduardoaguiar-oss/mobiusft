@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -16,8 +18,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file_cancelled_met.hpp"
-#include <mobius/core/log.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
+#include <mobius/core/log.hpp>
 
 namespace
 {
@@ -35,7 +37,7 @@ constexpr std::uint8_t LAST_VERSION = 0x01;
 // @return New CCancelled struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::extension::app::emule::file_cancelled_met::CCancelledFile
-_decode_ccancelledfile (mobius::core::decoder::data_decoder& decoder)
+_decode_ccancelledfile (mobius::core::decoder::data_decoder &decoder)
 {
     mobius::extension::app::emule::file_cancelled_met::CCancelledFile f;
 
@@ -45,7 +47,7 @@ _decode_ccancelledfile (mobius::core::decoder::data_decoder& decoder)
     // decoder tags
     auto tag_count = decoder.get_uint8 ();
 
-    for (std::uint32_t i = 0;i < tag_count;i++)
+    for (std::uint32_t i = 0; i < tag_count; i++)
         f.tags.emplace_back (decoder);
 
     // return struct
@@ -60,7 +62,7 @@ namespace mobius::extension::app::emule
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-file_cancelled_met::file_cancelled_met (const mobius::core::io::reader& reader)
+file_cancelled_met::file_cancelled_met (const mobius::core::io::reader &reader)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -77,21 +79,22 @@ file_cancelled_met::file_cancelled_met (const mobius::core::io::reader& reader)
         return;
 
     if (header == MET_HEADER_I64TAGS)
-      {
+    {
         version_ = decoder.get_uint8 ();
-        
+
         if (version_ > LAST_VERSION)
             log.development (__LINE__, "Version " + std::to_string (version_) +
-                                " > " + std::to_string (LAST_VERSION));
+                                           " > " +
+                                           std::to_string (LAST_VERSION));
         seed_ = decoder.get_uint32_le ();
-      }
+    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Decode entries
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::uint32_t count = decoder.get_uint32_le ();
 
-    for (std::uint32_t i = 0;i < count;i++)
+    for (std::uint32_t i = 0; i < count; i++)
         cancelled_files_.push_back (_decode_ccancelledfile (decoder));
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

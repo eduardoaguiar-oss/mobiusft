@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -33,16 +35,16 @@
 #include "evidence_loader_impl.hpp"
 #include "file_bt_fastresume.hpp"
 #include "file_ed2k_fastresume.hpp"
-#include <mobius/core/io/walker.hpp>
-#include <mobius/core/log.hpp>
+#include <algorithm>
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/decoder/inifile.hpp>
 #include <mobius/core/exception.inc>
-#include <mobius/framework/model/evidence.hpp>
 #include <mobius/core/io/folder.hpp>
 #include <mobius/core/io/path.hpp>
+#include <mobius/core/io/walker.hpp>
+#include <mobius/core/log.hpp>
 #include <mobius/core/string_functions.hpp>
-#include <algorithm>
+#include <mobius/framework/model/evidence.hpp>
 #include <stdexcept>
 
 namespace
@@ -62,14 +64,15 @@ static const std::string ANT_VERSION = "1.2";
 // @param other Other metadata map
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-_update_metadata (mobius::core::pod::map& metadata, const mobius::core::pod::map& other)
+_update_metadata (mobius::core::pod::map &metadata,
+                  const mobius::core::pod::map &other)
 {
-  for (const auto& [k, v] : other)
+    for (const auto &[k, v] : other)
     {
-      auto old_v = metadata.get (k);
+        auto old_v = metadata.get (k);
 
-      if (!metadata.contains (k) || (old_v.is_null () && !v.is_null ()))
-        metadata.set (k, v);
+        if (!metadata.contains (k) || (old_v.is_null () && !v.is_null ()))
+            metadata.set (k, v);
     }
 }
 
@@ -78,21 +81,21 @@ _update_metadata (mobius::core::pod::map& metadata, const mobius::core::pod::map
 // @param f File structure
 // @return Vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <mobius::core::pod::data>
-_get_file_hashes (const mobius::extension::app::emuletorrent::file& f)
+std::vector<mobius::core::pod::data>
+_get_file_hashes (const mobius::extension::app::emuletorrent::file &f)
 {
-  std::vector <mobius::core::pod::data> hashes;
+    std::vector<mobius::core::pod::data> hashes;
 
-  if (!f.hash_ed2k.empty ())
-    hashes.push_back ({"ed2k", f.hash_ed2k});
+    if (!f.hash_ed2k.empty ())
+        hashes.push_back ({"ed2k", f.hash_ed2k});
 
-  if (!f.hash_sha1.empty ())
-    hashes.push_back ({"sha1", f.hash_sha1});
+    if (!f.hash_sha1.empty ())
+        hashes.push_back ({"sha1", f.hash_sha1});
 
-  if (!f.hash_sha2_256.empty ())
-    hashes.push_back ({"sha2-256", f.hash_sha2_256});
+    if (!f.hash_sha2_256.empty ())
+        hashes.push_back ({"sha2-256", f.hash_sha2_256});
 
-  return hashes;
+    return hashes;
 }
 } // namespace
 
@@ -102,9 +105,10 @@ namespace mobius::extension::app::emuletorrent
 // @brief Constructor
 // @param item Item object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-evidence_loader_impl::evidence_loader_impl (const mobius::framework::model::item& item, scan_type type)
-  : item_ (item),
-    scan_type_ (type)
+evidence_loader_impl::evidence_loader_impl (
+    const mobius::framework::model::item &item, scan_type type)
+    : item_ (item),
+      scan_type_ (type)
 {
 }
 
@@ -114,69 +118,72 @@ evidence_loader_impl::evidence_loader_impl (const mobius::framework::model::item
 void
 evidence_loader_impl::run ()
 {
-  mobius::core::log log (__FILE__, __FUNCTION__);
-  log.info (__LINE__, "Evidence loader <" + APP_ID + "> started");
-  log.info (__LINE__, "Item UID: " + std::to_string (item_.get_uid ()));
-  log.info (__LINE__, "Scan mode: " + std::to_string (static_cast <int> (scan_type_)));
+    mobius::core::log log (__FILE__, __FUNCTION__);
+    log.info (__LINE__, "Evidence loader <" + APP_ID + "> started");
+    log.info (__LINE__, "Item UID: " + std::to_string (item_.get_uid ()));
+    log.info (__LINE__,
+              "Scan mode: " + std::to_string (static_cast<int> (scan_type_)));
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Check if loader has already run for item
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  if (item_.has_ant (ANT_ID))
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Check if loader has already run for item
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (item_.has_ant (ANT_ID))
     {
-      log.info (__LINE__, "Evidence loader <" + APP_ID + "> has already run");
-      return ;
-    }
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Check datasource
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto datasource = item_.get_datasource ();
-
-  if (!datasource)
-    throw std::runtime_error ("item has no datasource");
-
-  if (datasource.get_type () != "vfs")
-    throw std::runtime_error ("datasource type is not VFS");
-
-  if (!datasource.is_available ())
-    throw std::runtime_error ("datasource is not available");
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Log starting event
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto transaction = item_.new_transaction ();
-  item_.add_event ("app." + APP_ID + " started");
-  transaction.commit ();
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Scan item files, according to scan_type
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  switch (scan_type_)
-    {
-      case scan_type::canonical_folders:
-        _scan_canonical_folders ();
-        break;
-
-      case scan_type::all_folders:
-        _scan_all_folders ();
-        break;
-
-      default:
-        log.warning (__LINE__, "invalid scan type: " + std::to_string (static_cast <int> (scan_type_)));
+        log.info (__LINE__, "Evidence loader <" + APP_ID + "> has already run");
         return;
     }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Save evidences
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  _save_evidences ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Check datasource
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto datasource = item_.get_datasource ();
 
-  transaction = item_.new_transaction ();
-  item_.add_event ("app." + APP_ID + " ended");
-  transaction.commit ();
+    if (!datasource)
+        throw std::runtime_error ("item has no datasource");
 
-  log.info (__LINE__, "Evidence loader <" + APP_ID + "> ended");
+    if (datasource.get_type () != "vfs")
+        throw std::runtime_error ("datasource type is not VFS");
+
+    if (!datasource.is_available ())
+        throw std::runtime_error ("datasource is not available");
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Log starting event
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto transaction = item_.new_transaction ();
+    item_.add_event ("app." + APP_ID + " started");
+    transaction.commit ();
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Scan item files, according to scan_type
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    switch (scan_type_)
+    {
+    case scan_type::canonical_folders:
+        _scan_canonical_folders ();
+        break;
+
+    case scan_type::all_folders:
+        _scan_all_folders ();
+        break;
+
+    default:
+        log.warning (__LINE__,
+                     "invalid scan type: " +
+                         std::to_string (static_cast<int> (scan_type_)));
+        return;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Save evidences
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    _save_evidences ();
+
+    transaction = item_.new_transaction ();
+    item_.add_event ("app." + APP_ID + " ended");
+    transaction.commit ();
+
+    log.info (__LINE__, "Evidence loader <" + APP_ID + "> ended");
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -185,13 +192,14 @@ evidence_loader_impl::run ()
 void
 evidence_loader_impl::_scan_canonical_folders ()
 {
-  auto vfs_datasource = mobius::core::datasource::datasource_vfs (item_.get_datasource ());
-  auto vfs = vfs_datasource.get_vfs ();
+    auto vfs_datasource =
+        mobius::core::datasource::datasource_vfs (item_.get_datasource ());
+    auto vfs = vfs_datasource.get_vfs ();
 
-  for (const auto& entry : vfs.get_root_entries ())
+    for (const auto &entry : vfs.get_root_entries ())
     {
-      if (entry.is_folder ())
-        _scan_canonical_root_folder (entry.get_folder ());
+        if (entry.is_folder ())
+            _scan_canonical_root_folder (entry.get_folder ());
     }
 }
 
@@ -200,12 +208,13 @@ evidence_loader_impl::_scan_canonical_folders ()
 // @param folder Root folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_root_folder (const mobius::core::io::folder& folder)
+evidence_loader_impl::_scan_canonical_root_folder (
+    const mobius::core::io::folder &folder)
 {
-  auto w = mobius::core::io::walker (folder);
+    auto w = mobius::core::io::walker (folder);
 
-  for (const auto& f : w.get_folders_by_pattern ("users/*"))
-    _scan_canonical_user_folder (f);
+    for (const auto &f : w.get_folders_by_pattern ("users/*"))
+        _scan_canonical_user_folder (f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -213,18 +222,19 @@ evidence_loader_impl::_scan_canonical_root_folder (const mobius::core::io::folde
 // @param folder User folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_user_folder (const mobius::core::io::folder& folder)
+evidence_loader_impl::_scan_canonical_user_folder (
+    const mobius::core::io::folder &folder)
 {
-  username_ = folder.get_name ();
-  account_ = {};
+    username_ = folder.get_name ();
+    account_ = {};
 
-  auto w = mobius::core::io::walker (folder);
+    auto w = mobius::core::io::walker (folder);
 
-  for (const auto& f : w.get_folders_by_path ("appdata/roaming/mulehome"))
-    _scan_canonical_emuletorrent_roaming_folder (f);
+    for (const auto &f : w.get_folders_by_path ("appdata/roaming/mulehome"))
+        _scan_canonical_emuletorrent_roaming_folder (f);
 
-  for (const auto& f : w.get_folders_by_path ("appdata/local/eMuleTorrent"))
-    _scan_canonical_emuletorrent_local_folder (f);
+    for (const auto &f : w.get_folders_by_path ("appdata/local/eMuleTorrent"))
+        _scan_canonical_emuletorrent_local_folder (f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -232,12 +242,13 @@ evidence_loader_impl::_scan_canonical_user_folder (const mobius::core::io::folde
 // @param folder <i>mulehome</i> folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_emuletorrent_roaming_folder (const mobius::core::io::folder& folder)
+evidence_loader_impl::_scan_canonical_emuletorrent_roaming_folder (
+    const mobius::core::io::folder &folder)
 {
-  mobius::core::io::walker w (folder);
+    mobius::core::io::walker w (folder);
 
-  for (const auto& f : w.get_files_by_name ("emuletorrent.ini"))
-    _decode_emuletorrent_ini_file (f);
+    for (const auto &f : w.get_files_by_name ("emuletorrent.ini"))
+        _decode_emuletorrent_ini_file (f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -245,19 +256,20 @@ evidence_loader_impl::_scan_canonical_emuletorrent_roaming_folder (const mobius:
 // @param folder <i>eMuleTorrent</i> folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_canonical_emuletorrent_local_folder (const mobius::core::io::folder& folder)
+evidence_loader_impl::_scan_canonical_emuletorrent_local_folder (
+    const mobius::core::io::folder &folder)
 {
-  mobius::core::log log (__FILE__, __FUNCTION__);
-  mobius::core::io::walker w (folder);
+    mobius::core::log log (__FILE__, __FUNCTION__);
+    mobius::core::io::walker w (folder);
 
-  for (const auto& f : w.get_files_by_pattern ("BT_backup/*.fastresume"))
-    _decode_bt_fastresume_file (f);
+    for (const auto &f : w.get_files_by_pattern ("BT_backup/*.fastresume"))
+        _decode_bt_fastresume_file (f);
 
-  for (const auto& f : w.get_files_by_pattern ("BT_backup/*.torrent"))
-    log.development (__LINE__, "BT_backup: " + f.get_path ());
+    for (const auto &f : w.get_files_by_pattern ("BT_backup/*.torrent"))
+        log.development (__LINE__, "BT_backup: " + f.get_path ());
 
-  for (const auto& f : w.get_files_by_pattern ("ED2K_backup/*.fastresume"))
-    _decode_ed2k_fastresume_file (f);
+    for (const auto &f : w.get_files_by_pattern ("ED2K_backup/*.fastresume"))
+        _decode_ed2k_fastresume_file (f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -265,44 +277,52 @@ evidence_loader_impl::_scan_canonical_emuletorrent_local_folder (const mobius::c
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_emuletorrent_ini_file (const mobius::core::io::file& f)
+evidence_loader_impl::_decode_emuletorrent_ini_file (
+    const mobius::core::io::file &f)
 {
-  mobius::core::log log (__FILE__, __FUNCTION__);
+    mobius::core::log log (__FILE__, __FUNCTION__);
 
-  try
+    try
     {
-      mobius::core::decoder::inifile inifile (f.new_reader ());
+        mobius::core::decoder::inifile inifile (f.new_reader ());
 
-      if (!account_.f || (account_.f.is_deleted () && !f.is_deleted ()))
+        if (!account_.f || (account_.f.is_deleted () && !f.is_deleted ()))
         {
-          account acc;
+            account acc;
 
-          acc.username = username_;
-          acc.edonkey_guid = mobius::core::string::toupper (inifile.get_value ("Preferences", "eDonkey\\UserHash"));
-          acc.edonkey_nickname = inifile.get_value ("Preferences", "eDonkey\\Nick");
-          acc.download_temp_path = inifile.get_value ("Preferences", "Downloads\\TempPath");
-          acc.download_temp_path_mule = inifile.get_value ("Preferences", "Downloads\\TempPathMule");
-          acc.download_save_path = inifile.get_value ("Preferences", "Downloads\\SavePath");
-          acc.download_save_path_mule = inifile.get_value ("Preferences", "Downloads\\SavePathMule");
-          acc.autorun = inifile.get_value ("AutoRun", "enabled") == "true";
-          acc.f = f;
+            acc.username = username_;
+            acc.edonkey_guid = mobius::core::string::toupper (
+                inifile.get_value ("Preferences", "eDonkey\\UserHash"));
+            acc.edonkey_nickname =
+                inifile.get_value ("Preferences", "eDonkey\\Nick");
+            acc.download_temp_path =
+                inifile.get_value ("Preferences", "Downloads\\TempPath");
+            acc.download_temp_path_mule =
+                inifile.get_value ("Preferences", "Downloads\\TempPathMule");
+            acc.download_save_path =
+                inifile.get_value ("Preferences", "Downloads\\SavePath");
+            acc.download_save_path_mule =
+                inifile.get_value ("Preferences", "Downloads\\SavePathMule");
+            acc.autorun = inifile.get_value ("AutoRun", "enabled") == "true";
+            acc.f = f;
 
-          account_ = acc;
-          accounts_.push_back (acc);
+            account_ = acc;
+            accounts_.push_back (acc);
 
-          // Waiting for samples...
-          auto shared_dirs = inifile.get_value ("SharedDirectories", "ShareDirs\\size");
-          if (!shared_dirs.empty () && shared_dirs != "0")
-            log.development (__LINE__, "eMuleTorrent shared dirs found");
+            // Waiting for samples...
+            auto shared_dirs =
+                inifile.get_value ("SharedDirectories", "ShareDirs\\size");
+            if (!shared_dirs.empty () && shared_dirs != "0")
+                log.development (__LINE__, "eMuleTorrent shared dirs found");
 
-          auto friends = inifile.get_value ("ED2KFriends", "Friends\\size");
-          if (!friends.empty () && friends != "0")
-            log.development (__LINE__, "eMuleTorrent ED2KFriends found");
+            auto friends = inifile.get_value ("ED2KFriends", "Friends\\size");
+            if (!friends.empty () && friends != "0")
+                log.development (__LINE__, "eMuleTorrent ED2KFriends found");
         }
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      log.warning (__LINE__, e.what ());
+        log.warning (__LINE__, e.what ());
     }
 }
 
@@ -311,65 +331,70 @@ evidence_loader_impl::_decode_emuletorrent_ini_file (const mobius::core::io::fil
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_bt_fastresume_file (const mobius::core::io::file& f)
+evidence_loader_impl::_decode_bt_fastresume_file (
+    const mobius::core::io::file &f)
 {
-  mobius::core::log log (__FILE__, __FUNCTION__);
+    mobius::core::log log (__FILE__, __FUNCTION__);
 
-  try
+    try
     {
-      file_bt_fastresume bt (f.new_reader ());
+        file_bt_fastresume bt (f.new_reader ());
 
-      for (const auto& tf : bt.get_files ())
+        for (const auto &tf : bt.get_files ())
         {
-          file et_file;
-          et_file.account_guid = account_.edonkey_guid;
-          et_file.username = username_;
-          et_file.filename = tf.name;
-          et_file.size = tf.size;
+            file et_file;
+            et_file.account_guid = account_.edonkey_guid;
+            et_file.username = username_;
+            et_file.filename = tf.name;
+            et_file.size = tf.size;
 
-          // flags
-          if (bt.get_downloaded_bytes () > 0 || bt.get_pieces_downloaded () > 0)
-            et_file.flag_downloaded = true;
+            // flags
+            if (bt.get_downloaded_bytes () > 0 ||
+                bt.get_pieces_downloaded () > 0)
+                et_file.flag_downloaded = true;
 
-          if (bt.get_uploaded_bytes () > 0)
-            et_file.flag_uploaded = true;
+            if (bt.get_uploaded_bytes () > 0)
+                et_file.flag_uploaded = true;
 
-          et_file.flag_completed = bt.is_completed ();
-          et_file.flag_shared = bt.is_seeding ();
+            et_file.flag_completed = bt.is_completed ();
+            et_file.flag_shared = bt.is_seeding ();
 
-          // remote sources
-          for (const auto& p : bt.get_peers ())
+            // remote sources
+            for (const auto &p : bt.get_peers ())
             {
-              remote_source r;
+                remote_source r;
 
-              r.timestamp = p.timestamp;
-              r.ip = p.ip;
-              r.port = p.port;
+                r.timestamp = p.timestamp;
+                r.ip = p.ip;
+                r.port = p.port;
 
-              et_file.remote_sources.push_back (r);
+                et_file.remote_sources.push_back (r);
             }
 
-          // metadata
-          et_file.metadata.set ("magnet_uri", bt.get_magnet_uri ());
-          et_file.metadata.set ("is_paused", bt.is_paused ());
-          et_file.metadata.set ("is_completed", bt.is_completed ());
-          et_file.metadata.set ("is_seeding", bt.is_seeding ());
-          et_file.metadata.set ("downloaded_bytes", bt.get_downloaded_bytes ());
-          et_file.metadata.set ("uploaded_bytes", bt.get_uploaded_bytes ());
-          et_file.metadata.set ("pieces_count", bt.get_pieces_count ());
-          et_file.metadata.set ("pieces_downloaded", bt.get_pieces_downloaded ());
-          et_file.metadata.set ("last_modification_time", tf.last_modification_time);
-          _update_metadata (et_file.metadata, bt.get_metadata ());
+            // metadata
+            et_file.metadata.set ("magnet_uri", bt.get_magnet_uri ());
+            et_file.metadata.set ("is_paused", bt.is_paused ());
+            et_file.metadata.set ("is_completed", bt.is_completed ());
+            et_file.metadata.set ("is_seeding", bt.is_seeding ());
+            et_file.metadata.set ("downloaded_bytes",
+                                  bt.get_downloaded_bytes ());
+            et_file.metadata.set ("uploaded_bytes", bt.get_uploaded_bytes ());
+            et_file.metadata.set ("pieces_count", bt.get_pieces_count ());
+            et_file.metadata.set ("pieces_downloaded",
+                                  bt.get_pieces_downloaded ());
+            et_file.metadata.set ("last_modification_time",
+                                  tf.last_modification_time);
+            _update_metadata (et_file.metadata, bt.get_metadata ());
 
-          // evidence sources
-          et_file.bt_fastresume_f = f;
+            // evidence sources
+            et_file.bt_fastresume_f = f;
 
-          files_.push_back (et_file);
+            files_.push_back (et_file);
         }
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      log.warning (__LINE__, e.what ());
+        log.warning (__LINE__, e.what ());
     }
 }
 
@@ -378,48 +403,51 @@ evidence_loader_impl::_decode_bt_fastresume_file (const mobius::core::io::file& 
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_ed2k_fastresume_file (const mobius::core::io::file& f)
+evidence_loader_impl::_decode_ed2k_fastresume_file (
+    const mobius::core::io::file &f)
 {
-  mobius::core::log log (__FILE__, __FUNCTION__);
+    mobius::core::log log (__FILE__, __FUNCTION__);
 
-  try
+    try
     {
-      file_ed2k_fastresume ed2k (f.new_reader ());
+        file_ed2k_fastresume ed2k (f.new_reader ());
 
-      file et_file;
-      et_file.hash_ed2k = ed2k.get_hash_ed2k ();
-      et_file.account_guid = account_.edonkey_guid;
-      et_file.username = username_;
-      et_file.filename = ed2k.get_filename ();
-      et_file.path = ed2k.get_path ();
-      et_file.size = ed2k.get_file_size ();
+        file et_file;
+        et_file.hash_ed2k = ed2k.get_hash_ed2k ();
+        et_file.account_guid = account_.edonkey_guid;
+        et_file.username = username_;
+        et_file.filename = ed2k.get_filename ();
+        et_file.path = ed2k.get_path ();
+        et_file.size = ed2k.get_file_size ();
 
-      // flags
-      if (ed2k.get_downloaded_bytes () > 0 || ed2k.get_pieces_downloaded () > 0)
-        et_file.flag_downloaded = true;
+        // flags
+        if (ed2k.get_downloaded_bytes () > 0 ||
+            ed2k.get_pieces_downloaded () > 0)
+            et_file.flag_downloaded = true;
 
-      if (ed2k.get_uploaded_bytes () > 0)
-        et_file.flag_uploaded = true;
+        if (ed2k.get_uploaded_bytes () > 0)
+            et_file.flag_uploaded = true;
 
-      et_file.flag_completed = ed2k.is_completed ();
+        et_file.flag_completed = ed2k.is_completed ();
 
-      // metadata
-      et_file.metadata.set ("url", ed2k.get_url ());
-      et_file.metadata.set ("is_paused", ed2k.is_paused ());
-      et_file.metadata.set ("downloaded_bytes", ed2k.get_downloaded_bytes ());
-      et_file.metadata.set ("uploaded_bytes", ed2k.get_uploaded_bytes ());
-      et_file.metadata.set ("pieces_count", ed2k.get_pieces_count ());
-      et_file.metadata.set ("pieces_downloaded", ed2k.get_pieces_downloaded ());
-      _update_metadata (et_file.metadata, ed2k.get_metadata ());
+        // metadata
+        et_file.metadata.set ("url", ed2k.get_url ());
+        et_file.metadata.set ("is_paused", ed2k.is_paused ());
+        et_file.metadata.set ("downloaded_bytes", ed2k.get_downloaded_bytes ());
+        et_file.metadata.set ("uploaded_bytes", ed2k.get_uploaded_bytes ());
+        et_file.metadata.set ("pieces_count", ed2k.get_pieces_count ());
+        et_file.metadata.set ("pieces_downloaded",
+                              ed2k.get_pieces_downloaded ());
+        _update_metadata (et_file.metadata, ed2k.get_metadata ());
 
-      // evidence sources
-      et_file.ed2k_fastresume_f = f;
+        // evidence sources
+        et_file.ed2k_fastresume_f = f;
 
-      files_.push_back (et_file);
+        files_.push_back (et_file);
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      log.warning (__LINE__, e.what ());
+        log.warning (__LINE__, e.what ());
     }
 }
 
@@ -429,13 +457,14 @@ evidence_loader_impl::_decode_ed2k_fastresume_file (const mobius::core::io::file
 void
 evidence_loader_impl::_scan_all_folders ()
 {
-  auto vfs_datasource = mobius::core::datasource::datasource_vfs (item_.get_datasource ());
-  auto vfs = vfs_datasource.get_vfs ();
+    auto vfs_datasource =
+        mobius::core::datasource::datasource_vfs (item_.get_datasource ());
+    auto vfs = vfs_datasource.get_vfs ();
 
-  for (const auto& entry : vfs.get_root_entries ())
+    for (const auto &entry : vfs.get_root_entries ())
     {
-      if (entry.is_folder ())
-        _scan_generic_folder (entry.get_folder ());
+        if (entry.is_folder ())
+            _scan_generic_folder (entry.get_folder ());
     }
 }
 
@@ -444,20 +473,21 @@ evidence_loader_impl::_scan_all_folders ()
 // @param folder Folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_generic_folder (const mobius::core::io::folder& folder)
+evidence_loader_impl::_scan_generic_folder (
+    const mobius::core::io::folder &folder)
 {
-  mobius::core::io::walker w (folder);
+    mobius::core::io::walker w (folder);
 
-  for (const auto& f : w.get_files ())
+    for (const auto &f : w.get_files ())
     {
-      const std::string lname = mobius::core::string::tolower (f.get_name ());
+        const std::string lname = mobius::core::string::tolower (f.get_name ());
 
-      if (lname == "emuletorrent.ini")
-        _decode_emuletorrent_ini_file (f);
+        if (lname == "emuletorrent.ini")
+            _decode_emuletorrent_ini_file (f);
     }
 
-  for (const auto& child : w.get_folders ())
-    _scan_generic_folder (child);
+    for (const auto &child : w.get_folders ())
+        _scan_generic_folder (child);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -466,17 +496,17 @@ evidence_loader_impl::_scan_generic_folder (const mobius::core::io::folder& fold
 void
 evidence_loader_impl::_save_evidences ()
 {
-  auto transaction = item_.new_transaction ();
+    auto transaction = item_.new_transaction ();
 
-  _save_accounts ();
-  _save_local_files ();
-  _save_p2p_remote_files ();
-  _save_received_files ();
-  _save_sent_files ();
-  _save_shared_files ();
+    _save_accounts ();
+    _save_local_files ();
+    _save_p2p_remote_files ();
+    _save_received_files ();
+    _save_sent_files ();
+    _save_shared_files ();
 
-  item_.set_ant (ANT_ID, ANT_NAME, ANT_VERSION);
-  transaction.commit ();
+    item_.set_ant (ANT_ID, ANT_NAME, ANT_VERSION);
+    transaction.commit ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -485,32 +515,32 @@ evidence_loader_impl::_save_evidences ()
 void
 evidence_loader_impl::_save_accounts ()
 {
-  for (const auto& a : accounts_)
+    for (const auto &a : accounts_)
     {
-      mobius::core::pod::map metadata;
-      metadata.set ("app_id", APP_ID);
-      metadata.set ("app_name", APP_NAME);
-      metadata.set ("username", a.username);
-      metadata.set ("network", "eDonkey");
-      metadata.set ("autorun", a.autorun);
-      metadata.set ("edonkey_guid", a.edonkey_guid);
-      metadata.set ("edonkey_nickname", a.edonkey_nickname);
-      metadata.set ("download_temp_path", a.download_temp_path);
-      metadata.set ("download_temp_path_mule", a.download_temp_path_mule);
-      metadata.set ("download_save_path", a.download_save_path);
-      metadata.set ("download_save_path_mule", a.download_save_path_mule);
+        mobius::core::pod::map metadata;
+        metadata.set ("app_id", APP_ID);
+        metadata.set ("app_name", APP_NAME);
+        metadata.set ("username", a.username);
+        metadata.set ("network", "eDonkey");
+        metadata.set ("autorun", a.autorun);
+        metadata.set ("edonkey_guid", a.edonkey_guid);
+        metadata.set ("edonkey_nickname", a.edonkey_nickname);
+        metadata.set ("download_temp_path", a.download_temp_path);
+        metadata.set ("download_temp_path_mule", a.download_temp_path_mule);
+        metadata.set ("download_save_path", a.download_save_path);
+        metadata.set ("download_save_path_mule", a.download_save_path_mule);
 
-      auto e = item_.new_evidence ("user-account");
+        auto e = item_.new_evidence ("user-account");
 
-      e.set_attribute ("account_type", "p2p.edonkey");
-      e.set_attribute ("id", a.edonkey_guid);
-      e.set_attribute ("name", a.edonkey_nickname);
-      e.set_attribute ("password", {});
-      e.set_attribute ("password_found", "no");
-      e.set_attribute ("is_deleted", a.f.is_deleted ());
-      e.set_attribute ("metadata", metadata);
-      e.set_tag ("p2p");
-      e.add_source (a.f);
+        e.set_attribute ("account_type", "p2p.edonkey");
+        e.set_attribute ("id", a.edonkey_guid);
+        e.set_attribute ("name", a.edonkey_nickname);
+        e.set_attribute ("password", {});
+        e.set_attribute ("password_found", "no");
+        e.set_attribute ("is_deleted", a.f.is_deleted ());
+        e.set_attribute ("metadata", metadata);
+        e.set_tag ("p2p");
+        e.add_source (a.f);
     }
 }
 
@@ -520,46 +550,46 @@ evidence_loader_impl::_save_accounts ()
 void
 evidence_loader_impl::_save_local_files ()
 {
-  for (const auto& f : files_)
+    for (const auto &f : files_)
     {
-      if (!f.path.empty ())
+        if (!f.path.empty ())
         {
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Create evidence
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          auto e = item_.new_evidence ("local-file");
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Create evidence
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            auto e = item_.new_evidence ("local-file");
 
-          e.set_attribute ("username", f.username);
-          e.set_attribute ("path", f.path);
-          e.set_attribute ("app_id", APP_ID);
-          e.set_attribute ("app_name", APP_NAME);
-          e.set_attribute ("hashes", _get_file_hashes (f));
+            e.set_attribute ("username", f.username);
+            e.set_attribute ("path", f.path);
+            e.set_attribute ("app_id", APP_ID);
+            e.set_attribute ("app_name", APP_NAME);
+            e.set_attribute ("hashes", _get_file_hashes (f));
 
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Metadata
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          mobius::core::pod::map metadata;
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Metadata
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            mobius::core::pod::map metadata;
 
-          metadata.set ("size", f.size);
-          metadata.set ("flag_downloaded", to_string (f.flag_downloaded));
-          metadata.set ("flag_uploaded", to_string (f.flag_uploaded));
-          metadata.set ("flag_shared", to_string (f.flag_shared));
-          metadata.set ("flag_corrupted", to_string (f.flag_corrupted));
-          metadata.set ("flag_completed", to_string (f.flag_completed));
+            metadata.set ("size", f.size);
+            metadata.set ("flag_downloaded", to_string (f.flag_downloaded));
+            metadata.set ("flag_uploaded", to_string (f.flag_uploaded));
+            metadata.set ("flag_shared", to_string (f.flag_shared));
+            metadata.set ("flag_corrupted", to_string (f.flag_corrupted));
+            metadata.set ("flag_completed", to_string (f.flag_completed));
 
-          _update_metadata (metadata, f.metadata);
-          e.set_attribute ("metadata", metadata);
+            _update_metadata (metadata, f.metadata);
+            e.set_attribute ("metadata", metadata);
 
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Tags
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          e.set_tag ("p2p");
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Tags
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            e.set_tag ("p2p");
 
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Sources
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          e.add_source (f.bt_fastresume_f);
-          e.add_source (f.ed2k_fastresume_f);
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Sources
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            e.add_source (f.bt_fastresume_f);
+            e.add_source (f.ed2k_fastresume_f);
         }
     }
 }
@@ -570,45 +600,45 @@ evidence_loader_impl::_save_local_files ()
 void
 evidence_loader_impl::_save_received_files ()
 {
-  for (const auto& f : files_)
+    for (const auto &f : files_)
     {
-      if (f.flag_downloaded.is_yes ())
+        if (f.flag_downloaded.is_yes ())
         {
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Create evidence
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          auto e = item_.new_evidence ("received-file");
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Create evidence
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            auto e = item_.new_evidence ("received-file");
 
-          e.set_attribute ("filename", f.filename);
-          e.set_attribute ("path", f.path);
-          e.set_attribute ("username", f.username);
-          e.set_attribute ("app_id", APP_ID);
-          e.set_attribute ("app_name", APP_NAME);
-          e.set_attribute ("hashes", _get_file_hashes (f));
+            e.set_attribute ("filename", f.filename);
+            e.set_attribute ("path", f.path);
+            e.set_attribute ("username", f.username);
+            e.set_attribute ("app_id", APP_ID);
+            e.set_attribute ("app_name", APP_NAME);
+            e.set_attribute ("hashes", _get_file_hashes (f));
 
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Metadata
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          mobius::core::pod::map metadata;
-          metadata.set ("flag_downloaded", to_string (f.flag_downloaded));
-          metadata.set ("flag_uploaded", to_string (f.flag_uploaded));
-          metadata.set ("flag_shared", to_string (f.flag_shared));
-          metadata.set ("flag_corrupted", to_string (f.flag_corrupted));
-          metadata.set ("flag_completed", to_string (f.flag_completed));
-          _update_metadata (metadata, f.metadata);
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Metadata
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            mobius::core::pod::map metadata;
+            metadata.set ("flag_downloaded", to_string (f.flag_downloaded));
+            metadata.set ("flag_uploaded", to_string (f.flag_uploaded));
+            metadata.set ("flag_shared", to_string (f.flag_shared));
+            metadata.set ("flag_corrupted", to_string (f.flag_corrupted));
+            metadata.set ("flag_completed", to_string (f.flag_completed));
+            _update_metadata (metadata, f.metadata);
 
-          e.set_attribute ("metadata", metadata);
+            e.set_attribute ("metadata", metadata);
 
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Tags
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          e.set_tag ("p2p");
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Tags
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            e.set_tag ("p2p");
 
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Sources
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          e.add_source (f.bt_fastresume_f);
-          e.add_source (f.ed2k_fastresume_f);
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Sources
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            e.add_source (f.bt_fastresume_f);
+            e.add_source (f.ed2k_fastresume_f);
         }
     }
 }
@@ -619,43 +649,43 @@ evidence_loader_impl::_save_received_files ()
 void
 evidence_loader_impl::_save_p2p_remote_files ()
 {
-  for (const auto& f : files_)
+    for (const auto &f : files_)
     {
-      for (const auto& rs : f.remote_sources)
+        for (const auto &rs : f.remote_sources)
         {
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Create evidence
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          auto e = item_.new_evidence ("p2p-remote-file");
-          e.set_attribute ("timestamp", rs.timestamp);
-          e.set_attribute ("ip", rs.ip);
-          e.set_attribute ("port", rs.port);
-          e.set_attribute ("filename", f.filename);
-          e.set_attribute ("username", f.username);
-          e.set_attribute ("app_id", APP_ID);
-          e.set_attribute ("app_name", APP_NAME);
-          e.set_attribute ("hashes", _get_file_hashes (f));
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Create evidence
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            auto e = item_.new_evidence ("p2p-remote-file");
+            e.set_attribute ("timestamp", rs.timestamp);
+            e.set_attribute ("ip", rs.ip);
+            e.set_attribute ("port", rs.port);
+            e.set_attribute ("filename", f.filename);
+            e.set_attribute ("username", f.username);
+            e.set_attribute ("app_id", APP_ID);
+            e.set_attribute ("app_name", APP_NAME);
+            e.set_attribute ("hashes", _get_file_hashes (f));
 
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Metadata
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          mobius::core::pod::map metadata;
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Metadata
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            mobius::core::pod::map metadata;
 
-          metadata.set ("size", f.size);
-          _update_metadata (metadata, f.metadata);
+            metadata.set ("size", f.size);
+            _update_metadata (metadata, f.metadata);
 
-          e.set_attribute ("metadata", metadata);
+            e.set_attribute ("metadata", metadata);
 
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Tags
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          e.set_tag ("p2p");
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Tags
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            e.set_tag ("p2p");
 
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Sources
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          e.add_source (f.bt_fastresume_f);
-          e.add_source (f.ed2k_fastresume_f);
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Sources
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            e.add_source (f.bt_fastresume_f);
+            e.add_source (f.ed2k_fastresume_f);
         }
     }
 }
@@ -666,46 +696,46 @@ evidence_loader_impl::_save_p2p_remote_files ()
 void
 evidence_loader_impl::_save_sent_files ()
 {
-  for (const auto& f : files_)
+    for (const auto &f : files_)
     {
-      if (f.flag_uploaded.is_yes ())
+        if (f.flag_uploaded.is_yes ())
         {
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Create evidence
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          auto e = item_.new_evidence ("sent-file");
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Create evidence
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            auto e = item_.new_evidence ("sent-file");
 
-          e.set_attribute ("filename", f.filename);
-          e.set_attribute ("path", f.path);
-          e.set_attribute ("username", f.username);
-          e.set_attribute ("app_id", APP_ID);
-          e.set_attribute ("app_name", APP_NAME);
-          e.set_attribute ("hashes", _get_file_hashes (f));
+            e.set_attribute ("filename", f.filename);
+            e.set_attribute ("path", f.path);
+            e.set_attribute ("username", f.username);
+            e.set_attribute ("app_id", APP_ID);
+            e.set_attribute ("app_name", APP_NAME);
+            e.set_attribute ("hashes", _get_file_hashes (f));
 
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Metadata
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          mobius::core::pod::map metadata;
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Metadata
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            mobius::core::pod::map metadata;
 
-          metadata.set ("flag_downloaded", to_string (f.flag_downloaded));
-          metadata.set ("flag_uploaded", to_string (f.flag_uploaded));
-          metadata.set ("flag_shared", to_string (f.flag_shared));
-          metadata.set ("flag_corrupted", to_string (f.flag_corrupted));
-          metadata.set ("flag_completed", to_string (f.flag_completed));
-          _update_metadata (metadata, f.metadata);
+            metadata.set ("flag_downloaded", to_string (f.flag_downloaded));
+            metadata.set ("flag_uploaded", to_string (f.flag_uploaded));
+            metadata.set ("flag_shared", to_string (f.flag_shared));
+            metadata.set ("flag_corrupted", to_string (f.flag_corrupted));
+            metadata.set ("flag_completed", to_string (f.flag_completed));
+            _update_metadata (metadata, f.metadata);
 
-          e.set_attribute ("metadata", metadata);
+            e.set_attribute ("metadata", metadata);
 
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Tags
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          e.set_tag ("p2p");
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Tags
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            e.set_tag ("p2p");
 
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Sources
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          e.add_source (f.bt_fastresume_f);
-          e.add_source (f.ed2k_fastresume_f);
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Sources
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            e.add_source (f.bt_fastresume_f);
+            e.add_source (f.ed2k_fastresume_f);
         }
     }
 }
@@ -716,52 +746,49 @@ evidence_loader_impl::_save_sent_files ()
 void
 evidence_loader_impl::_save_shared_files ()
 {
-  for (const auto& f : files_)
+    for (const auto &f : files_)
     {
-      if (f.flag_shared.is_yes () || f.flag_shared.is_always ())
+        if (f.flag_shared.is_yes () || f.flag_shared.is_always ())
         {
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Create evidence
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          auto e = item_.new_evidence ("shared-file");
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Create evidence
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            auto e = item_.new_evidence ("shared-file");
 
-          e.set_attribute ("username", f.username);
-          e.set_attribute ("filename", f.filename);
-          e.set_attribute ("path", f.path);
-          e.set_attribute ("app_id", APP_ID);
-          e.set_attribute ("app_name", APP_NAME);
-          e.set_attribute ("hashes", _get_file_hashes (f));
+            e.set_attribute ("username", f.username);
+            e.set_attribute ("filename", f.filename);
+            e.set_attribute ("path", f.path);
+            e.set_attribute ("app_id", APP_ID);
+            e.set_attribute ("app_name", APP_NAME);
+            e.set_attribute ("hashes", _get_file_hashes (f));
 
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Metadata
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          mobius::core::pod::map metadata;
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Metadata
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            mobius::core::pod::map metadata;
 
-          metadata.set ("size", f.size);
-          metadata.set ("flag_downloaded", to_string (f.flag_downloaded));
-          metadata.set ("flag_uploaded", to_string (f.flag_uploaded));
-          metadata.set ("flag_shared", to_string (f.flag_shared));
-          metadata.set ("flag_corrupted", to_string (f.flag_corrupted));
-          metadata.set ("flag_completed", to_string (f.flag_completed));
-          _update_metadata (metadata, f.metadata);
+            metadata.set ("size", f.size);
+            metadata.set ("flag_downloaded", to_string (f.flag_downloaded));
+            metadata.set ("flag_uploaded", to_string (f.flag_uploaded));
+            metadata.set ("flag_shared", to_string (f.flag_shared));
+            metadata.set ("flag_corrupted", to_string (f.flag_corrupted));
+            metadata.set ("flag_completed", to_string (f.flag_completed));
+            _update_metadata (metadata, f.metadata);
 
-          e.set_attribute ("metadata", metadata);
+            e.set_attribute ("metadata", metadata);
 
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Tags
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          e.set_tag ("p2p");
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Tags
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            e.set_tag ("p2p");
 
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          // Sources
-          // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-          e.add_source (f.bt_fastresume_f);
-          e.add_source (f.ed2k_fastresume_f);
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Sources
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            e.add_source (f.bt_fastresume_f);
+            e.add_source (f.ed2k_fastresume_f);
         }
     }
 }
 
-} // namespace mobius::extension::app::ares
-
-
-
+} // namespace mobius::extension::app::emuletorrent

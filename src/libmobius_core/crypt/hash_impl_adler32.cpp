@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -23,8 +25,8 @@ namespace mobius::core::crypt
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-constexpr std::uint64_t BLOCK_SIZE = 0x10000000;  // max block size per iteration
-constexpr std::uint32_t BASE = 65521;		  // mod value
+constexpr std::uint64_t BLOCK_SIZE = 0x10000000; // max block size per iteration
+constexpr std::uint32_t BASE = 65521;            // mod value
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Reset hash value
@@ -32,8 +34,8 @@ constexpr std::uint32_t BASE = 65521;		  // mod value
 void
 hash_impl_adler32::reset () noexcept
 {
-  a_ = 1;
-  b_ = 0;
+    a_ = 1;
+    b_ = 0;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -54,30 +56,31 @@ hash_impl_adler32::reset () noexcept
 //
 //   2. b[1] = b[0] + a[1] = b[0] + a[0] + c[0]
 //      b[2] = b[1] + a[2] = b[0] + a[0] + c[0] + a[0] + c[0] + c[1]
-//      b[n] = b[n-1] + an = b[0] + a[0] * n + c[0] * n + c[1] * n-1 ... c[n] * 1
+//      b[n] = b[n-1] + an = b[0] + a[0] * n + c[0] * n + c[1] * n-1 ... c[n] *
+//      1
 //
 //   3. The BLOCK_SIZE value assures that 64-bit values can hold a[n] and b[n]
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-hash_impl_adler32::update (const mobius::core::bytearray& data) noexcept
+hash_impl_adler32::update (const mobius::core::bytearray &data) noexcept
 {
-  const std::uint8_t *p = data.begin ();
-  const std::uint64_t size = data.size ();
+    const std::uint8_t *p = data.begin ();
+    const std::uint64_t size = data.size ();
 
-  for (std::uint64_t i = 0; i < size; i += BLOCK_SIZE)
+    for (std::uint64_t i = 0; i < size; i += BLOCK_SIZE)
     {
-      std::uint64_t n = std::min (size - i, BLOCK_SIZE);
-      std::uint64_t b1 = b_ + a_ * n;
-      a_ = std::accumulate (p, p + n, std::uint64_t (a_)) % BASE;
+        std::uint64_t n = std::min (size - i, BLOCK_SIZE);
+        std::uint64_t b1 = b_ + a_ * n;
+        a_ = std::accumulate (p, p + n, std::uint64_t (a_)) % BASE;
 
-      while (n)
+        while (n)
         {
-          b1 += std::uint64_t (*p) * n;
-          n--;
-          p++;
+            b1 += std::uint64_t (*p) * n;
+            n--;
+            p++;
         }
 
-      b_ = b1 % BASE;
+        b_ = b1 % BASE;
     }
 }
 
@@ -88,31 +91,24 @@ hash_impl_adler32::update (const mobius::core::bytearray& data) noexcept
 bytearray
 hash_impl_adler32::get_digest ()
 {
-  return mobius::core::bytearray (
-    {
-      std::uint8_t (b_ >> 8),
-      std::uint8_t (b_),
-      std::uint8_t (a_ >> 8),
-      std::uint8_t (a_)
-    }
-  );
+    return mobius::core::bytearray ({std::uint8_t (b_ >> 8), std::uint8_t (b_),
+                                     std::uint8_t (a_ >> 8),
+                                     std::uint8_t (a_)});
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Clone object
 // @return Pointer to newly created object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::shared_ptr <hash_impl_base>
+std::shared_ptr<hash_impl_base>
 hash_impl_adler32::clone () const
 {
-  auto h = std::make_shared <hash_impl_adler32> ();
+    auto h = std::make_shared<hash_impl_adler32> ();
 
-  h->a_ = a_;
-  h->b_ = b_;
+    h->a_ = a_;
+    h->b_ = b_;
 
-  return h;
+    return h;
 }
 
 } // namespace mobius::core::crypt
-
-

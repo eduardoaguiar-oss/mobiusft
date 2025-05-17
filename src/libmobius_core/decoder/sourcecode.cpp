@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,8 +17,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/decoder/sourcecode.hpp>
 #include <cstdint>
+#include <mobius/core/decoder/sourcecode.hpp>
 
 namespace mobius::core::decoder
 {
@@ -26,14 +28,14 @@ namespace
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static constexpr std::uint64_t BLOCK_SIZE = 4096;
-}
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create sourcecode object
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-sourcecode::sourcecode (const mobius::core::io::reader& reader)
- : reader_ (reader)
+sourcecode::sourcecode (const mobius::core::io::reader &reader)
+    : reader_ (reader)
 {
 }
 
@@ -44,18 +46,18 @@ sourcecode::sourcecode (const mobius::core::io::reader& reader)
 sourcecode::char_type
 sourcecode::peek ()
 {
-  if (pos_ >= buffer_.size ())
+    if (pos_ >= buffer_.size ())
     {
-      buffer_ = reader_.read (BLOCK_SIZE);
-      pos_ = 0;
+        buffer_ = reader_.read (BLOCK_SIZE);
+        pos_ = 0;
     }
 
-  char_type c = 0;
+    char_type c = 0;
 
-  if (pos_ < buffer_.size ())
-    c = buffer_[pos_];
+    if (pos_ < buffer_.size ())
+        c = buffer_[pos_];
 
-  return c;
+    return c;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -65,32 +67,30 @@ sourcecode::peek ()
 sourcecode::char_type
 sourcecode::get ()
 {
-  // retrieve char from reader
-  if (pos_ >= buffer_.size ())
+    // retrieve char from reader
+    if (pos_ >= buffer_.size ())
     {
-      buffer_ = reader_.read (BLOCK_SIZE);
-      pos_ = 0;
+        buffer_ = reader_.read (BLOCK_SIZE);
+        pos_ = 0;
     }
 
-  char_type c = 0;
+    char_type c = 0;
 
-  if (pos_ < buffer_.size ())
-    c = buffer_[pos_++];
+    if (pos_ < buffer_.size ())
+        c = buffer_[pos_++];
 
-  // update current row and current column
-  if (c == '\n')
+    // update current row and current column
+    if (c == '\n')
     {
-      row_++;
-      col_ = 1;
+        row_++;
+        col_ = 1;
     }
 
-  else if (c)
-    col_++;
+    else if (c)
+        col_++;
 
-  // return character
-  return c;
+    // return character
+    return c;
 }
 
 } // namespace mobius::core::decoder
-
-

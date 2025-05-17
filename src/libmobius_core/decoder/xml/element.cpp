@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,10 +17,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <algorithm>
 #include <mobius/core/decoder/xml/element.hpp>
 #include <mobius/core/exception.inc>
 #include <mobius/core/string_functions.hpp>
-#include <algorithm>
 #include <stdexcept>
 
 #include <iostream>
@@ -30,157 +32,156 @@ namespace mobius::core::decoder::xml
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class element::impl
 {
-public:
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    explicit impl (xmlNode *);
+    impl (const impl &) = delete;
+    impl (impl &&) = delete;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit impl (xmlNode *);
-  impl (const impl&) = delete;
-  impl (impl&&) = delete;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl &operator= (const impl &) = delete;
+    impl &operator= (impl &&) = delete;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Operators
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  impl& operator= (const impl&) = delete;
-  impl& operator= (impl&&) = delete;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get element name
+    // @return Name
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_name () const
+    {
+        return name_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get element name
-  // @return Name
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::string
-  get_name () const
-  {
-    return name_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Set element name
+    // @param name Name
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void
+    set_name (const std::string &name)
+    {
+        name_ = name;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Set element name
-  // @param name Name
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void
-  set_name (const std::string& name)
-  {
-    name_ = name;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Set element path
+    // @param path Path
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void
+    set_path (const std::string &path)
+    {
+        path_ = path;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Set element path
-  // @param path Path
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void
-  set_path (const std::string& path)
-  {
-    path_ = path;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get content
+    // @return Content
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_content () const
+    {
+        return content_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get content
-  // @return Content
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::string
-  get_content () const
-  {
-    return content_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Set content
+    // @param content Content
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void
+    set_content (const std::string &content)
+    {
+        content_ = content;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Set content
-  // @param content Content
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void
-  set_content (const std::string& content)
-  {
-    content_ = content;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Set property
+    // @param name Name
+    // @param value Value
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void
+    set_property (const std::string &name, const std::string &value)
+    {
+        properties_[name] = value;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Set property
-  // @param name Name
-  // @param value Value
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void
-  set_property (const std::string& name, const std::string& value)
-  {
-    properties_[name] = value;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get properties
+    // @return Properties
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::map<std::string, std::string>
+    get_properties () const
+    {
+        return properties_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get properties
-  // @return Properties
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::map <std::string,std::string>
-  get_properties () const
-  {
-    return properties_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get parent element
+    // @return Parent element, if any
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    element
+    get_parent () const
+    {
+        return parent_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get parent element
-  // @return Parent element, if any
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  element
-  get_parent () const
-  {
-    return parent_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Set parent
+    // @param parent Parent
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void
+    set_parent (const element &parent)
+    {
+        parent_ = parent;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Set parent
-  // @param parent Parent
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void
-  set_parent (const element& parent)
-  {
-    parent_ = parent;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Add child
+    // @param child Child element
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void
+    add_child (const element &child)
+    {
+        children_.push_back (child);
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Add child
-  // @param child Child element
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void
-  add_child (const element& child)
-  {
-    children_.push_back (child);
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get children
+    // @return Children elements
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<element>
+    get_children () const
+    {
+        return children_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get children
-  // @return Children elements
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::vector <element>
-  get_children () const
-  {
-    return children_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool has_property (const std::string &) const;
+    std::string get_property (const std::string &) const;
+    std::string get_path () const;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  bool has_property (const std::string&) const;
-  std::string get_property (const std::string&) const;
-  std::string get_path () const;
+  private:
+    // @brief Name
+    std::string name_;
 
-private:
-  // @brief Name
-  std::string name_;
+    // @brief Full path
+    mutable std::string path_;
 
-  // @brief Full path
-  mutable std::string path_;
+    // @brief Content (text + CDATA)
+    std::string content_;
 
-  // @brief Content (text + CDATA)
-  std::string content_;
+    // @brief Properties
+    std::map<std::string, std::string> properties_;
 
-  // @brief Properties
-  std::map <std::string, std::string> properties_;
+    // @brief Parent element
+    element parent_;
 
-  // @brief Parent element
-  element parent_;
-
-  // @brief Child elements
-  std::vector <element> children_;
+    // @brief Child elements
+    std::vector<element> children_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -189,45 +190,48 @@ private:
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 element::impl::impl (xmlNode *node)
 {
-  if (node->name)
-    set_name (reinterpret_cast <const char *> (node->name));
+    if (node->name)
+        set_name (reinterpret_cast<const char *> (node->name));
 
-  // get properties
-  auto attr = node->properties;
+    // get properties
+    auto attr = node->properties;
 
-  while (attr)
+    while (attr)
     {
-      xmlChar* value = xmlNodeListGetString (node->doc, attr->children, 1);
-      if (value)
+        xmlChar *value = xmlNodeListGetString (node->doc, attr->children, 1);
+        if (value)
         {
-          set_property (reinterpret_cast <const char *> (attr->name), reinterpret_cast <const char *> (value));
-          xmlFree (value);
+            set_property (reinterpret_cast<const char *> (attr->name),
+                          reinterpret_cast<const char *> (value));
+            xmlFree (value);
         }
 
-      attr = attr->next;
+        attr = attr->next;
     }
 
-  // process child nodes
-  std::string content;
+    // process child nodes
+    std::string content;
 
-  auto child_node = node->children;
+    auto child_node = node->children;
 
-  while (child_node)
+    while (child_node)
     {
-      if (child_node->type == XML_ELEMENT_NODE)
-          add_child (element (child_node));
+        if (child_node->type == XML_ELEMENT_NODE)
+            add_child (element (child_node));
 
-      else if (child_node->type == XML_TEXT_NODE)
-        content += reinterpret_cast <const char *> (XML_GET_CONTENT (child_node));
+        else if (child_node->type == XML_TEXT_NODE)
+            content +=
+                reinterpret_cast<const char *> (XML_GET_CONTENT (child_node));
 
-      else if (child_node->type == XML_CDATA_SECTION_NODE)
-        content += reinterpret_cast <const char *> (XML_GET_CONTENT (child_node));
+        else if (child_node->type == XML_CDATA_SECTION_NODE)
+            content +=
+                reinterpret_cast<const char *> (XML_GET_CONTENT (child_node));
 
-      child_node = child_node->next;
+        child_node = child_node->next;
     }
 
-  // set content
-  set_content (content);
+    // set content
+    set_content (content);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -236,9 +240,9 @@ element::impl::impl (xmlNode *node)
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-element::impl::has_property (const std::string& name) const
+element::impl::has_property (const std::string &name) const
 {
-  return properties_.find (name) != properties_.end ();
+    return properties_.find (name) != properties_.end ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -247,16 +251,16 @@ element::impl::has_property (const std::string& name) const
 // @return Property value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-element::impl::get_property (const std::string& name) const
+element::impl::get_property (const std::string &name) const
 {
-  std::string value;
+    std::string value;
 
-  auto iter = properties_.find (name);
+    auto iter = properties_.find (name);
 
-  if (iter != properties_.end ())
-    value = iter->second;
+    if (iter != properties_.end ())
+        value = iter->second;
 
-  return value;
+    return value;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -266,15 +270,15 @@ element::impl::get_property (const std::string& name) const
 std::string
 element::impl::get_path () const
 {
-  if (path_.empty ())
+    if (path_.empty ())
     {
-      if (parent_)
-        path_ = parent_.get_path ();
+        if (parent_)
+            path_ = parent_.get_path ();
 
-      path_ += '/' + name_;
+        path_ += '/' + name_;
     }
 
-  return path_;
+    return path_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -282,11 +286,11 @@ element::impl::get_path () const
 // @param node libxml2 node structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 element::element (xmlNode *node)
-  : impl_ (std::make_shared <impl> (node))
+    : impl_ (std::make_shared<impl> (node))
 {
-  // set children parent
-  for (auto& child : get_children ())
-    child.impl_->set_parent (*this);
+    // set children parent
+    for (auto &child : get_children ())
+        child.impl_->set_parent (*this);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -296,10 +300,11 @@ element::element (xmlNode *node)
 std::string
 element::get_name () const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("element object is null"));
+    if (!impl_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("element object is null"));
 
-  return impl_->get_name ();
+    return impl_->get_name ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -309,10 +314,11 @@ element::get_name () const
 std::string
 element::get_path () const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("element object is null"));
+    if (!impl_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("element object is null"));
 
-  return impl_->get_path ();
+    return impl_->get_path ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -322,10 +328,11 @@ element::get_path () const
 std::string
 element::get_content () const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("element object is null"));
+    if (!impl_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("element object is null"));
 
-  return impl_->get_content ();
+    return impl_->get_content ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -334,12 +341,13 @@ element::get_content () const
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-element::has_property (const std::string& name) const
+element::has_property (const std::string &name) const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("element object is null"));
+    if (!impl_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("element object is null"));
 
-  return impl_->has_property (name);
+    return impl_->has_property (name);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -348,12 +356,13 @@ element::has_property (const std::string& name) const
 // @return Property value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-element::get_property (const std::string& name) const
+element::get_property (const std::string &name) const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("element object is null"));
+    if (!impl_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("element object is null"));
 
-  return impl_->get_property (name);
+    return impl_->get_property (name);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -362,39 +371,41 @@ element::get_property (const std::string& name) const
 // @return Property value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-element::get_property_by_path (const std::string& path) const
+element::get_property_by_path (const std::string &path) const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("element object is null"));
+    if (!impl_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("element object is null"));
 
-  std::string value;
-  std::string::size_type pos = path.rfind ('/');
+    std::string value;
+    std::string::size_type pos = path.rfind ('/');
 
-  if (pos == std::string::npos)
-    value = impl_->get_property (path);
+    if (pos == std::string::npos)
+        value = impl_->get_property (path);
 
-  else
+    else
     {
-      auto child = get_child_by_path (path.substr (0, pos));
+        auto child = get_child_by_path (path.substr (0, pos));
 
-      if (child)
-        value = child.get_property (path.substr (pos + 1));
+        if (child)
+            value = child.get_property (path.substr (pos + 1));
     }
 
-  return value;
+    return value;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get properties
 // @return Properties
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::map <std::string,std::string>
+std::map<std::string, std::string>
 element::get_properties () const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("element object is null"));
+    if (!impl_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("element object is null"));
 
-  return impl_->get_properties ();
+    return impl_->get_properties ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -404,10 +415,11 @@ element::get_properties () const
 element
 element::get_parent () const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("element object is null"));
+    if (!impl_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("element object is null"));
 
-  return impl_->get_parent ();
+    return impl_->get_parent ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -416,32 +428,34 @@ element::get_parent () const
 // @return First element that matches a given path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 element
-element::get_child_by_path (const std::string& path) const
+element::get_child_by_path (const std::string &path) const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("element object is null"));
+    if (!impl_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("element object is null"));
 
-  element e;
+    element e;
 
-  auto children = get_children_by_path (path);
+    auto children = get_children_by_path (path);
 
-  if (!children.empty ())
-    e = children[0];
+    if (!children.empty ())
+        e = children[0];
 
-  return e;
+    return e;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get children
 // @return Children elements
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <element>
+std::vector<element>
 element::get_children () const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("element object is null"));
+    if (!impl_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("element object is null"));
 
-  return impl_->get_children ();
+    return impl_->get_children ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -449,57 +463,58 @@ element::get_children () const
 // @param path Relative path
 // @return Children elements
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <element>
-element::get_children_by_path (const std::string& path) const
+std::vector<element>
+element::get_children_by_path (const std::string &path) const
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("element object is null"));
+    if (!impl_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("element object is null"));
 
-  std::string::size_type pos = 0;
+    std::string::size_type pos = 0;
 
-  // seek each pattern segment, limited by '/'
-  std::vector <element> elements = {*this};
-  std::string::size_type end = path.find ('/', pos);
+    // seek each pattern segment, limited by '/'
+    std::vector<element> elements = {*this};
+    std::string::size_type end = path.find ('/', pos);
 
-  while (pos != std::string::npos && !elements.empty ())
+    while (pos != std::string::npos && !elements.empty ())
     {
-      // get next segment from path
-      std::string segment;
+        // get next segment from path
+        std::string segment;
 
-      if (end == std::string::npos)
+        if (end == std::string::npos)
         {
-          segment = path.substr (pos);
-          pos = std::string::npos;
+            segment = path.substr (pos);
+            pos = std::string::npos;
         }
 
-      else
+        else
         {
-          segment = path.substr (pos, end - pos);
-          pos = end + 1;
-          end = path.find ('/', pos);
+            segment = path.substr (pos, end - pos);
+            pos = end + 1;
+            end = path.find ('/', pos);
         }
 
-      // create new vector with all elements whose name matches the sub path
-      std::vector <element> tmp_elements;
+        // create new vector with all elements whose name matches the sub path
+        std::vector<element> tmp_elements;
 
-      for (const auto& e : elements)
+        for (const auto &e : elements)
         {
-          auto children = e.get_children ();
+            auto children = e.get_children ();
 
-          std::copy_if (
-            children.begin (),
-            children.end (),
-            std::back_inserter (tmp_elements),
-            [&segment](const auto& c){ return mobius::core::string::fnmatch (segment, c.get_name ()); }
-          );
+            std::copy_if (children.begin (), children.end (),
+                          std::back_inserter (tmp_elements),
+                          [&segment] (const auto &c) {
+                              return mobius::core::string::fnmatch (
+                                  segment, c.get_name ());
+                          });
         }
 
-      // overwrite the candidate vector
-      elements = tmp_elements;
+        // overwrite the candidate vector
+        elements = tmp_elements;
     }
 
-  // return elements found
-  return elements;
+    // return elements found
+    return elements;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -507,22 +522,17 @@ element::get_children_by_path (const std::string& path) const
 // @param name Child name
 // @return Children elements
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <element>
-element::get_children_by_name (const std::string& name) const
+std::vector<element>
+element::get_children_by_name (const std::string &name) const
 {
-  std::vector <element> children = get_children ();
-  std::vector <element> selected_children;
+    std::vector<element> children = get_children ();
+    std::vector<element> selected_children;
 
-  std::copy_if (
-    children.begin (),
-    children.end (),
-    std::back_inserter (selected_children),
-    [name](const element& e){ return e.get_name () == name; }
-  );
+    std::copy_if (children.begin (), children.end (),
+                  std::back_inserter (selected_children),
+                  [name] (const element &e) { return e.get_name () == name; });
 
-  return selected_children;
+    return selected_children;
 }
 
 } // namespace mobius::core::decoder::xml
-
-

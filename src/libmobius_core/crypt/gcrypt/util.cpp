@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -37,14 +39,13 @@ static std::once_flag is_libgcrypt_initialized_;
 static void
 _init_libgcrypt ()
 {
-  if (!gcry_check_version (LIBGCRYPT_MIN_VERSION))
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("libgcrypt too old"));
+    if (!gcry_check_version (LIBGCRYPT_MIN_VERSION))
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("libgcrypt too old"));
 
-  gcry_control (GCRYCTL_INITIALIZATION_FINISHED, 0);
+    gcry_control (GCRYCTL_INITIALIZATION_FINISHED, 0);
 }
 
 } // namespace
-
 
 namespace mobius::core::crypt::gcrypt
 {
@@ -54,10 +55,11 @@ namespace mobius::core::crypt::gcrypt
 void
 init ()
 {
-  std::call_once (is_libgcrypt_initialized_, _init_libgcrypt);
+    std::call_once (is_libgcrypt_initialized_, _init_libgcrypt);
 
-  if (!gcry_control (GCRYCTL_INITIALIZATION_FINISHED_P))
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("libgcrypt has not been initialized"));
+    if (!gcry_control (GCRYCTL_INITIALIZATION_FINISHED_P))
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("libgcrypt has not been initialized"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -68,13 +70,12 @@ init ()
 std::string
 get_error_message (gcry_error_t err)
 {
-  const char *text = gcry_strerror (err);
+    const char *text = gcry_strerror (err);
 
-  if (text)
-    return text;
+    if (text)
+        return text;
 
-  return "libgcrypt error " + std::to_string (err);
+    return "libgcrypt error " + std::to_string (err);
 }
 
 } // namespace mobius::core::crypt::gcrypt
-

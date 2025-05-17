@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,11 +17,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/string_functions.hpp>
 #include <algorithm>
-#include <sstream>
-#include <iomanip>
 #include <fnmatch.h>
+#include <iomanip>
+#include <mobius/core/string_functions.hpp>
+#include <sstream>
 
 namespace mobius::core::string
 {
@@ -31,21 +33,21 @@ namespace mobius::core::string
 // @return new string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-replace (const std::string& str, const std::string& s1, const std::string& s2)
+replace (const std::string &str, const std::string &s1, const std::string &s2)
 {
-  if (str.empty () || s1.empty ())
-    return str;
+    if (str.empty () || s1.empty ())
+        return str;
 
-  std::string tmp (str);
-  std::string::size_type pos = tmp.find (s1);
+    std::string tmp (str);
+    std::string::size_type pos = tmp.find (s1);
 
-  while (pos != std::string::npos)
+    while (pos != std::string::npos)
     {
-      tmp = tmp.replace (pos, s1.length (), s2);
-      pos = tmp.find (s1, pos + s2.length ());
+        tmp = tmp.replace (pos, s1.length (), s2);
+        pos = tmp.find (s1, pos + s2.length ());
     }
 
-  return tmp;
+    return tmp;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -54,11 +56,11 @@ replace (const std::string& str, const std::string& s1, const std::string& s2)
 // @return lowercased string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-tolower (const std::string& str)
+tolower (const std::string &str)
 {
-  std::string tmp (str.length (), 0);
-  std::transform (str.begin (), str.end (), tmp.begin (), ::tolower);
-  return tmp;
+    std::string tmp (str.length (), 0);
+    std::transform (str.begin (), str.end (), tmp.begin (), ::tolower);
+    return tmp;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -67,14 +69,14 @@ tolower (const std::string& str)
 // @return capitalized string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-capitalize (const std::string& str)
+capitalize (const std::string &str)
 {
-  std::string tmp (tolower (str));
+    std::string tmp (tolower (str));
 
-  if (tmp.length () > 0)
-    tmp[0] = ::toupper (tmp[0]);
+    if (tmp.length () > 0)
+        tmp[0] = ::toupper (tmp[0]);
 
-  return tmp;
+    return tmp;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -83,11 +85,11 @@ capitalize (const std::string& str)
 // @return uppercased string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-toupper (const std::string& str)
+toupper (const std::string &str)
 {
-  std::string tmp (str.length (), 0);
-  std::transform (str.begin (), str.end (), tmp.begin (), ::toupper);
-  return tmp;
+    std::string tmp (str.length (), 0);
+    std::transform (str.begin (), str.end (), tmp.begin (), ::toupper);
+    return tmp;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -97,11 +99,10 @@ toupper (const std::string& str)
 // @return true if str starts with starting
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-startswith (const std::string& str, const std::string& starting)
+startswith (const std::string &str, const std::string &starting)
 {
-  return starting.length () > 0 &&
-         str.length () >= starting.length () &&
-         str.compare (0, starting.length (), starting) == 0;
+    return starting.length () > 0 && str.length () >= starting.length () &&
+           str.compare (0, starting.length (), starting) == 0;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -111,11 +112,11 @@ startswith (const std::string& str, const std::string& starting)
 // @return true if str ends with ending
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-endswith (const std::string& str, const std::string& ending)
+endswith (const std::string &str, const std::string &ending)
 {
-  return ending.length () > 0 &&
-         str.length () >= ending.length () &&
-         str.compare (str.length () - ending.length (), ending.length (), ending) == 0;
+    return ending.length () > 0 && str.length () >= ending.length () &&
+           str.compare (str.length () - ending.length (), ending.length (),
+                        ending) == 0;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -125,9 +126,9 @@ endswith (const std::string& str, const std::string& ending)
 // @return true if str matches, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-fnmatch (const std::string& pattern, const std::string& str)
+fnmatch (const std::string &pattern, const std::string &str)
 {
-  return ::fnmatch (pattern.c_str (), str.c_str (), FNM_NOESCAPE) == 0;
+    return ::fnmatch (pattern.c_str (), str.c_str (), FNM_NOESCAPE) == 0;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -137,12 +138,12 @@ fnmatch (const std::string& pattern, const std::string& str)
 // @return true if str matches, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-case_insensitive_fnmatch (const std::string& pattern, const std::string& str)
+case_insensitive_fnmatch (const std::string &pattern, const std::string &str)
 {
-  const std::string i_pattern = tolower (pattern);
-  const std::string i_str = tolower (str);
+    const std::string i_pattern = tolower (pattern);
+    const std::string i_str = tolower (str);
 
-  return ::fnmatch (i_pattern.c_str (), i_str.c_str (), FNM_NOESCAPE) == 0;
+    return ::fnmatch (i_pattern.c_str (), i_str.c_str (), FNM_NOESCAPE) == 0;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -152,13 +153,14 @@ case_insensitive_fnmatch (const std::string& pattern, const std::string& str)
 // @return True if strings match, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-case_insensitive_match (const std::string& a, const std::string& b)
+case_insensitive_match (const std::string &a, const std::string &b)
 {
-  return (a.size () == b.size () &&
-          std::equal (a.begin (), a.end (), b.begin (),
-                      [](char c1, char c2){ return (c1 == c2 || std::toupper (c1) == std::toupper (c2)); }
-                     )
-         );
+    return (a.size () == b.size () &&
+            std::equal (a.begin (), a.end (), b.begin (),
+                        [] (char c1, char c2) {
+                            return (c1 == c2 ||
+                                    std::toupper (c1) == std::toupper (c2));
+                        }));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -168,9 +170,9 @@ case_insensitive_match (const std::string& a, const std::string& b)
 // @return True if strings match, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-case_sensitive_match (const std::string& a, const std::string& b)
+case_sensitive_match (const std::string &a, const std::string &b)
 {
-  return (a == b);
+    return (a == b);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -180,15 +182,15 @@ case_sensitive_match (const std::string& a, const std::string& b)
 // @return a new string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-strip (const std::string& str, const std::string& chars)
+strip (const std::string &str, const std::string &chars)
 {
-  const auto pos1 = str.find_first_not_of (chars);
-  const auto pos2 = str.find_last_not_of (chars);
+    const auto pos1 = str.find_first_not_of (chars);
+    const auto pos2 = str.find_last_not_of (chars);
 
-  if (pos1 == std::string::npos || pos2 == std::string::npos)
-    return std::string ();
+    if (pos1 == std::string::npos || pos2 == std::string::npos)
+        return std::string ();
 
-  return str.substr (pos1, pos2 - pos1 + 1);
+    return str.substr (pos1, pos2 - pos1 + 1);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -198,14 +200,14 @@ strip (const std::string& str, const std::string& chars)
 // @return a new string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-lstrip (const std::string& str, const std::string& chars)
+lstrip (const std::string &str, const std::string &chars)
 {
-  const auto pos = str.find_first_not_of (chars);
+    const auto pos = str.find_first_not_of (chars);
 
-  if (pos == std::string::npos)
-    return std::string ();
+    if (pos == std::string::npos)
+        return std::string ();
 
-  return str.substr (pos);
+    return str.substr (pos);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -215,14 +217,14 @@ lstrip (const std::string& str, const std::string& chars)
 // @return a new string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-rstrip (const std::string& str, const std::string& chars)
+rstrip (const std::string &str, const std::string &chars)
 {
-  const auto pos = str.find_last_not_of (chars);
+    const auto pos = str.find_last_not_of (chars);
 
-  if (pos == std::string::npos)
-    return std::string ();
+    if (pos == std::string::npos)
+        return std::string ();
 
-  return str.substr (0, pos + 1);
+    return str.substr (0, pos + 1);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -231,22 +233,22 @@ rstrip (const std::string& str, const std::string& chars)
 // @param sep separator string
 // @return vector containing parts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <std::string>
-split (const std::string& str, const std::string& sep)
+std::vector<std::string>
+split (const std::string &str, const std::string &sep)
 {
-  std::vector <std::string> result;
-  std::string::size_type start = 0;
-  std::string::size_type end = str.find (sep);
+    std::vector<std::string> result;
+    std::string::size_type start = 0;
+    std::string::size_type end = str.find (sep);
 
-  while (end != std::string::npos)
+    while (end != std::string::npos)
     {
-      result.push_back (str.substr (start, end - start));
-      start = end + sep.length ();
-      end = str.find (sep, start);
+        result.push_back (str.substr (start, end - start));
+        start = end + sep.length ();
+        end = str.find (sep, start);
     }
 
-  result.push_back (str.substr (start));
-  return result;
+    result.push_back (str.substr (start));
+    return result;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -257,21 +259,21 @@ split (const std::string& str, const std::string& sep)
 // @return word
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-word (const std::string& str, int n, const std::string& sep)
+word (const std::string &str, int n, const std::string &sep)
 {
-  std::string word;
+    std::string word;
 
-  // split string
-  auto d = split (str, sep);
+    // split string
+    auto d = split (str, sep);
 
-  if (n < 0)
-    n = d.size () + n;
+    if (n < 0)
+        n = d.size () + n;
 
-  // get n word
-  if (n >= 0 && n < int (d.size ()))
-    word = d[n];
+    // get n word
+    if (n >= 0 && n < int (d.size ()))
+        word = d[n];
 
-  return word;
+    return word;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -281,12 +283,12 @@ word (const std::string& str, int n, const std::string& sep)
 // @return a new string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-remove_char (const std::string& str, char c)
+remove_char (const std::string &str, char c)
 {
-  std::string tmp (str);
-  std::string::iterator end_pos = std::remove (tmp.begin(), tmp.end(), c);
-  tmp.erase (end_pos, tmp.end ());
-  return tmp;
+    std::string tmp (str);
+    std::string::iterator end_pos = std::remove (tmp.begin (), tmp.end (), c);
+    tmp.erase (end_pos, tmp.end ());
+    return tmp;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -297,12 +299,12 @@ remove_char (const std::string& str, char c)
 // @return a new string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-lpad (const std::string& str, std::string::size_type siz, char c)
+lpad (const std::string &str, std::string::size_type siz, char c)
 {
-  if (str.length () < siz)
-    return std::string (siz - str.length (), c) + str;
+    if (str.length () < siz)
+        return std::string (siz - str.length (), c) + str;
 
-  return str;
+    return str;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -313,12 +315,12 @@ lpad (const std::string& str, std::string::size_type siz, char c)
 // @return a new string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-rpad (const std::string& str, std::string::size_type siz, char c)
+rpad (const std::string &str, std::string::size_type siz, char c)
 {
-  if (str.length () < siz)
-    return str + std::string (siz - str.length (), c);
+    if (str.length () < siz)
+        return str + std::string (siz - str.length (), c);
 
-  return str;
+    return str;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -329,9 +331,10 @@ rpad (const std::string& str, std::string::size_type siz, char c)
 std::string
 to_hex (std::uint64_t value, unsigned int digits)
 {
-  std::ostringstream stream;
-  stream << std::hex << std::setw (digits) << std::setfill ('0') << value << std::dec;
-  return stream.str ();
+    std::ostringstream stream;
+    stream << std::hex << std::setw (digits) << std::setfill ('0') << value
+           << std::dec;
+    return stream.str ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -343,11 +346,9 @@ to_hex (std::uint64_t value, unsigned int digits)
 std::string
 to_string (std::uint64_t value, unsigned int digits, char fill)
 {
-  std::ostringstream stream;
-  stream << std::setw (digits) << std::setfill (fill) << value;
-  return stream.str ();
+    std::ostringstream stream;
+    stream << std::setw (digits) << std::setfill (fill) << value;
+    return stream.str ();
 }
 
 } // namespace mobius::core::string
-
-

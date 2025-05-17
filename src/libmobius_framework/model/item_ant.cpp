@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,8 +17,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/framework/model/item.hpp>
 #include <mobius/framework/model/ant.hpp>
+#include <mobius/framework/model/item.hpp>
 
 namespace mobius::framework::model
 {
@@ -26,20 +28,19 @@ namespace mobius::framework::model
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-item::has_ant (const std::string& id) const
+item::has_ant (const std::string &id) const
 {
-  auto db = get_database ();
+    auto db = get_database ();
 
-  auto stmt = db.new_statement (
-                "SELECT * "
-                  "FROM ant "
-                 "WHERE item_uid = ? "
-                   "AND id = ?");
+    auto stmt = db.new_statement ("SELECT * "
+                                  "FROM ant "
+                                  "WHERE item_uid = ? "
+                                  "AND id = ?");
 
-  stmt.bind (1, get_uid ());
-  stmt.bind (2, id);
+    stmt.bind (1, get_uid ());
+    stmt.bind (2, id);
 
-  return bool (stmt.fetch_row ());
+    return bool (stmt.fetch_row ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -49,44 +50,39 @@ item::has_ant (const std::string& id) const
 // @param version ANT version
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-item::set_ant (
-  const std::string& id,
-  const std::string& name,
-  const std::string& version
-)
+item::set_ant (const std::string &id, const std::string &name,
+               const std::string &version)
 {
-  auto db = get_database ();
-  mobius::core::database::statement stmt;
+    auto db = get_database ();
+    mobius::core::database::statement stmt;
 
-  if (has_ant (id))
+    if (has_ant (id))
     {
-      stmt = db.new_statement (
-               "UPDATE ant "
-                  "SET name = ?, "
-                      "version = ?, "
-                      "last_execution_time = DATETIME ('now') "
-                "WHERE item_uid = ? "
-                  "AND id = ?");
+        stmt = db.new_statement ("UPDATE ant "
+                                 "SET name = ?, "
+                                 "version = ?, "
+                                 "last_execution_time = DATETIME ('now') "
+                                 "WHERE item_uid = ? "
+                                 "AND id = ?");
 
-      stmt.bind (1, name);
-      stmt.bind (2, version);
-      stmt.bind (3, get_uid ());
-      stmt.bind (4, id);
+        stmt.bind (1, name);
+        stmt.bind (2, version);
+        stmt.bind (3, get_uid ());
+        stmt.bind (4, id);
     }
 
-  else
+    else
     {
-      stmt = db.new_statement (
-               "INSERT INTO ant "
-                    "VALUES (NULL, ?, ?, ?, ?, DATETIME ('now'))");
+        stmt = db.new_statement ("INSERT INTO ant "
+                                 "VALUES (NULL, ?, ?, ?, ?, DATETIME ('now'))");
 
-      stmt.bind (1, get_uid ());
-      stmt.bind (2, id);
-      stmt.bind (3, name);
-      stmt.bind (4, version);
+        stmt.bind (1, get_uid ());
+        stmt.bind (2, id);
+        stmt.bind (3, name);
+        stmt.bind (4, version);
     }
 
-  stmt.execute ();
+    stmt.execute ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -94,45 +90,43 @@ item::set_ant (
 // @param id ANT ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-item::reset_ant (const std::string& id)
+item::reset_ant (const std::string &id)
 {
-  auto db = get_database ();
+    auto db = get_database ();
 
-  auto stmt = db.new_statement (
-                "DELETE FROM ant "
-                      "WHERE item_uid = ? "
-                        "AND id = ?");
+    auto stmt = db.new_statement ("DELETE FROM ant "
+                                  "WHERE item_uid = ? "
+                                  "AND id = ?");
 
-  stmt.bind (1, get_uid ());
-  stmt.bind (2, id);
-  stmt.execute ();
+    stmt.bind (1, get_uid ());
+    stmt.bind (2, id);
+    stmt.execute ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get executed ANTs
 // @return Executed ANTs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <ant>
+std::vector<ant>
 item::get_ants () const
 {
-  auto db = get_database ();
+    auto db = get_database ();
 
-  auto stmt = db.new_statement (
-                "SELECT uid "
-                  "FROM ant "
-                 "WHERE item_uid = ?");
+    auto stmt = db.new_statement ("SELECT uid "
+                                  "FROM ant "
+                                  "WHERE item_uid = ?");
 
-  stmt.bind (1, get_uid ());
+    stmt.bind (1, get_uid ());
 
-  std::vector <ant> ants;
+    std::vector<ant> ants;
 
-  while (stmt.fetch_row ())
+    while (stmt.fetch_row ())
     {
-      auto uid = stmt.get_column_int64 (0);
-      ants.emplace_back (*this, uid);
+        auto uid = stmt.get_column_int64 (0);
+        ants.emplace_back (*this, uid);
     }
 
-  return ants;
+    return ants;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -141,14 +135,13 @@ item::get_ants () const
 void
 item::remove_ants ()
 {
-  auto db = get_database ();
+    auto db = get_database ();
 
-  auto stmt = db.new_statement (
-                "DELETE FROM ant "
-                      "WHERE item_uid = ?");
+    auto stmt = db.new_statement ("DELETE FROM ant "
+                                  "WHERE item_uid = ?");
 
-  stmt.bind (1, get_uid ());
-  stmt.execute ();
+    stmt.bind (1, get_uid ());
+    stmt.execute ();
 }
 
 } // namespace mobius::framework::model

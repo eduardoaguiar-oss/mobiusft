@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -23,7 +25,7 @@ namespace mobius::extension::ui::gtk3
 // @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 widget_impl::widget_impl (std::any w)
-  : widget_ (std::any_cast <GtkWidget *>(w))
+    : widget_ (std::any_cast<GtkWidget *> (w))
 {
 }
 
@@ -34,7 +36,7 @@ widget_impl::widget_impl (std::any w)
 void
 widget_impl::set_sensitive (bool flag)
 {
-  gtk_widget_set_sensitive (widget_, flag);
+    gtk_widget_set_sensitive (widget_, flag);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -44,7 +46,7 @@ widget_impl::set_sensitive (bool flag)
 void
 widget_impl::set_visible (bool flag)
 {
-  gtk_widget_set_visible (widget_, flag);
+    gtk_widget_set_visible (widget_, flag);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -58,9 +60,7 @@ widget_impl::set_visible (bool flag)
 std::any
 widget_impl::get_ui_widget () const
 {
-  return widget_;
+    return widget_;
 }
 
 } // namespace mobius::extension::ui::gtk3
-
-

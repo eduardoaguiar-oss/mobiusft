@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -80,8 +82,8 @@ static constexpr int SCHEMA_VERSION = 13;
 static void
 _case_schema_upgrade_v11 (mobius::core::database::database db)
 {
-  db.execute ("ALTER TABLE datasource "
-               "ADD COLUMN revision INTEGER NOT NULL DEFAULT 1");
+    db.execute ("ALTER TABLE datasource "
+                "ADD COLUMN revision INTEGER NOT NULL DEFAULT 1");
 }
 
 } // namespace
@@ -93,183 +95,163 @@ _case_schema_upgrade_v11 (mobius::core::database::database db)
 void
 case_schema (mobius::core::database::database db)
 {
-  db.execute ("PRAGMA foreign_keys = OFF;");
-  auto transaction = db.new_transaction ();
+    db.execute ("PRAGMA foreign_keys = OFF;");
+    auto transaction = db.new_transaction ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // create table 'case'
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  db.execute (
-    "CREATE TABLE IF NOT EXISTS 'case' ("
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // create table 'case'
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    db.execute ("CREATE TABLE IF NOT EXISTS 'case' ("
                 "uid INTEGER PRIMARY KEY,"
-      "creation_time DATETIME NOT NULL);"
-    );
+                "creation_time DATETIME NOT NULL);");
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // create table 'item'
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  db.execute (
-    "CREATE TABLE IF NOT EXISTS item ("
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // create table 'item'
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    db.execute (
+        "CREATE TABLE IF NOT EXISTS item ("
+        "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "parent_uid INTEGER,"
+        "idx INTEGER NOT NULL,"
+        "category TEXT NOT NULL,"
+        "creation_time DATETIME NOT NULL,"
+        "FOREIGN KEY (parent_uid) REFERENCES item (uid) ON DELETE CASCADE);");
+
+    db.execute ("CREATE INDEX IF NOT EXISTS idx_item "
+                "ON item (parent_uid)");
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // create table 'attribute'
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    db.execute (
+        "CREATE TABLE IF NOT EXISTS attribute ("
+        "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "item_uid INTEGER,"
+        "id TEXT NOT NULL,"
+        "value BLOB,"
+        "FOREIGN KEY (item_uid) REFERENCES item (uid) ON DELETE CASCADE);");
+
+    db.execute ("CREATE UNIQUE INDEX IF NOT EXISTS idx_attribute "
+                "ON attribute (item_uid, id)");
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // create table 'datasource'
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    db.execute (
+        "CREATE TABLE IF NOT EXISTS datasource ("
+        "item_uid INTEGER PRIMARY KEY NOT NULL,"
+        "revision INTEGER NOT NULL,"
+        "state BLOB NOT NULL,"
+        "FOREIGN KEY (item_uid) REFERENCES item (uid) ON DELETE CASCADE);");
+
+    db.execute ("CREATE UNIQUE INDEX IF NOT EXISTS idx_datasource "
+                "ON datasource (item_uid)");
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // create table 'ant'
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    db.execute (
+        "CREATE TABLE IF NOT EXISTS ant ("
+        "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "item_uid INTEGER,"
+        "id TEXT NOT NULL,"
+        "name TEXT,"
+        "version TEXT,"
+        "last_execution_time DATETIME,"
+        "FOREIGN KEY (item_uid) REFERENCES item (uid) ON DELETE CASCADE);");
+
+    db.execute ("CREATE UNIQUE INDEX IF NOT EXISTS idx_ant "
+                "ON ant (item_uid, id)");
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // create table 'evidence'
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    db.execute (
+        "CREATE TABLE IF NOT EXISTS evidence ("
+        "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "item_uid INTEGER,"
+        "type TEXT NOT NULL,"
+        "FOREIGN KEY (item_uid) REFERENCES item (uid) ON DELETE CASCADE);");
+
+    db.execute ("CREATE INDEX IF NOT EXISTS idx_evidence "
+                "ON evidence (item_uid, type)");
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // create table 'evidence_attribute'
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    db.execute ("CREATE TABLE IF NOT EXISTS evidence_attribute ("
                 "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
-         "parent_uid INTEGER,"
-                "idx INTEGER NOT NULL,"
-           "category TEXT NOT NULL,"
-      "creation_time DATETIME NOT NULL,"
-    "FOREIGN KEY (parent_uid) REFERENCES item (uid) ON DELETE CASCADE);"
-    );
+                "evidence_uid INTEGER,"
+                "id TEXT NOT NULL,"
+                "value BLOB,"
+                "FOREIGN KEY (evidence_uid) REFERENCES evidence (uid) ON "
+                "DELETE CASCADE);");
 
-  db.execute (
-    "CREATE INDEX IF NOT EXISTS idx_item "
-           "ON item (parent_uid)");
+    db.execute ("CREATE UNIQUE INDEX IF NOT EXISTS idx_evidence_attribute "
+                "ON evidence_attribute (evidence_uid, id)");
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // create table 'attribute'
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  db.execute (
-    "CREATE TABLE IF NOT EXISTS attribute ("
-           "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
-      "item_uid INTEGER,"
-            "id TEXT NOT NULL,"
-         "value BLOB,"
-    "FOREIGN KEY (item_uid) REFERENCES item (uid) ON DELETE CASCADE);"
-    );
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // create table 'evidence_source'
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    db.execute ("CREATE TABLE IF NOT EXISTS evidence_source ("
+                "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
+                "evidence_uid INTEGER NOT NULL,"
+                "type INTEGER NOT NULL,"
+                "source_uid INTEGER NOT NULL,"
+                "description TEXT NOT NULL,"
+                "FOREIGN KEY (evidence_uid) REFERENCES evidence (uid) ON "
+                "DELETE CASCADE);");
 
-  db.execute (
-    "CREATE UNIQUE INDEX IF NOT EXISTS idx_attribute "
-           "ON attribute (item_uid, id)");
+    db.execute ("CREATE INDEX IF NOT EXISTS idx_evidence_source "
+                "ON evidence_source (evidence_uid)");
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // create table 'datasource'
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  db.execute (
-    "CREATE TABLE IF NOT EXISTS datasource ("
-      "item_uid INTEGER PRIMARY KEY NOT NULL,"
-      "revision INTEGER NOT NULL,"
-         "state BLOB NOT NULL,"
-    "FOREIGN KEY (item_uid) REFERENCES item (uid) ON DELETE CASCADE);"
-    );
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // create table 'evidence_tag'
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    db.execute ("CREATE TABLE IF NOT EXISTS evidence_tag ("
+                "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
+                "evidence_uid INTEGER,"
+                "name TEXT NOT NULL,"
+                "FOREIGN KEY (evidence_uid) REFERENCES evidence (uid) ON "
+                "DELETE CASCADE);");
 
-  db.execute (
-    "CREATE UNIQUE INDEX IF NOT EXISTS idx_datasource "
-           "ON datasource (item_uid)");
+    db.execute ("CREATE UNIQUE INDEX IF NOT EXISTS idx_evidence_tag "
+                "ON evidence_tag (evidence_uid, name)");
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // create table 'ant'
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  db.execute (
-    "CREATE TABLE IF NOT EXISTS ant ("
-                      "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
-                 "item_uid INTEGER,"
-                       "id TEXT NOT NULL,"
-                     "name TEXT,"
-                  "version TEXT,"
-      "last_execution_time DATETIME,"
-    "FOREIGN KEY (item_uid) REFERENCES item (uid) ON DELETE CASCADE);"
-    );
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // create table 'event'
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    db.execute (
+        "CREATE TABLE IF NOT EXISTS event ("
+        "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "item_uid INTEGER,"
+        "timestamp DATETIME NOT NULL,"
+        "text TEXT NOT NULL,"
+        "FOREIGN KEY (item_uid) REFERENCES item (uid) ON DELETE CASCADE);");
 
-  db.execute (
-    "CREATE UNIQUE INDEX IF NOT EXISTS idx_ant "
-           "ON ant (item_uid, id)");
+    db.execute ("CREATE INDEX IF NOT EXISTS idx_event "
+                "ON event (item_uid)");
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // create table 'evidence'
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  db.execute (
-    "CREATE TABLE IF NOT EXISTS evidence ("
-                      "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
-                 "item_uid INTEGER,"
-                     "type TEXT NOT NULL,"
-    "FOREIGN KEY (item_uid) REFERENCES item (uid) ON DELETE CASCADE);"
-    );
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // upgrade database, if necessary
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::database::meta_table meta_table (db);
+    int version = meta_table.get_version ();
 
-  db.execute (
-    "CREATE INDEX IF NOT EXISTS idx_evidence "
-           "ON evidence (item_uid, type)");
+    if (version == 0)
+        ; // newly created database
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // create table 'evidence_attribute'
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  db.execute (
-    "CREATE TABLE IF NOT EXISTS evidence_attribute ("
-              "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
-     "evidence_uid INTEGER,"
-               "id TEXT NOT NULL,"
-            "value BLOB,"
-       "FOREIGN KEY (evidence_uid) REFERENCES evidence (uid) ON DELETE CASCADE);"
-    );
+    else if (version > 8 && version < 11)
+        _case_schema_upgrade_v11 (db);
 
-  db.execute (
-    "CREATE UNIQUE INDEX IF NOT EXISTS idx_evidence_attribute "
-           "ON evidence_attribute (evidence_uid, id)");
+    if (version < SCHEMA_VERSION)
+        meta_table.set_version (SCHEMA_VERSION);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // create table 'evidence_source'
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  db.execute (
-    "CREATE TABLE IF NOT EXISTS evidence_source ("
-              "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
-     "evidence_uid INTEGER NOT NULL,"
-             "type INTEGER NOT NULL,"
-       "source_uid INTEGER NOT NULL,"
-      "description TEXT NOT NULL,"
-       "FOREIGN KEY (evidence_uid) REFERENCES evidence (uid) ON DELETE CASCADE);"
-    );
-
-  db.execute (
-    "CREATE INDEX IF NOT EXISTS idx_evidence_source "
-           "ON evidence_source (evidence_uid)");
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // create table 'evidence_tag'
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  db.execute (
-    "CREATE TABLE IF NOT EXISTS evidence_tag ("
-              "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
-     "evidence_uid INTEGER,"
-             "name TEXT NOT NULL,"
-       "FOREIGN KEY (evidence_uid) REFERENCES evidence (uid) ON DELETE CASCADE);"
-    );
-
-  db.execute (
-    "CREATE UNIQUE INDEX IF NOT EXISTS idx_evidence_tag "
-           "ON evidence_tag (evidence_uid, name)");
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // create table 'event'
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  db.execute (
-    "CREATE TABLE IF NOT EXISTS event ("
-                      "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
-                 "item_uid INTEGER,"
-                "timestamp DATETIME NOT NULL,"
-                     "text TEXT NOT NULL,"
-    "FOREIGN KEY (item_uid) REFERENCES item (uid) ON DELETE CASCADE);"
-    );
-
-  db.execute (
-    "CREATE INDEX IF NOT EXISTS idx_event "
-           "ON event (item_uid)");
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // upgrade database, if necessary
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::core::database::meta_table meta_table (db);
-  int version = meta_table.get_version ();
-
-  if (version == 0)
-    ; // newly created database
-
-  else if (version > 8 && version < 11)
-    _case_schema_upgrade_v11 (db);
-
-  if (version < SCHEMA_VERSION)
-    meta_table.set_version (SCHEMA_VERSION);
-
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // commit changes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  transaction.commit ();
-  db.execute ("PRAGMA foreign_keys = ON;");
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // commit changes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    transaction.commit ();
+    db.execute ("PRAGMA foreign_keys = ON;");
 }
 
 } // namespace mobius::framework::model

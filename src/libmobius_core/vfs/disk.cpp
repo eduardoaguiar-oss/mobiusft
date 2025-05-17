@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,12 +17,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/vfs/disk.hpp>
-#include <mobius/core/vfs/disk_impl_null.hpp>
-#include <mobius/core/vfs/disk_impl_device.hpp>
-#include <mobius/core/vfs/disk_impl_imagefile.hpp>
 #include <mobius/core/exception.inc>
 #include <mobius/core/io/uri.hpp>
+#include <mobius/core/vfs/disk.hpp>
+#include <mobius/core/vfs/disk_impl_device.hpp>
+#include <mobius/core/vfs/disk_impl_imagefile.hpp>
+#include <mobius/core/vfs/disk_impl_null.hpp>
 #include <stdexcept>
 
 namespace mobius::core::vfs
@@ -29,7 +31,7 @@ namespace mobius::core::vfs
 // @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 disk::disk ()
- : impl_ (std::make_shared <disk_impl_null> ())
+    : impl_ (std::make_shared<disk_impl_null> ())
 {
 }
 
@@ -37,8 +39,8 @@ disk::disk ()
 // @brief Constructor from implementation pointer
 // @param impl Implementation pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-disk::disk (const std::shared_ptr <disk_impl_base>& impl)
-  : impl_ (impl)
+disk::disk (const std::shared_ptr<disk_impl_base> &impl)
+    : impl_ (impl)
 {
 }
 
@@ -46,18 +48,19 @@ disk::disk (const std::shared_ptr <disk_impl_base>& impl)
 // @brief Constructor
 // @param state Object state
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-disk::disk (const mobius::core::pod::map& state)
+disk::disk (const mobius::core::pod::map &state)
 {
-  auto type = std::string (state.get ("type"));
+    auto type = std::string (state.get ("type"));
 
-  if (type == "device")
-    impl_ = std::make_shared <disk_impl_device> (state);
+    if (type == "device")
+        impl_ = std::make_shared<disk_impl_device> (state);
 
-  else if (type == "imagefile")
-    impl_ = std::make_shared <disk_impl_imagefile> (state);
+    else if (type == "imagefile")
+        impl_ = std::make_shared<disk_impl_imagefile> (state);
 
-  else
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid disk type: " + type));
+    else
+        throw std::invalid_argument (
+            MOBIUS_EXCEPTION_MSG ("invalid disk type: " + type));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -66,9 +69,9 @@ disk::disk (const mobius::core::pod::map& state)
 // @return Disk object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 disk
-new_disk_by_device_uid (const std::string& uid)
+new_disk_by_device_uid (const std::string &uid)
 {
-  return disk (std::make_shared <disk_impl_device> (uid));
+    return disk (std::make_shared<disk_impl_device> (uid));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -78,9 +81,9 @@ new_disk_by_device_uid (const std::string& uid)
 // @return Disk object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 disk
-new_disk_by_url (const std::string& url, const std::string& type)
+new_disk_by_url (const std::string &url, const std::string &type)
 {
-  return disk (std::make_shared <disk_impl_imagefile> (url, type));
+    return disk (std::make_shared<disk_impl_imagefile> (url, type));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -90,12 +93,11 @@ new_disk_by_url (const std::string& url, const std::string& type)
 // @return Disk object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 disk
-new_disk_by_path (const std::string& path, const std::string& type)
+new_disk_by_path (const std::string &path, const std::string &type)
 {
-  auto uri = mobius::core::io::new_uri_from_path (path);
-  return disk (std::make_shared <disk_impl_imagefile> (uri.get_value (), type));
+    auto uri = mobius::core::io::new_uri_from_path (path);
+    return disk (
+        std::make_shared<disk_impl_imagefile> (uri.get_value (), type));
 }
 
 } // namespace mobius::core::vfs
-
-

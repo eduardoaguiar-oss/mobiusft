@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -23,10 +25,7 @@ namespace mobius::core::datetime
 // @brief Construct time from day second number
 // @param s day second
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-time::time (day_second_type s) noexcept
-{
-  from_day_seconds (s);
-}
+time::time (day_second_type s) noexcept { from_day_seconds (s); }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Set time from second
@@ -35,11 +34,11 @@ time::time (day_second_type s) noexcept
 void
 time::from_day_seconds (day_second_type s) noexcept
 {
-  second_ = s % 60;
-  s = s / 60;
-  minute_ = s % 60;
-  hour_ = s / 60;
-  is_null_ = false;
+    second_ = s % 60;
+    s = s / 60;
+    minute_ = s % 60;
+    hour_ = s / 60;
+    is_null_ = false;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -49,7 +48,7 @@ time::from_day_seconds (day_second_type s) noexcept
 day_second_type
 time::to_day_seconds () const noexcept
 {
-  return second_ + minute_ * 60 + hour_ * 3600;
+    return second_ + minute_ * 60 + hour_ * 3600;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -59,12 +58,11 @@ time::to_day_seconds () const noexcept
 // @return true if the two time objects are equal
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator== (const time& t1, const time& t2) noexcept
+operator== (const time &t1, const time &t2) noexcept
 {
-  return bool (t1) == bool (t2) &&
-         t1.get_hour () == t2.get_hour () &&
-         t1.get_minute () == t2.get_minute () &&
-         t1.get_second () == t2.get_second ();
+    return bool (t1) == bool (t2) && t1.get_hour () == t2.get_hour () &&
+           t1.get_minute () == t2.get_minute () &&
+           t1.get_second () == t2.get_second ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -73,23 +71,21 @@ operator== (const time& t1, const time& t2) noexcept
 // @return string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-to_string (const time& t)
+to_string (const time &t)
 {
-  std::string str;
+    std::string str;
 
-  if (t)
+    if (t)
     {
-      char buffer[64] = {0};
+        char buffer[64] = {0};
 
-      sprintf (buffer, "%02d:%02d:%02d",
-               t.get_hour (),
-               t.get_minute (),
-               t.get_second ());
+        sprintf (buffer, "%02d:%02d:%02d", t.get_hour (), t.get_minute (),
+                 t.get_second ());
 
-      str = buffer;
+        str = buffer;
     }
 
-  return str;
+    return str;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -98,14 +94,12 @@ to_string (const time& t)
 // @param dt datetime object
 // @return reference to ostream
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::ostream&
-operator<< (std::ostream& stream, const time& t)
+std::ostream &
+operator<< (std::ostream &stream, const time &t)
 {
-  stream << to_string (t);
+    stream << to_string (t);
 
-  return stream;
+    return stream;
 }
 
 } // namespace mobius::core::datetime
-
-

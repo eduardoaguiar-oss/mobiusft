@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -25,12 +27,13 @@
 // @brief Constructor
 // @param imagefile_impl imagefile implementation object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-writer_impl::writer_impl (const imagefile_impl& imagefile_impl)
-  : segment_size_ (std::int64_t (imagefile_impl.get_attribute ("segment_size"))),
-    segment_idx_ (1),
-    segments_ (imagefile_impl.get_segment_array ())
+writer_impl::writer_impl (const imagefile_impl &imagefile_impl)
+    : segment_size_ (
+          std::int64_t (imagefile_impl.get_attribute ("segment_size"))),
+      segment_idx_ (1),
+      segments_ (imagefile_impl.get_segment_array ())
 {
-  _set_stream (0);
+    _set_stream (0);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -41,24 +44,25 @@ writer_impl::writer_impl (const imagefile_impl& imagefile_impl)
 void
 writer_impl::seek (offset_type offset, whence_type w)
 {
-  // calculate offset from the beginning of data
-  offset_type abs_offset;
+    // calculate offset from the beginning of data
+    offset_type abs_offset;
 
-  if (w == whence_type::beginning)
-    abs_offset = offset;
+    if (w == whence_type::beginning)
+        abs_offset = offset;
 
-  else if (w == whence_type::current)
-    abs_offset = pos_ + offset;
+    else if (w == whence_type::current)
+        abs_offset = pos_ + offset;
 
-  else if (w == whence_type::end)
-    abs_offset = size_ - 1 + offset;
+    else if (w == whence_type::end)
+        abs_offset = size_ - 1 + offset;
 
-  else
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
+    else
+        throw std::invalid_argument (
+            MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
 
-  // update current pos, if possible
-  if (abs_offset >= 0)
-    pos_ = abs_offset;
+    // update current pos, if possible
+    if (abs_offset >= 0)
+        pos_ = abs_offset;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -67,38 +71,38 @@ writer_impl::seek (offset_type offset, whence_type w)
 // @return Number of bytes written
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl::size_type
-writer_impl::write (const mobius::core::bytearray& data)
+writer_impl::write (const mobius::core::bytearray &data)
 {
-  // if write position is ahead of size_, fill gap with zeroes
-  if (size_ < pos_)
+    // if write position is ahead of size_, fill gap with zeroes
+    if (size_ < pos_)
     {
-      constexpr unsigned int BLOCK_SIZE = 65536;    //!< write block size
-      size_type count = pos_ - size_;
+        constexpr unsigned int BLOCK_SIZE = 65536; //!< write block size
+        size_type count = pos_ - size_;
 
-      mobius::core::bytearray buffer (BLOCK_SIZE);
-      buffer.fill (0);
+        mobius::core::bytearray buffer (BLOCK_SIZE);
+        buffer.fill (0);
 
-      while (count >= size_type (BLOCK_SIZE))
+        while (count >= size_type (BLOCK_SIZE))
         {
-          size_type bytes = _write_data (size_, buffer);
-          count -= bytes;
-          size_ += bytes;
+            size_type bytes = _write_data (size_, buffer);
+            count -= bytes;
+            size_ += bytes;
         }
 
-      if (count > 0)
+        if (count > 0)
         {
-          size_type bytes = _write_data (size_, buffer.slice (0, count - 1));
-          size_ += bytes;
+            size_type bytes = _write_data (size_, buffer.slice (0, count - 1));
+            size_ += bytes;
         }
     }
 
-  // write data
-  size_type bytes = _write_data (pos_, data);
-  pos_ += bytes;
-  size_ = std::max (size_, pos_);
+    // write data
+    size_type bytes = _write_data (pos_, data);
+    pos_ += bytes;
+    size_ = std::max (size_, pos_);
 
-  // return number of bytes written
-  return bytes;
+    // return number of bytes written
+    return bytes;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -107,31 +111,31 @@ writer_impl::write (const mobius::core::bytearray& data)
 // @param data data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 writer_impl::size_type
-writer_impl::_write_data (size_type pos, const mobius::core::bytearray& data)
+writer_impl::_write_data (size_type pos, const mobius::core::bytearray &data)
 {
-  mobius::core::bytearray buffer = data;
+    mobius::core::bytearray buffer = data;
 
-  while (!buffer.empty ())
+    while (!buffer.empty ())
     {
-      _set_stream (pos);
+        _set_stream (pos);
 
-      // write data up to segment size
-      size_type segment_left = segment_size_ - stream_.tell ();
+        // write data up to segment size
+        size_type segment_left = segment_size_ - stream_.tell ();
 
-      if (buffer.size () <= segment_left)
+        if (buffer.size () <= segment_left)
         {
-          pos += stream_.write (buffer);
-          buffer.clear ();
+            pos += stream_.write (buffer);
+            buffer.clear ();
         }
 
-      else
+        else
         {
-          pos += stream_.write (buffer.slice (0, segment_left - 1));
-          buffer = buffer.slice (segment_left, buffer.size () - 1);
+            pos += stream_.write (buffer.slice (0, segment_left - 1));
+            buffer = buffer.slice (segment_left, buffer.size () - 1);
         }
     }
 
-  return data.size ();
+    return data.size ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -141,16 +145,16 @@ writer_impl::_write_data (size_type pos, const mobius::core::bytearray& data)
 void
 writer_impl::_set_stream (size_type pos)
 {
-  size_type segment_idx = pos / segment_size_;
-  size_type stream_pos = pos % segment_size_;
+    size_type segment_idx = pos / segment_size_;
+    size_type stream_pos = pos % segment_size_;
 
-  if (segment_idx != segment_idx_)
+    if (segment_idx != segment_idx_)
     {
-      stream_ = segments_.new_writer (segment_idx);
-      segment_idx_ = segment_idx;
+        stream_ = segments_.new_writer (segment_idx);
+        segment_idx_ = segment_idx;
     }
 
-  stream_.seek (stream_pos);
+    stream_.seek (stream_pos);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -159,7 +163,5 @@ writer_impl::_set_stream (size_type pos)
 void
 writer_impl::flush ()
 {
-  stream_.flush ();
+    stream_.flush ();
 }
-
-

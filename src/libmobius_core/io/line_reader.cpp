@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -27,25 +29,25 @@ namespace
 // @return Separator string or "" if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::string
-_detect_separator (const std::string& s)
+_detect_separator (const std::string &s)
 {
-  char last_c = 0;
+    char last_c = 0;
 
-  for (const auto& c : s)
+    for (const auto &c : s)
     {
-      if (c == '\n' && last_c == '\r')
-        return "\r\n";
+        if (c == '\n' && last_c == '\r')
+            return "\r\n";
 
-      else if (c == '\n')
-        return "\n";
+        else if (c == '\n')
+            return "\n";
 
-      else if (last_c == '\r')
-        return "\r";
+        else if (last_c == '\r')
+            return "\r";
 
-      last_c = c;
+        last_c = c;
     }
 
-  return {};
+    return {};
 }
 
 } // namespace
@@ -55,12 +57,10 @@ _detect_separator (const std::string& s)
 // @param text_reader Text reader object
 // @param separator Line separator
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-line_reader::line_reader (
-  const mobius::core::io::text_reader& text_reader,
-  const std::string& separator
-)
- : text_reader_ (text_reader),
-   separator_ (separator)
+line_reader::line_reader (const mobius::core::io::text_reader &text_reader,
+                          const std::string &separator)
+    : text_reader_ (text_reader),
+      separator_ (separator)
 {
 }
 
@@ -70,13 +70,11 @@ line_reader::line_reader (
 // @param encoding Charset encoding
 // @param separator Line separator
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-line_reader::line_reader (
-  const mobius::core::io::reader& reader,
-  const std::string& encoding,
-  const std::string& separator
-)
- : text_reader_ (text_reader (reader, encoding)),
-   separator_ (separator)
+line_reader::line_reader (const mobius::core::io::reader &reader,
+                          const std::string &encoding,
+                          const std::string &separator)
+    : text_reader_ (text_reader (reader, encoding)),
+      separator_ (separator)
 {
 }
 
@@ -86,59 +84,57 @@ line_reader::line_reader (
 // @return <i>true</i> if line has been read, <i>false</i> otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-line_reader::read (std::string& line)
+line_reader::read (std::string &line)
 {
-  // detect separator, if not set
-  while (separator_.empty ())
+    // detect separator, if not set
+    while (separator_.empty ())
     {
-      auto data = text_reader_.read (65536);
+        auto data = text_reader_.read (65536);
 
-      if (data.empty ())
+        if (data.empty ())
         {
-          if (buffer_.empty ())
-            return false;
+            if (buffer_.empty ())
+                return false;
 
-          line = buffer_;
-          buffer_.clear ();
-          return true;
+            line = buffer_;
+            buffer_.clear ();
+            return true;
         }
 
-      buffer_ += data;
-      separator_ = _detect_separator (buffer_);
+        buffer_ += data;
+        separator_ = _detect_separator (buffer_);
     }
 
-  // search for separator
-  auto pos = buffer_.find (separator_);
+    // search for separator
+    auto pos = buffer_.find (separator_);
 
-  while (pos == std::string::npos)
+    while (pos == std::string::npos)
     {
-      auto data = text_reader_.read (65536);
+        auto data = text_reader_.read (65536);
 
-      if (data.empty ())
+        if (data.empty ())
         {
-          if (buffer_.empty ())
-            return false;
+            if (buffer_.empty ())
+                return false;
 
-          line = buffer_;
-          buffer_.clear ();
-          return true;
+            line = buffer_;
+            buffer_.clear ();
+            return true;
         }
 
-      buffer_ += data;
-      pos = buffer_.find (separator_);
+        buffer_ += data;
+        pos = buffer_.find (separator_);
     }
 
-  // if separator found, return line up to separator
-  if (pos != std::string::npos)
+    // if separator found, return line up to separator
+    if (pos != std::string::npos)
     {
-      line = buffer_.substr (0, pos);
-      buffer_ = buffer_.erase (0, pos + separator_.size ());
-      return true;
+        line = buffer_.substr (0, pos);
+        buffer_ = buffer_.erase (0, pos + separator_.size ());
+        return true;
     }
 
-  return false;
+    return false;
 }
 
 } // namespace mobius::core::io
-
-

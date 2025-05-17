@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,8 +17,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/io/reader_impl_bytearray.hpp>
 #include <mobius/core/exception.inc>
+#include <mobius/core/io/reader_impl_bytearray.hpp>
 #include <stdexcept>
 
 namespace mobius::core::io
@@ -25,8 +27,9 @@ namespace mobius::core::io
 // @brief Constructor
 // @param data bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-reader_impl_bytearray::reader_impl_bytearray (const mobius::core::bytearray& data)
-  : data_ (data)
+reader_impl_bytearray::reader_impl_bytearray (
+    const mobius::core::bytearray &data)
+    : data_ (data)
 {
 }
 
@@ -38,27 +41,28 @@ reader_impl_bytearray::reader_impl_bytearray (const mobius::core::bytearray& dat
 void
 reader_impl_bytearray::seek (offset_type offset, whence_type w)
 {
-  // calculate offset from the beginning of data
-  offset_type abs_offset;
+    // calculate offset from the beginning of data
+    offset_type abs_offset;
 
-  if (w == whence_type::beginning)
-    abs_offset = offset;
+    if (w == whence_type::beginning)
+        abs_offset = offset;
 
-  else if (w == whence_type::current)
-    abs_offset = pos_ + offset;
+    else if (w == whence_type::current)
+        abs_offset = pos_ + offset;
 
-  else if (w == whence_type::end)
-    abs_offset = data_.size () - 1 + offset;
+    else if (w == whence_type::end)
+        abs_offset = data_.size () - 1 + offset;
 
-  else
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
+    else
+        throw std::invalid_argument (
+            MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
 
-  // update current pos, if possible
-  if (abs_offset < 0)
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid offset"));
+    // update current pos, if possible
+    if (abs_offset < 0)
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid offset"));
 
-  else if (size_type (abs_offset) <= data_.size ())
-    pos_ = abs_offset;
+    else if (size_type (abs_offset) <= data_.size ())
+        pos_ = abs_offset;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -69,18 +73,16 @@ reader_impl_bytearray::seek (offset_type offset, whence_type w)
 mobius::core::bytearray
 reader_impl_bytearray::read (size_type size)
 {
-  offset_type end = std::min (data_.size (), pos_ + size) - 1;
-  mobius::core::bytearray data;
+    offset_type end = std::min (data_.size (), pos_ + size) - 1;
+    mobius::core::bytearray data;
 
-  if (offset_type (pos_) <= end)
+    if (offset_type (pos_) <= end)
     {
-      data = data_.slice (pos_, end);
-      pos_ = end + 1;
+        data = data_.slice (pos_, end);
+        pos_ = end + 1;
     }
 
-  return data;
+    return data;
 }
 
 } // namespace mobius::core::io
-
-

@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,8 +17,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/file_decoder/metadata.hpp>
 #include <algorithm>
+#include <mobius/core/file_decoder/metadata.hpp>
 #include <unordered_map>
 
 namespace mobius::core::file_decoder
@@ -26,31 +28,32 @@ namespace mobius::core::file_decoder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class metadata::impl
 {
-public:
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl (const impl &) = delete;
+    impl (impl &&) = delete;
+    impl () = default;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  impl (const impl&) = delete;
-  impl (impl&&) = delete;
-  impl () = default;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl &operator= (const impl &) = delete;
+    impl &operator= (impl &&) = delete;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Operators
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  impl& operator= (const impl&) = delete;
-  impl& operator= (impl&&) = delete;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void set_value (const std::string &, const std::string &,
+                    const mobius::core::pod::data &);
+    mobius::core::pod::data get_value (const std::string &,
+                                       const std::string &) const;
+    std::vector<std::string> get_groups () const;
+    mobius::core::pod::map get_group (const std::string &) const;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void set_value (const std::string&, const std::string&, const mobius::core::pod::data&);
-  mobius::core::pod::data get_value (const std::string&, const std::string&) const;
-  std::vector<std::string> get_groups () const;
-  mobius::core::pod::map get_group (const std::string&) const;
-
-private:
-  std::unordered_map <std::string, mobius::core::pod::map> metadata_;
+  private:
+    std::unordered_map<std::string, mobius::core::pod::map> metadata_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -60,12 +63,13 @@ private:
 // @param value Metadata value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-metadata::impl::set_value (const std::string& group, const std::string& name, const mobius::core::pod::data& value)
+metadata::impl::set_value (const std::string &group, const std::string &name,
+                           const mobius::core::pod::data &value)
 {
-  auto [iter, rc] = metadata_.try_emplace (group);
-  std::ignore = rc;
+    auto [iter, rc] = metadata_.try_emplace (group);
+    std::ignore = rc;
 
-  iter->second.set (name, value);
+    iter->second.set (name, value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -75,16 +79,17 @@ metadata::impl::set_value (const std::string& group, const std::string& name, co
 // @return Metadata value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::pod::data
-metadata::impl::get_value (const std::string& group, const std::string& name) const
+metadata::impl::get_value (const std::string &group,
+                           const std::string &name) const
 {
-  mobius::core::pod::data value;
+    mobius::core::pod::data value;
 
-  auto iter = metadata_.find (group);
+    auto iter = metadata_.find (group);
 
-  if (iter != metadata_.end ())
-    value = iter->second.get (name);
+    if (iter != metadata_.end ())
+        value = iter->second.get (name);
 
-  return value;
+    return value;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -94,16 +99,12 @@ metadata::impl::get_value (const std::string& group, const std::string& name) co
 std::vector<std::string>
 metadata::impl::get_groups () const
 {
-  std::vector <std::string> keys (metadata_.size ());
+    std::vector<std::string> keys (metadata_.size ());
 
-  std::transform (
-    metadata_.begin (),
-    metadata_.end (),
-    keys.begin (),
-    [](auto pair){ return pair.first; }
-  );
+    std::transform (metadata_.begin (), metadata_.end (), keys.begin (),
+                    [] (auto pair) { return pair.first; });
 
-  return keys;
+    return keys;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -112,23 +113,23 @@ metadata::impl::get_groups () const
 // @return Metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::pod::map
-metadata::impl::get_group (const std::string& group_id) const
+metadata::impl::get_group (const std::string &group_id) const
 {
-  mobius::core::pod::map value;
+    mobius::core::pod::map value;
 
-  auto iter = metadata_.find (group_id);
+    auto iter = metadata_.find (group_id);
 
-  if (iter != metadata_.end ())
-    value = iter->second;
+    if (iter != metadata_.end ())
+        value = iter->second;
 
-  return value;
+    return value;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 metadata::metadata ()
-  : impl_ (std::make_shared <impl> ())
+    : impl_ (std::make_shared<impl> ())
 {
 }
 
@@ -139,9 +140,10 @@ metadata::metadata ()
 // @param value Metadata value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-metadata::set_value (const std::string& group, const std::string& name, const mobius::core::pod::data& value)
+metadata::set_value (const std::string &group, const std::string &name,
+                     const mobius::core::pod::data &value)
 {
-  impl_->set_value (group, name, value);
+    impl_->set_value (group, name, value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -151,9 +153,9 @@ metadata::set_value (const std::string& group, const std::string& name, const mo
 // @return Metadata value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::pod::data
-metadata::get_value (const std::string& group, const std::string& name) const
+metadata::get_value (const std::string &group, const std::string &name) const
 {
-  return impl_->get_value (group, name);
+    return impl_->get_value (group, name);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -163,7 +165,7 @@ metadata::get_value (const std::string& group, const std::string& name) const
 std::vector<std::string>
 metadata::get_groups () const
 {
-  return impl_->get_groups ();
+    return impl_->get_groups ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -172,11 +174,9 @@ metadata::get_groups () const
 // @return Metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::pod::map
-metadata::get_group (const std::string& group) const
+metadata::get_group (const std::string &group) const
 {
-  return impl_->get_group (group);
+    return impl_->get_group (group);
 }
 
 } // namespace mobius::core::file_decoder
-
-

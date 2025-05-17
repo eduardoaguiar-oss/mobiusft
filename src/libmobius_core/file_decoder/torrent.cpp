@@ -465,11 +465,7 @@ torrent::torrent (const mobius::core::io::reader &reader)
 // @brief Check if object is valid
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-torrent::
-operator bool () const
-{
-    return impl_->is_instance ();
-}
+torrent::operator bool () const { return impl_->is_instance (); }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get file name

@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,10 +17,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/decoder/xml/dom.hpp>
-#include <mobius/core/exception.inc>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+#include <mobius/core/decoder/xml/dom.hpp>
+#include <mobius/core/exception.inc>
 #include <stdexcept>
 
 namespace
@@ -28,22 +30,16 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class xml2_init
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Initialize libxml2
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  xml2_init ()
-  {
-    xmlInitParser ();
-  }
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Initialize libxml2
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    xml2_init () { xmlInitParser (); }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Cleanup libxml2
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  ~xml2_init ()
-  {
-    xmlCleanupParser ();
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Cleanup libxml2
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    ~xml2_init () { xmlCleanupParser (); }
 };
 
 static xml2_init xml2_instance;
@@ -57,43 +53,43 @@ namespace mobius::core::decoder::xml
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class dom::impl
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  impl (const impl&) = delete;
-  impl (impl&&) = delete;
-  explicit impl (const std::string&, const std::string&);
-  explicit impl (mobius::core::io::reader, const std::string&);
-  explicit impl (const mobius::core::bytearray&, const std::string&);
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl (const impl &) = delete;
+    impl (impl &&) = delete;
+    explicit impl (const std::string &, const std::string &);
+    explicit impl (mobius::core::io::reader, const std::string &);
+    explicit impl (const mobius::core::bytearray &, const std::string &);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Operators
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  impl& operator= (const impl&) = delete;
-  impl& operator= (impl&&) = delete;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl &operator= (const impl &) = delete;
+    impl &operator= (impl &&) = delete;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get root element
-  // @return Root element
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  element
-  get_root_element () const
-  {
-    return root_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get root element
+    // @return Root element
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    element
+    get_root_element () const
+    {
+        return root_;
+    }
 
-private:
-  // @brief Document root element
-  element root_;
+  private:
+    // @brief Document root element
+    element root_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // @param text Text string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-dom::impl::impl (const std::string& text, const std::string& encoding)
-  : impl (mobius::core::bytearray (text), encoding)
+dom::impl::impl (const std::string &text, const std::string &encoding)
+    : impl (mobius::core::bytearray (text), encoding)
 {
 }
 
@@ -101,8 +97,8 @@ dom::impl::impl (const std::string& text, const std::string& encoding)
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-dom::impl::impl (mobius::core::io::reader reader, const std::string& encoding)
-  : impl (reader.read (reader.get_size ()), encoding)
+dom::impl::impl (mobius::core::io::reader reader, const std::string &encoding)
+    : impl (reader.read (reader.get_size ()), encoding)
 {
 }
 
@@ -110,36 +106,34 @@ dom::impl::impl (mobius::core::io::reader reader, const std::string& encoding)
 // @brief Constructor
 // @param data Data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-dom::impl::impl (const mobius::core::bytearray& data, const std::string& encoding)
+dom::impl::impl (const mobius::core::bytearray &data,
+                 const std::string &encoding)
 {
-  // Parse document
-  xmlDocPtr doc = xmlReadMemory (
-    reinterpret_cast <const char *> (data.data ()),
-    data.size (),
-    "document.xml",
-    encoding.empty () ? nullptr : encoding.c_str (),
-    XML_PARSE_NONET
-  );
+    // Parse document
+    xmlDocPtr doc = xmlReadMemory (
+        reinterpret_cast<const char *> (data.data ()), data.size (),
+        "document.xml", encoding.empty () ? nullptr : encoding.c_str (),
+        XML_PARSE_NONET);
 
-  if (!doc)
+    if (!doc)
     {
-      auto error = xmlGetLastError ();
-      throw std::runtime_error (MOBIUS_EXCEPTION_MSG (error->message));
+        auto error = xmlGetLastError ();
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG (error->message));
     }
 
-  // Get root element
-  xmlNode *root = xmlDocGetRootElement (doc);
+    // Get root element
+    xmlNode *root = xmlDocGetRootElement (doc);
 
-  if (!root)
+    if (!root)
     {
-      auto error = xmlGetLastError ();
-      xmlFreeDoc (doc);
-      throw std::runtime_error (MOBIUS_EXCEPTION_MSG (error->message));
+        auto error = xmlGetLastError ();
+        xmlFreeDoc (doc);
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG (error->message));
     }
 
-  root_ = element (root);
+    root_ = element (root);
 
-  xmlFreeDoc (doc);
+    xmlFreeDoc (doc);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -147,10 +141,9 @@ dom::impl::impl (const mobius::core::bytearray& data, const std::string& encodin
 // @param text Text string
 // @param encoding XML encoding
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-dom::dom (const std::string& text, const std::string& encoding)
-  : impl_ (std::make_shared <impl> (text, encoding))
+dom::dom (const std::string &text, const std::string &encoding)
+    : impl_ (std::make_shared<impl> (text, encoding))
 {
-
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -158,8 +151,8 @@ dom::dom (const std::string& text, const std::string& encoding)
 // @param reader Reader object
 // @param encoding XML encoding
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-dom::dom (const mobius::core::io::reader& reader, const std::string& encoding)
-  : impl_ (std::make_shared <impl> (reader, encoding))
+dom::dom (const mobius::core::io::reader &reader, const std::string &encoding)
+    : impl_ (std::make_shared<impl> (reader, encoding))
 {
 }
 
@@ -170,9 +163,7 @@ dom::dom (const mobius::core::io::reader& reader, const std::string& encoding)
 element
 dom::get_root_element () const
 {
-  return impl_->get_root_element ();
+    return impl_->get_root_element ();
 }
 
 } // namespace mobius::core::decoder::xml
-
-

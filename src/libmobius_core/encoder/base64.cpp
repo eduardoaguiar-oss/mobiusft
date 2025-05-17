@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -24,10 +26,12 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // @brief Base 64 chars (RFC 4648, section 4)
-static constexpr char BASE64[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+static constexpr char BASE64[] =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 // @brief Base 64 chars, URL and filename (RFC 4648, section 5)
-static constexpr char BASE64_URL[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+static constexpr char BASE64_URL[] =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
 // @brief Base 32 chars (RFC 4648, section 6)
 static constexpr char BASE32[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
@@ -49,31 +53,31 @@ namespace mobius::core::encoder
 // @see RFC 4648, section 4
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-base64 (const mobius::core::bytearray& data)
+base64 (const mobius::core::bytearray &data)
 {
-  std::string ret (((data.size () + 2) / 3) * 4, '=');
-  std::uint64_t i = 0;
-  std::uint32_t d = 0;
-  std::uint32_t bits = 0;
+    std::string ret (((data.size () + 2) / 3) * 4, '=');
+    std::uint64_t i = 0;
+    std::uint32_t d = 0;
+    std::uint32_t bits = 0;
 
-  for (const auto c : data)
+    for (const auto c : data)
     {
-      d = (d << 8) | c;
-      bits += 8;
+        d = (d << 8) | c;
+        bits += 8;
 
-      while (bits >= 6)
+        while (bits >= 6)
         {
-          bits -= 6;
-          ret[i++] = BASE64[d >> bits];
-          d = d & ((1 << bits) - 1);
+            bits -= 6;
+            ret[i++] = BASE64[d >> bits];
+            d = d & ((1 << bits) - 1);
         }
     }
 
-  // padding, if necessary
-  if (bits)
-    ret[i] = BASE64[d << (6 - bits)];
+    // padding, if necessary
+    if (bits)
+        ret[i] = BASE64[d << (6 - bits)];
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -83,31 +87,31 @@ base64 (const mobius::core::bytearray& data)
 // @see RFC 4648, section 5
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-base64url (const mobius::core::bytearray& data)
+base64url (const mobius::core::bytearray &data)
 {
-  std::string ret (((data.size () + 2) / 3) * 4, '=');
-  std::uint64_t i = 0;
-  std::uint32_t d = 0;
-  std::uint32_t bits = 0;
+    std::string ret (((data.size () + 2) / 3) * 4, '=');
+    std::uint64_t i = 0;
+    std::uint32_t d = 0;
+    std::uint32_t bits = 0;
 
-  for (const auto c : data)
+    for (const auto c : data)
     {
-      d = (d << 8) | c;
-      bits += 8;
+        d = (d << 8) | c;
+        bits += 8;
 
-      while (bits >= 6)
+        while (bits >= 6)
         {
-          bits -= 6;
-          ret[i++] = BASE64_URL[d >> bits];
-          d = d & ((1 << bits) - 1);
+            bits -= 6;
+            ret[i++] = BASE64_URL[d >> bits];
+            d = d & ((1 << bits) - 1);
         }
     }
 
-  // padding, if necessary
-  if (bits)
-    ret[i] = BASE64_URL[d << (6 - bits)];
+    // padding, if necessary
+    if (bits)
+        ret[i] = BASE64_URL[d << (6 - bits)];
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -117,31 +121,31 @@ base64url (const mobius::core::bytearray& data)
 // @see RFC 4648, section 6
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-base32 (const mobius::core::bytearray& data)
+base32 (const mobius::core::bytearray &data)
 {
-  std::string ret (((data.size () + 4) / 5) * 8, '=');
-  std::uint32_t d = 0;
-  std::uint32_t bits = 0;
-  std::uint64_t i = 0;
+    std::string ret (((data.size () + 4) / 5) * 8, '=');
+    std::uint32_t d = 0;
+    std::uint32_t bits = 0;
+    std::uint64_t i = 0;
 
-  for (const auto c : data)
+    for (const auto c : data)
     {
-      d = (d << 8) | c;
-      bits += 8;
+        d = (d << 8) | c;
+        bits += 8;
 
-      while (bits >= 5)
+        while (bits >= 5)
         {
-          bits -= 5;
-          ret[i++] = BASE32[d >> bits];
-          d = d & ((1 << bits) - 1);
+            bits -= 5;
+            ret[i++] = BASE32[d >> bits];
+            d = d & ((1 << bits) - 1);
         }
     }
 
-  // padding, if necessary
-  if (bits)
-    ret[i] = BASE32[d << (5 - bits)];
+    // padding, if necessary
+    if (bits)
+        ret[i] = BASE32[d << (5 - bits)];
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -151,31 +155,31 @@ base32 (const mobius::core::bytearray& data)
 // @see RFC 4648, section 7
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-base32hex (const mobius::core::bytearray& data)
+base32hex (const mobius::core::bytearray &data)
 {
-  std::string ret (((data.size () + 4) / 5) * 8, '=');
-  std::uint32_t d = 0;
-  std::uint32_t bits = 0;
-  std::uint64_t i = 0;
+    std::string ret (((data.size () + 4) / 5) * 8, '=');
+    std::uint32_t d = 0;
+    std::uint32_t bits = 0;
+    std::uint64_t i = 0;
 
-  for (const auto c : data)
+    for (const auto c : data)
     {
-      d = (d << 8) | c;
-      bits += 8;
+        d = (d << 8) | c;
+        bits += 8;
 
-      while (bits >= 5)
+        while (bits >= 5)
         {
-          bits -= 5;
-          ret[i++] = BASE32_HEX[d >> bits];
-          d = d & ((1 << bits) - 1);
+            bits -= 5;
+            ret[i++] = BASE32_HEX[d >> bits];
+            d = d & ((1 << bits) - 1);
         }
     }
 
-  // padding, if necessary
-  if (bits)
-    ret[i] = BASE32_HEX[d << (5 - bits)];
+    // padding, if necessary
+    if (bits)
+        ret[i] = BASE32_HEX[d << (5 - bits)];
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -185,22 +189,18 @@ base32hex (const mobius::core::bytearray& data)
 // @see RFC 4648, section 8
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-base16 (const mobius::core::bytearray& data)
+base16 (const mobius::core::bytearray &data)
 {
-  std::string ret (data.size () * 2, '\x00');
-  std::uint64_t i = 0;
+    std::string ret (data.size () * 2, '\x00');
+    std::uint64_t i = 0;
 
-  for (const auto c : data)
+    for (const auto c : data)
     {
-      ret[i++] = BASE16[c >> 4];
-      ret[i++] = BASE16[c & 0x0f];
+        ret[i++] = BASE16[c >> 4];
+        ret[i++] = BASE16[c & 0x0f];
     }
 
-  return ret;
+    return ret;
 }
 
 } // namespace mobius::core::encoder
-
-
-
-

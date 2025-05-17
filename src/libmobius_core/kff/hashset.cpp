@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,11 +17,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/kff/hashset.hpp>
 #include <mobius/core/collection_impl_base.hpp>
 #include <mobius/core/database/connection_pool.hpp>
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/database/meta_table.hpp>
+#include <mobius/core/kff/hashset.hpp>
 #include <mobius/core/string_functions.hpp>
 
 namespace mobius::core::kff
@@ -31,53 +33,51 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Database schema version
 static constexpr int SCHEMA_VERSION = 1;
-using hash_type = std::pair <std::string, std::string>;
+using hash_type = std::pair<std::string, std::string>;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Hash collection
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class collection_impl : public mobius::core::collection_impl_base <hash_type>
+class collection_impl : public mobius::core::collection_impl_base<hash_type>
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Constructor
-  // @param stmt Select statamente
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  collection_impl (const mobius::core::database::statement& stmt)
-    : stmt_ (stmt)
-  {
-  }
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Constructor
+    // @param stmt Select statamente
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    collection_impl (const mobius::core::database::statement &stmt)
+        : stmt_ (stmt)
+    {
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get value from collection
-  // @param Reference to value
-  // @return <b>true</b> if value is available, <b>false</b> otherwise
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  bool
-  get (value_type& value) override
-  {
-    bool rc = stmt_.fetch_row ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get value from collection
+    // @param Reference to value
+    // @return <b>true</b> if value is available, <b>false</b> otherwise
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool
+    get (value_type &value) override
+    {
+        bool rc = stmt_.fetch_row ();
 
-    if (rc)
-      value = std::make_pair (
-        stmt_.get_column_string (0),
-        stmt_.get_column_string (1)
-      );
+        if (rc)
+            value = std::make_pair (stmt_.get_column_string (0),
+                                    stmt_.get_column_string (1));
 
-    return rc;
-  }
+        return rc;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Reset collection
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void
-  reset () override
-  {
-    stmt_.reset ();
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Reset collection
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void
+    reset () override
+    {
+        stmt_.reset ();
+    }
 
-private:
-  mobius::core::database::statement stmt_;
+  private:
+    mobius::core::database::statement stmt_;
 };
 
 } // namespace
@@ -87,107 +87,107 @@ private:
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class hashset::impl
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  impl (const impl&) = delete;
-  impl (impl&&) = delete;
-  explicit impl (const std::string&);
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl (const impl &) = delete;
+    impl (impl &&) = delete;
+    explicit impl (const std::string &);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Operators
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  impl& operator= (const impl&) = delete;
-  impl& operator= (impl&&) = delete;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl &operator= (const impl &) = delete;
+    impl &operator= (impl &&) = delete;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get description
-  // @return Description
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::string
-  get_description () const
-  {
-    _load_data ();
-    return description_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get description
+    // @return Description
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_description () const
+    {
+        _load_data ();
+        return description_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get alert flag
-  // @return true/false
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  bool
-  is_alert () const
-  {
-    _load_data ();
-    return is_alert_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get alert flag
+    // @return true/false
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool
+    is_alert () const
+    {
+        _load_data ();
+        return is_alert_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get size
-  // @return Number of hashes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::uint64_t
-  get_size () const
-  {
-    _load_size ();
-    return size_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get size
+    // @return Number of hashes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::uint64_t
+    get_size () const
+    {
+        _load_size ();
+        return size_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Create new connection for database
-  // @return New connection object
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::core::database::connection
-  new_connection ()
-  {
-    return connection_pool_.acquire ();
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Create new connection for database
+    // @return New connection object
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::database::connection
+    new_connection ()
+    {
+        return connection_pool_.acquire ();
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Create new database transaction
-  // @return new transaction object
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::core::database::transaction
-  new_transaction ()
-  {
-    auto db = connection_pool_.get_database ();
-    return db.new_transaction ();
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Create new database transaction
+    // @return new transaction object
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::database::transaction
+    new_transaction ()
+    {
+        auto db = connection_pool_.get_database ();
+        return db.new_transaction ();
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void set_description (const std::string&);
-  void create (bool);
-  void clear ();
-  void add (const std::string&, const std::string&);
-  void remove (const std::string&, const std::string&);
-  bool lookup (const std::string&, const std::string&) const;
-  mobius::core::collection <hash_type> get_hashes () const;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void set_description (const std::string &);
+    void create (bool);
+    void clear ();
+    void add (const std::string &, const std::string &);
+    void remove (const std::string &, const std::string &);
+    bool lookup (const std::string &, const std::string &) const;
+    mobius::core::collection<hash_type> get_hashes () const;
 
-private:
-  // @brief Database connection pool
-  mobius::core::database::connection_pool connection_pool_;
+  private:
+    // @brief Database connection pool
+    mobius::core::database::connection_pool connection_pool_;
 
-  // @brief Description
-  mutable std::string description_;
+    // @brief Description
+    mutable std::string description_;
 
-  // @brief Is Alert
-  mutable bool is_alert_ = true;
+    // @brief Is Alert
+    mutable bool is_alert_ = true;
 
-  // @brief Size (number of hashes)
-  mutable std::uint64_t size_ = 0;
+    // @brief Size (number of hashes)
+    mutable std::uint64_t size_ = 0;
 
-  // @brief Data loaded flag
-  mutable bool data_loaded_ = false;
+    // @brief Data loaded flag
+    mutable bool data_loaded_ = false;
 
-  // @brief Size loaded flag
-  mutable bool size_loaded_ = false;
+    // @brief Size loaded flag
+    mutable bool size_loaded_ = false;
 
-  // Helper functions
-  void _load_data () const;
-  void _load_size () const;
+    // Helper functions
+    void _load_data () const;
+    void _load_size () const;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -196,21 +196,19 @@ private:
 void
 hashset::impl::_load_data () const
 {
-  if (data_loaded_)
-    return;
+    if (data_loaded_)
+        return;
 
-  auto db = connection_pool_.get_database ();
+    auto db = connection_pool_.get_database ();
 
-  auto stmt = db.new_statement (
-                "SELECT * "
-                  "FROM hashset"
-              );
+    auto stmt = db.new_statement ("SELECT * "
+                                  "FROM hashset");
 
-  if (stmt.fetch_row ())
+    if (stmt.fetch_row ())
     {
-      description_ = stmt.get_column_string (0);
-      is_alert_ = stmt.get_column_bool (1);
-      data_loaded_ = true;
+        description_ = stmt.get_column_string (0);
+        is_alert_ = stmt.get_column_bool (1);
+        data_loaded_ = true;
     }
 }
 
@@ -220,20 +218,18 @@ hashset::impl::_load_data () const
 void
 hashset::impl::_load_size () const
 {
-  if (size_loaded_)
-    return;
+    if (size_loaded_)
+        return;
 
-  auto db = connection_pool_.get_database ();
+    auto db = connection_pool_.get_database ();
 
-  auto stmt = db.new_statement (
-                "SELECT count (*) "
-                  "FROM hash"
-              );
+    auto stmt = db.new_statement ("SELECT count (*) "
+                                  "FROM hash");
 
-  if (stmt.fetch_row ())
+    if (stmt.fetch_row ())
     {
-      size_ = stmt.get_column_int64 (0);
-      size_loaded_ = true;
+        size_ = stmt.get_column_int64 (0);
+        size_loaded_ = true;
     }
 }
 
@@ -241,8 +237,8 @@ hashset::impl::_load_size () const
 // @brief Constructor
 // @param Path Database path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-hashset::impl::impl (const std::string& path)
- : connection_pool_ (path)
+hashset::impl::impl (const std::string &path)
+    : connection_pool_ (path)
 {
 }
 
@@ -251,19 +247,17 @@ hashset::impl::impl (const std::string& path)
 // @param description Description
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-hashset::impl::set_description (const std::string& description)
+hashset::impl::set_description (const std::string &description)
 {
-  auto db = connection_pool_.get_database ();
+    auto db = connection_pool_.get_database ();
 
-  auto stmt = db.new_statement (
-                "UPDATE hashset "
-                   "SET description = ?"
-              );
+    auto stmt = db.new_statement ("UPDATE hashset "
+                                  "SET description = ?");
 
-  stmt.bind (1, description);
-  stmt.execute ();
+    stmt.bind (1, description);
+    stmt.execute ();
 
-  description_ = description;
+    description_ = description;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -273,41 +267,35 @@ hashset::impl::set_description (const std::string& description)
 void
 hashset::impl::create (bool flag)
 {
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // create database
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto db = connection_pool_.get_database ();
-  auto transaction = db.new_transaction ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // create database
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto db = connection_pool_.get_database ();
+    auto transaction = db.new_transaction ();
 
-  mobius::core::database::meta_table meta_table (db);
-  meta_table.set_version (SCHEMA_VERSION);
+    mobius::core::database::meta_table meta_table (db);
+    meta_table.set_version (SCHEMA_VERSION);
 
-  db.execute (
-      "CREATE TABLE IF NOT EXISTS hashset ("
-                 "description TEXT NULL,"
-                 "is_alert INTEGER NULL"
-               ");"
-     );
+    db.execute ("CREATE TABLE IF NOT EXISTS hashset ("
+                "description TEXT NULL,"
+                "is_alert INTEGER NULL"
+                ");");
 
-  db.execute (
-      "CREATE TABLE IF NOT EXISTS hash ("
-               "type TEXT NOT NULL,"
-               "value TEXT NOT NULL,"
-               "PRIMARY KEY (type, value));"
-     );
+    db.execute ("CREATE TABLE IF NOT EXISTS hash ("
+                "type TEXT NOT NULL,"
+                "value TEXT NOT NULL,"
+                "PRIMARY KEY (type, value));");
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // create new row in hashset table
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto stmt = db.new_statement (
-                       "INSERT INTO hashset "
-                            "VALUES (NULL, ?)"
-              );
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // create new row in hashset table
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto stmt = db.new_statement ("INSERT INTO hashset "
+                                  "VALUES (NULL, ?)");
 
-  stmt.bind (1, flag);
-  stmt.execute ();
+    stmt.bind (1, flag);
+    stmt.execute ();
 
-  transaction.commit ();
+    transaction.commit ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -316,16 +304,14 @@ hashset::impl::create (bool flag)
 void
 hashset::impl::clear ()
 {
-  auto db = connection_pool_.get_database ();
+    auto db = connection_pool_.get_database ();
 
-  auto stmt = db.new_statement (
-                "DELETE FROM hash"
-              );
+    auto stmt = db.new_statement ("DELETE FROM hash");
 
-  stmt.execute ();
+    stmt.execute ();
 
-  size_ = 0;
-  size_loaded_ = true;
+    size_ = 0;
+    size_loaded_ = true;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -334,31 +320,29 @@ hashset::impl::clear ()
 // @param value Hash value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-hashset::impl::add (const std::string& type, const std::string& value)
+hashset::impl::add (const std::string &type, const std::string &value)
 {
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // insert hash
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto db = connection_pool_.get_database ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // insert hash
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto db = connection_pool_.get_database ();
 
-  auto stmt = db.new_statement (
-                 "INSERT OR IGNORE INTO hash "
-                      "VALUES (?, ?)"
-              );
+    auto stmt = db.new_statement ("INSERT OR IGNORE INTO hash "
+                                  "VALUES (?, ?)");
 
-  stmt.bind (1, type);
-  stmt.bind (2, mobius::core::string::tolower (value));
-  stmt.execute ();
+    stmt.bind (1, type);
+    stmt.bind (2, mobius::core::string::tolower (value));
+    stmt.execute ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // update size_
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto changes = db.get_changes ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // update size_
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto changes = db.get_changes ();
 
-  if (changes)
+    if (changes)
     {
-      _load_size ();
-      size_ += changes;
+        _load_size ();
+        size_ += changes;
     }
 }
 
@@ -368,32 +352,30 @@ hashset::impl::add (const std::string& type, const std::string& value)
 // @param value Hash value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-hashset::impl::remove (const std::string& type, const std::string& value)
+hashset::impl::remove (const std::string &type, const std::string &value)
 {
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // delete hash
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto db = connection_pool_.get_database ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // delete hash
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto db = connection_pool_.get_database ();
 
-  auto stmt = db.new_statement (
-                "DELETE FROM hash "
-                      "WHERE type = ? "
-                        "AND value = ?"
-              );
+    auto stmt = db.new_statement ("DELETE FROM hash "
+                                  "WHERE type = ? "
+                                  "AND value = ?");
 
-  stmt.bind (1, type);
-  stmt.bind (2, mobius::core::string::tolower (value));
-  stmt.execute ();
+    stmt.bind (1, type);
+    stmt.bind (2, mobius::core::string::tolower (value));
+    stmt.execute ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // update size_
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto changes = db.get_changes ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // update size_
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto changes = db.get_changes ();
 
-  if (changes)
+    if (changes)
     {
-      _load_size ();
-      size_ += changes;
+        _load_size ();
+        size_ += changes;
     }
 }
 
@@ -404,46 +386,43 @@ hashset::impl::remove (const std::string& type, const std::string& value)
 // @return <b>true</b> if hash is found, <b>false</b> otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-hashset::impl::lookup (const std::string& type, const std::string& value) const
+hashset::impl::lookup (const std::string &type, const std::string &value) const
 {
-  auto db = connection_pool_.get_database ();
+    auto db = connection_pool_.get_database ();
 
-  auto stmt = db.new_statement (
-                "SELECT 1 "
-                  "FROM hash "
-                 "WHERE type = ? "
-                   "AND value = ?"
-              );
+    auto stmt = db.new_statement ("SELECT 1 "
+                                  "FROM hash "
+                                  "WHERE type = ? "
+                                  "AND value = ?");
 
-  stmt.bind (1, type);
-  stmt.bind (2, mobius::core::string::tolower (value));
+    stmt.bind (1, type);
+    stmt.bind (2, mobius::core::string::tolower (value));
 
-  return stmt.fetch_row ();
+    return stmt.fetch_row ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get hashes
 // @return Collection of hashes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::collection <hash_type>
+mobius::core::collection<hash_type>
 hashset::impl::get_hashes () const
 {
-  auto db = connection_pool_.get_database ();
+    auto db = connection_pool_.get_database ();
 
-  auto stmt = db.new_statement (
-                "SELECT type, value "
-                  "FROM hash"
-              );
+    auto stmt = db.new_statement ("SELECT type, value "
+                                  "FROM hash");
 
-  return mobius::core::collection <hash_type> (std::make_shared <collection_impl> (stmt));
+    return mobius::core::collection<hash_type> (
+        std::make_shared<collection_impl> (stmt));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // @param Path Database path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-hashset::hashset (const std::string& path)
-  : impl_ (std::make_shared <impl> (path))
+hashset::hashset (const std::string &path)
+    : impl_ (std::make_shared<impl> (path))
 {
 }
 
@@ -454,7 +433,7 @@ hashset::hashset (const std::string& path)
 mobius::core::database::connection
 hashset::new_connection ()
 {
-  return impl_->new_connection ();
+    return impl_->new_connection ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -464,7 +443,7 @@ hashset::new_connection ()
 mobius::core::database::transaction
 hashset::new_transaction ()
 {
-  return impl_->new_transaction ();
+    return impl_->new_transaction ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -474,7 +453,7 @@ hashset::new_transaction ()
 std::string
 hashset::get_description () const
 {
-  return impl_->get_description ();
+    return impl_->get_description ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -482,9 +461,9 @@ hashset::get_description () const
 // @param description Description
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-hashset::set_description (const std::string& description)
+hashset::set_description (const std::string &description)
 {
-  impl_->set_description (description);
+    impl_->set_description (description);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -494,7 +473,7 @@ hashset::set_description (const std::string& description)
 bool
 hashset::is_alert () const
 {
-  return impl_->is_alert ();
+    return impl_->is_alert ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -504,7 +483,7 @@ hashset::is_alert () const
 std::uint64_t
 hashset::get_size () const
 {
-  return impl_->get_size ();
+    return impl_->get_size ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -514,7 +493,7 @@ hashset::get_size () const
 void
 hashset::create (bool flag)
 {
-  impl_->create (flag);
+    impl_->create (flag);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -523,7 +502,7 @@ hashset::create (bool flag)
 void
 hashset::clear ()
 {
-  impl_->clear ();
+    impl_->clear ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -532,9 +511,9 @@ hashset::clear ()
 // @param value Hash value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-hashset::add (const std::string& type, const std::string& value)
+hashset::add (const std::string &type, const std::string &value)
 {
-  impl_->add (type, value);
+    impl_->add (type, value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -543,9 +522,9 @@ hashset::add (const std::string& type, const std::string& value)
 // @param value Hash value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-hashset::remove (const std::string& type, const std::string& value)
+hashset::remove (const std::string &type, const std::string &value)
 {
-  impl_->remove (type, value);
+    impl_->remove (type, value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -555,19 +534,19 @@ hashset::remove (const std::string& type, const std::string& value)
 // @return <b>true</b> if hash is found, <b>false</b> otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-hashset::lookup (const std::string& type, const std::string& value) const
+hashset::lookup (const std::string &type, const std::string &value) const
 {
-  return impl_->lookup (type, value);
+    return impl_->lookup (type, value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get hashes
 // @return hashes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::collection <hash_type>
+mobius::core::collection<hash_type>
 hashset::get_hashes () const
 {
-  return impl_->get_hashes ();
+    return impl_->get_hashes ();
 }
 
 } // namespace mobius::core::kff

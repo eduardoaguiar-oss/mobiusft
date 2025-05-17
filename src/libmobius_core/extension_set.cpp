@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023duardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023duardo
+// Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,8 +17,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/extension_set.hpp>
 #include <algorithm>
+#include <mobius/core/extension_set.hpp>
 
 namespace mobius::core
 {
@@ -26,14 +28,14 @@ namespace mobius::core
 // @return Loaded extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extension
-extension_set::load (const std::string& path)
+extension_set::load (const std::string &path)
 {
-  extension e (path);
+    extension e (path);
 
-  std::lock_guard <std::mutex> lock (mutex_);
-  extensions_.emplace (e.get_id (), e);
+    std::lock_guard<std::mutex> lock (mutex_);
+    extensions_.emplace (e.get_id (), e);
 
-  return e;
+    return e;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -41,30 +43,28 @@ extension_set::load (const std::string& path)
 // @param id Extension ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-extension_set::unload (const std::string& id)
+extension_set::unload (const std::string &id)
 {
-  std::lock_guard <std::mutex> lock (mutex_);
-  extensions_.erase (id);
+    std::lock_guard<std::mutex> lock (mutex_);
+    extensions_.erase (id);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get extensions
 // @return List of extensions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::list <extension>
+std::list<extension>
 extension_set::get_extensions () const
 {
-  std::list <extension> extensions;
-  std::lock_guard <std::mutex> lock (mutex_);
+    std::list<extension> extensions;
+    std::lock_guard<std::mutex> lock (mutex_);
 
-  std::transform (
-     extensions_.begin (),
-     extensions_.end (),
-     std::back_inserter (extensions),
-     [] (const container_type::value_type& v){ return v.second; }
-  );
+    std::transform (extensions_.begin (), extensions_.end (),
+                    std::back_inserter (extensions),
+                    [] (const container_type::value_type &v)
+                    { return v.second; });
 
-  return extensions;
+    return extensions;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -73,10 +73,8 @@ extension_set::get_extensions () const
 void
 extension_set::clear ()
 {
-  std::lock_guard <std::mutex> lock (mutex_);
-  extensions_.clear ();
+    std::lock_guard<std::mutex> lock (mutex_);
+    extensions_.clear ();
 }
 
 } // namespace mobius::core
-
-

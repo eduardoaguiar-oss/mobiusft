@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,8 +17,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/datetime/datetime.hpp>
 #include <chrono>
+#include <mobius/core/datetime/datetime.hpp>
 
 namespace mobius::core::datetime
 {
@@ -25,10 +27,10 @@ namespace mobius::core::datetime
 // @param d date object
 // @param t time object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-datetime::datetime (const date& d, const time& t) noexcept
-  : date_ (d),
-    time_ (t),
-    is_null_ (false)
+datetime::datetime (const date &d, const time &t) noexcept
+    : date_ (d),
+      time_ (t),
+      is_null_ (false)
 {
 }
 
@@ -41,10 +43,10 @@ datetime::datetime (const date& d, const time& t) noexcept
 datetime
 now ()
 {
-  auto clock_now = std::chrono::system_clock::now ();
-  time_t t = std::chrono::system_clock::to_time_t (clock_now);
+    auto clock_now = std::chrono::system_clock::now ();
+    time_t t = std::chrono::system_clock::to_time_t (clock_now);
 
-  return new_datetime_from_unix_timestamp (t);
+    return new_datetime_from_unix_timestamp (t);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -53,11 +55,10 @@ now ()
 // @param d2 datetime object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator== (const datetime& d1, const datetime& d2) noexcept
+operator== (const datetime &d1, const datetime &d2) noexcept
 {
-  return bool (d1) == bool (d2) &&
-         d1.get_date () == d2.get_date () &&
-         d1.get_time () == d2.get_time ();
+    return bool (d1) == bool (d2) && d1.get_date () == d2.get_date () &&
+           d1.get_time () == d2.get_time ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -67,32 +68,34 @@ operator== (const datetime& d1, const datetime& d2) noexcept
 // @return new datetime object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datetime
-operator+ (const datetime& dt, const timedelta& delta) noexcept
+operator+ (const datetime &dt, const timedelta &delta) noexcept
 {
-  using value_type = timedelta::value_type;
-  value_type seconds = dt.get_time ().to_day_seconds () + delta.get_seconds ();
-  value_type days = 0;
+    using value_type = timedelta::value_type;
+    value_type seconds =
+        dt.get_time ().to_day_seconds () + delta.get_seconds ();
+    value_type days = 0;
 
-  constexpr value_type SECONDS_OF_DAY = 86400;
+    constexpr value_type SECONDS_OF_DAY = 86400;
 
-  if (seconds >= 0)
+    if (seconds >= 0)
     {
-      days = (seconds / SECONDS_OF_DAY) + delta.get_days ();
-      seconds = seconds % SECONDS_OF_DAY;
+        days = (seconds / SECONDS_OF_DAY) + delta.get_days ();
+        seconds = seconds % SECONDS_OF_DAY;
     }
-  else
+    else
     {
-      seconds += SECONDS_OF_DAY;
-      days--;
+        seconds += SECONDS_OF_DAY;
+        days--;
     }
 
-  // create new timedelta, with seconds = 0
-  mobius::core::datetime::timedelta delta2 (delta);
-  delta2.set_days (days);
-  delta2.set_seconds (0);
+    // create new timedelta, with seconds = 0
+    mobius::core::datetime::timedelta delta2 (delta);
+    delta2.set_days (days);
+    delta2.set_seconds (0);
 
-  // return new datetime
-  return mobius::core::datetime::datetime (dt.get_date () + delta2, time (seconds % SECONDS_OF_DAY));
+    // return new datetime
+    return mobius::core::datetime::datetime (dt.get_date () + delta2,
+                                             time (seconds % SECONDS_OF_DAY));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -102,14 +105,10 @@ operator+ (const datetime& dt, const timedelta& delta) noexcept
 // @return new datetime object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datetime
-operator- (const datetime& dt, const timedelta& delta) noexcept
+operator- (const datetime &dt, const timedelta &delta) noexcept
 {
-  return dt + timedelta (
-           -delta.get_years (),
-           -delta.get_days (),
-           -delta.get_seconds (),
-           -delta.get_nanoseconds ()
-         );
+    return dt + timedelta (-delta.get_years (), -delta.get_days (),
+                           -delta.get_seconds (), -delta.get_nanoseconds ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -118,12 +117,12 @@ operator- (const datetime& dt, const timedelta& delta) noexcept
 // @return string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-to_string (const datetime& dt)
+to_string (const datetime &dt)
 {
-  if (dt)
-    return to_string (dt.get_date ()) + ' ' + to_string (dt.get_time ());
+    if (dt)
+        return to_string (dt.get_date ()) + ' ' + to_string (dt.get_time ());
 
-  return std::string ();
+    return std::string ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -132,14 +131,12 @@ to_string (const datetime& dt)
 // @param dt datetime object
 // @return reference to ostream
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::ostream&
-operator<< (std::ostream& stream, const datetime& dt)
+std::ostream &
+operator<< (std::ostream &stream, const datetime &dt)
 {
-  stream << to_string (dt);
+    stream << to_string (dt);
 
-  return stream;
+    return stream;
 }
 
 } // namespace mobius::core::datetime
-
-

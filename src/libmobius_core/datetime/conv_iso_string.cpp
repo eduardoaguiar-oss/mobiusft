@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,11 +17,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <cstdio>
 #include <mobius/core/datetime/conv_iso_string.hpp>
 #include <mobius/core/exception.inc>
-#include <stdexcept>
 #include <sstream>
-#include <cstdio>
+#include <stdexcept>
 
 namespace mobius::core::datetime
 {
@@ -29,31 +31,24 @@ namespace mobius::core::datetime
 // @return datetime
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datetime
-new_datetime_from_iso_string (const std::string& str)
+new_datetime_from_iso_string (const std::string &str)
 {
-  int year, month, day;
-  int hours, minutes, seconds;
-  const char *format = nullptr;
-  constexpr int NUMBER_OF_ITEMS = 6;
+    int year, month, day;
+    int hours, minutes, seconds;
+    const char *format = nullptr;
+    constexpr int NUMBER_OF_ITEMS = 6;
 
-  if (str.length () > 10 && str[10] == 'T')
-    format = "%04d-%02d-%02dT%02d:%02d:%02d";
-  else
-    format = "%04d-%02d-%02d %02d:%02d:%02d";
+    if (str.length () > 10 && str[10] == 'T')
+        format = "%04d-%02d-%02dT%02d:%02d:%02d";
+    else
+        format = "%04d-%02d-%02d %02d:%02d:%02d";
 
-  if (sscanf (
-        str.c_str (),
-        format,
-        &year,
-        &month,
-        &day,
-        &hours,
-        &minutes,
-        &seconds) != NUMBER_OF_ITEMS
-     )
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG (("Invalid datetime string: " + str).c_str ()));
+    if (sscanf (str.c_str (), format, &year, &month, &day, &hours, &minutes,
+                &seconds) != NUMBER_OF_ITEMS)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG (
+            ("Invalid datetime string: " + str).c_str ()));
 
-  return datetime (year, month, day, hours, minutes, seconds);
+    return datetime (year, month, day, hours, minutes, seconds);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -62,14 +57,15 @@ new_datetime_from_iso_string (const std::string& str)
 // @return date formatted as string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-date_to_iso_string (const date& d)
+date_to_iso_string (const date &d)
 {
-  char buffer[64] = {0};
+    char buffer[64] = {0};
 
-  if (d)
-    sprintf (buffer, "%04d-%02d-%02d", d.get_year (), d.get_month (), d.get_day ());
+    if (d)
+        sprintf (buffer, "%04d-%02d-%02d", d.get_year (), d.get_month (),
+                 d.get_day ());
 
-  return buffer;
+    return buffer;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -78,14 +74,15 @@ date_to_iso_string (const date& d)
 // @return time formatted as 'HH:MM:SS'
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-time_to_iso_string (const time& t)
+time_to_iso_string (const time &t)
 {
-  char buffer[64] = {0};
+    char buffer[64] = {0};
 
-  if (t)
-    sprintf (buffer, "%02d:%02d:%02d", t.get_hour (), t.get_minute (), t.get_second ());
+    if (t)
+        sprintf (buffer, "%02d:%02d:%02d", t.get_hour (), t.get_minute (),
+                 t.get_second ());
 
-  return buffer;
+    return buffer;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -94,16 +91,15 @@ time_to_iso_string (const time& t)
 // @return datetime formatted as 'YYYY-MM-DD HH:MM:SS'
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-datetime_to_iso_string (const datetime& dt)
+datetime_to_iso_string (const datetime &dt)
 {
-  std::string str;
+    std::string str;
 
-  if (dt)
-    str = date_to_iso_string (dt.get_date ()) + 'T' + time_to_iso_string (dt.get_time ()) + 'Z';
+    if (dt)
+        str = date_to_iso_string (dt.get_date ()) + 'T' +
+              time_to_iso_string (dt.get_time ()) + 'Z';
 
-  return str;
+    return str;
 }
 
 } // namespace mobius::core::datetime
-
-

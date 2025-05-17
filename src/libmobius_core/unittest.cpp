@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -27,10 +29,12 @@ std::size_t unittest::global_unittests_ = 0;
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-unittest::unittest (const std::string& title)
-  : title_ (title), count_ (0), errors_ (0)
+unittest::unittest (const std::string &title)
+    : title_ (title),
+      count_ (0),
+      errors_ (0)
 {
-  global_unittests_++;
+    global_unittests_++;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -39,15 +43,17 @@ unittest::unittest (const std::string& title)
 void
 unittest::end ()
 {
-  std::size_t dots = title_.length() > 60 ? 0 : 60 - title_.length();
-  std::cout << "\033[1;39m" << title_ << "\033[0m " << std::string (dots, '.');
+    std::size_t dots = title_.length () > 60 ? 0 : 60 - title_.length ();
+    std::cout << "\033[1;39m" << title_ << "\033[0m "
+              << std::string (dots, '.');
 
-  if (!errors_)
-    std::cout << " \033[1;32mOK";
-  else
-    std::cout << " \033[1;31mERROR";
+    if (!errors_)
+        std::cout << " \033[1;32mOK";
+    else
+        std::cout << " \033[1;31mERROR";
 
-  std::cout << "\033[0m (" << count_ - errors_ << '/' << count_ << ')' << std::endl;
+    std::cout << "\033[0m (" << count_ - errors_ << '/' << count_ << ')'
+              << std::endl;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -59,14 +65,15 @@ unittest::end ()
 void
 unittest::assert_true (bool b, std::size_t line, const char *e)
 {
-  count_++;
-  global_count_++;
+    count_++;
+    global_count_++;
 
-  if (!b)
+    if (!b)
     {
-      std::cout << "\033[1;31mERROR:\033[0m " << e << " == true failed at line " << line << std::endl;
-      errors_++;
-      global_errors_++;
+        std::cout << "\033[1;31mERROR:\033[0m " << e
+                  << " == true failed at line " << line << std::endl;
+        errors_++;
+        global_errors_++;
     }
 }
 
@@ -79,14 +86,15 @@ unittest::assert_true (bool b, std::size_t line, const char *e)
 void
 unittest::assert_false (bool b, std::size_t line, const char *e)
 {
-  count_++;
-  global_count_++;
+    count_++;
+    global_count_++;
 
-  if (b)
+    if (b)
     {
-      std::cout << "\033[1;31mERROR:\033[0m " << e << " == false failed at line " << line << std::endl;
-      errors_++;
-      global_errors_++;
+        std::cout << "\033[1;31mERROR:\033[0m " << e
+                  << " == false failed at line " << line << std::endl;
+        errors_++;
+        global_errors_++;
     }
 }
 
@@ -98,16 +106,18 @@ unittest::assert_false (bool b, std::size_t line, const char *e)
 // @param e2 second expression
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-unittest::assert_equal (bool b, std::size_t line, const char *e1, const char *e2)
+unittest::assert_equal (bool b, std::size_t line, const char *e1,
+                        const char *e2)
 {
-  count_++;
-  global_count_++;
+    count_++;
+    global_count_++;
 
-  if (!b)
+    if (!b)
     {
-      std::cout << "\033[1;31mERROR:\033[0m " << e1 << " == " << e2 << " failed at line " << line << std::endl;
-      errors_++;
-      global_errors_++;
+        std::cout << "\033[1;31mERROR:\033[0m " << e1 << " == " << e2
+                  << " failed at line " << line << std::endl;
+        errors_++;
+        global_errors_++;
     }
 }
 
@@ -119,16 +129,18 @@ unittest::assert_equal (bool b, std::size_t line, const char *e1, const char *e2
 // @param e2 second expression
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-unittest::assert_not_equal (bool b, std::size_t line, const char *e1, const char *e2)
+unittest::assert_not_equal (bool b, std::size_t line, const char *e1,
+                            const char *e2)
 {
-  count_++;
-  global_count_++;
+    count_++;
+    global_count_++;
 
-  if (b)
+    if (b)
     {
-      std::cout << "\033[1;31mERROR:\033[0m " << e1 << " != " << e2 << " failed at line " << line << std::endl;
-      errors_++;
-      global_errors_++;
+        std::cout << "\033[1;31mERROR:\033[0m " << e1 << " != " << e2
+                  << " failed at line " << line << std::endl;
+        errors_++;
+        global_errors_++;
     }
 }
 
@@ -140,21 +152,26 @@ unittest::assert_not_equal (bool b, std::size_t line, const char *e1, const char
 // @param exc exception
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-unittest::assert_exception (int rc, std::size_t line, const char *e, const char *exc)
+unittest::assert_exception (int rc, std::size_t line, const char *e,
+                            const char *exc)
 {
-  count_++;
-  global_count_++;
+    count_++;
+    global_count_++;
 
-  if (rc)
+    if (rc)
     {
-      errors_++;
-      global_errors_++;
+        errors_++;
+        global_errors_++;
 
-      if (rc == 1)
-        std::cout << "\033[1;31mERROR:\033[0m " << e << " did not throw exception " << exc << " at line " << line << std::endl;
+        if (rc == 1)
+            std::cout << "\033[1;31mERROR:\033[0m " << e
+                      << " did not throw exception " << exc << " at line "
+                      << line << std::endl;
 
-      else
-        std::cout << "\033[1;31mERROR:\033[0m " << e << " threw a different exception " << exc << " at line " << line << std::endl;
+        else
+            std::cout << "\033[1;31mERROR:\033[0m " << e
+                      << " threw a different exception " << exc << " at line "
+                      << line << std::endl;
     }
 }
 
@@ -164,10 +181,10 @@ unittest::assert_exception (int rc, std::size_t line, const char *e, const char 
 void
 unittest::final_summary ()
 {
-  std::cout << std::endl;
-  std::cout << "unittests: " << global_unittests_ << std::endl;
-  std::cout << "tests    : " << global_count_ << std::endl;
-  std::cout << "errors   : " << global_errors_ << std::endl;
+    std::cout << std::endl;
+    std::cout << "unittests: " << global_unittests_ << std::endl;
+    std::cout << "tests    : " << global_count_ << std::endl;
+    std::cout << "errors   : " << global_errors_ << std::endl;
 }
 
 } // namespace mobius::core

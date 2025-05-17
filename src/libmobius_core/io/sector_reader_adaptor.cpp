@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -24,26 +26,26 @@ namespace mobius::core::io
 // @param reader generic io::reader
 // @param sector_size sector size in bytes (default = 512)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-sector_reader_adaptor::sector_reader_adaptor (
-  mobius::core::io::reader reader,
-  size_type sector_size)
-  : reader_ (reader),
-    sector_size_ (sector_size),
-    sectors_ ((reader.get_size () + sector_size - 1) / sector_size)
+sector_reader_adaptor::sector_reader_adaptor (mobius::core::io::reader reader,
+                                              size_type sector_size)
+    : reader_ (reader),
+      sector_size_ (sector_size),
+      sectors_ ((reader.get_size () + sector_size - 1) / sector_size)
 {
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief set current sector to be read
-// @param sector sector (positive from the start, negative from the end of read stream)
+// @param sector sector (positive from the start, negative from the end of read
+// stream)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 sector_reader_adaptor::seek (offset_type sector)
 {
-  if (sector < 0)
-    sector += sectors_;
+    if (sector < 0)
+        sector += sectors_;
 
-  reader_.seek (sector * sector_size_);
+    reader_.seek (sector * sector_size_);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -54,9 +56,7 @@ sector_reader_adaptor::seek (offset_type sector)
 mobius::core::bytearray
 sector_reader_adaptor::read (sector_type sectors)
 {
-  return reader_.read (sector_size_ * sectors);
+    return reader_.read (sector_size_ * sectors);
 }
 
 } // namespace mobius::core::io
-
-

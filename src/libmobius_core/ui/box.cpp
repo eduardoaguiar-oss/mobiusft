@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -25,8 +27,8 @@ namespace mobius::core::ui
 // @brief Constructor from implementation pointer
 // @param impl Implementation pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-box::box (const std::shared_ptr <box_impl_base>& impl)
-  : widget (std::static_pointer_cast <widget_impl_base> (impl))
+box::box (const std::shared_ptr<box_impl_base> &impl)
+    : widget (std::static_pointer_cast<widget_impl_base> (impl))
 {
 }
 
@@ -35,7 +37,8 @@ box::box (const std::shared_ptr <box_impl_base>& impl)
 // @param orientation Box orientation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 box::box (orientation_type orientation)
-  : widget (std::static_pointer_cast <widget_impl_base> (get_implementation ()->new_box (orientation)))
+    : widget (std::static_pointer_cast<widget_impl_base> (
+          get_implementation ()->new_box (orientation)))
 {
 }
 
@@ -45,12 +48,10 @@ box::box (orientation_type orientation)
 void
 box::add_filler ()
 {
-  mobius::core::ui::label filler(" ");
-  filler.set_visible (true);
+    mobius::core::ui::label filler (" ");
+    filler.set_visible (true);
 
-  add_child (filler, fill_type::fill_with_space);
+    add_child (filler, fill_type::fill_with_space);
 }
 
 } // namespace mobius::core::ui
-
-

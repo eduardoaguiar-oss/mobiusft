@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -24,8 +26,8 @@ namespace mobius::core::encoder
 // @brief Constructor
 // @param writer Writer object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data_encoder::data_encoder (const mobius::core::io::writer& writer)
-  : writer_ (writer)
+data_encoder::data_encoder (const mobius::core::io::writer &writer)
+    : writer_ (writer)
 {
 }
 
@@ -33,8 +35,8 @@ data_encoder::data_encoder (const mobius::core::io::writer& writer)
 // @brief Constructor
 // @param data Reference to bytearray object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data_encoder::data_encoder (mobius::core::bytearray& data)
-  : writer_ (mobius::core::io::new_bytearray_writer (data))
+data_encoder::data_encoder (mobius::core::bytearray &data)
+    : writer_ (mobius::core::io::new_bytearray_writer (data))
 {
 }
 
@@ -45,7 +47,7 @@ data_encoder::data_encoder (mobius::core::bytearray& data)
 void
 data_encoder::encode_uint8 (std::uint8_t value)
 {
-  writer_.write ({value});
+    writer_.write ({value});
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -55,9 +57,7 @@ data_encoder::encode_uint8 (std::uint8_t value)
 void
 data_encoder::encode_uint16_le (std::uint16_t value)
 {
-  writer_.write ({std::uint8_t (value),
-                  std::uint8_t (value >> 8)
-                 });
+    writer_.write ({std::uint8_t (value), std::uint8_t (value >> 8)});
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -67,11 +67,8 @@ data_encoder::encode_uint16_le (std::uint16_t value)
 void
 data_encoder::encode_uint32_le (std::uint32_t value)
 {
-  writer_.write ({std::uint8_t (value),
-                  std::uint8_t (value >> 8),
-                  std::uint8_t (value >> 16),
-                  std::uint8_t (value >> 24)
-                 });
+    writer_.write ({std::uint8_t (value), std::uint8_t (value >> 8),
+                    std::uint8_t (value >> 16), std::uint8_t (value >> 24)});
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -81,15 +78,10 @@ data_encoder::encode_uint32_le (std::uint32_t value)
 void
 data_encoder::encode_uint64_le (std::uint64_t value)
 {
-  writer_.write ({std::uint8_t (value),
-                  std::uint8_t (value >> 8),
-                  std::uint8_t (value >> 16),
-                  std::uint8_t (value >> 24),
-                  std::uint8_t (value >> 32),
-                  std::uint8_t (value >> 40),
-                  std::uint8_t (value >> 48),
-                  std::uint8_t (value >> 56)
-                 });
+    writer_.write ({std::uint8_t (value), std::uint8_t (value >> 8),
+                    std::uint8_t (value >> 16), std::uint8_t (value >> 24),
+                    std::uint8_t (value >> 32), std::uint8_t (value >> 40),
+                    std::uint8_t (value >> 48), std::uint8_t (value >> 56)});
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -99,7 +91,7 @@ data_encoder::encode_uint64_le (std::uint64_t value)
 void
 data_encoder::encode_int64_le (std::int64_t value)
 {
-  encode_uint64_le (std::uint64_t (value));
+    encode_uint64_le (std::uint64_t (value));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -108,20 +100,20 @@ data_encoder::encode_int64_le (std::int64_t value)
 // @param size size in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-data_encoder::encode_string_by_size (const std::string& value, std::size_t size)
+data_encoder::encode_string_by_size (const std::string &value, std::size_t size)
 {
-  if (value.length () <= size)
+    if (value.length () <= size)
     {
-      writer_.write (value);
+        writer_.write (value);
 
-      mobius::core::bytearray pad (size - value.length ());
-      pad.fill (0);
+        mobius::core::bytearray pad (size - value.length ());
+        pad.fill (0);
 
-      writer_.write (pad);
+        writer_.write (pad);
     }
 
-  else
-    writer_.write (value.substr (0, size));
+    else
+        writer_.write (value.substr (0, size));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -130,9 +122,9 @@ data_encoder::encode_string_by_size (const std::string& value, std::size_t size)
 // @param size size in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-data_encoder::encode_bytearray (const mobius::core::bytearray& data)
+data_encoder::encode_bytearray (const mobius::core::bytearray &data)
 {
-  writer_.write (data);
+    writer_.write (data);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -143,25 +135,25 @@ data_encoder::encode_bytearray (const mobius::core::bytearray& data)
 void
 data_encoder::fill (std::size_t siz, std::uint8_t value)
 {
-  constexpr std::size_t BLOCK_SIZE = 32768;
+    constexpr std::size_t BLOCK_SIZE = 32768;
 
-  if (siz >= BLOCK_SIZE)
+    if (siz >= BLOCK_SIZE)
     {
-      mobius::core::bytearray data (BLOCK_SIZE);
-      data.fill (value);
+        mobius::core::bytearray data (BLOCK_SIZE);
+        data.fill (value);
 
-      while (siz >= BLOCK_SIZE)
+        while (siz >= BLOCK_SIZE)
         {
-          writer_.write (data);
-          siz -= BLOCK_SIZE;
+            writer_.write (data);
+            siz -= BLOCK_SIZE;
         }
     }
 
-  if (siz > 0)
+    if (siz > 0)
     {
-      mobius::core::bytearray data (siz);
-      data.fill (value);
-      writer_.write (data);
+        mobius::core::bytearray data (siz);
+        data.fill (value);
+        writer_.write (data);
     }
 }
 

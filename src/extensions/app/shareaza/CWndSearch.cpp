@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -36,40 +38,37 @@ namespace mobius::extension::app::shareaza
 // @see WndSearch.cpp - CSearchWnd::Serialize
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-CWndSearch::decode (mobius::core::decoder::mfc& decoder)
+CWndSearch::decode (mobius::core::decoder::mfc &decoder)
 {
-  mobius::core::log log (__FILE__, __FUNCTION__);
+    mobius::core::log log (__FILE__, __FUNCTION__);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Check version
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  version_ = decoder.get_int ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Check version
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    version_ = decoder.get_int ();
 
-  if (version_ > SER_VERSION)
+    if (version_ > SER_VERSION)
     {
-      log.development (__LINE__, "Unhandled version: " + std::to_string (version_));
-      return;
+        log.development (__LINE__,
+                         "Unhandled version: " + std::to_string (version_));
+        return;
     }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Decode data
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto count = decoder.get_count ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode data
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto count = decoder.get_count ();
 
-  for (std::uint32_t i = 0; i < count; i++)
+    for (std::uint32_t i = 0; i < count; i++)
     {
-      CManagedSearch search;
-      search.decode (decoder);
+        CManagedSearch search;
+        search.decode (decoder);
 
-      searches_.push_back (search);
+        searches_.push_back (search);
     }
 
-  schema_ = decoder.get_string ();
-  match_list_.decode (decoder);
+    schema_ = decoder.get_string ();
+    match_list_.decode (decoder);
 }
 
 } // namespace mobius::extension::app::shareaza
-
-
-
-

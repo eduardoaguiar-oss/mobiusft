@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -30,19 +32,17 @@ static constexpr datetime EPOCH_NT_DATETIME (1601, 1, 1, 0, 0, 0);
 datetime
 new_datetime_from_nt_timestamp (std::uint64_t timestamp)
 {
-  datetime dt;
+    datetime dt;
 
-  if (timestamp)
+    if (timestamp)
     {
-      timedelta delta;
-      delta.set_seconds (timestamp / 10000000);
-      delta.set_nanoseconds ((timestamp % 10000000) * 100);
-      dt = EPOCH_NT_DATETIME + delta;
+        timedelta delta;
+        delta.set_seconds (timestamp / 10000000);
+        delta.set_nanoseconds ((timestamp % 10000000) * 100);
+        dt = EPOCH_NT_DATETIME + delta;
     }
 
-  return dt;
+    return dt;
 }
 
 } // namespace mobius::core::datetime
-
-

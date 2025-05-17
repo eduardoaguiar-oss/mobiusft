@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,9 +17,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <iomanip>
 #include <mobius/core/encoder/hexstring.hpp>
 #include <sstream>
-#include <iomanip>
 
 namespace mobius::core::encoder
 {
@@ -28,27 +30,23 @@ namespace mobius::core::encoder
 // @return Hexstring encoded string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-hexstring (const mobius::core::bytearray& data, const std::string& sep)
+hexstring (const mobius::core::bytearray &data, const std::string &sep)
 {
-  std::ostringstream stream;
-  stream << std::hex;
-  bool first = true;
+    std::ostringstream stream;
+    stream << std::hex;
+    bool first = true;
 
-  for (const auto& c : data)
+    for (const auto &c : data)
     {
-      if (first)
-        first = false;
-      else
-        stream << sep;
+        if (first)
+            first = false;
+        else
+            stream << sep;
 
-      stream << std::setw (2) << std::setfill ('0') << static_cast <int> (c);
+        stream << std::setw (2) << std::setfill ('0') << static_cast<int> (c);
     }
 
-  return stream.str ();
+    return stream.str ();
 }
 
 } // namespace mobius::core::encoder
-
-
-
-

@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -25,16 +27,16 @@
 // @brief Constructor
 // @param impl imagefile implementation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-reader_impl::reader_impl (const imagefile_impl& impl)
-  : size_ (impl.get_size ()),
-    chunk_size_ (impl.get_chunk_size ()),
-    segments_ (impl.get_segment_array ()),
-    chunk_offset_table_ (impl.get_chunk_offset_table ()),
-    chunk_idx_ (impl.get_chunk_count ()),
-    last_chunk_idx_ (impl.get_chunk_count () - 1)
+reader_impl::reader_impl (const imagefile_impl &impl)
+    : size_ (impl.get_size ()),
+      chunk_size_ (impl.get_chunk_size ()),
+      segments_ (impl.get_segment_array ()),
+      chunk_offset_table_ (impl.get_chunk_offset_table ()),
+      chunk_idx_ (impl.get_chunk_count ()),
+      last_chunk_idx_ (impl.get_chunk_count () - 1)
 {
-  segments_.scan ();
-  segment_idx_ = segments_.get_size ();
+    segments_.scan ();
+    segment_idx_ = segments_.get_size ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -45,27 +47,28 @@ reader_impl::reader_impl (const imagefile_impl& impl)
 void
 reader_impl::seek (offset_type offset, whence_type w)
 {
-  // calculate offset from the beginning of data
-  offset_type abs_offset;
+    // calculate offset from the beginning of data
+    offset_type abs_offset;
 
-  if (w == whence_type::beginning)
-    abs_offset = offset;
+    if (w == whence_type::beginning)
+        abs_offset = offset;
 
-  else if (w == whence_type::current)
-    abs_offset = pos_ + offset;
+    else if (w == whence_type::current)
+        abs_offset = pos_ + offset;
 
-  else if (w == whence_type::end)
-    abs_offset = size_ - 1 + offset;
+    else if (w == whence_type::end)
+        abs_offset = size_ - 1 + offset;
 
-  else
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
+    else
+        throw std::invalid_argument (
+            MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
 
-  // update current pos, if possible
-  if (abs_offset < 0)
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid offset"));
+    // update current pos, if possible
+    if (abs_offset < 0)
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid offset"));
 
-  else if (size_type (abs_offset) <= size_)
-    pos_ = abs_offset;
+    else if (size_type (abs_offset) <= size_)
+        pos_ = abs_offset;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -76,26 +79,28 @@ reader_impl::seek (offset_type offset, whence_type w)
 mobius::core::bytearray
 reader_impl::read (size_type size)
 {
-  size = std::min (size_ - pos_, size);
-  mobius::core::bytearray data;
+    size = std::min (size_ - pos_, size);
+    mobius::core::bytearray data;
 
-  while (size > 0)
+    while (size > 0)
     {
-      _retrieve_current_chunk ();
+        _retrieve_current_chunk ();
 
-      size_type slice_start = pos_ % chunk_size_;
-      size_type slice_end = std::min (slice_start + size - 1, chunk_data_.size () - 1);
+        size_type slice_start = pos_ % chunk_size_;
+        size_type slice_end =
+            std::min (slice_start + size - 1, chunk_data_.size () - 1);
 
-      if (slice_end < slice_start)
-        return data;
+        if (slice_end < slice_start)
+            return data;
 
-      mobius::core::bytearray tmp = chunk_data_.slice (slice_start, slice_end);
-      data += tmp;
-      pos_ += tmp.size ();
-      size -= tmp.size ();
+        mobius::core::bytearray tmp =
+            chunk_data_.slice (slice_start, slice_end);
+        data += tmp;
+        pos_ += tmp.size ();
+        size -= tmp.size ();
     }
 
-  return data;
+    return data;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -104,68 +109,67 @@ reader_impl::read (size_type size)
 void
 reader_impl::_retrieve_current_chunk ()
 {
-  size_type chunk_idx = pos_ / chunk_size_;
+    size_type chunk_idx = pos_ / chunk_size_;
 
-  // if chunk is loaded, return
-  if (chunk_idx == chunk_idx_)
-    return;
+    // if chunk is loaded, return
+    if (chunk_idx == chunk_idx_)
+        return;
 
-  // find segment info for pos_ offset (binary search)
-  int hi = chunk_offset_table_.size ();
-  int lo = 0;
-  int mid;
-  bool found = false;
+    // find segment info for pos_ offset (binary search)
+    int hi = chunk_offset_table_.size ();
+    int lo = 0;
+    int mid;
+    bool found = false;
 
-  while (lo < hi && !found)
+    while (lo < hi && !found)
     {
-      mid = (lo + hi) / 2;
+        mid = (lo + hi) / 2;
 
-      if (chunk_offset_table_[mid].start > pos_)
-        hi = mid;
+        if (chunk_offset_table_[mid].start > pos_)
+            hi = mid;
 
-      else if (chunk_offset_table_[mid].end < pos_)
-        lo = mid;
+        else if (chunk_offset_table_[mid].end < pos_)
+            lo = mid;
 
-      else
-        found = true;
+        else
+            found = true;
     }
 
-  // if segment info not found, return
-  if (!found)
-    return;
+    // if segment info not found, return
+    if (!found)
+        return;
 
-  // set stream
-  auto segment_idx = mid;
+    // set stream
+    auto segment_idx = mid;
 
-  if (segment_idx != segment_idx_)
+    if (segment_idx != segment_idx_)
     {
-      stream_ = segments_.new_reader (segment_idx);
-      segment_idx_ = segment_idx;
+        stream_ = segments_.new_reader (segment_idx);
+        segment_idx_ = segment_idx;
     }
 
-  // get chunk data offset
-  const auto& offset_table = chunk_offset_table_[mid];
-  size_type table_idx = (pos_ - offset_table.start) / chunk_size_;
-  auto offset = offset_table.offsets[table_idx];
+    // get chunk data offset
+    const auto &offset_table = chunk_offset_table_[mid];
+    size_type table_idx = (pos_ - offset_table.start) / chunk_size_;
+    auto offset = offset_table.offsets[table_idx];
 
-  constexpr std::uint64_t compressed_bit = std::uint64_t (1) << 63;
-  bool compressed = offset & compressed_bit;
-  offset = offset & 0x7fffffffffffffff;
+    constexpr std::uint64_t compressed_bit = std::uint64_t (1) << 63;
+    bool compressed = offset & compressed_bit;
+    offset = offset & 0x7fffffffffffffff;
 
-  // read chunk data
-  stream_.seek (offset);
+    // read chunk data
+    stream_.seek (offset);
 
-  if (compressed)
-    chunk_data_ = mobius::core::zlib_decompress (stream_.read (chunk_size_ + 4));
+    if (compressed)
+        chunk_data_ =
+            mobius::core::zlib_decompress (stream_.read (chunk_size_ + 4));
 
-  else
-    chunk_data_ = stream_.read (chunk_size_);
+    else
+        chunk_data_ = stream_.read (chunk_size_);
 
-  if (chunk_data_.size () != chunk_size_ && chunk_idx != last_chunk_idx_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid chunk"));
+    if (chunk_data_.size () != chunk_size_ && chunk_idx != last_chunk_idx_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid chunk"));
 
-  // set new current chunk index
-  chunk_idx_ = chunk_idx;
+    // set new current chunk index
+    chunk_idx_ = chunk_idx;
 }
-
-

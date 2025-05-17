@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -36,92 +38,91 @@ namespace mobius::extension::app::shareaza
 // @see Library.cpp - CLibrary::Serialize
 //! \todo AlbumFolder, LibraryHistory and LibraryMaps
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-CLibrary::CLibrary (mobius::core::decoder::mfc& decoder)
+CLibrary::CLibrary (mobius::core::decoder::mfc &decoder)
 {
-  mobius::core::log log (__FILE__, __FUNCTION__);
+    mobius::core::log log (__FILE__, __FUNCTION__);
 
-  last_modification_time_ = decoder.get_nt_time ();
+    last_modification_time_ = decoder.get_nt_time ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Check version
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  version_ = decoder.get_int ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Check version
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    version_ = decoder.get_int ();
 
-  if (version_ > SER_VERSION)
+    if (version_ > SER_VERSION)
     {
-      log.development (__LINE__, "Unhandled version: " + std::to_string (version_));
-      return;
+        log.development (__LINE__,
+                         "Unhandled version: " + std::to_string (version_));
+        return;
     }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // LibraryDictionary.cpp - CLibraryDictionary::Serialize
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  if (version_ >= 29)
-    words_count_ = decoder.get_dword ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // LibraryDictionary.cpp - CLibraryDictionary::Serialize
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (version_ >= 29)
+        words_count_ = decoder.get_dword ();
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // LibraryMaps.cpp - CLibraryMaps::Serialize1
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  next_index_ = decoder.get_dword ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // LibraryMaps.cpp - CLibraryMaps::Serialize1
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    next_index_ = decoder.get_dword ();
 
-  if (version_ >= 28)
+    if (version_ >= 28)
     {
-      index_map_count_ = decoder.get_dword ();
-      name_map_count_ = decoder.get_dword ();
-      path_map_count_ = decoder.get_dword ();
+        index_map_count_ = decoder.get_dword ();
+        name_map_count_ = decoder.get_dword ();
+        path_map_count_ = decoder.get_dword ();
     }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // CLibraryFolders
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  auto count = decoder.get_count ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // CLibraryFolders
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto count = decoder.get_count ();
 
-  for (std::uint32_t i = 0;i < count; i++)
-    folders_.emplace_back (decoder, version_, CLibraryFolder ());
+    for (std::uint32_t i = 0; i < count; i++)
+        folders_.emplace_back (decoder, version_, CLibraryFolder ());
 
-  is_instance_ = true;
+    is_instance_ = true;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get all folders from CLibrary
 // @return Folders
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <CLibraryFolder>
+std::vector<CLibraryFolder>
 CLibrary::get_all_folders () const
 {
-  std::vector <CLibraryFolder> folders = get_folders ();
-  std::size_t i = 0;
+    std::vector<CLibraryFolder> folders = get_folders ();
+    std::size_t i = 0;
 
-  while (i < folders.size ())
+    while (i < folders.size ())
     {
-      auto children = folders[i].get_children ();
-      std::copy (children.begin (), children.end (), std::back_inserter (folders));
-      ++i;
+        auto children = folders[i].get_children ();
+        std::copy (children.begin (), children.end (),
+                   std::back_inserter (folders));
+        ++i;
     }
 
-  return folders;
+    return folders;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get all files from CLibrary
 // @return Files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <CLibraryFile>
+std::vector<CLibraryFile>
 CLibrary::get_all_files () const
 {
-  std::vector <CLibraryFile> files;
+    std::vector<CLibraryFile> files;
 
-  for (const auto& folder : get_all_folders ())
+    for (const auto &folder : get_all_folders ())
     {
-      auto f_files = folder.get_files ();
-      std::copy (f_files.begin (), f_files.end (), std::back_inserter (files));
+        auto f_files = folder.get_files ();
+        std::copy (f_files.begin (), f_files.end (),
+                   std::back_inserter (files));
     }
 
-  return files;
+    return files;
 }
 
 } // namespace mobius::extension::app::shareaza
-
-
-
-

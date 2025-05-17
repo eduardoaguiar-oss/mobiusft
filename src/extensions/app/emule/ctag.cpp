@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -16,9 +18,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "ctag.hpp"
+#include <iomanip>
 #include <mobius/core/log.hpp>
 #include <mobius/core/string_functions.hpp>
-#include <iomanip>
 #include <sstream>
 #include <unordered_map>
 
@@ -66,8 +68,7 @@ constexpr std::uint8_t TAGTYPE_STR22 = 0x26;
 // Tag metadata names
 // @see CKnownFile::LoadTagsFromFile - srchybrid/KnownFile.cpp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::unordered_map <std::uint8_t, std::string> TAG_METADATA_NAMES =
-{
+std::unordered_map<std::uint8_t, std::string> TAG_METADATA_NAMES = {
     {0x01, "name"},
     {0x02, "size"},
     {0x03, "filetype"},
@@ -117,41 +118,41 @@ mobius::core::pod::data
 _get_tag_uint32_value (std::uint8_t id, std::uint32_t value)
 {
     switch (id)
-      {
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Datetime
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        case 0x05: [[fallthrough]]
-        case 0x21: [[fallthrough]]
-        case 0x34: [[fallthrough]]
-        case 0x92:
-            return mobius::core::datetime::new_datetime_from_unix_timestamp (value);
-            break;
-            
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Duration (seconds)
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        case 0x23: [[fallthrough]]
-        case 0xd3:
-          {
-            unsigned int hours = value / 3600;
-            unsigned int minutes = (value % 3600) / 60;
-            unsigned int seconds = value % 60;
+    {
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Datetime
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    case 0x05:
+    [[fallthrough]] case 0x21:
+    [[fallthrough]] case 0x34:
+    [[fallthrough]] case 0x92:
+        return mobius::core::datetime::new_datetime_from_unix_timestamp (value);
+        break;
 
-            std::ostringstream oss;
-            oss << std::setw(2) << std::setfill('0') << hours << ":"
-                << std::setw(2) << std::setfill('0') << minutes << ":"
-                << std::setw(2) << std::setfill('0') << seconds;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Duration (seconds)
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    case 0x23:
+    [[fallthrough]] case 0xd3:
+    {
+        unsigned int hours = value / 3600;
+        unsigned int minutes = (value % 3600) / 60;
+        unsigned int seconds = value % 60;
 
-            return oss.str ();
-          }
+        std::ostringstream oss;
+        oss << std::setw (2) << std::setfill ('0') << hours << ":"
+            << std::setw (2) << std::setfill ('0') << minutes << ":"
+            << std::setw (2) << std::setfill ('0') << seconds;
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Others
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        default:
-            return static_cast <std::int64_t> (value);
-      }
+        return oss.str ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Others
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    default:
+        return static_cast<std::int64_t> (value);
+    }
 }
 
 } // namespace
@@ -164,7 +165,7 @@ namespace mobius::extension::app::emule
 // @see CTag::CTag (srchybrid/packets.cpp)
 // @see ConvertED2KTag (srchybrid/SearchFile.cpp)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-ctag::ctag (mobius::core::decoder::data_decoder& decoder)
+ctag::ctag (mobius::core::decoder::data_decoder &decoder)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -174,114 +175,117 @@ ctag::ctag (mobius::core::decoder::data_decoder& decoder)
     type_ = decoder.get_uint8 ();
 
     if (type_ & 0x80)
-      {
+    {
         type_ &= 0x7f;
         id_ = decoder.get_uint8 ();
-      }
+    }
 
     else
-      {
+    {
         auto length = decoder.get_uint16_le ();
 
         if (length == 1)
             id_ = decoder.get_uint8 ();
-        
+
         else
             name_ = decoder.get_string_by_size (length);
-      }
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Read tag value
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  switch (type_)
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Read tag value
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    switch (type_)
     {
-      case TAGTYPE_HASH:
-            value_ = decoder.get_hex_string_by_size (16);
-            break;
+    case TAGTYPE_HASH:
+        value_ = decoder.get_hex_string_by_size (16);
+        break;
 
-      case TAGTYPE_STRING:
-        {
-            auto length = decoder.get_uint16_le ();
-            value_ = decoder.get_string_by_size (length, "utf-8");
-            break;
-        }
+    case TAGTYPE_STRING:
+    {
+        auto length = decoder.get_uint16_le ();
+        value_ = decoder.get_string_by_size (length, "utf-8");
+        break;
+    }
 
-      case TAGTYPE_UINT32:
-            value_ = _get_tag_uint32_value (id_, decoder.get_uint32_le ());
-            break;
+    case TAGTYPE_UINT32:
+        value_ = _get_tag_uint32_value (id_, decoder.get_uint32_le ());
+        break;
 
-      case TAGTYPE_FLOAT32:
-            log.development (__LINE__, "TAGTYPE_FLOAT32 not implemented");
-            break;
+    case TAGTYPE_FLOAT32:
+        log.development (__LINE__, "TAGTYPE_FLOAT32 not implemented");
+        break;
 
-      case TAGTYPE_BOOL:
-            value_ = decoder.get_uint8 () == 1;
-            break;
+    case TAGTYPE_BOOL:
+        value_ = decoder.get_uint8 () == 1;
+        break;
 
-      case TAGTYPE_BOOLARRAY:
-        {
-            auto length = decoder.get_uint16_le ();
-            decoder.skip (length / 8 + 1);
-            // @todo 07-Apr-2004: eMule versions prior to 0.42e.29 used the formula "(len+7)/8"!
-            break;
-        }
+    case TAGTYPE_BOOLARRAY:
+    {
+        auto length = decoder.get_uint16_le ();
+        decoder.skip (length / 8 + 1);
+        // @todo 07-Apr-2004: eMule versions prior to 0.42e.29 used the formula
+        // "(len+7)/8"!
+        break;
+    }
 
-      case TAGTYPE_BLOB:
-        {
-            // @todo 07-Apr-2004: eMule versions prior to 0.42e.29 handled the "len" as int16!
-            auto size = decoder.get_uint32_le ();
-            value_ = decoder.get_bytearray_by_size (size);
-            break;
-        }
+    case TAGTYPE_BLOB:
+    {
+        // @todo 07-Apr-2004: eMule versions prior to 0.42e.29 handled the "len"
+        // as int16!
+        auto size = decoder.get_uint32_le ();
+        value_ = decoder.get_bytearray_by_size (size);
+        break;
+    }
 
-      case TAGTYPE_UINT16:
-            value_ = decoder.get_uint16_le ();
-            break;
+    case TAGTYPE_UINT16:
+        value_ = decoder.get_uint16_le ();
+        break;
 
-      case TAGTYPE_UINT8:
-            value_ = decoder.get_uint8 ();
-            break;
+    case TAGTYPE_UINT8:
+        value_ = decoder.get_uint8 ();
+        break;
 
-      case TAGTYPE_BSOB:
-            // @todo implement
-            log.development (__LINE__, "TAGTYPE_BSOB not implemented");
-            break;
+    case TAGTYPE_BSOB:
+        // @todo implement
+        log.development (__LINE__, "TAGTYPE_BSOB not implemented");
+        break;
 
-      case TAGTYPE_UINT64:
-            value_ = static_cast <std::int64_t> (decoder.get_uint64_le ());
-            break;
-            
-      case TAGTYPE_STR1: [[fallthrough]]
-      case TAGTYPE_STR2: [[fallthrough]]
-      case TAGTYPE_STR3: [[fallthrough]]
-      case TAGTYPE_STR4: [[fallthrough]]
-      case TAGTYPE_STR5: [[fallthrough]]
-      case TAGTYPE_STR6: [[fallthrough]]
-      case TAGTYPE_STR7: [[fallthrough]]
-      case TAGTYPE_STR8: [[fallthrough]]
-      case TAGTYPE_STR9: [[fallthrough]]
-      case TAGTYPE_STR10: [[fallthrough]]
-      case TAGTYPE_STR11: [[fallthrough]]
-      case TAGTYPE_STR12: [[fallthrough]]
-      case TAGTYPE_STR13: [[fallthrough]]
-      case TAGTYPE_STR14: [[fallthrough]]
-      case TAGTYPE_STR15: [[fallthrough]]
-      case TAGTYPE_STR16: [[fallthrough]]
-      case TAGTYPE_STR17: [[fallthrough]]
-      case TAGTYPE_STR18: [[fallthrough]]
-      case TAGTYPE_STR19: [[fallthrough]]
-      case TAGTYPE_STR20: [[fallthrough]]
-      case TAGTYPE_STR21: [[fallthrough]]
-      case TAGTYPE_STR22:
-        {
-            std::uint32_t length = type_ - TAGTYPE_STR1 + 1;
-            value_ = decoder.get_string_by_size (length);
-            type_ = TAGTYPE_STRING;
-            break;
-        }
-        
-      default:
-            log.development (__LINE__, "Unknown tag type: 0x" + mobius::core::string::to_hex (type_, 2));
+    case TAGTYPE_UINT64:
+        value_ = static_cast<std::int64_t> (decoder.get_uint64_le ());
+        break;
+
+    case TAGTYPE_STR1:
+    [[fallthrough]] case TAGTYPE_STR2:
+    [[fallthrough]] case TAGTYPE_STR3:
+    [[fallthrough]] case TAGTYPE_STR4:
+    [[fallthrough]] case TAGTYPE_STR5:
+    [[fallthrough]] case TAGTYPE_STR6:
+    [[fallthrough]] case TAGTYPE_STR7:
+    [[fallthrough]] case TAGTYPE_STR8:
+    [[fallthrough]] case TAGTYPE_STR9:
+    [[fallthrough]] case TAGTYPE_STR10:
+    [[fallthrough]] case TAGTYPE_STR11:
+    [[fallthrough]] case TAGTYPE_STR12:
+    [[fallthrough]] case TAGTYPE_STR13:
+    [[fallthrough]] case TAGTYPE_STR14:
+    [[fallthrough]] case TAGTYPE_STR15:
+    [[fallthrough]] case TAGTYPE_STR16:
+    [[fallthrough]] case TAGTYPE_STR17:
+    [[fallthrough]] case TAGTYPE_STR18:
+    [[fallthrough]] case TAGTYPE_STR19:
+    [[fallthrough]] case TAGTYPE_STR20:
+    [[fallthrough]] case TAGTYPE_STR21:
+    [[fallthrough]] case TAGTYPE_STR22:
+    {
+        std::uint32_t length = type_ - TAGTYPE_STR1 + 1;
+        value_ = decoder.get_string_by_size (length);
+        type_ = TAGTYPE_STRING;
+        break;
+    }
+
+    default:
+        log.development (__LINE__, "Unknown tag type: 0x" +
+                                       mobius::core::string::to_hex (type_, 2));
     };
 }
 
@@ -291,7 +295,7 @@ ctag::ctag (mobius::core::decoder::data_decoder& decoder)
 // @return Metadata map
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::pod::map
-get_metadata_from_tags (const std::vector<ctag>& ctags)
+get_metadata_from_tags (const std::vector<ctag> &ctags)
 {
     mobius::core::pod::map metadata;
     mobius::core::log log (__FILE__, __FUNCTION__);
@@ -301,8 +305,8 @@ get_metadata_from_tags (const std::vector<ctag>& ctags)
     std::uint64_t total_gap_size = 0;
     std::uint64_t gap_start = 0;
 
-    for (const auto& tag : ctags)
-      {
+    for (const auto &tag : ctags)
+    {
         auto id = tag.get_id ();
 
         // Common IDs
@@ -310,28 +314,29 @@ get_metadata_from_tags (const std::vector<ctag>& ctags)
 
         if (iter != TAG_METADATA_NAMES.end ())
             metadata.set (iter->second, tag.get_value ());
-            
+
         // Gap start, Gap end
         else if (id == 0)
-          {
+        {
             auto tag_name = tag.get_name ();
-            
+
             if (!tag_name.empty ())
-              {
-                if (tag_name[0] == 0x09)        // FT_GAPSTART
-                    gap_start = tag.get_value <std::int64_t> ();
-                
-                else if (tag_name[0] == 0x0a)   // FT_GAPEND
-                    total_gap_size += (tag.get_value <std::int64_t> () - gap_start);
-              }
-          }
-        
+            {
+                if (tag_name[0] == 0x09) // FT_GAPSTART
+                    gap_start = tag.get_value<std::int64_t> ();
+
+                else if (tag_name[0] == 0x0a) // FT_GAPEND
+                    total_gap_size +=
+                        (tag.get_value<std::int64_t> () - gap_start);
+            }
+        }
+
         // Is corrupted
         else if (id == 0x24)
-          {
-            auto value = tag.get_value <std::string> ();
-            metadata.set("is_corrupted", !value.empty ());
-          }
+        {
+            auto value = tag.get_value<std::string> ();
+            metadata.set ("is_corrupted", !value.empty ());
+        }
 
         // AICH Hashset
         else if (id == 0x35)
@@ -339,24 +344,31 @@ get_metadata_from_tags (const std::vector<ctag>& ctags)
 
         // Uploaded bytes (low 32-bits)
         else if (id == 0x50)
-            uploaded_bytes = (uploaded_bytes & 0xffffffff00000000) | tag.get_value <std::int64_t> ();
+            uploaded_bytes = (uploaded_bytes & 0xffffffff00000000) |
+                             tag.get_value<std::int64_t> ();
 
         // Uploaded bytes (high 32-bits)
         else if (id == 0x54)
-            uploaded_bytes = (uploaded_bytes & 0x00000000ffffffff) | (tag.get_value <std::int64_t> () << 32);
+            uploaded_bytes = (uploaded_bytes & 0x00000000ffffffff) |
+                             (tag.get_value<std::int64_t> () << 32);
 
         // Not counted uploaded bytes (low 32-bits)
         else if (id == 0x90)
-            not_counted_uploaded_bytes = (not_counted_uploaded_bytes & 0xffffffff00000000) | tag.get_value <std::int64_t> ();
+            not_counted_uploaded_bytes =
+                (not_counted_uploaded_bytes & 0xffffffff00000000) |
+                tag.get_value<std::int64_t> ();
 
         // Not counted uploaded bytes (high 32-bits)
         else if (id == 0x91)
-            not_counted_uploaded_bytes = (not_counted_uploaded_bytes & 0x00000000ffffffff) | (tag.get_value <std::int64_t> () << 32);
+            not_counted_uploaded_bytes =
+                (not_counted_uploaded_bytes & 0x00000000ffffffff) |
+                (tag.get_value<std::int64_t> () << 32);
 
         // Unknown tag ID
         else
-            log.development (__LINE__, "Unhandled tag ID: " + std::to_string (id));
-      }
+            log.development (__LINE__,
+                             "Unhandled tag ID: " + std::to_string (id));
+    }
 
     // Set remaining metadata
     metadata.set ("total_gap_size", total_gap_size);

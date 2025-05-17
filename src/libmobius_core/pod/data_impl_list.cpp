@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -24,7 +26,7 @@ namespace mobius::core::pod
 // @param siz Vector size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data_impl_list::data_impl_list (std::uint64_t siz)
- : value_ (siz)
+    : value_ (siz)
 {
 }
 
@@ -36,7 +38,7 @@ data_impl_list::data_impl_list (std::uint64_t siz)
 data_impl_list::value_type
 data_impl_list::operator[] (size_type idx)
 {
-  return value_.at (idx);
+    return value_.at (idx);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -47,7 +49,7 @@ data_impl_list::operator[] (size_type idx)
 data_impl_list::value_type
 data_impl_list::operator[] (size_type idx) const
 {
-  return value_.at (idx);
+    return value_.at (idx);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -55,11 +57,9 @@ data_impl_list::operator[] (size_type idx) const
 // @param v shared_ptr to value_impl_base
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-data_impl_list::append (std::shared_ptr <data_impl_base> v)
+data_impl_list::append (std::shared_ptr<data_impl_base> v)
 {
-  value_.push_back (v);
+    value_.push_back (v);
 }
 
 } // namespace mobius::core::pod
-
-

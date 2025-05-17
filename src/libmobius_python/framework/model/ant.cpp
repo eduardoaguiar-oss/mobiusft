@@ -196,7 +196,8 @@ tp_dealloc (framework_model_ant_o *self)
 // @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject framework_model_ant_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0) "mobius.framework.model.ant", // tp_name
+    PyVarObject_HEAD_INIT (nullptr, 0)        // header
+    "mobius.framework.model.ant",             // tp_name
     sizeof (framework_model_ant_o),           // tp_basicsize
     0,                                        // tp_itemsize
     (destructor) tp_dealloc,                  // tp_dealloc

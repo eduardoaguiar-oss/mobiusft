@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -17,8 +19,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "reader_impl_plaintext.hpp"
 #include "imagefile_impl.hpp"
-#include <mobius/core/io/file.hpp>
 #include <mobius/core/exception.inc>
+#include <mobius/core/io/file.hpp>
 #include <stdexcept>
 
 namespace
@@ -31,12 +33,12 @@ constexpr int HEADER_SIZE = 16384;
 // @brief Constructor
 // @param impl imagefile_impl object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-reader_impl_plaintext::reader_impl_plaintext (const imagefile_impl& impl)
-  : size_ (impl.get_size ())
+reader_impl_plaintext::reader_impl_plaintext (const imagefile_impl &impl)
+    : size_ (impl.get_size ())
 {
-  auto f = impl.get_file ();
-  stream_ = f.new_reader ();
-  stream_.seek (HEADER_SIZE);
+    auto f = impl.get_file ();
+    stream_ = f.new_reader ();
+    stream_.seek (HEADER_SIZE);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -47,27 +49,28 @@ reader_impl_plaintext::reader_impl_plaintext (const imagefile_impl& impl)
 void
 reader_impl_plaintext::seek (offset_type offset, whence_type w)
 {
-  // calculate offset from the beginning of data
-  offset_type abs_offset;
+    // calculate offset from the beginning of data
+    offset_type abs_offset;
 
-  if (w == whence_type::beginning)
-    abs_offset = offset;
+    if (w == whence_type::beginning)
+        abs_offset = offset;
 
-  else if (w == whence_type::current)
-    abs_offset = pos_ + offset;
+    else if (w == whence_type::current)
+        abs_offset = pos_ + offset;
 
-  else if (w == whence_type::end)
-    abs_offset = size_ - 1 + offset;
+    else if (w == whence_type::end)
+        abs_offset = size_ - 1 + offset;
 
-  else
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
+    else
+        throw std::invalid_argument (
+            MOBIUS_EXCEPTION_MSG ("invalid whence_type"));
 
-  // update current pos, if possible
-  if (abs_offset < 0)
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid offset"));
+    // update current pos, if possible
+    if (abs_offset < 0)
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid offset"));
 
-  else if (size_type (abs_offset) <= size_)
-    pos_ = abs_offset;
+    else if (size_type (abs_offset) <= size_)
+        pos_ = abs_offset;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -78,10 +81,8 @@ reader_impl_plaintext::seek (offset_type offset, whence_type w)
 mobius::core::bytearray
 reader_impl_plaintext::read (size_type size)
 {
-  mobius::core::bytearray data = stream_.read (size);
-  pos_ += data.size ();
+    mobius::core::bytearray data = stream_.read (size);
+    pos_ += data.size ();
 
-  return data;
+    return data;
 }
-
-

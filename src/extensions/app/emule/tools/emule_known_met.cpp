@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -16,11 +18,11 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "../file_known_met.hpp"
-#include <mobius/core/application.hpp>
-#include <mobius/core/log.hpp>
-#include <mobius/core/io/file.hpp>
-#include <mobius/core/string_functions.hpp>
 #include <iostream>
+#include <mobius/core/application.hpp>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/log.hpp>
+#include <mobius/core/string_functions.hpp>
 #include <unistd.h>
 
 namespace
@@ -31,10 +33,10 @@ namespace
 void
 usage ()
 {
-  std::cerr << std::endl;
-  std::cerr << "use: emule_known_met [OPTIONS] <path>" << std::endl;
-  std::cerr << "e.g: emule_known_met Known.met" << std::endl;
-  std::cerr << std::endl;
+    std::cerr << std::endl;
+    std::cerr << "use: emule_known_met [OPTIONS] <path>" << std::endl;
+    std::cerr << "e.g: emule_known_met Known.met" << std::endl;
+    std::cerr << std::endl;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -42,21 +44,21 @@ usage ()
 // @param f CKnownFile data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-show_file (const mobius::extension::app::emule::file_known_met::CKnownFile& f)
+show_file (const mobius::extension::app::emule::file_known_met::CKnownFile &f)
 {
-  std::cerr << std::endl;
-  std::cerr << "\t\t>> File" << std::endl;
-  std::cerr << "\t\tHash ED2K: " << f.hash_ed2k << std::endl;
-  std::cerr << "\t\tLast modification time: " << f.last_modification_time << std::endl;
-  std::cerr << "\t\t\tTags: " << f.tags.size () << std::endl;
+    std::cerr << std::endl;
+    std::cerr << "\t\t>> File" << std::endl;
+    std::cerr << "\t\tHash ED2K: " << f.hash_ed2k << std::endl;
+    std::cerr << "\t\tLast modification time: " << f.last_modification_time
+              << std::endl;
+    std::cerr << "\t\t\tTags: " << f.tags.size () << std::endl;
 
-  for (const auto& tag : f.tags)
+    for (const auto &tag : f.tags)
     {
-        std::cerr   << "\t\t\t\t"
-                    << int (tag.get_id ()) << '\t'
-                    << mobius::core::string::to_hex (tag.get_type (), 2) << '\t'
-                    << tag.get_name () << '\t'
-                    << tag.get_value ().to_string () << std::endl;
+        std::cerr << "\t\t\t\t" << int (tag.get_id ()) << '\t'
+                  << mobius::core::string::to_hex (tag.get_type (), 2) << '\t'
+                  << tag.get_name () << '\t' << tag.get_value ().to_string ()
+                  << std::endl;
     }
 }
 
@@ -65,23 +67,23 @@ show_file (const mobius::extension::app::emule::file_known_met::CKnownFile& f)
 // @param path Known.met path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-show_known_met (const std::string& path)
+show_known_met (const std::string &path)
 {
-  std::cout << std::endl;
-  std::cout << ">> " << path << std::endl;
+    std::cout << std::endl;
+    std::cout << ">> " << path << std::endl;
 
-  auto f = mobius::core::io::new_file_by_path (path);
-  auto reader = f.new_reader ();
-  
-  mobius::extension::app::emule::file_known_met met (reader);
-  if (!met)
+    auto f = mobius::core::io::new_file_by_path (path);
+    auto reader = f.new_reader ();
+
+    mobius::extension::app::emule::file_known_met met (reader);
+    if (!met)
     {
-      std::cerr << "\tFile is not an instance of Known.met" << std::endl;
-      return;
+        std::cerr << "\tFile is not an instance of Known.met" << std::endl;
+        return;
     }
 
-  for (const auto& f : met.get_known_files ())
-    show_file (f);  
+    for (const auto &f : met.get_known_files ())
+        show_file (f);
 }
 
 } // namespace
@@ -92,63 +94,64 @@ show_known_met (const std::string& path)
 int
 main (int argc, char **argv)
 {
-  mobius::core::application app;
-  mobius::core::set_logfile_path ("mobius.log");
+    mobius::core::application app;
+    mobius::core::set_logfile_path ("mobius.log");
 
-  app.start ();
+    app.start ();
 
-  std::cerr << app.get_name () << " v" << app.get_version () << std::endl;
-  std::cerr << app.get_copyright () << std::endl;
-  std::cerr << "Emule Known.met viewer v1.0" << std::endl;
-  std::cerr << "by Eduardo Aguiar" << std::endl;
+    std::cerr << app.get_name () << " v" << app.get_version () << std::endl;
+    std::cerr << app.get_copyright () << std::endl;
+    std::cerr << "Emule Known.met viewer v1.0" << std::endl;
+    std::cerr << "by Eduardo Aguiar" << std::endl;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Parse command line
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  int opt;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Parse command line
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    int opt;
 
-  while ((opt = getopt (argc, argv, "h")) != EOF)
+    while ((opt = getopt (argc, argv, "h")) != EOF)
     {
-      switch (opt)
+        switch (opt)
         {
         case 'h':
-          usage ();
-          exit (EXIT_SUCCESS);
-          break;
+            usage ();
+            exit (EXIT_SUCCESS);
+            break;
 
         default:
-          usage ();
-          exit (EXIT_FAILURE);
+            usage ();
+            exit (EXIT_FAILURE);
         }
     }
 
-  if (optind >= argc)
+    if (optind >= argc)
     {
-      std::cerr << std::endl;
-      std::cerr << "Error: you must enter at least one path to Known.met file" << std::endl;
-      usage ();
-      exit (EXIT_FAILURE);
+        std::cerr << std::endl;
+        std::cerr << "Error: you must enter at least one path to Known.met file"
+                  << std::endl;
+        usage ();
+        exit (EXIT_FAILURE);
     }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Show hive info
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  while (optind < argc)
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Show hive info
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    while (optind < argc)
     {
-      try
+        try
         {
-          show_known_met (argv[optind]);
+            show_known_met (argv[optind]);
         }
-      catch (const std::exception& e)
+        catch (const std::exception &e)
         {
-          std::cerr <<  "Error: " << e.what () << std::endl;
-          exit (EXIT_FAILURE);
+            std::cerr << "Error: " << e.what () << std::endl;
+            exit (EXIT_FAILURE);
         }
 
-      optind++;
+        optind++;
     }
 
-  app.stop ();
+    app.stop ();
 
-  return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }

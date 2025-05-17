@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,8 +17,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/crypt/hash_digest.hpp>
 #include <mobius/core/crypt/hash.hpp>
+#include <mobius/core/crypt/hash_digest.hpp>
 
 namespace mobius::core::crypt
 {
@@ -27,14 +29,12 @@ namespace mobius::core::crypt
 // @return Hash digest
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
-hash_digest (const std::string& hash_id, const mobius::core::bytearray& data)
+hash_digest (const std::string &hash_id, const mobius::core::bytearray &data)
 {
-  mobius::core::crypt::hash h (hash_id);
-  h.update (data);
+    mobius::core::crypt::hash h (hash_id);
+    h.update (data);
 
-  return h.get_digest ();
+    return h.get_digest ();
 }
 
 } // namespace mobius::core::crypt
-
-

@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -25,15 +27,11 @@ namespace mobius::core
 // @return String containing formatted error message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-exception_msg (
-  const char *filename,
-  const char *funcname,
-  std::size_t line,
-  const char *text
-)
+exception_msg (const char *filename, const char *funcname, std::size_t line,
+               const char *text)
 {
-  std::string m_text = text ? text : "unspecified error";
-  return exception_msg (filename, funcname, line, m_text);
+    std::string m_text = text ? text : "unspecified error";
+    return exception_msg (filename, funcname, line, m_text);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -41,16 +39,11 @@ exception_msg (
 // @return String containing formatted error message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-exception_msg (
-  const std::string& filename,
-  const std::string& funcname,
-  std::size_t line,
-  const std::string& text
-)
+exception_msg (const std::string &filename, const std::string &funcname,
+               std::size_t line, const std::string &text)
 {
-  return std::string (funcname + "@" + filename + " (line " + std::to_string (line) + "): " + text);
+    return std::string (funcname + "@" + filename + " (line " +
+                        std::to_string (line) + "): " + text);
 }
 
 } // namespace mobius::core
-
-

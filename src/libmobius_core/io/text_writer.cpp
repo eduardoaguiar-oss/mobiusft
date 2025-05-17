@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,8 +17,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/io/text_writer.hpp>
 #include <mobius/core/charset.hpp>
+#include <mobius/core/io/text_writer.hpp>
 #include <mobius/core/string_functions.hpp>
 
 namespace mobius::core::io
@@ -26,12 +28,10 @@ namespace mobius::core::io
 // @param writer Writer object
 // @param encoding Charset encoding
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-text_writer::text_writer (
-  const mobius::core::io::writer& writer,
-  const std::string& encoding
-)
- : writer_ (writer),
-   encoding_ (mobius::core::string::toupper (encoding))
+text_writer::text_writer (const mobius::core::io::writer &writer,
+                          const std::string &encoding)
+    : writer_ (writer),
+      encoding_ (mobius::core::string::toupper (encoding))
 {
 }
 
@@ -40,13 +40,13 @@ text_writer::text_writer (
 // @param text String text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-text_writer::write (const std::string& text)
+text_writer::write (const std::string &text)
 {
-  if (encoding_ == "UTF-8" || encoding_ == "UTF8")
-    writer_.write (text);
+    if (encoding_ == "UTF-8" || encoding_ == "UTF8")
+        writer_.write (text);
 
-  else
-    writer_.write (mobius::core::conv_charset (text, "UTF-8", encoding_));
+    else
+        writer_.write (mobius::core::conv_charset (text, "UTF-8", encoding_));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -55,9 +55,7 @@ text_writer::write (const std::string& text)
 void
 text_writer::flush ()
 {
-  writer_.flush ();
+    writer_.flush ();
 }
 
 } // namespace mobius::core::io
-
-

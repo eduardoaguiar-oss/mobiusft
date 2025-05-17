@@ -1431,7 +1431,8 @@ tp_hash (framework_model_item_o *self)
 // @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject framework_model_item_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0) "mobius.framework.model.item", // tp_name
+    PyVarObject_HEAD_INIT (nullptr, 0)        // header
+    "mobius.framework.model.item",            // tp_name
     sizeof (framework_model_item_o),          // tp_basicsize
     0,                                        // tp_itemsize
     (destructor) tp_dealloc,                  // tp_dealloc

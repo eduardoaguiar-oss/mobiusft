@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,10 +17,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <algorithm>
 #include <mobius/core/mediator.hpp>
 #include <mobius/core/resource.hpp>
 #include <mobius/core/string_functions.hpp>
-#include <algorithm>
 #include <mutex>
 #include <string>
 #include <unordered_map>
@@ -32,7 +34,7 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // @brief Resources
-std::unordered_map <std::string, resource> resources_;
+std::unordered_map<std::string, resource> resources_;
 
 // @brief Resource mutex
 static std::mutex mutex_;
@@ -44,14 +46,14 @@ static std::mutex mutex_;
 // @param r Resource
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-add_resource (const std::string& id, const resource& r)
+add_resource (const std::string &id, const resource &r)
 {
-  {
-    std::lock_guard <std::mutex> lock (mutex_);
-    resources_[id] = r;
-  }
+    {
+        std::lock_guard<std::mutex> lock (mutex_);
+        resources_[id] = r;
+    }
 
-  mobius::core::emit ("resource-added", id, r);
+    mobius::core::emit ("resource-added", id, r);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -59,14 +61,14 @@ add_resource (const std::string& id, const resource& r)
 // @param id Resource ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-remove_resource (const std::string& id)
+remove_resource (const std::string &id)
 {
-  {
-    std::lock_guard <std::mutex> lock (mutex_);
-    resources_.erase (id);
-  }
+    {
+        std::lock_guard<std::mutex> lock (mutex_);
+        resources_.erase (id);
+    }
 
-  mobius::core::emit ("resource-removed", id);
+    mobius::core::emit ("resource-removed", id);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -74,10 +76,10 @@ remove_resource (const std::string& id)
 // @param id Resource ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-has_resource (const std::string& id)
+has_resource (const std::string &id)
 {
-  std::lock_guard <std::mutex> lock (mutex_);
-  return resources_.find (id) != resources_.end ();
+    std::lock_guard<std::mutex> lock (mutex_);
+    return resources_.find (id) != resources_.end ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -85,46 +87,43 @@ has_resource (const std::string& id)
 // @param id Resource ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 resource
-get_resource (const std::string& id)
+get_resource (const std::string &id)
 {
-  std::lock_guard <std::mutex> lock (mutex_);
+    std::lock_guard<std::mutex> lock (mutex_);
 
-  auto p = resources_.find (id);
+    auto p = resources_.find (id);
 
-  if (p != resources_.end ())
-    return p->second;
+    if (p != resources_.end ())
+        return p->second;
 
-  return resource ();
+    return resource ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get resources
 // @param group_id Group ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector <resource>
-get_resources (const std::string& group_id)
+std::vector<resource>
+get_resources (const std::string &group_id)
 {
-  std::vector <resource> resources;
-  std::string prefix = group_id + '.';
+    std::vector<resource> resources;
+    std::string prefix = group_id + '.';
 
-  // get resources
-  {
-    std::lock_guard <std::mutex> lock (mutex_);
+    // get resources
+    {
+        std::lock_guard<std::mutex> lock (mutex_);
 
-    for (const auto& p : resources_)
-      if (mobius::core::string::startswith (p.first, prefix))
-        resources.push_back (p.second);
-  }
+        for (const auto &p : resources_)
+            if (mobius::core::string::startswith (p.first, prefix))
+                resources.push_back (p.second);
+    }
 
-  // sort resources by ID
-  std::sort (resources.begin (),
-             resources.end (),
-             [] (const auto& a, const auto& b){ return a.get_id () < b.get_id (); }
-            );
+    // sort resources by ID
+    std::sort (resources.begin (), resources.end (),
+               [] (const auto &a, const auto &b)
+               { return a.get_id () < b.get_id (); });
 
-  return resources;
+    return resources;
 }
 
 } // namespace mobius::core
-
-

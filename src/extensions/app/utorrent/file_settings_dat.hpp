@@ -30,7 +30,8 @@ namespace mobius::extension::app::utorrent
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Settings.dat file decoder
 // @author Eduardo Aguiar
-// @see https://robertpearsonblog.wordpress.com/2016/11/10/utorrent-forensic-artifacts/
+// @see
+// https://robertpearsonblog.wordpress.com/2016/11/10/utorrent-forensic-artifacts/
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class file_settings_dat
 {

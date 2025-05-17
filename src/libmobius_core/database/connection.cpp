@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -27,35 +29,33 @@ namespace mobius::core::database
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class connection::impl
 {
-public:
-  // prototypes
-  explicit impl (connection_pool&);
-  ~impl ();
-  void release ();
+  public:
+    // prototypes
+    explicit impl (connection_pool &);
+    ~impl ();
+    void release ();
 
-private:
-  // @brief connection pool that owns this connection
-  connection_pool& pool_;
+  private:
+    // @brief connection pool that owns this connection
+    connection_pool &pool_;
 
-  // @brief flag: if connection is still active
-  bool is_active_ = false;
+    // @brief flag: if connection is still active
+    bool is_active_ = false;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Initialize connection::impl object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-connection::impl::impl (connection_pool& a_pool)
-  : pool_ (a_pool), is_active_ (true)
+connection::impl::impl (connection_pool &a_pool)
+    : pool_ (a_pool),
+      is_active_ (true)
 {
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Destroy connection::impl object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-connection::impl::~impl ()
-{
-  release ();
-}
+connection::impl::~impl () { release (); }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Release connection
@@ -63,10 +63,10 @@ connection::impl::~impl ()
 void
 connection::impl::release ()
 {
-  if (is_active_)
+    if (is_active_)
     {
-      pool_.release ();
-      is_active_ = false;
+        pool_.release ();
+        is_active_ = false;
     }
 }
 
@@ -75,8 +75,8 @@ connection::impl::release ()
 // @param pool connection pool
 // @param path database file path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-connection::connection (connection_pool& pool)
-  : impl_ (std::make_shared <impl> (pool))
+connection::connection (connection_pool &pool)
+    : impl_ (std::make_shared<impl> (pool))
 {
 }
 
@@ -86,12 +86,10 @@ connection::connection (connection_pool& pool)
 void
 connection::release ()
 {
-  if (!impl_)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid connection"));
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid connection"));
 
-  impl_->release ();
+    impl_->release ();
 }
 
 } // namespace mobius::core::database
-
-

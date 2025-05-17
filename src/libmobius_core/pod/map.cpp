@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,8 +17,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/pod/map.hpp>
 #include <algorithm>
+#include <mobius/core/pod/map.hpp>
 #include <stdexcept>
 
 namespace mobius::core::pod
@@ -25,9 +27,9 @@ namespace mobius::core::pod
 // @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 map::map ()
-  : data (std::make_shared <data_impl_map> ())
+    : data (std::make_shared<data_impl_map> ())
 {
-  impl_ = std::static_pointer_cast <data_impl_map> (data::impl ());
+    impl_ = std::static_pointer_cast<data_impl_map> (data::impl ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -35,25 +37,25 @@ map::map ()
 // @param d Data object (must be of type::map)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 map::map (data d)
- : data (d)
+    : data (d)
 {
-  impl_ = std::dynamic_pointer_cast <data_impl_map> (data::impl ());
+    impl_ = std::dynamic_pointer_cast<data_impl_map> (data::impl ());
 
-  if (!impl_)
-    throw std::invalid_argument ("cannot convert data to map");
+    if (!impl_)
+        throw std::invalid_argument ("cannot convert data to map");
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // @param l initializer_list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-map::map (const std::initializer_list <value_type>& l)
-  : data (std::make_shared <data_impl_map> ())
+map::map (const std::initializer_list<value_type> &l)
+    : data (std::make_shared<data_impl_map> ())
 {
-  impl_ = std::static_pointer_cast <data_impl_map> (data::impl ());
+    impl_ = std::static_pointer_cast<data_impl_map> (data::impl ());
 
-  for (const auto& p : l)
-    set (p.first, p.second);
+    for (const auto &p : l)
+        set (p.first, p.second);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -63,12 +65,12 @@ map::map (const std::initializer_list <value_type>& l)
 mobius::core::pod::map
 map::clone () const
 {
-  map m;
+    map m;
 
-  for (const auto& p: map (*this))
-    m.set (p.first, p.second.clone ());
+    for (const auto &p : map (*this))
+        m.set (p.first, p.second.clone ());
 
-  return m;
+    return m;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -76,10 +78,10 @@ map::clone () const
 // @param m Other map
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-map::update (const map& m)
+map::update (const map &m)
 {
-  for (const auto& p: m)
-    set (p.first, p.second.clone ());
+    for (const auto &p : m)
+        set (p.first, p.second.clone ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -89,29 +91,29 @@ map::update (const map& m)
 std::string
 map::to_string () const
 {
-  std::string text = "{";
-  bool first = true;
+    std::string text = "{";
+    bool first = true;
 
-  for (const auto& p : *this)
+    for (const auto &p : *this)
     {
-      if (first)
-        first = false;
+        if (first)
+            first = false;
 
-      else
-        text += ", ";
+        else
+            text += ", ";
 
-      text += '"' + p.first + '"' + ": ";
+        text += '"' + p.first + '"' + ": ";
 
-      if (p.second.is_string ())
-        text += '"' + p.second.to_string () + '"';
+        if (p.second.is_string ())
+            text += '"' + p.second.to_string () + '"';
 
-      else
-        text += p.second.to_string ();
+        else
+            text += p.second.to_string ();
     }
 
-  text += '}';
+    text += '}';
 
-  return text;
+    return text;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -120,10 +122,10 @@ map::to_string () const
 // @param m Map object
 // @return Ostream reference
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::ostream&
-operator<< (std::ostream& os, const mobius::core::pod::map& m)
+std::ostream &
+operator<< (std::ostream &os, const mobius::core::pod::map &m)
 {
-  return os << m.to_string ();
+    return os << m.to_string ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -133,10 +135,10 @@ operator<< (std::ostream& os, const mobius::core::pod::map& m)
 // @return <b>true</b> if objects are equal <b>false<b> otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator== (const map& a, const map& b)
+operator== (const map &a, const map &b)
 {
-  return a.get_size () == b.get_size () &&
-         std::equal (a.begin (), a.end (), b.begin ());
+    return a.get_size () == b.get_size () &&
+           std::equal (a.begin (), a.end (), b.begin ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -146,11 +148,9 @@ operator== (const map& a, const map& b)
 // @return <b>true</b> if objects are different <b>false<b> otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator!= (const map& a, const map& b)
+operator!= (const map &a, const map &b)
 {
-  return !(a == b);
+    return !(a == b);
 }
 
 } // namespace mobius::core::pod
-
-

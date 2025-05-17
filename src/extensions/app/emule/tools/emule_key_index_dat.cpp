@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -16,11 +18,11 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "../file_key_index_dat.hpp"
-#include <mobius/core/application.hpp>
-#include <mobius/core/log.hpp>
-#include <mobius/core/io/file.hpp>
-#include <mobius/core/string_functions.hpp>
 #include <iostream>
+#include <mobius/core/application.hpp>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/log.hpp>
+#include <mobius/core/string_functions.hpp>
 #include <unistd.h>
 
 namespace
@@ -42,32 +44,32 @@ usage ()
 // @param n Name structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-show_name (const mobius::extension::app::emule::file_key_index_dat::name& n)
+show_name (const mobius::extension::app::emule::file_key_index_dat::name &n)
 {
     std::cerr << std::endl;
     std::cerr << "\t\t\t\tLifetime: " << n.lifetime << std::endl;
 
     std::cerr << "\t\t\t\tFile names:" << std::endl;
-    for (const auto& [name, popularity] : n.filenames)
+    for (const auto &[name, popularity] : n.filenames)
         std::cerr << "\t\t\t\t\t" << popularity << '\t' << name << std::endl;
-       
+
     std::cerr << "\t\t\t\tIPs:" << std::endl;
-    for (const auto& ip : n.ips)
-        std::cerr << "\t\t\t\t\t" << ip.value << '\t' << ip.last_published << std::endl;
+    for (const auto &ip : n.ips)
+        std::cerr << "\t\t\t\t\t" << ip.value << '\t' << ip.last_published
+                  << std::endl;
 
     std::cerr << "\t\t\t\tTags: " << n.tags.size () << std::endl;
 
-    for (const auto& tag : n.tags)
-      {
-        std::cerr   << "\t\t\t\t"
-                    << int (tag.get_id ()) << '\t'
-                    << mobius::core::string::to_hex (tag.get_type (), 2) << '\t'
-                    << tag.get_name () << '\t'
-                    << tag.get_value ().to_string () << std::endl;
-      }
+    for (const auto &tag : n.tags)
+    {
+        std::cerr << "\t\t\t\t" << int (tag.get_id ()) << '\t'
+                  << mobius::core::string::to_hex (tag.get_type (), 2) << '\t'
+                  << tag.get_name () << '\t' << tag.get_value ().to_string ()
+                  << std::endl;
+    }
 
     std::cerr << "\t\t\t\tAICH hashes:" << std::endl;
-    for (const auto& h : n.aich_hashes)        
+    for (const auto &h : n.aich_hashes)
         std::cerr << "\t\t\t\t\t" << h << std::endl;
 }
 
@@ -76,13 +78,13 @@ show_name (const mobius::extension::app::emule::file_key_index_dat::name& n)
 // @param s Source structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-show_source (const mobius::extension::app::emule::file_key_index_dat::source& s)
+show_source (const mobius::extension::app::emule::file_key_index_dat::source &s)
 {
     std::cerr << std::endl;
     std::cerr << "\t\t\tID: " << s.id << std::endl;
     std::cerr << "\t\t\tNames:" << std::endl;
 
-    for (const auto& n : s.names)
+    for (const auto &n : s.names)
         show_name (n);
 }
 
@@ -91,14 +93,14 @@ show_source (const mobius::extension::app::emule::file_key_index_dat::source& s)
 // @param k Key structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-show_key (const mobius::extension::app::emule::file_key_index_dat::key& k)
+show_key (const mobius::extension::app::emule::file_key_index_dat::key &k)
 {
     std::cerr << std::endl;
     std::cerr << "\t>> Key" << std::endl;
     std::cerr << "\t\tID: " << k.id << std::endl;
     std::cerr << "\t\tSources:" << std::endl;
 
-    for (const auto& s : k.sources)
+    for (const auto &s : k.sources)
         show_source (s);
 }
 
@@ -107,7 +109,7 @@ show_key (const mobius::extension::app::emule::file_key_index_dat::key& k)
 // @param path KeyIndex.dat path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-show_key_index_dat (const std::string& path)
+show_key_index_dat (const std::string &path)
 {
     std::cout << std::endl;
     std::cout << ">> " << path << std::endl;
@@ -117,17 +119,17 @@ show_key_index_dat (const std::string& path)
 
     mobius::extension::app::emule::file_key_index_dat key_index (reader);
     if (!key_index)
-      {
+    {
         std::cerr << "\tFile is not an instance of KeyIndex.dat" << std::endl;
         return;
-      }
-  
+    }
+
     std::cerr << "\tVersion: " << int (key_index.get_version ()) << std::endl;
     std::cerr << "\tSave time: " << key_index.get_save_time () << std::endl;
     std::cerr << "\tClient ID: " << key_index.get_client_id () << std::endl;
 
-    for (const auto& k : key_index.get_keys ())
-        show_key (k);  
+    for (const auto &k : key_index.get_keys ())
+        show_key (k);
 }
 
 } // namespace
@@ -148,53 +150,55 @@ main (int argc, char **argv)
     std::cerr << "Emule KeyIndex.dat viewer v1.0" << std::endl;
     std::cerr << "by Eduardo Aguiar" << std::endl;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Parse command line
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  int opt;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Parse command line
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    int opt;
 
-  while ((opt = getopt (argc, argv, "h")) != EOF)
+    while ((opt = getopt (argc, argv, "h")) != EOF)
     {
-      switch (opt)
+        switch (opt)
         {
         case 'h':
-          usage ();
-          exit (EXIT_SUCCESS);
-          break;
+            usage ();
+            exit (EXIT_SUCCESS);
+            break;
 
         default:
-          usage ();
-          exit (EXIT_FAILURE);
+            usage ();
+            exit (EXIT_FAILURE);
         }
     }
 
-  if (optind >= argc)
+    if (optind >= argc)
     {
-      std::cerr << std::endl;
-      std::cerr << "Error: you must enter at least one path to KeyIndex.dat file" << std::endl;
-      usage ();
-      exit (EXIT_FAILURE);
+        std::cerr << std::endl;
+        std::cerr
+            << "Error: you must enter at least one path to KeyIndex.dat file"
+            << std::endl;
+        usage ();
+        exit (EXIT_FAILURE);
     }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Show hive info
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  while (optind < argc)
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Show hive info
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    while (optind < argc)
     {
-      try
+        try
         {
-          show_key_index_dat (argv[optind]);
+            show_key_index_dat (argv[optind]);
         }
-      catch (const std::exception& e)
+        catch (const std::exception &e)
         {
-          std::cerr <<  "Error: " << e.what () << std::endl;
-          exit (EXIT_FAILURE);
+            std::cerr << "Error: " << e.what () << std::endl;
+            exit (EXIT_FAILURE);
         }
 
-      optind++;
+        optind++;
     }
 
-  app.stop ();
+    app.stop ();
 
-  return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }

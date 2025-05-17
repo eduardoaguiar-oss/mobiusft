@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -25,7 +27,7 @@ namespace mobius::core::io
 // @brief Create default reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 reader::reader ()
-  : impl_ (std::make_shared <reader_impl_null> ())
+    : impl_ (std::make_shared<reader_impl_null> ())
 {
 }
 
@@ -33,8 +35,9 @@ reader::reader ()
 // @brief Create reader from a reader implementation object
 // @param ptr smart pointer to a reader_impl object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-reader::reader (const std::shared_ptr <reader_impl_base>& ptr)
-  : is_null_ (false), impl_ (ptr)
+reader::reader (const std::shared_ptr<reader_impl_base> &ptr)
+    : is_null_ (false),
+      impl_ (ptr)
 {
 }
 
@@ -45,17 +48,12 @@ reader::reader (const std::shared_ptr <reader_impl_base>& ptr)
 // @param end End position
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 reader
-new_slice_reader (
-  mobius::core::io::reader reader,
-  reader::offset_type pos,
-  reader::offset_type end
-)
+new_slice_reader (mobius::core::io::reader reader, reader::offset_type pos,
+                  reader::offset_type end)
 {
-  return mobius::core::io::reader (
-    std::make_shared <mobius::core::io::reader_impl_slice> (reader, pos, end)
-  );
+    return mobius::core::io::reader (
+        std::make_shared<mobius::core::io::reader_impl_slice> (reader, pos,
+                                                               end));
 }
 
 } // namespace mobius::core::io
-
-

@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,12 +17,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/core/exception.inc>
 #include <mobius/core/io/entry.hpp>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/folder.hpp>
-#include <mobius/core/io/uri.hpp>
 #include <mobius/core/io/local/new_entry_by_path.hpp>
-#include <mobius/core/exception.inc>
+#include <mobius/core/io/uri.hpp>
 #include <stdexcept>
 
 #ifdef SMBCLIENT_FOUND
@@ -34,61 +36,61 @@ namespace mobius::core::io
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class entry::impl
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  impl () = default;
-  impl (const impl&) = delete;
-  impl (impl&&) = delete;
-  explicit impl (file);
-  explicit impl (folder);
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl () = default;
+    impl (const impl &) = delete;
+    impl (impl &&) = delete;
+    explicit impl (file);
+    explicit impl (folder);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Operators
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  impl& operator= (const impl&) = delete;
-  impl& operator= (impl&&) = delete;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl &operator= (const impl &) = delete;
+    impl &operator= (impl &&) = delete;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get type
-  // @return Type
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  type
-  get_type () const
-  {
-    return type_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get type
+    // @return Type
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    type
+    get_type () const
+    {
+        return type_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get file
-  // @return File
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  file
-  get_file () const
-  {
-    return file_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get file
+    // @return File
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    file
+    get_file () const
+    {
+        return file_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get folder
-  // @return Folder
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  folder
-  get_folder () const
-  {
-    return folder_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get folder
+    // @return Folder
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    folder
+    get_folder () const
+    {
+        return folder_;
+    }
 
-private:
-  // @brief entry type
-  type type_ = type::null;
+  private:
+    // @brief entry type
+    type type_ = type::null;
 
-  // @brief file object
-  file file_;
+    // @brief file object
+    file file_;
 
-  // @brief folder object
-  folder folder_;
+    // @brief folder object
+    folder folder_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -96,7 +98,8 @@ private:
 // @param f file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 entry::impl::impl (file f)
- : type_ (type::file), file_ (f)
+    : type_ (type::file),
+      file_ (f)
 {
 }
 
@@ -105,7 +108,8 @@ entry::impl::impl (file f)
 // @param f folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 entry::impl::impl (folder f)
- : type_ (type::folder), folder_ (f)
+    : type_ (type::folder),
+      folder_ (f)
 {
 }
 
@@ -113,7 +117,7 @@ entry::impl::impl (folder f)
 // @brief Constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 entry::entry ()
-  : impl_ (std::make_shared <impl> ())
+    : impl_ (std::make_shared<impl> ())
 {
 }
 
@@ -122,7 +126,7 @@ entry::entry ()
 // @param f file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 entry::entry (file f)
-  : impl_ (std::make_shared <impl> (f))
+    : impl_ (std::make_shared<impl> (f))
 {
 }
 
@@ -131,7 +135,7 @@ entry::entry (file f)
 // @param f folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 entry::entry (folder f)
-  : impl_ (std::make_shared <impl> (f))
+    : impl_ (std::make_shared<impl> (f))
 {
 }
 
@@ -141,7 +145,7 @@ entry::entry (folder f)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 entry::operator bool () const noexcept
 {
-  return impl_->get_type () != type::null;
+    return impl_->get_type () != type::null;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -151,7 +155,7 @@ entry::operator bool () const noexcept
 bool
 entry::is_file () const
 {
-  return impl_->get_type () == type::file;
+    return impl_->get_type () == type::file;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -161,7 +165,7 @@ entry::is_file () const
 bool
 entry::is_folder () const
 {
-  return impl_->get_type () == type::folder;
+    return impl_->get_type () == type::folder;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -171,7 +175,7 @@ entry::is_folder () const
 entry::type
 entry::get_type () const
 {
-  return impl_->get_type ();
+    return impl_->get_type ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -181,10 +185,10 @@ entry::get_type () const
 file
 entry::get_file () const
 {
-  if (!is_file ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("entry is not file"));
+    if (!is_file ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("entry is not file"));
 
-  return impl_->get_file ();
+    return impl_->get_file ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -194,10 +198,10 @@ entry::get_file () const
 folder
 entry::get_folder () const
 {
-  if (!is_folder ())
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("entry is not folder"));
+    if (!is_folder ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("entry is not folder"));
 
-  return impl_->get_folder ();
+    return impl_->get_folder ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -207,13 +211,13 @@ entry::get_folder () const
 std::string
 entry::get_name () const
 {
-  if (get_type () == type::null)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("entry is null"));
+    if (get_type () == type::null)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("entry is null"));
 
-  if (is_file ())
-    return get_file ().get_name ();
+    if (is_file ())
+        return get_file ().get_name ();
 
-  return get_folder ().get_name ();
+    return get_folder ().get_name ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -223,13 +227,13 @@ entry::get_name () const
 std::string
 entry::get_extension () const
 {
-  if (get_type () == type::null)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("entry is null"));
+    if (get_type () == type::null)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("entry is null"));
 
-  if (is_file ())
-    return get_file ().get_extension ();
+    if (is_file ())
+        return get_file ().get_extension ();
 
-  return get_folder ().get_extension ();
+    return get_folder ().get_extension ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -239,13 +243,13 @@ entry::get_extension () const
 std::string
 entry::get_path () const
 {
-  if (get_type () == type::null)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("entry is null"));
+    if (get_type () == type::null)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("entry is null"));
 
-  if (is_file ())
-    return get_file ().get_path ();
+    if (is_file ())
+        return get_file ().get_path ();
 
-  return get_folder ().get_path ();
+    return get_folder ().get_path ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -253,15 +257,15 @@ entry::get_path () const
 // @param path Path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-entry::set_path (const std::string& path)
+entry::set_path (const std::string &path)
 {
-  if (get_type () == type::null)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("entry is null"));
+    if (get_type () == type::null)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("entry is null"));
 
-  if (is_file ())
-    return get_file ().set_path (path);
+    if (is_file ())
+        return get_file ().set_path (path);
 
-  return get_folder ().set_path (path);
+    return get_folder ().set_path (path);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -271,13 +275,13 @@ entry::set_path (const std::string& path)
 bool
 entry::is_deleted () const
 {
-  if (get_type () == type::null)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("entry is null"));
+    if (get_type () == type::null)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("entry is null"));
 
-  if (is_file ())
-    return get_file ().is_deleted ();
+    if (is_file ())
+        return get_file ().is_deleted ();
 
-  return get_folder ().is_deleted ();
+    return get_folder ().is_deleted ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -287,13 +291,13 @@ entry::is_deleted () const
 bool
 entry::is_reallocated () const
 {
-  if (get_type () == type::null)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("entry is null"));
+    if (get_type () == type::null)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("entry is null"));
 
-  if (is_file ())
-    return get_file ().is_reallocated ();
+    if (is_file ())
+        return get_file ().is_reallocated ();
 
-  return get_folder ().is_reallocated ();
+    return get_folder ().is_reallocated ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -302,9 +306,9 @@ entry::is_reallocated () const
 // @return Entry object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 entry
-new_entry_by_path (const std::string& path)
+new_entry_by_path (const std::string &path)
 {
-  return local::new_entry_by_path (path);
+    return local::new_entry_by_path (path);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -313,22 +317,21 @@ new_entry_by_path (const std::string& path)
 // @return Entry object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 entry
-new_entry_by_url (const std::string& url)
+new_entry_by_url (const std::string &url)
 {
-  mobius::core::io::uri u (url);
+    mobius::core::io::uri u (url);
 
-  if (u.get_scheme () == "file")
-    return new_entry_by_path (u.get_path ("utf-8"));
+    if (u.get_scheme () == "file")
+        return new_entry_by_path (u.get_path ("utf-8"));
 
 #ifdef SMBCLIENT_FOUND
-  else if (u.get_scheme () == "smb")
-    return smb::new_entry_by_url (url);
+    else if (u.get_scheme () == "smb")
+        return smb::new_entry_by_url (url);
 #endif
 
-  else
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("unhandled file scheme"));
+    else
+        throw std::invalid_argument (
+            MOBIUS_EXCEPTION_MSG ("unhandled file scheme"));
 }
 
 } // namespace mobius::core::io
-
-
