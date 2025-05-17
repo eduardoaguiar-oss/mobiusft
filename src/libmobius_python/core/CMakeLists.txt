@@ -19,13 +19,17 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20)
 project(libmobius-python-core LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Build sub-libraries
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_subdirectory(database)
+add_subdirectory(file_decoder)
 add_subdirectory(kff)
+add_subdirectory(system)
+add_subdirectory(turing)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
@@ -41,11 +45,6 @@ add_library(libmobius_python_core STATIC
     log.cpp
     resource.cpp
     thread_guard.cpp
-    file_decoder/decoder.cpp
-    file_decoder/entry.cpp
-    file_decoder/metadata.cpp
-    file_decoder/module.cpp
-    file_decoder/section.cpp
 )
 
 set_target_properties(libmobius_python_core PROPERTIES
@@ -60,7 +59,11 @@ target_include_directories(libmobius_python_core PRIVATE
 
 target_link_libraries(libmobius_python_core
    PRIVATE
+       "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_database>"
+       "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_file_decoder>"
        "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_kff>"
+       "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_system>"
+       "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_turing>"
    PUBLIC
        Mobius::Core
 )

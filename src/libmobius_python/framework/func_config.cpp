@@ -22,7 +22,7 @@
 // @brief  C++ API module wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "database/transaction.hpp"
+#include "core/database/transaction.hpp"
 #include "pod/data.hpp"
 #include <mobius/framework/config.hpp>
 #include <pymobius.hpp>
@@ -184,7 +184,7 @@ func_framework_new_config_transaction (PyObject *, PyObject *)
 
     try
     {
-        ret = pymobius_database_transaction_to_pyobject (
+        ret = pymobius_core_database_transaction_to_pyobject (
             mobius::framework::new_config_transaction ());
     }
     catch (const std::exception &e)

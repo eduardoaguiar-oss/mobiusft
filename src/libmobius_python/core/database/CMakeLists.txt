@@ -19,23 +19,29 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-cmake_minimum_required(VERSION 3.10)
-project(mobius_python_turing LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.20)
+project(libmobius_python_core_database LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Target: mobius_python_turing.la
+# Target: mobius_python_database.la
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_python_turing STATIC
+add_library(libmobius_python_core_database STATIC
     module.cpp
-    turing.cpp
+    connection.cpp
+    connection_set.cpp
+    transaction.cpp
 )
 
-target_include_directories(mobius_python_turing PRIVATE
+set_target_properties(libmobius_python_core_database PROPERTIES
+    PREFIX ""
+)
+
+target_include_directories(libmobius_python_core_database PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_link_libraries(mobius_python_turing PUBLIC Mobius::Core)
+target_link_libraries(libmobius_python_core_database PUBLIC Mobius::Core)
 
-target_compile_options(mobius_python_turing PRIVATE -fno-strict-aliasing -fPIC)
+target_compile_options(libmobius_python_core_database PRIVATE -fno-strict-aliasing -fPIC)

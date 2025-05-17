@@ -1,5 +1,5 @@
-#ifndef LIBMOBIUS_PYTHON_DATABASE_TRANSACTION_HPP
-#define LIBMOBIUS_PYTHON_DATABASE_TRANSACTION_HPP
+#ifndef LIBMOBIUS_PYTHON_CORE_DATABASE_CONNECTION_SET_HPP
+#define LIBMOBIUS_PYTHON_CORE_DATABASE_CONNECTION_SET_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/core/database/transaction.hpp>
+#include <mobius/core/database/connection_set.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -27,15 +27,15 @@
 typedef struct
 {
   PyObject_HEAD
-  mobius::core::database::transaction *obj;
-} database_transaction_o;
+  mobius::core::database::connection_set *obj;
+} core_database_connection_set_o;
 
-extern PyTypeObject database_transaction_t;
+extern PyTypeObject core_database_connection_set_t;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *pymobius_database_transaction_to_pyobject (mobius::core::database::transaction);
+PyObject *pymobius_core_database_connection_set_to_pyobject (const mobius::core::database::connection_set&);
 
 #endif
 

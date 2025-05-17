@@ -19,24 +19,30 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-cmake_minimum_required(VERSION 3.10)
-project(mobius_python_system LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.20)
+project(libmobius_python_core_file_decoder LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Target: mobius_python_system.la
+# Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_python_system STATIC
+add_library(libmobius_python_core_file_decoder STATIC
     module.cpp
-    device.cpp
-    func_get_devices.cpp
+    decoder.cpp
+    entry.cpp
+    metadata.cpp
+    section.cpp
 )
 
-target_include_directories(mobius_python_system PRIVATE
+set_target_properties(libmobius_python_core_file_decoder PROPERTIES
+    PREFIX ""
+)
+
+target_include_directories(libmobius_python_core_file_decoder PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_link_libraries(mobius_python_system PUBLIC Mobius::Core)
+target_link_libraries(libmobius_python_core_file_decoder PUBLIC Mobius::Core)
 
-target_compile_options(mobius_python_system PRIVATE -fno-strict-aliasing -fPIC)
+target_compile_options(libmobius_python_core_file_decoder PRIVATE -fno-strict-aliasing -fPIC)

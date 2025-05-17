@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+import mobius.core.turing
 import pymobius
 import pymobius.registry.user_accounts
 
@@ -35,7 +36,7 @@ class UserAccountReport(object):
         self.id = 'user-accounts'
         self.name = 'Accounts'
         self.group = 'user'
-        self.__turing = mobius.turing.turing()
+        self.__turing = mobius.core.turing.turing()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief generate report

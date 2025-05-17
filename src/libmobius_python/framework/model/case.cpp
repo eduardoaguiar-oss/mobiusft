@@ -23,8 +23,8 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "case.hpp"
-#include "database/connection.hpp"
-#include "database/transaction.hpp"
+#include "core/database/connection.hpp"
+#include "core/database/transaction.hpp"
 #include "evidence.hpp"
 #include "item.hpp"
 #include "module.hpp"
@@ -223,7 +223,7 @@ tp_f_new_connection (framework_model_case_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_database_connection_to_pyobject (
+        ret = pymobius_core_database_connection_to_pyobject (
             self->obj->new_connection ());
     }
     catch (const std::exception &e)
@@ -249,7 +249,7 @@ tp_f_new_transaction (framework_model_case_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_database_transaction_to_pyobject (
+        ret = pymobius_core_database_transaction_to_pyobject (
             self->obj->new_transaction ());
     }
     catch (const std::exception &e)

@@ -17,6 +17,7 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import traceback
 import mobius
+import mobius.core.turing
 import pymobius
 import pymobius.app.chromium
 
@@ -73,7 +74,7 @@ class Ant(object):
     def on_stop(self, ant):
 
         # add URLs to Turing, as IE entropy hashes
-        turing = mobius.turing.turing()
+        turing = mobius.core.turing.turing()
         transaction = turing.new_transaction()
 
         for url in self.__urls:

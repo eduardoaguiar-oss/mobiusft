@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \file connection.cc C++ API <i>mobius.database.connection</i> class wrapper
+// @file connection.cc C++ API <i>mobius.core.database.connection</i> class wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
@@ -30,9 +30,9 @@
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-pymobius_database_connection_check (PyObject *value)
+pymobius_core_database_connection_check (PyObject *value)
 {
-  return PyObject_IsInstance (value, reinterpret_cast<PyObject *> (&database_connection_t));
+  return PyObject_IsInstance (value, reinterpret_cast<PyObject *> (&core_database_connection_t));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -41,16 +41,16 @@ pymobius_database_connection_check (PyObject *value)
 // @return new connection object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_database_connection_to_pyobject (const mobius::core::database::connection& obj)
+pymobius_core_database_connection_to_pyobject (const mobius::core::database::connection& obj)
 {
   PyObject *ret = nullptr;
 
   if (obj)
     {
-      ret = _PyObject_New (&database_connection_t);
+      ret = _PyObject_New (&core_database_connection_t);
 
       if (ret)
-        ((database_connection_o *) ret)->obj = new mobius::core::database::connection (obj);
+        ((core_database_connection_o *) ret)->obj = new mobius::core::database::connection (obj);
     }
   else
     ret = mobius::py::pynone ();
@@ -64,12 +64,12 @@ pymobius_database_connection_to_pyobject (const mobius::core::database::connecti
 // @return Opened_file object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::database::connection
-pymobius_database_connection_from_pyobject (PyObject *value)
+pymobius_core_database_connection_from_pyobject (PyObject *value)
 {
-  if (!pymobius_database_connection_check (value))
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.database.connection"));
+  if (!pymobius_core_database_connection_check (value))
+    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.core.database.connection"));
 
-  return * (reinterpret_cast <database_connection_o *>(value)->obj);
+  return * (reinterpret_cast <core_database_connection_o *>(value)->obj);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -78,7 +78,7 @@ pymobius_database_connection_from_pyobject (PyObject *value)
 // @param args argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_release (database_connection_o *self, PyObject *)
+tp_f_release (core_database_connection_o *self, PyObject *)
 {
   // execute C++ code
   PyObject *ret = nullptr;
@@ -107,7 +107,7 @@ static PyMethodDef tp_methods[] =
     METH_VARARGS,
     "Release connection"
   },
-  {NULL, NULL, 0, NULL} // sentinel
+  {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -120,7 +120,7 @@ static PyMethodDef tp_methods[] =
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *, PyObject *)
 {
-  database_connection_o *self = (database_connection_o *) type->tp_alloc (type, 0);
+  core_database_connection_o *self = (core_database_connection_o *) type->tp_alloc (type, 0);
 
   if (self)
     self->obj = new mobius::core::database::connection ();
@@ -133,7 +133,7 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
 // @param self object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-tp_dealloc (database_connection_o *self)
+tp_dealloc (core_database_connection_o *self)
 {
   delete self->obj;
   Py_TYPE (self)->tp_free ((PyObject*) self);
@@ -142,11 +142,11 @@ tp_dealloc (database_connection_o *self)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject database_connection_t =
+PyTypeObject core_database_connection_t =
 {
-  PyVarObject_HEAD_INIT (NULL, 0)
-  "mobius.database.connection",            		// tp_name
-  sizeof (database_connection_o),          		// tp_basicsize
+  PyVarObject_HEAD_INIT (nullptr, 0)                    // header
+  "mobius.core.database.connection",            		// tp_name
+  sizeof (core_database_connection_o),          		// tp_basicsize
   0,                                       		// tp_itemsize
   (destructor) tp_dealloc,                 		// tp_dealloc
   0,                                       		// tp_print

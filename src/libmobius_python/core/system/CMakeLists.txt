@@ -20,24 +20,27 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.10)
-project(mobius_python_database LANGUAGES CXX)
+project(libmobius_python_core_system LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Target: mobius_python_database.la
+# Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_python_database STATIC
+add_library(libmobius_python_core_system STATIC
     module.cpp
-    connection.cpp
-    connection_set.cpp
-    transaction.cpp
+    device.cpp
+    func_get_devices.cpp
 )
 
-target_include_directories(mobius_python_database PRIVATE
+set_target_properties(libmobius_python_core_system PROPERTIES
+    PREFIX ""
+)
+
+target_include_directories(libmobius_python_core_system PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_link_libraries(mobius_python_database PUBLIC Mobius::Core)
+target_link_libraries(libmobius_python_core_system PUBLIC Mobius::Core)
 
-target_compile_options(mobius_python_database PRIVATE -fno-strict-aliasing -fPIC)
+target_compile_options(libmobius_python_core_system PRIVATE -fno-strict-aliasing -fPIC)

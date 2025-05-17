@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -17,71 +19,43 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief  C++ API mobius.system module wrapper
+// @brief  C++ API mobius.core.turing module wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "module.hpp"
+#include "turing.hpp"
 #include <pymobius.hpp>
-#include "device.hpp"
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Function prototypes
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject* func_get_devices (PyObject *, PyObject *);
 
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Module methods
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyMethodDef module_methods[] =
-{
-  {
-    "get_devices",
-    func_get_devices,
-    METH_VARARGS,
-    "Get system device list"
-  },
-  {
-    NULL,
-    NULL,
-    0,
-    NULL
-  } // sentinel
-};
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Module definition structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyModuleDef module_def =
-{
-  PyModuleDef_HEAD_INIT,
-  "mobius.system",
-  "Mobius Forensic Toolkit mobius.system module",
-  -1,
-  module_methods,
-  nullptr,
-  nullptr,
-  nullptr,
-  nullptr
-};
+static PyModuleDef module_def = {
+    PyModuleDef_HEAD_INIT,
+    "mobius.core.turing",
+    "Mobius Forensic Toolkit mobius.core.turing module",
+    -1,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr};
 
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create module
+// @brief Create mobius.core.turing module
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pymodule
-new_system_module ()
+new_core_turing_module ()
 {
-  // Initialize module
-  mobius::py::pymodule module (&module_def);
+    // Initialize module
+    mobius::py::pymodule module (&module_def);
 
-  // Add types
-  module.add_type ("device", &system_device_t);
+    // Add types
+    module.add_type ("turing", &core_turing_turing_t);
 
-  // Return module
-  return module;
+    // Return module
+    return module;
 }
-
-

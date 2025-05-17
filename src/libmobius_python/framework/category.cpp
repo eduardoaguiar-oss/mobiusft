@@ -24,7 +24,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "category.hpp"
 #include "attribute.hpp"
-#include "database/transaction.hpp"
+#include "core/database/transaction.hpp"
 #include <mobius/framework/config.hpp>
 #include <pylist.hpp>
 #include <pymobius.hpp>
@@ -673,7 +673,7 @@ func_framework_new_category_transaction (PyObject *, PyObject *)
 
     try
     {
-        ret = pymobius_database_transaction_to_pyobject (
+        ret = pymobius_core_database_transaction_to_pyobject (
             mobius::framework::new_category_transaction ());
     }
     catch (const std::exception &e)

@@ -1,6 +1,6 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Mobius Forensic Toolkit
-# Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023 Eduardo Aguiar
+# Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
@@ -17,10 +17,29 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Extension metadata
+# Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-EXTENSION_ID = 'hive-report'
-EXTENSION_NAME = 'Hive Report'
-EXTENSION_AUTHOR = 'Eduardo Aguiar and Vladimir Santos'
-EXTENSION_VERSION = '1.1'
-EXTENSION_DESCRIPTION = 'Add reports to Hive extension'
+cmake_minimum_required(VERSION 3.20)
+project(mobius_python_turing LANGUAGES CXX)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Target
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_library(libmobius_python_core_turing STATIC
+    module.cpp
+    turing.cpp
+)
+
+set_target_properties(libmobius_python_core_turing PROPERTIES
+    PREFIX ""
+)
+
+target_include_directories(libmobius_python_core_turing PRIVATE
+    ${MOBIUS_PYTHON_INCLUDE_DIRS}
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${Python3_INCLUDE_DIRS}
+)
+
+target_link_libraries(libmobius_python_core_turing PUBLIC Mobius::Core)
+
+target_compile_options(libmobius_python_core_turing PRIVATE -fno-strict-aliasing -fPIC)

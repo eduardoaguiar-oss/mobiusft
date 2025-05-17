@@ -16,6 +16,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import mobius
+import mobius.core.system
 import pymobius
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
@@ -465,7 +466,7 @@ class AddDeviceDialog(object):
     def __get_disks(self):
         device_list = []
 
-        for dev in mobius.system.get_devices("block", "disk"):
+        for dev in mobius.core.system.get_devices("block", "disk"):
             id_type = dev.get_property('ID_TYPE')
 
             if id_type == 'disk':

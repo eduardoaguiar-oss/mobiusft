@@ -22,5 +22,5 @@
 EXTENSION_ID = 'turing'
 EXTENSION_NAME = 'Turing'
 EXTENSION_AUTHOR = 'Eduardo Aguiar'
-EXTENSION_VERSION = '1.16'
+EXTENSION_VERSION = '1.17'
 EXTENSION_DESCRIPTION = 'Turing cryptographic extension'

@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \file transaction.cc C++ API <i>mobius.database.transaction</i> class wrapper
+// @file transaction.cc C++ API <i>mobius.core.database.transaction</i> class wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
@@ -30,12 +30,12 @@
 // @return new transaction object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_database_transaction_to_pyobject (mobius::core::database::transaction obj)
+pymobius_core_database_transaction_to_pyobject (mobius::core::database::transaction obj)
 {
-  PyObject *ret = _PyObject_New (&database_transaction_t);
+  PyObject *ret = _PyObject_New (&core_database_transaction_t);
 
   if (ret)
-    ((database_transaction_o *) ret)->obj = new mobius::core::database::transaction (obj);
+    ((core_database_transaction_o *) ret)->obj = new mobius::core::database::transaction (obj);
 
   return ret;
 }
@@ -46,7 +46,7 @@ pymobius_database_transaction_to_pyobject (mobius::core::database::transaction o
 // @param args argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_commit (database_transaction_o *self, PyObject *)
+tp_f_commit (core_database_transaction_o *self, PyObject *)
 {
   if (self->obj == nullptr)
     {
@@ -78,7 +78,7 @@ tp_f_commit (database_transaction_o *self, PyObject *)
 // @param args argument list
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_rollback (database_transaction_o *self, PyObject *)
+tp_f_rollback (core_database_transaction_o *self, PyObject *)
 {
   if (self->obj == nullptr)
     {
@@ -121,7 +121,7 @@ static PyMethodDef tp_methods[] =
     METH_VARARGS,
     "rollback operations"
   },
-  {NULL, NULL, 0, NULL} // sentinel
+  {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -129,7 +129,7 @@ static PyMethodDef tp_methods[] =
 // @param self object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-tp_dealloc (database_transaction_o *self)
+tp_dealloc (core_database_transaction_o *self)
 {
   delete self->obj;
   Py_TYPE (self)->tp_free ((PyObject*) self);
@@ -138,11 +138,11 @@ tp_dealloc (database_transaction_o *self)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject database_transaction_t =
+PyTypeObject core_database_transaction_t =
 {
-  PyVarObject_HEAD_INIT (NULL, 0)
-  "mobius.database.transaction",           		// tp_name
-  sizeof (database_transaction_o),         		// tp_basicsize
+  PyVarObject_HEAD_INIT (nullptr, 0)                    // header
+  "mobius.core.database.transaction",           		// tp_name
+  sizeof (core_database_transaction_o),         		// tp_basicsize
   0,                                       		// tp_itemsize
   (destructor) tp_dealloc,                 		// tp_dealloc
   0,                                       		// tp_print

@@ -1,6 +1,3 @@
-#ifndef LIBMOBIUS_PYTHON_SYSTEM_DEVICE_HPP
-#define LIBMOBIUS_PYTHON_SYSTEM_DEVICE_HPP
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
 // Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
@@ -18,25 +15,53 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
-#include <mobius/core/system/device.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief data structure
+// @file C++ API <i>mobius.core.database</i> module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-typedef struct
+#include "module.hpp"
+#include <pymobius.hpp>
+#include "connection.hpp"
+#include "connection_set.hpp"
+#include "transaction.hpp"
+
+namespace
 {
-  PyObject_HEAD
-  mobius::core::system::device *obj;
-} system_device_o;
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Module definition structure
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyModuleDef module_def =
+{
+  PyModuleDef_HEAD_INIT,
+  "mobius.core.database",
+  "Mobius Forensic Toolkit mobius.core.database module",
+  -1,
+  nullptr,
+  nullptr,
+  nullptr,
+  nullptr,
+  nullptr
+};
 
-extern PyTypeObject system_device_t;
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Helper functions
+// @brief Create mobius.core.database module
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *pymobius_system_device_to_pyobject (mobius::core::system::device);
+mobius::py::pymodule
+new_core_database_module ()
+{
+  // Initialize module
+  mobius::py::pymodule module (&module_def);
 
-#endif
+  // Add types
+  module.add_type ("connection", &core_database_connection_t);
+  module.add_type ("connection_set", &core_database_connection_set_t);
+  module.add_type ("transaction", &core_database_transaction_t);
+
+  // Return module
+  return module;
+}
 
 

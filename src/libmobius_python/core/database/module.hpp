@@ -1,5 +1,5 @@
-#ifndef LIBMOBIUS_PYTHON_TURING_MODULE_HPP
-#define LIBMOBIUS_PYTHON_TURING_MODULE_HPP
+#ifndef LIBMOBIUS_PYTHON_CORE_DATABASE_MODULE_HPP
+#define LIBMOBIUS_PYTHON_CORE_DATABASE_MODULE_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymodule.hpp>
 
-mobius::py::pymodule new_turing_module ();
+mobius::py::pymodule new_core_database_module ();
 
 #endif
 

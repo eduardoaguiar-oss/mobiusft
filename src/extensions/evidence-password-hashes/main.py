@@ -18,6 +18,7 @@
 import re
 
 import mobius
+import mobius.core.turing
 import pymobius
 from gi.repository import Gtk
 
@@ -139,7 +140,7 @@ class HashTesting(object):
         transaction.commit()
 
         # update Turing database
-        turing = mobius.turing.turing()
+        turing = mobius.core.turing.turing()
         transaction = turing.new_transaction()
 
         for h, keyword in self.__hash_passwords:
@@ -289,7 +290,7 @@ class HashesView(object):
         count = 0
         password_count = 0
 
-        turing = mobius.turing.turing()
+        turing = mobius.core.turing.turing()
 
         for item in itemlist:
             for h in item.get_evidences(EVIDENCE_TYPE):

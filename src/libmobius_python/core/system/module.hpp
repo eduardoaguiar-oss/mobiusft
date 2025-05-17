@@ -1,9 +1,11 @@
-#ifndef LIBMOBIUS_PYTHON_SYSTEM_MODULE_HPP
-#define LIBMOBIUS_PYTHON_SYSTEM_MODULE_HPP
+#ifndef LIBMOBIUS_PYTHON_CORE_SYSTEM_MODULE_HPP
+#define LIBMOBIUS_PYTHON_CORE_SYSTEM_MODULE_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -20,8 +22,6 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymodule.hpp>
 
-mobius::py::pymodule new_system_module ();
+mobius::py::pymodule new_core_system_module ();
 
 #endif
-
-

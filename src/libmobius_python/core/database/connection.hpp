@@ -1,3 +1,6 @@
+#ifndef LIBMOBIUS_PYTHON_CORE_DATABASE_CONNECTION_HPP
+#define LIBMOBIUS_PYTHON_CORE_DATABASE_CONNECTION_HPP
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
 // Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
@@ -15,49 +18,27 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <Python.h>
+#include <mobius/core/database/connection.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief  C++ API mobius.turing module wrapper
-// @author Eduardo Aguiar
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "module.hpp"
-#include <pymobius.hpp>
-#include "turing.hpp"
-
-namespace
+typedef struct
 {
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Module definition structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyModuleDef module_def =
-{
-  PyModuleDef_HEAD_INIT,
-  "mobius.turing",
-  "Mobius Forensic Toolkit mobius.turing module",
-  -1,
-  nullptr,
-  nullptr,
-  nullptr,
-  nullptr,
-  nullptr
-};
+  PyObject_HEAD
+  mobius::core::database::connection *obj;
+} core_database_connection_o;
 
-} // namespace
+extern PyTypeObject core_database_connection_t;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create mobius.turing module
+// Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pymodule
-new_turing_module ()
-{
-  // Initialize module
-  mobius::py::pymodule module (&module_def);
+bool pymobius_core_database_connection_check (PyObject *);
+PyObject *pymobius_core_database_connection_to_pyobject (const mobius::core::database::connection&);
+mobius::core::database::connection pymobius_core_database_connection_from_pyobject (PyObject *);
 
-  // Add types
-  module.add_type ("turing", &turing_turing_t);
-
-  // Return module
-  return module;
-}
+#endif
 
 

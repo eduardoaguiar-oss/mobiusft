@@ -19,188 +19,63 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @file kff.cc C++ API <i>mobius.core.kff.kff</i> class wrapper
+// @file turing.cc C++ API <i>mobius.core.turing.turing</i> class wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "kff.hpp"
-#include "core/database/connection_set.hpp"
+#include "turing.hpp"
 #include "core/database/transaction.hpp"
-#include "hashset.hpp"
-#include <mobius/core/exception.inc>
+#include "module.hpp"
 #include <pylist.hpp>
 #include <pymobius.hpp>
-#include <stdexcept>
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if value is an instance of <i>kff</i>
-// @param value Python value
-// @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-pymobius_core_kff_kff_check (PyObject *value)
+namespace
 {
-    return mobius::py::isinstance (value, &core_kff_kff_t);
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create tuple from hash
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+PyTuple_from_hash (const std::tuple<std::string, std::string, std::string> &row)
+{
+    PyObject *ret = PyTuple_New (3);
+
+    if (ret)
+    {
+        PyTuple_SetItem (
+            ret, 0, mobius::py::pystring_from_std_string (std::get<0> (row)));
+        PyTuple_SetItem (
+            ret, 1, mobius::py::pystring_from_std_string (std::get<1> (row)));
+        PyTuple_SetItem (
+            ret, 2, mobius::py::pystring_from_std_string (std::get<2> (row)));
+    }
+
+    return ret;
 }
 
+} // namespace
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>kff</i> Python object from C++ object
+// @brief Create <i>turing</i> Python object from C++ object
 // @param obj C++ object
-// @return New kff object
+// @return New turing object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_core_kff_kff_to_pyobject (const mobius::core::kff::kff &obj)
+pymobius_core_turing_turing_to_pyobject (
+    const mobius::core::turing::turing &obj)
 {
-    return mobius::py::to_pyobject<core_kff_kff_o> (obj, &core_kff_kff_t);
+    return mobius::py::to_pyobject<core_turing_turing_o> (
+        obj, &core_turing_turing_t);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>kff</i> C++ object from Python object
-// @param value Python value
-// @return Kff object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::kff::kff
-pymobius_core_kff_kff_from_pyobject (PyObject *value)
-{
-    return mobius::py::from_pyobject<core_kff_kff_o> (value, &core_kff_kff_t);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>new_connection</i> method implementation
+// @brief <i>has_hash</i> method implementation
 // @param self Object
 // @param args Argument list
-// @return new connection_set object
+// @return True/False
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_new_connection (core_kff_kff_o *self, PyObject *)
+tp_f_has_hash (core_turing_turing_o *self, PyObject *args)
 {
-    // Execute C++ function
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = pymobius_core_database_connection_set_to_pyobject (
-            self->obj->new_connection ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    // Return value
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>new_hashset</i> method implementation
-// @param self Object
-// @param args Argument list
-// @return hash set object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_f_new_hashset (core_kff_kff_o *self, PyObject *args)
-{
-    // Parse input args
-    std::string arg_id;
-    bool arg_is_alert;
-
-    try
-    {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
-        arg_is_alert = mobius::py::get_arg_as_bool (args, 1);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_invalid_type_error (e.what ());
-        return nullptr;
-    }
-
-    // Execute C++ function
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = pymobius_core_kff_hashset_to_pyobject (
-            self->obj->new_hashset (arg_id, arg_is_alert));
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    // Return value
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>remove_hashset</i> method implementation
-// @param self Object
-// @param args Argument list
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_f_remove_hashset (core_kff_kff_o *self, PyObject *args)
-{
-    // Parse input args
-    std::string arg_id;
-
-    try
-    {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_invalid_type_error (e.what ());
-        return nullptr;
-    }
-
-    // Execute C++ function
-    try
-    {
-        self->obj->remove_hashset (arg_id);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-        return nullptr;
-    }
-
-    // return None
-    return mobius::py::pynone ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>get_hashsets</i> method implementation
-// @param self Object
-// @param args Argument list
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_f_get_hashsets (core_kff_kff_o *self, PyObject *)
-{
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::pylist_from_cpp_pair_container (
-            self->obj->get_hashsets (), mobius::py::pystring_from_std_string,
-            pymobius_core_kff_hashset_to_pyobject);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>alert_lookup</i> method implementation
-// @param self Object
-// @param args Argument list
-// @return Hash sets
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_f_alert_lookup (core_kff_kff_o *self, PyObject *args)
-{
-    // Parse input args
+    // parse input args
     std::string arg_type;
     std::string arg_value;
 
@@ -215,32 +90,81 @@ tp_f_alert_lookup (core_kff_kff_o *self, PyObject *args)
         return nullptr;
     }
 
+    // execute C++ function
     PyObject *ret = nullptr;
 
     try
     {
-        ret = mobius::py::pylist_from_cpp_container (
-            self->obj->alert_lookup (arg_type, arg_value),
-            mobius::py::pystring_from_std_string);
+        ret = mobius::py::pybool_from_bool (
+            self->obj->has_hash (arg_type, arg_value));
     }
     catch (const std::exception &e)
     {
         mobius::py::set_runtime_error (e.what ());
     }
 
+    // return value
     return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>lookup</i> method implementation
-// @param self Object
-// @param args Argument list
-// @return Hashsets
+// @brief <i>set_hash</i> method implementation
+// @param self object
+// @param args argument list
+// @return new hash object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_lookup (core_kff_kff_o *self, PyObject *args)
+tp_f_set_hash (core_turing_turing_o *self, PyObject *args)
 {
-    // Parse input args
+    // parse input args
+    std::string arg_type;
+    std::string arg_value;
+    std::string arg_password;
+
+    try
+    {
+        arg_type = mobius::py::get_arg_as_std_string (args, 0);
+        arg_value = mobius::py::get_arg_as_std_string (args, 1);
+        arg_password = mobius::py::get_arg_as_std_string (args, 2);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        self->obj->set_hash (arg_type, arg_value, arg_password);
+        ret = mobius::py::pynone ();
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // return value
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>get_hash_password</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return status, password
+//
+// status: 0 - not found
+//         1 - found
+//         2 - LM first half found
+//         3 - LM second half found
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_get_hash_password (core_turing_turing_o *self, PyObject *args)
+{
+    // parse input args
     std::string arg_type;
     std::string arg_value;
 
@@ -255,18 +179,107 @@ tp_f_lookup (core_kff_kff_o *self, PyObject *args)
         return nullptr;
     }
 
+    // execute C++ function
     PyObject *ret = nullptr;
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
-            std::string (1, self->obj->lookup (arg_type, arg_value)));
+        auto p = self->obj->get_hash_password (arg_type, arg_value);
+        ret = PyTuple_New (2);
+
+        if (ret)
+        {
+            PyTuple_SetItem (
+                ret, 0,
+                mobius::py::pylong_from_int (static_cast<int> (p.first)));
+
+            if (p.first == mobius::core::turing::turing::pwd_status::not_found)
+                PyTuple_SetItem (ret, 1, mobius::py::pynone ());
+
+            else
+                PyTuple_SetItem (
+                    ret, 1, mobius::py::pystring_from_std_string (p.second));
+        }
     }
     catch (const std::exception &e)
     {
         mobius::py::set_runtime_error (e.what ());
     }
 
+    // return value
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>remove_hashes</i> method implementation
+// @param self object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_remove_hashes (core_turing_turing_o *self, PyObject *)
+{
+    // execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        self->obj->remove_hashes ();
+        ret = mobius::py::pynone ();
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>get_hashes</i> method implementation
+// @param self object
+// @param args argument list
+// @return hash list
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_get_hashes (core_turing_turing_o *self, PyObject *)
+{
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pylist_from_cpp_container (self->obj->get_hashes (),
+                                                     PyTuple_from_hash);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>new_transaction</i> method implementation
+// @param self object
+// @param args argument list
+// @return new transaction object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_new_transaction (core_turing_turing_o *self, PyObject *)
+{
+    // execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = pymobius_core_database_transaction_to_pyobject (
+            self->obj->new_transaction ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // return value
     return ret;
 }
 
@@ -274,56 +287,57 @@ tp_f_lookup (core_kff_kff_o *self, PyObject *args)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "new_connection", (PyCFunction) tp_f_new_connection, METH_VARARGS,
-     "create new connection set to KFF"},
-    {(char *) "new_hashset", (PyCFunction) tp_f_new_hashset, METH_VARARGS,
-     "Create hash set"},
-    {(char *) "remove_hashset", (PyCFunction) tp_f_remove_hashset, METH_VARARGS,
-     "Remove hash set"},
-    {(char *) "get_hashsets", (PyCFunction) tp_f_get_hashsets, METH_VARARGS,
-     "Get hash sets"},
-    {(char *) "alert_lookup", (PyCFunction) tp_f_alert_lookup, METH_VARARGS,
-     "Lookup hash in alert hash sets"},
-    {(char *) "lookup", (PyCFunction) tp_f_lookup, METH_VARARGS,
-     "Lookup hash in all hash sets"},
+    {(char *) "has_hash", (PyCFunction) tp_f_has_hash, METH_VARARGS,
+     "Check if hash is set"},
+    {(char *) "set_hash", (PyCFunction) tp_f_set_hash, METH_VARARGS,
+     "Set hash type, value and password"},
+    {(char *) "get_hash_password", (PyCFunction) tp_f_get_hash_password,
+     METH_VARARGS, "Get password for a given hash"},
+    {(char *) "remove_hashes", (PyCFunction) tp_f_remove_hashes, METH_VARARGS,
+     "Remove all hashes from database"},
+    {(char *) "get_hashes", (PyCFunction) tp_f_get_hashes, METH_VARARGS,
+     "get all hashes from database"},
+    {(char *) "new_transaction", (PyCFunction) tp_f_new_transaction,
+     METH_VARARGS, "create new transaction"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief tp_new (default constructor)
+// @brief <i>turing</i> constructor
 // @param type type object
 // @param args argument list
 // @param kwds keywords dict
-// @return new kff object
+// @return new <i>turing</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *, PyObject *)
 {
-    PyObject *ret = type->tp_alloc (type, 0);
+    core_turing_turing_o *self =
+        (core_turing_turing_o *) type->tp_alloc (type, 0);
 
-    if (ret)
+    if (self)
     {
         try
         {
-            ((core_kff_kff_o *) ret)->obj = new mobius::core::kff::kff ();
+            self->obj = new mobius::core::turing::turing ();
         }
         catch (const std::exception &e)
         {
-            Py_DECREF (ret);
             mobius::py::set_runtime_error (e.what ());
-            ret = nullptr;
+            Py_TYPE (self)->tp_free ((PyObject *) self);
+            self = nullptr;
         }
     }
 
-    return ret;
+    return (PyObject *) self;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>kff</i> deallocator
-// @param self Object
+// @brief <i>turing</i> deallocator
+// @param self object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-tp_dealloc (core_kff_kff_o *self)
+tp_dealloc (core_turing_turing_o *self)
 {
     delete self->obj;
     Py_TYPE (self)->tp_free ((PyObject *) self);
@@ -332,10 +346,10 @@ tp_dealloc (core_kff_kff_o *self)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_kff_kff_t = {
+PyTypeObject core_turing_turing_t = {
     PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.kff.kff",                    // tp_name
-    sizeof (core_kff_kff_o),                  // tp_basicsize
+    "mobius.core.turing.turing",              // tp_name
+    sizeof (core_turing_turing_o),            // tp_basicsize
     0,                                        // tp_itemsize
     (destructor) tp_dealloc,                  // tp_dealloc
     0,                                        // tp_print
@@ -353,7 +367,7 @@ PyTypeObject core_kff_kff_t = {
     0,                                        // tp_setattro
     0,                                        // tp_as_buffer
     Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "KFF database",                           // tp_doc
+    "turing class",                           // tp_doc
     0,                                        // tp_traverse
     0,                                        // tp_clear
     0,                                        // tp_richcompare

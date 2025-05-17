@@ -23,8 +23,8 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "hashset.hpp"
-#include "database/connection.hpp"
-#include "database/transaction.hpp"
+#include "core/database/connection.hpp"
+#include "core/database/transaction.hpp"
 #include <mobius/core/exception.inc>
 #include <pylist.hpp>
 #include <pymobius.hpp>
@@ -173,7 +173,7 @@ tp_f_new_connection (core_kff_hashset_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_database_connection_to_pyobject (
+        ret = pymobius_core_database_connection_to_pyobject (
             self->obj->new_connection ());
     }
     catch (const std::exception &e)
@@ -199,7 +199,7 @@ tp_f_new_transaction (core_kff_hashset_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_database_transaction_to_pyobject (
+        ret = pymobius_core_database_transaction_to_pyobject (
             self->obj->new_transaction ());
     }
     catch (const std::exception &e)

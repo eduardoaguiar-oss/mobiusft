@@ -1,9 +1,11 @@
-#ifndef LIBMOBIUS_PYTHON_DATABASE_CONNECTION_HPP
-#define LIBMOBIUS_PYTHON_DATABASE_CONNECTION_HPP
+#ifndef LIBMOBIUS_PYTHON_CORE_SYSTEM_DEVICE_HPP
+#define LIBMOBIUS_PYTHON_CORE_SYSTEM_DEVICE_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -19,26 +21,22 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
-#include <mobius/core/database/connection.hpp>
+#include <mobius/core/system/device.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Data structure
+// @brief data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
-  PyObject_HEAD
-  mobius::core::database::connection *obj;
-} database_connection_o;
+    PyObject_HEAD mobius::core::system::device *obj;
+} core_system_device_o;
 
-extern PyTypeObject database_connection_t;
+extern PyTypeObject core_system_device_t;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool pymobius_database_connection_check (PyObject *);
-PyObject *pymobius_database_connection_to_pyobject (const mobius::core::database::connection&);
-mobius::core::database::connection pymobius_database_connection_from_pyobject (PyObject *);
+PyObject *
+    pymobius_core_system_device_to_pyobject (mobius::core::system::device);
 
 #endif
-
-

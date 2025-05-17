@@ -16,6 +16,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import mobius
+import mobius.core.turing
 import pymobius
 import traceback
 
@@ -53,7 +54,7 @@ class Ant(object):
     # @param ant Mediator ant object
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def on_stop(self, ant):
-        turing = mobius.turing.turing()
+        turing = mobius.core.turing.turing()
         transaction = turing.new_transaction()
 
         for password in self.__passwords:

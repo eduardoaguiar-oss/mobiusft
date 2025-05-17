@@ -18,6 +18,7 @@
 import traceback
 
 import mobius
+import mobius.core.turing
 import pymobius
 import pymobius.registry.main
 
@@ -45,7 +46,7 @@ class Ant(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def run(self):
         try:
-            self.__turing = mobius.turing.turing()
+            self.__turing = mobius.core.turing.turing()
             self.__retrieve_ie_passwords()
         except Exception as e:
             mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')

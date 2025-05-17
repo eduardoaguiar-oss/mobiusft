@@ -18,6 +18,7 @@
 import json
 
 import mobius
+import mobius.core.turing
 import pymobius
 from gi.repository import Gtk
 
@@ -47,7 +48,7 @@ class DatabaseView(object):
     def __init__(self):
         self.__mediator = pymobius.mediator.copy()
         self.__data = None
-        self.__turing = mobius.turing.turing()
+        self.__turing = mobius.core.turing.turing()
 
         self.name = 'Turing Database'
         icon_path = self.__mediator.call('extension.get-resource-path', EXTENSION_ID, 'database.png')

@@ -19,169 +19,41 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @file kff.cc C++ API <i>mobius.core.kff.kff</i> class wrapper
+// @brief C++ API module wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "kff.hpp"
-#include "core/database/connection_set.hpp"
-#include "core/database/transaction.hpp"
-#include "hashset.hpp"
-#include <mobius/core/exception.inc>
-#include <pylist.hpp>
+#include "device.hpp"
+#include "io/reader.hpp"
 #include <pymobius.hpp>
-#include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if value is an instance of <i>kff</i>
-// @param value Python value
-// @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-pymobius_core_kff_kff_check (PyObject *value)
-{
-    return mobius::py::isinstance (value, &core_kff_kff_t);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>kff</i> Python object from C++ object
+// @brief create new object from C++ object
 // @param obj C++ object
-// @return New kff object
+// @return new device object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_core_kff_kff_to_pyobject (const mobius::core::kff::kff &obj)
+pymobius_core_system_device_to_pyobject (mobius::core::system::device obj)
 {
-    return mobius::py::to_pyobject<core_kff_kff_o> (obj, &core_kff_kff_t);
-}
+    PyObject *ret = _PyObject_New (&core_system_device_t);
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>kff</i> C++ object from Python object
-// @param value Python value
-// @return Kff object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::kff::kff
-pymobius_core_kff_kff_from_pyobject (PyObject *value)
-{
-    return mobius::py::from_pyobject<core_kff_kff_o> (value, &core_kff_kff_t);
-}
+    if (ret)
+        ((core_system_device_o *) ret)->obj =
+            new mobius::core::system::device (obj);
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>new_connection</i> method implementation
-// @param self Object
-// @param args Argument list
-// @return new connection_set object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_f_new_connection (core_kff_kff_o *self, PyObject *)
-{
-    // Execute C++ function
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = pymobius_core_database_connection_set_to_pyobject (
-            self->obj->new_connection ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    // Return value
     return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>new_hashset</i> method implementation
-// @param self Object
-// @param args Argument list
-// @return hash set object
+// @brief is_initialized getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_new_hashset (core_kff_kff_o *self, PyObject *args)
-{
-    // Parse input args
-    std::string arg_id;
-    bool arg_is_alert;
-
-    try
-    {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
-        arg_is_alert = mobius::py::get_arg_as_bool (args, 1);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_invalid_type_error (e.what ());
-        return nullptr;
-    }
-
-    // Execute C++ function
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = pymobius_core_kff_hashset_to_pyobject (
-            self->obj->new_hashset (arg_id, arg_is_alert));
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    // Return value
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>remove_hashset</i> method implementation
-// @param self Object
-// @param args Argument list
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_f_remove_hashset (core_kff_kff_o *self, PyObject *args)
-{
-    // Parse input args
-    std::string arg_id;
-
-    try
-    {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_invalid_type_error (e.what ());
-        return nullptr;
-    }
-
-    // Execute C++ function
-    try
-    {
-        self->obj->remove_hashset (arg_id);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-        return nullptr;
-    }
-
-    // return None
-    return mobius::py::pynone ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>get_hashsets</i> method implementation
-// @param self Object
-// @param args Argument list
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_f_get_hashsets (core_kff_kff_o *self, PyObject *)
+tp_getter_is_initialized (core_system_device_o *self)
 {
     PyObject *ret = nullptr;
 
     try
     {
-        ret = mobius::py::pylist_from_cpp_pair_container (
-            self->obj->get_hashsets (), mobius::py::pystring_from_std_string,
-            pymobius_core_kff_hashset_to_pyobject);
+        ret = mobius::py::pybool_from_bool (self->obj->is_initialized ());
     }
     catch (const std::exception &e)
     {
@@ -192,36 +64,16 @@ tp_f_get_hashsets (core_kff_kff_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>alert_lookup</i> method implementation
-// @param self Object
-// @param args Argument list
-// @return Hash sets
+// @brief type getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_alert_lookup (core_kff_kff_o *self, PyObject *args)
+tp_getter_type (core_system_device_o *self)
 {
-    // Parse input args
-    std::string arg_type;
-    std::string arg_value;
-
-    try
-    {
-        arg_type = mobius::py::get_arg_as_std_string (args, 0);
-        arg_value = mobius::py::get_arg_as_std_string (args, 1);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_invalid_type_error (e.what ());
-        return nullptr;
-    }
-
     PyObject *ret = nullptr;
 
     try
     {
-        ret = mobius::py::pylist_from_cpp_container (
-            self->obj->alert_lookup (arg_type, arg_value),
-            mobius::py::pystring_from_std_string);
+        ret = mobius::py::pystring_from_std_string (self->obj->get_type ());
     }
     catch (const std::exception &e)
     {
@@ -232,22 +84,73 @@ tp_f_alert_lookup (core_kff_kff_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>lookup</i> method implementation
-// @param self Object
-// @param args Argument list
-// @return Hashsets
+// @brief subsystem getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_lookup (core_kff_kff_o *self, PyObject *args)
+tp_getter_subsystem (core_system_device_o *self)
 {
-    // Parse input args
-    std::string arg_type;
-    std::string arg_value;
+    PyObject *ret = nullptr;
 
     try
     {
-        arg_type = mobius::py::get_arg_as_std_string (args, 0);
-        arg_value = mobius::py::get_arg_as_std_string (args, 1);
+        ret =
+            mobius::py::pystring_from_std_string (self->obj->get_subsystem ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief node getter
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_getter_node (core_system_device_o *self)
+{
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pystring_from_std_string (self->obj->get_node ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief getters and setters structure
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyGetSetDef tp_getset[] = {
+    {(char *) "is_initialized", (getter) tp_getter_is_initialized, (setter) 0,
+     (char *) "check if device is initialized", nullptr},
+    {(char *) "type", (getter) tp_getter_type, (setter) 0,
+     (char *) "device type", nullptr},
+    {(char *) "subsystem", (getter) tp_getter_subsystem, (setter) 0,
+     (char *) "device subsystem", nullptr},
+    {(char *) "node", (getter) tp_getter_node, (setter) 0,
+     (char *) "device node", nullptr},
+    {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief get_property method
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_get_property (core_system_device_o *self, PyObject *args)
+{
+    // parse input args
+    std::string arg_name;
+
+    try
+    {
+        arg_name = mobius::py::get_arg_as_std_string (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -255,87 +158,111 @@ tp_f_lookup (core_kff_kff_o *self, PyObject *args)
         return nullptr;
     }
 
+    // execute C++ function
     PyObject *ret = nullptr;
 
     try
     {
         ret = mobius::py::pystring_from_std_string (
-            std::string (1, self->obj->lookup (arg_type, arg_value)));
+            self->obj->get_property (arg_name));
     }
     catch (const std::exception &e)
     {
         mobius::py::set_runtime_error (e.what ());
     }
 
+    // return value
     return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Methods structure
+// @brief get_sysattr method
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_get_sysattr (core_system_device_o *self, PyObject *args)
+{
+    // parse input args
+    std::string arg_name;
+
+    try
+    {
+        arg_name = mobius::py::get_arg_as_std_string (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pystring_from_std_string (
+            self->obj->get_sysattr (arg_name));
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // return value
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief new_reader method
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_new_reader (core_system_device_o *self, PyObject *)
+{
+    // execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = pymobius_io_reader_to_pyobject (self->obj->new_reader ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // return value
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "new_connection", (PyCFunction) tp_f_new_connection, METH_VARARGS,
-     "create new connection set to KFF"},
-    {(char *) "new_hashset", (PyCFunction) tp_f_new_hashset, METH_VARARGS,
-     "Create hash set"},
-    {(char *) "remove_hashset", (PyCFunction) tp_f_remove_hashset, METH_VARARGS,
-     "Remove hash set"},
-    {(char *) "get_hashsets", (PyCFunction) tp_f_get_hashsets, METH_VARARGS,
-     "Get hash sets"},
-    {(char *) "alert_lookup", (PyCFunction) tp_f_alert_lookup, METH_VARARGS,
-     "Lookup hash in alert hash sets"},
-    {(char *) "lookup", (PyCFunction) tp_f_lookup, METH_VARARGS,
-     "Lookup hash in all hash sets"},
+    {(char *) "get_property", (PyCFunction) tp_f_get_property, METH_VARARGS,
+     "get property value"},
+    {(char *) "get_sysattr", (PyCFunction) tp_f_get_sysattr, METH_VARARGS,
+     "get system attribute"},
+    {(char *) "new_reader", (PyCFunction) tp_f_new_reader, METH_VARARGS,
+     "create new reader"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief tp_new (default constructor)
-// @param type type object
-// @param args argument list
-// @param kwds keywords dict
-// @return new kff object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_new (PyTypeObject *type, PyObject *, PyObject *)
-{
-    PyObject *ret = type->tp_alloc (type, 0);
-
-    if (ret)
-    {
-        try
-        {
-            ((core_kff_kff_o *) ret)->obj = new mobius::core::kff::kff ();
-        }
-        catch (const std::exception &e)
-        {
-            Py_DECREF (ret);
-            mobius::py::set_runtime_error (e.what ());
-            ret = nullptr;
-        }
-    }
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>kff</i> deallocator
-// @param self Object
+// @brief tp_dealloc
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-tp_dealloc (core_kff_kff_o *self)
+tp_dealloc (core_system_device_o *self)
 {
     delete self->obj;
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
+// @brief type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_kff_kff_t = {
+PyTypeObject core_system_device_t = {
     PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.kff.kff",                    // tp_name
-    sizeof (core_kff_kff_o),                  // tp_basicsize
+    "mobius.core.system.device",              // tp_name
+    sizeof (core_system_device_o),            // tp_basicsize
     0,                                        // tp_itemsize
     (destructor) tp_dealloc,                  // tp_dealloc
     0,                                        // tp_print
@@ -353,7 +280,7 @@ PyTypeObject core_kff_kff_t = {
     0,                                        // tp_setattro
     0,                                        // tp_as_buffer
     Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "KFF database",                           // tp_doc
+    "system device class",                    // tp_doc
     0,                                        // tp_traverse
     0,                                        // tp_clear
     0,                                        // tp_richcompare
@@ -362,7 +289,7 @@ PyTypeObject core_kff_kff_t = {
     0,                                        // tp_iternext
     tp_methods,                               // tp_methods
     0,                                        // tp_members
-    0,                                        // tp_getset
+    tp_getset,                                // tp_getset
     0,                                        // tp_base
     0,                                        // tp_dict
     0,                                        // tp_descr_get
@@ -370,7 +297,7 @@ PyTypeObject core_kff_kff_t = {
     0,                                        // tp_dictoffset
     0,                                        // tp_init
     0,                                        // tp_alloc
-    tp_new,                                   // tp_new
+    0,                                        // tp_new
     0,                                        // tp_free
     0,                                        // tp_is_gc
     0,                                        // tp_bases

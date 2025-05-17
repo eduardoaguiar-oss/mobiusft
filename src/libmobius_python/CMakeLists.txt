@@ -42,7 +42,6 @@ find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_subdirectory(core)
 add_subdirectory(crypt)
-add_subdirectory(database)
 add_subdirectory(datasource)
 add_subdirectory(datetime)
 add_subdirectory(decoder)
@@ -51,8 +50,6 @@ add_subdirectory(framework)
 add_subdirectory(io)
 add_subdirectory(os)
 add_subdirectory(pod)
-add_subdirectory(system)
-add_subdirectory(turing)
 add_subdirectory(ui)
 add_subdirectory(vfs)
 
@@ -88,7 +85,6 @@ set_target_properties(libmobius_python PROPERTIES
 target_link_libraries(libmobius_python PRIVATE
     libmobius_python_core
     mobius_python_crypt
-    mobius_python_database
     mobius_python_datasource
     mobius_python_datetime
     mobius_python_decoder
@@ -97,8 +93,6 @@ target_link_libraries(libmobius_python PRIVATE
     mobius_python_io
     mobius_python_os
     mobius_python_pod
-    mobius_python_system
-    mobius_python_turing
     mobius_python_ui
     mobius_python_vfs
     Mobius::Framework
