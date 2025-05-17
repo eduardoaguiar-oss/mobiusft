@@ -19,92 +19,50 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @file attribute.cc C++ API <i>mobius.framework.attribute</i> class wrapper
+// @file hashset.cc C++ API <i>mobius.core.kff.hashset</i> class wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "attribute.hpp"
+#include "hashset.hpp"
+#include "database/connection.hpp"
+#include "database/transaction.hpp"
 #include <mobius/core/exception.inc>
+#include <pylist.hpp>
 #include <pymobius.hpp>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>id</i> Attribute getter
-// @param self Object
-// @return <i>id</i> attribute
+// @brief Check if value is an instance of <i>hashset</i>
+// @param value Python value
+// @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_getter_id (framework_attribute_o *self)
+bool
+pymobius_core_kff_hashset_check (PyObject *value)
 {
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_id ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    return ret;
+    return mobius::py::isinstance (value, &core_kff_hashset_t);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>name</i> Attribute getter
-// @param self Object
-// @return <i>name</i> attribute
+// @brief Create <i>hashset</i> Python object from C++ object
+// @param obj C++ object
+// @return New hashset object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_getter_name (framework_attribute_o *self)
+PyObject *
+pymobius_core_kff_hashset_to_pyobject (const mobius::core::kff::hashset &obj)
 {
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_name ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    return ret;
+    return mobius::py::to_pyobject<core_kff_hashset_o> (obj,
+                                                        &core_kff_hashset_t);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>name</i> Attribute setter
-// @param self Object
-// @param value New value
-// @return 0 on success, -1 on error
+// @brief Create <i>hashset</i> C++ object from Python object
+// @param value Python value
+// @return Hashset object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static int
-tp_setter_name (framework_attribute_o *self, PyObject *value, void *)
+mobius::core::kff::hashset
+pymobius_core_kff_hashset_from_pyobject (PyObject *value)
 {
-    // Check value
-    try
-    {
-        mobius::py::check_setter_value (value, "name",
-                                        mobius::py::pystring_check);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_invalid_type_error (e.what ());
-        return -1;
-    }
-
-    // Set name attribute
-    try
-    {
-        self->obj->set_name (mobius::py::pystring_as_std_string (value));
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-        return -1;
-    }
-
-    // Return success
-    return 0;
+    return mobius::py::from_pyobject<core_kff_hashset_o> (value,
+                                                          &core_kff_hashset_t);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -113,7 +71,7 @@ tp_setter_name (framework_attribute_o *self, PyObject *value, void *)
 // @return <i>description</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_description (framework_attribute_o *self)
+tp_getter_description (core_kff_hashset_o *self)
 {
     PyObject *ret = nullptr;
 
@@ -137,7 +95,7 @@ tp_getter_description (framework_attribute_o *self)
 // @return 0 on success, -1 on error
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static int
-tp_setter_description (framework_attribute_o *self, PyObject *value, void *)
+tp_setter_description (core_kff_hashset_o *self, PyObject *value, void *)
 {
     // Check value
     try
@@ -167,193 +125,20 @@ tp_setter_description (framework_attribute_o *self, PyObject *value, void *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>datatype</i> Attribute getter
+// @brief <i>hashes</i> Attribute getter
 // @param self Object
-// @return <i>datatype</i> attribute
+// @return <i>hashes</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_datatype (framework_attribute_o *self)
+tp_getter_hashes (core_kff_hashset_o *self)
 {
     PyObject *ret = nullptr;
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_datatype ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>datatype</i> Attribute setter
-// @param self Object
-// @param value New value
-// @return 0 on success, -1 on error
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static int
-tp_setter_datatype (framework_attribute_o *self, PyObject *value, void *)
-{
-    // Check value
-    try
-    {
-        mobius::py::check_setter_value (value, "datatype",
-                                        mobius::py::pystring_check);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_invalid_type_error (e.what ());
-        return -1;
-    }
-
-    // Set datatype attribute
-    try
-    {
-        self->obj->set_datatype (mobius::py::pystring_as_std_string (value));
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-        return -1;
-    }
-
-    // Return success
-    return 0;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>value_mask</i> Attribute getter
-// @param self Object
-// @return <i>value_mask</i> attribute
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_getter_value_mask (framework_attribute_o *self)
-{
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret =
-            mobius::py::pystring_from_std_string (self->obj->get_value_mask ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>value_mask</i> Attribute setter
-// @param self Object
-// @param value New value
-// @return 0 on success, -1 on error
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static int
-tp_setter_value_mask (framework_attribute_o *self, PyObject *value, void *)
-{
-    // Check value
-    try
-    {
-        mobius::py::check_setter_value (value, "value_mask",
-                                        mobius::py::pystring_check);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_invalid_type_error (e.what ());
-        return -1;
-    }
-
-    // Set value_mask attribute
-    try
-    {
-        self->obj->set_value_mask (mobius::py::pystring_as_std_string (value));
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-        return -1;
-    }
-
-    // Return success
-    return 0;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>index</i> Attribute getter
-// @param self Object
-// @return <i>index</i> attribute
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_getter_index (framework_attribute_o *self)
-{
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::pylong_from_std_uint32_t (self->obj->get_index ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>index</i> Attribute setter
-// @param self Object
-// @param value New value
-// @return 0 on success, -1 on error
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static int
-tp_setter_index (framework_attribute_o *self, PyObject *value, void *)
-{
-    // Check value
-    try
-    {
-        mobius::py::check_setter_value (value, "index",
-                                        mobius::py::pylong_check);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_invalid_type_error (e.what ());
-        return -1;
-    }
-
-    // Set index attribute
-    try
-    {
-        self->obj->set_index (mobius::py::pylong_as_std_uint32_t (value));
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-        return -1;
-    }
-
-    // Return success
-    return 0;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>is_editable</i> Attribute getter
-// @param self Object
-// @return <i>is_editable</i> attribute
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_getter_is_editable (framework_attribute_o *self)
-{
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::pybool_from_bool (self->obj->is_editable ());
+        ret = mobius::py::pylist_from_cpp_pair_container (
+            self->obj->get_hashes (), mobius::py::pystring_from_std_string,
+            mobius::py::pystring_from_std_string);
     }
     catch (const std::exception &e)
     {
@@ -367,29 +152,239 @@ tp_getter_is_editable (framework_attribute_o *self)
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyGetSetDef tp_getset[] = {
-    {(char *) "id", (getter) tp_getter_id, nullptr, (char *) "attribute ID",
-     nullptr},
-    {(char *) "name", (getter) tp_getter_name, (setter) tp_setter_name,
-     (char *) "name", nullptr},
     {(char *) "description", (getter) tp_getter_description,
-     (setter) tp_setter_description, (char *) "description", nullptr},
-    {(char *) "datatype", (getter) tp_getter_datatype,
-     (setter) tp_setter_datatype, (char *) "datatype", nullptr},
-    {(char *) "value_mask", (getter) tp_getter_value_mask,
-     (setter) tp_setter_value_mask, (char *) "value_mask", nullptr},
-    {(char *) "index", (getter) tp_getter_index, (setter) tp_setter_index,
-     (char *) "index", nullptr},
-    {(char *) "is_editable", (getter) tp_getter_is_editable, nullptr,
-     (char *) "flag: is editable", nullptr},
-    {nullptr, nullptr, nullptr, nullptr, nullptr}, // sentinel
+     (setter) tp_setter_description, (char *) "Description", nullptr},
+    {(char *) "hashes", (getter) tp_getter_hashes, (setter) 0,
+     (char *) "hashes", nullptr},
+    {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>attribute</i> deallocator
+// @brief <i>new_connection</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return new connection object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_new_connection (core_kff_hashset_o *self, PyObject *)
+{
+    // Execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = pymobius_database_connection_to_pyobject (
+            self->obj->new_connection ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // Return value
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>new_transaction</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return new transaction object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_new_transaction (core_kff_hashset_o *self, PyObject *)
+{
+    // Execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = pymobius_database_transaction_to_pyobject (
+            self->obj->new_transaction ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // Return value
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>is_alert</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_is_alert (core_kff_hashset_o *self, PyObject *)
+{
+    // Execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pybool_from_bool (self->obj->is_alert ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // Return value
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>get_size</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Number of hashes
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_get_size (core_kff_hashset_o *self, PyObject *)
+{
+    // Execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pylong_from_std_uint64_t (self->obj->get_size ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // Return value
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>clear</i> method implementation
+// @param self Object
+// @param args Argument list
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_clear (core_kff_hashset_o *self, PyObject *)
+{
+    // Execute C++ function
+    try
+    {
+        self->obj->clear ();
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
+    }
+
+    // return None
+    return mobius::py::pynone ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>add</i> method implementation
+// @param self Object
+// @param args Argument list
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_add (core_kff_hashset_o *self, PyObject *args)
+{
+    // Parse input args
+    std::string arg_type;
+    std::string arg_value;
+
+    try
+    {
+        arg_type = mobius::py::get_arg_as_std_string (args, 0);
+        arg_value = mobius::py::get_arg_as_std_string (args, 1);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // Execute C++ function
+    try
+    {
+        self->obj->add (arg_type, arg_value);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
+    }
+
+    // return None
+    return mobius::py::pynone ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>remove</i> method implementation
+// @param self Object
+// @param args Argument list
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_remove (core_kff_hashset_o *self, PyObject *args)
+{
+    // Parse input args
+    std::string arg_type;
+    std::string arg_value;
+
+    try
+    {
+        arg_type = mobius::py::get_arg_as_std_string (args, 0);
+        arg_value = mobius::py::get_arg_as_std_string (args, 1);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // Execute C++ function
+    try
+    {
+        self->obj->remove (arg_type, arg_value);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
+    }
+
+    // return None
+    return mobius::py::pynone ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Methods structure
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyMethodDef tp_methods[] = {
+    {(char *) "new_connection", (PyCFunction) tp_f_new_connection, METH_VARARGS,
+     "create new connection for database"},
+    {(char *) "new_transaction", (PyCFunction) tp_f_new_transaction,
+     METH_VARARGS, "Create new database transaction"},
+    {(char *) "is_alert", (PyCFunction) tp_f_is_alert, METH_VARARGS,
+     "Return true if hash set is alert"},
+    {(char *) "get_size", (PyCFunction) tp_f_get_size, METH_VARARGS,
+     "Get number of hashes"},
+    {(char *) "clear", (PyCFunction) tp_f_clear, METH_VARARGS,
+     "Clear hash set"},
+    {(char *) "add", (PyCFunction) tp_f_add, METH_VARARGS, "Add hash"},
+    {(char *) "remove", (PyCFunction) tp_f_remove, METH_VARARGS, "Remove hash"},
+    {nullptr, nullptr, 0, nullptr} // sentinel
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>hashset</i> deallocator
 // @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-tp_dealloc (framework_attribute_o *self)
+tp_dealloc (core_kff_hashset_o *self)
 {
     delete self->obj;
     Py_TYPE (self)->tp_free ((PyObject *) self);
@@ -398,10 +393,10 @@ tp_dealloc (framework_attribute_o *self)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyTypeObject framework_attribute_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)           // header
-    "mobius.framework.attribute",             // tp_name
-    sizeof (framework_attribute_o),           // tp_basicsize
+PyTypeObject core_kff_hashset_t = {
+    PyVarObject_HEAD_INIT (nullptr, 0)        // header
+    "mobius.core.kff.hashset",                // tp_name
+    sizeof (core_kff_hashset_o),              // tp_basicsize
     0,                                        // tp_itemsize
     (destructor) tp_dealloc,                  // tp_dealloc
     0,                                        // tp_print
@@ -419,14 +414,14 @@ static PyTypeObject framework_attribute_t = {
     0,                                        // tp_setattro
     0,                                        // tp_as_buffer
     Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "attribute class",                        // tp_doc
+    "Hash set",                               // tp_doc
     0,                                        // tp_traverse
     0,                                        // tp_clear
     0,                                        // tp_richcompare
     0,                                        // tp_weaklistoffset
     0,                                        // tp_iter
     0,                                        // tp_iternext
-    0,                                        // tp_methods
+    tp_methods,                               // tp_methods
     0,                                        // tp_members
     tp_getset,                                // tp_getset
     0,                                        // tp_base
@@ -448,51 +443,3 @@ static PyTypeObject framework_attribute_t = {
     0,                                        // tp_version_tag
     0,                                        // tp_finalize
 };
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>mobius.framework.attribute</i> type
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pytypeobject
-new_framework_attribute_type ()
-{
-    mobius::py::pytypeobject type (&framework_attribute_t);
-    type.create ();
-
-    return type;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if value is an instance of <i>attribute</i>
-// @param value Python value
-// @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-pymobius_framework_attribute_check (PyObject *value)
-{
-    return mobius::py::isinstance (value, &framework_attribute_t);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>attribute</i> Python object from C++ object
-// @param obj C++ object
-// @return New attribute object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_framework_attribute_to_pyobject (
-    const mobius::framework::attribute &obj)
-{
-    return mobius::py::to_pyobject<framework_attribute_o> (
-        obj, &framework_attribute_t);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>attribute</i> C++ object from Python object
-// @param value Python value
-// @return Attribute object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::framework::attribute
-pymobius_framework_attribute_from_pyobject (PyObject *value)
-{
-    return mobius::py::from_pyobject<framework_attribute_o> (
-        value, &framework_attribute_t);
-}

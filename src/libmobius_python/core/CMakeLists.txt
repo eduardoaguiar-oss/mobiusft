@@ -23,9 +23,14 @@ cmake_minimum_required(VERSION 3.10)
 project(libmobius-python-core LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Build sub-libraries
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_subdirectory(kff)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_python_core STATIC
+add_library(libmobius_python_core STATIC
     module.cpp
     application.cpp
     extension.cpp
@@ -43,12 +48,21 @@ add_library(mobius_python_core STATIC
     file_decoder/section.cpp
 )
 
-target_include_directories(mobius_python_core PRIVATE
+set_target_properties(libmobius_python_core PROPERTIES
+    PREFIX ""
+)
+
+target_include_directories(libmobius_python_core PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_link_libraries(mobius_python_core PUBLIC Mobius::Core)
+target_link_libraries(libmobius_python_core
+   PRIVATE
+       "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_kff>"
+   PUBLIC
+       Mobius::Core
+)
 
-target_compile_options(mobius_python_core PRIVATE -fno-strict-aliasing -fPIC)
+target_compile_options(libmobius_python_core PRIVATE -fno-strict-aliasing -fPIC)

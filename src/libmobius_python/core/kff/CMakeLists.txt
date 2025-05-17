@@ -20,23 +20,27 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.10)
-project(mobius_python_kff LANGUAGES CXX)
+project(libmobius_python_core_kff LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Target: mobius_python_kff.la
+# Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_python_kff STATIC
+add_library(libmobius_python_core_kff STATIC
     module.cpp
     hashset.cpp
     kff.cpp
 )
 
-target_include_directories(mobius_python_kff PRIVATE
+set_target_properties(libmobius_python_core_kff PROPERTIES
+    PREFIX ""
+)
+
+target_include_directories(libmobius_python_core_kff PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_link_libraries(mobius_python_kff PUBLIC Mobius::Core)
+target_link_libraries(libmobius_python_core_kff PUBLIC Mobius::Core)
 
-target_compile_options(mobius_python_kff PRIVATE -fno-strict-aliasing -fPIC)
+target_compile_options(libmobius_python_core_kff PRIVATE -fno-strict-aliasing -fPIC)

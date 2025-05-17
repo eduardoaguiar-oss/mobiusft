@@ -18,6 +18,7 @@
 import traceback
 
 import mobius
+import mobius.framework
 import pymobius.ant.turing
 
 from . import accounts

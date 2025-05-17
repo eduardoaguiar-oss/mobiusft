@@ -410,7 +410,7 @@ tp_dealloc (framework_category_o *self)
 // @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyTypeObject framework_category_t = {
-    PyVarObject_HEAD_INIT (NULL, 0)           // header
+    PyVarObject_HEAD_INIT (nullptr, 0)           // header
     "mobius.framework.category",              // tp_name
     sizeof (framework_category_o),            // tp_basicsize
     0,                                        // tp_itemsize

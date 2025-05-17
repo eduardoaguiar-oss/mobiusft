@@ -22,5 +22,5 @@
 EXTENSION_ID = 'kff-manager'
 EXTENSION_NAME = 'KFF Manager'
 EXTENSION_AUTHOR = 'Eduardo Aguiar'
-EXTENSION_VERSION = '1.6'
+EXTENSION_VERSION = '1.7'
 EXTENSION_DESCRIPTION = 'Known File Filter (KFF) Manager'

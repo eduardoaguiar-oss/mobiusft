@@ -19,6 +19,7 @@ import os
 import os.path
 
 import mobius
+import mobius.framework
 import pymobius
 from gi.repository import Gtk
 

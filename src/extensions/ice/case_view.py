@@ -18,6 +18,7 @@
 import traceback
 
 import mobius
+import mobius.framework
 import pymobius
 import pymobius.item_browser
 from gi.repository import Gtk

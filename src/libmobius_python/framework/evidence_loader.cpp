@@ -19,7 +19,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \file evidence_loader.cc C++ API <i>mobius.framework.evidence_loader</i>
+// @file evidence_loader.cc C++ API <i>mobius.framework.evidence_loader</i>
 //! class wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -130,7 +130,7 @@ tp_dealloc (framework_evidence_loader_o *self)
 // @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyTypeObject framework_evidence_loader_t = {
-    PyVarObject_HEAD_INIT (NULL, 0)           // header
+    PyVarObject_HEAD_INIT (nullptr, 0)           // header
     "mobius.framework.evidence_loader",       // tp_name
     sizeof (framework_evidence_loader_o),     // tp_basicsize
     0,                                        // tp_itemsize

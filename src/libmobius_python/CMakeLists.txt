@@ -49,7 +49,6 @@ add_subdirectory(decoder)
 add_subdirectory(encoder)
 add_subdirectory(framework)
 add_subdirectory(io)
-add_subdirectory(kff)
 add_subdirectory(os)
 add_subdirectory(pod)
 add_subdirectory(system)
@@ -87,7 +86,7 @@ set_target_properties(libmobius_python PROPERTIES
 )
 
 target_link_libraries(libmobius_python PRIVATE
-    mobius_python_core
+    libmobius_python_core
     mobius_python_crypt
     mobius_python_database
     mobius_python_datasource
@@ -96,7 +95,6 @@ target_link_libraries(libmobius_python PRIVATE
     mobius_python_encoder
     mobius_python_framework
     mobius_python_io
-    mobius_python_kff
     mobius_python_os
     mobius_python_pod
     mobius_python_system

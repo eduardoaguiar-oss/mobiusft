@@ -17,6 +17,7 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import mobius
 import pymobius
+import mobius.framework
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Gtk

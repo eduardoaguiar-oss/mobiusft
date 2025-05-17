@@ -16,6 +16,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import mobius
+import mobius.core.kff
 
 ANT_ID = 'kff-alert'
 ANT_NAME = 'KFF Alert tagger'
@@ -62,7 +63,7 @@ class Ant(object):
     # @brief Run ant
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def run(self):
-        kff = mobius.kff.kff()
+        kff = mobius.core.kff.kff()
         connection = kff.new_connection()
 
         self.__tag_evidences('received-file')
@@ -75,7 +76,7 @@ class Ant(object):
     # @brief Tag evidences
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __tag_evidences(self, evidence_id):
-        kff = mobius.kff.kff()
+        kff = mobius.core.kff.kff()
 
         # Iterate through evidences obtained from an item using a specific evidence ID.
         # For each evidence, it checks if any of the hashes (of a specified type and value)

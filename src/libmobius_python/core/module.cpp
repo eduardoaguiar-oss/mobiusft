@@ -29,6 +29,7 @@
 #include "thread_guard.hpp"
 #include "decoder/module.hpp"
 #include "file_decoder/module.hpp"
+#include "kff/module.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Functions prototypes
@@ -100,6 +101,7 @@ new_core_module ()
 
   // Build submodules
   module.add_submodule ("file_decoder", new_core_file_decoder_module ());
+  module.add_submodule ("kff", new_core_kff_module ());
 
   // Return module
   return module;

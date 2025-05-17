@@ -1,9 +1,8 @@
-#ifndef LIBMOBIUS_PYTHON_KFF_HASHSET_HPP
-#define LIBMOBIUS_PYTHON_KFF_HASHSET_HPP
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -18,27 +17,47 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
-#include <mobius/core/kff/hashset.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Data structure
+// @brief  C++ API mobius.encoder module wrapper
+// @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-typedef struct
+#include "module.hpp"
+#include "hashset.hpp"
+#include "kff.hpp"
+#include <pymobius.hpp>
+
+namespace
 {
-  PyObject_HEAD
-  mobius::core::kff::hashset *obj;
-} kff_hashset_o;
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Module definition structure
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyModuleDef module_def = {
+    PyModuleDef_HEAD_INIT,
+    "mobius.core.kff",
+    "Mobius Forensic Toolkit mobius.core.kff module",
+    -1,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr};
 
-extern PyTypeObject kff_hashset_t;
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Helper functions
+// @brief Create module
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool pymobius_kff_hashset_check (PyObject *);
-PyObject *pymobius_kff_hashset_to_pyobject (const mobius::core::kff::hashset&);
-mobius::core::kff::hashset pymobius_kff_hashset_from_pyobject (PyObject *);
+mobius::py::pymodule
+new_core_kff_module ()
+{
+    // Initialize module
+    mobius::py::pymodule module (&module_def);
 
-#endif
+    // Add types
+    module.add_type ("kff", &core_kff_kff_t);
+    module.add_type ("hashset", &core_kff_hashset_t);
 
-
+    // Return module
+    return module;
+}

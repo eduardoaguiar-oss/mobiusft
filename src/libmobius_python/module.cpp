@@ -36,7 +36,6 @@
 #include "decoder/module.hpp"
 #include "encoder/module.hpp"
 #include "framework/module.hpp"
-#include "kff/module.hpp"
 #include "io/module.hpp"
 #include "os/module.hpp"
 #include "pod/module.hpp"
@@ -91,7 +90,6 @@ PyInit_mobius (void)
       module.add_submodule ("decoder", new_decoder_module ());
       module.add_submodule ("encoder", new_encoder_module ());
       module.add_submodule ("framework", new_framework_module ());
-      module.add_submodule ("kff", new_kff_module ());
       module.add_submodule ("io", new_io_module ());
       module.add_submodule ("os", new_os_module ());
       module.add_submodule ("pod", new_pod_module ());

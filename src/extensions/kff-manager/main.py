@@ -20,6 +20,7 @@ import os
 import os.path
 
 import mobius
+import mobius.core.kff
 import pymobius
 from gi.repository import GObject
 from gi.repository import Gdk
@@ -326,7 +327,7 @@ class KFFView(object):
         model = self.__listview.get_model()
         model.clear()
 
-        kff = mobius.kff.kff()
+        kff = mobius.core.kff.kff()
 
         for h_id, h in kff.get_hashsets():
             model.append((h_id, h.description, '✓' if h.is_alert() else '', h.get_size(), h))
@@ -403,7 +404,7 @@ class KFFView(object):
             return
 
         # create hashset
-        kff = mobius.kff.kff()
+        kff = mobius.core.kff.kff()
         h = kff.new_hashset(hashset_id, is_alert)
         h.description = hashset_description
 
@@ -442,7 +443,7 @@ class KFFView(object):
             return
 
         # remove hashset
-        kff = mobius.kff.kff()
+        kff = mobius.core.kff.kff()
         kff.remove_hashset(hashset_id)
 
         # update window

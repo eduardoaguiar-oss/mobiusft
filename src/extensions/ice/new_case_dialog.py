@@ -18,6 +18,7 @@
 import os
 
 import mobius
+import mobius.framework
 from gi.repository import Gdk
 from gi.repository import Gtk
 
