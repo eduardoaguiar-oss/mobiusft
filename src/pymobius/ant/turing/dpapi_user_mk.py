@@ -17,6 +17,7 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import traceback
 import mobius
+import mobius.core.os
 import pymobius.operating_system
 
 
@@ -152,7 +153,7 @@ class Ant(object):
             return
 
         try:
-            mkf = mobius.os.win.dpapi.master_key_file(reader)
+            mkf = mobius.core.os.win.dpapi.master_key_file(reader)
         except Exception as e:
             mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
             return

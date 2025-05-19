@@ -27,7 +27,7 @@
 #include "case.hpp"
 #include "core/database/connection.hpp"
 #include "core/database/transaction.hpp"
-#include "datasource/datasource.hpp"
+#include "core/datasource/datasource.hpp"
 #include "pod/data.hpp"
 #include "event.hpp"
 #include "evidence.hpp"
@@ -616,7 +616,7 @@ tp_f_get_datasource (framework_model_item_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_datasource_datasource_to_pyobject (
+        ret = pymobius_core_datasource_datasource_to_pyobject (
             self->obj->get_datasource ());
     }
     catch (const std::exception &e)
@@ -642,7 +642,7 @@ tp_f_set_datasource (framework_model_item_o *self, PyObject *args)
     try
     {
         arg_datasource = mobius::py::get_arg_as_cpp (
-            args, 0, pymobius_datasource_datasource_from_pyobject);
+            args, 0, pymobius_core_datasource_datasource_from_pyobject);
     }
     catch (const std::exception &e)
     {
@@ -1601,7 +1601,7 @@ class datasource_modified_callback
                 const mobius::core::datasource::datasource &datasource)
     {
         f_.call (pymobius_framework_model_item_to_pyobject (item),
-                 pymobius_datasource_datasource_to_pyobject (datasource));
+                 pymobius_core_datasource_datasource_to_pyobject (datasource));
     }
 
   private:

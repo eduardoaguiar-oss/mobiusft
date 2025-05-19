@@ -132,7 +132,7 @@ class UFDRFileInfoView(object):
             return
 
         url = filechooserbutton.get_uri()
-        self.__datasource = mobius.datasource.new_datasource_by_ufdr_url(url)
+        self.__datasource = mobius.core.datasource.new_datasource_by_ufdr_url(url)
 
         ant = pymobius.datasource.ufdr.case_info.UFDRCaseInfo(self.__datasource)
         ant.run()

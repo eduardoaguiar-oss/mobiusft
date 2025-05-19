@@ -25,6 +25,8 @@ import traceback
 
 import cairo
 import mobius
+import mobius.core.datasource
+import mobius.core.vfs
 import pymobius
 from gi.repository import GLib
 from gi.repository import GObject
@@ -760,7 +762,7 @@ class Widget(object):
         self.image.save()
 
         # create disk
-        disk = mobius.vfs.new_disk_by_path(self.image.image_path)
+        disk = mobius.core.vfs.new_disk_by_path(self.image.image_path)
 
         uname_data = os.uname()
         acquisition_platform = f'{uname_data[0]} {uname_data[2]} on {uname_data[4]}'
@@ -774,9 +776,9 @@ class Widget(object):
         disk.set_attribute('acquisition_time', acquisition_time)
 
         # set item datasource
-        vfs = mobius.vfs.vfs()
+        vfs = mobius.core.vfs.vfs()
         vfs.add_disk(disk)
-        datasource = mobius.datasource.new_datasource_from_vfs(vfs)
+        datasource = mobius.core.datasource.new_datasource_from_vfs(vfs)
 
         transaction = self.item.new_transaction()
         self.item.set_datasource(datasource)

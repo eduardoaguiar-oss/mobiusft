@@ -18,6 +18,8 @@
 import traceback
 
 import mobius
+import mobius.core.crypt
+import mobius.core.os
 import pymobius
 import pymobius.ant.turing
 import pymobius.app.chromium
@@ -145,7 +147,7 @@ class Ant(object):
             # DPAPI encrypted cookies
             # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             if DPAPI_GUID in cookie.value:
-                blob = mobius.os.win.dpapi.blob(cookie.value)
+                blob = mobius.core.os.win.dpapi.blob(cookie.value)
                 mk_guid = blob.master_key_guid
                 key_value = self.__dpapi_master_keys.get(mk_guid)
 
@@ -165,7 +167,7 @@ class Ant(object):
                 tag = payload[-16:]
 
                 for key_value in self.__v10_master_keys:
-                    cipher = mobius.crypt.new_cipher_gcm('aes', key_value, iv)
+                    cipher = mobius.core.crypt.new_cipher_gcm('aes', key_value, iv)
                     plaintext = cipher.decrypt(ciphertext)
 
                     if cipher.check_tag(tag):

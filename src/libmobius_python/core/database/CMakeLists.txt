@@ -23,7 +23,7 @@ cmake_minimum_required(VERSION 3.20)
 project(libmobius_python_core_database LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Target: mobius_python_database.la
+# Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(libmobius_python_core_database STATIC
     module.cpp

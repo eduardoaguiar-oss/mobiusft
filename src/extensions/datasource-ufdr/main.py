@@ -17,7 +17,6 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import mobius
 import pymobius
-import pymobius.datasource.ufdr.case_info
 from gi.repository import Gtk
 
 from caseinfo_view import CaseInfoView

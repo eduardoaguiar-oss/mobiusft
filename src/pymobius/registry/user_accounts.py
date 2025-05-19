@@ -18,6 +18,7 @@
 import struct
 
 import mobius
+import mobius.core.crypt
 import pymobius
 from pymobius.registry import *
 
@@ -435,13 +436,13 @@ def get_sam_key(registry):
         # @see http://moyix.blogspot.com.br/2008/02/syskey-and-sam.html
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         if revision == 0x10002:
-            md5 = mobius.crypt.hash("md5")
+            md5 = mobius.core.crypt.hash("md5")
             md5.update(f[0x70:0x80])
             md5.update(b'!@#$%^&*()qwertyUIOPAzxcvbnmQQQQQQQQQQQQ)(*@&%\0')
             md5.update(syskey)
             md5.update(b'0123456789012345678901234567890123456789\0')
 
-            rc4 = mobius.crypt.new_cipher_stream("rc4", md5.get_digest())
+            rc4 = mobius.core.crypt.new_cipher_stream("rc4", md5.get_digest())
             sam_key = rc4.encrypt(f[0x80:0xa0])[:16]
 
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -452,7 +453,7 @@ def get_sam_key(registry):
             struct_revision, struct_size, check_len, data_len, salt = struct.unpack('<IIII16s', f[0x68:0x88])
             data = f[0x88:0x88 + data_len]  # followed by check
 
-            c = mobius.crypt.new_cipher_cbc("aes", syskey, salt)
+            c = mobius.core.crypt.new_cipher_cbc("aes", syskey, salt)
             sam_key = c.decrypt(data)[:16]  # AES-128 (16 bytes key)
 
         else:
@@ -584,12 +585,12 @@ class user_account(object):
                 mobius.core.logf(f"DEV unhandled hash type: {htype}")
                 return []
 
-            md5 = mobius.crypt.hash("md5")
+            md5 = mobius.core.crypt.hash("md5")
             md5.update(self.__sam_key)
             md5.update(rid_data)
             md5.update(ntlm_str)
 
-            rc4 = mobius.crypt.new_cipher_stream("rc4", md5.get_digest())
+            rc4 = mobius.core.crypt.new_cipher_stream("rc4", md5.get_digest())
             obfkey = rc4.decrypt(data[4:])
 
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -601,7 +602,7 @@ class user_account(object):
             if data_size:
                 salt = data[8:24]
                 hdata = data[24:24 + data_size]
-                c = mobius.crypt.new_cipher_cbc("aes", self.__sam_key, salt)
+                c = mobius.core.crypt.new_cipher_cbc("aes", self.__sam_key, salt)
                 obfkey = c.decrypt(hdata)
 
             else:
@@ -623,8 +624,8 @@ class user_account(object):
             h.type = htype
             h.is_current = is_current
 
-            des1 = mobius.crypt.new_cipher_ecb("des", key1)
-            des2 = mobius.crypt.new_cipher_ecb("des", key2)
+            des1 = mobius.core.crypt.new_cipher_ecb("des", key1)
+            des2 = mobius.core.crypt.new_cipher_ecb("des", key2)
             h.value = des1.decrypt(obfkey[i:i + 8]) + des2.decrypt(obfkey[i + 8:i + NTLM_HASH_SIZE])
             hashes.append(h)
 

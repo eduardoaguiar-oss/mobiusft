@@ -18,6 +18,7 @@
 import traceback
 
 import mobius
+import mobius.core.os
 import pymobius
 import pymobius.operating_system
 
@@ -150,7 +151,7 @@ class Ant(object):
             if not reader:
                 return
 
-            credhist = mobius.os.win.dpapi.credhist_file(reader)
+            credhist = mobius.core.os.win.dpapi.credhist_file(reader)
 
         except Exception as e:
             mobius.core.logf('WRN ' + str(e) + ' ' + traceback.format_exc())

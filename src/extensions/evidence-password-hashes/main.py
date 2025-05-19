@@ -18,6 +18,8 @@
 import re
 
 import mobius
+import mobius.core.crypt
+import mobius.core.os
 import mobius.core.turing
 import pymobius
 from gi.repository import Gtk
@@ -105,19 +107,19 @@ class HashTesting(object):
             hvalue = None
 
             if htype == 'nt':
-                hvalue = mobius.encoder.hexstring(mobius.os.win.hash_nt(keyword))
+                hvalue = mobius.encoder.hexstring(mobius.core.os.win.hash_nt(keyword))
 
             elif htype == 'lm':
-                hvalue = mobius.encoder.hexstring(mobius.os.win.hash_lm(keyword))
+                hvalue = mobius.encoder.hexstring(mobius.core.os.win.hash_lm(keyword))
 
             elif htype == 'sha1.utf16':
-                hvalue = mobius.encoder.hexstring(mobius.crypt.hash_digest('sha1', keyword.encode('utf-16le')))
+                hvalue = mobius.encoder.hexstring(mobius.core.crypt.hash_digest('sha1', keyword.encode('utf-16le')))
 
             elif htype == 'msdcc1':
-                hvalue = mobius.encoder.hexstring(mobius.os.win.hash_msdcc1(keyword, g[1]))
+                hvalue = mobius.encoder.hexstring(mobius.core.os.win.hash_msdcc1(keyword, g[1]))
 
             elif htype == 'msdcc2':
-                hvalue = mobius.encoder.hexstring(mobius.os.win.hash_msdcc2(keyword, g[1], g[2]))
+                hvalue = mobius.encoder.hexstring(mobius.core.os.win.hash_msdcc2(keyword, g[1], g[2]))
 
             # test hash value
             for h in hashdict.pop(hvalue, []):

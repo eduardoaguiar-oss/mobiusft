@@ -16,6 +16,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import mobius
+import mobius.core.datasource
 from . import parser
 
 
@@ -51,7 +52,7 @@ class UFDRCaseInfo(object):
         self.__datasource.set_case_info(ufdr_parser.get_case_info())
 
         for e in ufdr_parser.get_extractions():
-            extraction = mobius.datasource.ufdr.extraction(e.id)
+            extraction = mobius.core.datasource.ufdr.extraction(e.id)
             extraction.type = e.extraction_type
             extraction.name = e.name
             extraction.device_name = e.device_name

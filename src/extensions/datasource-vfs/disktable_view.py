@@ -17,6 +17,7 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import mobius
 import mobius.core.system
+import mobius.core.vfs
 import pymobius
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
@@ -201,7 +202,7 @@ class DiskTableView(object):
         url = dialog.run()
 
         if url:
-            disk = mobius.vfs.new_disk_by_url(url)
+            disk = mobius.core.vfs.new_disk_by_url(url)
             idx = self.__vfs.add_disk(disk)
 
             self.__tableview.add_row((idx + 1, disk.type, disk.size, disk.name, disk))
@@ -215,7 +216,7 @@ class DiskTableView(object):
         device_uid = dialog.run()
 
         if device_uid:
-            disk = mobius.vfs.new_disk_by_device_uid(device_uid)
+            disk = mobius.core.vfs.new_disk_by_device_uid(device_uid)
             idx = self.__vfs.add_disk(disk)
 
             self.__tableview.add_row((idx + 1, disk.type, disk.size, disk.name, disk))
@@ -261,7 +262,7 @@ class DiskTableView(object):
         reader = self.__disk.new_reader()
 
         # create imagefile and writer
-        imagefile = mobius.vfs.new_imagefile_by_url(url, imagetype)
+        imagefile = mobius.core.vfs.new_imagefile_by_url(url, imagetype)
 
         if imagetype == 'ewf':
             imagefile.segment_size = reader.size

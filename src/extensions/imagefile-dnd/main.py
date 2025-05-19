@@ -16,6 +16,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import mobius
+import mobius.core.datasource
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Extension metadata
@@ -50,7 +51,7 @@ def pvt_stop():
 # @brief Fallback handler for file DND
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def dnd_fallback(parent, pos, url):
-    datasource = mobius.datasource.new_datasource_by_imagefile_url(url)
+    datasource = mobius.core.datasource.new_datasource_by_imagefile_url(url)
     transaction = parent.new_transaction()
 
     # create child item, if necessary

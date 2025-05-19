@@ -16,6 +16,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import mobius
+import mobius.core.vfs
 import pymobius
 from gi.repository import GdkPixbuf
 from gi.repository import Gtk
@@ -191,7 +192,7 @@ class BlockTableView(object):
         reader = self.__block.new_reader()
 
         # create imagefile and writer
-        imagefile = mobius.vfs.new_imagefile_by_url(url, imagetype)
+        imagefile = mobius.core.vfs.new_imagefile_by_url(url, imagetype)
 
         if imagetype == 'ewf':
             imagefile.segment_size = reader.size

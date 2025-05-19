@@ -20,6 +20,8 @@ import shutil
 import traceback
 
 import mobius
+import mobius.core.crypt
+import mobius.core.os
 import pymobius
 
 ANT_ID = 'registry'
@@ -129,7 +131,7 @@ class Ant(object):
 
         # builds registry list
         for r in reg_list:
-            registry = mobius.os.win.registry.registry()
+            registry = mobius.core.os.win.registry.registry()
 
             for hivefile in r.hivefiles:
                 try:
@@ -395,7 +397,7 @@ class Ant(object):
         path = self.__item.create_data_path(rpath)
 
         fp = open(path, 'wb')
-        h = mobius.crypt.hash('sha2-512')
+        h = mobius.core.crypt.hash('sha2-512')
         BLOCK_SIZE = 65536
 
         # copy data

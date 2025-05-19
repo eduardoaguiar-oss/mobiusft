@@ -22,5 +22,5 @@
 EXTENSION_ID = 'datasource-ufdr'
 EXTENSION_NAME = 'Datasource UFDR Viewer'
 EXTENSION_AUTHOR = 'Eduardo Aguiar'
-EXTENSION_VERSION = '1.4'
+EXTENSION_VERSION = '1.5'
 EXTENSION_DESCRIPTION = 'Datasource viewer for Cellebrite\'s UFDR datasources'

@@ -16,6 +16,8 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import mobius
+import mobius.core.crypt
+import mobius.core.os
 import mobius.core.turing
 import pymobius
 
@@ -116,19 +118,19 @@ class Ant(object):
             value = ''
 
             if h.type == 'nt':
-                value = mobius.os.win.hash_nt(password)
+                value = mobius.core.os.win.hash_nt(password)
 
             elif h.type == 'lm':
-                value = mobius.os.win.hash_lm(password)
+                value = mobius.core.os.win.hash_lm(password)
 
             elif h.type == 'msdcc1':
-                value = mobius.os.win.hash_msdcc1(password, attrs['username'])
+                value = mobius.core.os.win.hash_msdcc1(password, attrs['username'])
 
             elif h.type == 'msdcc2':
-                value = mobius.os.win.hash_msdcc2(password, attrs['username'], int(attrs['iterations']))
+                value = mobius.core.os.win.hash_msdcc2(password, attrs['username'], int(attrs['iterations']))
 
             elif h.type == 'sha1.utf16':
-                value = mobius.crypt.hash_digest('sha1', password.encode('utf-16-le'))
+                value = mobius.core.crypt.hash_digest('sha1', password.encode('utf-16-le'))
 
             if h.value == mobius.encoder.hexstring(value):
                 self.__password_count += 1

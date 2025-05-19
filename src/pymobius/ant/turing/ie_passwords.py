@@ -18,6 +18,7 @@
 import traceback
 
 import mobius
+import mobius.core.os
 import mobius.core.turing
 import pymobius
 import pymobius.registry.main
@@ -127,7 +128,7 @@ class Ant(object):
 
             if status == 1:  # found
                 secret = pymobius.Data()
-                secret.blob = mobius.os.win.dpapi.blob(value.data.data)
+                secret.blob = mobius.core.os.win.dpapi.blob(value.data.data)
                 secret.entropy = (url + '\0').encode('utf-16le')
                 secret.url = url
                 secret.source = value.name

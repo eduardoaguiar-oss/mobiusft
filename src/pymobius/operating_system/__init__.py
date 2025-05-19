@@ -19,6 +19,7 @@ import os.path
 import traceback
 
 import mobius
+import mobius.core.crypt
 import pymobius.registry
 import pymobius.registry.installed_programs
 import pymobius.registry.main
@@ -71,7 +72,7 @@ class file_wrapper(object):
             return
 
         # calculate hash sha2-512
-        h = mobius.crypt.hash('sha2-512')
+        h = mobius.core.crypt.hash('sha2-512')
         data = reader.read(65536)
 
         while data:

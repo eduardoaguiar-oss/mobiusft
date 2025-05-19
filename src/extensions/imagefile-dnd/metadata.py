@@ -22,5 +22,5 @@
 EXTENSION_ID = 'imagefile-dnd'
 EXTENSION_NAME = 'Imagefile DND'
 EXTENSION_AUTHOR = 'Eduardo Aguiar'
-EXTENSION_VERSION = '1.2'
+EXTENSION_VERSION = '1.3'
 EXTENSION_DESCRIPTION = 'Add support for imagefile DND'

@@ -29,17 +29,13 @@
 #include "api_dataholder.hpp"
 
 #include "core/module.hpp"
-#include "crypt/module.hpp"
-#include "datasource/module.hpp"
 #include "datetime/module.hpp"
 #include "decoder/module.hpp"
 #include "encoder/module.hpp"
 #include "framework/module.hpp"
 #include "io/module.hpp"
-#include "os/module.hpp"
 #include "pod/module.hpp"
 #include "ui/module.hpp"
-#include "vfs/module.hpp"
 
 namespace
 {
@@ -80,17 +76,13 @@ PyInit_mobius (void)
 
       // Build submodules
       module.add_submodule ("core", new_core_module ());
-      module.add_submodule ("crypt", new_crypt_module ());
-      module.add_submodule ("datasource", new_datasource_module ());
       module.add_submodule ("datetime", new_datetime_module ());
       module.add_submodule ("decoder", new_decoder_module ());
       module.add_submodule ("encoder", new_encoder_module ());
       module.add_submodule ("framework", new_framework_module ());
       module.add_submodule ("io", new_io_module ());
-      module.add_submodule ("os", new_os_module ());
       module.add_submodule ("pod", new_pod_module ());
       module.add_submodule ("ui", new_ui_module ());
-      module.add_submodule ("vfs", new_vfs_module ());
 
       // Create new reference to module object
       ret = module.new_reference ();

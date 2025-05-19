@@ -16,6 +16,8 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import mobius
+import mobius.core.datasource
+import mobius.core.vfs
 import pymobius
 from gi.repository import Gtk
 
@@ -95,7 +97,7 @@ class VFSView(object):
             self.__vfs = datasource.get_vfs()
 
         else:
-            self.__vfs = mobius.vfs.vfs()
+            self.__vfs = mobius.core.vfs.vfs()
             self.on_vfs_modified()
 
         self.__view_selector.set_data(self.__vfs)
@@ -105,7 +107,7 @@ class VFSView(object):
     # @brief Handle on_vfs_modified event
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def on_vfs_modified(self):
-        datasource = mobius.datasource.new_datasource_from_vfs(self.__vfs)
+        datasource = mobius.core.datasource.new_datasource_from_vfs(self.__vfs)
         self.__control.on_datasource_modified(datasource)
         self.__view_selector.reload()
 

@@ -16,6 +16,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import mobius
+import mobius.core.vfs
 from gi.repository import Gtk
 
 
@@ -40,7 +41,7 @@ class AddImageFileDialog(object):
 
         # add supported image file types
         imagetypes = []
-        for imagetype, description, extensions, is_writeable in mobius.vfs.get_imagefile_implementations():
+        for imagetype, description, extensions, is_writeable in mobius.core.vfs.get_imagefile_implementations():
             imagetypes.append((description, imagetype, extensions.split('|')))
 
         last_imagetype = mobius.framework.get_config('disk.last-imagetype')

@@ -16,6 +16,8 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import mobius
+import mobius.core.crypt
+import mobius.core.os
 import mobius.core.turing
 import pymobius
 import traceback
@@ -59,13 +61,13 @@ class Ant(object):
 
         for password in self.__passwords:
             try:
-                value = mobius.crypt.hash_digest('sha1', password.encode('utf-16-le'))
+                value = mobius.core.crypt.hash_digest('sha1', password.encode('utf-16-le'))
                 turing.set_hash('sha1.utf16', mobius.encoder.hexstring(value), password)
             except Exception as e:
                 mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
 
             try:
-                value = mobius.os.win.hash_nt(password)
+                value = mobius.core.os.win.hash_nt(password)
                 turing.set_hash('nt', mobius.encoder.hexstring(value), password)
             except Exception as e:
                 mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')

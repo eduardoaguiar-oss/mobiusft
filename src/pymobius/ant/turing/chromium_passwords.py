@@ -17,6 +17,8 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import traceback
 import mobius
+import mobius.core.crypt
+import mobius.core.os
 import mobius.core.turing
 import pymobius
 import pymobius.app.chromium
@@ -78,7 +80,7 @@ class Ant(object):
         transaction = turing.new_transaction()
 
         for url in self.__urls:
-            h = mobius.encoder.hexstring(mobius.os.win.hash_ie_entropy(url))
+            h = mobius.encoder.hexstring(mobius.core.os.win.hash_ie_entropy(url))
             turing.set_hash('ie.entropy', h, url)
 
         transaction.commit()
@@ -127,7 +129,7 @@ class Ant(object):
                 mobius.core.logf(f"INF DPAPI v10 Master Key blob {blob.master_key_guid} decrypted")
 
                 # create ID for this key
-                h = mobius.crypt.hash("md5")
+                h = mobius.core.crypt.hash("md5")
                 h.update(secret.source.encode("utf-8"))
                 key_id = h.get_hex_digest().upper()
 
@@ -211,7 +213,7 @@ class Ant(object):
             ciphertext = payload[15:-16]
             tag = payload[-16:]
 
-            cipher = mobius.crypt.new_cipher_gcm('aes', key.value, iv)
+            cipher = mobius.core.crypt.new_cipher_gcm('aes', key.value, iv)
             plaintext = cipher.decrypt(ciphertext)
 
             if cipher.check_tag(tag):
@@ -278,7 +280,7 @@ class Ant(object):
         # create a secret object for each v10 encryption key found
         for mk, secret in v10_master_keys.items():
             secret.type = 'dpapi.v10_master_key'
-            secret.blob = mobius.os.win.dpapi.blob(mk[5:])
+            secret.blob = mobius.core.os.win.dpapi.blob(mk[5:])
             secret.is_found = False
             self.__secrets.append(secret)
 
@@ -306,7 +308,7 @@ class Ant(object):
                 if DPAPI_GUID in p.password:  # Up to version 79
                     secret = pymobius.Data()
                     secret.type = 'dpapi.login_data'
-                    secret.blob = mobius.os.win.dpapi.blob(p.password)
+                    secret.blob = mobius.core.os.win.dpapi.blob(p.password)
                     secret.profile = profile
                     secret.p = p
                     secret.is_found = False

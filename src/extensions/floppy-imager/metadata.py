@@ -22,5 +22,5 @@
 EXTENSION_ID = 'floppy-imager'
 EXTENSION_NAME = 'Floppy Imager'
 EXTENSION_AUTHOR = 'Eduardo Aguiar'
-EXTENSION_VERSION = '1.8'
+EXTENSION_VERSION = '1.9'
 EXTENSION_DESCRIPTION = 'Floppy disk imager'

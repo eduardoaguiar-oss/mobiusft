@@ -20,6 +20,7 @@ import os
 import os.path
 
 import mobius
+import mobius.core.crypt
 import mobius.core.kff
 import pymobius
 from gi.repository import GObject
@@ -149,7 +150,7 @@ def walk(folder):
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def calculate_hash(f, hash_type):
     reader = f.new_reader()
-    h = mobius.crypt.hash(hash_type)
+    h = mobius.core.crypt.hash(hash_type)
     data = reader.read(65536)
 
     while data:
@@ -681,7 +682,7 @@ class KFFView(object):
         hbox.add_child(label, mobius.ui.box.fill_none)
 
         # hardcode for now
-        # @todo Use mobius.crypt.get_hash_list, when available
+        # @todo Use mobius.core.crypt.get_hash_list, when available
         c_model = Gtk.ListStore.new([str, str])
         c_model.append(('adler32', 'Adler 32'))
         c_model.append(('crc32', 'CRC-32'))

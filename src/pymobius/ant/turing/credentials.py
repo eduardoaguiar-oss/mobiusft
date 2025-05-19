@@ -18,6 +18,7 @@
 import traceback
 
 import mobius
+import mobius.core.os
 import pymobius
 import pymobius.operating_system
 
@@ -202,7 +203,7 @@ class Ant(object):
                 blob_data = decoder.get_bytearray_by_size(blob_size)
 
                 secret = pymobius.Data()
-                secret.blob = mobius.os.win.dpapi.blob(blob_data)
+                secret.blob = mobius.core.os.win.dpapi.blob(blob_data)
                 secret.path = f.path.replace('/', '\\')
 
                 self.__secrets.append(secret)
@@ -215,7 +216,7 @@ class Ant(object):
     # @brief Create password from Credentials data
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __create_password_from_credential_data(self, data):
-        credential = mobius.os.win.credential(data)
+        credential = mobius.core.os.win.credential(data)
 
         # handle blob data
         blob_data = b''
@@ -223,7 +224,7 @@ class Ant(object):
             blob_data += data
 
         if blob_data.startswith(b'\x01\x00\x00\x00'):
-            b = mobius.os.win.dpapi.blob(blob_data)
+            b = mobius.core.os.win.dpapi.blob(blob_data)
             mk = self.__master_keys.get(b.master_key_guid)
 
             if mk and b.decrypt(mk):

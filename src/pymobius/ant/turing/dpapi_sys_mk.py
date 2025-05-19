@@ -18,6 +18,7 @@
 import traceback
 
 import mobius
+import mobius.core.os
 import pymobius
 import pymobius.operating_system
 import pymobius.registry.main
@@ -142,7 +143,7 @@ class Ant(object):
         if not reader:
             return
 
-        mkf = mobius.os.win.dpapi.master_key_file(reader)
+        mkf = mobius.core.os.win.dpapi.master_key_file(reader)
         if not mkf:
             return
 

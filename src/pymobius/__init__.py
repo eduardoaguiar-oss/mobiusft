@@ -18,6 +18,7 @@
 import re
 
 import mobius
+import mobius.core.crypt
 import pymobius.mediator
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -167,7 +168,7 @@ def set_handled(item, f):
         return
 
     # calculate hash sha2-512
-    h = mobius.crypt.hash('sha2-512')
+    h = mobius.core.crypt.hash('sha2-512')
     data = reader.read(65536)
 
     while data:

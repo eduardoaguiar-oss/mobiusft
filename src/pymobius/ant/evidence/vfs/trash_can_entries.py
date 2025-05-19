@@ -18,6 +18,7 @@
 import traceback
 
 import mobius
+import mobius.core.os
 import pymobius
 
 ANT_ID = 'trash-can-entries'
@@ -137,7 +138,7 @@ class Ant(object):
     def __retrieve_vista_process_info_file(self, f, r, sid_folder):
         try:
             # decode record
-            ifile = mobius.os.win.trashbin.ifile(f.new_reader())
+            ifile = mobius.core.os.win.trashbin.ifile(f.new_reader())
 
             if ifile.path:
                 version = ifile.version
@@ -188,7 +189,7 @@ class Ant(object):
         try:
             f = folder.get_child_by_name('INFO2', False)
             if f:
-                info2 = mobius.os.win.trashbin.info2_file(f.new_reader())
+                info2 = mobius.core.os.win.trashbin.info2_file(f.new_reader())
 
                 for entry in info2.entries:
                     self.__retrieve_win2k_info2_entry(entry, folder, f, info2)

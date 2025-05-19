@@ -20,6 +20,7 @@ import traceback
 import xml.dom.minidom
 
 import mobius
+import mobius.core.os
 import pymobius
 import pymobius.registry.main
 import pymobius.registry.network_list
@@ -251,7 +252,7 @@ class Ant(object):
     # @brief Retrieve password from key_material
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __retrieve_password(self, key_material, evidence):
-        blob = mobius.os.win.dpapi.blob(binascii.unhexlify(key_material))
+        blob = mobius.core.os.win.dpapi.blob(binascii.unhexlify(key_material))
         key_value = self.__dpapi_master_keys.get(blob.master_key_guid)
 
         if key_value and blob.decrypt(key_value):

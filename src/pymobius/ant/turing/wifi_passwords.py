@@ -19,6 +19,7 @@ import re
 import binascii
 import traceback
 import mobius
+import mobius.core.os
 import pymobius.operating_system
 
 
@@ -165,7 +166,7 @@ class Ant(object):
 
         # store secret
         secret = dataholder()
-        secret.blob = mobius.os.win.dpapi.blob(binascii.unhexlify(key_material))
+        secret.blob = mobius.core.os.win.dpapi.blob(binascii.unhexlify(key_material))
         secret.source = f.path.replace('/', '\\')
         secret.ssid = name
 
