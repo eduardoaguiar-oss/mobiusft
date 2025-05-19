@@ -23,7 +23,7 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "device.hpp"
-#include "io/reader.hpp"
+#include "core/io/reader.hpp"
 #include <pymobius.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -222,7 +222,7 @@ tp_f_new_reader (core_system_device_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_io_reader_to_pyobject (self->obj->new_reader ());
+        ret = pymobius_core_io_reader_to_pyobject (self->obj->new_reader ());
     }
     catch (const std::exception &e)
     {

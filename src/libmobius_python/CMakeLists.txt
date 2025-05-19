@@ -41,13 +41,7 @@ find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 # Build sub-libraries
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_subdirectory(core)
-add_subdirectory(datetime)
-add_subdirectory(decoder)
-add_subdirectory(encoder)
 add_subdirectory(framework)
-add_subdirectory(io)
-add_subdirectory(pod)
-add_subdirectory(ui)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target: 'mobius' python module
@@ -80,15 +74,7 @@ set_target_properties(libmobius_python PROPERTIES
 
 target_link_libraries(libmobius_python PRIVATE
     libmobius_python_core
-    mobius_python_datetime
-    mobius_python_decoder
-    mobius_python_encoder
-    mobius_python_framework
-    mobius_python_io
-    mobius_python_pod
-    mobius_python_ui
-    Mobius::Framework
-    Mobius::Core
+    libmobius_python_framework
     Python3::Module
 )
 

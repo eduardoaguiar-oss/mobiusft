@@ -54,20 +54,20 @@ class ViewSelectorWidget(object):
         self.__on_view_changed_handler = None
 
         # main widget
-        self.__widget = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        self.__widget = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         self.__widget.set_spacing(3)
 
         # toolbar
         self.__toolbar = Gtk.Toolbar()
         self.__toolbar.set_style(Gtk.ToolbarStyle.ICONS)
         self.__toolbar.show()
-        self.__widget.add_child(self.__toolbar, mobius.ui.box.fill_none)
+        self.__widget.add_child(self.__toolbar, mobius.core.ui.box.fill_none)
 
         # notebook
         self.__notebook = Gtk.Notebook()
         self.__notebook.set_show_tabs(False)
         self.__notebook.show()
-        self.__widget.add_child(self.__notebook, mobius.ui.box.fill_with_widget)
+        self.__widget.add_child(self.__notebook, mobius.core.ui.box.fill_with_widget)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Iterate through views
@@ -136,7 +136,7 @@ class ViewSelectorWidget(object):
     def add(self, view_id, view, pos=-1):
 
         # render icon
-        icon = mobius.ui.new_icon_from_data(view.icon_data, mobius.ui.icon.size_dnd)
+        icon = mobius.core.ui.new_icon_from_data(view.icon_data, mobius.core.ui.icon.size_dnd)
         icon.set_visible(True)
 
         # add page to notebook

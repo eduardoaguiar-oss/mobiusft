@@ -16,6 +16,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import mobius
+import mobius.core.decoder
 import pymobius
 
 from metadata import *
@@ -100,7 +101,7 @@ class FilePropertiesView(object):
         self.icon_data = open(icon_path, 'rb').read()
 
         # build widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.show()
 
         self.__details_view = self.__mediator.call('ui.new-widget', 'attribute-list')
@@ -220,7 +221,7 @@ class FileHexView(object):
         self.icon_data = open(icon_path, 'rb').read()
 
         # build widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.show()
 
         self.__hexview = self.__mediator.call('ui.new-widget', 'hexview')
@@ -284,7 +285,7 @@ class ContentPropertiesView(object):
         self.icon_data = open(icon_path, 'rb').read()
 
         # build widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.show()
 
         # tableview
@@ -336,7 +337,7 @@ class ContentPropertiesView(object):
             return
 
         # get filetype
-        filetype = mobius.decoder.get_filetype(entry.new_reader())
+        filetype = mobius.core.decoder.get_filetype(entry.new_reader())
 
         if filetype == 'empty':
             self.__widget.set_message('File is empty')
@@ -372,7 +373,7 @@ class ContentPropertiesView(object):
         properties = []
 
         try:
-            lnk = mobius.decoder.lnk(entry.new_reader())
+            lnk = mobius.core.decoder.lnk(entry.new_reader())
 
         except Exception as e:
             self.__widget.set_message(str(e))

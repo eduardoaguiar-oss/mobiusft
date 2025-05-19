@@ -53,7 +53,7 @@ def decode_file(f):
         return bookmarks
 
     # decode json file
-    fp = mobius.io.text_reader(reader)
+    fp = mobius.core.io.text_reader(reader)
     data = json.load(fp)
 
     # check version
@@ -94,7 +94,7 @@ def retrieve_bookmarks_from_folder(folder, f):
                 b = pymobius.Data()
                 b.id = child.get('id')
                 b.name = child.get('name')
-                b.creation_time = mobius.datetime.new_datetime_from_nt_timestamp(int(child.get('date_added', '0')) * 10)
+                b.creation_time = mobius.core.datetime.new_datetime_from_nt_timestamp(int(child.get('date_added', '0')) * 10)
                 b.url = child.get('url')
                 b.folder = folder_name
                 b.path = f.path
@@ -103,7 +103,7 @@ def retrieve_bookmarks_from_folder(folder, f):
 
                 meta_info = child.get('meta_info')
                 if meta_info:
-                    b.last_visited_time = mobius.datetime.new_datetime_from_nt_timestamp(
+                    b.last_visited_time = mobius.core.datetime.new_datetime_from_nt_timestamp(
                         int(meta_info.get('last_visited_desktop', '0')) * 10)
 
                 bookmarks.append(b)

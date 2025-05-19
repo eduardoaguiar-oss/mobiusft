@@ -18,6 +18,7 @@
 import os.path
 
 import mobius
+import mobius.core.io
 import pymobius
 from gi.repository import Gdk
 from gi.repository import Gtk
@@ -60,13 +61,13 @@ class AttributeListWidget(object):
         self.__on_dnd_get_data_handler = None
 
         # main widget
-        self.__widget = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        self.__widget = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
 
         # scrolled window
         sw = Gtk.ScrolledWindow()
         sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         sw.show()
-        self.__widget.add_child(sw, mobius.ui.box.fill_with_widget)
+        self.__widget.add_child(sw, mobius.core.ui.box.fill_with_widget)
 
         # listview
         model = Gtk.ListStore.new([str, str, str, bool, str])
@@ -100,11 +101,11 @@ class AttributeListWidget(object):
         self.__toolbar = Gtk.Toolbar()
         self.__toolbar.set_style(Gtk.ToolbarStyle.ICONS)
         self.__toolbar.show()
-        self.__widget.add_child(self.__toolbar, mobius.ui.box.fill_none)
+        self.__widget.add_child(self.__toolbar, mobius.core.ui.box.fill_none)
 
         # DND button
         path = self.__mediator.call('extension.get-resource-path', EXTENSION_ID, 'report-data.png')
-        icon = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_dnd)
+        icon = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_dnd)
         icon.set_visible(True)
 
         self.__dnd_toolitem = Gtk.ToolButton.new()
@@ -470,8 +471,8 @@ class AttributeListWidget(object):
     # @brief handle export_txt_handler
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_export_txt_handler(self, uri, data):
-        f = mobius.io.new_file_by_url(uri)
-        fp = mobius.io.text_writer(f.new_writer())
+        f = mobius.core.io.new_file_by_url(uri)
+        fp = mobius.core.io.text_writer(f.new_writer())
         fp.write(self.get_text())
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -480,8 +481,8 @@ class AttributeListWidget(object):
     def __on_export_csv_handler(self, uri, data):
 
         # create writer
-        f = mobius.io.new_file_by_url(uri)
-        fp = mobius.io.text_writer(f.new_writer())
+        f = mobius.core.io.new_file_by_url(uri)
+        fp = mobius.core.io.text_writer(f.new_writer())
 
         # store data
         fp.write('id,name,value\r\n')
@@ -496,8 +497,8 @@ class AttributeListWidget(object):
     def __on_export_latex_handler(self, uri, data):
 
         # create writer
-        f = mobius.io.new_file_by_url(uri)
-        fp = mobius.io.text_writer(f.new_writer())
+        f = mobius.core.io.new_file_by_url(uri)
+        fp = mobius.core.io.text_writer(f.new_writer())
 
         # store data
         for attr in data.attributes:

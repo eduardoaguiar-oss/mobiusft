@@ -51,8 +51,8 @@ class NewCaseDialog(object):
         grid.show()
         self.__widget.vbox.pack_start(grid, True, True, 0)
 
-        label = mobius.ui.label('Case folder')
-        label.set_halign(mobius.ui.label.align_right)
+        label = mobius.core.ui.label('Case folder')
+        label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
         grid.attach(label.get_ui_widget(), 0, 0, 1, 1)
 
@@ -65,8 +65,8 @@ class NewCaseDialog(object):
         self.__case_folder_button.show()
         grid.attach(self.__case_folder_button, 1, 0, 2, 1)
 
-        label = mobius.ui.label('ID')
-        label.set_halign(mobius.ui.label.align_right)
+        label = mobius.core.ui.label('ID')
+        label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
         grid.attach(label.get_ui_widget(), 0, 1, 1, 1)
 
@@ -76,8 +76,8 @@ class NewCaseDialog(object):
         self.__entry_id.show()
         grid.attach(self.__entry_id, 1, 1, 2, 1)
 
-        label = mobius.ui.label('Name')
-        label.set_halign(mobius.ui.label.align_right)
+        label = mobius.core.ui.label('Name')
+        label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
         grid.attach(label.get_ui_widget(), 0, 2, 1, 1)
 

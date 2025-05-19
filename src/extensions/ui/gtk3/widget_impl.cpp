@@ -54,7 +54,7 @@ widget_impl::set_visible (bool flag)
 // @return Low level widget
 //
 // Increment widget reference because some widgets are dangling
-// When all widgets are derived from mobius.ui.widget, Python API's
+// When all widgets are derived from mobius.core.ui.widget, Python API's
 // widget.get_ui_widget will be deleted.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::any

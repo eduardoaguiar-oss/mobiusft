@@ -19,6 +19,7 @@ import re
 
 import mobius
 import mobius.core.crypt
+import mobius.core.io
 import mobius.core.os
 import mobius.core.turing
 import pymobius
@@ -107,19 +108,19 @@ class HashTesting(object):
             hvalue = None
 
             if htype == 'nt':
-                hvalue = mobius.encoder.hexstring(mobius.core.os.win.hash_nt(keyword))
+                hvalue = mobius.core.encoder.hexstring(mobius.core.os.win.hash_nt(keyword))
 
             elif htype == 'lm':
-                hvalue = mobius.encoder.hexstring(mobius.core.os.win.hash_lm(keyword))
+                hvalue = mobius.core.encoder.hexstring(mobius.core.os.win.hash_lm(keyword))
 
             elif htype == 'sha1.utf16':
-                hvalue = mobius.encoder.hexstring(mobius.core.crypt.hash_digest('sha1', keyword.encode('utf-16le')))
+                hvalue = mobius.core.encoder.hexstring(mobius.core.crypt.hash_digest('sha1', keyword.encode('utf-16le')))
 
             elif htype == 'msdcc1':
-                hvalue = mobius.encoder.hexstring(mobius.core.os.win.hash_msdcc1(keyword, g[1]))
+                hvalue = mobius.core.encoder.hexstring(mobius.core.os.win.hash_msdcc1(keyword, g[1]))
 
             elif htype == 'msdcc2':
-                hvalue = mobius.encoder.hexstring(mobius.core.os.win.hash_msdcc2(keyword, g[1], g[2]))
+                hvalue = mobius.core.encoder.hexstring(mobius.core.os.win.hash_msdcc2(keyword, g[1], g[2]))
 
             # test hash value
             for h in hashdict.pop(hvalue, []):
@@ -169,11 +170,11 @@ class HashesView(object):
         self.icon_data = open(icon_path, 'rb').read()
 
         # build widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.set_visible(True)
 
         # vbox
-        vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox.set_border_width(5)
         vbox.set_spacing(10)
         vbox.set_visible(True)
@@ -182,7 +183,7 @@ class HashesView(object):
         # vpaned
         self.__vpaned = Gtk.VPaned()
         self.__vpaned.show()
-        vbox.add_child(self.__vpaned, mobius.ui.box.fill_with_widget)
+        vbox.add_child(self.__vpaned, mobius.core.ui.box.fill_with_widget)
 
         pos = mobius.framework.get_config('evidence-password-hashes.vpaned-pos')
         if pos:
@@ -226,7 +227,7 @@ class HashesView(object):
         toolbar.insert(toolitem, -1)
 
         path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID, 'test.png')
-        image = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_dnd)
+        image = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_dnd)
         image.show()
 
         self.__test_keywords_toolitem = Gtk.ToolButton.new()
@@ -264,11 +265,11 @@ class HashesView(object):
         frame = Gtk.Frame()
         frame.set_shadow_type(Gtk.ShadowType.IN)
         frame.show()
-        vbox.add_child(frame, mobius.ui.box.fill_none)
+        vbox.add_child(frame, mobius.core.ui.box.fill_none)
 
-        self.__status_label = mobius.ui.label()
-        self.__status_label.set_halign(mobius.ui.label.align_left)
-        self.__status_label.set_elide_mode(mobius.ui.label.elide_end)
+        self.__status_label = mobius.core.ui.label()
+        self.__status_label.set_halign(mobius.core.ui.label.align_left)
+        self.__status_label.set_elide_mode(mobius.core.ui.label.elide_end)
         self.__status_label.set_visible(True)
         frame.add(self.__status_label.get_ui_widget())
 
@@ -381,7 +382,7 @@ class HashesView(object):
             return
 
         # check if file is empty
-        f = mobius.io.new_file_by_url(uri)
+        f = mobius.core.io.new_file_by_url(uri)
         size = f.size
 
         if size == 0:
@@ -399,7 +400,7 @@ class HashesView(object):
         # test keywords
         self.__test_keywords_progress_bar.show()
         reader = f.new_reader()
-        fp = mobius.io.line_reader(reader, 'utf-8', '\n')
+        fp = mobius.core.io.line_reader(reader, 'utf-8', '\n')
         pct = -1
 
         for line in fp:
@@ -414,7 +415,7 @@ class HashesView(object):
             if tmp_pct != pct:
                 self.__test_keywords_progress_bar.set_fraction(fraction)
                 self.__test_keywords_progress_bar.set_text('%d %%' % tmp_pct)
-                mobius.ui.flush()
+                mobius.core.ui.flush()
                 pct = tmp_pct
 
             hash_testing.test(keyword)
@@ -445,8 +446,8 @@ class HashesView(object):
     def __on_export_hashcat(self, uri, data):
 
         # create writer
-        f = mobius.io.new_file_by_url(uri)
-        fp = mobius.io.text_writer(f.new_writer())
+        f = mobius.core.io.new_file_by_url(uri)
+        fp = mobius.core.io.text_writer(f.new_writer())
 
         # export data
         for row in self.__tableview:
@@ -476,8 +477,8 @@ class HashesView(object):
     def __on_export_john(self, uri, data):
 
         # create writer
-        f = mobius.io.new_file_by_url(uri)
-        fp = mobius.io.text_writer(f.new_writer())
+        f = mobius.core.io.new_file_by_url(uri)
+        fp = mobius.core.io.text_writer(f.new_writer())
 
         # export data
         for row in self.__tableview:
@@ -510,8 +511,8 @@ class HashesView(object):
     def __on_export_pot(self, uri, data):
 
         # create writer
-        f = mobius.io.new_file_by_url(uri)
-        fp = mobius.io.text_writer(f.new_writer())
+        f = mobius.core.io.new_file_by_url(uri)
+        fp = mobius.core.io.text_writer(f.new_writer())
 
         # export data
         exported = set()
@@ -561,8 +562,8 @@ class HashesView(object):
             keywords.update(REGEX_WORDS.findall(metadata.get('user_comment')))
 
         # create writer
-        f = mobius.io.new_file_by_url(uri)
-        fp = mobius.io.text_writer(f.new_writer())
+        f = mobius.core.io.new_file_by_url(uri)
+        fp = mobius.core.io.text_writer(f.new_writer())
 
         # export data
         for pwd in sorted(keywords):

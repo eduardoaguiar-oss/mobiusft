@@ -21,6 +21,7 @@ import re
 import shutil
 
 import mobius
+import mobius.core.io
 import pymobius.xml
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -66,8 +67,8 @@ class PySource(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __init__(self, path):
         self.pos = 0
-        f = mobius.io.new_file_by_path(path)
-        self.__fp = mobius.io.text_writer(f.new_writer())
+        f = mobius.core.io.new_file_by_path(path)
+        self.__fp = mobius.core.io.text_writer(f.new_writer())
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief close sourcefile
@@ -125,8 +126,8 @@ class Generator(object):
 
         # create .dep file
         deppath = os.path.join(pydir, '%s.dep' % report_id)
-        depfile = mobius.io.new_file_by_path(deppath)
-        depwriter = mobius.io.text_writer(depfile.new_writer())
+        depfile = mobius.core.io.new_file_by_path(deppath)
+        depwriter = mobius.core.io.text_writer(depfile.new_writer())
 
         # generate source
         try:

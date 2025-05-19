@@ -46,10 +46,10 @@ class IPEDView(object):
         self.icon_data = open(icon_path, 'rb').read()
 
         # widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.show()
 
-        vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox.set_visible(True)
         self.__widget.set_content(vbox)
 
@@ -57,7 +57,7 @@ class IPEDView(object):
         self.__view_selector = self.__mediator.call('ui.new-widget', 'view-selector')
         self.__view_selector.set_control(self)
         self.__view_selector.show()
-        vbox.add_child(self.__view_selector.get_ui_widget(), mobius.ui.box.fill_with_widget)
+        vbox.add_child(self.__view_selector.get_ui_widget(), mobius.core.ui.box.fill_with_widget)
 
         # views
         self.__processing_view = ProcessingView(self)
@@ -73,11 +73,11 @@ class IPEDView(object):
         frame = Gtk.Frame()
         frame.set_shadow_type(Gtk.ShadowType.IN)
         frame.show()
-        vbox.add_child(frame, mobius.ui.box.fill_none)
+        vbox.add_child(frame, mobius.core.ui.box.fill_none)
 
-        self.__status_label = mobius.ui.label()
-        self.__status_label.set_halign(mobius.ui.label.align_left)
-        self.__status_label.set_elide_mode(mobius.ui.label.elide_end)
+        self.__status_label = mobius.core.ui.label()
+        self.__status_label.set_halign(mobius.core.ui.label.align_left)
+        self.__status_label.set_elide_mode(mobius.core.ui.label.elide_end)
         self.__status_label.set_visible(True)
         frame.add(self.__status_label.get_ui_widget())
 

@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+import mobius
 import pymobius
 
 from common import *
@@ -70,7 +71,7 @@ class MountedDevicesReport(object):
 
                 elif data.data.startswith(b'DMIO:ID:'):  # dynamic disk
                     guid = data.data[8:]
-                    name = 'dynamic disk (GUID:%s)' % mobius.encoder.hexstring(guid)
+                    name = 'dynamic disk (GUID:%s)' % mobius.core.encoder.hexstring(guid)
                     classname = 'diskdrive'
 
                 else:  # removable disk

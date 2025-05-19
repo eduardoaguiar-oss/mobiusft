@@ -47,7 +47,7 @@ class GenericView(object):
         self.icon_data = open(icon_path, 'rb').read()
 
         # build widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.set_visible(True)
 
         # vpaned
@@ -239,7 +239,7 @@ class TableView(object):
             self.__tableview.add_export_handler(exporter_id, exporter_name, exporter_ext, exporter_f)
 
         # add alert icon
-        image = mobius.ui.new_icon_by_name('alert', mobius.ui.icon.size_toolbar)
+        image = mobius.core.ui.new_icon_by_name('alert', mobius.core.ui.icon.size_toolbar)
         self.__alert_icon = image.get_ui_widget().get_pixbuf()
         self.__tableview.set_icon(evidence_type, self.__alert_icon)
 

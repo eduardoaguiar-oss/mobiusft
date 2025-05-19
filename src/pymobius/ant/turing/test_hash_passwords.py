@@ -98,7 +98,7 @@ class Ant(object):
     def __test_database(self, h):
         p = None
 
-        value = mobius.encoder.hexstring(h.value)
+        value = mobius.core.encoder.hexstring(h.value)
         status, password = self.__turing.get_hash_password(h.type, value)
 
         if status == 1:
@@ -132,7 +132,7 @@ class Ant(object):
             elif h.type == 'sha1.utf16':
                 value = mobius.core.crypt.hash_digest('sha1', password.encode('utf-16-le'))
 
-            if h.value == mobius.encoder.hexstring(value):
+            if h.value == mobius.core.encoder.hexstring(value):
                 self.__password_count += 1
                 p = self.__create_password(h, password)
                 return p
@@ -157,7 +157,7 @@ class Ant(object):
 
             p.metadata = h.metadata[:]
             p.metadata.append(('Hash type', h.type))
-            p.metadata.append(('Hash value', mobius.encoder.hexstring(h.value)))
+            p.metadata.append(('Hash value', mobius.core.encoder.hexstring(h.value)))
 
         return p
 

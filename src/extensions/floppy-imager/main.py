@@ -467,113 +467,113 @@ class Widget(object):
     # @brief Initialize widget
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __init__(self):
-        self.__widget = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        self.__widget = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         self.__widget.set_border_width(10)
         self.__widget.set_spacing(10)
         self.__widget.set_visible(True)
         self.mediator = pymobius.mediator.copy()
 
         # sector map
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_visible(True)
-        self.__widget.add_child(hbox, mobius.ui.box.fill_with_widget)
+        self.__widget.add_child(hbox, mobius.core.ui.box.fill_with_widget)
 
         hbox.add_filler()
 
-        vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox.set_visible(True)
-        hbox.add_child(vbox, mobius.ui.box.fill_none)
+        hbox.add_child(vbox, mobius.core.ui.box.fill_none)
 
         hbox.add_filler()
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>Sector map</b>')
-        label.set_halign(mobius.ui.label.align_left)
-        label.set_valign(mobius.ui.label.align_top)
+        label.set_halign(mobius.core.ui.label.align_left)
+        label.set_valign(mobius.core.ui.label.align_top)
         label.set_visible(True)
-        vbox.add_child(label, mobius.ui.box.fill_none)
+        vbox.add_child(label, mobius.core.ui.box.fill_none)
 
         self.sector_map = SectorMapWidget()
         self.sector_map.set_size_request(721, 401)
         self.sector_map.set_sensitive(False)
         self.sector_map.show()
-        vbox.add_child(self.sector_map, mobius.ui.box.fill_none)
+        vbox.add_child(self.sector_map, mobius.core.ui.box.fill_none)
 
         # map legend
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_spacing(30)
         hbox.set_visible(True)
-        vbox.add_child(hbox, mobius.ui.box.fill_none)
+        vbox.add_child(hbox, mobius.core.ui.box.fill_none)
 
-        hbox_read = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox_read = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox_read.set_spacing(3)
         hbox_read.set_visible(True)
-        hbox.add_child(hbox_read, mobius.ui.box.fill_none)
+        hbox.add_child(hbox_read, mobius.core.ui.box.fill_none)
 
         image = self.get_image_from_color(0, 0, .82)
         image.show()
-        hbox_read.add_child(image, mobius.ui.box.fill_none)
+        hbox_read.add_child(image, mobius.core.ui.box.fill_none)
 
-        label = mobius.ui.label('Read')
+        label = mobius.core.ui.label('Read')
         label.set_visible(True)
-        hbox_read.add_child(label, mobius.ui.box.fill_with_widget)
+        hbox_read.add_child(label, mobius.core.ui.box.fill_with_widget)
 
-        hbox_bad = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox_bad = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox_bad.set_spacing(3)
         hbox_bad.set_visible(True)
-        hbox.add_child(hbox_bad, mobius.ui.box.fill_none)
+        hbox.add_child(hbox_bad, mobius.core.ui.box.fill_none)
 
         image = self.get_image_from_color(.82, 0, 0)
         image.show()
-        hbox_bad.add_child(image, mobius.ui.box.fill_none)
+        hbox_bad.add_child(image, mobius.core.ui.box.fill_none)
 
-        label = mobius.ui.label('Bad')
+        label = mobius.core.ui.label('Bad')
         label.set_visible(True)
-        hbox_bad.add_child(label, mobius.ui.box.fill_with_widget)
+        hbox_bad.add_child(label, mobius.core.ui.box.fill_with_widget)
 
-        hbox_undef = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox_undef = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox_undef.set_spacing(3)
         hbox_undef.set_visible(True)
-        hbox.add_child(hbox_undef, mobius.ui.box.fill_none)
+        hbox.add_child(hbox_undef, mobius.core.ui.box.fill_none)
 
         image = self.get_image_from_color(.6, .6, .6)
         image.show()
-        hbox_undef.add_child(image, mobius.ui.box.fill_none)
+        hbox_undef.add_child(image, mobius.core.ui.box.fill_none)
 
-        label = mobius.ui.label('Undefined')
+        label = mobius.core.ui.label('Undefined')
         label.set_visible(True)
-        hbox_undef.add_child(label, mobius.ui.box.fill_with_widget)
+        hbox_undef.add_child(label, mobius.core.ui.box.fill_with_widget)
 
         # buttons
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_visible(True)
-        self.__widget.add_child(hbox, mobius.ui.box.fill_none)
+        self.__widget.add_child(hbox, mobius.core.ui.box.fill_none)
 
-        button = mobius.ui.button()
+        button = mobius.core.ui.button()
         button.set_icon_by_name('window-close')
         button.set_text('_Close')
         button.set_visible(True)
         button.set_callback('clicked', self.__on_extension_close)
-        hbox.add_child(button, mobius.ui.box.fill_none)
+        hbox.add_child(button, mobius.core.ui.box.fill_none)
 
         hbox.add_filler()
 
-        self.__retrieve_button = mobius.ui.button()
+        self.__retrieve_button = mobius.core.ui.button()
         self.__retrieve_button.set_icon_by_name('document-open')
         self.__retrieve_button.set_text('_Retrieve')
         self.__retrieve_button.set_sensitive(False)
         self.__retrieve_button.set_visible(True)
         self.__retrieve_button.set_callback('clicked', self.__on_retrieve_data)
-        hbox.add_child(self.__retrieve_button, mobius.ui.box.fill_none)
+        hbox.add_child(self.__retrieve_button, mobius.core.ui.box.fill_none)
 
         # status bar
         frame = Gtk.Frame()
         frame.set_shadow_type(Gtk.ShadowType.IN)
         frame.show()
-        self.__widget.add_child(frame, mobius.ui.box.fill_none)
+        self.__widget.add_child(frame, mobius.core.ui.box.fill_none)
 
-        self.__status_label = mobius.ui.label()
-        self.__status_label.set_halign(mobius.ui.label.align_left)
+        self.__status_label = mobius.core.ui.label()
+        self.__status_label.set_halign(mobius.core.ui.label.align_left)
         self.__status_label.set_visible(True)
         frame.add(self.__status_label.get_ui_widget())
 

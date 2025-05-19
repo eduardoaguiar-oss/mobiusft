@@ -54,9 +54,9 @@ class Profile(object):
 
         # set profile attributes
         self.name = folder.name
-        self.path = mobius.io.to_win_path(folder.path)
+        self.path = mobius.core.io.to_win_path(folder.path)
         self.folder = folder
-        self.metadata = mobius.pod.map()
+        self.metadata = mobius.core.pod.map()
         self.username = None
         self.app_id = APP_ID
         self.app_name = APP_NAME
@@ -311,7 +311,7 @@ class Profile(object):
             ip_data.timestamp = data.timestamp
             ip_data.app_id = APP_ID
             ip_data.app_name = APP_NAME
-            ip_data.dht_dat_path = mobius.io.to_win_path(f.path)
+            ip_data.dht_dat_path = mobius.core.io.to_win_path(f.path)
             ip_data.username = self.username
             ip_data.evidence_source = data.evidence_source
             self.__ip_addresses.append(ip_data)

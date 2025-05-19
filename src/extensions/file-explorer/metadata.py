@@ -22,5 +22,5 @@
 EXTENSION_ID = 'file-explorer'
 EXTENSION_NAME = 'File Explorer'
 EXTENSION_AUTHOR = 'Eduardo Aguiar'
-EXTENSION_VERSION = '1.17'
+EXTENSION_VERSION = '1.18'
 EXTENSION_DESCRIPTION = 'File Explorer'

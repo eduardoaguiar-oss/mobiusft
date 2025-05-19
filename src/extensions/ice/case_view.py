@@ -98,7 +98,7 @@ class CaseView(object):
         # toolitem: run report
         self.report_toolitem = Gtk.ToolButton.new()
 
-        image = mobius.ui.new_icon_by_name('report-run', mobius.ui.icon.size_toolbar)
+        image = mobius.core.ui.new_icon_by_name('report-run', mobius.core.ui.icon.size_toolbar)
         image.show()
         self.report_toolitem.set_icon_widget(image.get_ui_widget())
 
@@ -413,14 +413,14 @@ class CaseView(object):
         count = self.__treeview.count_selected_items()
 
         # show dialog
-        dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_question)
+        dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
         dialog.text = 'You are about to remove %s. Are you sure?' % ('an item' if count == 1 else f'{count:d} items')
-        dialog.add_button(mobius.ui.message_dialog.button_yes)
-        dialog.add_button(mobius.ui.message_dialog.button_no)
-        dialog.set_default_response(mobius.ui.message_dialog.button_no)
+        dialog.add_button(mobius.core.ui.message_dialog.button_yes)
+        dialog.add_button(mobius.core.ui.message_dialog.button_no)
+        dialog.set_default_response(mobius.core.ui.message_dialog.button_no)
         rc = dialog.run()
 
-        if rc != mobius.ui.message_dialog.button_yes:
+        if rc != mobius.core.ui.message_dialog.button_yes:
             return
 
         # remove items

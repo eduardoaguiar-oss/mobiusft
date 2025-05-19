@@ -160,12 +160,12 @@ def decode_message(row):
     # compose time
     compose_time_data = nsp_data.get('composeTime')
     if compose_time_data:
-        message.compose_time = mobius.datetime.new_datetime_from_unix_timestamp(int(compose_time_data) // 1000)
+        message.compose_time = mobius.core.datetime.new_datetime_from_unix_timestamp(int(compose_time_data) // 1000)
 
     # timestamp
     created_time_data = nsp_data.get('createdTime')
     if created_time_data:
-        message.timestamp = mobius.datetime.new_datetime_from_unix_timestamp(int(created_time_data) // 1000)
+        message.timestamp = mobius.core.datetime.new_datetime_from_unix_timestamp(int(created_time_data) // 1000)
 
     # decode _serverMessages
     smsg = nsp_data.get('_serverMessages')

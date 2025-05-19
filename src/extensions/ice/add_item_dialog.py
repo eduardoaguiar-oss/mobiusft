@@ -55,7 +55,7 @@ class AddItemDialog():
         datastore.set_sort_column_id(ADD_ITEM_COMBO_NAME, Gtk.SortType.ASCENDING)
 
         for category in mobius.framework.get_categories():
-            image = mobius.ui.new_icon_from_data(category.icon_data, mobius.ui.icon.size_dnd)
+            image = mobius.core.ui.new_icon_from_data(category.icon_data, mobius.core.ui.icon.size_dnd)
             image.show()
             icon = image.get_ui_widget().get_pixbuf()
             datastore.append((icon, category.name, category))
@@ -75,21 +75,21 @@ class AddItemDialog():
         self.__widget.vbox.pack_start(self.combobox, False, True, 0)
 
         # spinbutton
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_spacing(5)
         hbox.set_visible(True)
         self.__widget.vbox.pack_start(hbox.get_ui_widget(), False, True, 0)
 
         hbox.add_filler()
 
-        label = mobius.ui.label('Amount')
+        label = mobius.core.ui.label('Amount')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         adj = Gtk.Adjustment.new(1, 1, 9999, 1, 1, 0)
         self.spin = Gtk.SpinButton.new(adj, 0, 0)
         self.spin.show()
-        hbox.add_child(self.spin, mobius.ui.box.fill_none)
+        hbox.add_child(self.spin, mobius.core.ui.box.fill_none)
 
         # attribute listview
         frame = Gtk.Frame()

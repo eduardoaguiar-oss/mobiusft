@@ -90,7 +90,7 @@ class Ant(object):
                     'evidence_source': profile.evidence_source,
                 }
 
-                evidence.metadata = mobius.pod.map()
+                evidence.metadata = mobius.core.pod.map()
                 evidence.metadata.set('profile-guid', profile.guid)
                 evidence.metadata.set('description', profile.description)
                 evidence.metadata.set('date-created', profile.date_created)

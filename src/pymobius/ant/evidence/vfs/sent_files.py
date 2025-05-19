@@ -96,7 +96,7 @@ class Ant(object):
                     entry.app_id = 'skype'
                     entry.app_name = 'Skype'
 
-                    entry.metadata = mobius.pod.map()
+                    entry.metadata = mobius.core.pod.map()
                     entry.metadata.set('size', ft.size)
                     entry.metadata.set('start-time', ft.start_time)
                     entry.metadata.set('end-time', ft.finish_time)
@@ -147,7 +147,7 @@ class Ant(object):
                 entry.app_name = f.app_name
                 entry.item = self.__item.name
 
-                entry.metadata = mobius.pod.map()
+                entry.metadata = mobius.core.pod.map()
                 entry.metadata.set('size', f.size)
                 entry.metadata.set('start-time', f.added_time)
                 entry.metadata.set('end-time', f.completed_time)

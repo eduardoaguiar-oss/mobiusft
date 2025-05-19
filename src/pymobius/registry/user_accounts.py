@@ -376,7 +376,7 @@ class TS_Property(object):
         self.name = data[pos: pos + name_length].decode('utf-16')
         pos += name_length
 
-        value = mobius.encoder.hexstring(data[pos: pos + value_length])
+        value = mobius.core.encoder.hexstring(data[pos: pos + value_length])
         pos += value_length
 
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

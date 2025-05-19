@@ -17,14 +17,14 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \file metadata.cc C++ API <i>mobius.core.decoder.metadata</i> class wrapper
+// @file metadata.cc C++ API <i>mobius.core.decoder.metadata</i> class wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
 #include <pylist.hpp>
 #include "metadata.hpp"
-#include "pod/data.hpp"
-#include "pod/map.hpp"
+#include "core/pod/data.hpp"
+#include "core/pod/map.hpp"
 #include <mobius/core/exception.inc>
 #include <stdexcept>
 
@@ -45,7 +45,7 @@ tp_f_set_value (core_file_decoder_metadata_o *self, PyObject *args)
     {
       arg_group = mobius::py::get_arg_as_std_string (args, 0);
       arg_name = mobius::py::get_arg_as_std_string (args, 1);
-      arg_value = mobius::py::get_arg_as_cpp (args, 2, pymobius_pod_data_from_pyobject);
+      arg_value = mobius::py::get_arg_as_cpp (args, 2, pymobius_core_pod_data_from_pyobject);
     }
   catch (const std::exception& e)
     {
@@ -97,7 +97,7 @@ tp_f_get_value (core_file_decoder_metadata_o *self, PyObject *args)
 
   try
     {
-      ret = pymobius_pod_data_to_pyobject (self->obj->get_value (arg_group, arg_name));
+      ret = pymobius_core_pod_data_to_pyobject (self->obj->get_value (arg_group, arg_name));
     }
   catch (const std::exception& e)
     {
@@ -163,7 +163,7 @@ tp_f_get_group (core_file_decoder_metadata_o *self, PyObject *args)
 
   try
     {
-      ret = pymobius_pod_map_to_pyobject (self->obj->get_group (arg_group));
+      ret = pymobius_core_pod_map_to_pyobject (self->obj->get_group (arg_group));
     }
   catch (const std::exception& e)
     {
@@ -231,7 +231,7 @@ tp_dealloc (core_file_decoder_metadata_o *self)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyTypeObject core_file_decoder_metadata_t =
 {
-  PyVarObject_HEAD_INIT (NULL, 0)
+  PyVarObject_HEAD_INIT (nullptr, 0)                    // header
   "mobius.core.file_decoder.metadata",     		// tp_name
   sizeof (core_file_decoder_metadata_o),   		// tp_basicsize
   0,                                       		// tp_itemsize

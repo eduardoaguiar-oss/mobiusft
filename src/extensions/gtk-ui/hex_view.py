@@ -198,7 +198,7 @@ class HexViewWidget(object):
         self.__textview = None
 
         # widget
-        self.__widget = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        self.__widget = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         self.__widget.set_border_width(5)
         self.__widget.set_spacing(10)
         self.__widget.show()
@@ -207,7 +207,7 @@ class HexViewWidget(object):
         self.__accel_group = Gtk.AccelGroup()
         self.__menubar = Gtk.MenuBar()
         self.__menubar.show()
-        self.__widget.add_child(self.__menubar, mobius.ui.box.fill_none)
+        self.__widget.add_child(self.__menubar, mobius.core.ui.box.fill_none)
 
         item = Gtk.MenuItem.new_with_mnemonic('_View')
         item.show()
@@ -288,16 +288,16 @@ class HexViewWidget(object):
         # textview
         self.__frame = Gtk.Frame()
         self.__frame.show()
-        self.__widget.add_child(self.__frame, mobius.ui.box.fill_with_widget)
+        self.__widget.add_child(self.__frame, mobius.core.ui.box.fill_with_widget)
 
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_visible(True)
         self.__frame.add(hbox.get_ui_widget())
 
         sw = Gtk.ScrolledWindow()
         sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.NEVER)
         sw.show()
-        hbox.add_child(sw, mobius.ui.box.fill_with_widget)
+        hbox.add_child(sw, mobius.core.ui.box.fill_with_widget)
 
         self.__textview = Gtk.TextView.new_with_buffer(TextBuffer())
         self.__textview.set_editable(False)
@@ -321,7 +321,7 @@ class HexViewWidget(object):
 
         self.__vscrollbar = Gtk.VScrollbar()
         self.__vscrollbar.connect('change-value', self.__on_vscrollbar_change_value)
-        hbox.add_child(self.__vscrollbar, mobius.ui.box.fill_none)
+        hbox.add_child(self.__vscrollbar, mobius.core.ui.box.fill_none)
 
         # view data
         self.__textview_resized = False
@@ -453,19 +453,19 @@ class HexViewWidget(object):
         dialog.set_border_width(10)
         dialog.vbox.set_spacing(10)
 
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_spacing(3)
         hbox.set_visible(True)
         dialog.vbox.pack_start(hbox.get_ui_widget(), True, True, 0)
 
-        label = mobius.ui.label('Expression:')
+        label = mobius.core.ui.label('Expression:')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_with_widget)
+        hbox.add_child(label, mobius.core.ui.box.fill_with_widget)
 
         dialog.entry = Gtk.Entry()
         dialog.entry.set_activates_default(True)
         dialog.entry.show()
-        hbox.add_child(dialog.entry, mobius.ui.box.fill_with_widget)
+        hbox.add_child(dialog.entry, mobius.core.ui.box.fill_with_widget)
 
         # run dialog
         rc = dialog.run()

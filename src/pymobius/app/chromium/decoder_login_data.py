@@ -78,5 +78,5 @@ def decode_login_data(db, data, f):
         entry.times_used = row[8]
         entry.date_last_used = pymobius.app.chromium.get_datetime(row[9])
         entry.date_password_modified = pymobius.app.chromium.get_datetime(row[10])
-        entry.source = 'File %s' % mobius.io.to_win_path(f.path)
+        entry.source = 'File %s' % mobius.core.io.to_win_path(f.path)
         data.stored_passwords.append(entry)

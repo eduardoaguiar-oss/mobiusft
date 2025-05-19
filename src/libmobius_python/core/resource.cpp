@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \file resource.cc C++ API <i>mobius.core.resource</i> class wrapper
+// @file resource.cc C++ API <i>mobius.core.resource</i> class wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
@@ -141,23 +141,23 @@ static PyGetSetDef tp_getset[] =
     (getter) tp_getter_id,
     (setter) 0,
     (char *) "ID",
-    NULL
+    nullptr
   },
   {
     (char *) "description",
     (getter) tp_getter_description,
     (setter) 0,
     (char *) "Description",
-    NULL
+    nullptr
   },
   {
     (char *) "value",
     (getter) tp_getter_value,
     (setter) 0,
     (char *) "Value",
-    NULL
+    nullptr
   },
-  {NULL, NULL, NULL, NULL, NULL} // sentinel
+  {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -176,7 +176,7 @@ tp_dealloc (core_resource_o *self)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject core_resource_t =
 {
-  PyVarObject_HEAD_INIT (NULL, 0)
+  PyVarObject_HEAD_INIT (nullptr, 0)                    // header
   "mobius.core.resource",                  		// tp_name
   sizeof (core_resource_o),                		// tp_basicsize
   0,                                       		// tp_itemsize

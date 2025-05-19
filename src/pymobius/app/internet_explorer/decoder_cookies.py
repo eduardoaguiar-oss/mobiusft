@@ -39,7 +39,7 @@ def decode(f):
     evidence_source = pymobius.get_evidence_source_from_file(f)
 
     try:
-        fp = mobius.io.line_reader(reader, 'utf-8', '\n')
+        fp = mobius.core.io.line_reader(reader, 'utf-8', '\n')
 
         for line in fp:
             line = line.rstrip()
@@ -72,7 +72,7 @@ def decode(f):
             elif state == 5:
                 time_high = int(line)
                 timestamp = (time_high << 32) | time_low
-                cookie.expiration_time = mobius.datetime.new_datetime_from_nt_timestamp(timestamp)
+                cookie.expiration_time = mobius.core.datetime.new_datetime_from_nt_timestamp(timestamp)
                 state = state + 1
 
             elif state == 6:
@@ -82,7 +82,7 @@ def decode(f):
             elif state == 7:
                 time_high = int(line)
                 timestamp = (time_high << 32) | time_low
-                cookie.creation_time = mobius.datetime.new_datetime_from_nt_timestamp(timestamp)
+                cookie.creation_time = mobius.core.datetime.new_datetime_from_nt_timestamp(timestamp)
                 state = state + 1
 
             elif state == 8:

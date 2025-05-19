@@ -26,7 +26,7 @@
 #include "datasource.hpp"
 #include "../datasource.hpp"
 #include "extraction.hpp"
-#include "pod/map.hpp"
+#include "core/pod/map.hpp"
 #include <mobius/core/exception.inc>
 #include <pylist.hpp>
 #include <pymobius.hpp>
@@ -107,7 +107,7 @@ tp_f_get_file_info (core_datasource_ufdr_datasource_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_pod_map_to_pyobject (self->obj->get_file_info ());
+        ret = pymobius_core_pod_map_to_pyobject (self->obj->get_file_info ());
     }
     catch (const std::exception &e)
     {
@@ -132,7 +132,7 @@ tp_f_get_case_info (core_datasource_ufdr_datasource_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_pod_map_to_pyobject (self->obj->get_case_info ());
+        ret = pymobius_core_pod_map_to_pyobject (self->obj->get_case_info ());
     }
     catch (const std::exception &e)
     {
@@ -157,7 +157,7 @@ tp_f_set_case_info (core_datasource_ufdr_datasource_o *self, PyObject *args)
     try
     {
         arg_case_info = mobius::py::get_arg_as_cpp (
-            args, 0, pymobius_pod_map_from_pyobject);
+            args, 0, pymobius_core_pod_map_from_pyobject);
     }
     catch (const std::exception &e)
     {

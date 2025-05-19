@@ -22,5 +22,5 @@
 EXTENSION_ID = 'report-model'
 EXTENSION_NAME = 'Report Model'
 EXTENSION_AUTHOR = 'Eduardo Aguiar'
-EXTENSION_VERSION = '1.6'
+EXTENSION_VERSION = '1.7'
 EXTENSION_DESCRIPTION = 'Report model and services'

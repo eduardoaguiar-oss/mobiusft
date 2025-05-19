@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+import mobius.core.encoder
 import mobius.core.turing
 import pymobius
 import pymobius.registry.user_accounts
@@ -56,10 +57,10 @@ class UserAccountReport(object):
 
             for h in account.hashes:
                 if h.type == 'nt' and h.is_current:
-                    nthash = mobius.encoder.hexstring(h.value)
+                    nthash = mobius.core.encoder.hexstring(h.value)
 
                 elif h.type == 'lm' and h.is_current:
-                    lmhash = mobius.encoder.hexstring(h.value)
+                    lmhash = mobius.core.encoder.hexstring(h.value)
 
             # try to retrieve password
             if nthash:

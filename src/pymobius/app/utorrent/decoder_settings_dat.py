@@ -42,7 +42,7 @@ def decode_file(f):
         return
 
     # decode BTEncode data
-    metadata = mobius.decoder.btencode(reader)
+    metadata = mobius.core.decoder.btencode(reader)
 
     # create data object
     data = pymobius.Data()
@@ -57,16 +57,16 @@ def decode_file(f):
     data.version = get_version(metadata.pop('v'))
 
     timestamp = metadata.pop('born_on', 0) * 10000000
-    data.born_on_time = mobius.datetime.new_datetime_from_nt_timestamp(timestamp)
+    data.born_on_time = mobius.core.datetime.new_datetime_from_nt_timestamp(timestamp)
 
     timestamp = metadata.pop('bin_change', 0) * 10000000
-    data.bin_change_time = mobius.datetime.new_datetime_from_nt_timestamp(timestamp)
+    data.bin_change_time = mobius.core.datetime.new_datetime_from_nt_timestamp(timestamp)
 
     timestamp = metadata.pop('cold_on', 0) * 10000000
-    data.cold_on_time = mobius.datetime.new_datetime_from_nt_timestamp(timestamp)
+    data.cold_on_time = mobius.core.datetime.new_datetime_from_nt_timestamp(timestamp)
 
     timestamp = metadata.pop('settings_saved_systime', 0)
-    data.last_settings_time = mobius.datetime.new_datetime_from_unix_timestamp(timestamp)
+    data.last_settings_time = mobius.core.datetime.new_datetime_from_unix_timestamp(timestamp)
 
     return data
 

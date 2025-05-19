@@ -88,7 +88,7 @@ class Profile(object):
             return
 
         # decode Preferences file
-        fp = mobius.io.text_reader(reader)
+        fp = mobius.core.io.text_reader(reader)
         j = json.load(fp)
 
         if not j or not isinstance(j, dict):

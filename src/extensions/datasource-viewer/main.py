@@ -46,11 +46,11 @@ class DataSourceView(object):
         self.icon_data = open(icon_path, 'rb').read()
 
         # build widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.show()
 
         # regular widget
-        self.__vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        self.__vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         self.__vbox.set_border_width(5)
         self.__vbox.set_spacing(10)
         self.__vbox.set_visible(True)
@@ -76,16 +76,16 @@ class DataSourceView(object):
         widget_data = [('No datasource', 'null', None, None)] + list(sorted(widget_data))
 
         # Hbox
-        self.__hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        self.__hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         self.__hbox.set_spacing(5)
         self.__hbox.set_visible(True)
-        self.__vbox.add_child(self.__hbox, mobius.ui.box.fill_none)
+        self.__vbox.add_child(self.__hbox, mobius.core.ui.box.fill_none)
 
         # DND toolitem
         self.__dnd_toolitem = self.__mediator.call('ui.new-widget', 'dnd-toolitem')
         self.__dnd_toolitem.set_control(self)
         self.__dnd_toolitem.show()
-        self.__hbox.add_child(self.__dnd_toolitem.get_ui_widget(), mobius.ui.box.fill_none)
+        self.__hbox.add_child(self.__dnd_toolitem.get_ui_widget(), mobius.core.ui.box.fill_none)
 
         # combobox
         datastore = Gtk.ListStore.new([GdkPixbuf.Pixbuf, str, str, object])
@@ -106,12 +106,12 @@ class DataSourceView(object):
         renderer = Gtk.CellRendererText()
         self.__combobox.pack_start(renderer, True)
         self.__combobox.add_attribute(renderer, 'text', DS_COMBO_NAME)
-        self.__hbox.add_child(self.__combobox, mobius.ui.box.fill_with_widget)
+        self.__hbox.add_child(self.__combobox, mobius.core.ui.box.fill_with_widget)
 
         # working area
-        self.__working_area = mobius.ui.container()
+        self.__working_area = mobius.core.ui.container()
         self.__working_area.show()
-        self.__vbox.add_child(self.__working_area, mobius.ui.box.fill_with_widget)
+        self.__vbox.add_child(self.__working_area, mobius.core.ui.box.fill_with_widget)
 
         # view data
         self.__item = None

@@ -151,7 +151,7 @@ class Ant(object):
                 e.path = ifile.path
 
                 # fill metadata
-                e.metadata = mobius.pod.map()
+                e.metadata = mobius.core.pod.map()
                 e.metadata.set('version', version)
                 e.metadata.set('sid', sid_folder.name)
                 e.metadata.set('info-file-path', f.path)
@@ -204,7 +204,7 @@ class Ant(object):
     def __retrieve_win2k_info2_entry(self, entry, sid_folder, f_info2, info2):
         try:
             # Get Dc*.* file name
-            p = mobius.io.new_path_from_win(entry.path)
+            p = mobius.core.io.new_path_from_win(entry.path)
             ext = p.get_extension()
 
             dc_name = 'Dc' + str(entry.file_idx)
@@ -219,7 +219,7 @@ class Ant(object):
             e.path = entry.path
 
             # fill metadata
-            e.metadata = mobius.pod.map()
+            e.metadata = mobius.core.pod.map()
             e.metadata.set('logical-size', entry.size)
             e.metadata.set('file-idx', entry.file_idx)
             e.metadata.set('sid', sid_folder.name)

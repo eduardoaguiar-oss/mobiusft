@@ -64,15 +64,15 @@ def decode_downloads (db, data):
          FROM moz_downloads'''
 
   for row in cursor.execute (stmt):
-    url = mobius.io.uri (row[3])
+    url = mobius.core.io.uri (row[3])
 
     entry = pymobius.Data ()
     entry.id = row[0]
     entry.name = row[1]
     entry.source = row[2]
     entry.target = url.get_path ().replace ('/', '\\')
-    entry.start_time = mobius.datetime.new_datetime_from_unix_timestamp (row[4] // 1000000)
-    entry.end_time = mobius.datetime.new_datetime_from_unix_timestamp (row[5] // 1000000)
+    entry.start_time = mobius.core.datetime.new_datetime_from_unix_timestamp (row[4] // 1000000)
+    entry.end_time = mobius.core.datetime.new_datetime_from_unix_timestamp (row[5] // 1000000)
     entry.state = row[6]
     entry.bytes_downloaded = row[7]
     entry.size = row[8]

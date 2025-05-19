@@ -22,5 +22,5 @@
 EXTENSION_ID = 'skype-agent'
 EXTENSION_NAME = 'Skype Agent'
 EXTENSION_AUTHOR = 'Eduardo Aguiar and Márcia Mendes'
-EXTENSION_VERSION = '1.17'
+EXTENSION_VERSION = '1.18'
 EXTENSION_DESCRIPTION = 'Skype forensics tool'

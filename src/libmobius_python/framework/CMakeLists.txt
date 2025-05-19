@@ -19,8 +19,8 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-cmake_minimum_required(VERSION 3.10)
-project(mobius_python_framework LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.20)
+project(libmobius_python_framework LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Build sub-libraries
@@ -30,7 +30,7 @@ add_subdirectory(model)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target: mobius_python_framework.la
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_python_framework STATIC
+add_library(libmobius_python_framework STATIC
     module.cpp
     attribute.cpp
     category.cpp
@@ -38,16 +38,20 @@ add_library(mobius_python_framework STATIC
     func_config.cpp
 )
 
-target_include_directories(mobius_python_framework PRIVATE
+set_target_properties(libmobius_python_framework PROPERTIES
+    PREFIX ""
+)
+
+target_include_directories(libmobius_python_framework PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_link_libraries(mobius_python_framework
+target_link_libraries(libmobius_python_framework
    PRIVATE
      "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_python_framework_model>"
    PUBLIC Mobius::Framework
 )
 
-target_compile_options(mobius_python_framework PRIVATE -fno-strict-aliasing -fPIC)
+target_compile_options(libmobius_python_framework PRIVATE -fno-strict-aliasing -fPIC)

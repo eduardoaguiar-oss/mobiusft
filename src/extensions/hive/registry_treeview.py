@@ -20,6 +20,7 @@ import html
 import traceback
 
 import mobius
+import mobius.core.encoder
 import pymobius.mediator
 from gi.repository import Gtk
 
@@ -109,11 +110,11 @@ class RegistryTreeView(object):
         self.icon_data = open(path, 'rb').read()
 
         # build widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.show()
 
         # vbox
-        vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox.set_spacing(5)
         vbox.set_visible(True)
         self.__widget.set_content(vbox)
@@ -121,7 +122,7 @@ class RegistryTreeView(object):
         # hpaned
         self.__hpaned = Gtk.HPaned()
         self.__hpaned.show()
-        vbox.add_child(self.__hpaned, mobius.ui.box.fill_with_widget)
+        vbox.add_child(self.__hpaned, mobius.core.ui.box.fill_with_widget)
 
         position = mobius.framework.get_config('hive.registry-paned-position')
         if position:
@@ -194,12 +195,12 @@ class RegistryTreeView(object):
         frame = Gtk.Frame()
         frame.set_shadow_type(Gtk.ShadowType.IN)
         frame.show()
-        vbox.add_child(frame, mobius.ui.box.fill_none)
+        vbox.add_child(frame, mobius.core.ui.box.fill_none)
 
-        self.__status_label = mobius.ui.label()
+        self.__status_label = mobius.core.ui.label()
         self.__status_label.set_selectable(True)
-        self.__status_label.set_halign(mobius.ui.label.align_left)
-        self.__status_label.set_elide_mode(mobius.ui.label.elide_middle)
+        self.__status_label.set_halign(mobius.core.ui.label.align_left)
+        self.__status_label.set_elide_mode(mobius.core.ui.label.elide_middle)
         self.__status_label.set_visible(True)
         frame.add(self.__status_label.get_ui_widget())
 
@@ -410,7 +411,7 @@ class RegistryTreeView(object):
                 value_data = '\n'.join(values)
 
             else:
-                value_data = mobius.encoder.hexstring(data.data, ' ')
+                value_data = mobius.core.encoder.hexstring(data.data, ' ')
 
             size = data.size if data else 0
 

@@ -22,8 +22,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
 #include "entry.hpp"
-#include "pod/data.hpp"
-#include "pod/map.hpp"
+#include "core/pod/data.hpp"
+#include "core/pod/map.hpp"
 #include <mobius/core/exception.inc>
 #include <stdexcept>
 
@@ -108,7 +108,7 @@ tp_f_get_metadata (core_file_decoder_entry_o *self, PyObject *args)
 
   try
     {
-      ret = pymobius_pod_data_to_pyobject (self->obj->get_metadata (arg_name));
+      ret = pymobius_core_pod_data_to_pyobject (self->obj->get_metadata (arg_name));
     }
   catch (const std::exception& e)
     {
@@ -133,7 +133,7 @@ tp_f_get_all_metadata (core_file_decoder_entry_o *self, PyObject *)
 
   try
     {
-      ret = pymobius_pod_map_to_pyobject (self->obj->get_all_metadata ());
+      ret = pymobius_core_pod_map_to_pyobject (self->obj->get_all_metadata ());
     }
   catch (const std::exception& e)
     {
@@ -159,7 +159,7 @@ tp_f_set_metadata (core_file_decoder_entry_o *self, PyObject *args)
   try
     {
       arg_name = mobius::py::get_arg_as_std_string (args, 0);
-      arg_value = mobius::py::get_arg_as_cpp (args, 1, pymobius_pod_data_from_pyobject);
+      arg_value = mobius::py::get_arg_as_cpp (args, 1, pymobius_core_pod_data_from_pyobject);
     }
   catch (const std::exception& e)
     {
@@ -209,7 +209,7 @@ tp_dealloc (core_file_decoder_entry_o *self)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyTypeObject core_file_decoder_entry_t =
 {
-  PyVarObject_HEAD_INIT (NULL, 0)
+  PyVarObject_HEAD_INIT (nullptr, 0)                    // header
   "mobius.core.file_decoder.entry",        		// tp_name
   sizeof (core_file_decoder_entry_o),      		// tp_basicsize
   0,                                       		// tp_itemsize

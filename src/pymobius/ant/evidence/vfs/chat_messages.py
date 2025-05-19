@@ -107,7 +107,7 @@ class Ant(object):
                 if msg.sender_name:
                     entry.sender += ' (' + msg.sender_name + ')'
 
-                entry.metadata = mobius.pod.map()
+                entry.metadata = mobius.core.pod.map()
                 entry.metadata.set('chatname', msg.chatname)
                 entry.metadata.set('raw_text', msg.raw_text)
                 entry.metadata.set('message_type', msg.type)

@@ -22,6 +22,7 @@ import os.path
 import mobius
 import mobius.core.crypt
 import mobius.core.kff
+import mobius.core.io
 import pymobius
 from gi.repository import GObject
 from gi.repository import Gdk
@@ -41,7 +42,7 @@ EXTENSION_DESCRIPTION = 'Known File Filter (KFF) Manager'
 # @brief Get hashes from json file
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def import_json(f, hashset):
-    fp = mobius.io.text_reader(f.new_reader())
+    fp = mobius.core.io.text_reader(f.new_reader())
     d = json.load(fp)
 
     for htype, hashlist in d.items():
@@ -53,7 +54,7 @@ def import_json(f, hashset):
 # @brief Get hashes from tab separated file
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def import_tab_separated(f, hashset):
-    fp = mobius.io.line_reader(f.new_reader())
+    fp = mobius.core.io.line_reader(f.new_reader())
 
     for line in fp:
         htype, hvalue = line.split('\t')
@@ -64,7 +65,7 @@ def import_tab_separated(f, hashset):
 # @brief Get hashes from .csv file
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def import_csv(f, hashset):
-    fp = mobius.io.line_reader(f.new_reader())
+    fp = mobius.core.io.line_reader(f.new_reader())
     first = True
 
     for line in fp:
@@ -87,7 +88,7 @@ def import_csv(f, hashset):
 # @brief Import hashes from LED .txt file
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def import_led(f, hashset):
-    fp = mobius.io.line_reader(f.new_reader(), 'iso-8859-1')
+    fp = mobius.core.io.line_reader(f.new_reader(), 'iso-8859-1')
 
     for line in fp:
         if line[0] != '#':
@@ -108,7 +109,7 @@ def export_json(f, hashset):
         d.setdefault(htype, []).append(hvalue)
 
     # write data
-    fp = mobius.io.text_writer(f.new_writer())
+    fp = mobius.core.io.text_writer(f.new_writer())
     json.dump(d, fp)
 
 
@@ -116,7 +117,7 @@ def export_json(f, hashset):
 # @brief Export hashset as tab separated file
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def export_tab(f, hashset):
-    fp = mobius.io.text_writer(f.new_writer())
+    fp = mobius.core.io.text_writer(f.new_writer())
 
     for htype, hvalue in hashset.hashes:
         fp.write('%s\t%s\n' % (htype, hvalue))
@@ -126,7 +127,7 @@ def export_tab(f, hashset):
 # @brief Export hashset as csv file
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def export_csv(f, hashset):
-    fp = mobius.io.text_writer(f.new_writer())
+    fp = mobius.core.io.text_writer(f.new_writer())
     fp.write('id,name,value\r\n')
 
     for htype, hvalue in hashset.hashes:
@@ -180,7 +181,7 @@ class KFFView(object):
         self.icon_data = open(icon_path, 'rb').read()
 
         # build widget
-        self.__widget = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        self.__widget = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         self.__widget.set_border_width(5)
         self.__widget.set_visible(True)
 
@@ -188,7 +189,7 @@ class KFFView(object):
         toolbar = Gtk.Toolbar()
         toolbar.set_style(Gtk.ToolbarStyle.ICONS)
         toolbar.show()
-        self.__widget.add_child(toolbar, mobius.ui.box.fill_none)
+        self.__widget.add_child(toolbar, mobius.core.ui.box.fill_none)
 
         self.__new_hashset_toolitem = Gtk.ToolButton.new()
         self.__new_hashset_toolitem.set_icon_name('list-add')
@@ -241,7 +242,7 @@ class KFFView(object):
         sw = Gtk.ScrolledWindow()
         sw.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         sw.show()
-        self.__widget.add_child(sw, mobius.ui.box.fill_with_widget)
+        self.__widget.add_child(sw, mobius.core.ui.box.fill_with_widget)
 
         model = Gtk.ListStore.new([str, str, str, GObject.TYPE_LONG, object])
         model.set_sort_column_id(HASHSET_ID, Gtk.SortType.ASCENDING)
@@ -291,12 +292,12 @@ class KFFView(object):
         frame = Gtk.Frame()
         frame.set_shadow_type(Gtk.ShadowType.IN)
         frame.show()
-        self.__widget.add_child(frame, mobius.ui.box.fill_none)
+        self.__widget.add_child(frame, mobius.core.ui.box.fill_none)
 
-        self.__status_label = mobius.ui.label()
+        self.__status_label = mobius.core.ui.label()
         self.__status_label.set_selectable(True)
-        self.__status_label.set_halign(mobius.ui.label.align_left)
-        self.__status_label.set_elide_mode(mobius.ui.label.elide_middle)
+        self.__status_label.set_halign(mobius.core.ui.label.align_left)
+        self.__status_label.set_elide_mode(mobius.core.ui.label.elide_middle)
         self.__status_label.set_visible(True)
         frame.add(self.__status_label.get_ui_widget())
 
@@ -371,8 +372,8 @@ class KFFView(object):
         grid.show()
         dialog.vbox.pack_start(grid, True, True, 0)
 
-        label = mobius.ui.label('ID')
-        label.set_halign(mobius.ui.box.align_right)
+        label = mobius.core.ui.label('ID')
+        label.set_halign(mobius.core.ui.box.align_right)
         label.set_visible(True)
         grid.attach(label.get_ui_widget(), 0, 0, 1, 1)
 
@@ -380,8 +381,8 @@ class KFFView(object):
         dialog.id_entry.show()
         grid.attach(dialog.id_entry, 1, 0, 1, 1)
 
-        label = mobius.ui.label('Description')
-        label.set_halign(mobius.ui.box.align_right)
+        label = mobius.core.ui.label('Description')
+        label.set_halign(mobius.core.ui.box.align_right)
         label.set_visible(True)
         grid.attach(label, 0, 1, 1, 1)
 
@@ -433,14 +434,14 @@ class KFFView(object):
         hashset = model.get_value(treeiter, HASHSET_OBJ)
 
         # show confirmation dialog
-        dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_question)
+        dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
         dialog.text = f"You are about to remove hash set '{hashset_id}'. Are you sure?"
-        dialog.add_button(mobius.ui.message_dialog.button_yes)
-        dialog.add_button(mobius.ui.message_dialog.button_no)
-        dialog.set_default_response(mobius.ui.message_dialog.button_no)
+        dialog.add_button(mobius.core.ui.message_dialog.button_yes)
+        dialog.add_button(mobius.core.ui.message_dialog.button_no)
+        dialog.set_default_response(mobius.core.ui.message_dialog.button_no)
         rc = dialog.run()
 
-        if rc != mobius.ui.message_dialog.button_yes:
+        if rc != mobius.core.ui.message_dialog.button_yes:
             return
 
         # remove hashset
@@ -470,14 +471,14 @@ class KFFView(object):
         hashset = model.get_value(treeiter, HASHSET_OBJ)
 
         # show confirmation dialog
-        dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_question)
+        dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
         dialog.text = f"You are about to remove all hashes from '{hashset_id}' hash set. Are you sure?"
-        dialog.add_button(mobius.ui.message_dialog.button_yes)
-        dialog.add_button(mobius.ui.message_dialog.button_no)
-        dialog.set_default_response(mobius.ui.message_dialog.button_no)
+        dialog.add_button(mobius.core.ui.message_dialog.button_yes)
+        dialog.add_button(mobius.core.ui.message_dialog.button_no)
+        dialog.set_default_response(mobius.core.ui.message_dialog.button_no)
         rc = dialog.run()
 
-        if rc != mobius.ui.message_dialog.button_yes:
+        if rc != mobius.core.ui.message_dialog.button_yes:
             return
 
         # clear hashset
@@ -558,9 +559,9 @@ class KFFView(object):
 
         for url in urls:
             self.__status_label.set_text(f'Importing {url}')
-            mobius.ui.flush()
+            mobius.core.ui.flush()
 
-            f = mobius.io.new_file_by_url(url)
+            f = mobius.core.io.new_file_by_url(url)
             handler(f, hashset)
 
         transaction.commit()
@@ -645,7 +646,7 @@ class KFFView(object):
             url = url + '.' + fileext
 
         # export
-        f = mobius.io.new_file_by_url(url)
+        f = mobius.core.io.new_file_by_url(url)
         handler(f, hashset)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -672,14 +673,14 @@ class KFFView(object):
         fs.vbox.set_border_width(5)
         fs.vbox.set_spacing(5)
 
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_spacing(5)
         hbox.set_visible(True)
         fs.vbox.pack_start(hbox.get_ui_widget(), False, False, 0)
 
-        label = mobius.ui.label('Hash type:')
+        label = mobius.core.ui.label('Hash type:')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         # hardcode for now
         # @todo Use mobius.core.crypt.get_hash_list, when available
@@ -707,7 +708,7 @@ class KFFView(object):
         combobox.set_active_id('sha2-256')
         combobox.show()
 
-        hbox.add_child(combobox, mobius.ui.box.fill_with_widget)
+        hbox.add_child(combobox, mobius.core.ui.box.fill_with_widget)
 
         # run dialog
         rc = fs.run()
@@ -720,19 +721,19 @@ class KFFView(object):
             return
 
         # calculate hashes
-        folder = mobius.io.new_folder_by_url(url)
+        folder = mobius.core.io.new_folder_by_url(url)
         hashes = []
 
         for f in walk(folder):
             self.__status_label.set_text(f'Importing {f.path}')
-            mobius.ui.flush()
+            mobius.core.ui.flush()
 
             hash_value = calculate_hash(f, hash_type)
             hashes.append((hash_type, hash_value))
 
         # add to hashset
         self.__status_label.set_text(f'Adding hashes to "{hashset_id}" hash set')
-        mobius.ui.flush()
+        mobius.core.ui.flush()
 
         transaction = hashset.new_transaction()
 

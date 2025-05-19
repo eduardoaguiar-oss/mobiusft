@@ -205,7 +205,7 @@ class Widget(object):
     # @brief Build widget
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __init__(self, mediator, *args):
-        self.__widget = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        self.__widget = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         self.__widget.set_border_width(10)
         self.__widget.set_spacing(5)
         self.__mediator = mediator.copy()
@@ -213,7 +213,7 @@ class Widget(object):
         # menubar
         menubar = Gtk.MenuBar()
         menubar.show()
-        self.__widget.add_child(menubar, mobius.ui.box.fill_none)
+        self.__widget.add_child(menubar, mobius.core.ui.box.fill_none)
 
         item = Gtk.MenuItem.new_with_mnemonic('_File')
         item.show()
@@ -273,7 +273,7 @@ class Widget(object):
         toolbar = Gtk.Toolbar()
         toolbar.set_style(Gtk.ToolbarStyle.ICONS)
         toolbar.show()
-        self.__widget.add_child(toolbar, mobius.ui.box.fill_none)
+        self.__widget.add_child(toolbar, mobius.core.ui.box.fill_none)
 
         toolitem = Gtk.ToolButton.new()
         toolitem.set_icon_name('list-add')
@@ -306,7 +306,7 @@ class Widget(object):
         sw = Gtk.ScrolledWindow()
         sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         sw.show()
-        self.__widget.add_child(sw, mobius.ui.box.fill_with_widget)
+        self.__widget.add_child(sw, mobius.core.ui.box.fill_with_widget)
 
         model = Gtk.ListStore.new([str, str, str, str, str, str, object])
         model.set_sort_column_id(TREEITEM_NAME, Gtk.SortType.ASCENDING)
@@ -350,14 +350,14 @@ class Widget(object):
         sw.add(self.listview)
 
         # extension details
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_spacing(10)
         hbox.set_visible(True)
-        self.__widget.add_child(hbox, mobius.ui.box.fill_none)
+        self.__widget.add_child(hbox, mobius.core.ui.box.fill_none)
 
-        self.__detail_icon = mobius.ui.new_icon_by_name('image-missing', mobius.ui.icon.size_large)
+        self.__detail_icon = mobius.core.ui.new_icon_by_name('image-missing', mobius.core.ui.icon.size_large)
         self.__detail_icon.set_visible(True)
-        hbox.add_child(self.__detail_icon, mobius.ui.box.fill_none)
+        hbox.add_child(self.__detail_icon, mobius.core.ui.box.fill_none)
 
         self.detail_label = Gtk.Label.new()
         self.detail_label.set_justify(Gtk.Justification.LEFT)
@@ -367,17 +367,17 @@ class Widget(object):
         self.detail_label.set_yalign(0.5)
         self.detail_label.set_markup('<b>No extension selected</b>')
         self.detail_label.show()
-        hbox.add_child(self.detail_label, mobius.ui.box.fill_with_widget)
+        hbox.add_child(self.detail_label, mobius.core.ui.box.fill_with_widget)
 
         # status bar
         frame = Gtk.Frame()
         frame.set_shadow_type(Gtk.ShadowType.IN)
         frame.show()
-        self.__widget.add_child(frame, mobius.ui.box.fill_none)
+        self.__widget.add_child(frame, mobius.core.ui.box.fill_none)
 
-        self.status_label = mobius.ui.label()
+        self.status_label = mobius.core.ui.label()
         self.status_label.set_selectable(True)
-        self.status_label.set_halign(mobius.ui.label.align_left)
+        self.status_label.set_halign(mobius.core.ui.label.align_left)
         self.status_label.set_visible(True)
         frame.add(self.status_label.get_ui_widget())
 
@@ -414,11 +414,11 @@ class Widget(object):
 
         elif len(pathlist) > 1:
             count = selection.count_selected_rows()
-            self.__detail_icon.set_icon_by_name('image-missing', mobius.ui.icon.size_large)
+            self.__detail_icon.set_icon_by_name('image-missing', mobius.core.ui.icon.size_large)
             self.detail_label.set_markup(f'<b>{count:d} extensions selected</b>')
 
         else:  # Nothing selected
-            self.__detail_icon.set_icon_by_name('image-missing', mobius.ui.icon.size_large)
+            self.__detail_icon.set_icon_by_name('image-missing', mobius.core.ui.icon.size_large)
             self.detail_label.set_markup('<b>No extension selected</b>')
 
         self.update_options()
@@ -433,7 +433,7 @@ class Widget(object):
 
         icon_data = extension.get_icon_data()
         if icon_data:
-            self.__detail_icon.set_icon_from_data(icon_data, mobius.ui.icon.size_large)
+            self.__detail_icon.set_icon_from_data(icon_data, mobius.core.ui.icon.size_large)
 
         text = f'<b>{extension.name}</b>'
 
@@ -496,14 +496,14 @@ class Widget(object):
     def on_extension_uninstall(self, widget, *args):
 
         # show confirmation dialog
-        dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_question)
+        dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
         dialog.text = "You are about to uninstall extension(s). Are you sure?"
-        dialog.add_button(mobius.ui.message_dialog.button_yes)
-        dialog.add_button(mobius.ui.message_dialog.button_no)
-        dialog.set_default_response(mobius.ui.message_dialog.button_no)
+        dialog.add_button(mobius.core.ui.message_dialog.button_yes)
+        dialog.add_button(mobius.core.ui.message_dialog.button_no)
+        dialog.set_default_response(mobius.core.ui.message_dialog.button_no)
         rc = dialog.run()
 
-        if rc != mobius.ui.message_dialog.button_yes:
+        if rc != mobius.core.ui.message_dialog.button_yes:
             return
 
         # uninstall extensions
@@ -812,22 +812,22 @@ def cb_app_starting():
     if current_version and current_version != app.version:
 
         # show dialog
-        dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_question)
+        dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
         dialog.text = f"Welcome to Mobius v{app.version}. Would you like to check for new extensions?"
-        dialog.add_button(mobius.ui.message_dialog.button_yes)
-        dialog.add_button(mobius.ui.message_dialog.button_no)
+        dialog.add_button(mobius.core.ui.message_dialog.button_yes)
+        dialog.add_button(mobius.core.ui.message_dialog.button_no)
         dialog.add_button('Remind me later')
         rc = dialog.run()
 
         # if response = YES, set current version and show extension manager
-        if rc == mobius.ui.message_dialog.button_yes:
+        if rc == mobius.core.ui.message_dialog.button_yes:
             transaction = mobius.framework.new_config_transaction()
             mobius.framework.set_config('general.current-version', app.version)
             transaction.commit()
             on_activate(EXTENSION_ID)
 
         # else if response = NO, just set current version
-        elif rc == mobius.ui.message_dialog.button_no:
+        elif rc == mobius.core.ui.message_dialog.button_no:
             transaction = mobius.framework.new_config_transaction()
             mobius.framework.set_config('general.current-version', app.version)
             transaction.commit()

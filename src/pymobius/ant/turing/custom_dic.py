@@ -96,7 +96,7 @@ class Ant(object):
         if f:
             reader = f.new_reader()
             if reader:
-                fp = mobius.io.line_reader(reader, encoding, '\r\n')
+                fp = mobius.core.io.line_reader(reader, encoding, '\r\n')
 
                 for keyword in fp:
                     self.__keywords.add(keyword)

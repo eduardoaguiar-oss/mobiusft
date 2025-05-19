@@ -75,7 +75,7 @@ class Ant(object):
                     entry.description = program.comments
                     entry.evidence_source = program.evidence_source
 
-                    entry.metadata = mobius.pod.map()
+                    entry.metadata = mobius.core.pod.map()
                     entry.metadata.set('username', program.username)
                     entry.metadata.set('install-location', program.install_location)
                     entry.metadata.set('install-date', program.install_date)

@@ -94,7 +94,7 @@ class Ant(object):
     def __retrieve_dpapi_system_from_value(self, data):
 
         if data and data.size == 44:
-            decoder = mobius.decoder.data_decoder(data.data)
+            decoder = mobius.core.decoder.data_decoder(data.data)
 
             revision = decoder.get_uint32_le()
             local_credential = decoder.get_bytearray_by_size(20)
@@ -176,7 +176,7 @@ class Ant(object):
         key.metadata.append(('source', f.path.replace('/', '\\')))
         key.metadata.append(('DPAPI GUID', mkf.guid))
         key.metadata.append(('Revision', mk.revision))
-        key.metadata.append(('Salt', mobius.encoder.hexstring(mk.salt)))
+        key.metadata.append(('Salt', mobius.core.encoder.hexstring(mk.salt)))
         key.metadata.append(('Iterations', mk.iterations))
         key.metadata.append(('Hash ID', '0x%04x' % mk.hash_id))
         key.metadata.append(('Cipher ID', '0x%04x' % mk.cipher_id))

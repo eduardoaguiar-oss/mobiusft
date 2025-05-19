@@ -62,7 +62,7 @@ def func_slideplayer_com_br(c, data):
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def func_hotmart_com(c, data):
     # s = 'cid%3Dswdsil%40yahoo.com.br%3Bt%3D1569186164243'
-    u = mobius.io.uri(c.value.decode('ascii'))
+    u = mobius.core.io.uri(c.value.decode('ascii'))
     text = u.get_path('utf-8')
 
     if text.startswith('cid='):
@@ -150,7 +150,7 @@ class Ant(object):
                 entry.id = account.id
                 entry.name = account.name
                 entry.password = None
-                entry.metadata = mobius.pod.map()
+                entry.metadata = mobius.core.pod.map()
                 entry.evidence_source = account.evidence_source
                 entry.metadata.set('fullname', account.fullname)
                 entry.metadata.set('locale', account.locale)
@@ -203,7 +203,7 @@ class Ant(object):
             acc.id = None
             acc.name = None
             acc.password = None
-            acc.metadata = mobius.pod.map()
+            acc.metadata = mobius.core.pod.map()
 
             decoder(c, acc)
             if not acc.id:
@@ -251,7 +251,7 @@ class Ant(object):
             acc.id = None
             acc.name = None
             acc.password = None
-            acc.metadata = mobius.pod.map()
+            acc.metadata = mobius.core.pod.map()
 
             if p.password_type.startswith('net.http'):
                 acc.type = p.password_type
@@ -308,7 +308,7 @@ class Ant(object):
                 entry.evidence_source = account.evidence_source
                 entry.password = None
 
-                entry.metadata = mobius.pod.map()
+                entry.metadata = mobius.core.pod.map()
                 entry.metadata.set('username', profile.username)
                 entry.metadata.set('app-id', 'skype')
                 entry.metadata.set('app-name', 'Skype')

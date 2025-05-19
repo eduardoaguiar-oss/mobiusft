@@ -163,7 +163,7 @@ class UFDRParser(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __init__(self, path, control):
         self.__path = path
-        self.__case_info = mobius.pod.map()
+        self.__case_info = mobius.core.pod.map()
         self.__extractions = []
         self.__evidence_idx = 0
         self.__evidence_count = 0

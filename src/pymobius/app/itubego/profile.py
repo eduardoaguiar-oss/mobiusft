@@ -58,7 +58,7 @@ class Profile(object):
         self.name = username
         self.path = folder.path
         self.folder = folder
-        self.metadata = mobius.pod.map()
+        self.metadata = mobius.core.pod.map()
         self.username = username
         self.app_id = APP_ID
         self.app_name = APP_NAME

@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \file extension.cc C++ API <i>mobius.core.extension</i> class wrapper
+// @file extension.cc C++ API <i>mobius.core.extension</i> class wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
@@ -186,37 +186,37 @@ static PyGetSetDef tp_getset[] =
     (getter) tp_getter_id,
     (setter) 0,
     (char *) "Extension ID",
-    NULL
+    nullptr
   },
   {
     (char *) "name",
     (getter) tp_getter_name,
     (setter) 0,
     (char *) "Extension name",
-    NULL
+    nullptr
   },
   {
     (char *) "version",
     (getter) tp_getter_version,
     (setter) 0,
     (char *) "Extension version",
-    NULL
+    nullptr
   },
   {
     (char *) "authors",
     (getter) tp_getter_authors,
     (setter) 0,
     (char *) "Authors",
-    NULL
+    nullptr
   },
   {
     (char *) "description",
     (getter) tp_getter_description,
     (setter) 0,
     (char *) "Description",
-    NULL
+    nullptr
   },
-  {NULL, NULL, NULL, NULL, NULL} // sentinel
+  {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -340,7 +340,7 @@ static PyMethodDef tp_methods[] =
     METH_VARARGS,
     "Uninstall extension"
   },
-  {NULL, NULL, 0, NULL} // sentinel
+  {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -403,7 +403,7 @@ tp_dealloc (core_extension_o *self)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject core_extension_t =
 {
-  PyVarObject_HEAD_INIT (NULL, 0)
+  PyVarObject_HEAD_INIT (nullptr, 0)                    // header
   "mobius.core.extension",                 		// tp_name
   sizeof (core_extension_o),               		// tp_basicsize
   0,                                       		// tp_itemsize

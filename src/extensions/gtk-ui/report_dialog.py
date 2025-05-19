@@ -47,9 +47,9 @@ class ReportDialog(object):
 
         self.__mediator = pymobius.mediator.copy()
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>report</b>')
-        label.set_halign(mobius.ui.label.align_left)
+        label.set_halign(mobius.core.ui.label.align_left)
         label.set_visible(True)
         self.__widget.vbox.pack_start(label.get_ui_widget(), False, True, 0)
 
@@ -79,14 +79,14 @@ class ReportDialog(object):
         self.__widget.vbox.pack_start(self.__report_id_entry, False, True, 0)
 
         # placeholder
-        label = mobius.ui.label(' ')
+        label = mobius.core.ui.label(' ')
         label.set_visible(True)
         self.__widget.vbox.pack_start(label.get_ui_widget(), False, True, 0)
 
         # output folder
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>output folder</b>')
-        label.set_halign(mobius.ui.label.align_left)
+        label.set_halign(mobius.core.ui.label.align_left)
         label.set_visible(True)
         self.__widget.vbox.pack_start(label.get_ui_widget(), False, True, 0)
 
@@ -102,7 +102,7 @@ class ReportDialog(object):
         self.__widget.vbox.pack_start(self.__report_folder_button, False, True, 0)
 
         # placeholder
-        label = mobius.ui.label(' ')
+        label = mobius.core.ui.label(' ')
         label.set_visible(True)
         self.__widget.vbox.pack_start(label.get_ui_widget(), False, True, 0)
 

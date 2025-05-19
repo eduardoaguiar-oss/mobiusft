@@ -85,8 +85,8 @@ class Profile(object):
 
         # set profile attributes
         self.name = pct_decode(f.name[4:-3])
-        self.path = mobius.io.to_win_path(f.path)
-        self.metadata = mobius.pod.map()
+        self.path = mobius.core.io.to_win_path(f.path)
+        self.metadata = mobius.core.pod.map()
         self.metadata.set('db_path', self.path)
 
         # set data attributes
@@ -225,7 +225,7 @@ class Profile(object):
             # connect to db
             self.__db = sqlite3.connect(path)
             db_schema_version = get_schema_version(self.__db)
-            self.metadata.set('db_path', mobius.io.to_win_path(self.__f.path))
+            self.metadata.set('db_path', mobius.core.io.to_win_path(self.__f.path))
 
             if db_schema_version:
                 self.metadata.set('db_schema_version', db_schema_version)

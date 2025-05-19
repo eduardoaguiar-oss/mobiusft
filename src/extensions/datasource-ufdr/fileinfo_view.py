@@ -41,7 +41,7 @@ class UFDRFileInfoView(object):
         self.icon_data = open(path, 'rb').read()
 
         # vbox
-        vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox.set_spacing(5)
         vbox.set_visible(True)
         self.__widget = vbox
@@ -51,11 +51,11 @@ class UFDRFileInfoView(object):
         grid.set_row_spacing(10)
         grid.set_column_spacing(5)
         grid.show()
-        vbox.add_child(grid, mobius.ui.box.fill_none)
+        vbox.add_child(grid, mobius.core.ui.box.fill_none)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>UFDR file location</b>')
-        label.set_halign(mobius.ui.label.align_right)
+        label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
         grid.attach(label.get_ui_widget(), 0, 0, 1, 1)
 
@@ -72,7 +72,7 @@ class UFDRFileInfoView(object):
         self.__metadata_view.set_report_id('datasource-ufdr.file-info')
         self.__metadata_view.set_report_app('%s v%s' % (EXTENSION_NAME, EXTENSION_VERSION))
         self.__metadata_view.show()
-        vbox.add_child(self.__metadata_view.get_ui_widget(), mobius.ui.box.fill_with_widget)
+        vbox.add_child(self.__metadata_view.get_ui_widget(), mobius.core.ui.box.fill_with_widget)
 
         column = self.__metadata_view.add_column('name', 'Attribute')
         column.is_sortable = True

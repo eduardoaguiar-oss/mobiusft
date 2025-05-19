@@ -75,9 +75,9 @@ def dump(s, indent=0):
             text += '\n'
 
         text += f'{text_indent}{i:08x}  '
-        text += mobius.encoder.hexstring(data[:8], ' ')
+        text += mobius.core.encoder.hexstring(data[:8], ' ')
         text += '  '
-        text += mobius.encoder.hexstring(data[8:], ' ')
+        text += mobius.core.encoder.hexstring(data[8:], ' ')
         text += '   ' * (16 - len(data))
         text += '  '
         text += ''.join(chr(c) if 31 < c < 127 else '.' for c in data)

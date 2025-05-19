@@ -142,7 +142,7 @@ class Ant(object):
     # @brief Retrieve IE password from decrypted data
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __retrieve_ie_passwords_from_data(self, data, url):
-        decoder = mobius.decoder.data_decoder(data)
+        decoder = mobius.core.decoder.data_decoder(data)
 
         header_size = decoder.get_uint32_le()
         index_size = decoder.get_uint32_le()

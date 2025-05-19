@@ -83,7 +83,7 @@ class Ant(object):
                     v.username = entry.username
                     v.evidence_source = ''
 
-                    v.metadata = mobius.pod.map()
+                    v.metadata = mobius.core.pod.map()
                     v.metadata.set('id', entry.id)
                     v.metadata.set('profile-id', profile.name)
                     v.metadata.set('profile-path', profile.path)
@@ -123,7 +123,7 @@ class Ant(object):
                 v.username = entry.username
                 v.evidence_source = entry.evidence_source
 
-                v.metadata = mobius.pod.map()
+                v.metadata = mobius.core.pod.map()
                 v.metadata.set('id', entry.id)
                 v.metadata.set('typed', entry.typed)
                 v.metadata.set('visit-type', entry.visit_type)
@@ -163,7 +163,7 @@ class Ant(object):
                 v.username = entry.username
                 v.evidence_source = ''
 
-                v.metadata = mobius.pod.map()
+                v.metadata = mobius.core.pod.map()
                 v.metadata.set('file-path', entry.index_dat_path)
                 v.metadata.set('file-type', entry.file_type)
                 v.metadata.set('file-creation-time', entry.index_dat_creation_time)

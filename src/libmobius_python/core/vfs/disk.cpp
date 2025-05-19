@@ -23,9 +23,9 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "disk.hpp"
-#include "io/reader.hpp"
-#include "pod/data.hpp"
-#include "pod/map.hpp"
+#include "core/io/reader.hpp"
+#include "core/pod/data.hpp"
+#include "core/pod/map.hpp"
 #include <mobius/core/exception.inc>
 #include <pymobius.hpp>
 #include <stdexcept>
@@ -221,7 +221,7 @@ tp_f_set_attribute (core_vfs_disk_o *self, PyObject *args)
     {
         arg_id = mobius::py::get_arg_as_std_string (args, 0);
         arg_value = mobius::py::get_arg_as_cpp (
-            args, 1, pymobius_pod_data_from_pyobject);
+            args, 1, pymobius_core_pod_data_from_pyobject);
     }
     catch (const std::exception &e)
     {
@@ -271,7 +271,7 @@ tp_f_get_attribute (core_vfs_disk_o *self, PyObject *args)
 
     try
     {
-        ret = pymobius_pod_data_to_pyobject (self->obj->get_attribute (arg_id));
+        ret = pymobius_core_pod_data_to_pyobject (self->obj->get_attribute (arg_id));
     }
     catch (const std::exception &e)
     {
@@ -296,7 +296,7 @@ tp_f_get_attributes (core_vfs_disk_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_pod_map_to_pyobject (self->obj->get_attributes ());
+        ret = pymobius_core_pod_map_to_pyobject (self->obj->get_attributes ());
     }
     catch (const std::exception &e)
     {
@@ -321,7 +321,7 @@ tp_f_get_state (core_vfs_disk_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_pod_map_to_pyobject (self->obj->get_state ());
+        ret = pymobius_core_pod_map_to_pyobject (self->obj->get_state ());
     }
     catch (const std::exception &e)
     {
@@ -371,7 +371,7 @@ tp_f_new_reader (core_vfs_disk_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_io_reader_to_pyobject (self->obj->new_reader ());
+        ret = pymobius_core_io_reader_to_pyobject (self->obj->new_reader ());
     }
     catch (const std::exception &e)
     {

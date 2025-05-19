@@ -45,8 +45,8 @@ def decode(db, account):
     for row in db.execute(SQL_STATEMENT):
         ft = pymobius.Data()
         ft.status = row[2]
-        ft.start_time = mobius.datetime.new_datetime_from_unix_timestamp(row[3])
-        ft.finish_time = mobius.datetime.new_datetime_from_unix_timestamp(row[4])
+        ft.start_time = mobius.core.datetime.new_datetime_from_unix_timestamp(row[3])
+        ft.finish_time = mobius.core.datetime.new_datetime_from_unix_timestamp(row[4])
         ft.path = row[5]
         ft.filename = row[6]
         ft.size = row[7]

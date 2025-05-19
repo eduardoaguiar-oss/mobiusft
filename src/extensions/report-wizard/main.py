@@ -76,7 +76,7 @@ class StatementBlockWidget(Gtk.VBox):
         frame.show()
         self.pack_start(frame, False, True, 0)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<i>do nothing</i>')
         label.set_visible(True)
         frame.add(label.get_ui_widget())
@@ -259,7 +259,7 @@ class ReportWidget(Gtk.VBox):
                                Gdk.DragAction.COPY)
         toolitem.connect('drag-data-received', self.on_drop_trash_can)
 
-        image = mobius.ui.new_icon_by_name('dnd-delete', mobius.ui.icon.size_dialog)
+        image = mobius.core.ui.new_icon_by_name('dnd-delete', mobius.core.ui.icon.size_dialog)
         image.show()
 
         toolitem.set_label_widget(image.get_ui_widget())
@@ -436,36 +436,36 @@ class ReportWidget(Gtk.VBox):
     # @brief Build report
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def build_report(self, obj):
-        vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox.set_spacing(5)
         vbox.set_border_width(10)
         vbox.set_visible(True)
 
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_border_width(5)
         hbox.set_spacing(3)
         hbox.set_visible(True)
-        vbox.add_child(hbox, mobius.ui.box.fill_none)
+        vbox.add_child(hbox, mobius.core.ui.box.fill_none)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>report (</b>')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         entry = Gtk.Entry()
         entry.set_text(obj.args)
         entry.connect('changed', self.on_entry_changed, obj, 'args')
         entry.show()
-        hbox.add_child(entry, mobius.ui.box.fill_with_widget)
+        hbox.add_child(entry, mobius.core.ui.box.fill_with_widget)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>)</b>')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         w = self.build_statement(obj.code)
         w.show()
-        vbox.add_child(w, mobius.ui.box.fill_with_widget)
+        vbox.add_child(w, mobius.core.ui.box.fill_with_widget)
 
         return vbox.get_ui_widget()
 
@@ -481,20 +481,20 @@ class ReportWidget(Gtk.VBox):
         frame.show()
         eventbox.add(frame)
 
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_border_width(5)
         hbox.set_spacing(3)
         hbox.set_visible(True)
         frame.add(hbox.get_ui_widget())
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>text</b>')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         frame = Gtk.Frame()
         frame.show()
-        hbox.add_child(frame, mobius.ui.box.fill_with_widget)
+        hbox.add_child(frame, mobius.core.ui.box.fill_with_widget)
 
         textbuffer = Gtk.TextBuffer()
         textbuffer.set_text(obj.text)
@@ -509,7 +509,7 @@ class ReportWidget(Gtk.VBox):
         checkbutton.set_active(obj.newline)
         checkbutton.connect('toggled', self.on_checkbutton_toggled, obj, 'newline')
         checkbutton.show()
-        hbox.add_child(checkbutton, mobius.ui.box.fill_none)
+        hbox.add_child(checkbutton, mobius.core.ui.box.fill_none)
 
         return eventbox
 
@@ -525,20 +525,20 @@ class ReportWidget(Gtk.VBox):
         frame.show()
         eventbox.add(frame)
 
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_border_width(5)
         hbox.set_spacing(3)
         hbox.set_visible(True)
         frame.add(hbox.get_ui_widget())
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>verbatim</b>')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         frame = Gtk.Frame()
         frame.show()
-        hbox.add_child(frame, mobius.ui.box.fill_with_widget)
+        hbox.add_child(frame, mobius.core.ui.box.fill_with_widget)
 
         textbuffer = Gtk.TextBuffer()
         textbuffer.set_text(obj.text)
@@ -549,16 +549,16 @@ class ReportWidget(Gtk.VBox):
         textview.show()
         frame.add(textview)
 
-        vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox.set_spacing(5)
         vbox.set_visible(True)
-        hbox.add_child(vbox, mobius.ui.box.fill_none)
+        hbox.add_child(vbox, mobius.core.ui.box.fill_none)
 
         checkbutton = Gtk.CheckButton.new_with_label('newline')
         checkbutton.set_active(obj.newline)
         checkbutton.connect('toggled', self.on_checkbutton_toggled, obj, 'newline')
         checkbutton.show()
-        vbox.add_child(checkbutton, mobius.ui.box.fill_none)
+        vbox.add_child(checkbutton, mobius.core.ui.box.fill_none)
 
         # @begin-deprecated workaround for new option obj.use_exp_value
         if not hasattr(obj, 'use_exp_value'):
@@ -569,7 +569,7 @@ class ReportWidget(Gtk.VBox):
         checkbutton.set_active(obj.use_exp_value)
         checkbutton.connect('toggled', self.on_checkbutton_toggled, obj, 'use_exp_value')
         checkbutton.show()
-        vbox.add_child(checkbutton, mobius.ui.box.fill_none)
+        vbox.add_child(checkbutton, mobius.core.ui.box.fill_none)
 
         return eventbox
 
@@ -585,22 +585,22 @@ class ReportWidget(Gtk.VBox):
         frame.show()
         eventbox.add(frame)
 
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_border_width(5)
         hbox.set_spacing(3)
         hbox.set_visible(True)
         frame.add(hbox.get_ui_widget())
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>output</b>')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         entry = Gtk.Entry()
         entry.set_text(obj.filename)
         entry.connect('changed', self.on_entry_changed, obj, 'filename')
         entry.show()
-        hbox.add_child(entry, mobius.ui.box.fill_with_widget)
+        hbox.add_child(entry, mobius.core.ui.box.fill_with_widget)
 
         return eventbox
 
@@ -616,33 +616,33 @@ class ReportWidget(Gtk.VBox):
         frame.show()
         eventbox.add(frame)
 
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_border_width(5)
         hbox.set_spacing(3)
         hbox.set_visible(True)
         frame.add(hbox.get_ui_widget())
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>assign</b>')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         entry = Gtk.Entry()
         entry.set_text(obj.var)
         entry.connect('changed', self.on_entry_changed, obj, 'var')
         entry.show()
-        hbox.add_child(entry, mobius.ui.box.fill_none)
+        hbox.add_child(entry, mobius.core.ui.box.fill_none)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>value</b>')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         entry = Gtk.Entry()
         entry.set_text(obj.value)
         entry.connect('changed', self.on_entry_changed, obj, 'value')
         entry.show()
-        hbox.add_child(entry, mobius.ui.box.fill_with_widget)
+        hbox.add_child(entry, mobius.core.ui.box.fill_with_widget)
 
         return eventbox
 
@@ -658,38 +658,38 @@ class ReportWidget(Gtk.VBox):
         frame.show()
         eventbox.add(frame)
 
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_border_width(5)
         hbox.set_spacing(3)
         hbox.set_visible(True)
         frame.add(hbox.get_ui_widget())
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>call</b>')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         entry = Gtk.Entry()
         entry.set_text(obj.report)
         entry.connect('changed', self.on_entry_changed, obj, 'report')
         entry.show()
-        hbox.add_child(entry, mobius.ui.box.fill_none)
+        hbox.add_child(entry, mobius.core.ui.box.fill_none)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>(</b>')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         entry = Gtk.Entry()
         entry.set_text(obj.args)
         entry.connect('changed', self.on_entry_changed, obj, 'args')
         entry.show()
-        hbox.add_child(entry, mobius.ui.box.fill_with_widget)
+        hbox.add_child(entry, mobius.core.ui.box.fill_with_widget)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>)</b>')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         return eventbox
 
@@ -705,22 +705,22 @@ class ReportWidget(Gtk.VBox):
         frame.show()
         eventbox.add(frame)
 
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_border_width(5)
         hbox.set_spacing(3)
         hbox.set_visible(True)
         frame.add(hbox.get_ui_widget())
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>exec</b>')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         entry = Gtk.Entry()
         entry.set_text(obj.cmd)
         entry.connect('changed', self.on_entry_changed, obj, 'cmd')
         entry.show()
-        hbox.add_child(entry, mobius.ui.box.fill_with_widget)
+        hbox.add_child(entry, mobius.core.ui.box.fill_with_widget)
 
         return eventbox
 
@@ -743,21 +743,21 @@ class ReportWidget(Gtk.VBox):
         vbox.show()
         frame.add(vbox)
 
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_spacing(3)
         hbox.set_visible(True)
         vbox.pack_start(hbox.get_ui_widget(), False, True, 0)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>if</b>')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         entry = Gtk.Entry()
         entry.set_text(obj.condition)
         entry.connect('changed', self.on_entry_changed, obj, 'condition')
         entry.show()
-        hbox.add_child(entry, mobius.ui.box.fill_with_widget)
+        hbox.add_child(entry, mobius.core.ui.box.fill_with_widget)
 
         w = self.build_statement(obj.if_code)
         w.show()
@@ -778,15 +778,15 @@ class ReportWidget(Gtk.VBox):
         vbox.pack_end(w, True, True, 0)
 
         # else
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_spacing(3)
         hbox.set_visible(True)
         vbox.pack_end(hbox.get_ui_widget(), False, True, 0)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>else</b>')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         hbox.add_filler()
 
@@ -794,19 +794,19 @@ class ReportWidget(Gtk.VBox):
         button = Gtk.Button()
         button.connect('clicked', self.on_add_elif, vbox, obj)
         button.show()
-        hbox.add_child(button, mobius.ui.box.fill_none)
+        hbox.add_child(button, mobius.core.ui.box.fill_none)
 
-        button_hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        button_hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         button_hbox.set_visible(True)
         button.add(button_hbox.get_ui_widget())
 
         image = Gtk.Image.new_from_icon_name('list-add', Gtk.IconSize.MENU)
         image.show()
-        button_hbox.add_child(image, mobius.ui.box.fill_none)
+        button_hbox.add_child(image, mobius.core.ui.box.fill_none)
 
-        label = mobius.ui.label('elif')
+        label = mobius.core.ui.label('elif')
         label.set_visible(True)
-        button_hbox.add_child(label, mobius.ui.box.fill_none)
+        button_hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         return eventbox
 
@@ -817,7 +817,7 @@ class ReportWidget(Gtk.VBox):
         hbox = Gtk.HBox()
         hbox.set_spacing(3)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>elif</b>')
         label.set_visible(True)
         hbox.pack_start(label.get_ui_widget(), False, True, 0)
@@ -833,17 +833,17 @@ class ReportWidget(Gtk.VBox):
         button.show()
         hbox.pack_end(button, False, True, 0)
 
-        button_hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        button_hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         button_hbox.set_visible(True)
         button.add(button_hbox.get_ui_widget())
 
         image = Gtk.Image.new_from_icon_name('list-remove', Gtk.IconSize.MENU)
         image.show()
-        button_hbox.add_child(image, mobius.ui.box.fill_none)
+        button_hbox.add_child(image, mobius.core.ui.box.fill_none)
 
-        label = mobius.ui.label('elif')
+        label = mobius.core.ui.label('elif')
         label.set_visible(True)
-        button_hbox.add_child(label, mobius.ui.box.fill_none)
+        button_hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         w = self.build_statement(obj.code)
 
@@ -863,42 +863,42 @@ class ReportWidget(Gtk.VBox):
         frame.show()
         eventbox.add(frame)
 
-        vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox.set_border_width(5)
         vbox.set_spacing(10)
         vbox.set_visible(True)
         frame.add(vbox.get_ui_widget())
 
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_spacing(3)
         hbox.set_visible(True)
-        vbox.add_child(hbox, mobius.ui.box.fill_none)
+        vbox.add_child(hbox, mobius.core.ui.box.fill_none)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>for</b>')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         entry = Gtk.Entry()
         entry.set_text(obj.vars)
         entry.connect('changed', self.on_entry_changed, obj, 'vars')
         entry.show()
-        hbox.add_child(entry, mobius.ui.box.fill_none)
+        hbox.add_child(entry, mobius.core.ui.box.fill_none)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>in</b>')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         entry = Gtk.Entry()
         entry.set_text(obj.values)
         entry.connect('changed', self.on_entry_changed, obj, 'values')
         entry.show()
-        hbox.add_child(entry, mobius.ui.box.fill_with_widget)
+        hbox.add_child(entry, mobius.core.ui.box.fill_with_widget)
 
         w = self.build_statement(obj.code)
         w.show()
-        vbox.add_child(w, mobius.ui.box.fill_with_widget)
+        vbox.add_child(w, mobius.core.ui.box.fill_with_widget)
 
         return eventbox
 
@@ -914,31 +914,31 @@ class ReportWidget(Gtk.VBox):
         frame.show()
         eventbox.add(frame)
 
-        vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox.set_border_width(5)
         vbox.set_spacing(10)
         vbox.set_visible(True)
         frame.add(vbox.get_ui_widget())
 
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_spacing(3)
         hbox.set_visible(True)
-        vbox.add_child(hbox, mobius.ui.box.fill_none)
+        vbox.add_child(hbox, mobius.core.ui.box.fill_none)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>while</b>')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         entry = Gtk.Entry()
         entry.set_text(obj.condition)
         entry.connect('changed', self.on_entry_changed, obj, 'condition')
         entry.show()
-        hbox.add_child(entry, mobius.ui.box.fill_with_widget)
+        hbox.add_child(entry, mobius.core.ui.box.fill_with_widget)
 
         w = self.build_statement(obj.code)
         w.show()
-        vbox.add_child(w, mobius.ui.box.fill_with_widget)
+        vbox.add_child(w, mobius.core.ui.box.fill_with_widget)
 
         return eventbox
 
@@ -948,7 +948,7 @@ class ReportWidget(Gtk.VBox):
     def build_block(self, obj):
         hbox = Gtk.HBox()
 
-        label = mobius.ui.label('    ')
+        label = mobius.core.ui.label('    ')
         label.set_visible(True)
         hbox.pack_start(label.get_ui_widget(), False, True, 0)
 
@@ -1163,7 +1163,7 @@ class Widget(object):
     # @brief Initialize widget
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __init__(self, mediator):
-        self.__widget = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        self.__widget = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         self.__widget.set_border_width(5)
         self.__widget.set_spacing(10)
         self.__widget.set_visible(True)
@@ -1172,7 +1172,7 @@ class Widget(object):
         # menubar
         menubar = Gtk.MenuBar()
         menubar.show()
-        self.__widget.add_child(menubar, mobius.ui.box.fill_none)
+        self.__widget.add_child(menubar, mobius.core.ui.box.fill_none)
 
         item = Gtk.MenuItem.new_with_mnemonic('_File')
         item.show()
@@ -1223,7 +1223,7 @@ class Widget(object):
         toolbar = Gtk.Toolbar()
         toolbar.set_style(Gtk.ToolbarStyle.ICONS)
         toolbar.show()
-        self.__widget.add_child(toolbar, mobius.ui.box.fill_none)
+        self.__widget.add_child(toolbar, mobius.core.ui.box.fill_none)
 
         self.new_toolitem = Gtk.ToolButton.new()
         self.new_toolitem.set_icon_name('document-new')
@@ -1264,7 +1264,7 @@ class Widget(object):
         # hpaned
         hpaned = Gtk.HPaned()
         hpaned.show()
-        self.__widget.add_child(hpaned, mobius.ui.box.fill_with_widget)
+        self.__widget.add_child(hpaned, mobius.core.ui.box.fill_with_widget)
 
         # treeview
         frame = Gtk.Frame()
@@ -1397,19 +1397,19 @@ class Widget(object):
         dialog.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         dialog.set_border_width(10)
 
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_spacing(5)
         hbox.set_border_width(10)
         hbox.set_visible(True)
         dialog.vbox.pack_start(hbox.get_ui_widget(), True, True, 0)
 
-        label = mobius.ui.label('ID')
+        label = mobius.core.ui.label('ID')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         entry = Gtk.Entry()
         entry.show()
-        hbox.add_child(entry, mobius.ui.box.fill_with_widget)
+        hbox.add_child(entry, mobius.core.ui.box.fill_with_widget)
 
         rc = dialog.run()
         item_id = entry.get_text()
@@ -1437,18 +1437,18 @@ class Widget(object):
 
         # if there are unsaved reports, show save/ignore/cancel dialog
         if self.is_modified():
-            dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_question)
+            dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
             dialog.text = "Save changes before closing?"
-            dialog.add_button(mobius.ui.message_dialog.button_yes)
-            dialog.add_button(mobius.ui.message_dialog.button_no)
-            dialog.add_button(mobius.ui.message_dialog.button_cancel)
-            dialog.set_default_response(mobius.ui.message_dialog.button_cancel)
+            dialog.add_button(mobius.core.ui.message_dialog.button_yes)
+            dialog.add_button(mobius.core.ui.message_dialog.button_no)
+            dialog.add_button(mobius.core.ui.message_dialog.button_cancel)
+            dialog.set_default_response(mobius.core.ui.message_dialog.button_cancel)
             rc = dialog.run()
 
-            if rc == mobius.ui.message_dialog.button_cancel:
+            if rc == mobius.core.ui.message_dialog.button_cancel:
                 return True
 
-            elif rc == mobius.ui.message_dialog.button_yes:
+            elif rc == mobius.core.ui.message_dialog.button_yes:
                 pass  # save
 
         # clean-up code
@@ -1614,14 +1614,14 @@ class Widget(object):
         else:
             item_type = 'report'
 
-        dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_question)
+        dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
         dialog.text = f"You are about to remove {item_type} '{item_id}'. Are you sure?"
-        dialog.add_button(mobius.ui.message_dialog.button_yes)
-        dialog.add_button(mobius.ui.message_dialog.button_no)
-        dialog.set_default_response(mobius.ui.message_dialog.button_no)
+        dialog.add_button(mobius.core.ui.message_dialog.button_yes)
+        dialog.add_button(mobius.core.ui.message_dialog.button_no)
+        dialog.set_default_response(mobius.core.ui.message_dialog.button_no)
         rc = dialog.run()
 
-        if rc != mobius.ui.message_dialog.button_yes:
+        if rc != mobius.core.ui.message_dialog.button_yes:
             return
 
         # remove report/folder

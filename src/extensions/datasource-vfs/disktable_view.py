@@ -16,6 +16,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import mobius
+import mobius.core.io
 import mobius.core.system
 import mobius.core.vfs
 import pymobius
@@ -57,7 +58,7 @@ class DiskTableView(object):
             self.__vpaned.set_position(pos)
 
         # hbox
-        self.__hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        self.__hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         self.__hbox.set_spacing(5)
         self.__hbox.set_visible(True)
         self.__vpaned.pack1(self.__hbox.get_ui_widget(), True, False)
@@ -85,37 +86,37 @@ class DiskTableView(object):
         column.is_visible = False
 
         self.__tableview.show()
-        self.__hbox.add_child(self.__tableview.get_ui_widget(), mobius.ui.box.fill_with_widget)
+        self.__hbox.add_child(self.__tableview.get_ui_widget(), mobius.core.ui.box.fill_with_widget)
 
         # side buttons
-        vbuttonbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbuttonbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbuttonbox.set_visible(True)
-        self.__hbox.add_child(vbuttonbox, mobius.ui.box.fill_none)
+        self.__hbox.add_child(vbuttonbox, mobius.core.ui.box.fill_none)
 
-        button = mobius.ui.button()
+        button = mobius.core.ui.button()
         button.set_icon_by_name('list-add')
         button.set_text("Add image file")
         button.set_visible(True)
         button.set_callback('clicked', self.__on_add_imagefile)
-        vbuttonbox.add_child(button, mobius.ui.box.fill_none)
+        vbuttonbox.add_child(button, mobius.core.ui.box.fill_none)
 
-        button = mobius.ui.button()
+        button = mobius.core.ui.button()
         button.set_icon_by_name('list-add')
         button.set_text("Add device")
         button.set_visible(True)
         button.set_callback('clicked', self.__on_add_device)
-        vbuttonbox.add_child(button, mobius.ui.box.fill_none)
+        vbuttonbox.add_child(button, mobius.core.ui.box.fill_none)
 
-        self.__remove_button = mobius.ui.button()
+        self.__remove_button = mobius.core.ui.button()
         self.__remove_button.set_icon_by_name('list-remove')
         self.__remove_button.set_text("_Remove")
         self.__remove_button.set_sensitive(False)
         self.__remove_button.set_visible(True)
         self.__remove_button.set_callback('clicked', self.__on_remove_disk)
-        vbuttonbox.add_child(self.__remove_button, mobius.ui.box.fill_none)
+        vbuttonbox.add_child(self.__remove_button, mobius.core.ui.box.fill_none)
 
         # details container
-        self.__details_container = mobius.ui.container()
+        self.__details_container = mobius.core.ui.container()
         self.__details_container.show()
         self.__vpaned.pack2(self.__details_container.get_ui_widget(), True, True)
 
@@ -140,7 +141,7 @@ class DiskTableView(object):
         toolbar.insert(toolitem, -1)
 
         path = self.__mediator.call('extension.get-resource-path', EXTENSION_ID, 'export.png')
-        icon = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_dnd)
+        icon = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_dnd)
         icon.set_visible(True)
 
         self.__export_toolitem = Gtk.ToolButton.new()
@@ -228,14 +229,14 @@ class DiskTableView(object):
     def __on_remove_disk(self):
 
         # show confirmation dialog
-        dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_question)
+        dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
         dialog.text = f"You are about to remove disk '{self.__disk.name}'. Are you sure?"
-        dialog.add_button(mobius.ui.message_dialog.button_yes)
-        dialog.add_button(mobius.ui.message_dialog.button_no)
-        dialog.set_default_response(mobius.ui.message_dialog.button_no)
+        dialog.add_button(mobius.core.ui.message_dialog.button_yes)
+        dialog.add_button(mobius.core.ui.message_dialog.button_no)
+        dialog.set_default_response(mobius.core.ui.message_dialog.button_no)
         rc = dialog.run()
 
-        if rc != mobius.ui.message_dialog.button_yes:
+        if rc != mobius.core.ui.message_dialog.button_yes:
             return
 
         # remove disk
@@ -276,7 +277,7 @@ class DiskTableView(object):
 
         # if copy was cancelled, remove file
         if rc == Gtk.ResponseType.CANCEL:
-            f = mobius.io.file(url)
+            f = mobius.core.io.file(url)
             f.remove()
 
 
@@ -354,7 +355,7 @@ class DiskDataView(object):
         self.icon_data = open(path, 'rb').read()
 
         # build widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.show()
 
         self.__data_widget = self.__mediator.call('ui.new-widget', 'hexview')

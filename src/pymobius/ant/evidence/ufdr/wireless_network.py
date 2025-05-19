@@ -45,7 +45,7 @@ def handler(e):
             'evidence_source': f"UFDR evidence #{e.id}",
         }
 
-        evidence.metadata = mobius.pod.map()
+        evidence.metadata = mobius.core.pod.map()
         evidence.metadata.set('evidence-id', e.id)
         evidence.metadata.set('source-idx', e.source_index)
         evidence.metadata.set('extraction-id', e.extraction_id)
@@ -69,7 +69,7 @@ def handler(e):
         'evidence_source': f"UFDR evidence #{e.id}",
     }
 
-    evidence.metadata = mobius.pod.map()
+    evidence.metadata = mobius.core.pod.map()
     evidence.metadata.set('evidence-id', e.id)
     evidence.metadata.set('source-idx', e.source_index)
     evidence.metadata.set('extraction-id', e.extraction_id)

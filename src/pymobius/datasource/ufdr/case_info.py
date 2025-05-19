@@ -37,7 +37,7 @@ class UFDRCaseInfo(object):
             raise Exception("datasource is not UFDR datasource")
 
         # set data
-        uri = mobius.io.uri(datasource.get_url())
+        uri = mobius.core.io.uri(datasource.get_url())
 
         self.__datasource = datasource
         self.__path = uri.get_path('utf-8')

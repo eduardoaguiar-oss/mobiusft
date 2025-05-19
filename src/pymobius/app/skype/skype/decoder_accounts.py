@@ -73,11 +73,11 @@ def decode(db):
         account.phone_mobile = row[10]
         account.homepage = row[12]
         account.about = row[13]
-        account.profile_timestamp = mobius.datetime.new_datetime_from_unix_timestamp(row[14])
-        account.last_online_timestamp = mobius.datetime.new_datetime_from_unix_timestamp(row[15] or 0)
-        account.last_used_timestamp = mobius.datetime.new_datetime_from_unix_timestamp(row[16] or 0)
-        account.avatar_timestamp = mobius.datetime.new_datetime_from_unix_timestamp(row[17] or 0)
-        account.mood_timestamp = mobius.datetime.new_datetime_from_unix_timestamp(row[18] or 0)
+        account.profile_timestamp = mobius.core.datetime.new_datetime_from_unix_timestamp(row[14])
+        account.last_online_timestamp = mobius.core.datetime.new_datetime_from_unix_timestamp(row[15] or 0)
+        account.last_used_timestamp = mobius.core.datetime.new_datetime_from_unix_timestamp(row[16] or 0)
+        account.avatar_timestamp = mobius.core.datetime.new_datetime_from_unix_timestamp(row[17] or 0)
+        account.mood_timestamp = mobius.core.datetime.new_datetime_from_unix_timestamp(row[18] or 0)
         account.displayname = row[19]
         account.mood_text = row[20]
         # account.timezone = self.__get_timezone (row[21])

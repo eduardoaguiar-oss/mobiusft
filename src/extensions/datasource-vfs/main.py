@@ -44,11 +44,11 @@ class VFSView(object):
         self.icon_data = open(icon_path, 'rb').read()
 
         # build widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.set_visible(True)
 
         # vbox
-        vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox.set_spacing(5)
         vbox.set_visible(True)
         self.__widget.set_content(vbox)
@@ -65,7 +65,7 @@ class VFSView(object):
         self.__blocks_view = BlockTableView(self)
         self.__view_selector.add('blocks', self.__blocks_view)
 
-        vbox.add_child(self.__view_selector.get_ui_widget(), mobius.ui.box.fill_with_widget)
+        vbox.add_child(self.__view_selector.get_ui_widget(), mobius.core.ui.box.fill_with_widget)
 
         # set container
         self.__widget.set_message('Select an item to view VFS')

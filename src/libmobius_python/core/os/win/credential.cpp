@@ -24,7 +24,7 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "credential.hpp"
-#include "io/reader.hpp"
+#include "core/io/reader.hpp"
 #include <functional>
 #include <mobius/core/io/bytearray_io.hpp>
 #include <pylist.hpp>
@@ -265,7 +265,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     try
     {
         arg_reader = mobius::py::get_arg_as_cpp (
-            args, 0, pymobius_io_reader_from_pyobject);
+            args, 0, pymobius_core_io_reader_from_pyobject);
     }
     catch (const std::exception &e)
     {

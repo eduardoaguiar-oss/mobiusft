@@ -36,7 +36,7 @@ def formatter_bin2text(value):
         except UnicodeDecodeError:
             pass
 
-    return '<BINARY> ' + mobius.encoder.hexstring(value)
+    return '<BINARY> ' + mobius.core.encoder.hexstring(value)
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -136,7 +136,7 @@ FORMATTERS = {
     "chat-message-text": text_formatter,
     "bin2text": formatter_bin2text,
     "datetime": pymobius.to_string,
-    "hexstring": mobius.encoder.hexstring,
+    "hexstring": mobius.core.encoder.hexstring,
     "multiline": lambda lines: '\n'.join(lines or []),
     "string": pymobius.to_string,
 }

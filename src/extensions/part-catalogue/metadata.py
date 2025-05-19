@@ -22,5 +22,5 @@
 EXTENSION_ID = 'part-catalogue'
 EXTENSION_NAME = 'Part Catalogue'
 EXTENSION_AUTHOR = 'Eduardo Aguiar'
-EXTENSION_VERSION = '1.16'
+EXTENSION_VERSION = '1.17'
 EXTENSION_DESCRIPTION = 'Part catalogue and manager'

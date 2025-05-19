@@ -124,7 +124,7 @@ class Ant(object):
 
         # retrieve data
         for h in self.__item.get_evidences('visited-url'):
-            uri = mobius.io.uri(h.url)
+            uri = mobius.core.io.uri(h.url)
             host = uri.get_host()
 
             text = (self.__retrieve_browser_history_fragment(h) or
@@ -139,7 +139,7 @@ class Ant(object):
                 ts.username = h.username
                 ts.evidence_source = h.evidence_source
 
-                ts.metadata = mobius.pod.map()
+                ts.metadata = mobius.core.pod.map()
                 ts.metadata.set('url', h.url)
                 ts.metadata.set('host', host)
                 ts.metadata.update(h.metadata)
@@ -157,7 +157,7 @@ class Ant(object):
         text = ''
 
         try:
-            uri = mobius.io.uri(h.url)
+            uri = mobius.core.io.uri(h.url)
             host = uri.get_host()
 
             try:
@@ -193,7 +193,7 @@ class Ant(object):
         text = ''
 
         try:
-            uri = mobius.io.uri(h.url)
+            uri = mobius.core.io.uri(h.url)
             host = uri.get_host()
 
             try:
@@ -224,7 +224,7 @@ class Ant(object):
         text = ''
 
         try:
-            uri = mobius.io.uri(h.url)
+            uri = mobius.core.io.uri(h.url)
             host = uri.get_host()
 
             try:

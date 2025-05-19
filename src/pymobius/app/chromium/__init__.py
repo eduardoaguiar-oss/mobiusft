@@ -164,7 +164,7 @@ class model(object):
                 return {}
 
             # decode Local State json file
-            fp = mobius.io.text_reader(reader)
+            fp = mobius.core.io.text_reader(reader)
             j = json.load(fp)
 
             if not j or not isinstance(j, dict):
@@ -269,13 +269,13 @@ def get_datetime(timestamp):
         return None
 
     elif timestamp < 4294967296:
-        return mobius.datetime.new_datetime_from_unix_timestamp(timestamp)
+        return mobius.core.datetime.new_datetime_from_unix_timestamp(timestamp)
 
     elif timestamp < 10000000000000000:
-        return mobius.datetime.new_datetime_from_unix_timestamp(int(timestamp / 1000000))
+        return mobius.core.datetime.new_datetime_from_unix_timestamp(int(timestamp / 1000000))
 
     else:
-        return mobius.datetime.new_datetime_from_nt_timestamp(timestamp * 10)
+        return mobius.core.datetime.new_datetime_from_nt_timestamp(timestamp * 10)
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

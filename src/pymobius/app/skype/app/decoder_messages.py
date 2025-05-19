@@ -75,7 +75,7 @@ def decode(db, account_id, account_name):
         message = pymobius.Data()
         message.id = row[0]
         message.chatname = row[0]  # @deprecated
-        message.timestamp = mobius.datetime.new_datetime_from_unix_timestamp(row[1] // 1000)
+        message.timestamp = mobius.core.datetime.new_datetime_from_unix_timestamp(row[1] // 1000)
         message.sender_id = row[2].split(':', 1)[1]
         message.sender_name = names.get(row[2])
         message.status = row[4]

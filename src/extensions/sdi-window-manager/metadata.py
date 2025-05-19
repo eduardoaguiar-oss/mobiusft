@@ -22,5 +22,5 @@
 EXTENSION_ID = 'sdi-window-manager'
 EXTENSION_NAME = 'Single Document Interface'
 EXTENSION_AUTHOR = 'Eduardo Aguiar'
-EXTENSION_VERSION = '0.1.10'
+EXTENSION_VERSION = '0.1.11'
 EXTENSION_DESCRIPTION = 'Single document interface window manager'

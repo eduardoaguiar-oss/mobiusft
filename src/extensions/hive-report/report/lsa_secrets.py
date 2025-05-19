@@ -18,6 +18,7 @@
 import traceback
 
 import pymobius
+import mobius.core.encoder
 
 from common import *
 from metadata import *
@@ -62,13 +63,13 @@ def lsa_to_string(name, value):
         if name == 'L$RTMTIMEBOMB_1320153D-8DA3-4e8e-B27B-0D888223A588':
             return get_nt_datetime(struct.unpack('<Q', value[:8])[0])
 
-        return mobius.encoder.hexstring(value, ' ')
+        return mobius.core.encoder.hexstring(value, ' ')
 
     except Exception as e:
         mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
 
         if isinstance(value, bytes):
-            return mobius.encoder.hexstring(value, ' ')
+            return mobius.core.encoder.hexstring(value, ' ')
 
         return None
 

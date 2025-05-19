@@ -56,10 +56,10 @@ class CompactView(object):
         self.icon_data = open(icon_path, 'rb').read()
 
         # build widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.set_visible(True)
 
-        vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox.set_spacing(5)
         vbox.set_visible(True)
         self.__widget.set_content(vbox)
@@ -67,13 +67,13 @@ class CompactView(object):
         # navigation bar
         self.__navigation_bar = NavigationBar(control)
         self.__navigation_bar.show()
-        vbox.add_child(self.__navigation_bar.get_ui_widget(), mobius.ui.box.fill_none)
+        vbox.add_child(self.__navigation_bar.get_ui_widget(), mobius.core.ui.box.fill_none)
 
         # view
         sw = Gtk.ScrolledWindow()
         sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         sw.show()
-        vbox.add_child(sw, mobius.ui.box.fill_with_widget)
+        vbox.add_child(sw, mobius.core.ui.box.fill_with_widget)
 
         model = Gtk.ListStore.new([GdkPixbuf.Pixbuf, str, GObject.TYPE_LONG, str, str, str, object])
 
@@ -200,7 +200,7 @@ class CompactView(object):
 
         if not icon:
             path = self.__mediator.call('extension.get-resource-path', EXTENSION_ID, icon_id + '.svg')
-            image = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_toolbar)
+            image = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_toolbar)
             icon = image.get_ui_widget().get_pixbuf()
             self.__icons[icon_id] = icon
 

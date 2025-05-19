@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \file thread_guard.cc C++ API <i>mobius.core.thread_guard</i> class wrapper
+// @file thread_guard.cc C++ API <i>mobius.core.thread_guard</i> class wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
@@ -70,7 +70,7 @@ tp_dealloc (core_thread_guard_o *self)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyTypeObject core_thread_guard_t =
 {
-  PyVarObject_HEAD_INIT (NULL, 0)
+  PyVarObject_HEAD_INIT (nullptr, 0)                    // header
   "mobius.core.thread_guard",              		// tp_name
   sizeof (core_thread_guard_o),            		// tp_basicsize
   0,                                       		// tp_itemsize

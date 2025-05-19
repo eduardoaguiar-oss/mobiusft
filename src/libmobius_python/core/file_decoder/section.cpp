@@ -17,14 +17,14 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \file section.cc C++ API <i>mobius.core.decoder.section</i> class wrapper
+// @file section.cc C++ API <i>mobius.core.decoder.section</i> class wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
 #include <pydict.hpp>
 #include <pylist.hpp>
 #include "section.hpp"
-#include "io/reader.hpp"
+#include "core/io/reader.hpp"
 #include <mobius/core/exception.inc>
 #include <stdexcept>
 
@@ -185,7 +185,7 @@ tp_f_new_reader (core_file_decoder_section_o *self, PyObject *)
 
   try
     {
-      ret = pymobius_io_reader_to_pyobject (self->obj->new_reader ());
+      ret = pymobius_core_io_reader_to_pyobject (self->obj->new_reader ());
     }
   catch (const std::exception& e)
     {
@@ -284,7 +284,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 
   try
     {
-      arg_reader = mobius::py::get_arg_as_cpp (args, 0, pymobius_io_reader_from_pyobject);
+      arg_reader = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_io_reader_from_pyobject);
       arg_name = mobius::py::get_arg_as_std_string (args, 1);
     }
   catch (const std::exception& e)
@@ -330,7 +330,7 @@ tp_dealloc (core_file_decoder_section_o *self)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyTypeObject core_file_decoder_section_t =
 {
-  PyVarObject_HEAD_INIT (NULL, 0)
+  PyVarObject_HEAD_INIT (nullptr, 0)                    // header
   "mobius.core.file_decoder.section",      		// tp_name
   sizeof (core_file_decoder_section_o),    		// tp_basicsize
   0,                                       		// tp_itemsize

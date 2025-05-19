@@ -23,10 +23,10 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "filesystem.hpp"
-#include "io/folder.hpp"
-#include "io/reader.hpp"
-#include "pod/data.hpp"
-#include "pod/map.hpp"
+#include "core/io/folder.hpp"
+#include "core/io/reader.hpp"
+#include "core/pod/data.hpp"
+#include "core/pod/map.hpp"
 #include <mobius/core/exception.inc>
 #include <pygil.hpp>
 #include <pymobius.hpp>
@@ -80,7 +80,7 @@ tp_getter_reader (core_vfs_filesystem_o *self)
 
     try
     {
-        ret = pymobius_io_reader_to_pyobject (self->obj->get_reader ());
+        ret = pymobius_core_io_reader_to_pyobject (self->obj->get_reader ());
     }
     catch (const std::exception &e)
     {
@@ -190,7 +190,7 @@ tp_getter_metadata (core_vfs_filesystem_o *self)
 
     try
     {
-        ret = pymobius_pod_map_to_pyobject (self->obj->get_metadata ());
+        ret = pymobius_core_pod_map_to_pyobject (self->obj->get_metadata ());
     }
     catch (const std::exception &e)
     {
@@ -247,7 +247,7 @@ tp_f_get_metadata (core_vfs_filesystem_o *self, PyObject *args)
     try
     {
         ret =
-            pymobius_pod_data_to_pyobject (self->obj->get_metadata (arg_name));
+            pymobius_core_pod_data_to_pyobject (self->obj->get_metadata (arg_name));
     }
     catch (const std::exception &e)
     {
@@ -272,7 +272,7 @@ tp_f_get_root_folder (core_vfs_filesystem_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_io_folder_to_pyobject (self->obj->get_root_folder ());
+        ret = pymobius_core_io_folder_to_pyobject (self->obj->get_root_folder ());
     }
     catch (const std::exception &e)
     {
@@ -312,7 +312,7 @@ tp_new (PyTypeObject *, PyObject *args, PyObject *)
     try
     {
         arg_reader = mobius::py::get_arg_as_cpp (
-            args, 0, pymobius_io_reader_from_pyobject);
+            args, 0, pymobius_core_io_reader_from_pyobject);
         arg_offset = mobius::py::get_arg_as_uint64_t (args, 1);
         arg_type = mobius::py::get_arg_as_std_string (args, 2, "autodetect");
     }

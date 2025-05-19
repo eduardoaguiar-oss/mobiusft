@@ -25,8 +25,8 @@
 #include "vfs.hpp"
 #include "block.hpp"
 #include "disk.hpp"
-#include "io/entry.hpp"
-#include "pod/map.hpp"
+#include "core/io/entry.hpp"
+#include "core/pod/map.hpp"
 #include <mobius/core/exception.inc>
 #include <pylist.hpp>
 #include <pymobius.hpp>
@@ -79,7 +79,7 @@ tp_f_get_state (core_vfs_vfs_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_pod_map_to_pyobject (self->obj->get_state ());
+        ret = pymobius_core_pod_map_to_pyobject (self->obj->get_state ());
     }
     catch (const std::exception &e)
     {
@@ -299,7 +299,7 @@ tp_f_get_root_entries (core_vfs_vfs_o *self, PyObject *)
     try
     {
         ret = mobius::py::pylist_from_cpp_container (
-            self->obj->get_root_entries (), pymobius_io_entry_to_pyobject);
+            self->obj->get_root_entries (), pymobius_core_io_entry_to_pyobject);
     }
     catch (const std::exception &e)
     {

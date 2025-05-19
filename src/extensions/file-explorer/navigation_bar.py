@@ -59,7 +59,7 @@ class NavigationBar(object):
 
         # folder icon
         path = self.__mediator.call('extension.get-resource-path', EXTENSION_ID, 'folder.svg')
-        image = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_menu)
+        image = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_menu)
         self.__folder_icon = image.get_ui_widget().get_pixbuf()
 
         self.__selecting_item = False

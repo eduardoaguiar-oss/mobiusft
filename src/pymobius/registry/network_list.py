@@ -30,7 +30,7 @@ def get_nl_profile_datetime(data):
     value = None
 
     if data:
-        decoder = mobius.decoder.data_decoder(data.data)
+        decoder = mobius.core.decoder.data_decoder(data.data)
 
         year = decoder.get_uint16_le()
         month = decoder.get_uint16_le()
@@ -66,7 +66,7 @@ def get(registry):
             default_gateway_mac = key.get_data_by_name('DefaultGatewayMac')
 
             if profile_guid and default_gateway_mac:
-                bssid = mobius.encoder.hexstring(default_gateway_mac.data[:6], ':')
+                bssid = mobius.core.encoder.hexstring(default_gateway_mac.data[:6], ':')
                 bssids[profile_guid] = bssid
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

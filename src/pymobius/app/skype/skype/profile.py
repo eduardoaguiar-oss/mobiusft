@@ -86,9 +86,9 @@ class Profile(object):
 
         # set profile attributes
         self.name = folder.name
-        self.path = mobius.io.to_win_path(folder.path)
+        self.path = mobius.core.io.to_win_path(folder.path)
         self.folder = folder
-        self.metadata = mobius.pod.map()
+        self.metadata = mobius.core.pod.map()
 
         # set data attributes
         self.__accounts_loaded = False
@@ -244,7 +244,7 @@ class Profile(object):
             self.__evidence_source = pymobius.get_evidence_source_from_file(f)
 
             # set metadata
-            self.metadata.set('main.db_path', mobius.io.to_win_path(f.path))
+            self.metadata.set('main.db_path', mobius.core.io.to_win_path(f.path))
             db_schema_version = get_schema_version(self.__db)
 
             if db_schema_version:

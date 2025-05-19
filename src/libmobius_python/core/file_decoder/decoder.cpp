@@ -17,7 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \file decoder.cc C++ API <i>mobius.core.file_decoder.decoder</i> class wrapper
+// @file decoder.cc C++ API <i>mobius.core.file_decoder.decoder</i> class wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
@@ -28,9 +28,9 @@
 #include "section.hpp"
 #include "entry.hpp"
 #include "metadata.hpp"
-#include "io/reader.hpp"
-#include "pod/data.hpp"
-#include "pod/map.hpp"
+#include "core/io/reader.hpp"
+#include "core/pod/data.hpp"
+#include "core/pod/map.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>is_instance</i> method implementation
@@ -137,7 +137,7 @@ tp_f_get_metadata (core_file_decoder_decoder_o *self, PyObject *args)
 
   try
     {
-      ret = pymobius_pod_data_to_pyobject (self->obj->get_metadata (arg_group, arg_name));
+      ret = pymobius_core_pod_data_to_pyobject (self->obj->get_metadata (arg_group, arg_name));
     }
   catch (const std::exception& e)
     {
@@ -175,7 +175,7 @@ tp_f_get_metadata_group (core_file_decoder_decoder_o *self, PyObject *args)
 
   try
     {
-      ret = pymobius_pod_map_to_pyobject (self->obj->get_metadata_group (arg_group));
+      ret = pymobius_core_pod_map_to_pyobject (self->obj->get_metadata_group (arg_group));
     }
   catch (const std::exception& e)
     {
@@ -225,7 +225,7 @@ tp_f_decode (core_file_decoder_decoder_o *self, PyObject *args)
 
   try
     {
-      arg_reader = mobius::py::get_arg_as_cpp (args, 0, pymobius_io_reader_from_pyobject);
+      arg_reader = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_io_reader_from_pyobject);
     }
   catch (const std::exception& e)
     {
@@ -279,7 +279,7 @@ tp_dealloc (core_file_decoder_decoder_o *self)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyTypeObject core_file_decoder_decoder_t =
 {
-  PyVarObject_HEAD_INIT (NULL, 0)
+  PyVarObject_HEAD_INIT (nullptr, 0)                    // header
   "mobius.core.file_decoder.decoder",      		// tp_name
   sizeof (core_file_decoder_decoder_o),    		// tp_basicsize
   0,                                       		// tp_itemsize

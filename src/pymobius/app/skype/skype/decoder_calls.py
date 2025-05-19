@@ -54,7 +54,7 @@ def decode(db, user_id):
     for row in db.execute(SQL_STATEMENT):
         call = pymobius.Data()
         call.id = row[0]
-        call.timestamp = mobius.datetime.new_datetime_from_unix_timestamp(row[1])
+        call.timestamp = mobius.core.datetime.new_datetime_from_unix_timestamp(row[1])
         call.duration = row[3] or 0
         call.is_incoming = (row[4] == 1)
         call.is_conference = row[5] and row[5] > 0

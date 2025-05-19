@@ -88,7 +88,7 @@ class Ant(object):
                 bookmark.app_name = profile.app_name
                 bookmark.evidence_source = entry.evidence_source
 
-                bookmark.metadata = mobius.pod.map()
+                bookmark.metadata = mobius.core.pod.map()
                 bookmark.metadata.set('id', entry.id)
                 bookmark.metadata.set('last_visited_time', entry.last_visited_time)
                 bookmark.metadata.set('profile-id', profile.name)
@@ -131,7 +131,7 @@ class Ant(object):
                 bookmark.app_name = profile.app_name
                 bookmark.evidence_source = entry.evidence_source
 
-                bookmark.metadata = mobius.pod.map()
+                bookmark.metadata = mobius.core.pod.map()
                 bookmark.metadata.set('id', entry.id)
                 bookmark.metadata.set('last_modification_time', entry.last_modification_time)
                 bookmark.metadata.set('profile-id', profile.name)
@@ -174,7 +174,7 @@ class Ant(object):
                 bookmark.app_name = profile.app_name
                 bookmark.evidence_source = entry.evidence_source
 
-                bookmark.metadata = mobius.pod.map()
+                bookmark.metadata = mobius.core.pod.map()
                 bookmark.metadata.set('last-modification-time', entry.last_modification_time)
                 bookmark.metadata.set('profile-id', profile.name)
                 bookmark.metadata.set('profile-path', profile.path)

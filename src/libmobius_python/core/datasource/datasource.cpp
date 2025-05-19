@@ -25,7 +25,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "datasource.hpp"
 #include "datasource_vfs.hpp"
-#include "pod/map.hpp"
+#include "core/pod/map.hpp"
 #include "ufdr/datasource.hpp"
 #include <mobius/core/exception.inc>
 #include <pymobius.hpp>
@@ -120,7 +120,7 @@ tp_f_get_state (core_datasource_datasource_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_pod_map_to_pyobject (self->obj->get_state ());
+        ret = pymobius_core_pod_map_to_pyobject (self->obj->get_state ());
     }
     catch (const std::exception &e)
     {

@@ -50,8 +50,8 @@ def exporter_wordlist(uri, data):
     passwords = set(row[1] for row in data.rows)
 
     # create writer
-    f = mobius.io.new_file_by_url(uri)
-    fp = mobius.io.text_writer(f.new_writer())
+    f = mobius.core.io.new_file_by_url(uri)
+    fp = mobius.core.io.text_writer(f.new_writer())
 
     # export data
     for pwd in sorted(passwords):
@@ -178,7 +178,7 @@ class Ant(object):
         keys = [(k.type, k.id, k.value, k) for k in self.__keys]
 
         for k_type, k_id, k_value, k in sorted(keys):
-            metadata = mobius.pod.map()
+            metadata = mobius.core.pod.map()
 
             for var_name, var_value in k.metadata:
                 metadata.set(var_name, var_value)
@@ -198,7 +198,7 @@ class Ant(object):
         passwords = [(p.type, p.description, p.value, p) for p in self.__passwords]
 
         for p_type, p_description, p_value, p_obj in sorted(passwords, key=lambda x: x[:3]):
-            metadata = mobius.pod.map()
+            metadata = mobius.core.pod.map()
 
             for var_name, var_value in p_obj.metadata:
                 metadata.set(var_name, var_value)
@@ -218,12 +218,12 @@ class Ant(object):
         hashes = [(h.type, h.description, h.value, h) for h in self.__hashes]
 
         for h_type, h_description, h_value, h_obj in sorted(hashes):
-            metadata = mobius.pod.map()
+            metadata = mobius.core.pod.map()
 
             for var_name, var_value in h_obj.metadata:
                 metadata.set(var_name, var_value)
 
-            hash_value = mobius.encoder.hexstring(h_value)
+            hash_value = mobius.core.encoder.hexstring(h_value)
 
             h = self.__item.new_evidence(PASSWORD_HASH_EVIDENCE_TYPE)
             h.password_hash_type = h_type

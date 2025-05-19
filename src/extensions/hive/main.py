@@ -84,7 +84,7 @@ class HiveView(object):
         self.icon_data = open(icon_path, 'rb').read()
 
         # build widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.show()
 
         self.__view_selector = self.__mediator.call('ui.new-widget', 'view-selector')
@@ -127,7 +127,7 @@ class HiveView(object):
         toolbar.insert(self.__export_toolitem, -1)
 
         # registry selection menu tool item
-        icon = mobius.ui.new_icon_by_name('go-jump', mobius.ui.icon.size_toolbar)
+        icon = mobius.core.ui.new_icon_by_name('go-jump', mobius.core.ui.icon.size_toolbar)
         icon.set_visible(True)
 
         self.__registry_menu_toolitem = Gtk.MenuToolButton.new(icon.get_ui_widget(), '')
@@ -177,7 +177,7 @@ class HiveView(object):
         # show "retrieving message", if necessary
         if not item.has_ant(ANT_ID):
             self.__widget.set_message('Retrieving registry files...')
-            mobius.ui.flush()
+            mobius.core.ui.flush()
 
         # retrieve data
         try:

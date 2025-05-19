@@ -427,7 +427,7 @@ class Profile(object):
         if not reader:
             return
 
-        fp = mobius.io.line_reader(reader, 'utf-8', '\r\n')
+        fp = mobius.core.io.line_reader(reader, 'utf-8', '\r\n')
         url = None
 
         for line in fp:

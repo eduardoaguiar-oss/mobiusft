@@ -424,7 +424,7 @@ class MessageParser(object):
     # @brief Parse message
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def parse(self):
-        self.__parser = mobius.decoder.sgml.parser(self.__text)
+        self.__parser = mobius.core.decoder.sgml.parser(self.__text)
         e = self.__parser.get()
 
         while e.type != 0:
@@ -794,7 +794,7 @@ class MessageParser(object):
 
         element = {'type': 'start/quote', 'author': author}
         if timestamp:
-            element['timestamp'] = mobius.datetime.new_datetime_from_unix_timestamp(int(timestamp))
+            element['timestamp'] = mobius.core.datetime.new_datetime_from_unix_timestamp(int(timestamp))
 
         self.add_element(element)
 
@@ -829,7 +829,7 @@ class MessageParser(object):
 
         # create element
         if timestamp:
-            timestamp = mobius.datetime.new_datetime_from_unix_timestamp(int(timestamp))
+            timestamp = mobius.core.datetime.new_datetime_from_unix_timestamp(int(timestamp))
             text = 'SMS message sent at %s to %s: %s' % (timestamp, ', '.join(targets), msg)
 
         else:
@@ -953,7 +953,7 @@ class MessageParser(object):
 
                 if etext == 'eventtime':
                     s = int(self.__get_tag_value(e)) // 1000
-                    timestamp = mobius.datetime.new_datetime_from_unix_timestamp(s)
+                    timestamp = mobius.core.datetime.new_datetime_from_unix_timestamp(s)
 
                 elif etext == 'initiator':
                     initiator = format_account_id(self.__get_tag_value(e))
@@ -996,7 +996,7 @@ class MessageParser(object):
 
                 if etext == 'eventtime':
                     s = int(self.__get_tag_value(e)) // 1000
-                    timestamp = mobius.datetime.new_datetime_from_unix_timestamp(s)
+                    timestamp = mobius.core.datetime.new_datetime_from_unix_timestamp(s)
 
                 elif etext == 'initiator':
                     initiator = format_account_id(self.__get_tag_value(e))
@@ -1039,7 +1039,7 @@ class MessageParser(object):
 
                 if etext == 'eventtime':
                     s = int(self.__get_tag_value(e)) // 1000
-                    timestamp = mobius.datetime.new_datetime_from_unix_timestamp(s)
+                    timestamp = mobius.core.datetime.new_datetime_from_unix_timestamp(s)
 
                 elif etext == 'initiator':
                     initiator = format_account_id(self.__get_tag_value(e))
@@ -1080,7 +1080,7 @@ class MessageParser(object):
 
                 if etext == 'eventtime':
                     s = int(self.__get_tag_value(e)) // 1000
-                    timestamp = mobius.datetime.new_datetime_from_unix_timestamp(s)
+                    timestamp = mobius.core.datetime.new_datetime_from_unix_timestamp(s)
 
                 elif etext == 'initiator':
                     initiator = format_account_id(self.__get_tag_value(e))

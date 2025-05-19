@@ -47,7 +47,7 @@ def decode_file(f):
         return
 
     # decode BTEncode data
-    metadata = mobius.decoder.btencode(reader)
+    metadata = mobius.core.decoder.btencode(reader)
 
     # create data object
     data = pymobius.Data()
@@ -59,14 +59,14 @@ def decode_file(f):
 
     # IP address
     if 'ip' in metadata:
-        decoder = mobius.decoder.data_decoder(metadata.get('ip'))
+        decoder = mobius.core.decoder.data_decoder(metadata.get('ip'))
         data.ip = decoder.get_ipv4_be()
 
     # Age
-    data.timestamp = mobius.datetime.new_datetime_from_unix_timestamp(metadata.get('age'))
+    data.timestamp = mobius.core.datetime.new_datetime_from_unix_timestamp(metadata.get('age'))
 
     # Client GUID
     if 'id' in metadata:
-        data.guid = mobius.encoder.hexstring(metadata.get('id')).upper()
+        data.guid = mobius.core.encoder.hexstring(metadata.get('id')).upper()
 
     return data

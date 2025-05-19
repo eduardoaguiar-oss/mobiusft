@@ -18,6 +18,7 @@
 import os.path
 
 import mobius
+import mobius.core.ui
 import pymobius.xml
 from gi.repository import GdkPixbuf
 from gi.repository import Gtk
@@ -45,7 +46,7 @@ class Widget(object):
     # @brief initialize widget
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __init__(self):
-        self.__widget = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        self.__widget = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         self.__widget.set_border_width(5)
         self.__widget.set_spacing(5)
         self.__widget.set_visible(True)
@@ -54,7 +55,7 @@ class Widget(object):
         # menubar
         menubar = Gtk.MenuBar()
         menubar.show()
-        self.__widget.add_child(menubar, mobius.ui.box.fill_none)
+        self.__widget.add_child(menubar, mobius.core.ui.box.fill_none)
 
         item = Gtk.MenuItem.new_with_mnemonic('_File')
         item.show()
@@ -106,10 +107,10 @@ class Widget(object):
         # working area
         hpaned = Gtk.HPaned()
         hpaned.show()
-        self.__widget.add_child(hpaned, mobius.ui.box.fill_with_widget)
+        self.__widget.add_child(hpaned, mobius.core.ui.box.fill_with_widget)
 
         # part vbox
-        part_vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        part_vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         part_vbox.set_spacing(4)
         part_vbox.set_visible(True)
         hpaned.pack1(part_vbox.get_ui_widget(), False, True)
@@ -119,7 +120,7 @@ class Widget(object):
         datastore.set_sort_column_id(CATEGORY_NAME, Gtk.SortType.ASCENDING)
 
         for category in mobius.framework.get_categories():
-            image = mobius.ui.new_icon_from_data(category.icon_data, mobius.ui.icon.size_dnd)
+            image = mobius.core.ui.new_icon_from_data(category.icon_data, mobius.core.ui.icon.size_dnd)
             icon = image.get_ui_widget().get_pixbuf()
             datastore.append((icon, category.name, category))
 
@@ -135,12 +136,12 @@ class Widget(object):
         self.__category_combobox.pack_start(renderer, True)
         self.__category_combobox.add_attribute(renderer, 'text', CATEGORY_NAME)
 
-        part_vbox.add_child(self.__category_combobox, mobius.ui.box.fill_none)
+        part_vbox.add_child(self.__category_combobox, mobius.core.ui.box.fill_none)
 
         # part listview
         frame = Gtk.Frame()
         frame.show()
-        part_vbox.add_child(frame, mobius.ui.box.fill_with_widget)
+        part_vbox.add_child(frame, mobius.core.ui.box.fill_with_widget)
 
         sw = Gtk.ScrolledWindow()
         sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
@@ -165,17 +166,17 @@ class Widget(object):
         self.__part_listview.append_column(tvcolumn)
 
         # buttons
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_visible(True)
-        part_vbox.add_child(hbox, mobius.ui.box.fill_none)
+        part_vbox.add_child(hbox, mobius.core.ui.box.fill_none)
 
-        self.__remove_button = mobius.ui.button()
+        self.__remove_button = mobius.core.ui.button()
         self.__remove_button.set_icon_by_name('list-remove')
         self.__remove_button.set_text("_Remove")
         self.__remove_button.set_sensitive(False)
         self.__remove_button.set_callback('clicked', self.__on_part_remove)
         self.__remove_button.set_visible(True)
-        hbox.add_child(self.__remove_button, mobius.ui.box.fill_none)
+        hbox.add_child(self.__remove_button, mobius.core.ui.box.fill_none)
 
         # attribute listview
         self.__listview = self.__mediator.call('ui.new-widget', 'attribute-list')
@@ -306,14 +307,14 @@ class Widget(object):
             return
 
         # show confirmation dialog
-        dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_question)
+        dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
         dialog.text = f"You are about to remove part '{self.__part.id}'. Are you sure?"
-        dialog.add_button(mobius.ui.message_dialog.button_yes)
-        dialog.add_button(mobius.ui.message_dialog.button_no)
-        dialog.set_default_response(mobius.ui.message_dialog.button_no)
+        dialog.add_button(mobius.core.ui.message_dialog.button_yes)
+        dialog.add_button(mobius.core.ui.message_dialog.button_no)
+        dialog.set_default_response(mobius.core.ui.message_dialog.button_no)
         rc = dialog.run()
 
-        if rc != mobius.ui.message_dialog.button_yes:
+        if rc != mobius.core.ui.message_dialog.button_yes:
             return
 
         # remove part from model
@@ -445,9 +446,9 @@ class Widget(object):
         self.__on_category_selection_changed(self.__category_combobox)
 
         # show result
-        dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_info)
+        dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_info)
         dialog.text = f'Parts processed: {len(parts):d}'
-        dialog.add_button(mobius.ui.message_dialog.button_ok)
+        dialog.add_button(mobius.core.ui.message_dialog.button_ok)
         rc = dialog.run()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -528,13 +529,13 @@ def on_attribute_modified(item, attr_id, old_value, new_value):
 
     # unknown part ID. Open up part catalogue dialog
     if not part:
-        dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_question)
+        dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
         dialog.text = f"Would you like to include part '{new_value}'?"
-        dialog.add_button(mobius.ui.message_dialog.button_yes)
-        dialog.add_button(mobius.ui.message_dialog.button_no)
+        dialog.add_button(mobius.core.ui.message_dialog.button_yes)
+        dialog.add_button(mobius.core.ui.message_dialog.button_no)
         rc = dialog.run()
 
-        if rc == mobius.ui.message_dialog.button_yes:
+        if rc == mobius.core.ui.message_dialog.button_yes:
             working_area = open_working_area()
             widget = working_area.app_widget
             part = pymobius.mediator.call('part.new', item.category, new_value.strip())

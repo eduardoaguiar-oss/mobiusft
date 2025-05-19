@@ -47,7 +47,7 @@ class ICEWindow(object):
         self.__case = None
 
         # window
-        self.__widget = mobius.ui.window()
+        self.__widget = mobius.core.ui.window()
         self.__widget.set_visible(True)
         self.__widget.set_callback('closing', self.__on_window_closing)
 
@@ -62,11 +62,11 @@ class ICEWindow(object):
 
         # set window icon
         path = self.__mediator.call('extension.get-icon-path', EXTENSION_ID)
-        icon = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_toolbar)
+        icon = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_toolbar)
         self.__widget.set_icon(icon)
 
         # vbox
-        vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox.set_border_width(5)
         vbox.set_spacing(5)
         vbox.show()
@@ -75,7 +75,7 @@ class ICEWindow(object):
         # menubar
         menubar = Gtk.MenuBar()
         menubar.show()
-        vbox.add_child(menubar, mobius.ui.box.fill_none)
+        vbox.add_child(menubar, mobius.core.ui.box.fill_none)
 
         item = Gtk.MenuItem.new_with_mnemonic('_File')
         item.show()
@@ -141,7 +141,7 @@ class ICEWindow(object):
         toolbar = Gtk.Toolbar()
         toolbar.set_style(Gtk.ToolbarStyle.ICONS)
         toolbar.show()
-        vbox.add_child(toolbar, mobius.ui.box.fill_none)
+        vbox.add_child(toolbar, mobius.core.ui.box.fill_none)
 
         toolitem = Gtk.ToolButton.new()
         toolitem.set_icon_name('document-new')
@@ -160,7 +160,7 @@ class ICEWindow(object):
         # main container
         self.__case_view = CaseView()
         self.__case_view.show()
-        vbox.add_child(self.__case_view.get_ui_widget(), mobius.ui.box.fill_with_widget)
+        vbox.add_child(self.__case_view.get_ui_widget(), mobius.core.ui.box.fill_with_widget)
 
         # update window
         self.__update_window()
@@ -316,9 +316,9 @@ class ICEWindow(object):
 
         # check if case.sqlite exists
         if not os.path.exists(os.path.join(folder, 'case.sqlite')):
-            dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_error)
+            dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_error)
             dialog.text = 'Could not find "case.sqlite" file inside folder'
-            dialog.add_button(mobius.ui.message_dialog.button_ok)
+            dialog.add_button(mobius.core.ui.message_dialog.button_ok)
             rc = dialog.run()
             return
 
@@ -335,15 +335,15 @@ class ICEWindow(object):
         case_name = root_item.name or root_item.id
 
         # show 'would you like to close case' dialog
-        dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_question)
+        dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
         dialog.text = f"Do you want to close '{case_name}'?"
-        dialog.add_button(mobius.ui.message_dialog.button_yes)
-        dialog.add_button(mobius.ui.message_dialog.button_no)
-        dialog.set_default_response(mobius.ui.message_dialog.button_no)
+        dialog.add_button(mobius.core.ui.message_dialog.button_yes)
+        dialog.add_button(mobius.core.ui.message_dialog.button_no)
+        dialog.set_default_response(mobius.core.ui.message_dialog.button_no)
         rc = dialog.run()
 
         # if response = YES, set current version and show extension manager
-        if rc != mobius.ui.message_dialog.button_yes:
+        if rc != mobius.core.ui.message_dialog.button_yes:
             return True
 
         # close case
@@ -362,19 +362,19 @@ class ICEWindow(object):
     def __on_file_quit(self, widget, *args):
 
         # show confirmation dialog
-        dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_question)
+        dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
         dialog.text = "Do you really want to quit from Mobius Forensic Toolkit?"
-        dialog.add_button(mobius.ui.message_dialog.button_yes)
-        dialog.add_button(mobius.ui.message_dialog.button_no)
-        dialog.set_default_response(mobius.ui.message_dialog.button_no)
+        dialog.add_button(mobius.core.ui.message_dialog.button_yes)
+        dialog.add_button(mobius.core.ui.message_dialog.button_no)
+        dialog.set_default_response(mobius.core.ui.message_dialog.button_no)
         rc = dialog.run()
 
-        if rc != mobius.ui.message_dialog.button_yes:
+        if rc != mobius.core.ui.message_dialog.button_yes:
             return True
 
         # stop UI
         self.__destroy()
-        mobius.ui.stop()
+        mobius.core.ui.stop()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Handle help->about
@@ -425,18 +425,18 @@ class ICEWindow(object):
     # @brief Add item to tools menus
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __add_tools_menu_item(self, item_id, title, icon_path, callback):
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_spacing(3)
         hbox.set_visible(True)
 
-        icon = mobius.ui.new_icon_by_path(icon_path, mobius.ui.icon.size_toolbar)
+        icon = mobius.core.ui.new_icon_by_path(icon_path, mobius.core.ui.icon.size_toolbar)
         icon.set_visible(True)
-        hbox.add_child(icon, mobius.ui.box.fill_none)
+        hbox.add_child(icon, mobius.core.ui.box.fill_none)
 
-        label = mobius.ui.label(title)
-        label.set_halign(mobius.ui.label.align_left)
+        label = mobius.core.ui.label(title)
+        label.set_halign(mobius.core.ui.label.align_left)
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_with_widget)
+        hbox.add_child(label, mobius.core.ui.box.fill_with_widget)
 
         item = Gtk.MenuItem.new()
         item.add(hbox.get_ui_widget())
@@ -474,9 +474,9 @@ def svc_app_start():
     window.show()
 
     # start graphical interface
-    # mobius.ui.set_ui_implementation ("gtk3")
+    # mobius.core.ui.set_ui_implementation ("gtk3")
 
-    mobius.ui.start()
+    mobius.core.ui.start()
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

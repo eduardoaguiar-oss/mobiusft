@@ -22,5 +22,5 @@
 EXTENSION_ID = 'category-manager'
 EXTENSION_NAME = 'Category Manager'
 EXTENSION_AUTHOR = 'Eduardo Aguiar'
-EXTENSION_VERSION = '1.15'
+EXTENSION_VERSION = '1.16'
 EXTENSION_DESCRIPTION = 'Category Manager'

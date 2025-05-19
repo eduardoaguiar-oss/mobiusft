@@ -115,8 +115,8 @@ def decode_form_history_14(db):
         entry.fieldname = row[1]
         entry.value = row[2]
         entry.use_count = row[3]
-        entry.first_used_time = mobius.datetime.new_datetime_from_unix_timestamp(row[4] // 1000000)
-        entry.last_used_time = mobius.datetime.new_datetime_from_unix_timestamp(row[5] // 1000000)
+        entry.first_used_time = mobius.core.datetime.new_datetime_from_unix_timestamp(row[4] // 1000000)
+        entry.last_used_time = mobius.core.datetime.new_datetime_from_unix_timestamp(row[5] // 1000000)
 
         form_history.append(entry)
 

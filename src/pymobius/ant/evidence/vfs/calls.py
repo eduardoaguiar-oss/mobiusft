@@ -92,7 +92,7 @@ class Ant(object):
                 entry.app_name = 'Skype'
                 entry.username = profile.username
 
-                entry.metadata = mobius.pod.map()
+                entry.metadata = mobius.core.pod.map()
                 entry.metadata.set('id', c.id)
                 entry.metadata.set('is_incoming', c.is_incoming)
                 entry.metadata.set('is_conference', c.is_conference)

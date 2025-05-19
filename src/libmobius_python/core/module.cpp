@@ -30,12 +30,18 @@
 #include "crypt/module.hpp"
 #include "database/module.hpp"
 #include "datasource/module.hpp"
+#include "datetime/module.hpp"
 #include "decoder/module.hpp"
+#include "encoder/module.hpp"
+#include "core/decoder/module.hpp"
 #include "file_decoder/module.hpp"
+#include "io/module.hpp"
 #include "kff/module.hpp"
 #include "os/module.hpp"
+#include "pod/module.hpp"
 #include "system/module.hpp"
 #include "turing/module.hpp"
+#include "ui/module.hpp"
 #include "vfs/module.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -110,11 +116,17 @@ new_core_module ()
   module.add_submodule ("crypt", new_core_crypt_module ());
   module.add_submodule ("database", new_core_database_module ());
   module.add_submodule ("datasource", new_core_datasource_module ());
+  module.add_submodule ("datetime", new_core_datetime_module ());
+  module.add_submodule ("decoder", new_core_decoder_module ());
+  module.add_submodule ("encoder", new_core_encoder_module ());
   module.add_submodule ("file_decoder", new_core_file_decoder_module ());
+  module.add_submodule ("io", new_core_io_module ());
   module.add_submodule ("kff", new_core_kff_module ());
   module.add_submodule ("os", new_core_os_module ());
+  module.add_submodule ("pod", new_core_pod_module ());
   module.add_submodule ("system", new_core_system_module ());
   module.add_submodule ("turing", new_core_turing_module ());
+  module.add_submodule ("ui", new_core_ui_module ());
   module.add_submodule ("vfs", new_core_vfs_module ());
 
   // Return module

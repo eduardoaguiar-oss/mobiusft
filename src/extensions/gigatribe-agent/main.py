@@ -19,6 +19,8 @@ import datetime
 import struct
 
 import mobius
+import mobius.core.decoder
+import mobius.core.io
 import pymobius
 from gi.repository import Gtk
 
@@ -95,7 +97,7 @@ class GigaTribeChatFile(object):
         if signature != b'ch':
             return
 
-        decoder = mobius.decoder.qdatastream (fp, mobius.decoder.qdatastream.QT_4_0)
+        decoder = mobius.core.decoder.qdatastream (fp, mobius.core.decoder.qdatastream.QT_4_0)
 
         # version
         self.is_valid = True
@@ -154,7 +156,7 @@ class Widget(object):
     # @brief Build widget
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __init__(self):
-        self.__widget = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        self.__widget = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         self.__widget.set_border_width(10)
         self.__widget.set_spacing(5)
         self.__mediator = pymobius.mediator.copy()
@@ -162,7 +164,7 @@ class Widget(object):
         # menubar
         menubar = Gtk.MenuBar()
         menubar.show()
-        self.__widget.add_child(menubar, mobius.ui.box.fill_none)
+        self.__widget.add_child(menubar, mobius.core.ui.box.fill_none)
 
         item = Gtk.MenuItem.new_with_mnemonic('_File')
         item.show()
@@ -190,7 +192,7 @@ class Widget(object):
         toolbar = Gtk.Toolbar()
         toolbar.set_style(Gtk.ToolbarStyle.ICONS)
         toolbar.show()
-        self.__widget.add_child(toolbar, mobius.ui.box.fill_none)
+        self.__widget.add_child(toolbar, mobius.core.ui.box.fill_none)
 
         toolitem = Gtk.ToolButton.new()
         toolitem.set_icon_name('document-open')
@@ -225,17 +227,17 @@ class Widget(object):
         self.__chat_tableview.set_report_app(f'{EXTENSION_NAME} v{EXTENSION_VERSION}')
         self.__chat_tableview.show()
 
-        self.__widget.add_child(self.__chat_tableview.get_ui_widget(), mobius.ui.box.fill_with_widget)
+        self.__widget.add_child(self.__chat_tableview.get_ui_widget(), mobius.core.ui.box.fill_with_widget)
 
         # status bar
         frame = Gtk.Frame()
         frame.set_shadow_type(Gtk.ShadowType.IN)
         frame.show()
-        self.__widget.add_child(frame, mobius.ui.box.fill_none)
+        self.__widget.add_child(frame, mobius.core.ui.box.fill_none)
 
-        self.__status_label = mobius.ui.label()
+        self.__status_label = mobius.core.ui.label()
         self.__status_label.set_selectable(True)
-        self.__status_label.set_halign(mobius.ui.label.align_left)
+        self.__status_label.set_halign(mobius.core.ui.label.align_left)
         self.__status_label.set_visible(True)
         frame.add(self.__status_label.get_ui_widget())
 
@@ -250,7 +252,7 @@ class Widget(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __set_status_label(self, text):
         self.__status_label.set_text(text)
-        mobius.ui.flush()
+        mobius.core.ui.flush()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Handle close button
@@ -264,14 +266,14 @@ class Widget(object):
     def on_widget_stopped(self):
 
         # show confirmation dialog
-        dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_question)
+        dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
         dialog.text = f'Do you want to quit from {EXTENSION_NAME}?'
-        dialog.add_button(mobius.ui.message_dialog.button_yes)
-        dialog.add_button(mobius.ui.message_dialog.button_no)
-        dialog.set_default_response(mobius.ui.message_dialog.button_no)
+        dialog.add_button(mobius.core.ui.message_dialog.button_yes)
+        dialog.add_button(mobius.core.ui.message_dialog.button_no)
+        dialog.set_default_response(mobius.core.ui.message_dialog.button_no)
         rc = dialog.run()
 
-        if rc != mobius.ui.message_dialog.button_yes:
+        if rc != mobius.core.ui.message_dialog.button_yes:
             return True
 
         # close extension
@@ -307,7 +309,7 @@ class Widget(object):
         for uri in uri_list:
 
             try:
-                f = mobius.io.new_file_by_url(uri)
+                f = mobius.core.io.new_file_by_url(uri)
                 self.__set_status_label(f'Reading file {f.name}')
 
                 chatfile = GigaTribeChatFile()

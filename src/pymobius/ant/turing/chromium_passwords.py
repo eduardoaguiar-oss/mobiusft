@@ -80,7 +80,7 @@ class Ant(object):
         transaction = turing.new_transaction()
 
         for url in self.__urls:
-            h = mobius.encoder.hexstring(mobius.core.os.win.hash_ie_entropy(url))
+            h = mobius.core.encoder.hexstring(mobius.core.os.win.hash_ie_entropy(url))
             turing.set_hash('ie.entropy', h, url)
 
         transaction.commit()
@@ -168,7 +168,7 @@ class Ant(object):
 
                 if password and password[-1] > 16:
                     url = secret.p.origin_url
-                    uri = mobius.io.uri(url)
+                    uri = mobius.core.io.uri(url)
                     domain = uri.get_host()
 
                     p = pymobius.Data()
@@ -220,7 +220,7 @@ class Ant(object):
                 mobius.core.logf(f"INF login data {version} decrypted")
 
                 url = secret.p.origin_url
-                uri = mobius.io.uri(url)
+                uri = mobius.core.io.uri(url)
                 domain = uri.get_host()
 
                 p = pymobius.Data()

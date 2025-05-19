@@ -102,7 +102,7 @@ class Ant(object):
         try:
             # get UFDR path
             datasource = self.__item.get_datasource()
-            uri = mobius.io.uri(datasource.get_url())
+            uri = mobius.core.io.uri(datasource.get_url())
             path = uri.get_path('utf-8')
 
             # run UFDR parser

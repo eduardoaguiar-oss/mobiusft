@@ -38,7 +38,7 @@ class DNDToolItem(object):
         self.__mediator = pymobius.mediator.copy()
         path = self.__mediator.call('extension.get-resource-path', EXTENSION_ID, 'report-data.png')
 
-        icon = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_dnd)
+        icon = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_dnd)
         icon.set_visible(True)
 
         self.__toolitem = Gtk.ToolButton.new()

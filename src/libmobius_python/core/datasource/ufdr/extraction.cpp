@@ -24,7 +24,7 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "extraction.hpp"
-#include "pod/map.hpp"
+#include "core/pod/map.hpp"
 #include <mobius/core/exception.inc>
 #include <pylist.hpp>
 #include <pymobius.hpp>
@@ -360,7 +360,7 @@ tp_f_get_state (core_datasource_ufdr_extraction_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_pod_map_to_pyobject (self->obj->get_state ());
+        ret = pymobius_core_pod_map_to_pyobject (self->obj->get_state ());
     }
     catch (const std::exception &e)
     {

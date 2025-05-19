@@ -22,5 +22,5 @@
 EXTENSION_ID = 'gigatribe-agent'
 EXTENSION_NAME = 'Gigatribe Agent'
 EXTENSION_AUTHOR = 'Eduardo Aguiar and Marcia Mendes'
-EXTENSION_VERSION = '0.8'
+EXTENSION_VERSION = '0.9'
 EXTENSION_DESCRIPTION = 'Viewer for Gigatribe files'

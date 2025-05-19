@@ -102,10 +102,10 @@ class FileFinderView(object):
         self.icon_data = open(icon_path, 'rb').read()
 
         # build widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.show()
 
-        vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox.set_spacing(5)
         vbox.set_visible(True)
         self.__widget.set_content(vbox)
@@ -113,13 +113,13 @@ class FileFinderView(object):
         # navigation bar
         self.__navigation_bar = NavigationBar(control)
         self.__navigation_bar.show()
-        vbox.add_child(self.__navigation_bar.get_ui_widget(), mobius.ui.box.fill_none)
+        vbox.add_child(self.__navigation_bar.get_ui_widget(), mobius.core.ui.box.fill_none)
 
         # vpaned
         self.__vpaned = Gtk.VPaned()
         self.__vpaned.set_border_width(5)
         self.__vpaned.show()
-        vbox.add_child(self.__vpaned, mobius.ui.box.fill_with_widget)
+        vbox.add_child(self.__vpaned, mobius.core.ui.box.fill_with_widget)
 
         position = mobius.framework.get_config('file-explorer.file-finder-vpaned-position')
 
@@ -127,7 +127,7 @@ class FileFinderView(object):
             self.__vpaned.set_position(position)
 
         # search area
-        search_hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        search_hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         search_hbox.set_spacing(5)
         search_hbox.set_visible(True)
         self.__vpaned.pack1(search_hbox.get_ui_widget(), True, True)
@@ -135,7 +135,7 @@ class FileFinderView(object):
         sw = Gtk.ScrolledWindow()
         sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         sw.show()
-        search_hbox.add_child(sw, mobius.ui.box.fill_with_widget)
+        search_hbox.add_child(sw, mobius.core.ui.box.fill_with_widget)
 
         language_manager = GtkSource.LanguageManager.get_default()
         language = language_manager.get_language('python')
@@ -154,10 +154,10 @@ class FileFinderView(object):
         self.__sourceview.override_font(font)
         sw.add(self.__sourceview)
 
-        search_vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        search_vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         search_vbox.set_spacing(5)
         search_vbox.set_visible(True)
-        search_hbox.add_child(search_vbox, mobius.ui.box.fill_none)
+        search_hbox.add_child(search_vbox, mobius.core.ui.box.fill_none)
 
         # combobox
         datastore = Gtk.ListStore.new([str, object])
@@ -167,19 +167,19 @@ class FileFinderView(object):
         self.__filter_combobox.connect('changed', self.__on_combobox_selection_changed)
         self.__filter_combobox.set_active(0)
         self.__filter_combobox.show()
-        search_vbox.add_child(self.__filter_combobox, mobius.ui.box.fill_with_widget)
+        search_vbox.add_child(self.__filter_combobox, mobius.core.ui.box.fill_with_widget)
 
         renderer = Gtk.CellRendererText()
         renderer.set_padding(5, 0)
         self.__filter_combobox.pack_start(renderer, True)
         self.__filter_combobox.add_attribute(renderer, 'text', 0)
 
-        self.__search_button = mobius.ui.button()
+        self.__search_button = mobius.core.ui.button()
         self.__search_button.set_icon_by_name('edit-find')
         self.__search_button.set_text('_Find')
         self.__search_button.set_visible(True)
         self.__search_button.set_callback('clicked', self.__on_search_button_clicked)
-        search_vbox.add_child(self.__search_button, mobius.ui.box.fill_with_widget)
+        search_vbox.add_child(self.__search_button, mobius.core.ui.box.fill_with_widget)
 
         # view
         self.__listview = self.__mediator.call('ui.new-widget', 'tableview')
@@ -200,12 +200,12 @@ class FileFinderView(object):
         self.__vpaned.pack2(self.__listview.get_ui_widget(), True, True)
 
         path = self.__mediator.call('extension.get-resource-path', EXTENSION_ID, 'file.svg')
-        image = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_toolbar)
+        image = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_toolbar)
         icon = image.get_ui_widget().get_pixbuf()
         self.__listview.set_icon('file', icon)
 
         path = self.__mediator.call('extension.get-resource-path', EXTENSION_ID, 'folder.svg')
-        image = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_toolbar)
+        image = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_toolbar)
         icon = image.get_ui_widget().get_pixbuf()
         self.__listview.set_icon('folder', icon)
 
@@ -319,9 +319,9 @@ class FileFinderView(object):
         except Exception as e:
             mobius.core.logf(f'ERR {str(e)}\n{traceback.format_exc()}')
 
-            dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_error)
+            dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_error)
             dialog.text = f'Error: {str(e)}'
-            dialog.add_button(mobius.ui.message_dialog.BUTTON_OK)
+            dialog.add_button(mobius.core.ui.message_dialog.BUTTON_OK)
             rc = dialog.run()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -339,7 +339,7 @@ class FileFinderView(object):
             if self.__filter.test(entry):
                 icon_id = 'file' if entry.is_file() else 'folder'
                 self.__listview.add_row((icon_id, entry.path, entry))
-                mobius.ui.flush()
+                mobius.core.ui.flush()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Walk through folder entries recursively

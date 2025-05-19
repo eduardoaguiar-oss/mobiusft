@@ -88,7 +88,7 @@ class Profile(object):
         self.name = folder.name
         self.path = folder.path.replace('/', '\\')
         self.folder = folder
-        self.metadata = mobius.pod.map()
+        self.metadata = mobius.core.pod.map()
 
         # set data attributes
         self.__accounts_loaded = False
@@ -254,7 +254,7 @@ class Profile(object):
     def __get_main_db(self):
         if not self.__main_db:
             self.__main_db, db_path, db_schema_version, f = self.__get_db_file('main.db')
-            self.metadata.set('main.db_path', mobius.io.to_win_path(db_path))
+            self.metadata.set('main.db_path', mobius.core.io.to_win_path(db_path))
 
             if db_schema_version:
                 self.metadata.set('main.db_schema_version', db_schema_version)
@@ -270,7 +270,7 @@ class Profile(object):
     def __get_skype_db(self):
         if not self.__skype_db:
             self.__skype_db, db_path, db_schema_version, f = self.__get_db_file('skype.db')
-            self.metadata.set('skype.db_path', mobius.io.to_win_path(db_path))
+            self.metadata.set('skype.db_path', mobius.core.io.to_win_path(db_path))
 
             if db_schema_version:
                 self.metadata.set('skype.db_schema_version', db_schema_version)

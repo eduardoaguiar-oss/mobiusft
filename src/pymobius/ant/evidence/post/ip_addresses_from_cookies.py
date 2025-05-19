@@ -74,7 +74,7 @@ class Ant(object):
                 entry.username = c.username
                 entry.evidence_source = f"Cookie {c.name}"
 
-                metadata = mobius.pod.map()
+                metadata = mobius.core.pod.map()
                 metadata.set('cookie-name', c.name)
                 metadata.set('cookie-domain', c.domain)
                 metadata.set('cookie-evidence-source', c.evidence_source)
@@ -93,7 +93,7 @@ class Ant(object):
         ip = None
 
         if c.name == 'kt_ips':
-            uri = mobius.io.uri(c.value.decode('utf-8'))
+            uri = mobius.core.io.uri(c.value.decode('utf-8'))
             value = uri.get_path('utf-8')
 
             if ',' not in value and (value.count('.') == 3 or value.count(':') > 1):

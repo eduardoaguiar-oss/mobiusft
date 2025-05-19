@@ -17,6 +17,7 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import datetime
 
+import mobius.core.encoder
 import pymobius
 
 from common import *
@@ -65,7 +66,7 @@ class NetworkListReport(object):
                 default_gateway_mac = key.get_data_by_name('DefaultGatewayMac')
 
                 if default_gateway_mac:
-                    default_gateway_mac = mobius.encoder.hexstring(default_gateway_mac.data[:6], ':')
+                    default_gateway_mac = mobius.core.encoder.hexstring(default_gateway_mac.data[:6], ':')
 
                 profile_guid = get_data_as_string(key.get_data_by_name('ProfileGuid'))
                 profile_key = nl_key.get_key_by_path('Profiles\\%s' % profile_guid)

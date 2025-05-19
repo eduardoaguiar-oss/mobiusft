@@ -110,9 +110,9 @@ def decode_cookies_4(db, f):
         entry.name = row[2]
         entry.value = row[3]
         entry.is_encrypted = False
-        entry.last_access_time = mobius.datetime.new_datetime_from_nt_timestamp(row[4] * 10)
-        entry.creation_time = mobius.datetime.new_datetime_from_nt_timestamp(row[5] * 10)
-        entry.expiration_time = mobius.datetime.new_datetime_from_nt_timestamp(row[6] * 10)
+        entry.last_access_time = mobius.core.datetime.new_datetime_from_nt_timestamp(row[4] * 10)
+        entry.creation_time = mobius.core.datetime.new_datetime_from_nt_timestamp(row[5] * 10)
+        entry.expiration_time = mobius.core.datetime.new_datetime_from_nt_timestamp(row[6] * 10)
         entry.last_update_time = None
         entry.evidence_source = evidence_source
         entry.is_deleted = f.is_deleted()

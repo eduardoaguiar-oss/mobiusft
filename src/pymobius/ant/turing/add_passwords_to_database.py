@@ -62,13 +62,13 @@ class Ant(object):
         for password in self.__passwords:
             try:
                 value = mobius.core.crypt.hash_digest('sha1', password.encode('utf-16-le'))
-                turing.set_hash('sha1.utf16', mobius.encoder.hexstring(value), password)
+                turing.set_hash('sha1.utf16', mobius.core.encoder.hexstring(value), password)
             except Exception as e:
                 mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
 
             try:
                 value = mobius.core.os.win.hash_nt(password)
-                turing.set_hash('nt', mobius.encoder.hexstring(value), password)
+                turing.set_hash('nt', mobius.core.encoder.hexstring(value), password)
             except Exception as e:
                 mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
 

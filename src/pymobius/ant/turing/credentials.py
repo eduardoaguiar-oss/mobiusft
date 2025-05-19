@@ -195,7 +195,7 @@ class Ant(object):
             if not reader:
                 return
 
-            decoder = mobius.decoder.data_decoder(reader)
+            decoder = mobius.core.decoder.data_decoder(reader)
             revision = decoder.get_uint32_le()
             blob_size = decoder.get_uint64_le()
 

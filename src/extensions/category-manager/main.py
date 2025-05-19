@@ -20,6 +20,9 @@ import os
 import os.path
 
 import mobius
+import mobius.core.decoder
+import mobius.core.encoder
+import mobius.core.io
 import pymobius
 from gi.repository import GLib
 from gi.repository import Gdk
@@ -71,7 +74,7 @@ def import_json(f):
         category = mobius.framework.new_category(d_category.get('id'))
         category.name = d_category.get('name')
         category.description = d_category.get('description')
-        category.icon_data = mobius.decoder.base64(d_category.get('icon'))
+        category.icon_data = mobius.core.decoder.base64(d_category.get('icon'))
 
         # attributes
         for d_attr in d_category.get('attributes'):
@@ -96,7 +99,7 @@ def export_json(f):
             'id': category.id,
             'name': category.name,
             'description': category.description,
-            'icon': mobius.encoder.base64(category.icon_data)
+            'icon': mobius.core.encoder.base64(category.icon_data)
         }
 
         attrlist = []
@@ -115,7 +118,7 @@ def export_json(f):
         categories.append(d_category)
 
     # write file
-    fp = mobius.io.text_writer(f.new_writer())
+    fp = mobius.core.io.text_writer(f.new_writer())
     json.dump(categories, fp)
 
 
@@ -128,7 +131,7 @@ class Widget(object):
     # @brief Initialize widget
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __init__(self):
-        self.__widget = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        self.__widget = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         self.__mediator = pymobius.mediator.copy()
         self.__widget.set_border_width(5)
         self.__widget.set_spacing(5)
@@ -137,7 +140,7 @@ class Widget(object):
         # menubar
         menubar = Gtk.MenuBar()
         menubar.show()
-        self.__widget.add_child(menubar, mobius.ui.box.fill_none)
+        self.__widget.add_child(menubar, mobius.core.ui.box.fill_none)
 
         item = Gtk.MenuItem.new_with_mnemonic('_File')
         item.show()
@@ -169,17 +172,17 @@ class Widget(object):
         # hpaned
         hpaned = Gtk.HPaned()
         hpaned.show()
-        self.__widget.add_child(hpaned, mobius.ui.box.fill_with_widget)
+        self.__widget.add_child(hpaned, mobius.core.ui.box.fill_with_widget)
 
         # category listview
-        vbox1 = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox1 = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox1.set_spacing(5)
         vbox1.set_visible(True)
         hpaned.pack1(vbox1.get_ui_widget(), True, True)
 
         frame = Gtk.Frame()
         frame.show()
-        vbox1.add_child(frame, mobius.ui.box.fill_with_widget)
+        vbox1.add_child(frame, mobius.core.ui.box.fill_with_widget)
 
         sw = Gtk.ScrolledWindow()
         sw.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
@@ -210,26 +213,26 @@ class Widget(object):
         self.category_listview.append_column(tvcolumn)
 
         # buttons
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_visible(True)
-        vbox1.add_child(hbox, mobius.ui.box.fill_none)
+        vbox1.add_child(hbox, mobius.core.ui.box.fill_none)
 
-        button = mobius.ui.button()
+        button = mobius.core.ui.button()
         button.set_icon_by_name('list-add')
         button.set_text("_Add")
         button.set_visible(True)
         button.set_callback('clicked', self.__on_category_add)
-        hbox.add_child(button, mobius.ui.box.fill_none)
+        hbox.add_child(button, mobius.core.ui.box.fill_none)
 
         hbox.add_filler()
 
-        self.__remove_button = mobius.ui.button()
+        self.__remove_button = mobius.core.ui.button()
         self.__remove_button.set_icon_by_name('list-remove')
         self.__remove_button.set_text("_Remove")
         self.__remove_button.set_sensitive(False)
         self.__remove_button.set_visible(True)
         self.__remove_button.set_callback('clicked', self.__on_category_remove)
-        hbox.add_child(self.__remove_button, mobius.ui.box.fill_none)
+        hbox.add_child(self.__remove_button, mobius.core.ui.box.fill_none)
 
         # notebook
         notebook = Gtk.Notebook()
@@ -237,20 +240,20 @@ class Widget(object):
         hpaned.pack2(notebook, True, True)
 
         # page: general
-        vbox2 = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox2 = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox2.set_border_width(5)
         vbox2.set_visible(True)
-        notebook.append_page(vbox2.get_ui_widget(), mobius.ui.label('General').get_ui_widget())
+        notebook.append_page(vbox2.get_ui_widget(), mobius.core.ui.label('General').get_ui_widget())
 
         grid = Gtk.Grid.new()
         grid.set_row_spacing(10)
         grid.set_column_spacing(5)
         grid.show()
-        vbox2.add_child(grid, mobius.ui.box.fill_with_widget)
+        vbox2.add_child(grid, mobius.core.ui.box.fill_with_widget)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>ID</b>')
-        label.set_halign(mobius.ui.label.align_right)
+        label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
         grid.attach(label.get_ui_widget(), 0, 0, 1, 1)
 
@@ -261,9 +264,9 @@ class Widget(object):
         self.category_id_entry.show()
         grid.attach(self.category_id_entry, 1, 0, 2, 1)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>Name</b>')
-        label.set_halign(mobius.ui.label.align_right)
+        label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
         grid.attach(label.get_ui_widget(), 0, 1, 1, 1)
 
@@ -272,34 +275,34 @@ class Widget(object):
         self.category_name_entry.show()
         grid.attach(self.category_name_entry, 1, 1, 2, 1)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>Icon</b>')
-        label.set_halign(mobius.ui.label.align_right)
+        label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
         grid.attach(label.get_ui_widget(), 0, 2, 1, 1)
 
-        icon = mobius.ui.new_icon_by_name('image-missing', mobius.ui.icon.size_dnd)
-        self.__category_icon_button = mobius.ui.button()
+        icon = mobius.core.ui.new_icon_by_name('image-missing', mobius.core.ui.icon.size_dnd)
+        self.__category_icon_button = mobius.core.ui.button()
         self.__category_icon_button.set_icon(icon)
         self.__category_icon_button.set_visible(True)
         self.__category_icon_button.set_callback('clicked', self.__on_category_icon_edit)
 
         grid.attach(self.__category_icon_button.get_ui_widget(), 1, 2, 1, 1)
 
-        placeholder = mobius.ui.label(' ')
+        placeholder = mobius.core.ui.label(' ')
         placeholder.set_visible(True)
         grid.attach(placeholder.get_ui_widget(), 2, 0, 1, 1)
 
         # page: attributes
-        vbox_page = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox_page = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox_page.set_spacing(5)
         vbox_page.set_visible(True)
-        notebook.append_page(vbox_page.get_ui_widget(), mobius.ui.label('Attributes').get_ui_widget())
+        notebook.append_page(vbox_page.get_ui_widget(), mobius.core.ui.label('Attributes').get_ui_widget())
 
         sw = Gtk.ScrolledWindow()
         sw.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         sw.show()
-        vbox_page.add_child(sw, mobius.ui.box.fill_with_widget)
+        vbox_page.add_child(sw, mobius.core.ui.box.fill_with_widget)
 
         # attributes listview
         datastore = Gtk.ListStore.new([str, str, str])
@@ -331,52 +334,52 @@ class Widget(object):
         sw.add(self.attribute_listview)
 
         # value_mask
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_spacing(5)
         hbox.set_visible(True)
-        vbox_page.add_child(hbox, mobius.ui.box.fill_none)
+        vbox_page.add_child(hbox, mobius.core.ui.box.fill_none)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>Value mask</b>')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         self.value_mask_entry = Gtk.Entry()
         self.value_mask_entry.connect('changed', self.on_value_mask_changed)
         self.value_mask_entry.show()
-        hbox.add_child(self.value_mask_entry, mobius.ui.box.fill_with_widget)
+        hbox.add_child(self.value_mask_entry, mobius.core.ui.box.fill_with_widget)
 
         # attribute buttons
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_visible(True)
-        vbox_page.add_child(hbox, mobius.ui.box.fill_none)
+        vbox_page.add_child(hbox, mobius.core.ui.box.fill_none)
 
-        self.__add_attr_button = mobius.ui.button()
+        self.__add_attr_button = mobius.core.ui.button()
         self.__add_attr_button.set_icon_by_name('list-add')
         self.__add_attr_button.set_visible(True)
         self.__add_attr_button.set_callback('clicked', self.__on_attribute_add)
-        hbox.add_child(self.__add_attr_button, mobius.ui.box.fill_none)
+        hbox.add_child(self.__add_attr_button, mobius.core.ui.box.fill_none)
 
-        self.__remove_attr_button = mobius.ui.button()
+        self.__remove_attr_button = mobius.core.ui.button()
         self.__remove_attr_button.set_icon_by_name('list-remove')
         self.__remove_attr_button.set_sensitive(False)
         self.__remove_attr_button.set_visible(True)
         self.__remove_attr_button.set_callback('clicked', self.__on_attribute_remove)
-        hbox.add_child(self.__remove_attr_button, mobius.ui.box.fill_none)
+        hbox.add_child(self.__remove_attr_button, mobius.core.ui.box.fill_none)
 
-        self.__up_attr_button = mobius.ui.button()
+        self.__up_attr_button = mobius.core.ui.button()
         self.__up_attr_button.set_icon_by_name('go-up')
         self.__up_attr_button.set_sensitive(False)
         self.__up_attr_button.set_visible(True)
         self.__up_attr_button.set_callback('clicked', self.__on_attribute_up)
-        hbox.add_child(self.__up_attr_button, mobius.ui.box.fill_none)
+        hbox.add_child(self.__up_attr_button, mobius.core.ui.box.fill_none)
 
-        self.__down_attr_button = mobius.ui.button()
+        self.__down_attr_button = mobius.core.ui.button()
         self.__down_attr_button.set_icon_by_name('go-down')
         self.__down_attr_button.set_sensitive(False)
         self.__down_attr_button.set_visible(True)
         self.__down_attr_button.set_callback('clicked', self.__on_attribute_down)
-        hbox.add_child(self.__down_attr_button, mobius.ui.box.fill_none)
+        hbox.add_child(self.__down_attr_button, mobius.core.ui.box.fill_none)
 
         # flags
         self.is_selecting = False  # selecting new category
@@ -457,7 +460,7 @@ class Widget(object):
             uri += '.json'
 
         # export database
-        f = mobius.io.new_file_by_url(uri)
+        f = mobius.core.io.new_file_by_url(uri)
         export_json(f)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -483,7 +486,7 @@ class Widget(object):
             return
 
         # import database
-        f = mobius.io.new_file_by_url(uri)
+        f = mobius.core.io.new_file_by_url(uri)
         import_json(f)
         self.populate_category_listview()
 
@@ -501,7 +504,7 @@ class Widget(object):
             self.category_id_entry.set_text(category.id)
             self.category_name_entry.set_text(category.name or '')
 
-            icon = mobius.ui.new_icon_from_data(category.icon_data, mobius.ui.icon.size_dnd)
+            icon = mobius.core.ui.new_icon_from_data(category.icon_data, mobius.core.ui.icon.size_dnd)
             self.__category_icon_button.set_icon(icon)
 
             self.populate_attribute_listview(category)
@@ -510,7 +513,7 @@ class Widget(object):
         else:
             self.category_id_entry.set_text('')
             self.category_name_entry.set_text('')
-            icon = mobius.ui.new_icon_by_name('image-missing', mobius.ui.icon.size_dnd)
+            icon = mobius.core.ui.new_icon_by_name('image-missing', mobius.core.ui.icon.size_dnd)
             self.__category_icon_button.set_icon(icon)
 
             attr_model = self.attribute_listview.get_model()
@@ -545,8 +548,8 @@ class Widget(object):
         grid.show()
         dialog.vbox.pack_start(grid, True, True, 0)
 
-        label = mobius.ui.label('ID')
-        label.set_halign(mobius.ui.label.align_right)
+        label = mobius.core.ui.label('ID')
+        label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
         grid.attach(label, 0, 0, 1, 1)
 
@@ -554,8 +557,8 @@ class Widget(object):
         dialog.id_entry.show()
         grid.attach(dialog.id_entry, 1, 0, 1, 1)
 
-        label = mobius.ui.label('Name')
-        label.set_halign(mobius.ui.label.align_right)
+        label = mobius.core.ui.label('Name')
+        label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
         grid.attach(label, 0, 1, 1, 1)
 
@@ -593,14 +596,14 @@ class Widget(object):
             category = model.get_value(treeiter, CATEGORY_OBJ)
 
             # show confirmation dialog
-            dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_question)
+            dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
             dialog.text = f"You are about to remove category '{category.name}'. Are you sure?"
-            dialog.add_button(mobius.ui.message_dialog.button_yes)
-            dialog.add_button(mobius.ui.message_dialog.button_no)
-            dialog.set_default_response(mobius.ui.message_dialog.button_no)
+            dialog.add_button(mobius.core.ui.message_dialog.button_yes)
+            dialog.add_button(mobius.core.ui.message_dialog.button_no)
+            dialog.set_default_response(mobius.core.ui.message_dialog.button_no)
             rc = dialog.run()
 
-            if rc != mobius.ui.message_dialog.button_yes:
+            if rc != mobius.core.ui.message_dialog.button_yes:
                 return
 
             # remove category
@@ -660,7 +663,7 @@ class Widget(object):
         if treeiter:
             category = model.get_value(treeiter, CATEGORY_OBJ)
             category.icon_data = resize_icon_data(data)
-            icon = mobius.ui.new_icon_from_data(category.icon_data, mobius.ui.icon.size_dnd)
+            icon = mobius.core.ui.new_icon_from_data(category.icon_data, mobius.core.ui.icon.size_dnd)
             self.__category_icon_button.set_icon(icon)
             model.set_value(treeiter, CATEGORY_ICON, icon)
 
@@ -671,7 +674,7 @@ class Widget(object):
         icon = None
 
         if category.icon_data:
-            image = mobius.ui.new_icon_from_data(category.icon_data, mobius.ui.icon.size_dnd)
+            image = mobius.core.ui.new_icon_from_data(category.icon_data, mobius.core.ui.icon.size_dnd)
             icon = image.get_ui_widget().get_pixbuf()
 
         return icon
@@ -792,18 +795,18 @@ class Widget(object):
             attr = self.category.new_attribute(new_text)
 
         elif text == '<ID>':
-            dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_error)
+            dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_error)
             dialog.text = 'Attribute ID is mandatory'
-            dialog.add_button(mobius.ui.message_dialog.button_ok)
+            dialog.add_button(mobius.core.ui.message_dialog.button_ok)
             rc = dialog.run()
 
             column = self.attribute_listview.get_column(ATTR_ID)
             GLib.idle_add(self.attribute_listview.set_cursor, path, column, True)
 
         elif text != new_text:
-            dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_error)
+            dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_error)
             dialog.text = 'Cannot changed attribute ID'
-            dialog.add_button(mobius.ui.message_dialog.button_ok)
+            dialog.add_button(mobius.core.ui.message_dialog.button_ok)
             rc = dialog.run()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -849,7 +852,7 @@ def pvt_start():
 
     if not os.path.exists(app.get_config_path("category.sqlite")):
         path = app.get_data_path('data/category.json')
-        f = mobius.io.new_file_by_path(path)
+        f = mobius.core.io.new_file_by_path(path)
         import_json(f)
 
 

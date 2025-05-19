@@ -48,7 +48,7 @@ class ReportView(object):
         self.icon_data = open(icon_path, 'rb').read()
 
         # build widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.show()
 
         # hpaned
@@ -98,25 +98,25 @@ class ReportView(object):
         self.__group_nodes = {}
 
         path = self.__mediator.call('extension.get-resource-path', EXTENSION_ID, 'report-os.png')
-        image = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_toolbar)
+        image = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_toolbar)
         icon = image.get_ui_widget().get_pixbuf()
         treeiter = self.__model.append(None, [icon, 'Operating System', None])
         self.__group_nodes['os'] = self.__model.get_path(treeiter)
 
         path = self.__mediator.call('extension.get-resource-path', EXTENSION_ID, 'report-computer.png')
-        image = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_toolbar)
+        image = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_toolbar)
         icon = image.get_ui_widget().get_pixbuf()
         treeiter = self.__model.append(None, [icon, 'Computer', None])
         self.__group_nodes['computer'] = self.__model.get_path(treeiter)
 
         path = self.__mediator.call('extension.get-resource-path', EXTENSION_ID, 'report-user.png')
-        image = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_toolbar)
+        image = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_toolbar)
         icon = image.get_ui_widget().get_pixbuf()
         treeiter = self.__model.append(None, [icon, 'User', None])
         self.__group_nodes['user'] = self.__model.get_path(treeiter)
 
         path = self.__mediator.call('extension.get-resource-path', EXTENSION_ID, 'report-app.png')
-        image = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_toolbar)
+        image = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_toolbar)
         icon = image.get_ui_widget().get_pixbuf()
         treeiter = self.__model.append(None, [icon, 'Application', None])
         self.__group_nodes['app'] = self.__model.get_path(treeiter)
@@ -129,7 +129,7 @@ class ReportView(object):
 
         # generic report icon
         path = self.__mediator.call('extension.get-resource-path', EXTENSION_ID, 'report.png')
-        image = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_toolbar)
+        image = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_toolbar)
         self.report_icon = image.get_ui_widget().get_pixbuf()
 
         # populate reports
@@ -218,10 +218,10 @@ class ReportView(object):
             self.__report_area.remove(child)
 
         if not widget:
-            widget = mobius.ui.label('Select report')
+            widget = mobius.core.ui.label('Select report')
             widget.set_visible(True)
 
-        if isinstance(widget, mobius.ui.widget):
+        if isinstance(widget, mobius.core.ui.widget):
             self.__report_area.add(widget.get_ui_widget())
 
         else:

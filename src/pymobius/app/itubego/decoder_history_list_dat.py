@@ -45,7 +45,7 @@ def decode_file(f):
 
     # decode file
     evidence_source = pymobius.get_evidence_source_from_file(f)
-    decoder = mobius.decoder.qdatastream(reader)
+    decoder = mobius.core.decoder.qdatastream(reader)
     num_entries = decoder.get_qint32()
 
     for i in range(num_entries):

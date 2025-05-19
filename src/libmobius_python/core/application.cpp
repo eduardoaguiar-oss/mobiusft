@@ -22,7 +22,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
 #include "application.hpp"
-#include "pod/data.hpp"
+#include "core/pod/data.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief application: tp_new (default constructor)
@@ -108,27 +108,27 @@ static PyGetSetDef tp_getset[] =
     (char *) "name",
     (getter) tp_getter_name,
     (setter) 0,
-    (char *) "application name", NULL
+    (char *) "application name", nullptr
   },
   {
     (char *) "version",
     (getter) tp_getter_version,
     (setter) 0,
-    (char *) "application version", NULL
+    (char *) "application version", nullptr
   },
   {
     (char *) "title",
     (getter) tp_getter_title,
     (setter) 0,
-    (char *) "application title", NULL
+    (char *) "application title", nullptr
   },
   {
     (char *) "copyright",
     (getter) tp_getter_copyright,
     (setter) 0,
-    (char *) "application copyright notice", NULL
+    (char *) "application copyright notice", nullptr
   },
-  {NULL, NULL, NULL, NULL, NULL} // sentinel
+  {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -312,7 +312,7 @@ static PyMethodDef tp_methods[] =
     METH_VARARGS,
     "stop application"
   },
-  {NULL, NULL, 0, NULL} // sentinel
+  {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -320,7 +320,7 @@ static PyMethodDef tp_methods[] =
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyTypeObject core_application_t =
 {
-  PyVarObject_HEAD_INIT (NULL, 0)
+  PyVarObject_HEAD_INIT (nullptr, 0)                    // header
   "mobius.core.application",                   		// tp_name
   sizeof (core_application_o),              		// tp_basicsize
   0,                                       		// tp_itemsize

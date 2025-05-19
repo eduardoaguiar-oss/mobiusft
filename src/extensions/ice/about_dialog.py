@@ -44,7 +44,7 @@ class AboutDialog(object):
 
         # logo
         logo_path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID, 'logo.svg')
-        image = mobius.ui.new_icon_by_path(logo_path, mobius.ui.icon.size_extra_large)
+        image = mobius.core.ui.new_icon_by_path(logo_path, mobius.core.ui.icon.size_extra_large)
         icon = image.get_ui_widget().get_pixbuf()
         self.__widget.set_logo(icon)
 

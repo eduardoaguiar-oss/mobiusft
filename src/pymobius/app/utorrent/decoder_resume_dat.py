@@ -42,7 +42,7 @@ def decode_file(f):
         return
 
     # decode BTEncode data
-    metadata = mobius.decoder.btencode(reader)
+    metadata = mobius.core.decoder.btencode(reader)
 
     # create data object
     entries = []
@@ -52,7 +52,7 @@ def decode_file(f):
         try:
             if key.endswith('.torrent'):
                 entry = decode_entry(key, value)
-                entry.resume_dat_path = mobius.io.to_win_path(f.path)
+                entry.resume_dat_path = mobius.core.io.to_win_path(f.path)
                 entry.resume_dat_modification_time = f.modification_time
                 entries.append(entry)
         except Exception as e:
@@ -78,23 +78,23 @@ def decode_entry(key, value):
     data.bytes_uploaded = data.metadata.pop('uploaded', 0)
 
     timestamp = data.metadata.pop('time', 0)
-    data.metadata_time = mobius.datetime.new_datetime_from_unix_timestamp(timestamp)
+    data.metadata_time = mobius.core.datetime.new_datetime_from_unix_timestamp(timestamp)
 
     timestamp = data.metadata.pop('added_on', 0)
-    data.added_time = mobius.datetime.new_datetime_from_unix_timestamp(timestamp)
+    data.added_time = mobius.core.datetime.new_datetime_from_unix_timestamp(timestamp)
 
     timestamp = data.metadata.pop('completed_on', 0)
-    data.completed_time = mobius.datetime.new_datetime_from_unix_timestamp(timestamp)
+    data.completed_time = mobius.core.datetime.new_datetime_from_unix_timestamp(timestamp)
 
     timestamp = data.metadata.pop('last seen complete', 0)
-    data.last_seen_complete_time = mobius.datetime.new_datetime_from_unix_timestamp(timestamp)
+    data.last_seen_complete_time = mobius.core.datetime.new_datetime_from_unix_timestamp(timestamp)
 
     # peers
     data.peers = []
 
     if 'peers' in data.metadata:
         peers = data.metadata.pop('peers')
-        decoder = mobius.decoder.data_decoder(peers)
+        decoder = mobius.core.decoder.data_decoder(peers)
 
         while decoder.tell() < decoder.get_size():
             ip = decoder.get_ipv4_be()
@@ -103,7 +103,7 @@ def decode_entry(key, value):
 
     elif 'peers6' in data.metadata:
         peers6 = data.metadata.pop('peers6')
-        decoder = mobius.decoder.data_decoder(peers6)
+        decoder = mobius.core.decoder.data_decoder(peers6)
 
         while decoder.tell() < decoder.get_size():
             ip = decoder.get_ipv4_mapped_ipv6()

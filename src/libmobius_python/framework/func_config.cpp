@@ -23,7 +23,7 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "core/database/transaction.hpp"
-#include "pod/data.hpp"
+#include "core/pod/data.hpp"
 #include <mobius/framework/config.hpp>
 #include <pymobius.hpp>
 
@@ -77,7 +77,7 @@ func_framework_set_config (PyObject *, PyObject *args)
     {
         arg_name = mobius::py::get_arg_as_std_string (args, 0);
         arg_value = mobius::py::get_arg_as_cpp (
-            args, 1, pymobius_pod_data_from_pyobject);
+            args, 1, pymobius_core_pod_data_from_pyobject);
     }
     catch (const std::exception &e)
     {
@@ -124,7 +124,7 @@ func_framework_get_config (PyObject *, PyObject *args)
 
     try
     {
-        ret = pymobius_pod_data_to_python (
+        ret = pymobius_core_pod_data_to_python (
             mobius::framework::get_config (arg_name));
     }
     catch (const std::exception &e)

@@ -28,7 +28,7 @@
 #include <pyset.hpp>
 #include "evidence.hpp"
 #include "case.hpp"
-#include "pod/data.hpp"
+#include "core/pod/data.hpp"
 #include "item.hpp"
 #include <mobius/core/exception.inc>
 #include <stdexcept>
@@ -214,7 +214,7 @@ tp_f_get_attribute (framework_model_evidence_o *self, PyObject *args)
 
     try
     {
-        ret = pymobius_pod_data_to_pyobject (
+        ret = pymobius_core_pod_data_to_pyobject (
             self->obj->get_attribute (arg_id));
     }
     catch (const std::exception &e)
@@ -242,7 +242,7 @@ tp_f_set_attribute (framework_model_evidence_o *self, PyObject *args)
     {
         arg_id = mobius::py::get_arg_as_std_string (args, 0);
         arg_value = mobius::py::get_arg_as_cpp (
-            args, 1, pymobius_pod_data_from_pyobject);
+            args, 1, pymobius_core_pod_data_from_pyobject);
     }
     catch (const std::exception &e)
     {
@@ -280,7 +280,7 @@ tp_f_set_attributes (framework_model_evidence_o *self, PyObject *args)
     {
         arg_attributes = mobius::py::get_arg_as_cpp_map (
             args, 0, mobius::py::pystring_as_std_string,
-            pymobius_pod_data_from_pyobject);
+            pymobius_core_pod_data_from_pyobject);
     }
     catch (const std::exception &e)
     {
@@ -355,7 +355,7 @@ tp_f_get_attributes (framework_model_evidence_o *self, PyObject *)
     {
         ret = mobius::py::pydict_from_cpp_container (
             self->obj->get_attributes (), mobius::py::pystring_from_std_string,
-            pymobius_pod_data_to_pyobject);
+            pymobius_core_pod_data_to_pyobject);
     }
     catch (const std::exception &e)
     {
@@ -604,7 +604,7 @@ tp_getattro (PyObject *o, PyObject *name)
             auto s_name = mobius::py::pystring_as_std_string (name);
 
             if (self->obj->has_attribute (s_name))
-                ret = pymobius_pod_data_to_pyobject (
+                ret = pymobius_core_pod_data_to_pyobject (
                     self->obj->get_attribute (s_name));
 
             else
@@ -661,7 +661,7 @@ tp_setattro (PyObject *o, PyObject *name, PyObject *value)
 
             else
             {
-                auto s_value = pymobius_pod_data_from_pyobject (value);
+                auto s_value = pymobius_core_pod_data_from_pyobject (value);
                 self->obj->set_attribute (s_name, s_value);
             }
         }

@@ -43,7 +43,7 @@ def decode_file(f):
         return
 
     # decode BTEncode data
-    metadata = mobius.decoder.btencode(reader)
+    metadata = mobius.core.decoder.btencode(reader)
 
     if 'info' not in metadata:
         return
@@ -64,7 +64,7 @@ def decode_file(f):
                 t_file.size = f_metadata.get('length')
                 t_file.path = path.decode('utf-8')
                 t_file.name = os.path.basename(t_file.path)
-                t_file.torrent_path = mobius.io.to_win_path(f.path)
+                t_file.torrent_path = mobius.core.io.to_win_path(f.path)
                 t_file.torrent_name = f.name
                 files.append(t_file)
 
@@ -73,7 +73,7 @@ def decode_file(f):
         t_file.name = name
         t_file.path = ''
         t_file.size = info.get('length')
-        t_file.torrent_path = mobius.io.to_win_path(f.path)
+        t_file.torrent_path = mobius.core.io.to_win_path(f.path)
         t_file.torrent_name = f.name
         files.append(t_file)
 

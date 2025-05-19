@@ -16,6 +16,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import mobius
+import mobius.core.io
 import pymobius
 from gi.repository import Gtk
 
@@ -214,7 +215,7 @@ class UserListWidget(object):
         self.__vpaned.pack1(self.__user_listview.get_ui_widget(), True, True)
 
         # user image
-        self.__image = mobius.ui.new_icon_by_name('image-missing', mobius.ui.icon.size_large)
+        self.__image = mobius.core.ui.new_icon_by_name('image-missing', mobius.core.ui.icon.size_large)
         self.__image.set_visible(True)
         self.__vpaned.pack2(self.__image.get_ui_widget(), False, True)
 
@@ -265,7 +266,7 @@ class UserListWidget(object):
     def clear(self):
         self.__user_listview.clear()
         self.__details_listview.clear_values()
-        self.__image.set_icon_by_name('image-missing', mobius.ui.icon.size_large)
+        self.__image.set_icon_by_name('image-missing', mobius.core.ui.icon.size_large)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief set widget sensitive status
@@ -359,11 +360,11 @@ class UserListWidget(object):
             # user avatar image
             if account.avatar_image:
                 try:
-                    self.__image.set_icon_from_data(account.avatar_image, mobius.ui.icon.size_large)
+                    self.__image.set_icon_from_data(account.avatar_image, mobius.core.ui.icon.size_large)
                 except Exception as e:
-                    self.__image.set_icon_by_name('image-missing', mobius.ui.icon.size_large)
+                    self.__image.set_icon_by_name('image-missing', mobius.core.ui.icon.size_large)
             else:
-                self.__image.set_icon_by_name('image-missing', mobius.ui.icon.size_large)
+                self.__image.set_icon_by_name('image-missing', mobius.core.ui.icon.size_large)
 
             # report name
             if self.__details_report_name:
@@ -386,7 +387,7 @@ class Widget(object):
     # @brief Initialize widget
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __init__(self):
-        self.__widget = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        self.__widget = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         self.__widget.set_border_width(10)
         self.__widget.set_spacing(5)
         self.__widget.set_visible(True)
@@ -395,7 +396,7 @@ class Widget(object):
         # menubar
         menubar = Gtk.MenuBar()
         menubar.show()
-        self.__widget.add_child(menubar, mobius.ui.box.fill_none)
+        self.__widget.add_child(menubar, mobius.core.ui.box.fill_none)
 
         item = Gtk.MenuItem.new_with_mnemonic('_File')
         item.show()
@@ -463,7 +464,7 @@ class Widget(object):
         toolbar = Gtk.Toolbar()
         toolbar.set_style(Gtk.ToolbarStyle.ICONS)
         toolbar.show()
-        self.__widget.add_child(toolbar, mobius.ui.box.fill_none)
+        self.__widget.add_child(toolbar, mobius.core.ui.box.fill_none)
 
         toolitem = Gtk.ToolButton.new()
         toolitem.set_icon_name('document-open')
@@ -474,7 +475,7 @@ class Widget(object):
 
         self.__report_toolitem = Gtk.ToolButton.new()
 
-        image = mobius.ui.new_icon_by_name('report-run', mobius.ui.icon.size_toolbar)
+        image = mobius.core.ui.new_icon_by_name('report-run', mobius.core.ui.icon.size_toolbar)
         image.show()
 
         self.__report_toolitem.set_icon_widget(image.get_ui_widget())
@@ -500,7 +501,7 @@ class Widget(object):
         self.__view_toolitems[VIEW_CONTACTS] = toolitem
 
         path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID, 'view-contacts.png')
-        image = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_dnd)
+        image = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_dnd)
         image.show()
         toolitem.set_icon_widget(image.get_ui_widget())
 
@@ -513,7 +514,7 @@ class Widget(object):
         self.__view_toolitems[VIEW_VOICEMAILS] = toolitem
 
         path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID, 'view-voicemails.png')
-        image = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_dnd)
+        image = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_dnd)
         image.show()
         toolitem.set_icon_widget(image.get_ui_widget())
 
@@ -531,7 +532,7 @@ class Widget(object):
         self.__view_toolitems[VIEW_TIMELINE] = toolitem
 
         path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID, 'view-timeline.png')
-        image = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_dnd)
+        image = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_dnd)
         image.show()
         toolitem.set_icon_widget(image.get_ui_widget())
 
@@ -544,7 +545,7 @@ class Widget(object):
         self.__view_toolitems[VIEW_RECORDS] = toolitem
 
         path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID, 'view-records.png')
-        image = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_dnd)
+        image = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_dnd)
         image.show()
         toolitem.set_icon_widget(image.get_ui_widget())
 
@@ -553,7 +554,7 @@ class Widget(object):
         self.__notebook.set_show_tabs(False)
         self.__notebook.set_sensitive(False)
         self.__notebook.show()
-        self.__widget.add_child(self.__notebook, mobius.ui.box.fill_with_widget)
+        self.__widget.add_child(self.__notebook, mobius.core.ui.box.fill_with_widget)
 
         # tab: contacts view
         self.__contact_view = UserListWidget()
@@ -563,7 +564,7 @@ class Widget(object):
         self.__contact_view.set_details_report_name('skype contact')
         self.__contact_view.show()
 
-        self.__notebook.append_page(self.__contact_view.get_ui_widget(), mobius.ui.label('contacts').get_ui_widget())
+        self.__notebook.append_page(self.__contact_view.get_ui_widget(), mobius.core.ui.label('contacts').get_ui_widget())
 
         # tab: voicemail view
         self.__voicemail_listview = pymobius.mediator.call('ui.new-widget', 'tableview')
@@ -588,7 +589,7 @@ class Widget(object):
         self.__voicemail_listview.set_report_app('%s v%s' % (EXTENSION_NAME, EXTENSION_VERSION))
         self.__voicemail_listview.show()
 
-        self.__notebook.append_page(self.__voicemail_listview.get_ui_widget(), mobius.ui.label('voicemails').get_ui_widget())
+        self.__notebook.append_page(self.__voicemail_listview.get_ui_widget(), mobius.core.ui.label('voicemails').get_ui_widget())
 
         # tab: timeline view
         self.__timeline_view = pymobius.mediator.call('ui.new-widget', 'tableview')
@@ -601,7 +602,7 @@ class Widget(object):
         self.__timeline_view.set_report_app('%s v%s' % (EXTENSION_NAME, EXTENSION_VERSION))
         self.__timeline_view.show()
 
-        self.__notebook.append_page(self.__timeline_view.get_ui_widget(), mobius.ui.label('timeline').get_ui_widget())
+        self.__notebook.append_page(self.__timeline_view.get_ui_widget(), mobius.core.ui.label('timeline').get_ui_widget())
 
         # tab: record view
         self.__record_view = pymobius.mediator.call('ui.new-widget', 'tableview')
@@ -621,18 +622,18 @@ class Widget(object):
         self.__record_view.set_report_app(f'{EXTENSION_NAME} v{EXTENSION_VERSION}')
         self.__record_view.show()
 
-        self.__notebook.append_page(self.__record_view.get_ui_widget(), mobius.ui.label('records').get_ui_widget())
+        self.__notebook.append_page(self.__record_view.get_ui_widget(), mobius.core.ui.label('records').get_ui_widget())
 
         # status bar
         frame = Gtk.Frame()
         frame.set_shadow_type(Gtk.ShadowType.IN)
         frame.show()
-        self.__widget.add_child(frame, mobius.ui.box.fill_none)
+        self.__widget.add_child(frame, mobius.core.ui.box.fill_none)
 
-        self.__status_label = mobius.ui.label()
+        self.__status_label = mobius.core.ui.label()
         self.__status_label.set_selectable(True)
-        self.__status_label.set_halign(mobius.ui.label.align_left)
-        self.__status_label.set_elide_mode(mobius.ui.label.elide_middle)
+        self.__status_label.set_halign(mobius.core.ui.label.align_left)
+        self.__status_label.set_elide_mode(mobius.core.ui.label.elide_middle)
         self.__status_label.set_visible(True)
         frame.add(self.__status_label.get_ui_widget())
 
@@ -651,14 +652,14 @@ class Widget(object):
     def on_widget_stopped(self):
 
         # show confirmation dialog
-        dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_question)
+        dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
         dialog.text = f'Do you want to quit from {EXTENSION_NAME}?'
-        dialog.add_button(mobius.ui.message_dialog.button_yes)
-        dialog.add_button(mobius.ui.message_dialog.button_no)
-        dialog.set_default_response(mobius.ui.message_dialog.button_no)
+        dialog.add_button(mobius.core.ui.message_dialog.button_yes)
+        dialog.add_button(mobius.core.ui.message_dialog.button_no)
+        dialog.set_default_response(mobius.core.ui.message_dialog.button_no)
         rc = dialog.run()
 
-        if rc != mobius.ui.message_dialog.button_yes:
+        if rc != mobius.core.ui.message_dialog.button_yes:
             return True
 
         # close extension
@@ -770,9 +771,9 @@ class Widget(object):
             self.__agent = SkypeAgent()
 
             for uri in uri_list:
-                f = mobius.io.new_file_by_url(uri)
+                f = mobius.core.io.new_file_by_url(uri)
                 self.__status_label.set_text(f'Reading file {f.name}...')
-                mobius.ui.flush()
+                mobius.core.ui.flush()
 
                 stream = f.new_reader()
                 self.__agent.add_logfile(stream)

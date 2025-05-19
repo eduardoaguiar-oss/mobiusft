@@ -153,7 +153,7 @@ def retrieve_db_file (f):
   ext = os.path.splitext (f.name)[1]
   fd, path = tempfile.mkstemp (suffix=ext)
 
-  f = mobius.io.new_file_by_path (path)
+  f = mobius.core.io.new_file_by_path (path)
   fp = f.new_writer ()
   fp.write (reader.read ())
 

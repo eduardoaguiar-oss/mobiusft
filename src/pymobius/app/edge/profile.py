@@ -35,7 +35,7 @@ class Profile(object):
     def __init__(self, folder, item, username):
         self.app_id = 'edge'
         self.app_name = 'Microsoft Edge'
-        self.path = mobius.io.to_win_path(folder.path)
+        self.path = mobius.core.io.to_win_path(folder.path)
         self.username = username
         self.creation_time = folder.creation_time
         self.name = username

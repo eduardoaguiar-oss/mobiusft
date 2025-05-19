@@ -78,7 +78,7 @@ class ListView(object):
             description = info.get('description') or name
 
             path = get_icon_path(evidence_type)
-            image = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_dnd)
+            image = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_dnd)
             icon = image.get_ui_widget().get_pixbuf()
 
             self.__listview.set_icon(evidence_type, icon)
@@ -86,7 +86,7 @@ class ListView(object):
 
         # Add total row to listview
         path = mediator.call('extension.get-resource-path', EXTENSION_ID, 'total.png')
-        image = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_dnd)
+        image = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_dnd)
         icon = image.get_ui_widget().get_pixbuf()
 
         self.__listview.set_icon('total', icon)

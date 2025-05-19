@@ -53,7 +53,7 @@ class decoder(object):
             return
 
         # check signature
-        decoder = mobius.decoder.data_decoder(reader)
+        decoder = mobius.core.decoder.data_decoder(reader)
         signature = decoder.get_string_by_size(24)
 
         if signature != 'Client UrlCache MMF Ver ':
@@ -114,7 +114,7 @@ class decoder(object):
 
         try:
             offset = self.hash_table_offset
-            decoder = mobius.decoder.data_decoder(self.__reader)
+            decoder = mobius.core.decoder.data_decoder(self.__reader)
 
             while offset != 0:
                 decoder.seek(offset)

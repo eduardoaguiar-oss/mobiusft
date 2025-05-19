@@ -24,7 +24,7 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "master_key_file.hpp"
-#include "io/reader.hpp"
+#include "core/io/reader.hpp"
 #include "master_key.hpp"
 #include "module.hpp"
 #include <pymobius.hpp>
@@ -241,7 +241,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     try
     {
         arg_reader =
-            pymobius_io_reader_from_pyobject (mobius::py::get_arg (args, 0));
+            pymobius_core_io_reader_from_pyobject (mobius::py::get_arg (args, 0));
     }
     catch (const std::exception &e)
     {

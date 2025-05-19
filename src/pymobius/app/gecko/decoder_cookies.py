@@ -92,17 +92,17 @@ def decode_cookies(db, data, f):
         entry.evidence_source = evidence_source
 
         if row[4]:
-            entry.last_access_time = mobius.datetime.new_datetime_from_unix_timestamp(row[4] // 1000000)
+            entry.last_access_time = mobius.core.datetime.new_datetime_from_unix_timestamp(row[4] // 1000000)
         else:
             entry.last_access_time = None
 
         if row[5]:
-            entry.creation_time = mobius.datetime.new_datetime_from_unix_timestamp(row[5] // 1000000)
+            entry.creation_time = mobius.core.datetime.new_datetime_from_unix_timestamp(row[5] // 1000000)
         else:
             entry.creation_time = None
 
         if row[6]:
-            entry.expiration_time = mobius.datetime.new_datetime_from_unix_timestamp(row[6])
+            entry.expiration_time = mobius.core.datetime.new_datetime_from_unix_timestamp(row[6])
         else:
             entry.expiration_time = None
 

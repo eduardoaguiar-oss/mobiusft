@@ -36,7 +36,7 @@ def handler(e):
         'evidence_source': f"UFDR evidence #{e.id}"
     }
 
-    evidence.metadata = mobius.pod.map()
+    evidence.metadata = mobius.core.pod.map()
     evidence.metadata.set('evidence_id', e.id)
     evidence.metadata.set('source_idx', e.source_index)
     evidence.metadata.set('extraction_id', e.extraction_id)

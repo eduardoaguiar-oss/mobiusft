@@ -16,6 +16,8 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import mobius
+import mobius.core.io
+import mobius.core.pod
 import mobius.core.vfs
 import pymobius
 from gi.repository import GdkPixbuf
@@ -85,7 +87,7 @@ class BlockTableView(object):
         self.__vpaned.pack1(self.__tableview.get_ui_widget(), False, True)
 
         # details container
-        self.__details_container = mobius.ui.container()
+        self.__details_container = mobius.core.ui.container()
         self.__details_container.show()
         self.__vpaned.pack2(self.__details_container.get_ui_widget(), True, True)
 
@@ -113,7 +115,7 @@ class BlockTableView(object):
         toolbar.insert(toolitem, -1)
 
         path = self.__mediator.call('extension.get-resource-path', EXTENSION_ID, 'export.png')
-        icon = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_dnd)
+        icon = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_dnd)
         icon.set_visible(True)
 
         self.__export_toolitem = Gtk.ToolButton.new()
@@ -206,7 +208,7 @@ class BlockTableView(object):
 
         # if copy was cancelled, remove file
         if rc == Gtk.ResponseType.CANCEL:
-            f = mobius.io.file(url)
+            f = mobius.core.io.file(url)
             f.remove()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -215,8 +217,8 @@ class BlockTableView(object):
     def __on_export_dot(self, url, data):
 
         # create writer
-        f = mobius.io.new_file_by_url(url)
-        fp = mobius.io.text_writer(f.new_writer())
+        f = mobius.core.io.new_file_by_url(url)
+        fp = mobius.core.io.text_writer(f.new_writer())
 
         # .dot header
         fp.write("digraph VFS\n")
@@ -296,7 +298,7 @@ class BlockAttrView(object):
         self.__metadata_view.add_row(('Children', ','.join(str(c.uid) for c in block.get_children())))
 
         for name, value in block.get_attributes().get_values():
-            if not isinstance(value, mobius.pod.map) and not isinstance(value, list):
+            if not isinstance(value, mobius.core.pod.map) and not isinstance(value, list):
                 self.__metadata_view.add_row((pymobius.id_to_name(name), pymobius.to_string(value)))
 
         self.__metadata_view.set_report_name('Attributes of block <%s>' % '')
@@ -319,7 +321,7 @@ class BlockDataView(object):
         self.icon_data = open(path, 'rb').read()
 
         # build widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.show()
 
         self.__data_widget = self.__mediator.call('ui.new-widget', 'hexview')

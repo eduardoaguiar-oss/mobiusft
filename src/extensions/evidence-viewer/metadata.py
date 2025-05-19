@@ -22,5 +22,5 @@
 EXTENSION_ID = 'evidence-viewer'
 EXTENSION_NAME = 'Evidence Viewer'
 EXTENSION_AUTHOR = 'Eduardo Aguiar'
-EXTENSION_VERSION = '1.15'
+EXTENSION_VERSION = '1.16'
 EXTENSION_DESCRIPTION = 'Evidence Viewer'

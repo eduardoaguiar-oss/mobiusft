@@ -39,11 +39,11 @@ class FileListView(object):
         self.icon_data = open(icon_path, 'rb').read()
 
         # build widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.show()
 
         # vbox
-        vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox.set_border_width(5)
         vbox.set_spacing(10)
         vbox.set_visible(True)
@@ -65,7 +65,7 @@ class FileListView(object):
         column.is_sortable = True
 
         self.__hivefiles_tableview.show()
-        vbox.add_child(self.__hivefiles_tableview.get_ui_widget(), mobius.ui.box.fill_with_widget)
+        vbox.add_child(self.__hivefiles_tableview.get_ui_widget(), mobius.core.ui.box.fill_with_widget)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Get ui widget

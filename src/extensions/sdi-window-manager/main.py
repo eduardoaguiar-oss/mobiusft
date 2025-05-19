@@ -17,16 +17,7 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import mobius
 import pymobius
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Extension metadata
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-EXTENSION_ID = 'sdi-window-manager'
-EXTENSION_NAME = 'Single Document Interface'
-EXTENSION_AUTHOR = 'Eduardo Aguiar'
-EXTENSION_VERSION = '0.1.8'
-EXTENSION_DESCRIPTION = 'Single document interface window manager'
-
+from metadata import *
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Working Area
@@ -41,7 +32,7 @@ class WorkingArea(object):
         self.uid = None
         self.id = None
 
-        self.window = mobius.ui.window()
+        self.window = mobius.core.ui.window()
         self.window.set_callback('closing', self.on_window_closing)
         self.widget = None
 
@@ -67,7 +58,7 @@ class WorkingArea(object):
     # @brief Set icon
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def set_icon(self, path):
-        icon = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_toolbar)
+        icon = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_toolbar)
         self.window.set_icon(icon)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

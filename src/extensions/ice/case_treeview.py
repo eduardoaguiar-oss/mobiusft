@@ -447,7 +447,7 @@ class CaseTreeView(object):
             icon_data = self.__on_retrieve_icon_handler(item)
 
             if icon_data:
-                image = mobius.ui.new_icon_from_data(icon_data, mobius.ui.icon.size_dnd)
+                image = mobius.core.ui.new_icon_from_data(icon_data, mobius.core.ui.icon.size_dnd)
                 icon = image.get_ui_widget().get_pixbuf()
                 self.__category_icons[item.category] = icon
 

@@ -121,7 +121,7 @@ class Ant(object):
 
                 self.expiration_time = None
 
-                cookie.metadata = mobius.pod.map()
+                cookie.metadata = mobius.core.pod.map()
                 cookie.metadata.set('profile-id', profile.name)
                 cookie.metadata.set('profile-path', profile.path)
 
@@ -211,7 +211,7 @@ class Ant(object):
                 cookie.username = profile.username
                 cookie.app_name = profile.app_name
 
-                cookie.metadata = mobius.pod.map()
+                cookie.metadata = mobius.core.pod.map()
                 cookie.metadata.set('profile-id', profile.name)
                 cookie.metadata.set('profile-path', profile.path)
 
@@ -258,7 +258,7 @@ class Ant(object):
                 cookie.username = profile.username
                 cookie.app_name = profile.app_name
 
-                cookie.metadata = mobius.pod.map()
+                cookie.metadata = mobius.core.pod.map()
                 cookie.metadata.set('profile-id', profile.name)
                 cookie.metadata.set('profile-path', profile.path)
 
@@ -304,7 +304,7 @@ class Ant(object):
                 cookie.username = profile.username
                 cookie.app_name = profile.app_name
 
-                cookie.metadata = mobius.pod.map()
+                cookie.metadata = mobius.core.pod.map()
                 cookie.metadata.set('profile-id', profile.name)
                 cookie.metadata.set('profile-path', profile.path)
 

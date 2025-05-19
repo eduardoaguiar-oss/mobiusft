@@ -24,6 +24,7 @@ import traceback
 import zipfile
 
 import mobius
+import mobius.core.io
 import pymobius
 import pymobius.item_browser
 from gi.repository import Gtk
@@ -53,10 +54,10 @@ class ReportView(object):
         self.icon_data = open(path, 'rb').read()
 
         # widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.show()
 
-        vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox.set_border_width(5)
         vbox.set_spacing(10)
         vbox.set_visible(True)
@@ -66,11 +67,11 @@ class ReportView(object):
         grid.set_row_spacing(10)
         grid.set_column_spacing(5)
         grid.show()
-        vbox.add_child(grid, mobius.ui.box.fill_with_widget)
+        vbox.add_child(grid, mobius.core.ui.box.fill_with_widget)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>Report ID</b>')
-        label.set_halign(mobius.ui.label.align_right)
+        label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
         grid.attach(label.get_ui_widget(), 0, 0, 1, 1)
 
@@ -93,30 +94,30 @@ class ReportView(object):
         self.__hashes_txt_checkbutton.connect('toggled', self.__on_generate_iso_checkbutton_toggled)
         grid.attach(self.__generate_iso_checkbutton, 1, 2, 2, 1)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>Hashes.txt SHA2-256</b>')
-        label.set_halign(mobius.ui.label.align_right)
+        label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
         grid.attach(label.get_ui_widget(), 0, 3, 1, 1)
 
-        self.__hashes_txt_hash_label = mobius.ui.label()
-        self.__hashes_txt_hash_label.set_halign(mobius.ui.label.align_left)
+        self.__hashes_txt_hash_label = mobius.core.ui.label()
+        self.__hashes_txt_hash_label.set_halign(mobius.core.ui.label.align_left)
         self.__hashes_txt_hash_label.set_selectable(True)
         self.__hashes_txt_hash_label.show()
         grid.attach(self.__hashes_txt_hash_label.get_ui_widget(), 1, 3, 2, 1)
 
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_visible(True)
         hbox.add_filler ()
-        vbox.add_child(hbox, mobius.ui.box.fill_none)
+        vbox.add_child(hbox, mobius.core.ui.box.fill_none)
 
-        self.__generate_report_button = mobius.ui.button()
+        self.__generate_report_button = mobius.core.ui.button()
         self.__generate_report_button.set_icon_by_name('system-run')
         self.__generate_report_button.set_text('_Execute')
         self.__generate_report_button.set_sensitive(False)
         self.__generate_report_button.set_visible(True)
         self.__generate_report_button.set_callback('clicked', self.__on_generate_report)
-        hbox.add_child(self.__generate_report_button, mobius.ui.box.fill_none)
+        hbox.add_child(self.__generate_report_button, mobius.core.ui.box.fill_none)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Get ui widget
@@ -292,14 +293,14 @@ class ReportView(object):
 
         # check if there is an older report
         if os.path.exists(report_path):
-            dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_question)
+            dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
             dialog.text = f"Do you want to overwrite '{report_id}' report?"
-            dialog.add_button(mobius.ui.message_dialog.button_yes)
-            dialog.add_button(mobius.ui.message_dialog.button_no)
-            dialog.set_default_response(mobius.ui.message_dialog.button_no)
+            dialog.add_button(mobius.core.ui.message_dialog.button_yes)
+            dialog.add_button(mobius.core.ui.message_dialog.button_no)
+            dialog.set_default_response(mobius.core.ui.message_dialog.button_no)
             rc = dialog.run()
 
-            if rc != mobius.ui.message_dialog.button_yes:
+            if rc != mobius.core.ui.message_dialog.button_yes:
                 return
 
         option = pymobius.Data()
@@ -393,8 +394,8 @@ class ReportView(object):
         asap_path = option.report_path + '.asap'
         laudo = option.laudo
 
-        f = mobius.io.new_file_by_path(asap_path)
-        fp = mobius.io.text_writer(f.new_writer(), 'iso-8859-1')
+        f = mobius.core.io.new_file_by_path(asap_path)
+        fp = mobius.core.io.text_writer(f.new_writer(), 'iso-8859-1')
         fp.write('[LAUDO]\n')
         fp.write('TITULO=%s\n' % laudo.titulo)
         fp.write('SUBTITULO=%s\n' % laudo.subtitulo)
@@ -459,8 +460,8 @@ class ReportView(object):
         reports = []
         report_filename = 'reports.txt'
 
-        f = mobius.io.new_file_by_path(report_filename)
-        fp = mobius.io.line_reader(f.new_reader())
+        f = mobius.core.io.new_file_by_path(report_filename)
+        fp = mobius.core.io.line_reader(f.new_reader())
 
         for line in fp:
             ref, name = line.rstrip().split('|')
@@ -490,8 +491,8 @@ class ReportView(object):
         os.close(fd)
 
         # generate hashes.txt
-        f = mobius.io.new_file_by_path(tmpfile)
-        fp = mobius.io.text_writer(f.new_writer())
+        f = mobius.core.io.new_file_by_path(tmpfile)
+        fp = mobius.core.io.text_writer(f.new_writer())
         pos = len(option.report_path) + 1
 
         for root, dirs, files in os.walk(option.report_path, topdown=False):

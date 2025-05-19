@@ -112,7 +112,7 @@ class Ant(object):
         key.metadata.append(('User SID', secret.sid))
         key.metadata.append(('DPAPI GUID', mkf.guid))
         key.metadata.append(('Revision', mk.revision))
-        key.metadata.append(('Salt', mobius.encoder.hexstring(mk.salt)))
+        key.metadata.append(('Salt', mobius.core.encoder.hexstring(mk.salt)))
         key.metadata.append(('Iterations', mk.iterations))
         key.metadata.append(('Hash ID', f'(0x{mk.hash_id:04x})'))
         key.metadata.append(('Cipher ID', f'(0x{mk.cipher_id:04x})'))

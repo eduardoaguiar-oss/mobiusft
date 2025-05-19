@@ -88,7 +88,7 @@ def decode_call(row, names):
     call.is_missed = nsp_data.get('callState') == "missed"
     call.is_conference = nsp_data.get('callType') == "multiParty"
     call.from_id = get_member_id(nsp_data.get('originator'))
-    call.timestamp = mobius.datetime.new_datetime_from_iso_string(nsp_data.get('startTime'))
+    call.timestamp = mobius.core.datetime.new_datetime_from_iso_string(nsp_data.get('startTime'))
 
     # to_id_list
     if call.is_conference:
@@ -106,7 +106,7 @@ def decode_call(row, names):
 
     # calculate call duration
     if 'endTime' in nsp_data:
-        end_time = mobius.datetime.new_datetime_from_iso_string(nsp_data.get('endTime'))
+        end_time = mobius.core.datetime.new_datetime_from_iso_string(nsp_data.get('endTime'))
         delta = end_time - call.timestamp
         call.duration = delta.days * 86400 + delta.seconds
 

@@ -23,11 +23,11 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "imagefile.hpp"
-#include "io/file.hpp"
-#include "io/reader.hpp"
-#include "io/writer.hpp"
+#include "core/io/file.hpp"
+#include "core/io/reader.hpp"
+#include "core/io/writer.hpp"
 #include "module.hpp"
-#include "pod/data.hpp"
+#include "core/pod/data.hpp"
 #include <pymobius.hpp>
 #include <pydict.hpp>
 
@@ -213,7 +213,7 @@ tp_f_get_attribute (core_vfs_imagefile_o *self, PyObject *args)
 
     try
     {
-        ret = pymobius_pod_data_to_pyobject (self->obj->get_attribute (arg_id));
+        ret = pymobius_core_pod_data_to_pyobject (self->obj->get_attribute (arg_id));
     }
     catch (const std::exception &e)
     {
@@ -239,7 +239,7 @@ tp_f_set_attribute (core_vfs_imagefile_o *self, PyObject *args)
     {
         arg_id = mobius::py::get_arg_as_std_string (args, 0);
         arg_value = mobius::py::get_arg_as_cpp (
-            args, 1, pymobius_pod_data_from_pyobject);
+            args, 1, pymobius_core_pod_data_from_pyobject);
     }
     catch (const std::exception &e)
     {
@@ -278,7 +278,7 @@ tp_f_get_attributes (core_vfs_imagefile_o *self, PyObject *)
     {
         ret = mobius::py::pydict_from_cpp_container (
             self->obj->get_attributes (), mobius::py::pystring_from_std_string,
-            pymobius_pod_data_to_pyobject);
+            pymobius_core_pod_data_to_pyobject);
     }
     catch (const std::exception &e)
     {
@@ -302,7 +302,7 @@ tp_f_new_reader (core_vfs_imagefile_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_io_reader_to_pyobject (self->obj->new_reader ());
+        ret = pymobius_core_io_reader_to_pyobject (self->obj->new_reader ());
     }
     catch (const std::exception &e)
     {
@@ -327,7 +327,7 @@ tp_f_new_writer (core_vfs_imagefile_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_io_writer_to_pyobject (self->obj->new_writer ());
+        ret = pymobius_core_io_writer_to_pyobject (self->obj->new_writer ());
     }
     catch (const std::exception &e)
     {
@@ -392,7 +392,7 @@ tp_getattro (PyObject *o, PyObject *name)
             // search item.attributes, using item.get_attribute (name)
             auto self = reinterpret_cast<core_vfs_imagefile_o *> (o);
             auto s_name = mobius::py::pystring_as_std_string (name);
-            ret = pymobius_pod_data_to_pyobject (
+            ret = pymobius_core_pod_data_to_pyobject (
                 self->obj->get_attribute (s_name));
         }
     }
@@ -450,7 +450,7 @@ tp_setattro (PyObject *o, PyObject *name, PyObject *value)
             mobius::py::reset_error ();
 
             auto self = reinterpret_cast<core_vfs_imagefile_o *> (o);
-            auto s_value = pymobius_pod_data_from_pyobject (value);
+            auto s_value = pymobius_core_pod_data_from_pyobject (value);
             self->obj->set_attribute (s_name, s_value);
         }
     }

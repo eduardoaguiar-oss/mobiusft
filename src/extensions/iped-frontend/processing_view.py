@@ -22,6 +22,7 @@ import tempfile
 import threading
 
 import mobius
+import mobius.core.io
 import pymobius
 from gi.repository import Gtk
 
@@ -61,7 +62,7 @@ def get_paths(item):
             paths.append(disk.get_path())
 
     elif datasource.get_type() == 'ufdr':
-        uri = mobius.io.uri(datasource.get_url())
+        uri = mobius.core.io.uri(datasource.get_url())
         paths.append(uri.get_path('utf-8'))
 
     else:
@@ -141,10 +142,10 @@ class ProcessingView(object):
         self.icon_data = open(path, 'rb').read()
 
         # widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.show()
 
-        vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox.set_border_width(5)
         vbox.set_spacing(10)
         vbox.set_visible(True)
@@ -154,11 +155,11 @@ class ProcessingView(object):
         grid.set_row_spacing(10)
         grid.set_column_spacing(5)
         grid.show()
-        vbox.add_child(grid, mobius.ui.box.fill_with_widget)
+        vbox.add_child(grid, mobius.core.ui.box.fill_with_widget)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>Dname:</b>')
-        label.set_halign(mobius.ui.label.align_right)
+        label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
         grid.attach(label.get_ui_widget(), 0, 0, 1, 1)
 
@@ -169,9 +170,9 @@ class ProcessingView(object):
         self.__dname_entry.connect('changed', self.__on_dname_changed)
         grid.attach(self.__dname_entry, 1, 0, 2, 1)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>Profile:</b>')
-        label.set_halign(mobius.ui.label.align_right)
+        label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
         grid.attach(label.get_ui_widget(), 0, 1, 1, 1)
 
@@ -186,9 +187,9 @@ class ProcessingView(object):
         self.__profile_combobox.show()
         grid.attach(self.__profile_combobox, 1, 1, 2, 1)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>Sector size:</b>')
-        label.set_halign(mobius.ui.label.align_right)
+        label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
         grid.attach(label.get_ui_widget(), 0, 2, 1, 2)
 
@@ -200,25 +201,25 @@ class ProcessingView(object):
 
         grid.attach(self.__sector_size_spinbutton, 1, 2, 2, 2)
 
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_spacing(5)
         hbox.set_visible(True)
         hbox.add_filler ()
-        vbox.add_child(hbox, mobius.ui.box.fill_none)
+        vbox.add_child(hbox, mobius.core.ui.box.fill_none)
 
-        self.__execute_button = mobius.ui.button()
+        self.__execute_button = mobius.core.ui.button()
         self.__execute_button.set_icon_by_name('system-run')
         self.__execute_button.set_text('_Execute')
         self.__execute_button.set_visible(True)
         self.__execute_button.set_callback('clicked', self.__on_execute_button_clicked)
-        hbox.add_child(self.__execute_button, mobius.ui.box.fill_none)
+        hbox.add_child(self.__execute_button, mobius.core.ui.box.fill_none)
 
-        self.__open_button = mobius.ui.button()
+        self.__open_button = mobius.core.ui.button()
         self.__open_button.set_icon_by_name('document-open')
         self.__open_button.set_text('_Open')
         self.__open_button.set_visible(True)
         self.__open_button.set_callback('clicked', self.__on_open_button_clicked)
-        hbox.add_child(self.__open_button, mobius.ui.box.fill_none)
+        hbox.add_child(self.__open_button, mobius.core.ui.box.fill_none)
 
         self.__populate_profile_combobox()
         self.__update_view()
@@ -315,14 +316,14 @@ class ProcessingView(object):
         is_processed = any(is_item_processed(item) for item in self.__itemlist)
 
         if is_processed:
-            dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_question)
+            dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
             dialog.text = "Are you sure you want to reprocess item(s)?"
-            dialog.add_button(mobius.ui.message_dialog.button_yes)
-            dialog.add_button(mobius.ui.message_dialog.button_no)
-            dialog.set_default_response(mobius.ui.message_dialog.button_no)
+            dialog.add_button(mobius.core.ui.message_dialog.button_yes)
+            dialog.add_button(mobius.core.ui.message_dialog.button_no)
+            dialog.set_default_response(mobius.core.ui.message_dialog.button_no)
             rc = dialog.run()
 
-            if rc != mobius.ui.message_dialog.button_yes:
+            if rc != mobius.core.ui.message_dialog.button_yes:
                 return
 
         # create thread
@@ -417,8 +418,8 @@ class ProcessingView(object):
             fd, tmpfile = tempfile.mkstemp('.txt')
             os.close(fd)
 
-            f = mobius.io.new_file_by_path(tmpfile)
-            fp = mobius.io.text_writer(f.new_writer())
+            f = mobius.core.io.new_file_by_path(tmpfile)
+            fp = mobius.core.io.text_writer(f.new_writer())
 
             for item in itemlist:
                 fp.write(get_workdir_path(item) + '\n')

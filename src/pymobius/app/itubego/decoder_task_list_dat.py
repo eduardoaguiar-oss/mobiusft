@@ -47,7 +47,7 @@ def decode_file(f):
         return entries
 
     # decode file
-    decoder = mobius.decoder.qdatastream(reader)
+    decoder = mobius.core.decoder.qdatastream(reader)
     num_entries = decoder.get_qint32()
 
     for i in range(num_entries):
@@ -70,7 +70,7 @@ def decode_entry(decoder):
     # Create entry
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     data = pymobius.Data()
-    data.metadata = mobius.pod.map()
+    data.metadata = mobius.core.pod.map()
     data.file_path = None
     data.file_size = -1
     data.bytes_downloaded = -1

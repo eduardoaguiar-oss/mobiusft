@@ -107,7 +107,7 @@ def handler(e):
                 'username': metadata.get('Account'),
             }
 
-            evidence.metadata = mobius.pod.map()
+            evidence.metadata = mobius.core.pod.map()
             evidence.metadata.set('evidence-id', message.id)
             evidence.metadata.set('source-idx', message.source_index)
             evidence.metadata.set('extraction-id', message.extraction_id)
@@ -180,7 +180,7 @@ def handle_attachment(attachment, metadata, message):
     if file_id:
         evidence.attrs['file_id'] = file_id
 
-    evidence.metadata = mobius.pod.map()
+    evidence.metadata = mobius.core.pod.map()
     evidence.metadata.set('evidence_id', attachment.id)
     evidence.metadata.set('source_idx', attachment.source_index)
     evidence.metadata.set('extraction_id', attachment.extraction_id)

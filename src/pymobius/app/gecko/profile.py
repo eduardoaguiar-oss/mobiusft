@@ -50,7 +50,7 @@ class Profile (object):
     # beta.util.dirtree (folder)	# development only
 
     self.__roaming_folder = folder
-    self.path = mobius.io.to_win_path (folder.path)
+    self.path = mobius.core.io.to_win_path (folder.path)
 
     if folder.name.lower ().endswith ('.default'):
       self.name = folder.name[:-8]

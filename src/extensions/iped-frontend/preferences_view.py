@@ -42,10 +42,10 @@ class PreferencesView(object):
         self.icon_data = open(path, 'rb').read()
 
         # build widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.show()
 
-        vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox.set_border_width(10)
         vbox.set_spacing(5)
         vbox.show()
@@ -55,11 +55,11 @@ class PreferencesView(object):
         grid.set_row_spacing(10)
         grid.set_column_spacing(5)
         grid.show()
-        vbox.add_child(grid, mobius.ui.box.fill_with_widget)
+        vbox.add_child(grid, mobius.core.ui.box.fill_with_widget)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>IPED installation folder</b>')
-        label.set_halign(mobius.ui.label.align_right)
+        label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
         grid.attach(label.get_ui_widget(), 0, 0, 1, 1)
 
@@ -72,9 +72,9 @@ class PreferencesView(object):
         grid.attach(self.__iped_folder_button, 1, 0, 4, 1)
 
         # XMM (max memory size)
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>Max. Memory (XMX, in GB):</b>')
-        label.set_halign(mobius.ui.label.align_right)
+        label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
         grid.attach(label.get_ui_widget(), 0, 1, 1, 1)
 
@@ -139,9 +139,9 @@ class PreferencesView(object):
 
         # Show error dialog
         else:
-            dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_error)
+            dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_error)
             dialog.text = 'Folder does not contain "iped.jar" file'
-            dialog.add_button(mobius.ui.message_dialog.button_ok)
+            dialog.add_button(mobius.core.ui.message_dialog.button_ok)
             dialog.run()
 
             self.__iped_folder_button.set_filename('/opt')

@@ -18,6 +18,7 @@
 import json
 
 import mobius
+import mobius.core.io
 import mobius.core.turing
 import pymobius
 from gi.repository import Gtk
@@ -55,11 +56,11 @@ class DatabaseView(object):
         self.icon_data = open(icon_path, 'rb').read()
 
         # build widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.set_visible(True)
 
         # vbox
-        vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox.set_border_width(5)
         vbox.set_spacing(10)
         vbox.set_visible(True)
@@ -72,7 +73,7 @@ class DatabaseView(object):
         self.__tableview.set_report_app(f'{EXTENSION_NAME} v{EXTENSION_VERSION}')
         self.__tableview.set_control(self, 'main_tableview')
         self.__tableview.show()
-        vbox.add_child(self.__tableview.get_ui_widget(), mobius.ui.box.fill_with_widget)
+        vbox.add_child(self.__tableview.get_ui_widget(), mobius.core.ui.box.fill_with_widget)
 
         column = self.__tableview.add_column('type', 'Type')
         column.is_sortable = True
@@ -93,7 +94,7 @@ class DatabaseView(object):
         toolbar.insert(toolitem, -1)
 
         path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID, 'import.png')
-        image = mobius.ui.new_icon_by_path(path, mobius.ui.icon.size_dnd)
+        image = mobius.core.ui.new_icon_by_path(path, mobius.core.ui.icon.size_dnd)
         image.show()
 
         self.__test_keywords_toolitem = Gtk.ToolButton.new()
@@ -107,11 +108,11 @@ class DatabaseView(object):
         frame = Gtk.Frame()
         frame.set_shadow_type(Gtk.ShadowType.IN)
         frame.show()
-        vbox.add_child(frame, mobius.ui.box.fill_none)
+        vbox.add_child(frame, mobius.core.ui.box.fill_none)
 
-        self.__status_label = mobius.ui.label()
-        self.__status_label.set_halign(mobius.ui.label.align_left)
-        self.__status_label.set_elide_mode(mobius.ui.label.elide_end)
+        self.__status_label = mobius.core.ui.label()
+        self.__status_label.set_halign(mobius.core.ui.label.align_left)
+        self.__status_label.set_elide_mode(mobius.core.ui.label.elide_end)
         self.__status_label.set_visible(True)
         frame.add(self.__status_label.get_ui_widget())
 
@@ -253,8 +254,8 @@ class DatabaseView(object):
     # @brief Import .pot file
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_import_pot(self, filename):
-        f = mobius.io.new_file_by_path(filename)
-        fp = mobius.io.line_reader(f.new_reader(), 'utf-8', '\n')
+        f = mobius.core.io.new_file_by_path(filename)
+        fp = mobius.core.io.line_reader(f.new_reader(), 'utf-8', '\n')
 
         # store data
         transaction = self.__turing.new_transaction()
@@ -307,8 +308,8 @@ class DatabaseView(object):
         wordlist = set(p for (t, v, p) in self.__tableview)
 
         # create writer
-        f = mobius.io.new_file_by_url(uri)
-        fp = mobius.io.text_writer(f.new_writer())
+        f = mobius.core.io.new_file_by_url(uri)
+        fp = mobius.core.io.text_writer(f.new_writer())
 
         # export data
         for word in sorted(wordlist):
@@ -320,8 +321,8 @@ class DatabaseView(object):
     def __on_export_json(self, url, data):
         model = {'version': JSON_VERSION, 'hashes': [(t, v, p) for (t, v, p) in self.__tableview]}
 
-        f = mobius.io.new_file_by_url(url)
-        fp = mobius.io.text_writer(f.new_writer())
+        f = mobius.core.io.new_file_by_url(url)
+        fp = mobius.core.io.text_writer(f.new_writer())
         json.dump(model, fp)
 
 

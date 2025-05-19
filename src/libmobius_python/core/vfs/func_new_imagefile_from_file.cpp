@@ -23,7 +23,7 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "imagefile.hpp"
-#include "io/file.hpp"
+#include "core/io/file.hpp"
 #include <pygil.hpp>
 #include <pymobius.hpp>
 
@@ -40,7 +40,7 @@ func_vfs_new_imagefile_from_file (PyObject *, PyObject *args)
     try
     {
         arg_file = mobius::py::get_arg_as_cpp (args, 0,
-                                               pymobius_io_file_from_pyobject);
+                                               pymobius_core_io_file_from_pyobject);
         arg_type = mobius::py::get_arg_as_std_string (args, 1, "autodetect");
     }
     catch (const std::exception &e)

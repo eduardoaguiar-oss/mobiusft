@@ -72,31 +72,31 @@ class ProcessingView(object):
         self.icon_data = open(path, 'rb').read()
 
         # build widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.show()
 
         # vbox
-        vbox = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         vbox.set_visible(True)
         vbox.set_spacing(10)
         vbox.set_border_width(10)
         self.__widget.set_content(vbox)
 
         # Status box
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_spacing(5)
         hbox.set_visible(True)
-        vbox.add_child(hbox, mobius.ui.box.fill_none)
+        vbox.add_child(hbox, mobius.core.ui.box.fill_none)
 
-        label = mobius.ui.label()
+        label = mobius.core.ui.label()
         label.set_markup('<b>Status:</b>')
         label.set_visible(True)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
-        self.__status_label = mobius.ui.label()
+        self.__status_label = mobius.core.ui.label()
         self.__status_label.set_visible(True)
-        self.__status_label.set_halign(mobius.ui.label.align_left)
-        hbox.add_child(self.__status_label, mobius.ui.box.fill_with_widget)
+        self.__status_label.set_halign(mobius.core.ui.label.align_left)
+        hbox.add_child(self.__status_label, mobius.core.ui.box.fill_with_widget)
 
         # Running messages
         self.__running_view = mediator.call('ui.new-widget', 'tableview')
@@ -104,7 +104,7 @@ class ProcessingView(object):
         self.__running_view.set_report_app(f'{EXTENSION_NAME} v{EXTENSION_VERSION}')
         # self.__running_view.set_sensitive(False)
         self.__running_view.show()
-        vbox.add_child(self.__running_view.get_ui_widget(), mobius.ui.box.fill_with_widget)
+        vbox.add_child(self.__running_view.get_ui_widget(), mobius.core.ui.box.fill_with_widget)
 
         column = self.__running_view.add_column('timestamp', 'Date/Time')
         column.is_sortable = True
@@ -112,14 +112,14 @@ class ProcessingView(object):
         self.__running_view.add_column('event', 'Event')
 
         # Execution box
-        hbox = mobius.ui.box(mobius.ui.box.orientation_horizontal)
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_spacing(5)
         hbox.set_visible(True)
-        vbox.add_child(hbox, mobius.ui.box.fill_none)
+        vbox.add_child(hbox, mobius.core.ui.box.fill_none)
 
-        label = mobius.ui.label('Profile:')
+        label = mobius.core.ui.label('Profile:')
         label.set_visible(False)
-        hbox.add_child(label, mobius.ui.box.fill_none)
+        hbox.add_child(label, mobius.core.ui.box.fill_none)
 
         # Create a ListStore with one string column
         model = Gtk.ListStore(str, str)
@@ -133,17 +133,17 @@ class ProcessingView(object):
         self.__profile_combobox.add_attribute(renderer, "text", 1)
         self.__profile_combobox.set_id_column(0)
         self.__profile_combobox.set_visible(False)
-        hbox.add_child(self.__profile_combobox, mobius.ui.box.fill_none)
+        hbox.add_child(self.__profile_combobox, mobius.core.ui.box.fill_none)
 
         hbox.add_filler ()
 
-        self.__execute_button = mobius.ui.button()
+        self.__execute_button = mobius.core.ui.button()
         self.__execute_button.set_icon_by_name('system-run')
         self.__execute_button.set_text('_Execute')
         self.__execute_button.set_visible(True)
         self.__execute_button.set_sensitive(False)
         self.__execute_button.set_callback('clicked', self.__on_execute_button_clicked)
-        hbox.add_child(self.__execute_button, mobius.ui.box.fill_none)
+        hbox.add_child(self.__execute_button, mobius.core.ui.box.fill_none)
 
         # Show initial message
         self.__widget.set_message("Select a case item")
@@ -339,14 +339,14 @@ class ProcessingView(object):
             # they want to reload evidences. If the user selects 'no', the function
             # returns early without proceeding further.
             if any (item.has_ant('evidence') for item in self.__itemlist):
-                dialog = mobius.ui.message_dialog(mobius.ui.message_dialog.type_question)
+                dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
                 dialog.text = "You are about to reload evidences. Are you sure?"
-                dialog.add_button(mobius.ui.message_dialog.button_yes)
-                dialog.add_button(mobius.ui.message_dialog.button_no)
-                dialog.set_default_response(mobius.ui.message_dialog.button_no)
+                dialog.add_button(mobius.core.ui.message_dialog.button_yes)
+                dialog.add_button(mobius.core.ui.message_dialog.button_no)
+                dialog.set_default_response(mobius.core.ui.message_dialog.button_no)
                 rc = dialog.run()
 
-                if rc != mobius.ui.message_dialog.button_yes:
+                if rc != mobius.core.ui.message_dialog.button_yes:
                     return
 
             # Retrieve the active profile ID from a combobox, checks if it exists,

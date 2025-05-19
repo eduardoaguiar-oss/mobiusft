@@ -63,7 +63,7 @@ class NavigationView(object):
         self.icon_data = open(path, 'rb').read()
 
         # Box
-        self.__widget = mobius.ui.box(mobius.ui.box.orientation_vertical)
+        self.__widget = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
         self.__widget.show()
 
         # combobox
@@ -73,7 +73,7 @@ class NavigationView(object):
         self.__combobox.connect('changed', self.__on_evidence_type_selection_changed)
         self.__combobox.set_id_column(EVIDENCE_TYPE)
         self.__combobox.show()
-        self.__widget.add_child(self.__combobox, mobius.ui.box.fill_none)
+        self.__widget.add_child(self.__combobox, mobius.core.ui.box.fill_none)
 
         renderer = Gtk.CellRendererPixbuf()
         self.__combobox.pack_start(renderer, False)
@@ -92,9 +92,9 @@ class NavigationView(object):
         self.__combobox.add_attribute(renderer, 'text', EVIDENCE_DESCRIPTION)
 
         # view container
-        self.__container = mobius.ui.container()
+        self.__container = mobius.core.ui.container()
         self.__container.show()
-        self.__widget.add_child(self.__container, mobius.ui.box.fill_with_widget)
+        self.__widget.add_child(self.__container, mobius.core.ui.box.fill_with_widget)
 
         # Add evidence rows to listview
         for info in MODEL:

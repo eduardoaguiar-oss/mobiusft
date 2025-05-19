@@ -69,7 +69,7 @@ def decode_history(db, data):
         entry.id = row[0]
         entry.url = row[1]
         entry.title = row[2]
-        entry.timestamp = mobius.datetime.new_datetime_from_nt_timestamp(row[3] * 10)
+        entry.timestamp = mobius.core.datetime.new_datetime_from_nt_timestamp(row[3] * 10)
 
         data.history.append(entry)
 
@@ -116,8 +116,8 @@ def decode_downloads_20(db, data):
 
         entry.source = row[2]
         entry.name = os.path.basename(entry.target.replace('\\', '/'))
-        entry.start_time = mobius.datetime.new_datetime_from_unix_timestamp(row[3])
-        entry.end_time = mobius.datetime.new_datetime_from_unix_timestamp(row[4])
+        entry.start_time = mobius.core.datetime.new_datetime_from_unix_timestamp(row[3])
+        entry.end_time = mobius.core.datetime.new_datetime_from_unix_timestamp(row[4])
         entry.state = row[5]
         entry.bytes_downloaded = row[6]
         entry.size = row[7]
@@ -155,8 +155,8 @@ def decode_downloads_28(db, data):
         entry.name = os.path.basename(row[1].replace('\\', '/'))
         entry.source = row[2]
         entry.target = row[3]
-        entry.start_time = mobius.datetime.new_datetime_from_nt_timestamp(row[4] * 10)
-        entry.end_time = mobius.datetime.new_datetime_from_nt_timestamp(row[5] * 10)
+        entry.start_time = mobius.core.datetime.new_datetime_from_nt_timestamp(row[4] * 10)
+        entry.end_time = mobius.core.datetime.new_datetime_from_nt_timestamp(row[5] * 10)
         entry.state = row[6]
         entry.bytes_downloaded = row[7]
         entry.size = row[8]
@@ -195,8 +195,8 @@ def decode_downloads_29(db, data):
         entry.name = os.path.basename(row[1].replace('\\', '/'))
         entry.source = row[2]
         entry.target = row[3]
-        entry.start_time = mobius.datetime.new_datetime_from_nt_timestamp(row[4] * 10)
-        entry.end_time = mobius.datetime.new_datetime_from_nt_timestamp(row[5] * 10)
+        entry.start_time = mobius.core.datetime.new_datetime_from_nt_timestamp(row[4] * 10)
+        entry.end_time = mobius.core.datetime.new_datetime_from_nt_timestamp(row[5] * 10)
         entry.state = row[6]
         entry.bytes_downloaded = row[7]
         entry.size = row[8]

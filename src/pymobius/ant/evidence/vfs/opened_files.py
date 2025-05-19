@@ -88,7 +88,7 @@ class Ant(object):
 
         for profile in model.get_profiles():
             for h in profile.get_history():
-                url = mobius.io.uri(h.url)
+                url = mobius.core.io.uri(h.url)
 
                 if url.get_scheme() == 'file':
                     entry = pymobius.Data()
@@ -100,7 +100,7 @@ class Ant(object):
                     entry.app_name = profile.app_name
                     entry.item = self.__item.name
 
-                    entry.metadata = mobius.pod.map()
+                    entry.metadata = mobius.core.pod.map()
                     entry.metadata.set('title', h.title)
                     entry.metadata.set('url', h.url)
                     entry.metadata.set('profile', h.profile_name)
@@ -116,7 +116,7 @@ class Ant(object):
 
         for profile in model.get_profiles():
             for h in profile.get_history():
-                url = mobius.io.uri(h.url)
+                url = mobius.core.io.uri(h.url)
 
                 if url.get_scheme() == 'file':
                     entry = pymobius.Data()
@@ -127,7 +127,7 @@ class Ant(object):
                     entry.app_id = profile.app_id
                     entry.app_name = profile.app_name
 
-                    entry.metadata = mobius.pod.map()
+                    entry.metadata = mobius.core.pod.map()
                     entry.metadata.set('typed', h.typed)
                     entry.metadata.set('url', h.url)
                     entry.metadata.set('profile', h.profile_name)
@@ -158,7 +158,7 @@ class Ant(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __retrieve_windows_recent_file(self, f, profile):
         try:
-            lnkfile = mobius.decoder.lnk(f.new_reader())
+            lnkfile = mobius.core.decoder.lnk(f.new_reader())
 
             if lnkfile.local_base_path:
 
@@ -179,9 +179,9 @@ class Ant(object):
                     entry.app_id = 'win'
                     entry.app_name = 'Windows'
 
-                    entry.metadata = mobius.pod.map()
+                    entry.metadata = mobius.core.pod.map()
                     entry.metadata.set('profile-path', profile.path)
-                    entry.metadata.set('lnk-path', mobius.io.to_win_path(f.path))
+                    entry.metadata.set('lnk-path', mobius.core.io.to_win_path(f.path))
                     entry.metadata.set('target-creation-time', lnkfile.creation_time)
                     entry.metadata.set('target-access-time', lnkfile.access_time)
                     entry.metadata.set('target-write-time', lnkfile.write_time)

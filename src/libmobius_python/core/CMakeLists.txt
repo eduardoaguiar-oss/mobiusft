@@ -28,11 +28,17 @@ project(libmobius-python-core LANGUAGES CXX)
 add_subdirectory(crypt)
 add_subdirectory(database)
 add_subdirectory(datasource)
+add_subdirectory(datetime)
+add_subdirectory(decoder)
+add_subdirectory(encoder)
 add_subdirectory(file_decoder)
+add_subdirectory(io)
 add_subdirectory(kff)
 add_subdirectory(os)
+add_subdirectory(pod)
 add_subdirectory(system)
 add_subdirectory(turing)
+add_subdirectory(ui)
 add_subdirectory(vfs)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -66,11 +72,17 @@ target_link_libraries(libmobius_python_core
        "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_crypt>"
        "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_database>"
        "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_datasource>"
+       "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_datetime>"
+       "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_decoder>"
+       "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_encoder>"
        "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_file_decoder>"
+       "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_io>"
        "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_kff>"
        "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_os>"
+       "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_pod>"
        "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_system>"
        "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_turing>"
+       "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_ui>"
        "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_vfs>"
    PUBLIC
        Mobius::Core

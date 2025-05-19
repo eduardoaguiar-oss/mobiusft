@@ -19,6 +19,7 @@ import re
 import struct
 
 import mobius
+import mobius.core.datetime
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Known SIDS
@@ -68,7 +69,7 @@ def get_data_as_unix_datetime(data, value=None):
 
     if data:
         timestamp = data.get_data_as_dword()
-        d = mobius.datetime.new_datetime_from_unix_timestamp(timestamp)
+        d = mobius.core.datetime.new_datetime_from_unix_timestamp(timestamp)
         v = str(d)[:19]
 
     return v
@@ -85,7 +86,7 @@ def get_data_as_nt_datetime(data, value=None):
 # @brief Get NT datetime from timestamp
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def get_nt_datetime(timestamp):
-    d = mobius.datetime.new_datetime_from_nt_timestamp(timestamp)
+    d = mobius.core.datetime.new_datetime_from_nt_timestamp(timestamp)
     return str(d)[:19]
 
 

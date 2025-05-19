@@ -98,7 +98,7 @@ def decode_places(db, data, f):
         entry.url = row[1]
         entry.title = row[2]
         entry.typed = row[3] == 1
-        entry.timestamp = mobius.datetime.new_datetime_from_unix_timestamp(row[4] // 1000000)
+        entry.timestamp = mobius.core.datetime.new_datetime_from_unix_timestamp(row[4] // 1000000)
         entry.visit_type = row[5]
         entry.evidence_source = evidence_source
 
@@ -140,8 +140,8 @@ def decode_places(db, data, f):
         b.id = row[0]
         b.folder = folders.get(row[1])
         b.name = row[2]
-        b.creation_time = mobius.datetime.new_datetime_from_unix_timestamp((row[3] or 0) // 1000000)
-        b.last_modification_time = mobius.datetime.new_datetime_from_unix_timestamp((row[4] or 0) // 1000000)
+        b.creation_time = mobius.core.datetime.new_datetime_from_unix_timestamp((row[3] or 0) // 1000000)
+        b.last_modification_time = mobius.core.datetime.new_datetime_from_unix_timestamp((row[4] or 0) // 1000000)
         b.url = row[5]
         b.path = f.path
         b.evidence_source = evidence_source

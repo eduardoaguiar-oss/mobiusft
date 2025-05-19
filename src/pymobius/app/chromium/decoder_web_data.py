@@ -107,8 +107,8 @@ def decode_autofill_55(db, data):
         entry.fieldname = row[1]
         entry.value = row[2]
         entry.use_count = row[3]
-        entry.first_used_time = mobius.datetime.new_datetime_from_unix_timestamp(row[4])
-        entry.last_used_time = mobius.datetime.new_datetime_from_unix_timestamp(row[5])
+        entry.first_used_time = mobius.core.datetime.new_datetime_from_unix_timestamp(row[4])
+        entry.last_used_time = mobius.core.datetime.new_datetime_from_unix_timestamp(row[5])
         entry.is_encrypted = isinstance(entry.value, bytes)
 
         data.form_history.append(entry)
@@ -225,7 +225,7 @@ def decode_autofill_profiles_61(db, data):
                 entry.value = row[idx]
                 entry.use_count = 0
                 entry.first_used_time = None
-                entry.last_used_time = mobius.datetime.new_datetime_from_unix_timestamp(row[7])
+                entry.last_used_time = mobius.core.datetime.new_datetime_from_unix_timestamp(row[7])
                 entry.is_encrypted = isinstance(entry.value, bytes)
 
                 if row[8] == 1:

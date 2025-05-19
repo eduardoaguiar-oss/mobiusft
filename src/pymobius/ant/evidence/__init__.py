@@ -95,9 +95,9 @@ class Ant(object):
     def get_messages(self):
         messages = []
 
-        f = mobius.io.new_file_by_path(self.__evidence_msg_path)
+        f = mobius.core.io.new_file_by_path(self.__evidence_msg_path)
         if f.exists():
-            reader = mobius.io.line_reader(f.new_reader())
+            reader = mobius.core.io.line_reader(f.new_reader())
 
             for line in reader:
                 if '\t' in line:
@@ -109,7 +109,7 @@ class Ant(object):
     # @brief Clear log messages
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def clear_messages(self):
-        f = mobius.io.new_file_by_path(self.__evidence_msg_path)
+        f = mobius.core.io.new_file_by_path(self.__evidence_msg_path)
 
         if f.exists():
             f.remove()

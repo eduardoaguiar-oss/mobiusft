@@ -18,6 +18,7 @@
 import traceback
 
 import mobius
+import mobius.core.io
 import pymobius
 from gi.repository import Gtk
 
@@ -120,7 +121,7 @@ class FileExplorerView(object):
         self.icon_data = open(icon_path, 'rb').read()
 
         # build widget
-        self.__widget = mobius.ui.container()
+        self.__widget = mobius.core.ui.container()
         self.__widget.show()
 
         self.__vpaned = Gtk.VPaned()
@@ -154,7 +155,7 @@ class FileExplorerView(object):
         toolitem.show()
         toolbar.insert(toolitem, -1)
 
-        image = mobius.ui.new_icon_by_name('go-up', mobius.ui.icon.size_toolbar)
+        image = mobius.core.ui.new_icon_by_name('go-up', mobius.core.ui.icon.size_toolbar)
         image.show()
 
         self.__go_up_toolbutton = Gtk.ToolButton.new(image.get_ui_widget(), '')
@@ -163,7 +164,7 @@ class FileExplorerView(object):
         self.__go_up_toolbutton.show()
         toolbar.insert(self.__go_up_toolbutton, -1)
 
-        image = mobius.ui.new_icon_by_name('document-save-as', mobius.ui.icon.size_toolbar)
+        image = mobius.core.ui.new_icon_by_name('document-save-as', mobius.core.ui.icon.size_toolbar)
         image.show()
 
         self.__export_toolbutton = Gtk.ToolButton.new(image.get_ui_widget(), '')
@@ -279,7 +280,7 @@ class FileExplorerView(object):
     def __export_folder(self, folder, dest_folder):
         path = dest_folder + '/' + folder.name
 
-        f = mobius.io.new_folder_by_path(path)
+        f = mobius.core.io.new_folder_by_path(path)
         f.create()
 
         for child in folder.get_children():
