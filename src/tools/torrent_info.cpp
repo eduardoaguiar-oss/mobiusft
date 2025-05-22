@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -15,12 +17,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/file_decoder/torrent.hpp>
-#include <mobius/core/application.hpp>
-#include <mobius/core/log.hpp>
-#include <mobius/core/io/file.hpp>
-#include <mobius/core/string_functions.hpp>
 #include <iostream>
+#include <mobius/core/application.hpp>
+#include <mobius/core/file_decoder/torrent.hpp>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/log.hpp>
+#include <mobius/core/string_functions.hpp>
 #include <unistd.h>
 
 namespace
@@ -42,7 +44,7 @@ usage ()
 // @param path torrent file path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-show_torrent_info (const std::string& path)
+show_torrent_info (const std::string &path)
 {
     std::cout << std::endl;
     std::cout << ">> " << path << std::endl;
@@ -57,28 +59,32 @@ show_torrent_info (const std::string& path)
         return;
     }
     std::cout << "\tName: " << torrent.get_name () << std::endl;
-    std::cout << "\tFile size: " << torrent.get_length() << " bytes" << std::endl;
+    std::cout << "\tFile size: " << torrent.get_length () << " bytes"
+              << std::endl;
     std::cout << "\tComment: " << torrent.get_comment () << std::endl;
-    std::cout << "\tCreation time: " << torrent.get_creation_time () << std::endl;
+    std::cout << "\tCreation time: " << torrent.get_creation_time ()
+              << std::endl;
     std::cout << "\tCreated by: " << torrent.get_created_by () << std::endl;
     std::cout << "\tEncoding: " << torrent.get_encoding () << std::endl;
     std::cout << "\tInfo hash: " << torrent.get_info_hash () << std::endl;
-    std::cout << "\tPiece length: " << torrent.get_piece_length () << " bytes" << std::endl;
+    std::cout << "\tPiece length: " << torrent.get_piece_length () << " bytes"
+              << std::endl;
 
     std::cout << "\tAnnounce list:" << std::endl;
-    for (const auto& url : torrent.get_announce_list ())
+    for (const auto &url : torrent.get_announce_list ())
     {
         std::cout << "\t\t" << url << std::endl;
     }
 
     std::cout << "\tFiles:" << std::endl;
-    for(const auto& file : torrent.get_files ())
+    for (const auto &file : torrent.get_files ())
     {
-        std::cout << "\t\t" << file.path << " (" << file.length << " bytes)" << std::endl;
+        std::cout << "\t\t" << file.path << " (" << file.length << " bytes)"
+                  << std::endl;
     }
 
     std::cout << "\tPieces:" << std::endl;
-    for (const auto& piece : torrent.get_pieces ())
+    for (const auto &piece : torrent.get_pieces ())
     {
         std::cout << "\t\t" << piece << std::endl;
     }
@@ -125,7 +131,8 @@ main (int argc, char **argv)
     if (optind >= argc)
     {
         std::cerr << std::endl;
-        std::cerr << "Error: you must enter at least one path to torrent file" << std::endl;
+        std::cerr << "Error: you must enter at least one path to torrent file"
+                  << std::endl;
         usage ();
         exit (EXIT_FAILURE);
     }
@@ -137,11 +144,11 @@ main (int argc, char **argv)
     {
         try
         {
-            show_torrent_info(argv[optind]);
+            show_torrent_info (argv[optind]);
         }
-        catch (const std::exception& e)
+        catch (const std::exception &e)
         {
-            std::cerr <<  "Error: " << e.what () << std::endl;
+            std::cerr << "Error: " << e.what () << std::endl;
             exit (EXIT_FAILURE);
         }
 

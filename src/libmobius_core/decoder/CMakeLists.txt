@@ -56,7 +56,6 @@ add_library(mobius_core_decoder STATIC
 
 target_include_directories(mobius_core_decoder PRIVATE
     ${MOBIUS_INCLUDE_DIRS}
-    ${LIBXML2_INCLUDE_DIRS}
 )
 
 target_link_libraries(mobius_core_decoder PUBLIC

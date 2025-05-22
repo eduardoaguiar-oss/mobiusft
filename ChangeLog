@@ -1,5 +1,21 @@
 Mobius Forensic Toolkit 2.16
-	* libmobius_python: Module model moved to framework
+	* libmobius_python: Module model moved to framework.model
+	* libmobius_python: Module crypt moved to core.crypt
+	* libmobius_python: Module database moved to core.database
+	* libmobius_python: Module datasource moved to core.datasource
+	* libmobius_python: Module datetime moved to core.datetime
+	* libmobius_python: Module decoder moved to core.decoder
+	* libmobius_python: Module encoder moved to core.encoder
+	* libmobius_python: Module io moved to core.io
+	* libmobius_python: Module kff moved to core.kff
+	* libmobius_python: Module os moved to core.os
+	* libmobius_python: Module pod moved to core.pod
+	* libmobius_python: Module system moved to core.system
+	* libmobius_python: Module turing moved to core.turing
+	* libmobius_python: Module ui moved to core.ui
+	* libmobius_python: Module vfs moved to core.vfs
+	* libmobius_python: Created CMakeLists.txt for module core.file_decoder
+	* tools/dirfs: Option -d to dump file data
 
 Mobius Forensic Toolkit 2.15
 	* src/mobius package renamed to src/libmobius_core

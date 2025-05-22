@@ -48,7 +48,6 @@ add_library(mobius_core_database STATIC
 
 target_include_directories(mobius_core_database PRIVATE
     ${MOBIUS_INCLUDE_DIRS}
-    ${SQLite3_INCLUDE_DIRS}
 )
 
 target_link_libraries(mobius_core_database PUBLIC
