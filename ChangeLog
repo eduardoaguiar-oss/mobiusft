@@ -15,7 +15,13 @@ Mobius Forensic Toolkit 2.16
 	* libmobius_python: Module ui moved to core.ui
 	* libmobius_python: Module vfs moved to core.vfs
 	* libmobius_python: Created CMakeLists.txt for module core.file_decoder
+	* libmobius_python: New module called "framework.ant"
+	* libmobius_python: Created new class framework.ant.ant
 	* tools/dirfs: Option -d to dump file data
+	* libmobius_framework: New module called "ant"
+	* libmobius_framework: Created new class ant::ant_impl_base
+	* libmobius_framework: Created new class ant::ant_impl_null
+	* libmobius_framework: Created new class ant::ant
 
 Mobius Forensic Toolkit 2.15
 	* src/mobius package renamed to src/libmobius_core

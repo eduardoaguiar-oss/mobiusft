@@ -32,12 +32,13 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Build sub-libraries
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_subdirectory(ant)
 add_subdirectory(model)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_framework SHARED
+add_library(libmobius_framework SHARED
     attribute.cpp
     category.cpp
     config.cpp
@@ -45,22 +46,25 @@ add_library(mobius_framework SHARED
     evidence_loader.cpp
 )
 
-target_include_directories(mobius_framework PUBLIC ${MOBIUS_INCLUDE_DIRS})
+set_target_properties(libmobius_framework PROPERTIES
+    PREFIX ""
+)
 
-target_link_libraries(mobius_framework PRIVATE
+target_link_libraries(libmobius_framework PRIVATE
+    "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_framework_ant>"
     "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_framework_model>"
 )
 
-target_link_libraries(mobius_framework PRIVATE
+target_link_libraries(libmobius_framework PRIVATE
     Mobius::Core
 )
 
-add_library(Mobius::Framework ALIAS mobius_framework)
+add_library(Mobius::Framework ALIAS libmobius_framework)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-install(TARGETS mobius_framework
+install(TARGETS libmobius_framework
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )

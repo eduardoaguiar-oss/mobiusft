@@ -20,40 +20,17 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.20)
-project(libmobius_python_framework LANGUAGES CXX)
+project(libmobius-framework-ant LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Build sub-libraries
+# Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_subdirectory(ant)
-add_subdirectory(model)
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Target: mobius_python_framework.la
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(libmobius_python_framework STATIC
-    module.cpp
-    attribute.cpp
-    category.cpp
-    evidence_loader.cpp
-    func_config.cpp
+add_library(mobius_framework_ant STATIC
+    ant.cpp
 )
 
-set_target_properties(libmobius_python_framework PROPERTIES
-    PREFIX ""
+target_link_libraries(mobius_framework_ant PRIVATE
+    Mobius::Core
 )
 
-target_include_directories(libmobius_python_framework PRIVATE
-    ${MOBIUS_PYTHON_INCLUDE_DIRS}
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${Python3_INCLUDE_DIRS}
-)
-
-target_link_libraries(libmobius_python_framework
-   PRIVATE
-     "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_python_framework_ant>"
-     "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_python_framework_model>"
-   PUBLIC Mobius::Framework
-)
-
-target_compile_options(libmobius_python_framework PRIVATE -fno-strict-aliasing -fPIC)
+target_compile_options(mobius_framework_ant PRIVATE -fno-strict-aliasing -fPIC)
