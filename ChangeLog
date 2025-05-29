@@ -22,6 +22,7 @@ Mobius Forensic Toolkit 2.16
 	* libmobius_framework: Created new class ant::ant_impl_base
 	* libmobius_framework: Created new class ant::ant_impl_null
 	* libmobius_framework: Created new class ant::ant
+	* evidence-viewer: Added "Evidence Sources" panel
 
 Mobius Forensic Toolkit 2.15
 	* src/mobius package renamed to src/libmobius_core

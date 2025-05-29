@@ -39,6 +39,7 @@ set(SOURCE_FILES
     model.py
     navigation_view.py
     processing_view.py
+    sources_view.py
     icon.png
     ${RESOURCE_FILES}
 )

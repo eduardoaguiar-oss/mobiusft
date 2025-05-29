@@ -23,15 +23,42 @@
 //! wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <pymobius.hpp>
-#include <pydict.hpp>
-#include <pyset.hpp>
 #include "evidence.hpp"
+#include "api_dataholder.hpp"
 #include "case.hpp"
 #include "core/pod/data.hpp"
 #include "item.hpp"
 #include <mobius/core/exception.inc>
+#include <pymobius.hpp>
+#include <pydict.hpp>
+#include <pylist.hpp>
+#include <pyset.hpp>
 #include <stdexcept>
+
+namespace
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create dataholder from evidence::source object
+// @param source Evidence source object
+// @return New Python object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+_evidence_source_as_dataholder (
+    const mobius::framework::model::evidence::source &source)
+{
+    api_dataholder_o *pyobj = api_dataholder_new ();
+
+    if (pyobj)
+    {
+        api_dataholder_setattr (pyobj, "type", static_cast<int> (source.type));
+        api_dataholder_setattr (pyobj, "source_uid", source.source_uid);
+        api_dataholder_setattr (pyobj, "description", source.description);
+    }
+
+    return reinterpret_cast<PyObject *> (pyobj);
+}
+
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Check if value is an instance of <i>evidence</i>
@@ -540,6 +567,30 @@ tp_f_get_tags (framework_model_evidence_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get evidence sources
+// @param self Object
+// @param args Argument list
+// @return List of evidence sources
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_get_sources (framework_model_evidence_o *self, PyObject *)
+{
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pylist_from_cpp_container (self->obj->get_sources (),
+                                                     _evidence_source_as_dataholder);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
@@ -564,6 +615,8 @@ static PyMethodDef tp_methods[] = {
      "Reset tag"},
     {(char *) "get_tags", (PyCFunction) tp_f_get_tags, METH_VARARGS,
      "Get tags"},
+    {(char *) "get_sources", (PyCFunction) tp_f_get_sources, METH_VARARGS,
+     "Get evidence sources"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 

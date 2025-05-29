@@ -24,6 +24,7 @@ from metadata import *
 from hashes_view import HashesView
 from metadata_view import MetadataView
 from model import Getter
+from sources_view import SourcesView
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -98,6 +99,10 @@ class GenericView(object):
 
             else:
                 raise Exception(f"Invalid detail view widget: {widget_id}")
+
+        # Add sources view
+        self.__source_view = SourcesView(self)
+        self.__detail_view_selector.add(f"sources", self.__source_view)
 
         # set initial message
         self.__widget.set_message(f'Select item(s) to view {self.__evidence_name}')
