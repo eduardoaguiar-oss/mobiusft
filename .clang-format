@@ -2,7 +2,7 @@
 Language:        Cpp
 # BasedOnStyle:  LLVM
 AccessModifierOffset: -2
-AlignAfterOpenBracket: Align
+AlignAfterOpenBracket: BlockIndent #Align
 AlignArrayOfStructures: None
 AlignConsecutiveAssignments:
   Enabled:         false
@@ -118,6 +118,10 @@ IncludeCategories:
     Priority:        1
     SortPriority:    0
     CaseSensitive:   false
+  - Regex:           '[a-z_]*'
+    Priority:        4
+    SortPriority:    0
+    CaseSensitive:   true
 IncludeIsMainRegex: '(Test)?$'
 IncludeIsMainSourceRegex: ''
 IndentAccessModifiers: false

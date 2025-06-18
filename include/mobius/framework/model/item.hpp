@@ -122,11 +122,13 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   evidence new_evidence (const std::string&);
   evidence add_evidence (const evidence&);
+  std::vector <evidence> get_evidences () const;
   std::vector <evidence> get_evidences (const std::string&) const;
-  void remove_evidences (const std::string&);
   void remove_evidences ();
+  void remove_evidences (const std::string&);
+  std::int64_t count_evidences () const;
   std::int64_t count_evidences (const std::string&) const;
-  std::unordered_map <std::string, std::int64_t> count_evidences () const;
+  std::unordered_map <std::string, std::int64_t> count_evidences_grouped () const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief Get attribute

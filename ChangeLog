@@ -15,13 +15,20 @@ Mobius Forensic Toolkit 2.16
 	* libmobius_python: Module ui moved to core.ui
 	* libmobius_python: Module vfs moved to core.vfs
 	* libmobius_python: Created CMakeLists.txt for module core.file_decoder
-	* libmobius_python: New module called "framework.ant"
-	* libmobius_python: Created new class framework.ant.ant
+	* libmobius_python: Added new module called "framework.ant"
+	* libmobius_python: Added new class framework.ant.ant
+	* libmobius_python: Added new method framework.model.item.get_evidences
+	* libmobius_python: Added new method framework.model.item.count_evidences
+	* libmobius_python: Added new method framework.model.item.count_evidences_grouped
 	* tools/dirfs: Option -d to dump file data
-	* libmobius_framework: New module called "ant"
-	* libmobius_framework: Created new class ant::ant_impl_base
-	* libmobius_framework: Created new class ant::ant_impl_null
-	* libmobius_framework: Created new class ant::ant
+	* libmobius_framework: Added new module called "ant"
+	* libmobius_framework: Added new class ant::ant_impl_base
+	* libmobius_framework: Added new class ant::ant_impl_null
+	* libmobius_framework: Added new class ant::ant
+	* libmobius_framework: Added new class ant::post_processor
+	* libmobius_framework: Added new method model::item::get_evidences
+	* libmobius_framework: Added new method model::item::count_evidences
+	* libmobius_framework: Added new method model::item::count_evidences_grouped
 	* evidence-viewer: Added "Evidence Sources" panel
 
 Mobius Forensic Toolkit 2.15

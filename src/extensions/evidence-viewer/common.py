@@ -38,7 +38,7 @@ def count_evidences(itemlist):
     totals = {}
 
     for item in itemlist:
-        item_totals = item.count_evidences()
+        item_totals = item.count_evidences_grouped()
 
         for evidence_type, count in item_totals.items():
             totals[evidence_type] = totals.get(evidence_type, 0) + count

@@ -2,6 +2,7 @@ mobius_bin.sh
 mobius.code-workspace
 *.mobius
 *.swp
+*.dia~
 .libs
 .vscode
 .clang-format

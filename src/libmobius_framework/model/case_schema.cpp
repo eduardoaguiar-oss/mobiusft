@@ -82,8 +82,10 @@ static constexpr int SCHEMA_VERSION = 13;
 static void
 _case_schema_upgrade_v11 (mobius::core::database::database db)
 {
-    db.execute ("ALTER TABLE datasource "
-                "ADD COLUMN revision INTEGER NOT NULL DEFAULT 1");
+    db.execute (
+        "ALTER TABLE datasource "
+        "ADD COLUMN revision INTEGER NOT NULL DEFAULT 1"
+    );
 }
 
 } // namespace
@@ -101,9 +103,11 @@ case_schema (mobius::core::database::database db)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // create table 'case'
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    db.execute ("CREATE TABLE IF NOT EXISTS 'case' ("
-                "uid INTEGER PRIMARY KEY,"
-                "creation_time DATETIME NOT NULL);");
+    db.execute (
+        "CREATE TABLE IF NOT EXISTS 'case' ("
+        "uid INTEGER PRIMARY KEY,"
+        "creation_time DATETIME NOT NULL);"
+    );
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // create table 'item'
@@ -115,10 +119,13 @@ case_schema (mobius::core::database::database db)
         "idx INTEGER NOT NULL,"
         "category TEXT NOT NULL,"
         "creation_time DATETIME NOT NULL,"
-        "FOREIGN KEY (parent_uid) REFERENCES item (uid) ON DELETE CASCADE);");
+        "FOREIGN KEY (parent_uid) REFERENCES item (uid) ON DELETE CASCADE);"
+    );
 
-    db.execute ("CREATE INDEX IF NOT EXISTS idx_item "
-                "ON item (parent_uid)");
+    db.execute (
+        "CREATE INDEX IF NOT EXISTS idx_item "
+        "ON item (parent_uid)"
+    );
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // create table 'attribute'
@@ -129,10 +136,13 @@ case_schema (mobius::core::database::database db)
         "item_uid INTEGER,"
         "id TEXT NOT NULL,"
         "value BLOB,"
-        "FOREIGN KEY (item_uid) REFERENCES item (uid) ON DELETE CASCADE);");
+        "FOREIGN KEY (item_uid) REFERENCES item (uid) ON DELETE CASCADE);"
+    );
 
-    db.execute ("CREATE UNIQUE INDEX IF NOT EXISTS idx_attribute "
-                "ON attribute (item_uid, id)");
+    db.execute (
+        "CREATE UNIQUE INDEX IF NOT EXISTS idx_attribute "
+        "ON attribute (item_uid, id)"
+    );
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // create table 'datasource'
@@ -142,10 +152,13 @@ case_schema (mobius::core::database::database db)
         "item_uid INTEGER PRIMARY KEY NOT NULL,"
         "revision INTEGER NOT NULL,"
         "state BLOB NOT NULL,"
-        "FOREIGN KEY (item_uid) REFERENCES item (uid) ON DELETE CASCADE);");
+        "FOREIGN KEY (item_uid) REFERENCES item (uid) ON DELETE CASCADE);"
+    );
 
-    db.execute ("CREATE UNIQUE INDEX IF NOT EXISTS idx_datasource "
-                "ON datasource (item_uid)");
+    db.execute (
+        "CREATE UNIQUE INDEX IF NOT EXISTS idx_datasource "
+        "ON datasource (item_uid)"
+    );
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // create table 'ant'
@@ -158,10 +171,13 @@ case_schema (mobius::core::database::database db)
         "name TEXT,"
         "version TEXT,"
         "last_execution_time DATETIME,"
-        "FOREIGN KEY (item_uid) REFERENCES item (uid) ON DELETE CASCADE);");
+        "FOREIGN KEY (item_uid) REFERENCES item (uid) ON DELETE CASCADE);"
+    );
 
-    db.execute ("CREATE UNIQUE INDEX IF NOT EXISTS idx_ant "
-                "ON ant (item_uid, id)");
+    db.execute (
+        "CREATE UNIQUE INDEX IF NOT EXISTS idx_ant "
+        "ON ant (item_uid, id)"
+    );
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // create table 'evidence'
@@ -171,52 +187,67 @@ case_schema (mobius::core::database::database db)
         "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
         "item_uid INTEGER,"
         "type TEXT NOT NULL,"
-        "FOREIGN KEY (item_uid) REFERENCES item (uid) ON DELETE CASCADE);");
+        "FOREIGN KEY (item_uid) REFERENCES item (uid) ON DELETE CASCADE);"
+    );
 
-    db.execute ("CREATE INDEX IF NOT EXISTS idx_evidence "
-                "ON evidence (item_uid, type)");
+    db.execute (
+        "CREATE INDEX IF NOT EXISTS idx_evidence "
+        "ON evidence (item_uid, type)"
+    );
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // create table 'evidence_attribute'
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    db.execute ("CREATE TABLE IF NOT EXISTS evidence_attribute ("
-                "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
-                "evidence_uid INTEGER,"
-                "id TEXT NOT NULL,"
-                "value BLOB,"
-                "FOREIGN KEY (evidence_uid) REFERENCES evidence (uid) ON "
-                "DELETE CASCADE);");
+    db.execute (
+        "CREATE TABLE IF NOT EXISTS evidence_attribute ("
+        "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "evidence_uid INTEGER,"
+        "id TEXT NOT NULL,"
+        "value BLOB,"
+        "FOREIGN KEY (evidence_uid) REFERENCES evidence (uid) ON "
+        "DELETE CASCADE);"
+    );
 
-    db.execute ("CREATE UNIQUE INDEX IF NOT EXISTS idx_evidence_attribute "
-                "ON evidence_attribute (evidence_uid, id)");
+    db.execute (
+        "CREATE UNIQUE INDEX IF NOT EXISTS idx_evidence_attribute "
+        "ON evidence_attribute (evidence_uid, id)"
+    );
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // create table 'evidence_source'
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    db.execute ("CREATE TABLE IF NOT EXISTS evidence_source ("
-                "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
-                "evidence_uid INTEGER NOT NULL,"
-                "type INTEGER NOT NULL,"
-                "source_uid INTEGER NOT NULL,"
-                "description TEXT NOT NULL,"
-                "FOREIGN KEY (evidence_uid) REFERENCES evidence (uid) ON "
-                "DELETE CASCADE);");
+    db.execute (
+        "CREATE TABLE IF NOT EXISTS evidence_source ("
+        "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "evidence_uid INTEGER NOT NULL,"
+        "type INTEGER NOT NULL,"
+        "source_uid INTEGER NOT NULL,"
+        "description TEXT NOT NULL,"
+        "FOREIGN KEY (evidence_uid) REFERENCES evidence (uid) ON "
+        "DELETE CASCADE);"
+    );
 
-    db.execute ("CREATE INDEX IF NOT EXISTS idx_evidence_source "
-                "ON evidence_source (evidence_uid)");
+    db.execute (
+        "CREATE INDEX IF NOT EXISTS idx_evidence_source "
+        "ON evidence_source (evidence_uid)"
+    );
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // create table 'evidence_tag'
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    db.execute ("CREATE TABLE IF NOT EXISTS evidence_tag ("
-                "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
-                "evidence_uid INTEGER,"
-                "name TEXT NOT NULL,"
-                "FOREIGN KEY (evidence_uid) REFERENCES evidence (uid) ON "
-                "DELETE CASCADE);");
+    db.execute (
+        "CREATE TABLE IF NOT EXISTS evidence_tag ("
+        "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "evidence_uid INTEGER,"
+        "name TEXT NOT NULL,"
+        "FOREIGN KEY (evidence_uid) REFERENCES evidence (uid) ON "
+        "DELETE CASCADE);"
+    );
 
-    db.execute ("CREATE UNIQUE INDEX IF NOT EXISTS idx_evidence_tag "
-                "ON evidence_tag (evidence_uid, name)");
+    db.execute (
+        "CREATE UNIQUE INDEX IF NOT EXISTS idx_evidence_tag "
+        "ON evidence_tag (evidence_uid, name)"
+    );
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // create table 'event'
@@ -227,10 +258,13 @@ case_schema (mobius::core::database::database db)
         "item_uid INTEGER,"
         "timestamp DATETIME NOT NULL,"
         "text TEXT NOT NULL,"
-        "FOREIGN KEY (item_uid) REFERENCES item (uid) ON DELETE CASCADE);");
+        "FOREIGN KEY (item_uid) REFERENCES item (uid) ON DELETE CASCADE);"
+    );
 
-    db.execute ("CREATE INDEX IF NOT EXISTS idx_event "
-                "ON event (item_uid)");
+    db.execute (
+        "CREATE INDEX IF NOT EXISTS idx_event "
+        "ON event (item_uid)"
+    );
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // upgrade database, if necessary

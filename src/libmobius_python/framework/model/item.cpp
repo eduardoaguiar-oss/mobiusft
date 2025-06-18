@@ -33,8 +33,8 @@
 #include "evidence.hpp"
 #include "module.hpp"
 #include <functional>
-#include <pymobius.hpp>
 #include <pycallback.hpp>
+#include <pymobius.hpp>
 #include <pydict.hpp>
 #include <pylist.hpp>
 #include <pyobject.hpp>
@@ -946,7 +946,7 @@ tp_f_get_evidences (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        arg_type = mobius::py::get_arg_as_std_string (args, 0);
+        arg_type = mobius::py::get_arg_as_std_string (args, 0, std::string ());
     }
     catch (const std::exception &e)
     {
@@ -958,9 +958,14 @@ tp_f_get_evidences (framework_model_item_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pylist_from_cpp_container (
-            self->obj->get_evidences (arg_type),
-            pymobius_framework_model_evidence_to_pyobject);
+        if (arg_type.empty ())
+            ret = mobius::py::pylist_from_cpp_container (
+                self->obj->get_evidences (),
+                pymobius_framework_model_evidence_to_pyobject);
+        else
+            ret = mobius::py::pylist_from_cpp_container (
+                self->obj->get_evidences (arg_type),
+                pymobius_framework_model_evidence_to_pyobject);
     }
     catch (const std::exception &e)
     {
@@ -1038,14 +1043,36 @@ tp_f_count_evidences (framework_model_item_o *self, PyObject *args)
     {
         if (arg_type.empty ())
         {
-            ret = mobius::py::pydict_from_cpp_container (
-                self->obj->count_evidences (),
-                mobius::py::pystring_from_std_string,
-                mobius::py::pylong_from_std_int64_t);
+            ret = mobius::py::pylong_from_std_int64_t (
+                self->obj->count_evidences ());
         }
         else
             ret = mobius::py::pylong_from_std_int64_t (
                 self->obj->count_evidences (arg_type));
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>count_evidences_grouped</i> method implementation
+// @param self Object
+// @param args Argument list
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_count_evidences_grouped (framework_model_item_o *self, PyObject *)
+{
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pydict_from_cpp_container (
+            self->obj->count_evidences_grouped (), mobius::py::pystring_from_std_string,
+            mobius::py::pylong_from_std_int64_t);
     }
     catch (const std::exception &e)
     {
@@ -1222,7 +1249,9 @@ static PyMethodDef tp_methods[] = {
     {"remove_evidences", (PyCFunction) tp_f_remove_evidences, METH_VARARGS,
      "Remove evidences of a given type"},
     {"count_evidences", (PyCFunction) tp_f_count_evidences, METH_VARARGS,
-     "Count evidences by type"},
+     "Count evidences of a given type"},
+    {"count_evidences_grouped", (PyCFunction) tp_f_count_evidences_grouped,
+     METH_VARARGS, "Count evidences grouped by type"},
     {"new_connection", (PyCFunction) tp_f_new_connection, METH_VARARGS,
      "Create new connection to case database"},
     {"new_transaction", (PyCFunction) tp_f_new_transaction, METH_VARARGS,

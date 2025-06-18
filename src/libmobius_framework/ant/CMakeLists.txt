@@ -27,6 +27,8 @@ project(libmobius-framework-ant LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(mobius_framework_ant STATIC
     ant.cpp
+    ant_impl_post_processor.cpp
+    post_processor.cpp
 )
 
 target_link_libraries(mobius_framework_ant PRIVATE

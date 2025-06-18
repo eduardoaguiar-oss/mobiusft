@@ -1381,6 +1381,36 @@ item::add_evidence (const evidence &e)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get all evidences
+// @return Vector of evidences
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<evidence>
+item::get_evidences () const
+{
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+
+    auto db = get_database ();
+
+    auto stmt = db.new_statement ("SELECT uid, type "
+                                  "FROM evidence "
+                                  "WHERE item_uid = ?");
+
+    stmt.bind (1, get_uid ());
+
+    std::vector<evidence> evidences;
+
+    while (stmt.fetch_row ())
+    {
+        auto uid = stmt.get_column_int64 (0);
+        auto type = stmt.get_column_string (1);
+        evidences.emplace_back (*this, uid, type);
+    }
+
+    return evidences;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get evidences for a given type
 // @param type Evidence type
 // @return Vector of evidences of that type
@@ -1481,10 +1511,48 @@ item::count_evidences (const std::string &type) const
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Count all evidences
+// @details This function counts all evidences associated with the item,
+//          regardless of their type. It returns the total count of evidences
+//          linked to the item, which can be useful for understanding the
+//          overall amount of evidence collected for the item without
+//          filtering by type.
+// @return Total count of evidences
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::int64_t
+item::count_evidences () const
+{
+    if (!impl_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
+
+    auto db = get_database ();
+
+    auto stmt = db.new_statement ("SELECT count (*) "
+                                  "FROM evidence "
+                                  "WHERE item_uid = ?");
+
+    stmt.bind (1, get_uid ());
+
+    std::int64_t count = 0;
+
+    if (stmt.fetch_row ())
+        count = stmt.get_column_int64 (0);
+
+    return count;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Count all evidences grouped by type
+// @details This function counts all evidences grouped by type for the item.
+//          It returns a map where the keys are the evidence types and the
+//          values are the counts of evidences of that type.
+// @note This function is useful for getting a summary of the evidences
+//       associated with an item, allowing for quick access to the number of
+//       evidences of each type without needing to fetch all individual
+//       evidence records.
 // @return map of type -> count
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::unordered_map<std::string, std::int64_t>
-item::count_evidences () const
+item::count_evidences_grouped () const
 {
     if (!impl_)
         throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid item"));
