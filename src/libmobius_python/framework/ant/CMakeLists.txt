@@ -28,6 +28,7 @@ project(mobius_python_framework_ant LANGUAGES CXX)
 add_library(mobius_python_framework_ant STATIC
     module.cpp
     ant.cpp
+    post_processor.cpp
 )
 
 target_include_directories(mobius_python_framework_ant PRIVATE

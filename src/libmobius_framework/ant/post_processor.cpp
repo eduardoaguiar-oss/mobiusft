@@ -17,10 +17,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/framework/ant/ant_impl_post_processor.hpp>
 #include <mobius/framework/ant/post_processor.hpp>
 #include <mutex>
-#include <string>
 #include <unordered_map>
+#include <string>
 
 namespace
 {
@@ -36,6 +37,15 @@ static std::mutex mutex;
 
 namespace mobius::framework::ant
 {
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Constructor
+// @param item Case item object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+post_processor::post_processor (const mobius::framework::model::item &item)
+    : ant (std::make_shared<ant_impl_post_processor> (item))
+{
+}
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Register a post-processor
 // @param id Unique identifier for the post-processor

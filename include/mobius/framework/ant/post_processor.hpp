@@ -20,33 +20,25 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <functional>
-#include <memory>
 #include <mobius/framework/ant/ant.hpp>
-#include <mobius/framework/ant/ant_impl_post_processor.hpp>
 #include <mobius/framework/ant/post_processor_impl_base.hpp>
 #include <mobius/framework/model/item.hpp>
-#include <string>
+#include <functional>
+#include <memory>
 #include <utility>
+#include <string>
 #include <vector>
 
 namespace mobius::framework::ant
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>post_processor</i> ANT handle class
+// @brief <i>post_processor</i> ANT class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class post_processor : public ant
 {
   public:
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Constructor
-    // @param item Case item object
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    explicit post_processor (const mobius::framework::model::item &item)
-        : ant (std::make_shared<ant_impl_post_processor> (item))
-    {
-    }
+    explicit post_processor (const mobius::framework::model::item &);
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

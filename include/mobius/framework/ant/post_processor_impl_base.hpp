@@ -22,6 +22,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/framework/model/evidence.hpp>
 #include <string>
+#include <vector>
 
 namespace mobius::framework::ant
 {
@@ -33,17 +34,8 @@ class post_processor_impl_base
 {
   public:
     virtual ~post_processor_impl_base () = default;
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Abstract methods
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    virtual void on_evidence (const mobius::framework::model::evidence &) = 0;
-    virtual void on_tag_modified (
-        const mobius::framework::model::evidence &, const std::string &
-    ) = 0;
-    virtual void on_attribute_modified (
-        const mobius::framework::model::evidence &, const std::string &
-    ) = 0;
+    virtual std::vector<mobius::framework::model::evidence>
+        process_evidence (mobius::framework::model::evidence) = 0;
 };
 
 } // namespace mobius::framework::ant

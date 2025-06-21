@@ -24,6 +24,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "module.hpp"
 #include "ant.hpp"
+#include "post_processor.hpp"
 #include <pycallback.hpp>
 #include <pymobius.hpp>
 
@@ -67,6 +68,7 @@ new_framework_ant_module ()
 
     // Add types
     module.add_type ("ant", new_framework_ant_ant_type ());
+    module.add_type ("post_processor", new_framework_ant_post_processor_type ());
 
     // Return module
     return module;

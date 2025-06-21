@@ -1,5 +1,5 @@
-#ifndef MOBIUS_PYTHON_FRAMEWORK_ANT_ANT_HPP
-#define MOBIUS_PYTHON_FRAMEWORK_ANT_ANT_HPP
+#ifndef MOBIUS_PYTHON_FRAMEWORK_ANT_POST_PROCESSOR_HPP
+#define MOBIUS_PYTHON_FRAMEWORK_ANT_POST_PROCESSOR_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pytypeobject.hpp>
-#include <mobius/framework/ant/ant.hpp>
+#include <mobius/framework/ant/post_processor.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -28,17 +28,16 @@
 typedef struct
 {
     PyObject_HEAD
-    mobius::framework::ant::ant *obj;
-} framework_ant_ant_o;
+    mobius::framework::ant::post_processor *obj;
+} framework_ant_post_processor_o;
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pytypeobject new_framework_ant_ant_type ();
-PyTypeObject *get_framework_ant_ant_type ();
-bool pymobius_framework_ant_ant_check (PyObject *);
-PyObject *pymobius_framework_ant_ant_to_pyobject (const mobius::framework::ant::ant&);
-mobius::framework::ant::ant pymobius_framework_ant_ant_from_pyobject (PyObject *);
+mobius::py::pytypeobject new_framework_ant_post_processor_type ();
+bool pymobius_framework_ant_post_processor_check (PyObject *);
+PyObject *pymobius_framework_ant_post_processor_to_pyobject (const mobius::framework::ant::post_processor&);
+mobius::framework::ant::post_processor pymobius_framework_ant_post_processor_from_pyobject (PyObject *);
 
 #endif
