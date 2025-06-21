@@ -568,6 +568,24 @@ MODEL = [
                   ]),
          ]
          ),
+    args(id="pdi",
+         name="Personal Direct Identifier",
+         description="Personal Direct Identifier (PDI), such as SSN, CPF, passport number, ...",
+         master_views=[
+             args(id="table",
+                  columns=[
+                      args(id='pdi_type', name="PDI Type", is_sortable=True),
+                      args(id="value", is_sortable=True),
+                  ]),
+         ],
+         detail_views=[
+             args(id="metadata",
+                  rows=[
+                      args(id='pdi_type', name="PDI Type"),
+                      args(id='value'),
+                  ]),
+         ]
+         ),
     args(id="received-file",
          name="Received Files",
          description="Files received by local users",

@@ -119,10 +119,12 @@ ant_impl_post_processor::run ()
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Process evidences
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto transaction = item_.new_transaction ();
+
     for (const auto &e : item_.get_evidences ())
-    {
         _process_evidence (e);
-    }
+
+    transaction.commit ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

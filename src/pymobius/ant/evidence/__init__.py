@@ -178,6 +178,11 @@ class Ant(object):
             ant.run()
 
         # run post-processing ants
+        ant = mobius.framework.ant.post_processor(self.__item)
+        self.log(f"INF ant.post_processor started")
+        ant.run()
+        self.log(f"INF ant.post_processor ended")
+
         ants = ANTS + [r.value for r in mobius.core.get_resources('evidence.post')]
 
         for ant_class in ants:

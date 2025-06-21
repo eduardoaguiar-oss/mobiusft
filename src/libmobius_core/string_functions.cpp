@@ -17,14 +17,346 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <algorithm>
+#include <mobius/core/string_functions.hpp>
 #include <fnmatch.h>
 #include <iomanip>
-#include <mobius/core/string_functions.hpp>
+#include <regex>
 #include <sstream>
+#include <algorithm>
+
+namespace
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Constants
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+// @brief Basic email validation regex
+static const std::string EMAIL_REGEX =
+    R"(^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$)";
+
+// @brief Basic URL validation regex
+static const std::string URL_REGEX =
+    R"((http|https)://([a-zA-Z0-9.-]+)(:[0-9]+)?(/.*)?)";
+
+// @brief Basic IPv4 validation regex
+static const std::string IPV4_REGEX =
+    R"((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))";
+
+// @brief Basic IPv6 validation regex
+static const std::string IPV6_REGEX =
+    R"((^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$)|(^([0-9a-fA-F]{1,4}:){1,7}:$)|(^:([0-9a-fA-F]{1,4}:){1,6}[0-9a-fA-F]{1,4}$)|(^([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}$)|(^([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}$)|(^([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}$)|(^([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}$)|(^([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}$)|(^[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){6}|:)$)|(^:((:[0-9a-fA-F]{1,4}){7}|:)$))";
+
+// @brief CNPJ multipliers
+static constexpr int CNPJ_MULTIPLIERS[] = {6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
+} // namespace
 
 namespace mobius::core::string
 {
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Test if a string is composed of digits
+// @param str string
+// @return true if str is composed of digits, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+is_digit (const std::string &str)
+{
+    if (str.empty ())
+        return false;
+
+    return std::all_of (
+        str.begin (),
+        str.end (),
+        [] (char c) { return std::isdigit (c); }
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Test if a string is a number
+// @param str string
+// @return true if str is a number, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+is_integer (const std::string &str)
+{
+    if (str.empty ())
+        return false;
+
+    if (str[0] != '-' && str[0] != '+' && !std::isdigit (str[0]))
+        return false;
+
+    return std::all_of (
+        str.begin (),
+        str.end (),
+        [] (char c) { return std::isdigit (c); }
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Test if a string is a hexadecimal number
+// @param str string
+// @return true if str is a hexadecimal number, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+is_hex (const std::string &str)
+{
+    if (str.empty ())
+        return false;
+
+    return std::all_of (
+        str.begin (),
+        str.end (),
+        [] (char c) { return std::isxdigit (c); }
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Test if a string is alphabetic
+// @param str string
+// @return true if str is alphabetic, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+is_alpha (const std::string &str)
+{
+    if (str.empty ())
+        return false;
+
+    return std::all_of (
+        str.begin (),
+        str.end (),
+        [] (char c) { return std::isalpha (c); }
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Test if a string is alphanumeric
+// @param str string
+// @return true if str is alphanumeric, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+is_alnum (const std::string &str)
+{
+    if (str.empty ())
+        return false;
+
+    return std::all_of (
+        str.begin (),
+        str.end (),
+        [] (char c) { return std::isalnum (c); }
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Test if a string is lowercase
+// @param str string
+// @return true if str is lowercase, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+is_lower (const std::string &str)
+{
+    if (str.empty ())
+        return false;
+
+    return std::all_of (
+        str.begin (),
+        str.end (),
+        [] (char c) { return std::islower (c); }
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Test if a string is uppercase
+// @param str string
+// @return true if str is uppercase, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+is_upper (const std::string &str)
+{
+    if (str.empty ())
+        return false;
+
+    return std::all_of (
+        str.begin (),
+        str.end (),
+        [] (char c) { return std::isupper (c); }
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Test if a string contains only whitespace characters
+// @param str string
+// @return true if str contains only whitespace characters, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+is_space (const std::string &str)
+{
+    if (str.empty ())
+        return false;
+
+    return std::all_of (
+        str.begin (),
+        str.end (),
+        [] (char c) { return std::isspace (c); }
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Test if a string is a valid CPF (Brazilian individual taxpayer
+// identification number)
+// @param str string
+// @return true if str is a valid CPF, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+is_cpf (const std::string &str)
+{
+    std::string digits;
+
+    // Check if it's a formatted CPF (999.999.999-99)
+    if (str.length () == 14 && str[3] == '.' && str[7] == '.' &&
+        str[11] == '-' && isdigit (str[0]) && isdigit (str[1]) &&
+        isdigit (str[2]) && isdigit (str[4]) && isdigit (str[5]) &&
+        isdigit (str[6]) && isdigit (str[8]) && isdigit (str[9]) &&
+        isdigit (str[10]) && isdigit (str[12]) && isdigit (str[13]))
+        digits = str.substr (0, 3) + str.substr (4, 3) + str.substr (8, 3) +
+                 str.substr (12, 2);
+
+    // Unformatted CPF (11 digits)
+    else if (str.length () == 11 && is_digit (str))
+        digits = str;
+
+    else
+        return false;
+
+    // CPF must have 11 digits
+    if (digits.length () != 11)
+        return false;
+
+    // Calculate first verification digit
+    int sum = 0;
+    for (int i = 0; i < 9; i++)
+    {
+        sum += (digits[i] - '0') * (10 - i);
+    }
+    int remainder = sum % 11;
+    int dv1 = remainder < 2 ? 0 : 11 - remainder;
+
+    // Check first verification digit
+    if (dv1 != (digits[9] - '0'))
+        return false;
+
+    // Calculate second verification digit
+    sum = 0;
+    for (int i = 0; i < 10; i++)
+    {
+        sum += (digits[i] - '0') * (11 - i);
+    }
+    remainder = sum % 11;
+    int dv2 = remainder < 2 ? 0 : 11 - remainder;
+
+    // Check second verification digit
+    return dv2 == (digits[10] - '0');
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Test if a string is a valid CNPJ (Brazilian National Registry of Legal
+// Entities)
+// @param str string
+// @return true if str is a valid CNPJ, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+is_cnpj (const std::string &str)
+{
+    std::string digits;
+
+    // Check if it's a formatted CNPJ (99.999.999/9999-99)
+    if (str.length () == 18 && str[2] == '.' && str[6] == '.' &&
+        str[10] == '/' && str[15] == '-' && isdigit (str[0]) &&
+        isdigit (str[1]) && isdigit (str[3]) && isdigit (str[4]) &&
+        isdigit (str[5]) && isdigit (str[7]) && isdigit (str[8]) &&
+        isdigit (str[9]) && isdigit (str[11]) && isdigit (str[12]) &&
+        isdigit (str[13]) && isdigit (str[14]))
+        digits = str.substr (0, 2) + str.substr (3, 3) + str.substr (7, 3) +
+                 str.substr (11, 4) + str.substr (16, 2);
+
+    // Unformatted CNPJ (14 digits)
+    else if (str.length () == 14 && is_digit (str))
+        digits = str;
+
+    else
+        return false;
+
+    // CNPJ must have 14 digits
+    if (digits.length () != 14)
+        return false;
+
+    // Calculate first verification digit
+    int sum = 0;
+    for (int i = 0; i < 12; i++)
+        sum += (digits[i] - '0') * (CNPJ_MULTIPLIERS[i+1]);
+
+    int remainder = sum % 11;
+    int dv1 = remainder < 2 ? 0 : 11 - remainder;
+
+    // Check first verification digit
+    if (dv1 != (digits[12] - '0'))
+        return false;
+
+    // Calculate second verification digit
+    sum = 0;
+    for (int i = 0; i < 12; i++)
+        sum += (digits[i] - '0') * (CNPJ_MULTIPLIERS[i]);
+
+    sum += dv1 * 2;
+    remainder = sum % 11;
+    int dv2 = remainder < 2 ? 0 : 11 - remainder;
+
+    // Check second verification digit
+    return dv2 == (digits[13] - '0');
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Test if a string is a valid email address
+// @param str string
+// @return true if str is a valid email address, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+is_email (const std::string &str)
+{
+    return std::regex_match (str, std::regex (EMAIL_REGEX));
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Test if a string is a valid URL
+// @param str string
+// @return true if str is a valid URL, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+is_url (const std::string &str)
+{
+    return std::regex_match (str, std::regex (URL_REGEX));
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Test if a string is a valid IPv4 address
+// @param str string
+// @return true if str is a valid IPv4 address, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+is_ipv4 (const std::string &str)
+{
+    return std::regex_match (str, std::regex (IPV4_REGEX));
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Test if a string is a valid IPv6 address
+// @param str string
+// @return true if str is a valid IPv6 address, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+is_ipv6 (const std::string &str)
+{
+    return std::regex_match (str, std::regex (IPV6_REGEX));
+}
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief replace string's s1 substrings with s2
 // @param str string
@@ -115,8 +447,11 @@ bool
 endswith (const std::string &str, const std::string &ending)
 {
     return ending.length () > 0 && str.length () >= ending.length () &&
-           str.compare (str.length () - ending.length (), ending.length (),
-                        ending) == 0;
+           str.compare (
+               str.length () - ending.length (),
+               ending.length (),
+               ending
+           ) == 0;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -155,12 +490,16 @@ case_insensitive_fnmatch (const std::string &pattern, const std::string &str)
 bool
 case_insensitive_match (const std::string &a, const std::string &b)
 {
-    return (a.size () == b.size () &&
-            std::equal (a.begin (), a.end (), b.begin (),
-                        [] (char c1, char c2) {
-                            return (c1 == c2 ||
-                                    std::toupper (c1) == std::toupper (c2));
-                        }));
+    return (
+        a.size () == b.size () &&
+        std::equal (
+            a.begin (),
+            a.end (),
+            b.begin (),
+            [] (char c1, char c2)
+            { return (c1 == c2 || std::toupper (c1) == std::toupper (c2)); }
+        )
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

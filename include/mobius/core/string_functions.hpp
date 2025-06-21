@@ -24,27 +24,55 @@
 
 namespace mobius::core::string
 {
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// test functions
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool is_digit (const std::string&);
+bool is_integer (const std::string&);
+bool is_hex (const std::string&);
+bool is_alpha (const std::string&);
+bool is_alnum (const std::string&);
+bool is_lower (const std::string&);
+bool is_upper (const std::string&);
+bool is_space (const std::string&);
+bool is_cpf (const std::string&);
+bool is_cnpj (const std::string&);
+bool is_email (const std::string&);
+bool is_url (const std::string&);
+bool is_ipv4 (const std::string&);
+bool is_ipv6 (const std::string&);
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // case functions
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string tolower (const std::string&);
 std::string toupper (const std::string&);
 std::string capitalize (const std::string&);
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // remove chars functions
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string lstrip (const std::string&, const std::string& = " \t\r\n");
 std::string rstrip (const std::string&, const std::string& = " \t\r\n");
 std::string strip (const std::string&, const std::string& = " \t\r\n");
 std::string remove_char (const std::string&, char);
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // format functions
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string lpad (const std::string&, std::string::size_type, char = ' ');
 std::string rpad (const std::string&, std::string::size_type, char = ' ');
 std::string replace (const std::string&, const std::string&, const std::string&);
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // parse functions
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <std::string> split (const std::string&, const std::string& = " ");
 std::string word (const std::string&, int, const std::string& = " ");
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // compare functions
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool startswith (const std::string&, const std::string&);
 bool endswith (const std::string&, const std::string&);
 bool fnmatch (const std::string&, const std::string&);
@@ -52,7 +80,9 @@ bool case_insensitive_fnmatch (const std::string&, const std::string&);
 bool case_insensitive_match (const std::string&, const std::string&);
 bool case_sensitive_match (const std::string&, const std::string&);
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // representation functions
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string to_hex (std::uint64_t, unsigned int = 1);
 std::string to_string (std::uint64_t, unsigned int = 1, char = '0');
 

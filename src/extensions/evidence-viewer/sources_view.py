@@ -77,7 +77,7 @@ class SourcesView(object):
                     description = f"File {source.description}"
                     type_name = 'File'
                 elif source.type == 2:  # Evidence
-                    description = f"Evidence {source.description}"
+                    description = f"Evidence #{source.source_uid}: {source.description}"
                     type_name = 'Evidence'
                 else:
                     description = f"{source.description}"
