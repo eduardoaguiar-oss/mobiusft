@@ -74,15 +74,15 @@ class SourcesView(object):
         if evidence:
             for source in evidence.get_sources():
                 if source.type == 1:  # File
-                    description = f"File {source.description}"
                     type_name = 'File'
+
                 elif source.type == 2:  # Evidence
-                    description = f"Evidence #{source.source_uid}: {source.description}"
                     type_name = 'Evidence'
+
                 else:
-                    description = f"{source.description}"
                     type_name = 'Unknown'            
-                self.__details_view.add_row((type_name, description))
+
+                self.__details_view.add_row((type_name, f"{type_name} {source.description}"))
 
             self.__details_view.set_report_name(f'Evidence <{evidence.id}> sources')
             self.__details_view.set_sensitive(True)

@@ -117,10 +117,12 @@ IncludeCategories:
   # C++ standard library headers
   - Regex:           '^<(algorithm|array|vector|iostream|string|map|...)>$'
     Priority:        4  # Lowest priority (appears last)
+    SortPriority:    0
 
   # Catch-all for other system headers (e.g., <unistd.h>)
   - Regex:           '^<[^>]+>$'
     Priority:        3
+    SortPriority:    0
 IncludeIsMainRegex: '(Test)?$'
 IncludeIsMainSourceRegex: ''
 IndentAccessModifiers: false

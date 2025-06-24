@@ -33,22 +33,16 @@ class post_processor_impl
     : public mobius::framework::ant::post_processor_impl_base
 {
   public:
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Constructor
-    // @param item Case item
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    explicit post_processor_impl (const mobius::framework::model::item &item)
-        : item_ (item)
-    {
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Prototypes
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector<mobius::framework::model::evidence>
-        process_evidence (mobius::framework::model::evidence) final;
+    explicit post_processor_impl (
+        mobius::framework::ant::post_processor_coordinator &coordinator,
+        const mobius::framework::model::item &item
+    );
+    void process_evidence (mobius::framework::model::evidence) final;
 
   private:
+    // @brief Post-processor coordinator
+    mobius::framework::ant::post_processor_coordinator &coordinator_;
+
     // @brief Case item
     mobius::framework::model::item item_;
 };

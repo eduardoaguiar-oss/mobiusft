@@ -62,6 +62,7 @@ CHROMIUM_APPS = [
      True),
     ('kometa', 'Kometa', '%localappdata%/Kometa/User Data', True),
     ('opera', 'Opera', '%appdata%/Opera Software/Opera Stable', False),
+    ('opera-gx', 'Opera GX', '%appdata%/Opera Software/Opera GX Stable', False),
     ('orbitum', 'Orbitum', '%localappdata%/Orbitum/User Data', True),
     ('plutotv', 'PlutoTV', '%localappdata%/PlutoTV', False),
     ('spotify', 'Spotify', '%localappdata%/Spotify/Browser', False),

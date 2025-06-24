@@ -44,8 +44,11 @@ class post_processor : public ant
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Post processor implementation functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-using post_processor_implementation_builder = std::function<std::shared_ptr<
-    post_processor_impl_base> (const mobius::framework::model::item &)>;
+using post_processor_implementation_builder =
+    std::function<std::shared_ptr<post_processor_impl_base> (
+        mobius::framework::ant::post_processor_coordinator &,
+        mobius::framework::model::item &
+    )>;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure to hold post-processor implementation data
@@ -66,7 +69,8 @@ struct post_processor_implementation_data
 // Post processor implementation prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void register_post_processor_implementation (
-    const std::string &, const std::string &,
+    const std::string &,
+    const std::string &,
     post_processor_implementation_builder
 );
 
@@ -88,8 +92,11 @@ register_post_processor_implementation (
 )
 {
     register_post_processor_implementation (
-        id, name, [] (const mobius::framework::model::item &item)
-        { return std::make_shared<T> (item); }
+        id,
+        name,
+        [] (mobius::framework::ant::post_processor_coordinator &coordinator,
+            mobius::framework::model::item &item)
+        { return std::make_shared<T> (coordinator, item); }
     );
 }
 

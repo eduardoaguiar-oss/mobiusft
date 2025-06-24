@@ -65,6 +65,7 @@ public:
   std::string get_data_path (const std::string&) const;
   std::string get_config_path (const std::string&) const;
   std::string get_cache_path (const std::string&) const;
+  std::string get_extension_resource_path (const std::string&, const std::string&) const;
 };
 
 } // namespace mobius::core

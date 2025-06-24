@@ -32,7 +32,9 @@ namespace mobius::framework::ant
 // @brief <i>post_processor ant</i> implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class ant_impl_post_processor : public ant_impl_base
+class ant_impl_post_processor
+    : public ant_impl_base,
+      public mobius::framework::ant::post_processor_coordinator
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -45,6 +47,8 @@ class ant_impl_post_processor : public ant_impl_base
     std::string get_version () const final;
     double get_progress () const final;
     mobius::core::pod::map get_status () const final;
+    void
+    on_new_evidence (const mobius::framework::model::evidence &evidence) final;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Check if object is valid
@@ -98,6 +102,9 @@ class ant_impl_post_processor : public ant_impl_base
 
     // @brief Total number of evidences processed
     std::atomic<size_t> processed_evidences_ {0};
+
+    // @brief Derived evidences count
+    std::atomic<size_t> derived_evidences_ {0};
 
     // @brief Post processor implementations
     std::vector<

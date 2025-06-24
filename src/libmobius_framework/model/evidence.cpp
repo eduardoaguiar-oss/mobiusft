@@ -17,11 +17,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <algorithm>
 #include <mobius/core/exception.inc>
 #include <mobius/framework/model/case.hpp>
 #include <mobius/framework/model/evidence.hpp>
 #include <stdexcept>
+#include <algorithm>
 
 namespace mobius::framework::model
 {
@@ -143,10 +143,12 @@ evidence::impl::has_attribute (const std::string &id) const
 {
     auto db = _get_database ();
 
-    auto stmt = db.new_statement ("SELECT * "
-                                  "FROM evidence_attribute "
-                                  "WHERE evidence_uid = ? "
-                                  "AND id = ?");
+    auto stmt = db.new_statement (
+        "SELECT * "
+        "FROM evidence_attribute "
+        "WHERE evidence_uid = ? "
+        "AND id = ?"
+    );
 
     stmt.bind (1, get_uid ());
     stmt.bind (2, id);
@@ -164,17 +166,20 @@ evidence::impl::get_attribute (const std::string &id) const
 {
     auto db = _get_database ();
 
-    auto stmt = db.new_statement ("SELECT value "
-                                  "FROM evidence_attribute "
-                                  "WHERE evidence_uid = ? "
-                                  "AND id = ?");
+    auto stmt = db.new_statement (
+        "SELECT value "
+        "FROM evidence_attribute "
+        "WHERE evidence_uid = ? "
+        "AND id = ?"
+    );
 
     stmt.bind (1, get_uid ());
     stmt.bind (2, id);
 
     if (!stmt.fetch_row ())
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("attribute '" + id + "' not found"));
+            MOBIUS_EXCEPTION_MSG ("attribute '" + id + "' not found")
+        );
 
     return stmt.get_column_pod (0);
 }
@@ -185,18 +190,21 @@ evidence::impl::get_attribute (const std::string &id) const
 // @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence::impl::set_attribute (const std::string &id,
-                               const mobius::core::pod::data &value)
+evidence::impl::set_attribute (
+    const std::string &id, const mobius::core::pod::data &value
+)
 {
     auto db = _get_database ();
     mobius::core::database::statement stmt;
 
     if (has_attribute (id))
     {
-        stmt = db.new_statement ("UPDATE evidence_attribute "
-                                 "SET value = ? "
-                                 "WHERE evidence_uid = ? "
-                                 "AND id = ?");
+        stmt = db.new_statement (
+            "UPDATE evidence_attribute "
+            "SET value = ? "
+            "WHERE evidence_uid = ? "
+            "AND id = ?"
+        );
 
         stmt.bind (1, value);
         stmt.bind (2, get_uid ());
@@ -205,8 +213,10 @@ evidence::impl::set_attribute (const std::string &id,
 
     else
     {
-        stmt = db.new_statement ("INSERT INTO evidence_attribute "
-                                 "VALUES (NULL, ?, ?, ?)");
+        stmt = db.new_statement (
+            "INSERT INTO evidence_attribute "
+            "VALUES (NULL, ?, ?, ?)"
+        );
 
         stmt.bind (1, get_uid ());
         stmt.bind (2, id);
@@ -225,9 +235,11 @@ evidence::impl::remove_attribute (const std::string &id)
 {
     auto db = _get_database ();
 
-    auto stmt = db.new_statement ("DELETE FROM evidence_attribute "
-                                  "WHERE evidence_uid = ? "
-                                  "AND id = ?");
+    auto stmt = db.new_statement (
+        "DELETE FROM evidence_attribute "
+        "WHERE evidence_uid = ? "
+        "AND id = ?"
+    );
 
     stmt.bind (1, get_uid ());
     stmt.bind (2, id);
@@ -243,9 +255,11 @@ evidence::impl::get_attributes () const
 {
     auto db = _get_database ();
 
-    auto stmt = db.new_statement ("SELECT id, value "
-                                  "FROM evidence_attribute "
-                                  "WHERE evidence_uid = ?");
+    auto stmt = db.new_statement (
+        "SELECT id, value "
+        "FROM evidence_attribute "
+        "WHERE evidence_uid = ?"
+    );
 
     stmt.bind (1, get_uid ());
     std::map<std::string, mobius::core::pod::data> values;
@@ -270,10 +284,12 @@ evidence::impl::has_tag (const std::string &name) const
 {
     auto db = _get_database ();
 
-    auto stmt = db.new_statement ("SELECT * "
-                                  "FROM evidence_tag "
-                                  "WHERE evidence_uid = ? "
-                                  "AND name = ?");
+    auto stmt = db.new_statement (
+        "SELECT * "
+        "FROM evidence_tag "
+        "WHERE evidence_uid = ? "
+        "AND name = ?"
+    );
 
     stmt.bind (1, get_uid ());
     stmt.bind (2, name);
@@ -290,9 +306,10 @@ evidence::impl::set_tag (const std::string &name)
 {
     auto db = _get_database ();
 
-    mobius::core::database::statement stmt =
-        db.new_statement ("INSERT OR IGNORE INTO evidence_tag "
-                          "VALUES (NULL, ?, ?)");
+    mobius::core::database::statement stmt = db.new_statement (
+        "INSERT OR IGNORE INTO evidence_tag "
+        "VALUES (NULL, ?, ?)"
+    );
 
     stmt.bind (1, get_uid ());
     stmt.bind (2, name);
@@ -306,8 +323,11 @@ evidence::impl::set_tag (const std::string &name)
 void
 evidence::impl::set_tags (const std::set<std::string> &tags)
 {
-    std::for_each (tags.cbegin (), tags.end (),
-                   [this] (const std::string &tag) { set_tag (tag); });
+    std::for_each (
+        tags.cbegin (),
+        tags.end (),
+        [this] (const std::string &tag) { set_tag (tag); }
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -319,9 +339,11 @@ evidence::impl::reset_tag (const std::string &name)
 {
     auto db = _get_database ();
 
-    auto stmt = db.new_statement ("DELETE FROM evidence_tag "
-                                  "WHERE evidence_uid = ? "
-                                  "AND name = ?");
+    auto stmt = db.new_statement (
+        "DELETE FROM evidence_tag "
+        "WHERE evidence_uid = ? "
+        "AND name = ?"
+    );
 
     stmt.bind (1, get_uid ());
     stmt.bind (2, name);
@@ -337,9 +359,11 @@ evidence::impl::get_tags () const
 {
     auto db = _get_database ();
 
-    auto stmt = db.new_statement ("SELECT name "
-                                  "FROM evidence_tag "
-                                  "WHERE evidence_uid = ?");
+    auto stmt = db.new_statement (
+        "SELECT name "
+        "FROM evidence_tag "
+        "WHERE evidence_uid = ?"
+    );
 
     stmt.bind (1, get_uid ());
 
@@ -361,14 +385,18 @@ evidence::impl::get_tags () const
 // @param description Source description
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence::impl::add_source (evidence::source_type type, std::uint64_t uid,
-                            const std::string &description)
+evidence::impl::add_source (
+    evidence::source_type type,
+    std::uint64_t uid,
+    const std::string &description
+)
 {
     auto db = _get_database ();
 
-    mobius::core::database::statement stmt =
-        db.new_statement ("INSERT INTO evidence_source "
-                          "VALUES (NULL, ?, ?, ?, ?)");
+    mobius::core::database::statement stmt = db.new_statement (
+        "INSERT INTO evidence_source "
+        "VALUES (NULL, ?, ?, ?, ?)"
+    );
 
     stmt.bind (1, get_uid ());
     stmt.bind (2, static_cast<int64_t> (type));
@@ -387,9 +415,11 @@ evidence::impl::get_sources () const
 {
     auto db = _get_database ();
 
-    auto stmt = db.new_statement ("SELECT type, source_uid, description "
-                                  "FROM evidence_source "
-                                  "WHERE evidence_uid = ?");
+    auto stmt = db.new_statement (
+        "SELECT type, source_uid, description "
+        "FROM evidence_source "
+        "WHERE evidence_uid = ?"
+    );
 
     stmt.bind (1, get_uid ());
 
@@ -428,7 +458,8 @@ evidence::get_item () const
 {
     if (!impl_)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("evidence object is null"));
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
 
     return impl_->get_item ();
 }
@@ -442,7 +473,8 @@ evidence::get_uid () const
 {
     if (!impl_)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("evidence object is null"));
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
 
     return impl_->get_uid ();
 }
@@ -456,7 +488,8 @@ evidence::get_type () const
 {
     if (!impl_)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("evidence object is null"));
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
 
     return impl_->get_type ();
 }
@@ -471,7 +504,8 @@ evidence::has_attribute (const std::string &id) const
 {
     if (!impl_)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("evidence object is null"));
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
 
     return impl_->has_attribute (id);
 }
@@ -486,7 +520,8 @@ evidence::get_attribute (const std::string &id) const
 {
     if (!impl_)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("evidence object is null"));
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
 
     return impl_->get_attribute (id);
 }
@@ -497,12 +532,14 @@ evidence::get_attribute (const std::string &id) const
 // @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence::set_attribute (const std::string &id,
-                         const mobius::core::pod::data &value)
+evidence::set_attribute (
+    const std::string &id, const mobius::core::pod::data &value
+)
 {
     if (!impl_)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("evidence object is null"));
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
 
     impl_->set_attribute (id, value);
 }
@@ -513,15 +550,19 @@ evidence::set_attribute (const std::string &id,
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence::set_attributes (
-    const std::map<std::string, mobius::core::pod::data> &attributes)
+    const std::map<std::string, mobius::core::pod::data> &attributes
+)
 {
     if (!impl_)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("evidence object is null"));
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
 
-    std::for_each (attributes.cbegin (), attributes.cend (),
-                   [this] (const auto &it)
-                   { set_attribute (it.first, it.second); });
+    std::for_each (
+        attributes.cbegin (),
+        attributes.cend (),
+        [this] (const auto &it) { set_attribute (it.first, it.second); }
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -533,7 +574,8 @@ evidence::remove_attribute (const std::string &id)
 {
     if (!impl_)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("evidence object is null"));
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
 
     impl_->remove_attribute (id);
 }
@@ -547,7 +589,8 @@ evidence::get_attributes () const
 {
     if (!impl_)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("evidence object is null"));
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
 
     return impl_->get_attributes ();
 }
@@ -562,7 +605,8 @@ evidence::has_tag (const std::string &name) const
 {
     if (!impl_)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("evidence object is null"));
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
 
     return impl_->has_tag (name);
 }
@@ -576,7 +620,8 @@ evidence::set_tag (const std::string &name)
 {
     if (!impl_)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("evidence object is null"));
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
 
     impl_->set_tag (name);
 }
@@ -590,7 +635,8 @@ evidence::set_tags (const std::set<std::string> &tags)
 {
     if (!impl_)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("evidence object is null"));
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
 
     impl_->set_tags (tags);
 }
@@ -604,7 +650,8 @@ evidence::reset_tag (const std::string &name)
 {
     if (!impl_)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("evidence object is null"));
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
 
     impl_->reset_tag (name);
 }
@@ -618,7 +665,8 @@ evidence::get_tags () const
 {
     if (!impl_)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("evidence object is null"));
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
 
     return impl_->get_tags ();
 }
@@ -632,13 +680,16 @@ evidence::add_source (const mobius::core::io::file &f)
 {
     if (!impl_)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("evidence object is null"));
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
 
     if (f)
     {
-        impl_->add_source (source_type::file, 0,
-                           f.get_path () + " (i-node: " +
-                               std::to_string (f.get_inode ()) + ')');
+        impl_->add_source (
+            source_type::file,
+            0,
+            f.get_path () + " (i-node: " + std::to_string (f.get_inode ()) + ')'
+        );
     }
 }
 
@@ -651,10 +702,14 @@ evidence::add_source (const evidence &e)
 {
     if (!impl_)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("evidence object is null"));
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
 
-    impl_->add_source (source_type::evidence, e.get_uid (),
-                       e.get_type () + " evidence");
+    impl_->add_source (
+        source_type::evidence,
+        e.get_uid (),
+        e.get_type () + " (UID: " + std::to_string (e.get_uid ()) + ')'
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -666,7 +721,8 @@ evidence::get_sources () const
 {
     if (!impl_)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("evidence object is null"));
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
 
     return impl_->get_sources ();
 }

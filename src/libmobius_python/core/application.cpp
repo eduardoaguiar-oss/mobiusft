@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -20,8 +22,8 @@
 // @brief C++ API module wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <pymobius.hpp>
 #include "application.hpp"
+#include <pymobius.hpp>
 #include "core/pod/data.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -34,23 +36,24 @@
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *, PyObject *)
 {
-  PyObject *ret = type->tp_alloc (type, 0);
+    PyObject *ret = type->tp_alloc (type, 0);
 
-  if (ret)
+    if (ret)
     {
-      try
+        try
         {
-          ((core_application_o *) ret)->obj = new mobius::core::application ();
+            ((core_application_o *) ret)->obj =
+                new mobius::core::application ();
         }
-      catch (const std::exception& e)
+        catch (const std::exception &e)
         {
-          Py_DECREF (ret);
-          mobius::py::set_io_error (e.what ());
-          ret = nullptr;
+            Py_DECREF (ret);
+            mobius::py::set_io_error (e.what ());
+            ret = nullptr;
         }
     }
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -59,8 +62,8 @@ tp_new (PyTypeObject *type, PyObject *, PyObject *)
 static void
 tp_dealloc (core_application_o *self)
 {
-  delete self->obj;
-  Py_TYPE (self)->tp_free ((PyObject*) self);
+    delete self->obj;
+    Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -69,7 +72,7 @@ tp_dealloc (core_application_o *self)
 static PyObject *
 tp_getter_name (core_application_o *self)
 {
-  return mobius::py::pystring_from_std_string (self->obj->get_name ());
+    return mobius::py::pystring_from_std_string (self->obj->get_name ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -78,7 +81,7 @@ tp_getter_name (core_application_o *self)
 static PyObject *
 tp_getter_version (core_application_o *self)
 {
-  return mobius::py::pystring_from_std_string (self->obj->get_version ());
+    return mobius::py::pystring_from_std_string (self->obj->get_version ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -87,7 +90,7 @@ tp_getter_version (core_application_o *self)
 static PyObject *
 tp_getter_title (core_application_o *self)
 {
-  return mobius::py::pystring_from_std_string (self->obj->get_title ());
+    return mobius::py::pystring_from_std_string (self->obj->get_title ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -96,39 +99,34 @@ tp_getter_title (core_application_o *self)
 static PyObject *
 tp_getter_copyright (core_application_o *self)
 {
-  return mobius::py::pystring_from_std_string (self->obj->get_copyright ());
+    return mobius::py::pystring_from_std_string (self->obj->get_copyright ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief application: getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyGetSetDef tp_getset[] =
-{
-  {
-    (char *) "name",
-    (getter) tp_getter_name,
-    (setter) 0,
-    (char *) "application name", nullptr
-  },
-  {
-    (char *) "version",
-    (getter) tp_getter_version,
-    (setter) 0,
-    (char *) "application version", nullptr
-  },
-  {
-    (char *) "title",
-    (getter) tp_getter_title,
-    (setter) 0,
-    (char *) "application title", nullptr
-  },
-  {
-    (char *) "copyright",
-    (getter) tp_getter_copyright,
-    (setter) 0,
-    (char *) "application copyright notice", nullptr
-  },
-  {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
+static PyGetSetDef tp_getset[] = {
+    {(char *) "name",
+     (getter) tp_getter_name,
+     (setter) 0,
+     (char *) "application name",
+     nullptr},
+    {(char *) "version",
+     (getter) tp_getter_version,
+     (setter) 0,
+     (char *) "application version",
+     nullptr},
+    {(char *) "title",
+     (getter) tp_getter_title,
+     (setter) 0,
+     (char *) "application title",
+     nullptr},
+    {(char *) "copyright",
+     (getter) tp_getter_copyright,
+     (setter) 0,
+     (char *) "application copyright notice",
+     nullptr},
+    {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -137,32 +135,34 @@ static PyGetSetDef tp_getset[] =
 static PyObject *
 tp_f_get_config_path (core_application_o *self, PyObject *args)
 {
-  // Parse input args
-  std::string arg_rpath;
+    // Parse input args
+    std::string arg_rpath;
 
-  try
+    try
     {
-      arg_rpath = mobius::py::get_arg_as_std_string (args, 0);
+        arg_rpath = mobius::py::get_arg_as_std_string (args, 0);
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_invalid_type_error (e.what ());
-      return nullptr;
-    }
-
-  // execute C++ function
-  PyObject *ret = nullptr;
-
-  try
-    {
-      ret = mobius::py::pystring_from_std_string (self->obj->get_config_path (arg_rpath));
-    }
-  catch (const std::exception& e)
-    {
-      mobius::py::set_io_error (e.what ());
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
     }
 
-  return ret;
+    // execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pystring_from_std_string (
+            self->obj->get_config_path (arg_rpath)
+        );
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_io_error (e.what ());
+    }
+
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -171,32 +171,34 @@ tp_f_get_config_path (core_application_o *self, PyObject *args)
 static PyObject *
 tp_f_get_cache_path (core_application_o *self, PyObject *args)
 {
-  // Parse input args
-  std::string arg_rpath;
+    // Parse input args
+    std::string arg_rpath;
 
-  try
+    try
     {
-      arg_rpath = mobius::py::get_arg_as_std_string (args, 0);
+        arg_rpath = mobius::py::get_arg_as_std_string (args, 0);
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_invalid_type_error (e.what ());
-      return nullptr;
-    }
-
-  // execute C++ function
-  PyObject *ret = nullptr;
-
-  try
-    {
-      ret = mobius::py::pystring_from_std_string (self->obj->get_cache_path (arg_rpath));
-    }
-  catch (const std::exception& e)
-    {
-      mobius::py::set_runtime_error (e.what ());
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
     }
 
-  return ret;
+    // execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pystring_from_std_string (
+            self->obj->get_cache_path (arg_rpath)
+        );
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -205,32 +207,75 @@ tp_f_get_cache_path (core_application_o *self, PyObject *args)
 static PyObject *
 tp_f_get_data_path (core_application_o *self, PyObject *args)
 {
-  // Parse input args
-  std::string arg_rpath;
+    // Parse input args
+    std::string arg_rpath;
 
-  try
+    try
     {
-      arg_rpath = mobius::py::get_arg_as_std_string (args, 0);
+        arg_rpath = mobius::py::get_arg_as_std_string (args, 0);
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_invalid_type_error (e.what ());
-      return nullptr;
-    }
-
-  // execute C++ function
-  PyObject *ret = nullptr;
-
-  try
-    {
-      ret = mobius::py::pystring_from_std_string (self->obj->get_data_path (arg_rpath));
-    }
-  catch (const std::exception& e)
-    {
-      mobius::py::set_runtime_error (e.what ());
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
     }
 
-  return ret;
+    // execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pystring_from_std_string (
+            self->obj->get_data_path (arg_rpath)
+        );
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief application.get_extension_resource_path wrapper
+// @param self application object
+// @param args argument list
+// @return resource path as a Python string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_get_extension_resource_path (core_application_o *self, PyObject *args)
+{
+    // Parse input args
+    std::string arg_extension_id;
+    std::string arg_rpath;
+
+    try
+    {
+        arg_extension_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_rpath = mobius::py::get_arg_as_std_string (args, 1);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pystring_from_std_string (
+            self->obj->get_extension_resource_path (arg_extension_id, arg_rpath)
+        );
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -239,20 +284,20 @@ tp_f_get_data_path (core_application_o *self, PyObject *args)
 static PyObject *
 tp_f_start (core_application_o *self, PyObject *)
 {
-  // execute C++ function
-  PyObject *ret = nullptr;
+    // execute C++ function
+    PyObject *ret = nullptr;
 
-  try
+    try
     {
-      self->obj->start ();
-      ret = mobius::py::pynone ();
+        self->obj->start ();
+        ret = mobius::py::pynone ();
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
+        mobius::py::set_runtime_error (e.what ());
     }
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -261,113 +306,109 @@ tp_f_start (core_application_o *self, PyObject *)
 static PyObject *
 tp_f_stop (core_application_o *self, PyObject *)
 {
-  // execute C++ function
-  PyObject *ret = nullptr;
+    // execute C++ function
+    PyObject *ret = nullptr;
 
-  try
+    try
     {
-      self->obj->stop ();
-      ret = mobius::py::pynone ();
+        self->obj->stop ();
+        ret = mobius::py::pynone ();
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
+        mobius::py::set_runtime_error (e.what ());
     }
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief application: methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyMethodDef tp_methods[] =
-{
-  {
-    (char *) "get_config_path",
-    (PyCFunction) tp_f_get_config_path,
-    METH_VARARGS,
-    "get config path"
-  },
-  {
-    (char *) "get_cache_path",
-    (PyCFunction) tp_f_get_cache_path,
-    METH_VARARGS,
-    "get cache path"
-  },
-  {
-    (char *) "get_data_path",
-    (PyCFunction) tp_f_get_data_path,
-    METH_VARARGS,
-    "get data path"
-  },
-  {
-    (char *) "start",
-    (PyCFunction) tp_f_start,
-    METH_VARARGS,
-    "start application"
-  },
-  {
-    (char *) "stop",
-    (PyCFunction) tp_f_stop,
-    METH_VARARGS,
-    "stop application"
-  },
-  {nullptr, nullptr, 0, nullptr} // sentinel
+static PyMethodDef tp_methods[] = {
+    {(char *) "get_config_path",
+     (PyCFunction) tp_f_get_config_path,
+     METH_VARARGS,
+     "get config path"},
+
+    {(char *) "get_cache_path",
+     (PyCFunction) tp_f_get_cache_path,
+     METH_VARARGS,
+     "get cache path"},
+
+    {(char *) "get_data_path",
+     (PyCFunction) tp_f_get_data_path,
+     METH_VARARGS,
+     "get data path"},
+
+    {(char *) "get_extension_resource_path",
+     (PyCFunction) tp_f_get_extension_resource_path,
+     METH_VARARGS,
+     "get extension resource path"},
+
+    {(char *) "start",
+     (PyCFunction) tp_f_start,
+     METH_VARARGS,
+     "start application"},
+
+    {(char *) "stop",
+     (PyCFunction) tp_f_stop,
+     METH_VARARGS,
+     "stop application"},
+
+    {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief application: type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_application_t =
-{
-  PyVarObject_HEAD_INIT (nullptr, 0)                    // header
-  "mobius.core.application",                   		// tp_name
-  sizeof (core_application_o),              		// tp_basicsize
-  0,                                       		// tp_itemsize
-  (destructor) tp_dealloc,  	                   	// tp_dealloc
-  0,                                       		// tp_print
-  0,                                       		// tp_getattr
-  0,                                       		// tp_setattr
-  0,                                       		// tp_compare
-  0,                                       		// tp_repr
-  0,                                       		// tp_as_number
-  0,                                       		// tp_as_sequence
-  0,                                       		// tp_as_mapping
-  0,                                       		// tp_hash
-  0,                                       		// tp_call
-  0,                                       		// tp_str
-  0,                                       		// tp_getattro
-  0,                                       		// tp_setattro
-  0,                                       		// tp_as_buffer
-  Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,		// tp_flags
-  "application class",                     		// tp_doc
-  0,                                       		// tp_traverse
-  0,                                       		// tp_clear
-  0,                                       		// tp_richcompare
-  0,                                       		// tp_weaklistoffset
-  0,                                       		// tp_iter
-  0,                                       		// tp_iternext
-  tp_methods,                              		// tp_methods
-  0,                                       		// tp_members
-  tp_getset,                	                   	// tp_getset
-  0,                             	              	// tp_base
-  0,                                       		// tp_dict
-  0,                                       		// tp_descr_get
-  0,                                       		// tp_descr_set
-  0,                                       		// tp_dictoffset
-  0,                                       		// tp_init
-  0,                                       		// tp_alloc
-  tp_new,                                  		// tp_new
-  0,                                       		// tp_free
-  0,                                       		// tp_is_gc
-  0,                                       		// tp_bases
-  0,                                       		// tp_mro
-  0,                                       		// tp_cache
-  0,                                       		// tp_subclasses
-  0,                                       		// tp_weaklist
-  0,                                       		// tp_del
-  0,                                       		// tp_version_tag
-  0,							// tp_finalize
+PyTypeObject core_application_t = {
+    PyVarObject_HEAD_INIT (nullptr, 0)        // header
+    "mobius.core.application",                // tp_name
+    sizeof (core_application_o),              // tp_basicsize
+    0,                                        // tp_itemsize
+    (destructor) tp_dealloc,                  // tp_dealloc
+    0,                                        // tp_print
+    0,                                        // tp_getattr
+    0,                                        // tp_setattr
+    0,                                        // tp_compare
+    0,                                        // tp_repr
+    0,                                        // tp_as_number
+    0,                                        // tp_as_sequence
+    0,                                        // tp_as_mapping
+    0,                                        // tp_hash
+    0,                                        // tp_call
+    0,                                        // tp_str
+    0,                                        // tp_getattro
+    0,                                        // tp_setattro
+    0,                                        // tp_as_buffer
+    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
+    "application class",                      // tp_doc
+    0,                                        // tp_traverse
+    0,                                        // tp_clear
+    0,                                        // tp_richcompare
+    0,                                        // tp_weaklistoffset
+    0,                                        // tp_iter
+    0,                                        // tp_iternext
+    tp_methods,                               // tp_methods
+    0,                                        // tp_members
+    tp_getset,                                // tp_getset
+    0,                                        // tp_base
+    0,                                        // tp_dict
+    0,                                        // tp_descr_get
+    0,                                        // tp_descr_set
+    0,                                        // tp_dictoffset
+    0,                                        // tp_init
+    0,                                        // tp_alloc
+    tp_new,                                   // tp_new
+    0,                                        // tp_free
+    0,                                        // tp_is_gc
+    0,                                        // tp_bases
+    0,                                        // tp_mro
+    0,                                        // tp_cache
+    0,                                        // tp_subclasses
+    0,                                        // tp_weaklist
+    0,                                        // tp_del
+    0,                                        // tp_version_tag
+    0,                                        // tp_finalize
 };
-
-

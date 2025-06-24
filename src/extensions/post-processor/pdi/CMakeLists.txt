@@ -38,3 +38,8 @@ target_link_libraries(post_processor_pdi PRIVATE Mobius::Framework Mobius::Core)
 # Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 install(TARGETS post_processor_pdi LIBRARY DESTINATION share/mobiusft/extensions)
+
+install(
+    FILES pdi_autofill.txt
+    DESTINATION share/mobiusft
+)

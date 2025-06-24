@@ -25,6 +25,7 @@ Mobius Forensic Toolkit 2.16
 	* libmobius_python: Added new method framework.model.item.get_evidences
 	* libmobius_python: Added new method framework.model.item.count_evidences
 	* libmobius_python: Added new method framework.model.item.count_evidences_grouped
+	* libmobius_python: Added new method core.application.get_extension_resource_path
 	* libmobius_framework: Added new module called "ant"
 	* libmobius_framework: Added new class ant::ant_impl_base
 	* libmobius_framework: Added new class ant::ant_impl_null
@@ -48,6 +49,8 @@ Mobius Forensic Toolkit 2.16
 	* libmobius_core: Added new function mobius::string::is_url
 	* libmobius_core: Added new function mobius::string::is_ipv4
 	* libmobius_core: Added new function mobius::string::is_ipv6
+	* libmobius_core: Added new method application::get_extension_resource_path
+	* app.chromium: Added support for Opera GX browser
 
 Mobius Forensic Toolkit 2.15
 	* src/mobius package renamed to src/libmobius_core

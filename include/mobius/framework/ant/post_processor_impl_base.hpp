@@ -21,11 +21,21 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/framework/model/evidence.hpp>
-#include <string>
-#include <vector>
 
 namespace mobius::framework::ant
 {
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>post_processor_coordinator</i> base class
+// @author Eduardo Aguiar
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+class post_processor_coordinator
+{
+  public:
+    virtual ~post_processor_coordinator () = default;
+    virtual void
+    on_new_evidence (const mobius::framework::model::evidence &evidence) = 0;
+};
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>post_processor_impl_base</i> class
 // @author Eduardo Aguiar
@@ -34,8 +44,7 @@ class post_processor_impl_base
 {
   public:
     virtual ~post_processor_impl_base () = default;
-    virtual std::vector<mobius::framework::model::evidence>
-        process_evidence (mobius::framework::model::evidence) = 0;
+    virtual void process_evidence (mobius::framework::model::evidence) = 0;
 };
 
 } // namespace mobius::framework::ant

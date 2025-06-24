@@ -42,7 +42,8 @@ ant_impl_post_processor::ant_impl_post_processor (
     : item_ (item),
       progress_ (0.0),
       total_evidences_ (0),
-      processed_evidences_ (0)
+      processed_evidences_ (0),
+      derived_evidences_ (0)
 {
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Build post-processor implementations
@@ -50,7 +51,7 @@ ant_impl_post_processor::ant_impl_post_processor (
     for (const auto &data :
          mobius::framework::ant::list_post_processor_implementations ())
     {
-        implementations_.emplace_back (data.factory (item_));
+        implementations_.emplace_back (data.factory (*this, item_));
     }
 }
 
@@ -84,6 +85,7 @@ ant_impl_post_processor::get_status () const
     mobius::core::pod::map status = {
         {"total_evidences", total_evidences_.load ()},
         {"processed_evidences", processed_evidences_.load ()},
+        {"derived_evidences", derived_evidences_.load ()},
         {"post_processors_count", implementations_.size ()}
     };
     return status;
@@ -151,14 +153,27 @@ ant_impl_post_processor::_process_evidence (
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Notify each post-processor implementation about the evidence
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    for (const auto &impl : implementations_)
-    {
-        for (const auto &new_evidence : impl->process_evidence (evidence))
-        {
-            total_evidences_.fetch_add (1);
-            _process_evidence (new_evidence);
-        }
-    }
+    std::for_each (
+        implementations_.begin (),
+        implementations_.end (),
+        [&evidence] (const auto &impl) { impl->process_evidence (evidence); }
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Handle new evidence
+// This method is called when a new evidence is found.
+// It notifies all post-processor implementations about the new evidence.
+// @param evidence The new evidence to process
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+ant_impl_post_processor::on_new_evidence (
+    const mobius::framework::model::evidence &evidence
+)
+{
+    total_evidences_.fetch_add (1);
+    derived_evidences_.fetch_add (1);
+    _process_evidence (evidence);
 }
 
 } // namespace mobius::framework::ant

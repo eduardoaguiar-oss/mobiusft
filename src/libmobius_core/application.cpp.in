@@ -312,6 +312,20 @@ application::get_cache_path (const std::string& path) const
   return _join_path (cache_folder_, path);
 }
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get extension resource path
+// @param extension_id Extension ID
+// @param path relative path
+// @return absolute path to extension/resource folder
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+application::get_extension_resource_path (
+    const std::string& extension_id,
+    const std::string& path) const
+{
+  return _join_path (config_folder_ + '/' + extension_id + "/resource", path);
+}
+
 } // namespace mobius::core
 
 
