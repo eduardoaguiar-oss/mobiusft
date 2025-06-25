@@ -17,18 +17,18 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <algorithm>
-#include <array>
+#include <mobius/core/bytearray.hpp>
+#include <mobius/core/charset.hpp>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <mobius/core/bytearray.hpp>
-#include <mobius/core/charset.hpp>
+#include <algorithm>
+#include <array>
 
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Convert a uint64_t value to a hex string
+// @brief Convert a uint64_t value to a hex string
 // @param value Value to convert
 // @param siz Size of the hex string
 // @return Hex string
@@ -37,7 +37,13 @@ std::string
 to_hex (std::uint64_t value, unsigned int siz)
 {
     char buffer[32] = {0};
-    snprintf (buffer, sizeof (buffer), "%0*lux", siz, value);
+    snprintf (
+        buffer,
+        sizeof (buffer),
+        "%0*llx",
+        siz,
+        static_cast<unsigned long long> (value)
+    );
 
     return std::string (buffer);
 }
@@ -286,8 +292,11 @@ bytearray::count (value_type value) const noexcept
 bool
 bytearray::all_equal (value_type value) const noexcept
 {
-    return std::all_of (data_.begin (), data_.end (),
-                        [value] (std::uint8_t i) { return i == value; });
+    return std::all_of (
+        data_.begin (),
+        data_.end (),
+        [value] (std::uint8_t i) { return i == value; }
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
