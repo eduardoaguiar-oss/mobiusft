@@ -98,8 +98,6 @@ set(CPACK_SOURCE_IGNORE_FILES
     "\\\\.vscode/"
     "\\\\.idea/"
     "mobius.code-workspace"
-    "mobiusft-*"
-    "*.dia"
     "FEATURES.md"
     "screenshots/"
 )
