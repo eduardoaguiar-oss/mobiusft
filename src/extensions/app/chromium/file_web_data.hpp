@@ -117,8 +117,14 @@ class file_web_data
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct credit_card
     {
-        // @brief Number
-        std::string number;
+        // @brief Card number
+        std::string card_number;
+
+        // @brief Encrypted card number
+        mobius::core::bytearray card_number_encrypted;
+
+        // @brief Name on card
+        std::string name_on_card;
 
         // @brief Expiration month
         std::uint32_t expiration_month = 0;
@@ -129,11 +135,29 @@ class file_web_data
         // @brief CVV
         std::string cvv;
 
-        // @brief Name
-        std::string name;
+        // @brief Origin
+        std::string origin;
 
-        // @brief Address
-        std::string address;
+        // @brief Use count
+        std::uint32_t use_count = 0;
+
+        // @brief Use date
+        mobius::core::datetime::datetime use_date;
+
+        // @brief Nickname
+        std::string nickname;
+
+        // @brief Type
+        std::string type;
+
+        // @brief Network
+        std::string network;
+
+        // @brief Bank name
+        std::string bank_name;
+
+        // @brief Card issuer
+        std::string card_issuer;
 
         // @brief Date last used
         mobius::core::datetime::datetime date_last_used;
@@ -141,8 +165,14 @@ class file_web_data
         // @brief Date modified
         mobius::core::datetime::datetime date_modified;
 
-        // @brief Card number encrypted
-        mobius::core::bytearray card_number_encrypted;
+        // @brief Unmask date
+        mobius::core::datetime::datetime unmask_date;
+
+        // @brief Metadata
+        mobius::core::pod::map metadata;
+
+        // @brief Is encrypted
+        bool is_encrypted = false;
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -196,6 +226,16 @@ class file_web_data
         return autofill_profiles_;
     }
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get credit cards
+    // @return Vector of credit cards
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<credit_card>
+    get_credit_cards () const
+    {
+        return credit_cards_;
+    }
+
   private:
     // @brief Flag is instance
     bool is_instance_ = false;
@@ -206,16 +246,17 @@ class file_web_data
     // @brief Autofill entries
     std::vector<autofill_entry> autofill_entries_;
 
-    // @brief Credit card entries
-    std::vector<credit_card> credit_cards_;
-
     // @brief Autofill profiles
     std::vector<autofill_profile> autofill_profiles_;
+
+    // @brief Credit cards
+    std::vector<credit_card> credit_cards_;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _load_autofill_entries (mobius::core::database::database &);
+    void _load_credit_cards (mobius::core::database::database &);
 };
 
 } // namespace mobius::extension::app::chromium

@@ -67,8 +67,8 @@ show_web_data (const std::string &path)
         std::cout << "\tName: " << entry.name << std::endl;
 
         if (entry.is_encrypted)
-            std::cout << "\tValue: (encrypted)" << entry.value.dump ()
-                      << std::endl;
+            std::cout << "\tValue: (encrypted)" << std::endl
+                      << entry.value.dump (8) << std::endl;
         else
             std::cout << "\tValue: " << entry.value.to_string () << std::endl;
 

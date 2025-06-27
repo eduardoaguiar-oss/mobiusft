@@ -20,12 +20,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <cstdint>
-#include <map>
+#include <mobius/core/bytearray.hpp>
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/reader.hpp>
 #include <mobius/core/pod/map.hpp>
+#include <cstdint>
+#include <map>
 #include <set>
 #include <string>
 #include <vector>
@@ -38,190 +39,235 @@ namespace mobius::extension::app::chromium
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class profile
 {
-  public:/*
+  public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Account structure
+    // @brief Autofill structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    struct account
+    struct autofill
     {
-        // @brief Client ID
-        std::string client_id;
+        // @brief Record number
+        std::uint64_t idx = 0;
 
-        // @brief IP Addresses
-        std::set<std::pair<std::string, mobius::core::datetime::datetime>>
-            ip_addresses;
-
-        // @brief First DHT timestamp
-        mobius::core::datetime::datetime first_dht_timestamp;
-
-        // @brief Last DHT timestamp
-        mobius::core::datetime::datetime last_dht_timestamp;
-
-        // @brief Source files
-        std::vector<mobius::core::io::file> files;
-
-        // @brief Most reliable dht.dat file
-        mobius::core::io::file f;
-    };
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Settings structure
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    struct settings
-    {
-        // @brief CID
-        std::string computer_id;
-
-        // @brief Auto start
-        bool auto_start = false;
-
-        // @brief Execution count
-        std::uint32_t execution_count = 0;
-
-        // @brief Total bytes downloaded
-        std::uint64_t total_bytes_downloaded = 0;
-
-        // @brief Total bytes uploaded
-        std::uint64_t total_bytes_uploaded = 0;
-
-        // @brief Installation time
-        mobius::core::datetime::datetime installation_time;
-
-        // @brief Last used time
-        mobius::core::datetime::datetime last_used_time;
-
-        // @brief Last bin change time
-        mobius::core::datetime::datetime last_bin_change_time;
-
-        // @brief Current version
-        std::string version;
-
-        // @brief Installation version
-        std::string installation_version;
-
-        // @brief Language
-        std::string language;
-
-        // @brief settings.dat file object
-        mobius::core::io::file f;
-    };
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Torrent content file structure
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    struct torrent_content_file
-    {
-        // @brief File name
+        // @brief Name
         std::string name;
 
-        // @brief File path
-        std::string path;
+        // @brief Value
+        mobius::core::bytearray value;
 
-        // @brief File length
-        std::uint64_t length = 0;
+        // @brief Count
+        std::uint32_t count = 0;
 
-        // @brief File offset
-        std::uint64_t offset = 0;
+        // @brief Date created
+        mobius::core::datetime::datetime date_created;
 
-        // @brief File piece length
-        std::uint64_t piece_length = 0;
-
-        // @brief File piece offset
-        std::uint64_t piece_offset = 0;
-
-        // @brief Creation time
-        mobius::core::datetime::datetime creation_time;
-    };
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Local file structure
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    struct local_file
-    {
-        // @brief Entry name
-        std::string name;
+        // @brief Date last used
+        mobius::core::datetime::datetime date_last_used;
 
         // @brief Metadata
         mobius::core::pod::map metadata;
 
-        // @brief Download URL
-        std::string download_url;
+        // @brief Is encrypted
+        bool is_encrypted = false;
 
-        // @brief Caption
-        std::string caption;
+        // @brief User name
+        std::string username;
 
-        // @brief Path
-        std::string path;
+        // @brief Source file
+        mobius::core::io::file f;
+    };
 
-        // @brief Size
-        std::uint64_t size = 0;
+    /*
+      //
+      =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+      // @brief Account structure
+      //
+      =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+      struct account
+      {
+          // @brief Client ID
+          std::string client_id;
 
-        // @brief Seeded seconds
-        std::uint64_t seeded_seconds = 0;
+          // @brief IP Addresses
+          std::set<std::pair<std::string, mobius::core::datetime::datetime>>
+              ip_addresses;
 
-        // @brief Downloaded seconds
-        std::uint64_t downloaded_seconds = 0;
+          // @brief First DHT timestamp
+          mobius::core::datetime::datetime first_dht_timestamp;
 
-        // @brief Block size
-        std::uint64_t blocksize = 0;
+          // @brief Last DHT timestamp
+          mobius::core::datetime::datetime last_dht_timestamp;
 
-        // @brief Bytes downloaded
-        std::uint64_t bytes_downloaded = 0;
+          // @brief Source files
+          std::vector<mobius::core::io::file> files;
 
-        // @brief Bytes uploaded
-        std::uint64_t bytes_uploaded = 0;
+          // @brief Most reliable dht.dat file
+          mobius::core::io::file f;
+      };
 
-        // @brief Creation time
-        mobius::core::datetime::datetime creation_time;
+      //
+      =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+      // @brief Settings structure
+      //
+      =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+      struct settings
+      {
+          // @brief CID
+          std::string computer_id;
 
-        // @brief Metadata time
-        mobius::core::datetime::datetime metadata_time;
+          // @brief Auto start
+          bool auto_start = false;
 
-        // @brief Added time
-        mobius::core::datetime::datetime added_time;
+          // @brief Execution count
+          std::uint32_t execution_count = 0;
 
-        // @brief Completed time
-        mobius::core::datetime::datetime completed_time;
+          // @brief Total bytes downloaded
+          std::uint64_t total_bytes_downloaded = 0;
 
-        // @brief Last seen complete time
-        mobius::core::datetime::datetime last_seen_complete_time;
+          // @brief Total bytes uploaded
+          std::uint64_t total_bytes_uploaded = 0;
 
-        // @brief Torrent name
-        std::string torrent_name;
+          // @brief Installation time
+          mobius::core::datetime::datetime installation_time;
 
-        // @brief Created by
-        std::string created_by;
+          // @brief Last used time
+          mobius::core::datetime::datetime last_used_time;
 
-        // @brief Encoding
-        std::string encoding;
+          // @brief Last bin change time
+          mobius::core::datetime::datetime last_bin_change_time;
 
-        // @brief Comment
-        std::string comment;
+          // @brief Current version
+          std::string version;
 
-        // @brief Info hash
-        std::string info_hash;
+          // @brief Installation version
+          std::string installation_version;
 
-        // @brief Peers
-        std::vector<std::pair<std::string, std::uint16_t>> peers;
+          // @brief Language
+          std::string language;
 
-        // @brief Resume.dat file
-        mobius::core::io::file resume_file;
+          // @brief settings.dat file object
+          mobius::core::io::file f;
+      };
 
-        // @brief Torrent file
-        mobius::core::io::file torrent_file;
+      //
+      =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+      // @brief Torrent content file structure
+      //
+      =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+      struct torrent_content_file
+      {
+          // @brief File name
+          std::string name;
 
-        // @brief Torrent content files
-        std::vector<torrent_content_file> content_files;
+          // @brief File path
+          std::string path;
 
-        // @brief Source files
-        std::vector<mobius::core::io::file> sources;
-    };*/
+          // @brief File length
+          std::uint64_t length = 0;
+
+          // @brief File offset
+          std::uint64_t offset = 0;
+
+          // @brief File piece length
+          std::uint64_t piece_length = 0;
+
+          // @brief File piece offset
+          std::uint64_t piece_offset = 0;
+
+          // @brief Creation time
+          mobius::core::datetime::datetime creation_time;
+      };
+
+      //
+      =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+      // @brief Local file structure
+      //
+      =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+      struct local_file
+      {
+          // @brief Entry name
+          std::string name;
+
+          // @brief Metadata
+          mobius::core::pod::map metadata;
+
+          // @brief Download URL
+          std::string download_url;
+
+          // @brief Caption
+          std::string caption;
+
+          // @brief Path
+          std::string path;
+
+          // @brief Size
+          std::uint64_t size = 0;
+
+          // @brief Seeded seconds
+          std::uint64_t seeded_seconds = 0;
+
+          // @brief Downloaded seconds
+          std::uint64_t downloaded_seconds = 0;
+
+          // @brief Block size
+          std::uint64_t blocksize = 0;
+
+          // @brief Bytes downloaded
+          std::uint64_t bytes_downloaded = 0;
+
+          // @brief Bytes uploaded
+          std::uint64_t bytes_uploaded = 0;
+
+          // @brief Creation time
+          mobius::core::datetime::datetime creation_time;
+
+          // @brief Metadata time
+          mobius::core::datetime::datetime metadata_time;
+
+          // @brief Added time
+          mobius::core::datetime::datetime added_time;
+
+          // @brief Completed time
+          mobius::core::datetime::datetime completed_time;
+
+          // @brief Last seen complete time
+          mobius::core::datetime::datetime last_seen_complete_time;
+
+          // @brief Torrent name
+          std::string torrent_name;
+
+          // @brief Created by
+          std::string created_by;
+
+          // @brief Encoding
+          std::string encoding;
+
+          // @brief Comment
+          std::string comment;
+
+          // @brief Info hash
+          std::string info_hash;
+
+          // @brief Peers
+          std::vector<std::pair<std::string, std::uint16_t>> peers;
+
+          // @brief Resume.dat file
+          mobius::core::io::file resume_file;
+
+          // @brief Torrent file
+          mobius::core::io::file torrent_file;
+
+          // @brief Torrent content files
+          std::vector<torrent_content_file> content_files;
+
+          // @brief Source files
+          std::vector<mobius::core::io::file> sources;
+      };*/
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    //std::vector<account> get_accounts () const;
-    //std::vector<local_file> get_local_files () const;
+    // std::vector<account> get_accounts () const;
+    // std::vector<local_file> get_local_files () const;
     void add_preferences_file (const mobius::core::io::file &);
     void add_web_data_file (const mobius::core::io::file &);
 
@@ -250,26 +296,30 @@ class profile
     {
         username_ = username;
     }
-/*
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get main settings
-    // @return settings
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    settings
-    get_main_settings () const
-    {
-        return main_settings_;
-    }
+    /*
+        //
+       =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // @brief Get main settings
+        // @return settings
+        //
+       =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        settings
+        get_main_settings () const
+        {
+            return main_settings_;
+        }
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get all settings found
-    // @return settings
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector<settings>
-    get_settings () const
-    {
-        return settings_;
-    }*/
+        //
+       =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // @brief Get all settings found
+        // @return settings
+        //
+       =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        std::vector<settings>
+        get_settings () const
+        {
+            return settings_;
+        }*/
 
   private:
     // @brief Check if profile is valid
@@ -277,18 +327,22 @@ class profile
 
     // @brief Username
     std::string username_;
-/*
-    // @brief Accounts
-    std::map<std::string, account> accounts_;
 
-    // @brief Local files
-    std::map<std::string, local_file> local_files_;
+    // @brief Autofill entries
+    std::vector<autofill> autofill_;
 
-    // @brief Main settings
-    settings main_settings_;
+    /*
+        // @brief Accounts
+        std::map<std::string, account> accounts_;
 
-    // @brief Settings found
-    std::vector<settings> settings_;*/
+        // @brief Local files
+        std::map<std::string, local_file> local_files_;
+
+        // @brief Main settings
+        settings main_settings_;
+
+        // @brief Settings found
+        std::vector<settings> settings_;*/
 };
 
 } // namespace mobius::extension::app::chromium

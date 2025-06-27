@@ -37,11 +37,12 @@ std::string
 to_hex (std::uint64_t value, unsigned int siz)
 {
     char buffer[32] = {0};
+
     snprintf (
         buffer,
         sizeof (buffer),
         "%0*llx",
-        siz,
+        static_cast<int>(siz),
         static_cast<unsigned long long> (value)
     );
 

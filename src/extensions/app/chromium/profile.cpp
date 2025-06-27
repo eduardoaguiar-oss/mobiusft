@@ -27,7 +27,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @see
 // https://github.com/obsidianforensics/hindsight/blob/main/documentation/Evolution%20of%20Chrome%20Databases%20(v35).pdf
-
+// @see
+// https://medium.com/@jsaxena017/web-browser-forensics-part-1-chromium-browser-family-99b807083c25
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 namespace mobius::extension::app::chromium
 { /*
@@ -158,14 +159,11 @@ profile::add_web_data_file (const mobius::core::io::file &f)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Decode file
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto reader = f.new_reader ();
-    if (!reader)
-        return;
+    file_web_data web_data (f.new_reader());
 
-    file_web_data web_data (reader);
     if (!web_data)
     {
-        log.warning (__LINE__, "File is not a valid 'Web Data' file");
+        log.info (__LINE__, "File is not a valid 'Web Data' file");
         return;
     }
 
@@ -173,47 +171,28 @@ profile::add_web_data_file (const mobius::core::io::file &f)
         __LINE__,
         "File " + f.get_path () + " is a valid 'Web Data' file"
     );
-    /*
-        //
-       =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Add entries
-        //
-       =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        for (const auto &entry : resume_dat.get_entries ())
-        {
-            local_file &lf = local_files_[entry.torrent_name];
 
-            bool overwrite = !lf.resume_file ||
-                             (lf.resume_file.is_deleted () && !f.is_deleted ())
-       || (lf.resume_file.is_deleted () == f.is_deleted () &&
-                              lf.resume_file.get_name () != "resume.dat" &&
-                              f.get_name () == "resume.dat");
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Add entries
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &entry : web_data.get_autofill_entries ())
+    {
+        autofill a;
 
-            mobius::core::value_selector vs (overwrite);
+        a.idx = entry.idx;
+        a.name = entry.name;
+        a.value = entry.value;
+        a.count = entry.count;
+        a.date_created = entry.date_created;
+        a.date_last_used = entry.date_last_used;
+        a.username = username_;
+        a.is_encrypted = entry.is_encrypted;
+        a.f = f;
 
-            lf.name = vs (lf.name, entry.name);
-            lf.metadata = vs (lf.metadata, entry.metadata);
-            lf.download_url = vs (lf.download_url, entry.download_url);
-            lf.caption = vs (lf.caption, entry.caption);
-            lf.path = vs (lf.path, entry.path);
-            lf.seeded_seconds = vs (lf.seeded_seconds, entry.seeded_seconds);
-            lf.downloaded_seconds =
-                vs (lf.downloaded_seconds, entry.downloaded_seconds);
-            lf.blocksize = vs (lf.blocksize, entry.blocksize);
-            lf.bytes_downloaded = vs (lf.bytes_downloaded,
-       entry.bytes_downloaded); lf.bytes_uploaded = vs (lf.bytes_uploaded,
-       entry.bytes_uploaded); lf.metadata_time = vs (lf.metadata_time,
-       entry.metadata_time); lf.added_time = vs (lf.added_time,
-       entry.added_time); lf.completed_time = vs (lf.completed_time,
-       entry.completed_time); lf.last_seen_complete_time = vs
-       (lf.last_seen_complete_time, entry.last_seen_complete_time);
-            lf.torrent_name = vs (lf.torrent_name, entry.torrent_name);
-            lf.resume_file = vs (lf.resume_file, f);
-            lf.sources.push_back (f);
+        autofill_.push_back (a);
+    }
 
-            std::copy (entry.peers.begin (), entry.peers.end (),
-                       std::back_inserter (lf.peers));
-        }*/
+    is_valid_ = true;
 }
 
 /*
