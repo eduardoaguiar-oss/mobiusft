@@ -117,6 +117,9 @@ class file_web_data
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct credit_card
     {
+        // @brief Record Index
+        std::uint64_t idx = 0;
+
         // @brief Card number
         std::string card_number;
 
@@ -207,16 +210,6 @@ class file_web_data
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get credit card entries
-    // @return Vector of credit card entries
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector<credit_card>
-    get_credit_card_entries () const
-    {
-        return credit_cards_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get autofill profiles
     // @return Vector of autofill profiles
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -257,6 +250,7 @@ class file_web_data
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _load_autofill_entries (mobius::core::database::database &);
     void _load_credit_cards (mobius::core::database::database &);
+    void _load_masked_credit_cards (mobius::core::database::database &);
 };
 
 } // namespace mobius::extension::app::chromium

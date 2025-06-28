@@ -49,6 +49,9 @@ show_web_data (const std::string &path)
     std::cout << std::endl;
     std::cout << ">> " << path << std::endl;
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Try to decode file
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     auto f = mobius::core::io::new_file_by_path (path);
     auto reader = f.new_reader ();
 
@@ -59,10 +62,14 @@ show_web_data (const std::string &path)
         return;
     }
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Show autofill profiles
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::cout << "Autofill entries:" << std::endl;
+
     for (const auto &entry : dat.get_autofill_entries ())
     {
         std::cout << std::endl;
-        std::cout << "Autofill entry:" << std::endl;
         std::cout << "\tIndex: " << entry.idx << std::endl;
         std::cout << "\tName: " << entry.name << std::endl;
 
@@ -79,6 +86,43 @@ show_web_data (const std::string &path)
         std::cout << "\tCount: " << entry.count << std::endl;
         std::cout << "\tIs encrypted: " << (entry.is_encrypted ? "yes" : "no")
                   << std::endl;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Show credit cards
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::cout << std::endl;
+    std::cout << "Credit cards:" << std::endl;
+
+    for (const auto &card : dat.get_credit_cards ())
+    {
+        std::cout << std::endl;
+        std::cout << "\tIndex: " << card.idx << std::endl;
+        std::cout << "\tName on card: " << card.name_on_card << std::endl;
+        std::cout << "\tExpiration month: " << card.expiration_month
+                  << std::endl;
+        std::cout << "\tExpiration year: " << card.expiration_year << std::endl;
+
+        if (card.is_encrypted)
+            std::cout << "\tCard number: (encrypted)" << std::endl;
+        else
+            std::cout << "\tCard number: " << card.card_number << std::endl;
+
+        std::cout << "\tDate modified: " << to_string (card.date_modified)
+                  << std::endl;
+        std::cout << "\tOrigin: " << card.origin << std::endl;
+        std::cout << "\tUse count: " << card.use_count << std::endl;
+        std::cout << "\tUse date: " << to_string (card.use_date) << std::endl;
+        std::cout << "\tNickname: " << card.nickname << std::endl;
+        std::cout << "\tType: " << card.type << std::endl;
+        std::cout << "\tNetwork: " << card.network << std::endl;
+        std::cout << "\tBank name: " << card.bank_name << std::endl;
+        std::cout << "\tCard issuer: " << card.card_issuer << std::endl;
+
+        // show metadata
+        std::cout << "\tMetadata:" << std::endl;
+        for (const auto &[k, v] : card.metadata)
+            std::cout << "\t\t" << k << ": " << v << std::endl;
     }
 }
 

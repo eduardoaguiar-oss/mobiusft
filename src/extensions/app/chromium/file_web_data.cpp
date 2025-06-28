@@ -27,6 +27,10 @@
 // Web Data file tables
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //
+// VERSIONS UNKNOWN: 1-39, 41, 42, 44, 46, 47, 49-54, 57, 59, 62, 63, 66, 68,
+// 69, 73, 75, 79, 85, 89, 93-95, 99, 101-103, 105, 106, 114, 115, 118, 120-133,
+// 135-
+//
 // - autofill: autofill entries
 //      name: 40??-134
 //      value: 40??-134
@@ -276,6 +280,8 @@ file_web_data::file_web_data (const mobius::core::io::reader &reader)
     // Load data
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     _load_autofill_entries (db);
+    _load_credit_cards (db);
+    _load_masked_credit_cards (db);
 
     is_instance_ = true;
 }
@@ -286,30 +292,30 @@ file_web_data::file_web_data (const mobius::core::io::reader &reader)
 void
 file_web_data::_load_autofill_entries (mobius::core::database::database &db)
 {
+    // Prepare statement
     mobius::core::database::statement stmt;
 
     if (schema_version_ < 55)
-    {
         stmt = db.new_statement (
             "SELECT a.name, a.value, a.count, d.date_created, NULL "
             "FROM autofill a "
             "LEFT JOIN autofill_dates d ON a.pair_id = d.pair_id"
         );
-    }
 
     else
-    {
         stmt = db.new_statement (
             "SELECT name, value, count, date_created, date_last_used "
             "FROM autofill"
         );
-    }
+
+    // Retrieve records from autofill table
+    std::uint64_t idx = 0;
 
     while (stmt.fetch_row ())
     {
         autofill_entry entry;
 
-        entry.idx = autofill_entries_.size ();
+        entry.idx = idx++;
         entry.name = stmt.get_column_string (0);
         entry.value = stmt.get_column_bytearray (1);
         entry.count = stmt.get_column_int (2);
@@ -332,49 +338,135 @@ file_web_data::_load_autofill_entries (mobius::core::database::database &db)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Load credit cards
 // @param db Database object
-// @todo SQL statements according to version
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 file_web_data::_load_credit_cards (mobius::core::database::database &db)
 {
-    mobius::core::database::statement stmt;
+    // Prepare SQL statement for table credit_cards
+    mobius::core::database::statement stmt = db.new_statement (_generate_sql (
+        "SELECT guid, "
+        "name_on_card, "
+        "expiration_month, "
+        "expiration_year, "
+        "card_number_encrypted, "
+        "date_modified, "
+        "${origin,55}, "
+        "${use_count,61}, "
+        "${use_date,61}, "
+        "${nickname,87} "
+        "FROM credit_cards",
+        schema_version_
+    ));
 
-    if (schema_version_ < 55)
-    {
-        stmt = db.new_statement (
-            "SELECT c.name_on_card, c.card_number, c.expiration_month, "
-            "c.expiration_year, c.cvv, c.origin, c.use_count, c.use_date, "
-            "c.nickname "
-            "FROM credit_cards c"
-        );
-    }
-
-    else
-    {
-        stmt = db.new_statement (
-            "SELECT name_on_card, card_number, expiration_month, "
-            "expiration_year, cvv, origin, use_count, use_date,  nickname "
-            "FROM credit_cards"
-        );
-    }
+    // Retrieve records from credit_cards table
+    std::uint64_t idx = 0;
 
     while (stmt.fetch_row ())
     {
         credit_card card;
 
-        card.name_on_card = stmt.get_column_string (0);
-        card.card_number = stmt.get_column_string (1);
-        card.expiration_month = stmt.get_column_int (2);
-        card.expiration_year = stmt.get_column_int (3);
-        card.cvv = stmt.get_column_string (4);
-        card.origin = stmt.get_column_string (5);
-        card.use_count = stmt.get_column_int (6);
+        card.idx = idx++;
+        card.name_on_card = stmt.get_column_string (1);
+        card.expiration_month = stmt.get_column_int64 (2);
+        card.expiration_year = stmt.get_column_int64 (3);
+        card.card_number_encrypted = stmt.get_column_bytearray (4);
+        card.origin = stmt.get_column_string (6);
+        card.use_count = stmt.get_column_int64 (7);
+        card.nickname = stmt.get_column_string (9);
+
+        auto timestamp = stmt.get_column_int64 (5);
+        card.date_modified =
+            mobius::core::datetime::new_datetime_from_unix_timestamp (
+                timestamp
+            );
+
+        timestamp = stmt.get_column_int64 (8);
         card.use_date =
             mobius::core::datetime::new_datetime_from_unix_timestamp (
-                stmt.get_column_int64 (7)
+                timestamp
             );
-        card.nickname = stmt.get_column_string (8);
-        card.card_number_encrypted = mobius::core::bytearray (card.card_number);
+
+        card.metadata.set ("guid", stmt.get_column_string (0));
+        card.is_encrypted = card.card_number_encrypted.startswith ("v10") ||
+                            card.card_number_encrypted.startswith ("v20");
+
+        // Add card to the list
+        credit_cards_.emplace_back (std::move (card));
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load masked credit cards
+// @param db Database object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file_web_data::_load_masked_credit_cards (mobius::core::database::database &db)
+{
+    if (schema_version_ < 60)
+        return;
+
+    // Prepare SQL statement for tables masked_credit_cards and
+    // unmasked_credit_cards
+    auto stmt = db.new_statement (_generate_sql (
+        "SELECT m.id, "
+        "${m.status,60,97}, "
+        "${m.name_on_card,60}, "
+        "${m.type,60,71}, "
+        "m.last_four, "
+        "${m.exp_month,60}, "
+        "${m.exp_year,60}, "
+        "${m.network,72}, "
+        "${m.bank_name,74}, "
+        "${m.card_issuer,86}, "
+        "${m.nickname,84}, "
+        "${u.card_number_encrypted,60}, "
+        "${u.use_count,64,84}, "
+        "${u.use_date,64,84}, "
+        "${u.unmask_date,64} "
+        "FROM masked_credit_cards m "
+        "LEFT JOIN unmasked_credit_cards u ON m.id = u.id ",
+        schema_version_
+    ));
+
+    // Retrieve records from masked_credit_cards and unmasked_credit_cards
+    // tables
+    auto idx = 0;
+
+    while (stmt.fetch_row ())
+    {
+        credit_card card;
+
+        card.idx = idx++;
+        card.name_on_card = stmt.get_column_string (2);
+        card.type = stmt.get_column_string (3);
+        card.expiration_month = stmt.get_column_int64 (5);
+        card.expiration_year = stmt.get_column_int64 (6);
+        card.network = stmt.get_column_string (7);
+        card.bank_name = stmt.get_column_string (8);
+        card.card_issuer = stmt.get_column_string (9);
+        card.nickname = stmt.get_column_string (10);
+        card.card_number_encrypted = stmt.get_column_bytearray (11);
+        card.use_count = stmt.get_column_int64 (12);
+        auto last_four = stmt.get_column_string (4);
+
+        if (!last_four.empty ())
+            card.card_number = std::string ("**** **** **** ") + last_four;
+
+        auto timestamp = stmt.get_column_int64 (13);
+        card.use_date =
+            mobius::core::datetime::new_datetime_from_unix_timestamp (
+                timestamp
+            );
+
+        timestamp = stmt.get_column_int64 (14);
+        card.unmask_date =
+            mobius::core::datetime::new_datetime_from_unix_timestamp (
+                timestamp
+            );
+
+        card.metadata.set ("last_four", last_four);
+        card.metadata.set ("id", stmt.get_column_string (0));
+        card.metadata.set ("status", stmt.get_column_string (1));
         card.is_encrypted = card.card_number_encrypted.startswith ("v10") ||
                             card.card_number_encrypted.startswith ("v20");
 

@@ -46,6 +46,7 @@ class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
     // Function prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void run () final;
+    void scan_folder (const mobius::core::io::folder &);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Check if object is valid
@@ -90,13 +91,13 @@ class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
     void _scan_canonical_root_folder (const mobius::core::io::folder &);
     void _scan_canonical_user_folder (const mobius::core::io::folder &);
     void _scan_all_folders (const mobius::core::io::folder &);
-    void _scan_folder (const mobius::core::io::folder &);
 
     void _save_evidences ();
+    void _save_autofills ();
+    void _save_credit_cards ();
 
     void _save_accounts ();
     void _save_ip_addresses ();
-    void _save_autofills ();
     void _save_local_files ();
     void _save_p2p_remote_files ();
     void _save_received_files ();

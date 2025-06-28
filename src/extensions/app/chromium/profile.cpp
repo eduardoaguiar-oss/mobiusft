@@ -173,7 +173,7 @@ profile::add_web_data_file (const mobius::core::io::file &f)
     );
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Add entries
+    // Add autofill entries
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     for (const auto &entry : web_data.get_autofill_entries ())
     {
@@ -190,6 +190,35 @@ profile::add_web_data_file (const mobius::core::io::file &f)
         a.f = f;
 
         autofill_.push_back (a);
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Add credit cards
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &card : web_data.get_credit_cards ())
+    {
+        credit_card c;
+        c.idx = card.idx;
+        c.card_number = card.card_number;
+        c.card_number_encrypted = card.card_number_encrypted;
+        c.name_on_card = card.name_on_card;
+        c.expiration_month = card.expiration_month;
+        c.expiration_year = card.expiration_year;
+        c.cvv = card.cvv;
+        c.origin = card.origin;
+        c.use_count = card.use_count;
+        c.use_date = card.use_date;
+        c.nickname = card.nickname;
+        c.type = card.type;
+        c.network = card.network;
+        c.bank_name = card.bank_name;
+        c.card_issuer = card.card_issuer;
+        c.metadata = card.metadata;
+        c.date_modified = card.date_modified;
+        c.unmask_date = card.unmask_date;
+        c.f = f;
+
+        credit_cards_.push_back (c);
     }
 
     is_valid_ = true;
