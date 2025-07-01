@@ -18,11 +18,10 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "profile.hpp"
-#include <algorithm>
-#include "file_web_data.hpp"
-// #include <mobius/core/file_decoder/torrent.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/value_selector.hpp>
+#include <algorithm>
+#include "file_web_data.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @see
@@ -159,7 +158,7 @@ profile::add_web_data_file (const mobius::core::io::file &f)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Decode file
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    file_web_data web_data (f.new_reader());
+    file_web_data web_data (f.new_reader ());
 
     if (!web_data)
     {
@@ -190,6 +189,65 @@ profile::add_web_data_file (const mobius::core::io::file &f)
         a.f = f;
 
         autofill_.push_back (a);
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Add accounts (and autofill)
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &p : web_data.get_autofill_profiles ())
+    {
+        account acc;
+
+        // Attributes
+        acc.id = p.guid;
+        acc.emails = p.emails;
+        acc.organizations = std::vector<std::string> {p.company_name};
+        acc.username = username_;
+        acc.f = f;
+
+        // Phone numbers
+        std::transform (
+            p.phones.begin (),
+            p.phones.end (),
+            std::back_inserter (acc.phone_numbers),
+            [] (const auto &phone) { return phone.number; }
+        );
+
+        // Addresses
+        std::transform (
+            p.addresses.begin (),
+            p.addresses.end (),
+            std::back_inserter (acc.addresses),
+            [] (const auto &addr)
+            {
+                std::string s;
+                if (!addr.address_line_1.empty ())
+                    s += addr.address_line_1 + ", ";
+                if (!addr.address_line_2.empty ())
+                    s += addr.address_line_2 + ", ";
+                if (!addr.street_address.empty ())
+                    s += addr.street_address + ", ";
+                if (!addr.city.empty ())
+                    s += addr.city + ", ";
+                if (!addr.state.empty ())
+                    s += addr.state + " ";
+                if (!addr.zip_code.empty ())
+                    s += addr.zip_code + ", ";
+                if (!addr.country.empty ())
+                    s += addr.country;
+                return s;
+            }
+        );
+
+        // Metadata
+        acc.metadata.set ("origin", p.origin);
+        acc.metadata.set ("language_code", p.language_code);
+        acc.metadata.set ("date_modified", p.date_modified);
+        acc.metadata.set ("date_last_used", p.date_last_used);
+        acc.metadata.set ("use_count", p.use_count);
+        acc.metadata.set ("is_in_trash", p.is_in_trash);
+
+        accounts_.push_back (acc);
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

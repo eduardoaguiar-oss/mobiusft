@@ -65,10 +65,11 @@ std::string rpad (const std::string&, std::string::size_type, char = ' ');
 std::string replace (const std::string&, const std::string&, const std::string&);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// parse functions
+// Word functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector <std::string> split (const std::string&, const std::string& = " ");
 std::string word (const std::string&, int, const std::string& = " ");
+std::string join (const std::vector <std::string>&, const std::string& = " ");
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // compare functions

@@ -65,21 +65,36 @@ class file_web_data
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Autofill profile structure
+    // @brief Autofill profile address structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    struct autofill_profile
+    struct autofill_profile_address
     {
-        // @brief Name
-        std::string name;
+        // @brief Address line 1
+        std::string address_line_1;
 
-        // @brief Email
-        std::string email;
+        // @brief Address line 2
+        std::string address_line_2;
 
-        // @brief Phone
-        std::string phone;
+        // @brief Street address
+        std::string street_address;
 
-        // @brief Address
-        std::string address;
+        // @brief Street name
+        std::string street_name;
+
+        // @brief Dependent street name
+        std::string dependent_street_name;
+
+        // @brief House number
+        std::string house_number;
+
+        // @brief Subpremise
+        std::string subpremise;
+
+        // @brief Premise name
+        std::string premise_name;
+
+        // @brief Dependent locality
+        std::string dependent_locality;
 
         // @brief City
         std::string city;
@@ -90,26 +105,107 @@ class file_web_data
         // @brief Zip code
         std::string zip_code;
 
+        // @brief Country code
+        std::string country_code;
+
+        // @brief Apartment number
+        std::string apartment_number;
+
+        // @brief Floor
+        std::string floor;
+
         // @brief Country
         std::string country;
+    };
 
-        // @brief Date last used
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Autofill profile name structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct autofill_profile_name
+    {
+        // @brief First name
+        std::string first_name;
+
+        // @brief Middle name
+        std::string middle_name;
+
+        // @brief Last name
+        std::string last_name;
+
+        // @brief Full name
+        std::string full_name;
+
+        // @brief Honorific prefix
+        std::string honorific_prefix;
+
+        // @brief First last name
+        std::string first_last_name;
+
+        // @brief Conjunction last name
+        std::string conjunction_last_name;
+
+        // @brief Second last name
+        std::string second_last_name;
+
+        // @brief Full name with honorific prefix
+        std::string full_name_with_honorific_prefix;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Autofill profile phone structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct autofill_profile_phone
+    {
+        // @brief Phone type
+        std::string type;
+
+        // @brief Phone number
+        std::string number;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Autofill profile structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct autofill_profile
+    {
+        // @brief Record Index
+        std::uint64_t idx = 0;
+
+        // @brief GUID
+        std::string guid;
+
+        // @brief company name
+        std::string company_name;
+
+        // @brief Use count
+        std::uint32_t use_count = 0;
+
+        // @brief Last time used
         mobius::core::datetime::datetime date_last_used;
-
-        // @brief Date created
-        mobius::core::datetime::datetime date_created;
 
         // @brief Date modified
         mobius::core::datetime::datetime date_modified;
 
-        // @brief Company name
-        std::string company_name;
+        // @brief Origin
+        std::string origin;
 
-        // @brief Count
-        std::uint32_t count = 0;
+        // @brief Language code
+        std::string language_code;
 
-        // @brief Is deleted
-        bool is_deleted = false;
+        // @brief Names
+        std::vector<autofill_profile_name> names;
+
+        // @brief Addresses
+        std::vector<autofill_profile_address> addresses;
+
+        // @brief Emails
+        std::vector<std::string> emails;
+
+        // @brief Phones
+        std::vector<autofill_profile_phone> phones;
+
+        // @brief Is in trash
+        bool is_in_trash = false;
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -249,6 +345,7 @@ class file_web_data
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _load_autofill_entries (mobius::core::database::database &);
+    void _load_autofill_profiles (mobius::core::database::database &);
     void _load_credit_cards (mobius::core::database::database &);
     void _load_masked_credit_cards (mobius::core::database::database &);
 };

@@ -325,6 +325,69 @@ evidence_loader_impl::_save_evidences ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save accounts
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_loader_impl::_save_accounts ()
+{
+    for (const auto &p : profiles_)
+    {
+        for (const auto &acc : p.get_accounts ())
+        {
+            auto e = item_.new_evidence ("user-account");
+
+            // Set attributes
+            e.set_attribute ("account_type", "app.chromium");
+            e.set_attribute ("id", acc.id);
+            e.set_attribute ("password", {});
+            e.set_attribute ("password_found", "no");
+            e.set_attribute ("is_deleted", acc.f.is_deleted ());
+
+            // Set phones
+            e.set_attribute (
+                "phones",
+                mobius::core::string::join (acc.phone_numbers, "\n")
+            );
+
+            // Set emails
+            e.set_attribute (
+                "emails",
+                mobius::core::string::join (acc.emails, "\n")
+            );
+
+            // Set organizations
+            e.set_attribute (
+                "organizations",
+                mobius::core::string::join (acc.organizations, "\n")
+            );
+
+            // Set addressess
+            e.set_attribute (
+                "addresses",
+                mobius::core::string::join (acc.addresses, "\n")
+            );
+
+            // Set names
+            e.set_attribute (
+                "names",
+                mobius::core::string::join (acc.names, "\n")
+            );
+
+            // Set metadata
+            auto metadata = acc.metadata.clone ();
+            metadata.set ("username", p.get_username ());
+            metadata.set ("app_name", APP_NAME);
+            metadata.set ("app_id", APP_ID);
+            e.set_attribute ("metadata", metadata);
+
+            // Tags and sources
+            e.set_tag ("app.browser");
+            e.add_source (acc.f);
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save autofill entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -334,14 +397,28 @@ evidence_loader_impl::_save_autofills ()
     {
         for (const auto &a : p.get_autofill_entries ())
         {
-            auto e = item_.new_evidence ("autofill-entry");
+            auto e = item_.new_evidence ("autofill");
 
-            e.set_attribute ("app_id", APP_ID);
+            e.set_attribute ("field_name", a.name);
             e.set_attribute ("app_name", APP_NAME);
+            e.set_attribute ("app_id", APP_ID);
             e.set_attribute ("username", p.get_username ());
-            e.set_attribute ("name", a.name);
-            e.set_attribute ("value", a.value);
-            e.set_attribute ("metadata", a.metadata);
+            e.set_attribute ("is_encrypted", a.is_encrypted);
+
+            if (a.is_encrypted)
+            {
+                e.set_attribute ("encrypted_value", a.value);
+                e.set_attribute ("value", "<ENCRYPTED>");
+            }
+            else
+                e.set_attribute ("value", a.value.to_string ());
+
+            auto metadata = a.metadata.clone ();
+            metadata.set ("count", a.count);
+            metadata.set ("date_created", a.date_created);
+            metadata.set ("date_last_used", a.date_last_used);
+            metadata.set ("record_number", a.idx);
+            e.set_attribute ("metadata", metadata);
 
             e.set_tag ("app.browser");
             e.add_source (a.f);
@@ -386,6 +463,7 @@ evidence_loader_impl::_save_credit_cards ()
             metadata.set ("nickname", cc.nickname);
             metadata.set ("card_number", cc.card_number);
             metadata.set ("unmasked_date", cc.unmask_date);
+            metadata.set ("record_number", cc.idx);
 
             e.set_attribute ("metadata", metadata);
 
@@ -394,62 +472,7 @@ evidence_loader_impl::_save_credit_cards ()
         }
     }
 }
-
 /*
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Save accounts
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_save_accounts ()
-{
-    for (const auto &p : profiles_)
-    {
-        auto settings = p.get_main_settings ();
-
-        mobius::core::pod::map metadata;
-        metadata.set ("app_id", APP_ID);
-        metadata.set ("app_name", APP_NAME);
-        metadata.set ("network", "BitTorrent");
-        metadata.set ("username", p.get_username ());
-        metadata.set (
-            "total_downloaded_bytes",
-            settings.total_bytes_downloaded
-        );
-        metadata.set ("total_uploaded_bytes", settings.total_bytes_uploaded);
-        metadata.set ("execution_count", settings.execution_count);
-        metadata.set ("installation_time", settings.installation_time);
-        metadata.set ("last_used_time", settings.last_used_time);
-        metadata.set ("last_bin_change_time", settings.last_bin_change_time);
-        metadata.set ("version", settings.version);
-        metadata.set ("installation_version", settings.installation_version);
-        metadata.set ("language", settings.language);
-        metadata.set ("computer_id", settings.computer_id);
-        metadata.set ("auto_start", settings.auto_start ? "yes" : "no");
-
-        for (const auto &account : p.get_accounts ())
-        {
-            auto e_metadata = metadata.clone ();
-            e_metadata.set ("first_dht_timestamp", account.first_dht_timestamp);
-            e_metadata.set ("last_dht_timestamp", account.last_dht_timestamp);
-
-            auto e = item_.new_evidence ("user-account");
-
-            e.set_attribute ("account_type", "p2p.bittorrent");
-            e.set_attribute ("id", account.client_id);
-            e.set_attribute ("password", {});
-            e.set_attribute ("password_found", "no");
-            e.set_attribute ("is_deleted", account.f.is_deleted ());
-            e.set_attribute ("metadata", e_metadata);
-            e.set_tag ("p2p");
-
-            for (const auto &f : account.files)
-                e.add_source (f);
-
-            e.add_source (settings.f);
-        }
-    }
-}
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save local files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

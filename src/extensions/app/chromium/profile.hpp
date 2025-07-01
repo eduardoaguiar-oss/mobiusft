@@ -41,6 +41,42 @@ class profile
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Account structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct account
+    {
+        // @brief GUID
+        std::string id;
+
+        // @brief Name
+        std::string name;
+
+        // @brief Email
+        std::vector<std::string> emails;
+
+        // @brief Phone number
+        std::vector<std::string> phone_numbers;
+
+        // @brief Organizations
+        std::vector<std::string> organizations;
+
+        // @brief Address
+        std::vector<std::string> addresses;
+
+        // @brief Names
+        std::vector<std::string> names;
+
+        // @brief Metadata
+        mobius::core::pod::map metadata;
+
+        // @brief User name
+        std::string username;
+
+        // @brief Source file
+        mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Autofill structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct autofill
@@ -142,8 +178,6 @@ class profile
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // std::vector<account> get_accounts () const;
-    // std::vector<local_file> get_local_files () const;
     void add_preferences_file (const mobius::core::io::file &);
     void add_web_data_file (const mobius::core::io::file &);
 
@@ -174,6 +208,16 @@ class profile
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get accounts
+    // @return Vector of accounts
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<account>
+    get_accounts () const
+    {
+        return accounts_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get autofill entries
     // @return Vector of autofill entries
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -200,23 +244,14 @@ class profile
     // @brief Username
     std::string username_;
 
+    // @brief Accounts
+    std::vector<account> accounts_;
+
     // @brief Autofill entries
     std::vector<autofill> autofill_;
 
     // @brief Credit cards
     std::vector<credit_card> credit_cards_;
-    /*
-        // @brief Accounts
-        std::map<std::string, account> accounts_;
-
-        // @brief Local files
-        std::map<std::string, local_file> local_files_;
-
-        // @brief Main settings
-        settings main_settings_;
-
-        // @brief Settings found
-        std::vector<settings> settings_;*/
 };
 
 } // namespace mobius::extension::app::chromium

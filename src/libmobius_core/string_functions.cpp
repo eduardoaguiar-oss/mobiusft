@@ -616,6 +616,27 @@ word (const std::string &str, int n, const std::string &sep)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief join vector of strings into a single string
+// @param vec vector of strings
+// @param sep separator string
+// @return joined string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+join (const std::vector<std::string> &vec, const std::string &sep)
+{
+    std::string result;
+
+    for (const auto& s : vec)
+    {
+        if (!result.empty ())
+            result += sep;
+        result += s;
+    }
+
+    return result;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief remove all occurrences of 'c' in str
 // @param str string
 // @param c char

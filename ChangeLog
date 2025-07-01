@@ -1,6 +1,9 @@
 Mobius Forensic Toolkit 2.17
 	* Added new C++ extension called "app-chromium"
 	* app-chromium: Retrieve autofill_entry.date_created for versions < 55
+	* app-chromium: Retrieve autofill_profiles as User Accounts
+	* evidence-viewer: Added attribute "names" to User Accounts
+	* libmobius_core: Added new function mobius::string::join
 
 Mobius Forensic Toolkit 2.16
 	* Added new C++ extension called "post-processor-pdi"

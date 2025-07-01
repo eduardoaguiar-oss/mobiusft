@@ -17,19 +17,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "file_web_data.hpp"
-#include <mobius/core/database/database.hpp>
-#include <mobius/core/io/tempfile.hpp>
-#include <mobius/core/log.hpp>
-#include <mobius/core/string_functions.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Web Data file tables
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//
-// VERSIONS UNKNOWN: 1-39, 41, 42, 44, 46, 47, 49-54, 57, 59, 62, 63, 66, 68,
-// 69, 73, 75, 79, 85, 89, 93-95, 99, 101-103, 105, 106, 114, 115, 118, 120-133,
-// 135-
 //
 // - autofill: autofill entries
 //      name: 40??-134
@@ -38,7 +29,7 @@
 //      count: 40??-134
 //      date_created: 55??-134
 //      date_last_used: 55??-134
-
+//
 // - autofill_dates: autofill entry dates
 //      pair_id: 40??-48??
 //      date_created: 40??-48??
@@ -59,7 +50,8 @@
 //      date_modified: 40??-113??
 //      origin: 55??-113??
 //      language_code: 56-113??
-//      full_name: 60??-113??
+//      use_count: 61-134
+//      use_date: 61-134
 //      DELETED: 116??
 //
 // - autofill_profile_addresses: autofill profile addresses
@@ -99,10 +91,25 @@
 //
 // - autofill_profile_names: autofill profile names
 //      guid: 40-58??
-//      first_name: 40-58??
-//      middle_name: 40-58??
-//      last_name: 40-58??
-//      full_name: 58??
+//      first_name: 40-113??
+//      middle_name: 40-113??
+//      last_name: 40-113??
+//      full_name: 58??-113??
+//      honorific_prefix: 88-113??
+//      first_last_name: 88-113??
+//      conjunction_last_name: 88-113??
+//      second_last_name: 88-113??
+//      honorific_prefix_status: 88-113??
+//      first_name_status: 88-113??
+//      middle_name_status: 88-113??
+//      last_name_status: 88-113??
+//      first_last_name_status: 88-113??
+//      conjunction_last_name_status: 88-113??
+//      second_last_name_status: 88-113??
+//      full_name_status: 88-113??
+//      full_name_with_honorific_prefix: 92-113??
+//      full_name_with_honorific_prefix_status: 92-113??
+//      DELETED: 116??
 //
 // - autofill_profile_phones: autofill profile phones
 //      guid: 40-113??
@@ -140,7 +147,7 @@
 //      bank_name: 74??-134
 //      card_issuer: 86??-134
 //      nickname: 84??-134
-
+//
 // - unmasked_credit_cards: unmasked credit card entries
 //      id: 60??-134
 //      card_number_encrypted: 60??-134
@@ -148,100 +155,293 @@
 //      use_date: 64??-84??
 //      unmask_date: 64??-134
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include "file_web_data.hpp"
+#include <mobius/core/database/database.hpp>
+#include <mobius/core/io/tempfile.hpp>
+#include <mobius/core/log.hpp>
+#include <mobius/core/string_functions.hpp>
+#include <unordered_set>
+#include "common.hpp"
 
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Generate SQL statement with version-aware column replacements
-// @param sql_template The SQL template string with
-// ${column,start_version,end_version} placeholders
-// @param schema_version The current schema version to check against
-// @return Processed SQL statement with appropriate columns based on version
+// @brief Unknown schema versions
+// This set contains schema versions that are not recognized or not handled
+// by the current implementation. It is used to identify unsupported versions
+// of the web data schema in Chromium-based applications.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-_generate_sql (const std::string &sql_template, int64_t schema_version)
-{
-    std::string result = sql_template;
-    std::string::size_type pos = 0;
+static std::unordered_set<std::int64_t> UNKNOWN_SCHEMA_VERSIONS = {
+    1,   2,   3,   4,   5,   6,   7,   8,   9,   10,  11,  12,  13,  14,  15,
+    16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,
+    31,  32,  33,  34,  35,  36,  37,  38,  39,  41,  42,  44,  46,  47,  49,
+    50,  51,  52,  53,  54,  57,  59,  62,  63,  66,  68,  69,  73,  75,  79,
+    85,  89,  93,  94,  95,  99,  101, 102, 103, 105, 106, 114, 115, 118, 120,
+    121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133,
+};
 
-    while ((pos = result.find ("${", pos)) != std::string::npos)
-    {
-        // Find the closing bracket
-        auto end_pos = result.find ("}", pos);
-        if (end_pos == std::string::npos)
-        {
-            pos += 2; // Skip the "${" and continue
-            continue;
-        }
-
-        // Extract the placeholder content
-        std::string placeholder = result.substr (pos + 2, end_pos - pos - 2);
-
-        // Split by comma
-        std::vector<std::string> parts;
-        std::string::size_type prev = 0;
-        std::string::size_type comma_pos = 0;
-
-        while ((comma_pos = placeholder.find (',', prev)) != std::string::npos)
-        {
-            parts.push_back (placeholder.substr (prev, comma_pos - prev));
-            prev = comma_pos + 1;
-        }
-        parts.push_back (placeholder.substr (prev));
-
-        // Default to empty string if column should be excluded
-        std::string replacement = "NULL";
-
-        // Get column name and version ranges
-        std::string column_name = parts[0];
-        int64_t start_version = -1;
-        int64_t end_version = std::numeric_limits<int64_t>::max ();
-
-        // Parse start_version if provided
-        if (parts.size () > 1 && !parts[1].empty ())
-        {
-            try
-            {
-                start_version = std::stoll (parts[1]);
-            }
-            catch (...)
-            {
-                // Keep default if parsing fails
-            }
-        }
-
-        // Parse end_version if provided
-        if (parts.size () > 2 && !parts[2].empty ())
-        {
-            try
-            {
-                end_version = std::stoll (parts[2]);
-            }
-            catch (...)
-            {
-                // Keep default if parsing fails
-            }
-        }
-
-        // Check if current schema version is within range
-        if (schema_version >= start_version && schema_version <= end_version)
-            replacement = column_name;
-
-        // Replace the placeholder with the column name or empty string
-        result.replace (pos, end_pos - pos + 1, replacement);
-
-        // Continue searching from current position
-        // No need to advance pos since the replacement might be shorter than
-        // the placeholder
-    }
-
-    return result;
-}
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Last known schema version
+// This constant represents the last schema version that is known and handled
+// by the current implementation. Any schema version greater than this value
+// will be considered unsupported and will trigger a warning in the log.
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static constexpr std::int64_t LAST_KNOWN_SCHEMA_VERSION = 134;
 
 } // namespace
 
 namespace mobius::extension::app::chromium
 {
+namespace
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if profile is in trash
+// @param db Database object
+// @param schema_version Schema version
+// @param guid Profile GUID
+// @return true if profile is in trash, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static bool
+_is_profile_in_trash (
+    mobius::core::database::database &db,
+    std::int64_t schema_version,
+    const std::string &guid
+)
+{
+    if (schema_version < 40 || schema_version > 98)
+        return false;
+
+    auto stmt = db.new_statement (
+        "SELECT 1 "
+        "FROM autofill_profiles_trash "
+        "WHERE guid = ?"
+    );
+
+    stmt.bind (1, guid);
+
+    return stmt.fetch_row ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get profiles addresses
+// @param db Database object
+// @param schema_version Schema version
+// @param guiid Profile GUID
+// @return Vector of autofill profile addresses
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static std::vector<file_web_data::autofill_profile_address>
+_get_profile_addresses (
+    mobius::core::database::database &db,
+    std::int64_t schema_version,
+    const std::string &guid
+)
+{
+    std::vector<file_web_data::autofill_profile_address> addresses;
+
+    if (schema_version < 88 || schema_version > 113)
+        return {};
+
+    mobius::core::database::statement stmt = db.new_statement (generate_sql (
+        "SELECT street_address, "
+        "street_name, "
+        "dependent_street_name, "
+        "house_number, "
+        "subpremise, "
+        "premise_name, "
+        "street_address_status, "
+        "street_name_status, "
+        "dependent_street_name_status, "
+        "house_number_status, "
+        "subpremise_status, "
+        "premise_name_status, "
+        "${dependent_locality,90}, "
+        "${city,90}, "
+        "${state,90}, "
+        "${zip_code,90}, "
+        "${country_code,90}, "
+        "${dependent_locality_status,90}, "
+        "${city_status,90}, "
+        "${state_status,90}, "
+        "${zip_code_status,90}, "
+        "${country_code_status,90}, "
+        "${apartment_number,91}, "
+        "${floor,91}, "
+        "${apartment_number_status,91}, "
+        "${floor_status,91} "
+        "FROM autofill_profile_addresses "
+        "WHERE guid = ?",
+        schema_version
+    ));
+
+    stmt.bind (1, guid);
+
+    // Retrieve records from autofill_profile_addresses table
+    while (stmt.fetch_row ())
+    {
+        file_web_data::autofill_profile_address address;
+        address.street_address = stmt.get_column_string (0);
+        address.street_name = stmt.get_column_string (1);
+        address.dependent_street_name = stmt.get_column_string (2);
+        address.house_number = stmt.get_column_string (3);
+        address.subpremise = stmt.get_column_string (4);
+        address.premise_name = stmt.get_column_string (5);
+        address.dependent_locality = stmt.get_column_string (12);
+        address.city = stmt.get_column_string (13);
+        address.state = stmt.get_column_string (14);
+        address.zip_code = stmt.get_column_string (15);
+        address.country_code = stmt.get_column_string (16);
+        address.apartment_number = stmt.get_column_string (22);
+        address.floor = stmt.get_column_string (23);
+
+        // Add address to the profile
+        addresses.emplace_back (std::move (address));
+    }
+
+    return addresses;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get profile emails
+// @param db Database object
+// @param schema_version Schema version
+// @param guid Profile GUID
+// @return Vector of profile emails
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static std::vector<std::string>
+_get_profile_emails (
+    mobius::core::database::database &db,
+    std::int64_t schema_version,
+    const std::string &guid
+)
+{
+    std::vector<std::string> emails;
+
+    if (schema_version < 40 || schema_version > 113)
+        return emails;
+
+    // Prepare statement to retrieve emails from autofill_profile_emails table
+    mobius::core::database::statement stmt = db.new_statement (generate_sql (
+        "SELECT email "
+        "FROM autofill_profile_emails "
+        "WHERE guid = ?",
+        schema_version
+    ));
+
+    stmt.bind (1, guid);
+
+    // Retrieve records from autofill_profile_emails table
+    while (stmt.fetch_row ())
+        emails.emplace_back (stmt.get_column_string (0));
+
+    return emails;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get profile names
+// @param db Database object
+// @param schema_version Schema version
+// @param guid Profile GUID
+// @return Vector of profile names
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static std::vector<file_web_data::autofill_profile_name>
+_get_profile_names (
+    mobius::core::database::database &db,
+    std::int64_t schema_version,
+    const std::string &guid
+)
+{
+    std::vector<file_web_data::autofill_profile_name> names;
+
+    if (schema_version < 40 || schema_version > 113)
+        return names;
+
+    // Prepare statement to retrieve names from autofill_profile_names table
+    mobius::core::database::statement stmt = db.new_statement (generate_sql (
+        "SELECT first_name, "
+        "middle_name, "
+        "last_name, "
+        "${full_name,58}, "
+        "${honorific_prefix,88}, "
+        "${first_last_name,88}, "
+        "${conjunction_last_name,88}, "
+        "${second_last_name,88}, "
+        "${full_name_with_honorific_prefix,92} "
+        "FROM autofill_profile_names "
+        "WHERE guid = ?",
+        schema_version
+    ));
+
+    stmt.bind (1, guid);
+
+    // Retrieve records from autofill_profile_names table
+    while (stmt.fetch_row ())
+    {
+        file_web_data::autofill_profile_name name;
+
+        name.first_name = stmt.get_column_string (0);
+        name.middle_name = stmt.get_column_string (1);
+        name.last_name = stmt.get_column_string (2);
+        name.full_name = stmt.get_column_string (3);
+        name.honorific_prefix = stmt.get_column_string (4);
+        name.first_last_name = stmt.get_column_string (5);
+        name.conjunction_last_name = stmt.get_column_string (6);
+        name.second_last_name = stmt.get_column_string (7);
+        name.full_name_with_honorific_prefix = stmt.get_column_string (8);
+
+        // Add name to the profile
+        names.emplace_back (std::move (name));
+    }
+
+    return names;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get profile phones
+// @param db Database object
+// @param schema_version Schema version
+// @param guid Profile GUID
+// @return Vector of profile phones
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static std::vector<file_web_data::autofill_profile_phone>
+_get_profile_phones (
+    mobius::core::database::database &db,
+    std::int64_t schema_version,
+    const std::string &guid
+)
+{
+    std::vector<file_web_data::autofill_profile_phone> phones;
+
+    if (schema_version < 40 || schema_version > 113)
+        return phones;
+
+    // Prepare statement to retrieve phones from autofill_profile_phones table
+    mobius::core::database::statement stmt = db.new_statement (generate_sql (
+        "SELECT ${type,40,48}, "
+        "number "
+        "FROM autofill_profile_phones "
+        "WHERE guid = ?",
+        schema_version
+    ));
+
+    stmt.bind (1, guid);
+
+    // Retrieve records from autofill_profile_phones table
+    while (stmt.fetch_row ())
+    {
+        file_web_data::autofill_profile_phone phone;
+
+        phone.type = stmt.get_column_string (0);
+        phone.number = stmt.get_column_string (1);
+
+        // Add phone to the profile
+        phones.emplace_back (std::move (phone));
+    }
+
+    return phones;
+}
+
+} // namespace
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // @param reader Reader object
@@ -253,15 +453,15 @@ file_web_data::file_web_data (const mobius::core::io::reader &reader)
     if (!reader)
         return;
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Copy reader content to temporary file
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::io::tempfile tfile;
     tfile.copy_from (reader);
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Get schema version
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::database::database db (tfile.get_path ());
 
     auto stmt = db.new_statement (
@@ -276,10 +476,21 @@ file_web_data::file_web_data (const mobius::core::io::reader &reader)
     else
         return;
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (schema_version_ > LAST_KNOWN_SCHEMA_VERSION ||
+        UNKNOWN_SCHEMA_VERSIONS.find (schema_version_) !=
+            UNKNOWN_SCHEMA_VERSIONS.end ())
+    {
+        log.development (
+            __LINE__,
+            "Unhandled schema version: " + std::to_string (schema_version_)
+        );
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Load data
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     _load_autofill_entries (db);
+    _load_autofill_profiles (db);
     _load_credit_cards (db);
     _load_masked_credit_cards (db);
 
@@ -297,14 +508,22 @@ file_web_data::_load_autofill_entries (mobius::core::database::database &db)
 
     if (schema_version_ < 55)
         stmt = db.new_statement (
-            "SELECT a.name, a.value, a.count, d.date_created, NULL "
+            "SELECT a.name, "
+            "a.value, "
+            "a.count, "
+            "d.date_created, "
+            "NULL "
             "FROM autofill a "
             "LEFT JOIN autofill_dates d ON a.pair_id = d.pair_id"
         );
 
     else
         stmt = db.new_statement (
-            "SELECT name, value, count, date_created, date_last_used "
+            "SELECT name, "
+            "value, "
+            "count, "
+            "date_created, "
+            "date_last_used "
             "FROM autofill"
         );
 
@@ -319,19 +538,118 @@ file_web_data::_load_autofill_entries (mobius::core::database::database &db)
         entry.name = stmt.get_column_string (0);
         entry.value = stmt.get_column_bytearray (1);
         entry.count = stmt.get_column_int (2);
-        entry.date_created =
-            mobius::core::datetime::new_datetime_from_unix_timestamp (
-                stmt.get_column_int64 (3)
-            );
-        entry.date_last_used =
-            mobius::core::datetime::new_datetime_from_unix_timestamp (
-                stmt.get_column_int64 (4)
-            );
+        entry.date_created = get_datetime (stmt.get_column_int64 (3));
+        entry.date_last_used = get_datetime (stmt.get_column_int64 (4));
         entry.is_encrypted =
             entry.value.startswith ("v10") || entry.value.startswith ("v20");
 
         // Add entry to the list
         autofill_entries_.emplace_back (std::move (entry));
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load autofill profiles
+// @param db Database object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file_web_data::_load_autofill_profiles (mobius::core::database::database &db)
+{
+    // Check schema version
+    if (schema_version_ < 40 || schema_version_ > 113)
+    {
+        mobius::core::log log (__FILE__, __FUNCTION__);
+        log.development (
+            __LINE__,
+            "Unsupported schema version for autofill profiles: " +
+                std::to_string (schema_version_)
+        );
+        return;
+    }
+
+    // Prepare SQL statement for table autofill_profiles
+    mobius::core::database::statement stmt = db.new_statement (generate_sql (
+        "SELECT guid, "
+        "company_name, "
+        "${address_line_1,40,48}, "
+        "${address_line_2,40,48}, "
+        "${street_address,55}, "
+        "${dependent_locality,55}, "
+        "city, "
+        "state, "
+        "zipcode, "
+        "country_code, "
+        "${country,40,48}, "
+        "${date_modified,40}, "
+        "${origin,55}, "
+        "${language_code,56}, "
+        "${use_count,61}, "
+        "${use_date,61} "
+        "FROM autofill_profiles p",
+        schema_version_
+    ));
+
+    // Retrieve records from autofill_profiles table
+    std::uint64_t idx = 0;
+
+    while (stmt.fetch_row ())
+    {
+        autofill_profile profile;
+
+        // Set profile fields
+        profile.idx = idx++;
+        profile.guid = stmt.get_column_string (0);
+        profile.company_name = stmt.get_column_string (1);
+        profile.date_modified = get_datetime (stmt.get_column_int64 (11));
+        profile.origin = stmt.get_column_string (12);
+        profile.language_code = stmt.get_column_string (13);
+        profile.use_count = stmt.get_column_int64 (14);
+        profile.date_last_used = get_datetime (stmt.get_column_int64 (15));
+
+        profile.is_in_trash =
+            _is_profile_in_trash (db, schema_version_, profile.guid);
+        profile.addresses =
+            _get_profile_addresses (db, schema_version_, profile.guid);
+        profile.emails =
+            _get_profile_emails (db, schema_version_, profile.guid);
+        profile.names = _get_profile_names (db, schema_version_, profile.guid);
+        profile.phones =
+            _get_profile_phones (db, schema_version_, profile.guid);
+
+        // Create address, if available
+        auto address_line_1 = stmt.get_column_string (2);
+        auto address_line_2 = stmt.get_column_string (3);
+        auto street_address = stmt.get_column_string (4);
+        auto dependent_locality = stmt.get_column_string (5);
+        auto city = stmt.get_column_string (6);
+        auto state = stmt.get_column_string (7);
+        auto zip_code = stmt.get_column_string (8);
+        auto country_code = stmt.get_column_string (9);
+        auto country = stmt.get_column_string (10);
+
+        if (!address_line_1.empty () || !address_line_2.empty () ||
+            !street_address.empty () || !dependent_locality.empty () ||
+            !city.empty () || !state.empty () || !zip_code.empty () ||
+            !country_code.empty () || !country.empty ())
+        {
+            autofill_profile_address address;
+
+            address.address_line_1 = std::move (address_line_1);
+            address.address_line_2 = std::move (address_line_2);
+            address.street_address = std::move (street_address);
+            address.dependent_locality = std::move (dependent_locality);
+            address.city = std::move (city);
+            address.state = std::move (state);
+            address.zip_code = std::move (zip_code);
+            address.country_code = std::move (country_code);
+            address.country = std::move (country);
+
+            // Add address to the profile
+            profile.addresses.emplace_back (std::move (address));
+        }
+
+        // Add profile to the list
+        autofill_profiles_.emplace_back (std::move (profile));
     }
 }
 
@@ -343,7 +661,7 @@ void
 file_web_data::_load_credit_cards (mobius::core::database::database &db)
 {
     // Prepare SQL statement for table credit_cards
-    mobius::core::database::statement stmt = db.new_statement (_generate_sql (
+    mobius::core::database::statement stmt = db.new_statement (generate_sql (
         "SELECT guid, "
         "name_on_card, "
         "expiration_month, "
@@ -370,21 +688,11 @@ file_web_data::_load_credit_cards (mobius::core::database::database &db)
         card.expiration_month = stmt.get_column_int64 (2);
         card.expiration_year = stmt.get_column_int64 (3);
         card.card_number_encrypted = stmt.get_column_bytearray (4);
+        card.date_modified = get_datetime(stmt.get_column_int64 (5));
         card.origin = stmt.get_column_string (6);
         card.use_count = stmt.get_column_int64 (7);
+        card.use_date = get_datetime(stmt.get_column_int64 (8));
         card.nickname = stmt.get_column_string (9);
-
-        auto timestamp = stmt.get_column_int64 (5);
-        card.date_modified =
-            mobius::core::datetime::new_datetime_from_unix_timestamp (
-                timestamp
-            );
-
-        timestamp = stmt.get_column_int64 (8);
-        card.use_date =
-            mobius::core::datetime::new_datetime_from_unix_timestamp (
-                timestamp
-            );
 
         card.metadata.set ("guid", stmt.get_column_string (0));
         card.is_encrypted = card.card_number_encrypted.startswith ("v10") ||
@@ -407,7 +715,7 @@ file_web_data::_load_masked_credit_cards (mobius::core::database::database &db)
 
     // Prepare SQL statement for tables masked_credit_cards and
     // unmasked_credit_cards
-    auto stmt = db.new_statement (_generate_sql (
+    auto stmt = db.new_statement (generate_sql (
         "SELECT m.id, "
         "${m.status,60,97}, "
         "${m.name_on_card,60}, "
@@ -447,22 +755,13 @@ file_web_data::_load_masked_credit_cards (mobius::core::database::database &db)
         card.nickname = stmt.get_column_string (10);
         card.card_number_encrypted = stmt.get_column_bytearray (11);
         card.use_count = stmt.get_column_int64 (12);
+        card.use_date = get_datetime(stmt.get_column_int64 (13));
+        card.unmask_date = get_datetime(stmt.get_column_int64 (14));
+
         auto last_four = stmt.get_column_string (4);
 
         if (!last_four.empty ())
             card.card_number = std::string ("**** **** **** ") + last_four;
-
-        auto timestamp = stmt.get_column_int64 (13);
-        card.use_date =
-            mobius::core::datetime::new_datetime_from_unix_timestamp (
-                timestamp
-            );
-
-        timestamp = stmt.get_column_int64 (14);
-        card.unmask_date =
-            mobius::core::datetime::new_datetime_from_unix_timestamp (
-                timestamp
-            );
 
         card.metadata.set ("last_four", last_four);
         card.metadata.set ("id", stmt.get_column_string (0));

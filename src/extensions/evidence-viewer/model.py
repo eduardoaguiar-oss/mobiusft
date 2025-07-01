@@ -723,6 +723,7 @@ MODEL = [
                       args(id='name'),
                       args(id='password'),
                       args(id='password_found'),
+                      args(id='names', name='Names', format="multiline"),
                       args(id='phones', name='Phones', format="multiline"),
                       args(id='addresses', name='Addresses', format="multiline"),
                       args(id='emails', name='E-mails', format="multiline"),

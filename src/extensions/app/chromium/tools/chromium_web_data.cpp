@@ -63,9 +63,9 @@ show_web_data (const std::string &path)
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Show autofill profiles
+    // Show autofill entries
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::cout << "Autofill entries:" << std::endl;
+    /*std::cout << "Autofill entries:" << std::endl;
 
     for (const auto &entry : dat.get_autofill_entries ())
     {
@@ -86,12 +86,103 @@ show_web_data (const std::string &path)
         std::cout << "\tCount: " << entry.count << std::endl;
         std::cout << "\tIs encrypted: " << (entry.is_encrypted ? "yes" : "no")
                   << std::endl;
+    }*/
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Show autofill profiles
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::cout << std::endl;
+    std::cout << "Autofill profiles:" << std::endl;
+    for (const auto &profile : dat.get_autofill_profiles ())
+    {
+        std::cout << std::endl;
+        std::cout << "\tIndex: " << profile.idx << std::endl;
+        std::cout << "\tGUID: " << profile.guid << std::endl;
+        std::cout << "\tCompany name: " << profile.company_name << std::endl;
+        std::cout << "\tDate modified: " << profile.date_modified << std::endl;
+        std::cout << "\tOrigin: " << profile.origin << std::endl;
+        std::cout << "\tLanguage code: " << profile.language_code << std::endl;
+        std::cout << "\tUse count: " << profile.use_count << std::endl;
+        std::cout << "\tDate last used: " << profile.date_last_used
+                  << std::endl;
+
+        // show names
+        for (const auto &name : profile.names)
+        {
+            std::cout << "\tName:" << std::endl;
+            std::cout << "\t\tFirst name: " << name.first_name << std::endl;
+            std::cout << "\t\tMiddle name: " << name.middle_name << std::endl;
+            std::cout << "\t\tLast name: " << name.last_name << std::endl;
+            std::cout << "\t\tFull name: " << name.full_name << std::endl;
+            if (!name.honorific_prefix.empty ())
+                std::cout << "\t\tHonorific prefix: " << name.honorific_prefix
+                          << std::endl;
+            if (!name.first_last_name.empty ())
+                std::cout << "\t\tFirst last name: " << name.first_last_name
+                          << std::endl;
+            if (!name.conjunction_last_name.empty ())
+                std::cout << "\t\tConjunction last name: "
+                          << name.conjunction_last_name << std::endl;
+            if (!name.second_last_name.empty ())
+                std::cout << "\t\tSecond last name: " << name.second_last_name
+                          << std::endl;
+            if (!name.full_name_with_honorific_prefix.empty ())
+                std::cout << "\t\tFull name with honorific prefix: "
+                          << name.full_name_with_honorific_prefix << std::endl;
+        }
+
+        // show addresses
+        for (const auto &address : profile.addresses)
+        {
+            std::cout << "\tAddress:" << std::endl;
+            std::cout << "\t\tAddress line 1: " << address.address_line_1
+                      << std::endl;
+            std::cout << "\t\tAddress line 2: " << address.address_line_2
+                      << std::endl;
+            std::cout << "\t\tStreet address: " << address.street_address
+                      << std::endl;
+            std::cout << "\t\tStreet name: " << address.street_name
+                      << std::endl;
+            std::cout << "\t\tDependent street name: "
+                      << address.dependent_street_name << std::endl;
+            std::cout << "\t\tHouse number: " << address.house_number
+                      << std::endl;
+            std::cout << "\t\tSubpremise: " << address.subpremise << std::endl;
+            std::cout << "\t\tPremise name: " << address.premise_name
+                      << std::endl;
+            std::cout << "\t\tDependent locality: "
+                      << address.dependent_locality << std::endl;
+            std::cout << "\t\tCity: " << address.city << std::endl;
+            std::cout << "\t\tState: " << address.state << std::endl;
+            std::cout << "\t\tZip code: " << address.zip_code << std::endl;
+            std::cout << "\t\tCountry code: " << address.country_code
+                      << std::endl;
+            std::cout << "\t\tApartment number: " << address.apartment_number
+                      << std::endl;
+            std::cout << "\t\tFloor: " << address.floor << std::endl;
+            std::cout << "\t\tCountry: " << address.country << std::endl;
+        }
+
+        // show emails
+        std::cout << "\tEmails:" << std::endl;
+        for (const auto &email : profile.emails)
+        {
+            std::cout << "\t\t" << email << std::endl;
+        }
+
+        // show phones
+        std::cout << "\tPhones:" << std::endl;
+        for (const auto &phone : profile.phones)
+        {
+            std::cout << "\t\tType: " << phone.type << std::endl;
+            std::cout << "\t\tNumber: " << phone.number << std::endl;
+        }
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Show credit cards
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::cout << std::endl;
+    /*std::cout << std::endl;
     std::cout << "Credit cards:" << std::endl;
 
     for (const auto &card : dat.get_credit_cards ())
@@ -123,7 +214,7 @@ show_web_data (const std::string &path)
         std::cout << "\tMetadata:" << std::endl;
         for (const auto &[k, v] : card.metadata)
             std::cout << "\t\t" << k << ": " << v << std::endl;
-    }
+    }*/
 }
 
 } // namespace

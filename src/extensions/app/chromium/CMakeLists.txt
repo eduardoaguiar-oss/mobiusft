@@ -27,7 +27,10 @@ project(app_chromium LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(app_chromium MODULE
     main.cpp
+    common.cpp
     evidence_loader_impl.cpp
+    file_history.cpp
+    file_web_data.cpp
     profile.cpp
 )
 
@@ -39,11 +42,24 @@ target_link_libraries(app_chromium PRIVATE Mobius::Framework Mobius::Core)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_executable(tools_chromium_web_data
     tools/chromium_web_data.cpp
+    common.cpp
     file_web_data.cpp
 )
 
 set_target_properties(tools_chromium_web_data PROPERTIES OUTPUT_NAME "chromium_web_data")
 target_link_libraries(tools_chromium_web_data PRIVATE Mobius::Core)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: chromium_history
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_executable(tools_chromium_history
+    tools/chromium_history.cpp
+    common.cpp
+    file_history.cpp
+)
+
+set_target_properties(tools_chromium_history PROPERTIES OUTPUT_NAME "chromium_history")
+target_link_libraries(tools_chromium_history PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation
