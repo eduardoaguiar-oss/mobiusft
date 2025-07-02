@@ -37,8 +37,8 @@ Whether you're a digital forensics expert or a beginner, the Mobius Forensic Too
 - **Mailing List**: Stay updated with the latest developments and connect with other users through the official Mobius mailing list.
 
 ## Getting project files
-Download the latest version of the Mobius Forensic Toolkit from the official website:  
-[https://www.nongnu.org/mobiusft](https://www.nongnu.org/mobiusft).
+Download the latest version of the Mobius Forensic Toolkit from GitHub:  
+[https://www.github.com/eduardoaguiar-oss/mobiusft/releases](https://www.github.com/eduardoaguiar-oss/mobiusft/releases).
 
 You can download the latest development version from GitHub repository:  
 [https://www.github.com/eduardoaguiar-oss/mobiusft](https://www.github.com/eduardoaguiar-oss/mobiusft).
@@ -86,6 +86,7 @@ We extend our gratitude to the following organizations and individuals for their
 - **Everaldo's Crystal Interaction Design Project** ([https://everaldo.com/crystal](https://everaldo.com/crystal)) for their beautiful icon designs.
 - **Wikimedia Commons** ([https://commons.wikimedia.org](https://commons.wikimedia.org)) for their extensive collection of resources.
 - **GNU Savannah** ([https://savannah.nongnu.org](https://savannah.nongnu.org)) for hosting this project.
+- **GitHub** ([https://www.github.com](https://www.github.com)) for hosting this project.
 - **Beatae Mariae Virgini.**
 
 Thank you for using the **Mobius Forensic Toolkit**. Your support and feedback are invaluable in helping us improve and grow this project.
