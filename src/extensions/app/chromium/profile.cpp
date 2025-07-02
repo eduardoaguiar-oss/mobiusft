@@ -21,6 +21,7 @@
 #include <mobius/core/log.hpp>
 #include <mobius/core/value_selector.hpp>
 #include <algorithm>
+#include "file_history.hpp"
 #include "file_web_data.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -280,6 +281,49 @@ profile::add_web_data_file (const mobius::core::io::file &f)
     }
 
     is_valid_ = true;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add History file
+// @param f History file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_history_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode file
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    file_history fh (f.new_reader ());
+
+    if (!fh)
+    {
+        log.info (__LINE__, "File is not a valid 'History' file");
+        return;
+    }
+
+    log.info (
+        __LINE__,
+        "File " + f.get_path () + " is a valid 'History' file"
+    );
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Add history entries
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &entry : fh.get_history_entries ())
+    {
+        history_entry e;
+
+        e.idx = entry.idx;
+        e.url = entry.url;
+        e.title = entry.title;
+        e.visit_time = entry.visit_time;
+        e.visit_id = entry.visit_id;
+        e.f = f;
+
+        history_entries_.push_back (e);
+    }
 }
 
 /*

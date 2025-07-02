@@ -176,10 +176,35 @@ class profile
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief History entry structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct history_entry
+    {
+        // @brief Record number
+        std::uint64_t idx = 0;
+
+        // @brief URL
+        std::string url;
+
+        // @brief Title
+        std::string title;
+
+        // @brief Visit time
+        mobius::core::datetime::datetime visit_time;
+
+        // @brief Visit ID
+        std::int64_t visit_id = 0;
+
+        // @brief Source file
+        mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void add_preferences_file (const mobius::core::io::file &);
     void add_web_data_file (const mobius::core::io::file &);
+    void add_history_file (const mobius::core::io::file &);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Check if profile is valid
@@ -237,6 +262,16 @@ class profile
         return credit_cards_;
     }
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get history entries
+    // @return Vector of history entries
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<history_entry>
+    get_history_entries () const
+    {
+        return history_entries_;
+    }
+    
   private:
     // @brief Check if profile is valid
     bool is_valid_ = false;
@@ -252,6 +287,9 @@ class profile
 
     // @brief Credit cards
     std::vector<credit_card> credit_cards_;
+
+    // @brief History entries
+    std::vector<history_entry> history_entries_;
 };
 
 } // namespace mobius::extension::app::chromium

@@ -15,7 +15,6 @@ br.answers.search.yahoo.com	/search	p
 br.search.yahoo.com	/search	p
 busca.drogaraia.com.br	/search	w
 busca.onofre.com.br	/search	w
-buscando.extra.com.br	/	strBusca
 buscas.casasbahia.com.br	/	strBusca
 empresas.americanas.com.br	/busca	conteudo
 empresas.americanas.com.br	/busca/	conteudo

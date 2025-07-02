@@ -28,13 +28,83 @@
 // History file tables
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //
-// - autofill: autofill entries
-//      name: 40??-134
-//      value: 40??-134
-//      pair_id: 40??-48??
-//      count: 40??-134
-//      date_created: 55??-134
-//      date_last_used: 55??-134
+// - downloads: Downloads
+//      id: 20??-69
+//      full_path: 20??-[23,28[
+//      url: 20??-[23,28[
+//      start_time: 20??-69
+//      received_bytes: 20??-69
+//      total_bytes: 20??-69
+//      state: 20??-69
+//      end_time: 20??-69
+//      opened: 20??-69
+//      guid: 30-69
+//      current_path: ]23,28]-69
+//      target_path: ]23,28]-69
+//      danger_type: ]23,28]-69
+//      interrupt_reason: ]23,28]-69
+//      hash: 30-69
+//      last_access_time: ]33,36]-69
+//      transient: ]33,36]-69
+//      referrer: ]23,28]-69
+//      site_url: ]30,32]-69
+//      embedder_download_data: ]51,53]-69
+//      tab_url: ]30,32]-69
+//      tab_referrer_url: ]30,32]-69
+//      http_method: 30-69
+//      by_ext_id: ]23,28]-69
+//      by_ext_name: ]23,28]-69
+//      by_web_app_id: ]63,65]-69
+//      etag: ]23,28]-69
+//      last_modified: ]23,28]-69
+//      mime_type: 29-69
+//      original_mime_type: 29-69
+//
+// - downloads_url_chains: Download URL chains
+//      CREATED: ]23,28]
+//      id: ]23,28]-69
+//      chain_index: ]23,28]-69
+//      url: ]23,28]-69
+//
+// - keyword_search_terms: Keyword search terms
+//      keyword_id: 20??-69
+//      url_id: 20??-69
+//      lower_term: 20??-41
+//      term: 20??-69
+//      normalized_term: 42-69
+//
+// - urls: URLs
+//      id: 20??-69
+//      url: 20??-69
+//      title: 20??-69
+//      visit_count: 20??-69
+//      typed_count: 20??-69
+//      last_visit_time: 20??-69
+//      hidden: 20??-69
+//      favicon_id: 20??-[33,36[
+//
+// - visits: Visits
+//      id: 20??-69
+//      url: 20??-69
+//      visit_time: 20??-69
+//      from_visit: 20??-69
+//      transition: 20??-69
+//      segment_id: 20??-69
+//      is_indexed: 20??-[23,28[
+//      visit_duration: ]20,22]-69
+//      incremented_omnibox_typed_score: ]39,41]-69
+//      publicly_routable: 43-[48,50[
+//      opened_visit: ]48,50]-69
+//      originator_cache_guid: ]53,55]-69
+//      originator_visit_id: ]53,55]-69
+//      originator_from_visit: 56-69
+//      originator_opener_visit: 56-69
+//      is_known_to_sync: 59-69
+//      consider_for_ntp_most_visited: 63-69
+//      external_referrer_url: 66-69
+//      visited_link_id: 67-69
+//      app_id: 69-69
+
 
 namespace
 {

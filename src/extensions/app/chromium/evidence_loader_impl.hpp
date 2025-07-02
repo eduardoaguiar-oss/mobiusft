@@ -95,14 +95,10 @@ class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
     void _save_evidences ();
     void _save_autofills ();
     void _save_credit_cards ();
+    void _save_visited_urls ();
 
     void _save_accounts ();
-    void _save_ip_addresses ();
-    void _save_local_files ();
-    void _save_p2p_remote_files ();
     void _save_received_files ();
-    void _save_sent_files ();
-    void _save_shared_files ();
 };
 
 } // namespace mobius::extension::app::chromium
