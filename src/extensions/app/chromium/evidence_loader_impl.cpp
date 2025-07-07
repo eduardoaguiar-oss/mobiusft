@@ -493,6 +493,7 @@ evidence_loader_impl::_save_visited_urls ()
 
             auto metadata = mobius::core::pod::map();
             metadata.set ("record_number", entry.idx);
+            metadata.set ("visit_id", entry.visit_id);
             metadata.set ("app_id", APP_ID);
             metadata.set ("app_name", APP_NAME);
             e.set_attribute ("metadata", metadata);

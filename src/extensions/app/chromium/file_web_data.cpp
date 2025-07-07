@@ -23,17 +23,30 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //
 // - autofill: autofill entries
-//      name: 40??-134
-//      value: 40??-134
-//      pair_id: 40??-48??
-//      count: 40??-134
-//      date_created: 55??-134
-//      date_last_used: 55??-134
+//      - count: 40, 43, 45, 48, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78,
+//      80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119, 122, 125,
+//      127, 130, 132, 134-135
+//      - date_created: 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84,
+//      86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119, 122, 125, 127,
+//      130, 132, 134-135
+//      - date_last_used: 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84,
+//      86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119, 122, 125, 127,
+//      130, 132, 134-135
+//      - guid: 83-84, 87-88, 90
+//      - name: 40, 43, 45, 48, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78,
+//      80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119, 122, 125,
+//      127, 130, 132, 134-135
+//      - pair_id: 40, 43, 45, 48
+//      - value: 40, 43, 45, 48, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78,
+//      80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119, 122, 125,
+//      127, 130, 132, 134-135
+//      - value_lower: 40, 43, 45, 48, 55-56, 58, 60-61, 64-65, 67, 70-72, 74,
+//      76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119, 122,
+//      125, 127, 130, 132, 134-135
 //
 // - autofill_dates: autofill entry dates
-//      pair_id: 40??-48??
-//      date_created: 40??-48??
-//      DELETED: 55??
+//      - date_created: 40, 43, 45, 48
+//      - pair_id: 40, 43, 45, 48
 //
 // - autofill_profiles: autofill profiles
 //      guid: 40??-113??
@@ -50,8 +63,8 @@
 //      date_modified: 40??-113??
 //      origin: 55??-113??
 //      language_code: 56-113??
-//      use_count: 61-134
-//      use_date: 61-134
+//      use_count: 61-135
+//      use_date: 61-135
 //      DELETED: 116??
 //
 // - autofill_profile_addresses: autofill profile addresses
@@ -122,38 +135,41 @@
 //      DELETED: 100??
 //
 // - credit_cards: credit card entries
-//      guid: 40??-134
-//      name_on_card: 40??-134
-//      expiration_month: 40??-134
-//      expiration_year: 40??-134
-//      card_number_encrypted: 40??-134
-//      date_modified: 40??-134
-//      origin: 55??-134
-//      use_count: 61-134
-//      use_date: 61-134
-//      billing_address_id: 67??-134
-//      nickname: 87-134
+//      guid: 40??-135
+//      name_on_card: 40??-135
+//      expiration_month: 40??-135
+//      expiration_year: 40??-135
+//      card_number_encrypted: 40??-135
+//      date_modified: 40??-135
+//      origin: 55??-135
+//      use_count: 61-135
+//      use_date: 61-135
+//      billing_address_id: 67??-135
+//      nickname: 87-135
 //
 // - masked_credit_cards: masked credit card entries
-//      id: 60??-134
+//      id: 60??-135
 //      status: 60??-97
-//      name_on_card??: 60-134
+//      name_on_card??: 60-135
 //      type: 60??-71,74??-82
-//      last_four: 60??-134
-//      exp_month: 60??-134
-//      exp_year: 60??-134
+//      last_four: 60??-135
+//      exp_month: 60??-135
+//      exp_year: 60??-135
 //      billing_address_id: 67??-70
-//      network: 72-134
-//      bank_name: 74??-134
-//      card_issuer: 86??-134
-//      nickname: 84??-134
+//      network: 72-135
+//      bank_name: 74??-135
+//      card_issuer: 86??-135
+//      nickname: 84??-135
 //
 // - unmasked_credit_cards: unmasked credit card entries
-//      id: 60??-134
-//      card_number_encrypted: 60??-134
-//      use_count: 64??-84??
-//      use_date: 64??-84??
-//      unmask_date: 64??-134
+//    - card_number_encrypted: 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88,
+//    90-92, 96-98, 100, 104, 107-113, 116-117, 119, 122, 130, 132, 134-135
+//    - id: 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100,
+//    104, 107-113, 116-117, 119, 122, 130, 132, 134-135
+//    - unmask_date: 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98,
+//    100, 104, 107-113, 116-117, 119, 122, 130, 132, 134-135
+//    - use_count: 64-65, 67, 70-72, 74, 76-78, 80-84
+//    - use_date: 64-65, 67, 70-72, 74, 76-78, 80-84
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file_web_data.hpp"
 #include <mobius/core/database/database.hpp>
@@ -172,12 +188,12 @@ namespace
 // of the web data schema in Chromium-based applications.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::unordered_set<std::int64_t> UNKNOWN_SCHEMA_VERSIONS = {
-    1,   2,   3,   4,   5,   6,   7,   8,   9,   10,  11,  12,  13,  14,  15,
-    16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,
-    31,  32,  33,  34,  35,  36,  37,  38,  39,  41,  42,  44,  46,  47,  49,
-    50,  51,  52,  53,  54,  57,  59,  62,  63,  66,  68,  69,  73,  75,  79,
-    85,  89,  93,  94,  95,  99,  101, 102, 103, 105, 106, 114, 115, 118, 120,
-    121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133,
+    1,   2,   3,   4,   5,   6,   7,   8,   9,   10,  11,  12,  13,  14,
+    15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,
+    29,  30,  31,  32,  33,  34,  35,  36,  37,  38,  39,  41,  42,  44,
+    46,  47,  49,  50,  51,  52,  53,  54,  57,  59,  62,  63,  66,  68,
+    69,  73,  75,  79,  85,  89,  93,  94,  95,  99,  101, 102, 103, 105,
+    106, 114, 115, 118, 120, 121, 123, 124, 126, 128, 129, 131, 133,
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -186,7 +202,7 @@ static std::unordered_set<std::int64_t> UNKNOWN_SCHEMA_VERSIONS = {
 // by the current implementation. Any schema version greater than this value
 // will be considered unsupported and will trigger a warning in the log.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static constexpr std::int64_t LAST_KNOWN_SCHEMA_VERSION = 134;
+static constexpr std::int64_t LAST_KNOWN_SCHEMA_VERSION = 135;
 
 } // namespace
 
@@ -557,15 +573,7 @@ file_web_data::_load_autofill_profiles (mobius::core::database::database &db)
 {
     // Check schema version
     if (schema_version_ < 40 || schema_version_ > 113)
-    {
-        mobius::core::log log (__FILE__, __FUNCTION__);
-        log.development (
-            __LINE__,
-            "Unsupported schema version for autofill profiles: " +
-                std::to_string (schema_version_)
-        );
         return;
-    }
 
     // Prepare SQL statement for table autofill_profiles
     mobius::core::database::statement stmt = db.new_statement (generate_sql (
@@ -688,10 +696,10 @@ file_web_data::_load_credit_cards (mobius::core::database::database &db)
         card.expiration_month = stmt.get_column_int64 (2);
         card.expiration_year = stmt.get_column_int64 (3);
         card.card_number_encrypted = stmt.get_column_bytearray (4);
-        card.date_modified = get_datetime(stmt.get_column_int64 (5));
+        card.date_modified = get_datetime (stmt.get_column_int64 (5));
         card.origin = stmt.get_column_string (6);
         card.use_count = stmt.get_column_int64 (7);
-        card.use_date = get_datetime(stmt.get_column_int64 (8));
+        card.use_date = get_datetime (stmt.get_column_int64 (8));
         card.nickname = stmt.get_column_string (9);
 
         card.metadata.set ("guid", stmt.get_column_string (0));
@@ -755,8 +763,8 @@ file_web_data::_load_masked_credit_cards (mobius::core::database::database &db)
         card.nickname = stmt.get_column_string (10);
         card.card_number_encrypted = stmt.get_column_bytearray (11);
         card.use_count = stmt.get_column_int64 (12);
-        card.use_date = get_datetime(stmt.get_column_int64 (13));
-        card.unmask_date = get_datetime(stmt.get_column_int64 (14));
+        card.use_date = get_datetime (stmt.get_column_int64 (13));
+        card.unmask_date = get_datetime (stmt.get_column_int64 (14));
 
         auto last_four = stmt.get_column_string (4);
 

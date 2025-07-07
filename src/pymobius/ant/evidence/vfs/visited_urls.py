@@ -19,13 +19,12 @@ import traceback
 
 import mobius
 import pymobius
-import pymobius.app.chromium
 import pymobius.app.gecko
 import pymobius.app.internet_explorer
 
 ANT_ID = 'visited-urls'
 ANT_NAME = 'Visited URLs'
-ANT_VERSION = '1.1'
+ANT_VERSION = '1.2'
 EVIDENCE_TYPE = 'visited-url'
 
 
@@ -54,49 +53,10 @@ class Ant(object):
 
         self.__entries = []
 
-        self.__retrieve_chromium()
         self.__retrieve_gecko()
         self.__retrieve_internet_explorer()
 
         self.__save_data()
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from Chromium based browsers
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_chromium(self):
-        model = pymobius.app.chromium.model(self.__item)
-
-        for profile in model.get_profiles():
-            self.__retrieve_chromium_profile(profile)
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from Chromium based browsers
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_chromium_profile(self, profile):
-        try:
-            for entry in profile.get_history():
-                if not entry.url.startswith('file://'):
-                    v = pymobius.Data()
-                    v.timestamp = entry.timestamp
-                    v.url = entry.url
-                    v.title = entry.title
-                    v.username = entry.username
-                    v.evidence_source = ''
-
-                    v.metadata = mobius.core.pod.map()
-                    v.metadata.set('id', entry.id)
-                    v.metadata.set('profile-id', profile.name)
-                    v.metadata.set('profile-path', profile.path)
-
-                    if profile.creation_time:
-                        v.metadata.set('profile-creation-time', profile.creation_time)
-
-                    v.metadata.set('app-id', profile.app_id)
-                    v.metadata.set('app-name', profile.app_name)
-
-                    self.__entries.append(v)
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Retrieve data from Gecko based browsers

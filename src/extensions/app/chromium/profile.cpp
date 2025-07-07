@@ -324,6 +324,8 @@ profile::add_history_file (const mobius::core::io::file &f)
 
         history_entries_.push_back (e);
     }
+
+    is_valid_ = true;
 }
 
 /*

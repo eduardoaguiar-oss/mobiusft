@@ -31,7 +31,7 @@ namespace
 // console. When set to false, debug output will be suppressed. This can be
 // useful for development and troubleshooting purposes.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static constexpr bool DEBUG = true;
+static constexpr bool DEBUG = false;
 
 } // namespace
 

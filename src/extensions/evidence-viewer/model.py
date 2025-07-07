@@ -186,8 +186,31 @@ class Getter(object):
 # detail_views: list of detail views for this evidence type
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 MODEL = [
+    args(id="app-profile",
+         name="Application Profiles",
+         description="Applications' profiles",
+         master_views=[
+             args(id="table",
+                  columns=[
+                      args(id='username', is_sortable=True),
+                      args(id='app_name', name="Application", is_sortable=True),
+                      args(id='last_modified_time', name="Last modified Date/time (UTC)", format='datetime', first_sortable=True),
+                      args(id='path', name="Path", is_sortable=True),
+                  ]),
+         ],
+         detail_views=[
+             args(id="metadata",
+                  rows=[
+                      args(id='username'),
+                      args(id='app_name', name="Application"),
+                      args(id='creation_time', name="Creation Date/time (UTC)", format='datetime'),
+                      args(id='last_modified_time', name="Last modified Date/time (UTC)", format='datetime'),
+                      args(id='path', name="Path", is_sortable=True),
+                  ]),
+         ]
+         ),
     args(id="autofill",
-         name="Autofill data",
+         name="Autofill Data",
          description="Autofill text data",
          master_views=[
              args(id="table",
