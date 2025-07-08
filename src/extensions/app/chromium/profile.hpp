@@ -30,6 +30,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include "file_history.hpp"
 
 namespace mobius::extension::app::chromium
 {
@@ -176,29 +177,57 @@ class profile
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief History entry structure
+    // Downloads structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    struct history_entry
+    struct download : public file_history::download
     {
-        // @brief Record number
-        std::uint64_t idx = 0;
+        // Default constructor
+        download () = default;
 
-        // @brief URL
-        std::string url;
+        // @brief Constructor that takes a file_history::download object
+        explicit download (const file_history::download &base)
+            : file_history::download (base) // Copy the base class members
+        {
+        }
 
-        // @brief Title
-        std::string title;
-
-        // @brief Visit time
-        mobius::core::datetime::datetime visit_time;
-
-        // @brief Visit ID
-        std::int64_t visit_id = 0;
+        // @brief Assignment operator from file_history::download
+        download &
+        operator= (const file_history::download &base)
+        {
+            file_history::download::operator= (base);
+            return *this;
+        }
 
         // @brief Source file
         mobius::core::io::file f;
     };
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief History entry structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct history_entry : public file_history::history_entry
+    {
+        // Default constructor
+        history_entry () = default;
+
+        // @brief Constructor that takes a file_history::history_entry object
+        explicit history_entry (const file_history::history_entry &base)
+            : file_history::history_entry (base) // Copy the base class members
+        {
+        }
+
+        // @brief Assignment operator from file_history::history_entry
+        history_entry &
+        operator= (const file_history::history_entry &base)
+        {
+            file_history::history_entry::operator= (base);
+            return *this;
+        }
+
+        // @brief Source file
+        mobius::core::io::file f;
+    };
+    
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -271,7 +300,17 @@ class profile
     {
         return history_entries_;
     }
-    
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get downloads
+    // @return Vector of downloads
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<download>
+    get_downloads () const
+    {
+        return downloads_;
+    }
+
   private:
     // @brief Check if profile is valid
     bool is_valid_ = false;
@@ -290,6 +329,9 @@ class profile
 
     // @brief History entries
     std::vector<history_entry> history_entries_;
+
+    // @brief Downloads
+    std::vector<download> downloads_;
 };
 
 } // namespace mobius::extension::app::chromium

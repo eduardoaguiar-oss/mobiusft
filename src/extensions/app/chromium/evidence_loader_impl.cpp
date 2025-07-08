@@ -476,6 +476,77 @@ evidence_loader_impl::_save_credit_cards ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save received files
+// @todo Implement saving of received files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_loader_impl::_save_received_files ()
+{
+    for (const auto &profile : profiles_)
+    {
+        for (const auto &entry : profile.get_downloads ())
+        {
+            if (entry.start_time)
+            {
+                auto e = item_.new_evidence ("received-file");
+                auto path = mobius::core::string::first_of (
+                    entry.target_path,
+                    entry.full_path
+                );
+
+                e.set_attribute ("timestamp", entry.start_time);
+                e.set_attribute ("username", profile.get_username ());
+                e.set_attribute ("path", path);
+                e.set_attribute ("filename", _get_filename (path));
+                e.set_attribute ("app_id", APP_ID);
+                e.set_attribute ("app_name", APP_NAME);
+
+                auto metadata = mobius::core::pod::map ();
+                metadata.set ("record_number", entry.idx);
+                metadata.set ("by_ext_id", entry.by_ext_id);
+                metadata.set ("by_ext_name", entry.by_ext_name);
+                metadata.set ("by_web_app_id", entry.by_web_app_id);
+                metadata.set ("current_path", entry.current_path);
+                metadata.set ("danger_type", entry.danger_type);
+                metadata.set (
+                    "embedder_download_data",
+                    entry.embedder_download_data
+                );
+                metadata.set ("end_time", entry.end_time);
+                metadata.set ("etag", entry.etag);
+                metadata.set ("full_path", entry.full_path);
+                metadata.set ("guid", entry.guid);
+                metadata.set ("hash", entry.hash);
+                metadata.set ("http_method", entry.http_method);
+                metadata.set ("id", entry.id);
+                metadata.set ("interrupt_reason", entry.interrupt_reason);
+                metadata.set ("last_access_time", entry.last_access_time);
+                metadata.set ("last_modified", entry.last_modified);
+                metadata.set ("mime_type", entry.mime_type);
+                metadata.set ("opened", entry.opened);
+                metadata.set ("original_mime_type", entry.original_mime_type);
+                metadata.set ("received_bytes", entry.received_bytes);
+                metadata.set ("referrer", entry.referrer);
+                metadata.set ("site_url", entry.site_url);
+                metadata.set ("start_time", entry.start_time);
+                metadata.set ("state", entry.state);
+                metadata.set ("tab_referrer_url", entry.tab_referrer_url);
+                metadata.set ("tab_url", entry.tab_url);
+                metadata.set ("target_path", entry.target_path);
+                metadata.set ("total_bytes", entry.total_bytes);
+                metadata.set ("transient", entry.transient);
+                metadata.set ("url", entry.url);
+
+                e.set_attribute ("metadata", metadata);
+
+                e.set_tag ("p2p");
+                e.add_source (entry.f);
+            }
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save visited URLs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -491,7 +562,7 @@ evidence_loader_impl::_save_visited_urls ()
             e.set_attribute ("title", entry.title);
             e.set_attribute ("timestamp", entry.visit_time);
 
-            auto metadata = mobius::core::pod::map();
+            auto metadata = mobius::core::pod::map ();
             metadata.set ("record_number", entry.idx);
             metadata.set ("visit_id", entry.visit_id);
             metadata.set ("app_id", APP_ID);
@@ -503,56 +574,5 @@ evidence_loader_impl::_save_visited_urls ()
         }
     }
 }
-
-/*
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Save received files
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_save_received_files ()
-{
-    for (const auto &profile : profiles_)
-    {
-        for (const auto &lf : profile.get_local_files ())
-        {
-            if (lf.bytes_downloaded > 0 || lf.downloaded_seconds > 0)
-            {
-                auto lf_metadata = _get_metadata (lf);
-                lf_metadata.set ("username", profile.get_username ());
-
-                for (const auto &tf : lf.content_files)
-                {
-                    auto path = _join_paths (lf.path, tf.path);
-                    auto filename = _get_filename (path);
-
-                    auto e = item_.new_evidence ("received-file");
-
-                    e.set_attribute ("timestamp", lf.added_time);
-                    e.set_attribute ("username", profile.get_username ());
-                    e.set_attribute ("filename", filename);
-                    e.set_attribute ("path", path);
-                    e.set_attribute ("app_id", APP_ID);
-                    e.set_attribute ("app_name", APP_NAME);
-                    // e.set_attribute ("hashes", get_file_hashes (tf));
-
-                    auto tf_metadata = lf_metadata.clone ();
-                    tf_metadata.set ("torrent_path", tf.path);
-                    tf_metadata.set ("torrent_offset", tf.offset);
-                    tf_metadata.set ("torrent_length", tf.length);
-                    tf_metadata.set ("torrent_piece_length", tf.piece_length);
-                    tf_metadata.set ("torrent_piece_offset", tf.piece_offset);
-
-                    e.set_attribute ("metadata", tf_metadata);
-
-                    e.set_tag ("p2p");
-                    for (const auto &f : lf.sources)
-                        e.add_source (f);
-                }
-            }
-        }
-    }
-}
-
-*/
 
 } // namespace mobius::extension::app::chromium

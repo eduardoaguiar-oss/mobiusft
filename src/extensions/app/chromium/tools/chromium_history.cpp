@@ -76,6 +76,53 @@ show_history (const std::string &path)
         std::cout << "\tVisit ID: " << entry.visit_id << std::endl;
         std::cout << "\tVisit time: " << entry.visit_time << std::endl;
     }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Show download entries
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::cout << std::endl;
+    std::cout << "Download entries:" << std::endl;
+
+    for (const auto &entry : dat.get_downloads ())
+    {
+        std::cout << std::endl;
+        std::cout << "\tIndex: " << entry.idx << std::endl;
+        std::cout << "\tBy extension ID: " << entry.by_ext_id << std::endl;
+        std::cout << "\tBy extension name: " << entry.by_ext_name << std::endl;
+        std::cout << "\tBy web app ID: " << entry.by_web_app_id << std::endl;
+        std::cout << "\tCurrent path: " << entry.current_path << std::endl;
+        std::cout << "\tDanger type: " << entry.danger_type << std::endl;
+        std::cout << "\tEmbedder download data: "
+                  << entry.embedder_download_data << std::endl;
+        std::cout << "\tEnd time: " << entry.end_time << std::endl;
+        std::cout << "\tETag: " << entry.etag << std::endl;
+        std::cout << "\tFull path: " << entry.full_path << std::endl;
+        std::cout << "\tGUID: " << entry.guid << std::endl;
+        std::cout << "\tHash: " << entry.hash << std::endl;
+        std::cout << "\tHTTP method: " << entry.http_method << std::endl;
+        std::cout << "\tID: " << entry.id << std::endl;
+        std::cout << "\tInterrupt reason: " << entry.interrupt_reason
+                  << std::endl;
+        std::cout << "\tLast access time: " << entry.last_access_time
+                  << std::endl;
+        std::cout << "\tLast modified: " << entry.last_modified << std::endl;
+        std::cout << "\tMIME type: " << entry.mime_type << std::endl;
+        std::cout << "\tOpened: " << (entry.opened ? "Yes" : "No") << std::endl;
+        std::cout << "\tOriginal MIME type: " << entry.original_mime_type
+                  << std::endl;
+        std::cout << "\tReceived bytes: " << entry.received_bytes << std::endl;
+        std::cout << "\tReferrer: " << entry.referrer << std::endl;
+        std::cout << "\tSite URL: " << entry.site_url << std::endl;
+        std::cout << "\tStart time: " << entry.start_time << std::endl;
+        std::cout << "\tState: " << entry.state << std::endl;
+        std::cout << "\tTab referrer URL: " << entry.tab_referrer_url
+                  << std::endl;
+        std::cout << "\tTab URL: " << entry.tab_url << std::endl;
+        std::cout << "\tTarget path: " << entry.target_path << std::endl;
+        std::cout << "\tTotal bytes: " << entry.total_bytes << std::endl;
+        std::cout << "\tTransient: " << (entry.transient ? "Yes" : "No") << std::endl;
+        std::cout << "\tURL: " << entry.url << std::endl;
+    }
 }
 
 } // namespace

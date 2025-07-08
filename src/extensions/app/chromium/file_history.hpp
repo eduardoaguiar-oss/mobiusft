@@ -58,6 +58,105 @@ class file_history
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Download structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct download
+    {
+        // @brief Record Index
+        std::uint64_t idx = 0;
+
+        // @brief The id of the extension that created this download
+        std::string by_ext_id;
+
+        // @brief The name of the extension that created this download
+        std::string by_ext_name;
+
+        // @brief The id of the web app that created this download
+        std::string by_web_app_id;
+
+        // @brief Current path
+        std::string current_path;
+
+        // @brief Danger type
+        std::string danger_type;
+
+        // @brief Embedder download data
+        std::string embedder_download_data;
+
+        // @brief End time
+        mobius::core::datetime::datetime end_time;
+
+        // @brief ETag
+        std::string etag;
+
+        // @brief Full path
+        std::string full_path;
+
+        // @brief GUID
+        std::string guid;
+
+        // @brief Hash
+        std::string hash;
+
+        // @brief HTTP method
+        std::string http_method = "GET";
+
+        // @brief ID
+        std::uint64_t id = 0;
+
+        // @brief Interrupt reason
+        std::uint32_t interrupt_reason = 0;
+
+        // @brief Last access time
+        mobius::core::datetime::datetime last_access_time;
+
+        // @brief Last-Modified header value
+        std::string last_modified;
+
+        // @brief MIME type
+        std::string mime_type;
+
+        // @brief Opened
+        bool opened = false;
+
+        // @brief Original MIME type
+        std::string original_mime_type;
+
+        // @brief Received bytes
+        std::uint64_t received_bytes = 0;
+
+        // @brief Referrer
+        std::string referrer;
+
+        // @brief Site URL
+        std::string site_url;
+
+        // @brief Start time
+        mobius::core::datetime::datetime start_time;
+
+        // @brief State
+        std::string state;
+
+        // @brief Tab referrer URL
+        std::string tab_referrer_url;
+
+        // @brief Tab URL
+        std::string tab_url;
+
+        // @brief Target path
+        std::string target_path;
+
+        // @brief Total bytes
+        std::uint64_t total_bytes = 0;
+
+        // @brief Transient
+        bool transient = false;
+
+        // @brief URL
+        std::string url;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     file_history (const mobius::core::io::reader &);
@@ -88,6 +187,16 @@ class file_history
         return history_entries_;
     }
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get downloads
+    // @return Vector of download entries
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<download>
+    get_downloads () const
+    {
+        return downloads_;
+    }
+
   private:
     // @brief Flag is instance
     bool is_instance_ = false;
@@ -97,6 +206,9 @@ class file_history
 
     // @brief History entries
     std::vector<history_entry> history_entries_;
+
+    // @brief Download entries
+    std::vector<download> downloads_;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions

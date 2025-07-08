@@ -313,16 +313,21 @@ profile::add_history_file (const mobius::core::io::file &f)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     for (const auto &entry : fh.get_history_entries ())
     {
-        history_entry e;
-
-        e.idx = entry.idx;
-        e.url = entry.url;
-        e.title = entry.title;
-        e.visit_time = entry.visit_time;
-        e.visit_id = entry.visit_id;
+        history_entry e (entry);
         e.f = f;
 
         history_entries_.push_back (e);
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Add downloads
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &entry : fh.get_downloads ())
+    {
+        download d (entry);
+        d.f = f;
+
+        downloads_.push_back (d);
     }
 
     is_valid_ = true;
