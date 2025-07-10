@@ -97,6 +97,7 @@ class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
     void _save_app_profiles ();
     void _save_autofills ();
     void _save_credit_cards ();
+    void _save_pdis ();
     void _save_received_files ();
     void _save_visited_urls ();
 

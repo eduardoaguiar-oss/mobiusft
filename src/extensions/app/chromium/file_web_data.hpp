@@ -23,6 +23,7 @@
 #include <mobius/core/bytearray.hpp>
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/datetime/datetime.hpp>
+#include <mobius/core/io/file.hpp>
 #include <mobius/core/io/reader.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <string>
@@ -206,6 +207,9 @@ class file_web_data
 
         // @brief Is in trash
         bool is_in_trash = false;
+
+        // @brief Source file
+        mobius::core::io::file f;
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -332,6 +336,9 @@ class file_web_data
 
         // @brief Tags
         std::vector<credit_card_tag> tags;
+
+        // @brief Source file
+        mobius::core::io::file f;
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

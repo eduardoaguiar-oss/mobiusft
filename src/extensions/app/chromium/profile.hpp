@@ -32,6 +32,7 @@
 #include <string>
 #include <vector>
 #include "file_history.hpp"
+#include "file_web_data.hpp"
 
 namespace mobius::extension::app::chromium
 {
@@ -45,6 +46,7 @@ class profile
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Datatypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    using autofill_profile = file_web_data::autofill_profile;
     using download = file_history::download;
     using history_entry = file_history::history_entry;
 
@@ -322,6 +324,26 @@ class profile
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get autofill profiles
+    // @return Vector of autofill profiles
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<autofill_profile>
+    get_autofill_profiles () const
+    {
+        return autofill_profiles_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of autofill profiles
+    // @return Number of autofill profiles
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    size_autofill_profiles () const
+    {
+        return autofill_profiles_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get credit cards
     // @return Vector of credit cards
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -411,6 +433,9 @@ class profile
 
     // @brief Autofill entries
     std::vector<autofill> autofill_;
+
+    // @brief Autofill profiles
+    std::vector<autofill_profile> autofill_profiles_;
 
     // @brief Credit cards
     std::vector<credit_card> credit_cards_;

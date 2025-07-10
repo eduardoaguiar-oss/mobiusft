@@ -45,17 +45,92 @@ class file_history
         // @brief Record Index
         std::uint64_t idx = 0;
 
-        // @brief URL
-        std::string url;
+        // @brief Schema version
+        std::uint64_t schema_version = 0;
+
+        // @brief Favicon ID
+        std::uint64_t favicon_id = 0;
+
+        // @brief Hidden
+        bool hidden = false;
+
+        // @brief ID
+        std::uint64_t id = 0;
+
+        // @brief Last visit time
+        mobius::core::datetime::datetime last_visit_time;
 
         // @brief Title
         std::string title;
 
+        // @brief Typed count
+        std::uint64_t typed_count = 0;
+
+        // @brief URL
+        std::string url;
+
+        // @brief Visit count
+        std::uint64_t visit_count = 0;
+
+        // @brief App ID
+        std::string app_id;
+
+        // @brief Consider for NTP most visited
+        bool consider_for_ntp_most_visited = false;
+
+        // @brief External referrer URL
+        std::string external_referrer_url;
+
+        // @brief From visit ID
+        std::uint64_t from_visit = 0;
+
         // @brief Visit ID
         std::uint64_t visit_id = 0;
 
+        // @brief Incremented omnibox typed score
+        bool incremented_omnibox_typed_score = false;
+
+        // @brief Is indexed
+        bool is_indexed = false;
+
+        // @brief Is known to sync
+        bool is_known_to_sync = false;
+
+        // @brief Opener visit ID
+        std::uint64_t opener_visit = 0;
+
+        // @brief Originator cache GUID
+        std::string originator_cache_guid;
+
+        // @brief Originator from visit ID
+        std::uint64_t originator_from_visit = 0;
+
+        // @brief Originator opener visit ID
+        std::uint64_t originator_opener_visit = 0;
+
+        // @brief Originator visit ID
+        std::uint64_t originator_visit_id = 0;
+
+        // @brief Publicly routable
+        bool publicly_routable = false;
+
+        // @brief Segment ID
+        std::uint64_t segment_id = 0;
+
+        // @brief Transition type
+        std::uint64_t transition;
+
+        // @brief Visit URL
+        std::uint64_t visit_url;
+
+        // @brief Visit duration
+        std::uint64_t visit_duration = 0;
+
         // @brief Visit time
         mobius::core::datetime::datetime visit_time;
+
+        // @brief Visited link ID
+        std::uint64_t visited_link_id = 0;
 
         // @brief File object
         mobius::core::io::file f;

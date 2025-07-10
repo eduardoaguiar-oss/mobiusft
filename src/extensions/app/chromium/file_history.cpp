@@ -278,41 +278,6 @@ file_history::file_history (const mobius::core::io::reader &reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Load history
-// @param db Database object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-file_history::_load_history (mobius::core::database::database &db)
-{
-    // Prepare statement
-    mobius::core::database::statement stmt = db.new_statement (
-        "SELECT v.id, "
-        "u.url, "
-        "u.title, "
-        "v.visit_time "
-        "FROM urls u, visits v "
-        "WHERE v.url = u.id "
-        "ORDER BY v.visit_time"
-    );
-
-    // Retrieve rows from query
-    std::uint64_t idx = 0;
-
-    while (stmt.fetch_row ())
-    {
-        history_entry entry;
-
-        entry.idx = idx++;
-        entry.url = stmt.get_column_string (1);
-        entry.title = stmt.get_column_string (2);
-        entry.visit_time = get_datetime (stmt.get_column_int64 (3));
-        entry.visit_id = stmt.get_column_int64 (0);
-
-        history_entries_.emplace_back (std::move (entry));
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Load downloads
 // @param db Database object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -411,9 +376,9 @@ file_history::_load_downloads (mobius::core::database::database &db)
         entry.by_web_app_id = stmt.get_column_int64 (2);
         entry.current_path = stmt.get_column_string (3);
 
-        auto embedder_download_data = stmt.get_column_bytearray(5);
-        entry.embedder_download_data = embedder_download_data.dump();
-        
+        auto embedder_download_data = stmt.get_column_bytearray (5);
+        entry.embedder_download_data = embedder_download_data.dump ();
+
         entry.end_time = get_datetime (stmt.get_column_int64 (6));
         entry.etag = stmt.get_column_string (7);
         entry.full_path = stmt.get_column_string (8);
@@ -462,6 +427,92 @@ file_history::_load_downloads (mobius::core::database::database &db)
 
         // Add entry to the list
         downloads_.emplace_back (std::move (entry));
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load history
+// @param db Database object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file_history::_load_history (mobius::core::database::database &db)
+{
+    // Prepare statement
+    mobius::core::database::statement stmt = db.new_statement (generate_sql (
+        "SELECT "
+        "${u.favicon_id,20,33}, "
+        "u.hidden, "
+        "u.id, "
+        "u.last_visit_time, "
+        "u.title, "
+        "u.typed_count, "
+        "u.url, "
+        "u.visit_count, "
+        "${v.app_id,69}, "
+        "${v.consider_for_ntp_most_visited,63}, "
+        "${v.external_referrer_url,66}, "
+        "v.from_visit, "
+        "v.id, "
+        "${v.incremented_omnibox_typed_score,40}, "
+        "${v.is_indexed,20,32}, "
+        "${v.is_known_to_sync,59}, "
+        "${v.opener_visit,50}, "
+        "${v.originator_cache_guid,55}, "
+        "${v.originator_from_visit,56}, "
+        "${v.originator_opener_visit,56}, "
+        "${v.originator_visit_id,55}, "
+        "${v.publicly_routable,43,48}, "
+        "v.segment_id, "
+        "v.transition, "
+        "v.url, "
+        "v.visit_duration, "
+        "v.visit_time, "
+        "${v.visited_link_id,67} "
+        "FROM urls u, visits v "
+        "WHERE v.url = u.id "
+        "ORDER BY v.visit_time",
+        schema_version_
+    ));
+
+    // Retrieve rows from query
+    std::uint64_t idx = 0;
+
+    while (stmt.fetch_row ())
+    {
+        history_entry entry;
+
+        entry.idx = idx++;
+        entry.schema_version = schema_version_;
+        entry.favicon_id = stmt.get_column_int64 (0);
+        entry.hidden = stmt.get_column_bool (1);
+        entry.id = stmt.get_column_int64 (2);
+        entry.last_visit_time = get_datetime (stmt.get_column_int64 (3));
+        entry.title = stmt.get_column_string (4);
+        entry.typed_count = stmt.get_column_int64 (5);
+        entry.url = stmt.get_column_string (6);
+        entry.visit_count = stmt.get_column_int64 (7);
+        entry.app_id = stmt.get_column_int64 (8);
+        entry.consider_for_ntp_most_visited = stmt.get_column_bool (9);
+        entry.external_referrer_url = stmt.get_column_string (10);
+        entry.from_visit = stmt.get_column_int64 (11);
+        entry.visit_id = stmt.get_column_int64 (12);
+        entry.incremented_omnibox_typed_score = stmt.get_column_bool (13);
+        entry.is_indexed = stmt.get_column_bool (14);
+        entry.is_known_to_sync = stmt.get_column_bool (15);
+        entry.opener_visit = stmt.get_column_int64 (16);
+        entry.originator_cache_guid = stmt.get_column_string (17);
+        entry.originator_from_visit = stmt.get_column_int64 (18);
+        entry.originator_opener_visit = stmt.get_column_int64 (19);
+        entry.originator_visit_id = stmt.get_column_int64 (20);
+        entry.publicly_routable = stmt.get_column_bool (21);
+        entry.segment_id = stmt.get_column_int64 (22);
+        entry.transition = stmt.get_column_int64 (23);
+        entry.visit_url = stmt.get_column_int64 (24);
+        entry.visit_duration = stmt.get_column_int64 (25);
+        entry.visit_time = get_datetime (stmt.get_column_int64 (26));
+        entry.visited_link_id = stmt.get_column_int64 (27);
+
+        history_entries_.emplace_back (std::move (entry));
     }
 }
 

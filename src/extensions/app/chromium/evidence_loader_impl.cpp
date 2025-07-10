@@ -27,6 +27,8 @@
 #include <mobius/core/string_functions.hpp>
 #include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/model/evidence.hpp>
+#include <iomanip>
+#include <sstream>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // References:
@@ -62,6 +64,32 @@ _get_filename (const std::string &path)
     }
 
     return filename;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Convert duration to string format
+// @param duration Duration in microseconds
+// @return Formatted string representing the duration in days, hours, minutes,
+// and seconds
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+_duration_to_string (std::uint64_t duration)
+{
+    std::uint64_t seconds = duration / 1000000;
+    std::uint64_t microseconds = duration % 1000000;
+    std::uint64_t hours = seconds / 3600;
+    std::uint64_t minutes = (seconds % 3600) / 60;
+    seconds = seconds % 60;
+
+    std::stringstream ss;
+    ss << std::setfill ('0') << std::setw (2) << hours << ":"
+       << std::setfill ('0') << std::setw (2) << minutes << ":"
+       << std::setfill ('0') << std::setw (2) << seconds;
+
+    if (microseconds > 0)
+        ss << "." << std::setfill ('0') << std::setw (6) << microseconds;
+
+    return ss.str ();
 }
 
 } // namespace
@@ -293,6 +321,7 @@ evidence_loader_impl::_save_evidences ()
     _save_app_profiles ();
     _save_autofills ();
     _save_credit_cards ();
+    _save_pdis ();
     _save_received_files ();
     _save_visited_urls ();
 
@@ -486,6 +515,158 @@ evidence_loader_impl::_save_credit_cards ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save PDI entries
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_loader_impl::_save_pdis ()
+{
+    for (const auto &p : profiles_)
+    {
+        for (const auto &ap : p.get_autofill_profiles ())
+        {
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Add e-mails
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            for (const auto &email : ap.emails)
+            {
+                if (!email.empty ())
+                {
+                    auto e = item_.new_evidence ("pdi");
+                    e.set_attribute ("pdi_type", "email");
+                    e.set_attribute ("value", email);
+
+                    auto metadata = mobius::core::pod::map ();
+
+                    metadata.set ("app_id", p.get_app_id ());
+                    metadata.set ("app_name", p.get_app_name ());
+                    metadata.set ("username", p.get_username ());
+                    metadata.set ("autofill_profile_guid", ap.guid);
+                    metadata.set ("autofill_profile_in_trash", ap.is_in_trash);
+
+                    e.set_attribute ("metadata", metadata);
+
+                    e.set_tag ("app.browser");
+                    e.add_source (ap.f);
+                }
+            }
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Add phones
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            for (const auto &phone : ap.phones)
+            {
+                auto value = phone.number;
+                if (!phone.type.empty ())
+                    value += " (" + phone.type + ")";
+
+                if (!value.empty ())
+                {
+                    auto e = item_.new_evidence ("pdi");
+                    e.set_attribute ("pdi_type", "phone");
+                    e.set_attribute ("value", value);
+
+                    auto metadata = mobius::core::pod::map ();
+
+                    metadata.set ("phone_number", phone.number);
+                    metadata.set ("phone_type", phone.type);
+                    metadata.set ("app_id", p.get_app_id ());
+                    metadata.set ("app_name", p.get_app_name ());
+                    metadata.set ("username", p.get_username ());
+                    metadata.set ("autofill_profile_guid", ap.guid);
+                    metadata.set ("autofill_profile_in_trash", ap.is_in_trash);
+
+                    e.set_attribute ("metadata", metadata);
+
+                    e.set_tag ("app.browser");
+                    e.add_source (ap.f);
+                }
+            }
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Add addresses
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            for (const auto &address : ap.addresses)
+            {
+                std::string value;
+
+                if (!address.street_address.empty ())
+                    value += address.street_address;
+                else if (!address.address_line_1.empty ())
+                {
+                    value += address.address_line_1;
+                    if (!address.address_line_2.empty ())
+                        value += " " + address.address_line_2;
+                }
+                if (!address.city.empty ())
+                    value += ", " + address.city;
+                if (!address.state.empty ())
+                    value += "/" + address.state;
+                if (!address.zip_code.empty ())
+                    value += ", " + address.zip_code;
+                if (!address.country.empty ())
+                    value += ", " + address.country;
+
+                if (!value.empty ())
+                {
+                    auto e = item_.new_evidence ("pdi");
+                    e.set_attribute ("pdi_type", "address");
+                    e.set_attribute ("value", value);
+
+                    auto metadata = mobius::core::pod::map ();
+                    metadata.set ("app_id", p.get_app_id ());
+                    metadata.set ("app_name", p.get_app_name ());
+                    metadata.set ("username", p.get_username ());
+                    metadata.set ("autofill_profile_guid", ap.guid);
+                    metadata.set ("autofill_profile_in_trash", ap.is_in_trash);
+
+                    e.set_attribute ("metadata", metadata);
+
+                    e.set_tag ("app.browser");
+                    e.add_source (ap.f);
+                }
+            }
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Add names
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            for (const auto &name : ap.names)
+            {
+                std::string value;
+
+                if (!name.full_name.empty ())
+                    value = name.full_name;
+
+                else if (!name.first_name.empty ())
+                {
+                    value = name.first_name;
+                    if (!name.last_name.empty ())
+                        value += " " + name.last_name;
+                }
+
+                if (!value.empty ())
+                {
+                    auto e = item_.new_evidence ("pdi");
+                    e.set_attribute ("pdi_type", "fullname");
+                    e.set_attribute ("value", value);
+
+                    auto metadata = mobius::core::pod::map ();
+                    metadata.set ("app_id", p.get_app_id ());
+                    metadata.set ("app_name", p.get_app_name ());
+                    metadata.set ("username", p.get_username ());
+                    metadata.set ("autofill_profile_guid", ap.guid);
+                    metadata.set ("autofill_profile_in_trash", ap.is_in_trash);
+
+                    e.set_attribute ("metadata", metadata);
+
+                    e.set_tag ("app.browser");
+                    e.add_source (ap.f);
+                }
+            }
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save received files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -555,6 +736,108 @@ evidence_loader_impl::_save_received_files ()
     }
 }
 
+// @brief Activity time
+mobius::core::datetime::datetime activity_time;
+
+// @brief Display count
+std::uint64_t display_count = 0;
+
+// @brief Display time
+mobius::core::datetime::datetime display_time;
+
+// @brief Favicon ID
+std::uint64_t favicon_id = 0;
+
+// @brief Hidden
+bool hidden = false;
+
+// @brief ID
+std::uint64_t id = 0;
+
+// @brief Last display time
+mobius::core::datetime::datetime last_display;
+
+// @brief Last visit time
+mobius::core::datetime::datetime last_visit_time;
+
+// @brief Links clicked count
+std::uint64_t links_clicked_count = 0;
+
+// @brief Open time
+mobius::core::datetime::datetime open_time;
+
+// @brief Title
+std::string title;
+
+// @brief Typed count
+std::uint64_t typed_count = 0;
+
+// @brief URL
+std::string url;
+
+// @brief Visit count
+std::uint64_t visit_count = 0;
+
+// @brief App ID
+std::string app_id;
+
+// @brief Consider for NTP most visited
+bool consider_for_ntp_most_visited = false;
+
+// @brief External referrer URL
+std::string external_referrer_url;
+
+// @brief From visit ID
+std::uint64_t from_visit = 0;
+
+// @brief Visit ID
+std::uint64_t visit_id = 0;
+
+// @brief Incremented omnibox typed score
+bool incremented_omnibox_typed_score = false;
+
+// @brief Is indexed
+bool is_indexed = false;
+
+// @brief Is known to sync
+bool is_known_to_sync = false;
+
+// @brief Opener visit ID
+std::uint64_t opener_visit = 0;
+
+// @brief Originator cache GUID
+std::string originator_cache_guid;
+
+// @brief Originator from visit ID
+std::uint64_t originator_from_visit = 0;
+
+// @brief Originator opener visit ID
+std::uint64_t originator_opener_visit = 0;
+
+// @brief Originator visit ID
+std::uint64_t originator_visit_id = 0;
+
+// @brief Publicly routable
+bool publicly_routable = false;
+
+// @brief Segment ID
+std::uint64_t segment_id = 0;
+
+// @brief Transition type
+std::string transition;
+
+// @brief Visit URL
+std::string visit_url;
+
+// @brief Visit duration
+std::uint64_t visit_duration = 0;
+
+// @brief Visit time
+mobius::core::datetime::datetime visit_time;
+
+// @brief Visited link ID
+std::uint64_t visited_link_id = 0;
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save visited URLs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -572,10 +855,48 @@ evidence_loader_impl::_save_visited_urls ()
             e.set_attribute ("timestamp", entry.visit_time);
 
             auto metadata = mobius::core::pod::map ();
-            metadata.set ("record_number", entry.idx);
-            metadata.set ("visit_id", entry.visit_id);
+
             metadata.set ("app_id", p.get_app_id ());
             metadata.set ("app_name", p.get_app_name ());
+            metadata.set ("row_number", entry.idx);
+            metadata.set ("schema_version", entry.schema_version);
+            metadata.set ("id", entry.id);
+            metadata.set ("visit_id", entry.visit_id);
+            metadata.set ("from_visit", entry.from_visit);
+            metadata.set ("favicon_id", entry.favicon_id);
+            metadata.set ("hidden", entry.hidden);
+            metadata.set ("last_visit_time", entry.last_visit_time);
+            metadata.set ("typed_count", entry.typed_count);
+            metadata.set ("visit_count", entry.visit_count);
+            metadata.set ("visit_time", entry.visit_time);
+            metadata.set ("app_id", entry.app_id);
+            metadata.set (
+                "consider_for_ntp_most_visited",
+                entry.consider_for_ntp_most_visited
+            );
+            metadata.set ("external_referrer_url", entry.external_referrer_url);
+            metadata.set (
+                "incremented_omnibox_typed_score",
+                entry.incremented_omnibox_typed_score
+            );
+            metadata.set ("is_indexed", entry.is_indexed);
+            metadata.set ("is_known_to_sync", entry.is_known_to_sync);
+            metadata.set ("opener_visit", entry.opener_visit);
+            metadata.set ("originator_cache_guid", entry.originator_cache_guid);
+            metadata.set ("originator_from_visit", entry.originator_from_visit);
+            metadata.set (
+                "originator_opener_visit",
+                entry.originator_opener_visit
+            );
+            metadata.set ("originator_visit_id", entry.originator_visit_id);
+            metadata.set ("publicly_routable", entry.publicly_routable);
+            metadata.set ("segment_id", entry.segment_id);
+            metadata.set (
+                "visit_duration",
+                _duration_to_string (entry.visit_duration)
+            );
+            metadata.set ("visit_url", entry.visit_url);
+            metadata.set ("visited_link_id", entry.visited_link_id);
             e.set_attribute ("metadata", metadata);
 
             e.set_tag ("app.browser");
