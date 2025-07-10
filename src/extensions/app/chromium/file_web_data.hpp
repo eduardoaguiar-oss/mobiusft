@@ -209,6 +209,21 @@ class file_web_data
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Credit Card Tag structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct credit_card_tag
+    {
+        // @brief Date modified
+        mobius::core::datetime::datetime date_modified;
+
+        // @brief Encrypted tag
+        mobius::core::bytearray tag_encrypted;
+
+        // @brief Tag
+        std::string tag;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Credit Card structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct credit_card
@@ -216,14 +231,32 @@ class file_web_data
         // @brief Record Index
         std::uint64_t idx = 0;
 
-        // @brief Card number
-        std::string card_number;
+        // @brief GUID
+        std::string guid;
 
         // @brief Encrypted card number
         mobius::core::bytearray card_number_encrypted;
 
-        // @brief Name on card
-        std::string name_on_card;
+        // @brief Encrypted CVC
+        mobius::core::bytearray cvc_encrypted;
+
+        // @brief Encrypted name on card
+        mobius::core::bytearray name_on_card_encrypted;
+
+        // @brief Encrypted IBAN
+        mobius::core::bytearray iban_encrypted;
+
+        // @brief IBAN
+        std::string iban;
+
+        // @brief Card number
+        std::string card_number;
+
+        // @brief CVC
+        std::string cvc;
+
+        // @brief Last four digits
+        std::string last_four;
 
         // @brief Expiration month
         std::uint32_t expiration_month = 0;
@@ -231,35 +264,8 @@ class file_web_data
         // @brief Expiration year
         std::uint32_t expiration_year = 0;
 
-        // @brief CVV
-        std::string cvv;
-
-        // @brief Origin
-        std::string origin;
-
-        // @brief Use count
-        std::uint32_t use_count = 0;
-
-        // @brief Use date
-        mobius::core::datetime::datetime use_date;
-
-        // @brief Nickname
-        std::string nickname;
-
-        // @brief Type
-        std::string type;
-
-        // @brief Network
-        std::string network;
-
-        // @brief Bank name
-        std::string bank_name;
-
-        // @brief Card issuer
-        std::string card_issuer;
-
-        // @brief Date last used
-        mobius::core::datetime::datetime date_last_used;
+        // @brief Name on card
+        std::string name_on_card;
 
         // @brief Date modified
         mobius::core::datetime::datetime date_modified;
@@ -267,11 +273,65 @@ class file_web_data
         // @brief Unmask date
         mobius::core::datetime::datetime unmask_date;
 
-        // @brief Metadata
-        mobius::core::pod::map metadata;
+        // @brief Use count
+        std::uint32_t use_count = 0;
 
-        // @brief Is encrypted
-        bool is_encrypted = false;
+        // @brief Use date
+        mobius::core::datetime::datetime use_date;
+
+        // @brief ID
+        std::string id;
+
+        // @brief Billing address ID
+        std::uint64_t billing_address_id = 0;
+
+        // @brief Nickname
+        std::string nickname;
+
+        // @brief Origin
+        std::string origin;
+
+        // @brief Bank name
+        std::string bank_name;
+
+        // @brief Card art URL
+        std::string card_art_url;
+
+        // @brief Card info retrieval enrollment state
+        std::string card_info_retrieval_enrollment_state;
+
+        // @brief Card issuer
+        std::string card_issuer;
+
+        // @brief Card issuer ID
+        std::uint64_t card_issuer_id = 0;
+
+        // @brief Instrument ID
+        std::uint64_t instrument_id = 0;
+
+        // @brief Network
+        std::string network;
+
+        // @brief Product description
+        std::string product_description;
+
+        // @brief Product terms URL
+        std::string product_terms_url;
+
+        // @brief Status
+        std::string status;
+
+        // @brief Type
+        std::string type;
+
+        // @brief Virtual card enrollment state
+        std::string virtual_card_enrollment_state;
+
+        // @brief Virtual card enrollment type
+        std::string virtual_card_enrollment_type;
+
+        // @brief Tags
+        std::vector<credit_card_tag> tags;
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

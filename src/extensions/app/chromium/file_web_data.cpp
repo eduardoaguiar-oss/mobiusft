@@ -811,6 +811,10 @@ file_web_data::_load_autofill_profiles (mobius::core::database::database &db)
     }
 }
 
+// Credit card tables: credit_cards, masked_credit_cards,
+// unmasked_credit_cards, server_credit_cards, server_stored_cvc,
+// credit_card_tags, credit_card_tags_v2
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Load credit cards
 // @param db Database object
@@ -842,6 +846,7 @@ file_web_data::_load_credit_cards (mobius::core::database::database &db)
         credit_card card;
 
         card.idx = idx++;
+        card.guid = stmt.get_column_string (0);
         card.name_on_card = stmt.get_column_string (1);
         card.expiration_month = stmt.get_column_int64 (2);
         card.expiration_year = stmt.get_column_int64 (3);
@@ -851,10 +856,6 @@ file_web_data::_load_credit_cards (mobius::core::database::database &db)
         card.use_count = stmt.get_column_int64 (7);
         card.use_date = get_datetime (stmt.get_column_int64 (8));
         card.nickname = stmt.get_column_string (9);
-
-        card.metadata.set ("guid", stmt.get_column_string (0));
-        card.is_encrypted = card.card_number_encrypted.startswith ("v10") ||
-                            card.card_number_encrypted.startswith ("v20");
 
         // Add card to the list
         credit_cards_.emplace_back (std::move (card));
@@ -903,8 +904,11 @@ file_web_data::_load_masked_credit_cards (mobius::core::database::database &db)
         credit_card card;
 
         card.idx = idx++;
+        card.guid = stmt.get_column_string (0);
+        card.status = stmt.get_column_string (1);
         card.name_on_card = stmt.get_column_string (2);
         card.type = stmt.get_column_string (3);
+        card.last_four = stmt.get_column_string (4);
         card.expiration_month = stmt.get_column_int64 (5);
         card.expiration_year = stmt.get_column_int64 (6);
         card.network = stmt.get_column_string (7);
@@ -916,16 +920,8 @@ file_web_data::_load_masked_credit_cards (mobius::core::database::database &db)
         card.use_date = get_datetime (stmt.get_column_int64 (13));
         card.unmask_date = get_datetime (stmt.get_column_int64 (14));
 
-        auto last_four = stmt.get_column_string (4);
-
-        if (!last_four.empty ())
-            card.card_number = std::string ("**** **** **** ") + last_four;
-
-        card.metadata.set ("last_four", last_four);
-        card.metadata.set ("id", stmt.get_column_string (0));
-        card.metadata.set ("status", stmt.get_column_string (1));
-        card.is_encrypted = card.card_number_encrypted.startswith ("v10") ||
-                            card.card_number_encrypted.startswith ("v20");
+        if (!card.last_four.empty ())
+            card.card_number = std::string ("**** **** **** ") + card.last_four;
 
         // Add card to the list
         credit_cards_.emplace_back (std::move (card));

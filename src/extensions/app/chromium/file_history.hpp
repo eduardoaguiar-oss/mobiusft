@@ -22,6 +22,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/datetime/datetime.hpp>
+#include <mobius/core/io/file.hpp>
 #include <mobius/core/io/reader.hpp>
 #include <cstdint>
 #include <string>
@@ -55,6 +56,9 @@ class file_history
 
         // @brief Visit time
         mobius::core::datetime::datetime visit_time;
+
+        // @brief File object
+        mobius::core::io::file f;
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -154,6 +158,9 @@ class file_history
 
         // @brief URL
         std::string url;
+
+        // @brief File object
+        mobius::core::io::file f;
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

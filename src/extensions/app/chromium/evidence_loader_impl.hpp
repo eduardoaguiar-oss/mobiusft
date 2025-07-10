@@ -93,12 +93,14 @@ class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
     void _scan_all_folders (const mobius::core::io::folder &);
 
     void _save_evidences ();
+
+    void _save_app_profiles ();
     void _save_autofills ();
     void _save_credit_cards ();
+    void _save_received_files ();
     void _save_visited_urls ();
 
     void _save_accounts ();
-    void _save_received_files ();
 };
 
 } // namespace mobius::extension::app::chromium

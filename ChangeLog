@@ -2,11 +2,16 @@ Mobius Forensic Toolkit 2.17
 	* Added new C++ extension called "app-chromium"
 	* app-chromium: Retrieve autofill_entry.date_created for versions < 55
 	* app-chromium: Retrieve autofill_profiles as User Accounts
-	* app-chromium: Retrieve credit cards info
+	* app-chromium: Retrieve Application Profiles
+	* app-chromium: Retrieve Credit Cards
+	* app-chromium: Retrieve Received Files
+	* app-chromium: Retrieve Visited URLs
 	* evidence-viewer: Added attribute "names" to User Accounts
-	* evidence-viewer: Added new evidence type "Application profile"
+	* evidence-viewer: Added new evidence type "Application Profile"
 	* libmobius_core: Added new function mobius::string::join
+	* libmobius_framework: Added method model::evidence::add_source(folder)
 	* ant.evidence.vfs: Changed to call app-chromium evidence loader
+	* ant.evidence.vfs.received_files: Removed old Chromium code
 	* ant.evidence.vfs.visited_urls: Removed old Chromium code
 
 Mobius Forensic Toolkit 2.16

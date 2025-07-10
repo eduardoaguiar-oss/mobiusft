@@ -202,7 +202,8 @@ MODEL = [
              args(id="metadata",
                   rows=[
                       args(id='username'),
-                      args(id='app_name', name="Application"),
+                      args(id='app_id', name="Application ID"),
+                      args(id='app_name', name="Application name"),
                       args(id='creation_time', name="Creation Date/time (UTC)", format='datetime'),
                       args(id='last_modified_time', name="Last modified Date/time (UTC)", format='datetime'),
                       args(id='path', name="Path", is_sortable=True),

@@ -39,7 +39,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Datatypes
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  enum class source_type { none, file, evidence };
+  enum class source_type { none, file, evidence, folder };
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // @brief Evidence source class
@@ -86,6 +86,7 @@ public:
   std::set <std::string> get_tags () const;
 
   void add_source (const mobius::core::io::file&);
+  void add_source (const mobius::core::io::folder&);
   void add_source (const evidence&);
   std::vector <evidence::source> get_sources () const;
 

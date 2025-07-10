@@ -695,6 +695,28 @@ evidence::add_source (const mobius::core::io::file &f)
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Add evidence source
+// @param f Folder object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence::add_source (const mobius::core::io::folder &f)
+{
+    if (!impl_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
+
+    if (f)
+    {
+        impl_->add_source (
+            source_type::folder,
+            0,
+            f.get_path () + " (i-node: " + std::to_string (f.get_inode ()) + ')'
+        );
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add evidence source
 // @param e Evidence object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void

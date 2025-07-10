@@ -36,36 +36,9 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static const std::string APP_ID = "chromium";
-static const std::string APP_NAME = "Chromium";
 static const std::string ANT_ID = "evidence.app-chromium";
-static const std::string ANT_NAME = APP_NAME;
+static const std::string ANT_NAME = "App Chromium";
 static const std::string ANT_VERSION = "1.0";
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Join paths
-// @param root Root path
-// @param rpath Relative path
-// @return Joined path
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-_join_paths (const std::string &root, const std::string &rpath)
-{
-    auto path = root;
-
-    if (!rpath.empty ())
-    {
-        if (!path.empty ())
-            path += '/';
-
-        path += rpath;
-    }
-
-    if (path.find_first_of ("\\") != std::string::npos)
-        path = mobius::core::string::replace (path, "/", "\\");
-
-    return path;
-}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get filename from path
@@ -114,7 +87,7 @@ void
 evidence_loader_impl::run ()
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
-    log.info (__LINE__, "Evidence loader <app-" + APP_ID + "> started");
+    log.info (__LINE__, "Evidence loader <app-chromium> started");
     log.info (__LINE__, "Item UID: " + std::to_string (item_.get_uid ()));
     log.info (
         __LINE__,
@@ -126,10 +99,7 @@ evidence_loader_impl::run ()
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     if (item_.has_ant (ANT_ID))
     {
-        log.info (
-            __LINE__,
-            "Evidence loader <app-" + APP_ID + "> has already run"
-        );
+        log.info (__LINE__, "Evidence loader <app-chromium> has already run");
         return;
     }
 
@@ -151,7 +121,7 @@ evidence_loader_impl::run ()
     // Log starting event
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     auto transaction = item_.new_transaction ();
-    item_.add_event ("app." + APP_ID + " started");
+    item_.add_event ("app.chromium started");
     transaction.commit ();
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -182,10 +152,10 @@ evidence_loader_impl::run ()
     _save_evidences ();
 
     transaction = item_.new_transaction ();
-    item_.add_event ("app." + APP_ID + " ended");
+    item_.add_event ("app.chromium has ended");
     transaction.commit ();
 
-    log.info (__LINE__, "Evidence loader <app-" + APP_ID + "> ended");
+    log.info (__LINE__, "Evidence loader <app-chromium> has ended");
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -264,7 +234,6 @@ evidence_loader_impl::scan_folder (const mobius::core::io::folder &folder)
     mobius::core::log log (__FILE__, __FUNCTION__);
 
     profile_ = {};
-    profile_.set_username (username_);
 
     auto w = mobius::core::io::walker (folder);
 
@@ -306,7 +275,10 @@ evidence_loader_impl::scan_folder (const mobius::core::io::folder &folder)
     }
 
     if (profile_)
+    {
+        profile_.set_folder (folder);
         profiles_.push_back (profile_);
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -318,8 +290,10 @@ evidence_loader_impl::_save_evidences ()
     auto transaction = item_.new_transaction ();
 
     _save_accounts ();
+    _save_app_profiles ();
     _save_autofills ();
     _save_credit_cards ();
+    _save_received_files ();
     _save_visited_urls ();
 
     item_.set_ant (ANT_ID, ANT_NAME, ANT_VERSION);
@@ -378,14 +352,50 @@ evidence_loader_impl::_save_accounts ()
             // Set metadata
             auto metadata = acc.metadata.clone ();
             metadata.set ("username", p.get_username ());
-            metadata.set ("app_name", APP_NAME);
-            metadata.set ("app_id", APP_ID);
+            metadata.set ("app_name", p.get_app_name ());
+            metadata.set ("app_id", p.get_app_id ());
             e.set_attribute ("metadata", metadata);
 
             // Tags and sources
             e.set_tag ("app.browser");
             e.add_source (acc.f);
         }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save app profiles
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_loader_impl::_save_app_profiles ()
+{
+    for (const auto &p : profiles_)
+    {
+        auto e = item_.new_evidence ("app-profile");
+
+        // Attributes
+        e.set_attribute ("app_id", p.get_app_id ());
+        e.set_attribute ("app_name", p.get_app_name ());
+        e.set_attribute ("username", p.get_username ());
+        e.set_attribute ("creation_time", p.get_creation_time ());
+        e.set_attribute ("last_modified_time", p.get_last_modified_time ());
+        e.set_attribute ("path", p.get_path ());
+
+        // Metadata
+        auto metadata = mobius::core::pod::map ();
+
+        metadata.set ("profile_name", p.get_profile_name ());
+        metadata.set ("num_accounts", p.size_accounts ());
+        metadata.set ("num_autofill_entries", p.size_autofill_entries ());
+        metadata.set ("num_credit_cards", p.size_credit_cards ());
+        metadata.set ("num_downloads", p.size_downloads ());
+        metadata.set ("num_history_entries", p.size_history_entries ());
+
+        e.set_attribute ("metadata", metadata);
+
+        // Tags and sources
+        e.set_tag ("app.browser");
+        e.add_source (p.get_folder ());
     }
 }
 
@@ -402,8 +412,8 @@ evidence_loader_impl::_save_autofills ()
             auto e = item_.new_evidence ("autofill");
 
             e.set_attribute ("field_name", a.name);
-            e.set_attribute ("app_name", APP_NAME);
-            e.set_attribute ("app_id", APP_ID);
+            e.set_attribute ("app_name", p.get_app_name ());
+            e.set_attribute ("app_id", p.get_app_id ());
             e.set_attribute ("username", p.get_username ());
             e.set_attribute ("is_encrypted", a.is_encrypted);
 
@@ -439,8 +449,8 @@ evidence_loader_impl::_save_credit_cards ()
         for (const auto &cc : p.get_credit_cards ())
         {
             auto e = item_.new_evidence ("credit-card");
-            e.set_attribute ("app_id", APP_ID);
-            e.set_attribute ("app_name", APP_NAME);
+            e.set_attribute ("app_id", p.get_app_id ());
+            e.set_attribute ("app_name", p.get_app_name ());
             e.set_attribute ("username", p.get_username ());
             e.set_attribute ("name", cc.name_on_card);
             e.set_attribute ("number", cc.card_number);
@@ -477,7 +487,6 @@ evidence_loader_impl::_save_credit_cards ()
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save received files
-// @todo Implement saving of received files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_loader_impl::_save_received_files ()
@@ -498,44 +507,44 @@ evidence_loader_impl::_save_received_files ()
                 e.set_attribute ("username", profile.get_username ());
                 e.set_attribute ("path", path);
                 e.set_attribute ("filename", _get_filename (path));
-                e.set_attribute ("app_id", APP_ID);
-                e.set_attribute ("app_name", APP_NAME);
+                e.set_attribute ("app_id", profile.get_app_id ());
+                e.set_attribute ("app_name", profile.get_app_name ());
 
                 auto metadata = mobius::core::pod::map ();
-                metadata.set ("record_number", entry.idx);
-                metadata.set ("by_ext_id", entry.by_ext_id);
-                metadata.set ("by_ext_name", entry.by_ext_name);
-                metadata.set ("by_web_app_id", entry.by_web_app_id);
+                metadata.set ("start_time", entry.start_time);
+                metadata.set ("end_time", entry.end_time);
                 metadata.set ("current_path", entry.current_path);
+                metadata.set ("full_path", entry.full_path);
+                metadata.set ("target_path", entry.target_path);
+                metadata.set ("site_url", entry.site_url);
+                metadata.set ("tab_url", entry.tab_url);
+                metadata.set ("tab_referrer_url", entry.tab_referrer_url);
+                metadata.set ("url", entry.url);
+                metadata.set ("referrer", entry.referrer);
+                metadata.set ("received_bytes", entry.received_bytes);
+                metadata.set ("total_bytes", entry.total_bytes);
+                metadata.set ("state", entry.state);
+                metadata.set ("mime_type", entry.mime_type);
+                metadata.set ("original_mime_type", entry.original_mime_type);
+                metadata.set ("record_number", entry.idx);
+                metadata.set ("id", entry.id);
+                metadata.set ("guid", entry.guid);
+                metadata.set ("extension_id", entry.by_ext_id);
+                metadata.set ("extenstion_name", entry.by_ext_name);
+                metadata.set ("web_app_id", entry.by_web_app_id);
                 metadata.set ("danger_type", entry.danger_type);
                 metadata.set (
                     "embedder_download_data",
                     entry.embedder_download_data
                 );
-                metadata.set ("end_time", entry.end_time);
                 metadata.set ("etag", entry.etag);
-                metadata.set ("full_path", entry.full_path);
-                metadata.set ("guid", entry.guid);
                 metadata.set ("hash", entry.hash);
                 metadata.set ("http_method", entry.http_method);
-                metadata.set ("id", entry.id);
                 metadata.set ("interrupt_reason", entry.interrupt_reason);
                 metadata.set ("last_access_time", entry.last_access_time);
                 metadata.set ("last_modified", entry.last_modified);
-                metadata.set ("mime_type", entry.mime_type);
                 metadata.set ("opened", entry.opened);
-                metadata.set ("original_mime_type", entry.original_mime_type);
-                metadata.set ("received_bytes", entry.received_bytes);
-                metadata.set ("referrer", entry.referrer);
-                metadata.set ("site_url", entry.site_url);
-                metadata.set ("start_time", entry.start_time);
-                metadata.set ("state", entry.state);
-                metadata.set ("tab_referrer_url", entry.tab_referrer_url);
-                metadata.set ("tab_url", entry.tab_url);
-                metadata.set ("target_path", entry.target_path);
-                metadata.set ("total_bytes", entry.total_bytes);
                 metadata.set ("transient", entry.transient);
-                metadata.set ("url", entry.url);
 
                 e.set_attribute ("metadata", metadata);
 
@@ -565,8 +574,8 @@ evidence_loader_impl::_save_visited_urls ()
             auto metadata = mobius::core::pod::map ();
             metadata.set ("record_number", entry.idx);
             metadata.set ("visit_id", entry.visit_id);
-            metadata.set ("app_id", APP_ID);
-            metadata.set ("app_name", APP_NAME);
+            metadata.set ("app_id", p.get_app_id ());
+            metadata.set ("app_name", p.get_app_name ());
             e.set_attribute ("metadata", metadata);
 
             e.set_tag ("app.browser");

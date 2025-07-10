@@ -119,12 +119,6 @@
 //      - visit_count: 20, 22-23, 28-30, 32-33, 36-45, 48, 50-51, 53, 55-56,
 //      58-59, 61-63, 65-69
 //
-// - visit_source
-//      - id: 20, 22-23, 28-30, 32-33, 36-45, 48, 50-51, 53, 55-56, 58-59,
-//      61-63, 65-69
-//      - source: 20, 22-23, 28-30, 32-33, 36-45, 48, 50-51, 53, 55-56, 58-59,
-//      61-63, 65-69
-//
 // - visited_links: Visited links
 //      - frame_url: 67-69
 //      - id: 67-69
@@ -417,7 +411,9 @@ file_history::_load_downloads (mobius::core::database::database &db)
         entry.by_web_app_id = stmt.get_column_int64 (2);
         entry.current_path = stmt.get_column_string (3);
 
-        entry.embedder_download_data = stmt.get_column_string (5);
+        auto embedder_download_data = stmt.get_column_bytearray(5);
+        entry.embedder_download_data = embedder_download_data.dump();
+        
         entry.end_time = get_datetime (stmt.get_column_int64 (6));
         entry.etag = stmt.get_column_string (7);
         entry.full_path = stmt.get_column_string (8);

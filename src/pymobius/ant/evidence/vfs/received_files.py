@@ -63,7 +63,6 @@ class Ant(object):
             raise Exception('Datasource is not available')
 
         # retrieve data
-        self.__retrieve_chromium()
         self.__retrieve_gecko()
         self.__retrieve_itubego()
         self.__retrieve_skype()
@@ -71,51 +70,6 @@ class Ant(object):
 
         # save data
         self.__save_data()
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from Chromium based browsers
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_chromium(self):
-        try:
-            model = pymobius.app.chromium.model(self.__item)
-
-            for profile in model.get_profiles():
-                self.__retrieve_chromium_profile(profile)
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from Chromium profile
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_chromium_profile(self, profile):
-        DOWNLOAD_STATE = {0: 'In progress', 1: 'Complete', 2: 'Cancelled', 3: 'Interrupted'}
-
-        try:
-            for d in profile.get_downloads():
-                entry = pymobius.Data()
-
-                entry.username = profile.username
-                entry.timestamp = d.start_time
-                entry.filename = d.name
-                entry.path = d.target
-                entry.app_id = profile.app_id
-                entry.app_name = profile.app_name
-
-                entry.metadata = mobius.core.pod.map()
-                entry.metadata.set('url', d.source)
-                entry.metadata.set('size', d.size)
-                entry.metadata.set('start-time', d.start_time)
-                entry.metadata.set('end-time', d.end_time)
-                entry.metadata.set('bytes-downloaded', d.bytes_downloaded)
-                entry.metadata.set('download-state', DOWNLOAD_STATE.get(d.state, 'Unknown (%d)' % d.state))
-                entry.metadata.set('page-referrer', d.referrer)
-                entry.metadata.set('profile-id', profile.name)
-                entry.metadata.set('profile-path', profile.path)
-
-                self.__entries.append(entry)
-
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Retrieve data from Gecko based browsers

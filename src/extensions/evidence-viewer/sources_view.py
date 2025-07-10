@@ -79,6 +79,9 @@ class SourcesView(object):
                 elif source.type == 2:  # Evidence
                     type_name = 'Evidence'
 
+                elif source.type == 3:  # Folder
+                    type_name = 'Folder'
+
                 else:
                     type_name = 'Unknown'            
 

@@ -19,10 +19,110 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "profile.hpp"
 #include <mobius/core/log.hpp>
+#include <mobius/core/string_functions.hpp>
 #include <mobius/core/value_selector.hpp>
+#include <tuple>
 #include <algorithm>
+#include <string>
+#include <vector>
 #include "file_history.hpp"
 #include "file_web_data.hpp"
+
+namespace
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Known Chromium browsers
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// This list is based on the Chromium-based browsers. It includes popular
+// browsers and some lesser-known ones. The list is ordered by popularity, with
+// the most popular browsers listed first. Note: This list may not be exhaustive
+// and can change over time as new browsers are released or existing ones are
+// updated.
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<std::tuple<std::string, std::string, std::string>>
+    chromiumBrowsers = {
+
+        // Most popular Chromium-based browsers first
+        {"/Google/Chrome/User Data/", "chrome", "Google Chrome"},
+        {"/Microsoft/Edge/User Data/", "edge", "Microsoft Edge"},
+        {"/BraveSoftware/Brave-Browser/User Data/", "brave", "Brave"},
+        {"/Opera Software/Opera Stable/", "opera", "Opera"},
+        {"/Vivaldi/User Data/", "vivaldi", "Vivaldi"},
+        {"/Yandex/YandexBrowser/User Data/", "yandex", "Yandex Browser"},
+        {"/Chromium/User Data/", "chromium", "Chromium"},
+
+        // Other Chromium-based browsers
+        {"/1stBrowser/User Data/", "1stbrowser", "1st Browser"},
+        {"/7Star/7Star/User Data/", "7star", "7 Star"},
+        {"/AliExpress/User Data/", "aliexpress", "AliExpress"},
+        {"/Amigo/User Data/", "amigo", "Amigo"},
+        {"/AppKiwi/User Data/", "appkiwi", "AppKiwi"},
+        {"/Avast Software/Browser/User Data/", "avast", "Avast Browser"},
+        {"/AVAST Software/Browser/User Data/", "avast", "Avast Browser"},
+        {"/BoBrowser/User Data/", "bobrowser", "BoBrowser"},
+        {"/CCleaner Browser/User Data/", "ccleaner", "CCleaner Browser"},
+        {"/CentBrowser/User Data/", "centbrowser", "CentBrowser"},
+        {"/Chedot/User Data/", "chedot", "Chedot"},
+        {"/Ckaach/", "ckaach", "Ckaach"},
+        {"/CocCoc/Browser/User Data/", "coccoc", "Coccoc"},
+        {"/Comodo/Dragon/User Data/", "comodo", "Comodo Dragon"},
+        {"/CryptoTab Browser/User Data/", "cryptotab", "CryptoTab Browser"},
+        {"/Discord/", "discord", "Discord"},
+        {"/Elements Browser/User Data/", "elements", "Elements Browser"},
+        {"/Epic Privacy Browser/User Data/", "epic", "Epic Privacy Browser"},
+        {"/Google/Chrome SxS/User Data/", "chrome.canary", "Chrome Canary"},
+        {"/Kiwi/User Data/", "kiwi", "Kiwi Browser"},
+        {"/Kodi/userdata/addon_data/plugin.program.browser.launcher/profile/2",
+         "kodi.browser",
+         "Kodi Browser Launcher"},
+        {"/Kodi/userdata/addon_data/plugin.program.chrome.launcher/profile",
+         "kodi.chrome",
+         "Kodi Chrome Launcher"},
+        {"/Kometa/User Data/", "kometa", "Kometa"},
+        {"/Lunascape/User Data/", "lunascape", "Lunascape"},
+        {"/Maxthon/User Data/", "maxthon", "Maxthon"},
+        {"/Microsoft/Edge Beta/User Data/", "edge.beta", "Microsoft Edge Beta"},
+        {"/Microsoft/Edge Dev/User Data/", "edge.dev", "Microsoft Edge Dev"},
+        {"/Microsoft/Edge SxS/User Data/",
+         "edge.canary",
+         "Microsoft Edge Canary"},
+        {"/Mighty Browser/User Data/", "mighty", "Mighty Browser"},
+        {"/Naver/Whale/User Data/", "whale", "Naver Whale"},
+        {"/Opera Software/Opera GX Stable/", "opera-gx", "Opera GX"},
+        {"/Orbitum/User Data/", "orbitum", "Orbitum"},
+        {"/PlutoTV/", "plutotv", "PlutoTV"},
+        {"/Sputnik/Sputnik/User Data/", "sputnik", "Sputnik"},
+        {"/Temp/BCLTMP/Chrome/",
+         "chrome.bcltmp",
+         "Google Chrome from Avast Browser Cleanup"},
+        {"/Torch/User Data/", "torch", "Torch"},
+        {"/uCozMedia/Uran/User Data/", "uran", "Uran"},
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get username from path
+// @param path Path to profile
+// @return Username extracted from path
+//
+// @note Paths are in the following format: /FSxx/Users/username/... or
+// /FSxx/home/username/... where FSxx is the filesystem identifier.
+// Example: /FS01/Users/johndoe/AppData/Local/Google/Chrome/User Data/
+// In this case, the username is "johndoe".
+// If the path does not match the expected format, an empty string is returned.
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+_get_username (const std::string &path)
+{
+    auto dirnames = mobius::core::string::split (path, "/");
+
+    if (dirnames.size () > 3 &&
+        (dirnames[2] == "Users" || dirnames[2] == "home"))
+        return dirnames[3]; // Username is the fourth directory
+
+    return {}; // No username found
+}
+
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @see
@@ -31,46 +131,48 @@
 // https://medium.com/@jsaxena017/web-browser-forensics-part-1-chromium-browser-family-99b807083c25
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 namespace mobius::extension::app::chromium
-{ /*
- // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- // @brief Get accounts
- // @return vector of accounts
- // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- std::vector<profile::account>
- profile::get_accounts () const
- {
-     std::vector<account> accounts;
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set folder
+// @param f Folder
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::set_folder (const mobius::core::io::folder &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
 
-     std::transform (accounts_.begin (), accounts_.end (),
-                     std::back_inserter (accounts),
-                     [] (const auto &pair) { return pair.second; });
+    folder_ = f;
+    profile_name_ = f.get_name ();
+    last_modified_time_ = f.get_modification_time ();
+    creation_time_ = f.get_creation_time ();
 
-     std::sort (accounts.begin (), accounts.end (),
-                [] (const auto &a, const auto &b)
-                { return a.client_id < b.client_id; });
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Get username from path
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto path = f.get_path ();
+    username_ = _get_username (path);
 
-     return accounts;
- }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Identify browser based on folder name
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto it = std::find_if (
+        chromiumBrowsers.begin (),
+        chromiumBrowsers.end (),
+        [&path] (const auto &browser)
+        { return path.find (std::get<0> (browser)) != std::string::npos; }
+    );
 
- // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- // @brief Get local files
- // @return vector of local files
- // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- std::vector<profile::local_file>
- profile::get_local_files () const
- {
-     std::vector<local_file> local_files;
-
-     std::transform (local_files_.begin (), local_files_.end (),
-                     std::back_inserter (local_files),
-                     [] (const auto &pair) { return pair.second; });
-
-     std::sort (local_files.begin (), local_files.end (),
-                [] (const auto &a, const auto &b)
-                { return a.torrent_name < b.torrent_name; });
-
-     return local_files;
- }*/
+    if (it != chromiumBrowsers.end ())
+    {
+        app_id_ = std::get<1> (*it);
+        app_name_ = std::get<2> (*it);
+    }
+    else
+        log.development (
+            __LINE__,
+            "Unidentified Chromium-based browser. Profile path: " + path
+        );
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Add Preferences file
@@ -148,6 +250,57 @@ profile::add_preferences_file (const mobius::core::io::file &f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add History file
+// @param f History file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_history_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode file
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    file_history fh (f.new_reader ());
+
+    if (!fh)
+    {
+        log.info (__LINE__, "File is not a valid 'History' file");
+        return;
+    }
+
+    log.info (__LINE__, "File " + f.get_path () + " is a valid 'History' file");
+
+    if (!last_modified_time_ ||
+        f.get_modification_time () > last_modified_time_)
+        last_modified_time_ = f.get_modification_time ();
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Add history entries
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &entry : fh.get_history_entries ())
+    {
+        history_entry e (entry);
+        e.f = f;
+
+        history_entries_.push_back (e);
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Add downloads
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &entry : fh.get_downloads ())
+    {
+        download d (entry);
+        d.f = f;
+
+        downloads_.push_back (d);
+    }
+
+    is_valid_ = true;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Add Web Data file
 // @param f Web Data file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -172,6 +325,10 @@ profile::add_web_data_file (const mobius::core::io::file &f)
         "File " + f.get_path () + " is a valid 'Web Data' file"
     );
 
+    if (!last_modified_time_ ||
+        f.get_modification_time () > last_modified_time_)
+        last_modified_time_ = f.get_modification_time ();
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add autofill entries
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -185,7 +342,6 @@ profile::add_web_data_file (const mobius::core::io::file &f)
         a.count = entry.count;
         a.date_created = entry.date_created;
         a.date_last_used = entry.date_last_used;
-        a.username = username_;
         a.is_encrypted = entry.is_encrypted;
         a.f = f;
 
@@ -203,7 +359,6 @@ profile::add_web_data_file (const mobius::core::io::file &f)
         acc.id = p.guid;
         acc.emails = p.emails;
         acc.organizations = std::vector<std::string> {p.company_name};
-        acc.username = username_;
         acc.f = f;
 
         // Phone numbers
@@ -257,13 +412,14 @@ profile::add_web_data_file (const mobius::core::io::file &f)
     for (const auto &card : web_data.get_credit_cards ())
     {
         credit_card c;
+
         c.idx = card.idx;
         c.card_number = card.card_number;
         c.card_number_encrypted = card.card_number_encrypted;
         c.name_on_card = card.name_on_card;
         c.expiration_month = card.expiration_month;
         c.expiration_year = card.expiration_year;
-        c.cvv = card.cvv;
+        c.cvv = card.cvc;
         c.origin = card.origin;
         c.use_count = card.use_count;
         c.use_date = card.use_date;
@@ -272,62 +428,11 @@ profile::add_web_data_file (const mobius::core::io::file &f)
         c.network = card.network;
         c.bank_name = card.bank_name;
         c.card_issuer = card.card_issuer;
-        c.metadata = card.metadata;
         c.date_modified = card.date_modified;
         c.unmask_date = card.unmask_date;
         c.f = f;
 
         credit_cards_.push_back (c);
-    }
-
-    is_valid_ = true;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Add History file
-// @param f History file
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-profile::add_history_file (const mobius::core::io::file &f)
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Decode file
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    file_history fh (f.new_reader ());
-
-    if (!fh)
-    {
-        log.info (__LINE__, "File is not a valid 'History' file");
-        return;
-    }
-
-    log.info (
-        __LINE__,
-        "File " + f.get_path () + " is a valid 'History' file"
-    );
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Add history entries
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    for (const auto &entry : fh.get_history_entries ())
-    {
-        history_entry e (entry);
-        e.f = f;
-
-        history_entries_.push_back (e);
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Add downloads
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    for (const auto &entry : fh.get_downloads ())
-    {
-        download d (entry);
-        d.f = f;
-
-        downloads_.push_back (d);
     }
 
     is_valid_ = true;
