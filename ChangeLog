@@ -11,7 +11,8 @@ Mobius Forensic Toolkit 2.17
 	* app-chromium: Added support for Web Data schema version up to 135
 	* evidence-viewer: Added attribute "names" to User Accounts
 	* evidence-viewer: Added new evidence type "Application Profile"
-	* libmobius_core: Added new function mobius::string::join
+	* libmobius_core: Added new function string::join
+	* libmobius_core: Added new method database::has_table
 	* libmobius_framework: Added method model::evidence::add_source(folder)
 	* ant.evidence.vfs: Changed to call app-chromium evidence loader
 	* ant.evidence.vfs.autofill: Removed old Chromium code

@@ -65,7 +65,7 @@ show_web_data (const std::string &path)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Show autofill entries
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    /*std::cout << "Autofill entries:" << std::endl;
+    std::cout << "Autofill entries:" << std::endl;
 
     for (const auto &entry : dat.get_autofill_entries ())
     {
@@ -86,7 +86,7 @@ show_web_data (const std::string &path)
         std::cout << "\tCount: " << entry.count << std::endl;
         std::cout << "\tIs encrypted: " << (entry.is_encrypted ? "yes" : "no")
                   << std::endl;
-    }*/
+    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Show autofill profiles
@@ -182,39 +182,61 @@ show_web_data (const std::string &path)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Show credit cards
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    /*std::cout << std::endl;
+    std::cout << std::endl;
     std::cout << "Credit cards:" << std::endl;
 
     for (const auto &card : dat.get_credit_cards ())
     {
         std::cout << std::endl;
         std::cout << "\tIndex: " << card.idx << std::endl;
-        std::cout << "\tName on card: " << card.name_on_card << std::endl;
+        std::cout << "\tGUID: " << card.guid << std::endl;
+        std::cout << "\tBank name: " << card.bank_name << std::endl;
+        std::cout << "\tBilling address ID: " << card.billing_address_id
+                  << std::endl;
+        std::cout << "\tCard art URL: " << card.card_art_url << std::endl;
+        std::cout << "\tCard info retrieval enrollment state: "
+                  << card.card_info_retrieval_enrollment_state << std::endl;
+        std::cout << "\tCard issuer: " << card.card_issuer << std::endl;
+        std::cout << "\tCard issuer ID: " << card.card_issuer_id << std::endl;
+        std::cout << "\tDate modified: " << card.date_modified << std::endl;
         std::cout << "\tExpiration month: " << card.expiration_month
                   << std::endl;
         std::cout << "\tExpiration year: " << card.expiration_year << std::endl;
-
-        if (card.is_encrypted)
-            std::cout << "\tCard number: (encrypted)" << std::endl;
-        else
-            std::cout << "\tCard number: " << card.card_number << std::endl;
-
-        std::cout << "\tDate modified: " << to_string (card.date_modified)
-                  << std::endl;
-        std::cout << "\tOrigin: " << card.origin << std::endl;
-        std::cout << "\tUse count: " << card.use_count << std::endl;
-        std::cout << "\tUse date: " << to_string (card.use_date) << std::endl;
-        std::cout << "\tNickname: " << card.nickname << std::endl;
-        std::cout << "\tType: " << card.type << std::endl;
+        std::cout << "\tID: " << card.id << std::endl;
+        std::cout << "\tInstrument ID: " << card.instrument_id << std::endl;
+        std::cout << "\tLast four: " << card.last_four << std::endl;
+        std::cout << "\tName on card: " << card.name_on_card << std::endl;
         std::cout << "\tNetwork: " << card.network << std::endl;
-        std::cout << "\tBank name: " << card.bank_name << std::endl;
-        std::cout << "\tCard issuer: " << card.card_issuer << std::endl;
+        std::cout << "\tNickname: " << card.nickname << std::endl;
+        std::cout << "\tOrigin: " << card.origin << std::endl;
+        std::cout << "\tProduct description: " << card.product_description
+                  << std::endl;
+        std::cout << "\tProduct terms URL: " << card.product_terms_url
+                  << std::endl;
+        std::cout << "\tStatus: " << card.status << std::endl;
+        std::cout << "\tType: " << card.type << std::endl;
+        std::cout << "\tVirtual card enrollment state: "
+                  << card.virtual_card_enrollment_state << std::endl;
+        std::cout << "\tVirtual card enrollment type: "
+                  << card.virtual_card_enrollment_type << std::endl;
+        std::cout << "\tUse count: " << card.use_count << std::endl;
+        std::cout << "\tUse date: " << card.use_date << std::endl;
+        std::cout << "\tUnmask date: " << card.unmask_date << std::endl;
+        std::cout << "\tCard number: " << card.card_number << std::endl;
+        std::cout << "\tCard number encrypted: "
+                  << card.card_number_encrypted.dump () << std::endl;
 
-        // show metadata
-        std::cout << "\tMetadata:" << std::endl;
-        for (const auto &[k, v] : card.metadata)
-            std::cout << "\t\t" << k << ": " << v << std::endl;
-    }*/
+        // show tags
+        std::cout << "\tTags:" << std::endl;
+        for (const auto &tag : card.tags)
+        {
+            std::cout << "\t\tDate modified: " << tag.date_modified
+                      << std::endl;
+            std::cout << "\t\tTag: " << tag.tag << std::endl;
+            std::cout << "\t\tEncrypted tag: " << tag.tag_encrypted.dump ()
+                      << std::endl;
+        }
+    }
 }
 
 } // namespace

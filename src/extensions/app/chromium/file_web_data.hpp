@@ -25,7 +25,6 @@
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/reader.hpp>
-#include <mobius/core/pod/map.hpp>
 #include <string>
 #include <vector>
 
@@ -287,7 +286,7 @@ class file_web_data
         std::string id;
 
         // @brief Billing address ID
-        std::uint64_t billing_address_id = 0;
+        std::string billing_address_id;
 
         // @brief Nickname
         std::string nickname;
@@ -311,7 +310,7 @@ class file_web_data
         std::uint64_t card_issuer_id = 0;
 
         // @brief Instrument ID
-        std::uint64_t instrument_id = 0;
+        std::string instrument_id;
 
         // @brief Network
         std::string network;
@@ -350,7 +349,10 @@ class file_web_data
     // @brief Check if stream is an instance of web data file
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const noexcept { return is_instance_; }
+    operator bool () const noexcept
+    {
+        return is_instance_;
+    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get schema version

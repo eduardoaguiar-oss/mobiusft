@@ -235,46 +235,53 @@ file_history::file_history (const mobius::core::io::reader &reader)
     if (!reader)
         return;
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Copy reader content to temporary file
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::core::io::tempfile tfile;
-    tfile.copy_from (reader);
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Get schema version
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::core::database::database db (tfile.get_path ());
-
-    auto stmt = db.new_statement (
-        "SELECT value "
-        "FROM meta "
-        "WHERE key = 'version'"
-    );
-
-    if (stmt.fetch_row ())
-        schema_version_ = stmt.get_column_int64 (0);
-
-    else
-        return;
-
-    if (schema_version_ > LAST_KNOWN_SCHEMA_VERSION ||
-        UNKNOWN_SCHEMA_VERSIONS.find (schema_version_) !=
-            UNKNOWN_SCHEMA_VERSIONS.end ())
+    try
     {
-        log.development (
-            __LINE__,
-            "Unhandled schema version: " + std::to_string (schema_version_)
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Copy reader content to temporary file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::io::tempfile tfile;
+        tfile.copy_from (reader);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Get schema version
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::database::database db (tfile.get_path ());
+
+        auto stmt = db.new_statement (
+            "SELECT value "
+            "FROM meta "
+            "WHERE key = 'version'"
         );
+
+        if (stmt.fetch_row ())
+            schema_version_ = stmt.get_column_int64 (0);
+
+        else
+            return;
+
+        if (schema_version_ > LAST_KNOWN_SCHEMA_VERSION ||
+            UNKNOWN_SCHEMA_VERSIONS.find (schema_version_) !=
+                UNKNOWN_SCHEMA_VERSIONS.end ())
+        {
+            log.development (
+                __LINE__,
+                "Unhandled schema version: " + std::to_string (schema_version_)
+            );
+        }
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Load data
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        _load_history (db);
+        _load_downloads (db);
+
+        is_instance_ = true;
     }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Load data
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    _load_history (db);
-    _load_downloads (db);
-
-    is_instance_ = true;
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -286,147 +293,157 @@ file_history::_load_downloads (mobius::core::database::database &db)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
-    // Prepare statement
-    mobius::core::database::statement stmt;
-
-    if (schema_version_ < 24)
-        stmt = db.new_statement (
-            "SELECT "
-            "NULL AS by_ext_id, "
-            "NULL AS by_ext_name, "
-            "NULL AS by_web_app_id, "
-            "NULL AS current_path, "
-            "NULL AS danger_type, "
-            "NULL AS embedder_download_data, "
-            "end_time, "
-            "NULL AS etag, "
-            "full_path, "
-            "NULL AS guid, "
-            "NULL AS hash, "
-            "NULL AS http_method, "
-            "id, "
-            "NULL AS interrupt_reason, "
-            "NULL AS last_access_time, "
-            "NULL AS last_modified, "
-            "NULL AS mime_type, "
-            "opened, "
-            "NULL AS original_mime_type, "
-            "received_bytes, "
-            "NULL AS referrer, "
-            "NULL AS site_url, "
-            "start_time, "
-            "state, "
-            "NULL AS tab_referrer_url, "
-            "NULL AS tab_url, "
-            "NULL AS target_path, "
-            "total_bytes, "
-            "NULL AS transient, "
-            "url "
-            "FROM downloads"
-        );
-
-    else
-        stmt = db.new_statement (generate_sql (
-            "SELECT "
-            "d.by_ext_id, "
-            "d.by_ext_name, "
-            "${d.by_web_app_id,65}, "
-            "d.current_path, "
-            "d.danger_type, "
-            "${d.embedder_download_data,53}, "
-            "d.end_time, "
-            "d.etag, "
-            "NULL AS full_path, "
-            "${d.guid,30}, "
-            "${d.hash,30}, "
-            "${d.http_method,30}, "
-            "d.id, "
-            "d.interrupt_reason, "
-            "${d.last_access_time,36}, "
-            "d.last_modified, "
-            "${d.mime_type,29}, "
-            "d.opened, "
-            "${d.original_mime_type,29}, "
-            "d.received_bytes, "
-            "d.referrer, "
-            "${d.site_url,32}, "
-            "d.start_time, "
-            "d.state, "
-            "${d.tab_referrer_url,32}, "
-            "${d.tab_url,32}, "
-            "d.target_path, "
-            "d.total_bytes, "
-            "${d.transient,36}, "
-            "c.url "
-            "FROM downloads d "
-            "LEFT JOIN downloads_url_chains c ON d.id = c.id",
-            schema_version_
-        ));
-
-    // Retrieve rows from query
-    std::uint64_t idx = 0;
-
-    while (stmt.fetch_row ())
+    try
     {
-        download entry;
+        // Prepare statement
+        mobius::core::database::statement stmt;
 
-        entry.idx = idx++;
-        entry.by_ext_id = stmt.get_column_int64 (0);
-        entry.by_ext_name = stmt.get_column_string (1);
-        entry.by_web_app_id = stmt.get_column_int64 (2);
-        entry.current_path = stmt.get_column_string (3);
+        if (schema_version_ < 24)
+            stmt = db.new_statement (
+                "SELECT "
+                "NULL AS by_ext_id, "
+                "NULL AS by_ext_name, "
+                "NULL AS by_web_app_id, "
+                "NULL AS current_path, "
+                "NULL AS danger_type, "
+                "NULL AS embedder_download_data, "
+                "end_time, "
+                "NULL AS etag, "
+                "full_path, "
+                "NULL AS guid, "
+                "NULL AS hash, "
+                "NULL AS http_method, "
+                "id, "
+                "NULL AS interrupt_reason, "
+                "NULL AS last_access_time, "
+                "NULL AS last_modified, "
+                "NULL AS mime_type, "
+                "opened, "
+                "NULL AS original_mime_type, "
+                "received_bytes, "
+                "NULL AS referrer, "
+                "NULL AS site_url, "
+                "start_time, "
+                "state, "
+                "NULL AS tab_referrer_url, "
+                "NULL AS tab_url, "
+                "NULL AS target_path, "
+                "total_bytes, "
+                "NULL AS transient, "
+                "url "
+                "FROM downloads"
+            );
 
-        auto embedder_download_data = stmt.get_column_bytearray (5);
-        entry.embedder_download_data = embedder_download_data.dump ();
+        else
+            stmt = db.new_statement (generate_sql (
+                "SELECT "
+                "d.by_ext_id, "
+                "d.by_ext_name, "
+                "${d.by_web_app_id,65}, "
+                "d.current_path, "
+                "d.danger_type, "
+                "${d.embedder_download_data,53}, "
+                "d.end_time, "
+                "d.etag, "
+                "NULL AS full_path, "
+                "${d.guid,30}, "
+                "${d.hash,30}, "
+                "${d.http_method,30}, "
+                "d.id, "
+                "d.interrupt_reason, "
+                "${d.last_access_time,36}, "
+                "d.last_modified, "
+                "${d.mime_type,29}, "
+                "d.opened, "
+                "${d.original_mime_type,29}, "
+                "d.received_bytes, "
+                "d.referrer, "
+                "${d.site_url,32}, "
+                "d.start_time, "
+                "d.state, "
+                "${d.tab_referrer_url,32}, "
+                "${d.tab_url,32}, "
+                "d.target_path, "
+                "d.total_bytes, "
+                "${d.transient,36}, "
+                "c.url "
+                "FROM downloads d "
+                "LEFT JOIN downloads_url_chains c ON d.id = c.id",
+                schema_version_
+            ));
 
-        entry.end_time = get_datetime (stmt.get_column_int64 (6));
-        entry.etag = stmt.get_column_string (7);
-        entry.full_path = stmt.get_column_string (8);
-        entry.guid = stmt.get_column_string (9);
+        // Retrieve rows from query
+        std::uint64_t idx = 0;
 
-        entry.http_method = stmt.get_column_string (11);
-        entry.id = stmt.get_column_int64 (12);
-        entry.interrupt_reason = stmt.get_column_int64 (13);
-        entry.last_access_time = get_datetime (stmt.get_column_int64 (14));
-        entry.last_modified = stmt.get_column_string (15);
-        entry.mime_type = stmt.get_column_string (16);
-        entry.opened = stmt.get_column_bool (17);
-        entry.original_mime_type = stmt.get_column_string (18);
-        entry.received_bytes = stmt.get_column_int64 (19);
-        entry.referrer = stmt.get_column_string (20);
-        entry.site_url = stmt.get_column_string (21);
-        entry.start_time = get_datetime (stmt.get_column_int64 (22));
-
-        entry.tab_referrer_url = stmt.get_column_string (24);
-        entry.tab_url = stmt.get_column_string (25);
-        entry.target_path = stmt.get_column_string (26);
-        entry.total_bytes = stmt.get_column_int64 (27);
-        entry.transient = stmt.get_column_bool (28);
-        entry.url = stmt.get_column_string (29);
-
-        // Handle danger type
-        auto danger_type_iter =
-            DOWNLOAD_DANGER_TYPE_STRINGS.find (stmt.get_column_int64 (4));
-
-        if (danger_type_iter != DOWNLOAD_DANGER_TYPE_STRINGS.end ())
-            entry.danger_type = danger_type_iter->second;
-
-        // Handle hash
-        auto h = stmt.get_column_bytearray (10);
-        if (h)
+        while (stmt.fetch_row ())
         {
-            entry.hash = h.to_hexstring ();
-            log.development (__LINE__, "Download hash found: " + entry.hash);
+            download entry;
+
+            entry.idx = idx++;
+            entry.by_ext_id = stmt.get_column_int64 (0);
+            entry.by_ext_name = stmt.get_column_string (1);
+            entry.by_web_app_id = stmt.get_column_int64 (2);
+            entry.current_path = stmt.get_column_string (3);
+
+            auto embedder_download_data = stmt.get_column_bytearray (5);
+            entry.embedder_download_data = embedder_download_data.dump ();
+
+            entry.end_time = get_datetime (stmt.get_column_int64 (6));
+            entry.etag = stmt.get_column_string (7);
+            entry.full_path = stmt.get_column_string (8);
+            entry.guid = stmt.get_column_string (9);
+
+            entry.http_method = stmt.get_column_string (11);
+            entry.id = stmt.get_column_int64 (12);
+            entry.interrupt_reason = stmt.get_column_int64 (13);
+            entry.last_access_time = get_datetime (stmt.get_column_int64 (14));
+            entry.last_modified = stmt.get_column_string (15);
+            entry.mime_type = stmt.get_column_string (16);
+            entry.opened = stmt.get_column_bool (17);
+            entry.original_mime_type = stmt.get_column_string (18);
+            entry.received_bytes = stmt.get_column_int64 (19);
+            entry.referrer = stmt.get_column_string (20);
+            entry.site_url = stmt.get_column_string (21);
+            entry.start_time = get_datetime (stmt.get_column_int64 (22));
+
+            entry.tab_referrer_url = stmt.get_column_string (24);
+            entry.tab_url = stmt.get_column_string (25);
+            entry.target_path = stmt.get_column_string (26);
+            entry.total_bytes = stmt.get_column_int64 (27);
+            entry.transient = stmt.get_column_bool (28);
+            entry.url = stmt.get_column_string (29);
+
+            // Handle danger type
+            auto danger_type_iter =
+                DOWNLOAD_DANGER_TYPE_STRINGS.find (stmt.get_column_int64 (4));
+
+            if (danger_type_iter != DOWNLOAD_DANGER_TYPE_STRINGS.end ())
+                entry.danger_type = danger_type_iter->second;
+
+            // Handle hash
+            auto h = stmt.get_column_bytearray (10);
+            if (h)
+            {
+                entry.hash = h.to_hexstring ();
+                log.development (
+                    __LINE__,
+                    "Download hash found: " + entry.hash
+                );
+            }
+
+            // Handle download state
+            auto state_iter =
+                DOWNLOAD_STATE_STRINGS.find (stmt.get_column_int64 (23));
+            if (state_iter != DOWNLOAD_STATE_STRINGS.end ())
+                entry.state = state_iter->second;
+
+            // Add entry to the list
+            downloads_.emplace_back (std::move (entry));
         }
-
-        // Handle download state
-        auto state_iter =
-            DOWNLOAD_STATE_STRINGS.find (stmt.get_column_int64 (23));
-        if (state_iter != DOWNLOAD_STATE_STRINGS.end ())
-            entry.state = state_iter->second;
-
-        // Add entry to the list
-        downloads_.emplace_back (std::move (entry));
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
     }
 }
 
@@ -437,82 +454,92 @@ file_history::_load_downloads (mobius::core::database::database &db)
 void
 file_history::_load_history (mobius::core::database::database &db)
 {
-    // Prepare statement
-    mobius::core::database::statement stmt = db.new_statement (generate_sql (
-        "SELECT "
-        "${u.favicon_id,20,33}, "
-        "u.hidden, "
-        "u.id, "
-        "u.last_visit_time, "
-        "u.title, "
-        "u.typed_count, "
-        "u.url, "
-        "u.visit_count, "
-        "${v.app_id,69}, "
-        "${v.consider_for_ntp_most_visited,63}, "
-        "${v.external_referrer_url,66}, "
-        "v.from_visit, "
-        "v.id, "
-        "${v.incremented_omnibox_typed_score,40}, "
-        "${v.is_indexed,20,32}, "
-        "${v.is_known_to_sync,59}, "
-        "${v.opener_visit,50}, "
-        "${v.originator_cache_guid,55}, "
-        "${v.originator_from_visit,56}, "
-        "${v.originator_opener_visit,56}, "
-        "${v.originator_visit_id,55}, "
-        "${v.publicly_routable,43,48}, "
-        "v.segment_id, "
-        "v.transition, "
-        "v.url, "
-        "v.visit_duration, "
-        "v.visit_time, "
-        "${v.visited_link_id,67} "
-        "FROM urls u, visits v "
-        "WHERE v.url = u.id "
-        "ORDER BY v.visit_time",
-        schema_version_
-    ));
+    mobius::core::log log (__FILE__, __FUNCTION__);
 
-    // Retrieve rows from query
-    std::uint64_t idx = 0;
-
-    while (stmt.fetch_row ())
+    try
     {
-        history_entry entry;
+        // Prepare statement
+        mobius::core::database::statement stmt =
+            db.new_statement (generate_sql (
+                "SELECT "
+                "${u.favicon_id,20,33}, "
+                "u.hidden, "
+                "u.id, "
+                "u.last_visit_time, "
+                "u.title, "
+                "u.typed_count, "
+                "u.url, "
+                "u.visit_count, "
+                "${v.app_id,69}, "
+                "${v.consider_for_ntp_most_visited,63}, "
+                "${v.external_referrer_url,66}, "
+                "v.from_visit, "
+                "v.id, "
+                "${v.incremented_omnibox_typed_score,40}, "
+                "${v.is_indexed,20,32}, "
+                "${v.is_known_to_sync,59}, "
+                "${v.opener_visit,50}, "
+                "${v.originator_cache_guid,55}, "
+                "${v.originator_from_visit,56}, "
+                "${v.originator_opener_visit,56}, "
+                "${v.originator_visit_id,55}, "
+                "${v.publicly_routable,43,48}, "
+                "v.segment_id, "
+                "v.transition, "
+                "v.url, "
+                "v.visit_duration, "
+                "v.visit_time, "
+                "${v.visited_link_id,67} "
+                "FROM urls u, visits v "
+                "WHERE v.url = u.id "
+                "ORDER BY v.visit_time",
+                schema_version_
+            ));
 
-        entry.idx = idx++;
-        entry.schema_version = schema_version_;
-        entry.favicon_id = stmt.get_column_int64 (0);
-        entry.hidden = stmt.get_column_bool (1);
-        entry.id = stmt.get_column_int64 (2);
-        entry.last_visit_time = get_datetime (stmt.get_column_int64 (3));
-        entry.title = stmt.get_column_string (4);
-        entry.typed_count = stmt.get_column_int64 (5);
-        entry.url = stmt.get_column_string (6);
-        entry.visit_count = stmt.get_column_int64 (7);
-        entry.app_id = stmt.get_column_int64 (8);
-        entry.consider_for_ntp_most_visited = stmt.get_column_bool (9);
-        entry.external_referrer_url = stmt.get_column_string (10);
-        entry.from_visit = stmt.get_column_int64 (11);
-        entry.visit_id = stmt.get_column_int64 (12);
-        entry.incremented_omnibox_typed_score = stmt.get_column_bool (13);
-        entry.is_indexed = stmt.get_column_bool (14);
-        entry.is_known_to_sync = stmt.get_column_bool (15);
-        entry.opener_visit = stmt.get_column_int64 (16);
-        entry.originator_cache_guid = stmt.get_column_string (17);
-        entry.originator_from_visit = stmt.get_column_int64 (18);
-        entry.originator_opener_visit = stmt.get_column_int64 (19);
-        entry.originator_visit_id = stmt.get_column_int64 (20);
-        entry.publicly_routable = stmt.get_column_bool (21);
-        entry.segment_id = stmt.get_column_int64 (22);
-        entry.transition = stmt.get_column_int64 (23);
-        entry.visit_url = stmt.get_column_int64 (24);
-        entry.visit_duration = stmt.get_column_int64 (25);
-        entry.visit_time = get_datetime (stmt.get_column_int64 (26));
-        entry.visited_link_id = stmt.get_column_int64 (27);
+        // Retrieve rows from query
+        std::uint64_t idx = 0;
 
-        history_entries_.emplace_back (std::move (entry));
+        while (stmt.fetch_row ())
+        {
+            history_entry entry;
+
+            entry.idx = idx++;
+            entry.schema_version = schema_version_;
+            entry.favicon_id = stmt.get_column_int64 (0);
+            entry.hidden = stmt.get_column_bool (1);
+            entry.id = stmt.get_column_int64 (2);
+            entry.last_visit_time = get_datetime (stmt.get_column_int64 (3));
+            entry.title = stmt.get_column_string (4);
+            entry.typed_count = stmt.get_column_int64 (5);
+            entry.url = stmt.get_column_string (6);
+            entry.visit_count = stmt.get_column_int64 (7);
+            entry.app_id = stmt.get_column_int64 (8);
+            entry.consider_for_ntp_most_visited = stmt.get_column_bool (9);
+            entry.external_referrer_url = stmt.get_column_string (10);
+            entry.from_visit = stmt.get_column_int64 (11);
+            entry.visit_id = stmt.get_column_int64 (12);
+            entry.incremented_omnibox_typed_score = stmt.get_column_bool (13);
+            entry.is_indexed = stmt.get_column_bool (14);
+            entry.is_known_to_sync = stmt.get_column_bool (15);
+            entry.opener_visit = stmt.get_column_int64 (16);
+            entry.originator_cache_guid = stmt.get_column_string (17);
+            entry.originator_from_visit = stmt.get_column_int64 (18);
+            entry.originator_opener_visit = stmt.get_column_int64 (19);
+            entry.originator_visit_id = stmt.get_column_int64 (20);
+            entry.publicly_routable = stmt.get_column_bool (21);
+            entry.segment_id = stmt.get_column_int64 (22);
+            entry.transition = stmt.get_column_int64 (23);
+            entry.visit_url = stmt.get_column_int64 (24);
+            entry.visit_duration = stmt.get_column_int64 (25);
+            entry.visit_time = get_datetime (stmt.get_column_int64 (26));
+            entry.visited_link_id = stmt.get_column_int64 (27);
+
+            history_entries_.emplace_back (std::move (entry));
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
     }
 }
 
