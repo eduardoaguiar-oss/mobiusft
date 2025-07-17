@@ -445,14 +445,8 @@ evidence_loader_impl::_save_autofills ()
             e.set_attribute ("app_id", p.get_app_id ());
             e.set_attribute ("username", p.get_username ());
             e.set_attribute ("is_encrypted", a.is_encrypted);
-
-            if (a.is_encrypted)
-            {
-                e.set_attribute ("encrypted_value", a.value);
-                e.set_attribute ("value", "<ENCRYPTED>");
-            }
-            else
-                e.set_attribute ("value", a.value.to_string ());
+            e.set_attribute ("encrypted_value", a.encrypted_value);
+            e.set_attribute ("value", a.value);
 
             auto metadata = a.metadata.clone ();
             metadata.set ("count", a.count);
@@ -482,7 +476,9 @@ evidence_loader_impl::_save_credit_cards ()
             e.set_attribute ("app_name", p.get_app_name ());
             e.set_attribute ("username", p.get_username ());
             e.set_attribute ("name", cc.name_on_card);
+            e.set_attribute ("name_encrypted", cc.name_on_card_encrypted);
             e.set_attribute ("number", cc.card_number);
+            e.set_attribute ("number_encrypted", cc.card_number_encrypted);
             e.set_attribute ("company", cc.network);
 
             if (cc.expiration_month && cc.expiration_year)
@@ -492,18 +488,29 @@ evidence_loader_impl::_save_credit_cards ()
                         std::to_string (cc.expiration_month)
                 );
 
-            e.set_attribute ("cvv", cc.cvv);
-
-            auto metadata = cc.metadata.clone ();
+            auto metadata = mobius::core::pod::map ();
+            metadata.set ("id", cc.id);
+            metadata.set ("guid", cc.guid);
+            metadata.set ("expiration_month", cc.expiration_month);
+            metadata.set ("expiration_year", cc.expiration_year);
+            metadata.set ("origin", cc.origin);
+            metadata.set ("iban", cc.iban);
+            metadata.set ("cvc", cc.cvc);
+            metadata.set ("last_four", cc.last_four);
+            metadata.set ("card_art_url", cc.card_art_url);
+            metadata.set (
+                "card_info_retrieval_enrollment_state",
+                cc.card_info_retrieval_enrollment_state
+            );
             metadata.set ("type", cc.type);
             metadata.set ("network", cc.network);
             metadata.set ("bank_name", cc.bank_name);
             metadata.set ("card_issuer", cc.card_issuer);
             metadata.set ("use_count", cc.use_count);
             metadata.set ("use_date", to_string (cc.use_date));
-            metadata.set ("nickname", cc.nickname);
-            metadata.set ("card_number", cc.card_number);
             metadata.set ("unmasked_date", cc.unmask_date);
+            metadata.set ("date_modified", to_string (cc.date_modified));
+            metadata.set ("nickname", cc.nickname);
             metadata.set ("record_number", cc.idx);
 
             e.set_attribute ("metadata", metadata);
@@ -735,108 +742,6 @@ evidence_loader_impl::_save_received_files ()
         }
     }
 }
-
-// @brief Activity time
-mobius::core::datetime::datetime activity_time;
-
-// @brief Display count
-std::uint64_t display_count = 0;
-
-// @brief Display time
-mobius::core::datetime::datetime display_time;
-
-// @brief Favicon ID
-std::uint64_t favicon_id = 0;
-
-// @brief Hidden
-bool hidden = false;
-
-// @brief ID
-std::uint64_t id = 0;
-
-// @brief Last display time
-mobius::core::datetime::datetime last_display;
-
-// @brief Last visit time
-mobius::core::datetime::datetime last_visit_time;
-
-// @brief Links clicked count
-std::uint64_t links_clicked_count = 0;
-
-// @brief Open time
-mobius::core::datetime::datetime open_time;
-
-// @brief Title
-std::string title;
-
-// @brief Typed count
-std::uint64_t typed_count = 0;
-
-// @brief URL
-std::string url;
-
-// @brief Visit count
-std::uint64_t visit_count = 0;
-
-// @brief App ID
-std::string app_id;
-
-// @brief Consider for NTP most visited
-bool consider_for_ntp_most_visited = false;
-
-// @brief External referrer URL
-std::string external_referrer_url;
-
-// @brief From visit ID
-std::uint64_t from_visit = 0;
-
-// @brief Visit ID
-std::uint64_t visit_id = 0;
-
-// @brief Incremented omnibox typed score
-bool incremented_omnibox_typed_score = false;
-
-// @brief Is indexed
-bool is_indexed = false;
-
-// @brief Is known to sync
-bool is_known_to_sync = false;
-
-// @brief Opener visit ID
-std::uint64_t opener_visit = 0;
-
-// @brief Originator cache GUID
-std::string originator_cache_guid;
-
-// @brief Originator from visit ID
-std::uint64_t originator_from_visit = 0;
-
-// @brief Originator opener visit ID
-std::uint64_t originator_opener_visit = 0;
-
-// @brief Originator visit ID
-std::uint64_t originator_visit_id = 0;
-
-// @brief Publicly routable
-bool publicly_routable = false;
-
-// @brief Segment ID
-std::uint64_t segment_id = 0;
-
-// @brief Transition type
-std::string transition;
-
-// @brief Visit URL
-std::string visit_url;
-
-// @brief Visit duration
-std::uint64_t visit_duration = 0;
-
-// @brief Visit time
-mobius::core::datetime::datetime visit_time;
-
-// @brief Visited link ID
-std::uint64_t visited_link_id = 0;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save visited URLs

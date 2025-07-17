@@ -240,11 +240,20 @@ class file_web_data
         // @brief Encrypted card number
         mobius::core::bytearray card_number_encrypted;
 
-        // @brief Encrypted CVC
-        mobius::core::bytearray cvc_encrypted;
+        // @brief Card number
+        std::string card_number;
 
         // @brief Encrypted name on card
         mobius::core::bytearray name_on_card_encrypted;
+
+        // @brief Name on card
+        std::string name_on_card;
+
+        // @brief Encrypted CVC
+        mobius::core::bytearray cvc_encrypted;
+
+        // @brief CVC
+        std::string cvc;
 
         // @brief Encrypted IBAN
         mobius::core::bytearray iban_encrypted;
@@ -252,11 +261,8 @@ class file_web_data
         // @brief IBAN
         std::string iban;
 
-        // @brief Card number
-        std::string card_number;
-
-        // @brief CVC
-        std::string cvc;
+        // @brief Is IBAN encrypted
+        bool is_iban_encrypted = false;
 
         // @brief Last four digits
         std::string last_four;
@@ -266,9 +272,6 @@ class file_web_data
 
         // @brief Expiration year
         std::uint32_t expiration_year = 0;
-
-        // @brief Name on card
-        std::string name_on_card;
 
         // @brief Date modified
         mobius::core::datetime::datetime date_modified;

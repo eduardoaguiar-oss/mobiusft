@@ -135,7 +135,7 @@ post_processor_impl::post_processor_impl (
     mobius::core::log log (__FILE__, __FUNCTION__);
 
     auto app = mobius::core::application ();
-    auto path = app.get_data_path ("pdi_autofill.txt");
+    auto path = app.get_data_path ("data/pdi_autofill.txt");
 
     // Load the autofill configuration
     std::ifstream file (path);

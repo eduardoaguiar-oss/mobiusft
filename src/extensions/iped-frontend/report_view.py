@@ -551,6 +551,6 @@ class ReportView(object):
         option.control.set_status(f'Generating {os.path.basename(option.report_path)}.iso file...')
 
         iso_path = option.report_path + '.iso'
-        cmd = f'mkisofs -J -r -joliet-long -iso-level 3 -quiet -V {option.report_id} -o "{iso_path}" "{option.report_path}"'
+        cmd = f'mkisofs -udf -iso-level 3 -quiet -V {option.report_id} -o "{iso_path}" "{option.report_path}"'
         mobius.core.logf('INF ' + cmd)
         os.system(cmd)

@@ -41,5 +41,5 @@ install(TARGETS post_processor_pdi LIBRARY DESTINATION share/mobiusft/extensions
 
 install(
     FILES pdi_autofill.txt
-    DESTINATION share/mobiusft
+    DESTINATION share/mobiusft/data
 )

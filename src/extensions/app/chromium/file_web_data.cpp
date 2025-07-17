@@ -1027,7 +1027,6 @@ file_web_data::_load_credit_cards (mobius::core::database::database &db)
 
             card.idx = idx++;
             card.guid = stmt.get_column_string (0);
-            card.name_on_card = stmt.get_column_string (1);
             card.expiration_month = stmt.get_column_int64 (2);
             card.expiration_year = stmt.get_column_int64 (3);
             card.card_number_encrypted = stmt.get_column_bytearray (4);
@@ -1037,6 +1036,16 @@ file_web_data::_load_credit_cards (mobius::core::database::database &db)
             card.use_date = get_datetime (stmt.get_column_int64 (8));
             card.billing_address_id = stmt.get_column_string (9);
             card.nickname = stmt.get_column_string (10);
+
+            // Set name on card
+            auto name_on_card = stmt.get_column_bytearray (1);
+
+            if (name_on_card.startswith ("v10") ||
+                name_on_card.startswith ("v20"))
+                card.name_on_card_encrypted = name_on_card;
+
+            else
+                card.name_on_card = name_on_card.to_string ();
 
             // Add card to the list
             credit_cards_.emplace_back (std::move (card));

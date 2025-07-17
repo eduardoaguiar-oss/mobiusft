@@ -47,6 +47,7 @@ class profile
     // Datatypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     using autofill_profile = file_web_data::autofill_profile;
+    using credit_card = file_web_data::credit_card;
     using download = file_history::download;
     using history_entry = file_history::history_entry;
 
@@ -94,8 +95,11 @@ class profile
         // @brief Name
         std::string name;
 
+        // @brief Encrypted value
+        mobius::core::bytearray encrypted_value;
+
         // @brief Value
-        mobius::core::bytearray value;
+        std::string value;
 
         // @brief Count
         std::uint32_t count = 0;
@@ -111,69 +115,6 @@ class profile
 
         // @brief Is encrypted
         bool is_encrypted = false;
-
-        // @brief Source file
-        mobius::core::io::file f;
-    };
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Credit card structure
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    struct credit_card
-    {
-        // @brief Record number
-        std::uint64_t idx = 0;
-
-        // @brief Card number
-        std::string card_number;
-
-        // @brief Encrypted card number
-        mobius::core::bytearray card_number_encrypted;
-
-        // @brief Name on card
-        std::string name_on_card;
-
-        // @brief Expiration month
-        std::uint32_t expiration_month = 0;
-
-        // @brief Expiration year
-        std::uint32_t expiration_year = 0;
-
-        // @brief CVV
-        std::string cvv;
-
-        // @brief Origin
-        std::string origin;
-
-        // @brief Use count
-        std::uint32_t use_count = 0;
-
-        // @brief Use date
-        mobius::core::datetime::datetime use_date;
-
-        // @brief Nickname
-        std::string nickname;
-
-        // @brief Type
-        std::string type;
-
-        // @brief Network
-        std::string network;
-
-        // @brief Bank name
-        std::string bank_name;
-
-        // @brief Card issuer
-        std::string card_issuer;
-
-        // @brief Metadata
-        mobius::core::pod::map metadata;
-
-        // @brief Date modified
-        mobius::core::datetime::datetime date_modified;
-
-        // @brief Unmask date
-        mobius::core::datetime::datetime unmask_date;
 
         // @brief Source file
         mobius::core::io::file f;

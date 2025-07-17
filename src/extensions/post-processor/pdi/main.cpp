@@ -27,7 +27,7 @@ extern "C"
 {
     const char *EXTENSION_ID = "post-processor-pdi";
     const char *EXTENSION_NAME = "PDI post-processor";
-    const char *EXTENSION_VERSION = "1.0";
+    const char *EXTENSION_VERSION = "1.1";
     const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
     const char *EXTENSION_DESCRIPTION =
         "Personal Direct Identifiers post-processor";

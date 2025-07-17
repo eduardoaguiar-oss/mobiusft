@@ -20,7 +20,6 @@ import traceback
 import mobius
 import pymobius
 import pymobius.app.skype
-import pymobius.app.utorrent
 
 ANT_ID = 'sent-files'
 ANT_NAME = 'Sent files'
@@ -61,7 +60,6 @@ class Ant(object):
 
         # retrieve data
         self.__retrieve_skype()
-        self.__retrieve_utorrent()
 
         # save data
         self.__save_data()
@@ -116,46 +114,6 @@ class Ant(object):
 
                     self.__entries.append(entry)
 
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)} {traceback.format_exc()}')
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from µTorrent
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_utorrent(self):
-        try:
-            model = pymobius.app.utorrent.model(self.__item)
-
-            for profile in model.get_profiles():
-                self.__retrieve_utorrent_profile(profile)
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)} {traceback.format_exc()}')
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from µTorrent profile
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_utorrent_profile(self, profile):
-        try:
-            for f in profile.get_uploaded_files():
-                entry = pymobius.Data()
-
-                entry.username = profile.username
-                entry.timestamp = f.added_time
-                entry.filename = f.name
-                entry.path = f.path
-                entry.app_id = f.app_id
-                entry.app_name = f.app_name
-                entry.item = self.__item.name
-
-                entry.metadata = mobius.core.pod.map()
-                entry.metadata.set('size', f.size)
-                entry.metadata.set('start-time', f.added_time)
-                entry.metadata.set('end-time', f.completed_time)
-                entry.metadata.set('caption', f.caption)
-                entry.metadata.set('resume.dat-path', f.resume_dat_path)
-                entry.metadata.set('torrent-path', f.torrent_path)
-
-                self.__entries.append(entry)
         except Exception as e:
             mobius.core.logf(f'WRN {str(e)} {traceback.format_exc()}')
 

@@ -19,7 +19,6 @@ import traceback
 
 import mobius
 import pymobius
-import pymobius.app.chromium
 import pymobius.app.gecko
 import pymobius.app.itubego
 import pymobius.app.skype
@@ -27,7 +26,7 @@ import pymobius.app.utorrent
 
 ANT_ID = 'received-files'
 ANT_NAME = 'Received files'
-ANT_VERSION = '1.0'
+ANT_VERSION = '1.1'
 EVIDENCE_TYPE = 'received-file'
 
 
