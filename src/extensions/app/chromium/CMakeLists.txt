@@ -29,6 +29,7 @@ add_library(app_chromium MODULE
     main.cpp
     common.cpp
     evidence_loader_impl.cpp
+    file_cookies.cpp
     file_history.cpp
     file_login_data.cpp
     file_web_data.cpp
@@ -38,6 +39,18 @@ add_library(app_chromium MODULE
 
 set_target_properties(app_chromium PROPERTIES OUTPUT_NAME "app-chromium" PREFIX "")
 target_link_libraries(app_chromium PRIVATE Mobius::Framework Mobius::Core)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: chromium_cookies
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_executable(tools_chromium_cookies
+    tools/chromium_cookies.cpp
+    common.cpp
+    file_cookies.cpp
+)
+
+set_target_properties(tools_chromium_cookies PROPERTIES OUTPUT_NAME "chromium_cookies")
+target_link_libraries(tools_chromium_cookies PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: chromium_history
@@ -83,6 +96,7 @@ install(TARGETS
 )
 
 install(TARGETS
+    tools_chromium_cookies
     tools_chromium_history
     tools_chromium_login_data
     tools_chromium_web_data

@@ -25,7 +25,9 @@
 #include <algorithm>
 #include <string>
 #include <vector>
+#include "file_cookies.hpp"
 #include "file_history.hpp"
+#include "file_login_data.hpp"
 #include "file_web_data.hpp"
 
 namespace
@@ -175,20 +177,41 @@ profile::set_folder (const mobius::core::io::folder &f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Add Preferences file
-// @param f Preferences file
+// @brief Add Cookies file
+// @param f Cookies file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::add_preferences_file (const mobius::core::io::file &f)
+profile::add_cookies_file (const mobius::core::io::file &f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Decode file
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto reader = f.new_reader ();
-    if (!reader)
+    file_cookies fc (f.new_reader ());
+
+    if (!fc)
+    {
+        log.info (__LINE__, "File is not a valid 'Cookies' file");
         return;
+    }
+
+    log.info (__LINE__, "File " + f.get_path () + " is a valid 'Cookies' file");
+
+    if (!last_modified_time_ ||
+        f.get_modification_time () > last_modified_time_)
+        last_modified_time_ = f.get_modification_time ();
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Add cookies
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &entry : fc.get_cookies ())
+    {
+        cookie c (entry);
+        c.f = f;
+
+        cookies_.push_back (c);
+    }
 
     is_valid_ = true;
 }
@@ -283,6 +306,25 @@ profile::add_login_data_file (const mobius::core::io::file &f)
 
         logins_.push_back (l);
     }
+
+    is_valid_ = true;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add Preferences file
+// @param f Preferences file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_preferences_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode file
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto reader = f.new_reader ();
+    if (!reader)
+        return;
 
     is_valid_ = true;
 }

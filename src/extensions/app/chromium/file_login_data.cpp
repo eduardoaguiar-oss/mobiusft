@@ -26,6 +26,11 @@
 #include "common.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// References:
+// @see https://atropos4n6.com/windows/chrome-login-data-forensics/
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Login Data file tables
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //
@@ -175,8 +180,7 @@ file_login_data::_load_logins (mobius::core::database::database &db)
         mobius::core::database::statement stmt;
 
         stmt = db.new_statement (generate_sql (
-            "SELECT _rowid_, "
-            "action_url, "
+            "SELECT action_url, "
             "${avatar_url,7,13}, "
             "blacklisted_by_user, "
             "date_created, "
@@ -214,45 +218,47 @@ file_login_data::_load_logins (mobius::core::database::database &db)
         ));
 
         // Retrieve rows from query
+        std::uint64_t idx = 0;
+    
         while (stmt.fetch_row ())
         {
             login l;
 
             // Set attributes
-            l.idx = stmt.get_column_int (0);
-            l.action_url = stmt.get_column_string (1);
-            l.avatar_url = stmt.get_column_string (2);
-            l.blacklisted_by_user = stmt.get_column_bool (3);
-            l.date_created = get_datetime (stmt.get_column_int64 (4));
-            l.date_last_used = get_datetime (stmt.get_column_int64 (5));
-            l.date_password_modified = get_datetime (stmt.get_column_int64 (6));
-            l.date_received = get_datetime (stmt.get_column_int64 (7));
-            l.date_synced = get_datetime (stmt.get_column_int64 (8));
-            l.display_name = stmt.get_column_string (9);
-            l.federation_url = stmt.get_column_string (10);
-            l.generation_upload_status = stmt.get_column_int64 (11);
-            l.icon_url = stmt.get_column_string (12);
-            l.id = stmt.get_column_string (13);
-            l.is_zero_click = stmt.get_column_bool (14);
-            l.keychain_identifier = stmt.get_column_string (15);
-            l.origin_url = stmt.get_column_string (16);
-            l.password_value = stmt.get_column_bytearray (19);
-            l.password_element = stmt.get_column_string (17);
-            l.password_type = stmt.get_column_int64 (18);
-            l.preferred = stmt.get_column_bool (20);
-            l.scheme = stmt.get_column_string (21);
-            l.sender_email = stmt.get_column_string (22);
-            l.sender_name = stmt.get_column_string (23);
-            l.sender_profile_image_url = stmt.get_column_string (24);
-            l.sharing_notification_displayed = stmt.get_column_bool (25);
-            l.signon_realm = stmt.get_column_string (26);
-            l.skip_zero_click = stmt.get_column_bool (27);
-            l.ssl_valid = stmt.get_column_bool (28);
-            l.submit_element = stmt.get_column_string (29);
-            l.times_used = stmt.get_column_int64 (30);
-            l.use_additional_auth = stmt.get_column_bool (31);
-            l.username_element = stmt.get_column_string (32);
-            l.username_value = stmt.get_column_string (33);
+            l.idx = idx++;
+            l.action_url = stmt.get_column_string (0);
+            l.avatar_url = stmt.get_column_string (1);
+            l.blacklisted_by_user = stmt.get_column_bool (2);
+            l.date_created = get_datetime (stmt.get_column_int64 (3));
+            l.date_last_used = get_datetime (stmt.get_column_int64 (4));
+            l.date_password_modified = get_datetime (stmt.get_column_int64 (5));
+            l.date_received = get_datetime (stmt.get_column_int64 (6));
+            l.date_synced = get_datetime (stmt.get_column_int64 (7));
+            l.display_name = stmt.get_column_string (8);
+            l.federation_url = stmt.get_column_string (9);
+            l.generation_upload_status = stmt.get_column_int64 (10);
+            l.icon_url = stmt.get_column_string (11);
+            l.id = stmt.get_column_string (12);
+            l.is_zero_click = stmt.get_column_bool (13);
+            l.keychain_identifier = stmt.get_column_string (14);
+            l.origin_url = stmt.get_column_string (15);
+            l.password_element = stmt.get_column_string (16);
+            l.password_type = stmt.get_column_int64 (17);
+            l.password_value = stmt.get_column_bytearray (18);
+            l.preferred = stmt.get_column_bool (19);
+            l.scheme = stmt.get_column_string (20);
+            l.sender_email = stmt.get_column_string (21);
+            l.sender_name = stmt.get_column_string (22);
+            l.sender_profile_image_url = stmt.get_column_string (23);
+            l.sharing_notification_displayed = stmt.get_column_bool (24);
+            l.signon_realm = stmt.get_column_string (25);
+            l.skip_zero_click = stmt.get_column_bool (26);
+            l.ssl_valid = stmt.get_column_bool (27);
+            l.submit_element = stmt.get_column_string (28);
+            l.times_used = stmt.get_column_int64 (29);
+            l.use_additional_auth = stmt.get_column_bool (30);
+            l.username_element = stmt.get_column_string (31);
+            l.username_value = stmt.get_column_string (32);
 
             // Add to logins vector
             logins_.emplace_back (std::move (l));

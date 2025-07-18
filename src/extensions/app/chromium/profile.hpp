@@ -31,6 +31,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include "file_cookies.hpp"
 #include "file_history.hpp"
 #include "file_login_data.hpp"
 #include "file_web_data.hpp"
@@ -48,6 +49,7 @@ class profile
     // Datatypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     using autofill_profile = file_web_data::autofill_profile;
+    using cookie = file_cookies::cookie;
     using credit_card = file_web_data::credit_card;
     using download = file_history::download;
     using history_entry = file_history::history_entry;
@@ -129,10 +131,11 @@ class profile
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void set_folder (const mobius::core::io::folder &);
-    void add_preferences_file (const mobius::core::io::file &);
-    void add_web_data_file (const mobius::core::io::file &);
+    void add_cookies_file (const mobius::core::io::file &);
     void add_history_file (const mobius::core::io::file &);
     void add_login_data_file (const mobius::core::io::file &);
+    void add_preferences_file (const mobius::core::io::file &);
+    void add_web_data_file (const mobius::core::io::file &);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Check if profile is valid
@@ -291,6 +294,26 @@ class profile
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get cookies
+    // @return Vector of cookies
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<cookie>
+    get_cookies () const
+    {
+        return cookies_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of cookies
+    // @return Number of cookies
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    size_cookies () const
+    {
+        return cookies_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get credit cards
     // @return Vector of credit cards
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -403,6 +426,9 @@ class profile
 
     // @brief Autofill profiles
     std::vector<autofill_profile> autofill_profiles_;
+
+    // @brief Cookies
+    std::vector<cookie> cookies_;
 
     // @brief Credit cards
     std::vector<credit_card> credit_cards_;
