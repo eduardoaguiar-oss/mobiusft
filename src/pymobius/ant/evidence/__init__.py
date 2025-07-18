@@ -25,6 +25,7 @@ from . import vfs
 from .post import ip_addresses_from_cookies as post_ip_addresses_from_cookies
 from .post import kff_alert as post_kff_alert
 from .post import searched_texts_from_visited_urls as post_searched_texts_from_visited_urls
+from .post import user_accounts_from_cookies as post_user_accounts_from_cookies
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Constants
@@ -52,6 +53,7 @@ ANTS = [
     post_ip_addresses_from_cookies.Ant,
     post_searched_texts_from_visited_urls.Ant,
     post_kff_alert.Ant,
+    post_user_accounts_from_cookies.Ant,
 ]
 
 

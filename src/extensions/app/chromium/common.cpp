@@ -18,6 +18,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "common.hpp"
+#include <mobius/core/log.hpp>
 #include <iomanip>
 #include <limits>
 #include <sstream>
@@ -155,6 +156,56 @@ get_datetime (std::uint64_t timestamp)
         return mobius::core::datetime::new_datetime_from_nt_timestamp (
             timestamp * 10
         );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get schema version from database
+// @param db Database object
+// @return Schema version
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::int64_t
+get_db_schema_version (mobius::core::database::database db)
+{
+    std::int64_t schema_version = 0;
+
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        auto stmt =
+            db.new_statement ("SELECT value FROM meta WHERE key = 'version'");
+
+        if (stmt.fetch_row ())
+        {
+            schema_version = stmt.get_column_int64 (0);
+
+            if (!schema_version)
+            {
+                log.warning (
+                    __LINE__,
+                    "Schema version = 0. Path: " +
+                        db.get_path ()
+                );
+            }
+        }
+        else
+        {
+            log.warning (
+                __LINE__,
+                "Schema version not found in meta table. Path: " +
+                    db.get_path ()
+            );
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__,
+            std::string (e.what ()) + ". Path: " + db.get_path ()
+        );
+    }
+
+    return schema_version;
 }
 
 } // namespace mobius::extension::app::chromium

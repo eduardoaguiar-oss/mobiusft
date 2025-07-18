@@ -22,77 +22,11 @@ import pymobius.ant.turing
 import pymobius.app.chromium
 import pymobius.app.skype
 
-from . import cookies
-
 ANT_ID = 'accounts'
 ANT_NAME = 'Accounts'
-ANT_VERSION = '1.1'
+ANT_VERSION = '1.2'
 
 EVIDENCE_TYPE = 'user-account'
-
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Decode login.live.com MSSPre cookie
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-def func_login_live_com(c, data):
-    c_data = c.value.decode('utf-8').split('|')
-    data.id = c_data[0]
-    data.metadata.set('mspcid', c_data[1])
-
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Decode generic cookie
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-def func_value(c, data):
-    data.id = c.value.decode('utf-8')
-
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Decode slideplayer.com.br login cookie
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-def func_slideplayer_com_br(c, data):
-    c_data = c.value.decode('utf-8').split('+')
-    data.id = c_data[0]
-    data.name = c_data[1]
-    data.password = c_data[2]
-
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Decode hotmart.com __kdtc cookie
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-def func_hotmart_com(c, data):
-    # s = 'cid%3Dswdsil%40yahoo.com.br%3Bt%3D1569186164243'
-    u = mobius.core.io.uri(c.value.decode('ascii'))
-    text = u.get_path('utf-8')
-
-    if text.startswith('cid='):
-        pos = text.find(';')
-
-        if pos != -1:
-            data.id = text[4:pos]
-
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Cookies by domain and cookie name
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-COOKIES = {
-    ('hotmart.com', '__kdtc'): 'hotmart_com',
-    ('imvu.com', '_imvu_avnm'): 'value',
-    ('login.live.com', 'MSPPre'): 'login_live_com',
-    ('pof.com', 'usernameb'): 'value',
-    ('pof.com.br', 'usernameb'): 'value',
-    ('slideplayer.com.br', 'login'): 'slideplayer_com_br',
-}
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Cookie decoders
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-COOKIE_DECODERS = {
-    'hotmart_com': func_hotmart_com,
-    'login_live_com': func_login_live_com,
-    'slideplayer_com_br': func_slideplayer_com_br,
-    'value': func_value
-}
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -120,7 +54,6 @@ class Ant(object):
 
         self.__entries = []
         self.__retrieve_chromium()
-        self.__retrieve_cookies()
         self.__retrieve_passwords()
         self.__retrieve_skype()
 
@@ -160,65 +93,6 @@ class Ant(object):
                 entry.metadata.set('app_id', profile.app_id)
                 entry.metadata.set('app_name', profile.app_name)
                 self.__entries.append(entry)
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from cookies
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_cookies(self):
-        try:
-
-            # run ant.cookies, if necessary
-            if not self.__item.has_ant('cookies'):
-                ant = cookies.Ant(self.__item)
-                ant.run()
-
-            # retrieve data
-            for c in self.__item.get_evidences('cookie'):
-                if not c.is_encrypted:
-                    self.__retrieve_cookie(c)
-
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from cookie
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_cookie(self, c):
-        try:
-            # get cookie decoder
-            decoder_name = COOKIES.get((c.domain, c.name))
-            if not decoder_name:
-                return
-
-            # get decoder function
-            decoder = COOKIE_DECODERS.get(decoder_name)
-            if not decoder:
-                mobius.core.logf(f'WRN Decoder "{decoder_name}" not found')
-                return
-
-            # run decoder function
-            acc = pymobius.Data()
-            acc.id = None
-            acc.name = None
-            acc.password = None
-            acc.metadata = mobius.core.pod.map()
-
-            decoder(c, acc)
-            if not acc.id:
-                return
-
-            # create account
-            acc.type = f'web.{c.domain}'
-            acc.evidence_source = f"Cookie '{c.name}'. Created in {c.creation_time}"
-            acc.metadata.set('cookie-creation-time', c.creation_time)
-            acc.metadata.set('cookie-domain', c.domain)
-            acc.metadata.set('cookie-name', c.name)
-            acc.metadata.set('cookie-evidence-source', c.evidence_source)
-            acc.metadata.update(c.metadata)
-
-            self.__entries.append(acc)
         except Exception as e:
             mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
 

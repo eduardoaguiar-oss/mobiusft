@@ -32,6 +32,7 @@
 #include <string>
 #include <vector>
 #include "file_history.hpp"
+#include "file_login_data.hpp"
 #include "file_web_data.hpp"
 
 namespace mobius::extension::app::chromium
@@ -50,6 +51,7 @@ class profile
     using credit_card = file_web_data::credit_card;
     using download = file_history::download;
     using history_entry = file_history::history_entry;
+    using login = file_login_data::login;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Account structure
@@ -92,6 +94,9 @@ class profile
         // @brief Record number
         std::uint64_t idx = 0;
 
+        // #brief DB Schema version
+        std::int64_t schema_version = 0;
+
         // @brief Name
         std::string name;
 
@@ -127,6 +132,7 @@ class profile
     void add_preferences_file (const mobius::core::io::file &);
     void add_web_data_file (const mobius::core::io::file &);
     void add_history_file (const mobius::core::io::file &);
+    void add_login_data_file (const mobius::core::io::file &);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Check if profile is valid
@@ -344,6 +350,26 @@ class profile
         return history_entries_.size ();
     }
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get logins
+    // @return Vector of logins
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<login>
+    get_logins () const
+    {
+        return logins_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of logins
+    // @return Number of logins
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    size_logins () const
+    {
+        return logins_.size ();
+    }
+
   private:
     // @brief Check if profile is valid
     bool is_valid_ = false;
@@ -381,11 +407,14 @@ class profile
     // @brief Credit cards
     std::vector<credit_card> credit_cards_;
 
+    // @brief Downloads
+    std::vector<download> downloads_;
+
     // @brief History entries
     std::vector<history_entry> history_entries_;
 
-    // @brief Downloads
-    std::vector<download> downloads_;
+    // @brief Logins
+    std::vector<login> logins_;
 };
 
 } // namespace mobius::extension::app::chromium

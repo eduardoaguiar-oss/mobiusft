@@ -30,24 +30,14 @@ add_library(app_chromium MODULE
     common.cpp
     evidence_loader_impl.cpp
     file_history.cpp
+    file_login_data.cpp
     file_web_data.cpp
+    post_processor_impl.cpp
     profile.cpp
 )
 
 set_target_properties(app_chromium PROPERTIES OUTPUT_NAME "app-chromium" PREFIX "")
 target_link_libraries(app_chromium PRIVATE Mobius::Framework Mobius::Core)
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Tools: chromium_web_data
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_executable(tools_chromium_web_data
-    tools/chromium_web_data.cpp
-    common.cpp
-    file_web_data.cpp
-)
-
-set_target_properties(tools_chromium_web_data PROPERTIES OUTPUT_NAME "chromium_web_data")
-target_link_libraries(tools_chromium_web_data PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: chromium_history
@@ -62,6 +52,30 @@ set_target_properties(tools_chromium_history PROPERTIES OUTPUT_NAME "chromium_hi
 target_link_libraries(tools_chromium_history PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: chromium_login_data
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_executable(tools_chromium_login_data
+    tools/chromium_login_data.cpp
+    common.cpp
+    file_login_data.cpp
+)
+
+set_target_properties(tools_chromium_login_data PROPERTIES OUTPUT_NAME "chromium_login_data")
+target_link_libraries(tools_chromium_login_data PRIVATE Mobius::Core)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: chromium_web_data
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_executable(tools_chromium_web_data
+    tools/chromium_web_data.cpp
+    common.cpp
+    file_web_data.cpp
+)
+
+set_target_properties(tools_chromium_web_data PROPERTIES OUTPUT_NAME "chromium_web_data")
+target_link_libraries(tools_chromium_web_data PRIVATE Mobius::Core)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 install(TARGETS
@@ -69,6 +83,8 @@ install(TARGETS
 )
 
 install(TARGETS
+    tools_chromium_history
+    tools_chromium_login_data
     tools_chromium_web_data
     RUNTIME DESTINATION share/mobiusft/tools
 )

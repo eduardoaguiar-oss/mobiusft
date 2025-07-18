@@ -58,6 +58,7 @@ class database
     statement new_statement (const std::string &);
     transaction new_transaction ();
     void end_transaction ();
+    std::string get_path () const;
     std::string get_error_message () const;
     std::int64_t get_last_insert_row_id () const;
     std::int64_t get_changes () const;

@@ -20,6 +20,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/core/database/database.hpp>
 #include <mobius/core/datetime/datetime.hpp>
 #include <cstdint>
 #include <string>
@@ -31,7 +32,8 @@ namespace mobius::extension::app::chromium
 // Function prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::datetime::datetime get_datetime (std::uint64_t);
-std::string generate_sql (const std::string &, int64_t);
+std::string generate_sql (const std::string &, std::int64_t);
+std::int64_t get_db_schema_version (mobius::core::database::database);
 
 } // namespace mobius::extension::app::chromium
 

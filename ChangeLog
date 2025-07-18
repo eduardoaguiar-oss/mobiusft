@@ -1,3 +1,11 @@
+Mobius Forensic Toolkit 2.18
+	* libmobius_core: Added new method database::get_path
+	* app-chromium: New function get_db_schema_version (db)
+	* app-chromium: Decode Login Data files
+	* app-chromium: Decode Login Data For Account files
+	* ant.evidence: New module post.user_accounts_from_cookies
+	* ant.evidence.vfs.accounts: Remove retrieve from cookies
+
 Mobius Forensic Toolkit 2.17
 	* Added new C++ extension called "app-chromium"
 	* app-chromium: Retrieve autofill_entry.date_created for versions < 55

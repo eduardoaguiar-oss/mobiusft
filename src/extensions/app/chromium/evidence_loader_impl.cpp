@@ -41,6 +41,7 @@ namespace
 static const std::string ANT_ID = "evidence.app-chromium";
 static const std::string ANT_NAME = "App Chromium";
 static const std::string ANT_VERSION = "1.0";
+static const std::string APP_FAMILY = "chromium";
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get filename from path
@@ -269,29 +270,29 @@ evidence_loader_impl::scan_folder (const mobius::core::io::folder &folder)
     {
         try
         {
-            if (name == "cookies")
+            if (name == "bookmarks")
+                ; // profile_.add_settings_dat_file (f);
+
+            else if (name == "cookies")
                 ; // profile_.add_settings_dat_file (f);
 
             else if (name == "extension cookies")
                 ; // profile_.add_settings_dat_file (f);
 
             else if (name == "login data")
-                ; // profile_.add_settings_dat_file (f);
+                profile_.add_login_data_file (f);
+
+            else if (name == "login data for account")
+                profile_.add_login_data_file (f);
+
+            else if (name == "history")
+                profile_.add_history_file (f);
 
             else if (name == "preferences")
                 ; // profile_.add_settings_dat_file (f);
 
             else if (name == "web data")
                 profile_.add_web_data_file (f);
-
-            else if (name == "bookmarks")
-                ; // profile_.add_settings_dat_file (f);
-
-            else if (name == "history provider cache")
-                ; // profile_.add_settings_dat_file (f);
-
-            else if (name == "history")
-                profile_.add_history_file (f);
         }
         catch (const std::exception &e)
         {
@@ -347,6 +348,7 @@ evidence_loader_impl::_save_accounts ()
             e.set_attribute ("password", {});
             e.set_attribute ("password_found", "no");
             e.set_attribute ("is_deleted", acc.f.is_deleted ());
+            e.set_attribute ("app_family", APP_FAMILY);
 
             // Set phones
             e.set_attribute (
@@ -409,6 +411,7 @@ evidence_loader_impl::_save_app_profiles ()
         e.set_attribute ("creation_time", p.get_creation_time ());
         e.set_attribute ("last_modified_time", p.get_last_modified_time ());
         e.set_attribute ("path", p.get_path ());
+        e.set_attribute ("app_family", APP_FAMILY);
 
         // Metadata
         auto metadata = mobius::core::pod::map ();
@@ -419,6 +422,7 @@ evidence_loader_impl::_save_app_profiles ()
         metadata.set ("num_credit_cards", p.size_credit_cards ());
         metadata.set ("num_downloads", p.size_downloads ());
         metadata.set ("num_history_entries", p.size_history_entries ());
+        metadata.set ("num_logins", p.size_logins ());
 
         e.set_attribute ("metadata", metadata);
 
@@ -447,12 +451,16 @@ evidence_loader_impl::_save_autofills ()
             e.set_attribute ("is_encrypted", a.is_encrypted);
             e.set_attribute ("encrypted_value", a.encrypted_value);
             e.set_attribute ("value", a.value);
+            e.set_attribute ("app_family", APP_FAMILY);
 
             auto metadata = a.metadata.clone ();
+
             metadata.set ("count", a.count);
             metadata.set ("date_created", a.date_created);
             metadata.set ("date_last_used", a.date_last_used);
             metadata.set ("record_number", a.idx);
+            metadata.set ("schema_version", a.schema_version);
+            metadata.set ("profile_name", p.get_profile_name ());
             e.set_attribute ("metadata", metadata);
 
             e.set_tag ("app.browser");
@@ -476,10 +484,11 @@ evidence_loader_impl::_save_credit_cards ()
             e.set_attribute ("app_name", p.get_app_name ());
             e.set_attribute ("username", p.get_username ());
             e.set_attribute ("name", cc.name_on_card);
-            e.set_attribute ("name_encrypted", cc.name_on_card_encrypted);
+            e.set_attribute ("encrypted_name", cc.name_on_card_encrypted);
             e.set_attribute ("number", cc.card_number);
-            e.set_attribute ("number_encrypted", cc.card_number_encrypted);
+            e.set_attribute ("encrypted_number", cc.card_number_encrypted);
             e.set_attribute ("company", cc.network);
+            e.set_attribute ("app_family", APP_FAMILY);
 
             if (cc.expiration_month && cc.expiration_year)
                 e.set_attribute (
@@ -541,6 +550,7 @@ evidence_loader_impl::_save_pdis ()
                     auto e = item_.new_evidence ("pdi");
                     e.set_attribute ("pdi_type", "email");
                     e.set_attribute ("value", email);
+                    e.set_attribute ("app_family", APP_FAMILY);
 
                     auto metadata = mobius::core::pod::map ();
 
@@ -571,6 +581,7 @@ evidence_loader_impl::_save_pdis ()
                     auto e = item_.new_evidence ("pdi");
                     e.set_attribute ("pdi_type", "phone");
                     e.set_attribute ("value", value);
+                    e.set_attribute ("app_family", APP_FAMILY);
 
                     auto metadata = mobius::core::pod::map ();
 
@@ -618,6 +629,7 @@ evidence_loader_impl::_save_pdis ()
                     auto e = item_.new_evidence ("pdi");
                     e.set_attribute ("pdi_type", "address");
                     e.set_attribute ("value", value);
+                    e.set_attribute ("app_family", APP_FAMILY);
 
                     auto metadata = mobius::core::pod::map ();
                     metadata.set ("app_id", p.get_app_id ());
@@ -655,6 +667,7 @@ evidence_loader_impl::_save_pdis ()
                     auto e = item_.new_evidence ("pdi");
                     e.set_attribute ("pdi_type", "fullname");
                     e.set_attribute ("value", value);
+                    e.set_attribute ("app_family", APP_FAMILY);
 
                     auto metadata = mobius::core::pod::map ();
                     metadata.set ("app_id", p.get_app_id ());
@@ -697,6 +710,7 @@ evidence_loader_impl::_save_received_files ()
                 e.set_attribute ("filename", _get_filename (path));
                 e.set_attribute ("app_id", profile.get_app_id ());
                 e.set_attribute ("app_name", profile.get_app_name ());
+                e.set_attribute ("app_family", APP_FAMILY);
 
                 auto metadata = mobius::core::pod::map ();
                 metadata.set ("start_time", entry.start_time);
@@ -758,6 +772,7 @@ evidence_loader_impl::_save_visited_urls ()
             e.set_attribute ("url", entry.url);
             e.set_attribute ("title", entry.title);
             e.set_attribute ("timestamp", entry.visit_time);
+            e.set_attribute ("app_family", APP_FAMILY);
 
             auto metadata = mobius::core::pod::map ();
 

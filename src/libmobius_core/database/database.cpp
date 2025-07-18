@@ -38,12 +38,18 @@ class sqlite3_init
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Initialize libsqlite3
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    sqlite3_init () { sqlite3_initialize (); }
+    sqlite3_init ()
+    {
+        sqlite3_initialize ();
+    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Cleanup libsqlite3
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    ~sqlite3_init () { sqlite3_shutdown (); }
+    ~sqlite3_init ()
+    {
+        sqlite3_shutdown ();
+    }
 };
 
 static sqlite3_init sqlite3_instance;
@@ -58,10 +64,19 @@ namespace mobius::core::database
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct database_impl
 {
+    // Database handle. This is a pointer to the sqlite3 database object.
     sqlite3 *db = nullptr;
+
+    // Transaction level. This is used to track nested transactions.
     int transaction_level = 0;
+
+    // Database file path
+    std::string path;
+
+    // Flag to indicate if the database is null
     bool is_null = true;
 
+    // Destructor
     ~database_impl ();
 };
 
@@ -73,6 +88,7 @@ database_impl::~database_impl ()
     if (db != nullptr)
     {
         sqlite3_close (db);
+        db = nullptr;
     }
 }
 
@@ -103,6 +119,7 @@ database::database (const std::string &path)
     if (rc != SQLITE_OK)
         throw std::runtime_error (MOBIUS_EXCEPTION_SQLITE);
 
+    impl_->path = path;
     impl_->is_null = false;
 }
 
@@ -185,6 +202,16 @@ database::new_statement (const std::string &sql)
         throw std::runtime_error (MOBIUS_EXCEPTION_SQLITE);
 
     return statement (*this, stmt);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get database file path
+// @return database file path
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+database::get_path () const
+{
+    return impl_->path;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

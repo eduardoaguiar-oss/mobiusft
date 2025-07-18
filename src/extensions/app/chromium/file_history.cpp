@@ -243,21 +243,13 @@ file_history::file_history (const mobius::core::io::reader &reader)
         mobius::core::io::tempfile tfile;
         tfile.copy_from (reader);
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Get schema version
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         mobius::core::database::database db (tfile.get_path ());
+        schema_version_ = get_db_schema_version (db);
 
-        auto stmt = db.new_statement (
-            "SELECT value "
-            "FROM meta "
-            "WHERE key = 'version'"
-        );
-
-        if (stmt.fetch_row ())
-            schema_version_ = stmt.get_column_int64 (0);
-
-        else
+        if (!schema_version_)
             return;
 
         if (schema_version_ > LAST_KNOWN_SCHEMA_VERSION ||

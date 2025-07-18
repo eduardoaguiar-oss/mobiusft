@@ -17,9 +17,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "evidence_loader_impl.hpp"
 #include <mobius/core/resource.hpp>
+#include <mobius/framework/ant/post_processor.hpp>
 #include <mobius/framework/evidence_loader.hpp>
+#include "evidence_loader_impl.hpp"
+#include "post_processor_impl.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Extension data
@@ -28,7 +30,7 @@ extern "C"
 {
     const char *EXTENSION_ID = "app-chromium";
     const char *EXTENSION_NAME = "App Chromium";
-    const char *EXTENSION_VERSION = "1.0";
+    const char *EXTENSION_VERSION = "1.1";
     const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
     const char *EXTENSION_DESCRIPTION = "Chromium based browsers support";
 } // extern "C"
@@ -39,10 +41,20 @@ extern "C"
 extern "C" void
 start ()
 {
+    // Register the post-processor implementation
+    mobius::framework::ant::register_post_processor_implementation<
+        mobius::extension::app::chromium::post_processor_impl> (
+        "chromium-decrypt",
+        "Decrypt Chromium Data"
+    );
+
+    // Register the evidence loader builder resource
     mobius::core::add_resource (
-        "evidence_loader.builder.app-chromium", "Chromium evidence loader",
+        "evidence_loader.builder.app-chromium",
+        "Chromium evidence loader",
         mobius::framework::new_evidence_loader_builder_resource<
-            mobius::extension::app::chromium::evidence_loader_impl> ());
+            mobius::extension::app::chromium::evidence_loader_impl> ()
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -51,5 +63,8 @@ start ()
 extern "C" void
 stop ()
 {
+    mobius::framework::ant::unregister_post_processor_implementation (
+        "chromium-decrypt"
+    );
     mobius::core::remove_resource ("evidence_loader.builder.app-chromium");
 }

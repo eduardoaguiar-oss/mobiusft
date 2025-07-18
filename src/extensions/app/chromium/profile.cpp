@@ -46,7 +46,7 @@ std::vector<std::tuple<std::string, std::string, std::string>>
         {"/Google/Chrome/User Data/", "chrome", "Google Chrome"},
         {"/Microsoft/Edge/User Data/", "edge", "Microsoft Edge"},
         {"/BraveSoftware/Brave-Browser/User Data/", "brave", "Brave"},
-        {"/Opera Software/Opera Stable/", "opera", "Opera"},
+        {"/Opera Software/Opera Stable", "opera", "Opera"},
         {"/Vivaldi/User Data/", "vivaldi", "Vivaldi"},
         {"/Yandex/YandexBrowser/User Data/", "yandex", "Yandex Browser"},
         {"/Chromium/User Data/", "chromium", "Chromium"},
@@ -63,11 +63,11 @@ std::vector<std::tuple<std::string, std::string, std::string>>
         {"/CCleaner Browser/User Data/", "ccleaner", "CCleaner Browser"},
         {"/CentBrowser/User Data/", "centbrowser", "CentBrowser"},
         {"/Chedot/User Data/", "chedot", "Chedot"},
-        {"/Ckaach/", "ckaach", "Ckaach"},
+        {"/Ckaach", "ckaach", "Ckaach"},
         {"/CocCoc/Browser/User Data/", "coccoc", "Coccoc"},
         {"/Comodo/Dragon/User Data/", "comodo", "Comodo Dragon"},
         {"/CryptoTab Browser/User Data/", "cryptotab", "CryptoTab Browser"},
-        {"/Discord/", "discord", "Discord"},
+        {"/Discord", "discord", "Discord"},
         {"/Elements Browser/User Data/", "elements", "Elements Browser"},
         {"/Epic Privacy Browser/User Data/", "epic", "Epic Privacy Browser"},
         {"/Google/Chrome SxS/User Data/", "chrome.canary", "Chrome Canary"},
@@ -88,11 +88,11 @@ std::vector<std::tuple<std::string, std::string, std::string>>
          "Microsoft Edge Canary"},
         {"/Mighty Browser/User Data/", "mighty", "Mighty Browser"},
         {"/Naver/Whale/User Data/", "whale", "Naver Whale"},
-        {"/Opera Software/Opera GX Stable/", "opera-gx", "Opera GX"},
+        {"/Opera Software/Opera GX Stable", "opera-gx", "Opera GX"},
         {"/Orbitum/User Data/", "orbitum", "Orbitum"},
         {"/PlutoTV/", "plutotv", "PlutoTV"},
         {"/Sputnik/Sputnik/User Data/", "sputnik", "Sputnik"},
-        {"/Temp/BCLTMP/Chrome/",
+        {"/Temp/BCLTMP/Chrome",
          "chrome.bcltmp",
          "Google Chrome from Avast Browser Cleanup"},
         {"/Torch/User Data/", "torch", "Torch"},
@@ -245,6 +245,49 @@ profile::add_history_file (const mobius::core::io::file &f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add Login Data file
+// @param f Login Data file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_login_data_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode file
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    file_login_data login_data (f.new_reader ());
+
+    if (!login_data)
+    {
+        log.info (__LINE__, "File is not a valid 'Login Data' file");
+        return;
+    }
+
+    log.info (
+        __LINE__,
+        "File " + f.get_path () + " is a valid 'Login Data' file"
+    );
+
+    if (!last_modified_time_ ||
+        f.get_modification_time () > last_modified_time_)
+        last_modified_time_ = f.get_modification_time ();
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Add logins
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &entry : login_data.get_logins ())
+    {
+        login l (entry);
+        l.f = f;
+
+        logins_.push_back (l);
+    }
+
+    is_valid_ = true;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Add Web Data file
 // @param f Web Data file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -285,6 +328,7 @@ profile::add_web_data_file (const mobius::core::io::file &f)
         a.count = entry.count;
         a.date_created = entry.date_created;
         a.date_last_used = entry.date_last_used;
+        a.schema_version = web_data.get_schema_version ();
         a.is_encrypted = entry.is_encrypted;
 
         if (entry.is_encrypted)
