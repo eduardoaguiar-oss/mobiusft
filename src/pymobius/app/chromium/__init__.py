@@ -174,7 +174,7 @@ class model(object):
             local_state = j
             local_state['path'] = f.path
 
-            # set v10_encrypted_key, if found
+            # set v10_encrypted_key and v20_encrypted_key, if found
             os_crypt = local_state.get('os_crypt')
 
             if os_crypt:
@@ -186,6 +186,15 @@ class model(object):
                     if v10_encrypted_key.startswith(b'DPAPI'):
                         local_state['v10_encrypted_key'] = v10_encrypted_key
                         mobius.core.logf('INF v10_encrypted_key found:\n' + pymobius.dump(v10_encrypted_key))
+
+                encrypted_key = os_crypt.get('app_bound_encrypted_key')
+
+                if encrypted_key:
+                    v20_encrypted_key = base64.b64decode(encrypted_key)
+
+                    if v20_encrypted_key.startswith(b'APPB'):
+                        local_state['v20_encrypted_key'] = v20_encrypted_key
+                        mobius.core.logf('INF v20_encrypted_key found:\n' + pymobius.dump(v20_encrypted_key))
 
             # return data
             return local_state

@@ -3,6 +3,9 @@ Mobius Forensic Toolkit 2.18
 	* app-chromium: New function get_db_schema_version (db)
 	* app-chromium: Decode Login Data files
 	* app-chromium: Decode Login Data For Account files
+	* app-chromium: Decode Cookies files
+	* app-chromium: Decode Extension Cookies files
+	* app-chromium: Decode Safe Browsing Cookies files
 	* ant.evidence: New module post.user_accounts_from_cookies
 	* ant.evidence.vfs.accounts: Remove retrieve from cookies
 

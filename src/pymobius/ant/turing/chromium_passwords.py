@@ -41,7 +41,7 @@ class Ant(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __init__(self, item):
         self.name = 'Turing Chromium Passwords'
-        self.version = '1.1'
+        self.version = '1.2'
         self.__item = item
         self.__secrets = []
         self.__urls = set()

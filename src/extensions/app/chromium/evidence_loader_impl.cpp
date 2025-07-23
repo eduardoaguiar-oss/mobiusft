@@ -119,7 +119,8 @@ evidence_loader_impl::run ()
     log.info (__LINE__, "Evidence loader <app-chromium> started");
     log.info (__LINE__, "Item UID: " + std::to_string (item_.get_uid ()));
     log.info (
-        __LINE__, "Scan mode: " + std::to_string (static_cast<int> (scan_type_))
+        __LINE__,
+        "Scan mode: " + std::to_string (static_cast<int> (scan_type_))
     );
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -167,8 +168,9 @@ evidence_loader_impl::run ()
 
     default:
         log.warning (
-            __LINE__, "invalid scan type: " +
-                          std::to_string (static_cast<int> (scan_type_))
+            __LINE__,
+            "invalid scan type: " +
+                std::to_string (static_cast<int> (scan_type_))
         );
         return;
     }
@@ -260,15 +262,30 @@ evidence_loader_impl::scan_folder (const mobius::core::io::folder &folder)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
-    profile_ = {};
+    // ==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Reset profile if we are starting a new folder scan
+    // ==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (profile_ && !mobius::core::string::startswith (
+                        folder.get_path (),
+                        profile_.get_path ()
+                    ))
+        profile_ = {};
 
+    bool is_new = !bool (profile_);
+
+    // ==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Scan folder
+    // ==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     auto w = mobius::core::io::walker (folder);
 
     for (const auto &[name, f] : w.get_files_with_names ())
     {
         try
         {
-            if (name == "bookmarks")
+            if (name == "local state")
+                ; // profile_.add_local_state_file (f);
+
+            else if (name == "bookmarks")
                 ; // profile_.add_settings_dat_file (f);
 
             else if (name == "cookies")
@@ -304,9 +321,13 @@ evidence_loader_impl::scan_folder (const mobius::core::io::folder &folder)
         }
     }
 
-    if (profile_)
+    // ==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // If we have a new profile, add it to the profiles list
+    // ==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (profile_ && is_new)
     {
         profile_.set_folder (folder);
+        profile_.set_username (username_);
         profiles_.push_back (profile_);
     }
 }
@@ -353,12 +374,14 @@ evidence_loader_impl::_save_accounts ()
 
             // Set phones
             e.set_attribute (
-                "phones", mobius::core::string::join (acc.phone_numbers, "\n")
+                "phones",
+                mobius::core::string::join (acc.phone_numbers, "\n")
             );
 
             // Set emails
             e.set_attribute (
-                "emails", mobius::core::string::join (acc.emails, "\n")
+                "emails",
+                mobius::core::string::join (acc.emails, "\n")
             );
 
             // Set organizations
@@ -369,12 +392,14 @@ evidence_loader_impl::_save_accounts ()
 
             // Set addressess
             e.set_attribute (
-                "addresses", mobius::core::string::join (acc.addresses, "\n")
+                "addresses",
+                mobius::core::string::join (acc.addresses, "\n")
             );
 
             // Set names
             e.set_attribute (
-                "names", mobius::core::string::join (acc.names, "\n")
+                "names",
+                mobius::core::string::join (acc.names, "\n")
             );
 
             // Set metadata
@@ -491,9 +516,9 @@ evidence_loader_impl::_save_credit_cards ()
 
             if (cc.expiration_month && cc.expiration_year)
                 e.set_attribute (
-                    "expiration_date", std::to_string (cc.expiration_year) +
-                                           '-' +
-                                           std::to_string (cc.expiration_month)
+                    "expiration_date",
+                    std::to_string (cc.expiration_year) + '-' +
+                        std::to_string (cc.expiration_month)
                 );
 
             auto metadata = mobius::core::pod::map ();
@@ -699,7 +724,8 @@ evidence_loader_impl::_save_received_files ()
             {
                 auto e = item_.new_evidence ("received-file");
                 auto path = mobius::core::string::first_of (
-                    entry.target_path, entry.full_path
+                    entry.target_path,
+                    entry.full_path
                 );
 
                 e.set_attribute ("timestamp", entry.start_time);
@@ -734,7 +760,8 @@ evidence_loader_impl::_save_received_files ()
                 metadata.set ("web_app_id", entry.by_web_app_id);
                 metadata.set ("danger_type", entry.danger_type);
                 metadata.set (
-                    "embedder_download_data", entry.embedder_download_data
+                    "embedder_download_data",
+                    entry.embedder_download_data
                 );
                 metadata.set ("etag", entry.etag);
                 metadata.set ("hash", entry.hash);
@@ -802,13 +829,15 @@ evidence_loader_impl::_save_visited_urls ()
             metadata.set ("originator_cache_guid", entry.originator_cache_guid);
             metadata.set ("originator_from_visit", entry.originator_from_visit);
             metadata.set (
-                "originator_opener_visit", entry.originator_opener_visit
+                "originator_opener_visit",
+                entry.originator_opener_visit
             );
             metadata.set ("originator_visit_id", entry.originator_visit_id);
             metadata.set ("publicly_routable", entry.publicly_routable);
             metadata.set ("segment_id", entry.segment_id);
             metadata.set (
-                "visit_duration", _duration_to_string (entry.visit_duration)
+                "visit_duration",
+                _duration_to_string (entry.visit_duration)
             );
             metadata.set ("visit_url", entry.visit_url);
             metadata.set ("visited_link_id", entry.visited_link_id);
