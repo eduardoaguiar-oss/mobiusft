@@ -54,6 +54,8 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   void set_ignore_reallocated (bool);
   void set_case_sensitive (bool);
+  std::string get_folder_name () const;
+  
   std::vector <mobius::core::io::entry> get_entries () const;
   std::vector <mobius::core::io::entry> get_entries_by_name (const std::string&) const;
   std::vector <mobius::core::io::entry> get_entries_by_path (const std::string&) const;

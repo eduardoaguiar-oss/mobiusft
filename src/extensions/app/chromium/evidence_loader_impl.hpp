@@ -91,6 +91,8 @@ class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
     void _scan_canonical_root_folder (const mobius::core::io::folder &);
     void _scan_canonical_user_folder (const mobius::core::io::folder &);
     void _scan_all_folders (const mobius::core::io::folder &);
+    void _scan_local_state (const mobius::core::io::folder &);
+    void _scan_profile (const mobius::core::io::folder &);
 
     void _save_evidences ();
 

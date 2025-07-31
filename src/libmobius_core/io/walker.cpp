@@ -188,6 +188,8 @@ class walker::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string get_folder_name () const;
+
     std::vector<mobius::core::io::entry> get_entries () const;
     std::vector<mobius::core::io::entry>
     get_entries_by_name (const std::string &) const;
@@ -249,6 +251,21 @@ class walker::impl
 walker::impl::impl (const mobius::core::io::folder &folder)
     : folder_ (folder)
 {
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get normalized folder name
+// @return Folder name
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+walker::impl::get_folder_name () const
+{
+    std::string name = folder_.get_name ();
+
+    if (flag_case_sensitive_)
+        return name;
+
+    return mobius::core::string::tolower (name);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -8,6 +8,10 @@ Mobius Forensic Toolkit 2.18
 	* app-chromium: Decode Safe Browsing Cookies files
 	* ant.evidence: New module post.user_accounts_from_cookies
 	* ant.evidence.vfs.accounts: Remove retrieve from cookies
+	* libmobius_core: Added new method io::walker::get_folder_name
+	* libmobius_core: Added new module decoder::json to decode .json files
+	* libmobius_core: Added new class decoder::json::tokenizer
+	* libmobius_core: Added new class decoder::json::parser
 
 Mobius Forensic Toolkit 2.17
 	* Added new C++ extension called "app-chromium"

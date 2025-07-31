@@ -30,8 +30,28 @@
 #include <iomanip>
 #include <sstream>
 
+#include <iostream> // for debugging purposes
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// References:
+// - Chromium folder structure:
+//
+// @see
+// https://chromium.googlesource.com/chromium/src/+/HEAD/docs/user_data_dir.md
+//
+//  - Local State: File containing global settings and state, including v10 and
+//  v20 encrypted keys
+//  - Profiles: Each user profile has its own folder, typically named "Profile
+//  X" or "Default"
+//      - Bookmarks: File containing the user's bookmarks
+//      - Cookies: File containing cookies for the profile
+//      - History: File containing the browsing history
+//      - Login Data: File containing saved passwords and login information
+//      - Preferences: File containing user preferences and settings
+//      - Web Data: File containing autofill data and other web-related
+//      information
+//      - Network: Folder containing network-related data, such as DNS cache and
+//      protocol handlers
+//           - Cookies: File containing cookies for the profile
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 namespace
 {
@@ -40,7 +60,7 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const std::string ANT_ID = "evidence.app-chromium";
 static const std::string ANT_NAME = "App Chromium";
-static const std::string ANT_VERSION = "1.0";
+static const std::string ANT_VERSION = "1.1";
 static const std::string APP_FAMILY = "chromium";
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -260,6 +280,46 @@ evidence_loader_impl::_scan_all_folders (const mobius::core::io::folder &folder)
 void
 evidence_loader_impl::scan_folder (const mobius::core::io::folder &folder)
 {
+    _scan_local_state (folder);
+    _scan_profile (folder);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Scan folder for Local State files
+// @param folder Folder to scan
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_loader_impl::_scan_local_state (const mobius::core::io::folder &folder)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    auto w = mobius::core::io::walker (folder);
+
+    for (const auto &f : w.get_files_by_name ("local state"))
+    {
+        try
+        {
+            // Process Local State file
+            std::cout << "Processing Local State file: " << f.get_path ()
+                      << std::endl;
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (
+                __LINE__,
+                std::string (e.what ()) + " (file: " + f.get_path () + ")"
+            );
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Scan folder for Chromium profiles
+// @param folder Folder to scan
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_loader_impl::_scan_profile (const mobius::core::io::folder &folder)
+{
     mobius::core::log log (__FILE__, __FUNCTION__);
 
     // ==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -282,10 +342,7 @@ evidence_loader_impl::scan_folder (const mobius::core::io::folder &folder)
     {
         try
         {
-            if (name == "local state")
-                ; // profile_.add_local_state_file (f);
-
-            else if (name == "bookmarks")
+            if (name == "bookmarks")
                 ; // profile_.add_settings_dat_file (f);
 
             else if (name == "cookies")

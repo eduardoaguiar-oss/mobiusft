@@ -48,6 +48,8 @@ add_library(mobius_core_decoder STATIC
     qdatastream.cpp
     sourcecode.cpp
     tdf.cpp
+    json/tokenizer.cpp
+    json/parser.cpp
     sgml/parser.cpp
     sgml/tokenizer.cpp
     xml/dom.cpp
