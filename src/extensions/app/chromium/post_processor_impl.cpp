@@ -19,17 +19,23 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "post_processor_impl.hpp"
 #include <mobius/core/log.hpp>
+#include <mobius/core/os/win/dpapi/blob.hpp>
 #include <string>
 
 #include <iostream>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @see https://security.googleblog.com/2024/07/improving-security-of-chrome-cookies-on.html
-// @see https://github.com/xaitax/Chrome-App-Bound-Encryption-Decryption/blob/main/docs/RESEARCH.md
+// @see
+// https://security.googleblog.com/2024/07/improving-security-of-chrome-cookies-on.html
+// @see
+// https://github.com/xaitax/Chrome-App-Bound-Encryption-Decryption/blob/main/docs/RESEARCH.md
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace
 {
+// @brief App Bound Encrypted Key Signature (v20)
+const mobius::core::bytearray APP_BOUND_SIGNATURE = "APPB";
+
 } // namespace
 
 namespace mobius::extension::app::chromium
@@ -57,6 +63,8 @@ post_processor_impl::process_evidence (
     mobius::framework::model::evidence evidence
 )
 {
+    std::cout << "Processing evidence: " << evidence.get_uid () << std::endl;
+
     auto type = evidence.get_type ();
 
     if (type == "autofill")
@@ -146,18 +154,55 @@ post_processor_impl::_process_encryption_key (
     mobius::framework::model::evidence evidence
 )
 {
+    // Get key attributes
     auto key_type = evidence.get_attribute<std::string> ("key_type");
     auto id = evidence.get_attribute<std::string> ("id");
     auto value = evidence.get_attribute<mobius::core::bytearray> ("value");
 
-    if (key_type == "dpapi.sys" || key_type == "dpapi.user")
-        dpapi_keys_[id] = value;
+    // Store decrypted keys for later use
+    if (value)
+    {
+        if (key_type == "dpapi.sys" || key_type == "dpapi.user")
+            dpapi_keys_[id] = value;
 
-    else if (key_type == "chromium.v10")
-        chromium_v10_keys_.insert (value);
+        else if (key_type == "chromium.v10")
+            chromium_v10_keys_.insert (value);
 
-    else if (key_type == "chromium.v20")
-        chromium_v20_keys_.insert (value);
+        else if (key_type == "chromium.v20")
+            chromium_v20_keys_.insert (value);
+
+        return;
+    }
+
+    // Try to decrypt the key
+    if (key_type == "chromium.v20")
+    {
+        auto encrypted_value =
+            evidence.get_attribute<mobius::core::bytearray> ("encrypted_value");
+
+        if (encrypted_value.startswith (APP_BOUND_SIGNATURE))
+        {
+            mobius::core::os::win::dpapi::blob blob (
+                encrypted_value.slice (4, encrypted_value.size ())
+            );
+
+            auto metadata =
+                evidence.get_attribute<mobius::core::pod::map> ("metadata");
+            metadata.set ("dpapi_revision", blob.get_revision ());
+            metadata.set ("dpapi_provider_guid", blob.get_provider_guid ());
+            metadata.set (
+                "dpapi_master_key_revision",
+                blob.get_master_key_revision ()
+            );
+            metadata.set ("dpapi_master_key_guid", blob.get_master_key_guid ());
+            metadata.set ("dpapi_description", blob.get_description ());
+            evidence.set_attribute ("metadata", metadata);
+            
+            std::cout << "Chromium v20 key is encrypted. ID: " << id
+                      << std::endl;
+            std::cout << encrypted_value.dump () << std::endl;
+        }
+    }
 }
 
 } // namespace mobius::extension::app::chromium

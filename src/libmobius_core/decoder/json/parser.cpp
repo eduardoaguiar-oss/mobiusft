@@ -33,31 +33,6 @@ namespace
 // @brief Debug flag. Set to true for debugging output
 static constexpr bool DEBUG = false;
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Convert number value to mobius::core::pod::data
-// @param value Number value as string
-// @return mobius::core::pod::data object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::core::pod::data
-_convert_number_to_data (const std::string &value)
-{
-    try
-    {
-        if (value.find_first_of (".") != std::string::npos)
-            return mobius::core::pod::data (std::stod (value));
-
-        return mobius::core::pod::data (
-            static_cast<std::int64_t> (std::stoll (value))
-        );
-    }
-    catch (const std::exception &e)
-    {
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG (
-            "Failed to convert number: " + value + " - " + e.what ()
-        ));
-    }
-}
-
 } // namespace
 
 namespace mobius::core::decoder::json
@@ -85,59 +60,75 @@ parser::parser (const mobius::core::bytearray &bytearray)
 // @return JSON root element
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::pod::data
-parser::get ()
+parser::parse ()
 {
-    return _decode_value ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode JSON value
-// @return Decoded value as mobius::core::pod::data object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::pod::data
-parser::_decode_value ()
-{
-    mobius::core::pod::data data;
-
     auto [type, value] = tokenizer_.get_token ();
 
     if (DEBUG)
         std::cout << "Token type: " << static_cast<int> (type) << ", value: '"
                   << value << "'" << std::endl;
 
-    switch (type)
+    return _get_token_data (type, value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get token data
+// @param type Token type
+// @param value Token value
+// @return mobius::core::pod::data object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::pod::data
+parser::_get_token_data (tokenizer::token_type type, const std::string &value)
+{
+    mobius::core::pod::data data;
+
+    try
     {
-    case tokenizer::token_type::string:
-        data = mobius::core::pod::data (value.substr (1, value.size () - 2));
-        break;
+        switch (type)
+        {
+        case tokenizer::token_type::left_brace: // {
+            data = _decode_map ();
+            break;
 
-    case tokenizer::token_type::number:
-        data = _convert_number_to_data (value);
-        break;
+        case tokenizer::token_type::left_bracket: // [
+            data = _decode_array ();
+            break;
 
-    case tokenizer::token_type::boolean:
-        data = mobius::core::pod::data (value == "true");
-        break;
+        case tokenizer::token_type::string:
+            data = value.substr (1, value.size () - 2); // Remove quotes
+            break;
 
-    case tokenizer::token_type::null:
-        break;
+        case tokenizer::token_type::number:
+            if (value.find_first_of (".") != std::string::npos)
+                data = std::stod (value);
+            else
+                data = static_cast<std::int64_t> (std::stoll (value));
+            break;
 
-    case tokenizer::token_type::left_brace: // {
-        data = _decode_map ();
-        break;
+        case tokenizer::token_type::boolean:
+            data = (value == "true");
+            break;
 
-    case tokenizer::token_type::left_bracket: // [
-        data = _decode_array ();
-        break;
+        case tokenizer::token_type::null:
+            break;
 
-    case tokenizer::token_type::end:
-        break;
+        case tokenizer::token_type::end:
+            break;
 
-    default:
+        default:
+            throw std::runtime_error (MOBIUS_EXCEPTION_MSG (
+                "Unexpected token [type: " +
+                std::to_string (static_cast<int> (type)) + "] with value: '" +
+                value + "'"
+            ));
+        }
+    }
+    catch (const std::exception &e)
+    {
         throw std::runtime_error (MOBIUS_EXCEPTION_MSG (
-            "Unexpected token [type: " +
-            std::to_string (static_cast<int> (type)) + "] with value: '" +
-            value + "'"
+            "Failed to get token data [type: " +
+            std::to_string (static_cast<int> (type)) + "]: " + value + " - " +
+            e.what ()
         ));
     }
 
@@ -153,70 +144,70 @@ parser::_decode_map ()
 {
     mobius::core::pod::map map;
 
+    int state = 0; // 0: expecting key, 1: expecting colon, 2: expecting value,
+                   // 3: expecting comma or end
     std::string current_key;
 
-    while (true)
+    auto [type, value] = tokenizer_.get_token ();
+
+    while (type != tokenizer::token_type::end &&
+           type != tokenizer::token_type::right_brace)
     {
         if (DEBUG)
+        {
             std::cout << "Map: " << map.to_string () << std::endl;
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Get key
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        std::string current_key;
-
-        auto [type, value] = tokenizer_.get_token ();
-
-        if (DEBUG)
             std::cout << "Token type: " << static_cast<int> (type)
-                      << ", Value: '" << value << "'" << std::endl;
+                      << ", value: '" << value << "'" << std::endl;
+        }
 
-        if (type == tokenizer::token_type::string)
-            current_key = value.substr (1, value.size () - 2);
+        if (state == 0) // Get key
+        {
+            if (type != tokenizer::token_type::string)
+                throw std::runtime_error (
+                    MOBIUS_EXCEPTION_MSG ("Expected string token for key")
+                );
 
-        else if (type == tokenizer::token_type::end ||
-                 type == tokenizer::token_type::right_brace)
-            return map;
+            current_key = value.substr (1, value.size () - 2); // Remove quotes
+            state = 1; // Move to expecting colon
+        }
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Expect colon
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        else if (state == 1) // Expect colon
+        {
+            if (type != tokenizer::token_type::colon)
+                throw std::runtime_error (
+                    MOBIUS_EXCEPTION_MSG ("Expected colon token after key")
+                );
+
+            state = 2; // Move to expecting value
+        }
+
+        else if (state == 2) // Get value
+        {
+            auto value_data = _get_token_data (type, value);
+
+            if (DEBUG)
+                std::cout << "Decoded value: " << value_data.to_string ()
+                          << std::endl;
+
+            map.set (current_key, value_data);
+            state = 3; // Move to expecting comma
+        }
+
+        else if (state == 3) // Expect comma or end
+        {
+            if (type == tokenizer::token_type::comma)
+                state = 0; // Reset to expecting key
+
+            else
+                throw std::runtime_error (
+                    MOBIUS_EXCEPTION_MSG ("Expected comma token")
+                );
+        }
+
         std::tie (type, value) = tokenizer_.get_token ();
-
-        if (type == tokenizer::token_type::end ||
-            type == tokenizer::token_type::right_brace)
-            return map;
-
-        else if (type != tokenizer::token_type::colon)
-            throw std::runtime_error (
-                MOBIUS_EXCEPTION_MSG ("Unexpected colon token")
-            );
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Get value
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        mobius::core::pod::data value_data = _decode_value ();
-
-        if (DEBUG)
-            std::cout << "Decoded value: " << value_data.to_string ()
-                      << std::endl;
-
-        map.set (current_key, value_data);
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Expect comma or end
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        std::tie (type, value) = tokenizer_.get_token ();
-
-        if (type == tokenizer::token_type::end ||
-            type == tokenizer::token_type::right_brace)
-            return map;
-
-        else if (type != tokenizer::token_type::comma)
-            throw std::runtime_error (
-                MOBIUS_EXCEPTION_MSG ("Unexpected token after value")
-            );
     }
+
+    return map;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -233,9 +224,18 @@ parser::_decode_array ()
     while (type != tokenizer::token_type::end &&
            type != tokenizer::token_type::right_bracket)
     {
-        array.push_back (_decode_value ());
+        array.push_back (_get_token_data (type, value));
 
         std::tie (type, value) = tokenizer_.get_token ();
+
+        if (type == tokenizer::token_type::comma)
+            std::tie (type, value) =
+                tokenizer_.get_token (); // Continue to next element
+
+        else if (type != tokenizer::token_type::right_bracket)
+            throw std::runtime_error (
+                MOBIUS_EXCEPTION_MSG ("Expected comma or end of array")
+            );
     }
 
     return mobius::core::pod::data (array);

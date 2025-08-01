@@ -18,17 +18,22 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "evidence_loader_impl.hpp"
+#include <mobius/core/crypt/hash.hpp>
 #include <mobius/core/datasource/datasource_vfs.hpp>
+#include <mobius/core/decoder/base64.hpp>
 #include <mobius/core/decoder/inifile.hpp>
+#include <mobius/core/decoder/json/parser.hpp>
 #include <mobius/core/io/path.hpp>
 #include <mobius/core/io/walker.hpp>
 #include <mobius/core/log.hpp>
+#include <mobius/core/os/win/dpapi/blob.hpp>
 #include <mobius/core/pod/data.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/model/evidence.hpp>
 #include <iomanip>
 #include <sstream>
+#include "common.hpp"
 
 #include <iostream> // for debugging purposes
 
@@ -62,6 +67,8 @@ static const std::string ANT_ID = "evidence.app-chromium";
 static const std::string ANT_NAME = "App Chromium";
 static const std::string ANT_VERSION = "1.1";
 static const std::string APP_FAMILY = "chromium";
+static const std::string APP_NAME = "Chromium";
+static const std::string APP_ID = "chromium";
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get filename from path
@@ -138,10 +145,6 @@ evidence_loader_impl::run ()
     mobius::core::log log (__FILE__, __FUNCTION__);
     log.info (__LINE__, "Evidence loader <app-chromium> started");
     log.info (__LINE__, "Item UID: " + std::to_string (item_.get_uid ()));
-    log.info (
-        __LINE__,
-        "Scan mode: " + std::to_string (static_cast<int> (scan_type_))
-    );
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Check if loader has already run for item
@@ -174,32 +177,14 @@ evidence_loader_impl::run ()
     transaction.commit ();
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Scan item files, according to scan_type
+    // Scan for evidences
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    switch (scan_type_)
-    {
-    case scan_type::canonical_folders:
-        _scan_canonical_folders ();
-        break;
-
-    case scan_type::all_folders:
-        //_scan_all_folders ();
-        break;
-
-    default:
-        log.warning (
-            __LINE__,
-            "invalid scan type: " +
-                std::to_string (static_cast<int> (scan_type_))
-        );
-        return;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Save evidences
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    _scan_canonical_folders ();
     _save_evidences ();
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Log ending event
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     transaction = item_.new_transaction ();
     item_.add_event ("app.chromium has ended");
     transaction.commit ();
@@ -296,20 +281,75 @@ evidence_loader_impl::_scan_local_state (const mobius::core::io::folder &folder)
     auto w = mobius::core::io::walker (folder);
 
     for (const auto &f : w.get_files_by_name ("local state"))
+        _decode_local_state_file (f);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode Local State file
+// @param f Local State file to decode
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_loader_impl::_decode_local_state_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
     {
-        try
+        // Try to parse the Local State file as a JSON file
+        mobius::core::decoder::json::parser parser (f.new_reader ());
+        auto data = parser.parse ();
+
+        if (!data.is_map ())
         {
-            // Process Local State file
-            std::cout << "Processing Local State file: " << f.get_path ()
-                      << std::endl;
+            log.info (__LINE__, "Local State file is not a valid JSON map");
+            return;
         }
-        catch (const std::exception &e)
-        {
-            log.warning (
-                __LINE__,
-                std::string (e.what ()) + " (file: " + f.get_path () + ")"
+
+        log.info (
+            __LINE__,
+            "File " + f.get_path () + " is a valid 'Local State' file"
+        );
+
+        // Get Local State data
+        auto os_crypt =
+            mobius::core::pod::map (data).get<mobius::core::pod::map> (
+                "os_crypt"
             );
+
+        // Get v10 key from Local State map
+        mobius::core::bytearray v10_key;
+
+        auto encrypted_key = os_crypt.get<std::string> ("encrypted_key");
+
+        if (!encrypted_key.empty ())
+            v10_key = mobius::core::decoder::base64 (encrypted_key);
+
+        // Get v20 key from Local State map
+        mobius::core::bytearray v20_key;
+
+        auto app_bound_encrypted_key =
+            os_crypt.get<std::string> ("app_bound_encrypted_key");
+
+        if (!app_bound_encrypted_key.empty ())
+            v20_key = mobius::core::decoder::base64 (app_bound_encrypted_key);
+
+        // Save data
+        if (v10_key || v20_key)
+        {
+            local_state ls;
+            ls.v10_key = v10_key;
+            ls.v20_key = v20_key;
+            ls.f = f;
+
+            local_states_.emplace_back (std::move (ls));
         }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__,
+            std::string (e.what ()) + " (file: " + f.get_path () + ")"
+        );
     }
 }
 
@@ -384,7 +424,6 @@ evidence_loader_impl::_scan_profile (const mobius::core::io::folder &folder)
     if (profile_ && is_new)
     {
         profile_.set_folder (folder);
-        profile_.set_username (username_);
         profiles_.push_back (profile_);
     }
 }
@@ -401,6 +440,7 @@ evidence_loader_impl::_save_evidences ()
     _save_app_profiles ();
     _save_autofills ();
     _save_credit_cards ();
+    _save_encryption_keys ();
     _save_pdis ();
     _save_received_files ();
     _save_visited_urls ();
@@ -607,6 +647,51 @@ evidence_loader_impl::_save_credit_cards ()
 
             e.set_tag ("app.browser");
             e.add_source (cc.f);
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save encryption keys
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_loader_impl::_save_encryption_keys ()
+{
+    for (const auto &ls : local_states_)
+    {
+        const auto [app_id, app_name] = get_app_from_path (ls.f.get_path ());
+        const auto username = get_username_from_path (ls.f.get_path ());
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Save v20 key
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        if (ls.v20_key)
+        {
+            // create evidence
+            auto e = item_.new_evidence ("encryption-key");
+            e.set_attribute ("key_type", "chromium.v20");
+            e.set_attribute ("encrypted_value", ls.v20_key);
+
+            // value is empty, as v20 key is not decrypted yet
+            e.set_attribute ("value", mobius::core::bytearray {});
+
+            // create ID for this key
+            auto h = mobius::core::crypt::hash ("md5");
+            h.update (ls.v20_key);
+            auto key_id = mobius::core::string::toupper (h.get_hex_digest ());
+            e.set_attribute ("id", key_id);
+
+            // metadata
+            auto metadata = ls.metadata.clone ();
+            metadata.set ("app_id", app_id);
+            metadata.set ("app_name", app_name);
+            metadata.set ("app_family", APP_FAMILY);
+            metadata.set ("username", username);
+            e.set_attribute ("metadata", metadata);
+
+            // tag and source
+            e.set_tag ("app.browser");
+            e.add_source (ls.f);
         }
     }
 }

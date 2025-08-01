@@ -36,6 +36,24 @@ class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Local State structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct local_state
+    {
+        // @brief V10 key
+        mobius::core::bytearray v10_key;
+
+        // @brief V20 key
+        mobius::core::bytearray v20_key;
+
+        // @brief Metadata
+        mobius::core::pod::map metadata;
+
+        // @brief File object
+        mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     explicit evidence_loader_impl (
@@ -84,6 +102,9 @@ class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
     // @brief Profiles found
     std::vector<profile> profiles_;
 
+    // @brief Local States found
+    std::vector<local_state> local_states_;
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -93,12 +114,14 @@ class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
     void _scan_all_folders (const mobius::core::io::folder &);
     void _scan_local_state (const mobius::core::io::folder &);
     void _scan_profile (const mobius::core::io::folder &);
+    void _decode_local_state_file (const mobius::core::io::file &);
 
     void _save_evidences ();
 
     void _save_app_profiles ();
     void _save_autofills ();
     void _save_credit_cards ();
+    void _save_encryption_keys ();
     void _save_pdis ();
     void _save_received_files ();
     void _save_visited_urls ();

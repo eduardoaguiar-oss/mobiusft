@@ -3,7 +3,9 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -29,59 +31,63 @@ namespace mobius::core::os::win::dpapi
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief BLOB class
 // @author Eduardo Aguiar
-// @see https://elie.net/talk/reversing-dpapi-and-stealing-windows-secrets-offline/
+// @see
+// https://elie.net/talk/reversing-dpapi-and-stealing-windows-secrets-offline/
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class blob
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit blob (mobius::core::io::reader);
-  blob (blob&&) noexcept = default;
-  blob (const blob&) noexcept = default;
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    explicit blob (const mobius::core::io::reader &);
+    explicit blob (const mobius::core::bytearray &);
+    blob (blob &&) noexcept = default;
+    blob (const blob &) noexcept = default;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Operators
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  blob& operator= (const blob&) noexcept = default;
-  blob& operator= (blob&&) noexcept = default;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    blob &operator= (const blob &) noexcept = default;
+    blob &operator= (blob &&) noexcept = default;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Function prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::uint32_t get_revision () const;
-  std::string get_provider_guid () const;
-  std::uint32_t get_master_key_revision () const;
-  std::string get_master_key_guid () const;
-  std::uint32_t get_flags () const;
-  std::string get_description () const;
-  std::uint32_t get_cipher_id () const;
-  std::uint32_t get_key_length () const;
-  mobius::core::bytearray get_salt () const;
-  mobius::core::bytearray get_hmac_key () const;
-  std::uint32_t get_hash_id () const;
-  std::uint32_t get_hash_length () const;
-  mobius::core::bytearray get_hmac_value () const;
-  mobius::core::bytearray get_cipher_text () const;
-  mobius::core::bytearray get_plain_text () const;
-  mobius::core::bytearray get_signature () const;
-  mobius::core::bytearray get_signature_data () const;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Function prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::uint32_t get_revision () const;
+    std::string get_provider_guid () const;
+    std::uint32_t get_master_key_revision () const;
+    std::string get_master_key_guid () const;
+    std::uint32_t get_flags () const;
+    std::string get_description () const;
+    std::uint32_t get_cipher_id () const;
+    std::uint32_t get_key_length () const;
+    mobius::core::bytearray get_salt () const;
+    mobius::core::bytearray get_hmac_key () const;
+    std::uint32_t get_hash_id () const;
+    std::uint32_t get_hash_length () const;
+    mobius::core::bytearray get_hmac_value () const;
+    mobius::core::bytearray get_cipher_text () const;
+    mobius::core::bytearray get_plain_text () const;
+    mobius::core::bytearray get_signature () const;
+    mobius::core::bytearray get_signature_data () const;
 
-  bool test_key (const mobius::core::bytearray&, const mobius::core::bytearray& = {});
-  bool decrypt (const mobius::core::bytearray&, const mobius::core::bytearray& = {});
-  bool is_decrypted () const;
+    bool test_key (
+        const mobius::core::bytearray &, const mobius::core::bytearray & = {}
+    );
+    bool decrypt (
+        const mobius::core::bytearray &, const mobius::core::bytearray & = {}
+    );
+    bool is_decrypted () const;
 
-private:
-  // @brief Implementation class forward declaration
-  class impl;
+  private:
+    // @brief Implementation class forward declaration
+    class impl;
 
-  // @brief Implementation pointer
-  std::shared_ptr <impl> impl_;
+    // @brief Implementation pointer
+    std::shared_ptr<impl> impl_;
 };
 
 } // namespace mobius::core::os::win::dpapi
 
 #endif
-
-

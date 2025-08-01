@@ -12,6 +12,7 @@ Mobius Forensic Toolkit 2.18
 	* libmobius_core: Added new module decoder::json to decode .json files
 	* libmobius_core: Added new class decoder::json::tokenizer
 	* libmobius_core: Added new class decoder::json::parser
+	* libmobius_core: Added new method os::win::dpapi::blob (bytearray)
 
 Mobius Forensic Toolkit 2.17
 	* Added new C++ extension called "app-chromium"

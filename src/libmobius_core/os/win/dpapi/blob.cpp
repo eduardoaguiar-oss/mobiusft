@@ -22,6 +22,7 @@
 #include <mobius/core/crypt/hmac.hpp>
 #include <mobius/core/crypt/pkcs5.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
+#include <mobius/core/io/bytearray_io.hpp>
 #include <mobius/core/os/win/dpapi/blob.hpp>
 #include <mobius/core/os/win/dpapi/cipher_info.hpp>
 #include <mobius/core/os/win/dpapi/hash_info.hpp>
@@ -37,11 +38,11 @@ class blob::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    explicit impl (mobius::core::io::reader);
-    bool test_key (const mobius::core::bytearray &,
-                   const mobius::core::bytearray &);
-    bool decrypt (const mobius::core::bytearray &,
-                  const mobius::core::bytearray &);
+    explicit impl (const mobius::core::io::reader &);
+    bool
+    test_key (const mobius::core::bytearray &, const mobius::core::bytearray &);
+    bool
+    decrypt (const mobius::core::bytearray &, const mobius::core::bytearray &);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Operators
@@ -295,11 +296,13 @@ namespace
 // @see https://github.com/mis-team/dpapick
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static mobius::core::bytearray
-_generate_session_key (std::uint32_t ms_hash_id,
-                       const mobius::core::bytearray &key,
-                       const mobius::core::bytearray &salt,
-                       const mobius::core::bytearray &data = {},
-                       const mobius::core::bytearray &entropy = {})
+_generate_session_key (
+    std::uint32_t ms_hash_id,
+    const mobius::core::bytearray &key,
+    const mobius::core::bytearray &salt,
+    const mobius::core::bytearray &data = {},
+    const mobius::core::bytearray &entropy = {}
+)
 {
     // generate prekey
     mobius::core::bytearray prekey;
@@ -370,7 +373,7 @@ _generate_session_key (std::uint32_t ms_hash_id,
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-blob::impl::impl (mobius::core::io::reader reader)
+blob::impl::impl (const mobius::core::io::reader &reader)
 {
     mobius::core::decoder::data_decoder decoder (reader);
 
@@ -418,8 +421,21 @@ blob::impl::impl (mobius::core::io::reader reader)
 // @brief Constructor
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-blob::blob (mobius::core::io::reader reader)
+blob::blob (const mobius::core::io::reader &reader)
     : impl_ (std::make_shared<impl> (reader))
+{
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Constructor
+// @param bytearray Bytearray object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+blob::blob (const mobius::core::bytearray &bytearray)
+    : impl_ (
+          std::make_shared<impl> (
+              mobius::core::io::new_bytearray_reader (bytearray)
+          )
+      )
 {
 }
 
@@ -430,11 +446,17 @@ blob::blob (mobius::core::io::reader reader)
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-blob::impl::test_key (const mobius::core::bytearray &key,
-                      const mobius::core::bytearray &entropy)
+blob::impl::test_key (
+    const mobius::core::bytearray &key, const mobius::core::bytearray &entropy
+)
 {
-    auto signature = _generate_session_key (hash_id_, key, hmac_value_,
-                                            signature_data_, entropy);
+    auto signature = _generate_session_key (
+        hash_id_,
+        key,
+        hmac_value_,
+        signature_data_,
+        entropy
+    );
 
     return signature == signature_;
 }
@@ -446,8 +468,9 @@ blob::impl::test_key (const mobius::core::bytearray &key,
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-blob::impl::decrypt (const mobius::core::bytearray &key,
-                     const mobius::core::bytearray &entropy)
+blob::impl::decrypt (
+    const mobius::core::bytearray &key, const mobius::core::bytearray &entropy
+)
 {
     // test if key is the right one
     if (!test_key (key, entropy))
@@ -499,7 +522,9 @@ blob::impl::decrypt (const mobius::core::bytearray &key,
     const auto cipher_id =
         mobius::core::os::win::dpapi::get_cipher_id (cipher_id_);
     auto c = mobius::core::crypt::new_cipher_cbc (
-        cipher_id, derived_key.slice (0, cipher_key_length - 1));
+        cipher_id,
+        derived_key.slice (0, cipher_key_length - 1)
+    );
     plain_text_ = mobius::core::crypt::pkcs5_unpad (c.decrypt (cipher_text_));
 
     return true;
@@ -512,8 +537,9 @@ blob::impl::decrypt (const mobius::core::bytearray &key,
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-blob::test_key (const mobius::core::bytearray &key,
-                const mobius::core::bytearray &entropy)
+blob::test_key (
+    const mobius::core::bytearray &key, const mobius::core::bytearray &entropy
+)
 {
     return impl_->test_key (key, entropy);
 }
@@ -525,8 +551,9 @@ blob::test_key (const mobius::core::bytearray &key,
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-blob::decrypt (const mobius::core::bytearray &key,
-               const mobius::core::bytearray &entropy)
+blob::decrypt (
+    const mobius::core::bytearray &key, const mobius::core::bytearray &entropy
+)
 {
     return impl_->decrypt (key, entropy);
 }

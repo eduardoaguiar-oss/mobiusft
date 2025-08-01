@@ -39,7 +39,7 @@ class parser
   public:
     explicit parser (const mobius::core::io::reader &);
     explicit parser (const mobius::core::bytearray &);
-    mobius::core::pod::data get ();
+    mobius::core::pod::data parse ();
 
   private:
     // @brief Tokenizer object
@@ -48,7 +48,8 @@ class parser
     // Helper functions
     mobius::core::pod::map _decode_map ();
     mobius::core::pod::data _decode_array ();
-    mobius::core::pod::data _decode_value ();
+    mobius::core::pod::data
+    _get_token_data (tokenizer::token_type, const std::string &);
 };
 
 } // namespace mobius::core::decoder::json
