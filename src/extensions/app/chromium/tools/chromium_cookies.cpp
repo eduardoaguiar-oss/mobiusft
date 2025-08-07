@@ -73,8 +73,6 @@ show_cookies (const std::string &path)
         std::cout << "\tIndex: " << entry.idx << std::endl;
         std::cout << "\tSchema version: " << dat.get_schema_version ()
                   << std::endl;
-        std::cout << "\tBrowser provenance: " << entry.browser_provenance
-                  << std::endl;
         std::cout << "\tCreation UTC: " << entry.creation_utc << std::endl;
         std::cout << "\tEncrypted value: \n" << entry.encrypted_value.dump (12);
         std::cout << "\tExpires UTC: " << entry.expires_utc << std::endl;

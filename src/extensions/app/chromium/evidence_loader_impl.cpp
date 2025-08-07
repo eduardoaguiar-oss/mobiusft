@@ -120,6 +120,53 @@ _duration_to_string (std::uint64_t duration)
     return ss.str ();
 }
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get metadata from DPAPI blob
+// @param data DPAPI blob data
+// @return Metadata as a map
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::pod::map
+_get_metadata_from_dpapi_blob (const mobius::core::bytearray &data)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    mobius::core::pod::map metadata;
+
+    try
+    {
+        auto blob = mobius::core::os::win::dpapi::blob (data);
+
+        metadata.set ("dpapi_revision", blob.get_revision ());
+        metadata.set ("dpapi_provider_guid", blob.get_provider_guid ());
+        metadata.set (
+            "dpapi_master_key_revision",
+            blob.get_master_key_revision ()
+        );
+        metadata.set ("dpapi_master_key_guid", blob.get_master_key_guid ());
+        metadata.set ("dpapi_flags", blob.get_flags ());
+        metadata.set ("dpapi_description", blob.get_description ());
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, std::string (e.what ()));
+    }
+
+    return metadata;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get key ID from DPAPI blob
+// @param data DPAPI blob data
+// @return Key ID as a string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+_get_key_id_from_dpapi_blob (const mobius::core::bytearray &data)
+{
+    auto h = mobius::core::crypt::hash ("md5");
+    h.update (data);
+    return mobius::core::string::toupper (h.get_hex_digest ());
+}
+
 } // namespace
 
 namespace mobius::extension::app::chromium
@@ -295,7 +342,9 @@ evidence_loader_impl::_decode_local_state_file (const mobius::core::io::file &f)
 
     try
     {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Try to parse the Local State file as a JSON file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         mobius::core::decoder::json::parser parser (f.new_reader ());
         auto data = parser.parse ();
 
@@ -310,38 +359,65 @@ evidence_loader_impl::_decode_local_state_file (const mobius::core::io::file &f)
             "File " + f.get_path () + " is a valid 'Local State' file"
         );
 
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Get Local State data
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         auto os_crypt =
             mobius::core::pod::map (data).get<mobius::core::pod::map> (
                 "os_crypt"
             );
+        if (!os_crypt)
+        {
+            log.info (
+                __LINE__,
+                "Local State file does not contain 'os_crypt' data"
+            );
+            return;
+        }
 
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Get v10 key from Local State map
-        mobius::core::bytearray v10_key;
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto v10_encrypted_key = os_crypt.get<std::string> ("encrypted_key");
 
-        auto encrypted_key = os_crypt.get<std::string> ("encrypted_key");
+        if (!v10_encrypted_key.empty ())
+        {
+            auto value = mobius::core::decoder::base64 (v10_encrypted_key);
 
-        if (!encrypted_key.empty ())
-            v10_key = mobius::core::decoder::base64 (encrypted_key);
+            if (value.startswith ("DPAPI"))
+            {
+                encryption_key ek;
+                ek.type = "v10";
+                ek.value = value.slice (5, value.size ());
+                ek.id = _get_key_id_from_dpapi_blob (ek.value);
+                ek.metadata = _get_metadata_from_dpapi_blob (ek.value);
+                ek.f = f;
 
+                encryption_keys_.emplace_back (std::move (ek));
+            }
+        }
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Get v20 key from Local State map
-        mobius::core::bytearray v20_key;
-
-        auto app_bound_encrypted_key =
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto v20_encrypted_key =
             os_crypt.get<std::string> ("app_bound_encrypted_key");
 
-        if (!app_bound_encrypted_key.empty ())
-            v20_key = mobius::core::decoder::base64 (app_bound_encrypted_key);
-
-        // Save data
-        if (v10_key || v20_key)
+        if (!v20_encrypted_key.empty ())
         {
-            local_state ls;
-            ls.v10_key = v10_key;
-            ls.v20_key = v20_key;
-            ls.f = f;
+            auto value = mobius::core::decoder::base64 (v20_encrypted_key);
 
-            local_states_.emplace_back (std::move (ls));
+            if (value.startswith ("APPB"))
+            {
+                encryption_key ek;
+                ek.type = "v20";
+                ek.value = value.slice (4, value.size ());
+                ek.id = _get_key_id_from_dpapi_blob (ek.value);
+                ek.metadata = _get_metadata_from_dpapi_blob (ek.value);
+                ek.f = f;
+
+                encryption_keys_.emplace_back (std::move (ek));
+            }
         }
     }
     catch (const std::exception &e)
@@ -657,32 +733,28 @@ evidence_loader_impl::_save_credit_cards ()
 void
 evidence_loader_impl::_save_encryption_keys ()
 {
-    for (const auto &ls : local_states_)
+    for (const auto &ek : encryption_keys_)
     {
-        const auto [app_id, app_name] = get_app_from_path (ls.f.get_path ());
-        const auto username = get_username_from_path (ls.f.get_path ());
+        const auto [app_id, app_name] = get_app_from_path (ek.f.get_path ());
+        const auto username = get_username_from_path (ek.f.get_path ());
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Save v20 key
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        if (ls.v20_key)
+        if (ek.type == "v20")
         {
             // create evidence
             auto e = item_.new_evidence ("encryption-key");
+
             e.set_attribute ("key_type", "chromium.v20");
-            e.set_attribute ("encrypted_value", ls.v20_key);
+            e.set_attribute ("encrypted_value", ek.value);
+            e.set_attribute ("id", ek.id);
 
             // value is empty, as v20 key is not decrypted yet
             e.set_attribute ("value", mobius::core::bytearray {});
 
-            // create ID for this key
-            auto h = mobius::core::crypt::hash ("md5");
-            h.update (ls.v20_key);
-            auto key_id = mobius::core::string::toupper (h.get_hex_digest ());
-            e.set_attribute ("id", key_id);
-
             // metadata
-            auto metadata = ls.metadata.clone ();
+            auto metadata = ek.metadata.clone ();
             metadata.set ("app_id", app_id);
             metadata.set ("app_name", app_name);
             metadata.set ("app_family", APP_FAMILY);
@@ -691,7 +763,7 @@ evidence_loader_impl::_save_encryption_keys ()
 
             // tag and source
             e.set_tag ("app.browser");
-            e.add_source (ls.f);
+            e.add_source (ek.f);
         }
     }
 }

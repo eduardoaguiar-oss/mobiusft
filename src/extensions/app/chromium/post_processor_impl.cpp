@@ -34,7 +34,10 @@
 namespace
 {
 // @brief App Bound Encrypted Key Signature (v20)
-const mobius::core::bytearray APP_BOUND_SIGNATURE = "APPB";
+static const mobius::core::bytearray APP_BOUND_SIGNATURE = "APPB";
+
+// @brief Debug flag
+static constexpr bool DEBUG = true;
 
 } // namespace
 
@@ -63,7 +66,7 @@ post_processor_impl::process_evidence (
     mobius::framework::model::evidence evidence
 )
 {
-    std::cout << "Processing evidence: " << evidence.get_uid () << std::endl;
+    // std::cout << "Processing evidence: " << evidence.get_uid () << std::endl;
 
     auto type = evidence.get_type ();
 
@@ -158,10 +161,15 @@ post_processor_impl::_process_encryption_key (
     auto key_type = evidence.get_attribute<std::string> ("key_type");
     auto id = evidence.get_attribute<std::string> ("id");
     auto value = evidence.get_attribute<mobius::core::bytearray> ("value");
+    auto encrypted_value =
+        evidence.get_attribute<mobius::core::bytearray> ("encrypted_value");
 
     // Store decrypted keys for later use
     if (value)
     {
+        std::cout << "Decrypted key found. Type: " << key_type << ", ID: " << id
+                  << ", Value: " << value.dump () << std::endl;
+
         if (key_type == "dpapi.sys" || key_type == "dpapi.user")
             dpapi_keys_[id] = value;
 
@@ -174,35 +182,112 @@ post_processor_impl::_process_encryption_key (
         return;
     }
 
-    // Try to decrypt the key
-    if (key_type == "chromium.v20")
+    if (key_type == "chromium.v10")
     {
-        auto encrypted_value =
-            evidence.get_attribute<mobius::core::bytearray> ("encrypted_value");
-
-        if (encrypted_value.startswith (APP_BOUND_SIGNATURE))
+        // Try to decrypt the key using DPAPI keys
+        if (encrypted_value)
         {
-            mobius::core::os::win::dpapi::blob blob (
-                encrypted_value.slice (4, encrypted_value.size ())
-            );
+            if (DEBUG)
+                std::cout << "Attempting to decrypt v10 key: "
+                          << encrypted_value.dump () << std::endl;
 
-            auto metadata =
-                evidence.get_attribute<mobius::core::pod::map> ("metadata");
-            metadata.set ("dpapi_revision", blob.get_revision ());
-            metadata.set ("dpapi_provider_guid", blob.get_provider_guid ());
-            metadata.set (
-                "dpapi_master_key_revision",
-                blob.get_master_key_revision ()
+            auto decrypted_value = _decrypt_dpapi_value (
+                evidence.get_attribute<mobius::core::bytearray> (
+                    "encrypted_value"
+                )
             );
-            metadata.set ("dpapi_master_key_guid", blob.get_master_key_guid ());
-            metadata.set ("dpapi_description", blob.get_description ());
-            evidence.set_attribute ("metadata", metadata);
-            
-            std::cout << "Chromium v20 key is encrypted. ID: " << id
-                      << std::endl;
-            std::cout << encrypted_value.dump () << std::endl;
+            if (decrypted_value)
+            {
+                std::cout << "Decrypted v10 key: " << decrypted_value.dump ()
+                          << std::endl;
+                // chromium_v10_keys_.insert (decrypted_value);
+                return;
+            }
         }
     }
+
+    // Try to decrypt the key
+    else if (key_type == "chromium.v20")
+    {
+        auto decrypted_value = _decrypt_v20_encrypted_key (encrypted_value);
+        if (decrypted_value)
+        {
+            std::cout << "Decrypted v20 key: " << decrypted_value.dump ()
+                      << std::endl;
+            // chromium_v20_keys_.insert (decrypted_value);
+            return;
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decrypt DPAPI value
+// @param encrypted_value Encrypted DPAPI value to decrypt
+// @return Decrypted value as bytearray
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::bytearray
+post_processor_impl::_decrypt_dpapi_value (
+    const mobius::core::bytearray &encrypted_value
+) const
+{
+    if (!encrypted_value)
+        return {};
+
+    // Create DPAPI blob from encrypted value
+    mobius::core::os::win::dpapi::blob blob (encrypted_value);
+    auto mk_guid = blob.get_master_key_guid ();
+
+    // Find the master key in the DPAPI keys map
+    auto iter = dpapi_keys_.find (mk_guid);
+    if (iter == dpapi_keys_.end ())
+    {
+        if (DEBUG)
+            std::cout << "No DPAPI master key found for decryption. ID: "
+                      << mk_guid << ". Blob data: " << std::endl
+                      << encrypted_value.dump () << std::endl;
+        return {};
+    }
+
+    auto master_key = iter->second;
+    if (DEBUG)
+        std::cout << "DPAPI master key found for decryption: " << std::endl
+                  << master_key.dump () << std::endl;
+
+    // Decrypt the blob using the master key
+    if (!blob.decrypt (master_key))
+    {
+        if (DEBUG)
+            std::cout << "Failed to decrypt DPAPI value with master key: "
+                      << mk_guid << std::endl;
+        return {};
+    }
+
+    // If decryption was successful, get the decrypted value
+    auto decrypted_value = blob.get_plain_text ();
+    if (DEBUG)
+        std::cout << "DPAPI value decrypted successfully. Blob data: "
+                  << std::endl
+                  << decrypted_value.dump () << std::endl;
+
+    return decrypted_value;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decrypt v20 encrypted key
+// @param encrypted_value Encrypted key to decrypt
+// @return Decrypted value as bytearray
+//
+// @note This function tries to decrypt the encrypted value twice, assuming
+// that the encrypted value is a valid DPAPI blob.
+// v20 encrypted keys are encrypted using a User DPAPI key and then
+// encrypted again with a system DPAPI key.
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::bytearray
+post_processor_impl::_decrypt_v20_encrypted_key (
+    const mobius::core::bytearray &encrypted_value
+) const
+{
+    return _decrypt_dpapi_value (_decrypt_dpapi_value (encrypted_value));
 }
 
 } // namespace mobius::extension::app::chromium

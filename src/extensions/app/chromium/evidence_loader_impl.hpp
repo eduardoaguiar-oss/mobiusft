@@ -29,22 +29,25 @@
 namespace mobius::extension::app::chromium
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>Emule evidence_loader</i> implementation class
+// @brief <i>Chromium evidence_loader</i> implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Local State structure
+    // @brief Encryption Key structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    struct local_state
+    struct encryption_key
     {
-        // @brief V10 key
-        mobius::core::bytearray v10_key;
+        // @brief Key type
+        std::string type;
 
-        // @brief V20 key
-        mobius::core::bytearray v20_key;
+        // @brief Key ID
+        std::string id;
+
+        // @brief Encrypted Key value
+        mobius::core::bytearray value;
 
         // @brief Metadata
         mobius::core::pod::map metadata;
@@ -102,8 +105,8 @@ class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
     // @brief Profiles found
     std::vector<profile> profiles_;
 
-    // @brief Local States found
-    std::vector<local_state> local_states_;
+    // @brief Encryption keys found
+    std::vector<encryption_key> encryption_keys_;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions

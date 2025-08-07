@@ -454,20 +454,21 @@ class HashesView(object):
             h = row[-1]
             metadata = h.metadata
             username = metadata.get('username')
+            hash_type = h.password_hash_type
 
-            if h.has_password():
+            if h.has_attribute("password"):
                 pass  # do not export hashes already found
 
-            elif h.type == 'lm':
+            elif hash_type == 'lm':
                 fp.write('%s\n' % h.value)
 
-            elif h.type == 'nt':
+            elif hash_type == 'nt':
                 fp.write('%s\n' % h.value)
 
-            elif h.type == 'msdcc1':
+            elif hash_type == 'msdcc1':
                 fp.write('%s:%s\n' % (h.value, username))
 
-            elif h.type == 'msdcc2':
+            elif hash_type == 'msdcc2':
                 iterations = metadata.get('iterations')
                 fp.write('$DCC2$%s#%s#%s\n' % (iterations, username, h.value))
 
@@ -488,20 +489,21 @@ class HashesView(object):
             rid = metadata.get('user_rid')
             gid = metadata.get('user_gid')
             gecos = metadata.get('fullname') or metadata.get('user_comment')
+            hash_type = h.password_hash_type
 
-            if h.has_password():
+            if h.has_attribute("password"):
                 pass  # do not export hashes already found
 
-            elif h.type == 'nt':
+            elif hash_type == 'nt':
                 fp.write('%s:$NT$%s:%s:%s:%s::\n' % (username, h.value, rid, gid, gecos))
 
-            elif h.type == 'lm':
+            elif hash_type == 'lm':
                 fp.write('%s:$LM$%s:%s:%s:%s::\n' % (username, h.value, rid, gid, gecos))
 
-            elif h.type == 'msdcc1':
+            elif hash_type == 'msdcc1':
                 fp.write('%s:M$%s#%s:%s:%s:%s::\n' % (username, username, h.value, rid, gid, gecos))
 
-            elif h.type == 'msdcc2':
+            elif hash_type == 'msdcc2':
                 iterations = metadata.get('iterations')
                 fp.write('%s:$DCC2$%s#%s#%s:%s:%s:%s::\n' % (username, iterations, username, h.value, rid, gid, gecos))
 
@@ -521,12 +523,13 @@ class HashesView(object):
             h = row[-1]
             metadata = h.metadata
             username = metadata.get('username')
+            hash_type = h.password_hash_type
 
-            if h.has_password() and (h.type, h.value) not in exported:
-                if h.type == 'nt':
+            if h.has_attribute("password") and (hash_type, h.value) not in exported:
+                if hash_type == 'nt':
                     fp.write('$NT$%s:%s\n' % (h.value, h.password))
 
-                elif h.type == 'lm':
+                elif hash_type == 'lm':
                     if ('lm', h.value[:16]) not in exported:
                         fp.write('$LM$%s:%s\n' % (h.value[:16], h.password[:7].upper()))
                         exported.add(('lm', h.value[:16]))
@@ -534,14 +537,14 @@ class HashesView(object):
                         fp.write('$LM$%s:%s\n' % (h.value[16:], h.password[7:].upper()))
                         exported.add(('lm', h.value[16:]))
 
-                elif h.type == 'msdcc1':
+                elif hash_type == 'msdcc1':
                     fp.write('M$%s#%s:%s\n' % (h.value, username, h.password))
 
-                elif h.type == 'msdcc2':
+                elif hash_type == 'msdcc2':
                     iterations = metadata.get('iterations')
                     fp.write('$DCC2$%d#%s#%s:%s\n' % (iterations, username, h.value, h.password))
 
-                exported.add((h.type, h.value))
+                exported.add((hash_type, h.value))
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Export wordlist file
@@ -552,7 +555,7 @@ class HashesView(object):
         for row in self.__tableview:
             h = row[-1]
 
-            if h.has_password():
+            if h.has_attribute("password"):
                 keywords.add(h.password)
 
             metadata = h.metadata

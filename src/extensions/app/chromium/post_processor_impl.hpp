@@ -51,7 +51,7 @@ class post_processor_impl
     mobius::framework::model::item item_;
 
     // @brief DPAPI encryption keys
-    std::unordered_map<std::string, std::string> dpapi_keys_;
+    std::unordered_map<std::string, mobius::core::bytearray> dpapi_keys_;
 
     // @brief Chromium v10 encryption keys
     std::set<mobius::core::bytearray> chromium_v10_keys_;
@@ -66,6 +66,11 @@ class post_processor_impl
     void _process_cookie (mobius::framework::model::evidence evidence);
     void _process_credit_card (mobius::framework::model::evidence evidence);
     void _process_encryption_key (mobius::framework::model::evidence evidence);
+    
+    mobius::core::bytearray
+    _decrypt_dpapi_value (const mobius::core::bytearray &) const;
+    mobius::core::bytearray
+    _decrypt_v20_encrypted_key (const mobius::core::bytearray &) const;
 };
 
 } // namespace mobius::extension::app::chromium

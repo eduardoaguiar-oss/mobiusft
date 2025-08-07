@@ -45,9 +45,6 @@ class file_cookies
         // @brief Record Index
         std::uint64_t idx = 0;
 
-        // @brief Browser provenance
-        std::string browser_provenance;
-
         // @brief Creation UTC
         mobius::core::datetime::datetime creation_utc;
 

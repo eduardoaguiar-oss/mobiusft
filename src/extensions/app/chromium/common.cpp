@@ -92,11 +92,28 @@ std::vector<std::tuple<std::string, std::string, std::string>>
         {"/Microsoft/Edge SxS/User Data/",
          "edge.canary",
          "Microsoft Edge Canary"},
+        {"/Microsoft/Office/", "office", "Microsoft Office"},
+        {"/Microsoft/OneDrive/", "onedrive", "Microsoft OneDrive"},
         {"/Mighty Browser/User Data/", "mighty", "Mighty Browser"},
         {"/Naver/Whale/User Data/", "whale", "Naver Whale"},
         {"/Opera Software/Opera GX Stable", "opera-gx", "Opera GX"},
         {"/Orbitum/User Data/", "orbitum", "Orbitum"},
+        {"/Packages/Microsoft.MicrosoftOfficeHub_8wekyb3d8bbwe/",
+         "officehub",
+         "Microsoft Office Hub"},
+        {"/Packages/SpotifyAB.SpotifyMusic_zpdnekdrzrea0/",
+         "spotify",
+         "Spotify"},
+        {"/Pale Moon/User Data/", "palemoon", "Pale Moon"},
         {"/PlutoTV/", "plutotv", "PlutoTV"},
+        {"/Puffin/User Data/", "puffin", "Puffin"},
+        {"/QuteBrowser/User Data/", "qutebrowser", "QuteBrowser"},
+        {"/QQBrowser/User Data/", "qqbrowser", "QQ Browser"},
+        {"/Rambox/User Data/", "rambox", "Rambox"},
+        {"/Razer/Chroma/User Data/", "razer", "Razer Chroma"},
+        {"/Rockmelt/User Data/", "rockmelt", "Rockmelt"},
+        {"/Sleipnir/User Data/", "sleipnir", "Sleipnir"},
+        {"/Slimjet/User Data/", "slimjet", "Slimjet"},
         {"/Sputnik/Sputnik/User Data/", "sputnik", "Sputnik"},
         {"/Temp/BCLTMP/Chrome",
          "chrome.bcltmp",
@@ -252,8 +269,7 @@ get_db_schema_version (mobius::core::database::database db)
             {
                 log.warning (
                     __LINE__,
-                    "Schema version = 0. Path: " +
-                        db.get_path ()
+                    "Schema version = 0. Path: " + db.get_path ()
                 );
             }
         }
@@ -320,10 +336,7 @@ get_app_from_path (const std::string &path)
 
     mobius::core::log log (__FILE__, __FUNCTION__);
 
-    log.warning (
-        __LINE__,
-        "Unknown Chromium-based browser. Path: " + path
-    );
+    log.development (__LINE__, "Unknown Chromium-based browser. Path: " + path);
 
     return {"chromium", "Chromium"};
 }

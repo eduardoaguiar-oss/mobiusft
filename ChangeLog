@@ -1,18 +1,22 @@
 Mobius Forensic Toolkit 2.18
-	* libmobius_core: Added new method database::get_path
-	* app-chromium: New function get_db_schema_version (db)
-	* app-chromium: Decode Login Data files
-	* app-chromium: Decode Login Data For Account files
-	* app-chromium: Decode Cookies files
-	* app-chromium: Decode Extension Cookies files
-	* app-chromium: Decode Safe Browsing Cookies files
-	* ant.evidence: New module post.user_accounts_from_cookies
-	* ant.evidence.vfs.accounts: Remove retrieve from cookies
-	* libmobius_core: Added new method io::walker::get_folder_name
-	* libmobius_core: Added new module decoder::json to decode .json files
-	* libmobius_core: Added new class decoder::json::tokenizer
-	* libmobius_core: Added new class decoder::json::parser
-	* libmobius_core: Added new method os::win::dpapi::blob (bytearray)
+	* libmobius_core: Added new method database::get_path  
+	* app-chromium: Added new function get_db_schema_version(db)  
+	* app-chromium: Added decoding for Login Data files  
+	* app-chromium: Added decoding for Login Data For Account files  
+	* app-chromium: Added decoding for Cookies files  
+	* app-chromium: Added decoding for Extension Cookies files  
+	* app-chromium: Added decoding for Safe Browsing Cookies files  
+	* app-chromium: Added decoding for Local State files  
+	* app-chromium: Implemented new class post_processor_impl  
+	* ant.evidence: Added new module post.user_accounts_from_cookies  
+	* ant.evidence.vfs.accounts: Removed cookie retrieval feature  
+	* evidence-password-hashes: Fixed .hashcat file export  
+	* evidence-password-hashes: Fixed .john file export  
+	* libmobius_core: Added new method io::walker::get_folder_name  
+	* libmobius_core: Added new JSON decoder module (decoder::json)  
+	* libmobius_core: Added new class decoder::json::tokenizer  
+	* libmobius_core: Added new class decoder::json::parser  
+	* libmobius_core: Added new method os::win::dpapi::blob(bytearray)  
 
 Mobius Forensic Toolkit 2.17
 	* Added new C++ extension called "app-chromium"

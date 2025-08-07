@@ -179,8 +179,7 @@ file_cookies::_load_cookies (mobius::core::database::database &db)
         mobius::core::database::statement stmt;
 
         stmt = db.new_statement (generate_sql (
-            "SELECT ${browser_provenance,12}, "
-            "creation_utc, "
+            "SELECT creation_utc, "
             "${encrypted_value,7}, "
             "expires_utc, "
             "${has_cross_site_ancestor,23}, "
@@ -217,31 +216,30 @@ file_cookies::_load_cookies (mobius::core::database::database &db)
 
             // Set attributes
             c.idx = idx++;
-            c.browser_provenance = stmt.get_column_int64 (0);
-            c.creation_utc = get_datetime (stmt.get_column_int64 (1));
-            c.encrypted_value = stmt.get_column_bytearray (2);
-            c.expires_utc = get_datetime (stmt.get_column_int64 (3));
-            c.has_cross_site_ancestor = stmt.get_column_bool (4);
-            c.has_expires = stmt.get_column_bool (5);
-            c.host_key = stmt.get_column_string (6);
-            c.httponly = stmt.get_column_bool (7);
-            c.is_httponly = stmt.get_column_bool (8);
-            c.is_persistent = stmt.get_column_bool (9);
-            c.is_same_party = stmt.get_column_bool (10);
-            c.is_secure = stmt.get_column_bool (11);
-            c.last_access_utc = get_datetime (stmt.get_column_int64 (12));
-            c.last_update_utc = get_datetime (stmt.get_column_int64 (13));
-            c.name = stmt.get_column_string (14);
-            c.path = stmt.get_column_string (15);
-            c.persistent = stmt.get_column_bool (16);
-            c.priority = stmt.get_column_int (17);
-            c.samesite = stmt.get_column_bool (18);
-            c.secure = stmt.get_column_bool (19);
-            c.source_port = stmt.get_column_int (20);
-            c.source_scheme = stmt.get_column_string (21);
-            c.source_type = stmt.get_column_int (22);
-            c.top_frame_site_key = stmt.get_column_string (23);
-            c.value = stmt.get_column_bytearray (24);
+            c.creation_utc = get_datetime (stmt.get_column_int64 (0));
+            c.encrypted_value = stmt.get_column_bytearray (1);
+            c.expires_utc = get_datetime (stmt.get_column_int64 (2));
+            c.has_cross_site_ancestor = stmt.get_column_bool (3);
+            c.has_expires = stmt.get_column_bool (4);
+            c.host_key = stmt.get_column_string (5);
+            c.httponly = stmt.get_column_bool (6);
+            c.is_httponly = stmt.get_column_bool (7);
+            c.is_persistent = stmt.get_column_bool (8);
+            c.is_same_party = stmt.get_column_bool (9);
+            c.is_secure = stmt.get_column_bool (10);
+            c.last_access_utc = get_datetime (stmt.get_column_int64 (11));
+            c.last_update_utc = get_datetime (stmt.get_column_int64 (12));
+            c.name = stmt.get_column_string (13);
+            c.path = stmt.get_column_string (14);
+            c.persistent = stmt.get_column_bool (15);
+            c.priority = stmt.get_column_int (16);
+            c.samesite = stmt.get_column_bool (17);
+            c.secure = stmt.get_column_bool (18);
+            c.source_port = stmt.get_column_int (19);
+            c.source_scheme = stmt.get_column_string (20);
+            c.source_type = stmt.get_column_int (21);
+            c.top_frame_site_key = stmt.get_column_string (22);
+            c.value = stmt.get_column_bytearray (23);
 
             // Add to cookies vector
             cookies_.emplace_back (std::move (c));

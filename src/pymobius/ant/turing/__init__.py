@@ -187,6 +187,10 @@ class Ant(object):
             key.key_type = k_type
             key.id = k_id
             key.value = k_value
+
+            if hasattr (k, 'encrypted_value'):
+              key.encrypted_value = k.encrypted_value
+
             key.metadata = metadata
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
