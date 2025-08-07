@@ -18,6 +18,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "post_processor_impl.hpp"
+#include <mobius/core/crypt/cipher.hpp>
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/os/win/dpapi/blob.hpp>
 #include <string>
@@ -33,11 +35,16 @@
 
 namespace
 {
+// @brief Debug flag
+static constexpr bool DEBUG = true;
+
 // @brief App Bound Encrypted Key Signature (v20)
 static const mobius::core::bytearray APP_BOUND_SIGNATURE = "APPB";
 
-// @brief Debug flag
-static constexpr bool DEBUG = true;
+// @brief DPAPI master key GUID
+static const mobius::core::bytearray DPAPI_SIGNATURE =
+    "\x01\x00\x00\x00\xd0\x8c\x9d\xdf\x01\x15\xd1\x11\x8c\x7a\x00\xc0\x4f\xc2"
+    "\x97\xeb";
 
 } // namespace
 
@@ -66,9 +73,15 @@ post_processor_impl::process_evidence (
     mobius::framework::model::evidence evidence
 )
 {
-    // std::cout << "Processing evidence: " << evidence.get_uid () << std::endl;
-
     auto type = evidence.get_type ();
+
+    if (type == "encryption-key")
+        _process_encryption_key (evidence);
+
+    auto app_family = evidence.get_attribute<std::string> ("app_family", {});
+
+    // if (app_family != "chromium")
+    //     return;
 
     if (type == "autofill")
         _process_autofill (evidence);
@@ -78,9 +91,6 @@ post_processor_impl::process_evidence (
 
     else if (type == "credit-card")
         _process_credit_card (evidence);
-
-    else if (type == "encryption-key")
-        _process_encryption_key (evidence);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -92,10 +102,6 @@ post_processor_impl::_process_autofill (
     mobius::framework::model::evidence evidence
 )
 {
-    auto app_family = evidence.get_attribute<std::string> ("app_family", {});
-    if (app_family != "chromium")
-        return;
-
     auto is_encrypted = evidence.get_attribute<bool> ("is_encrypted", false);
 
     if (is_encrypted)
@@ -113,12 +119,53 @@ post_processor_impl::_process_cookie (
     mobius::framework::model::evidence evidence
 )
 {
-    auto app_family = evidence.get_attribute<std::string> ("app_family", {});
-    if (app_family != "chromium")
+    if (DEBUG)
+        std::cout << "Processing cookie evidence: "
+                  << evidence.get_attribute<std::string> ("name") << std::endl;
+
+    // Check if cookie is already decrypted
+    auto value = evidence.get_attribute<mobius::core::bytearray> ("value", {});
+
+    if (value)
         return;
 
-    std::cout << "cookie evidence found. Name: "
-              << evidence.get_attribute<std::string> ("name") << std::endl;
+    // If not, check if it has an encrypted value and process it accordingly
+    auto encrypted_value =
+        evidence.get_attribute<mobius::core::bytearray> ("encrypted_value", {});
+
+    if (encrypted_value)
+    {
+        if (DEBUG)
+            std::cout << "Cookie evidence has encrypted value: " << std::endl
+                      << encrypted_value.dump () << std::endl;
+
+        // Decrypt the cookie value
+        auto decrypted_value = _decrypt_data (encrypted_value);
+
+        if (decrypted_value)
+        {
+            if (DEBUG)
+                std::cout << "Cookie evidence decrypted successfully. "
+                             "Decrypted value: "
+                          << std::endl
+                          << decrypted_value.dump () << std::endl;
+
+            evidence.set_attribute ("value", decrypted_value);
+
+            // Notify the coordinator about the decrypted cookie
+            // coordinator_.notify_decrypted (evidence);
+        }
+        else
+        {
+            if (DEBUG)
+                std::cout
+                    << "Failed to decrypt cookie evidence. Encrypted value: "
+                    << encrypted_value.dump () << std::endl;
+
+            // Store the evidence for later processing
+            pending_evidences_.push_back (evidence);
+        }
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -130,10 +177,6 @@ post_processor_impl::_process_credit_card (
     mobius::framework::model::evidence evidence
 )
 {
-    auto app_family = evidence.get_attribute<std::string> ("app_family", {});
-    if (app_family != "chromium")
-        return;
-
     auto encrypted_card_number =
         evidence.get_attribute<mobius::core::bytearray> (
             "encrypted_number",
@@ -157,65 +200,98 @@ post_processor_impl::_process_encryption_key (
     mobius::framework::model::evidence evidence
 )
 {
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Get key attributes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     auto key_type = evidence.get_attribute<std::string> ("key_type");
     auto id = evidence.get_attribute<std::string> ("id");
-    auto value = evidence.get_attribute<mobius::core::bytearray> ("value");
+    auto value = evidence.get_attribute<mobius::core::bytearray> ("value", {});
     auto encrypted_value =
-        evidence.get_attribute<mobius::core::bytearray> ("encrypted_value");
+        evidence.get_attribute<mobius::core::bytearray> ("encrypted_value", {});
 
-    // Store decrypted keys for later use
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // If key value is available, store it
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     if (value)
     {
-        std::cout << "Decrypted key found. Type: " << key_type << ", ID: " << id
-                  << ", Value: " << value.dump () << std::endl;
-
-        if (key_type == "dpapi.sys" || key_type == "dpapi.user")
-            dpapi_keys_[id] = value;
-
-        else if (key_type == "chromium.v10")
-            chromium_v10_keys_.insert (value);
-
-        else if (key_type == "chromium.v20")
-            chromium_v20_keys_.insert (value);
-
+        _on_key (key_type, id, value);
         return;
     }
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Handle Chromium v10 encryption keys
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     if (key_type == "chromium.v10")
     {
-        // Try to decrypt the key using DPAPI keys
         if (encrypted_value)
         {
             if (DEBUG)
-                std::cout << "Attempting to decrypt v10 key: "
+                std::cout << "Attempting to decrypt v10 key: " << std::endl
                           << encrypted_value.dump () << std::endl;
 
-            auto decrypted_value = _decrypt_dpapi_value (
-                evidence.get_attribute<mobius::core::bytearray> (
-                    "encrypted_value"
-                )
-            );
+            auto decrypted_value = _decrypt_dpapi_value (encrypted_value);
+
             if (decrypted_value)
             {
-                std::cout << "Decrypted v10 key: " << decrypted_value.dump ()
-                          << std::endl;
-                // chromium_v10_keys_.insert (decrypted_value);
-                return;
+                if (DEBUG)
+                    std::cout << "v10 key decrypted: " << std::endl
+                              << decrypted_value.dump () << std::endl;
+
+                evidence.set_attribute ("value", decrypted_value);
+                _on_key (key_type, id, decrypted_value);
             }
+
+            // If decryption failed, store the evidence for later processing
+            else
+                pending_evidences_.push_back (evidence);
         }
     }
 
-    // Try to decrypt the key
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Handle Chromium v20 encryption keys
+    // @see chrome/browser/os_crypt/app_bound_encryption_provider_win.cc file
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     else if (key_type == "chromium.v20")
     {
-        auto decrypted_value = _decrypt_v20_encrypted_key (encrypted_value);
-        if (decrypted_value)
+        // Try to decrypt the key using DPAPI keys
+        // v20 keys are encrypted using a User DPAPI key and then
+        // encrypted again with a system DPAPI key.
+        if (encrypted_value)
         {
-            std::cout << "Decrypted v20 key: " << decrypted_value.dump ()
-                      << std::endl;
-            // chromium_v20_keys_.insert (decrypted_value);
-            return;
+            if (DEBUG)
+                std::cout << "Attempting to decrypt v20 key: " << std::endl
+                          << encrypted_value.dump () << std::endl;
+
+            auto decrypted_value = _decrypt_v20_encrypted_key (encrypted_value);
+
+            if (decrypted_value)
+            {
+                if (DEBUG)
+                    std::cout << "v20 key decrypted: " << std::endl
+                              << decrypted_value.dump () << std::endl;
+
+                // Decode the decrypted value
+                auto decoder =
+                    mobius::core::decoder::data_decoder (decrypted_value);
+                auto validation_size = decoder.get_uint32_le ();
+                auto validation_data =
+                    decoder.get_bytearray_by_size (validation_size);
+                auto key_size = decoder.get_uint32_le ();
+                auto key_data = decoder.get_bytearray_by_size (key_size);
+
+                if (DEBUG)
+                    std::cout << "Validation data: " << std::endl
+                              << validation_data.dump () << std::endl
+                              << "Key data: " << std::endl
+                              << key_data.dump () << std::endl;
+
+                // evidence.set_attribute ("value", decrypted_value);
+                _on_key (key_type, id, key_data);
+            }
+
+            // If decryption failed, store the evidence for later processing
+            else
+                pending_evidences_.push_back (evidence);
         }
     }
 }
@@ -288,6 +364,91 @@ post_processor_impl::_decrypt_v20_encrypted_key (
 ) const
 {
     return _decrypt_dpapi_value (_decrypt_dpapi_value (encrypted_value));
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decrypt an encrypted value
+// @param data Encrypted data to decrypt
+// @return Decrypted data as bytearray
+// @note This function checks if the value is encrypted with DPAPI or
+// Chromium v10 or Chromium v20 encryption and decrypts it accordingly.
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::bytearray
+post_processor_impl::_decrypt_data (const mobius::core::bytearray &data) const
+{
+    if (data.size () < 16)
+    {
+        if (DEBUG)
+            std::cout << "Data is too short to be decrypted: " << data.dump ()
+                      << std::endl;
+        return {};
+    }
+
+    if (data.startswith ("v10") || data.startswith ("v20"))
+    {
+        auto version = data.slice (0, 2);
+        auto iv = data.slice (3, 14);
+        auto ciphertext = data.slice (15, data.size () - 17);
+        auto tag = data.slice (data.size () - 16, data.size () - 1);
+
+        for (const auto &key_value : chromium_keys_)
+        {
+            auto cipher =
+                mobius::core::crypt::new_cipher_gcm ("aes", key_value, iv);
+            auto plaintext = cipher.decrypt (ciphertext);
+
+            if (cipher.check_tag (tag))
+                return plaintext;
+        }
+    }
+
+    else if (data.startswith (DPAPI_SIGNATURE))
+        return _decrypt_dpapi_value (data);
+
+    return {};
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Called when a new encryption key is stored
+// @param type Type of the key (e.g., "dpapi.sys", "chromium.v10")
+// @param id Identifier of the key
+// @param value Value of the key
+// @note This function processes pending evidences that can be decrypted with
+// the newly stored key.
+// It checks the type of each pending evidence and processes it accordingly.
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+post_processor_impl::_on_key (
+    const std::string &type,
+    const std::string &id,
+    const mobius::core::bytearray &value
+)
+{
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Store the key in the appropriate set based on its type
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (type == "dpapi.sys" || type == "dpapi.user")
+        dpapi_keys_[id] = value;
+
+    else if (type == "chromium.v10" || type == "chromium.v20")
+        chromium_keys_.insert (value);
+
+    else
+        return;
+
+    if (DEBUG)
+        std::cout << "Encryption key stored. Type: " << type << ", ID: " << id
+                  << ", Value: " << std::endl
+                  << value.dump () << std::endl;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Reprocess pending evidences, trying to decrypt them with the new key
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<mobius::framework::model::evidence> pending;
+    std::swap (pending, pending_evidences_);
+
+    for (auto &evidence : pending)
+        process_evidence (evidence);
 }
 
 } // namespace mobius::extension::app::chromium

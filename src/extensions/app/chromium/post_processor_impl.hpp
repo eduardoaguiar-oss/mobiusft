@@ -53,22 +53,31 @@ class post_processor_impl
     // @brief DPAPI encryption keys
     std::unordered_map<std::string, mobius::core::bytearray> dpapi_keys_;
 
-    // @brief Chromium v10 encryption keys
-    std::set<mobius::core::bytearray> chromium_v10_keys_;
+    // @brief Chromium encryption keys (both v10 and v20)
+    std::set<mobius::core::bytearray> chromium_keys_;
 
-    // @brief Chromium v20 encryption keys
-    std::set<mobius::core::bytearray> chromium_v20_keys_;
+    // @brief Pending evidences to process later
+    std::vector<mobius::framework::model::evidence> pending_evidences_;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void _on_key (
+        const std::string &,
+        const std::string &,
+        const mobius::core::bytearray &
+    );
     void _process_autofill (mobius::framework::model::evidence evidence);
     void _process_cookie (mobius::framework::model::evidence evidence);
     void _process_credit_card (mobius::framework::model::evidence evidence);
     void _process_encryption_key (mobius::framework::model::evidence evidence);
-    
+
+    mobius::core::bytearray
+    _decrypt_data (const mobius::core::bytearray &) const;
     mobius::core::bytearray
     _decrypt_dpapi_value (const mobius::core::bytearray &) const;
+    mobius::core::bytearray
+    _decrypt_v10_value (const mobius::core::bytearray &) const;
     mobius::core::bytearray
     _decrypt_v20_encrypted_key (const mobius::core::bytearray &) const;
 };

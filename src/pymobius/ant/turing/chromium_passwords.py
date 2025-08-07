@@ -138,7 +138,7 @@ class Ant(object):
                 k.type = 'chromium.v10'
                 k.id = key_id
                 k.value = blob.plain_text
-                k.encrypted_value = key.value
+                k.encrypted_value = secret.encrypted_value
 
                 k.metadata = []
                 k.metadata.append(("Source", secret.source))
@@ -282,7 +282,7 @@ class Ant(object):
         for mk, secret in v10_master_keys.items():
             secret.type = 'dpapi.v10_master_key'
             secret.blob = mobius.core.os.win.dpapi.blob(mk[5:])
-            secret.encrypted_value = secret.blob
+            secret.encrypted_value = mk[5:]
             secret.is_found = False
             self.__secrets.append(secret)
 
