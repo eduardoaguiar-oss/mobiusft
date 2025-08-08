@@ -27,6 +27,7 @@
 #include <mobius/core/io/reader.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <cstdint>
+#include <memory>
 #include <map>
 #include <set>
 #include <string>
@@ -128,8 +129,47 @@ class profile
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    profile ();
+    profile (const profile &) noexcept = default;
+    profile (profile &&) noexcept = default;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    profile &operator= (const profile &) noexcept = default;
+    profile &operator= (profile &&) noexcept = default;
+    operator bool () const noexcept;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string get_username () const;
+    void set_username (const std::string &);
+    mobius::core::io::folder get_folder () const;
+    std::string get_path () const;
+    std::string get_app_id () const;
+    std::string get_app_name () const;
+    std::string get_profile_name () const;
+    mobius::core::datetime::datetime get_creation_time () const;
+    mobius::core::datetime::datetime get_last_modified_time () const;
+    std::vector<account> get_accounts () const;
+    std::size_t size_accounts () const;
+    std::vector<autofill> get_autofill_entries () const;
+    std::size_t size_autofill_entries () const;
+    std::vector<autofill_profile> get_autofill_profiles () const;
+    std::size_t size_autofill_profiles () const;
+    std::vector<cookie> get_cookies () const;
+    std::size_t size_cookies () const;
+    std::vector<credit_card> get_credit_cards () const;
+    std::size_t size_credit_cards () const;
+    std::vector<download> get_downloads () const;
+    std::size_t size_downloads () const;
+    std::vector<history_entry> get_history_entries () const;
+    std::size_t size_history_entries () const;
+    std::vector<login> get_logins () const;
+    std::size_t size_logins () const;
     void set_folder (const mobius::core::io::folder &);
     void add_cookies_file (const mobius::core::io::file &);
     void add_history_file (const mobius::core::io::file &);
@@ -137,310 +177,12 @@ class profile
     void add_preferences_file (const mobius::core::io::file &);
     void add_web_data_file (const mobius::core::io::file &);
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Check if profile is valid
-    // @return true/false
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const noexcept { return is_valid_; }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get username
-    // @return username
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::string
-    get_username () const
-    {
-        return username_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Set username
-    // @param username username
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void
-    set_username (const std::string &username)
-    {
-        username_ = username;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get folder
-    // @return Folder object
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::core::io::folder
-    get_folder () const
-    {
-        return folder_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get path to profile
-    // @return Path to profile
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::string
-    get_path () const
-    {
-        return folder_.get_path ();
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get application ID
-    // @return Application ID
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::string
-    get_app_id () const
-    {
-        return app_id_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get application name
-    // @return Application name
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::string
-    get_app_name () const
-    {
-        return app_name_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get profile name
-    // @return Profile name
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::string
-    get_profile_name () const
-    {
-        return profile_name_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get creation time
-    // @return Creation time
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::core::datetime::datetime
-    get_creation_time () const
-    {
-        return creation_time_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get last modified time
-    // @return Last modified time
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::core::datetime::datetime
-    get_last_modified_time () const
-    {
-        return last_modified_time_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get accounts
-    // @return Vector of accounts
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector<account>
-    get_accounts () const
-    {
-        return accounts_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get number of accounts
-    // @return Number of accounts
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::size_t
-    size_accounts () const
-    {
-        return accounts_.size ();
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get autofill entries
-    // @return Vector of autofill entries
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector<autofill>
-    get_autofill_entries () const
-    {
-        return autofill_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get number of autofill entries
-    // @return Number of autofill entries
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::size_t
-    size_autofill_entries () const
-    {
-        return autofill_.size ();
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get autofill profiles
-    // @return Vector of autofill profiles
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector<autofill_profile>
-    get_autofill_profiles () const
-    {
-        return autofill_profiles_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get number of autofill profiles
-    // @return Number of autofill profiles
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::size_t
-    size_autofill_profiles () const
-    {
-        return autofill_profiles_.size ();
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get cookies
-    // @return Vector of cookies
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector<cookie>
-    get_cookies () const
-    {
-        return cookies_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get number of cookies
-    // @return Number of cookies
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::size_t
-    size_cookies () const
-    {
-        return cookies_.size ();
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get credit cards
-    // @return Vector of credit cards
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector<credit_card>
-    get_credit_cards () const
-    {
-        return credit_cards_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get number of credit cards
-    // @return Number of credit cards
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::size_t
-    size_credit_cards () const
-    {
-        return credit_cards_.size ();
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get downloads
-    // @return Vector of downloads
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector<download>
-    get_downloads () const
-    {
-        return downloads_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get number of downloads
-    // @return Number of downloads
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::size_t
-    size_downloads () const
-    {
-        return downloads_.size ();
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get history entries
-    // @return Vector of history entries
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector<history_entry>
-    get_history_entries () const
-    {
-        return history_entries_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get number of history entries
-    // @return Number of history entries
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::size_t
-    size_history_entries () const
-    {
-        return history_entries_.size ();
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get logins
-    // @return Vector of logins
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector<login>
-    get_logins () const
-    {
-        return logins_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get number of logins
-    // @return Number of logins
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::size_t
-    size_logins () const
-    {
-        return logins_.size ();
-    }
-
   private:
-    // @brief Check if profile is valid
-    bool is_valid_ = false;
+    // @brief Forward declaration
+    class impl;
 
-    // @brief Folder object
-    mobius::core::io::folder folder_;
-
-    // @brief Application ID
-    std::string app_id_ = "chromium";
-
-    // @brief Application name
-    std::string app_name_ = "Chromium";
-
-    // @brief Profile name
-    std::string profile_name_;
-
-    // @brief Username
-    std::string username_;
-
-    // @brief Creation time
-    mobius::core::datetime::datetime creation_time_;
-
-    // @brief Last modified time
-    mobius::core::datetime::datetime last_modified_time_;
-
-    // @brief Accounts
-    std::vector<account> accounts_;
-
-    // @brief Autofill entries
-    std::vector<autofill> autofill_;
-
-    // @brief Autofill profiles
-    std::vector<autofill_profile> autofill_profiles_;
-
-    // @brief Cookies
-    std::vector<cookie> cookies_;
-
-    // @brief Credit cards
-    std::vector<credit_card> credit_cards_;
-
-    // @brief Downloads
-    std::vector<download> downloads_;
-
-    // @brief History entries
-    std::vector<history_entry> history_entries_;
-
-    // @brief Logins
-    std::vector<login> logins_;
+    // @brief Implementation pointer
+    std::shared_ptr<impl> impl_;
 };
 
 } // namespace mobius::extension::app::chromium

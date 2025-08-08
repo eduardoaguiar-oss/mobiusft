@@ -8,8 +8,10 @@ Mobius Forensic Toolkit 2.18
 	* app-chromium: Added decoding for Safe Browsing Cookies files  
 	* app-chromium: Added decoding for Local State files  
 	* app-chromium: Implemented new class post_processor_impl  
+	* app-chromium: Enhanced post_processor_impl to support decryption of both v10 and v20 Chromium encryption keys
 	* ant.evidence: Added new module post.user_accounts_from_cookies  
 	* ant.evidence.vfs.accounts: Removed cookie retrieval feature  
+	* ant.evidence.vfs.cookies: Removed old Chromium code
 	* evidence-password-hashes: Fixed .hashcat file export  
 	* evidence-password-hashes: Fixed .john file export  
 	* libmobius_core: Added new method io::walker::get_folder_name  

@@ -123,6 +123,7 @@ class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
 
     void _save_app_profiles ();
     void _save_autofills ();
+    void _save_cookies ();
     void _save_credit_cards ();
     void _save_encryption_keys ();
     void _save_pdis ();

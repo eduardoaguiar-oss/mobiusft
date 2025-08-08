@@ -21,6 +21,7 @@
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/io/tempfile.hpp>
 #include <mobius/core/log.hpp>
+#include <mobius/core/string_functions.hpp>
 #include <unordered_set>
 #include "common.hpp"
 
@@ -194,7 +195,7 @@ file_cookies::_load_cookies (mobius::core::database::database &db)
             c.expires_utc = get_datetime (stmt.get_column_int64 (2));
             c.has_cross_site_ancestor = stmt.get_column_bool (3);
             c.has_expires = stmt.get_column_bool (4);
-            c.host_key = stmt.get_column_string (5);
+            c.host_key = mobius::core::string::lstrip (stmt.get_column_string (5), ".");
             c.httponly = stmt.get_column_bool (6);
             c.is_httponly = stmt.get_column_bool (7);
             c.is_persistent = stmt.get_column_bool (8);
@@ -213,6 +214,10 @@ file_cookies::_load_cookies (mobius::core::database::database &db)
             c.source_type = stmt.get_column_int (21);
             c.top_frame_site_key = stmt.get_column_string (22);
             c.value = stmt.get_column_bytearray (23);
+
+            // Set last_update_utc if not set
+            if (!c.last_update_utc && c.creation_utc == c.last_access_utc)
+                c.last_update_utc = c.creation_utc;
 
             // Add to cookies vector
             cookies_.emplace_back (std::move (c));

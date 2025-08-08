@@ -515,6 +515,7 @@ evidence_loader_impl::_save_evidences ()
     _save_accounts ();
     _save_app_profiles ();
     _save_autofills ();
+    _save_cookies ();
     _save_credit_cards ();
     _save_encryption_keys ();
     _save_pdis ();
@@ -667,6 +668,57 @@ evidence_loader_impl::_save_autofills ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save cookies
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_loader_impl::_save_cookies ()
+{
+    for (const auto &p : profiles_)
+    {
+        for (const auto &c : p.get_cookies ())
+        {
+            auto e = item_.new_evidence ("cookie");
+            e.set_attribute ("app_id", p.get_app_id ());
+            e.set_attribute ("app_name", p.get_app_name ());
+            e.set_attribute ("app_family", APP_FAMILY);
+            e.set_attribute ("username", p.get_username ());
+            e.set_attribute ("name", c.name);
+            e.set_attribute ("value", c.value);
+            e.set_attribute ("domain", c.host_key);
+            e.set_attribute ("encrypted_value", c.encrypted_value);
+            e.set_attribute ("creation_time", c.creation_utc);
+            e.set_attribute ("last_access_time", c.last_access_utc);
+            e.set_attribute ("last_update_time", c.last_update_utc);
+            e.set_attribute ("expiration_time", c.expires_utc);
+            e.set_attribute ("is_deleted", c.f.is_deleted ());
+            e.set_attribute ("is_encrypted", !c.value && c.encrypted_value);
+
+            auto metadata = mobius::core::pod::map ();
+            metadata.set ("record_idx", c.idx);
+            metadata.set ("has_cross_site_ancestor", c.has_cross_site_ancestor);
+            metadata.set ("has_expires", c.has_expires);
+            metadata.set ("is_httponly", c.is_httponly);
+            metadata.set ("is_persistent", c.is_persistent);
+            metadata.set ("is_same_party", c.is_same_party);
+            metadata.set ("is_secure", c.is_secure);
+            metadata.set ("path", c.path);
+            metadata.set ("persistent", c.persistent);
+            metadata.set ("priority", c.priority);
+            metadata.set ("same_site", c.samesite);
+            metadata.set ("secure", c.secure);
+            metadata.set ("source_port", c.source_port);
+            metadata.set ("source_scheme", c.source_scheme);
+            metadata.set ("source_type", c.source_type);
+            metadata.set ("top_frame_site_key", c.top_frame_site_key);
+            e.set_attribute ("metadata", metadata);
+
+            e.set_tag ("app.browser");
+            e.add_source (c.f);
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save credit cards
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -738,33 +790,27 @@ evidence_loader_impl::_save_encryption_keys ()
         const auto [app_id, app_name] = get_app_from_path (ek.f.get_path ());
         const auto username = get_username_from_path (ek.f.get_path ());
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Save v20 key
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        if (ek.type == "v20")
-        {
-            // create evidence
-            auto e = item_.new_evidence ("encryption-key");
+        // create evidence
+        auto e = item_.new_evidence ("encryption-key");
 
-            e.set_attribute ("key_type", "chromium.v20");
-            e.set_attribute ("encrypted_value", ek.value);
-            e.set_attribute ("id", ek.id);
+        e.set_attribute ("key_type", "chromium.v20");
+        e.set_attribute ("encrypted_value", ek.value);
+        e.set_attribute ("id", ek.id);
 
-            // value is empty, as v20 key is not decrypted yet
-            e.set_attribute ("value", mobius::core::bytearray {});
+        // value is empty, as key is not decrypted yet
+        e.set_attribute ("value", mobius::core::bytearray {});
 
-            // metadata
-            auto metadata = ek.metadata.clone ();
-            metadata.set ("app_id", app_id);
-            metadata.set ("app_name", app_name);
-            metadata.set ("app_family", APP_FAMILY);
-            metadata.set ("username", username);
-            e.set_attribute ("metadata", metadata);
+        // metadata
+        auto metadata = ek.metadata.clone ();
+        metadata.set ("app_id", app_id);
+        metadata.set ("app_name", app_name);
+        metadata.set ("app_family", APP_FAMILY);
+        metadata.set ("username", username);
+        e.set_attribute ("metadata", metadata);
 
-            // tag and source
-            e.set_tag ("app.browser");
-            e.add_source (ek.f);
-        }
+        // tag and source
+        e.set_tag ("app.browser");
+        e.add_source (ek.f);
     }
 }
 
