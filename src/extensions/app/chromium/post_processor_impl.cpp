@@ -31,6 +31,7 @@
 // https://security.googleblog.com/2024/07/improving-security-of-chrome-cookies-on.html
 // @see
 // https://github.com/xaitax/Chrome-App-Bound-Encryption-Decryption/blob/main/docs/RESEARCH.md
+// @see https://github.com/runassu/chrome_v20_decryption/tree/main
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace
@@ -45,6 +46,16 @@ static const mobius::core::bytearray APP_BOUND_SIGNATURE = "APPB";
 static const mobius::core::bytearray DPAPI_SIGNATURE =
     "\x01\x00\x00\x00\xd0\x8c\x9d\xdf\x01\x15\xd1\x11\x8c\x7a\x00\xc0\x4f\xc2"
     "\x97\xeb";
+
+// @brief V20 encryption key (protection level 1)
+static const mobius::core::bytearray V20_PROTECTION_LEVEL_1_KEY =
+    "\xB3\x1C\x6E\x24\x1A\xC8\x46\x72\x8D\xA9\xC1\xFA\xC4\x93\x66\x51"
+    "\xCF\xFB\x94\x4D\x14\x3A\xB8\x16\x27\x6B\xCC\x6D\xA0\x28\x47\x87";
+
+// @brief V20 encryption key (protection level 2)
+static const mobius::core::bytearray V20_PROTECTION_LEVEL_2_KEY =
+    "\xE9\x8F\x37\xD7\xF4\xE1\xFA\x43\x3D\x19\x30\x4D\xC2\x25\x80\x42"
+    "\x09\x0E\x2D\x1D\x7E\xEA\x76\x70\xD4\x1F\x73\x8D\x08\x72\x96\x60";
 
 } // namespace
 
@@ -250,12 +261,12 @@ post_processor_impl::_process_encryption_key (
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Handle Chromium v20 encryption keys
     // @see chrome/browser/os_crypt/app_bound_encryption_provider_win.cc file
+    // @see
+    // https://github.com/xaitax/Chrome-App-Bound-Encryption-Decryption/blob/main/docs/RESEARCH.md
+    // @see https://github.com/runassu/chrome_v20_decryption/tree/main
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     else if (key_type == "chromium.v20")
     {
-        // Try to decrypt the key using DPAPI keys
-        // v20 keys are encrypted using a User DPAPI key and then
-        // encrypted again with a system DPAPI key.
         if (encrypted_value)
         {
             if (DEBUG)
@@ -270,23 +281,8 @@ post_processor_impl::_process_encryption_key (
                     std::cout << "v20 key decrypted: " << std::endl
                               << decrypted_value.dump () << std::endl;
 
-                // Decode the decrypted value
-                auto decoder =
-                    mobius::core::decoder::data_decoder (decrypted_value);
-                auto validation_size = decoder.get_uint32_le ();
-                auto validation_data =
-                    decoder.get_bytearray_by_size (validation_size);
-                auto key_size = decoder.get_uint32_le ();
-                auto key_data = decoder.get_bytearray_by_size (key_size);
-
-                if (DEBUG)
-                    std::cout << "Validation data: " << std::endl
-                              << validation_data.dump () << std::endl
-                              << "Key data: " << std::endl
-                              << key_data.dump () << std::endl;
-
-                // evidence.set_attribute ("value", decrypted_value);
-                _on_key (key_type, id, key_data);
+                evidence.set_attribute ("value", decrypted_value);
+                _on_key (key_type, id, decrypted_value);
             }
 
             // If decryption failed, store the evidence for later processing
@@ -357,13 +353,108 @@ post_processor_impl::_decrypt_dpapi_value (
 // that the encrypted value is a valid DPAPI blob.
 // v20 encrypted keys are encrypted using a User DPAPI key and then
 // encrypted again with a system DPAPI key.
+//
+// @see https://github.com/runassu/chrome_v20_decryption/tree/main for
+// protection level handling
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
 post_processor_impl::_decrypt_v20_encrypted_key (
     const mobius::core::bytearray &encrypted_value
 ) const
 {
-    return _decrypt_dpapi_value (_decrypt_dpapi_value (encrypted_value));
+    auto decrypted_value =
+        _decrypt_dpapi_value (_decrypt_dpapi_value (encrypted_value));
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode the decrypted value
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto decoder = mobius::core::decoder::data_decoder (decrypted_value);
+    auto validation_size = decoder.get_uint32_le ();
+    auto validation_data = decoder.get_bytearray_by_size (validation_size);
+    auto key_size = decoder.get_uint32_le ();
+
+    if (DEBUG)
+        std::cout << "V20 decrypted value: " << std::endl
+                  << decrypted_value.dump () << std::endl
+                  << "Validation data: " << std::endl
+                  << validation_data.dump () << std::endl
+                  << "Key size: " << key_size << std::endl;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Key has no further protection (Simply AES-GCM key)
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (key_size == 32)
+        return decoder.get_bytearray_by_size (key_size);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // AES-GCM Encrypted Key (protection level 1 up to 3)
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    else if (key_size == 61)
+    {
+        auto protection_level = decoder.get_uint8 ();
+        auto iv = decoder.get_bytearray_by_size (12);
+        auto encrypted_key = decoder.get_bytearray_by_size (32);
+        auto tag = decoder.get_bytearray_by_size (16);
+
+        mobius::core::crypt::cipher cipher;
+
+        if (protection_level == 1)
+        {
+            cipher = mobius::core::crypt::new_cipher_gcm (
+                "aes",
+                V20_PROTECTION_LEVEL_1_KEY,
+                iv
+            );
+        }
+        else if (protection_level == 2 || protection_level == 3)
+        {
+            // @todo handle protection levels 2 and 3
+            mobius::core::log log (__FILE__, __func__);
+            log.development (
+                __LINE__,
+                "Unhandled protection level in v20 decrypted value: " +
+                    std::to_string (protection_level)
+            );
+            return {};
+        }
+        else
+        {
+            mobius::core::log log (__FILE__, __func__);
+            log.development (
+                __LINE__,
+                "Unhandled protection level in v20 decrypted value: " +
+                    std::to_string (protection_level)
+            );
+            return {};
+        }
+
+        return cipher.decrypt (encrypted_key);
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Unhandled key size
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    else
+    {
+        mobius::core::log log (__FILE__, __func__);
+
+        auto key_data = decoder.get_bytearray_by_size (key_size);
+
+        log.development (
+            __LINE__,
+            "Unhandled key size in v20 decrypted value: " +
+                std::to_string (key_size)
+        );
+        log.development (__LINE__, "Key data: " + key_data.dump ());
+
+        if (DEBUG)
+            std::cout << "Unexpected key size in v20 decrypted value: "
+                      << key_size << std::endl
+                      << ". Key data: " << std::endl
+                      << key_data.dump ();
+    }
+
+    return {};
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -376,7 +467,7 @@ post_processor_impl::_decrypt_v20_encrypted_key (
 mobius::core::bytearray
 post_processor_impl::_decrypt_data (const mobius::core::bytearray &data) const
 {
-    if (data.size () < 16)
+    if (data.size () < 31)
     {
         if (DEBUG)
             std::cout << "Data is too short to be decrypted: " << data.dump ()
