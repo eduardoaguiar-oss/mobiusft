@@ -303,6 +303,9 @@ class file_web_data
         // @brief Card art URL
         std::string card_art_url;
 
+        // @brief Card benefit source
+        std::string card_benefit_source;
+
         // @brief Card info retrieval enrollment state
         std::string card_info_retrieval_enrollment_state;
 

@@ -83,23 +83,7 @@ namespace
 // of the web data schema in Chromium-based applications.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::unordered_set<std::int64_t> UNKNOWN_SCHEMA_VERSIONS = {
-    2,
-    3,
-    4,
-    6,
-    8,
-    9,
-    10,
-    11,
-    14,
-    15,
-    20,
-    23,
-    30,
-    36,
-    37,
-    38,
-    39,
+    2, 3, 4, 6, 8, 9, 10, 11, 14, 15, 20, 23, 30, 36, 37, 38, 39,
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -219,7 +203,7 @@ file_login_data::_load_logins (mobius::core::database::database &db)
 
         // Retrieve rows from query
         std::uint64_t idx = 0;
-    
+
         while (stmt.fetch_row ())
         {
             login l;

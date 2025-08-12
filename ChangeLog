@@ -1,5 +1,7 @@
 Mobius Forensic Toolkit 2.18
 	* libmobius_core: Added new method database::get_path  
+	* app-chromium: Added support for History schema version up to 70
+	* app-chromium: Added support for Web Data schema version up to 141
 	* app-chromium: Added new function get_db_schema_version(db)  
 	* app-chromium: Added decoding for Login Data files  
 	* app-chromium: Added decoding for Login Data For Account files  

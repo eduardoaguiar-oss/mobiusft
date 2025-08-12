@@ -303,6 +303,10 @@ post_processor_impl::_decrypt_dpapi_value (
     const mobius::core::bytearray &encrypted_value
 ) const
 {
+    if (DEBUG)
+        std::cout << "Decrypting DPAPI value: " << std::endl
+                  << encrypted_value.dump () << std::endl;
+
     mobius::core::log log (__FILE__, __func__);
     log.debug (__LINE__, "DPAPI value to decrypt: " + encrypted_value.dump ());
     
@@ -386,17 +390,21 @@ post_processor_impl::_decrypt_v20_encrypted_key (
                 std::to_string (encrypted_value.size ())
         );
 
-        auto decrypted_value =
-            _decrypt_dpapi_value (_decrypt_dpapi_value (encrypted_value));
+        auto decrypted_value_1 =
+            _decrypt_dpapi_value (encrypted_value);
 
-        if (!decrypted_value)
-            return {};
+        if (DEBUG)
+            std::cout << "Decrypted V20 value (1st attempt): " << std::endl
+                      << decrypted_value_1.dump () << std::endl;
 
-        log.debug (
-            __LINE__,
-            "Decrypted V20 value. Size: " +
-                std::to_string (decrypted_value.size ())
-        );
+        if (!decrypted_value_1 || decrypted_value_1.size () == 32)
+            return decrypted_value_1;
+
+        auto decrypted_value = _decrypt_dpapi_value (decrypted_value_1);
+
+        if (DEBUG)
+            std::cout << "Decrypted V20 value (2nd attempt): " << std::endl
+                      << decrypted_value.dump () << std::endl;
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Decode the decrypted value
