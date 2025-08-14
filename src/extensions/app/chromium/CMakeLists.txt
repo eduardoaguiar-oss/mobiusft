@@ -31,7 +31,9 @@ add_library(app_chromium MODULE
     evidence_loader_impl.cpp
     file_cookies.cpp
     file_history.cpp
+    file_local_state.cpp
     file_login_data.cpp
+    file_preferences.cpp
     file_web_data.cpp
     post_processor_impl.cpp
     profile.cpp
@@ -65,6 +67,18 @@ set_target_properties(tools_chromium_history PROPERTIES OUTPUT_NAME "chromium_hi
 target_link_libraries(tools_chromium_history PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: chromium_local_state
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_executable(tools_chromium_local_state
+    tools/chromium_local_state.cpp
+    common.cpp
+    file_local_state.cpp
+)
+
+set_target_properties(tools_chromium_local_state PROPERTIES OUTPUT_NAME "chromium_local_state")
+target_link_libraries(tools_chromium_local_state PRIVATE Mobius::Core)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: chromium_login_data
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_executable(tools_chromium_login_data
@@ -75,6 +89,18 @@ add_executable(tools_chromium_login_data
 
 set_target_properties(tools_chromium_login_data PROPERTIES OUTPUT_NAME "chromium_login_data")
 target_link_libraries(tools_chromium_login_data PRIVATE Mobius::Core)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: chromium_preferences
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_executable(tools_chromium_preferences
+    tools/chromium_preferences.cpp
+    common.cpp
+    file_preferences.cpp
+)
+
+set_target_properties(tools_chromium_preferences PROPERTIES OUTPUT_NAME "chromium_preferences")
+target_link_libraries(tools_chromium_preferences PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: chromium_web_data
@@ -99,6 +125,7 @@ install(TARGETS
     tools_chromium_cookies
     tools_chromium_history
     tools_chromium_login_data
+    tools_chromium_preferences
     tools_chromium_web_data
     RUNTIME DESTINATION share/mobiusft/tools
 )

@@ -19,12 +19,11 @@ import traceback
 
 import mobius
 import pymobius.ant.turing
-import pymobius.app.chromium
 import pymobius.app.skype
 
 ANT_ID = 'accounts'
 ANT_NAME = 'Accounts'
-ANT_VERSION = '1.2'
+ANT_VERSION = '1.3'
 
 EVIDENCE_TYPE = 'user-account'
 
@@ -53,48 +52,11 @@ class Ant(object):
             return
 
         self.__entries = []
-        self.__retrieve_chromium()
         self.__retrieve_passwords()
         self.__retrieve_skype()
 
         self.entries = self.__entries
         self.__save_data()
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from Chromium based browsers
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_chromium(self):
-        try:
-            model = pymobius.app.chromium.model(self.__item)
-
-            for profile in model.get_profiles():
-                self.__retrieve_chromium_profile(profile)
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from Chromium profile
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_chromium_profile(self, profile):
-        try:
-            for account in profile.get_accounts():
-                entry = pymobius.Data()
-                entry.type = f'app.{profile.app_id}'
-                entry.id = account.id
-                entry.name = account.name
-                entry.password = None
-                entry.metadata = mobius.core.pod.map()
-                entry.evidence_source = account.evidence_source
-                entry.metadata.set('fullname', account.fullname)
-                entry.metadata.set('locale', account.locale)
-                entry.metadata.set('email', account.email)
-                entry.metadata.set('profile_path', profile.path)
-                entry.metadata.set('username', profile.username)
-                entry.metadata.set('app_id', profile.app_id)
-                entry.metadata.set('app_name', profile.app_name)
-                self.__entries.append(entry)
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Retrieve data from passwords

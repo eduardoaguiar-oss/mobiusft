@@ -21,6 +21,7 @@
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/io/tempfile.hpp>
 #include <mobius/core/log.hpp>
+#include <mobius/core/mediator.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <unordered_set>
 #include "common.hpp"
@@ -130,7 +131,17 @@ file_cookies::file_cookies (const mobius::core::io::reader &reader)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         _load_cookies (db);
 
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Finish decoding
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         is_instance_ = true;
+
+        mobius::core::emit (
+            "file_for_sampling",
+            "app.chromium.cookies." +
+                mobius::core::string::to_string (schema_version_, 5),
+            reader
+        );
     }
     catch (const std::exception &e)
     {
@@ -195,7 +206,8 @@ file_cookies::_load_cookies (mobius::core::database::database &db)
             c.expires_utc = get_datetime (stmt.get_column_int64 (2));
             c.has_cross_site_ancestor = stmt.get_column_bool (3);
             c.has_expires = stmt.get_column_bool (4);
-            c.host_key = mobius::core::string::lstrip (stmt.get_column_string (5), ".");
+            c.host_key =
+                mobius::core::string::lstrip (stmt.get_column_string (5), ".");
             c.httponly = stmt.get_column_bool (6);
             c.is_httponly = stmt.get_column_bool (7);
             c.is_persistent = stmt.get_column_bool (8);

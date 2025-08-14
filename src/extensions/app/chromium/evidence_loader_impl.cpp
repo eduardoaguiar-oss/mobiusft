@@ -18,15 +18,13 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "evidence_loader_impl.hpp"
-#include <mobius/core/crypt/hash.hpp>
 #include <mobius/core/datasource/datasource_vfs.hpp>
-#include <mobius/core/decoder/base64.hpp>
 #include <mobius/core/decoder/inifile.hpp>
 #include <mobius/core/decoder/json/parser.hpp>
 #include <mobius/core/io/path.hpp>
 #include <mobius/core/io/walker.hpp>
 #include <mobius/core/log.hpp>
-#include <mobius/core/os/win/dpapi/blob.hpp>
+#include <mobius/core/mediator.hpp>
 #include <mobius/core/pod/data.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <mobius/framework/evidence_flag.hpp>
@@ -34,8 +32,7 @@
 #include <iomanip>
 #include <sstream>
 #include "common.hpp"
-
-#include <iostream> // for debugging purposes
+#include "file_local_state.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // - Chromium folder structure:
@@ -66,6 +63,7 @@ namespace
 static const std::string ANT_ID = "evidence.app-chromium";
 static const std::string ANT_NAME = "App Chromium";
 static const std::string ANT_VERSION = "1.1";
+static const std::string SAMPLING_ID = "sampling";
 static const std::string APP_FAMILY = "chromium";
 static const std::string APP_NAME = "Chromium";
 static const std::string APP_ID = "chromium";
@@ -75,7 +73,7 @@ static const std::string APP_ID = "chromium";
 // @param path Path
 // @return Filename
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
+static std::string
 _get_filename (const std::string &path)
 {
     auto filename = path;
@@ -92,79 +90,6 @@ _get_filename (const std::string &path)
     }
 
     return filename;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Convert duration to string format
-// @param duration Duration in microseconds
-// @return Formatted string representing the duration in days, hours, minutes,
-// and seconds
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-_duration_to_string (std::uint64_t duration)
-{
-    std::uint64_t seconds = duration / 1000000;
-    std::uint64_t microseconds = duration % 1000000;
-    std::uint64_t hours = seconds / 3600;
-    std::uint64_t minutes = (seconds % 3600) / 60;
-    seconds = seconds % 60;
-
-    std::stringstream ss;
-    ss << std::setfill ('0') << std::setw (2) << hours << ":"
-       << std::setfill ('0') << std::setw (2) << minutes << ":"
-       << std::setfill ('0') << std::setw (2) << seconds;
-
-    if (microseconds > 0)
-        ss << "." << std::setfill ('0') << std::setw (6) << microseconds;
-
-    return ss.str ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get metadata from DPAPI blob
-// @param data DPAPI blob data
-// @return Metadata as a map
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::pod::map
-_get_metadata_from_dpapi_blob (const mobius::core::bytearray &data)
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    mobius::core::pod::map metadata;
-
-    try
-    {
-        auto blob = mobius::core::os::win::dpapi::blob (data);
-
-        metadata.set ("dpapi_revision", blob.get_revision ());
-        metadata.set ("dpapi_provider_guid", blob.get_provider_guid ());
-        metadata.set (
-            "dpapi_master_key_revision",
-            blob.get_master_key_revision ()
-        );
-        metadata.set ("dpapi_master_key_guid", blob.get_master_key_guid ());
-        metadata.set ("dpapi_flags", blob.get_flags ());
-        metadata.set ("dpapi_description", blob.get_description ());
-    }
-    catch (const std::exception &e)
-    {
-        log.warning (__LINE__, std::string (e.what ()));
-    }
-
-    return metadata;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get key ID from DPAPI blob
-// @param data DPAPI blob data
-// @return Key ID as a string
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-_get_key_id_from_dpapi_blob (const mobius::core::bytearray &data)
-{
-    auto h = mobius::core::crypt::hash ("md5");
-    h.update (data);
-    return mobius::core::string::toupper (h.get_hex_digest ());
 }
 
 } // namespace
@@ -323,8 +248,6 @@ evidence_loader_impl::scan_folder (const mobius::core::io::folder &folder)
 void
 evidence_loader_impl::_scan_local_state (const mobius::core::io::folder &folder)
 {
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
     auto w = mobius::core::io::walker (folder);
 
     for (const auto &f : w.get_files_by_name ("local state"))
@@ -342,89 +265,36 @@ evidence_loader_impl::_decode_local_state_file (const mobius::core::io::file &f)
 
     try
     {
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Try to parse the Local State file as a JSON file
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        mobius::core::decoder::json::parser parser (f.new_reader ());
-        auto data = parser.parse ();
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Decode file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        file_local_state fls (f.new_reader ());
 
-        if (!data.is_map ())
+        if (!fls)
         {
-            log.info (__LINE__, "Local State file is not a valid JSON map");
+            log.info (__LINE__, "File is not a valid 'Local State' file");
             return;
         }
 
         log.info (
-            __LINE__,
-            "File " + f.get_path () + " is a valid 'Local State' file"
+            __LINE__, "File " + f.get_path () + " is a valid 'Local State' file"
         );
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Get Local State data
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        auto os_crypt =
-            mobius::core::pod::map (data).get<mobius::core::pod::map> (
-                "os_crypt"
-            );
-        if (!os_crypt)
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Add encryption keys
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (const auto &ek : fls.get_encryption_keys ())
         {
-            log.info (
-                __LINE__,
-                "Local State file does not contain 'os_crypt' data"
-            );
-            return;
-        }
+            encryption_key ekey (ek);
+            ekey.f = f;
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Get v10 key from Local State map
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        auto v10_encrypted_key = os_crypt.get<std::string> ("encrypted_key");
-
-        if (!v10_encrypted_key.empty ())
-        {
-            auto value = mobius::core::decoder::base64 (v10_encrypted_key);
-
-            if (value.startswith ("DPAPI"))
-            {
-                encryption_key ek;
-                ek.type = "v10";
-                ek.value = value.slice (5, value.size ());
-                ek.id = _get_key_id_from_dpapi_blob (ek.value);
-                ek.metadata = _get_metadata_from_dpapi_blob (ek.value);
-                ek.f = f;
-
-                encryption_keys_.emplace_back (std::move (ek));
-            }
-        }
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Get v20 key from Local State map
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        auto v20_encrypted_key =
-            os_crypt.get<std::string> ("app_bound_encrypted_key");
-
-        if (!v20_encrypted_key.empty ())
-        {
-            auto value = mobius::core::decoder::base64 (v20_encrypted_key);
-
-            if (value.startswith ("APPB"))
-            {
-                encryption_key ek;
-                ek.type = "v20";
-                ek.value = value.slice (4, value.size ());
-                ek.id = _get_key_id_from_dpapi_blob (ek.value);
-                ek.metadata = _get_metadata_from_dpapi_blob (ek.value);
-                ek.f = f;
-
-                encryption_keys_.emplace_back (std::move (ek));
-            }
+            encryption_keys_.push_back (ekey);
         }
     }
     catch (const std::exception &e)
     {
         log.warning (
-            __LINE__,
-            std::string (e.what ()) + " (file: " + f.get_path () + ")"
+            __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
         );
     }
 }
@@ -442,10 +312,11 @@ evidence_loader_impl::_scan_profile (const mobius::core::io::folder &folder)
     // Reset profile if we are starting a new folder scan
     // ==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     if (profile_ && !mobius::core::string::startswith (
-                        folder.get_path (),
-                        profile_.get_path ()
+                        folder.get_path (), profile_.get_path ()
                     ))
+    {
         profile_ = {};
+    }
 
     bool is_new = !bool (profile_);
 
@@ -477,7 +348,7 @@ evidence_loader_impl::_scan_profile (const mobius::core::io::folder &folder)
                 profile_.add_history_file (f);
 
             else if (name == "preferences")
-                ; // profile_.add_settings_dat_file (f);
+                profile_.add_preferences_file (f);
 
             else if (name == "safe browsing cookies")
                 profile_.add_cookies_file (f);
@@ -548,14 +419,12 @@ evidence_loader_impl::_save_accounts ()
 
             // Set phones
             e.set_attribute (
-                "phones",
-                mobius::core::string::join (acc.phone_numbers, "\n")
+                "phones", mobius::core::string::join (acc.phone_numbers, "\n")
             );
 
             // Set emails
             e.set_attribute (
-                "emails",
-                mobius::core::string::join (acc.emails, "\n")
+                "emails", mobius::core::string::join (acc.emails, "\n")
             );
 
             // Set organizations
@@ -566,14 +435,12 @@ evidence_loader_impl::_save_accounts ()
 
             // Set addressess
             e.set_attribute (
-                "addresses",
-                mobius::core::string::join (acc.addresses, "\n")
+                "addresses", mobius::core::string::join (acc.addresses, "\n")
             );
 
             // Set names
             e.set_attribute (
-                "names",
-                mobius::core::string::join (acc.names, "\n")
+                "names", mobius::core::string::join (acc.names, "\n")
             );
 
             // Set metadata
@@ -613,6 +480,8 @@ evidence_loader_impl::_save_app_profiles ()
         auto metadata = mobius::core::pod::map ();
 
         metadata.set ("profile_name", p.get_profile_name ());
+        metadata.set ("last_engagement_time", p.get_last_engagement_time ());
+        metadata.set ("created_by_version", p.get_created_by_version ());
         metadata.set ("num_accounts", p.size_accounts ());
         metadata.set ("num_autofill_entries", p.size_autofill_entries ());
         metadata.set ("num_autofill_profiles", p.size_autofill_profiles ());
@@ -741,9 +610,9 @@ evidence_loader_impl::_save_credit_cards ()
 
             if (cc.expiration_month && cc.expiration_year)
                 e.set_attribute (
-                    "expiration_date",
-                    std::to_string (cc.expiration_year) + '-' +
-                        std::to_string (cc.expiration_month)
+                    "expiration_date", std::to_string (cc.expiration_year) +
+                                           '-' +
+                                           std::to_string (cc.expiration_month)
                 );
 
             auto metadata = mobius::core::pod::map ();
@@ -984,8 +853,7 @@ evidence_loader_impl::_save_received_files ()
             {
                 auto e = item_.new_evidence ("received-file");
                 auto path = mobius::core::string::first_of (
-                    entry.target_path,
-                    entry.full_path
+                    entry.target_path, entry.full_path
                 );
 
                 e.set_attribute ("timestamp", entry.start_time);
@@ -1020,8 +888,7 @@ evidence_loader_impl::_save_received_files ()
                 metadata.set ("web_app_id", entry.by_web_app_id);
                 metadata.set ("danger_type", entry.danger_type);
                 metadata.set (
-                    "embedder_download_data",
-                    entry.embedder_download_data
+                    "embedder_download_data", entry.embedder_download_data
                 );
                 metadata.set ("etag", entry.etag);
                 metadata.set ("hash", entry.hash);
@@ -1089,15 +956,13 @@ evidence_loader_impl::_save_visited_urls ()
             metadata.set ("originator_cache_guid", entry.originator_cache_guid);
             metadata.set ("originator_from_visit", entry.originator_from_visit);
             metadata.set (
-                "originator_opener_visit",
-                entry.originator_opener_visit
+                "originator_opener_visit", entry.originator_opener_visit
             );
             metadata.set ("originator_visit_id", entry.originator_visit_id);
             metadata.set ("publicly_routable", entry.publicly_routable);
             metadata.set ("segment_id", entry.segment_id);
             metadata.set (
-                "visit_duration",
-                _duration_to_string (entry.visit_duration)
+                "visit_duration", duration_to_string (entry.visit_duration)
             );
             metadata.set ("visit_url", entry.visit_url);
             metadata.set ("visited_link_id", entry.visited_link_id);

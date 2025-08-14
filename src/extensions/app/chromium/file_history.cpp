@@ -21,6 +21,8 @@
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/io/tempfile.hpp>
 #include <mobius/core/log.hpp>
+#include <mobius/core/mediator.hpp>
+#include <mobius/core/string_functions.hpp>
 #include <unordered_map>
 #include <unordered_set>
 #include "common.hpp"
@@ -183,12 +185,8 @@ static constexpr std::int64_t LAST_KNOWN_SCHEMA_VERSION = 70;
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const std::unordered_map<std::int32_t, std::string>
     DOWNLOAD_STATE_STRINGS = {
-        {-1, "invalid"},
-        {0, "in_progress"},
-        {1, "complete"},
-        {2, "cancelled"},
-        {3, "bug_140687"},
-        {4, "interrupted"},
+        {-1, "invalid"},  {0, "in_progress"}, {1, "complete"},
+        {2, "cancelled"}, {3, "bug_140687"},  {4, "interrupted"},
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -237,9 +235,9 @@ file_history::file_history (const mobius::core::io::reader &reader)
 
     try
     {
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Copy reader content to temporary file
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         mobius::core::io::tempfile tfile;
         tfile.copy_from (reader);
 
@@ -262,13 +260,23 @@ file_history::file_history (const mobius::core::io::reader &reader)
             );
         }
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Load data
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         _load_history (db);
         _load_downloads (db);
 
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Finish decoding
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         is_instance_ = true;
+
+        mobius::core::emit (
+            "file_for_sampling",
+            "app.chromium.history." +
+                mobius::core::string::to_string (schema_version_, 5),
+            reader
+        );
     }
     catch (const std::exception &e)
     {
@@ -418,8 +426,7 @@ file_history::_load_downloads (mobius::core::database::database &db)
             {
                 entry.hash = h.to_hexstring ();
                 log.development (
-                    __LINE__,
-                    "Download hash found: " + entry.hash
+                    __LINE__, "Download hash found: " + entry.hash
                 );
             }
 

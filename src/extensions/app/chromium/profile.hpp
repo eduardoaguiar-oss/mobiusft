@@ -152,8 +152,10 @@ class profile
     std::string get_app_id () const;
     std::string get_app_name () const;
     std::string get_profile_name () const;
+    std::string get_created_by_version () const;
     mobius::core::datetime::datetime get_creation_time () const;
     mobius::core::datetime::datetime get_last_modified_time () const;
+    mobius::core::datetime::datetime get_last_engagement_time () const;
     std::vector<account> get_accounts () const;
     std::size_t size_accounts () const;
     std::vector<autofill> get_autofill_entries () const;
@@ -170,6 +172,7 @@ class profile
     std::size_t size_history_entries () const;
     std::vector<login> get_logins () const;
     std::size_t size_logins () const;
+
     void set_folder (const mobius::core::io::folder &);
     void add_cookies_file (const mobius::core::io::file &);
     void add_history_file (const mobius::core::io::file &);

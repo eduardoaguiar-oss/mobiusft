@@ -3,16 +3,19 @@ Mobius Forensic Toolkit 2.18
 	* app-chromium: Added support for History schema version up to 70
 	* app-chromium: Added support for Web Data schema version up to 141
 	* app-chromium: Added new function get_db_schema_version(db)  
-	* app-chromium: Added decoding for Login Data files  
-	* app-chromium: Added decoding for Login Data For Account files  
 	* app-chromium: Added decoding for Cookies files  
 	* app-chromium: Added decoding for Extension Cookies files  
 	* app-chromium: Added decoding for Safe Browsing Cookies files  
 	* app-chromium: Added decoding for Local State files  
+	* app-chromium: Added decoding for Login Data files  
+	* app-chromium: Added decoding for Login Data For Account files  
+	* app-chromium: Added decoding for Preferences files  
 	* app-chromium: Implemented new class post_processor_impl  
 	* app-chromium: Enhanced post_processor_impl to support decryption of both v10 and v20 Chromium encryption keys
+	* app-chromium: Enhanced profile class to fill metadata from Preferences' profile key
 	* ant.evidence: Added new module post.user_accounts_from_cookies  
-	* ant.evidence.vfs.accounts: Removed cookie retrieval feature  
+	* ant.evidence.vfs.accounts: Removed cookie retrieval feature
+	* ant.evidence.vfs.accounts: Removed old Chromium code
 	* ant.evidence.vfs.cookies: Removed old Chromium code
 	* evidence-password-hashes: Fixed .hashcat file export  
 	* evidence-password-hashes: Fixed .john file export  
@@ -21,6 +24,8 @@ Mobius Forensic Toolkit 2.18
 	* libmobius_core: Added new class decoder::json::tokenizer  
 	* libmobius_core: Added new class decoder::json::parser  
 	* libmobius_core: Added new method os::win::dpapi::blob(bytearray)  
+	* libmobius_core: Added new method pod::data::to_list
+	* libmobius_core: Added new method pod::data::to_map
 
 Mobius Forensic Toolkit 2.17
 	* Added new C++ extension called "app-chromium"

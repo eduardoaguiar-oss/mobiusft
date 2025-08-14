@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_CHROMIUM_EVIDENCE_LOADER_IMPL_HPP
-#define MOBIUS_EXTENSION_APP_CHROMIUM_EVIDENCE_LOADER_IMPL_HPP
+#ifndef MOBIUS_EXTENSION_APP_CHROMIUM_FILE_PREFERENCES_HPP
+#define MOBIUS_EXTENSION_APP_CHROMIUM_FILE_PREFERENCES_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -20,102 +20,126 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/framework/evidence_loader_impl_base.hpp>
-#include <mobius/framework/model/item.hpp>
+#include <mobius/core/datetime/datetime.hpp>
+#include <mobius/core/io/file.hpp>
+#include <mobius/core/io/reader.hpp>
+#include <mobius/core/pod/map.hpp>
+#include <cstdint>
 #include <string>
 #include <vector>
-#include "file_local_state.hpp"
-#include "profile.hpp"
 
 namespace mobius::extension::app::chromium
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>Chromium evidence_loader</i> implementation class
+// @brief Preferences file decoder
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
+class file_preferences
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Datatypes
+    // @brief Account structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    using encryption_key = file_local_state::encryption_key;
+    struct account
+    {
+        // @brief Record Index
+        std::uint64_t idx = 0;
+
+        // @brief Account ID
+        std::string id;
+
+        // @brief Account name
+        std::string name;
+
+        // @brief Full name
+        std::string full_name;
+
+        // @brief E-mail address
+        std::string email;
+
+        // @brief Locale
+        std::string locale;
+
+        // @brief Picture URL
+        std::string picture_url;
+
+        // @brief Metadata
+        mobius::core::pod::map metadata;
+
+        // @brief File object
+        mobius::core::io::file f;
+    };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Constructors
+    // @brief Profile structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    explicit evidence_loader_impl (
-        const mobius::framework::model::item &, scan_type
-    );
+    struct profile
+    {
+        // @brief Profile name
+        std::string name;
+
+        // @brief Created by app version
+        std::string created_by_version;
+
+        // @brief Creation time
+        mobius::core::datetime::datetime creation_time;
+
+        // @brief Last engagement time
+        mobius::core::datetime::datetime last_engagement_time;
+        
+        // @brief File object
+        mobius::core::io::file f;
+    };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Function prototypes
+    // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void run () final;
-    void scan_folder (const mobius::core::io::folder &);
+    file_preferences (const mobius::core::io::reader &);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Check if object is valid
+    // @brief Check if stream is an instance of Preferences file
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    explicit
-    operator bool () const noexcept final
+    operator bool () const noexcept
     {
-        return true;
+        return is_instance_;
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get evidence_loader type
-    // @return Type as string
+    // @brief Get accounts
+    // @return Vector of accounts
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::string
-    get_type () const final
+    std::vector<account>
+    get_accounts () const
     {
-        return "app-chromium";
+        return accounts_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get profile data
+    // @return Profile data
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    profile
+    get_profile () const
+    {
+        return profile_;
     }
 
   private:
-    // @brief Case item
-    mobius::framework::model::item item_;
+    // @brief Flag is instance
+    bool is_instance_ = false;
 
-    // @brief Scan type
-    scan_type scan_type_;
+    // @brief Accounts
+    std::vector<account> accounts_;
 
-    // @brief User name
-    std::string username_;
-
-    // @brief Current profile
+    // @brief Profile data
     profile profile_;
-
-    // @brief Profiles found
-    std::vector<profile> profiles_;
-
-    // @brief Encryption keys found
-    std::vector<encryption_key> encryption_keys_;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void _scan_canonical_folders ();
-    void _scan_canonical_root_folder (const mobius::core::io::folder &);
-    void _scan_canonical_user_folder (const mobius::core::io::folder &);
-    void _scan_all_folders (const mobius::core::io::folder &);
-    void _scan_local_state (const mobius::core::io::folder &);
-    void _scan_profile (const mobius::core::io::folder &);
-    void _decode_local_state_file (const mobius::core::io::file &);
-
-    void _save_evidences ();
-
-    void _save_app_profiles ();
-    void _save_autofills ();
-    void _save_cookies ();
-    void _save_credit_cards ();
-    void _save_encryption_keys ();
-    void _save_pdis ();
-    void _save_received_files ();
-    void _save_visited_urls ();
-
-    void _save_accounts ();
+    void _load_accounts (const mobius::core::pod::data&);
+    void _load_profile (const mobius::core::pod::data&);
 };
 
 } // namespace mobius::extension::app::chromium

@@ -21,6 +21,8 @@
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/io/tempfile.hpp>
 #include <mobius/core/log.hpp>
+#include <mobius/core/mediator.hpp>
+#include <mobius/core/string_functions.hpp>
 #include <unordered_map>
 #include <unordered_set>
 #include "common.hpp"
@@ -141,7 +143,17 @@ file_login_data::file_login_data (const mobius::core::io::reader &reader)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         _load_logins (db);
 
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Finish decoding
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         is_instance_ = true;
+
+        mobius::core::emit (
+            "file_for_sampling",
+            "app.chromium.login_data." +
+                mobius::core::string::to_string (schema_version_, 5),
+            reader
+        );
     }
     catch (const std::exception &e)
     {

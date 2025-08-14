@@ -27,6 +27,7 @@
 #include "file_cookies.hpp"
 #include "file_history.hpp"
 #include "file_login_data.hpp"
+#include "file_preferences.hpp"
 #include "file_web_data.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -141,6 +142,26 @@ class profile::impl
     get_last_modified_time () const
     {
         return last_modified_time_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get last engagement time
+    // @return Last engagement time
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::datetime::datetime
+    get_last_engagement_time () const
+    {
+        return last_engagement_time_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get created by version
+    // @return Created by version
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_created_by_version () const
+    {
+        return created_by_version_;
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -338,6 +359,12 @@ class profile::impl
     // @brief Last modified time
     mobius::core::datetime::datetime last_modified_time_;
 
+    // @brief Last engagement time
+    mobius::core::datetime::datetime last_engagement_time_;
+
+    // @brief Created by version
+    std::string created_by_version_;
+
     // @brief Accounts
     std::vector<account> accounts_;
 
@@ -532,9 +559,51 @@ profile::impl::add_preferences_file (const mobius::core::io::file &f)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Decode file
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto reader = f.new_reader ();
-    if (!reader)
+    file_preferences preferences (f.new_reader ());
+
+    if (!preferences)
+    {
+        log.info (__LINE__, "File is not a valid 'Preferences' file");
         return;
+    }
+
+    log.info (
+        __LINE__,
+        "File " + f.get_path () + " is a valid 'Preferences' file"
+    );
+
+    if (!last_modified_time_ ||
+        f.get_modification_time () > last_modified_time_)
+        last_modified_time_ = f.get_modification_time ();
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Set profile data
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto p = preferences.get_profile ();
+
+    profile_name_ = mobius::core::string::first_of (p.name, profile_name_);
+    creation_time_ = p.creation_time;
+    last_engagement_time_ = p.last_engagement_time;
+    created_by_version_ = p.created_by_version;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Add Chromium accounts
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &entry : preferences.get_accounts ())
+    {
+        account a;
+
+        a.id = entry.id;
+        a.name = entry.name;
+        a.emails.push_back (entry.email);
+        a.names.push_back (entry.full_name);
+        
+        a.metadata = entry.metadata.clone ();
+        a.metadata.set ("picture_url", entry.picture_url);
+        a.f = f;
+
+        accounts_.push_back (a);
+    }
 
     is_valid_ = true;
 }

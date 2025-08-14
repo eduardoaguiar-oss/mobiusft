@@ -79,18 +79,15 @@ std::vector<std::tuple<std::string, std::string, std::string>>
         {"/Google/Chrome SxS/User Data/", "chrome.canary", "Chrome Canary"},
         {"/Kiwi/User Data/", "kiwi", "Kiwi Browser"},
         {"/Kodi/userdata/addon_data/plugin.program.browser.launcher/profile/2",
-         "kodi.browser",
-         "Kodi Browser Launcher"},
+         "kodi.browser", "Kodi Browser Launcher"},
         {"/Kodi/userdata/addon_data/plugin.program.chrome.launcher/profile",
-         "kodi.chrome",
-         "Kodi Chrome Launcher"},
+         "kodi.chrome", "Kodi Chrome Launcher"},
         {"/Kometa/User Data/", "kometa", "Kometa"},
         {"/Lunascape/User Data/", "lunascape", "Lunascape"},
         {"/Maxthon/User Data/", "maxthon", "Maxthon"},
         {"/Microsoft/Edge Beta/User Data/", "edge.beta", "Microsoft Edge Beta"},
         {"/Microsoft/Edge Dev/User Data/", "edge.dev", "Microsoft Edge Dev"},
-        {"/Microsoft/Edge SxS/User Data/",
-         "edge.canary",
+        {"/Microsoft/Edge SxS/User Data/", "edge.canary",
          "Microsoft Edge Canary"},
         {"/Microsoft/Office/", "office", "Microsoft Office"},
         {"/Microsoft/OneDrive/", "onedrive", "Microsoft OneDrive"},
@@ -98,11 +95,9 @@ std::vector<std::tuple<std::string, std::string, std::string>>
         {"/Naver/Whale/User Data/", "whale", "Naver Whale"},
         {"/Opera Software/Opera GX Stable", "opera-gx", "Opera GX"},
         {"/Orbitum/User Data/", "orbitum", "Orbitum"},
-        {"/Packages/Microsoft.MicrosoftOfficeHub_8wekyb3d8bbwe/",
-         "officehub",
+        {"/Packages/Microsoft.MicrosoftOfficeHub_8wekyb3d8bbwe/", "officehub",
          "Microsoft Office Hub"},
-        {"/Packages/SpotifyAB.SpotifyMusic_zpdnekdrzrea0/",
-         "spotify",
+        {"/Packages/SpotifyAB.SpotifyMusic_zpdnekdrzrea0/", "spotify",
          "Spotify"},
         {"/Pale Moon/User Data/", "palemoon", "Pale Moon"},
         {"/PlutoTV/", "plutotv", "PlutoTV"},
@@ -115,8 +110,7 @@ std::vector<std::tuple<std::string, std::string, std::string>>
         {"/Sleipnir/User Data/", "sleipnir", "Sleipnir"},
         {"/Slimjet/User Data/", "slimjet", "Slimjet"},
         {"/Sputnik/Sputnik/User Data/", "sputnik", "Sputnik"},
-        {"/Temp/BCLTMP/Chrome",
-         "chrome.bcltmp",
+        {"/Temp/BCLTMP/Chrome", "chrome.bcltmp",
          "Google Chrome from Avast Browser Cleanup"},
         {"/Torch/User Data/", "torch", "Torch"},
         {"/uCozMedia/Uran/User Data/", "uran", "Uran"},
@@ -126,6 +120,32 @@ std::vector<std::tuple<std::string, std::string, std::string>>
 
 namespace mobius::extension::app::chromium
 {
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Convert duration to string format
+// @param duration Duration in microseconds
+// @return Formatted string representing the duration in days, hours, minutes,
+// and seconds
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+duration_to_string (std::uint64_t duration)
+{
+    std::uint64_t seconds = duration / 1000000;
+    std::uint64_t microseconds = duration % 1000000;
+    std::uint64_t hours = seconds / 3600;
+    std::uint64_t minutes = (seconds % 3600) / 60;
+    seconds = seconds % 60;
+
+    std::stringstream ss;
+    ss << std::setfill ('0') << std::setw (2) << hours << ":"
+       << std::setfill ('0') << std::setw (2) << minutes << ":"
+       << std::setfill ('0') << std::setw (2) << seconds;
+
+    if (microseconds > 0)
+        ss << "." << std::setfill ('0') << std::setw (6) << microseconds;
+
+    return ss.str ();
+}
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Generate SQL statement with version-aware column replacements
 // @param sql_template The SQL template string with
@@ -268,25 +288,22 @@ get_db_schema_version (mobius::core::database::database db)
             if (!schema_version)
             {
                 log.warning (
-                    __LINE__,
-                    "Schema version = 0. Path: " + db.get_path ()
+                    __LINE__, "Schema version = 0. Path: " + db.get_path ()
                 );
             }
         }
         else
         {
             log.warning (
-                __LINE__,
-                "Schema version not found in meta table. Path: " +
-                    db.get_path ()
+                __LINE__, "Schema version not found in meta table. Path: " +
+                              db.get_path ()
             );
         }
     }
     catch (const std::exception &e)
     {
         log.warning (
-            __LINE__,
-            std::string (e.what ()) + ". Path: " + db.get_path ()
+            __LINE__, std::string (e.what ()) + ". Path: " + db.get_path ()
         );
     }
 
