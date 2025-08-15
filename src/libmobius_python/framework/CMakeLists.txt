@@ -37,6 +37,7 @@ add_library(libmobius_python_framework STATIC
     category.cpp
     evidence_loader.cpp
     func_config.cpp
+    processor.cpp
 )
 
 set_target_properties(libmobius_python_framework PROPERTIES

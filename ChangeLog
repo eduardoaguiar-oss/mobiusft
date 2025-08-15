@@ -26,6 +26,7 @@ Mobius Forensic Toolkit 2.18
 	* libmobius_core: Added new method os::win::dpapi::blob(bytearray)  
 	* libmobius_core: Added new method pod::data::to_list
 	* libmobius_core: Added new method pod::data::to_map
+	* libmobius_python: Added callback for "file_for_sampling" event
 
 Mobius Forensic Toolkit 2.17
 	* Added new C++ extension called "app-chromium"

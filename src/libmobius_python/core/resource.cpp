@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -20,12 +22,12 @@
 // @file resource.cc C++ API <i>mobius.core.resource</i> class wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <pymobius.hpp>
-#include <pycallback.hpp>
-#include <pylist.hpp>
-#include <pyobject.hpp>
 #include "resource.hpp"
 #include <mobius/core/exception.inc>
+#include <pycallback.hpp>
+#include <pylist.hpp>
+#include <pymobius.hpp>
+#include <pyobject.hpp>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -36,7 +38,7 @@
 bool
 pymobius_core_resource_check (PyObject *value)
 {
-  return mobius::py::isinstance (value, &core_resource_t);
+    return mobius::py::isinstance (value, &core_resource_t);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -45,13 +47,13 @@ pymobius_core_resource_check (PyObject *value)
 // @return New resource object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_core_resource_to_pyobject (const mobius::core::resource& obj)
+pymobius_core_resource_to_pyobject (const mobius::core::resource &obj)
 {
-  if (obj)
-    return mobius::py::to_pyobject <core_resource_o> (obj, &core_resource_t);
+    if (obj)
+        return mobius::py::to_pyobject<core_resource_o> (obj, &core_resource_t);
 
-  else
-    return mobius::py::pynone ();
+    else
+        return mobius::py::pynone ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -62,7 +64,7 @@ pymobius_core_resource_to_pyobject (const mobius::core::resource& obj)
 mobius::core::resource
 pymobius_core_resource_from_pyobject (PyObject *value)
 {
-  return mobius::py::from_pyobject <core_resource_o> (value, &core_resource_t);
+    return mobius::py::from_pyobject<core_resource_o> (value, &core_resource_t);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -73,18 +75,18 @@ pymobius_core_resource_from_pyobject (PyObject *value)
 static PyObject *
 tp_getter_id (core_resource_o *self)
 {
-  PyObject *ret = nullptr;
+    PyObject *ret = nullptr;
 
-  try
+    try
     {
-      ret = mobius::py::pystring_from_std_string (self->obj->get_id ());
+        ret = mobius::py::pystring_from_std_string (self->obj->get_id ());
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
+        mobius::py::set_runtime_error (e.what ());
     }
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -95,18 +97,20 @@ tp_getter_id (core_resource_o *self)
 static PyObject *
 tp_getter_description (core_resource_o *self)
 {
-  PyObject *ret = nullptr;
+    PyObject *ret = nullptr;
 
-  try
+    try
     {
-      ret = mobius::py::pystring_from_std_string (self->obj->get_description ());
+        ret = mobius::py::pystring_from_std_string (
+            self->obj->get_description ()
+        );
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
+        mobius::py::set_runtime_error (e.what ());
     }
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -117,47 +121,30 @@ tp_getter_description (core_resource_o *self)
 static PyObject *
 tp_getter_value (core_resource_o *self)
 {
-  PyObject *ret = nullptr;
+    PyObject *ret = nullptr;
 
-  try
+    try
     {
-      ret = self->obj->get_value <mobius::py::pyobject> ().new_reference ();
+        ret = self->obj->get_value<mobius::py::pyobject> ().new_reference ();
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
+        mobius::py::set_runtime_error (e.what ());
     }
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyGetSetDef tp_getset[] =
-{
-  {
-    (char *) "id",
-    (getter) tp_getter_id,
-    (setter) 0,
-    (char *) "ID",
-    nullptr
-  },
-  {
-    (char *) "description",
-    (getter) tp_getter_description,
-    (setter) 0,
-    (char *) "Description",
-    nullptr
-  },
-  {
-    (char *) "value",
-    (getter) tp_getter_value,
-    (setter) 0,
-    (char *) "Value",
-    nullptr
-  },
-  {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
+static PyGetSetDef tp_getset[] = {
+    {(char *) "id", (getter) tp_getter_id, (setter) 0, (char *) "ID", nullptr},
+    {(char *) "description", (getter) tp_getter_description, (setter) 0,
+     (char *) "Description", nullptr},
+    {(char *) "value", (getter) tp_getter_value, (setter) 0, (char *) "Value",
+     nullptr},
+    {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -167,63 +154,62 @@ static PyGetSetDef tp_getset[] =
 static void
 tp_dealloc (core_resource_o *self)
 {
-  delete self->obj;
-  Py_TYPE (self)->tp_free ((PyObject*) self);
+    delete self->obj;
+    Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_resource_t =
-{
-  PyVarObject_HEAD_INIT (nullptr, 0)                    // header
-  "mobius.core.resource",                  		// tp_name
-  sizeof (core_resource_o),                		// tp_basicsize
-  0,                                       		// tp_itemsize
-  (destructor) tp_dealloc,                 		// tp_dealloc
-  0,                                       		// tp_print
-  0,                                       		// tp_getattr
-  0,                                       		// tp_setattr
-  0,                                       		// tp_compare
-  0,                                       		// tp_repr
-  0,                                       		// tp_as_number
-  0,                                       		// tp_as_sequence
-  0,                                       		// tp_as_mapping
-  0,                                       		// tp_hash
-  0,                                       		// tp_call
-  0,                                       		// tp_str
-  0,                                       		// tp_getattro
-  0,                                       		// tp_setattro
-  0,                                       		// tp_as_buffer
-  Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,		// tp_flags
-  "C++ extension class",                   		// tp_doc
-  0,                                       		// tp_traverse
-  0,                                       		// tp_clear
-  0,                                       		// tp_richcompare
-  0,                                       		// tp_weaklistoffset
-  0,                                       		// tp_iter
-  0,                                       		// tp_iternext
-  0,                                       		// tp_methods
-  0,                                       		// tp_members
-  tp_getset,                               		// tp_getset
-  0,                                       		// tp_base
-  0,                                       		// tp_dict
-  0,                                       		// tp_descr_get
-  0,                                       		// tp_descr_set
-  0,                                       		// tp_dictoffset
-  0,                                       		// tp_init
-  0,                                       		// tp_alloc
-  0,                                       		// tp_new
-  0,                                       		// tp_free
-  0,                                       		// tp_is_gc
-  0,                                       		// tp_bases
-  0,                                       		// tp_mro
-  0,                                       		// tp_cache
-  0,                                       		// tp_subclasses
-  0,                                       		// tp_weaklist
-  0,                                       		// tp_del
-  0,                                       		// tp_version_tag
-  0,                                       		// tp_finalize
+PyTypeObject core_resource_t = {
+    PyVarObject_HEAD_INIT (nullptr, 0)        // header
+    "mobius.core.resource",                   // tp_name
+    sizeof (core_resource_o),                 // tp_basicsize
+    0,                                        // tp_itemsize
+    (destructor) tp_dealloc,                  // tp_dealloc
+    0,                                        // tp_print
+    0,                                        // tp_getattr
+    0,                                        // tp_setattr
+    0,                                        // tp_compare
+    0,                                        // tp_repr
+    0,                                        // tp_as_number
+    0,                                        // tp_as_sequence
+    0,                                        // tp_as_mapping
+    0,                                        // tp_hash
+    0,                                        // tp_call
+    0,                                        // tp_str
+    0,                                        // tp_getattro
+    0,                                        // tp_setattro
+    0,                                        // tp_as_buffer
+    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
+    "C++ extension class",                    // tp_doc
+    0,                                        // tp_traverse
+    0,                                        // tp_clear
+    0,                                        // tp_richcompare
+    0,                                        // tp_weaklistoffset
+    0,                                        // tp_iter
+    0,                                        // tp_iternext
+    0,                                        // tp_methods
+    0,                                        // tp_members
+    tp_getset,                                // tp_getset
+    0,                                        // tp_base
+    0,                                        // tp_dict
+    0,                                        // tp_descr_get
+    0,                                        // tp_descr_set
+    0,                                        // tp_dictoffset
+    0,                                        // tp_init
+    0,                                        // tp_alloc
+    0,                                        // tp_new
+    0,                                        // tp_free
+    0,                                        // tp_is_gc
+    0,                                        // tp_bases
+    0,                                        // tp_mro
+    0,                                        // tp_cache
+    0,                                        // tp_subclasses
+    0,                                        // tp_weaklist
+    0,                                        // tp_del
+    0,                                        // tp_version_tag
+    0,                                        // tp_finalize
 };
 
 namespace
@@ -233,55 +219,48 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class resource_added_callback
 {
-public:
-  resource_added_callback (PyObject *f)
-    : f_ (f)
-  {
-  }
+  public:
+    resource_added_callback (PyObject *f)
+        : f_ (f)
+    {
+    }
 
-  void
-  operator () (
-    const std::string& id,
-    const mobius::core::resource& r)
-  {
-    f_.call (
-      mobius::py::pystring_from_std_string (id),
-      pymobius_core_resource_to_pyobject (r)
-    );
-  }
+    void
+    operator() (const std::string &id, const mobius::core::resource &r)
+    {
+        f_.call (
+            mobius::py::pystring_from_std_string (id),
+            pymobius_core_resource_to_pyobject (r)
+        );
+    }
 
-private:
-  mobius::py::pyobject f_;
+  private:
+    mobius::py::pyobject f_;
 };
 
-mobius::py::callback <resource_added_callback> cb_1_ ("resource-added");
+mobius::py::callback<resource_added_callback> cb_1_ ("resource-added");
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief resource-removed event callback
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class resource_removed_callback
 {
-public:
-  resource_removed_callback (PyObject *f)
-    : f_ (f)
-  {
-  }
+  public:
+    resource_removed_callback (PyObject *f)
+        : f_ (f)
+    {
+    }
 
-  void
-  operator () (
-    const std::string& id)
-  {
-    f_.call (
-      mobius::py::pystring_from_std_string (id)
-    );
-  }
+    void
+    operator() (const std::string &id)
+    {
+        f_.call (mobius::py::pystring_from_std_string (id));
+    }
 
-private:
-  mobius::py::pyobject f_;
+  private:
+    mobius::py::pyobject f_;
 };
 
-mobius::py::callback <resource_removed_callback> cb_2_ ("resource-removed");
+mobius::py::callback<resource_removed_callback> cb_2_ ("resource-removed");
 
 } // namespace
-
-

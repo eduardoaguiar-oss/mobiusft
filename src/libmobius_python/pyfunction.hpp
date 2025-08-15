@@ -3,7 +3,9 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -18,13 +20,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#define PY_SSIZE_T_CLEAN        // PEP 353
+#define PY_SSIZE_T_CLEAN // PEP 353
 
+#include <mobius/core/exception.inc>
 #include <Python.h>
+#include <memory>
 #include <pygil.hpp>
 #include <pymobius.hpp>
-#include <mobius/core/exception.inc>
-#include <memory>
 #include <stdexcept>
 
 namespace mobius::py
@@ -35,69 +37,87 @@ namespace mobius::py
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class function
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  function (PyObject *);
-  function () noexcept = default;
-  function (function&&) noexcept = default;
-  function (const function&) noexcept = default;
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    function (PyObject *);
+    function () noexcept = default;
+    function (function &&) noexcept = default;
+    function (const function &) noexcept = default;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Operators
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  function& operator= (const function&) noexcept = default;
-  function& operator= (function&&) noexcept = default;
-  operator PyObject * () const noexcept;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    function &operator= (const function &) noexcept = default;
+    function &operator= (function &&) noexcept = default;
+    operator PyObject * () const noexcept;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Check if object is valid
-  // @return true/false
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit operator bool () const noexcept
-  {
-    return bool (impl_);
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if object is valid
+    // @return true/false
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    explicit
+    operator bool () const noexcept
+    {
+        return bool (impl_);
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Call function
-  // @param args Function arguments
-  // @return Value returned by function
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  template <typename ...Args> PyObject *
-  operator () (Args... args)
-  {
-    if (!impl_)
-      throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("null function cannot be called"));
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Call operator
+    // @param args Function arguments
+    // @return Value returned by function
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    template <typename... Args>
+    PyObject *
+    operator() (Args... args)
+    {
+        mobius::py::GIL_holder holder;
 
-    mobius::py::GIL_holder holder;
+        return call (args...);
+    }
 
-    // Create argument tuple
-    PyObject *t = PyTuple_Pack (sizeof... (args), args...);
-    if (!t)
-      throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("could not build arguments"));
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Call function
+    // @param args Function arguments
+    // @return Value returned by function
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    template <typename... Args>
+    PyObject *
+    call (Args... args)
+    {
+        if (!impl_)
+            throw std::runtime_error (
+                MOBIUS_EXCEPTION_MSG ("null function cannot be called")
+            );
 
-    // Call Python function
-    PyObject *rc = PyObject_CallObject (static_cast <PyObject *> (*this), t);
-    Py_DECREF (t);
+        // Create argument tuple
+        PyObject *t = PyTuple_Pack (sizeof...(args), args...);
+        if (!t)
+            throw std::runtime_error (
+                MOBIUS_EXCEPTION_MSG ("could not build arguments")
+            );
 
-    if (rc == nullptr)
-      throw std::runtime_error (MOBIUS_EXCEPTION_MSG (get_error_message ()));
+        // Call Python function
+        PyObject *rc = PyObject_CallObject (static_cast<PyObject *> (*this), t);
+        Py_DECREF (t);
 
-    return rc;
-  }
+        if (rc == nullptr)
+            throw std::runtime_error (
+                MOBIUS_EXCEPTION_MSG (get_error_message ())
+            );
 
-private:
-  // @brief Implementation class forward declaration
-  class impl;
+        return rc;
+    }
 
-  // @brief Implementation pointer
-  std::shared_ptr <impl> impl_;
+  private:
+    // @brief Implementation class forward declaration
+    class impl;
+
+    // @brief Implementation pointer
+    std::shared_ptr<impl> impl_;
 };
 
 } // namespace mobius::py
 
 #endif
-
-

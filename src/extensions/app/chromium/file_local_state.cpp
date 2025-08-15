@@ -168,8 +168,10 @@ file_local_state::file_local_state (const mobius::core::io::reader &reader)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         is_instance_ = true;
 
+        // file_for_sampling event mandates sampling ID as std::string
         mobius::core::emit (
-            "file_for_sampling", "app.chromium.local_state", reader
+            "file_for_sampling", std::string ("app.chromium.local_state"),
+            reader
         );
     }
     catch (const std::exception &e)

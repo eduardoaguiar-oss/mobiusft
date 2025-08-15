@@ -23,12 +23,17 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "module.hpp"
+#include <pygil.hpp>
+#include <pymobius.hpp>
+#include "ant/module.hpp"
 #include "attribute.hpp"
 #include "category.hpp"
 #include "evidence_loader.hpp"
-#include "ant/module.hpp"
 #include "model/module.hpp"
-#include <pymobius.hpp>
+
+#include <pycallback.hpp>
+#include <pyfunction.hpp>
+#include "core/io/reader.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Functions prototypes
@@ -79,7 +84,8 @@ static PyModuleDef module_def = {
     nullptr,
     nullptr,
     nullptr,
-    nullptr};
+    nullptr
+};
 
 } // namespace
 
@@ -109,3 +115,37 @@ new_framework_module ()
     // Return module
     return module;
 }
+
+namespace
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <b>file_for_sampling</b> event callback
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+class file_for_sampling_callback
+{
+  public:
+    file_for_sampling_callback (PyObject *f)
+        : f_ (f)
+    {
+    }
+
+    void
+    operator() (
+        const std::string &sampling_id, const mobius::core::io::reader &reader
+    )
+    {
+        mobius::py::GIL_holder holder;
+
+        f_.call (
+            mobius::py::pystring_from_std_string (sampling_id),
+            pymobius_core_io_reader_to_pyobject (reader)
+        );
+    }
+
+  private:
+    mobius::py::function f_;
+};
+
+mobius::py::callback<file_for_sampling_callback> cb_1_ ("file_for_sampling");
+
+} // namespace

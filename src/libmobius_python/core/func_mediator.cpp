@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -20,83 +22,81 @@
 // @brief  C++ API module wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <pymobius.hpp>
-#include <pycallback.hpp>
 #include <mobius/core/mediator.hpp>
+#include <pycallback.hpp>
+#include <pymobius.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <b>subscribe</b> function implementation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject*
+PyObject *
 func_subscribe (PyObject *, PyObject *args)
 {
-  // Parse input args
-  std::string arg_id;
-  PyObject *arg_f;
+    // Parse input args
+    std::string arg_id;
+    PyObject *arg_f;
 
-  try
+    try
     {
-      arg_id = mobius::py::get_arg_as_std_string (args, 0);
-      arg_f = mobius::py::get_arg (args, 1);
+        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_f = mobius::py::get_arg (args, 1);
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_invalid_type_error (e.what ());
-      return nullptr;
-    }
-
-  // Execute C++ function
-  PyObject *ret = nullptr;
-
-  try
-    {
-      auto callback = mobius::py::new_callback (arg_id, arg_f);
-
-      ret = mobius::py::pylong_from_std_uint64_t (
-              mobius::core::subscribe (arg_id, callback)
-            );
-    }
-  catch (const std::exception& e)
-    {
-      mobius::py::set_runtime_error (e.what ());
-      return nullptr;
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
     }
 
-  return ret;
+    // Execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        auto callback = mobius::py::new_callback (arg_id, arg_f);
+
+        ret = mobius::py::pylong_from_std_uint64_t (
+            mobius::core::subscribe (arg_id, callback)
+        );
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
+    }
+
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <b>unsubscribe</b> function implementation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject*
+PyObject *
 func_unsubscribe (PyObject *, PyObject *args)
 {
-  // Parse input args
-  std::uint64_t arg_uid;
+    // Parse input args
+    std::uint64_t arg_uid;
 
-  try
+    try
     {
-      arg_uid = mobius::py::get_arg_as_uint64_t (args, 0);
+        arg_uid = mobius::py::get_arg_as_uint64_t (args, 0);
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_invalid_type_error (e.what ());
-      return nullptr;
-    }
-
-  // Execute C++ function
-  try
-    {
-      mobius::core::unsubscribe (arg_uid);
-    }
-  catch (const std::exception& e)
-    {
-      mobius::py::set_runtime_error (e.what ());
-      return nullptr;
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
     }
 
-  // return None
-  return mobius::py::pynone ();
+    // Execute C++ function
+    try
+    {
+        mobius::core::unsubscribe (arg_uid);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
+    }
+
+    // return None
+    return mobius::py::pynone ();
 }
-
-
