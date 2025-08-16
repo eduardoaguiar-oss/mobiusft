@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <string>
 #include "common.hpp"
+#include "file_bookmarks.hpp"
 #include "file_cookies.hpp"
 #include "file_history.hpp"
 #include "file_login_data.hpp"
@@ -328,6 +329,7 @@ class profile::impl
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void set_folder (const mobius::core::io::folder &);
+    void add_bookmarks_file (const mobius::core::io::file &);
     void add_cookies_file (const mobius::core::io::file &);
     void add_history_file (const mobius::core::io::file &);
     void add_login_data_file (const mobius::core::io::file &);
@@ -411,6 +413,46 @@ profile::impl::set_folder (const mobius::core::io::folder &f)
     auto path = f.get_path ();
     username_ = get_username_from_path (path);
     std::tie (app_id_, app_name_) = get_app_from_path (path);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add Bookmarks file
+// @param f Bookmarks file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::add_bookmarks_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode file
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    file_bookmarks fb (f.new_reader ());
+
+    if (!fb)
+    {
+        log.info (__LINE__, "File is not a valid 'Bookmarks' file");
+        return;
+    }
+
+    log.info (__LINE__, "File " + f.get_path () + " is a valid 'Bookmarks' file");
+
+    if (!last_modified_time_ ||
+        f.get_modification_time () > last_modified_time_)
+        last_modified_time_ = f.get_modification_time ();
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Add bookmarks
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    /*for (const auto &entry : fb.get_bookmarks ())
+    {
+        bookmark b (entry);
+        b.f = f;
+
+        bookmarks_.push_back (b);
+    }*/
+
+    is_valid_ = true;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1030,6 +1072,16 @@ std::size_t
 profile::size_logins () const
 {
     return impl_->size_logins ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add Bookmarks file
+// @param f Bookmarks file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_bookmarks_file (const mobius::core::io::file &f)
+{
+    impl_->add_bookmarks_file (f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

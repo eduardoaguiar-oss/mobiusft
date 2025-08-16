@@ -174,6 +174,7 @@ class profile
     std::size_t size_logins () const;
 
     void set_folder (const mobius::core::io::folder &);
+    void add_bookmarks_file (const mobius::core::io::file &);
     void add_cookies_file (const mobius::core::io::file &);
     void add_history_file (const mobius::core::io::file &);
     void add_login_data_file (const mobius::core::io::file &);

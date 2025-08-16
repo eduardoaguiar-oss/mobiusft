@@ -330,7 +330,7 @@ evidence_loader_impl::_scan_profile (const mobius::core::io::folder &folder)
         try
         {
             if (name == "bookmarks")
-                ; // profile_.add_settings_dat_file (f);
+                profile_.add_bookmarks_file (f);
 
             else if (name == "cookies")
                 profile_.add_cookies_file (f);
