@@ -38,6 +38,39 @@ class file_bookmarks
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Bookmark entry structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct entry
+    {
+        // @brief Bookmark ID
+        std::string id;
+
+        // @brief Bookmark GUID
+        std::string guid;
+
+        // @brief Bookmark name
+        std::string name;
+
+        // @brief Bookmark URL
+        std::string url;
+
+        // @brief Folder name
+        std::string folder_name;
+
+        // @brief Creation time
+        mobius::core::datetime::datetime creation_time;
+
+        // @brief Last modified time
+        mobius::core::datetime::datetime last_modified_time;
+
+        // @brief Last used time
+        mobius::core::datetime::datetime last_used_time;
+
+        // @brief Source file
+        mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     file_bookmarks (const mobius::core::io::reader &);
@@ -61,6 +94,16 @@ class file_bookmarks
         return version_;
     }
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get bookmark entries
+    // @return Bookmark entries
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<entry>
+    get_entries () const
+    {
+        return entries_;
+    }
+
   private:
     // @brief Flag is instance
     bool is_instance_ = false;
@@ -68,10 +111,15 @@ class file_bookmarks
     // @brief File version
     int version_ = 0;
 
+    // @brief Bookmark entries
+    std::vector<entry> entries_;
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void _load_entries (const mobius::core::pod::map &);
+    void _load_entry (const mobius::core::pod::map &, const std::string & = {});
+    void _load_url (const mobius::core::pod::map &, const std::string &);
+    void _load_folder (const mobius::core::pod::map &, const std::string &);
 };
 
 } // namespace mobius::extension::app::chromium

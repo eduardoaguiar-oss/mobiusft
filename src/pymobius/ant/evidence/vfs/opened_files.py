@@ -19,14 +19,11 @@ import traceback
 
 import mobius
 import pymobius
-import pymobius.app.chromium
-import pymobius.app.gecko
-import pymobius.app.internet_explorer
 import pymobius.operating_system
 
 ANT_ID = 'opened-files'
 ANT_NAME = 'Opened files'
-ANT_VERSION = '1.1'
+ANT_VERSION = '1.2'
 EVIDENCE_TYPE = 'opened-file'
 
 
@@ -64,76 +61,11 @@ class Ant(object):
         self.__entries = []
 
         try:
-            self.__retrieve_chromium()
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
-
-        try:
-            self.__retrieve_gecko()
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
-
-        try:
             self.__retrieve_windows_recent()
         except Exception as e:
             mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
 
         self.__save_data()
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from Chromium based browsers
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_chromium(self):
-        model = pymobius.app.chromium.model(self.__item)
-
-        for profile in model.get_profiles():
-            for h in profile.get_history():
-                url = mobius.core.io.uri(h.url)
-
-                if url.get_scheme() == 'file':
-                    entry = pymobius.Data()
-
-                    entry.path = format_path(url.get_path())
-                    entry.timestamp = h.timestamp
-                    entry.username = h.username
-                    entry.app_id = profile.app_id
-                    entry.app_name = profile.app_name
-                    entry.item = self.__item.name
-
-                    entry.metadata = mobius.core.pod.map()
-                    entry.metadata.set('title', h.title)
-                    entry.metadata.set('url', h.url)
-                    entry.metadata.set('profile', h.profile_name)
-                    entry.metadata.set('profile-path', h.profile_path)
-
-                    self.__entries.append(entry)
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from Gecko based browsers
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_gecko(self):
-        model = pymobius.app.gecko.model(self.__item)
-
-        for profile in model.get_profiles():
-            for h in profile.get_history():
-                url = mobius.core.io.uri(h.url)
-
-                if url.get_scheme() == 'file':
-                    entry = pymobius.Data()
-
-                    entry.path = format_path(url.get_path())
-                    entry.timestamp = h.timestamp
-                    entry.username = h.username
-                    entry.app_id = profile.app_id
-                    entry.app_name = profile.app_name
-
-                    entry.metadata = mobius.core.pod.map()
-                    entry.metadata.set('typed', h.typed)
-                    entry.metadata.set('url', h.url)
-                    entry.metadata.set('profile', h.profile_name)
-                    entry.metadata.set('profile-path', h.profile_path)
-
-                    self.__entries.append(entry)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Retrieve opened files from Windows/Recent folders

@@ -23,7 +23,7 @@ import pymobius.app.skype
 
 ANT_ID = 'accounts'
 ANT_NAME = 'Accounts'
-ANT_VERSION = '1.3'
+ANT_VERSION = '1.2'
 
 EVIDENCE_TYPE = 'user-account'
 

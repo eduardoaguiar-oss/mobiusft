@@ -49,7 +49,7 @@ file_bookmarks::file_bookmarks (const mobius::core::io::reader &reader)
             return;
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Retrieve data
+        // Check version
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         auto map = data.to_map ();
 
@@ -61,8 +61,18 @@ file_bookmarks::file_bookmarks (const mobius::core::io::reader &reader)
                 __LINE__, "Unhandled version: " + std::to_string (version_)
             );
 
-        //_load_accounts (map.get ("account_info"));
-        //_load_profile (map.get ("profile"));
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Retrieve data
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto root_data = map.get ("roots");
+        if (!root_data.is_map ())
+        {
+            log.warning (__LINE__, "Invalid roots data");
+            return;
+        }
+
+        for (const auto &item : root_data.to_map ())
+            _load_entry (item.second.to_map ());
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Finish parsing
@@ -84,42 +94,95 @@ file_bookmarks::file_bookmarks (const mobius::core::io::reader &reader)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode entries
-// @param entries Entries dict
+// @brief Load entry from JSON dictionary
+// @param map Entry map
+// @param parent_name Parent folder name
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-file_bookmarks::_load_entries (const mobius::core::pod::map &entries)
+file_bookmarks::_load_entry (
+    const mobius::core::pod::map &map, const std::string &parent_name
+)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
-    /*
-        if (!account_info.is_list ())
-        {
-            log.warning (__LINE__, "Account list is not a valid list");
-            return;
-        }
 
-        for (const auto &item : account_info.to_list ())
-        {
-            if (item.is_map ())
-            {
-                auto map = item.to_map ();
+    auto type = map.get<std::string> ("type");
 
-                account a;
+    if (type == "url")
+        _load_url (map, parent_name);
 
-                a.idx = accounts_.size ();
-                a.id = map.pop<std::string> ("account_id");
-                a.name = map.pop<std::string> ("given_name");
-                a.full_name = map.pop<std::string> ("full_name");
-                a.email = map.pop<std::string> ("email");
-                a.locale = map.pop<std::string> ("locale");
-                a.picture_url = map.pop<std::string> ("picture_url");
+    else if (type == "folder")
+        _load_folder (map, parent_name);
 
-                for (const auto &[k, v] : map)
-                    a.metadata.set (k, v);
+    else
+        log.development (__LINE__, "Unknown bookmark type: " + type);
+}
 
-                accounts_.push_back (a);
-            }
-        }*/
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load folder from JSON dictionary
+// @param map Entry map
+// @param parent_name Parent folder name
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file_bookmarks::_load_folder (
+    const mobius::core::pod::map &map, const std::string &parent_name
+)
+{
+    // Get folder name
+    auto folder_name = map.get<std::string> ("name");
+
+    if (!parent_name.empty ())
+        folder_name = parent_name + '.' + folder_name;
+
+    // Load children
+    auto children = map.get ("children");
+
+    if (children.is_list ())
+    {
+        for (const auto &child : children.to_list ())
+            _load_entry (child.to_map (), folder_name);
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load URL from JSON dictionary
+// @param map Entry map
+// @param folder_name Folder name
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file_bookmarks::_load_url (
+    const mobius::core::pod::map &map, const std::string &folder_name
+)
+{
+    entry e;
+
+    // Attributes
+    e.id = map.get<std::string> ("id");
+    e.guid = map.get<std::string> ("guid");
+    e.name = map.get<std::string> ("name");
+    e.url = map.get<std::string> ("url");
+    e.folder_name = folder_name;
+
+    e.creation_time =
+        get_datetime_from_string (map.get<std::string> ("date_added"));
+    e.last_modified_time =
+        get_datetime_from_string (map.get<std::string> ("date_modified"));
+    e.last_used_time =
+        get_datetime_from_string (map.get<std::string> ("date_last_used"));
+
+    // Meta information
+    auto meta_info = map.get ("meta_info");
+    if (meta_info.is_map ())
+    {
+        auto meta_info_map = meta_info.to_map ();
+
+        auto last_visited_desktop =
+            meta_info_map.get<std::int64_t> ("last_visited_desktop");
+
+        if (last_visited_desktop)
+            e.last_used_time = get_datetime (last_visited_desktop);
+    }
+
+    entries_.push_back (e);
 }
 
 } // namespace mobius::extension::app::chromium

@@ -226,6 +226,26 @@ class profile::impl
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get bookmarks
+    // @return Vector of bookmarks
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<bookmark>
+    get_bookmarks () const
+    {
+        return bookmarks_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of bookmarks
+    // @return Number of bookmarks
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    size_bookmarks () const
+    {
+        return bookmarks_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get cookies
     // @return Vector of cookies
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -376,6 +396,9 @@ class profile::impl
     // @brief Autofill profiles
     std::vector<autofill_profile> autofill_profiles_;
 
+    // @brief Bookmarks
+    std::vector<bookmark> bookmarks_;
+
     // @brief Cookies
     std::vector<cookie> cookies_;
 
@@ -444,13 +467,13 @@ profile::impl::add_bookmarks_file (const mobius::core::io::file &f)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add bookmarks
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    /*for (const auto &entry : fb.get_bookmarks ())
+    for (const auto &entry : fb.get_entries ())
     {
         bookmark b (entry);
         b.f = f;
 
         bookmarks_.push_back (b);
-    }*/
+    }
 
     is_valid_ = true;
 }
@@ -972,6 +995,26 @@ std::size_t
 profile::size_autofill_profiles () const
 {
     return impl_->size_autofill_profiles ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get bookmarks
+// @return Vector of bookmarks
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<profile::bookmark>
+profile::get_bookmarks () const
+{
+    return impl_->get_bookmarks ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get number of bookmarks
+// @return Number of bookmarks
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::size_t
+profile::size_bookmarks () const
+{
+    return impl_->size_bookmarks ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

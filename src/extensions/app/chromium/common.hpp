@@ -23,8 +23,8 @@
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/datetime/datetime.hpp>
 #include <cstdint>
-#include <string>
 #include <utility>
+#include <string>
 
 namespace mobius::extension::app::chromium
 {
@@ -32,11 +32,12 @@ namespace mobius::extension::app::chromium
 // Function prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::datetime::datetime get_datetime (std::uint64_t);
+mobius::core::datetime::datetime get_datetime_from_string (const std::string &);
 std::string duration_to_string (std::uint64_t);
 std::string generate_sql (const std::string &, std::int64_t);
 std::int64_t get_db_schema_version (mobius::core::database::database);
-std::string get_username_from_path (const std::string&);
-std::pair <std::string, std::string> get_app_from_path (const std::string&);
+std::string get_username_from_path (const std::string &);
+std::pair<std::string, std::string> get_app_from_path (const std::string &);
 
 } // namespace mobius::extension::app::chromium
 

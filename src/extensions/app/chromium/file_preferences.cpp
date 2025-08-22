@@ -81,6 +81,9 @@ file_preferences::_load_accounts (const mobius::core::pod::data &account_info)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
+    if (account_info.is_null ())
+        return;
+
     if (!account_info.is_list ())
     {
         log.warning (__LINE__, "Account list is not a valid list");
@@ -120,6 +123,9 @@ file_preferences::_load_profile (const mobius::core::pod::data &profile_info)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
+    if (profile_info.is_null ())
+        return;
+
     if (!profile_info.is_map ())
     {
         log.warning (__LINE__, "Profile info is not a valid map");
@@ -131,15 +137,12 @@ file_preferences::_load_profile (const mobius::core::pod::data &profile_info)
     profile_.name = map.pop<std::string> ("name");
     profile_.created_by_version = map.pop<std::string> ("created_by_version");
 
-    auto creation_time_str = map.pop<std::string> ("creation_time");
-    if (!creation_time_str.empty ())
-        profile_.creation_time = get_datetime (std::stoull (creation_time_str));
+    profile_.creation_time =
+        get_datetime_from_string (map.pop<std::string> ("creation_time"));
 
-    auto last_engagement_time_str =
-        map.pop<std::string> ("last_engagement_time");
-    if (!last_engagement_time_str.empty ())
-        profile_.last_engagement_time =
-            get_datetime (std::stoull (last_engagement_time_str));
+    profile_.last_engagement_time = get_datetime_from_string (
+        map.pop<std::string> ("last_engagement_time")
+    );
 }
 
 } // namespace mobius::extension::app::chromium

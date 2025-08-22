@@ -386,6 +386,7 @@ evidence_loader_impl::_save_evidences ()
     _save_accounts ();
     _save_app_profiles ();
     _save_autofills ();
+    _save_bookmarked_urls ();
     _save_cookies ();
     _save_credit_cards ();
     _save_encryption_keys ();
@@ -485,6 +486,7 @@ evidence_loader_impl::_save_app_profiles ()
         metadata.set ("num_accounts", p.size_accounts ());
         metadata.set ("num_autofill_entries", p.size_autofill_entries ());
         metadata.set ("num_autofill_profiles", p.size_autofill_profiles ());
+        metadata.set ("num_bookmarks", p.size_bookmarks ());
         metadata.set ("num_cookies", p.size_cookies ());
         metadata.set ("num_credit_cards", p.size_credit_cards ());
         metadata.set ("num_downloads", p.size_downloads ());
@@ -532,6 +534,40 @@ evidence_loader_impl::_save_autofills ()
 
             e.set_tag ("app.browser");
             e.add_source (a.f);
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save bookmarked URLs
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+void
+evidence_loader_impl::_save_bookmarked_urls ()
+{
+    for (const auto &p : profiles_)
+    {
+        for (const auto &b : p.get_bookmarks ())
+        {
+            auto e = item_.new_evidence ("bookmarked-url");
+            e.set_attribute ("url", b.url);
+            e.set_attribute ("app_name", p.get_app_name ());
+            e.set_attribute ("app_family", APP_FAMILY);
+            e.set_attribute ("username", p.get_username ());
+            e.set_attribute ("name", b.name);
+            e.set_attribute ("creation_time", b.creation_time);
+            e.set_attribute ("last_modified_time", b.last_modified_time);
+            e.set_attribute ("last_used_time", b.last_used_time);
+            e.set_attribute ("folder", b.folder_name);
+
+            auto metadata = mobius::core::pod::map ();
+            metadata.set ("id", b.id);
+            metadata.set ("guid", b.guid);
+            metadata.set ("app_id", p.get_app_id ());
+            e.set_attribute ("metadata", metadata);
+
+            e.set_tag ("app.browser");
+            e.add_source (b.f);
         }
     }
 }
@@ -940,7 +976,6 @@ evidence_loader_impl::_save_visited_urls ()
             metadata.set ("typed_count", entry.typed_count);
             metadata.set ("visit_count", entry.visit_count);
             metadata.set ("visit_time", entry.visit_time);
-            metadata.set ("app_id", entry.app_id);
             metadata.set (
                 "consider_for_ntp_most_visited",
                 entry.consider_for_ntp_most_visited

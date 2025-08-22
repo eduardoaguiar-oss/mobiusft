@@ -265,6 +265,28 @@ get_datetime (std::uint64_t timestamp)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Convert chromium timestamp string to date/time
+// @param timestamp_str String representing the timestamp
+// @return Date/time object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::datetime::datetime
+get_datetime_from_string (const std::string &timestamp_str)
+{
+    if (timestamp_str.empty ())
+        return {};
+
+    try
+    {
+        auto timestamp = std::stoull (timestamp_str);
+        return get_datetime (timestamp);
+    }
+    catch (...)
+    {
+        return {};
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get schema version from database
 // @param db Database object
 // @return Schema version

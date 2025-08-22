@@ -32,6 +32,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include "file_bookmarks.hpp"
 #include "file_cookies.hpp"
 #include "file_history.hpp"
 #include "file_login_data.hpp"
@@ -50,6 +51,7 @@ class profile
     // Datatypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     using autofill_profile = file_web_data::autofill_profile;
+    using bookmark = file_bookmarks::entry;
     using cookie = file_cookies::cookie;
     using credit_card = file_web_data::credit_card;
     using download = file_history::download;
@@ -162,6 +164,8 @@ class profile
     std::size_t size_autofill_entries () const;
     std::vector<autofill_profile> get_autofill_profiles () const;
     std::size_t size_autofill_profiles () const;
+    std::vector<bookmark> get_bookmarks () const;
+    std::size_t size_bookmarks () const;
     std::vector<cookie> get_cookies () const;
     std::size_t size_cookies () const;
     std::vector<credit_card> get_credit_cards () const;

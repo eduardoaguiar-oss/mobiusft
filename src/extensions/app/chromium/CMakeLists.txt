@@ -29,6 +29,7 @@ add_library(app_chromium MODULE
     main.cpp
     common.cpp
     evidence_loader_impl.cpp
+    file_bookmarks.cpp
     file_cookies.cpp
     file_history.cpp
     file_local_state.cpp
@@ -41,6 +42,18 @@ add_library(app_chromium MODULE
 
 set_target_properties(app_chromium PROPERTIES OUTPUT_NAME "app-chromium" PREFIX "")
 target_link_libraries(app_chromium PRIVATE Mobius::Framework Mobius::Core)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: chromium_bookmarks
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_executable(tools_chromium_bookmarks
+    tools/chromium_bookmarks.cpp
+    common.cpp
+    file_bookmarks.cpp
+)
+
+set_target_properties(tools_chromium_bookmarks PROPERTIES OUTPUT_NAME "chromium_bookmarks")
+target_link_libraries(tools_chromium_bookmarks PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: chromium_cookies
