@@ -173,60 +173,71 @@ post_processor_impl::process_evidence (
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
-    // Check if the evidence type is "autofill"
-    if (evidence.get_type () != "autofill")
-        return;
-
-    // Get the field name and value attributes
-    const auto field_name = evidence.get_attribute<std::string> ("field_name");
-    const auto value = evidence.get_attribute<std::string> ("value");
-
-    if (field_name.empty () || value.empty ())
-        return;
-
-    // Check if the field name is known
-    const auto l_field_name = mobius::core::string::tolower (field_name);
-    auto range = FIELDS.equal_range (l_field_name);
-    bool handled = false;
-
-    for (auto iter = range.first; iter != range.second; ++iter)
+    try
     {
-        auto type = iter->second;
+        // Check if the evidence type is "autofill"
+        if (evidence.get_type () != "autofill")
+            return;
 
-        if (_validate_value (type, value))
+        // Get the field name and value attributes
+        const auto field_name =
+            evidence.get_attribute<std::string> ("field_name");
+        const auto value = evidence.get_attribute<std::string> ("value");
+
+        if (field_name.empty () || value.empty ())
+            return;
+
+        // Check if the field name is known
+        const auto l_field_name = mobius::core::string::tolower (field_name);
+        auto range = FIELDS.equal_range (l_field_name);
+        bool handled = false;
+
+        for (auto iter = range.first; iter != range.second; ++iter)
         {
-            auto e = item_.new_evidence ("pdi");
-            e.set_attribute ("pdi_type", type);
-            e.set_attribute ("value", _format_value (type, value));
+            auto type = iter->second;
 
-            mobius::core::pod::map metadata = {
-                {"username", evidence.get_attribute<std::string> ("username")},
-                {"app_name", evidence.get_attribute<std::string> ("app_name")},
-                {"field_name",
-                 evidence.get_attribute<std::string> ("field_name")},
-            };
+            if (_validate_value (type, value))
+            {
+                auto e = item_.new_evidence ("pdi");
+                e.set_attribute ("pdi_type", type);
+                e.set_attribute ("value", _format_value (type, value));
 
-            e.set_attribute ("metadata", metadata);
-            e.add_source (evidence);
+                mobius::core::pod::map metadata = {
+                    {"username",
+                     evidence.get_attribute<std::string> ("username")},
+                    {"app_name",
+                     evidence.get_attribute<std::string> ("app_name")},
+                    {"field_name",
+                     evidence.get_attribute<std::string> ("field_name")},
+                };
 
-            // Notify the coordinator about the new evidence
-            coordinator_.on_new_evidence (e);
-            handled = true;
+                e.set_attribute ("metadata", metadata);
+                e.add_source (evidence);
+
+                // Notify the coordinator about the new evidence
+                coordinator_.on_new_evidence (e);
+                handled = true;
+            }
+        }
+
+        // If field name is not known, use PDI validators to gather new field
+        // names
+        if (!handled)
+        {
+            for (const auto &validator : TYPE_VALIDATORS)
+            {
+                if (validator.second (value))
+                    log.development (
+                        __LINE__,
+                        validator.first +
+                            " value found. Autofill field_name=" + field_name
+                    );
+            }
         }
     }
-
-    // If field name is not known, use PDI validators to gather new field names
-    if (!handled)
+    catch (const std::exception &e)
     {
-        for (const auto &validator : TYPE_VALIDATORS)
-        {
-            if (validator.second (value))
-                log.development (
-                    __LINE__,
-                    validator.first +
-                        " value found. Autofill field_name=" + field_name
-                );
-        }
+        log.warning (__LINE__, e.what ());
     }
 }
 

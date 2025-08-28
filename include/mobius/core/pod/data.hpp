@@ -29,6 +29,7 @@
 #include <initializer_list>
 #include <memory>
 #include <ostream>
+#include <algorithm>
 #include <string>
 #include <vector>
 
@@ -69,6 +70,20 @@ class data
     data (const mobius::core::bytearray &);
     data (const std::initializer_list<data> &);
     data (const std::vector<data> &);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Create data from generic std::vector
+    // @param vec Vector to convert
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    template <typename T> data (const std::vector<T> &vec)
+    {
+        std::vector<data> vdata (vec.size ());
+        std::transform (
+            vec.begin (), vec.end (), vdata.begin (),
+            [] (const auto &item) { return data (item); }
+        );
+        *this = vdata;
+    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Operators

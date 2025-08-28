@@ -67,9 +67,6 @@ class post_processor_impl
         const std::string &,
         const mobius::core::bytearray &
     );
-    void _process_autofill (mobius::framework::model::evidence evidence);
-    void _process_cookie (mobius::framework::model::evidence evidence);
-    void _process_credit_card (mobius::framework::model::evidence evidence);
     void _process_encryption_key (mobius::framework::model::evidence evidence);
 
     mobius::core::bytearray

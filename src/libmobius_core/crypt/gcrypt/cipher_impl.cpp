@@ -74,7 +74,8 @@ _get_algo_id (const std::string &name)
 
     if (iter == CIPHERS.end ())
         algo_id = gcry_cipher_map_name (
-            mobius::core::string::toupper (name).c_str ());
+            mobius::core::string::toupper (name).c_str ()
+        );
 
     else
         algo_id = iter->second;
@@ -138,56 +139,60 @@ namespace mobius::core::crypt::gcrypt
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cipher_impl::cipher_impl (const std::string &algo, const std::string &mode)
 {
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // initialize libgcrypt only once, at the first call of any thread
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     init ();
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // get algo ID
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     int algo_id = _get_algo_id (algo);
 
     if (!algo_id)
         throw std::invalid_argument (
-            MOBIUS_EXCEPTION_MSG ("invalid cipher algorithm <" + algo + '>'));
+            MOBIUS_EXCEPTION_MSG ("invalid cipher algorithm <" + algo + '>')
+        );
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // get mode ID
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     int mode_id = _get_mode_id (mode);
 
     if (!mode_id)
         throw std::invalid_argument (
-            MOBIUS_EXCEPTION_MSG ("invalid cipher mode: " + mode));
+            MOBIUS_EXCEPTION_MSG ("invalid cipher mode: " + mode)
+        );
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // get flags
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     unsigned int flags = 0;
 
     if (mode == "cbc-cts")
         flags |= GCRY_CIPHER_CBC_CTS;
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // open cipher
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     auto rc = gcry_cipher_open (&hd_, algo_id, mode_id, flags);
     if (rc)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG (get_error_message (rc)));
+            MOBIUS_EXCEPTION_MSG (get_error_message (rc))
+        );
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // allow weak keys
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     rc = gcry_cipher_ctl (hd_, GCRYCTL_SET_ALLOW_WEAK_KEY, NULL, 1);
     if (rc)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG (get_error_message (rc)));
+            MOBIUS_EXCEPTION_MSG (get_error_message (rc))
+        );
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // set metadata
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     block_size_ = gcry_cipher_get_algo_blklen (algo_id);
     type_ = algo;
     is_stream_ = (mode_id == GCRY_CIPHER_MODE_STREAM);
@@ -212,7 +217,8 @@ cipher_impl::reset ()
     auto rc = gcry_cipher_reset (hd_);
     if (rc)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG (get_error_message (rc)));
+            MOBIUS_EXCEPTION_MSG (get_error_message (rc))
+        );
 
     // reset IV
     if (iv_)
@@ -232,7 +238,8 @@ cipher_impl::final ()
     auto rc = gcry_cipher_final (hd_);
     if (rc)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG (get_error_message (rc)));
+            MOBIUS_EXCEPTION_MSG (get_error_message (rc))
+        );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -245,7 +252,8 @@ cipher_impl::authenticate (const mobius::core::bytearray &data)
     auto rc = gcry_cipher_authenticate (hd_, data.data (), data.size ());
     if (rc)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG (get_error_message (rc)));
+            MOBIUS_EXCEPTION_MSG (get_error_message (rc))
+        );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -260,7 +268,8 @@ cipher_impl::get_tag () const
     auto rc = gcry_cipher_gettag (hd_, tag.data (), tag.size ());
     if (rc)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG (get_error_message (rc)));
+            MOBIUS_EXCEPTION_MSG (get_error_message (rc))
+        );
 
     return tag;
 }
@@ -278,7 +287,8 @@ cipher_impl::check_tag (const mobius::core::bytearray &tag) const
     if (rc && (gcry_err_code (rc) != GPG_ERR_CHECKSUM) &&
         (gcry_err_code (rc) != GPG_ERR_INV_LENGTH))
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG (get_error_message (rc)));
+            MOBIUS_EXCEPTION_MSG (get_error_message (rc))
+        );
 
     return rc == GPG_ERR_NO_ERROR;
 }
@@ -298,9 +308,11 @@ cipher_impl::set_key (const mobius::core::bytearray &key)
 
     // set key
     auto rc = gcry_cipher_setkey (hd_, arg_key.data (), arg_key.size ());
+
     if (rc && (gcry_err_code (rc) != GPG_ERR_WEAK_KEY))
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG (get_error_message (rc)));
+            MOBIUS_EXCEPTION_MSG (get_error_message (rc))
+        );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -313,7 +325,8 @@ cipher_impl::set_iv (const mobius::core::bytearray &iv)
     auto rc = gcry_cipher_setiv (hd_, iv.data (), iv.size ());
     if (rc)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG (get_error_message (rc)));
+            MOBIUS_EXCEPTION_MSG (get_error_message (rc))
+        );
 
     iv_ = iv;
 }
@@ -328,7 +341,8 @@ cipher_impl::set_counter (const mobius::core::bytearray &cv)
     auto rc = gcry_cipher_setctr (hd_, cv.data (), cv.size ());
     if (rc)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG (get_error_message (rc)));
+            MOBIUS_EXCEPTION_MSG (get_error_message (rc))
+        );
 
     cv_ = cv;
 }
@@ -343,11 +357,13 @@ cipher_impl::encrypt (const mobius::core::bytearray &data)
 {
     mobius::core::bytearray out (data.size ());
 
-    auto rc = gcry_cipher_encrypt (hd_, out.data (), out.size (), data.data (),
-                                   data.size ());
+    auto rc = gcry_cipher_encrypt (
+        hd_, out.data (), out.size (), data.data (), data.size ()
+    );
     if (rc)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG (get_error_message (rc)));
+            MOBIUS_EXCEPTION_MSG (get_error_message (rc))
+        );
 
     return out;
 }
@@ -362,11 +378,13 @@ cipher_impl::decrypt (const mobius::core::bytearray &data)
 {
     mobius::core::bytearray out (data.size ());
 
-    auto rc = gcry_cipher_decrypt (hd_, out.data (), out.size (), data.data (),
-                                   data.size ());
+    auto rc = gcry_cipher_decrypt (
+        hd_, out.data (), out.size (), data.data (), data.size ()
+    );
     if (rc)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG (get_error_message (rc)));
+            MOBIUS_EXCEPTION_MSG (get_error_message (rc))
+        );
 
     return out;
 }

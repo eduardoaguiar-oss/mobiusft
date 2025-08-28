@@ -33,6 +33,7 @@ Mobius Forensic Toolkit 2.18
 	* libmobius_core: Added new method os::win::dpapi::blob(bytearray)  
 	* libmobius_core: Added new method pod::data::to_list
 	* libmobius_core: Added new method pod::data::to_map
+	* libmobius_core: Added new template method pod::data::data (const std::vector<T>&)
 	* libmobius_python: Added callback for "file_for_sampling" event
 	* libmobius_python: Added new method function::call
 

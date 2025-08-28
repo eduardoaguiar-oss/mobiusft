@@ -48,38 +48,56 @@ post_processor_impl::process_evidence (
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
-    // Check if the evidence type is "visited-url"
-    if (evidence.get_type () != "visited-url")
-        return;
+    try
+    {
+        // Check if the evidence type is "visited-url"
+        if (evidence.get_type () != "visited-url")
+            return;
 
-    // Check if URL scheme is "file"
-    auto visited_url = evidence.get_attribute<std::string> ("url");
-    auto url = mobius::core::io::uri (visited_url);
+        // Check if URL scheme is "file"
+        auto visited_url = evidence.get_attribute<std::string> ("url");
+        auto url = mobius::core::io::uri (visited_url);
 
-    if (url.get_scheme () != "file")
-        return;
+        if (url.get_scheme () != "file")
+            return;
 
-    // Create opened file evidence
-    auto e = item_.new_evidence ("opened-file");
-    auto metadata = evidence.get_attribute ("metadata").to_map ();
+        // Create opened file evidence
+        auto e = item_.new_evidence ("opened-file");
+        auto metadata = evidence.get_attribute ("metadata").to_map ();
 
-    e.set_attribute ("path", url.get_path ());
-    e.set_attribute ("timestamp", evidence.get_attribute<std::string> ("timestamp"));
-    e.set_attribute ("username", evidence.get_attribute<std::string> ("username"));
-    e.set_attribute ("app_id", metadata.get<std::string> ("app_id"));
-    e.set_attribute ("app_name", metadata.get<std::string> ("app_name"));
-    e.set_attribute ("app_family", evidence.get_attribute<std::string> ("app_family"));
+        e.set_attribute ("path", url.get_path ());
+        e.set_attribute (
+            "timestamp",
+            evidence.get_attribute<mobius::core::datetime::datetime> (
+                "timestamp"
+            )
+        );
+        e.set_attribute (
+            "username", evidence.get_attribute<std::string> ("username")
+        );
+        e.set_attribute ("app_id", metadata.get<std::string> ("app_id"));
+        e.set_attribute ("app_name", metadata.get<std::string> ("app_name"));
+        e.set_attribute (
+            "app_family", evidence.get_attribute<std::string> ("app_family")
+        );
 
-    // Set metadata
-    metadata.set ("url", visited_url);
-    metadata.set ("page_title", evidence.get_attribute<std::string> ("title"));
-    e.set_attribute ("metadata", metadata);
+        // Set metadata
+        metadata.set ("url", visited_url);
+        metadata.set (
+            "page_title", evidence.get_attribute<std::string> ("title")
+        );
+        e.set_attribute ("metadata", metadata);
 
-    // Tags
-    e.set_tag ("app.browser");
+        // Tags
+        e.set_tag ("app.browser");
 
-    // Add source
-    e.add_source (evidence);
+        // Add source
+        e.add_source (evidence);
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
 }
 
 } // namespace mobius::extension::post_processor_opened_files

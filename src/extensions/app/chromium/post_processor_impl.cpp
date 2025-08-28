@@ -1,4 +1,4 @@
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
 // Copyright (C)
 // 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
@@ -16,7 +16,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "post_processor_impl.hpp"
 #include <mobius/core/crypt/cipher.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
@@ -26,13 +26,13 @@
 
 #include <iostream>
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @see
 // https://security.googleblog.com/2024/07/improving-security-of-chrome-cookies-on.html
 // @see
 // https://github.com/xaitax/Chrome-App-Bound-Encryption-Decryption/blob/main/docs/RESEARCH.md
 // @see https://github.com/runassu/chrome_v20_decryption/tree/main
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace
 {
@@ -57,15 +57,23 @@ static const mobius::core::bytearray V20_PROTECTION_LEVEL_2_KEY =
     "\xE9\x8F\x37\xD7\xF4\xE1\xFA\x43\x3D\x19\x30\x4D\xC2\x25\x80\x42"
     "\x09\x0E\x2D\x1D\x7E\xEA\x76\x70\xD4\x1F\x73\x8D\x08\x72\x96\x60";
 
+// @brief Attribute names that can be encrypted.
+// Every attribute that has encrypted value is stored as two attributes:
+// attribute_name, encrypted_attribute_name
+static const std::unordered_map<std::string, std::vector<std::string>>
+    ATTRIBUTES = {
+        {"cookie", {"value"}},
+};
+
 } // namespace
 
 namespace mobius::extension::app::chromium
 {
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Post-processor implementation constructor
 // @param coordinator Post-processor coordinator
 // @param item Case item
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 post_processor_impl::post_processor_impl (
     mobius::framework::ant::post_processor_coordinator &coordinator,
     const mobius::framework::model::item &item
@@ -75,132 +83,109 @@ post_processor_impl::post_processor_impl (
 {
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Process evidence
 // @param evidence Evidence to process
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 post_processor_impl::process_evidence (
     mobius::framework::model::evidence evidence
 )
 {
-    auto type = evidence.get_type ();
+    mobius::core::log log (__FILE__, __FUNCTION__);
 
-    if (type == "encryption-key")
-        _process_encryption_key (evidence);
-
-    auto app_family = evidence.get_attribute<std::string> ("app_family", {});
-
-    // if (app_family != "chromium")
-    //     return;
-
-    if (type == "autofill")
-        _process_autofill (evidence);
-
-    else if (type == "cookie")
-        _process_cookie (evidence);
-
-    else if (type == "credit-card")
-        _process_credit_card (evidence);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Process autofill evidence
-// @param evidence Evidence to process
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-post_processor_impl::_process_autofill (
-    mobius::framework::model::evidence evidence
-)
-{
-    auto is_encrypted = evidence.get_attribute<bool> ("is_encrypted", false);
-
-    if (is_encrypted)
-        std::cout << "Autofill evidence is encrypted. Field name: "
-                  << evidence.get_attribute<std::string> ("field_name")
-                  << std::endl;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Process cookie evidence
-// @param evidence Evidence to process
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-post_processor_impl::_process_cookie (
-    mobius::framework::model::evidence evidence
-)
-{
-    if (DEBUG)
-        std::cout << "Processing cookie evidence: "
-                  << evidence.get_attribute<std::string> ("name") << std::endl;
-
-    // Check if cookie is already decrypted
-    auto value = evidence.get_attribute<mobius::core::bytearray> ("value", {});
-
-    if (value)
-        return;
-
-    // If not, check if it has an encrypted value and process it accordingly
-    auto encrypted_value =
-        evidence.get_attribute<mobius::core::bytearray> ("encrypted_value", {});
-
-    if (encrypted_value)
+    try
     {
-        if (DEBUG)
-            std::cout << "Cookie evidence has encrypted value: " << std::endl
-                      << encrypted_value.dump () << std::endl;
+        std::cerr << "*** 1 ***" << std::endl;
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Handle encryption keys
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto type = evidence.get_type ();
 
-        // Decrypt the cookie value
-        auto decrypted_value = _decrypt_data (encrypted_value);
-
-        if (decrypted_value)
+        if (type == "encryption-key")
         {
-            if (DEBUG)
-                std::cout << "Cookie evidence decrypted successfully. "
-                             "Decrypted value: "
-                          << std::endl
-                          << decrypted_value.dump () << std::endl;
-
-            evidence.set_attribute ("value", decrypted_value);
-
-            // Notify the coordinator about the decrypted cookie
-            // coordinator_.notify_decrypted (evidence);
+            _process_encryption_key (evidence);
+            return;
         }
-        else
-        {
-            if (DEBUG)
-                std::cout
-                    << "Failed to decrypt cookie evidence. Encrypted value: "
-                    << std::endl
-                    << encrypted_value.dump () << std::endl;
 
-            // Store the evidence for later processing
+        std::cerr << "*** 2 *** type=" << type << std::endl;
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Check APP_FAMILY for Chromium artifacts
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto app_family =
+            evidence.get_attribute<std::string> ("app_family", {});
+
+        if (app_family != "chromium")
+            return;
+
+        std::cerr << "*** 3 *** app_family=" << app_family << std::endl;
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Process evidence
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto iter = ATTRIBUTES.find (type);
+
+        if (iter == ATTRIBUTES.end ())
+            return;
+
+        auto is_modified = false;
+        auto is_encrypted = false;
+
+        std::cerr << "*** 4 ***" << std::endl;
+
+        for (const auto &name : iter->second)
+        {
+            mobius::core::pod::data v1, v2;
+            if (evidence.has_attribute (name))
+                v1 = evidence.get_attribute (name);
+            if (evidence.has_attribute ("encrypted_" + name))
+                v2 = evidence.get_attribute ("encrypted_" + name);
+
+            if (!v1.is_bytearray () && !v2.is_bytearray ())
+                std::cout << "Not bytearray: " << type << ':'
+                          << int (v1.get_type ()) << '|' << int (v2.get_type ())
+                          << "->" << evidence.has_attribute (name) << '|'
+                          << evidence.has_attribute ("encrypted_" + name)
+                          << std::endl;
+
+            auto value =
+                evidence.get_attribute<mobius::core::bytearray> (name, {});
+
+            auto encrypted_value =
+                evidence.get_attribute<mobius::core::bytearray> (
+                    "encrypted_" + name, {}
+                );
+
+            if (!value && encrypted_value)
+            {
+                auto decrypted_value = _decrypt_data (encrypted_value);
+
+                if (decrypted_value)
+                {
+                    evidence.set_attribute (name, decrypted_value);
+                    is_modified = true;
+                }
+                else
+                    is_encrypted = true;
+            }
+        }
+
+        std::cerr << "*** 5 *** is_modified=" << is_modified
+                  << " is_encrypted=" << is_encrypted << std::endl;
+        if (is_modified)
+            ; // notify coordinator
+
+        // Store the evidence for later processing
+        if (is_encrypted)
             pending_evidences_.push_back (evidence);
-        }
+
+        std::cerr << "*** 6 ***" << std::endl;
     }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Process credit card evidence
-// @param evidence Evidence to process
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-post_processor_impl::_process_credit_card (
-    mobius::framework::model::evidence evidence
-)
-{
-    auto encrypted_card_number =
-        evidence.get_attribute<mobius::core::bytearray> (
-            "encrypted_number",
-            {}
-        );
-    auto encrypted_name =
-        evidence.get_attribute<mobius::core::bytearray> ("encrypted_name", {});
-
-    std::cout << "Credit card evidence found. Encrypted number: "
-              << encrypted_card_number.dump () << std::endl;
-    std::cout << "Encrypted cardholder name: " << encrypted_name.dump ()
-              << std::endl;
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -266,7 +251,7 @@ post_processor_impl::_process_encryption_key (
     // https://github.com/xaitax/Chrome-App-Bound-Encryption-Decryption/blob/main/docs/RESEARCH.md
     // @see https://github.com/runassu/chrome_v20_decryption/tree/main
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    else if (key_type == "chromium.v20")
+    /*else if (key_type == "chromium.v20")
     {
         if (encrypted_value)
         {
@@ -290,7 +275,7 @@ post_processor_impl::_process_encryption_key (
             else
                 pending_evidences_.push_back (evidence);
         }
-    }
+    }*/
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -307,9 +292,6 @@ post_processor_impl::_decrypt_dpapi_value (
         std::cout << "Decrypting DPAPI value: " << std::endl
                   << encrypted_value.dump () << std::endl;
 
-    mobius::core::log log (__FILE__, __func__);
-    log.debug (__LINE__, "DPAPI value to decrypt: " + encrypted_value.dump ());
-    
     if (!encrypted_value)
         return {};
 
@@ -385,13 +367,11 @@ post_processor_impl::_decrypt_v20_encrypted_key (
         // Try to decrypt encrypted value
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         log.debug (
-            __LINE__,
-            "Trying to decrypt V20 encrypted value. Size: " +
-                std::to_string (encrypted_value.size ())
+            __LINE__, "Trying to decrypt V20 encrypted value. Size: " +
+                          std::to_string (encrypted_value.size ())
         );
 
-        auto decrypted_value_1 =
-            _decrypt_dpapi_value (encrypted_value);
+        auto decrypted_value_1 = _decrypt_dpapi_value (encrypted_value);
 
         if (DEBUG)
             std::cout << "Decrypted V20 value (1st attempt): " << std::endl
@@ -440,9 +420,7 @@ post_processor_impl::_decrypt_v20_encrypted_key (
             if (protection_level == 1)
             {
                 cipher = mobius::core::crypt::new_cipher_gcm (
-                    "aes",
-                    V20_PROTECTION_LEVEL_1_KEY,
-                    iv
+                    "aes", V20_PROTECTION_LEVEL_1_KEY, iv
                 );
             }
             else if (protection_level == 2 || protection_level == 3)
@@ -476,9 +454,8 @@ post_processor_impl::_decrypt_v20_encrypted_key (
             auto key_data = decoder.get_bytearray_by_size (key_size);
 
             log.development (
-                __LINE__,
-                "Unhandled key size in v20 decrypted value: " +
-                    std::to_string (key_size)
+                __LINE__, "Unhandled key size in v20 decrypted value: " +
+                              std::to_string (key_size)
             );
             log.development (__LINE__, "Key data: " + key_data.dump ());
 
@@ -494,9 +471,8 @@ post_processor_impl::_decrypt_v20_encrypted_key (
         mobius::core::log log (__FILE__, __func__);
 
         log.warning (
-            __LINE__,
-            "Error occurred while processing v20 decrypted value: " +
-                std::string (e.what ())
+            __LINE__, "Error occurred while processing v20 decrypted value: " +
+                          std::string (e.what ())
         );
     }
 
@@ -523,7 +499,10 @@ post_processor_impl::_decrypt_data (const mobius::core::bytearray &data) const
             return {};
         }
 
-        if (data.startswith ("v10") || data.startswith ("v20"))
+        if (data.startswith (DPAPI_SIGNATURE))
+            return _decrypt_dpapi_value (data);
+
+        else if (data.startswith ("v10") || data.startswith ("v20"))
         {
             auto version = data.slice (0, 2);
             auto iv = data.slice (3, 14);
@@ -548,9 +527,6 @@ post_processor_impl::_decrypt_data (const mobius::core::bytearray &data) const
                     return plaintext;
             }
         }
-
-        else if (data.startswith (DPAPI_SIGNATURE))
-            return _decrypt_dpapi_value (data);
     }
     catch (const std::exception &e)
     {

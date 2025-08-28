@@ -417,32 +417,11 @@ evidence_loader_impl::_save_accounts ()
             e.set_attribute ("password_found", "no");
             e.set_attribute ("is_deleted", acc.f.is_deleted ());
             e.set_attribute ("app_family", APP_FAMILY);
-
-            // Set phones
-            e.set_attribute (
-                "phones", mobius::core::string::join (acc.phone_numbers, "\n")
-            );
-
-            // Set emails
-            e.set_attribute (
-                "emails", mobius::core::string::join (acc.emails, "\n")
-            );
-
-            // Set organizations
-            e.set_attribute (
-                "organizations",
-                mobius::core::string::join (acc.organizations, "\n")
-            );
-
-            // Set addressess
-            e.set_attribute (
-                "addresses", mobius::core::string::join (acc.addresses, "\n")
-            );
-
-            // Set names
-            e.set_attribute (
-                "names", mobius::core::string::join (acc.names, "\n")
-            );
+            e.set_attribute ("phones", acc.phone_numbers);
+            e.set_attribute ("emails", acc.emails);
+            e.set_attribute ("organizations", acc.organizations);
+            e.set_attribute ("addresses", acc.addresses);
+            e.set_attribute ("names", acc.names);
 
             // Set metadata
             auto metadata = acc.metadata.clone ();

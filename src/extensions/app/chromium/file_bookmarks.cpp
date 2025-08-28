@@ -175,8 +175,9 @@ file_bookmarks::_load_url (
     {
         auto meta_info_map = meta_info.to_map ();
 
-        auto last_visited_desktop =
-            meta_info_map.get<std::int64_t> ("last_visited_desktop");
+        auto last_visited_desktop = get_datetime_from_string (
+            meta_info_map.get<std::string> ("last_visited_desktop")
+        );
 
         if (last_visited_desktop)
             e.last_used_time = get_datetime (last_visited_desktop);
