@@ -23,9 +23,6 @@ import mobius.core.turing
 import pymobius
 import pymobius.app.chromium
 
-DPAPI_GUID = b'\xd0\x8c\x9d\xdf\x01\x15\xd1\x11\x8c\x7a\x00\xc0\x4f\xc2\x97\xeb'
-
-
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Retrieve and decrypt Chromium Passwords
 # @author Eduardo Aguiar
@@ -105,9 +102,6 @@ class Ant(object):
                 elif secret.type == 'dpapi.v10_master_key':
                     self.__on_key_dpapi_v10_master_key(ant, key, secret)
 
-                elif secret.type == 'dpapi.login_data':
-                    self.__on_key_dpapi_login_data(ant, key, secret)
-
                 elif secret.type == 'v10.login_data':
                     self.__on_key_v10_login_data(ant, key, secret)
 
@@ -151,53 +145,6 @@ class Ant(object):
 
             else:
                 mobius.core.logf(f"WRN DPAPI v10 Master Key blob {blob.master_key_guid} could not be decrypted")
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Try to decrypt DPAPI login data
-    # @param ant Ant
-    # @param key Key
-    # @param secret Secret
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __on_key_dpapi_login_data(self, ant, key, secret):
-        blob = secret.blob
-
-        if key.type == 'dpapi.user' and blob.master_key_guid == key.id and not blob.is_decrypted():
-
-            if blob.decrypt(key.value):
-                mobius.core.logf(f"INF DPAPI login data blob {blob.master_key_guid} decrypted")
-                password = blob.plain_text.rstrip(b'\0')
-
-                if password and password[-1] > 16:
-                    url = secret.p.origin_url
-                    uri = mobius.core.io.uri(url)
-                    domain = uri.get_host()
-
-                    p = pymobius.Data()
-                    p.type = f'net.http/{domain}'
-                    p.value = password.decode('utf-8')
-                    p.description = f"Web password. URL: {secret.p.origin_url}"
-
-                    p.metadata = []
-                    p.metadata.append(("Source", secret.p.source))
-                    p.metadata.append(("Action URL", secret.p.action_url))
-                    p.metadata.append(("URL", secret.p.origin_url))
-                    p.metadata.append(("Domain", domain))
-                    p.metadata.append(("User ID", secret.p.username))
-                    p.metadata.append(("Sign On Realm", secret.p.signon_realm))
-                    p.metadata.append(("Date Created", secret.p.date_created))
-                    p.metadata.append(("Date Last Used", secret.p.date_last_used))
-                    p.metadata.append(("Date Password Modified", secret.p.date_password_modified))
-                    p.metadata.append(("Times Used", secret.p.times_used))
-                    p.metadata.append(("Profile path", secret.profile.path))
-                    p.metadata.append(("Application", secret.profile.app_name))
-
-                    self.__count += 1
-                    ant.add_password(p)
-
-                secret.is_found = True
-
-            else:
-                mobius.core.logf(f"WRN DPAPI login data blob {blob.master_key_guid} could not be decrypted")
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Try to decrypt v10 login data
@@ -307,17 +254,7 @@ class Ant(object):
 
             if p.has_password:
 
-                if DPAPI_GUID in p.password:  # Up to version 79
-                    secret = pymobius.Data()
-                    secret.type = 'dpapi.login_data'
-                    secret.blob = mobius.core.os.win.dpapi.blob(p.password)
-                    secret.profile = profile
-                    secret.p = p
-                    secret.is_found = False
-                    self.__secrets.append(secret)
-                    self.__total += 1
-
-                elif p.password.startswith(b'v10'):  # Version 80 and up
+                if p.password.startswith(b'v10'):  # Version 80 and up
                     secret = pymobius.Data()
                     secret.type = 'v10.login_data'
                     secret.data = p.password
@@ -326,6 +263,3 @@ class Ant(object):
                     secret.is_found = False
                     self.__secrets.append(secret)
                     self.__total += 1
-
-                else:
-                    mobius.core.logf('DEV Unknown password value:\n' + pymobius.dump(p.password))

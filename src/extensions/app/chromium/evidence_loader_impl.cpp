@@ -22,6 +22,7 @@
 #include <mobius/core/decoder/inifile.hpp>
 #include <mobius/core/decoder/json/parser.hpp>
 #include <mobius/core/io/path.hpp>
+#include <mobius/core/io/uri.hpp>
 #include <mobius/core/io/walker.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/mediator.hpp>
@@ -383,7 +384,6 @@ evidence_loader_impl::_save_evidences ()
 {
     auto transaction = item_.new_transaction ();
 
-    _save_accounts ();
     _save_app_profiles ();
     _save_autofills ();
     _save_bookmarked_urls ();
@@ -392,49 +392,11 @@ evidence_loader_impl::_save_evidences ()
     _save_encryption_keys ();
     _save_pdis ();
     _save_received_files ();
+    _save_user_accounts ();
     _save_visited_urls ();
 
     item_.set_ant (ANT_ID, ANT_NAME, ANT_VERSION);
     transaction.commit ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Save accounts
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_save_accounts ()
-{
-    for (const auto &p : profiles_)
-    {
-        for (const auto &acc : p.get_accounts ())
-        {
-            auto e = item_.new_evidence ("user-account");
-
-            // Set attributes
-            e.set_attribute ("account_type", "app.chromium");
-            e.set_attribute ("id", acc.id);
-            e.set_attribute ("password", {});
-            e.set_attribute ("password_found", "no");
-            e.set_attribute ("is_deleted", acc.f.is_deleted ());
-            e.set_attribute ("app_family", APP_FAMILY);
-            e.set_attribute ("phones", acc.phone_numbers);
-            e.set_attribute ("emails", acc.emails);
-            e.set_attribute ("organizations", acc.organizations);
-            e.set_attribute ("addresses", acc.addresses);
-            e.set_attribute ("names", acc.names);
-
-            // Set metadata
-            auto metadata = acc.metadata.clone ();
-            metadata.set ("username", p.get_username ());
-            metadata.set ("app_name", p.get_app_name ());
-            metadata.set ("app_id", p.get_app_id ());
-            e.set_attribute ("metadata", metadata);
-
-            // Tags and sources
-            e.set_tag ("app.browser");
-            e.add_source (acc.f);
-        }
-    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -699,6 +661,80 @@ evidence_loader_impl::_save_encryption_keys ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save passwords
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_loader_impl::_save_passwords ()
+{
+    for (const auto &p : profiles_)
+    {
+        for (const auto &login : p.get_logins ())
+        {
+            auto uri = mobius::core::io::uri (login.origin_url);
+            auto domain = uri.get_host ();
+
+            // Set attributes
+            auto e = item_.new_evidence ("password");
+            e.set_attribute ("password_type", "net.http/" + domain);
+            e.set_attribute ("encrypted_value", login.password_value);
+            e.set_attribute ("value", mobius::core::bytearray {});
+            e.set_attribute( "description", "Web password. URL: " + login.origin_url);
+
+            // Set metadata
+            auto metadata = mobius::core::pod::map ();
+            metadata.set ("username", p.get_username ());
+            metadata.set ("app_name", p.get_app_name ());
+            metadata.set ("app_id", p.get_app_id ());
+            metadata.set ("record_idx", login.idx);
+            metadata.set ("action_url", login.action_url);
+            metadata.set ("avatar_url", login.avatar_url);
+            metadata.set ("blacklisted_by_user", login.blacklisted_by_user);
+            metadata.set ("date_created", login.date_created);
+            metadata.set ("date_last_used", login.date_last_used);
+            metadata.set (
+                "date_password_modified", login.date_password_modified
+            );
+            metadata.set ("date_received", login.date_received);
+            metadata.set ("date_synced", login.date_synced);
+            metadata.set ("display_name", login.display_name);
+            metadata.set ("federation_url", login.federation_url);
+            metadata.set (
+                "generation_upload_status", login.generation_upload_status
+            );
+            metadata.set ("icon_url", login.icon_url);
+            metadata.set ("is_zero_click", login.is_zero_click);
+            metadata.set ("keychain_identifier", login.keychain_identifier);
+            metadata.set ("origin_url", login.origin_url);
+            metadata.set ("password_element", login.password_element);
+            metadata.set ("password_type", login.password_type);
+            metadata.set ("preferred", login.preferred);
+            metadata.set ("scheme", login.scheme);
+            metadata.set ("sender_email", login.sender_email);
+            metadata.set ("sender_name", login.sender_name);
+            metadata.set (
+                "sender_profile_image_url", login.sender_profile_image_url
+            );
+            metadata.set (
+                "sharing_notification_displayed",
+                login.sharing_notification_displayed
+            );
+            metadata.set ("signon_realm", login.signon_realm);
+            metadata.set ("skip_zero_click", login.skip_zero_click);
+            metadata.set ("ssl_valid", login.ssl_valid);
+            metadata.set ("submit_element", login.submit_element);
+            metadata.set ("times_used", login.times_used);
+            metadata.set ("use_additional_auth", login.use_additional_auth);
+            metadata.set ("username_element", login.username_element);
+            metadata.set ("username_value", login.username_value);
+            e.set_attribute ("metadata", metadata);
+
+            e.set_tag ("app.browser");
+            e.add_source (login.f);
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save PDI entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -919,6 +955,120 @@ evidence_loader_impl::_save_received_files ()
                 e.set_tag ("p2p");
                 e.add_source (entry.f);
             }
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save accounts
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_loader_impl::_save_user_accounts ()
+{
+    for (const auto &p : profiles_)
+    {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Save accounts from Preferences
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (const auto &acc : p.get_accounts ())
+        {
+            auto e = item_.new_evidence ("user-account");
+
+            // Set attributes
+            e.set_attribute ("account_type", "app.chromium");
+            e.set_attribute ("id", acc.id);
+            e.set_attribute ("password", mobius::core::bytearray {});
+            e.set_attribute ("password_found", "no");
+            e.set_attribute ("is_deleted", acc.f.is_deleted ());
+            e.set_attribute ("app_family", APP_FAMILY);
+            e.set_attribute ("phones", acc.phone_numbers);
+            e.set_attribute ("emails", acc.emails);
+            e.set_attribute ("organizations", acc.organizations);
+            e.set_attribute ("addresses", acc.addresses);
+            e.set_attribute ("names", acc.names);
+
+            // Set metadata
+            auto metadata = acc.metadata.clone ();
+            metadata.set ("username", p.get_username ());
+            metadata.set ("app_name", p.get_app_name ());
+            metadata.set ("app_id", p.get_app_id ());
+            e.set_attribute ("metadata", metadata);
+
+            // Tags and sources
+            e.set_tag ("app.browser");
+            e.add_source (acc.f);
+        }
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Save accounts from logins
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (const auto &login : p.get_logins ())
+        {
+            auto uri = mobius::core::io::uri (login.origin_url);
+            auto domain = uri.get_host ();
+
+            auto e = item_.new_evidence ("user-account");
+
+            // Set attributes
+            e.set_attribute ("account_type", "net.http/" + domain);
+            e.set_attribute ("id", login.username_value);
+            e.set_attribute ("encrypted_password", login.password_value);
+            e.set_attribute ("password", mobius::core::bytearray {});
+            e.set_attribute ("password_found", "no");
+            e.set_attribute ("is_deleted", login.f.is_deleted ());
+            e.set_attribute ("app_family", APP_FAMILY);
+
+            // Set metadata
+            auto metadata = mobius::core::pod::map ();
+            metadata.set ("username", p.get_username ());
+            metadata.set ("app_name", p.get_app_name ());
+            metadata.set ("app_id", p.get_app_id ());
+            metadata.set ("record_idx", login.idx);
+            metadata.set ("action_url", login.action_url);
+            metadata.set ("avatar_url", login.avatar_url);
+            metadata.set ("blacklisted_by_user", login.blacklisted_by_user);
+            metadata.set ("date_created", login.date_created);
+            metadata.set ("date_last_used", login.date_last_used);
+            metadata.set (
+                "date_password_modified", login.date_password_modified
+            );
+            metadata.set ("date_received", login.date_received);
+            metadata.set ("date_synced", login.date_synced);
+            metadata.set ("display_name", login.display_name);
+            metadata.set ("federation_url", login.federation_url);
+            metadata.set (
+                "generation_upload_status", login.generation_upload_status
+            );
+            metadata.set ("icon_url", login.icon_url);
+            metadata.set ("is_zero_click", login.is_zero_click);
+            metadata.set ("keychain_identifier", login.keychain_identifier);
+            metadata.set ("origin_url", login.origin_url);
+            metadata.set ("password_element", login.password_element);
+            metadata.set ("password_type", login.password_type);
+            metadata.set ("preferred", login.preferred);
+            metadata.set ("scheme", login.scheme);
+            metadata.set ("sender_email", login.sender_email);
+            metadata.set ("sender_name", login.sender_name);
+            metadata.set (
+                "sender_profile_image_url", login.sender_profile_image_url
+            );
+            metadata.set (
+                "sharing_notification_displayed",
+                login.sharing_notification_displayed
+            );
+            metadata.set ("signon_realm", login.signon_realm);
+            metadata.set ("skip_zero_click", login.skip_zero_click);
+            metadata.set ("ssl_valid", login.ssl_valid);
+            metadata.set ("submit_element", login.submit_element);
+            metadata.set ("times_used", login.times_used);
+            metadata.set ("use_additional_auth", login.use_additional_auth);
+            metadata.set ("username_element", login.username_element);
+            metadata.set ("username_value", login.username_value);
+            e.set_attribute ("metadata", metadata);
+
+            // Tags and sources
+            e.set_tag ("app.browser");
+            e.add_source (login.f);
         }
     }
 }

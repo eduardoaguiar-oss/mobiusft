@@ -736,7 +736,7 @@ MODEL = [
                       args(id='account_type', name='Type', first_sortable=True),
                       args(id='id', name='ID', is_sortable=True),
                       args(id='password_found'),
-                      args(id='password'),
+                      args(id='password', format='bin2text'),
                   ]),
          ],
          detail_views=[
@@ -745,7 +745,7 @@ MODEL = [
                       args(id='account_type', name='Type'),
                       args(id='id', name='Account ID'),
                       args(id='name'),
-                      args(id='password'),
+                      args(id='password', format='bin2text'),
                       args(id='password_found'),
                       args(id='names', name='Names', format="multiline"),
                       args(id='phones', name='Phones', format="multiline"),

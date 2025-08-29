@@ -62,7 +62,10 @@ static const mobius::core::bytearray V20_PROTECTION_LEVEL_2_KEY =
 // attribute_name, encrypted_attribute_name
 static const std::unordered_map<std::string, std::vector<std::string>>
     ATTRIBUTES = {
+        {"autofill", {"value"}},
         {"cookie", {"value"}},
+        {"credit-card", {"number", "name"}},
+        {"user-account", {"password"}},
 };
 
 } // namespace
