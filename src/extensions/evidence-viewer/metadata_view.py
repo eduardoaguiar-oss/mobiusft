@@ -82,6 +82,8 @@ class MetadataView(object):
         if evidence:
 
             # attributes
+            self.__details_view.add_row(('Evidence UID', evidence.uid))
+            self.__details_view.add_row(('Evidence Type', evidence.type))
             self.__details_view.add_row(('Item', evidence.item.name))
 
             for args in self.__details_columns:

@@ -19,6 +19,18 @@ import mobius
 import pymobius.ant.turing
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# @brief Bool formatter
+# @param value Bool value
+# @return String value
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+def formatter_bool(value):
+    if isinstance(value, bool):
+         return 'yes' if value else 'no'
+
+    return value
+    
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Bin2Text formatter
 # @param value Bytes value
 # @return String value
@@ -132,6 +144,7 @@ def pango_escape(text):
 # @brief Data formatters
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 FORMATTERS = {
+    "bool": formatter_bool,
     "chat-message-recipients": recipients_formatter,
     "chat-message-text": text_formatter,
     "bin2text": formatter_bin2text,
@@ -139,6 +152,43 @@ FORMATTERS = {
     "hexstring": mobius.core.encoder.hexstring,
     "multiline": lambda lines: '\n'.join(lines or []),
     "string": pymobius.to_string,
+}
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# @brief Generic getter
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+def getter_generic(obj, attr_id):
+    return getattr(obj, attr_id, None)
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# @brief Encrypted value getter
+# @param obj Object
+# @param attr_id Attribute ID
+# @return '<ENCRYPTED>' if <attr_id>_is_encrypted is True, otherwise the value of <attr_id>
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+def getter_encrypted(obj, attr_id):
+    is_encrypted = getattr(obj, f"{attr_id}_is_encrypted", False)
+
+    if is_encrypted:
+        return '<ENCRYPTED>'
+
+    v = getattr(obj, attr_id, None)
+    if not v:
+        return ''
+    
+    elif isinstance(v, bytes):
+        return v.decode('utf-8', errors='replace')
+    
+    return str(v)
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# @brief Getters
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+GETTERS = {
+    "encrypted": getter_encrypted,
 }
 
 
@@ -161,12 +211,13 @@ class Getter(object):
     def __init__(self, attr_id, attr_format=None):
         self.__attr_id = attr_id
         self.__formatter = FORMATTERS.get(attr_format)
+        self.__getter = GETTERS.get(attr_format, getter_generic)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Initialize object
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __call__(self, obj):
-        v = getattr(obj, self.__attr_id)
+        v = self.__getter(obj, self.__attr_id)
 
         if self.__formatter:
             return self.__formatter(v)
@@ -575,7 +626,7 @@ MODEL = [
              args(id="table",
                   columns=[
                       args(id='password_type', name="Type", first_sortable=True),
-                      args(id='value', name="Password"),
+                      args(id='value', name="Password", format="encrypted"),
                       args(id='description'),
                   ],
                   exporters=[
@@ -586,7 +637,7 @@ MODEL = [
              args(id="metadata",
                   rows=[
                       args(id='password_type', name="Type"),
-                      args(id='value', name="Password"),
+                      args(id='value', name="Password", format="encrypted"),
                       args(id='account', name="Account"),
                       args(id='description'),
                   ]),
@@ -735,8 +786,8 @@ MODEL = [
                   columns=[
                       args(id='account_type', name='Type', first_sortable=True),
                       args(id='id', name='ID', is_sortable=True),
-                      args(id='password_found'),
-                      args(id='password', format='bin2text'),
+                      args(id='password_found', format="bool"),
+                      args(id='password', format='encrypted'),
                   ]),
          ],
          detail_views=[
@@ -745,8 +796,8 @@ MODEL = [
                       args(id='account_type', name='Type'),
                       args(id='id', name='Account ID'),
                       args(id='name'),
-                      args(id='password', format='bin2text'),
-                      args(id='password_found'),
+                      args(id='password', format='encrypted'),
+                      args(id='password_found', format="bool"),
                       args(id='names', name='Names', format="multiline"),
                       args(id='phones', name='Phones', format="multiline"),
                       args(id='addresses', name='Addresses', format="multiline"),

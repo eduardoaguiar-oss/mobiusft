@@ -390,6 +390,7 @@ evidence_loader_impl::_save_evidences ()
     _save_cookies ();
     _save_credit_cards ();
     _save_encryption_keys ();
+    _save_passwords ();
     _save_pdis ();
     _save_received_files ();
     _save_user_accounts ();
@@ -530,8 +531,9 @@ evidence_loader_impl::_save_cookies ()
             e.set_attribute ("username", p.get_username ());
             e.set_attribute ("name", c.name);
             e.set_attribute ("value", c.value);
+            e.set_attribute ("value_encrypted", c.encrypted_value);
+            e.set_attribute ("value_is_encrypted", !c.value && c.encrypted_value);
             e.set_attribute ("domain", c.host_key);
-            e.set_attribute ("encrypted_value", c.encrypted_value);
             e.set_attribute ("creation_time", c.creation_utc);
             e.set_attribute ("last_access_time", c.last_access_utc);
             e.set_attribute ("last_update_time", c.last_update_utc);
@@ -676,9 +678,13 @@ evidence_loader_impl::_save_passwords ()
             // Set attributes
             auto e = item_.new_evidence ("password");
             e.set_attribute ("password_type", "net.http/" + domain);
-            e.set_attribute ("encrypted_value", login.password_value);
             e.set_attribute ("value", mobius::core::bytearray {});
-            e.set_attribute( "description", "Web password. URL: " + login.origin_url);
+            e.set_attribute ("value_encrypted", login.password_value);
+            e.set_attribute ("value_is_encrypted", true);
+            e.set_attribute (
+                "description", "Web password. URL: " + login.origin_url
+            );
+            e.set_attribute ("app_family", APP_FAMILY);
 
             // Set metadata
             auto metadata = mobius::core::pod::map ();
@@ -744,6 +750,13 @@ evidence_loader_impl::_save_pdis ()
     {
         for (const auto &ap : p.get_autofill_profiles ())
         {
+            auto ap_metadata = mobius::core::pod::map ();
+            ap_metadata.set ("app_id", p.get_app_id ());
+            ap_metadata.set ("app_name", p.get_app_name ());
+            ap_metadata.set ("username", p.get_username ());
+            ap_metadata.set ("autofill_profile_guid", ap.guid);
+            ap_metadata.set ("autofill_profile_in_trash", ap.is_in_trash);
+
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Add e-mails
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -755,16 +768,7 @@ evidence_loader_impl::_save_pdis ()
                     e.set_attribute ("pdi_type", "email");
                     e.set_attribute ("value", email);
                     e.set_attribute ("app_family", APP_FAMILY);
-
-                    auto metadata = mobius::core::pod::map ();
-
-                    metadata.set ("app_id", p.get_app_id ());
-                    metadata.set ("app_name", p.get_app_name ());
-                    metadata.set ("username", p.get_username ());
-                    metadata.set ("autofill_profile_guid", ap.guid);
-                    metadata.set ("autofill_profile_in_trash", ap.is_in_trash);
-
-                    e.set_attribute ("metadata", metadata);
+                    e.set_attribute ("metadata", ap_metadata);
 
                     e.set_tag ("app.browser");
                     e.add_source (ap.f);
@@ -787,16 +791,9 @@ evidence_loader_impl::_save_pdis ()
                     e.set_attribute ("value", value);
                     e.set_attribute ("app_family", APP_FAMILY);
 
-                    auto metadata = mobius::core::pod::map ();
-
+                    auto metadata = ap_metadata.clone ();
                     metadata.set ("phone_number", phone.number);
                     metadata.set ("phone_type", phone.type);
-                    metadata.set ("app_id", p.get_app_id ());
-                    metadata.set ("app_name", p.get_app_name ());
-                    metadata.set ("username", p.get_username ());
-                    metadata.set ("autofill_profile_guid", ap.guid);
-                    metadata.set ("autofill_profile_in_trash", ap.is_in_trash);
-
                     e.set_attribute ("metadata", metadata);
 
                     e.set_tag ("app.browser");
@@ -834,15 +831,7 @@ evidence_loader_impl::_save_pdis ()
                     e.set_attribute ("pdi_type", "address");
                     e.set_attribute ("value", value);
                     e.set_attribute ("app_family", APP_FAMILY);
-
-                    auto metadata = mobius::core::pod::map ();
-                    metadata.set ("app_id", p.get_app_id ());
-                    metadata.set ("app_name", p.get_app_name ());
-                    metadata.set ("username", p.get_username ());
-                    metadata.set ("autofill_profile_guid", ap.guid);
-                    metadata.set ("autofill_profile_in_trash", ap.is_in_trash);
-
-                    e.set_attribute ("metadata", metadata);
+                    e.set_attribute ("metadata", ap_metadata);
 
                     e.set_tag ("app.browser");
                     e.add_source (ap.f);
@@ -872,15 +861,7 @@ evidence_loader_impl::_save_pdis ()
                     e.set_attribute ("pdi_type", "fullname");
                     e.set_attribute ("value", value);
                     e.set_attribute ("app_family", APP_FAMILY);
-
-                    auto metadata = mobius::core::pod::map ();
-                    metadata.set ("app_id", p.get_app_id ());
-                    metadata.set ("app_name", p.get_app_name ());
-                    metadata.set ("username", p.get_username ());
-                    metadata.set ("autofill_profile_guid", ap.guid);
-                    metadata.set ("autofill_profile_in_trash", ap.is_in_trash);
-
-                    e.set_attribute ("metadata", metadata);
+                    e.set_attribute ("metadata", ap_metadata);
 
                     e.set_tag ("app.browser");
                     e.add_source (ap.f);
@@ -978,7 +959,7 @@ evidence_loader_impl::_save_user_accounts ()
             e.set_attribute ("account_type", "app.chromium");
             e.set_attribute ("id", acc.id);
             e.set_attribute ("password", mobius::core::bytearray {});
-            e.set_attribute ("password_found", "no");
+            e.set_attribute ("password_found", false);
             e.set_attribute ("is_deleted", acc.f.is_deleted ());
             e.set_attribute ("app_family", APP_FAMILY);
             e.set_attribute ("phones", acc.phone_numbers);
@@ -1012,9 +993,10 @@ evidence_loader_impl::_save_user_accounts ()
             // Set attributes
             e.set_attribute ("account_type", "net.http/" + domain);
             e.set_attribute ("id", login.username_value);
-            e.set_attribute ("encrypted_password", login.password_value);
             e.set_attribute ("password", mobius::core::bytearray {});
-            e.set_attribute ("password_found", "no");
+            e.set_attribute ("password_encrypted", login.password_value);
+            e.set_attribute ("password_is_encrypted", true);
+            e.set_attribute ("password_found", true);
             e.set_attribute ("is_deleted", login.f.is_deleted ());
             e.set_attribute ("app_family", APP_FAMILY);
 

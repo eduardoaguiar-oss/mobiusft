@@ -57,14 +57,15 @@ static const mobius::core::bytearray V20_PROTECTION_LEVEL_2_KEY =
     "\xE9\x8F\x37\xD7\xF4\xE1\xFA\x43\x3D\x19\x30\x4D\xC2\x25\x80\x42"
     "\x09\x0E\x2D\x1D\x7E\xEA\x76\x70\xD4\x1F\x73\x8D\x08\x72\x96\x60";
 
-// @brief Attribute names that can be encrypted.
-// Every attribute that has encrypted value is stored as two attributes:
-// attribute_name, encrypted_attribute_name
+// @brief Attribute names that can be encrypted, for each evidence type
+// Every attribute that has encrypted value is stored as three attributes:
+// <name>, <name>_encrypted, and <name>_is_encrypted.
 static const std::unordered_map<std::string, std::vector<std::string>>
     ATTRIBUTES = {
         {"autofill", {"value"}},
         {"cookie", {"value"}},
         {"credit-card", {"number", "name"}},
+        {"password", {"value"}},
         {"user-account", {"password"}},
 };
 
@@ -99,7 +100,6 @@ post_processor_impl::process_evidence (
 
     try
     {
-        std::cerr << "*** 1 ***" << std::endl;
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Handle encryption keys
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -111,8 +111,6 @@ post_processor_impl::process_evidence (
             return;
         }
 
-        std::cerr << "*** 2 *** type=" << type << std::endl;
-
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Check APP_FAMILY for Chromium artifacts
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -121,8 +119,6 @@ post_processor_impl::process_evidence (
 
         if (app_family != "chromium")
             return;
-
-        std::cerr << "*** 3 *** app_family=" << app_family << std::endl;
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Process evidence
@@ -135,55 +131,42 @@ post_processor_impl::process_evidence (
         auto is_modified = false;
         auto is_encrypted = false;
 
-        std::cerr << "*** 4 ***" << std::endl;
-
         for (const auto &name : iter->second)
         {
-            mobius::core::pod::data v1, v2;
-            if (evidence.has_attribute (name))
-                v1 = evidence.get_attribute (name);
-            if (evidence.has_attribute ("encrypted_" + name))
-                v2 = evidence.get_attribute ("encrypted_" + name);
+            auto is_encrypted_value =
+                evidence.get_attribute<bool> (name + "_is_encrypted", false);
 
-            if (!v1.is_bytearray () && !v2.is_bytearray ())
-                std::cout << "Not bytearray: " << type << ':'
-                          << int (v1.get_type ()) << '|' << int (v2.get_type ())
-                          << "->" << evidence.has_attribute (name) << '|'
-                          << evidence.has_attribute ("encrypted_" + name)
-                          << std::endl;
-
-            auto value =
-                evidence.get_attribute<mobius::core::bytearray> (name, {});
-
-            auto encrypted_value =
-                evidence.get_attribute<mobius::core::bytearray> (
-                    "encrypted_" + name, {}
-                );
-
-            if (!value && encrypted_value)
+            if (is_encrypted_value)
             {
-                auto decrypted_value = _decrypt_data (encrypted_value);
+                auto value =
+                    evidence.get_attribute<mobius::core::bytearray> (name, {});
 
-                if (decrypted_value)
+                auto encrypted_value =
+                    evidence.get_attribute<mobius::core::bytearray> (
+                        name + "_encrypted", {}
+                    );
+
+                auto [rc, decrypted_value] = _decrypt_data (encrypted_value);
+
+                if (rc)
                 {
                     evidence.set_attribute (name, decrypted_value);
+                    evidence.set_attribute (name + "_is_encrypted", false);
                     is_modified = true;
                 }
                 else
+                {
                     is_encrypted = true;
+                }
             }
         }
 
-        std::cerr << "*** 5 *** is_modified=" << is_modified
-                  << " is_encrypted=" << is_encrypted << std::endl;
         if (is_modified)
             ; // notify coordinator
 
         // Store the evidence for later processing
         if (is_encrypted)
             pending_evidences_.push_back (evidence);
-
-        std::cerr << "*** 6 ***" << std::endl;
     }
     catch (const std::exception &e)
     {
@@ -229,9 +212,9 @@ post_processor_impl::_process_encryption_key (
                 std::cout << "Attempting to decrypt v10 key: " << std::endl
                           << encrypted_value.dump () << std::endl;
 
-            auto decrypted_value = _decrypt_dpapi_value (encrypted_value);
+            auto [rc, decrypted_value] = _decrypt_dpapi_value (encrypted_value);
 
-            if (decrypted_value)
+            if (rc)
             {
                 if (DEBUG)
                     std::cout << "v10 key decrypted: " << std::endl
@@ -282,21 +265,81 @@ post_processor_impl::_process_encryption_key (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decrypt an encrypted value
+// @param data Encrypted data to decrypt
+// @return Decrypted data as bytearray
+// @note This function checks if the value is encrypted with DPAPI or
+// Chromium v10 or Chromium v20 encryption and decrypts it accordingly.
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::pair<bool, mobius::core::bytearray>
+post_processor_impl::_decrypt_data (const mobius::core::bytearray &data) const
+{
+    try
+    {
+        if (!data)
+            return {false, {}};
+
+        if (data.size () < 31)
+        {
+            if (DEBUG)
+                std::cout << "Data is too short to be decrypted: "
+                          << data.dump () << std::endl;
+            return {false, {}};
+        }
+
+        if (data.startswith (DPAPI_SIGNATURE))
+            return _decrypt_dpapi_value (data);
+
+        else if (data.startswith ("v10") || data.startswith ("v20"))
+        {
+            auto version = data.slice (0, 2);
+            auto iv = data.slice (3, 14);
+            auto ciphertext = data.slice (15, data.size () - 17);
+            auto tag = data.slice (data.size () - 16, data.size () - 1);
+
+            if (DEBUG)
+                std::cout << "Decrypting " << version.to_string ()
+                          << " data: " << std::endl
+                          << data.dump () << std::endl
+                          << "IV len: " << iv.size ()
+                          << ". Ciphertext size: " << ciphertext.size ()
+                          << ". TAG size: " << tag.size () << std::endl;
+
+            for (const auto &key_value : chromium_keys_)
+            {
+                auto cipher =
+                    mobius::core::crypt::new_cipher_gcm ("aes", key_value, iv);
+                auto plaintext = cipher.decrypt (ciphertext);
+
+                if (cipher.check_tag (tag))
+                    return {true, plaintext};
+            }
+        }
+    }
+    catch (const std::exception &e)
+    {
+        mobius::core::log log (__FILE__, __func__);
+        log.warning (
+            __LINE__,
+            "Error occurred while decrypting data: " + std::string (e.what ())
+        );
+    }
+
+    return {false, {}};
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Decrypt DPAPI value
 // @param encrypted_value Encrypted DPAPI value to decrypt
 // @return Decrypted value as bytearray
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::bytearray
+std::pair<bool, mobius::core::bytearray>
 post_processor_impl::_decrypt_dpapi_value (
     const mobius::core::bytearray &encrypted_value
 ) const
 {
-    if (DEBUG)
-        std::cout << "Decrypting DPAPI value: " << std::endl
-                  << encrypted_value.dump () << std::endl;
-
     if (!encrypted_value)
-        return {};
+        return {false, {}};
 
     // Create DPAPI blob from encrypted value
     mobius::core::os::win::dpapi::blob blob (encrypted_value);
@@ -304,37 +347,20 @@ post_processor_impl::_decrypt_dpapi_value (
 
     // Find the master key in the DPAPI keys map
     auto iter = dpapi_keys_.find (mk_guid);
+
     if (iter == dpapi_keys_.end ())
-    {
-        if (DEBUG)
-            std::cout << "No DPAPI master key found for decryption. ID: "
-                      << mk_guid << ". Blob data: " << std::endl
-                      << encrypted_value.dump () << std::endl;
-        return {};
-    }
+        return {false, {}};
 
     auto master_key = iter->second;
-    if (DEBUG)
-        std::cout << "DPAPI master key found for decryption: " << std::endl
-                  << master_key.dump () << std::endl;
 
     // Decrypt the blob using the master key
     if (!blob.decrypt (master_key))
-    {
-        if (DEBUG)
-            std::cout << "Failed to decrypt DPAPI value with master key: "
-                      << mk_guid << std::endl;
-        return {};
-    }
+        return {false, {}};
 
     // If decryption was successful, get the decrypted value
     auto decrypted_value = blob.get_plain_text ();
-    if (DEBUG)
-        std::cout << "DPAPI value decrypted successfully. Blob data: "
-                  << std::endl
-                  << decrypted_value.dump () << std::endl;
 
-    return decrypted_value;
+    return {true, decrypted_value};
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -374,7 +400,7 @@ post_processor_impl::_decrypt_v20_encrypted_key (
                           std::to_string (encrypted_value.size ())
         );
 
-        auto decrypted_value_1 = _decrypt_dpapi_value (encrypted_value);
+        auto [rc_1, decrypted_value_1] = _decrypt_dpapi_value (encrypted_value);
 
         if (DEBUG)
             std::cout << "Decrypted V20 value (1st attempt): " << std::endl
@@ -383,7 +409,7 @@ post_processor_impl::_decrypt_v20_encrypted_key (
         if (!decrypted_value_1 || decrypted_value_1.size () == 32)
             return decrypted_value_1;
 
-        auto decrypted_value = _decrypt_dpapi_value (decrypted_value_1);
+        auto [rc, decrypted_value] = _decrypt_dpapi_value (decrypted_value_1);
 
         if (DEBUG)
             std::cout << "Decrypted V20 value (2nd attempt): " << std::endl
@@ -476,67 +502,6 @@ post_processor_impl::_decrypt_v20_encrypted_key (
         log.warning (
             __LINE__, "Error occurred while processing v20 decrypted value: " +
                           std::string (e.what ())
-        );
-    }
-
-    return {};
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decrypt an encrypted value
-// @param data Encrypted data to decrypt
-// @return Decrypted data as bytearray
-// @note This function checks if the value is encrypted with DPAPI or
-// Chromium v10 or Chromium v20 encryption and decrypts it accordingly.
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::bytearray
-post_processor_impl::_decrypt_data (const mobius::core::bytearray &data) const
-{
-    try
-    {
-        if (data.size () < 31)
-        {
-            if (DEBUG)
-                std::cout << "Data is too short to be decrypted: "
-                          << data.dump () << std::endl;
-            return {};
-        }
-
-        if (data.startswith (DPAPI_SIGNATURE))
-            return _decrypt_dpapi_value (data);
-
-        else if (data.startswith ("v10") || data.startswith ("v20"))
-        {
-            auto version = data.slice (0, 2);
-            auto iv = data.slice (3, 14);
-            auto ciphertext = data.slice (15, data.size () - 17);
-            auto tag = data.slice (data.size () - 16, data.size () - 1);
-
-            if (DEBUG)
-                std::cout << "Decrypting " << version.to_string ()
-                          << " data: " << std::endl
-                          << data.dump () << std::endl
-                          << "IV len: " << iv.size ()
-                          << ". Ciphertext size: " << ciphertext.size ()
-                          << ". TAG size: " << tag.size () << std::endl;
-
-            for (const auto &key_value : chromium_keys_)
-            {
-                auto cipher =
-                    mobius::core::crypt::new_cipher_gcm ("aes", key_value, iv);
-                auto plaintext = cipher.decrypt (ciphertext);
-
-                if (cipher.check_tag (tag))
-                    return plaintext;
-            }
-        }
-    }
-    catch (const std::exception &e)
-    {
-        mobius::core::log log (__FILE__, __func__);
-        log.warning (
-            __LINE__,
-            "Error occurred while decrypting data: " + std::string (e.what ())
         );
     }
 
