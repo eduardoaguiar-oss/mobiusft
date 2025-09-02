@@ -543,6 +543,7 @@ evidence_loader_impl::_save_cookies ()
 
             auto metadata = mobius::core::pod::map ();
             metadata.set ("record_idx", c.idx);
+            metadata.set ("schema_version", c.schema_version);
             metadata.set ("has_cross_site_ancestor", c.has_cross_site_ancestor);
             metadata.set ("has_expires", c.has_expires);
             metadata.set ("is_httponly", c.is_httponly);
@@ -641,9 +642,10 @@ evidence_loader_impl::_save_encryption_keys ()
         // create evidence
         auto e = item_.new_evidence ("encryption-key");
 
-        e.set_attribute ("key_type", "chromium.v20");
-        e.set_attribute ("encrypted_value", ek.value);
+        e.set_attribute ("key_type", "chromium." + ek.type);
         e.set_attribute ("id", ek.id);
+        e.set_attribute ("app_family", APP_FAMILY);
+        e.set_attribute ("encrypted_value", ek.value);
 
         // value is empty, as key is not decrypted yet
         e.set_attribute ("value", mobius::core::bytearray {});
@@ -1006,6 +1008,7 @@ evidence_loader_impl::_save_user_accounts ()
             metadata.set ("app_name", p.get_app_name ());
             metadata.set ("app_id", p.get_app_id ());
             metadata.set ("record_idx", login.idx);
+            metadata.set ("schema_version", login.schema_version);
             metadata.set ("action_url", login.action_url);
             metadata.set ("avatar_url", login.avatar_url);
             metadata.set ("blacklisted_by_user", login.blacklisted_by_user);

@@ -3,7 +3,9 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -35,7 +37,7 @@ namespace mobius::core
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class bytearray
 {
-public:
+  public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Datatypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -61,28 +63,28 @@ public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    bytearray() = default;
-    bytearray(const char *);
-    bytearray(const std::string &);
-    bytearray(const uint8_t *, size_type);
-    bytearray(const uint8_t, size_type);
-    bytearray(const_iterator, const_iterator);
-    bytearray(const bytearray &) = default;
-    bytearray(bytearray &&) noexcept = default;
-    bytearray(const std::initializer_list<uint8_t> &);
-    explicit bytearray(size_type);
+    bytearray () = default;
+    bytearray (const char *);
+    bytearray (const std::string &);
+    bytearray (const uint8_t *, size_type);
+    bytearray (const uint8_t, size_type);
+    bytearray (const_iterator, const_iterator);
+    bytearray (const bytearray &) = default;
+    bytearray (bytearray &&) noexcept = default;
+    bytearray (const std::initializer_list<uint8_t> &);
+    explicit bytearray (size_type);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Operators
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    const_reference operator[](size_type) const;
-    reference operator[](size_type);
-    bytearray &operator=(const bytearray &) = default;
-    bytearray &operator=(bytearray &&) noexcept = default;
-    bytearray &operator^=(const bytearray &) noexcept;
-    bytearray &operator+=(const bytearray &);
-    bytearray &operator<<=(int) noexcept;
-    bytearray &operator>>=(int) noexcept;
+    const_reference operator[] (size_type) const;
+    reference operator[] (size_type);
+    bytearray &operator= (const bytearray &) = default;
+    bytearray &operator= (bytearray &&) noexcept = default;
+    bytearray &operator^= (const bytearray &) noexcept;
+    bytearray &operator+= (const bytearray &);
+    bytearray &operator<<= (int) noexcept;
+    bytearray &operator>>= (int) noexcept;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Check if another bytearray is equal to *this
@@ -90,18 +92,18 @@ public:
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     bool
-    operator==(const bytearray &b) const noexcept
+    operator== (const bytearray &b) const noexcept
     {
-      return data_ == b.data_;
+        return data_ == b.data_;
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Check if bytearray is not empty
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool() const noexcept
+    operator bool () const noexcept
     {
-      return !data_.empty();
+        return !data_.empty ();
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -109,9 +111,9 @@ public:
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     bool
-    empty() const noexcept
+    empty () const noexcept
     {
-      return data_.empty();
+        return data_.empty ();
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -119,9 +121,9 @@ public:
     // @return number of elements contained in the bytearray
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     size_type
-    size() const noexcept
+    size () const noexcept
     {
-      return data_.size();
+        return data_.size ();
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -129,9 +131,9 @@ public:
     // @return const pointer
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     const_pointer
-    data() const noexcept
+    data () const noexcept
     {
-      return data_.data();
+        return data_.data ();
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -139,18 +141,18 @@ public:
     // @return pointer
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     pointer
-    data() noexcept
+    data () noexcept
     {
-      return data_.data();
+        return data_.data ();
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Clear bytearray
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void
-    clear()
+    clear ()
     {
-      data_.clear();
+        data_.clear ();
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -158,9 +160,9 @@ public:
     // @param size new size in bytes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void
-    resize(size_type size)
+    resize (size_type size)
     {
-      data_.resize(size);
+        data_.resize (size);
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -168,9 +170,9 @@ public:
     // @return const iterator
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     const_iterator
-    begin() const noexcept
+    begin () const noexcept
     {
-      return data_.data();
+        return data_.data ();
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -178,9 +180,9 @@ public:
     // @return const iterator
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     const_iterator
-    end() const noexcept
+    end () const noexcept
     {
-      return data_.data() + data_.size();
+        return data_.data () + data_.size ();
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -188,9 +190,9 @@ public:
     // @return iterator
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     iterator
-    begin() noexcept
+    begin () noexcept
     {
-      return data_.data();
+        return data_.data ();
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -198,9 +200,9 @@ public:
     // @return iterator
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     iterator
-    end() noexcept
+    end () noexcept
     {
-      return data_.data() + data_.size();
+        return data_.data () + data_.size ();
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -208,9 +210,9 @@ public:
     // @return const iterator
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     const_reverse_iterator
-    rbegin() const noexcept
+    rbegin () const noexcept
     {
-      return data_.rbegin();
+        return data_.rbegin ();
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -218,9 +220,9 @@ public:
     // @return const iterator
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     const_reverse_iterator
-    rend() const noexcept
+    rend () const noexcept
     {
-      return data_.rend();
+        return data_.rend ();
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -228,9 +230,9 @@ public:
     // @return iterator
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     reverse_iterator
-    rbegin() noexcept
+    rbegin () noexcept
     {
-      return data_.rbegin();
+        return data_.rbegin ();
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -238,44 +240,45 @@ public:
     // @return iterator
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     reverse_iterator
-    rend() noexcept
+    rend () noexcept
     {
-      return data_.rend();
+        return data_.rend ();
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::uint64_t count(std::uint8_t) const noexcept;
-    bool all_equal(std::uint8_t) const noexcept;
-    bool compare(size_type, const bytearray &) const noexcept;
-    bool startswith(const bytearray &) const noexcept;
-    bool endswith(const bytearray &) const noexcept;
-    pos_type find(const bytearray &) const noexcept;
-    pos_type rfind(const bytearray &) const noexcept;
-    void fill(value_type) noexcept;
-    void random() noexcept;
-    void lpad(size_type, value_type = 0);
-    void rpad(size_type, value_type = 0);
-    void from_hexstring(const std::string &);
-    std::string to_hexstring() const;
-    std::string to_string(const std::string & = {}) const;
-    std::string dump(unsigned int = 0) const;
-    bytearray slice(size_type, size_type) const;
-    std::vector<bytearray> split(const bytearray &) const;
+    std::uint64_t count (std::uint8_t) const noexcept;
+    bool all_equal (std::uint8_t) const noexcept;
+    bool compare (size_type, const bytearray &) const noexcept;
+    bool startswith (const bytearray &) const noexcept;
+    bool endswith (const bytearray &) const noexcept;
+    pos_type find (const bytearray &) const noexcept;
+    pos_type rfind (const bytearray &) const noexcept;
+    void fill (value_type) noexcept;
+    void random () noexcept;
+    void lpad (size_type, value_type = 0);
+    void rpad (size_type, value_type = 0);
+    void from_hexstring (const std::string &);
+    std::string to_hexstring () const;
+    std::string to_string (const std::string & = {}) const;
+    std::string dump (unsigned int = 0) const;
+    bytearray slice (size_type, size_type) const;
+    std::vector<bytearray> split (const bytearray &) const;
 
   private:
     container_type data_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Helper functions
+// Functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bytearray operator+(const bytearray &, const bytearray &);
-bytearray operator^(const bytearray &, const bytearray &);
-bytearray operator<<(const bytearray &, int);
-bytearray operator>>(const bytearray &, int);
-bool operator!=(const bytearray &, const bytearray &);
+bytearray operator+ (const bytearray &, const bytearray &);
+bytearray operator^ (const bytearray &, const bytearray &);
+bytearray operator<< (const bytearray &, int);
+bytearray operator>> (const bytearray &, int);
+bool operator< (const bytearray &, const bytearray &);
+bool operator!= (const bytearray &, const bytearray &);
 
 } // namespace mobius::core
 

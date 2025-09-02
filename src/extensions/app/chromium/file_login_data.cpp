@@ -222,6 +222,7 @@ file_login_data::_load_logins (mobius::core::database::database &db)
 
             // Set attributes
             l.idx = idx++;
+            l.schema_version = schema_version_;
             l.action_url = stmt.get_column_string (0);
             l.avatar_url = stmt.get_column_string (1);
             l.blacklisted_by_user = stmt.get_column_bool (2);

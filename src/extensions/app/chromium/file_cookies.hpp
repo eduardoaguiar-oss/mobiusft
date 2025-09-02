@@ -45,6 +45,9 @@ class file_cookies
         // @brief Record Index
         std::uint64_t idx = 0;
 
+        // @brief Schema version
+        std::uint64_t schema_version = 0;
+
         // @brief Creation UTC
         mobius::core::datetime::datetime creation_utc;
 

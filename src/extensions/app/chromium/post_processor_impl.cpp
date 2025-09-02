@@ -237,7 +237,7 @@ post_processor_impl::_process_encryption_key (
     // https://github.com/xaitax/Chrome-App-Bound-Encryption-Decryption/blob/main/docs/RESEARCH.md
     // @see https://github.com/runassu/chrome_v20_decryption/tree/main
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    /*else if (key_type == "chromium.v20")
+    else if (key_type == "chromium.v20")
     {
         if (encrypted_value)
         {
@@ -261,7 +261,7 @@ post_processor_impl::_process_encryption_key (
             else
                 pending_evidences_.push_back (evidence);
         }
-    }*/
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -297,14 +297,6 @@ post_processor_impl::_decrypt_data (const mobius::core::bytearray &data) const
             auto ciphertext = data.slice (15, data.size () - 17);
             auto tag = data.slice (data.size () - 16, data.size () - 1);
 
-            if (DEBUG)
-                std::cout << "Decrypting " << version.to_string ()
-                          << " data: " << std::endl
-                          << data.dump () << std::endl
-                          << "IV len: " << iv.size ()
-                          << ". Ciphertext size: " << ciphertext.size ()
-                          << ". TAG size: " << tag.size () << std::endl;
-
             for (const auto &key_value : chromium_keys_)
             {
                 auto cipher =
@@ -312,7 +304,32 @@ post_processor_impl::_decrypt_data (const mobius::core::bytearray &data) const
                 auto plaintext = cipher.decrypt (ciphertext);
 
                 if (cipher.check_tag (tag))
+                {
+                    if (DEBUG)
+                        std::cout
+                            << version.to_string ()
+                            << " data decrypted with key: " << key_value.dump ()
+                            << std::endl
+                            << "Plaintext: " << std::endl
+                            << plaintext.dump () << std::endl;
                     return {true, plaintext};
+                }
+            }
+
+            if (DEBUG && version == "v10")
+            {
+                std::cout << "Failed to decrypt " << version.to_string ()
+                          << " data. "
+                          << "IV len: " << iv.size ()
+                          << ". Ciphertext size: " << ciphertext.size ()
+                          << ". TAG size: " << tag.size ()
+                          << ". Data:" << std::endl
+                          << data.dump () << std::endl;
+                std::cout << "Chromium keys available:" << std::endl;
+                for (const auto &key : chromium_keys_)
+                {
+                    std::cout << " - " << key.dump () << std::endl;
+                }
             }
         }
     }
@@ -406,10 +423,17 @@ post_processor_impl::_decrypt_v20_encrypted_key (
             std::cout << "Decrypted V20 value (1st attempt): " << std::endl
                       << decrypted_value_1.dump () << std::endl;
 
-        if (!decrypted_value_1 || decrypted_value_1.size () == 32)
+        if (!rc_1)
+            return {};
+
+        
+        if (decrypted_value_1.size () == 32)    // Edge v20 key
             return decrypted_value_1;
 
-        auto [rc, decrypted_value] = _decrypt_dpapi_value (decrypted_value_1);
+        auto [rc_2, decrypted_value] = _decrypt_dpapi_value (decrypted_value_1);
+
+        if (!rc_2)
+            return {};
 
         if (DEBUG)
             std::cout << "Decrypted V20 value (2nd attempt): " << std::endl

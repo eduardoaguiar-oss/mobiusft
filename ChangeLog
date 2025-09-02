@@ -1,5 +1,4 @@
 Mobius Forensic Toolkit 2.18
-	* libmobius_core: Added new method database::get_path  
 	* app-chromium: Added support for History schema version up to 70
 	* app-chromium: Added support for Web Data schema version up to 141
 	* app-chromium: Added new function get_db_schema_version(db)  
@@ -11,21 +10,22 @@ Mobius Forensic Toolkit 2.18
 	* app-chromium: Added decoding for Login Data files  
 	* app-chromium: Added decoding for Login Data For Account files  
 	* app-chromium: Added decoding for Preferences files  
-	* app-chromium: Implemented new class post_processor_impl  
-	* app-chromium: Enhanced post_processor_impl class to support decryption of both v10 and v20 Chromium encryption keys
-	* app-chromium: Enhanced profile class to fill metadata from Preferences' profile key
+	* app-chromium: Implemented new class post_processor_impl class to support decryption of DPAPI, v10, and v20 encrypted data, such as cookies, login data, credit cards and autofill.
 	* app-chromium: Added new tool called file_bookmarks
 	* app-chromium: Added new tool called file_cookies
 	* app-chromium: Added new tool called file_local_state
 	* app-chromium: Added new tool called file_preferences
+	* Added new post-processor extension called "post-processor-opened-files"
 	* ant.evidence: Added new module post.user_accounts_from_cookies  
 	* ant.evidence.vfs.accounts: Removed cookie retrieval feature
 	* ant.evidence.vfs.accounts: Removed old Chromium code
 	* ant.evidence.vfs.bookmarked_urls: Removed old Chromium code
 	* ant.evidence.vfs.cookies: Removed old Chromium code
+	* ant.turing.chromium_passwords: Removed old Chromium module
+	* pymobius.app.chromium: Removed old Chromium module
 	* evidence-password-hashes: Fixed .hashcat file export  
 	* evidence-password-hashes: Fixed .john file export  
-	* Added new post-processor extension called "post-processor-opened-files"
+	* libmobius_core: Added new method database::get_path  
 	* libmobius_core: Added new method io::walker::get_folder_name  
 	* libmobius_core: Added new JSON decoder module (decoder::json)  
 	* libmobius_core: Added new class decoder::json::tokenizer  
@@ -34,6 +34,7 @@ Mobius Forensic Toolkit 2.18
 	* libmobius_core: Added new method pod::data::to_list
 	* libmobius_core: Added new method pod::data::to_map
 	* libmobius_core: Added new template method pod::data::data (const std::vector<T>&)
+	* libmobius_core: Added new operator< (bytearray, bytearray)
 	* libmobius_python: Added callback for "file_for_sampling" event
 	* libmobius_python: Added new method function::call
 

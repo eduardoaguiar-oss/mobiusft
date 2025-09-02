@@ -175,19 +175,42 @@ def getter_encrypted(obj, attr_id):
         return '<ENCRYPTED>'
 
     v = getattr(obj, attr_id, None)
-    if not v:
+    
+    return formatter_bin2text(v)
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# @brief Cookie value getter
+# @param obj Object
+# @param attr_id Attribute ID
+# @return '<ENCRYPTED>' if <attr_id>_is_encrypted is True, otherwise the value of <attr_id>
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+def getter_cookie_value(obj, attr_id):
+    is_encrypted = getattr(obj, f"{attr_id}_is_encrypted", False)
+
+    if is_encrypted:
+        return '<ENCRYPTED>'
+
+    value = getattr(obj, attr_id, None)
+    if not value:
         return ''
-    
-    elif isinstance(v, bytes):
-        return v.decode('utf-8', errors='replace')
-    
-    return str(v)
+
+    elif isinstance(value, str):
+        return value
+
+    try:
+        return value.decode('utf-8')
+    except UnicodeDecodeError:
+        pass
+
+    return '<BINARY> ' + mobius.core.encoder.hexstring(value)
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Getters
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 GETTERS = {
+    "cookie_value": getter_cookie_value,
     "encrypted": getter_encrypted,
 }
 
@@ -394,21 +417,23 @@ MODEL = [
                       args(id="app_name", name="Application", is_sortable=True),
                       args(id='domain', is_sortable=True),
                       args(id='name', is_sortable=True),
-                      args(id='value', format="bin2text", is_sortable=True),
+                      args(id='value', format="cookie_value", is_sortable=True),
                   ]),
          ],
          detail_views=[
              args(id="metadata",
                   rows=[
                       args(id='name'),
-                      args(id='value', format="bin2text"),
+                      args(id='value', format="cookie_value"),
                       args(id='domain'),
                       args(id='creation_time', name="Creation date/time (UTC)", format='datetime'),
                       args(id='last_access_time', name="Last access date/time (UTC)", format='datetime'),
                       args(id='expiration_time', name="Expiration date/time (UTC)", format='datetime'),
                       args(id='last_update_time', name="Last update date/time (UTC)", format='datetime'),
                       args(id='is_deleted'),
-                      args(id='is_encrypted'),
+                      args(id='app_id', name="Application ID"),
+                      args(id='app_name', name="Application"),
+                      args(id='app_family', name="Application Family")
                   ]),
          ]
          ),

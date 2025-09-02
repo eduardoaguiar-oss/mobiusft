@@ -17,7 +17,6 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import mobius
 import pymobius.ant.turing.add_passwords_to_database
-import pymobius.ant.turing.chromium_passwords
 import pymobius.ant.turing.credentials
 import pymobius.ant.turing.credhist_hashes
 import pymobius.ant.turing.custom_dic
@@ -101,7 +100,6 @@ class Ant(object):
 
         # create ants
         self.__ants = [
-            pymobius.ant.turing.chromium_passwords.Ant(self.__item),
             pymobius.ant.turing.credentials.Ant(self.__item),
             pymobius.ant.turing.credhist_hashes.Ant(self.__item),
             pymobius.ant.turing.custom_dic.Ant(self.__item),

@@ -107,7 +107,10 @@ file_preferences::_load_accounts (const mobius::core::pod::data &account_info)
             a.picture_url = map.pop<std::string> ("picture_url");
 
             for (const auto &[k, v] : map)
-                a.metadata.set (k, v);
+            {
+                if (!v.is_map () && !v.is_list ())
+                    a.metadata.set (k, v);
+            }
 
             accounts_.push_back (a);
         }

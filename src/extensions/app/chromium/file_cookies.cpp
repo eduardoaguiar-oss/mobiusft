@@ -201,6 +201,7 @@ file_cookies::_load_cookies (mobius::core::database::database &db)
 
             // Set attributes
             c.idx = idx++;
+            c.schema_version = schema_version_;
             c.creation_utc = get_datetime (stmt.get_column_int64 (0));
             c.encrypted_value = stmt.get_column_bytearray (1);
             c.expires_utc = get_datetime (stmt.get_column_int64 (2));

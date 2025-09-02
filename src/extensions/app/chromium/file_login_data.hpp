@@ -45,6 +45,9 @@ class file_login_data
         // @brief Record Index
         std::uint64_t idx = 0;
 
+        // @brief Schema version
+        std::uint64_t schema_version = 0;
+
         // @brief Action URL
         std::string action_url;
 

@@ -595,4 +595,15 @@ operator!= (const bytearray &a, const bytearray &b)
     return !(a == b);
 }
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if first bytearray is lesser than second bytearray
+// @param a bytearray
+// @param b bytearray
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+operator< (const bytearray &a, const bytearray &b)
+{
+    return std::lexicographical_compare (a.begin (), a.end (), b.begin (), b.end ());
+}
+
 } // namespace mobius::core
