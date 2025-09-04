@@ -23,10 +23,10 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "module.hpp"
+#include <pymobius.hpp>
 #include "cipher.hpp"
 #include "hash.hpp"
 #include "hmac.hpp"
-#include <pymobius.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Function prototypes
@@ -39,6 +39,7 @@ PyObject *func_new_cipher_ecb (PyObject *, PyObject *);
 PyObject *func_new_cipher_gcm (PyObject *, PyObject *);
 PyObject *func_new_cipher_ige (PyObject *, PyObject *);
 PyObject *func_new_cipher_ofb (PyObject *, PyObject *);
+PyObject *func_new_cipher_poly1305 (PyObject *, PyObject *);
 PyObject *func_new_cipher_stream (PyObject *, PyObject *);
 PyObject *func_pbkdf1 (PyObject *, PyObject *);
 PyObject *func_pbkdf2_hmac (PyObject *, PyObject *);
@@ -66,6 +67,8 @@ static PyMethodDef module_methods[] = {
      "Create new cipher object with IGE mode"},
     {"new_cipher_ofb", func_new_cipher_ofb, METH_VARARGS,
      "Create new cipher object with OFB mode"},
+    {"new_cipher_poly1305", func_new_cipher_poly1305, METH_VARARGS,
+     "Create new cipher object with Poly1305 mode"},
     {"new_cipher_stream", func_new_cipher_stream, METH_VARARGS,
      "Create new stream cipher object"},
     {"pbkdf1", func_pbkdf1, METH_VARARGS, "Generate derived key using PBKDF1"},
@@ -88,7 +91,8 @@ static PyModuleDef module_def = {
     nullptr,
     nullptr,
     nullptr,
-    nullptr};
+    nullptr
+};
 
 } // namespace
 

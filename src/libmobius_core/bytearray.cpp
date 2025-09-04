@@ -280,7 +280,7 @@ bytearray::rpad (size_type siz, value_type val)
 // @param value Value to compare
 // @return Number of elements that are equal to value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::uint64_t
+std::size_t
 bytearray::count (value_type value) const noexcept
 {
     return std::count (data_.begin (), data_.end (), value);
@@ -605,5 +605,36 @@ operator< (const bytearray &a, const bytearray &b)
 {
     return std::lexicographical_compare (a.begin (), a.end (), b.begin (), b.end ());
 }
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Prune first n bytes from bytearray
+// @param b Bytearray
+// @param n Number of bytes to prune
+// @return New bytearray
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bytearray
+left_prune (const bytearray &b, size_t n)
+{
+    if (n >= b.size ())
+        return {};
+
+    return {b.begin () + n, b.end ()};
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Prune last n bytes from bytearray
+// @param b Bytearray
+// @param n Number of bytes to prune
+// @return New bytearray
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bytearray
+right_prune (const bytearray &b, size_t n)
+{
+    if (n >= b.size ())
+        return {};
+
+    return {b.begin (), b.end () - n};
+}
+
 
 } // namespace mobius::core

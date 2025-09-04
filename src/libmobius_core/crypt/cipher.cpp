@@ -146,6 +146,27 @@ new_cipher_gcm (const std::string &id, const bytearray &key,
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create new cipher object with Poly1305 mode
+// @param id Cipher ID
+// @param key Cipher key
+// @param iv Initialization vector
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+cipher
+new_cipher_poly1305 (const std::string &id, const bytearray &key,
+                     const bytearray &iv)
+{
+    auto c = std::make_shared<gcrypt::cipher_impl> (id, "poly1305");
+    c->set_key (key);
+
+    if (iv)
+        c->set_iv (iv);
+    else
+        c->set_iv (mobius::core::bytearray (c->get_block_size ()));
+
+    return cipher (c);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create new cipher object with IGE mode
 // @param id Cipher ID
 // @param key Cipher key

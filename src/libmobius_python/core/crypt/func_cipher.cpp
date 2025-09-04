@@ -315,6 +315,48 @@ func_new_cipher_ofb (PyObject *, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Function new_cipher_poly1305
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_new_cipher_poly1305 (PyObject *, PyObject *args)
+{
+    // parse arguments
+    std::string arg_cipher_id;
+    mobius::core::bytearray arg_key;
+    mobius::core::bytearray arg_iv;
+
+    try
+    {
+        arg_cipher_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_key = mobius::py::get_arg_as_bytearray (args, 1);
+        arg_iv = mobius::py::get_arg_as_bytearray (args, 2,
+                                                   mobius::core::bytearray {});
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // execute C++ code
+    PyObject *ret = nullptr;
+
+    try
+    {
+        auto cm = mobius::core::crypt::new_cipher_poly1305 (arg_cipher_id, arg_key,
+                                                           arg_iv);
+        ret = pymobius_core_crypt_cipher_to_pyobject (cm);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // create Python imagefile according to its type
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Function new_cipher_stream
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *

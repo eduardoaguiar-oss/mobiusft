@@ -67,7 +67,10 @@ class post_processor_impl
         const std::string &,
         const mobius::core::bytearray &
     );
+
+    void _process_cookie (mobius::framework::model::evidence evidence);
     void _process_encryption_key (mobius::framework::model::evidence evidence);
+    void _process_generic_evidence (mobius::framework::model::evidence evidence);
 
     std::pair<bool, mobius::core::bytearray>
     _decrypt_data (const mobius::core::bytearray &) const;
@@ -76,7 +79,7 @@ class post_processor_impl
     _decrypt_dpapi_value (const mobius::core::bytearray &) const;
 
     std::pair<bool, mobius::core::bytearray>
-    _decrypt_v10_value (const mobius::core::bytearray &) const;
+    _decrypt_v_value (const mobius::core::bytearray &) const;
 
     mobius::core::bytearray
     _decrypt_v20_encrypted_key (const mobius::core::bytearray &) const;

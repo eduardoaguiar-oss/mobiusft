@@ -35,8 +35,12 @@ Mobius Forensic Toolkit 2.18
 	* libmobius_core: Added new method pod::data::to_map
 	* libmobius_core: Added new template method pod::data::data (const std::vector<T>&)
 	* libmobius_core: Added new operator< (bytearray, bytearray)
+	* libmobius_core: Added new function left_prune (bytearray, n)
+	* libmobius_core: Added new function right_prune (bytearray, n)
+	* libmobius_core: Added new function crypt::new_cipher_poly1305
 	* libmobius_python: Added callback for "file_for_sampling" event
 	* libmobius_python: Added new method function::call
+	* libmobius_python: Added new function crypt.new_cipher_poly1305
 
 Mobius Forensic Toolkit 2.17
 	* Added new C++ extension called "app-chromium"

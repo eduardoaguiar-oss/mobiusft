@@ -248,8 +248,8 @@ class bytearray
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::uint64_t count (std::uint8_t) const noexcept;
-    bool all_equal (std::uint8_t) const noexcept;
+    std::size_t count (value_type) const noexcept;
+    bool all_equal (value_type) const noexcept;
     bool compare (size_type, const bytearray &) const noexcept;
     bool startswith (const bytearray &) const noexcept;
     bool endswith (const bytearray &) const noexcept;
@@ -271,7 +271,7 @@ class bytearray
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Functions
+// Operators
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray operator+ (const bytearray &, const bytearray &);
 bytearray operator^ (const bytearray &, const bytearray &);
@@ -279,6 +279,12 @@ bytearray operator<< (const bytearray &, int);
 bytearray operator>> (const bytearray &, int);
 bool operator< (const bytearray &, const bytearray &);
 bool operator!= (const bytearray &, const bytearray &);
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Functions
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bytearray left_prune (const bytearray &, size_t);
+bytearray right_prune (const bytearray &, size_t);
 
 } // namespace mobius::core
 

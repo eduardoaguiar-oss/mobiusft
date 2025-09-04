@@ -195,6 +195,11 @@ cipher new_cipher_ofb (
     const mobius::core::bytearray &,
     const mobius::core::bytearray & = {}
 );
+cipher new_cipher_poly1305 (
+    const std::string &,
+    const mobius::core::bytearray &,
+    const mobius::core::bytearray & = {}
+);
 cipher
 new_cipher_stream (const std::string &, const mobius::core::bytearray & = {});
 

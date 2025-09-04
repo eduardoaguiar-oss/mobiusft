@@ -37,7 +37,7 @@
 namespace
 {
 // @brief Debug flag
-static constexpr bool DEBUG = true;
+static constexpr bool DEBUG = false;
 
 // @brief App Bound Encrypted Key Signature (v20)
 static const mobius::core::bytearray APP_BOUND_SIGNATURE = "APPB";
@@ -100,77 +100,69 @@ post_processor_impl::process_evidence (
 
     try
     {
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Handle encryption keys
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         auto type = evidence.get_type ();
 
-        if (type == "encryption-key")
-        {
+        if (type == "cookie")
+            _process_cookie (evidence);
+
+        else if (type == "encryption-key")
             _process_encryption_key (evidence);
-            return;
-        }
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Check APP_FAMILY for Chromium artifacts
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        auto app_family =
-            evidence.get_attribute<std::string> ("app_family", {});
-
-        if (app_family != "chromium")
-            return;
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Process evidence
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        auto iter = ATTRIBUTES.find (type);
-
-        if (iter == ATTRIBUTES.end ())
-            return;
-
-        auto is_modified = false;
-        auto is_encrypted = false;
-
-        for (const auto &name : iter->second)
-        {
-            auto is_encrypted_value =
-                evidence.get_attribute<bool> (name + "_is_encrypted", false);
-
-            if (is_encrypted_value)
-            {
-                auto value =
-                    evidence.get_attribute<mobius::core::bytearray> (name, {});
-
-                auto encrypted_value =
-                    evidence.get_attribute<mobius::core::bytearray> (
-                        name + "_encrypted", {}
-                    );
-
-                auto [rc, decrypted_value] = _decrypt_data (encrypted_value);
-
-                if (rc)
-                {
-                    evidence.set_attribute (name, decrypted_value);
-                    evidence.set_attribute (name + "_is_encrypted", false);
-                    is_modified = true;
-                }
-                else
-                {
-                    is_encrypted = true;
-                }
-            }
-        }
-
-        if (is_modified)
-            ; // notify coordinator
-
-        // Store the evidence for later processing
-        if (is_encrypted)
-            pending_evidences_.push_back (evidence);
+        else
+            _process_generic_evidence (evidence);
     }
     catch (const std::exception &e)
     {
         log.warning (__LINE__, e.what ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Process cookie evidence
+// @param evidence Evidence to process
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+post_processor_impl::_process_cookie (
+    mobius::framework::model::evidence evidence
+)
+{
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Get cookie attributes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto value = evidence.get_attribute<mobius::core::bytearray> ("value", {});
+    auto encrypted_value =
+        evidence.get_attribute<mobius::core::bytearray> ("value_encrypted", {});
+    auto is_encrypted =
+        evidence.get_attribute<bool> ("value_is_encrypted", false);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // If cookie is not encrypted, or encrypted value is not available,
+    // nothing to do
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (!is_encrypted || !encrypted_value)
+        return;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Attempt to decrypt the cookie value
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto [rc, decrypted_value] = _decrypt_data (encrypted_value);
+
+    if (rc)
+    {
+        // prune first 32 bytes if encryption algorithm is "v20"
+        if (encrypted_value.startswith ("v20"))
+            decrypted_value = left_prune (decrypted_value, 32);
+
+        evidence.set_attribute ("value", decrypted_value);
+        evidence.set_attribute ("value_is_encrypted", false);
+
+        // @todo notify coordinator
+    }
+
+    else
+    {
+        // Store the evidence for later processing
+        pending_evidences_.push_back (evidence);
     }
 }
 
@@ -264,6 +256,75 @@ post_processor_impl::_process_encryption_key (
     }
 }
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Process generic evidence
+// @param evidence Evidence to process
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+post_processor_impl::_process_generic_evidence (
+    mobius::framework::model::evidence evidence
+)
+{
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Check APP_FAMILY for Chromium artifacts
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto app_family = evidence.get_attribute<std::string> ("app_family", {});
+
+    if (app_family != "chromium")
+        return;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Process evidence
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto type = evidence.get_type ();
+    auto iter = ATTRIBUTES.find (type);
+
+    if (iter == ATTRIBUTES.end ())
+        return;
+
+    auto is_modified = false;
+    auto is_encrypted = false;
+
+    for (const auto &name : iter->second)
+    {
+        auto is_encrypted_value =
+            evidence.get_attribute<bool> (name + "_is_encrypted", false);
+
+        if (is_encrypted_value)
+        {
+            auto value =
+                evidence.get_attribute<mobius::core::bytearray> (name, {});
+
+            auto encrypted_value =
+                evidence.get_attribute<mobius::core::bytearray> (
+                    name + "_encrypted", {}
+                );
+
+            auto [rc, decrypted_value] = _decrypt_data (encrypted_value);
+
+            if (rc)
+            {
+                evidence.set_attribute (name, decrypted_value);
+                evidence.set_attribute (name + "_is_encrypted", false);
+                is_modified = true;
+            }
+            else
+            {
+                is_encrypted = true;
+            }
+        }
+    }
+
+    if (is_modified)
+    {
+        // @todo notify coordinator
+    }
+
+    // Store the evidence for later processing
+    if (is_encrypted)
+        pending_evidences_.push_back (evidence);
+}
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Decrypt an encrypted value
 // @param data Encrypted data to decrypt
@@ -276,62 +337,11 @@ post_processor_impl::_decrypt_data (const mobius::core::bytearray &data) const
 {
     try
     {
-        if (!data)
-            return {false, {}};
-
-        if (data.size () < 31)
-        {
-            if (DEBUG)
-                std::cout << "Data is too short to be decrypted: "
-                          << data.dump () << std::endl;
-            return {false, {}};
-        }
-
         if (data.startswith (DPAPI_SIGNATURE))
             return _decrypt_dpapi_value (data);
 
         else if (data.startswith ("v10") || data.startswith ("v20"))
-        {
-            auto version = data.slice (0, 2);
-            auto iv = data.slice (3, 14);
-            auto ciphertext = data.slice (15, data.size () - 17);
-            auto tag = data.slice (data.size () - 16, data.size () - 1);
-
-            for (const auto &key_value : chromium_keys_)
-            {
-                auto cipher =
-                    mobius::core::crypt::new_cipher_gcm ("aes", key_value, iv);
-                auto plaintext = cipher.decrypt (ciphertext);
-
-                if (cipher.check_tag (tag))
-                {
-                    if (DEBUG)
-                        std::cout
-                            << version.to_string ()
-                            << " data decrypted with key: " << key_value.dump ()
-                            << std::endl
-                            << "Plaintext: " << std::endl
-                            << plaintext.dump () << std::endl;
-                    return {true, plaintext};
-                }
-            }
-
-            if (DEBUG && version == "v10")
-            {
-                std::cout << "Failed to decrypt " << version.to_string ()
-                          << " data. "
-                          << "IV len: " << iv.size ()
-                          << ". Ciphertext size: " << ciphertext.size ()
-                          << ". TAG size: " << tag.size ()
-                          << ". Data:" << std::endl
-                          << data.dump () << std::endl;
-                std::cout << "Chromium keys available:" << std::endl;
-                for (const auto &key : chromium_keys_)
-                {
-                    std::cout << " - " << key.dump () << std::endl;
-                }
-            }
-        }
+            return _decrypt_v_value (data);
     }
     catch (const std::exception &e)
     {
@@ -381,6 +391,61 @@ post_processor_impl::_decrypt_dpapi_value (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decrypt v10/v20 value
+// @param data Encrypted v10/v20 data to decrypt
+// @return Decrypted data as bytearray
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::pair<bool, mobius::core::bytearray>
+post_processor_impl::_decrypt_v_value (
+    const mobius::core::bytearray &data
+) const
+{
+    if (data.size () < 31)
+        return {false, {}};
+
+    auto version = data.slice (0, 2);
+    auto iv = data.slice (3, 14);
+    auto ciphertext = data.slice (15, data.size () - 17);
+    auto tag = data.slice (data.size () - 16, data.size () - 1);
+
+    for (const auto &key_value : chromium_keys_)
+    {
+        auto cipher =
+            mobius::core::crypt::new_cipher_gcm ("aes", key_value, iv);
+        auto plaintext = cipher.decrypt (ciphertext);
+
+        if (cipher.check_tag (tag))
+        {
+            if (DEBUG)
+                std::cout << version.to_string ()
+                          << " data decrypted with key: " << key_value.dump ()
+                          << std::endl
+                          << "Plaintext: " << std::endl
+                          << plaintext.dump () << std::endl;
+
+            return {true, plaintext};
+        }
+    }
+
+    if (DEBUG)
+    {
+        std::cout << "Failed to decrypt " << version.to_string () << " data. "
+                  << "IV len: " << iv.size ()
+                  << ". Ciphertext size: " << ciphertext.size ()
+                  << ". TAG size: " << tag.size () << ". Data:" << std::endl
+                  << data.dump () << std::endl;
+
+        std::cout << "Chromium keys available:" << std::endl;
+        for (const auto &key : chromium_keys_)
+        {
+            std::cout << " - " << key.dump () << std::endl;
+        }
+    }
+
+    return {false, {}};
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Decrypt v20 encrypted key
 // @param encrypted_value Encrypted key to decrypt
 // @return Decrypted value as bytearray
@@ -410,26 +475,23 @@ post_processor_impl::_decrypt_v20_encrypted_key (
     try
     {
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Try to decrypt encrypted value
+        // Try to decrypt encrypted value with DPAPI system key first
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        log.debug (
-            __LINE__, "Trying to decrypt V20 encrypted value. Size: " +
-                          std::to_string (encrypted_value.size ())
-        );
-
         auto [rc_1, decrypted_value_1] = _decrypt_dpapi_value (encrypted_value);
+
+        if (!rc_1)
+            return {};
 
         if (DEBUG)
             std::cout << "Decrypted V20 value (1st attempt): " << std::endl
                       << decrypted_value_1.dump () << std::endl;
 
-        if (!rc_1)
-            return {};
-
-        
-        if (decrypted_value_1.size () == 32)    // Edge v20 key
+        if (decrypted_value_1.size () == 32) // Edge v20 key
             return decrypted_value_1;
 
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Try to decrypt encrypted value with DPAPI user key second
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         auto [rc_2, decrypted_value] = _decrypt_dpapi_value (decrypted_value_1);
 
         if (!rc_2)
@@ -476,21 +538,17 @@ post_processor_impl::_decrypt_v20_encrypted_key (
                     "aes", V20_PROTECTION_LEVEL_1_KEY, iv
                 );
             }
-            else if (protection_level == 2 || protection_level == 3)
+            else if (protection_level == 2)
             {
-                // @todo handle protection levels 2 and 3
-                log.development (
-                    __LINE__,
-                    "Unhandled protection level in v20 decrypted value: " +
-                        std::to_string (protection_level)
+                cipher = mobius::core::crypt::new_cipher_poly1305 (
+                    "chacha20", V20_PROTECTION_LEVEL_2_KEY, iv
                 );
-                return {};
             }
             else
             {
                 log.development (
                     __LINE__,
-                    "Unhandled protection level in v20 decrypted value: " +
+                    "Unhandled protection level in v20 decrypted key: " +
                         std::to_string (protection_level)
                 );
                 return {};
@@ -510,7 +568,7 @@ post_processor_impl::_decrypt_v20_encrypted_key (
                 __LINE__, "Unhandled key size in v20 decrypted value: " +
                               std::to_string (key_size)
             );
-            log.development (__LINE__, "Key data: " + key_data.dump ());
+            log.development (__LINE__, "Key data:\n" + key_data.dump ());
 
             if (DEBUG)
                 std::cout << "Unexpected key size in v20 decrypted value: "
@@ -537,9 +595,9 @@ post_processor_impl::_decrypt_v20_encrypted_key (
 // @param type Type of the key (e.g., "dpapi.sys", "chromium.v10")
 // @param id Identifier of the key
 // @param value Value of the key
-// @note This function processes pending evidences that can be decrypted with
-// the newly stored key.
-// It checks the type of each pending evidence and processes it accordingly.
+// @note This function processes pending evidences that can be decrypted
+// with the newly stored key. It checks the type of each pending evidence
+// and processes it accordingly.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 post_processor_impl::_on_key (
