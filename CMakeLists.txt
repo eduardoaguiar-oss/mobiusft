@@ -20,7 +20,7 @@ cmake_minimum_required(VERSION 3.20)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(MOBIUS_VERSION 2.18)
+set(MOBIUS_VERSION 2.19)
 set(MOBIUS_DESCRIPTION "Mobius Forensic Toolkit")
 
 project(mobius
@@ -48,6 +48,7 @@ message(STATUS "MOBIUS_PYTHON_DIR: ${MOBIUS_PYTHON_DIR}")
 # Build modules
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_subdirectory(data)
+add_subdirectory(docs)
 add_subdirectory(include)
 add_subdirectory(src)
 

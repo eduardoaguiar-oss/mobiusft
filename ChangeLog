@@ -1,3 +1,6 @@
+Mobius Forensic Toolkit 2.19
+	* docs: Create directory for consolidated documentation
+
 Mobius Forensic Toolkit 2.18
 	* app-chromium: Added support for History schema version up to 70
 	* app-chromium: Added support for Web Data schema version up to 141

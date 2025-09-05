@@ -1,7 +1,7 @@
 ---
 title: Mobius Forensic Toolkit
 description: "Open-source forensic framework and tools written in C++/Python"
-version: 2.18
+version: 2.19
 ---
 
 # Mobius Forensic Toolkit
@@ -57,14 +57,13 @@ cmake --install build
 Example:
 
 ```bash
-tar xvf mobiusft-2.16.tar.xz
-cmake -B build -S mobiusft-2.16 --install-prefix /opt/mobiusft-2.16 -DLIBTSK_ROOT=/opt/sleuthkit-4.14.0 -DCMAKE_BUILD_TYPE=Release
+tar xvf mobiusft-2.18.tar.xz
+cmake -B build -S mobiusft-2.18 --install-prefix /opt/mobiusft-2.18 -DLIBTSK_ROOT=/opt/sleuthkit-4.14.0 -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j 24
-cmake --install build
+sudo 'cmake --install build'
 ```
 
-For detailed installation instructions, refer to the official installation guide:  
-[https://www.nongnu.org/mobiusft/support/installation_guide/index.html](https://www.nongnu.org/mobiusft/support/installation_guide/index.html).
+For detailed installation instructions, refer to the official [installation guide](docs/INSTALL.md).
 
 ## Usage
 
@@ -76,7 +75,10 @@ To get started with the Mobius Forensic Toolkit, check out the **Quick Start Gui
 Please, support this project. Here are the ways you can make a donation:
 
 - Buy me a coffee at https://buymeacoffee.com/mobiusft.
-- Send any amount of crypto coins to one of the addresses listed at https://www.nongnu.org/mobiusft.
+- Send any amount of crypto coins to one of the following addresses:
+   - Bitcoin (BTC): bc1qa92rvaru86hr5lup2a6ewqqgnran3p2qf3djah
+   - Litecoin (LTC): LhiBHWgrqysZsoZfiuc3tUyzFRWwmDZipo
+   - Monero (XMR): 46J7sEedDzqDvbrqzpb8suJgEbiK6RMtKHU7THuuN7FAciSN84npSqdFL5JSRFmsqrDaP9tZmYaTTBXEKU37XvLFGH2mkyi
 
 ## Acknowledgments
 
