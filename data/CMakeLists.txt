@@ -33,7 +33,7 @@ add_library(mobius_data INTERFACE)
 # Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 install(
-    DIRECTORY data icons
+    DIRECTORY data icons profiles
     DESTINATION share/mobiusft
     USE_SOURCE_PERMISSIONS
 )
