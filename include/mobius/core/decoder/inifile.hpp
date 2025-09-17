@@ -3,7 +3,9 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -30,38 +32,59 @@ namespace mobius::core::decoder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class inifile
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  inifile (const mobius::core::io::reader&, const std::string& = "UTF-8", const std::string& = {});
-  inifile (inifile&&) noexcept = default;
-  inifile (const inifile&) noexcept = default;
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    inifile (
+        const mobius::core::io::reader &,
+        const std::string & = "UTF-8",
+        const std::string & = {}
+    );
+    inifile (inifile &&) noexcept = default;
+    inifile (const inifile &) noexcept = default;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Operators
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  inifile& operator= (const inifile&) noexcept = default;
-  inifile& operator= (inifile&&) noexcept = default;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    inifile &operator= (const inifile &) noexcept = default;
+    inifile &operator= (inifile &&) noexcept = default;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Function prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  bool has_value (const std::string&, const std::string&) const;
-  std::string get_value (const std::string&, const std::string&) const;
-  void set_case_sensitive (bool);
-  void set_comment_char (char);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Function prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool has_value (const std::string &, const std::string &) const;
+    std::string get_value (const std::string &, const std::string &) const;
+    void set_case_sensitive (bool);
+    void set_comment_char (char);
 
-private:
-  // @brief Implementation class forward declaration
-  class impl;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get value, with default if not found
+    // @param section Section name
+    // @param key Key name
+    // @param default_value Default value to return if key not found
+    // @return Value string or default_value if not found
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_value (
+        const std::string &section,
+        const std::string &key,
+        const std::string &default_value
+    ) const
+    {
+        if (has_value (section, key))
+            return get_value (section, key);
+        return default_value;
+    }
 
-  // @brief Implementation pointer
-  std::shared_ptr <impl> impl_;
+  private:
+    // @brief Implementation class forward declaration
+    class impl;
+
+    // @brief Implementation pointer
+    std::shared_ptr<impl> impl_;
 };
 
 } // namespace mobius::core::decoder
 
 #endif
-
-

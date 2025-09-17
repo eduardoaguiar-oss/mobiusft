@@ -24,17 +24,90 @@
 #include <mobius/core/io/walker.hpp>
 #include <mobius/framework/case_profile.hpp>
 #include <stdexcept>
-#include <set>
+#include <map>
 
 namespace mobius::framework
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief case_profile implementation class
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+class case_profile::impl
+{
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl (const impl &) = delete;
+    impl (impl &&) = delete;
+    impl () = default;
+    explicit impl (const std::string &);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl &operator= (const impl &) = delete;
+    impl &operator= (impl &&) = delete;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get profile ID
+    // @return Profile ID
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_id () const
+    {
+        return id_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get profile name
+    // @return Profile name
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_name () const
+    {
+        return name_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get profile description
+    // @return Profile description
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_description () const
+    {
+        return description_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get processor scope
+    // @return Processor scope
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_processor_scope () const
+    {
+        return processor_scope_;
+    }
+
+  private:
+    // @brief Profile ID
+    std::string id_;
+
+    // @brief Profile name
+    std::string name_;
+
+    // @brief Profile description
+    std::string description_;
+
+    // @brief Processor scope
+    std::string processor_scope_;
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // @param id Profile ID
-//
 // Loads profile from configuration path. If not found, tries data path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-case_profile::case_profile (const std::string &id)
+case_profile::impl::impl (const std::string &id)
 {
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Search profile file
@@ -64,52 +137,112 @@ case_profile::case_profile (const std::string &id)
     id_ = id;
     name_ = ini.get_value ("general", "name");
     description_ = ini.get_value ("general", "description");
-    processor_scope_ = ini.get_value ("processor", "scope");
+    processor_scope_ = ini.get_value ("processor", "scope", "all");
 }
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Constructor
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+case_profile::case_profile ()
+    : impl_ (std::make_shared<impl> ())
+{
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Constructor
+// @param id Profile ID
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+case_profile::case_profile (const std::string &id)
+    : impl_ (std::make_shared<impl> (id))
+{
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get ID
+// @return Profile ID
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+case_profile::get_id () const
+{
+    return impl_->get_id ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get name
+// @return Profile name
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+case_profile::get_name () const
+{
+    return impl_->get_name ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get description
+// @return Profile description
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+case_profile::get_description () const
+{
+    return impl_->get_description ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get processor scope
+// @return Processor scope
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+case_profile::get_processor_scope () const
+{
+    return impl_->get_processor_scope ();
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief List profiles
-// @return Vector of profile IDs
+// @return Vector of profiles
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector<std::string>
+std::vector<case_profile>
 list_case_profiles ()
 {
-    std::set<std::string> profiles;
+    std::map<std::string, case_profile> profiles;
 
+    // Get profile folders
     mobius::core::application app;
 
-    // List profiles from data path
-    auto folder =
+    auto data_folder =
         mobius::core::io::new_folder_by_path (app.get_data_path ("profiles"));
 
-    auto w = mobius::core::io::walker (folder);
-
-    for (const auto &f : w.get_files_by_pattern ("*.profile"))
-    {
-        auto name = f.get_name ();
-        if (name.size () > 8 && name.substr (name.size () - 8) == ".profile")
-            profiles.insert (name.substr (0, name.size () - 8));
-    }
-
-    // List profiles from config path
-    folder =
+    auto config_folder =
         mobius::core::io::new_folder_by_path (app.get_config_path ("profiles"));
 
-    if (!folder.exists ())
-        folder.create();
+    if (!config_folder.exists ())
+        config_folder.create ();
 
-    w = mobius::core::io::walker (folder);
-
-    for (const auto &f : w.get_files_by_pattern ("*.profile"))
+    // List profiles from folders
+    for (const auto &folder : {data_folder, config_folder})
     {
-        auto name = f.get_name ();
-        if (name.size () > 8 && name.substr (name.size () - 8) == ".profile")
-            profiles.insert (name.substr (0, name.size () - 8));
+        auto w = mobius::core::io::walker (folder);
+
+        for (const auto &f : w.get_files_by_pattern ("*.profile"))
+        {
+            auto name = f.get_name ();
+            if (name.size () > 8 && name.substr (name.size () - 8) == ".profile")
+            {
+                auto profile_id = name.substr (0, name.size () - 8);
+                profiles[profile_id] = case_profile (profile_id);
+            }
+        }
     }
 
     // Return as vector
-    return std::vector<std::string> (profiles.begin (), profiles.end ());
+    std::vector<case_profile> result;
+
+    std::transform (
+        profiles.begin (), profiles.end (), std::back_inserter (result),
+        [] (const auto &pair) { return pair.second; }
+    );
+
+    return result;
 }
 
 } // namespace mobius::framework

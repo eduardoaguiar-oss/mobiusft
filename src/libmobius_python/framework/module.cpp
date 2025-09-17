@@ -27,6 +27,7 @@
 #include <pymobius.hpp>
 #include "ant/module.hpp"
 #include "attribute.hpp"
+#include "case_profile.hpp"
 #include "category.hpp"
 #include "evidence_loader.hpp"
 #include "model/module.hpp"
@@ -69,6 +70,8 @@ static PyMethodDef module_methods[] = {
      "Remove config value"},
     {"new_config_transaction", func_framework_new_config_transaction,
      METH_VARARGS, "Create new transaction object to config database"},
+    {"list_case_profiles", pymobius_framework_list_case_profiles, METH_VARARGS,
+     "List case profiles"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
@@ -100,6 +103,7 @@ new_framework_module ()
 
     // Add types
     module.add_type ("attribute", new_framework_attribute_type ());
+    module.add_type ("case_profile", new_framework_case_profile_type ());
     module.add_type ("category", new_framework_category_type ());
     module.add_type ("evidence_loader", new_framework_evidence_loader_type ());
 

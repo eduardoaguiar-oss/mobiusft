@@ -1,5 +1,11 @@
 Mobius Forensic Toolkit 2.19
 	* docs: Create directory for consolidated documentation
+	* Created new resource folder data/profiles
+	* libmobius_core: Added new method decoder::ini::get_value (with default value)
+	* libmobius_framework: Added new class case_profile
+	* libmobius_framework: Added new function list_case_profiles
+	* libmobius_python: Added new class framework.case_profile
+	* libmobius_python: Added new function framework.list_case_profiles
 
 Mobius Forensic Toolkit 2.18
 	* app-chromium: Added support for History schema version up to 70
