@@ -91,6 +91,19 @@ class Ant(object):
         self.__profile_id = profile_id
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Get processing status
+    # @return Status dictionary
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def get_status(self):
+        status = mobius.core.pod.map()
+        status.set('id', self.id)
+        status.set('name', self.name)
+        status.set('version', self.version)
+        status.set('profile_id', self.__profile_id)
+
+        return status
+    
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Get log messages, if any
     # @return Messages
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

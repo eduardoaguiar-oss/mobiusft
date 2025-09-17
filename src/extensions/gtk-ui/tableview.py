@@ -47,6 +47,7 @@ DATATYPES = {
 # @brief widget: tableview
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class TableViewWidget(object):
+    
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief column class
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -259,6 +260,7 @@ class TableViewWidget(object):
         column.type = column_type
         column.is_exportable = column_type not in ('object', 'icon')
         column.is_sortable = column_type not in ('object', 'icon') and is_sortable
+        column.is_visible = column_type not in ('object',)
         self.__columns.append(column)
 
         return column
