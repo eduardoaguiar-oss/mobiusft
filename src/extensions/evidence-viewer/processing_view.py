@@ -107,10 +107,8 @@ class ProcessingView(object):
         self.__running_view.set_sensitive(False)
         self.__running_view.show()
 
-        column = self.__running_view.add_column('timestamp', 'Date/Time')
-        column.is_sortable = True
-
-        self.__running_view.add_column('event', 'Event')
+        self.__running_view.add_column('data', 'Data')
+        self.__running_view.add_column('event', 'Value')
 
         vbox.add_child(self.__running_view.get_ui_widget(), mobius.core.ui.box.fill_with_widget)
 
@@ -190,7 +188,7 @@ class ProcessingView(object):
 
         if itemlist:
             if any(i.has_datasource() for i in itemlist):
-                self.__populate_itemlist()
+                self.__populate_status_tableview()
 
             elif len (itemlist) == 1:
                 self.__widget.set_message("Selected item has no datasource")
@@ -202,18 +200,9 @@ class ProcessingView(object):
             self.__widget.set_message("Select a case item")
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Add message for running item
-    # @param timestamp Message timestamp
-    # @param text Message text
+    # @brief Populate status tableview with itemlist
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def add_message(self, item, timestamp, text):
-        if item in self.__running_items and item in self.__itemlist:
-            GLib.idle_add(self.__running_view.add_row, (str(timestamp), text))
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Populate panel with itemlist
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __populate_itemlist(self):
+    def __populate_status_tableview(self):
         self.__status_tableview.clear()
         
         for item in self.__itemlist:
@@ -224,15 +213,11 @@ class ProcessingView(object):
         self.__widget.show_content()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Update item status in the itemlist
-    # @param item Item to update
+    # @brief Handle status tableview selection change event
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __update_item_status(self, item):
-        for row in self.__status_tableview:
-            if row[3] == item:
-                row[0] = self.__get_item_status(item)
-
+    def status_tableview_on_selection_changed(self, selected_rows):
         self.__on_status_tableview_updated()
+        self.__running_view.set_sensitive(True)
         
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Get item status
@@ -253,10 +238,26 @@ class ProcessingView(object):
             return 'Not processed'
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Handle status tableview selection change event
+    # @brief Update item status in the itemlist
+    # @param item Item to update
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def status_tableview_on_selection_changed(self, selected_rows):
+    def __update_item_status(self, item):
+        for row in self.__status_tableview:
+            if row[3] == item:
+                row[0] = self.__get_item_status(item)
+
         self.__on_status_tableview_updated()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Update running view with ANT status metadata
+    # @param ant ANT instance
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __update_running_view(self, ant):
+        metadata = ant.get_status()
+        self.__running_view.clear()
+        
+        for key, value in metadata.get_values():
+            self.__running_view.add_row((key, str(value)))
         
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Update panel when status tableview selection changes
@@ -286,8 +287,6 @@ class ProcessingView(object):
 
         # Refresh running view
         if len(selected_items) == 1 and selected_items[0] in self.__running_items:
-            self.__running_view.set_sensitive(True)
-            
             old_watched_item = self.__watched_item
 
             if not self.__watched_item or self.__watched_item != selected_items[0]:
@@ -295,17 +294,15 @@ class ProcessingView(object):
                 self.__watched_item = selected_items[0]
                 
                 if not old_watched_item:
-                    GLib.timeout_add(REFRESH_INTERVAL_MS, self.__on_update_running_view)
+                    GLib.timeout_add(REFRESH_INTERVAL_MS, self.__on_running_timer_interval)
 
         else:
-            self.__running_view.set_sensitive(False)
             self.__watched_item = None
             
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Update running view
+    # @brief Handle timer interval event and update running view.
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __on_update_running_view(self):
-        self.__running_view.clear()
+    def __on_running_timer_interval(self):
 
         # Get running ANT
         if not self.__watched_item:
@@ -318,10 +315,7 @@ class ProcessingView(object):
         t, ant = data
         
         # Update running view with ANT status metadata
-        metadata = ant.get_status()
-        
-        for key, value in metadata.get_values():
-            self.__running_view.add_row((key, str(value)))
+        self.__update_running_view(ant)
         
         # Continue updating if still running
         return True
@@ -350,8 +344,9 @@ class ProcessingView(object):
             # returns early without proceeding further.
             selected_rows = self.__status_tableview.get_selected_rows()
             selected_items = [row[3] for (row_id, row) in selected_rows]
+            can_run_items = [item for item in selected_items if item.has_datasource() and item not in self.__running_items]
                               
-            if any (item.has_ant('evidence') for item in selected_items):
+            if any (item.has_ant('evidence') for item in can_run_items):
                 dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
                 dialog.text = "You are about to reload evidences. Are you sure?"
                 dialog.add_button(mobius.core.ui.message_dialog.button_yes)
@@ -376,15 +371,14 @@ class ProcessingView(object):
             # using the __thread_begin method. Each thread is set as a daemon,
             # meaning it will not prevent the program from exiting. The running threads are
             # stored in the running_items dictionary with the corresponding item as the key.
-            for item in selected_items:
-                if item.has_datasource() and item not in self.__running_items:
-                    ant = pymobius.ant.evidence.Ant(item)
-                    ant.clear_messages()
+            for item in can_run_items:
+                ant = pymobius.ant.evidence.Ant(item, profile_id)
 
-                    t = threading.Thread(target=self.__thread_begin, args=(item, profile_id), daemon=True)
-                    t.start()
-                    self.__running_items[item] = (t, ant)
-                    self.__update_item_status(item)
+                t = threading.Thread(target=self.__thread_begin, args=(ant, item), daemon=True)
+                t.start()
+                
+                self.__running_items[item] = (t, ant)
+                self.__update_item_status(item)
 
         except Exception as e:
             mobius.core.logf(f"WRN {str(e)}\n{traceback.format_exc()}")
@@ -392,24 +386,20 @@ class ProcessingView(object):
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Entry point for processing an evidence item in a new thread.
+    # @param ant The ANT instance responsible for processing the evidence item.
+    # @param item The evidence item to be processed.
     #
     # This function initializes a processing thread to handle the specified 
     # evidence item. The thread guards against concurrency issues and uses the 
     # ANT engine to execute evidence-related tasks. Once processing is complete, 
     # a callback is scheduled on the main thread to finalize the operation.
     #
-    # @param item The evidence item to be processed.
-    # @param profile_id Profile ID to process item
-    #
     # After starting, the function immediately returns control to the caller while
     # the processing continues asynchronously.
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __thread_begin(self, item, profile_id):
+    def __thread_begin(self, ant, item):
         guard = mobius.core.thread_guard()
 
-        ant = pymobius.ant.evidence.Ant(item)
-        ant.set_profile_id(profile_id)
-        ant.set_control(self)
         ant.reset()
         ant.run()
 
@@ -425,6 +415,7 @@ class ProcessingView(object):
     # @param item The evidence item whose processing thread has finished.
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __thread_end(self, item):
-        self.__running_items.pop(item, None)
+        t, ant = self.__running_items.pop(item, [None, None])
+        self.__update_running_view(ant)
         self.__update_item_status(item)
         self.__control.on_processing_end()

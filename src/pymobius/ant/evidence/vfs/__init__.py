@@ -41,7 +41,7 @@ from . import wireless_networks
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ANT_ID = 'evidence.vfs'
 ANT_NAME = 'Evidence Loader Agent - VFS'
-ANT_VERSION = '1.0'
+ANT_VERSION = '1.1'
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Ants for each evidence type
@@ -83,60 +83,65 @@ class Ant(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Initialize object
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __init__(self, item):
+    def __init__(self, item, profile_id):
         self.id = ANT_ID
         self.name = ANT_NAME
         self.version = ANT_VERSION
 
         self.__item = item
         self.__datasource = item.get_datasource()
+        self.__profile_id = profile_id
         self.__vfs = self.__datasource.get_vfs()
-        self.__control = None
+        self.__step_number = ''
+        self.__step_name = ''
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Set control object
-    # @param control Control object
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def set_control(self, control):
-        self.__control = control
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Get status
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def get_status(self):
+        status = mobius.core.pod.map()
+        status.set('step_number', self.__step_number)
+        status.set('step_name', self.__step_name)
 
+        return status
+    
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Run ant
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def run(self):
-        self.__control.log(f"INF ant {self.id} started")
+        mobius.core.logf(f"INF ant {self.id} started")
 
         # run sub-ants
-        for ant_class in ANTS:
+        for idx, ant_class in enumerate(ANTS, 1):
             ant = ant_class(self.__item)
-            self.__control.log(f"INF ant.run started: {ant.name}")
+
+            self.__step_number = f"1.{idx}"
+            self.__step_name = ant.name
+            
+            mobius.core.logf(f"INF ant.run started: {ant.name}")
 
             try:
                 ant.run()
             except Exception as e:
-                self.__control.log(f'WRN {str(e)}\n{traceback.format_exc()}')
+                mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
 
-            self.__control.log(f"INF ant.run ended: {ant.name}")
+            mobius.core.logf(f"INF ant.run ended: {ant.name}")
 
         # run evidence loader ants
-        for loader in LOADERS:
-            self.__control.log(f"INF evidence loader started: {loader}")
+        for idx, loader in enumerate(LOADERS, 1):
+            mobius.core.logf(f"INF evidence loader started: {loader}")
 
             try:
+                self.__item.reset_ant(f"evidence.{loader}")
                 ant = mobius.framework.evidence_loader(loader, self.__item)
+                
+                self.__step_number = f"2.{idx}"
+                self.__step_name = f"{loader} loader"
+                
                 ant.run()
             except Exception as e:
-                self.__control.log(f'WRN {str(e)}\n{traceback.format_exc()}')
+                mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
 
-            self.__control.log(f"INF evidence loader ended: {loader}")
+            mobius.core.logf(f"INF evidence loader ended: {loader}")
 
-        self.__control.log(f"INF ant {self.id} ended")
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Reset ant
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def reset(self):
-        for loader in LOADERS:
-            self.__item.reset_ant(f'evidence.{loader}')
-
-        self.__item.reset_ant('evidence')
+        mobius.core.logf(f"INF ant {self.id} ended")

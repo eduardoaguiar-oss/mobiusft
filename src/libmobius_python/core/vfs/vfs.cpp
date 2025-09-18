@@ -23,14 +23,15 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "vfs.hpp"
-#include "block.hpp"
-#include "disk.hpp"
-#include "core/io/entry.hpp"
-#include "core/pod/map.hpp"
 #include <mobius/core/exception.inc>
+#include <pygil.hpp>
 #include <pylist.hpp>
 #include <pymobius.hpp>
 #include <stdexcept>
+#include "block.hpp"
+#include "core/io/entry.hpp"
+#include "core/pod/map.hpp"
+#include "disk.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Check if value is an instance of <i>vfs</i>
@@ -79,7 +80,9 @@ tp_f_get_state (core_vfs_vfs_o *self, PyObject *)
 
     try
     {
-        ret = pymobius_core_pod_map_to_pyobject (self->obj->get_state ());
+        ret = pymobius_core_pod_map_to_pyobject (
+            mobius::py::GIL () (self->obj->get_state ())
+        );
     }
     catch (const std::exception &e)
     {
@@ -101,6 +104,7 @@ tp_f_clear (core_vfs_vfs_o *self, PyObject *)
     // Execute C++ function
     try
     {
+        mobius::py::GIL GIL;
         self->obj->clear ();
     }
     catch (const std::exception &e)
@@ -124,6 +128,7 @@ tp_f_rescan (core_vfs_vfs_o *self, PyObject *)
     // Execute C++ function
     try
     {
+        mobius::py::GIL GIL;
         self->obj->rescan ();
     }
     catch (const std::exception &e)
@@ -150,7 +155,9 @@ tp_f_is_available (core_vfs_vfs_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->is_available ());
+        ret = mobius::py::pybool_from_bool (
+            mobius::py::GIL () (self->obj->is_available ())
+        );
     }
     catch (const std::exception &e)
     {
@@ -176,7 +183,8 @@ tp_f_add_disk (core_vfs_vfs_o *self, PyObject *args)
     try
     {
         arg_d = mobius::py::get_arg_as_cpp (
-            args, 0, pymobius_core_vfs_disk_from_pyobject);
+            args, 0, pymobius_core_vfs_disk_from_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -189,7 +197,9 @@ tp_f_add_disk (core_vfs_vfs_o *self, PyObject *args)
 
     try
     {
-        ret = PyLong_FromSize_t (self->obj->add_disk (arg_d));
+        ret = PyLong_FromSize_t (
+            mobius::py::GIL () (self->obj->add_disk (arg_d))
+        );
     }
     catch (const std::exception &e)
     {
@@ -224,6 +234,7 @@ tp_f_remove_disk (core_vfs_vfs_o *self, PyObject *args)
     // Execute C++ function
     try
     {
+        mobius::py::GIL GIL;
         self->obj->remove_disk (arg_idx);
     }
     catch (const std::exception &e)
@@ -250,7 +261,9 @@ tp_f_get_disks (core_vfs_vfs_o *self, PyObject *)
     try
     {
         ret = mobius::py::pylist_from_cpp_container (
-            self->obj->get_disks (), pymobius_core_vfs_disk_to_pyobject);
+            mobius::py::GIL () (self->obj->get_disks ()),
+            pymobius_core_vfs_disk_to_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -274,7 +287,9 @@ tp_f_get_blocks (core_vfs_vfs_o *self, PyObject *)
     try
     {
         ret = mobius::py::pylist_from_cpp_container (
-            self->obj->get_blocks (), pymobius_core_vfs_block_to_pyobject);
+            mobius::py::GIL () (self->obj->get_blocks ()),
+            pymobius_core_vfs_block_to_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -299,7 +314,9 @@ tp_f_get_root_entries (core_vfs_vfs_o *self, PyObject *)
     try
     {
         ret = mobius::py::pylist_from_cpp_container (
-            self->obj->get_root_entries (), pymobius_core_io_entry_to_pyobject);
+            mobius::py::GIL () (self->obj->get_root_entries ()),
+            pymobius_core_io_entry_to_pyobject
+        );
     }
     catch (const std::exception &e)
     {

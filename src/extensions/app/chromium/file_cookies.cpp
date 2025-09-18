@@ -35,33 +35,33 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //
 // - cookies
-//      - browser_provenance: 12-16, 18, 23-24
-//      - creation_utc: 4-5, 7-16, 18-19, 21, 23-24
-//      - encrypted_value: 7-16, 18-19, 21, 23-24
-//      - expires_utc: 4-5, 7-16, 18-19, 21, 23-24
+//      - browser_provenance: 12-16, 18, 21, 23-24
+//      - creation_utc: 4-5, 7-19, 21, 23-24
+//      - encrypted_value: 7-19, 21, 23-24
+//      - expires_utc: 4-5, 7-19, 21, 23-24
 //      - firstpartyonly: 8-10
 //      - has_cross_site_ancestor: 23-24
-//      - has_expires: 5, 7-16, 18-19, 21, 23-24
-//      - host_key: 4-5, 7-16, 18-19, 21, 23-24
+//      - has_expires: 5, 7-19, 21, 23-24
+//      - host_key: 4-5, 7-19, 21, 23-24
 //      - httponly: 4-5, 7-9
-//      - is_edgelegacycookie: 12-16, 18, 23-24
-//      - is_httponly: 10-16, 18-19, 21, 23-24
-//      - is_persistent: 10-16, 18-19, 21, 23-24
-//      - is_same_party: 13-16, 18-19
-//      - is_secure: 10-16, 18-19, 21, 23-24
-//      - last_access_utc: 4-5, 7-16, 18-19, 21, 23-24
+//      - is_edgelegacycookie: 12-16, 18, 21, 23-24
+//      - is_httponly: 10-19, 21, 23-24
+//      - is_persistent: 10-19, 21, 23-24
+//      - is_same_party: 13-19
+//      - is_secure: 10-19, 21, 23-24
+//      - last_access_utc: 4-5, 7-19, 21, 23-24
 //      - last_update_utc: 18-19, 21, 23-24
-//      - name: 4-5, 7-16, 18-19, 21, 23-24
-//      - path: 4-5, 7-16, 18-19, 21, 23-24
+//      - name: 4-5, 7-19, 21, 23-24
+//      - path: 4-5, 7-19, 21, 23-24
 //      - persistent: 5, 7-9
-//      - priority: 7-16, 18-19, 21, 23-24
-//      - samesite: 11-16, 18-19, 21, 23-24
+//      - priority: 7-19, 21, 23-24
+//      - samesite: 11-19, 21, 23-24
 //      - secure: 4-5, 7-9
-//      - source_port: 13-16, 18-19, 21, 23-24
-//      - source_scheme: 12-16, 18-19, 21, 23-24
+//      - source_port: 13-19, 21, 23-24
+//      - source_scheme: 12-19, 21, 23-24
 //      - source_type: 23-24
-//      - top_frame_site_key: 15-16, 18-19, 21, 23-24
-//      - value: 4-5, 7-16, 18-19, 21, 23-24
+//      - top_frame_site_key: 15-19, 21, 23-24
+//      - value: 4-5, 7-19, 21, 23-24
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace
@@ -73,7 +73,7 @@ namespace
 // of the web data schema in Chromium-based applications.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::unordered_set<std::int64_t> UNKNOWN_SCHEMA_VERSIONS = {
-    1, 2, 3, 6, 17, 20, 22,
+    1, 2, 3, 6, 20, 22,
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

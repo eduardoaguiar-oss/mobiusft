@@ -63,7 +63,7 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const std::string ANT_ID = "evidence.app-chromium";
 static const std::string ANT_NAME = "App Chromium";
-static const std::string ANT_VERSION = "1.1";
+static const std::string ANT_VERSION = "1.2";
 static const std::string SAMPLING_ID = "sampling";
 static const std::string APP_FAMILY = "chromium";
 static const std::string APP_NAME = "Chromium";

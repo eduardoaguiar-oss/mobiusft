@@ -23,15 +23,16 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "folder.hpp"
+#include <mobius/core/exception.inc>
+#include <pygil.hpp>
+#include <pylist.hpp>
+#include <pymobius.hpp>
+#include <stdexcept>
 #include "core/pod/data.hpp"
 #include "core/pod/map.hpp"
 #include "entry.hpp"
 #include "file.hpp"
 #include "stream.hpp"
-#include <mobius/core/exception.inc>
-#include <pylist.hpp>
-#include <pymobius.hpp>
-#include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Check if object type is <i>folder</i>
@@ -80,7 +81,8 @@ pymobius_core_io_folder_from_pyobject (PyObject *pyobj)
 {
     if (!PyObject_IsInstance (pyobj, (PyObject *) &core_io_folder_t))
         throw std::invalid_argument (
-            MOBIUS_EXCEPTION_MSG ("object type must be mobius.core.io.folder"));
+            MOBIUS_EXCEPTION_MSG ("object type must be mobius.core.io.folder")
+        );
 
     return *(reinterpret_cast<core_io_folder_o *> (pyobj)->obj);
 }
@@ -120,7 +122,8 @@ tp_setter_name (core_io_folder_o *self, PyObject *value, void *)
     if (!mobius::py::pystring_check (value))
     {
         mobius::py::set_invalid_type_error (
-            "invalid type for 'name' attribute");
+            "invalid type for 'name' attribute"
+        );
         return -1;
     }
 
@@ -194,7 +197,8 @@ tp_setter_path (core_io_folder_o *self, PyObject *value, void *)
     if (!mobius::py::pystring_check (value))
     {
         mobius::py::set_invalid_type_error (
-            "invalid type for 'path' attribute");
+            "invalid type for 'path' attribute"
+        );
         return -1;
     }
 
@@ -263,7 +267,8 @@ tp_getter_user_id (core_io_folder_o *self)
     try
     {
         ret = mobius::py::pylong_from_int (
-            static_cast<int> (self->obj->get_user_id ()));
+            static_cast<int> (self->obj->get_user_id ())
+        );
     }
     catch (const std::exception &e)
     {
@@ -305,7 +310,8 @@ tp_getter_group_id (core_io_folder_o *self)
     try
     {
         ret = mobius::py::pylong_from_int (
-            static_cast<int> (self->obj->get_group_id ()));
+            static_cast<int> (self->obj->get_group_id ())
+        );
     }
     catch (const std::exception &e)
     {
@@ -347,7 +353,8 @@ tp_getter_permissions (core_io_folder_o *self)
     try
     {
         ret = mobius::py::pylong_from_int (
-            static_cast<int> (self->obj->get_permissions ()));
+            static_cast<int> (self->obj->get_permissions ())
+        );
     }
     catch (const std::exception &e)
     {
@@ -368,7 +375,8 @@ tp_getter_access_time (core_io_folder_o *self)
     try
     {
         ret = mobius::py::pydatetime_from_datetime (
-            self->obj->get_access_time ());
+            self->obj->get_access_time ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -389,7 +397,8 @@ tp_getter_modification_time (core_io_folder_o *self)
     try
     {
         ret = mobius::py::pydatetime_from_datetime (
-            self->obj->get_modification_time ());
+            self->obj->get_modification_time ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -410,7 +419,8 @@ tp_getter_metadata_time (core_io_folder_o *self)
     try
     {
         ret = mobius::py::pydatetime_from_datetime (
-            self->obj->get_metadata_time ());
+            self->obj->get_metadata_time ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -431,7 +441,8 @@ tp_getter_creation_time (core_io_folder_o *self)
     try
     {
         ret = mobius::py::pydatetime_from_datetime (
-            self->obj->get_creation_time ());
+            self->obj->get_creation_time ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -452,7 +463,8 @@ tp_getter_deletion_time (core_io_folder_o *self)
     try
     {
         ret = mobius::py::pydatetime_from_datetime (
-            self->obj->get_deletion_time ());
+            self->obj->get_deletion_time ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -473,7 +485,8 @@ tp_getter_backup_time (core_io_folder_o *self)
     try
     {
         ret = mobius::py::pydatetime_from_datetime (
-            self->obj->get_backup_time ());
+            self->obj->get_backup_time ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -532,7 +545,9 @@ tp_f_exists (core_io_folder_o *self)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (self->obj->exists ());
+        ret = mobius::py::pybool_from_bool (
+            mobius::py::GIL () (self->obj->exists ())
+        );
     }
     catch (const std::exception &e)
     {
@@ -714,7 +729,9 @@ tp_f_get_children (core_io_folder_o *self, PyObject *)
     try
     {
         ret = mobius::py::pylist_from_cpp_container (
-            self->obj->get_children (), pymobius_core_io_entry_to_pyobject);
+            mobius::py::GIL () (self->obj->get_children ()),
+            pymobius_core_io_entry_to_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -751,7 +768,10 @@ tp_f_get_child_by_name (core_io_folder_o *self, PyObject *args)
     try
     {
         ret = pymobius_core_io_entry_to_pyobject (
-            self->obj->get_child_by_name (arg_name, arg_case_sensitive));
+            mobius::py::GIL () (
+                self->obj->get_child_by_name (arg_name, arg_case_sensitive)
+            )
+        );
     }
     catch (const std::exception &e)
     {
@@ -788,7 +808,10 @@ tp_f_get_child_by_path (core_io_folder_o *self, PyObject *args)
     try
     {
         ret = pymobius_core_io_entry_to_pyobject (
-            self->obj->get_child_by_path (arg_name, arg_case_sensitive));
+            mobius::py::GIL () (
+                self->obj->get_child_by_path (arg_name, arg_case_sensitive)
+            )
+        );
     }
     catch (const std::exception &e)
     {
@@ -825,8 +848,11 @@ tp_f_get_children_by_name (core_io_folder_o *self, PyObject *args)
     try
     {
         ret = mobius::py::pylist_from_cpp_container (
-            self->obj->get_children_by_name (arg_name, arg_case_sensitive),
-            pymobius_core_io_entry_to_pyobject);
+            mobius::py::GIL () (
+                self->obj->get_children_by_name (arg_name, arg_case_sensitive)
+            ),
+            pymobius_core_io_entry_to_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -896,7 +922,8 @@ tp_f_new_folder (core_io_folder_o *self, PyObject *args)
     try
     {
         ret = pymobius_core_io_folder_to_pyobject (
-            self->obj->new_folder (arg_name));
+            self->obj->new_folder (arg_name)
+        );
     }
     catch (const std::exception &e)
     {
@@ -917,6 +944,7 @@ tp_f_create (core_io_folder_o *self, PyObject *)
 
     try
     {
+        mobius::py::GIL gil;
         self->obj->create ();
         ret = mobius::py::pynone ();
     }
@@ -939,6 +967,7 @@ tp_f_clear (core_io_folder_o *self, PyObject *)
 
     try
     {
+        mobius::py::GIL gil;
         self->obj->clear ();
         ret = mobius::py::pynone ();
     }
@@ -960,6 +989,7 @@ tp_f_reload (core_io_folder_o *self, PyObject *)
 
     try
     {
+        mobius::py::GIL gil;
         self->obj->reload ();
         ret = mobius::py::pynone ();
     }
@@ -983,7 +1013,8 @@ tp_f_copy (core_io_folder_o *self, PyObject *args)
     try
     {
         arg_dst = pymobius_core_io_folder_from_pyobject (
-            mobius::py::get_arg (args, 0));
+            mobius::py::get_arg (args, 0)
+        );
     }
     catch (const std::exception &e)
     {
@@ -996,6 +1027,7 @@ tp_f_copy (core_io_folder_o *self, PyObject *args)
 
     try
     {
+        mobius::py::GIL gil;
         self->obj->copy (arg_dst);
         ret = mobius::py::pynone ();
     }
@@ -1019,7 +1051,8 @@ tp_f_move (core_io_folder_o *self, PyObject *args)
     try
     {
         arg_dst = pymobius_core_io_folder_from_pyobject (
-            mobius::py::get_arg (args, 0));
+            mobius::py::get_arg (args, 0)
+        );
     }
     catch (const std::exception &e)
     {
@@ -1032,6 +1065,7 @@ tp_f_move (core_io_folder_o *self, PyObject *args)
 
     try
     {
+        mobius::py::GIL gil;
         self->obj->move (arg_dst);
         ret = mobius::py::pynone ();
     }
@@ -1054,6 +1088,7 @@ tp_f_remove (core_io_folder_o *self, PyObject *)
 
     try
     {
+        mobius::py::GIL gil;
         self->obj->remove ();
         ret = mobius::py::pynone ();
     }
@@ -1089,6 +1124,7 @@ tp_f_rename (core_io_folder_o *self, PyObject *args)
 
     try
     {
+        mobius::py::GIL gil;
         self->obj->rename (arg_name);
         ret = mobius::py::pynone ();
     }
@@ -1115,7 +1151,9 @@ tp_f_get_streams (core_io_folder_o *self, PyObject *)
     try
     {
         ret = mobius::py::pylist_from_cpp_container (
-            self->obj->get_streams (), pymobius_core_io_stream_to_pyobject);
+            mobius::py::GIL () (self->obj->get_streams ()),
+            pymobius_core_io_stream_to_pyobject
+        );
     }
     catch (const std::exception &e)
     {
