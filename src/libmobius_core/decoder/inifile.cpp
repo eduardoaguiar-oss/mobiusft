@@ -17,14 +17,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <atomic>
-#include <map>
 #include <mobius/core/decoder/inifile.hpp>
 #include <mobius/core/exception.inc>
 #include <mobius/core/io/line_reader.hpp>
 #include <mobius/core/string_functions.hpp>
+#include <atomic>
 #include <stdexcept>
 #include <utility>
+#include <map>
 
 namespace mobius::core::decoder
 {
@@ -39,8 +39,11 @@ class inifile::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     impl (const impl &) = delete;
     impl (impl &&) = delete;
-    impl (const mobius::core::io::reader &, const std::string &,
-          const std::string &);
+    impl (
+        const mobius::core::io::reader &,
+        const std::string &,
+        const std::string &
+    );
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Operators
@@ -53,8 +56,10 @@ class inifile::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     bool has_value (const std::string &, const std::string &) const;
     std::string get_value (const std::string &, const std::string &) const;
+    std::map<std::string, std::string> get_values (const std::string &) const;
     void set_case_sensitive (bool);
     void set_comment_char (char);
+    void set_value_char (char);
 
   private:
     // @brief Line reader object
@@ -65,6 +70,9 @@ class inifile::impl
 
     // @brief Comment char
     char comment_char_ = ';';
+
+    // @brief Value char
+    char value_char_ = '=';
 
     // @brief Flag is loaded
     mutable std::atomic_bool is_loaded_ = false;
@@ -84,10 +92,59 @@ class inifile::impl
 // @param encoding File encoding
 // @param separator Line separator
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-inifile::impl::impl (const mobius::core::io::reader &reader,
-                     const std::string &encoding, const std::string &separator)
+inifile::impl::impl (
+    const mobius::core::io::reader &reader,
+    const std::string &encoding,
+    const std::string &separator
+)
     : line_reader_ (reader, encoding, separator)
 {
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set group and key to be case sensitive or not
+// @param flag Flag
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+inifile::impl::set_case_sensitive (bool flag)
+{
+    if (is_loaded_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG (
+            "could not change case sensitive because "
+            "inifile is already loaded"
+        ));
+
+    is_case_sensitive_ = flag;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set char used to start a comment
+// @param c Char
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+inifile::impl::set_comment_char (char c)
+{
+    if (is_loaded_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG (
+            "could not set comment char because inifile is already loaded"
+        ));
+
+    comment_char_ = c;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set char used to separate key and value
+// @param c Char
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+inifile::impl::set_value_char (char c)
+{
+    if (is_loaded_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG (
+            "could not set value char because inifile is already loaded"
+        ));
+
+    value_char_ = c;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -97,8 +154,9 @@ inifile::impl::impl (const mobius::core::io::reader &reader,
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-inifile::impl::has_value (const std::string &group,
-                          const std::string &key) const
+inifile::impl::has_value (
+    const std::string &group, const std::string &key
+) const
 {
     _load ();
 
@@ -117,8 +175,9 @@ inifile::impl::has_value (const std::string &group,
 // @return Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-inifile::impl::get_value (const std::string &group,
-                          const std::string &key) const
+inifile::impl::get_value (
+    const std::string &group, const std::string &key
+) const
 {
     std::string value;
 
@@ -138,32 +197,27 @@ inifile::impl::get_value (const std::string &group,
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set group and key to be case sensitive or not
-// @param flag Flag
+// @brief Get all values for a given group
+// @param group Group name
+// @return Vector of key/value pairs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-inifile::impl::set_case_sensitive (bool flag)
+std::map<std::string, std::string>
+inifile::impl::get_values (const std::string &group) const
 {
-    if (is_loaded_)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("could not change case sensitive because "
-                                  "inifile is already loaded"));
+    std::map<std::string, std::string> result;
 
-    is_case_sensitive_ = flag;
-}
+    _load ();
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set char used to start a comment
-// @param c Char
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-inifile::impl::set_comment_char (char c)
-{
-    if (is_loaded_)
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG (
-            "could not set comment char because inifile is already loaded"));
+    std::string a_group =
+        (is_case_sensitive_) ? group : mobius::core::string::tolower (group);
 
-    comment_char_ = c;
+    for (const auto &kv : values_)
+    {
+        if (kv.first.first == a_group)
+            result.emplace (kv.first.second, kv.second);
+    }
+
+    return result;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -181,12 +235,14 @@ inifile::impl::_load () const
     while (line_reader_.read (line))
     {
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Strip comments
+        // Strip comments and right spaces
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         auto pos = line.find (comment_char_);
 
         if (pos != std::string::npos)
             line.erase (pos);
+
+        line = mobius::core::string::rstrip (line);
 
         if (!line.empty ())
         {
@@ -207,7 +263,7 @@ inifile::impl::_load () const
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             else
             {
-                pos = line.find ('=');
+                pos = line.find (value_char_);
 
                 if (pos != std::string::npos)
                 {
@@ -224,6 +280,19 @@ inifile::impl::_load () const
 
                     values_[{group, key}] = value;
                 }
+
+                else
+                {
+                    auto key = mobius::core::string::strip (line);
+
+                    if (!is_case_sensitive_)
+                    {
+                        group = mobius::core::string::tolower (group);
+                        key = mobius::core::string::tolower (key);
+                    }
+
+                    values_[{group, key}] = {};
+                }
             }
         }
     }
@@ -237,10 +306,43 @@ inifile::impl::_load () const
 // @param encoding File encoding
 // @param separator Line separator
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-inifile::inifile (const mobius::core::io::reader &reader,
-                  const std::string &encoding, const std::string &separator)
+inifile::inifile (
+    const mobius::core::io::reader &reader,
+    const std::string &encoding,
+    const std::string &separator
+)
     : impl_ (std::make_shared<impl> (reader, encoding, separator))
 {
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set group and key to be case sensitive or not
+// @param flag Flag
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+inifile::set_case_sensitive (bool flag)
+{
+    impl_->set_case_sensitive (flag);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set char used to start a comment
+// @param c Char
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+inifile::set_comment_char (char c)
+{
+    impl_->set_comment_char (c);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set char used to separate key and value
+// @param c Char
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+inifile::set_value_char (char c)
+{
+    impl_->set_value_char (c);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -268,23 +370,14 @@ inifile::get_value (const std::string &group, const std::string &name) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set group and key to be case sensitive or not
-// @param flag Flag
+// @brief Get all values for a given group
+// @param group Group name
+// @return Map of key/value pairs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-inifile::set_case_sensitive (bool flag)
+std::map<std::string, std::string>
+inifile::get_values (const std::string &group) const
 {
-    impl_->set_case_sensitive (flag);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set char used to start a comment
-// @param c Char
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-inifile::set_comment_char (char c)
-{
-    impl_->set_comment_char (c);
+    return impl_->get_values (group);
 }
 
 } // namespace mobius::core::decoder

@@ -27,7 +27,116 @@
 #include <mobius/core/exception.inc>
 #include <pygil.hpp>
 #include <pymobius.hpp>
+#include <pydict.hpp>
 #include <stdexcept>
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>set_case_sensitive</i> method implementation
+// @param self Object
+// @param args Argument list
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_set_case_sensitive (core_decoder_inifile_o *self, PyObject *args)
+{
+    // Parse input args
+    bool arg_flag;
+
+    try
+    {
+        arg_flag = mobius::py::get_arg_as_bool (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // Execute C++ function
+    try
+    {
+        self->obj->set_case_sensitive (arg_flag);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
+    }
+
+    // return None
+    return mobius::py::pynone ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>set_comment_char</i> method implementation
+// @param self Object
+// @param args Argument list
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_set_comment_char (core_decoder_inifile_o *self, PyObject *args)
+{
+    // Parse input args
+    char arg_c;
+
+    try
+    {
+        arg_c = mobius::py::get_arg_as_char (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // Execute C++ function
+    try
+    {
+        self->obj->set_comment_char (arg_c);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
+    }
+
+    // return None
+    return mobius::py::pynone ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>set_value_char</i> method implementation
+// @param self Object
+// @param args Argument list
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_set_value_char (core_decoder_inifile_o *self, PyObject *args)
+{
+    // Parse input args
+    char arg_c;
+
+    try
+    {
+        arg_c = mobius::py::get_arg_as_char (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // Execute C++ function
+    try
+    {
+        self->obj->set_value_char (arg_c);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
+    }
+
+    // return None
+    return mobius::py::pynone ();
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>has_value</i> method implementation
@@ -112,19 +221,20 @@ tp_f_get_value (core_decoder_inifile_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>set_case_sensitive</i> method implementation
+// @brief <i>get_values</i> method implementation
 // @param self Object
 // @param args Argument list
+// @return Map of key/value pairs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_set_case_sensitive (core_decoder_inifile_o *self, PyObject *args)
+tp_f_get_values (core_decoder_inifile_o *self, PyObject *args)
 {
     // Parse input args
-    bool arg_flag;
+    std::string arg_group;
 
     try
     {
-        arg_flag = mobius::py::get_arg_as_bool (args, 0);
+        arg_group = mobius::py::get_arg_as_std_string (args, 0);
     }
     catch (const std::exception &e)
     {
@@ -133,67 +243,39 @@ tp_f_set_case_sensitive (core_decoder_inifile_o *self, PyObject *args)
     }
 
     // Execute C++ function
+    PyObject *ret = nullptr;
+
     try
     {
-        self->obj->set_case_sensitive (arg_flag);
+        ret = mobius::py::pydict_from_cpp_container (
+            self->obj->get_values (arg_group),
+            mobius::py::pystring_from_std_string,
+            mobius::py::pystring_from_std_string);
     }
     catch (const std::exception &e)
     {
         mobius::py::set_runtime_error (e.what ());
-        return nullptr;
     }
 
-    // return None
-    return mobius::py::pynone ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>set_comment_char</i> method implementation
-// @param self Object
-// @param args Argument list
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_f_set_comment_char (core_decoder_inifile_o *self, PyObject *args)
-{
-    // Parse input args
-    char arg_c;
-
-    try
-    {
-        arg_c = mobius::py::get_arg_as_char (args, 0);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_invalid_type_error (e.what ());
-        return nullptr;
-    }
-
-    // Execute C++ function
-    try
-    {
-        self->obj->set_comment_char (arg_c);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-        return nullptr;
-    }
-
-    // return None
-    return mobius::py::pynone ();
+    // Return value
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {"has_value", (PyCFunction) tp_f_has_value, METH_VARARGS,
-     "Check if inifile has a given value"},
-    {"get_value", (PyCFunction) tp_f_get_value, METH_VARARGS, "Get value"},
     {"set_case_sensitive", (PyCFunction) tp_f_set_case_sensitive, METH_VARARGS,
      "Set group and key to be case sensitive or not"},
     {"set_comment_char", (PyCFunction) tp_f_set_comment_char, METH_VARARGS,
      "Set char used to start a comment"},
+    {"set_value_char", (PyCFunction) tp_f_set_value_char, METH_VARARGS,
+     "Set char used to separate key and value"},
+    {"has_value", (PyCFunction) tp_f_has_value, METH_VARARGS,
+     "Check if inifile has a given value"},
+    {"get_value", (PyCFunction) tp_f_get_value, METH_VARARGS, "Get value"},
+    {"get_values", (PyCFunction) tp_f_get_values, METH_VARARGS,
+     "Get map of key/value pairs for a given group"},
     {nullptr, nullptr, 0, nullptr}, // sentinel
 };
 

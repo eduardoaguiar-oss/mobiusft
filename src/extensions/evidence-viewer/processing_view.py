@@ -204,6 +204,7 @@ class ProcessingView(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __populate_status_tableview(self):
         self.__status_tableview.clear()
+        self.__running_view.clear()
         
         for item in self.__itemlist:
             status = self.__get_item_status(item)
@@ -257,7 +258,7 @@ class ProcessingView(object):
         self.__running_view.clear()
         
         for key, value in metadata.get_values():
-            self.__running_view.add_row((key, str(value)))
+            self.__running_view.add_row((pymobius.id_to_name(key), str(value)))
         
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Update panel when status tableview selection changes

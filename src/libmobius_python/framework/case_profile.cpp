@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -17,12 +19,13 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @file case_profile.cpp C++ API <i>mobius.framework.case_profile</i> class wrapper
+// @file case_profile.cpp C++ API <i>mobius.framework.case_profile</i> class
+// wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <pymobius.hpp>
-#include <pylist.hpp>
 #include "case_profile.hpp"
+#include <pylist.hpp>
+#include <pymobius.hpp>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -41,7 +44,7 @@ tp_f_get_id (framework_case_profile_o *self, PyObject *)
     {
         ret = mobius::py::pystring_from_std_string (self->obj->get_id ());
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
         mobius::py::set_runtime_error (e.what ());
     }
@@ -66,7 +69,7 @@ tp_f_get_name (framework_case_profile_o *self, PyObject *)
     {
         ret = mobius::py::pystring_from_std_string (self->obj->get_name ());
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
         mobius::py::set_runtime_error (e.what ());
     }
@@ -89,9 +92,11 @@ tp_f_get_description (framework_case_profile_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_description ());
+        ret = mobius::py::pystring_from_std_string (
+            self->obj->get_description ()
+        );
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
         mobius::py::set_runtime_error (e.what ());
     }
@@ -114,9 +119,38 @@ tp_f_get_processor_scope (framework_case_profile_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_processor_scope ());
+        ret = mobius::py::pystring_from_std_string (
+            self->obj->get_processor_scope ()
+        );
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // Return value
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>get_processors</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return List of processors
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_get_processors (framework_case_profile_o *self, PyObject *)
+{
+    // Execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pylist_from_cpp_container (
+            self->obj->get_processors (), mobius::py::pystring_from_std_string
+        );
+    }
+    catch (const std::exception &e)
     {
         mobius::py::set_runtime_error (e.what ());
     }
@@ -128,12 +162,15 @@ tp_f_get_processor_scope (framework_case_profile_o *self, PyObject *)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyMethodDef tp_methods[] =
-{
+static PyMethodDef tp_methods[] = {
     {"get_id", (PyCFunction) tp_f_get_id, METH_VARARGS, "Get ID"},
     {"get_name", (PyCFunction) tp_f_get_name, METH_VARARGS, "Get name"},
-    {"get_description", (PyCFunction) tp_f_get_description, METH_VARARGS, "Get description"},
-    {"get_processor_scope", (PyCFunction) tp_f_get_processor_scope, METH_VARARGS, "Get processor scope"},
+    {"get_description", (PyCFunction) tp_f_get_description, METH_VARARGS,
+     "Get description"},
+    {"get_processor_scope", (PyCFunction) tp_f_get_processor_scope,
+     METH_VARARGS, "Get processor scope"},
+    {"get_processors", (PyCFunction) tp_f_get_processors, METH_VARARGS,
+     "Get list of processors"},
     {nullptr, nullptr, 0, nullptr}, // sentinel
 };
 
@@ -154,15 +191,15 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
         arg_id = mobius::py::get_arg_as_std_string (args, 0);
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
         mobius::py::set_invalid_type_error (e.what ());
         return nullptr;
     }
 
-
     // Create Python object
-    framework_case_profile_o *ret = reinterpret_cast <framework_case_profile_o *> (type->tp_alloc (type, 0));
+    framework_case_profile_o *ret =
+        reinterpret_cast<framework_case_profile_o *> (type->tp_alloc (type, 0));
 
     if (ret)
     {
@@ -170,7 +207,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
         {
             ret->obj = new mobius::framework::case_profile (arg_id);
         }
-        catch (const std::exception& e)
+        catch (const std::exception &e)
         {
             Py_DECREF (ret);
             mobius::py::set_runtime_error (e.what ());
@@ -178,7 +215,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
         }
     }
 
-    return reinterpret_cast <PyObject *> (ret);
+    return reinterpret_cast<PyObject *> (ret);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -189,62 +226,61 @@ static void
 tp_dealloc (framework_case_profile_o *self)
 {
     delete self->obj;
-    Py_TYPE (self)->tp_free ((PyObject*) self);
+    Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyTypeObject framework_case_profile_t =
-{
-    PyVarObject_HEAD_INIT (nullptr, 0)       		// header
-    "mobius.framework.case_profile",         		// tp_name
-    sizeof (framework_case_profile_o),       		// tp_basicsize
-    0,                                       		// tp_itemsize
-    (destructor) tp_dealloc,                 		// tp_dealloc
-    0,                                       		// tp_print
-    0,                                       		// tp_getattr
-    0,                                       		// tp_setattr
-    0,                                       		// tp_compare
-    0,                                       		// tp_repr
-    0,                                       		// tp_as_number
-    0,                                       		// tp_as_sequence
-    0,                                       		// tp_as_mapping
-    0,                                       		// tp_hash
-    0,                                       		// tp_call
-    0,                                       		// tp_str
-    0,                                       		// tp_getattro
-    0,                                       		// tp_setattro
-    0,                                       		// tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,		// tp_flags
-    "Case profile class",                    		// tp_doc
-    0,                                       		// tp_traverse
-    0,                                       		// tp_clear
-    0,                                       		// tp_richcompare
-    0,                                       		// tp_weaklistoffset
-    0,                                       		// tp_iter
-    0,                                       		// tp_iternext
-    tp_methods,                              		// tp_methods
-    0,                                       		// tp_members
-    0,                                       		// tp_getset
-    0,                                       		// tp_base
-    0,                                       		// tp_dict
-    0,                                       		// tp_descr_get
-    0,                                       		// tp_descr_set
-    0,                                       		// tp_dictoffset
-    0,                                       		// tp_init
-    0,                                       		// tp_alloc
-    tp_new,                                  		// tp_new
-    0,                                       		// tp_free
-    0,                                       		// tp_is_gc
-    0,                                       		// tp_bases
-    0,                                       		// tp_mro
-    0,                                       		// tp_cache
-    0,                                       		// tp_subclasses
-    0,                                       		// tp_weaklist
-    0,                                       		// tp_del
-    0,                                       		// tp_version_tag
-    0,                                       		// tp_finalize
+static PyTypeObject framework_case_profile_t = {
+    PyVarObject_HEAD_INIT (nullptr, 0)        // header
+    "mobius.framework.case_profile",          // tp_name
+    sizeof (framework_case_profile_o),        // tp_basicsize
+    0,                                        // tp_itemsize
+    (destructor) tp_dealloc,                  // tp_dealloc
+    0,                                        // tp_print
+    0,                                        // tp_getattr
+    0,                                        // tp_setattr
+    0,                                        // tp_compare
+    0,                                        // tp_repr
+    0,                                        // tp_as_number
+    0,                                        // tp_as_sequence
+    0,                                        // tp_as_mapping
+    0,                                        // tp_hash
+    0,                                        // tp_call
+    0,                                        // tp_str
+    0,                                        // tp_getattro
+    0,                                        // tp_setattro
+    0,                                        // tp_as_buffer
+    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
+    "Case profile class",                     // tp_doc
+    0,                                        // tp_traverse
+    0,                                        // tp_clear
+    0,                                        // tp_richcompare
+    0,                                        // tp_weaklistoffset
+    0,                                        // tp_iter
+    0,                                        // tp_iternext
+    tp_methods,                               // tp_methods
+    0,                                        // tp_members
+    0,                                        // tp_getset
+    0,                                        // tp_base
+    0,                                        // tp_dict
+    0,                                        // tp_descr_get
+    0,                                        // tp_descr_set
+    0,                                        // tp_dictoffset
+    0,                                        // tp_init
+    0,                                        // tp_alloc
+    tp_new,                                   // tp_new
+    0,                                        // tp_free
+    0,                                        // tp_is_gc
+    0,                                        // tp_bases
+    0,                                        // tp_mro
+    0,                                        // tp_cache
+    0,                                        // tp_subclasses
+    0,                                        // tp_weaklist
+    0,                                        // tp_del
+    0,                                        // tp_version_tag
+    0,                                        // tp_finalize
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -276,9 +312,13 @@ pymobius_framework_case_profile_check (PyObject *value)
 // @return New case_profile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_framework_case_profile_to_pyobject (const mobius::framework::case_profile& obj)
+pymobius_framework_case_profile_to_pyobject (
+    const mobius::framework::case_profile &obj
+)
 {
-    return mobius::py::to_pyobject <framework_case_profile_o> (obj, &framework_case_profile_t);
+    return mobius::py::to_pyobject<framework_case_profile_o> (
+        obj, &framework_case_profile_t
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -289,7 +329,9 @@ pymobius_framework_case_profile_to_pyobject (const mobius::framework::case_profi
 mobius::framework::case_profile
 pymobius_framework_case_profile_from_pyobject (PyObject *value)
 {
-    return mobius::py::from_pyobject <framework_case_profile_o> (value, &framework_case_profile_t);
+    return mobius::py::from_pyobject<framework_case_profile_o> (
+        value, &framework_case_profile_t
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -305,7 +347,8 @@ pymobius_framework_list_case_profiles (PyObject *, PyObject *)
     {
         ret = mobius::py::pylist_from_cpp_container (
             mobius::framework::list_case_profiles (),
-            pymobius_framework_case_profile_to_pyobject);
+            pymobius_framework_case_profile_to_pyobject
+        );
     }
     catch (const std::exception &e)
     {

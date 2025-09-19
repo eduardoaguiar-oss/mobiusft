@@ -21,6 +21,7 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymobius.hpp>
+#include <pygil.hpp>
 #include "ant.hpp"
 #include <stdexcept>
 #include "core/pod/map.hpp"
@@ -36,6 +37,7 @@ tp_f_run (framework_ant_ant_o *self, PyObject *)
     // Execute C++ function
     try
     {
+        mobius::py::GIL gil;
         self->obj->run ();
     }
     catch (const std::exception& e)

@@ -21,8 +21,10 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/io/reader.hpp>
+#include <map>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace mobius::core::decoder
 {
@@ -55,8 +57,10 @@ class inifile
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     bool has_value (const std::string &, const std::string &) const;
     std::string get_value (const std::string &, const std::string &) const;
+    std::map<std::string, std::string> get_values (const std::string &) const;
     void set_case_sensitive (bool);
     void set_comment_char (char);
+    void set_value_char (char);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get value, with default if not found

@@ -4,14 +4,20 @@ Mobius Forensic Toolkit 2.19
 	* evidence-viewer: Added new items' status tableview
 	* evidence-viewer: Added new profile combobox
 	* evidence-viewer: Added new processing status tableview
-	* app-chromium: Changed to handle Cookies files v17
-	* libmobius_core: Added new method decoder::ini::get_value (with default value)
+	* app-chromium: Changed file_cookies module to handle Cookies files v17
+	* libmobius_core: Added new method decoder::inifile::get_value (with default value)
+	* libmobius_core: Added new method decoder::inifile::get_values
+	* libmobius_core: Added new method decoder::inifile::set_value_char
 	* libmobius_framework: Added new class case_profile
 	* libmobius_framework: Added new function list_case_profiles
+	* libmobius_framework: Added new class vfs_processor_impl_base
+	* libmobius_framework: Added new class ant_impl_vfs_processor
+	* libmobius_framework: Added new class vfs_processor
 	* libmobius_python: Added new class framework.case_profile
 	* libmobius_python: Added new function framework.list_case_profiles
 	* libmobius_python: Changed core.vfs.vfs class to release GIL when calling C++ methods
 	* libmobius_python: Changed io.folder class to release GIL when calling C++ methods
+	* libmobius_python: Added new class framework.ant.vfs_processor
 
 Mobius Forensic Toolkit 2.18
 	* app-chromium: Added support for History schema version up to 70

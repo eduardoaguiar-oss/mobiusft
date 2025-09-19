@@ -62,7 +62,7 @@ class Ant(object):
         self.name = ANT_NAME
         self.version = ANT_VERSION
         self.__item = item
-        self.__profile_id = profile_id
+        self.__profile = mobius.framework.case_profile(profile_id)
         self.__started_time = datetime.datetime.now()
         self.__phase_number = 0
         self.__phase_name = ''
@@ -76,7 +76,7 @@ class Ant(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def get_status(self):
         status = mobius.core.pod.map()
-        status.set('profile_id', self.__profile_id)
+        status.set('profile_id', self.__profile.get_id())
         status.set('started_time', self.__started_time)
         status.set('current_time', datetime.datetime.now())
         status.set('phase_number', f"{self.__phase_number} of 3")
@@ -136,11 +136,11 @@ class Ant(object):
         self.__phase_name = f"Evidence Loader"
 
         if datasource.get_type() == 'ufdr':
-            self.__ant = ufdr.Ant(self.__item, self.__profile_id)
+            self.__ant = ufdr.Ant(self.__item, self.__profile)
             self.__ant.run()
 
         elif datasource.get_type() == 'vfs':
-            self.__ant = vfs.Ant(self.__item, self.__profile_id)
+            self.__ant = vfs.Ant(self.__item, self.__profile)
             self.__ant.run()
 
         # run post-processing ant

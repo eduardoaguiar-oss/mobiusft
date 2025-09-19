@@ -88,6 +88,16 @@ class case_profile::impl
         return processor_scope_;
     }
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get processors
+    // @return Vector of processors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<std::string>
+    get_processors () const
+    {
+        return processors_;
+    }
+
   private:
     // @brief Profile ID
     std::string id_;
@@ -100,6 +110,9 @@ class case_profile::impl
 
     // @brief Processor scope
     std::string processor_scope_;
+
+    // @brief Processors
+    std::vector<std::string> processors_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -138,6 +151,12 @@ case_profile::impl::impl (const std::string &id)
     name_ = ini.get_value ("general", "name");
     description_ = ini.get_value ("general", "description");
     processor_scope_ = ini.get_value ("processor", "scope", "all");
+
+    for (const auto& [k, v] : ini.get_values ("processors"))
+    {
+        if (v != "no" && v != "false")
+            processors_.emplace_back (k);
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -195,6 +214,16 @@ std::string
 case_profile::get_processor_scope () const
 {
     return impl_->get_processor_scope ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get processors
+// @return Vector of processors
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<std::string>
+case_profile::get_processors () const
+{
+    return impl_->get_processors ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

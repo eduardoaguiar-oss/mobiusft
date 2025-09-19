@@ -83,17 +83,18 @@ class Ant(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Initialize object
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __init__(self, item, profile_id):
+    def __init__(self, item, profile):
         self.id = ANT_ID
         self.name = ANT_NAME
         self.version = ANT_VERSION
 
         self.__item = item
         self.__datasource = item.get_datasource()
-        self.__profile_id = profile_id
+        self.__profile = profile
         self.__vfs = self.__datasource.get_vfs()
         self.__step_number = ''
         self.__step_name = ''
+        self.__ant = None
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Get status
@@ -103,6 +104,9 @@ class Ant(object):
         status.set('step_number', self.__step_number)
         status.set('step_name', self.__step_name)
 
+        if self.__ant:
+            status.update(self.__ant.get_status())
+            
         return status
     
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -127,6 +131,14 @@ class Ant(object):
 
             mobius.core.logf(f"INF ant.run ended: {ant.name}")
 
+        # run vfs_processor
+        self.__step_number = "2"
+        self.__step_name = "VFS Processor"
+        
+        self.__ant = mobius.framework.ant.vfs_processor(self.__item, self.__profile)
+        self.__ant.run()
+        self.__ant = None
+        
         # run evidence loader ants
         for idx, loader in enumerate(LOADERS, 1):
             mobius.core.logf(f"INF evidence loader started: {loader}")
@@ -135,7 +147,7 @@ class Ant(object):
                 self.__item.reset_ant(f"evidence.{loader}")
                 ant = mobius.framework.evidence_loader(loader, self.__item)
                 
-                self.__step_number = f"2.{idx}"
+                self.__step_number = f"3.{idx}"
                 self.__step_name = f"{loader} loader"
                 
                 ant.run()

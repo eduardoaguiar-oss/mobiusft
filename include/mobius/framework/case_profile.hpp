@@ -54,6 +54,7 @@ class case_profile
     std::string get_name () const;
     std::string get_description () const;
     std::string get_processor_scope () const;
+    std::vector<std::string> get_processors () const;
 
   private:
     // @brief Implementation class forward declaration
