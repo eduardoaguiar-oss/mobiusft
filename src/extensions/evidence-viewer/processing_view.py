@@ -23,7 +23,6 @@ import pymobius
 import pymobius.ant.evidence
 from gi.repository import GLib
 from gi.repository import Gtk
-from gi.repository import GObject
 
 from metadata import *
 

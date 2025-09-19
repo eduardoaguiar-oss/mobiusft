@@ -33,6 +33,7 @@ class vfs_processor_impl_base
   public:
     virtual ~vfs_processor_impl_base () = default;
     virtual void on_folder (const mobius::core::io::folder &) = 0;
+    virtual void on_complete () = 0;
 };
 
 } // namespace mobius::framework::ant

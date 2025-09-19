@@ -17,7 +17,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "evidence_loader_impl.hpp"
+#include "vfs_processor_impl.hpp"
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/decoder/inifile.hpp>
 #include <mobius/core/decoder/json/parser.hpp>
@@ -63,7 +63,7 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const std::string ANT_ID = "evidence.app-chromium";
 static const std::string ANT_NAME = "App Chromium";
-static const std::string ANT_VERSION = "1.2";
+static const std::string ANT_VERSION = "1.0";
 static const std::string SAMPLING_ID = "sampling";
 static const std::string APP_FAMILY = "chromium";
 static const std::string APP_NAME = "Chromium";
@@ -100,119 +100,14 @@ namespace mobius::extension::app::chromium
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // @param item Item object
+// @param case_profile Case profile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-evidence_loader_impl::evidence_loader_impl (
-    const mobius::framework::model::item &item, scan_type type
+vfs_processor_impl::vfs_processor_impl (
+    const mobius::framework::model::item &item,
+    const mobius::framework::case_profile &
 )
-    : item_ (item),
-      scan_type_ (type)
+    : item_ (item)
 {
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Scan item files for evidences
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::run ()
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-    log.info (__LINE__, "Evidence loader <app-chromium> started");
-    log.info (__LINE__, "Item UID: " + std::to_string (item_.get_uid ()));
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Check if loader has already run for item
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    if (item_.has_ant (ANT_ID))
-    {
-        log.info (__LINE__, "Evidence loader <app-chromium> has already run");
-        return;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Check datasource
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto datasource = item_.get_datasource ();
-
-    if (!datasource)
-        throw std::runtime_error ("item has no datasource");
-
-    if (datasource.get_type () != "vfs")
-        throw std::runtime_error ("datasource type is not VFS");
-
-    if (!datasource.is_available ())
-        throw std::runtime_error ("datasource is not available");
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Log starting event
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto transaction = item_.new_transaction ();
-    item_.add_event ("app.chromium started");
-    transaction.commit ();
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Scan for evidences
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    _scan_canonical_folders ();
-    _save_evidences ();
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Log ending event
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    transaction = item_.new_transaction ();
-    item_.add_event ("app.chromium has ended");
-    transaction.commit ();
-
-    log.info (__LINE__, "Evidence loader <app-chromium> has ended");
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Scan canonical folders
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_scan_canonical_folders ()
-{
-    auto vfs_datasource =
-        mobius::core::datasource::datasource_vfs (item_.get_datasource ());
-    auto vfs = vfs_datasource.get_vfs ();
-
-    for (const auto &entry : vfs.get_root_entries ())
-    {
-        if (entry.is_folder ())
-            _scan_canonical_root_folder (entry.get_folder ());
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Scan root folder for evidences
-// @param folder Root folder
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_scan_canonical_root_folder (
-    const mobius::core::io::folder &folder
-)
-{
-    username_ = {};
-    auto w = mobius::core::io::walker (folder);
-
-    // Users folders
-    for (const auto &f : w.get_folders_by_pattern ("users/*"))
-        _scan_canonical_user_folder (f);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Scan user folder for evidences
-// @param folder User folder
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_scan_canonical_user_folder (
-    const mobius::core::io::folder &folder
-)
-{
-    username_ = folder.get_name ();
-    auto w = mobius::core::io::walker (folder);
-
-    for (const auto &f : w.get_folders_by_pattern ("appdata/*"))
-        _scan_all_folders (f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -220,23 +115,7 @@ evidence_loader_impl::_scan_canonical_user_folder (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_all_folders (const mobius::core::io::folder &folder)
-{
-    scan_folder (folder);
-
-    // Scan subfolders
-    auto w = mobius::core::io::walker (folder);
-
-    for (const auto &f : w.get_folders ())
-        _scan_all_folders (f);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Scan folder searching for Chromium evidences
-// @param folder Folder to scan
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::scan_folder (const mobius::core::io::folder &folder)
+vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 {
     _scan_local_state (folder);
     _scan_profile (folder);
@@ -247,7 +126,7 @@ evidence_loader_impl::scan_folder (const mobius::core::io::folder &folder)
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_local_state (const mobius::core::io::folder &folder)
+vfs_processor_impl::_scan_local_state (const mobius::core::io::folder &folder)
 {
     auto w = mobius::core::io::walker (folder);
 
@@ -260,7 +139,7 @@ evidence_loader_impl::_scan_local_state (const mobius::core::io::folder &folder)
 // @param f Local State file to decode
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_decode_local_state_file (const mobius::core::io::file &f)
+vfs_processor_impl::_decode_local_state_file (const mobius::core::io::file &f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -305,7 +184,7 @@ evidence_loader_impl::_decode_local_state_file (const mobius::core::io::file &f)
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_scan_profile (const mobius::core::io::folder &folder)
+vfs_processor_impl::_scan_profile (const mobius::core::io::folder &folder)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -377,10 +256,10 @@ evidence_loader_impl::_scan_profile (const mobius::core::io::folder &folder)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Save evidences
+// @brief Called when processing is complete
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_save_evidences ()
+vfs_processor_impl::on_complete ()
 {
     auto transaction = item_.new_transaction ();
 
@@ -404,7 +283,7 @@ evidence_loader_impl::_save_evidences ()
 // @brief Save app profiles
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_save_app_profiles ()
+vfs_processor_impl::_save_app_profiles ()
 {
     for (const auto &p : profiles_)
     {
@@ -447,7 +326,7 @@ evidence_loader_impl::_save_app_profiles ()
 // @brief Save autofill entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_save_autofills ()
+vfs_processor_impl::_save_autofills ()
 {
     for (const auto &p : profiles_)
     {
@@ -485,7 +364,7 @@ evidence_loader_impl::_save_autofills ()
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void
-evidence_loader_impl::_save_bookmarked_urls ()
+vfs_processor_impl::_save_bookmarked_urls ()
 {
     for (const auto &p : profiles_)
     {
@@ -518,7 +397,7 @@ evidence_loader_impl::_save_bookmarked_urls ()
 // @brief Save cookies
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_save_cookies ()
+vfs_processor_impl::_save_cookies ()
 {
     for (const auto &p : profiles_)
     {
@@ -532,7 +411,9 @@ evidence_loader_impl::_save_cookies ()
             e.set_attribute ("name", c.name);
             e.set_attribute ("value", c.value);
             e.set_attribute ("value_encrypted", c.encrypted_value);
-            e.set_attribute ("value_is_encrypted", !c.value && c.encrypted_value);
+            e.set_attribute (
+                "value_is_encrypted", !c.value && c.encrypted_value
+            );
             e.set_attribute ("domain", c.host_key);
             e.set_attribute ("creation_time", c.creation_utc);
             e.set_attribute ("last_access_time", c.last_access_utc);
@@ -571,7 +452,7 @@ evidence_loader_impl::_save_cookies ()
 // @brief Save credit cards
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_save_credit_cards ()
+vfs_processor_impl::_save_credit_cards ()
 {
     for (const auto &p : profiles_)
     {
@@ -632,7 +513,7 @@ evidence_loader_impl::_save_credit_cards ()
 // @brief Save encryption keys
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_save_encryption_keys ()
+vfs_processor_impl::_save_encryption_keys ()
 {
     for (const auto &ek : encryption_keys_)
     {
@@ -668,7 +549,7 @@ evidence_loader_impl::_save_encryption_keys ()
 // @brief Save passwords
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_save_passwords ()
+vfs_processor_impl::_save_passwords ()
 {
     for (const auto &p : profiles_)
     {
@@ -746,7 +627,7 @@ evidence_loader_impl::_save_passwords ()
 // @brief Save PDI entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_save_pdis ()
+vfs_processor_impl::_save_pdis ()
 {
     for (const auto &p : profiles_)
     {
@@ -877,7 +758,7 @@ evidence_loader_impl::_save_pdis ()
 // @brief Save received files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_save_received_files ()
+vfs_processor_impl::_save_received_files ()
 {
     for (const auto &profile : profiles_)
     {
@@ -946,7 +827,7 @@ evidence_loader_impl::_save_received_files ()
 // @brief Save accounts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_save_user_accounts ()
+vfs_processor_impl::_save_user_accounts ()
 {
     for (const auto &p : profiles_)
     {
@@ -1062,7 +943,7 @@ evidence_loader_impl::_save_user_accounts ()
 // @brief Save visited URLs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_loader_impl::_save_visited_urls ()
+vfs_processor_impl::_save_visited_urls ()
 {
     for (const auto &p : profiles_)
     {

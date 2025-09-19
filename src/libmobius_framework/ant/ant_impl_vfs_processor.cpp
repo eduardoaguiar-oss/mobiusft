@@ -163,6 +163,22 @@ ant_impl_vfs_processor::run ()
             }
         }
     }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Notify implementations that processing is done
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &impl : implementations_)
+    {
+        try
+        {
+            impl->on_complete ();
+        }
+        catch (const std::exception &e)
+        {
+            mobius::core::log log (__FILE__, __FUNCTION__);
+            log.warning (__LINE__, e.what ());
+        }
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

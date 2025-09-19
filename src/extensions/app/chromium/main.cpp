@@ -17,11 +17,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/resource.hpp>
 #include <mobius/framework/ant/post_processor.hpp>
-#include <mobius/framework/evidence_loader.hpp>
-#include "evidence_loader_impl.hpp"
+#include <mobius/framework/ant/vfs_processor.hpp>
 #include "post_processor_impl.hpp"
+#include "vfs_processor_impl.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Extension data
@@ -48,12 +47,11 @@ start ()
         "Decrypt Chromium Data"
     );
 
-    // Register the evidence loader builder resource
-    mobius::core::add_resource (
-        "evidence_loader.builder.app-chromium",
-        "Chromium evidence loader",
-        mobius::framework::new_evidence_loader_builder_resource<
-            mobius::extension::app::chromium::evidence_loader_impl> ()
+    // Register the vfs-processor implementation
+    mobius::framework::ant::register_vfs_processor_implementation<
+        mobius::extension::app::chromium::vfs_processor_impl> (
+        EXTENSION_ID,
+        EXTENSION_NAME
     );
 }
 
@@ -66,5 +64,7 @@ stop ()
     mobius::framework::ant::unregister_post_processor_implementation (
         "chromium-decrypt"
     );
-    mobius::core::remove_resource ("evidence_loader.builder.app-chromium");
+    mobius::framework::ant::unregister_vfs_processor_implementation (
+        EXTENSION_ID
+    );
 }

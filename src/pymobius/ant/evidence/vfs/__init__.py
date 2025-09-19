@@ -66,7 +66,6 @@ ANTS = [
 
 LOADERS = [
     "app-ares",
-    "app-chromium",
     "app-emule",
     "app-emuletorrent",
     "app-shareaza",
