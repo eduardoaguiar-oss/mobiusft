@@ -1,5 +1,5 @@
 [general]
-name=Forensics
+name=Deep Forensics
 description=Deep Forensic Scan
 
 [processor]

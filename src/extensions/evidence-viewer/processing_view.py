@@ -103,7 +103,6 @@ class ProcessingView(object):
         self.__running_view = mediator.call('ui.new-widget', 'tableview')
         self.__running_view.set_report_id('evidence.processing-status')
         self.__running_view.set_report_app(f'{EXTENSION_NAME} v{EXTENSION_VERSION}')
-        self.__running_view.set_sensitive(False)
         self.__running_view.show()
 
         self.__running_view.add_column('data', 'Data')
@@ -216,8 +215,10 @@ class ProcessingView(object):
     # @brief Handle status tableview selection change event
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def status_tableview_on_selection_changed(self, selected_rows):
-        self.__on_status_tableview_updated()
-        self.__running_view.set_sensitive(True)
+        self.__running_view.clear()
+        self.__update_profile_id()
+        self.__update_options()
+        self.__update_running_timer()
         
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Get item status
@@ -246,28 +247,17 @@ class ProcessingView(object):
             if row[3] == item:
                 row[0] = self.__get_item_status(item)
 
-        self.__on_status_tableview_updated()
+        self.__update_running_timer()
+        self.__update_options()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Update running view with ANT status metadata
-    # @param ant ANT instance
+    # @brief Update profile combobox based on selection
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __update_running_view(self, ant):
-        metadata = ant.get_status()
-        self.__running_view.clear()
-        
-        for key, value in metadata.get_values():
-            self.__running_view.add_row((pymobius.id_to_name(key), str(value)))
-        
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Update panel when status tableview selection changes
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __on_status_tableview_updated(self):
+    def __update_profile_id(self):
         selected_rows = self.__status_tableview.get_selected_rows()
         selected_items = [row[3] for (row_id, row) in selected_rows]
         can_run_items = [item for item in selected_items if item.has_datasource() and item not in self.__running_items]
         
-        # Select profile according to items that can run
         profile_id = None
         profile_ids = set(item.get_attribute('profile_id') for item in can_run_items if item.has_attribute('profile_id'))
 
@@ -279,13 +269,36 @@ class ProcessingView(object):
             
         if profile_id:
             self.__profile_combobox.set_active_id(profile_id)
-                    
-        # Set profile combobox and execute button sensitivity
-        can_run = len(can_run_items) > 0
+            
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Update running view with ANT status metadata
+    # @param ant ANT instance
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __update_running_view(self, ant):
+        metadata = ant.get_status()
+        self.__running_view.clear()
+        
+        for key, value in metadata.get_values():
+            self.__running_view.add_row((pymobius.id_to_name(key), str(value)))
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Update options (execute button and profile combobox) based on selection
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=    
+    def __update_options(self):
+        selected_rows = self.__status_tableview.get_selected_rows()
+        selected_items = [row[3] for (row_id, row) in selected_rows]
+        can_run = any(item for item in selected_items if item.has_datasource() and item not in self.__running_items)
+
         self.__execute_button.set_sensitive(can_run)
         self.__profile_combobox.set_sensitive(can_run)
 
-        # Refresh running view
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Update running timer based on selection
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=    
+    def __update_running_timer(self):
+        selected_rows = self.__status_tableview.get_selected_rows()
+        selected_items = [row[3] for (row_id, row) in selected_rows]
+
         if len(selected_items) == 1 and selected_items[0] in self.__running_items:
             old_watched_item = self.__watched_item
 
@@ -295,10 +308,9 @@ class ProcessingView(object):
                 
                 if not old_watched_item:
                     GLib.timeout_add(REFRESH_INTERVAL_MS, self.__on_running_timer_interval)
-
         else:
             self.__watched_item = None
-            
+
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Handle timer interval event and update running view.
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
