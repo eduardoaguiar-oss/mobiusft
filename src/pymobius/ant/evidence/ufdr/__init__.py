@@ -43,7 +43,7 @@ from . import wireless_network
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ANT_ID = 'evidence.ufdr'
 ANT_NAME = 'Evidence Finder Agent - UFDR'
-ANT_VERSION = '1.0'
+ANT_VERSION = '1.1'
 SAVE_THRESHOLD = 131072
 
 HANDLERS = {
@@ -75,29 +75,38 @@ class Ant(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Initialize object
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __init__(self, item):
+    def __init__(self, item, profile):
         self.id = ANT_ID
         self.name = ANT_NAME
         self.version = ANT_VERSION
 
         self.__item = item
+        self.__profile = profile
+        self.__phase_number = ''
+        self.__phase_name = ''
+        self.__tagged_files_count = 0
+        self.__evidences_count = 0
         self.__evidences = []
         self.__file_hashes = {}
         self.__unhandled_types = set()
-        self.__control = None
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Set control object
-    # @param control Control object
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def set_control(self, control):
-        self.__control = control
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Get status
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def get_status(self):
+        status = mobius.core.pod.map()
+        status.set('phase_number', self.__phase_number)
+        status.set('phase_name', self.__phase_name)
+        status.set('tagged_files', self.__tagged_files_count)
+        status.set('evidences', len(self.__evidences_count))
+            
+        return status
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Run ant
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def run(self):
-        self.__control.log(f"INF ant {self.id} started")
+        mobius.core.logf(f"INF ant {self.id} started")
 
         try:
             # get UFDR path
@@ -121,9 +130,9 @@ class Ant(object):
                 mobius.core.logf(f"DEV unknown datatype: {dt}")
 
         except Exception as e:
-            self.__control.log(f'WRN {str(e)}\n{traceback.format_exc()}')
+            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
 
-        self.__control.log(f"INF ant {self.id} ended")
+        mobius.core.logf(f"INF ant {self.id} ended")
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Reset ant
@@ -142,6 +151,10 @@ class Ant(object):
     # @brief Handle on_tagged_file event
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def on_tagged_file(self, f):
+        if self.__phase_number == '':
+            self.__phase_number = "1 of 2"
+            self.__phase_name = "Processing tagged files"
+            
         hashes = []
 
         hash_md5 = f.file_metadata.get('MD5')
@@ -154,11 +167,17 @@ class Ant(object):
 
         if hashes:
             self.__file_hashes[f.id] = hashes
+            
+        self.__tagged_files_count += 1
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Handle on_evidence event
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def on_evidence(self, e):
+        if self.__phase_number == "1 of 2":
+            self.__phase_number = "2 of 2"
+            self.__phase_name = "Processing evidences"
+
         print()
         print(f'   ID: {e.id}')
         print(f'   Type: {e.type}')
@@ -181,7 +200,8 @@ class Ant(object):
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         try:
             for evidence in handler(e):
-
+                self.__evidences_count += 1
+        
                 # set evidence.hashes, if possible
                 file_id = evidence.attrs.get('file_id')
                 if file_id:
@@ -196,7 +216,7 @@ class Ant(object):
                 if len(self.__evidences) > SAVE_THRESHOLD:
                     self.__save_evidences()
         except Exception as e:
-            self.__control.log(f'WRN {str(e)}\n{traceback.format_exc()}')
+            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Save evidences into case DB
