@@ -73,6 +73,7 @@
 #include "file_shareh.hpp"
 #include "file_sharel.hpp"
 #include "file_torrenth.hpp"
+#include "profile.hpp"
 #include <algorithm>
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/decoder/hexstring.hpp>
@@ -97,7 +98,7 @@ static const std::string APP_ID = "ares";
 static const std::string APP_NAME = "Ares Galaxy";
 static const std::string ANT_ID = "evidence.app-ares";
 static const std::string ANT_NAME = APP_NAME;
-static const std::string ANT_VERSION = "1.3";
+static const std::string ANT_VERSION = "1.4";
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Convert registry data into string
