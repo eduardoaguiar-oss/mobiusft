@@ -77,14 +77,21 @@ collection_impl_folder::collection_impl_folder (const fs_file &f)
     if (!f)
         throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid folder"));
 
-    fs_dir_p_ = tsk_fs_dir_open_meta (fs_file_.get_pointer ()->fs_info,
-                                      fs_file_.get_inode ());
+    if (!f.get_inode ())
+        return;
 
-    if (!fs_dir_p_)
-        throw std::runtime_error (TSK_EXCEPTION_MSG);
+    else
+    {
+        fs_dir_p_ = tsk_fs_dir_open_meta (
+            fs_file_.get_pointer ()->fs_info, fs_file_.get_inode ()
+        );
 
-    pos_ = 0;
-    count_ = tsk_fs_dir_getsize (fs_dir_p_);
+        if (!fs_dir_p_)
+            throw std::runtime_error (TSK_EXCEPTION_MSG);
+
+        pos_ = 0;
+        count_ = tsk_fs_dir_getsize (fs_dir_p_);
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -164,7 +171,8 @@ folder_impl::get_user_name () const
 {
     if (!exists ())
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+            MOBIUS_EXCEPTION_MSG ("folder does not exist")
+        );
 
     return std::string (); // libtsk has no user name
 }
@@ -178,7 +186,8 @@ folder_impl::get_group_name () const
 {
     if (!exists ())
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+            MOBIUS_EXCEPTION_MSG ("folder does not exist")
+        );
 
     return std::string (); // libtsk has no group name
 }
@@ -192,7 +201,8 @@ folder_impl::is_hidden () const
 {
     if (!exists ())
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("folder does not exist"));
+            MOBIUS_EXCEPTION_MSG ("folder does not exist")
+        );
 
     return false; //! name_.empty () && name_[0] == '.';
 }

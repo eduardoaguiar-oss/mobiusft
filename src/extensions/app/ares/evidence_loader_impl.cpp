@@ -73,17 +73,13 @@
 #include "file_shareh.hpp"
 #include "file_sharel.hpp"
 #include "file_torrenth.hpp"
-#include "profile.hpp"
 #include <algorithm>
 #include <mobius/core/datasource/datasource_vfs.hpp>
-#include <mobius/core/decoder/hexstring.hpp>
 #include <mobius/core/exception.inc>
 #include <mobius/core/io/folder.hpp>
 #include <mobius/core/io/path.hpp>
 #include <mobius/core/io/walker.hpp>
 #include <mobius/core/log.hpp>
-#include <mobius/core/os/win/registry/hive_data.hpp>
-#include <mobius/core/os/win/registry/hive_file.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <mobius/framework/model/evidence.hpp>
@@ -99,46 +95,6 @@ static const std::string APP_NAME = "Ares Galaxy";
 static const std::string ANT_ID = "evidence.app-ares";
 static const std::string ANT_NAME = APP_NAME;
 static const std::string ANT_VERSION = "1.4";
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Convert registry data into string
-// @param data Registry data
-// @param encoding Char encoding
-// @return String
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static std::string
-to_string_from_hexstring (
-    const mobius::core::os::win::registry::hive_data &data,
-    const std::string &encoding = "utf-16le")
-{
-    std::string value;
-
-    if (data)
-    {
-        mobius::core::bytearray d;
-        d.from_hexstring (data.get_data ().to_string (encoding));
-        value = d.to_string ();
-    }
-
-    return value;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Convert registry data into hex string
-// @param data Registry data
-// @return String
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static std::string
-to_hex_string (const mobius::core::os::win::registry::hive_data &data)
-{
-    std::string value;
-
-    if (data)
-        value =
-            mobius::core::string::toupper (data.get_data ().to_hexstring ());
-
-    return value;
-}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Update metadata map, preferring non null values
@@ -310,12 +266,8 @@ evidence_loader_impl::_scan_canonical_user_folder (
     const mobius::core::io::folder &folder)
 {
     username_ = folder.get_name ();
-    account_ = {};
 
     auto w = mobius::core::io::walker (folder);
-
-    for (const auto &f : w.get_files_by_name ("ntuser.dat"))
-        _decode_ntuser_dat_file (f);
 
     for (const auto &f : w.get_folders_by_path ("appdata/local/ares"))
         _scan_canonical_ares_folder (f);
@@ -515,7 +467,6 @@ evidence_loader_impl::_scan_canonical_ares_data_tempdl_pbthash_file (
             (fobj.tempdl_pbthash_f.is_deleted () && !is_deleted))
         {
             fobj.hash_sha1 = hash_sha1;
-            fobj.account_guid = account_.guid;
             fobj.username = username_;
             fobj.size = pbthash.get_file_size ();
             fobj.tempdl_pbthash_f = f;
@@ -632,7 +583,6 @@ evidence_loader_impl::_scan_canonical_ares_data_tempdl_phash_file (
                 (fobj.tempdl_phash_f.is_deleted () && !is_deleted))
             {
                 fobj.hash_sha1 = hash_sha1;
-                fobj.account_guid = account_.guid;
                 fobj.username = username_;
                 fobj.flag_downloaded = true;
                 fobj.tempdl_phash_f = f;
@@ -700,7 +650,6 @@ evidence_loader_impl::_scan_canonical_ares_data_tempul_udpphash_file (
                 (fobj.tempul_udpphash_f.is_deleted () && !is_deleted))
             {
                 fobj.hash_sha1 = hash_sha1;
-                fobj.account_guid = account_.guid;
                 fobj.username = username_;
                 fobj.flag_uploaded = true;
                 fobj.tempul_udpphash_f = f;
@@ -756,7 +705,6 @@ evidence_loader_impl::_decode_phashidx_dat_file (
                 (fobj.phashidx_f.is_deleted () && !is_deleted))
             {
                 fobj.hash_sha1 = entry.hash_sha1;
-                fobj.account_guid = account_.guid;
                 fobj.username = username_;
                 fobj.phashidx_idx = entry.idx;
                 fobj.flag_completed =
@@ -816,7 +764,6 @@ evidence_loader_impl::_decode_shareh_dat_file (const mobius::core::io::file &f)
             if (!fobj.shareh_f || (fobj.shareh_f.is_deleted () && !is_deleted))
             {
                 fobj.hash_sha1 = entry.hash_sha1;
-                fobj.account_guid = account_.guid;
                 fobj.username = username_;
                 fobj.download_completed_time = entry.download_completed_time;
                 fobj.shareh_idx = entry.idx;
@@ -891,7 +838,6 @@ evidence_loader_impl::_decode_sharel_dat_file (const mobius::core::io::file &f)
             {
                 // attributes
                 fobj.hash_sha1 = entry.hash_sha1;
-                fobj.account_guid = account_.guid;
                 fobj.username = username_;
                 fobj.path = entry.path;
                 fobj.size = entry.size;
@@ -983,7 +929,6 @@ evidence_loader_impl::_decode_torrenth_dat_file (
             if (!fobj.shareh_f || (fobj.shareh_f.is_deleted () && !is_deleted))
             {
                 fobj.hash_sha1 = entry.hash_sha1;
-                fobj.account_guid = account_.guid;
                 fobj.username = username_;
                 fobj.torrenth_idx = entry.idx;
                 fobj.torrenth_f = f;
@@ -1074,7 +1019,6 @@ evidence_loader_impl::_decode_arestra_file (const mobius::core::io::file &f)
         {
             // set attributes
             fobj.hash_sha1 = arestra.get_hash_sha1 ();
-            fobj.account_guid = account_.guid;
             fobj.username = username_;
             fobj.download_started_time = arestra.get_download_started_time ();
             fobj.size = arestra.get_file_size ();
@@ -1125,92 +1069,6 @@ evidence_loader_impl::_decode_arestra_file (const mobius::core::io::file &f)
             fobj.metadata.set ("url", arestra.get_url ());
             fobj.metadata.set ("comment", arestra.get_comment ());
             fobj.metadata.set ("subfolder", arestra.get_subfolder ());
-        }
-    }
-    catch (const std::exception &e)
-    {
-        log.warning (__LINE__, e.what ());
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode data from NTUSER.dat file
-// @param f File object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_decode_ntuser_dat_file (const mobius::core::io::file &f)
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    try
-    {
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Create decoder
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        auto decoder =
-            mobius::core::os::win::registry::hive_file (f.new_reader ());
-
-        if (!decoder.is_instance ())
-        {
-            log.info (__LINE__, "File " + f.get_path () + " ignored.");
-            return;
-        }
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Get evidences from Ares key
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        const auto &root_key = decoder.get_root_key ();
-        const auto &ares_key = root_key.get_key_by_path ("Software\\Ares");
-
-        if (ares_key)
-        {
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            // Load account
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            account acc;
-
-            acc.guid = ares_key.get_data_by_name ("Personal.GUID")
-                           .get_data_as_string ("utf-16le");
-            acc.nickname = to_string_from_hexstring (
-                ares_key.get_data_by_name ("Personal.Nickname"));
-            acc.dht_id =
-                to_hex_string (ares_key.get_data_by_name ("Network.DHTID"));
-            acc.mdht_id =
-                to_hex_string (ares_key.get_data_by_name ("Network.MDHTID"));
-            acc.username = username_;
-            acc.is_deleted = f.is_deleted ();
-            acc.f = f;
-
-            if (account_.guid.empty () ||
-                (account_.is_deleted && !acc.is_deleted))
-                account_ = acc;
-
-            accounts_.push_back (acc);
-
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            // Load autofill values
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            for (const auto &key :
-                 ares_key.get_keys_by_mask ("Search.History\\*"))
-            {
-                std::string category = key.get_name ();
-
-                for (const auto &value : key.get_values ())
-                {
-                    autofill af;
-
-                    af.value =
-                        mobius::core::decoder::hexstring (value.get_name ())
-                            .to_string ();
-                    af.username = username_;
-                    af.category = category;
-                    af.account_guid = acc.guid;
-                    af.is_deleted = acc.is_deleted;
-                    af.f = f;
-
-                    autofills_.push_back (af);
-                }
-            }
         }
     }
     catch (const std::exception &e)
@@ -1274,12 +1132,6 @@ evidence_loader_impl::_save_evidences ()
 
     auto transaction = item_.new_transaction ();
 
-    log.debug (__LINE__, "Saving accounts");
-    _save_accounts ();
-
-    log.debug (__LINE__, "Saving autofills");
-    _save_autofills ();
-
     log.debug (__LINE__, "Saving local files");
     _save_local_files ();
 
@@ -1299,64 +1151,6 @@ evidence_loader_impl::_save_evidences ()
     transaction.commit ();
 
     log.debug (__LINE__, "Evidences saved");
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Save accounts
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_save_accounts ()
-{
-    for (const auto &a : accounts_)
-    {
-        mobius::core::pod::map metadata;
-        metadata.set ("app_id", APP_ID);
-        metadata.set ("app_name", APP_NAME);
-        metadata.set ("username", a.username);
-        metadata.set ("network", "Ares");
-        metadata.set ("guid", a.guid);
-        metadata.set ("dht_id", a.dht_id);
-        metadata.set ("mdht_id", a.mdht_id);
-
-        auto e = item_.new_evidence ("user-account");
-
-        e.set_attribute ("account_type", "p2p.ares");
-        e.set_attribute ("id", a.guid);
-        e.set_attribute ("name", a.nickname);
-        e.set_attribute ("password", {});
-        e.set_attribute ("password_found", "no");
-        e.set_attribute ("is_deleted", a.is_deleted);
-        e.set_attribute ("metadata", metadata);
-        e.set_tag ("p2p");
-        e.add_source (a.f);
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Save autofill entries
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_save_autofills ()
-{
-    for (const auto &a : autofills_)
-    {
-        mobius::core::pod::map metadata;
-        metadata.set ("category", a.category);
-        metadata.set ("network", "Ares");
-        metadata.set ("ares_account_guid", a.account_guid);
-
-        auto e = item_.new_evidence ("autofill");
-
-        e.set_attribute ("field_name", "search");
-        e.set_attribute ("value", a.value);
-        e.set_attribute ("app_id", APP_ID);
-        e.set_attribute ("app_name", APP_NAME);
-        e.set_attribute ("username", a.username);
-        e.set_attribute ("is_deleted", a.is_deleted);
-        e.set_attribute ("metadata", metadata);
-        e.set_tag ("p2p");
-        e.add_source (a.f);
-    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

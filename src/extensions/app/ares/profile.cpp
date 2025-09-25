@@ -18,10 +18,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "profile.hpp"
-#include <mobius/core/decoder/hexstring.hpp>
 #include <mobius/core/io/path.hpp>
 #include <mobius/core/log.hpp>
-#include <mobius/core/os/win/registry/hive_file.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <mobius/core/value_selector.hpp>
 #include <algorithm>
@@ -108,47 +106,6 @@ get_username_from_path (const std::string &path)
     return {}; // No username found
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Convert registry data into string
-// @param data Registry data
-// @param encoding Char encoding
-// @return String
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static std::string
-to_string_from_hexstring (
-    const mobius::core::os::win::registry::hive_data &data,
-    const std::string &encoding = "utf-16le"
-)
-{
-    std::string value;
-
-    if (data)
-    {
-        mobius::core::bytearray d;
-        d.from_hexstring (data.get_data ().to_string (encoding));
-        value = d.to_string ();
-    }
-
-    return value;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Convert registry data into hex string
-// @param data Registry data
-// @return String
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static std::string
-to_hex_string (const mobius::core::os::win::registry::hive_data &data)
-{
-    std::string value;
-
-    if (data)
-        value =
-            mobius::core::string::toupper (data.get_data ().to_hexstring ());
-
-    return value;
-}
-
 } // namespace
 
 namespace mobius::extension::app::ares
@@ -166,7 +123,7 @@ class profile::impl
     bool
     is_valid () const
     {
-        return is_valid_;
+        return bool (folder_);
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -177,16 +134,6 @@ class profile::impl
     get_username () const
     {
         return username_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Set username
-    // @param username username
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void
-    set_username (const std::string &username)
-    {
-        username_ = username;
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -230,12 +177,31 @@ class profile::impl
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of files in profile
+    // @return Number of files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    size_files () const
+    {
+        consolidate_files ();
+        return consolidated_files_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get files in profile
+    // @return Vector of files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<file>
+    get_files () const
+    {
+        consolidate_files ();
+        return consolidated_files_;
+    }
+    
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void set_folder (const mobius::core::io::folder &);
-
     void add_arestra_file (const mobius::core::io::file &);
-    void add_ntuser_dat_file (const mobius::core::io::file &);
     void add_phashidx_file (const mobius::core::io::file &);
     void add_shareh_file (const mobius::core::io::file &);
     void add_sharel_file (const mobius::core::io::file &);
@@ -245,9 +211,6 @@ class profile::impl
     void add_tempul_udpphash_file (const mobius::core::io::file &);
 
   private:
-    // @brief Check if profile is valid
-    bool is_valid_ = false;
-
     // @brief Folder object
     mobius::core::io::folder folder_;
 
@@ -260,20 +223,17 @@ class profile::impl
     // @brief Last modified time
     mobius::core::datetime::datetime last_modified_time_;
 
-    // @brief Account data
-    account account_;
-
     // @brief Account files
-    std::map<std::string, file> account_files_;
+    std::map<std::string, file> files_;
 
-    // @brief All accounts found
-    std::vector<account> accounts_;
+    // @brief Consolidated files
+    mutable std::vector<file> consolidated_files_;
 
-    // @brief All autofills found
-    std::vector<autofill> autofills_;
-
-    // @brief File catalog
-    std::vector<file> files_;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Helper functions
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void set_folder (const mobius::core::io::folder &);
+    void consolidate_files () const;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -283,18 +243,52 @@ class profile::impl
 void
 profile::impl::set_folder (const mobius::core::io::folder &f)
 {
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Get data from folder
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (folder_ || !f)
+        return;
+
     folder_ = f;
+
     last_modified_time_ = f.get_modification_time ();
     creation_time_ = f.get_creation_time ();
+    username_ = get_username_from_path (f.get_path ());
+}
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Get username, app ID and app name from path
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto path = f.get_path ();
-    username_ = get_username_from_path (path);
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Consolidate files from map to vector
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::consolidate_files () const
+{
+    if (!consolidated_files_.empty ())
+        return;
+
+    for (const auto &[hash_sha1, af] : files_)
+    {
+        std::ignore = hash_sha1;
+
+        if (af.torrent_files.size () == 0)
+            consolidated_files_.push_back (af);
+
+        else
+        {
+            for (const auto &tf : af.torrent_files)
+            {
+                file f = af;
+
+                f.size = tf.size;
+                f.filename = tf.name;
+                f.path = tf.path;
+                f.hash_sha1.clear ();
+
+                f.metadata = af.metadata.clone ();
+                f.metadata.set ("torrent_file_idx", tf.idx);
+                f.metadata.set ("torrent_last_modification_time",
+                                tf.last_modification_time);
+
+                consolidated_files_.push_back (f);
+            }
+        }
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -329,8 +323,7 @@ profile::impl::add_arestra_file (const mobius::core::io::file &f)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     bool is_deleted = f.is_deleted ();
 
-    auto [iter, success] =
-        account_files_.try_emplace (fa.get_hash_sha1 (), file {});
+    auto [iter, success] = files_.try_emplace (fa.get_hash_sha1 (), file {});
     std::ignore = success;
     auto &fobj = iter->second;
 
@@ -338,7 +331,6 @@ profile::impl::add_arestra_file (const mobius::core::io::file &f)
     {
         // set attributes
         fobj.hash_sha1 = fa.get_hash_sha1 ();
-        fobj.account_guid = account_.guid;
         fobj.username = username_;
         fobj.download_started_time = fa.get_download_started_time ();
         fobj.size = fa.get_file_size ();
@@ -394,82 +386,6 @@ profile::impl::add_arestra_file (const mobius::core::io::file &f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Add NTUSER.DAT file
-// @param f NTUSER.DAT file
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-profile::impl::add_ntuser_dat_file (const mobius::core::io::file &f)
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Create decoder
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto decoder = mobius::core::os::win::registry::hive_file (f.new_reader ());
-
-    if (!decoder.is_instance ())
-    {
-        log.info (__LINE__, "File " + f.get_path () + " ignored.");
-        return;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Get evidences from Ares key
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    const auto &root_key = decoder.get_root_key ();
-    const auto &ares_key = root_key.get_key_by_path ("Software\\Ares");
-
-    if (ares_key)
-    {
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Load account
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        account acc;
-
-        acc.guid = ares_key.get_data_by_name ("Personal.GUID")
-                       .get_data_as_string ("utf-16le");
-        acc.nickname = to_string_from_hexstring (
-            ares_key.get_data_by_name ("Personal.Nickname")
-        );
-        acc.dht_id =
-            to_hex_string (ares_key.get_data_by_name ("Network.DHTID"));
-        acc.mdht_id =
-            to_hex_string (ares_key.get_data_by_name ("Network.MDHTID"));
-        acc.username = username_;
-        acc.is_deleted = f.is_deleted ();
-        acc.f = f;
-
-        if (account_.guid.empty () || (account_.is_deleted && !acc.is_deleted))
-            account_ = acc;
-
-        accounts_.push_back (acc);
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Load autofill values
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        for (const auto &key : ares_key.get_keys_by_mask ("Search.History\\*"))
-        {
-            std::string category = key.get_name ();
-
-            for (const auto &value : key.get_values ())
-            {
-                autofill af;
-
-                af.value = mobius::core::decoder::hexstring (value.get_name ())
-                               .to_string ();
-                af.username = username_;
-                af.category = category;
-                af.account_guid = acc.guid;
-                af.is_deleted = acc.is_deleted;
-                af.f = f;
-
-                autofills_.push_back (af);
-            }
-        }
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Add PHashIdx.dat file
 // @param f PHashIdx.dat file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -504,15 +420,13 @@ profile::impl::add_phashidx_file (const mobius::core::io::file &f)
 
     for (const auto &entry : ph)
     {
-        auto [iter, success] =
-            account_files_.try_emplace (entry.hash_sha1, file {});
+        auto [iter, success] = files_.try_emplace (entry.hash_sha1, file {});
         std::ignore = success;
         auto &fobj = iter->second;
 
         if (!fobj.phashidx_f || (fobj.phashidx_f.is_deleted () && !is_deleted))
         {
             fobj.hash_sha1 = entry.hash_sha1;
-            fobj.account_guid = account_.guid;
             fobj.username = username_;
             fobj.phashidx_idx = entry.idx;
             fobj.flag_completed =
@@ -525,7 +439,7 @@ profile::impl::add_phashidx_file (const mobius::core::io::file &f)
         }
     }
 
-    is_valid_ = true;
+    set_folder (f.get_parent ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -564,15 +478,13 @@ profile::impl::add_shareh_file (const mobius::core::io::file &f)
 
     for (const auto &entry : fh)
     {
-        auto [iter, success] =
-            account_files_.try_emplace (entry.hash_sha1, file {});
+        auto [iter, success] = files_.try_emplace (entry.hash_sha1, file {});
         std::ignore = success;
         auto &fobj = iter->second;
 
         if (!fobj.shareh_f || (fobj.shareh_f.is_deleted () && !is_deleted))
         {
             fobj.hash_sha1 = entry.hash_sha1;
-            fobj.account_guid = account_.guid;
             fobj.username = username_;
             fobj.download_completed_time = entry.download_completed_time;
             fobj.shareh_idx = entry.idx;
@@ -599,7 +511,7 @@ profile::impl::add_shareh_file (const mobius::core::io::file &f)
         }
     }
 
-    is_valid_ = true;
+    set_folder (f.get_parent ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -638,8 +550,7 @@ profile::impl::add_sharel_file (const mobius::core::io::file &f)
 
     for (const auto &entry : fl)
     {
-        auto [iter, success] =
-            account_files_.try_emplace (entry.hash_sha1, file {});
+        auto [iter, success] = files_.try_emplace (entry.hash_sha1, file {});
         std::ignore = success;
         auto &fobj = iter->second;
 
@@ -647,7 +558,6 @@ profile::impl::add_sharel_file (const mobius::core::io::file &f)
         {
             // attributes
             fobj.hash_sha1 = entry.hash_sha1;
-            fobj.account_guid = account_.guid;
             fobj.username = username_;
             fobj.path = entry.path;
             fobj.size = entry.size;
@@ -689,7 +599,7 @@ profile::impl::add_sharel_file (const mobius::core::io::file &f)
         }
     }
 
-    is_valid_ = true;
+    set_folder (f.get_parent ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -728,15 +638,13 @@ profile::impl::add_torrenth_file (const mobius::core::io::file &f)
 
     for (const auto &entry : th)
     {
-        auto [iter, success] =
-            account_files_.try_emplace (entry.hash_sha1, file {});
+        auto [iter, success] = files_.try_emplace (entry.hash_sha1, file {});
         std::ignore = success;
         auto &fobj = iter->second;
 
         if (!fobj.shareh_f || (fobj.shareh_f.is_deleted () && !is_deleted))
         {
             fobj.hash_sha1 = entry.hash_sha1;
-            fobj.account_guid = account_.guid;
             fobj.username = username_;
             fobj.torrenth_idx = entry.idx;
             fobj.torrenth_f = f;
@@ -759,7 +667,7 @@ profile::impl::add_torrenth_file (const mobius::core::io::file &f)
         }
     }
 
-    is_valid_ = true;
+    set_folder (f.get_parent ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -794,7 +702,7 @@ profile::impl::add_tempdl_phash_file (const mobius::core::io::file &f)
     for (const auto &entry : phash)
     {
         auto hash_sha1 = entry.hash_sha1;
-        auto [iter, success] = account_files_.try_emplace (hash_sha1, file {});
+        auto [iter, success] = files_.try_emplace (hash_sha1, file {});
         std::ignore = success;
         auto &fobj = iter->second;
 
@@ -802,7 +710,6 @@ profile::impl::add_tempdl_phash_file (const mobius::core::io::file &f)
             (fobj.tempdl_phash_f.is_deleted () && !is_deleted))
         {
             fobj.hash_sha1 = hash_sha1;
-            fobj.account_guid = account_.guid;
             fobj.username = username_;
             fobj.flag_downloaded = true;
             fobj.tempdl_phash_f = f;
@@ -818,8 +725,6 @@ profile::impl::add_tempdl_phash_file (const mobius::core::io::file &f)
             }
         }
     }
-
-    is_valid_ = true;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -853,7 +758,7 @@ profile::impl::add_tempdl_pbthash_file (const mobius::core::io::file &f)
     bool is_deleted = f.is_deleted ();
 
     auto hash_sha1 = pbthash.get_hash_sha1 ();
-    auto [iter, success] = account_files_.try_emplace (hash_sha1, file {});
+    auto [iter, success] = files_.try_emplace (hash_sha1, file {});
     std::ignore = success;
     auto &fobj = iter->second;
 
@@ -861,7 +766,6 @@ profile::impl::add_tempdl_pbthash_file (const mobius::core::io::file &f)
         (fobj.tempdl_pbthash_f.is_deleted () && !is_deleted))
     {
         fobj.hash_sha1 = hash_sha1;
-        fobj.account_guid = account_.guid;
         fobj.username = username_;
         fobj.size = pbthash.get_file_size ();
         fobj.tempdl_pbthash_f = f;
@@ -931,8 +835,6 @@ profile::impl::add_tempdl_pbthash_file (const mobius::core::io::file &f)
             pbthash.get_download_started_time ()
         );
     }
-
-    is_valid_ = true;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -967,7 +869,7 @@ profile::impl::add_tempul_udpphash_file (const mobius::core::io::file &f)
     for (const auto &entry : phash)
     {
         auto hash_sha1 = entry.hash_sha1;
-        auto [iter, success] = account_files_.try_emplace (hash_sha1, file {});
+        auto [iter, success] = files_.try_emplace (hash_sha1, file {});
         std::ignore = success;
         auto &fobj = iter->second;
 
@@ -975,15 +877,12 @@ profile::impl::add_tempul_udpphash_file (const mobius::core::io::file &f)
             (fobj.tempul_udpphash_f.is_deleted () && !is_deleted))
         {
             fobj.hash_sha1 = hash_sha1;
-            fobj.account_guid = account_.guid;
             fobj.username = username_;
             fobj.flag_uploaded = true;
             fobj.tempul_udpphash_f = f;
             fobj.metadata.set ("pieces_count", entry.pieces_count);
         }
     }
-
-    is_valid_ = true;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1015,16 +914,6 @@ profile::get_username () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set username
-// @param username username
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-profile::set_username (const std::string &username)
-{
-    impl_->set_username (username);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get folder
 // @return Folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1032,16 +921,6 @@ mobius::core::io::folder
 profile::get_folder () const
 {
     return impl_->get_folder ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set folder
-// @param f Folder
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-profile::set_folder (const mobius::core::io::folder &f)
-{
-    impl_->set_folder (f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1075,6 +954,16 @@ profile::get_last_modified_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get number of files in profile
+// @return Number of files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::size_t
+profile::size_files () const
+{
+    return impl_->size_files ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Add ARESTRA file
 // @param f ARESTRA file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1082,16 +971,6 @@ void
 profile::add_arestra_file (const mobius::core::io::file &f)
 {
     impl_->add_arestra_file (f);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Add NTUSER.DAT file
-// @param f NTUSER.DAT file
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-profile::add_ntuser_dat_file (const mobius::core::io::file &f)
-{
-    impl_->add_ntuser_dat_file (f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -44,19 +44,6 @@ struct account
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Ares autofill
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-struct autofill
-{
-    bool is_deleted = false;
-    std::string username;
-    std::string value;
-    std::string category;
-    std::string account_guid;
-    mobius::core::io::file f;
-};
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Remote source (another users sharing file)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct remote_source
@@ -176,17 +163,8 @@ class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
     // @brief User name
     std::string username_;
 
-    // @brief Account data
-    account account_;
-
     // @brief Account files
     std::map<std::string, file> account_files_;
-
-    // @brief All accounts found
-    std::vector<account> accounts_;
-
-    // @brief All autofills found
-    std::vector<autofill> autofills_;
 
     // @brief File catalog
     std::vector<file> files_;
@@ -217,15 +195,12 @@ class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
     void _scan_generic_folder (const mobius::core::io::folder &);
 
     void _decode_arestra_file (const mobius::core::io::file &);
-    void _decode_ntuser_dat_file (const mobius::core::io::file &);
     void _decode_phashidx_dat_file (const mobius::core::io::file &);
     void _decode_shareh_dat_file (const mobius::core::io::file &);
     void _decode_sharel_dat_file (const mobius::core::io::file &);
     void _decode_torrenth_dat_file (const mobius::core::io::file &);
 
     void _save_evidences ();
-    void _save_accounts ();
-    void _save_autofills ();
     void _save_local_files ();
     void _save_p2p_remote_files ();
     void _save_received_files ();

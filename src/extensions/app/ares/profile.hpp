@@ -20,11 +20,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/bytearray.hpp>
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/folder.hpp>
-#include <mobius/core/io/reader.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <mobius/framework/evidence_flag.hpp>
 #include <cstdint>
@@ -41,33 +39,6 @@ namespace mobius::extension::app::ares
 class profile
 {
   public:
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Ares account
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    struct account
-    {
-        bool is_deleted = false;
-        std::string guid;
-        std::string dht_id;
-        std::string mdht_id;
-        std::string nickname;
-        std::string username;
-        mobius::core::io::file f;
-    };
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Ares autofill
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    struct autofill
-    {
-        bool is_deleted = false;
-        std::string username;
-        std::string value;
-        std::string category;
-        std::string account_guid;
-        mobius::core::io::file f;
-    };
-
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Remote source (another users sharing file)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -125,6 +96,8 @@ class profile
         std::vector<remote_source> remote_sources;
 
         // evidence sources
+        std::vector<mobius::core::io::file> evidence_sources;
+
         mobius::core::io::file shareh_f;
         mobius::core::io::file sharel_f;
         mobius::core::io::file torrenth_f;
@@ -163,11 +136,9 @@ class profile
     mobius::core::datetime::datetime get_creation_time () const;
     mobius::core::datetime::datetime get_last_modified_time () const;
 
-    void set_username (const std::string &);
-    void set_folder (const mobius::core::io::folder &);
+    std::size_t size_files () const;
 
     void add_arestra_file (const mobius::core::io::file &);
-    void add_ntuser_dat_file (const mobius::core::io::file &);
     void add_phashidx_file (const mobius::core::io::file &);
     void add_shareh_file (const mobius::core::io::file &);
     void add_sharel_file (const mobius::core::io::file &);

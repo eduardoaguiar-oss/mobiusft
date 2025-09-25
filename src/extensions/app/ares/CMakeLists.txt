@@ -42,6 +42,7 @@ add_library(app_ares MODULE
     file_sharel.cpp
     file_torrenth.cpp
     profile.cpp
+    vfs_processor_impl.cpp
 )
 
 set_target_properties(app_ares PROPERTIES OUTPUT_NAME "app-ares" PREFIX "")
