@@ -35,6 +35,7 @@
 #include <iomanip>
 #include <sstream>
 #include "common.hpp"
+#include "file_arestra.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // - Ares Galaxy folder structure:
@@ -47,34 +48,10 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const std::string ANT_ID = "evidence.app-ares";
 static const std::string ANT_NAME = "App Ares Galaxy";
-static const std::string ANT_VERSION = "1.0";
+static const std::string ANT_VERSION = "1.4";
 static const std::string SAMPLING_ID = "sampling";
 static const std::string APP_NAME = "Ares Galaxy";
 static const std::string APP_ID = "ares";
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get filename from path
-// @param path Path
-// @return Filename
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static std::string
-_get_filename (const std::string &path)
-{
-    auto filename = path;
-
-    auto pos = filename.find_last_of ("\\");
-    if (pos != std::string::npos)
-        filename = filename.substr (pos + 1);
-
-    else
-    {
-        pos = filename.find_last_of ("/");
-        if (pos != std::string::npos)
-            filename = filename.substr (pos + 1);
-    }
-
-    return filename;
-}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get username from path
@@ -140,6 +117,40 @@ to_hex_string (const mobius::core::os::win::registry::hive_data &data)
     return value;
 }
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Update metadata map, preferring non null values
+// @param metadata Metadata map
+// @param other Other metadata map
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static void
+update_metadata (mobius::core::pod::map &metadata,
+                 const mobius::core::pod::map &other)
+{
+    for (const auto &[k, v] : other)
+    {
+        auto old_v = metadata.get (k);
+
+        if (!metadata.contains (k) || (old_v.is_null () && !v.is_null ()))
+            metadata.set (k, v);
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get vector of hashes for a given file
+// @param f File structure
+// @return Vector
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<mobius::core::pod::data>
+get_file_hashes (const mobius::extension::app::ares::profile::file &f)
+{
+    std::vector<mobius::core::pod::data> hashes;
+
+    if (!f.hash_sha1.empty ())
+        hashes.push_back ({"sha1", f.hash_sha1});
+
+    return hashes;
+}
+
 } // namespace
 
 namespace mobius::extension::app::ares
@@ -179,7 +190,11 @@ vfs_processor_impl::on_complete ()
 
     _save_app_profiles ();
     _save_autofills ();
+    _save_local_files ();
+    _save_p2p_remote_files ();
     _save_received_files ();
+    _save_sent_files ();
+    _save_shared_files ();
     _save_user_accounts ();
 
     item_.set_ant (ANT_ID, ANT_NAME, ANT_VERSION);
@@ -193,17 +208,111 @@ vfs_processor_impl::on_complete ()
 void
 vfs_processor_impl::_scan_arestra_files (const mobius::core::io::folder &folder)
 {
+    mobius::core::log log (__FILE__, __FUNCTION__);
     mobius::core::io::walker w (folder);
 
-    auto filter = [] (const auto &f)
+    for (const auto &[name, f] : w.get_files_with_names ())
     {
-        return mobius::core::string::startswith (
-            f.get_name (), "___ARESTRA___"
-        );
-    };
+        try
+        {
+            if (mobius::core::string::startswith (name, "___arestra___"))
+                _decode_arestra_file (f);
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (
+                __LINE__,
+                std::string (e.what ()) + " (file: " + f.get_path () + ")"
+            );
+        }
+    }
+}
 
-    for (const auto &f : w.find_files (filter))
-        ; //_decode_arestra_file (f);
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode ARESTRA file
+// @param f ARESTRA file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_decode_arestra_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode file
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    file_arestra arestra (f.new_reader ());
+
+    if (!arestra)
+    {
+        log.info (
+            __LINE__,
+            "File " + f.get_path () + " is not a valid PBTHash.dat file"
+        );
+        return;
+    }
+
+    log.info (__LINE__, "File decoded [___ARESTRA___]. Path: " + f.get_path ());
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Create file object
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    profile::file fobj;
+
+    // set attributes
+    fobj.hash_sha1 = arestra.get_hash_sha1 ();
+    fobj.username = username_;
+    fobj.download_started_time = arestra.get_download_started_time ();
+    fobj.size = arestra.get_file_size ();
+    fobj.arestra_f = f;
+
+    // set filename
+    fobj.filename = mobius::core::io::path (f.get_path ()).get_filename ();
+    fobj.filename.erase (0, 13); // remove "___ARESTRA___"
+
+    // set flags
+    fobj.flag_downloaded = true;
+    fobj.flag_corrupted.set_if_unknown (arestra.is_corrupted ());
+    fobj.flag_shared.set_if_unknown (
+        false
+    ); // @see thread_share.pas (line 1065)
+    fobj.flag_completed = arestra.is_completed ();
+
+    // add remote_sources
+    for (const auto &[ip, port] : arestra.get_alt_sources ())
+    {
+        profile::remote_source r_source;
+        r_source.timestamp = f.get_modification_time ();
+        r_source.ip = ip;
+        r_source.port = port;
+
+        fobj.remote_sources.push_back (r_source);
+    }
+
+    // set metadata
+    fobj.metadata.set ("arestra_signature", arestra.get_signature ());
+    fobj.metadata.set ("arestra_file_version", arestra.get_version ());
+    fobj.metadata.set (
+        "download_started_time", arestra.get_download_started_time ()
+    );
+    fobj.metadata.set ("downloaded_bytes", arestra.get_progress ());
+    fobj.metadata.set ("verified_bytes", arestra.get_phash_verified ());
+    fobj.metadata.set ("is_paused", arestra.is_paused ());
+    fobj.metadata.set ("media_type", arestra.get_media_type ());
+    fobj.metadata.set ("param1", arestra.get_param1 ());
+    fobj.metadata.set ("param2", arestra.get_param2 ());
+    fobj.metadata.set ("param3", arestra.get_param3 ());
+    fobj.metadata.set ("kwgenre", arestra.get_kw_genre ());
+    fobj.metadata.set ("title", arestra.get_title ());
+    fobj.metadata.set ("artist", arestra.get_artist ());
+    fobj.metadata.set ("album", arestra.get_album ());
+    fobj.metadata.set ("category", arestra.get_category ());
+    fobj.metadata.set ("year", arestra.get_year ());
+    fobj.metadata.set ("language", arestra.get_language ());
+    fobj.metadata.set ("url", arestra.get_url ());
+    fobj.metadata.set ("comment", arestra.get_comment ());
+    fobj.metadata.set ("subfolder", arestra.get_subfolder ());
+
+    files_.push_back (fobj);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -215,10 +324,23 @@ vfs_processor_impl::_scan_ntuser_dat_files (
     const mobius::core::io::folder &folder
 )
 {
+    mobius::core::log log (__FILE__, __FUNCTION__);
     mobius::core::io::walker w (folder);
 
     for (const auto &f : w.get_files_by_name ("ntuser.dat"))
-        _decode_ntuser_dat_file (f);
+    {
+        try
+        {
+            _decode_ntuser_dat_file (f);
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (
+                __LINE__,
+                std::string (e.what ()) + " (file: " + f.get_path () + ")"
+            );
+        }
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -352,6 +474,10 @@ vfs_processor_impl::_scan_profile (const mobius::core::io::folder &folder)
 
         for (const auto &f : w.get_folders_by_name ("tempul"))
             _scan_tempul_folder (p, f);
+
+        auto files = p.get_files ();
+
+        std::copy (files.begin (), files.end (), std::back_inserter (files_));
     }
 }
 
@@ -466,72 +592,346 @@ vfs_processor_impl::_save_autofills ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save local files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_local_files ()
+{
+    for (const auto &f : files_)
+    {
+        if (!f.path.empty ())
+        {
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Create evidence
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            auto e = item_.new_evidence ("local-file");
+
+            e.set_attribute ("username", f.username);
+            e.set_attribute ("path", f.path);
+            e.set_attribute ("app_id", APP_ID);
+            e.set_attribute ("app_name", APP_NAME);
+            e.set_attribute ("hashes", get_file_hashes (f));
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Metadata
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            mobius::core::pod::map metadata;
+
+            metadata.set ("size", f.size);
+            metadata.set ("flag_downloaded", to_string (f.flag_downloaded));
+            metadata.set ("flag_uploaded", to_string (f.flag_uploaded));
+            metadata.set ("flag_shared", to_string (f.flag_shared));
+            metadata.set ("flag_corrupted", to_string (f.flag_corrupted));
+            metadata.set ("flag_completed", to_string (f.flag_completed));
+
+            if (f.shareh_idx)
+                metadata.set ("shareh_idx", f.shareh_idx);
+
+            if (f.sharel_idx)
+                metadata.set ("sharel_idx", f.sharel_idx);
+
+            if (f.torrenth_idx)
+                metadata.set ("torrenth_idx", f.torrenth_idx);
+
+            if (f.phashidx_idx)
+                metadata.set ("phashidx_idx", f.phashidx_idx);
+
+            metadata.set ("network", "Ares");
+            update_metadata (metadata, f.metadata);
+
+            e.set_attribute ("metadata", metadata);
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Tags
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            e.set_tag ("p2p");
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Sources
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            e.add_source (f.shareh_f);
+            e.add_source (f.sharel_f);
+            e.add_source (f.phashidx_f);
+            e.add_source (f.arestra_f);
+            e.add_source (f.tempdl_pbthash_f);
+            e.add_source (f.tempdl_phash_f);
+            e.add_source (f.tempul_udpphash_f);
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save remote files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_p2p_remote_files ()
+{
+    for (const auto &f : files_)
+    {
+        for (const auto &rs : f.remote_sources)
+        {
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Create evidence
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            auto e = item_.new_evidence ("p2p-remote-file");
+            e.set_attribute ("timestamp", rs.timestamp);
+            e.set_attribute ("ip", rs.ip);
+            e.set_attribute ("port", rs.port);
+            e.set_attribute ("filename", f.filename);
+            e.set_attribute ("username", f.username);
+            e.set_attribute ("app_id", APP_ID);
+            e.set_attribute ("app_name", APP_NAME);
+            e.set_attribute ("hashes", get_file_hashes (f));
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Metadata
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            mobius::core::pod::map metadata;
+
+            metadata.set ("size", f.size);
+            metadata.set ("network", "Ares");
+            update_metadata (metadata, f.metadata);
+
+            e.set_attribute ("metadata", metadata);
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Tags
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            e.set_tag ("p2p");
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Sources
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            e.add_source (f.shareh_f);
+            e.add_source (f.sharel_f);
+            e.add_source (f.torrenth_f);
+            e.add_source (f.phashidx_f);
+            e.add_source (f.arestra_f);
+            e.add_source (f.tempdl_pbthash_f);
+            e.add_source (f.tempdl_phash_f);
+            e.add_source (f.tempul_udpphash_f);
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save received files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 vfs_processor_impl::_save_received_files ()
 {
-    for (const auto &profile : profiles_)
+    for (const auto &f : files_)
     {
-        /*        for (const auto &entry : profile.get_downloads ())
-                {
-                    if (entry.start_time)
-                    {
-                        auto e = item_.new_evidence ("received-file");
-                        auto path = mobius::core::string::first_of (
-                            entry.target_path, entry.full_path
-                        );
+        if (f.flag_downloaded.is_yes ())
+        {
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Create evidence
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            auto e = item_.new_evidence ("received-file");
 
-                        e.set_attribute ("timestamp", entry.start_time);
-                        e.set_attribute ("username", profile.get_username ());
-                        e.set_attribute ("path", path);
-                        e.set_attribute ("filename", _get_filename (path));
-                        e.set_attribute ("app_id", profile.get_app_id ());
-                        e.set_attribute ("app_name", profile.get_app_name ());
-                        e.set_attribute ("app_family", APP_FAMILY);
+            if (f.download_completed_time)
+                e.set_attribute ("timestamp", f.download_completed_time);
 
-                        auto metadata = mobius::core::pod::map ();
-                        metadata.set ("start_time", entry.start_time);
-                        metadata.set ("end_time", entry.end_time);
-                        metadata.set ("current_path", entry.current_path);
-                        metadata.set ("full_path", entry.full_path);
-                        metadata.set ("target_path", entry.target_path);
-                        metadata.set ("site_url", entry.site_url);
-                        metadata.set ("tab_url", entry.tab_url);
-                        metadata.set ("tab_referrer_url",
-           entry.tab_referrer_url); metadata.set ("url", entry.url);
-                        metadata.set ("referrer", entry.referrer);
-                        metadata.set ("received_bytes", entry.received_bytes);
-                        metadata.set ("total_bytes", entry.total_bytes);
-                        metadata.set ("state", entry.state);
-                        metadata.set ("mime_type", entry.mime_type);
-                        metadata.set ("original_mime_type",
-           entry.original_mime_type); metadata.set ("record_number", entry.idx);
-                        metadata.set ("id", entry.id);
-                        metadata.set ("guid", entry.guid);
-                        metadata.set ("extension_id", entry.by_ext_id);
-                        metadata.set ("extenstion_name", entry.by_ext_name);
-                        metadata.set ("web_app_id", entry.by_web_app_id);
-                        metadata.set ("danger_type", entry.danger_type);
-                        metadata.set (
-                            "embedder_download_data",
-           entry.embedder_download_data
-                        );
-                        metadata.set ("etag", entry.etag);
-                        metadata.set ("hash", entry.hash);
-                        metadata.set ("http_method", entry.http_method);
-                        metadata.set ("interrupt_reason",
-           entry.interrupt_reason); metadata.set ("last_access_time",
-           entry.last_access_time); metadata.set ("last_modified",
-           entry.last_modified); metadata.set ("opened", entry.opened);
-                        metadata.set ("transient", entry.transient);
+            else if (f.download_started_time)
+                e.set_attribute ("timestamp", f.download_started_time);
 
-                        e.set_attribute ("metadata", metadata);
+            e.set_attribute ("filename", f.filename);
+            e.set_attribute ("path", f.path);
+            e.set_attribute ("username", f.username);
+            e.set_attribute ("app_id", APP_ID);
+            e.set_attribute ("app_name", APP_NAME);
+            e.set_attribute ("hashes", get_file_hashes (f));
 
-                        e.set_tag ("p2p");
-                        e.add_source (entry.f);
-                    }
-                }*/
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Metadata
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            mobius::core::pod::map metadata;
+            metadata.set ("flag_downloaded", to_string (f.flag_downloaded));
+            metadata.set ("flag_uploaded", to_string (f.flag_uploaded));
+            metadata.set ("flag_shared", to_string (f.flag_shared));
+            metadata.set ("flag_corrupted", to_string (f.flag_corrupted));
+            metadata.set ("flag_completed", to_string (f.flag_completed));
+
+            if (f.shareh_idx)
+                metadata.set ("shareh_idx", f.shareh_idx);
+
+            if (f.sharel_idx)
+                metadata.set ("sharel_idx", f.sharel_idx);
+
+            if (f.torrenth_idx)
+                metadata.set ("torrenth_idx", f.torrenth_idx);
+
+            if (f.phashidx_idx)
+                metadata.set ("phashidx_idx", f.phashidx_idx);
+
+            metadata.set ("network", "Ares");
+            update_metadata (metadata, f.metadata);
+
+            e.set_attribute ("metadata", metadata);
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Tags
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            e.set_tag ("p2p");
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Sources
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            e.add_source (f.shareh_f);
+            e.add_source (f.sharel_f);
+            e.add_source (f.torrenth_f);
+            e.add_source (f.phashidx_f);
+            e.add_source (f.arestra_f);
+            e.add_source (f.tempdl_pbthash_f);
+            e.add_source (f.tempdl_phash_f);
+            e.add_source (f.tempul_udpphash_f);
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save sent files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_sent_files ()
+{
+    for (const auto &f : files_)
+    {
+        if (f.flag_uploaded.is_yes ())
+        {
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Create evidence
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            auto e = item_.new_evidence ("sent-file");
+
+            if (f.upload_started_time)
+                e.set_attribute ("timestamp", f.upload_started_time);
+
+            e.set_attribute ("filename", f.filename);
+            e.set_attribute ("path", f.path);
+            e.set_attribute ("username", f.username);
+            e.set_attribute ("app_id", APP_ID);
+            e.set_attribute ("app_name", APP_NAME);
+            e.set_attribute ("hashes", get_file_hashes (f));
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Metadata
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            mobius::core::pod::map metadata;
+            metadata.set ("flag_downloaded", to_string (f.flag_downloaded));
+            metadata.set ("flag_uploaded", to_string (f.flag_uploaded));
+            metadata.set ("flag_shared", to_string (f.flag_shared));
+            metadata.set ("flag_corrupted", to_string (f.flag_corrupted));
+            metadata.set ("flag_completed", to_string (f.flag_completed));
+
+            if (f.shareh_idx)
+                metadata.set ("shareh_idx", f.shareh_idx);
+
+            if (f.sharel_idx)
+                metadata.set ("sharel_idx", f.sharel_idx);
+
+            if (f.torrenth_idx)
+                metadata.set ("torrenth_idx", f.torrenth_idx);
+
+            if (f.phashidx_idx)
+                metadata.set ("phashidx_idx", f.phashidx_idx);
+
+            metadata.set ("network", "Ares");
+            update_metadata (metadata, f.metadata);
+
+            e.set_attribute ("metadata", metadata);
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Tags
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            e.set_tag ("p2p");
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Sources
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            e.add_source (f.shareh_f);
+            e.add_source (f.sharel_f);
+            e.add_source (f.torrenth_f);
+            e.add_source (f.phashidx_f);
+            e.add_source (f.arestra_f);
+            e.add_source (f.tempdl_pbthash_f);
+            e.add_source (f.tempdl_phash_f);
+            e.add_source (f.tempul_udpphash_f);
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save shared files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_shared_files ()
+{
+    for (const auto &f : files_)
+    {
+        if (f.flag_shared.is_yes () || f.flag_shared.is_always ())
+        {
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Create evidence
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            auto e = item_.new_evidence ("shared-file");
+
+            e.set_attribute ("username", f.username);
+            e.set_attribute ("filename", f.filename);
+            e.set_attribute ("path", f.path);
+            e.set_attribute ("app_id", APP_ID);
+            e.set_attribute ("app_name", APP_NAME);
+
+            std::vector<mobius::core::pod::data> hashes = {
+                {"sha1", f.hash_sha1}};
+            e.set_attribute ("hashes", hashes);
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Metadata
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            mobius::core::pod::map metadata;
+
+            metadata.set ("size", f.size);
+            metadata.set ("flag_downloaded", to_string (f.flag_downloaded));
+            metadata.set ("flag_uploaded", to_string (f.flag_uploaded));
+            metadata.set ("flag_shared", to_string (f.flag_shared));
+            metadata.set ("flag_corrupted", to_string (f.flag_corrupted));
+            metadata.set ("flag_completed", to_string (f.flag_completed));
+
+            if (f.shareh_idx)
+                metadata.set ("shareh_idx", f.shareh_idx);
+
+            if (f.sharel_idx)
+                metadata.set ("sharel_idx", f.sharel_idx);
+
+            if (f.torrenth_idx)
+                metadata.set ("torrenth_idx", f.torrenth_idx);
+
+            if (f.phashidx_idx)
+                metadata.set ("phashidx_idx", f.phashidx_idx);
+
+            metadata.set ("network", "Ares");
+            update_metadata (metadata, f.metadata);
+
+            e.set_attribute ("metadata", metadata);
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Tags
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            e.set_tag ("p2p");
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Sources
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            e.add_source (f.shareh_f);
+            e.add_source (f.sharel_f);
+            e.add_source (f.torrenth_f);
+            e.add_source (f.phashidx_f);
+            e.add_source (f.arestra_f);
+            e.add_source (f.tempdl_pbthash_f);
+            e.add_source (f.tempdl_phash_f);
+            e.add_source (f.tempul_udpphash_f);
+        }
     }
 }
 

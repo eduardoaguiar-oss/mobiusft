@@ -137,6 +137,7 @@ class profile
     mobius::core::datetime::datetime get_last_modified_time () const;
 
     std::size_t size_files () const;
+    std::vector<file> get_files () const;
 
     void add_arestra_file (const mobius::core::io::file &);
     void add_phashidx_file (const mobius::core::io::file &);

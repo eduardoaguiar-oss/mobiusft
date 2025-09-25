@@ -23,11 +23,9 @@
 #include "decoder_impl_shareh.hpp"
 #include "decoder_impl_sharel.hpp"
 #include "decoder_impl_torrenth.hpp"
-#include "evidence_loader_impl.hpp"
 #include "vfs_processor_impl.hpp"
 #include <mobius/core/file_decoder/decoder.hpp>
 #include <mobius/core/resource.hpp>
-#include <mobius/framework/evidence_loader.hpp>
 #include <mobius/framework/ant/vfs_processor.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -54,11 +52,6 @@ start ()
         EXTENSION_ID,
         EXTENSION_NAME
     );
-
-    mobius::core::add_resource (
-        "evidence_loader.builder.app-ares", "Ares Galaxy evidence loader",
-        mobius::framework::new_evidence_loader_builder_resource<
-            mobius::extension::app::ares::evidence_loader_impl> ());
 
     mobius::core::add_resource (
         "file_decoder.builder.app-ares-arestra",
@@ -104,7 +97,6 @@ stop ()
         EXTENSION_ID
     );
 
-    mobius::core::remove_resource ("evidence_loader.builder.app-ares");
     mobius::core::remove_resource ("file_decoder.builder.app-ares-arestra");
     mobius::core::remove_resource ("file_decoder.builder.app-ares-pbthash");
     mobius::core::remove_resource ("file_decoder.builder.app-ares-phash");

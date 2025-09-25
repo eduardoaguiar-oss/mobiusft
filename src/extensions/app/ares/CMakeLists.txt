@@ -34,7 +34,6 @@ add_library(app_ares MODULE
     decoder_impl_shareh.cpp
     decoder_impl_sharel.cpp
     decoder_impl_torrenth.cpp
-    evidence_loader_impl.cpp
     file_arestra.cpp
     file_pbthash.cpp
     file_phash.cpp

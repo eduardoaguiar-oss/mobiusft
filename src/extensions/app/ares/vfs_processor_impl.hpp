@@ -98,6 +98,9 @@ class vfs_processor_impl
     // @brief Autofill values
     std::vector<autofill> autofills_;
 
+    // @brief Files
+    std::vector<profile::file> files_;
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -107,6 +110,7 @@ class vfs_processor_impl
     void _scan_tempdl_folder (profile &, const mobius::core::io::folder &);
     void _scan_tempul_folder (profile &, const mobius::core::io::folder &);
 
+    void _decode_arestra_file (const mobius::core::io::file &);
     void _decode_ntuser_dat_file (const mobius::core::io::file &);
 
     void _save_app_profiles ();
