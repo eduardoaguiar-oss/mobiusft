@@ -111,6 +111,7 @@ ant_impl_vfs_processor::get_status () const
 void
 ant_impl_vfs_processor::run ()
 {
+    mobius::core::log log (__FILE__, __FUNCTION__);
     processed_folders_ = 0;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -135,6 +136,8 @@ ant_impl_vfs_processor::run ()
     // Otherwise, process only "home", "users" and "documents and settings"
     // folders.
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    log.info (__LINE__, "Starting VFS processing");
+
     for (const auto &entry : vfs.get_root_entries ())
     {
         if (entry.is_folder ())
@@ -179,6 +182,8 @@ ant_impl_vfs_processor::run ()
             log.warning (__LINE__, e.what ());
         }
     }
+
+    log.info (__LINE__, "VFS processing completed");
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

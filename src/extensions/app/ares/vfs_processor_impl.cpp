@@ -38,9 +38,53 @@
 #include "file_arestra.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// - Ares Galaxy folder structure:
+// References:
+//    . Ares Galaxy 246 source code
+//    . Forensic Analysis of Ares Galaxy Peer-to-Peer Network (Kolenbrander)
 //
+// Ares Galaxy main files (* decoded by MobiusFT):
+//
+//  . DHTNodes.dat - DHT nodes
+//       @see DHT_readnodeFile - DHT/dhtzones.pas (line 125)
+//       (client ID, IP, udp_port, tcp_port, type)
+//
+//  . MDHTNodes.dat - MDHT nodes
+//       @see MDHT_readnodeFile - BitTorrent/dht_zones.pas (line 124)
+//       (client ID, IP, udp_port, type)
+//
+//  * PHashIdx.dat, PhashIdxTemp.dat, TempPHash.dat - PHash table
+//       @see ICH_load_phash_indexs - helper_ICH.pas (line 1023)
+//       (hash_sha1, Phash table)
+//
+//  * ShareH.dat - Trusted metadata
+//       @see get_trusted_metas - helper_library_db.pas (line 542)
+//
+//  * ShareL.dat - Cached metadata
+//       @see get_cached_metas - helper_library_db.pas (line 367)
+//
+//  . SNodes.dat
+//       @see aresnodes_loadfromdisk - helper_ares_nodes (line 445)
+//       (IP, port, reports, attempts, connects, first_seen, last_seen)
+//
+//  * TorrentH.dat - DHT magnet file history and metadata
+//       @see tthread_dht.getMagnetFiles - DHT/thread_dht.pas (line 284)
+//
+//  * TempDL/PHash_XXX.dat - Downloading file pieces info
+//       @see ICH_loadPieces - helper_ICH (line 528)
+//       (flag_done, progress, hash_sha1)
+//
+//  * TempDL/PBTHash_XXX.dat - Downloading file (BitTorrent) metadata
+//       @see BitTorrentDb_load - BitTorrent/BitTorrentDlDb.pas (line 88)
+//
+//  * TempUL/UDPPHash_XXX.dat - Uploading file (BitTorrent) metadata
+//       @see ICH_send_Phash@helper_ICH.pas (line 776)
+//
+//  * ___ARESTRA___*.* - Downloading files, with metadata info
+//       @see read_details_DB_Download - helper_download_disk.pas (line 722)
+//
+//  . __INCOMPLETE__*.* - Downloading files (BitTorrent)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -123,8 +167,9 @@ to_hex_string (const mobius::core::os::win::registry::hive_data &data)
 // @param other Other metadata map
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-update_metadata (mobius::core::pod::map &metadata,
-                 const mobius::core::pod::map &other)
+update_metadata (
+    mobius::core::pod::map &metadata, const mobius::core::pod::map &other
+)
 {
     for (const auto &[k, v] : other)
     {
@@ -175,9 +220,9 @@ vfs_processor_impl::vfs_processor_impl (
 void
 vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 {
-    _scan_profile (folder);
-    _scan_arestra_files (folder);
-    _scan_ntuser_dat_files (folder);
+    _scan_profile_folder (folder);
+    _scan_arestra_folder (folder);
+    _scan_ntuser_dat_folder (folder);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -206,7 +251,7 @@ vfs_processor_impl::on_complete ()
 // @param folder Folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_arestra_files (const mobius::core::io::folder &folder)
+vfs_processor_impl::_scan_arestra_folder (const mobius::core::io::folder &folder)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
     mobius::core::io::walker w (folder);
@@ -260,7 +305,7 @@ vfs_processor_impl::_decode_arestra_file (const mobius::core::io::file &f)
 
     // set attributes
     fobj.hash_sha1 = arestra.get_hash_sha1 ();
-    fobj.username = username_;
+    fobj.username = get_username_from_path (f.get_path ());
     fobj.download_started_time = arestra.get_download_started_time ();
     fobj.size = arestra.get_file_size ();
     fobj.arestra_f = f;
@@ -271,10 +316,8 @@ vfs_processor_impl::_decode_arestra_file (const mobius::core::io::file &f)
 
     // set flags
     fobj.flag_downloaded = true;
-    fobj.flag_corrupted.set_if_unknown (arestra.is_corrupted ());
-    fobj.flag_shared.set_if_unknown (
-        false
-    ); // @see thread_share.pas (line 1065)
+    fobj.flag_corrupted = arestra.is_corrupted ();
+    fobj.flag_shared = false; // @see thread_share.pas (line 1065)
     fobj.flag_completed = arestra.is_completed ();
 
     // add remote_sources
@@ -320,7 +363,7 @@ vfs_processor_impl::_decode_arestra_file (const mobius::core::io::file &f)
 // @param folder Folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_ntuser_dat_files (
+vfs_processor_impl::_scan_ntuser_dat_folder (
     const mobius::core::io::folder &folder
 )
 {
@@ -352,9 +395,9 @@ vfs_processor_impl::_decode_ntuser_dat_file (const mobius::core::io::file &f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Create decoder
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     auto decoder = mobius::core::os::win::registry::hive_file (f.new_reader ());
 
     if (!decoder.is_instance ())
@@ -363,9 +406,9 @@ vfs_processor_impl::_decode_ntuser_dat_file (const mobius::core::io::file &f)
         return;
     }
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Get evidences from Ares key
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     const auto &root_key = decoder.get_root_key ();
     const auto &ares_key = root_key.get_key_by_path ("Software\\Ares");
 
@@ -373,9 +416,9 @@ vfs_processor_impl::_decode_ntuser_dat_file (const mobius::core::io::file &f)
     {
         auto username = get_username_from_path (f.get_path ());
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Load account
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         account acc;
 
         acc.guid = ares_key.get_data_by_name ("Personal.GUID")
@@ -391,14 +434,11 @@ vfs_processor_impl::_decode_ntuser_dat_file (const mobius::core::io::file &f)
         acc.is_deleted = f.is_deleted ();
         acc.f = f;
 
-        if (account_.guid.empty () || (account_.is_deleted && !acc.is_deleted))
-            account_ = acc;
-
         accounts_.push_back (acc);
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Load autofill values
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         for (const auto &key : ares_key.get_keys_by_mask ("Search.History\\*"))
         {
             std::string category = key.get_name ();
@@ -426,7 +466,7 @@ vfs_processor_impl::_decode_ntuser_dat_file (const mobius::core::io::file &f)
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_profile (const mobius::core::io::folder &folder)
+vfs_processor_impl::_scan_profile_folder (const mobius::core::io::folder &folder)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -883,7 +923,8 @@ vfs_processor_impl::_save_shared_files ()
             e.set_attribute ("app_name", APP_NAME);
 
             std::vector<mobius::core::pod::data> hashes = {
-                {"sha1", f.hash_sha1}};
+                {"sha1", f.hash_sha1}
+            };
             e.set_attribute ("hashes", hashes);
 
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

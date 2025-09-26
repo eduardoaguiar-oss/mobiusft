@@ -26,7 +26,6 @@
 #include <map>
 #include <string>
 #include <vector>
-#include "file_arestra.hpp"
 #include "file_pbthash.hpp"
 #include "file_phash.hpp"
 #include "file_shareh.hpp"
@@ -37,48 +36,6 @@
 // References:
 //    . Ares Galaxy 246 source code
 //    . Forensic Analysis of Ares Galaxy Peer-to-Peer Network (Kolenbrander)
-//
-// Ares Galaxy main files (* decoded by MobiusFT):
-//
-//  . DHTNodes.dat - DHT nodes
-//       @see DHT_readnodeFile - DHT/dhtzones.pas (line 125)
-//       (client ID, IP, udp_port, tcp_port, type)
-//
-//  . MDHTNodes.dat - MDHT nodes
-//       @see MDHT_readnodeFile - BitTorrent/dht_zones.pas (line 124)
-//       (client ID, IP, udp_port, type)
-//
-//  * PHashIdx.dat, PhashIdxTemp.dat, TempPHash.dat - PHash table
-//       @see ICH_load_phash_indexs - helper_ICH.pas (line 1023)
-//       (hash_sha1, Phash table)
-//
-//  * ShareH.dat - Trusted metadata
-//       @see get_trusted_metas - helper_library_db.pas (line 542)
-//
-//  * ShareL.dat - Cached metadata
-//       @see get_cached_metas - helper_library_db.pas (line 367)
-//
-//  . SNodes.dat
-//       @see aresnodes_loadfromdisk - helper_ares_nodes (line 445)
-//       (IP, port, reports, attempts, connects, first_seen, last_seen)
-//
-//  * TorrentH.dat - DHT magnet file history and metadata
-//       @see tthread_dht.getMagnetFiles - DHT/thread_dht.pas (line 284)
-//
-//  * TempDL/PHash_XXX.dat - Downloading file pieces info
-//       @see ICH_loadPieces - helper_ICH (line 528)
-//       (flag_done, progress, hash_sha1)
-//
-//  * TempDL/PBTHash_XXX.dat - Downloading file (BitTorrent) metadata
-//       @see BitTorrentDb_load - BitTorrent/BitTorrentDlDb.pas (line 88)
-//
-//  * TempUL/UDPPHash_XXX.dat - Uploading file (BitTorrent) metadata
-//       @see ICH_send_Phash@helper_ICH.pas (line 776)
-//
-//  * ___ARESTRA___*.* - Downloading files, with metadata info
-//       @see read_details_DB_Download - helper_download_disk.pas (line 722)
-//
-//  . __INCOMPLETE__*.* - Downloading files (BitTorrent)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace
@@ -201,7 +158,6 @@ class profile::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void add_arestra_file (const mobius::core::io::file &);
     void add_phashidx_file (const mobius::core::io::file &);
     void add_shareh_file (const mobius::core::io::file &);
     void add_sharel_file (const mobius::core::io::file &);
@@ -288,100 +244,6 @@ profile::impl::consolidate_files () const
                 consolidated_files_.push_back (f);
             }
         }
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Add ARESTRA file
-// @param f ARESTRA file
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-profile::impl::add_arestra_file (const mobius::core::io::file &f)
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Decode file
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    file_arestra fa (f.new_reader ());
-
-    if (!fa)
-    {
-        log.info (
-            __LINE__, "File " + f.get_path () + " is not a valid ARESTRA file."
-        );
-        return;
-    }
-    log.info (__LINE__, "File decoded [ARESTRA]. Path: " + f.get_path ());
-
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
-        last_modified_time_ = f.get_modification_time ();
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Get metadata
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    bool is_deleted = f.is_deleted ();
-
-    auto [iter, success] = files_.try_emplace (fa.get_hash_sha1 (), file {});
-    std::ignore = success;
-    auto &fobj = iter->second;
-
-    if (!fobj.arestra_f || (fobj.arestra_f.is_deleted () && !is_deleted))
-    {
-        // set attributes
-        fobj.hash_sha1 = fa.get_hash_sha1 ();
-        fobj.username = username_;
-        fobj.download_started_time = fa.get_download_started_time ();
-        fobj.size = fa.get_file_size ();
-        fobj.arestra_f = f;
-
-        // set filename
-        fobj.filename = mobius::core::io::path (f.get_path ()).get_filename ();
-        fobj.filename.erase (0, 13); // remove "___ARESTRA___"
-
-        // set flags
-        fobj.flag_downloaded = true;
-        fobj.flag_corrupted.set_if_unknown (fa.is_corrupted ());
-        fobj.flag_shared.set_if_unknown (
-            false
-        ); // @see thread_share.pas (line 1065)
-        fobj.flag_completed = fa.is_completed ();
-
-        // add remote_sources
-        for (const auto &[ip, port] : fa.get_alt_sources ())
-        {
-            remote_source r_source;
-            r_source.timestamp = f.get_modification_time ();
-            r_source.ip = ip;
-            r_source.port = port;
-
-            fobj.remote_sources.push_back (r_source);
-        }
-
-        // set metadata
-        fobj.metadata.set ("arestra_signature", fa.get_signature ());
-        fobj.metadata.set ("arestra_file_version", fa.get_version ());
-        fobj.metadata.set (
-            "download_started_time", fa.get_download_started_time ()
-        );
-        fobj.metadata.set ("downloaded_bytes", fa.get_progress ());
-        fobj.metadata.set ("verified_bytes", fa.get_phash_verified ());
-        fobj.metadata.set ("is_paused", fa.is_paused ());
-        fobj.metadata.set ("media_type", fa.get_media_type ());
-        fobj.metadata.set ("param1", fa.get_param1 ());
-        fobj.metadata.set ("param2", fa.get_param2 ());
-        fobj.metadata.set ("param3", fa.get_param3 ());
-        fobj.metadata.set ("kwgenre", fa.get_kw_genre ());
-        fobj.metadata.set ("title", fa.get_title ());
-        fobj.metadata.set ("artist", fa.get_artist ());
-        fobj.metadata.set ("album", fa.get_album ());
-        fobj.metadata.set ("category", fa.get_category ());
-        fobj.metadata.set ("year", fa.get_year ());
-        fobj.metadata.set ("language", fa.get_language ());
-        fobj.metadata.set ("url", fa.get_url ());
-        fobj.metadata.set ("comment", fa.get_comment ());
-        fobj.metadata.set ("subfolder", fa.get_subfolder ());
     }
 }
 
@@ -971,16 +833,6 @@ std::vector<profile::file>
 profile::get_files () const
 {
     return impl_->get_files ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Add ARESTRA file
-// @param f ARESTRA file
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-profile::add_arestra_file (const mobius::core::io::file &f)
-{
-    impl_->add_arestra_file (f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

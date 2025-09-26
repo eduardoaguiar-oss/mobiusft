@@ -83,14 +83,8 @@ class vfs_processor_impl
     // @brief Case item
     mobius::framework::model::item item_;
 
-    // @brief User name
-    std::string username_;
-
     // @brief Profiles found
     std::vector<profile> profiles_;
-
-    // @brief Account data
-    account account_;
 
     // @brief All accounts found
     std::vector<account> accounts_;
@@ -104,9 +98,9 @@ class vfs_processor_impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void _scan_ntuser_dat_files (const mobius::core::io::folder &);
-    void _scan_arestra_files (const mobius::core::io::folder &);
-    void _scan_profile (const mobius::core::io::folder &);
+    void _scan_profile_folder (const mobius::core::io::folder &);
+    void _scan_arestra_folder (const mobius::core::io::folder &);
+    void _scan_ntuser_dat_folder (const mobius::core::io::folder &);
     void _scan_tempdl_folder (profile &, const mobius::core::io::folder &);
     void _scan_tempul_folder (profile &, const mobius::core::io::folder &);
 
