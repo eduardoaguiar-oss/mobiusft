@@ -168,26 +168,6 @@ folder::get_parent () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get children
-// @return Child entries
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector<entry>
-folder::get_children () const
-{
-    std::vector<entry> entries = impl_->get_children ();
-
-    // set entries paths
-    auto path = get_path ();
-
-    std::for_each (
-        entries.begin (), entries.end (),
-        [&path] (entry &e) { e.set_path (path + '/' + e.get_name ()); }
-    );
-
-    return entries;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get child by name
 // @param name Name
 // @param cs Case sensitive flag

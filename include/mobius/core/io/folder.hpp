@@ -49,7 +49,7 @@ class folder
     // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     folder ();
-    explicit folder (const std::shared_ptr<folder_impl_base>&);
+    explicit folder (const std::shared_ptr<folder_impl_base> &);
     folder (const folder &) noexcept = default;
     folder (folder &&) noexcept = default;
 
@@ -299,6 +299,16 @@ class folder
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get children
+    // @return Child entries
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<entry>
+    get_children () const
+    {
+        return impl_->get_children ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Create folder
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void
@@ -352,7 +362,6 @@ class folder
     void move (folder);
     std::string get_extension () const;
     folder get_parent () const;
-    std::vector<entry> get_children () const;
     entry get_child_by_name (const std::string &, bool = true) const;
     entry get_child_by_path (const std::string &, bool = true) const;
     std::vector<entry>

@@ -157,12 +157,15 @@ folder_impl::get_parent () const
 std::vector<mobius::core::io::entry>
 folder_impl::get_children () const
 {
-    if (!fs_file_)
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid folder"));
-
+    // Return cached children if already loaded
     if (children_loaded_)
         return children_;
 
+    // Check if fs_file_ is valid
+    if (!fs_file_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid folder"));
+
+    // Create children from fs_file_ children
     auto children = fs_file_.get_children ();
     std::transform (
         children.begin(), children.end(),
@@ -180,8 +183,18 @@ folder_impl::get_children () const
         }
     );
 
+    // set children's paths
+    auto path = get_path ();
+
+    std::for_each (
+        children_.begin (), children_.end (),
+        [&path] (mobius::core::io::entry &e) { e.set_path (path + '/' + e.get_name ()); }
+    );
+
+    // set children loaded flag
     children_loaded_ = true;
 
+    // Return children
     return children_;
 }
 

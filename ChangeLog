@@ -14,9 +14,15 @@ Mobius Forensic Toolkit 2.20
 	* libmobius_core: Changed vfs::tsk::folder_impl::get_children method to return std::vector
 	* libmobius_core: Removed vfs::tsk::folder_impl::new_file method
 	* libmobius_core: Removed vfs::tsk::folder_impl::new_folder method
-	* Added new method vfs::tsk::fs_file::get_children
-	* Changed vfs::tsk::folder_impl to use fs_file::get_children
-	* Changed vfs::tsk::folder_impl to implement cache for children
+	* libmobius_core: Added new method vfs::tsk::fs_file::get_children
+	* libmobius_core: Changed vfs::tsk::folder_impl to use fs_file::get_children
+	* libmobius_core: Changed vfs::tsk::folder_impl to implement cache for children
+	* libmobius_core: Changed io::local::folder_impl::get_children method to return std::vector
+	* libmobius_core: Removed io::local::folder_impl::new_file method
+	* libmobius_core: Removed io::local::folder_impl::new_folder method
+	* libmobius_core: Changed io::smb::folder_impl::get_children method to return std::vector
+	* libmobius_core: Removed io::smb::folder_impl::new_file method
+	* libmobius_core: Removed io::smb::folder_impl::new_folder method
 
 Mobius Forensic Toolkit 2.19
 	* docs: Create directory for consolidated documentation

@@ -17,16 +17,17 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <cstring>
-#include <libsmbclient.h>
 #include <mobius/core/exception.inc>
 #include <mobius/core/exception_posix.inc>
+#include <mobius/core/io/entry.hpp>
 #include <mobius/core/io/smb/file_impl.hpp>
 #include <mobius/core/io/smb/folder_impl.hpp>
 #include <mobius/core/io/smb/init.hpp>
 #include <mobius/core/io/smb/reader_impl.hpp>
 #include <mobius/core/io/smb/writer_impl.hpp>
 #include <mobius/core/io/uri.hpp>
+#include <cstring>
+#include <libsmbclient.h>
 #include <stdexcept>
 
 namespace mobius::core::io::smb
@@ -444,13 +445,16 @@ file_impl::_load_stat () const
         permissions_ = st.st_mode & 0777;
         access_time_ =
             mobius::core::datetime::new_datetime_from_unix_timestamp (
-                st.st_atime);
+                st.st_atime
+            );
         modification_time_ =
             mobius::core::datetime::new_datetime_from_unix_timestamp (
-                st.st_mtime);
+                st.st_mtime
+            );
         metadata_time_ =
             mobius::core::datetime::new_datetime_from_unix_timestamp (
-                st.st_ctime);
+                st.st_ctime
+            );
 
         switch (st.st_mode & S_IFMT)
         {

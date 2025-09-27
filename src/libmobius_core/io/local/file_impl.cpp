@@ -20,6 +20,7 @@
 #include <climits>
 #include <mobius/core/exception.inc>
 #include <mobius/core/exception_posix.inc>
+#include <mobius/core/io/entry.hpp>
 #include <mobius/core/io/local/file_impl.hpp>
 #include <mobius/core/io/local/folder_impl.hpp>
 #include <mobius/core/io/local/reader_impl.hpp>
