@@ -347,6 +347,52 @@ fs_file::get_parent () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get children
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<fs_file>
+fs_file::get_children () const
+{
+    if (!exists ())
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+
+    // Check if fs_file is a folder
+    _load_fs_meta ();
+
+    if (!p_->meta || !p_->meta->addr ||
+        (p_->meta->type != TSK_FS_META_TYPE_DIR &&
+         p_->meta->type != TSK_FS_META_TYPE_VIRT_DIR))
+        return {};
+
+    // Try to open directory
+    TSK_FS_DIR *dir_p = tsk_fs_dir_open_meta (p_->fs_info, p_->meta->addr);
+
+    if (!dir_p)
+        throw std::runtime_error (TSK_EXCEPTION_MSG);
+
+    // Read directory entries
+    std::vector<fs_file> children;
+    auto count = tsk_fs_dir_getsize (dir_p);
+
+    for (std::size_t i = 0; i < count; i++)
+    {
+        TSK_FS_FILE *fp = tsk_fs_dir_get (dir_p, i);
+        if (!fp)
+            throw std::runtime_error (TSK_EXCEPTION_MSG);
+
+        // if entry is not '.' and '..', create and return true
+        fs_file f (fp);
+
+        if (f.get_inode () != p_->meta->addr && f.get_name () != "." &&
+            f.get_name () != "..")
+            children.push_back (f);
+    }
+
+    tsk_fs_dir_close (dir_p);
+
+    return children;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get streams
 // @return Streams
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -442,8 +488,9 @@ fs_file::_load_fs_meta () const
     // retrieve meta structure if needed
     if (!p_->meta && p_->name && p_->name->meta_addr)
     {
-        int rc = p_->fs_info->file_add_meta (p_->fs_info, p_.get (),
-                                             p_->name->meta_addr);
+        int rc = p_->fs_info->file_add_meta (
+            p_->fs_info, p_.get (), p_->name->meta_addr
+        );
 
         if (rc)
             throw std::runtime_error (TSK_EXCEPTION_MSG);
@@ -460,26 +507,32 @@ fs_file::_load_fs_meta () const
         // set timestamps
         access_time_ =
             mobius::core::datetime::new_datetime_from_unix_timestamp (
-                p_->meta->atime);
+                p_->meta->atime
+            );
         modification_time_ =
             mobius::core::datetime::new_datetime_from_unix_timestamp (
-                p_->meta->mtime);
+                p_->meta->mtime
+            );
         metadata_time_ =
             mobius::core::datetime::new_datetime_from_unix_timestamp (
-                p_->meta->ctime);
+                p_->meta->ctime
+            );
         creation_time_ =
             mobius::core::datetime::new_datetime_from_unix_timestamp (
-                p_->meta->crtime);
+                p_->meta->crtime
+            );
 
         if (p_->fs_info->ftype & TSK_FS_TYPE_EXT_DETECT)
             deletion_time_ =
                 mobius::core::datetime::new_datetime_from_unix_timestamp (
-                    p_->meta->time2.ext2.dtime);
+                    p_->meta->time2.ext2.dtime
+                );
 
         if (p_->fs_info->ftype & TSK_FS_TYPE_HFS_DETECT)
             backup_time_ =
                 mobius::core::datetime::new_datetime_from_unix_timestamp (
-                    p_->meta->time2.hfs.bkup_time);
+                    p_->meta->time2.hfs.bkup_time
+                );
 
         // if file has name, check if it is reallocated
         if (p_->name)

@@ -49,25 +49,23 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::string get_user_name () const override;
-    std::string get_group_name () const override;
-    void create () override;
-    void clear () override;
-    void remove () override;
-    void rename (const std::string &) override;
-    bool move (folder_type) override;
-    file_type new_file (const std::string &) const override;
-    folder_type new_folder (const std::string &) const override;
-    folder_type get_parent () const override;
-    children_type get_children () const override;
+    std::string get_user_name () const final;
+    std::string get_group_name () const final;
+    void create () final;
+    void clear () final;
+    void remove () final;
+    void rename (const std::string &) final;
+    bool move (folder_type) final;
+    folder_type get_parent () const final;
+    std::vector<mobius::core::io::entry> get_children () const final;
 
-    bool is_hidden () const override;
+    bool is_hidden () const final;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Check if object is valid
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const noexcept override
+    operator bool () const noexcept final
     {
         return true;
     }
@@ -77,7 +75,7 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     bool
-    exists () const override
+    exists () const final
     {
         return fs_file_.exists ();
     }
@@ -87,7 +85,7 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // @return File name
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::string
-    get_name () const override
+    get_name () const final
     {
         return name_;
     }
@@ -97,7 +95,7 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // @param name Name
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void
-    set_name (const std::string &name) override
+    set_name (const std::string &name) final
     {
         name_ = name;
     }
@@ -107,7 +105,7 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // @return Short file name
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::string
-    get_short_name () const override
+    get_short_name () const final
     {
         return fs_file_.get_short_name ();
     }
@@ -117,7 +115,7 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // @return Path
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::string
-    get_path () const override
+    get_path () const final
     {
         return fs_file_.get_path ();
     }
@@ -127,7 +125,7 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // @param path Path
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void
-    set_path (const std::string &path) override
+    set_path (const std::string &path) final
     {
         fs_file_.set_path (path);
     }
@@ -137,7 +135,7 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     bool
-    is_deleted () const override
+    is_deleted () const final
     {
         return fs_file_.is_deleted ();
     }
@@ -147,7 +145,7 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     bool
-    is_reallocated () const override
+    is_reallocated () const final
     {
         return fs_file_.is_reallocated ();
     }
@@ -157,7 +155,7 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     bool
-    is_browseable () const override
+    is_browseable () const final
     {
         return true;
     }
@@ -177,7 +175,7 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // @return Size in bytes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     size_type
-    get_size () const override
+    get_size () const final
     {
         return fs_file_.get_size ();
     }
@@ -187,7 +185,7 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // @return User ID
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     user_id_type
-    get_user_id () const override
+    get_user_id () const final
     {
         return fs_file_.get_user_id ();
     }
@@ -197,7 +195,7 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // @return Group ID
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     group_id_type
-    get_group_id () const override
+    get_group_id () const final
     {
         return fs_file_.get_group_id ();
     }
@@ -207,7 +205,7 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // @return Permissions mask
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     permission_type
-    get_permissions () const override
+    get_permissions () const final
     {
         return fs_file_.get_permissions ();
     }
@@ -217,7 +215,7 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // @return Creation date/time
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::datetime::datetime
-    get_creation_time () const override
+    get_creation_time () const final
     {
         return fs_file_.get_creation_time ();
     }
@@ -227,7 +225,7 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // @return Last file access date/time
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::datetime::datetime
-    get_access_time () const override
+    get_access_time () const final
     {
         return fs_file_.get_access_time ();
     }
@@ -237,7 +235,7 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // @return Last file metadata modification date/time
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::datetime::datetime
-    get_modification_time () const override
+    get_modification_time () const final
     {
         return fs_file_.get_modification_time ();
     }
@@ -247,7 +245,7 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // @return Last file metadata modification date/time
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::datetime::datetime
-    get_metadata_time () const override
+    get_metadata_time () const final
     {
         return fs_file_.get_metadata_time ();
     }
@@ -257,7 +255,7 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // @return Deletion date/time
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::datetime::datetime
-    get_deletion_time () const override
+    get_deletion_time () const final
     {
         return fs_file_.get_deletion_time ();
     }
@@ -267,7 +265,7 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // @return Backup date/time
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::datetime::datetime
-    get_backup_time () const override
+    get_backup_time () const final
     {
         return fs_file_.get_backup_time ();
     }
@@ -276,7 +274,7 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // @brief Reload file info
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void
-    reload () override
+    reload () final
     {
         fs_file_.reload ();
     }
@@ -286,7 +284,7 @@ class folder_impl : public mobius::core::io::folder_impl_base
     // @return Streams
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::vector<stream_type>
-    get_streams () const override
+    get_streams () const final
     {
         return fs_file_.get_streams ();
     }
@@ -297,6 +295,12 @@ class folder_impl : public mobius::core::io::folder_impl_base
 
     // @brief Name
     std::string name_;
+
+    // @brief Children loaded flag
+    mutable bool children_loaded_ = false;
+
+    // @brief Children
+    mutable std::vector<mobius::core::io::entry> children_;
 };
 
 } // namespace mobius::core::vfs::tsk

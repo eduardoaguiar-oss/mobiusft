@@ -1,5 +1,22 @@
 Mobius Forensic Toolkit 2.20
 	* app-ares: Added new class profile
+	* app-ares: Added new class vfs_processor_impl to load Ares Galaxy evidences
+	* app-ares: Removed old class evidence_loader_impl
+	* libmobius_core: Changed io::folder::get_children method to return std::vector
+	* libmobius_core: Changed io::folder::new_file method
+	* libmobius_core: Changed io::folder::new_folder method
+	* libmobius_core: Changed io::folder_impl_base::get_children method to return std::vector
+	* libmobius_core: Removed io::folder_impl_base::new_file method
+	* libmobius_core: Removed io::folder_impl_base::new_folder method
+	* libmobius_core: Changed io::folder_impl_null::get_children method to return std::vector
+	* libmobius_core: Removed io::folder_impl_null::new_file method
+	* libmobius_core: Removed io::folder_impl_null::new_folder method
+	* libmobius_core: Changed vfs::tsk::folder_impl::get_children method to return std::vector
+	* libmobius_core: Removed vfs::tsk::folder_impl::new_file method
+	* libmobius_core: Removed vfs::tsk::folder_impl::new_folder method
+	* Added new method vfs::tsk::fs_file::get_children
+	* Changed vfs::tsk::folder_impl to use fs_file::get_children
+	* Changed vfs::tsk::folder_impl to implement cache for children
 
 Mobius Forensic Toolkit 2.19
 	* docs: Create directory for consolidated documentation

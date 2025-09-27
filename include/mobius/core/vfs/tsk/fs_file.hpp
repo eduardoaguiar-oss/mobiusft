@@ -99,6 +99,7 @@ public:
   mobius::core::datetime::datetime get_backup_time () const;
   void reload ();
   fs_file get_parent () const;
+  std::vector <fs_file> get_children () const;
   std::vector <stream_type> get_streams () const;
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

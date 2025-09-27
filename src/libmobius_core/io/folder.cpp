@@ -17,9 +17,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <algorithm>
-#include <functional>
-#include <memory>
 #include <mobius/core/exception.inc>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/folder.hpp>
@@ -29,7 +26,10 @@
 #include <mobius/core/io/path.hpp>
 #include <mobius/core/io/uri.hpp>
 #include <mobius/core/string_functions.hpp>
+#include <functional>
+#include <memory>
 #include <stdexcept>
+#include <algorithm>
 
 #ifdef SMBCLIENT_FOUND
 #include <mobius/core/io/smb/folder_impl.hpp>
@@ -37,95 +37,19 @@
 
 namespace mobius::core::io
 {
-namespace
-{
-using entry_impl = folder_impl_base::entry_impl;
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Collection implementation for folder entries
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class collection_impl
-    : public mobius::core::collection_impl_base<mobius::core::io::entry>
-{
-  public:
-    using pointer_type =
-        std::shared_ptr<mobius::core::collection_impl_base<entry_impl>>;
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Prototypes
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    collection_impl (const pointer_type &, const std::string &);
-    bool get (mobius::core::io::entry &) override;
-    void reset () override;
-
-  private:
-    pointer_type impl_;
-    std::string path_;
-};
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Initialize object
-// @param impl Implementation object
-// @param path Collection base folder path
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-collection_impl::collection_impl (const pointer_type &impl,
-                                  const std::string &path)
-    : impl_ (impl),
-      path_ (path)
-{
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get folder entry
-// @param e Entry reference
-// @return true/false if entry was found
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-collection_impl::get (mobius::core::io::entry &e)
-{
-    bool rc = false;
-    folder_impl_base::entry_impl eimpl;
-
-    if (impl_->get (eimpl))
-    {
-        if (eimpl.folder_p)
-            e = entry (folder (eimpl.folder_p));
-
-        else if (eimpl.file_p)
-            e = entry (file (eimpl.file_p));
-
-        else
-            throw std::runtime_error (
-                MOBIUS_EXCEPTION_MSG ("invalid entry_impl"));
-
-        e.set_path (path_ + '/' + e.get_name ());
-        rc = true;
-    }
-
-    return rc;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Reset collection
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-collection_impl::reset ()
-{
-    impl_->reset ();
-}
-
-} // namespace
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Construct object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-folder::folder () { impl_ = std::make_shared<folder_impl_null> (); }
+folder::folder ()
+{
+    impl_ = std::make_shared<folder_impl_null> ();
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Construct object
 // @param impl Implementation object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-folder::folder (std::shared_ptr<folder_impl_base> impl)
+folder::folder (const std::shared_ptr<folder_impl_base> &impl)
     : impl_ (impl)
 {
 }
@@ -137,7 +61,27 @@ folder::folder (std::shared_ptr<folder_impl_base> impl)
 file
 folder::new_file (const std::string &name) const
 {
-    return file (impl_->new_file (name));
+    auto e = get_child_by_name (name);
+
+    if (e.is_file ())
+        return e.get_file ();
+
+    return {};
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create new folder object
+// @return Folder object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+folder
+folder::new_folder (const std::string &name) const
+{
+    auto e = get_child_by_name (name);
+
+    if (e.is_folder ())
+        return e.get_folder ();
+
+    return {};
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -184,7 +128,8 @@ folder::copy (folder dst) const
 
         else
             throw std::invalid_argument (
-                MOBIUS_EXCEPTION_MSG ("unhandled entry"));
+                MOBIUS_EXCEPTION_MSG ("unhandled entry")
+            );
     }
 }
 
@@ -226,11 +171,20 @@ folder::get_parent () const
 // @brief Get children
 // @return Child entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-folder::children_type
+std::vector<entry>
 folder::get_children () const
 {
-    return children_type (std::make_shared<collection_impl> (
-        impl_->get_children (), get_path ()));
+    std::vector<entry> entries = impl_->get_children ();
+
+    // set entries paths
+    auto path = get_path ();
+
+    std::for_each (
+        entries.begin (), entries.end (),
+        [&path] (entry &e) { e.set_path (path + '/' + e.get_name ()); }
+    );
+
+    return entries;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -329,9 +283,10 @@ folder::get_streams () const
 
     std::vector<stream> streams (impl_streams.size ());
 
-    std::transform (impl_streams.begin (), impl_streams.end (),
-                    streams.begin (),
-                    [] (const auto &s) { return stream (s); });
+    std::transform (
+        impl_streams.begin (), impl_streams.end (), streams.begin (),
+        [] (const auto &s) { return stream (s); }
+    );
 
     return streams;
 }
@@ -367,7 +322,8 @@ new_folder_by_url (const std::string &url)
 
     else
         throw std::invalid_argument (
-            MOBIUS_EXCEPTION_MSG ("unhandled folder scheme"));
+            MOBIUS_EXCEPTION_MSG ("unhandled folder scheme")
+        );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

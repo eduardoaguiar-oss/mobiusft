@@ -20,7 +20,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/collection_impl_base.hpp>
 #include <mobius/core/datetime/datetime.hpp>
 #include <cstdint>
 #include <memory>
@@ -31,7 +30,6 @@
 namespace mobius::core::io
 {
 class entry;
-class file_impl_base;
 class stream_impl_base;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -56,21 +54,9 @@ class folder_impl_base
     folder_impl_base &operator= (folder_impl_base &&) = delete;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief entry_impl concrete class
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    struct entry_impl
-    {
-        std::shared_ptr<folder_impl_base> folder_p;
-        std::shared_ptr<file_impl_base> file_p;
-    };
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Datatypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     using folder_type = std::shared_ptr<folder_impl_base>;
-    using file_type = std::shared_ptr<file_impl_base>;
-    using children_type =
-        std::shared_ptr<mobius::core::collection_impl_base<entry_impl>>;
     using stream_type = std::shared_ptr<stream_impl_base>;
     using size_type = std::uint64_t;  //< file size in bytes
     using inode_type = std::uint64_t; //< inode
@@ -107,9 +93,7 @@ class folder_impl_base
     virtual mobius::core::datetime::datetime get_deletion_time () const = 0;
     virtual mobius::core::datetime::datetime get_backup_time () const = 0;
     virtual folder_type get_parent () const = 0;
-    virtual children_type get_children () const = 0;
-    virtual file_type new_file (const std::string &) const = 0;
-    virtual folder_type new_folder (const std::string &) const = 0;
+    virtual std::vector<entry> get_children () const = 0;
     virtual void create () = 0;
     virtual void clear () = 0;
     virtual void reload () = 0;

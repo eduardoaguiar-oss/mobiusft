@@ -17,141 +17,21 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/collection_impl_base.hpp>
 #include <mobius/core/exception.inc>
+#include <mobius/core/io/entry.hpp>
+#include <mobius/core/io/file.hpp>
 #include <mobius/core/io/file_impl_null.hpp>
+#include <mobius/core/io/folder.hpp>
 #include <mobius/core/io/folder_impl_null.hpp>
 #include <mobius/core/vfs/tsk/exception.hpp>
 #include <mobius/core/vfs/tsk/file_impl.hpp>
 #include <mobius/core/vfs/tsk/folder_impl.hpp>
+#include <algorithm>
 #include <stdexcept>
 #include <tsk/libtsk.h>
 
 namespace mobius::core::vfs::tsk
 {
-namespace
-{
-using entry_impl = mobius::core::io::folder_impl_base::entry_impl;
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Collection implementation for folder entries
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class collection_impl_folder
-    : public mobius::core::collection_impl_base<entry_impl>
-{
-  public:
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Constructors and destructor
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    explicit collection_impl_folder (const fs_file &);
-    collection_impl_folder (const collection_impl_folder &) = delete;
-    collection_impl_folder (collection_impl_folder &&) = delete;
-    ~collection_impl_folder ();
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Assignment operators
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    collection_impl_folder &operator= (const collection_impl_folder &) = delete;
-    collection_impl_folder &operator= (collection_impl_folder &&) = delete;
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Prototypes
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    bool get (entry_impl &) override;
-    void reset () override;
-
-  private:
-    fs_file fs_file_;
-    TSK_FS_DIR *fs_dir_p_ = nullptr;
-    std::uint32_t pos_ = 0;
-    std::uint32_t count_ = 0;
-};
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Initialize object
-// @param f fs_file object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-collection_impl_folder::collection_impl_folder (const fs_file &f)
-    : fs_file_ (f)
-{
-    if (!f)
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid folder"));
-
-    if (!f.get_inode ())
-        return;
-
-    else
-    {
-        fs_dir_p_ = tsk_fs_dir_open_meta (
-            fs_file_.get_pointer ()->fs_info, fs_file_.get_inode ()
-        );
-
-        if (!fs_dir_p_)
-            throw std::runtime_error (TSK_EXCEPTION_MSG);
-
-        pos_ = 0;
-        count_ = tsk_fs_dir_getsize (fs_dir_p_);
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Destroy object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-collection_impl_folder::~collection_impl_folder ()
-{
-    if (fs_dir_p_)
-    {
-        tsk_fs_dir_close (fs_dir_p_);
-        fs_dir_p_ = nullptr;
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get folder entry
-// @param e Entry reference
-// @return true/false if entry was found
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-collection_impl_folder::get (entry_impl &e)
-{
-    while (pos_ < count_)
-    {
-        // get dir entry
-        TSK_FS_FILE *fp = tsk_fs_dir_get (fs_dir_p_, pos_++);
-        if (!fp)
-            throw std::runtime_error (TSK_EXCEPTION_MSG);
-
-        // if entry is not '.' and '..', create and return true
-        fs_file f (fp);
-
-        if (f.get_inode () != fs_file_.get_inode () && f.get_name () != "." &&
-            f.get_name () != "..")
-        {
-            if (f.get_type () == f.fs_file_type::folder)
-                e.folder_p = std::make_shared<folder_impl> (f);
-
-            else
-                e.file_p = std::make_shared<file_impl> (f);
-
-            return true;
-        }
-    }
-
-    // no more entries...
-    return false;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Reset collection
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-collection_impl_folder::reset ()
-{
-    pos_ = 0;
-}
-
-} // namespace
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Initialize object
 // @param fp Pointer to file structure
@@ -255,64 +135,6 @@ folder_impl::move (folder_type)
     throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot move folder"));
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create new file object
-// @param name File name
-// @return Pointer to file object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-folder_impl::file_type
-folder_impl::new_file (const std::string &name) const
-{
-    file_type f = std::make_shared<mobius::core::io::file_impl_null> ();
-    auto children = get_children ();
-    entry_impl e;
-
-    while (children->get (e))
-    {
-        auto file_p = e.file_p;
-
-        if (file_p && file_p->get_name () == name)
-        {
-            if (file_p->is_deleted ())
-                f = file_p;
-
-            else
-                return file_p;
-        }
-    }
-
-    return f;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create new folder object
-// @param name Folder name
-// @return Pointer to folder object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-folder_impl::folder_type
-folder_impl::new_folder (const std::string &name) const
-{
-    folder_type f = std::make_shared<mobius::core::io::folder_impl_null> ();
-    auto children = get_children ();
-    entry_impl e;
-
-    while (children->get (e))
-    {
-        auto folder_p = e.folder_p;
-
-        if (folder_p && folder_p->get_name () == name)
-        {
-            if (folder_p->is_deleted ())
-                f = folder_p;
-
-            else
-                return folder_p;
-        }
-    }
-
-    return f;
-}
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get parent folder
 // @return Parent folder
@@ -332,10 +154,35 @@ folder_impl::get_parent () const
 // @brief Get children
 // @return Collection
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-folder_impl::children_type
+std::vector<mobius::core::io::entry>
 folder_impl::get_children () const
 {
-    return std::make_shared<collection_impl_folder> (fs_file_);
+    if (!fs_file_)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid folder"));
+
+    if (children_loaded_)
+        return children_;
+
+    auto children = fs_file_.get_children ();
+    std::transform (
+        children.begin(), children.end(),
+        std::back_inserter (children_),
+        [] (const fs_file &f)
+        {
+            if (f.get_type () == f.fs_file_type::folder)
+                return mobius::core::io::entry (
+                    mobius::core::io::folder (std::make_shared<folder_impl> (f))
+                );
+
+            return mobius::core::io::entry (
+                mobius::core::io::file (std::make_shared<file_impl> (f))
+            );
+        }
+    );
+
+    children_loaded_ = true;
+
+    return children_;
 }
 
 } // namespace mobius::core::vfs::tsk
