@@ -53,7 +53,7 @@ static const std::string APP_ID = "utorrent";
 static const std::string APP_NAME = "µTorrent";
 static const std::string ANT_ID = "evidence.app-utorrent";
 static const std::string ANT_NAME = APP_NAME;
-static const std::string ANT_VERSION = "1.0";
+static const std::string ANT_VERSION = "1.1";
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get metadata from local_file

@@ -20,12 +20,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <cstdint>
-#include <map>
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/reader.hpp>
 #include <mobius/core/pod/map.hpp>
+#include <cstdint>
+#include <map>
 #include <set>
 #include <string>
 #include <vector>
@@ -233,7 +233,10 @@ class profile
     // @brief Check if profile is valid
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const noexcept { return is_valid_; }
+    operator bool () const noexcept
+    {
+        return is_valid_;
+    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get username
