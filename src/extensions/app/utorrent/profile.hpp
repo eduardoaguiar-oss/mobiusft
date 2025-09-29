@@ -22,10 +22,10 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/io/file.hpp>
-#include <mobius/core/io/reader.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <cstdint>
-#include <map>
+#include <memory>
+#include <utility>
 #include <set>
 #include <string>
 #include <vector>
@@ -220,82 +220,43 @@ class profile
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    profile ();
+    profile (const profile &) noexcept = default;
+    profile (profile &&) noexcept = default;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    profile &operator= (const profile &) noexcept = default;
+    profile &operator= (profile &&) noexcept = default;
+    operator bool () const;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string get_username () const;
+    mobius::core::io::folder get_folder () const;
+    std::string get_path () const;
+    mobius::core::datetime::datetime get_creation_time () const;
+    mobius::core::datetime::datetime get_last_modified_time () const;
     std::vector<account> get_accounts () const;
     std::vector<local_file> get_local_files () const;
+    std::size_t size_local_files () const;
+    settings get_main_settings () const;
+    std::vector<settings> get_settings () const;
     void add_dht_dat_file (const mobius::core::io::file &);
     void add_resume_dat_file (const mobius::core::io::file &);
     void add_settings_dat_file (const mobius::core::io::file &);
     void add_torrent_file (const mobius::core::io::file &);
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Check if profile is valid
-    // @return true/false
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const noexcept
-    {
-        return is_valid_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get username
-    // @return username
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::string
-    get_username () const
-    {
-        return username_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Set username
-    // @param username username
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void
-    set_username (const std::string &username)
-    {
-        username_ = username;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get main settings
-    // @return settings
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    settings
-    get_main_settings () const
-    {
-        return main_settings_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get all settings found
-    // @return settings
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector<settings>
-    get_settings () const
-    {
-        return settings_;
-    }
-
   private:
-    // @brief Check if profile is valid
-    bool is_valid_ = false;
+    // @brief Forward declaration
+    class impl;
 
-    // @brief Username
-    std::string username_;
-
-    // @brief Accounts
-    std::map<std::string, account> accounts_;
-
-    // @brief Local files
-    std::map<std::string, local_file> local_files_;
-
-    // @brief Main settings
-    settings main_settings_;
-
-    // @brief Settings found
-    std::vector<settings> settings_;
+    // @brief Implementation pointer
+    std::shared_ptr<impl> impl_;
 };
 
 } // namespace mobius::extension::app::utorrent

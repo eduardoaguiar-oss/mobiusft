@@ -69,13 +69,14 @@ class vfs_processor_impl
     // void _decode_arestra_file (const mobius::core::io::file &);
     // void _decode_ntuser_dat_file (const mobius::core::io::file &);
 
-    void _save_accounts ();
+    void _save_app_profiles ();
     void _save_ip_addresses ();
     void _save_local_files ();
     void _save_p2p_remote_files ();
     void _save_received_files ();
     void _save_sent_files ();
     void _save_shared_files ();
+    void _save_user_accounts ();
 };
 
 } // namespace mobius::extension::app::utorrent

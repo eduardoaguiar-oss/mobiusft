@@ -310,7 +310,6 @@ evidence_loader_impl::_scan_canonical_utorrent_folder (
     mobius::core::log log (__FILE__, __FUNCTION__);
 
     profile_ = {};
-    profile_.set_username (username_);
 
     auto w = mobius::core::io::walker (folder);
 
@@ -349,8 +348,6 @@ evidence_loader_impl::_save_evidences ()
 {
     auto transaction = item_.new_transaction ();
 
-    _save_accounts ();
-    _save_ip_addresses ();
     _save_local_files ();
     _save_p2p_remote_files ();
     _save_received_files ();
@@ -359,111 +356,6 @@ evidence_loader_impl::_save_evidences ()
 
     item_.set_ant (ANT_ID, ANT_NAME, ANT_VERSION);
     transaction.commit ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Save accounts
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_save_accounts ()
-{
-    for (const auto &p : profiles_)
-    {
-        auto settings = p.get_main_settings ();
-
-        mobius::core::pod::map metadata;
-        metadata.set ("app_id", APP_ID);
-        metadata.set ("app_name", APP_NAME);
-        metadata.set ("network", "BitTorrent");
-        metadata.set ("username", p.get_username ());
-        metadata.set ("total_downloaded_bytes",
-                      settings.total_bytes_downloaded);
-        metadata.set ("total_uploaded_bytes", settings.total_bytes_uploaded);
-        metadata.set ("execution_count", settings.execution_count);
-        metadata.set ("installation_time", settings.installation_time);
-        metadata.set ("last_used_time", settings.last_used_time);
-        metadata.set ("last_bin_change_time", settings.last_bin_change_time);
-        metadata.set ("version", settings.version);
-        metadata.set ("installation_version", settings.installation_version);
-        metadata.set ("language", settings.language);
-        metadata.set ("computer_id", settings.computer_id);
-        metadata.set ("auto_start", settings.auto_start ? "yes" : "no");
-
-        for (const auto &account : p.get_accounts ())
-        {
-            auto e_metadata = metadata.clone ();
-            e_metadata.set ("first_dht_timestamp", account.first_dht_timestamp);
-            e_metadata.set ("last_dht_timestamp", account.last_dht_timestamp);
-
-            auto e = item_.new_evidence ("user-account");
-
-            e.set_attribute ("account_type", "p2p.bittorrent");
-            e.set_attribute ("id", account.client_id);
-            e.set_attribute ("password", {});
-            e.set_attribute ("password_found", "no");
-            e.set_attribute ("is_deleted", account.f.is_deleted ());
-            e.set_attribute ("metadata", e_metadata);
-            e.set_tag ("p2p");
-
-            for (const auto &f : account.files)
-                e.add_source (f);
-
-            e.add_source (settings.f);
-        }
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Save IP addresses
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_save_ip_addresses ()
-{
-    for (const auto &p : profiles_)
-    {
-        auto settings = p.get_main_settings ();
-
-        mobius::core::pod::map metadata;
-        metadata.set ("network", "BitTorrent");
-        metadata.set ("total_downloaded_bytes",
-                      settings.total_bytes_downloaded);
-        metadata.set ("total_uploaded_bytes", settings.total_bytes_uploaded);
-        metadata.set ("execution_count", settings.execution_count);
-        metadata.set ("installation_time", settings.installation_time);
-        metadata.set ("last_used_time", settings.last_used_time);
-        metadata.set ("last_bin_change_time", settings.last_bin_change_time);
-        metadata.set ("version", settings.version);
-        metadata.set ("installation_version", settings.installation_version);
-        metadata.set ("language", settings.language);
-        metadata.set ("computer_id", settings.computer_id);
-        metadata.set ("auto_start", settings.auto_start ? "yes" : "no");
-
-        for (const auto &account : p.get_accounts ())
-        {
-            auto e_metadata = metadata.clone ();
-            e_metadata.set ("client_id", account.client_id);
-            e_metadata.set ("first_dht_timestamp", account.first_dht_timestamp);
-            e_metadata.set ("last_dht_timestamp", account.last_dht_timestamp);
-
-            for (const auto &[ip, timestamp] : account.ip_addresses)
-            {
-                auto e = item_.new_evidence ("ip-address");
-
-                e.set_attribute ("timestamp", timestamp);
-                e.set_attribute ("address", ip);
-                e.set_attribute ("app_id", APP_ID);
-                e.set_attribute ("app_name", APP_NAME);
-                e.set_attribute ("username", p.get_username ());
-                e.set_attribute ("metadata", e_metadata.clone ());
-                e.set_tag ("p2p");
-
-                for (const auto &f : account.files)
-                    e.add_source (f);
-
-                e.add_source (settings.f);
-            }
-        }
-    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

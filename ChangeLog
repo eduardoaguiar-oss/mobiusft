@@ -2,6 +2,8 @@ Mobius Forensic Toolkit 2.20
 	* app-ares: Added new class profile
 	* app-ares: Added new class vfs_processor_impl to load Ares Galaxy evidences
 	* app-ares: Removed old class evidence_loader_impl
+	* app-utorrent: Added new class vfs_processor_impl to load uTorrent/BitTorrent evidences
+	* app-utorrent: Class profile changed to implement pimpl idiom	
 	* libmobius_core: Changed io::folder::get_children method to return std::vector
 	* libmobius_core: Changed io::folder::new_file method
 	* libmobius_core: Changed io::folder::new_folder method
