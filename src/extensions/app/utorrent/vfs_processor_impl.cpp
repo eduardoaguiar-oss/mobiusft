@@ -1,0 +1,711 @@
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Mobius Forensic Toolkit
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
+//
+// This program is free software; you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the
+// Free Software Foundation; either version 2, or (at your option) any later
+// version.
+//
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General
+// Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include "vfs_processor_impl.hpp"
+#include <mobius/core/datasource/datasource_vfs.hpp>
+#include <mobius/core/io/path.hpp>
+#include <mobius/core/io/uri.hpp>
+#include <mobius/core/io/walker.hpp>
+#include <mobius/core/log.hpp>
+#include <mobius/core/mediator.hpp>
+#include <mobius/core/pod/data.hpp>
+#include <mobius/core/string_functions.hpp>
+#include <mobius/framework/evidence_flag.hpp>
+#include <mobius/framework/model/evidence.hpp>
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// References:
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+namespace
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Constants
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static const std::string SAMPLING_ID = "sampling";
+static const std::string APP_ID = "utorrent";
+static const std::string APP_NAME = "µTorrent/BitTorrent";
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get metadata from local_file
+// @param lf Local file structure
+// @return Metadata
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static mobius::core::pod::map
+get_metadata (const mobius::extension::app::utorrent::profile::local_file &lf)
+{
+    auto lf_metadata = mobius::core::pod::map ();
+
+    lf_metadata.set ("app_id", APP_ID);
+    lf_metadata.set ("app_name", APP_NAME);
+    lf_metadata.set ("download_url", lf.download_url);
+    lf_metadata.set ("caption", lf.caption);
+    lf_metadata.set ("comment", lf.comment);
+    lf_metadata.set ("size", lf.size);
+    lf_metadata.set ("seeded_seconds", lf.seeded_seconds);
+    lf_metadata.set ("downloaded_seconds", lf.downloaded_seconds);
+    lf_metadata.set ("blocksize", lf.blocksize);
+    lf_metadata.set ("bytes_downloaded", lf.bytes_downloaded);
+    lf_metadata.set ("bytes_uploaded", lf.bytes_uploaded);
+    lf_metadata.set ("creation_time", lf.creation_time);
+    lf_metadata.set ("metadata_time", lf.metadata_time);
+    lf_metadata.set ("added_time", lf.added_time);
+    lf_metadata.set ("completed_time", lf.completed_time);
+    lf_metadata.set ("last_seen_complete_time", lf.last_seen_complete_time);
+    lf_metadata.set ("torrent_name", lf.torrent_name);
+    lf_metadata.set ("created_by", lf.created_by);
+    lf_metadata.set ("encoding", lf.encoding);
+    lf_metadata.set ("info_hash", lf.info_hash);
+    lf_metadata.set ("local_file_path", lf.path);
+
+    mobius::framework::evidence_flag flag_downloaded;
+    mobius::framework::evidence_flag flag_uploaded;
+    mobius::framework::evidence_flag flag_shared;
+    mobius::framework::evidence_flag flag_completed;
+
+    if (lf.resume_file)
+    {
+        flag_downloaded =
+            (lf.bytes_downloaded > 0 || lf.downloaded_seconds > 0);
+        flag_uploaded = (lf.bytes_uploaded > 0);
+        flag_shared = (lf.seeded_seconds > 0);
+        flag_completed = bool (lf.completed_time);
+    }
+
+    lf_metadata.set ("flag_downloaded", flag_downloaded.to_string ());
+    lf_metadata.set ("flag_uploaded", flag_uploaded.to_string ());
+    lf_metadata.set ("flag_shared", flag_shared.to_string ());
+    lf_metadata.set ("flag_completed", flag_completed.to_string ());
+
+    return lf_metadata;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Join paths
+// @param root Root path
+// @param rpath Relative path
+// @return Joined path
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static std::string
+join_paths (const std::string &root, const std::string &rpath)
+{
+    auto path = root;
+
+    if (!rpath.empty ())
+    {
+        if (!path.empty ())
+            path += '/';
+
+        path += rpath;
+    }
+
+    if (path.find_first_of ("\\") != std::string::npos)
+        path = mobius::core::string::replace (path, "/", "\\");
+
+    return path;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get filename from path
+// @param path Path
+// @return Filename
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static std::string
+get_filename (const std::string &path)
+{
+    auto filename = path;
+
+    auto pos = filename.find_last_of ("\\");
+    if (pos != std::string::npos)
+        filename = filename.substr (pos + 1);
+
+    else
+    {
+        pos = filename.find_last_of ("/");
+        if (pos != std::string::npos)
+            filename = filename.substr (pos + 1);
+    }
+
+    return filename;
+}
+
+} // namespace
+
+namespace mobius::extension::app::utorrent
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Constructor
+// @param item Item object
+// @param case_profile Case profile object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+vfs_processor_impl::vfs_processor_impl (
+    const mobius::framework::model::item &item,
+    const mobius::framework::case_profile &
+)
+    : item_ (item)
+{
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Scan all subfolders of a folder
+// @param folder Folder to scan
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
+{
+    _scan_profile_folder (folder);
+    //_scan_arestra_folder (folder);
+    //_scan_ntuser_dat_folder (folder);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Called when processing is complete
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::on_complete ()
+{
+    auto transaction = item_.new_transaction ();
+
+    _save_accounts ();
+    _save_ip_addresses ();
+    _save_local_files ();
+    _save_p2p_remote_files ();
+    _save_received_files ();
+    _save_sent_files ();
+    _save_shared_files ();
+
+    transaction.commit ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Scan folder for ___ARESTRA___ files
+// @param folder Folder object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+/*void
+vfs_processor_impl::_scan_arestra_folder (const mobius::core::io::folder
+&folder)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+    mobius::core::io::walker w (folder);
+
+    for (const auto &[name, f] : w.get_files_with_names ())
+    {
+        try
+        {
+            //if (mobius::core::string::startswith (name, "___arestra___"))
+            //    _decode_arestra_file (f);
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (
+                __LINE__,
+                std::string (e.what ()) + " (file: " + f.get_path () + ")"
+            );
+        }
+    }
+}*/
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode ARESTRA file
+// @param f ARESTRA file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+/*void
+vfs_processor_impl::_decode_arestra_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decode file
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    file_arestra arestra (f.new_reader ());
+
+    if (!arestra)
+    {
+        log.info (
+            __LINE__,
+            "File " + f.get_path () + " is not a valid PBTHash.dat file"
+        );
+        return;
+    }
+
+    log.info (__LINE__, "File decoded [___ARESTRA___]. Path: " + f.get_path ());
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Create file object
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    profile::file fobj;
+
+    // set attributes
+    fobj.hash_sha1 = arestra.get_hash_sha1 ();
+    fobj.username = get_username_from_path (f.get_path ());
+    fobj.download_started_time = arestra.get_download_started_time ();
+    fobj.size = arestra.get_file_size ();
+    fobj.arestra_f = f;
+
+    // set filename
+    fobj.filename = mobius::core::io::path (f.get_path ()).get_filename ();
+    fobj.filename.erase (0, 13); // remove "___ARESTRA___"
+
+    // set flags
+    fobj.flag_downloaded = true;
+    fobj.flag_corrupted = arestra.is_corrupted ();
+    fobj.flag_shared = false; // @see thread_share.pas (line 1065)
+    fobj.flag_completed = arestra.is_completed ();
+
+    // add remote_sources
+    for (const auto &[ip, port] : arestra.get_alt_sources ())
+    {
+        profile::remote_source r_source;
+        r_source.timestamp = f.get_modification_time ();
+        r_source.ip = ip;
+        r_source.port = port;
+
+        fobj.remote_sources.push_back (r_source);
+    }
+
+    // set metadata
+    fobj.metadata.set ("arestra_signature", arestra.get_signature ());
+    fobj.metadata.set ("arestra_file_version", arestra.get_version ());
+    fobj.metadata.set (
+        "download_started_time", arestra.get_download_started_time ()
+    );
+    fobj.metadata.set ("downloaded_bytes", arestra.get_progress ());
+    fobj.metadata.set ("verified_bytes", arestra.get_phash_verified ());
+    fobj.metadata.set ("is_paused", arestra.is_paused ());
+    fobj.metadata.set ("media_type", arestra.get_media_type ());
+    fobj.metadata.set ("param1", arestra.get_param1 ());
+    fobj.metadata.set ("param2", arestra.get_param2 ());
+    fobj.metadata.set ("param3", arestra.get_param3 ());
+    fobj.metadata.set ("kwgenre", arestra.get_kw_genre ());
+    fobj.metadata.set ("title", arestra.get_title ());
+    fobj.metadata.set ("artist", arestra.get_artist ());
+    fobj.metadata.set ("album", arestra.get_album ());
+    fobj.metadata.set ("category", arestra.get_category ());
+    fobj.metadata.set ("year", arestra.get_year ());
+    fobj.metadata.set ("language", arestra.get_language ());
+    fobj.metadata.set ("url", arestra.get_url ());
+    fobj.metadata.set ("comment", arestra.get_comment ());
+    fobj.metadata.set ("subfolder", arestra.get_subfolder ());
+
+    files_.push_back (fobj);
+}
+*/
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Scan folder for µTorrent/BitTorrent profiles
+// @param folder Folder to scan
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_scan_profile_folder (
+    const mobius::core::io::folder &folder
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Scan folder
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto w = mobius::core::io::walker (folder);
+    profile p;
+
+    for (const auto &[name, f] : w.get_files_with_names ())
+    {
+        try
+        {
+            if (name == "settings.dat" || name == "settings.dat.old")
+                p.add_settings_dat_file (f);
+
+            else if (name == "dht.dat" || name == "dht.dat.old")
+                p.add_dht_dat_file (f);
+
+            else if (name == "resume.dat" || name == "resume.dat.old")
+                p.add_resume_dat_file (f);
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (
+                __LINE__,
+                std::string (e.what ()) + " (file: " + f.get_path () + ")"
+            );
+        }
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // If we have a new profile, add it to the profiles list
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (p)
+    {
+        profiles_.push_back (p);
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save accounts
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_accounts ()
+{
+    for (const auto &p : profiles_)
+    {
+        auto settings = p.get_main_settings ();
+
+        mobius::core::pod::map metadata;
+        metadata.set ("app_id", APP_ID);
+        metadata.set ("app_name", APP_NAME);
+        metadata.set ("network", "BitTorrent");
+        metadata.set ("username", p.get_username ());
+        metadata.set (
+            "total_downloaded_bytes", settings.total_bytes_downloaded
+        );
+        metadata.set ("total_uploaded_bytes", settings.total_bytes_uploaded);
+        metadata.set ("execution_count", settings.execution_count);
+        metadata.set ("installation_time", settings.installation_time);
+        metadata.set ("last_used_time", settings.last_used_time);
+        metadata.set ("last_bin_change_time", settings.last_bin_change_time);
+        metadata.set ("version", settings.version);
+        metadata.set ("installation_version", settings.installation_version);
+        metadata.set ("language", settings.language);
+        metadata.set ("computer_id", settings.computer_id);
+        metadata.set ("auto_start", settings.auto_start ? "yes" : "no");
+
+        for (const auto &account : p.get_accounts ())
+        {
+            auto e_metadata = metadata.clone ();
+            e_metadata.set ("first_dht_timestamp", account.first_dht_timestamp);
+            e_metadata.set ("last_dht_timestamp", account.last_dht_timestamp);
+
+            auto e = item_.new_evidence ("user-account");
+
+            e.set_attribute ("account_type", "p2p.bittorrent");
+            e.set_attribute ("id", account.client_id);
+            e.set_attribute ("password", {});
+            e.set_attribute ("password_found", "no");
+            e.set_attribute ("is_deleted", account.f.is_deleted ());
+            e.set_attribute ("metadata", e_metadata);
+            e.set_tag ("p2p");
+
+            for (const auto &f : account.files)
+                e.add_source (f);
+
+            e.add_source (settings.f);
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save IP addresses
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_ip_addresses ()
+{
+    for (const auto &p : profiles_)
+    {
+        auto settings = p.get_main_settings ();
+
+        mobius::core::pod::map metadata;
+        metadata.set ("network", "BitTorrent");
+        metadata.set (
+            "total_downloaded_bytes", settings.total_bytes_downloaded
+        );
+        metadata.set ("total_uploaded_bytes", settings.total_bytes_uploaded);
+        metadata.set ("execution_count", settings.execution_count);
+        metadata.set ("installation_time", settings.installation_time);
+        metadata.set ("last_used_time", settings.last_used_time);
+        metadata.set ("last_bin_change_time", settings.last_bin_change_time);
+        metadata.set ("version", settings.version);
+        metadata.set ("installation_version", settings.installation_version);
+        metadata.set ("language", settings.language);
+        metadata.set ("computer_id", settings.computer_id);
+        metadata.set ("auto_start", settings.auto_start ? "yes" : "no");
+
+        for (const auto &account : p.get_accounts ())
+        {
+            auto e_metadata = metadata.clone ();
+            e_metadata.set ("client_id", account.client_id);
+            e_metadata.set ("first_dht_timestamp", account.first_dht_timestamp);
+            e_metadata.set ("last_dht_timestamp", account.last_dht_timestamp);
+
+            for (const auto &[ip, timestamp] : account.ip_addresses)
+            {
+                auto e = item_.new_evidence ("ip-address");
+
+                e.set_attribute ("timestamp", timestamp);
+                e.set_attribute ("address", ip);
+                e.set_attribute ("app_id", APP_ID);
+                e.set_attribute ("app_name", APP_NAME);
+                e.set_attribute ("username", p.get_username ());
+                e.set_attribute ("metadata", e_metadata.clone ());
+                e.set_tag ("p2p");
+
+                for (const auto &f : account.files)
+                    e.add_source (f);
+
+                e.add_source (settings.f);
+            }
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save local files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_local_files ()
+{
+    for (const auto &profile : profiles_)
+    {
+        for (const auto &lf : profile.get_local_files ())
+        {
+            if (!lf.path.empty ())
+            {
+                auto lf_metadata = get_metadata (lf);
+                lf_metadata.set ("username", profile.get_username ());
+
+                for (const auto &tf : lf.content_files)
+                {
+                    auto path = join_paths (lf.path, tf.path);
+                    auto filename = get_filename (path);
+
+                    auto e = item_.new_evidence ("local-file");
+
+                    e.set_attribute ("username", profile.get_username ());
+                    e.set_attribute ("filename", filename);
+                    e.set_attribute ("path", path);
+                    e.set_attribute ("app_id", APP_ID);
+                    e.set_attribute ("app_name", APP_NAME);
+                    // e.set_attribute ("hashes", get_file_hashes (tf));
+
+                    auto tf_metadata = lf_metadata.clone ();
+                    tf_metadata.set ("torrent_path", tf.path);
+                    tf_metadata.set ("torrent_offset", tf.offset);
+                    tf_metadata.set ("torrent_length", tf.length);
+                    tf_metadata.set ("torrent_piece_length", tf.piece_length);
+                    tf_metadata.set ("torrent_piece_offset", tf.piece_offset);
+
+                    e.set_attribute ("metadata", tf_metadata);
+
+                    e.set_tag ("p2p");
+                    for (const auto &f : lf.sources)
+                        e.add_source (f);
+                }
+            }
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save received files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_received_files ()
+{
+    for (const auto &profile : profiles_)
+    {
+        for (const auto &lf : profile.get_local_files ())
+        {
+            if (lf.bytes_downloaded > 0 || lf.downloaded_seconds > 0)
+            {
+                auto lf_metadata = get_metadata (lf);
+                lf_metadata.set ("username", profile.get_username ());
+
+                for (const auto &tf : lf.content_files)
+                {
+                    auto path = join_paths (lf.path, tf.path);
+                    auto filename = get_filename (path);
+
+                    auto e = item_.new_evidence ("received-file");
+
+                    e.set_attribute ("timestamp", lf.added_time);
+                    e.set_attribute ("username", profile.get_username ());
+                    e.set_attribute ("filename", filename);
+                    e.set_attribute ("path", path);
+                    e.set_attribute ("app_id", APP_ID);
+                    e.set_attribute ("app_name", APP_NAME);
+                    // e.set_attribute ("hashes", get_file_hashes (tf));
+
+                    auto tf_metadata = lf_metadata.clone ();
+                    tf_metadata.set ("torrent_path", tf.path);
+                    tf_metadata.set ("torrent_offset", tf.offset);
+                    tf_metadata.set ("torrent_length", tf.length);
+                    tf_metadata.set ("torrent_piece_length", tf.piece_length);
+                    tf_metadata.set ("torrent_piece_offset", tf.piece_offset);
+
+                    e.set_attribute ("metadata", tf_metadata);
+
+                    e.set_tag ("p2p");
+                    for (const auto &f : lf.sources)
+                        e.add_source (f);
+                }
+            }
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save remote files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_p2p_remote_files ()
+{
+    for (const auto &profile : profiles_)
+    {
+        for (const auto &lf : profile.get_local_files ())
+        {
+            auto username = profile.get_username ();
+
+            if (lf.metadata_time && !lf.peers.empty ())
+            {
+                auto lf_metadata = get_metadata (lf);
+
+                for (const auto &tf : lf.content_files)
+                {
+                    auto path = join_paths (lf.path, tf.path);
+                    auto filename = get_filename (path);
+
+                    for (const auto &[ip, port] : lf.peers)
+                    {
+                        auto e = item_.new_evidence ("p2p-remote-file");
+
+                        e.set_attribute ("timestamp", lf.metadata_time);
+                        e.set_attribute ("ip", ip);
+                        e.set_attribute ("port", port);
+                        e.set_attribute ("filename", filename);
+                        e.set_attribute ("username", username);
+                        e.set_attribute ("app_id", APP_ID);
+                        e.set_attribute ("app_name", APP_NAME);
+                        e.set_attribute ("path", path);
+                        // e.set_attribute ("hashes", get_file_hashes (tf));
+
+                        auto tf_metadata = lf_metadata.clone ();
+                        tf_metadata.set ("torrent_path", tf.path);
+                        tf_metadata.set ("torrent_offset", tf.offset);
+                        tf_metadata.set ("torrent_length", tf.length);
+                        tf_metadata.set ("torrent_piece_length",
+                                         tf.piece_length);
+                        tf_metadata.set ("torrent_piece_offset",
+                                         tf.piece_offset);
+
+                        e.set_attribute ("metadata", tf_metadata);
+
+                        e.set_tag ("p2p");
+                        for (const auto &f : lf.sources)
+                            e.add_source (f);
+                    }
+                }
+            }
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save sent files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_sent_files ()
+{
+    for (const auto &profile : profiles_)
+    {
+        for (const auto &lf : profile.get_local_files ())
+        {
+            if (lf.bytes_uploaded > 0)
+            {
+                auto lf_metadata = get_metadata (lf);
+                lf_metadata.set ("username", profile.get_username ());
+
+                for (const auto &tf : lf.content_files)
+                {
+                    auto path = join_paths (lf.path, tf.path);
+                    auto filename = get_filename (path);
+
+                    auto e = item_.new_evidence ("sent-file");
+
+                    e.set_attribute ("timestamp", lf.added_time);
+                    e.set_attribute ("username", profile.get_username ());
+                    e.set_attribute ("filename", filename);
+                    e.set_attribute ("path", path);
+                    e.set_attribute ("app_id", APP_ID);
+                    e.set_attribute ("app_name", APP_NAME);
+                    // e.set_attribute ("hashes", get_file_hashes (tf));
+
+                    auto tf_metadata = lf_metadata.clone ();
+                    tf_metadata.set ("torrent_path", tf.path);
+                    tf_metadata.set ("torrent_offset", tf.offset);
+                    tf_metadata.set ("torrent_length", tf.length);
+                    tf_metadata.set ("torrent_piece_length", tf.piece_length);
+                    tf_metadata.set ("torrent_piece_offset", tf.piece_offset);
+
+                    e.set_attribute ("metadata", tf_metadata);
+
+                    e.set_tag ("p2p");
+                    for (const auto &f : lf.sources)
+                        e.add_source (f);
+                }
+            }
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save shared files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_shared_files ()
+{
+    for (const auto &profile : profiles_)
+    {
+        for (const auto &lf : profile.get_local_files ())
+        {
+            if (lf.seeded_seconds > 0)
+            {
+                auto lf_metadata = get_metadata (lf);
+                lf_metadata.set ("username", profile.get_username ());
+
+                for (const auto &tf : lf.content_files)
+                {
+                    auto path = join_paths (lf.path, tf.path);
+                    auto filename = get_filename (path);
+
+                    auto e = item_.new_evidence ("shared-file");
+
+                    e.set_attribute ("username", profile.get_username ());
+                    e.set_attribute ("filename", filename);
+                    e.set_attribute ("path", path);
+                    e.set_attribute ("app_id", APP_ID);
+                    e.set_attribute ("app_name", APP_NAME);
+                    // e.set_attribute ("hashes", get_file_hashes (tf));
+
+                    auto tf_metadata = lf_metadata.clone ();
+                    tf_metadata.set ("torrent_path", tf.path);
+                    tf_metadata.set ("torrent_offset", tf.offset);
+                    tf_metadata.set ("torrent_length", tf.length);
+                    tf_metadata.set ("torrent_piece_length", tf.piece_length);
+                    tf_metadata.set ("torrent_piece_offset", tf.piece_offset);
+
+                    e.set_attribute ("metadata", tf_metadata);
+
+                    e.set_tag ("p2p");
+                    for (const auto &f : lf.sources)
+                        e.add_source (f);
+                }
+            }
+        }
+    }
+}
+
+} // namespace mobius::extension::app::utorrent
