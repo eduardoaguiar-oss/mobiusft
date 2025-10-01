@@ -27,8 +27,7 @@ include(GNUInstallDirs)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Find dependencies
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-find_program(Python3_EXECUTABLE NAMES python3 REQUIRED)
-find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+find_package(Python3 3.10 COMPONENTS Interpreter Development REQUIRED)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Checking for PyGTK 3.0

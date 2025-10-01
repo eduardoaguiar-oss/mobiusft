@@ -22,6 +22,20 @@
 #include <mobius/core/exception.inc>
 #include <stdexcept>
 
+namespace
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Callback to destroy each box child
+// @param widget Widget pointer
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static void
+callback_widget_destroy (GtkWidget* widget, gpointer)
+{
+    gtk_widget_destroy (widget);
+}
+
+} // namespace
+
 namespace mobius::extension::ui::gtk3
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -157,7 +171,7 @@ box_impl::clear ()
     children_.clear ();
 
     gtk_container_foreach (reinterpret_cast<GtkContainer *> (widget_),
-                           reinterpret_cast<GtkCallback> (gtk_widget_destroy),
+                           callback_widget_destroy,
                            nullptr);
 }
 
