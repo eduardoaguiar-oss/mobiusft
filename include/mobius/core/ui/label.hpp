@@ -58,7 +58,8 @@ public:
   // @brief Convert label to widget
   // @return Widget
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit operator widget () const
+  widget
+  as_widget () const
   {
     return widget (_impl <widget_impl_base> ());
   }

@@ -402,7 +402,7 @@ fs_file::_load_fs_name () const
         break;
 
     case TSK_FS_NAME_TYPE_DIR:
-    [[fallthrough]] case TSK_FS_NAME_TYPE_VIRT_DIR:
+    case TSK_FS_NAME_TYPE_VIRT_DIR:
         type_ = fs_file_type::folder;
         break;
 
@@ -411,7 +411,7 @@ fs_file::_load_fs_name () const
         break;
 
     case TSK_FS_NAME_TYPE_REG:
-    [[fallthrough]] case TSK_FS_NAME_TYPE_VIRT:
+    case TSK_FS_NAME_TYPE_VIRT:
         type_ = fs_file_type::regular;
         break;
 
@@ -502,7 +502,7 @@ fs_file::_load_fs_meta () const
                 break;
 
             case TSK_FS_META_TYPE_DIR:
-            [[fallthrough]] case TSK_FS_META_TYPE_VIRT_DIR:
+            case TSK_FS_META_TYPE_VIRT_DIR:
                 type_ = fs_file_type::folder;
                 break;
 
@@ -511,7 +511,7 @@ fs_file::_load_fs_meta () const
                 break;
 
             case TSK_FS_META_TYPE_REG:
-            [[fallthrough]] case TSK_FS_META_TYPE_VIRT:
+            case TSK_FS_META_TYPE_VIRT:
                 type_ = fs_file_type::regular;
                 break;
 
