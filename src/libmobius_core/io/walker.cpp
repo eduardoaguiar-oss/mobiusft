@@ -20,6 +20,7 @@
 #include <mobius/core/io/walker.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/string_functions.hpp>
+#include <algorithm>
 #include <stdexcept>
 
 namespace

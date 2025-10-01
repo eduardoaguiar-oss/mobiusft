@@ -1,5 +1,7 @@
 Mobius Forensic Toolkit 2.19
 	* docs: Create directory for consolidated documentation
+	* Compatible with Python v3.13
+	* Compatible with GCC v15.1.1
 	* Created new resource folder data/profiles
 	* evidence-viewer: Added new items' status tableview
 	* evidence-viewer: Added new profile combobox
@@ -10,6 +12,10 @@ Mobius Forensic Toolkit 2.19
 	* libmobius_core: Added new method decoder::inifile::get_value (with default value)
 	* libmobius_core: Added new method decoder::inifile::get_values
 	* libmobius_core: Added new method decoder::inifile::set_value_char
+	* libmobius_core: Added necessary include to the io::uri component
+	* libmobius_core: Added necessary include to the io::walker component
+	* libmobius_core: Added necessary include to the mediator component
+	* libmobius_core: Removed inheritance from std::iterator in the pod::map component
 	* libmobius_framework: Added new class case_profile
 	* libmobius_framework: Added new function list_case_profiles
 	* libmobius_framework: Added new class vfs_processor_impl_base
@@ -21,6 +27,7 @@ Mobius Forensic Toolkit 2.19
 	* libmobius_python: Changed io.folder class to release GIL when calling C++ methods
 	* libmobius_python: Changed framework.ant.run method to release GIL when calling C++
 	* libmobius_python: Added new class framework.ant.vfs_processor
+	* libmobius_python: Changed pymobius.cpp to use PyFrame_GetCode 
 
 Mobius Forensic Toolkit 2.18
 	* app-chromium: Added support for History schema version up to 70

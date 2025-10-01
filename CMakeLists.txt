@@ -38,8 +38,8 @@ set(MOBIUS_SHARE_DIR "${CMAKE_INSTALL_DATADIR}/mobiusft" CACHE PATH "Installatio
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Set MOBIUS_PYTHON_DIR
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-find_program(Python3_EXECUTABLE NAMES python3 REQUIRED)
-find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+#find_program(Python3_EXECUTABLE NAMES python3 REQUIRED)
+find_package(Python 3.10 COMPONENTS Interpreter Development REQUIRED)
 
 set(MOBIUS_PYTHON_DIR "${CMAKE_INSTALL_LIBDIR}/python${Python3_VERSION_MAJOR}.${Python3_VERSION_MINOR}/site-packages")
 message(STATUS "MOBIUS_PYTHON_DIR: ${MOBIUS_PYTHON_DIR}")
