@@ -28,7 +28,7 @@ extern "C"
 {
     const char *EXTENSION_ID = "ui-gtk3";
     const char *EXTENSION_NAME = "User Interface (UI) - GTK v3";
-    const char *EXTENSION_VERSION = "1.5";
+    const char *EXTENSION_VERSION = "1.6";
     const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
     const char *EXTENSION_DESCRIPTION =
         "GTK v3 User Interface abstraction layer";

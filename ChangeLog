@@ -28,6 +28,9 @@ Mobius Forensic Toolkit 2.20
 
 Mobius Forensic Toolkit 2.19
 	* docs: Create directory for consolidated documentation
+	* Compatible with Python v3.13
+	* Compatible with GCC v15.1.1
+	* Project upgraded to C++20
 	* Created new resource folder data/profiles
 	* evidence-viewer: Added new items' status tableview
 	* evidence-viewer: Added new profile combobox
@@ -35,9 +38,21 @@ Mobius Forensic Toolkit 2.19
 	* app-chromium: Changed file_cookies module to handle Cookies files v17
 	* app-chromium: Added new class vfs_processor_impl 
 	* app-chromium: Removed class evidence_loader_impl
+	* app-emule: Removed unnecessary [[fallthrough]] attributes from ctag module
 	* libmobius_core: Added new method decoder::inifile::get_value (with default value)
 	* libmobius_core: Added new method decoder::inifile::get_values
 	* libmobius_core: Added new method decoder::inifile::set_value_char
+	* libmobius_core: Added necessary include to the io::uri component
+	* libmobius_core: Added necessary include to the io::walker component
+	* libmobius_core: Added necessary include to the mediator component
+	* libmobius_core: Removed inheritance from std::iterator in the pod::map component
+	* libmobius_core: Removed unnecessary [[fallthrough]] attributes from vfs::tsk::fs_file module
+	* libmobius_core: Removed memset use from vfs::tsk::adaptor class
+	* libmobius_core: Changed ui::box::operator widget to as_widget()
+	* libmobius_core: Changed ui::button::operator widget to as_widget()
+	* libmobius_core: Changed ui::icon::operator widget to as_widget()
+	* libmobius_core: Changed ui::label::operator widget to as_widget()
+	* libmobius_core: Changed datasource::ufdr::datasource::operator datasource to as_datasource()
 	* libmobius_framework: Added new class case_profile
 	* libmobius_framework: Added new function list_case_profiles
 	* libmobius_framework: Added new class vfs_processor_impl_base
@@ -49,6 +64,19 @@ Mobius Forensic Toolkit 2.19
 	* libmobius_python: Changed io.folder class to release GIL when calling C++ methods
 	* libmobius_python: Changed framework.ant.run method to release GIL when calling C++
 	* libmobius_python: Added new class framework.ant.vfs_processor
+	* libmobius_python: Changed pymobius.cpp to use PyFrame_GetCode 
+	* libmobius_python: Changed core.ui.box module to set tp_vectorcall
+	* libmobius_python: Changed core.ui.button module to set tp_vectorcall
+	* libmobius_python: Changed core.ui.container module to set tp_vectorcall
+	* libmobius_python: Changed core.ui.icon module to set tp_vectorcall
+	* libmobius_python: Changed core.ui.label module to set tp_vectorcall
+	* libmobius_python: Changed core.ui.message_dialog module to set tp_vectorcall
+	* libmobius_python: Changed core.ui.stacked_container module to set tp_vectorcall
+	* libmobius_python: Changed core.ui.widget module to set tp_vectorcall
+	* libmobius_python: Changed core.resource to add closures to getters
+	* libmobius_python: Changed core.application to add closures to getters
+	* pymobius.extension: Changed function svc_extension_start_api to handle modules with __file__ == None
+	* tools.hive_info: Changed to use reference in loop
 
 Mobius Forensic Toolkit 2.18
 	* app-chromium: Added support for History schema version up to 70

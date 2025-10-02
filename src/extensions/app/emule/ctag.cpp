@@ -123,9 +123,9 @@ _get_tag_uint32_value (std::uint8_t id, std::uint32_t value)
     // Datetime
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     case 0x05:
-    [[fallthrough]] case 0x21:
-    [[fallthrough]] case 0x34:
-    [[fallthrough]] case 0x92:
+    case 0x21:
+    case 0x34:
+    case 0x92:
         return mobius::core::datetime::new_datetime_from_unix_timestamp (value);
         break;
 
@@ -133,7 +133,7 @@ _get_tag_uint32_value (std::uint8_t id, std::uint32_t value)
     // Duration (seconds)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     case 0x23:
-    [[fallthrough]] case 0xd3:
+    case 0xd3:
     {
         unsigned int hours = value / 3600;
         unsigned int minutes = (value % 3600) / 60;
@@ -255,27 +255,27 @@ ctag::ctag (mobius::core::decoder::data_decoder &decoder)
         break;
 
     case TAGTYPE_STR1:
-    [[fallthrough]] case TAGTYPE_STR2:
-    [[fallthrough]] case TAGTYPE_STR3:
-    [[fallthrough]] case TAGTYPE_STR4:
-    [[fallthrough]] case TAGTYPE_STR5:
-    [[fallthrough]] case TAGTYPE_STR6:
-    [[fallthrough]] case TAGTYPE_STR7:
-    [[fallthrough]] case TAGTYPE_STR8:
-    [[fallthrough]] case TAGTYPE_STR9:
-    [[fallthrough]] case TAGTYPE_STR10:
-    [[fallthrough]] case TAGTYPE_STR11:
-    [[fallthrough]] case TAGTYPE_STR12:
-    [[fallthrough]] case TAGTYPE_STR13:
-    [[fallthrough]] case TAGTYPE_STR14:
-    [[fallthrough]] case TAGTYPE_STR15:
-    [[fallthrough]] case TAGTYPE_STR16:
-    [[fallthrough]] case TAGTYPE_STR17:
-    [[fallthrough]] case TAGTYPE_STR18:
-    [[fallthrough]] case TAGTYPE_STR19:
-    [[fallthrough]] case TAGTYPE_STR20:
-    [[fallthrough]] case TAGTYPE_STR21:
-    [[fallthrough]] case TAGTYPE_STR22:
+    case TAGTYPE_STR2:
+    case TAGTYPE_STR3:
+    case TAGTYPE_STR4:
+    case TAGTYPE_STR5:
+    case TAGTYPE_STR6:
+    case TAGTYPE_STR7:
+    case TAGTYPE_STR8:
+    case TAGTYPE_STR9:
+    case TAGTYPE_STR10:
+    case TAGTYPE_STR11:
+    case TAGTYPE_STR12:
+    case TAGTYPE_STR13:
+    case TAGTYPE_STR14:
+    case TAGTYPE_STR15:
+    case TAGTYPE_STR16:
+    case TAGTYPE_STR17:
+    case TAGTYPE_STR18:
+    case TAGTYPE_STR19:
+    case TAGTYPE_STR20:
+    case TAGTYPE_STR21:
+    case TAGTYPE_STR22:
     {
         std::uint32_t length = type_ - TAGTYPE_STR1 + 1;
         value_ = decoder.get_string_by_size (length);

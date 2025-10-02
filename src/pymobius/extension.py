@@ -330,7 +330,7 @@ def svc_extension_start_api(extension_id):
         del sys.path[0]
 
         for name, value in list(sys.modules.items()):
-            path = getattr(value, '__file__', '')
+            path = getattr(value, '__file__', '') or ''
 
             if '/mobiusft/extensions/' in path:
                 sys.modules.pop(name)
