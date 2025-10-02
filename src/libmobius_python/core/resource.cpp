@@ -73,7 +73,7 @@ pymobius_core_resource_from_pyobject (PyObject *value)
 // @return <i>id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_id (core_resource_o *self)
+tp_getter_id (core_resource_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -95,7 +95,7 @@ tp_getter_id (core_resource_o *self)
 // @return <i>description</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_description (core_resource_o *self)
+tp_getter_description (core_resource_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -119,7 +119,7 @@ tp_getter_description (core_resource_o *self)
 // @return <i>value</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_value (core_resource_o *self)
+tp_getter_value (core_resource_o *self, void *)
 {
     PyObject *ret = nullptr;
 

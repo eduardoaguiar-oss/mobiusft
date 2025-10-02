@@ -36,7 +36,7 @@ def get(registry):
     for username, user_key in iter_hkey_users(registry):
 
         for guid_key in user_key.get_key_by_mask(
-                'Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\UserAssist\*'):
+                'Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\UserAssist\\*'):
             guid = guid_key.name[1:-1]
             guid = GUID.get(guid, guid)
             version_data = guid_key.get_data_by_name('Version')

@@ -47,7 +47,8 @@ public:
   // @brief Convert datasource_vfs to datasource
   // @return Datasource
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit operator datasource () const
+  datasource
+  as_datasource () const
   {
     return datasource (_impl <datasource_impl_vfs> ());
   }

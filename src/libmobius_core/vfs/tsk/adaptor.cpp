@@ -92,8 +92,7 @@ adaptor::adaptor (const mobius::core::io::reader reader, std::uint64_t offset)
       offset_ (offset)
 {
     // create image info structure
-    TSK_IMG_INFO_MOBIUS *p = new TSK_IMG_INFO_MOBIUS;
-    memset (p, 0, sizeof (TSK_IMG_INFO)); //_MOBIUS));
+    TSK_IMG_INFO_MOBIUS *p = new TSK_IMG_INFO_MOBIUS ();
     p->reader = reader;
 
     constexpr int SECTOR_SIZE = 512; // unused
@@ -156,8 +155,7 @@ void
 adaptor::_create_tsk () const
 {
     // create image info structure
-    TSK_IMG_INFO_MOBIUS *p = new TSK_IMG_INFO_MOBIUS;
-    memset (p, 0, sizeof (TSK_IMG_INFO_MOBIUS));
+    TSK_IMG_INFO_MOBIUS *p = new TSK_IMG_INFO_MOBIUS ();
     p->reader = reader_;
 
     constexpr int SECTOR_SIZE = 512; // unused

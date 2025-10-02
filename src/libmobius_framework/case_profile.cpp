@@ -23,6 +23,7 @@
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/walker.hpp>
 #include <mobius/framework/case_profile.hpp>
+#include <algorithm>
 #include <stdexcept>
 #include <map>
 

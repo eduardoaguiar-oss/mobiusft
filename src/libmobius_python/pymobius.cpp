@@ -493,7 +493,8 @@ get_error_message ()
 
   while (p_traceback)
     {
-      msg += "\nFile: \"" + mobius::py::pystring_as_std_string (PyObject_Str (p_traceback->tb_frame->f_code->co_filename)) + "\", line " + std::to_string (p_traceback->tb_lineno);
+      auto f_code = PyFrame_GetCode (p_traceback->tb_frame);
+      msg += "\nFile: \"" + mobius::py::pystring_as_std_string (PyObject_Str (f_code->co_filename)) + "\", line " + std::to_string (p_traceback->tb_lineno);
 
       p_traceback = p_traceback->tb_next;
     }
@@ -532,8 +533,13 @@ get_filename ()
   std::string filename;
 
   PyFrameObject *frame = PyEval_GetFrame ();
-  if (frame && frame->f_code && frame->f_code->co_filename)
-    filename = mobius::py::pystring_as_std_string (frame->f_code->co_filename);
+  if (!frame)
+    return filename;
+  
+  auto f_code = PyFrame_GetCode (frame);
+  
+  if (f_code && f_code->co_filename)
+    filename = mobius::py::pystring_as_std_string (f_code->co_filename);
 
   return filename;
 }
@@ -548,8 +554,12 @@ get_funcname ()
   std::string funcname;
 
   PyFrameObject *frame = PyEval_GetFrame ();
-  if (frame && frame->f_code && frame->f_code->co_name)
-    funcname = mobius::py::pystring_as_std_string (frame->f_code->co_name);
+  if (!frame)
+    return funcname;
+  
+  auto f_code = PyFrame_GetCode (frame);
+  if (f_code && f_code->co_name)
+    funcname = mobius::py::pystring_as_std_string (f_code->co_name);
 
   return funcname;
 }

@@ -50,7 +50,7 @@ print_hivefile (const std::string &url)
     auto reader = f.new_reader ();
     mobius::core::os::win::registry::hive_file hf (reader);
 
-    for (const auto attr : hf.get_metadata ())
+    for (const auto& attr : hf.get_metadata ())
         std::cout << "   " << attr.description << ": " << attr.value
                   << std::endl;
 }

@@ -47,7 +47,8 @@ public:
   // @brief Convert datasource to datasource
   // @return Datasource
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit operator mobius::core::datasource::datasource () const
+  mobius::core::datasource::datasource
+  as_datasource () const
   {
     return mobius::core::datasource::datasource (_impl <ufdr::datasource_impl> ());
   }

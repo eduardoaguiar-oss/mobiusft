@@ -17,8 +17,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <cstdint>
 #include <mobius/core/mediator.hpp>
+#include <algorithm>
+#include <cstdint>
 #include <mutex>
 #include <unordered_map>
 #include <vector>
