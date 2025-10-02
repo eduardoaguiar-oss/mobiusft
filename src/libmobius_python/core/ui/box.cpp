@@ -300,55 +300,55 @@ tp_dealloc (core_ui_box_o *self)
 // @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyTypeObject core_ui_box_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.ui.box",                     // tp_name
-    sizeof (core_ui_box_o),                   // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
+    PyVarObject_HEAD_INIT(nullptr, 0)        // initializer
+    "mobius.core.ui.box",                    // tp_name
+    sizeof(core_ui_box_o),                   // tp_basicsize
+    0,                                       // tp_itemsize
+    (destructor)tp_dealloc,                  // tp_dealloc
+    0,                                       // tp_vectorcall_offset
+    nullptr,                                 // tp_getattr
+    nullptr,                                 // tp_setattr
+    nullptr,                                 // tp_as_async
+    nullptr,                                 // tp_repr
+    nullptr,                                 // tp_as_number
+    nullptr,                                 // tp_as_sequence
+    nullptr,                                 // tp_as_mapping
+    nullptr,                                 // tp_hash
+    nullptr,                                 // tp_call
+    nullptr,                                 // tp_str
+    nullptr,                                 // tp_getattro
+    nullptr,                                 // tp_setattro
+    nullptr,                                 // tp_as_buffer
     Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "Box class",                              // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    0,                                        // tp_getset
-    get_ui_widget_type (),                    // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    tp_new,                                   // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
-    nullptr,                                  // tp_vectorcall
+    "Box class",                             // tp_doc
+    nullptr,                                 // tp_traverse
+    nullptr,                                 // tp_clear
+    nullptr,                                 // tp_richcompare
+    0,                                       // tp_weaklistoffset
+    nullptr,                                 // tp_iter
+    nullptr,                                 // tp_iternext
+    tp_methods,                              // tp_methods
+    nullptr,                                 // tp_members
+    nullptr,                                 // tp_getset
+    get_ui_widget_type(),                    // tp_base
+    nullptr,                                 // tp_dict
+    nullptr,                                 // tp_descr_get
+    nullptr,                                 // tp_descr_set
+    0,                                       // tp_dictoffset
+    nullptr,                                 // tp_init
+    nullptr,                                 // tp_alloc
+    tp_new,                                  // tp_new
+    nullptr,                                 // tp_free
+    nullptr,                                 // tp_is_gc
+    nullptr,                                 // tp_bases
+    nullptr,                                 // tp_mro
+    nullptr,                                 // tp_cache
+    nullptr,                                 // tp_subclasses
+    nullptr,                                 // tp_weaklist
+    nullptr,                                 // tp_del
+    0,                                       // tp_version_tag
+    nullptr,                                 // tp_finalize
+    nullptr,                                 // tp_vectorcall (Python 3.9+)
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

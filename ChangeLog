@@ -2,6 +2,7 @@ Mobius Forensic Toolkit 2.19
 	* docs: Create directory for consolidated documentation
 	* Compatible with Python v3.13
 	* Compatible with GCC v15.1.1
+	* Project upgraded to C++20
 	* Created new resource folder data/profiles
 	* evidence-viewer: Added new items' status tableview
 	* evidence-viewer: Added new profile combobox
@@ -44,6 +45,9 @@ Mobius Forensic Toolkit 2.19
 	* libmobius_python: Changed core.ui.message_dialog module to set tp_vectorcall
 	* libmobius_python: Changed core.ui.stacked_container module to set tp_vectorcall
 	* libmobius_python: Changed core.ui.widget module to set tp_vectorcall
+	* libmobius_python: Changed core.resource to add closures to getters
+	* libmobius_python: Changed core.application to add closures to getters
+	* pymobius.extension: Changed function svc_extension_start_api to handle modules with __file__ == None
 	* tools.hive_info: Changed to use reference in loop
 
 Mobius Forensic Toolkit 2.18
