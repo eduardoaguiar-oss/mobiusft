@@ -25,6 +25,8 @@ Mobius Forensic Toolkit 2.20
 	* libmobius_core: Changed io::smb::folder_impl::get_children method to return std::vector
 	* libmobius_core: Removed io::smb::folder_impl::new_file method
 	* libmobius_core: Removed io::smb::folder_impl::new_folder method
+	* ant.evidence.vfs.received_files: Removed utorrent code
+	* pymobius.app.utorrent: Removed module
 
 Mobius Forensic Toolkit 2.19
 	* docs: Create directory for consolidated documentation
