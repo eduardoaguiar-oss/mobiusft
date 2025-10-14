@@ -36,10 +36,10 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //
 // - logins
-//      - action_url: 1, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
+//      - action_url: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
 //      - avatar_url: 7, 12-13
-//      - blacklisted_by_user: 1, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
-//      - date_created: 1, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
+//      - blacklisted_by_user: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
+//      - date_created: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
 //      - date_last_used: 25-29, 31-35, 40-41
 //      - date_password_modified: 31-35, 40-41
 //      - date_received: 40-41
@@ -53,26 +53,26 @@
 //      - is_zero_click: 7
 //      - keychain_identifier: 40-41
 //      - moving_blocked_for: 27-29, 31-35, 40-41
-//      - origin_url: 1, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
-//      - password_element: 1, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
-//      - password_type: 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
-//      - password_value: 1, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
+//      - origin_url: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
+//      - password_element: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
+//      - password_type: 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
+//      - password_value: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
 //      - possible_username_pairs: 19, 21-22, 24-29, 31-35, 40-41
-//      - possible_usernames: 5, 7, 12-13, 16-18
-//      - preferred: 1, 5, 7, 12-13, 16-19, 21-22, 24-27
-//      - scheme: 1, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
+//      - possible_usernames: 3, 5, 7, 12-13, 16-18
+//      - preferred: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-27
+//      - scheme: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
 //      - sender_email: 40-41
 //      - sender_name: 40-41
 //      - sender_profile_image_url: 41
 //      - sharing_notification_displayed: 40-41
-//      - signon_realm: 1, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
+//      - signon_realm: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
 //      - skip_zero_click: 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
-//      - ssl_valid: 1, 5, 7, 12-13, 16-17
-//      - submit_element: 1, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
-//      - times_used: 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
+//      - ssl_valid: 1, 3, 5, 7, 12-13, 16-17
+//      - submit_element: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
+//      - times_used: 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
 //      - use_additional_auth: 5, 7
-//      - username_element: 1, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
-//      - username_value: 1, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
+//      - username_element: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
+//      - username_value: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-41
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace
@@ -84,7 +84,7 @@ namespace
 // of the web data schema in Chromium-based applications.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::unordered_set<std::int64_t> UNKNOWN_SCHEMA_VERSIONS = {
-    2, 3, 4, 6, 8, 9, 10, 11, 14, 15, 20, 23, 30, 36, 37, 38, 39,
+    2, 4, 6, 8, 9, 10, 11, 14, 15, 20, 23, 30, 36, 37, 38, 39,
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -185,7 +185,7 @@ file_login_data::_load_logins (mobius::core::database::database &db)
             "${keychain_identifier,40}, "
             "origin_url, "
             "password_element, "
-            "${password_type,5}, "
+            "${password_type,3}, "
             "password_value, "
             "${preferred,1,27}, "
             "scheme, "
@@ -197,7 +197,7 @@ file_login_data::_load_logins (mobius::core::database::database &db)
             "${skip_zero_click,12}, "
             "${ssl_valid,1,17}, "
             "submit_element, "
-            "${times_used,5}, "
+            "${times_used,3}, "
             "${use_additional_auth,5,7}, "
             "username_element, "
             "username_value "
