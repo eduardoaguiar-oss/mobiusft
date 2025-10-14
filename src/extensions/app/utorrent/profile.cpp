@@ -219,6 +219,10 @@ profile::impl::set_folder (const mobius::core::io::folder &f)
     last_modified_time_ = f.get_modification_time ();
     creation_time_ = f.get_creation_time ();
     username_ = get_username_from_path (f.get_path ());
+
+    mobius::core::emit (
+        "sampling_folder", std::string ("app.utorrent.profiles"), f
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -290,7 +294,7 @@ profile::impl::add_dht_dat_file (const mobius::core::io::file &f)
         return;
     }
 
-    log.info (__LINE__, "File decoded[dht.dat]: " + f.get_path ());
+    log.info (__LINE__, "File decoded [dht.dat]: " + f.get_path ());
 
     set_folder (f.get_parent ());
 
@@ -337,10 +341,10 @@ profile::impl::add_dht_dat_file (const mobius::core::io::file &f)
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Emit file_for_sampling event
+    // Emit sampling_file event
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::emit (
-        "file_for_sampling", std::string ("app.utorrent.dht_dat"), reader
+        "sampling_file", std::string ("app.utorrent.dht_dat"), reader
     );
 }
 
@@ -367,7 +371,7 @@ profile::impl::add_resume_dat_file (const mobius::core::io::file &f)
         return;
     }
 
-    log.info (__LINE__, "File decoded[resume.dat]: " + f.get_path ());
+    log.info (__LINE__, "File decoded [resume.dat]: " + f.get_path ());
 
     set_folder (f.get_parent ());
 
@@ -413,10 +417,10 @@ profile::impl::add_resume_dat_file (const mobius::core::io::file &f)
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Emit file_for_sampling event
+    // Emit sampling_file event
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::emit (
-        "file_for_sampling", std::string ("app.utorrent.resume_dat"), reader
+        "sampling_file", std::string ("app.utorrent.resume_dat"), reader
     );
 }
 
@@ -443,7 +447,7 @@ profile::impl::add_settings_dat_file (const mobius::core::io::file &f)
         return;
     }
 
-    log.info (__LINE__, "File decoded[settings.dat]: " + f.get_path ());
+    log.info (__LINE__, "File decoded [settings.dat]: " + f.get_path ());
 
     set_folder (f.get_parent ());
 
@@ -484,10 +488,10 @@ profile::impl::add_settings_dat_file (const mobius::core::io::file &f)
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Emit file_for_sampling event
+    // Emit sampling_file event
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::emit (
-        "file_for_sampling", std::string ("app.utorrent.settings_dat"), reader
+        "sampling_file", std::string ("app.utorrent.settings_dat"), reader
     );
 }
 

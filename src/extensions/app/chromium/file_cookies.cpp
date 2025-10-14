@@ -21,7 +21,6 @@
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/io/tempfile.hpp>
 #include <mobius/core/log.hpp>
-#include <mobius/core/mediator.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <unordered_set>
 #include "common.hpp"
@@ -135,13 +134,6 @@ file_cookies::file_cookies (const mobius::core::io::reader &reader)
         // Finish decoding
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         is_instance_ = true;
-
-        mobius::core::emit (
-            "file_for_sampling",
-            "app.chromium.cookies." +
-                mobius::core::string::to_string (schema_version_, 5),
-            reader
-        );
     }
     catch (const std::exception &e)
     {

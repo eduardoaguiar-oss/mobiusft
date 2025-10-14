@@ -17,6 +17,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include "file_web_data.hpp"
+#include <mobius/core/database/database.hpp>
+#include <mobius/core/io/tempfile.hpp>
+#include <mobius/core/log.hpp>
+#include <mobius/core/string_functions.hpp>
+#include <unordered_map>
+#include <unordered_set>
+#include "common.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // References:
@@ -356,15 +364,6 @@
 //      - use_count: 64-65, 67, 70-72, 74, 76-78, 80-84
 //      - use_date: 64-65, 67, 70-72, 74, 76-78, 80-84
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "file_web_data.hpp"
-#include <mobius/core/database/database.hpp>
-#include <mobius/core/io/tempfile.hpp>
-#include <mobius/core/log.hpp>
-#include <mobius/core/mediator.hpp>
-#include <mobius/core/string_functions.hpp>
-#include <unordered_map>
-#include <unordered_set>
-#include "common.hpp"
 
 namespace
 {
@@ -834,13 +833,6 @@ file_web_data::file_web_data (const mobius::core::io::reader &reader)
         // Finish decoding
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         is_instance_ = true;
-
-        mobius::core::emit (
-            "file_for_sampling",
-            "app.chromium.web_data." +
-                mobius::core::string::to_string (schema_version_, 5),
-            reader
-        );
     }
     catch (const std::exception &e)
     {

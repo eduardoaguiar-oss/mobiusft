@@ -4,6 +4,10 @@ Mobius Forensic Toolkit 2.20
 	* app-ares: Removed old class evidence_loader_impl
 	* app-utorrent: Added new class vfs_processor_impl to load uTorrent/BitTorrent evidences
 	* app-utorrent: Class profile changed to implement pimpl idiom	
+	* app-utorrent: Changed profile class to emit "sampling_file" events
+	* app-utorrent: Changed profile  class to emit "sampling_folder" event
+	* app-chromium: Changed to move sampling_file events to profile instead of file-xxx modules
+	* app-chromium: Changed to emit sampling_folder (sampling_id, folder)
 	* libmobius_core: Changed io::folder::get_children method to return std::vector
 	* libmobius_core: Changed io::folder::new_file method
 	* libmobius_core: Changed io::folder::new_folder method
@@ -25,6 +29,8 @@ Mobius Forensic Toolkit 2.20
 	* libmobius_core: Changed io::smb::folder_impl::get_children method to return std::vector
 	* libmobius_core: Removed io::smb::folder_impl::new_file method
 	* libmobius_core: Removed io::smb::folder_impl::new_folder method
+	* libmobius_python: framework/module changed to handle sampling_file event and callbacks
+	* libmobius_python: framework/module changed to handle sampling_folder event and callbacks
 	* ant.evidence.vfs.received_files: Removed utorrent code
 	* pymobius.app.utorrent: Removed module
 

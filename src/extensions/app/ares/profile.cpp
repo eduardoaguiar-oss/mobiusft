@@ -208,6 +208,10 @@ profile::impl::set_folder (const mobius::core::io::folder &f)
     last_modified_time_ = f.get_modification_time ();
     creation_time_ = f.get_creation_time ();
     username_ = get_username_from_path (f.get_path ());
+
+    mobius::core::emit (
+        "sampling_folder", std::string ("app.ares.profiles"), f
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -306,11 +310,10 @@ profile::impl::add_phashidx_file (const mobius::core::io::file &f)
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Emit file_for_sampling event
+    // Emit sampling_file event
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::emit (
-        "file_for_sampling", std::string ("app.ares.phashidx_dat"),
-        f.new_reader ()
+        "sampling_file", std::string ("app.ares.phashidx_dat"), f.new_reader ()
     );
 }
 
@@ -386,11 +389,10 @@ profile::impl::add_shareh_file (const mobius::core::io::file &f)
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Emit file_for_sampling event
+    // Emit sampling_file event
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::emit (
-        "file_for_sampling", std::string ("app.ares.shareh_dat"),
-        f.new_reader ()
+        "sampling_file", std::string ("app.ares.shareh_dat"), f.new_reader ()
     );
 }
 
@@ -482,11 +484,10 @@ profile::impl::add_sharel_file (const mobius::core::io::file &f)
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Emit file_for_sampling event
+    // Emit sampling_file event
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::emit (
-        "file_for_sampling", std::string ("app.ares.sharel_dat"),
-        f.new_reader ()
+        "sampling_file", std::string ("app.ares.sharel_dat"), f.new_reader ()
     );
 }
 
@@ -558,11 +559,10 @@ profile::impl::add_torrenth_file (const mobius::core::io::file &f)
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Emit file_for_sampling event
+    // Emit sampling_file event
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::emit (
-        "file_for_sampling", std::string ("app.ares.torrenth_dat"),
-        f.new_reader ()
+        "sampling_file", std::string ("app.ares.torrenth_dat"), f.new_reader ()
     );
 }
 
