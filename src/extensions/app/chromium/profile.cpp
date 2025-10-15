@@ -414,7 +414,8 @@ class profile::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void set_folder (const mobius::core::io::folder &);
+    void _set_folder (const mobius::core::io::folder &);
+    void _update_mtime (const mobius::core::io::file &f);
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -422,7 +423,7 @@ class profile::impl
 // @param f Folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::impl::set_folder (const mobius::core::io::folder &f)
+profile::impl::_set_folder (const mobius::core::io::folder &f)
 {
     if (folder_ || !f)
         return;
@@ -451,6 +452,21 @@ profile::impl::set_folder (const mobius::core::io::folder &f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Update last modified time based on file
+// @param f File
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_update_mtime (const mobius::core::io::file &f)
+{
+    if (!f)
+        return;
+
+    if (!last_modified_time_ ||
+        f.get_modification_time () > last_modified_time_)
+        last_modified_time_ = f.get_modification_time ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Add Bookmarks file
 // @param f Bookmarks file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -472,11 +488,8 @@ profile::impl::add_bookmarks_file (const mobius::core::io::file &f)
 
     log.info (__LINE__, "File decoded [Bookmarks]: " + f.get_path ());
 
-    set_folder (f.get_parent ());
-
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
-        last_modified_time_ = f.get_modification_time ();
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add bookmarks
@@ -522,9 +535,7 @@ profile::impl::add_cookies_file (const mobius::core::io::file &f)
 
     log.info (__LINE__, "File decoded [Cookies]: " + f.get_path ());
 
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
-        last_modified_time_ = f.get_modification_time ();
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add cookies
@@ -570,11 +581,8 @@ profile::impl::add_history_file (const mobius::core::io::file &f)
 
     log.info (__LINE__, "File decoded [History]: " + f.get_path ());
 
-    set_folder (f.get_parent ());
-
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
-        last_modified_time_ = f.get_modification_time ();
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add history entries
@@ -631,11 +639,8 @@ profile::impl::add_login_data_file (const mobius::core::io::file &f)
 
     log.info (__LINE__, "File decoded [Login Data]: " + f.get_path ());
 
-    set_folder (f.get_parent ());
-
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
-        last_modified_time_ = f.get_modification_time ();
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add logins
@@ -681,11 +686,8 @@ profile::impl::add_preferences_file (const mobius::core::io::file &f)
 
     log.info (__LINE__, "File decoded [Preferences]: " + f.get_path ());
 
-    set_folder (f.get_parent ());
-
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
-        last_modified_time_ = f.get_modification_time ();
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Set profile data
@@ -747,11 +749,8 @@ profile::impl::add_web_data_file (const mobius::core::io::file &f)
 
     log.info (__LINE__, "File decoded [Web Data]: " + f.get_path ());
 
-    set_folder (f.get_parent ());
-
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
-        last_modified_time_ = f.get_modification_time ();
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add autofill entries

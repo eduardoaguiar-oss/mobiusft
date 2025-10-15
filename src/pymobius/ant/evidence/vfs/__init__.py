@@ -68,7 +68,6 @@ LOADERS = [
     "app-emule",
     "app-emuletorrent",
     "app-shareaza",
-    "app-utorrent",
 ]
 
 

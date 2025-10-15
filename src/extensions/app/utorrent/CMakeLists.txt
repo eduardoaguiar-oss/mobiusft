@@ -27,7 +27,6 @@ project(app_utorrent LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(app_utorrent MODULE
     main.cpp
-    evidence_loader_impl.cpp
     file_dht_dat.cpp
     file_resume_dat.cpp
     file_settings_dat.cpp

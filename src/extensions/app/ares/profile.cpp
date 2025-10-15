@@ -141,7 +141,7 @@ class profile::impl
     std::size_t
     size_files () const
     {
-        consolidate_files ();
+        _consolidate_files ();
         return consolidated_files_.size ();
     }
 
@@ -152,7 +152,7 @@ class profile::impl
     std::vector<file>
     get_files () const
     {
-        consolidate_files ();
+        _consolidate_files ();
         return consolidated_files_;
     }
 
@@ -189,8 +189,9 @@ class profile::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void set_folder (const mobius::core::io::folder &);
-    void consolidate_files () const;
+    void _set_folder (const mobius::core::io::folder &);
+    void _consolidate_files () const;
+    void _update_mtime (const mobius::core::io::file &);
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -198,7 +199,7 @@ class profile::impl
 // @param f Folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::impl::set_folder (const mobius::core::io::folder &f)
+profile::impl::_set_folder (const mobius::core::io::folder &f)
 {
     if (folder_ || !f)
         return;
@@ -218,7 +219,7 @@ profile::impl::set_folder (const mobius::core::io::folder &f)
 // @brief Consolidate files from map to vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::impl::consolidate_files () const
+profile::impl::_consolidate_files () const
 {
     if (!consolidated_files_.empty ())
         return;
@@ -254,6 +255,21 @@ profile::impl::consolidate_files () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Update last modified time based on file
+// @param f File
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_update_mtime (const mobius::core::io::file &f)
+{
+    if (!f)
+        return;
+
+    if (!last_modified_time_ ||
+        f.get_modification_time () > last_modified_time_)
+        last_modified_time_ = f.get_modification_time ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Add PHashIdx.dat file
 // @param f PHashIdx.dat file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -277,11 +293,8 @@ profile::impl::add_phashidx_file (const mobius::core::io::file &f)
     }
     log.info (__LINE__, "File decoded [PHashIdx]: " + f.get_path ());
 
-    set_folder (f.get_parent ());
-
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
-        last_modified_time_ = f.get_modification_time ();
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add PHashIdx entries
@@ -342,11 +355,8 @@ profile::impl::add_shareh_file (const mobius::core::io::file &f)
 
     log.info (__LINE__, "File decoded [ShareH.dat]: " + f.get_path ());
 
-    set_folder (f.get_parent ());
-
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
-        last_modified_time_ = f.get_modification_time ();
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add share history entries
@@ -421,11 +431,8 @@ profile::impl::add_sharel_file (const mobius::core::io::file &f)
 
     log.info (__LINE__, "File decoded [ShareL.dat]: " + f.get_path ());
 
-    set_folder (f.get_parent ());
-
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
-        last_modified_time_ = f.get_modification_time ();
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add share library entries
@@ -516,11 +523,8 @@ profile::impl::add_torrenth_file (const mobius::core::io::file &f)
 
     log.info (__LINE__, "File decoded [TorrentH.dat]: " + f.get_path ());
 
-    set_folder (f.get_parent ());
-
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
-        last_modified_time_ = f.get_modification_time ();
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add TorrentH entries

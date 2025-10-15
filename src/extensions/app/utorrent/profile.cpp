@@ -201,7 +201,8 @@ class profile::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void set_folder (const mobius::core::io::folder &);
+    void _set_folder (const mobius::core::io::folder &);
+    void _update_mtime (const mobius::core::io::file &f);
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -209,7 +210,7 @@ class profile::impl
 // @param f Folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::impl::set_folder (const mobius::core::io::folder &f)
+profile::impl::_set_folder (const mobius::core::io::folder &f)
 {
     if (folder_ || !f)
         return;
@@ -223,6 +224,21 @@ profile::impl::set_folder (const mobius::core::io::folder &f)
     mobius::core::emit (
         "sampling_folder", std::string ("app.utorrent.profiles"), f
     );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Update last modified time based on file
+// @param f File
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_update_mtime (const mobius::core::io::file &f)
+{
+    if (!f)
+        return;
+
+    if (!last_modified_time_ ||
+        f.get_modification_time () > last_modified_time_)
+        last_modified_time_ = f.get_modification_time ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -296,7 +312,8 @@ profile::impl::add_dht_dat_file (const mobius::core::io::file &f)
 
     log.info (__LINE__, "File decoded [dht.dat]: " + f.get_path ());
 
-    set_folder (f.get_parent ());
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add account
@@ -373,7 +390,8 @@ profile::impl::add_resume_dat_file (const mobius::core::io::file &f)
 
     log.info (__LINE__, "File decoded [resume.dat]: " + f.get_path ());
 
-    set_folder (f.get_parent ());
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add entries
@@ -449,7 +467,8 @@ profile::impl::add_settings_dat_file (const mobius::core::io::file &f)
 
     log.info (__LINE__, "File decoded [settings.dat]: " + f.get_path ());
 
-    set_folder (f.get_parent ());
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Create settings object
@@ -518,8 +537,10 @@ profile::impl::add_torrent_file (const mobius::core::io::file &f)
         return;
     }
 
-    log.info (__LINE__, "File " + f.get_path () + " is a valid torrent file");
+    log.info (__LINE__, "File decoded [torrent]: " + f.get_path ());
 
+    _update_mtime(f);
+    
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add torrent file
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

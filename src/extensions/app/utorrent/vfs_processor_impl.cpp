@@ -31,6 +31,19 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // References:
+// @see
+// https://www.forensicfocus.com/articles/forensic-analysis-of-the-%CE%BCtorrent-peer-to-peer-client-in-windows/
+// @see
+// https://robertpearsonblog.wordpress.com/2016/11/10/utorrent-forensic-artifacts/
+// @see
+// https://robertpearsonblog.wordpress.com/2016/11/11/utorrent-and-windows-10-forensic-nuggets-of-info/
+// @see libtorrent source code
+//
+// µTorrent main forensic files:
+// - settings.dat: contains the settings of the µTorrent client
+// - resume.dat: contains the resume data of the torrents
+// - dht.dat: contains the DHT data
+// - *.torrent: contains information about torrents
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace
@@ -171,7 +184,6 @@ vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 {
     _scan_profile_folder (folder);
     //_scan_arestra_folder (folder);
-    //_scan_ntuser_dat_folder (folder);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -184,129 +196,15 @@ vfs_processor_impl::on_complete ()
 
     _save_app_profiles ();
     _save_ip_addresses ();
-    //_save_local_files ();
-    //_save_p2p_remote_files ();
-    //_save_received_files ();
-    //_save_sent_files ();
-    //_save_shared_files ();
+    _save_local_files ();
+    _save_p2p_remote_files ();
+    _save_received_files ();
+    _save_sent_files ();
+    _save_shared_files ();
     _save_user_accounts ();
 
     transaction.commit ();
 }
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Scan folder for ___ARESTRA___ files
-// @param folder Folder object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-/*void
-vfs_processor_impl::_scan_arestra_folder (const mobius::core::io::folder
-&folder)
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-    mobius::core::io::walker w (folder);
-
-    for (const auto &[name, f] : w.get_files_with_names ())
-    {
-        try
-        {
-            //if (mobius::core::string::startswith (name, "___arestra___"))
-            //    _decode_arestra_file (f);
-        }
-        catch (const std::exception &e)
-        {
-            log.warning (
-                __LINE__,
-                std::string (e.what ()) + " (file: " + f.get_path () + ")"
-            );
-        }
-    }
-}*/
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode ARESTRA file
-// @param f ARESTRA file
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-/*void
-vfs_processor_impl::_decode_arestra_file (const mobius::core::io::file &f)
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Decode file
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    file_arestra arestra (f.new_reader ());
-
-    if (!arestra)
-    {
-        log.info (
-            __LINE__,
-            "File " + f.get_path () + " is not a valid PBTHash.dat file"
-        );
-        return;
-    }
-
-    log.info (__LINE__, "File decoded [___ARESTRA___]. Path: " + f.get_path ());
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Create file object
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    profile::file fobj;
-
-    // set attributes
-    fobj.hash_sha1 = arestra.get_hash_sha1 ();
-    fobj.username = get_username_from_path (f.get_path ());
-    fobj.download_started_time = arestra.get_download_started_time ();
-    fobj.size = arestra.get_file_size ();
-    fobj.arestra_f = f;
-
-    // set filename
-    fobj.filename = mobius::core::io::path (f.get_path ()).get_filename ();
-    fobj.filename.erase (0, 13); // remove "___ARESTRA___"
-
-    // set flags
-    fobj.flag_downloaded = true;
-    fobj.flag_corrupted = arestra.is_corrupted ();
-    fobj.flag_shared = false; // @see thread_share.pas (line 1065)
-    fobj.flag_completed = arestra.is_completed ();
-
-    // add remote_sources
-    for (const auto &[ip, port] : arestra.get_alt_sources ())
-    {
-        profile::remote_source r_source;
-        r_source.timestamp = f.get_modification_time ();
-        r_source.ip = ip;
-        r_source.port = port;
-
-        fobj.remote_sources.push_back (r_source);
-    }
-
-    // set metadata
-    fobj.metadata.set ("arestra_signature", arestra.get_signature ());
-    fobj.metadata.set ("arestra_file_version", arestra.get_version ());
-    fobj.metadata.set (
-        "download_started_time", arestra.get_download_started_time ()
-    );
-    fobj.metadata.set ("downloaded_bytes", arestra.get_progress ());
-    fobj.metadata.set ("verified_bytes", arestra.get_phash_verified ());
-    fobj.metadata.set ("is_paused", arestra.is_paused ());
-    fobj.metadata.set ("media_type", arestra.get_media_type ());
-    fobj.metadata.set ("param1", arestra.get_param1 ());
-    fobj.metadata.set ("param2", arestra.get_param2 ());
-    fobj.metadata.set ("param3", arestra.get_param3 ());
-    fobj.metadata.set ("kwgenre", arestra.get_kw_genre ());
-    fobj.metadata.set ("title", arestra.get_title ());
-    fobj.metadata.set ("artist", arestra.get_artist ());
-    fobj.metadata.set ("album", arestra.get_album ());
-    fobj.metadata.set ("category", arestra.get_category ());
-    fobj.metadata.set ("year", arestra.get_year ());
-    fobj.metadata.set ("language", arestra.get_language ());
-    fobj.metadata.set ("url", arestra.get_url ());
-    fobj.metadata.set ("comment", arestra.get_comment ());
-    fobj.metadata.set ("subfolder", arestra.get_subfolder ());
-
-    files_.push_back (fobj);
-}
-*/
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Scan folder for µTorrent/BitTorrent profiles
@@ -337,6 +235,28 @@ vfs_processor_impl::_scan_profile_folder (
 
             else if (name == "resume.dat" || name == "resume.dat.old")
                 p.add_resume_dat_file (f);
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (
+                __LINE__,
+                std::string (e.what ()) + " (file: " + f.get_path () + ")"
+            );
+        }
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Scan .torrent files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &[name, f] : w.get_files_with_names ())
+    {
+        try
+        {
+            if (mobius::core::string::endswith (name, ".torrent"))
+            {
+                if (p)
+                    p.add_torrent_file (f);
+            }
         }
         catch (const std::exception &e)
         {
@@ -574,10 +494,12 @@ vfs_processor_impl::_save_p2p_remote_files ()
                         tf_metadata.set ("torrent_path", tf.path);
                         tf_metadata.set ("torrent_offset", tf.offset);
                         tf_metadata.set ("torrent_length", tf.length);
-                        tf_metadata.set ("torrent_piece_length",
-                                         tf.piece_length);
-                        tf_metadata.set ("torrent_piece_offset",
-                                         tf.piece_offset);
+                        tf_metadata.set (
+                            "torrent_piece_length", tf.piece_length
+                        );
+                        tf_metadata.set (
+                            "torrent_piece_offset", tf.piece_offset
+                        );
 
                         e.set_attribute ("metadata", tf_metadata);
 
