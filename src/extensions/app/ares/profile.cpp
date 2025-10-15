@@ -20,6 +20,7 @@
 #include "profile.hpp"
 #include <mobius/core/io/path.hpp>
 #include <mobius/core/log.hpp>
+#include <mobius/core/mediator.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <mobius/core/value_selector.hpp>
 #include <algorithm>
@@ -140,7 +141,7 @@ class profile::impl
     std::size_t
     size_files () const
     {
-        consolidate_files ();
+        _consolidate_files ();
         return consolidated_files_.size ();
     }
 
@@ -151,7 +152,7 @@ class profile::impl
     std::vector<file>
     get_files () const
     {
-        consolidate_files ();
+        _consolidate_files ();
         return consolidated_files_;
     }
 
@@ -188,8 +189,9 @@ class profile::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void set_folder (const mobius::core::io::folder &);
-    void consolidate_files () const;
+    void _set_folder (const mobius::core::io::folder &);
+    void _consolidate_files () const;
+    void _update_mtime (const mobius::core::io::file &);
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -197,7 +199,7 @@ class profile::impl
 // @param f Folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::impl::set_folder (const mobius::core::io::folder &f)
+profile::impl::_set_folder (const mobius::core::io::folder &f)
 {
     if (folder_ || !f)
         return;
@@ -207,13 +209,17 @@ profile::impl::set_folder (const mobius::core::io::folder &f)
     last_modified_time_ = f.get_modification_time ();
     creation_time_ = f.get_creation_time ();
     username_ = get_username_from_path (f.get_path ());
+
+    mobius::core::emit (
+        "sampling_folder", std::string ("app.ares.profiles"), f
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Consolidate files from map to vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::impl::consolidate_files () const
+profile::impl::_consolidate_files () const
 {
     if (!consolidated_files_.empty ())
         return;
@@ -238,13 +244,29 @@ profile::impl::consolidate_files () const
 
                 f.metadata = af.metadata.clone ();
                 f.metadata.set ("torrent_file_idx", tf.idx);
-                f.metadata.set ("torrent_last_modification_time",
-                                tf.last_modification_time);
+                f.metadata.set (
+                    "torrent_last_modification_time", tf.last_modification_time
+                );
 
                 consolidated_files_.push_back (f);
             }
         }
     }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Update last modified time based on file
+// @param f File
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_update_mtime (const mobius::core::io::file &f)
+{
+    if (!f)
+        return;
+
+    if (!last_modified_time_ ||
+        f.get_modification_time () > last_modified_time_)
+        last_modified_time_ = f.get_modification_time ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -269,11 +291,10 @@ profile::impl::add_phashidx_file (const mobius::core::io::file &f)
         );
         return;
     }
-    log.info (__LINE__, "File decoded [PHashIdx]. Path: " + f.get_path ());
+    log.info (__LINE__, "File decoded [PHashIdx]: " + f.get_path ());
 
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
-        last_modified_time_ = f.get_modification_time ();
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add PHashIdx entries
@@ -301,7 +322,12 @@ profile::impl::add_phashidx_file (const mobius::core::io::file &f)
         }
     }
 
-    set_folder (f.get_parent ());
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Emit sampling_file event
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::emit (
+        "sampling_file", std::string ("app.ares.phashidx_dat"), f.new_reader ()
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -327,11 +353,10 @@ profile::impl::add_shareh_file (const mobius::core::io::file &f)
         return;
     }
 
-    log.info (__LINE__, "File decoded [ShareH.dat]. Path: " + f.get_path ());
+    log.info (__LINE__, "File decoded [ShareH.dat]: " + f.get_path ());
 
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
-        last_modified_time_ = f.get_modification_time ();
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add share history entries
@@ -373,7 +398,12 @@ profile::impl::add_shareh_file (const mobius::core::io::file &f)
         }
     }
 
-    set_folder (f.get_parent ());
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Emit sampling_file event
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::emit (
+        "sampling_file", std::string ("app.ares.shareh_dat"), f.new_reader ()
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -399,11 +429,10 @@ profile::impl::add_sharel_file (const mobius::core::io::file &f)
         return;
     }
 
-    log.info (__LINE__, "File decoded [ShareL.dat]. Path: " + f.get_path ());
+    log.info (__LINE__, "File decoded [ShareL.dat]: " + f.get_path ());
 
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
-        last_modified_time_ = f.get_modification_time ();
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add share library entries
@@ -461,7 +490,12 @@ profile::impl::add_sharel_file (const mobius::core::io::file &f)
         }
     }
 
-    set_folder (f.get_parent ());
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Emit sampling_file event
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::emit (
+        "sampling_file", std::string ("app.ares.sharel_dat"), f.new_reader ()
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -487,11 +521,10 @@ profile::impl::add_torrenth_file (const mobius::core::io::file &f)
         return;
     }
 
-    log.info (__LINE__, "File decoded [TorrentH.dat]. Path: " + f.get_path ());
+    log.info (__LINE__, "File decoded [TorrentH.dat]: " + f.get_path ());
 
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
-        last_modified_time_ = f.get_modification_time ();
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add TorrentH entries
@@ -529,7 +562,12 @@ profile::impl::add_torrenth_file (const mobius::core::io::file &f)
         }
     }
 
-    set_folder (f.get_parent ());
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Emit sampling_file event
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::emit (
+        "sampling_file", std::string ("app.ares.torrenth_dat"), f.new_reader ()
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -554,7 +592,7 @@ profile::impl::add_tempdl_phash_file (const mobius::core::io::file &f)
         return;
     }
 
-    log.info (__LINE__, "File decoded [PHash.dat]. Path: " + f.get_path ());
+    log.info (__LINE__, "File decoded [PHash.dat]: " + f.get_path ());
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Process entries
@@ -612,7 +650,7 @@ profile::impl::add_tempdl_pbthash_file (const mobius::core::io::file &f)
         return;
     }
 
-    log.info (__LINE__, "File decoded [PBTHash.dat]. Path: " + f.get_path ());
+    log.info (__LINE__, "File decoded [PBTHash.dat]: " + f.get_path ());
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Process file
@@ -721,7 +759,7 @@ profile::impl::add_tempul_udpphash_file (const mobius::core::io::file &f)
         return;
     }
 
-    log.info (__LINE__, "File decoded [UDPPHash.dat] Path: " + f.get_path ());
+    log.info (__LINE__, "File decoded [UDPPHash.dat]: " + f.get_path ());
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Process entries

@@ -18,13 +18,16 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "profile.hpp"
+#include <mobius/core/file_decoder/torrent.hpp>
+#include <mobius/core/log.hpp>
+#include <mobius/core/mediator.hpp>
+#include <mobius/core/string_functions.hpp>
+#include <mobius/core/value_selector.hpp>
+#include <algorithm>
+#include <map>
 #include "file_dht_dat.hpp"
 #include "file_resume_dat.hpp"
 #include "file_settings_dat.hpp"
-#include <algorithm>
-#include <mobius/core/file_decoder/torrent.hpp>
-#include <mobius/core/log.hpp>
-#include <mobius/core/value_selector.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @see
@@ -34,24 +37,228 @@
 // @see
 // https://robertpearsonblog.wordpress.com/2016/11/11/utorrent-and-windows-10-forensic-nuggets-of-info/
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+namespace
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get username from path
+// @param path Path to profile
+// @return Username extracted from path
+//
+// @note Paths are in the following format: /FSxx/Users/username/... or
+// /FSxx/home/username/... where FSxx is the filesystem identifier.
+// Example: /FS01/Users/johndoe/AppData/Local/Google/Chrome/User Data/
+// In this case, the username is "johndoe".
+// If the path does not match the expected format, an empty string is returned.
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static std::string
+get_username_from_path (const std::string &path)
+{
+    auto dirnames = mobius::core::string::split (path, "/");
+
+    if (dirnames.size () > 3 &&
+        (dirnames[2] == "Users" || dirnames[2] == "home"))
+        return dirnames[3]; // Username is the fourth directory
+
+    return {}; // No username found
+}
+
+} // namespace
+
 namespace mobius::extension::app::utorrent
 {
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Implementation class
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+class profile::impl
+{
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if profile is valid
+    // @return true/false
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool
+    is_valid () const
+    {
+        return bool (folder_);
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get username
+    // @return username
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_username () const
+    {
+        return username_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get folder
+    // @return Folder object
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::io::folder
+    get_folder () const
+    {
+        return folder_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get path to profile
+    // @return Path to profile
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_path () const
+    {
+        return (folder_) ? folder_.get_path () : "";
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get creation time
+    // @return Creation time
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::datetime::datetime
+    get_creation_time () const
+    {
+        return creation_time_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get last modified time
+    // @return Last modified time
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::datetime::datetime
+    get_last_modified_time () const
+    {
+        return last_modified_time_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get main settings
+    // @return settings
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    settings
+    get_main_settings () const
+    {
+        return main_settings_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get all settings found
+    // @return settings
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<settings>
+    get_settings () const
+    {
+        return settings_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of local files
+    // @return number of local files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    size_local_files () const
+    {
+        return local_files_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<account> get_accounts () const;
+    std::vector<local_file> get_local_files () const;
+    void add_dht_dat_file (const mobius::core::io::file &);
+    void add_resume_dat_file (const mobius::core::io::file &);
+    void add_settings_dat_file (const mobius::core::io::file &);
+    void add_torrent_file (const mobius::core::io::file &);
+
+  private:
+    // @brief Folder object
+    mobius::core::io::folder folder_;
+
+    // @brief Username
+    std::string username_;
+
+    // @brief Creation time
+    mobius::core::datetime::datetime creation_time_;
+
+    // @brief Last modified time
+    mobius::core::datetime::datetime last_modified_time_;
+
+    // @brief Accounts
+    std::map<std::string, account> accounts_;
+
+    // @brief Local files
+    std::map<std::string, local_file> local_files_;
+
+    // @brief Main settings
+    settings main_settings_;
+
+    // @brief Settings found
+    std::vector<settings> settings_;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Helper functions
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void _set_folder (const mobius::core::io::folder &);
+    void _update_mtime (const mobius::core::io::file &f);
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set folder
+// @param f Folder
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_set_folder (const mobius::core::io::folder &f)
+{
+    if (folder_ || !f)
+        return;
+
+    folder_ = f;
+
+    last_modified_time_ = f.get_modification_time ();
+    creation_time_ = f.get_creation_time ();
+    username_ = get_username_from_path (f.get_path ());
+
+    mobius::core::emit (
+        "sampling_folder", std::string ("app.utorrent.profiles"), f
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Update last modified time based on file
+// @param f File
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_update_mtime (const mobius::core::io::file &f)
+{
+    if (!f)
+        return;
+
+    if (!last_modified_time_ ||
+        f.get_modification_time () > last_modified_time_)
+        last_modified_time_ = f.get_modification_time ();
+}
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get accounts
 // @return vector of accounts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector<profile::account>
-profile::get_accounts () const
+profile::impl::get_accounts () const
 {
     std::vector<account> accounts;
 
-    std::transform (accounts_.begin (), accounts_.end (),
-                    std::back_inserter (accounts),
-                    [] (const auto &pair) { return pair.second; });
+    std::transform (
+        accounts_.begin (), accounts_.end (), std::back_inserter (accounts),
+        [] (const auto &pair) { return pair.second; }
+    );
 
-    std::sort (accounts.begin (), accounts.end (),
-               [] (const auto &a, const auto &b)
-               { return a.client_id < b.client_id; });
+    std::sort (
+        accounts.begin (), accounts.end (),
+        [] (const auto &a, const auto &b) { return a.client_id < b.client_id; }
+    );
 
     return accounts;
 }
@@ -61,17 +268,21 @@ profile::get_accounts () const
 // @return vector of local files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector<profile::local_file>
-profile::get_local_files () const
+profile::impl::get_local_files () const
 {
     std::vector<local_file> local_files;
 
-    std::transform (local_files_.begin (), local_files_.end (),
-                    std::back_inserter (local_files),
-                    [] (const auto &pair) { return pair.second; });
+    std::transform (
+        local_files_.begin (), local_files_.end (),
+        std::back_inserter (local_files),
+        [] (const auto &pair) { return pair.second; }
+    );
 
-    std::sort (local_files.begin (), local_files.end (),
-               [] (const auto &a, const auto &b)
-               { return a.torrent_name < b.torrent_name; });
+    std::sort (
+        local_files.begin (), local_files.end (),
+        [] (const auto &a, const auto &b)
+        { return a.torrent_name < b.torrent_name; }
+    );
 
     return local_files;
 }
@@ -81,7 +292,7 @@ profile::get_local_files () const
 // @param f dht.dat file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::add_dht_dat_file (const mobius::core::io::file &f)
+profile::impl::add_dht_dat_file (const mobius::core::io::file &f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -99,7 +310,10 @@ profile::add_dht_dat_file (const mobius::core::io::file &f)
         return;
     }
 
-    log.info (__LINE__, "File " + f.get_path () + " is a valid dht.dat file");
+    log.info (__LINE__, "File decoded [dht.dat]: " + f.get_path ());
+
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add account
@@ -126,8 +340,9 @@ profile::add_dht_dat_file (const mobius::core::io::file &f)
         acc.last_dht_timestamp = dht_dat.get_timestamp ();
 
     acc.files.push_back (f);
-    acc.ip_addresses.emplace (dht_dat.get_ip_address (),
-                              dht_dat.get_timestamp ());
+    acc.ip_addresses.emplace (
+        dht_dat.get_ip_address (), dht_dat.get_timestamp ()
+    );
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Get data from file
@@ -142,7 +357,12 @@ profile::add_dht_dat_file (const mobius::core::io::file &f)
         acc.f = f;
     }
 
-    is_valid_ = true;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Emit sampling_file event
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::emit (
+        "sampling_file", std::string ("app.utorrent.dht_dat"), reader
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -150,7 +370,7 @@ profile::add_dht_dat_file (const mobius::core::io::file &f)
 // @param f Resume.dat file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::add_resume_dat_file (const mobius::core::io::file &f)
+profile::impl::add_resume_dat_file (const mobius::core::io::file &f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -168,8 +388,10 @@ profile::add_resume_dat_file (const mobius::core::io::file &f)
         return;
     }
 
-    log.info (__LINE__,
-              "File " + f.get_path () + " is a valid resume.dat file");
+    log.info (__LINE__, "File decoded [resume.dat]: " + f.get_path ());
+
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add entries
@@ -206,9 +428,18 @@ profile::add_resume_dat_file (const mobius::core::io::file &f)
         lf.resume_file = vs (lf.resume_file, f);
         lf.sources.push_back (f);
 
-        std::copy (entry.peers.begin (), entry.peers.end (),
-                   std::back_inserter (lf.peers));
+        std::copy (
+            entry.peers.begin (), entry.peers.end (),
+            std::back_inserter (lf.peers)
+        );
     }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Emit sampling_file event
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::emit (
+        "sampling_file", std::string ("app.utorrent.resume_dat"), reader
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -216,7 +447,7 @@ profile::add_resume_dat_file (const mobius::core::io::file &f)
 // @param f Settings.dat file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::add_settings_dat_file (const mobius::core::io::file &f)
+profile::impl::add_settings_dat_file (const mobius::core::io::file &f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -234,8 +465,10 @@ profile::add_settings_dat_file (const mobius::core::io::file &f)
         return;
     }
 
-    log.info (__LINE__,
-              "File " + f.get_path () + " is a valid settings.dat file");
+    log.info (__LINE__, "File decoded [settings.dat]: " + f.get_path ());
+
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Create settings object
@@ -271,8 +504,14 @@ profile::add_settings_dat_file (const mobius::core::io::file &f)
          f.get_name () == "settings.dat"))
     {
         main_settings_ = s;
-        is_valid_ = true;
     }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Emit sampling_file event
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::emit (
+        "sampling_file", std::string ("app.utorrent.settings_dat"), reader
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -280,7 +519,7 @@ profile::add_settings_dat_file (const mobius::core::io::file &f)
 // @param f Torrent file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::add_torrent_file (const mobius::core::io::file &f)
+profile::impl::add_torrent_file (const mobius::core::io::file &f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -298,8 +537,10 @@ profile::add_torrent_file (const mobius::core::io::file &f)
         return;
     }
 
-    log.info (__LINE__, "File " + f.get_path () + " is a valid torrent file");
+    log.info (__LINE__, "File decoded [torrent]: " + f.get_path ());
 
+    _update_mtime(f);
+    
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add torrent file
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -322,17 +563,178 @@ profile::add_torrent_file (const mobius::core::io::file &f)
     std::vector<torrent_content_file> content_files;
     auto torrent_files = torrent.get_files ();
 
-    std::transform (torrent_files.begin (), torrent_files.end (),
-                    std::back_inserter (content_files),
-                    [] (const auto &file)
-                    {
-                        return torrent_content_file {
-                            file.name,         file.path,
-                            file.length,       file.offset,
-                            file.piece_length, file.piece_offset,
-                            file.creation_time};
-                    });
+    std::transform (
+        torrent_files.begin (), torrent_files.end (),
+        std::back_inserter (content_files),
+        [] (const auto &file)
+        {
+            return torrent_content_file {file.name,         file.path,
+                                         file.length,       file.offset,
+                                         file.piece_length, file.piece_offset,
+                                         file.creation_time};
+        }
+    );
+
     lf.content_files = vs (lf.content_files, content_files);
+    lf.sources.push_back (f);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Constructor
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+profile::profile ()
+    : impl_ (std::make_shared<impl> ())
+{
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if profile is valid
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+profile::
+operator bool () const
+{
+    return impl_->is_valid ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get username
+// @return username
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+profile::get_username () const
+{
+    return impl_->get_username ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get folder
+// @return Folder object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::io::folder
+profile::get_folder () const
+{
+    return impl_->get_folder ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get path to profile
+// @return Path to profile
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+profile::get_path () const
+{
+    return impl_->get_path ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get creation time
+// @return Creation time
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::datetime::datetime
+profile::get_creation_time () const
+{
+    return impl_->get_creation_time ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get last modified time
+// @return Last modified time
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::datetime::datetime
+profile::get_last_modified_time () const
+{
+    return impl_->get_last_modified_time ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get accounts
+// @return vector of accounts
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<profile::account>
+profile::get_accounts () const
+{
+    return impl_->get_accounts ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get local files
+// @return vector of local files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<profile::local_file>
+profile::get_local_files () const
+{
+    return impl_->get_local_files ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get number of local files
+// @return number of local files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::size_t
+profile::size_local_files () const
+{
+    return impl_->size_local_files ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get main settings
+// @return settings
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+profile::settings
+profile::get_main_settings () const
+{
+    return impl_->get_main_settings ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get all settings found
+// @return settings
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<profile::settings>
+profile::get_settings () const
+{
+    return impl_->get_settings ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add dht.dat file
+// @param f dht.dat file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_dht_dat_file (const mobius::core::io::file &f)
+{
+    impl_->add_dht_dat_file (f);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add resume.dat file
+// @param f Resume.dat file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_resume_dat_file (const mobius::core::io::file &f)
+{
+    impl_->add_resume_dat_file (f);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add settings.dat file
+// @param f Settings.dat file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_settings_dat_file (const mobius::core::io::file &f)
+{
+    impl_->add_settings_dat_file (f);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add torrent file
+// @param f Torrent file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_torrent_file (const mobius::core::io::file &f)
+{
+    impl_->add_torrent_file (f);
 }
 
 } // namespace mobius::extension::app::utorrent

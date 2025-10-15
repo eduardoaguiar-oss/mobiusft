@@ -27,11 +27,11 @@ project(app_utorrent LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(app_utorrent MODULE
     main.cpp
-    evidence_loader_impl.cpp
-    profile.cpp
     file_dht_dat.cpp
     file_resume_dat.cpp
     file_settings_dat.cpp
+    profile.cpp
+    vfs_processor_impl.cpp
 )
 
 set_target_properties(app_utorrent PROPERTIES OUTPUT_NAME "app-utorrent" PREFIX "")

@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_UTORRENT_EVIDENCE_LOADER_IMPL_HPP
-#define MOBIUS_EXTENSION_APP_UTORRENT_EVIDENCE_LOADER_IMPL_HPP
+#ifndef MOBIUS_EXTENSION_APP_UTORRENT_VFS_PROCESSOR_IMPL_HPP
+#define MOBIUS_EXTENSION_APP_UTORRENT_VFS_PROCESSOR_IMPL_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -20,64 +20,41 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "profile.hpp"
-#include <mobius/framework/evidence_loader_impl_base.hpp>
+#include <mobius/core/io/file.hpp>
+#include <mobius/framework/ant/vfs_processor_impl_base.hpp>
+#include <mobius/framework/case_profile.hpp>
 #include <mobius/framework/model/item.hpp>
 #include <string>
 #include <vector>
+#include "profile.hpp"
 
 namespace mobius::extension::app::utorrent
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>Emule evidence_loader</i> implementation class
+// @brief uTorrent <i>vfs_processor</i> implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
+class vfs_processor_impl
+    : public mobius::framework::ant::vfs_processor_impl_base
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    explicit evidence_loader_impl (const mobius::framework::model::item &,
-                                   scan_type);
+    explicit vfs_processor_impl (
+        const mobius::framework::model::item &,
+        const mobius::framework::case_profile &
+    );
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Function prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void run () final;
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Check if object is valid
-    // @return true/false
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    explicit
-    operator bool () const noexcept final
-    {
-        return true;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get evidence_loader type
-    // @return Type as string
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::string
-    get_type () const final
-    {
-        return "app-utorrent";
-    }
+    void on_folder (const mobius::core::io::folder &) final;
+    void on_complete () final;
 
   private:
     // @brief Case item
     mobius::framework::model::item item_;
-
-    // @brief Scan type
-    scan_type scan_type_;
-
-    // @brief User name
-    std::string username_;
-
-    // @brief Current profile
-    profile profile_;
 
     // @brief Profiles found
     std::vector<profile> profiles_;
@@ -85,21 +62,21 @@ class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void _scan_canonical_folders ();
-    void _scan_canonical_root_folder (const mobius::core::io::folder &);
-    void _scan_canonical_user_folder (const mobius::core::io::folder &);
-    void _scan_canonical_utorrent_folder (const mobius::core::io::folder &);
+    void _scan_profile_folder (const mobius::core::io::folder &);
+    // void _scan_arestra_folder (const mobius::core::io::folder &);
+    // void _scan_ntuser_dat_folder (const mobius::core::io::folder &);
 
-    void _save_evidences ();
-    void _save_accounts ();
+    // void _decode_arestra_file (const mobius::core::io::file &);
+    // void _decode_ntuser_dat_file (const mobius::core::io::file &);
+
+    void _save_app_profiles ();
     void _save_ip_addresses ();
-
-    void _save_autofills ();
     void _save_local_files ();
     void _save_p2p_remote_files ();
     void _save_received_files ();
     void _save_sent_files ();
     void _save_shared_files ();
+    void _save_user_accounts ();
 };
 
 } // namespace mobius::extension::app::utorrent

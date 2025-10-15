@@ -20,7 +20,6 @@
 #include "file_bookmarks.hpp"
 #include <mobius/core/decoder/json/parser.hpp>
 #include <mobius/core/log.hpp>
-#include <mobius/core/mediator.hpp>
 #include <mobius/core/string_functions.hpp>
 #include "common.hpp"
 
@@ -78,14 +77,6 @@ file_bookmarks::file_bookmarks (const mobius::core::io::reader &reader)
         // Finish parsing
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         is_instance_ = true;
-
-        // file_for_sampling event requires sampling ID as std::string
-        mobius::core::emit (
-            "file_for_sampling",
-            "app.chromium.bookmarks." +
-                mobius::core::string::to_string (version_, 5),
-            reader
-        );
     }
     catch (const std::exception &e)
     {

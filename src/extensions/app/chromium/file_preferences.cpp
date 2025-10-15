@@ -20,7 +20,6 @@
 #include "file_preferences.hpp"
 #include <mobius/core/decoder/json/parser.hpp>
 #include <mobius/core/log.hpp>
-#include <mobius/core/mediator.hpp>
 #include "common.hpp"
 
 namespace mobius::extension::app::chromium
@@ -59,12 +58,6 @@ file_preferences::file_preferences (const mobius::core::io::reader &reader)
         // Finish parsing
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         is_instance_ = true;
-
-        // file_for_sampling event mandates sampling ID as std::string
-        mobius::core::emit (
-            "file_for_sampling", std::string ("app.chromium.preferences"),
-            reader
-        );
     }
     catch (const std::exception &e)
     {

@@ -34,6 +34,7 @@
 
 #include <pycallback.hpp>
 #include <pyfunction.hpp>
+#include "core/io/folder.hpp"
 #include "core/io/reader.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -123,12 +124,12 @@ new_framework_module ()
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <b>file_for_sampling</b> event callback
+// @brief <b>sampling_file</b> event callback
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class file_for_sampling_callback
+class sampling_file_callback
 {
   public:
-    file_for_sampling_callback (PyObject *f)
+    sampling_file_callback (PyObject *f)
         : f_ (f)
     {
     }
@@ -138,9 +139,7 @@ class file_for_sampling_callback
         const std::string &sampling_id, const mobius::core::io::reader &reader
     )
     {
-        mobius::py::GIL_holder holder;
-
-        f_.call (
+        f_ (
             mobius::py::pystring_from_std_string (sampling_id),
             pymobius_core_io_reader_to_pyobject (reader)
         );
@@ -150,6 +149,34 @@ class file_for_sampling_callback
     mobius::py::function f_;
 };
 
-mobius::py::callback<file_for_sampling_callback> cb_1_ ("file_for_sampling");
+mobius::py::callback<sampling_file_callback> cb_1_ ("sampling_file");
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <b>sampling_folder</b> event callback
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+class sampling_folder_callback
+{
+  public:
+    sampling_folder_callback (PyObject *f)
+        : f_ (f)
+    {
+    }
+
+    void
+    operator() (
+        const std::string &sampling_id, const mobius::core::io::folder &folder
+    )
+    {
+        f_ (
+            mobius::py::pystring_from_std_string (sampling_id),
+            pymobius_core_io_folder_to_pyobject (folder)
+        );
+    }
+
+  private:
+    mobius::py::function f_;
+};
+
+mobius::py::callback<sampling_folder_callback> cb_2_ ("sampling_folder");
 
 } // namespace

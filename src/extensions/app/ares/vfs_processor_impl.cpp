@@ -507,8 +507,6 @@ vfs_processor_impl::_scan_profile_folder (const mobius::core::io::folder &folder
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     if (p)
     {
-        profiles_.push_back (p);
-
         for (const auto &f : w.get_folders_by_name ("tempdl"))
             _scan_tempdl_folder (p, f);
 
@@ -518,6 +516,8 @@ vfs_processor_impl::_scan_profile_folder (const mobius::core::io::folder &folder
         auto files = p.get_files ();
 
         std::copy (files.begin (), files.end (), std::back_inserter (files_));
+
+        profiles_.push_back (p);
     }
 }
 

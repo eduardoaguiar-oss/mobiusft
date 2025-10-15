@@ -64,7 +64,6 @@ namespace
 static const std::string ANT_ID = "evidence.app-chromium";
 static const std::string ANT_NAME = "App Chromium";
 static const std::string ANT_VERSION = "1.0";
-static const std::string SAMPLING_ID = "sampling";
 static const std::string APP_FAMILY = "chromium";
 static const std::string APP_NAME = "Chromium";
 static const std::string APP_ID = "chromium";
@@ -170,6 +169,14 @@ vfs_processor_impl::_decode_local_state_file (const mobius::core::io::file &f)
 
             encryption_keys_.push_back (ekey);
         }
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Emit sampling_file event
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::emit (
+            "sampling_file", std::string ("app.chromium.local_state"),
+            f.new_reader ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -189,52 +196,41 @@ vfs_processor_impl::_scan_profile (const mobius::core::io::folder &folder)
     mobius::core::log log (__FILE__, __FUNCTION__);
 
     // ==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Reset profile if we are starting a new folder scan
-    // ==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    if (profile_ && !mobius::core::string::startswith (
-                        folder.get_path (), profile_.get_path ()
-                    ))
-    {
-        profile_ = {};
-    }
-
-    bool is_new = !bool (profile_);
-
-    // ==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Scan folder
     // ==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     auto w = mobius::core::io::walker (folder);
+    profile p;
 
     for (const auto &[name, f] : w.get_files_with_names ())
     {
         try
         {
             if (name == "bookmarks")
-                profile_.add_bookmarks_file (f);
+                p.add_bookmarks_file (f);
 
             else if (name == "cookies")
-                profile_.add_cookies_file (f);
+                p.add_cookies_file (f);
 
             else if (name == "extension cookies")
-                profile_.add_cookies_file (f);
+                p.add_cookies_file (f);
 
             else if (name == "login data")
-                profile_.add_login_data_file (f);
+                p.add_login_data_file (f);
 
             else if (name == "login data for account")
-                profile_.add_login_data_file (f);
+                p.add_login_data_file (f);
 
             else if (name == "history")
-                profile_.add_history_file (f);
+                p.add_history_file (f);
 
             else if (name == "preferences")
-                profile_.add_preferences_file (f);
+                p.add_preferences_file (f);
 
             else if (name == "safe browsing cookies")
-                profile_.add_cookies_file (f);
+                p.add_cookies_file (f);
 
             else if (name == "web data")
-                profile_.add_web_data_file (f);
+                p.add_web_data_file (f);
         }
         catch (const std::exception &e)
         {
@@ -248,10 +244,12 @@ vfs_processor_impl::_scan_profile (const mobius::core::io::folder &folder)
     // ==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // If we have a new profile, add it to the profiles list
     // ==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    if (profile_ && is_new)
+    if (p)
     {
-        profile_.set_folder (folder);
-        profiles_.push_back (profile_);
+        profiles_.push_back (p);
+
+        for (const auto &f : w.get_files_by_path ("network/cookies"))
+            p.add_cookies_file (f);
     }
 }
 

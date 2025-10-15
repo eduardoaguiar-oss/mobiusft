@@ -349,7 +349,7 @@ get_username_from_path (const std::string &path)
     auto dirnames = mobius::core::string::split (path, "/");
 
     if (dirnames.size () > 3 &&
-        (dirnames[2] == "Users" || dirnames[2] == "home"))
+        (dirnames[2] == "Users" || dirnames[2] == "home" || dirnames[2] == "Documents and Settings"))
         return dirnames[3]; // Username is the fourth directory
 
     return {}; // No username found

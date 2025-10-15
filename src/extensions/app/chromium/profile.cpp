@@ -19,6 +19,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "profile.hpp"
 #include <mobius/core/log.hpp>
+#include <mobius/core/mediator.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <mobius/core/value_selector.hpp>
 #include <algorithm>
@@ -52,7 +53,7 @@ class profile::impl
     bool
     is_valid () const
     {
-        return is_valid_;
+        return bool (folder_);
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -348,7 +349,6 @@ class profile::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void set_folder (const mobius::core::io::folder &);
     void add_bookmarks_file (const mobius::core::io::file &);
     void add_cookies_file (const mobius::core::io::file &);
     void add_history_file (const mobius::core::io::file &);
@@ -357,9 +357,6 @@ class profile::impl
     void add_web_data_file (const mobius::core::io::file &);
 
   private:
-    // @brief Check if profile is valid
-    bool is_valid_ = false;
-
     // @brief Folder object
     mobius::core::io::folder folder_;
 
@@ -413,6 +410,12 @@ class profile::impl
 
     // @brief Logins
     std::vector<login> logins_;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Helper functions
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void _set_folder (const mobius::core::io::folder &);
+    void _update_mtime (const mobius::core::io::file &f);
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -420,8 +423,11 @@ class profile::impl
 // @param f Folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::impl::set_folder (const mobius::core::io::folder &f)
+profile::impl::_set_folder (const mobius::core::io::folder &f)
 {
+    if (folder_ || !f)
+        return;
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Get data from folder
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -436,6 +442,28 @@ profile::impl::set_folder (const mobius::core::io::folder &f)
     auto path = f.get_path ();
     username_ = get_username_from_path (path);
     std::tie (app_id_, app_name_) = get_app_from_path (path);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Emit sampling_folder event
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::emit (
+        "sampling_folder", std::string ("app.chromium.profiles"), f
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Update last modified time based on file
+// @param f File
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_update_mtime (const mobius::core::io::file &f)
+{
+    if (!f)
+        return;
+
+    if (!last_modified_time_ ||
+        f.get_modification_time () > last_modified_time_)
+        last_modified_time_ = f.get_modification_time ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -458,11 +486,10 @@ profile::impl::add_bookmarks_file (const mobius::core::io::file &f)
         return;
     }
 
-    log.info (__LINE__, "File " + f.get_path () + " is a valid 'Bookmarks' file");
+    log.info (__LINE__, "File decoded [Bookmarks]: " + f.get_path ());
 
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
-        last_modified_time_ = f.get_modification_time ();
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add bookmarks
@@ -475,7 +502,15 @@ profile::impl::add_bookmarks_file (const mobius::core::io::file &f)
         bookmarks_.push_back (b);
     }
 
-    is_valid_ = true;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Emit sampling_file event
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::emit (
+        "sampling_file",
+        "app.chromium.bookmarks." +
+            mobius::core::string::to_string (fb.get_version (), 5),
+        f.new_reader ()
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -498,11 +533,9 @@ profile::impl::add_cookies_file (const mobius::core::io::file &f)
         return;
     }
 
-    log.info (__LINE__, "File " + f.get_path () + " is a valid 'Cookies' file");
+    log.info (__LINE__, "File decoded [Cookies]: " + f.get_path ());
 
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
-        last_modified_time_ = f.get_modification_time ();
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add cookies
@@ -515,7 +548,15 @@ profile::impl::add_cookies_file (const mobius::core::io::file &f)
         cookies_.push_back (c);
     }
 
-    is_valid_ = true;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Emit sampling_file event
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::emit (
+        "sampling_file",
+        "app.chromium.cookies." +
+            mobius::core::string::to_string (fc.get_schema_version (), 5),
+        f.new_reader ()
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -538,11 +579,10 @@ profile::impl::add_history_file (const mobius::core::io::file &f)
         return;
     }
 
-    log.info (__LINE__, "File " + f.get_path () + " is a valid 'History' file");
+    log.info (__LINE__, "File decoded [History]: " + f.get_path ());
 
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
-        last_modified_time_ = f.get_modification_time ();
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add history entries
@@ -566,7 +606,15 @@ profile::impl::add_history_file (const mobius::core::io::file &f)
         downloads_.push_back (d);
     }
 
-    is_valid_ = true;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Emit sampling_file event
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::emit (
+        "sampling_file",
+        "app.chromium.history." +
+            mobius::core::string::to_string (fh.get_schema_version (), 5),
+        f.new_reader ()
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -581,27 +629,23 @@ profile::impl::add_login_data_file (const mobius::core::io::file &f)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Decode file
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    file_login_data login_data (f.new_reader ());
+    file_login_data fl (f.new_reader ());
 
-    if (!login_data)
+    if (!fl)
     {
         log.info (__LINE__, "File is not a valid 'Login Data' file");
         return;
     }
 
-    log.info (
-        __LINE__,
-        "File " + f.get_path () + " is a valid 'Login Data' file"
-    );
+    log.info (__LINE__, "File decoded [Login Data]: " + f.get_path ());
 
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
-        last_modified_time_ = f.get_modification_time ();
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add logins
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    for (const auto &entry : login_data.get_logins ())
+    for (const auto &entry : fl.get_logins ())
     {
         login l (entry);
         l.f = f;
@@ -609,7 +653,15 @@ profile::impl::add_login_data_file (const mobius::core::io::file &f)
         logins_.push_back (l);
     }
 
-    is_valid_ = true;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Emit sampling_file event
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::emit (
+        "sampling_file",
+        "app.chromium.login_data." +
+            mobius::core::string::to_string (fl.get_schema_version (), 5),
+        f.new_reader ()
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -632,14 +684,10 @@ profile::impl::add_preferences_file (const mobius::core::io::file &f)
         return;
     }
 
-    log.info (
-        __LINE__,
-        "File " + f.get_path () + " is a valid 'Preferences' file"
-    );
+    log.info (__LINE__, "File decoded [Preferences]: " + f.get_path ());
 
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
-        last_modified_time_ = f.get_modification_time ();
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Set profile data
@@ -662,7 +710,7 @@ profile::impl::add_preferences_file (const mobius::core::io::file &f)
         a.name = entry.name;
         a.emails.push_back (entry.email);
         a.names.push_back (entry.full_name);
-        
+
         a.metadata = entry.metadata.clone ();
         a.metadata.set ("picture_url", entry.picture_url);
         a.f = f;
@@ -670,7 +718,13 @@ profile::impl::add_preferences_file (const mobius::core::io::file &f)
         accounts_.push_back (a);
     }
 
-    is_valid_ = true;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Emit sampling_file event
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::emit (
+        "sampling_file", std::string ("app.chromium.preferences"),
+        f.new_reader ()
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -685,27 +739,23 @@ profile::impl::add_web_data_file (const mobius::core::io::file &f)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Decode file
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    file_web_data web_data (f.new_reader ());
+    file_web_data fw (f.new_reader ());
 
-    if (!web_data)
+    if (!fw)
     {
         log.info (__LINE__, "File is not a valid 'Web Data' file");
         return;
     }
 
-    log.info (
-        __LINE__,
-        "File " + f.get_path () + " is a valid 'Web Data' file"
-    );
+    log.info (__LINE__, "File decoded [Web Data]: " + f.get_path ());
 
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
-        last_modified_time_ = f.get_modification_time ();
+    _set_folder (f.get_parent ());
+    _update_mtime (f);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add autofill entries
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    for (const auto &entry : web_data.get_autofill_entries ())
+    for (const auto &entry : fw.get_autofill_entries ())
     {
         autofill a;
 
@@ -714,7 +764,7 @@ profile::impl::add_web_data_file (const mobius::core::io::file &f)
         a.count = entry.count;
         a.date_created = entry.date_created;
         a.date_last_used = entry.date_last_used;
-        a.schema_version = web_data.get_schema_version ();
+        a.schema_version = fw.get_schema_version ();
         a.is_encrypted = entry.is_encrypted;
 
         if (entry.is_encrypted)
@@ -730,7 +780,7 @@ profile::impl::add_web_data_file (const mobius::core::io::file &f)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add accounts (and autofill)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    for (const auto &p : web_data.get_autofill_profiles ())
+    for (const auto &p : fw.get_autofill_profiles ())
     {
         account acc;
 
@@ -742,16 +792,14 @@ profile::impl::add_web_data_file (const mobius::core::io::file &f)
 
         // Phone numbers
         std::transform (
-            p.phones.begin (),
-            p.phones.end (),
+            p.phones.begin (), p.phones.end (),
             std::back_inserter (acc.phone_numbers),
             [] (const auto &phone) { return phone.number; }
         );
 
         // Addresses
         std::transform (
-            p.addresses.begin (),
-            p.addresses.end (),
+            p.addresses.begin (), p.addresses.end (),
             std::back_inserter (acc.addresses),
             [] (const auto &addr)
             {
@@ -788,7 +836,7 @@ profile::impl::add_web_data_file (const mobius::core::io::file &f)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add credit cards
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    for (const auto &card : web_data.get_credit_cards ())
+    for (const auto &card : fw.get_credit_cards ())
     {
         credit_card c (card);
         c.f = f;
@@ -796,7 +844,15 @@ profile::impl::add_web_data_file (const mobius::core::io::file &f)
         credit_cards_.push_back (c);
     }
 
-    is_valid_ = true;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Emit sampling_file event
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::emit (
+        "sampling_file",
+        "app.chromium.web_data." +
+            mobius::core::string::to_string (fw.get_schema_version (), 5),
+        f.new_reader ()
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -845,16 +901,6 @@ mobius::core::io::folder
 profile::get_folder () const
 {
     return impl_->get_folder ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set folder
-// @param f Folder
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-profile::set_folder (const mobius::core::io::folder &f)
-{
-    impl_->set_folder (f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
