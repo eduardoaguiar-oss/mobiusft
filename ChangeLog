@@ -10,7 +10,7 @@ Mobius Forensic Toolkit 2.20
 	* app-chromium: Changed to move sampling_file events to profile instead of file-xxx modules
 	* app-chromium: Changed to emit sampling_folder (sampling_id, folder)
 	* app-chromium: Added support for Cookies files v6
-	* app-chromium: Added support for Login Data files v3
+	* app-chromium: Added support for Login Data files v3 and v42
 	* app-chromium: Added support for Web Data files v52
 	* libmobius_core: Changed io::folder::get_children method to return std::vector
 	* libmobius_core: Changed io::folder::new_file method
@@ -33,6 +33,8 @@ Mobius Forensic Toolkit 2.20
 	* libmobius_core: Changed io::smb::folder_impl::get_children method to return std::vector
 	* libmobius_core: Removed io::smb::folder_impl::new_file method
 	* libmobius_core: Removed io::smb::folder_impl::new_folder method
+	* libmobius_core: Added new function core::ui::build_widget_from_low_level
+	* libmobius_core: Removed constructor core::ui::widget (any, bool)
 	* libmobius_python: framework/module changed to handle sampling_file event and callbacks
 	* libmobius_python: framework/module changed to handle sampling_folder event and callbacks
 	* ant.evidence.vfs.received_files: Removed utorrent code

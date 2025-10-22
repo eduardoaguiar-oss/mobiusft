@@ -3,7 +3,9 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -18,9 +20,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/core/bytearray.hpp>
 #include <mobius/core/ui/icon_impl_base.hpp>
 #include <mobius/core/ui/widget.hpp>
-#include <mobius/core/bytearray.hpp>
 
 namespace mobius::core::ui
 {
@@ -30,68 +32,73 @@ namespace mobius::core::ui
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class icon : public widget
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Datatypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  using size_type = icon_impl_base::size_type;
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Datatypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    using size_type = icon_impl_base::size_type;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  icon ();
-  explicit icon (const std::shared_ptr <icon_impl_base>&);
-  explicit icon (const widget&);
-  icon (icon&&) noexcept = default;
-  icon (const icon&) noexcept = default;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    icon ();
+    explicit icon (const std::shared_ptr<icon_impl_base> &);
+    explicit icon (const widget &);
+    icon (icon &&) noexcept = default;
+    icon (const icon &) noexcept = default;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Operators
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  icon& operator= (const icon&) noexcept = default;
-  icon& operator= (icon&&) noexcept = default;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    icon &operator= (const icon &) noexcept = default;
+    icon &operator= (icon &&) noexcept = default;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Convert icon to widget
-  // @return Widget
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  widget
-  as_widget () const
-  {
-    return widget (_impl <widget_impl_base> ());
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Convert icon to widget
+    // @return Widget
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    widget
+    as_widget () const
+    {
+        return widget (_impl<widget_impl_base> ());
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Set icon from data
-  // @param data Icon data
-  // @param size Icon size
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void
-  set_icon_from_data (const mobius::core::bytearray& data, size_type size)
-  {
-    _impl <icon_impl_base> ()->set_icon_from_data (data, size);
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Set icon from data
+    // @param data Icon data
+    // @param size Icon size
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void
+    set_icon_from_data (const mobius::core::bytearray &data, size_type size)
+    {
+        _impl<icon_impl_base> ()->set_icon_from_data (data, size);
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void set_icon_by_name (const std::string&, size_type = size_type::toolbar);
-  void set_icon_by_path (const std::string&, size_type = size_type::toolbar);
-  void set_icon_by_url (const std::string&, size_type = size_type::toolbar);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void set_icon_by_name (const std::string &, size_type = size_type::toolbar);
+    void set_icon_by_path (const std::string &, size_type = size_type::toolbar);
+    void set_icon_by_url (const std::string &, size_type = size_type::toolbar);
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void set_icon_path (const std::string&);
-icon new_icon_by_name (const std::string&, icon::size_type = icon::size_type::toolbar);
-icon new_icon_by_path (const std::string&, icon::size_type = icon::size_type::toolbar);
-icon new_icon_by_url (const std::string&, icon::size_type = icon::size_type::toolbar);
-icon new_icon_from_data (const mobius::core::bytearray&, icon::size_type = icon::size_type::toolbar);
-
+void set_icon_path (const std::string &);
+icon new_icon_by_name (
+    const std::string &, icon::size_type = icon::size_type::toolbar
+);
+icon new_icon_by_path (
+    const std::string &, icon::size_type = icon::size_type::toolbar
+);
+icon new_icon_by_url (
+    const std::string &, icon::size_type = icon::size_type::toolbar
+);
+icon new_icon_from_data (
+    const mobius::core::bytearray &, icon::size_type = icon::size_type::toolbar
+);
 
 } // namespace mobius::core::ui
 
 #endif
-
-

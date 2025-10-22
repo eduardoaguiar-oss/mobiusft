@@ -34,7 +34,10 @@ icon_impl::icon_impl (GtkWidget *widget)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-icon_impl::~icon_impl () { g_object_unref (G_OBJECT (widget_)); }
+icon_impl::~icon_impl ()
+{
+    g_object_unref (G_OBJECT (widget_));
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Set widget sensitive
@@ -84,8 +87,9 @@ icon_impl::set_icon_by_name (const std::string &name, size_type size)
         gtk_icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
     };
 
-    gtk_image_set_from_icon_name (reinterpret_cast<GtkImage *> (widget_),
-                                  name.c_str (), gtk_icon_size);
+    gtk_image_set_from_icon_name (
+        reinterpret_cast<GtkImage *> (widget_), name.c_str (), gtk_icon_size
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -94,12 +98,14 @@ icon_impl::set_icon_by_name (const std::string &name, size_type size)
 // @param size Icon size
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-icon_impl::set_icon_from_data (const mobius::core::bytearray &data,
-                               size_type size)
+icon_impl::set_icon_from_data (
+    const mobius::core::bytearray &data, size_type size
+)
 {
     GdkPixbufLoader *loader = gdk_pixbuf_loader_new ();
-    gdk_pixbuf_loader_set_size (loader, static_cast<int> (size),
-                                static_cast<int> (size));
+    gdk_pixbuf_loader_set_size (
+        loader, static_cast<int> (size), static_cast<int> (size)
+    );
     gdk_pixbuf_loader_write (loader, data.data (), data.size (), nullptr);
     gdk_pixbuf_loader_close (loader, nullptr);
 

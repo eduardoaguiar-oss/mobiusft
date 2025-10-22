@@ -1,6 +1,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -20,9 +22,9 @@
 // @file extension.cc C++ API <i>mobius.core.extension</i> class wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <pymobius.hpp>
 #include "extension.hpp"
 #include <mobius/core/exception.inc>
+#include <pymobius.hpp>
 #include <stdexcept>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -33,7 +35,9 @@
 bool
 pymobius_core_extension_check (PyObject *value)
 {
-  return PyObject_IsInstance (value, reinterpret_cast<PyObject *> (&core_extension_t));
+    return PyObject_IsInstance (
+        value, reinterpret_cast<PyObject *> (&core_extension_t)
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -42,14 +46,14 @@ pymobius_core_extension_check (PyObject *value)
 // @return New extension object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_core_extension_to_pyobject (const mobius::core::extension& obj)
+pymobius_core_extension_to_pyobject (const mobius::core::extension &obj)
 {
-  PyObject *ret = _PyObject_New (&core_extension_t);
+    PyObject *ret = _PyObject_New (&core_extension_t);
 
-  if (ret)
-    ((core_extension_o *) ret)->obj = new mobius::core::extension (obj);
+    if (ret)
+        ((core_extension_o *) ret)->obj = new mobius::core::extension (obj);
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -60,10 +64,12 @@ pymobius_core_extension_to_pyobject (const mobius::core::extension& obj)
 mobius::core::extension
 pymobius_core_extension_from_pyobject (PyObject *value)
 {
-  if (!pymobius_core_extension_check (value))
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("object must be an instance of mobius.core.extension"));
+    if (!pymobius_core_extension_check (value))
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (
+            "object must be an instance of mobius.core.extension"
+        ));
 
-  return * (reinterpret_cast <core_extension_o *>(value)->obj);
+    return *(reinterpret_cast<core_extension_o *> (value)->obj);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -72,20 +78,20 @@ pymobius_core_extension_from_pyobject (PyObject *value)
 // @return <i>id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_id (core_extension_o *self)
+tp_getter_id (core_extension_o *self, void *)
 {
-  PyObject *ret = nullptr;
+    PyObject *ret = nullptr;
 
-  try
+    try
     {
-      ret = mobius::py::pystring_from_std_string (self->obj->get_id ());
+        ret = mobius::py::pystring_from_std_string (self->obj->get_id ());
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
+        mobius::py::set_runtime_error (e.what ());
     }
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -94,20 +100,20 @@ tp_getter_id (core_extension_o *self)
 // @return <i>name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_name (core_extension_o *self)
+tp_getter_name (core_extension_o *self, void *)
 {
-  PyObject *ret = nullptr;
+    PyObject *ret = nullptr;
 
-  try
+    try
     {
-      ret = mobius::py::pystring_from_std_string (self->obj->get_name ());
+        ret = mobius::py::pystring_from_std_string (self->obj->get_name ());
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
+        mobius::py::set_runtime_error (e.what ());
     }
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -116,20 +122,20 @@ tp_getter_name (core_extension_o *self)
 // @return <i>version</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_version (core_extension_o *self)
+tp_getter_version (core_extension_o *self, void *)
 {
-  PyObject *ret = nullptr;
+    PyObject *ret = nullptr;
 
-  try
+    try
     {
-      ret = mobius::py::pystring_from_std_string (self->obj->get_version ());
+        ret = mobius::py::pystring_from_std_string (self->obj->get_version ());
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
+        mobius::py::set_runtime_error (e.what ());
     }
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -138,20 +144,20 @@ tp_getter_version (core_extension_o *self)
 // @return <i>authors</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_authors (core_extension_o *self)
+tp_getter_authors (core_extension_o *self, void *)
 {
-  PyObject *ret = nullptr;
+    PyObject *ret = nullptr;
 
-  try
+    try
     {
-      ret = mobius::py::pystring_from_std_string (self->obj->get_authors ());
+        ret = mobius::py::pystring_from_std_string (self->obj->get_authors ());
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
+        mobius::py::set_runtime_error (e.what ());
     }
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -160,63 +166,39 @@ tp_getter_authors (core_extension_o *self)
 // @return <i>description</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_description (core_extension_o *self)
+tp_getter_description (core_extension_o *self, void *)
 {
-  PyObject *ret = nullptr;
+    PyObject *ret = nullptr;
 
-  try
+    try
     {
-      ret = mobius::py::pystring_from_std_string (self->obj->get_description ());
+        ret = mobius::py::pystring_from_std_string (
+            self->obj->get_description ()
+        );
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
+        mobius::py::set_runtime_error (e.what ());
     }
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Getters and setters structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyGetSetDef tp_getset[] =
-{
-  {
-    (char *) "id",
-    (getter) tp_getter_id,
-    (setter) 0,
-    (char *) "Extension ID",
-    nullptr
-  },
-  {
-    (char *) "name",
-    (getter) tp_getter_name,
-    (setter) 0,
-    (char *) "Extension name",
-    nullptr
-  },
-  {
-    (char *) "version",
-    (getter) tp_getter_version,
-    (setter) 0,
-    (char *) "Extension version",
-    nullptr
-  },
-  {
-    (char *) "authors",
-    (getter) tp_getter_authors,
-    (setter) 0,
-    (char *) "Authors",
-    nullptr
-  },
-  {
-    (char *) "description",
-    (getter) tp_getter_description,
-    (setter) 0,
-    (char *) "Description",
-    nullptr
-  },
-  {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
+static PyGetSetDef tp_getset[] = {
+    {(char *) "id", (getter) tp_getter_id, (setter) 0, (char *) "Extension ID",
+     nullptr},
+    {(char *) "name", (getter) tp_getter_name, (setter) 0,
+     (char *) "Extension name", nullptr},
+    {(char *) "version", (getter) tp_getter_version, (setter) 0,
+     (char *) "Extension version", nullptr},
+    {(char *) "authors", (getter) tp_getter_authors, (setter) 0,
+     (char *) "Authors", nullptr},
+    {(char *) "description", (getter) tp_getter_description, (setter) 0,
+     (char *) "Description", nullptr},
+    {nullptr, nullptr, nullptr, nullptr, nullptr} // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -227,19 +209,19 @@ static PyGetSetDef tp_getset[] =
 static PyObject *
 tp_f_start (core_extension_o *self, PyObject *)
 {
-  // Execute C++ function
-  try
+    // Execute C++ function
+    try
     {
-      self->obj->start ();
+        self->obj->start ();
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
-      return nullptr;
+        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
     }
 
-  // return None
-  return mobius::py::pynone ();
+    // return None
+    return mobius::py::pynone ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -250,19 +232,19 @@ tp_f_start (core_extension_o *self, PyObject *)
 static PyObject *
 tp_f_stop (core_extension_o *self, PyObject *)
 {
-  // Execute C++ function
-  try
+    // Execute C++ function
+    try
     {
-      self->obj->stop ();
+        self->obj->stop ();
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
-      return nullptr;
+        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
     }
 
-  // return None
-  return mobius::py::pynone ();
+    // return None
+    return mobius::py::pynone ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -273,19 +255,19 @@ tp_f_stop (core_extension_o *self, PyObject *)
 static PyObject *
 tp_f_install (core_extension_o *self, PyObject *)
 {
-  // Execute C++ function
-  try
+    // Execute C++ function
+    try
     {
-      self->obj->install ();
+        self->obj->install ();
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
-      return nullptr;
+        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
     }
 
-  // return None
-  return mobius::py::pynone ();
+    // return None
+    return mobius::py::pynone ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -296,51 +278,33 @@ tp_f_install (core_extension_o *self, PyObject *)
 static PyObject *
 tp_f_uninstall (core_extension_o *self, PyObject *)
 {
-  // Execute C++ function
-  try
+    // Execute C++ function
+    try
     {
-      self->obj->uninstall ();
+        self->obj->uninstall ();
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
-      return nullptr;
+        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
     }
 
-  // return None
-  return mobius::py::pynone ();
+    // return None
+    return mobius::py::pynone ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyMethodDef tp_methods[] =
-{
-  {
-    (char *) "start",
-    (PyCFunction) tp_f_start,
-    METH_VARARGS,
-    "Start extension"
-  },
-  {
-    (char *) "stop",
-    (PyCFunction) tp_f_stop,
-    METH_VARARGS,
-    "Stop extension"
-  },
-  {
-    (char *) "install",
-    (PyCFunction) tp_f_install,
-    METH_VARARGS,
-    "Install extension"
-  },
-  {
-    (char *) "uninstall",
-    (PyCFunction) tp_f_uninstall,
-    METH_VARARGS,
-    "Uninstall extension"
-  },
-  {nullptr, nullptr, 0, nullptr} // sentinel
+static PyMethodDef tp_methods[] = {
+    {(char *) "start", (PyCFunction) tp_f_start, METH_VARARGS,
+     "Start extension"},
+    {(char *) "stop", (PyCFunction) tp_f_stop, METH_VARARGS, "Stop extension"},
+    {(char *) "install", (PyCFunction) tp_f_install, METH_VARARGS,
+     "Install extension"},
+    {(char *) "uninstall", (PyCFunction) tp_f_uninstall, METH_VARARGS,
+     "Uninstall extension"},
+    {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -353,38 +317,38 @@ static PyMethodDef tp_methods[] =
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
-  // Parse input args
-  std::string arg_path;
+    // Parse input args
+    std::string arg_path;
 
-  try
+    try
     {
-      arg_path = mobius::py::get_arg_as_std_string (args, 0);
+        arg_path = mobius::py::get_arg_as_std_string (args, 0);
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_invalid_type_error (e.what ());
-      return nullptr;
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
     }
 
+    // Create Python object
+    core_extension_o *ret =
+        reinterpret_cast<core_extension_o *> (type->tp_alloc (type, 0));
 
-  // Create Python object
-  core_extension_o *ret = reinterpret_cast <core_extension_o *> (type->tp_alloc (type, 0));
-
-  if (ret)
+    if (ret)
     {
-      try
+        try
         {
-          ret->obj = new mobius::core::extension (arg_path);
+            ret->obj = new mobius::core::extension (arg_path);
         }
-      catch (const std::exception& e)
+        catch (const std::exception &e)
         {
-          Py_DECREF (ret);
-          mobius::py::set_runtime_error (e.what ());
-          ret = nullptr;
+            Py_DECREF (ret);
+            mobius::py::set_runtime_error (e.what ());
+            ret = nullptr;
         }
     }
 
-  return reinterpret_cast <PyObject *> (ret);
+    return reinterpret_cast<PyObject *> (ret);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -394,63 +358,60 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 static void
 tp_dealloc (core_extension_o *self)
 {
-  delete self->obj;
-  Py_TYPE (self)->tp_free ((PyObject*) self);
+    delete self->obj;
+    Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Type structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_extension_t =
-{
-  PyVarObject_HEAD_INIT (nullptr, 0)                    // header
-  "mobius.core.extension",                 		// tp_name
-  sizeof (core_extension_o),               		// tp_basicsize
-  0,                                       		// tp_itemsize
-  (destructor) tp_dealloc,                 		// tp_dealloc
-  0,                                       		// tp_print
-  0,                                       		// tp_getattr
-  0,                                       		// tp_setattr
-  0,                                       		// tp_compare
-  0,                                       		// tp_repr
-  0,                                       		// tp_as_number
-  0,                                       		// tp_as_sequence
-  0,                                       		// tp_as_mapping
-  0,                                       		// tp_hash
-  0,                                       		// tp_call
-  0,                                       		// tp_str
-  0,                                       		// tp_getattro
-  0,                                       		// tp_setattro
-  0,                                       		// tp_as_buffer
-  Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,		// tp_flags
-  "C++ extension class",                   		// tp_doc
-  0,                                       		// tp_traverse
-  0,                                       		// tp_clear
-  0,                                       		// tp_richcompare
-  0,                                       		// tp_weaklistoffset
-  0,                                       		// tp_iter
-  0,                                       		// tp_iternext
-  tp_methods,                              		// tp_methods
-  0,                                       		// tp_members
-  tp_getset,                               		// tp_getset
-  0,                                       		// tp_base
-  0,                                       		// tp_dict
-  0,                                       		// tp_descr_get
-  0,                                       		// tp_descr_set
-  0,                                       		// tp_dictoffset
-  0,                                       		// tp_init
-  0,                                       		// tp_alloc
-  tp_new,                                  		// tp_new
-  0,                                       		// tp_free
-  0,                                       		// tp_is_gc
-  0,                                       		// tp_bases
-  0,                                       		// tp_mro
-  0,                                       		// tp_cache
-  0,                                       		// tp_subclasses
-  0,                                       		// tp_weaklist
-  0,                                       		// tp_del
-  0,                                       		// tp_version_tag
-  0,							// tp_finalize
+PyTypeObject core_extension_t = {
+    PyVarObject_HEAD_INIT (nullptr, 0)        // header
+    "mobius.core.extension",                  // tp_name
+    sizeof (core_extension_o),                // tp_basicsize
+    0,                                        // tp_itemsize
+    (destructor) tp_dealloc,                  // tp_dealloc
+    0,                                        // tp_print
+    0,                                        // tp_getattr
+    0,                                        // tp_setattr
+    0,                                        // tp_compare
+    0,                                        // tp_repr
+    0,                                        // tp_as_number
+    0,                                        // tp_as_sequence
+    0,                                        // tp_as_mapping
+    0,                                        // tp_hash
+    0,                                        // tp_call
+    0,                                        // tp_str
+    0,                                        // tp_getattro
+    0,                                        // tp_setattro
+    0,                                        // tp_as_buffer
+    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
+    "C++ extension class",                    // tp_doc
+    0,                                        // tp_traverse
+    0,                                        // tp_clear
+    0,                                        // tp_richcompare
+    0,                                        // tp_weaklistoffset
+    0,                                        // tp_iter
+    0,                                        // tp_iternext
+    tp_methods,                               // tp_methods
+    0,                                        // tp_members
+    tp_getset,                                // tp_getset
+    0,                                        // tp_base
+    0,                                        // tp_dict
+    0,                                        // tp_descr_get
+    0,                                        // tp_descr_set
+    0,                                        // tp_dictoffset
+    0,                                        // tp_init
+    0,                                        // tp_alloc
+    tp_new,                                   // tp_new
+    0,                                        // tp_free
+    0,                                        // tp_is_gc
+    0,                                        // tp_bases
+    0,                                        // tp_mro
+    0,                                        // tp_cache
+    0,                                        // tp_subclasses
+    0,                                        // tp_weaklist
+    0,                                        // tp_del
+    0,                                        // tp_version_tag
+    0,                                        // tp_finalize
 };
-
-

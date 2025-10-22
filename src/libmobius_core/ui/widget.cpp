@@ -42,13 +42,14 @@ widget::widget (const std::shared_ptr<widget_impl_base> &impl)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Constructor from low level widget
+// @brief Buiild widget from low level widget
 // @param w Low level widget
 // @param is_owner If widget is owner of <i>w</i>
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-widget::widget (std::any w, bool is_owner)
-    : impl_ (get_implementation ()->new_widget (w, is_owner))
+widget
+build_widget_from_low_level (std::any w, bool is_owner)
 {
+    return widget (get_implementation ()->new_widget (w, is_owner));
 }
 
 } // namespace mobius::core::ui

@@ -413,7 +413,7 @@ pymobius_core_ui_widget_from_pyobject (PyObject *value)
             throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (
                 "could not convert argument to GtkWidget"));
 
-        w = mobius::core::ui::widget (wp);
+        w = mobius::core::ui::build_widget_from_low_level (wp);
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

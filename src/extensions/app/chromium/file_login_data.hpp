@@ -60,6 +60,9 @@ class file_login_data
         // @brief Date created
         mobius::core::datetime::datetime date_created;
 
+        // @brief Date last filled
+        mobius::core::datetime::datetime date_last_filled;
+
         // @brief Date last used
         mobius::core::datetime::datetime date_last_used;
 

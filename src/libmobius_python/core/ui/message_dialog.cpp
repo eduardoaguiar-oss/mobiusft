@@ -34,7 +34,7 @@
 // @return <i>type</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_type (core_ui_message_dialog_o *self)
+tp_getter_type (core_ui_message_dialog_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -57,7 +57,7 @@ tp_getter_type (core_ui_message_dialog_o *self)
 // @return <i>title</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_title (core_ui_message_dialog_o *self)
+tp_getter_title (core_ui_message_dialog_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -115,7 +115,7 @@ tp_setter_title (core_ui_message_dialog_o *self, PyObject *value, void *)
 // @return <i>text</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_text (core_ui_message_dialog_o *self)
+tp_getter_text (core_ui_message_dialog_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -173,7 +173,7 @@ tp_setter_text (core_ui_message_dialog_o *self, PyObject *value, void *)
 // @return <i>informative_text</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_informative_text (core_ui_message_dialog_o *self)
+tp_getter_informative_text (core_ui_message_dialog_o *self, void *)
 {
     PyObject *ret = nullptr;
 

@@ -3,7 +3,7 @@ name=CSAM
 description=Child Sexual Abuse Material focused profile
 
 [processor]
-scope=all	# all = all folders, users = only users folders and subfolders
+scope=users	# all = all folders, users = only users folders and subfolders
 
 [processors]
 app-ares

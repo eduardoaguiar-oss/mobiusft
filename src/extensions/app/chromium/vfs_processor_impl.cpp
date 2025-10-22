@@ -577,6 +577,7 @@ vfs_processor_impl::_save_passwords ()
             metadata.set ("avatar_url", login.avatar_url);
             metadata.set ("blacklisted_by_user", login.blacklisted_by_user);
             metadata.set ("date_created", login.date_created);
+            metadata.set ("date_last_filled", login.date_last_filled);
             metadata.set ("date_last_used", login.date_last_used);
             metadata.set (
                 "date_password_modified", login.date_password_modified
