@@ -35,8 +35,12 @@ Mobius Forensic Toolkit 2.20
 	* libmobius_core: Removed io::smb::folder_impl::new_folder method
 	* libmobius_core: Added new function core::ui::build_widget_from_low_level
 	* libmobius_core: Removed constructor core::ui::widget (any, bool)
-	* libmobius_python: framework/module changed to handle sampling_file event and callbacks
-	* libmobius_python: framework/module changed to handle sampling_folder event and callbacks
+	* libmobius_python: Changed framework/module to handle sampling_file event and callbacks
+	* libmobius_python: Changed framework/module to handle sampling_folder event and callbacks
+	* libmobius_python: Changed core.io.file module to fix PyCFunction signatures
+	* libmobius_python: Changed core.io.folder module to fix PyCFunction signatures
+	* libmobius_python: Changed core.vfs.block module to fix PyCFunction signatures
+	* libmobius_python: Changed all tp_getter_xxx functions to fix getter functions signatures
 	* ant.evidence.vfs.received_files: Removed utorrent code
 	* ant.evidence.vfs: Removed call to app-utorrent evidence loader
 	* pymobius.app.utorrent: Removed module

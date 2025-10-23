@@ -76,7 +76,7 @@ pymobius_core_os_win_credential_from_pyobject (PyObject *pyobj)
 // @return <i>domain</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_domain (core_os_win_credential_o *self)
+tp_getter_domain (core_os_win_credential_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -98,7 +98,7 @@ tp_getter_domain (core_os_win_credential_o *self)
 // @return <i>username</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_username (core_os_win_credential_o *self)
+tp_getter_username (core_os_win_credential_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -120,7 +120,7 @@ tp_getter_username (core_os_win_credential_o *self)
 // @return <i>password</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_password (core_os_win_credential_o *self)
+tp_getter_password (core_os_win_credential_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -142,7 +142,7 @@ tp_getter_password (core_os_win_credential_o *self)
 // @return <i>password_data</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_password_data (core_os_win_credential_o *self)
+tp_getter_password_data (core_os_win_credential_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -165,7 +165,7 @@ tp_getter_password_data (core_os_win_credential_o *self)
 // @return <i>flags</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_flags (core_os_win_credential_o *self)
+tp_getter_flags (core_os_win_credential_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -187,7 +187,7 @@ tp_getter_flags (core_os_win_credential_o *self)
 // @return <i>last_update_time</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_last_update_time (core_os_win_credential_o *self)
+tp_getter_last_update_time (core_os_win_credential_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -210,7 +210,7 @@ tp_getter_last_update_time (core_os_win_credential_o *self)
 // @return <i>data</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_data (core_os_win_credential_o *self)
+tp_getter_data (core_os_win_credential_o *self, void *)
 {
     PyObject *ret = nullptr;
 

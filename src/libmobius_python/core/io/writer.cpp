@@ -82,7 +82,7 @@ pymobius_core_io_writer_from_pyobject (PyObject *value)
 // @brief is_seekable getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_is_seekable (core_io_writer_o *self)
+tp_getter_is_seekable (core_io_writer_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -102,7 +102,7 @@ tp_getter_is_seekable (core_io_writer_o *self)
 // @brief is_rewindable getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_is_rewindable (core_io_writer_o *self)
+tp_getter_is_rewindable (core_io_writer_o *self, void *)
 {
     PyObject *ret = nullptr;
 

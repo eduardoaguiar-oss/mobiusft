@@ -78,7 +78,7 @@ pymobius_core_decoder_lnk_from_pyobject (PyObject *value)
 // @return <i>header_size</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_header_size (core_decoder_lnk_o *self)
+tp_getter_header_size (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -101,7 +101,7 @@ tp_getter_header_size (core_decoder_lnk_o *self)
 // @return <i>clsid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_clsid (core_decoder_lnk_o *self)
+tp_getter_clsid (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -123,7 +123,7 @@ tp_getter_clsid (core_decoder_lnk_o *self)
 // @return <i>flags</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_flags (core_decoder_lnk_o *self)
+tp_getter_flags (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -145,7 +145,7 @@ tp_getter_flags (core_decoder_lnk_o *self)
 // @return <i>file_attributes</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_file_attributes (core_decoder_lnk_o *self)
+tp_getter_file_attributes (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -168,7 +168,7 @@ tp_getter_file_attributes (core_decoder_lnk_o *self)
 // @return <i>creation_time</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_creation_time (core_decoder_lnk_o *self)
+tp_getter_creation_time (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -191,7 +191,7 @@ tp_getter_creation_time (core_decoder_lnk_o *self)
 // @return <i>access_time</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_access_time (core_decoder_lnk_o *self)
+tp_getter_access_time (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -214,7 +214,7 @@ tp_getter_access_time (core_decoder_lnk_o *self)
 // @return <i>write_time</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_write_time (core_decoder_lnk_o *self)
+tp_getter_write_time (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -237,7 +237,7 @@ tp_getter_write_time (core_decoder_lnk_o *self)
 // @return <i>file_size</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_file_size (core_decoder_lnk_o *self)
+tp_getter_file_size (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -260,7 +260,7 @@ tp_getter_file_size (core_decoder_lnk_o *self)
 // @return <i>icon_index</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_icon_index (core_decoder_lnk_o *self)
+tp_getter_icon_index (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -283,7 +283,7 @@ tp_getter_icon_index (core_decoder_lnk_o *self)
 // @return <i>show_command</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_show_command (core_decoder_lnk_o *self)
+tp_getter_show_command (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -306,7 +306,7 @@ tp_getter_show_command (core_decoder_lnk_o *self)
 // @return <i>hotkeys</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_hotkeys (core_decoder_lnk_o *self)
+tp_getter_hotkeys (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -328,7 +328,7 @@ tp_getter_hotkeys (core_decoder_lnk_o *self)
 // @return <i>volume_label</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_volume_label (core_decoder_lnk_o *self)
+tp_getter_volume_label (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -351,7 +351,7 @@ tp_getter_volume_label (core_decoder_lnk_o *self)
 // @return <i>drive_type</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_drive_type (core_decoder_lnk_o *self)
+tp_getter_drive_type (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -374,7 +374,7 @@ tp_getter_drive_type (core_decoder_lnk_o *self)
 // @return <i>drive_serial_number</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_drive_serial_number (core_decoder_lnk_o *self)
+tp_getter_drive_serial_number (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -397,7 +397,7 @@ tp_getter_drive_serial_number (core_decoder_lnk_o *self)
 // @return <i>local_base_path</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_local_base_path (core_decoder_lnk_o *self)
+tp_getter_local_base_path (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -420,7 +420,7 @@ tp_getter_local_base_path (core_decoder_lnk_o *self)
 // @return <i>common_path_suffix</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_common_path_suffix (core_decoder_lnk_o *self)
+tp_getter_common_path_suffix (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -443,7 +443,7 @@ tp_getter_common_path_suffix (core_decoder_lnk_o *self)
 // @return <i>net_name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_net_name (core_decoder_lnk_o *self)
+tp_getter_net_name (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -465,7 +465,7 @@ tp_getter_net_name (core_decoder_lnk_o *self)
 // @return <i>device_name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_device_name (core_decoder_lnk_o *self)
+tp_getter_device_name (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -488,7 +488,7 @@ tp_getter_device_name (core_decoder_lnk_o *self)
 // @return <i>network_provider_type</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_network_provider_type (core_decoder_lnk_o *self)
+tp_getter_network_provider_type (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -511,7 +511,7 @@ tp_getter_network_provider_type (core_decoder_lnk_o *self)
 // @return <i>name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_name (core_decoder_lnk_o *self)
+tp_getter_name (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -533,7 +533,7 @@ tp_getter_name (core_decoder_lnk_o *self)
 // @return <i>relative_path</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_relative_path (core_decoder_lnk_o *self)
+tp_getter_relative_path (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -556,7 +556,7 @@ tp_getter_relative_path (core_decoder_lnk_o *self)
 // @return <i>working_dir</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_working_dir (core_decoder_lnk_o *self)
+tp_getter_working_dir (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -579,7 +579,7 @@ tp_getter_working_dir (core_decoder_lnk_o *self)
 // @return <i>arguments</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_arguments (core_decoder_lnk_o *self)
+tp_getter_arguments (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -602,7 +602,7 @@ tp_getter_arguments (core_decoder_lnk_o *self)
 // @return <i>icon_location</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_icon_location (core_decoder_lnk_o *self)
+tp_getter_icon_location (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -625,7 +625,7 @@ tp_getter_icon_location (core_decoder_lnk_o *self)
 // @return <i>netbios_name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_netbios_name (core_decoder_lnk_o *self)
+tp_getter_netbios_name (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -648,7 +648,7 @@ tp_getter_netbios_name (core_decoder_lnk_o *self)
 // @return <i>header_offset</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_header_offset (core_decoder_lnk_o *self)
+tp_getter_header_offset (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -671,7 +671,7 @@ tp_getter_header_offset (core_decoder_lnk_o *self)
 // @return <i>link_target_id_list_offset</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_link_target_id_list_offset (core_decoder_lnk_o *self)
+tp_getter_link_target_id_list_offset (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -694,7 +694,7 @@ tp_getter_link_target_id_list_offset (core_decoder_lnk_o *self)
 // @return <i>link_info_offset</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_link_info_offset (core_decoder_lnk_o *self)
+tp_getter_link_info_offset (core_decoder_lnk_o *self, void *)
 {
     PyObject *ret = nullptr;
 

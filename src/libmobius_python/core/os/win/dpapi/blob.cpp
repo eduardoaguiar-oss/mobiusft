@@ -79,7 +79,7 @@ pymobius_core_os_win_dpapi_blob_from_pyobject (PyObject *value)
 // @return <i>revision</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_revision (core_os_win_dpapi_blob_o *self)
+tp_getter_revision (core_os_win_dpapi_blob_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -101,7 +101,7 @@ tp_getter_revision (core_os_win_dpapi_blob_o *self)
 // @return <i>provider_guid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_provider_guid (core_os_win_dpapi_blob_o *self)
+tp_getter_provider_guid (core_os_win_dpapi_blob_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -124,7 +124,7 @@ tp_getter_provider_guid (core_os_win_dpapi_blob_o *self)
 // @return <i>master_key_revision</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_master_key_revision (core_os_win_dpapi_blob_o *self)
+tp_getter_master_key_revision (core_os_win_dpapi_blob_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -147,7 +147,7 @@ tp_getter_master_key_revision (core_os_win_dpapi_blob_o *self)
 // @return <i>master_key_guid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_master_key_guid (core_os_win_dpapi_blob_o *self)
+tp_getter_master_key_guid (core_os_win_dpapi_blob_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -170,7 +170,7 @@ tp_getter_master_key_guid (core_os_win_dpapi_blob_o *self)
 // @return <i>flags</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_flags (core_os_win_dpapi_blob_o *self)
+tp_getter_flags (core_os_win_dpapi_blob_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -192,7 +192,7 @@ tp_getter_flags (core_os_win_dpapi_blob_o *self)
 // @return <i>description</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_description (core_os_win_dpapi_blob_o *self)
+tp_getter_description (core_os_win_dpapi_blob_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -215,7 +215,7 @@ tp_getter_description (core_os_win_dpapi_blob_o *self)
 // @return <i>cipher_id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_cipher_id (core_os_win_dpapi_blob_o *self)
+tp_getter_cipher_id (core_os_win_dpapi_blob_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -238,7 +238,7 @@ tp_getter_cipher_id (core_os_win_dpapi_blob_o *self)
 // @return <i>key_length</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_key_length (core_os_win_dpapi_blob_o *self)
+tp_getter_key_length (core_os_win_dpapi_blob_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -261,7 +261,7 @@ tp_getter_key_length (core_os_win_dpapi_blob_o *self)
 // @return <i>salt</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_salt (core_os_win_dpapi_blob_o *self)
+tp_getter_salt (core_os_win_dpapi_blob_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -283,7 +283,7 @@ tp_getter_salt (core_os_win_dpapi_blob_o *self)
 // @return <i>hmac_key</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_hmac_key (core_os_win_dpapi_blob_o *self)
+tp_getter_hmac_key (core_os_win_dpapi_blob_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -305,7 +305,7 @@ tp_getter_hmac_key (core_os_win_dpapi_blob_o *self)
 // @return <i>hash_id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_hash_id (core_os_win_dpapi_blob_o *self)
+tp_getter_hash_id (core_os_win_dpapi_blob_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -327,7 +327,7 @@ tp_getter_hash_id (core_os_win_dpapi_blob_o *self)
 // @return <i>hash_length</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_hash_length (core_os_win_dpapi_blob_o *self)
+tp_getter_hash_length (core_os_win_dpapi_blob_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -350,7 +350,7 @@ tp_getter_hash_length (core_os_win_dpapi_blob_o *self)
 // @return <i>hmac_value</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_hmac_value (core_os_win_dpapi_blob_o *self)
+tp_getter_hmac_value (core_os_win_dpapi_blob_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -372,7 +372,7 @@ tp_getter_hmac_value (core_os_win_dpapi_blob_o *self)
 // @return <i>cipher_text</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_cipher_text (core_os_win_dpapi_blob_o *self)
+tp_getter_cipher_text (core_os_win_dpapi_blob_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -395,7 +395,7 @@ tp_getter_cipher_text (core_os_win_dpapi_blob_o *self)
 // @return <i>plain_text</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_plain_text (core_os_win_dpapi_blob_o *self)
+tp_getter_plain_text (core_os_win_dpapi_blob_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -417,7 +417,7 @@ tp_getter_plain_text (core_os_win_dpapi_blob_o *self)
 // @return <i>signature</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_signature (core_os_win_dpapi_blob_o *self)
+tp_getter_signature (core_os_win_dpapi_blob_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -439,7 +439,7 @@ tp_getter_signature (core_os_win_dpapi_blob_o *self)
 // @return <i>signature</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_signature_data (core_os_win_dpapi_blob_o *self)
+tp_getter_signature_data (core_os_win_dpapi_blob_o *self, void *)
 {
     PyObject *ret = nullptr;
 

@@ -87,7 +87,7 @@ pymobius_core_io_stream_from_pyobject (PyObject *value)
 // @return <i>size</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_size (core_io_stream_o *self)
+tp_getter_size (core_io_stream_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -109,7 +109,7 @@ tp_getter_size (core_io_stream_o *self)
 // @return <i>type</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_type (core_io_stream_o *self)
+tp_getter_type (core_io_stream_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -131,7 +131,7 @@ tp_getter_type (core_io_stream_o *self)
 // @return <i>name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_name (core_io_stream_o *self)
+tp_getter_name (core_io_stream_o *self, void *)
 {
     PyObject *ret = nullptr;
 

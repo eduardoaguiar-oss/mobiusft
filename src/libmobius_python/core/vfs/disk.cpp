@@ -69,7 +69,7 @@ pymobius_core_vfs_disk_from_pyobject (PyObject *value)
 // @return <i>type</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_type (core_vfs_disk_o *self)
+tp_getter_type (core_vfs_disk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -91,7 +91,7 @@ tp_getter_type (core_vfs_disk_o *self)
 // @return <i>size</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_size (core_vfs_disk_o *self)
+tp_getter_size (core_vfs_disk_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -113,7 +113,7 @@ tp_getter_size (core_vfs_disk_o *self)
 // @return <i>name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_name (core_vfs_disk_o *self)
+tp_getter_name (core_vfs_disk_o *self, void *)
 {
     PyObject *ret = nullptr;
 

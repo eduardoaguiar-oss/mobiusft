@@ -234,7 +234,7 @@ pymobius_core_pod_data_to_python (const mobius::core::pod::data &value)
 // @return <i>type</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_type (core_pod_data_o *self)
+tp_getter_type (core_pod_data_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -257,7 +257,7 @@ tp_getter_type (core_pod_data_o *self)
 // @return <i>value</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_value (core_pod_data_o *self)
+tp_getter_value (core_pod_data_o *self, void *)
 {
     PyObject *ret = nullptr;
 

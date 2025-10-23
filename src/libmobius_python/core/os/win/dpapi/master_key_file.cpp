@@ -77,7 +77,7 @@ pymobius_core_os_win_dpapi_master_key_file_from_pyobject (PyObject *pyobj)
 // @return <i>revision</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_revision (core_os_win_dpapi_master_key_file_o *self)
+tp_getter_revision (core_os_win_dpapi_master_key_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -99,7 +99,7 @@ tp_getter_revision (core_os_win_dpapi_master_key_file_o *self)
 // @return <i>guid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_guid (core_os_win_dpapi_master_key_file_o *self)
+tp_getter_guid (core_os_win_dpapi_master_key_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -121,7 +121,7 @@ tp_getter_guid (core_os_win_dpapi_master_key_file_o *self)
 // @return <i>flags</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_flags (core_os_win_dpapi_master_key_file_o *self)
+tp_getter_flags (core_os_win_dpapi_master_key_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -143,7 +143,7 @@ tp_getter_flags (core_os_win_dpapi_master_key_file_o *self)
 // @return <i>master_key</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_master_key (core_os_win_dpapi_master_key_file_o *self)
+tp_getter_master_key (core_os_win_dpapi_master_key_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -166,7 +166,7 @@ tp_getter_master_key (core_os_win_dpapi_master_key_file_o *self)
 // @return <i>backup_key</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_backup_key (core_os_win_dpapi_master_key_file_o *self)
+tp_getter_backup_key (core_os_win_dpapi_master_key_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -189,7 +189,7 @@ tp_getter_backup_key (core_os_win_dpapi_master_key_file_o *self)
 // @return <i>credhist_guid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_credhist_guid (core_os_win_dpapi_master_key_file_o *self)
+tp_getter_credhist_guid (core_os_win_dpapi_master_key_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 

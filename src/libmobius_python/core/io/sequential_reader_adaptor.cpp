@@ -83,7 +83,7 @@ pymobius_core_io_sequential_reader_adaptor_from_pyobject (PyObject *value)
 // @return <i>block_size</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_block_size (core_io_sequential_reader_adaptor_o *self)
+tp_getter_block_size (core_io_sequential_reader_adaptor_o *self, void *)
 {
     PyObject *ret = nullptr;
 

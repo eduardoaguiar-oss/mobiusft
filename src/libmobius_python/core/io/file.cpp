@@ -89,7 +89,7 @@ pymobius_core_io_file_from_pyobject (PyObject *pyobj)
 // @brief name getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_name (core_io_file_o *self)
+tp_getter_name (core_io_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -109,7 +109,7 @@ tp_getter_name (core_io_file_o *self)
 // @brief short_name getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_short_name (core_io_file_o *self)
+tp_getter_short_name (core_io_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -130,7 +130,7 @@ tp_getter_short_name (core_io_file_o *self)
 // @brief path getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_path (core_io_file_o *self)
+tp_getter_path (core_io_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -183,7 +183,7 @@ tp_setter_path (core_io_file_o *self, PyObject *value, void *)
 // @brief inode getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_inode (core_io_file_o *self)
+tp_getter_inode (core_io_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -203,7 +203,7 @@ tp_getter_inode (core_io_file_o *self)
 // @brief size getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_size (core_io_file_o *self)
+tp_getter_size (core_io_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -223,7 +223,7 @@ tp_getter_size (core_io_file_o *self)
 // @brief type getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_type (core_io_file_o *self)
+tp_getter_type (core_io_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -244,7 +244,7 @@ tp_getter_type (core_io_file_o *self)
 // @brief user_id getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_user_id (core_io_file_o *self)
+tp_getter_user_id (core_io_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -265,7 +265,7 @@ tp_getter_user_id (core_io_file_o *self)
 // @brief user_name getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_user_name (core_io_file_o *self)
+tp_getter_user_name (core_io_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -286,7 +286,7 @@ tp_getter_user_name (core_io_file_o *self)
 // @brief group_id getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_group_id (core_io_file_o *self)
+tp_getter_group_id (core_io_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -307,7 +307,7 @@ tp_getter_group_id (core_io_file_o *self)
 // @brief group_name getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_group_name (core_io_file_o *self)
+tp_getter_group_name (core_io_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -328,7 +328,7 @@ tp_getter_group_name (core_io_file_o *self)
 // @brief permissions getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_permissions (core_io_file_o *self)
+tp_getter_permissions (core_io_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -349,7 +349,7 @@ tp_getter_permissions (core_io_file_o *self)
 // @brief access_time getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_access_time (core_io_file_o *self)
+tp_getter_access_time (core_io_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -370,7 +370,7 @@ tp_getter_access_time (core_io_file_o *self)
 // @brief modification_time getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_modification_time (core_io_file_o *self)
+tp_getter_modification_time (core_io_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -391,7 +391,7 @@ tp_getter_modification_time (core_io_file_o *self)
 // @brief metadata_time getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_metadata_time (core_io_file_o *self)
+tp_getter_metadata_time (core_io_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -412,7 +412,7 @@ tp_getter_metadata_time (core_io_file_o *self)
 // @brief creation_time getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_creation_time (core_io_file_o *self)
+tp_getter_creation_time (core_io_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -433,7 +433,7 @@ tp_getter_creation_time (core_io_file_o *self)
 // @brief deletion_time getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_deletion_time (core_io_file_o *self)
+tp_getter_deletion_time (core_io_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -454,7 +454,7 @@ tp_getter_deletion_time (core_io_file_o *self)
 // @brief backup_time getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_backup_time (core_io_file_o *self)
+tp_getter_backup_time (core_io_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -516,7 +516,7 @@ static PyGetSetDef tp_getset[] = {
 // @brief exists method
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_exists (core_io_file_o *self)
+tp_f_exists (core_io_file_o *self, PyObject *)
 {
     PyObject *ret = nullptr;
 
@@ -536,7 +536,7 @@ tp_f_exists (core_io_file_o *self)
 // @brief is_deleted method
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_is_deleted (core_io_file_o *self)
+tp_f_is_deleted (core_io_file_o *self, PyObject *)
 {
     PyObject *ret = nullptr;
 
@@ -556,7 +556,7 @@ tp_f_is_deleted (core_io_file_o *self)
 // @brief is_reallocated method
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_is_reallocated (core_io_file_o *self)
+tp_f_is_reallocated (core_io_file_o *self, PyObject *)
 {
     PyObject *ret = nullptr;
 
@@ -576,7 +576,7 @@ tp_f_is_reallocated (core_io_file_o *self)
 // @brief is_hidden method
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_is_hidden (core_io_file_o *self)
+tp_f_is_hidden (core_io_file_o *self, PyObject *)
 {
     PyObject *ret = nullptr;
 
@@ -596,7 +596,7 @@ tp_f_is_hidden (core_io_file_o *self)
 // @brief is_block_device method
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_is_block_device (core_io_file_o *self)
+tp_f_is_block_device (core_io_file_o *self, PyObject *)
 {
     PyObject *ret = nullptr;
 
@@ -616,7 +616,7 @@ tp_f_is_block_device (core_io_file_o *self)
 // @brief is_char_device method
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_is_char_device (core_io_file_o *self)
+tp_f_is_char_device (core_io_file_o *self, PyObject *)
 {
     PyObject *ret = nullptr;
 
@@ -636,7 +636,7 @@ tp_f_is_char_device (core_io_file_o *self)
 // @brief is_fifo method
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_is_fifo (core_io_file_o *self)
+tp_f_is_fifo (core_io_file_o *self, PyObject *)
 {
     PyObject *ret = nullptr;
 
@@ -656,7 +656,7 @@ tp_f_is_fifo (core_io_file_o *self)
 // @brief is_symlink method
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_is_symlink (core_io_file_o *self)
+tp_f_is_symlink (core_io_file_o *self, PyObject *)
 {
     PyObject *ret = nullptr;
 
@@ -676,7 +676,7 @@ tp_f_is_symlink (core_io_file_o *self)
 // @brief is_regular_file method
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_is_regular_file (core_io_file_o *self)
+tp_f_is_regular_file (core_io_file_o *self, PyObject *)
 {
     PyObject *ret = nullptr;
 
@@ -696,7 +696,7 @@ tp_f_is_regular_file (core_io_file_o *self)
 // @brief is_socket method
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_is_socket (core_io_file_o *self)
+tp_f_is_socket (core_io_file_o *self, PyObject *)
 {
     PyObject *ret = nullptr;
 
@@ -716,7 +716,7 @@ tp_f_is_socket (core_io_file_o *self)
 // @brief is_folder method
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_is_folder (core_io_file_o *)
+tp_f_is_folder (core_io_file_o *, PyObject *)
 {
     PyObject *ret = nullptr;
 
@@ -736,7 +736,7 @@ tp_f_is_folder (core_io_file_o *)
 // @brief is_file method
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_is_file (core_io_file_o *)
+tp_f_is_file (core_io_file_o *, PyObject *)
 {
     PyObject *ret = nullptr;
 
@@ -756,7 +756,7 @@ tp_f_is_file (core_io_file_o *)
 // @brief get_extension method
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_get_extension (core_io_file_o *self)
+tp_f_get_extension (core_io_file_o *self, PyObject *)
 {
     PyObject *ret = nullptr;
 

@@ -72,7 +72,7 @@ pymobius_core_vfs_block_from_pyobject (PyObject *value)
 // @return <i>uid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_uid (core_vfs_block_o *self)
+tp_getter_uid (core_vfs_block_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -129,7 +129,7 @@ tp_setter_uid (core_vfs_block_o *self, PyObject *value, void *)
 // @return <i>type</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_type (core_vfs_block_o *self)
+tp_getter_type (core_vfs_block_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -151,7 +151,7 @@ tp_getter_type (core_vfs_block_o *self)
 // @return <i>size</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_size (core_vfs_block_o *self)
+tp_getter_size (core_vfs_block_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -248,7 +248,7 @@ tp_f_add_parent (core_vfs_block_o *self, PyObject *args)
 // @return <i>parents</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_get_parents (core_vfs_block_o *self)
+tp_f_get_parents (core_vfs_block_o *self, PyObject *)
 {
     PyObject *ret = nullptr;
 

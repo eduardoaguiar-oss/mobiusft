@@ -81,7 +81,7 @@ pymobius_framework_model_case_from_pyobject (PyObject *value)
 // @return <i>root_item</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_root_item (framework_model_case_o *self)
+tp_getter_root_item (framework_model_case_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -104,7 +104,7 @@ tp_getter_root_item (framework_model_case_o *self)
 // @return <i>uid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_uid (framework_model_case_o *self)
+tp_getter_uid (framework_model_case_o *self, void *)
 {
     PyObject *ret = nullptr;
 

@@ -78,7 +78,7 @@ pymobius_core_decoder_tdf_from_pyobject (PyObject *value)
 // @return <i>version</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_version (core_decoder_tdf_o *self)
+tp_getter_version (core_decoder_tdf_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -100,7 +100,7 @@ tp_getter_version (core_decoder_tdf_o *self)
 // @return <i>major_version</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_major_version (core_decoder_tdf_o *self)
+tp_getter_major_version (core_decoder_tdf_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -123,7 +123,7 @@ tp_getter_major_version (core_decoder_tdf_o *self)
 // @return <i>minor_version</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_minor_version (core_decoder_tdf_o *self)
+tp_getter_minor_version (core_decoder_tdf_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -146,7 +146,7 @@ tp_getter_minor_version (core_decoder_tdf_o *self)
 // @return <i>revision</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_revision (core_decoder_tdf_o *self)
+tp_getter_revision (core_decoder_tdf_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -168,7 +168,7 @@ tp_getter_revision (core_decoder_tdf_o *self)
 // @return <i>hash_value</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_hash_value (core_decoder_tdf_o *self)
+tp_getter_hash_value (core_decoder_tdf_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -191,7 +191,7 @@ tp_getter_hash_value (core_decoder_tdf_o *self)
 // @return <i>payload</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_payload (core_decoder_tdf_o *self)
+tp_getter_payload (core_decoder_tdf_o *self, void *)
 {
     PyObject *ret = nullptr;
 

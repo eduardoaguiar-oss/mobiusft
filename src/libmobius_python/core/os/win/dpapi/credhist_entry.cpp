@@ -81,7 +81,7 @@ pymobius_core_os_win_dpapi_credhist_entry_from_pyobject (PyObject *value)
 // @return <i>revision</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_revision (core_os_win_dpapi_credhist_entry_o *self)
+tp_getter_revision (core_os_win_dpapi_credhist_entry_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -103,7 +103,7 @@ tp_getter_revision (core_os_win_dpapi_credhist_entry_o *self)
 // @return <i>guid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_guid (core_os_win_dpapi_credhist_entry_o *self)
+tp_getter_guid (core_os_win_dpapi_credhist_entry_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -125,7 +125,7 @@ tp_getter_guid (core_os_win_dpapi_credhist_entry_o *self)
 // @return <i>type</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_type (core_os_win_dpapi_credhist_entry_o *self)
+tp_getter_type (core_os_win_dpapi_credhist_entry_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -147,7 +147,7 @@ tp_getter_type (core_os_win_dpapi_credhist_entry_o *self)
 // @return <i>hash_id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_hash_id (core_os_win_dpapi_credhist_entry_o *self)
+tp_getter_hash_id (core_os_win_dpapi_credhist_entry_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -169,7 +169,7 @@ tp_getter_hash_id (core_os_win_dpapi_credhist_entry_o *self)
 // @return <i>iterations</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_iterations (core_os_win_dpapi_credhist_entry_o *self)
+tp_getter_iterations (core_os_win_dpapi_credhist_entry_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -192,7 +192,7 @@ tp_getter_iterations (core_os_win_dpapi_credhist_entry_o *self)
 // @return <i>cipher_id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_cipher_id (core_os_win_dpapi_credhist_entry_o *self)
+tp_getter_cipher_id (core_os_win_dpapi_credhist_entry_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -215,7 +215,7 @@ tp_getter_cipher_id (core_os_win_dpapi_credhist_entry_o *self)
 // @return <i>salt</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_salt (core_os_win_dpapi_credhist_entry_o *self)
+tp_getter_salt (core_os_win_dpapi_credhist_entry_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -237,7 +237,7 @@ tp_getter_salt (core_os_win_dpapi_credhist_entry_o *self)
 // @return <i>sid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_sid (core_os_win_dpapi_credhist_entry_o *self)
+tp_getter_sid (core_os_win_dpapi_credhist_entry_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -259,7 +259,7 @@ tp_getter_sid (core_os_win_dpapi_credhist_entry_o *self)
 // @return <i>cipher_text</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_cipher_text (core_os_win_dpapi_credhist_entry_o *self)
+tp_getter_cipher_text (core_os_win_dpapi_credhist_entry_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -282,7 +282,7 @@ tp_getter_cipher_text (core_os_win_dpapi_credhist_entry_o *self)
 // @return <i>hash_sha1</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_hash_sha1 (core_os_win_dpapi_credhist_entry_o *self)
+tp_getter_hash_sha1 (core_os_win_dpapi_credhist_entry_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -304,7 +304,7 @@ tp_getter_hash_sha1 (core_os_win_dpapi_credhist_entry_o *self)
 // @return <i>hash_ntlm</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_hash_ntlm (core_os_win_dpapi_credhist_entry_o *self)
+tp_getter_hash_ntlm (core_os_win_dpapi_credhist_entry_o *self, void *)
 {
     PyObject *ret = nullptr;
 

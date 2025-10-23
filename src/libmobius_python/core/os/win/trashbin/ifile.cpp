@@ -79,7 +79,7 @@ pymobius_core_os_win_trashbin_ifile_from_pyobject (PyObject *value)
 // @return <i>version</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_version (core_os_win_trashbin_ifile_o *self)
+tp_getter_version (core_os_win_trashbin_ifile_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -101,7 +101,7 @@ tp_getter_version (core_os_win_trashbin_ifile_o *self)
 // @return <i>size</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_size (core_os_win_trashbin_ifile_o *self)
+tp_getter_size (core_os_win_trashbin_ifile_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -123,7 +123,7 @@ tp_getter_size (core_os_win_trashbin_ifile_o *self)
 // @return <i>deletion_time</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_deletion_time (core_os_win_trashbin_ifile_o *self)
+tp_getter_deletion_time (core_os_win_trashbin_ifile_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -146,7 +146,7 @@ tp_getter_deletion_time (core_os_win_trashbin_ifile_o *self)
 // @return <i>path</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_path (core_os_win_trashbin_ifile_o *self)
+tp_getter_path (core_os_win_trashbin_ifile_o *self, void *)
 {
     PyObject *ret = nullptr;
 

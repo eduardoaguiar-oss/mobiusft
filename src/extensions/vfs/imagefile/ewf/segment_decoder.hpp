@@ -74,7 +74,7 @@ class segment_decoder
         // @return true/false
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         bool
-        operator!= (const_iterator &i)
+        operator!= (const const_iterator &i)
         {
             return !(*this == i);
         }

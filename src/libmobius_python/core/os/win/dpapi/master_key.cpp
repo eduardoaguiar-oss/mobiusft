@@ -87,7 +87,7 @@ pymobius_core_os_win_dpapi_master_key_from_pyobject (PyObject *value)
 // @return <i>revision</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_revision (core_os_win_dpapi_master_key_o *self)
+tp_getter_revision (core_os_win_dpapi_master_key_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -109,7 +109,7 @@ tp_getter_revision (core_os_win_dpapi_master_key_o *self)
 // @return <i>salt</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_salt (core_os_win_dpapi_master_key_o *self)
+tp_getter_salt (core_os_win_dpapi_master_key_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -131,7 +131,7 @@ tp_getter_salt (core_os_win_dpapi_master_key_o *self)
 // @return <i>iterations</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_iterations (core_os_win_dpapi_master_key_o *self)
+tp_getter_iterations (core_os_win_dpapi_master_key_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -154,7 +154,7 @@ tp_getter_iterations (core_os_win_dpapi_master_key_o *self)
 // @return <i>hash_id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_hash_id (core_os_win_dpapi_master_key_o *self)
+tp_getter_hash_id (core_os_win_dpapi_master_key_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -176,7 +176,7 @@ tp_getter_hash_id (core_os_win_dpapi_master_key_o *self)
 // @return <i>cipher_id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_cipher_id (core_os_win_dpapi_master_key_o *self)
+tp_getter_cipher_id (core_os_win_dpapi_master_key_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -199,7 +199,7 @@ tp_getter_cipher_id (core_os_win_dpapi_master_key_o *self)
 // @return <i>cipher_text</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_cipher_text (core_os_win_dpapi_master_key_o *self)
+tp_getter_cipher_text (core_os_win_dpapi_master_key_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -222,7 +222,7 @@ tp_getter_cipher_text (core_os_win_dpapi_master_key_o *self)
 // @return <i>plain_text</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_plain_text (core_os_win_dpapi_master_key_o *self)
+tp_getter_plain_text (core_os_win_dpapi_master_key_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -244,7 +244,7 @@ tp_getter_plain_text (core_os_win_dpapi_master_key_o *self)
 // @return <i>flags</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_flags (core_os_win_dpapi_master_key_o *self)
+tp_getter_flags (core_os_win_dpapi_master_key_o *self, void *)
 {
     PyObject *ret = nullptr;
 

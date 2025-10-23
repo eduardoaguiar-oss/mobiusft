@@ -33,7 +33,7 @@
 // @return <i>idx</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_idx (core_file_decoder_entry_o *self)
+tp_getter_idx (core_file_decoder_entry_o *self, void *)
 {
   PyObject *ret = nullptr;
 
@@ -55,7 +55,7 @@ tp_getter_idx (core_file_decoder_entry_o *self)
 // @return <i>name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_name (core_file_decoder_entry_o *self)
+tp_getter_name (core_file_decoder_entry_o *self, void *)
 {
   PyObject *ret = nullptr;
 

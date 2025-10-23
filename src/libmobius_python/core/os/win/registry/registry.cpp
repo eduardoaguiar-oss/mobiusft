@@ -81,7 +81,7 @@ tp_dealloc (core_os_win_registry_registry_o *self)
 // @brief registry: files getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_files (core_os_win_registry_registry_o *self)
+tp_getter_files (core_os_win_registry_registry_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -103,7 +103,7 @@ tp_getter_files (core_os_win_registry_registry_o *self)
 // @brief registry: keys getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_keys (core_os_win_registry_registry_o *self)
+tp_getter_keys (core_os_win_registry_registry_o *self, void *)
 {
     PyObject *ret = nullptr;
 

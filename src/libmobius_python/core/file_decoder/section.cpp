@@ -34,7 +34,7 @@
 // @return <i>name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_name (core_file_decoder_section_o *self)
+tp_getter_name (core_file_decoder_section_o *self, void *)
 {
   PyObject *ret = nullptr;
 
@@ -56,7 +56,7 @@ tp_getter_name (core_file_decoder_section_o *self)
 // @return <i>offset</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_offset (core_file_decoder_section_o *self)
+tp_getter_offset (core_file_decoder_section_o *self, void *)
 {
   PyObject *ret = nullptr;
 
@@ -78,7 +78,7 @@ tp_getter_offset (core_file_decoder_section_o *self)
 // @return <i>size</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_size (core_file_decoder_section_o *self)
+tp_getter_size (core_file_decoder_section_o *self, void *)
 {
   PyObject *ret = nullptr;
 

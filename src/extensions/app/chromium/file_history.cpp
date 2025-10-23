@@ -467,7 +467,7 @@ file_history::_load_history (mobius::core::database::database &db)
                 "v.from_visit, "
                 "v.id, "
                 "${v.incremented_omnibox_typed_score,40}, "
-                "${v.is_indexed,20,32}, "
+                "${v.is_indexed,20,41}, "
                 "${v.is_known_to_sync,59}, "
                 "${v.opener_visit,50}, "
                 "${v.originator_cache_guid,55}, "

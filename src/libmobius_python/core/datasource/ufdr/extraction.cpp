@@ -72,7 +72,7 @@ pymobius_core_datasource_ufdr_extraction_from_pyobject (PyObject *value)
 // @return <i>id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_id (core_datasource_ufdr_extraction_o *self)
+tp_getter_id (core_datasource_ufdr_extraction_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -94,7 +94,7 @@ tp_getter_id (core_datasource_ufdr_extraction_o *self)
 // @return <i>type</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_type (core_datasource_ufdr_extraction_o *self)
+tp_getter_type (core_datasource_ufdr_extraction_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -153,7 +153,7 @@ tp_setter_type (core_datasource_ufdr_extraction_o *self, PyObject *value,
 // @return <i>name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_name (core_datasource_ufdr_extraction_o *self)
+tp_getter_name (core_datasource_ufdr_extraction_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -212,7 +212,7 @@ tp_setter_name (core_datasource_ufdr_extraction_o *self, PyObject *value,
 // @return <i>device_name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_device_name (core_datasource_ufdr_extraction_o *self)
+tp_getter_device_name (core_datasource_ufdr_extraction_o *self, void *)
 {
     PyObject *ret = nullptr;
 

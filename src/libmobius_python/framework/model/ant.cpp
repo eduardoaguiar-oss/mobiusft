@@ -58,7 +58,7 @@ pymobius_framework_model_ant_to_pyobject (
 // @return <i>item</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_item (framework_model_ant_o *self)
+tp_getter_item (framework_model_ant_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -81,7 +81,7 @@ tp_getter_item (framework_model_ant_o *self)
 // @return <i>id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_id (framework_model_ant_o *self)
+tp_getter_id (framework_model_ant_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -103,7 +103,7 @@ tp_getter_id (framework_model_ant_o *self)
 // @return <i>name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_name (framework_model_ant_o *self)
+tp_getter_name (framework_model_ant_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -125,7 +125,7 @@ tp_getter_name (framework_model_ant_o *self)
 // @return <i>version</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_version (framework_model_ant_o *self)
+tp_getter_version (framework_model_ant_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -147,7 +147,7 @@ tp_getter_version (framework_model_ant_o *self)
 // @return <i>last_execution_time</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_last_execution_time (framework_model_ant_o *self)
+tp_getter_last_execution_time (framework_model_ant_o *self, void *)
 {
     PyObject *ret = nullptr;
 

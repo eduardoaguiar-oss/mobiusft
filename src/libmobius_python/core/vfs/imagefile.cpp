@@ -63,7 +63,7 @@ pymobius_core_vfs_imagefile_to_pyobject (mobius::core::vfs::imagefile obj)
 // @return <i>type</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_type (core_vfs_imagefile_o *self)
+tp_getter_type (core_vfs_imagefile_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -85,7 +85,7 @@ tp_getter_type (core_vfs_imagefile_o *self)
 // @return <i>size</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_size (core_vfs_imagefile_o *self)
+tp_getter_size (core_vfs_imagefile_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -107,7 +107,7 @@ tp_getter_size (core_vfs_imagefile_o *self)
 // @return <i>sectors</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_sectors (core_vfs_imagefile_o *self)
+tp_getter_sectors (core_vfs_imagefile_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -129,7 +129,7 @@ tp_getter_sectors (core_vfs_imagefile_o *self)
 // @return <i>sector_size</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_sector_size (core_vfs_imagefile_o *self)
+tp_getter_sector_size (core_vfs_imagefile_o *self, void *)
 {
     PyObject *ret = nullptr;
 

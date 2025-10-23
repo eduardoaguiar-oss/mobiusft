@@ -47,7 +47,7 @@ pymobius_core_system_device_to_pyobject (mobius::core::system::device obj)
 // @brief is_initialized getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_is_initialized (core_system_device_o *self)
+tp_getter_is_initialized (core_system_device_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -67,7 +67,7 @@ tp_getter_is_initialized (core_system_device_o *self)
 // @brief type getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_type (core_system_device_o *self)
+tp_getter_type (core_system_device_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -87,7 +87,7 @@ tp_getter_type (core_system_device_o *self)
 // @brief subsystem getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_subsystem (core_system_device_o *self)
+tp_getter_subsystem (core_system_device_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -108,7 +108,7 @@ tp_getter_subsystem (core_system_device_o *self)
 // @brief node getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_node (core_system_device_o *self)
+tp_getter_node (core_system_device_o *self, void *)
 {
     PyObject *ret = nullptr;
 

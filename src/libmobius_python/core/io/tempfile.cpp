@@ -35,7 +35,7 @@
 // @return <i>path</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_path (core_io_tempfile_o *self)
+tp_getter_path (core_io_tempfile_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -57,7 +57,7 @@ tp_getter_path (core_io_tempfile_o *self)
 // @return <i>size</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_size (core_io_tempfile_o *self)
+tp_getter_size (core_io_tempfile_o *self, void *)
 {
     PyObject *ret = nullptr;
 

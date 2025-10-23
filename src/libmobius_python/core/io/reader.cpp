@@ -103,7 +103,7 @@ pymobius_core_io_reader_from_pyobject (PyObject *pyobj)
 // @brief is_seekable getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_is_seekable (core_io_reader_o *self)
+tp_getter_is_seekable (core_io_reader_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -123,7 +123,7 @@ tp_getter_is_seekable (core_io_reader_o *self)
 // @brief is_rewindable getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_is_rewindable (core_io_reader_o *self)
+tp_getter_is_rewindable (core_io_reader_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -143,7 +143,7 @@ tp_getter_is_rewindable (core_io_reader_o *self)
 // @brief size getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_size (core_io_reader_o *self)
+tp_getter_size (core_io_reader_o *self, void *)
 {
     PyObject *ret = nullptr;
 

@@ -35,7 +35,7 @@
 // @return <i>id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_id (framework_category_o *self)
+tp_getter_id (framework_category_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -57,7 +57,7 @@ tp_getter_id (framework_category_o *self)
 // @return <i>name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_name (framework_category_o *self)
+tp_getter_name (framework_category_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -115,7 +115,7 @@ tp_setter_name (framework_category_o *self, PyObject *value, void *)
 // @return <i>description</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_description (framework_category_o *self)
+tp_getter_description (framework_category_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -174,7 +174,7 @@ tp_setter_description (framework_category_o *self, PyObject *value, void *)
 // @return <i>icon_data</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_icon_data (framework_category_o *self)
+tp_getter_icon_data (framework_category_o *self, void *)
 {
     PyObject *ret = nullptr;
 

@@ -45,7 +45,7 @@
 // @return <i>uid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_uid (framework_model_item_o *self)
+tp_getter_uid (framework_model_item_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -67,7 +67,7 @@ tp_getter_uid (framework_model_item_o *self)
 // @return <i>category</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_category (framework_model_item_o *self)
+tp_getter_category (framework_model_item_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -89,7 +89,7 @@ tp_getter_category (framework_model_item_o *self)
 // @return <i>case</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_case (framework_model_item_o *self)
+tp_getter_case (framework_model_item_o *self, void *)
 {
     PyObject *ret = nullptr;
 

@@ -102,7 +102,7 @@ pymobius_framework_model_evidence_from_pyobject (PyObject *value)
 // @return <i>item</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_item (framework_model_evidence_o *self)
+tp_getter_item (framework_model_evidence_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -125,7 +125,7 @@ tp_getter_item (framework_model_evidence_o *self)
 // @return <i>uid</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_uid (framework_model_evidence_o *self)
+tp_getter_uid (framework_model_evidence_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -147,7 +147,7 @@ tp_getter_uid (framework_model_evidence_o *self)
 // @return <i>type</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_type (framework_model_evidence_o *self)
+tp_getter_type (framework_model_evidence_o *self, void *)
 {
     PyObject *ret = nullptr;
 

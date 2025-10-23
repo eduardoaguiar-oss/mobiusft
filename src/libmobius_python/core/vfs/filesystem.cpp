@@ -74,7 +74,7 @@ pymobius_core_vfs_filesystem_from_pyobject (PyObject *value)
 // @return <i>reader</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_reader (core_vfs_filesystem_o *self)
+tp_getter_reader (core_vfs_filesystem_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -96,7 +96,7 @@ tp_getter_reader (core_vfs_filesystem_o *self)
 // @return <i>offset</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_offset (core_vfs_filesystem_o *self)
+tp_getter_offset (core_vfs_filesystem_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -118,7 +118,7 @@ tp_getter_offset (core_vfs_filesystem_o *self)
 // @return <i>size</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_size (core_vfs_filesystem_o *self)
+tp_getter_size (core_vfs_filesystem_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -140,7 +140,7 @@ tp_getter_size (core_vfs_filesystem_o *self)
 // @return <i>type</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_type (core_vfs_filesystem_o *self)
+tp_getter_type (core_vfs_filesystem_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -162,7 +162,7 @@ tp_getter_type (core_vfs_filesystem_o *self)
 // @return <i>name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_name (core_vfs_filesystem_o *self)
+tp_getter_name (core_vfs_filesystem_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -184,7 +184,7 @@ tp_getter_name (core_vfs_filesystem_o *self)
 // @return <i>metadata</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_metadata (core_vfs_filesystem_o *self)
+tp_getter_metadata (core_vfs_filesystem_o *self, void *)
 {
     PyObject *ret = nullptr;
 

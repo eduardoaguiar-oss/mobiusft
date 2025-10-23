@@ -96,7 +96,7 @@ tp_dealloc (core_os_win_registry_registry_key_o *self)
 // @brief registry_key: name getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_name (core_os_win_registry_registry_key_o *self)
+tp_getter_name (core_os_win_registry_registry_key_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -152,7 +152,7 @@ tp_setter_name (core_os_win_registry_registry_key_o *self, PyObject *value,
 // @brief registry_key: classname getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_classname (core_os_win_registry_registry_key_o *self)
+tp_getter_classname (core_os_win_registry_registry_key_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -173,7 +173,7 @@ tp_getter_classname (core_os_win_registry_registry_key_o *self)
 // @brief registry_key: last_modification_time getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_last_modification_time (core_os_win_registry_registry_key_o *self)
+tp_getter_last_modification_time (core_os_win_registry_registry_key_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -194,7 +194,7 @@ tp_getter_last_modification_time (core_os_win_registry_registry_key_o *self)
 // @brief registry_key: subkeys getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_subkeys (core_os_win_registry_registry_key_o *self)
+tp_getter_subkeys (core_os_win_registry_registry_key_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -216,7 +216,7 @@ tp_getter_subkeys (core_os_win_registry_registry_key_o *self)
 // @brief registry_key: values getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_values (core_os_win_registry_registry_key_o *self)
+tp_getter_values (core_os_win_registry_registry_key_o *self, void *)
 {
     PyObject *ret = nullptr;
 

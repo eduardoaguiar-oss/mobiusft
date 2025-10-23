@@ -66,7 +66,7 @@ tp_dealloc (core_os_win_registry_registry_data_o *self)
 // @brief registry_data: size getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_size (core_os_win_registry_registry_data_o *self)
+tp_getter_size (core_os_win_registry_registry_data_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -86,7 +86,7 @@ tp_getter_size (core_os_win_registry_registry_data_o *self)
 // @brief registry_data: type getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_type (core_os_win_registry_registry_data_o *self)
+tp_getter_type (core_os_win_registry_registry_data_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -107,7 +107,7 @@ tp_getter_type (core_os_win_registry_registry_data_o *self)
 // @brief registry_data: data getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_data (core_os_win_registry_registry_data_o *self)
+tp_getter_data (core_os_win_registry_registry_data_o *self, void *)
 {
     PyObject *ret = nullptr;
 

@@ -71,7 +71,7 @@ pymobius_core_kff_hashset_from_pyobject (PyObject *value)
 // @return <i>description</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_description (core_kff_hashset_o *self)
+tp_getter_description (core_kff_hashset_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -130,7 +130,7 @@ tp_setter_description (core_kff_hashset_o *self, PyObject *value, void *)
 // @return <i>hashes</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_hashes (core_kff_hashset_o *self)
+tp_getter_hashes (core_kff_hashset_o *self, void *)
 {
     PyObject *ret = nullptr;
 

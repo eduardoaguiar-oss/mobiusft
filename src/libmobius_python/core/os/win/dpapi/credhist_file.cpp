@@ -85,7 +85,7 @@ pymobius_core_os_win_dpapi_credhist_file_from_pyobject (PyObject *value)
 // @return <i>entries</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_entries (core_os_win_dpapi_credhist_file_o *self)
+tp_getter_entries (core_os_win_dpapi_credhist_file_o *self, void *)
 {
     PyObject *ret = nullptr;
 

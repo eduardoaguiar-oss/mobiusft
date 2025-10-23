@@ -81,7 +81,7 @@ pymobius_core_os_win_trashbin_info2_entry_from_pyobject (PyObject *value)
 // @return <i>is_deleted</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_is_deleted (os_win_trashbin_info2_entry_o *self)
+tp_getter_is_deleted (os_win_trashbin_info2_entry_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -103,7 +103,7 @@ tp_getter_is_deleted (os_win_trashbin_info2_entry_o *self)
 // @return <i>path</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_path (os_win_trashbin_info2_entry_o *self)
+tp_getter_path (os_win_trashbin_info2_entry_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -125,7 +125,7 @@ tp_getter_path (os_win_trashbin_info2_entry_o *self)
 // @return <i>drive_number</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_drive_number (os_win_trashbin_info2_entry_o *self)
+tp_getter_drive_number (os_win_trashbin_info2_entry_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -148,7 +148,7 @@ tp_getter_drive_number (os_win_trashbin_info2_entry_o *self)
 // @return <i>file_idx</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_file_idx (os_win_trashbin_info2_entry_o *self)
+tp_getter_file_idx (os_win_trashbin_info2_entry_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -170,7 +170,7 @@ tp_getter_file_idx (os_win_trashbin_info2_entry_o *self)
 // @return <i>deletion_time</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_deletion_time (os_win_trashbin_info2_entry_o *self)
+tp_getter_deletion_time (os_win_trashbin_info2_entry_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -193,7 +193,7 @@ tp_getter_deletion_time (os_win_trashbin_info2_entry_o *self)
 // @return <i>size</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_size (os_win_trashbin_info2_entry_o *self)
+tp_getter_size (os_win_trashbin_info2_entry_o *self, void *)
 {
     PyObject *ret = nullptr;
 

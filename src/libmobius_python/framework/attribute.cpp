@@ -33,7 +33,7 @@
 // @return <i>id</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_id (framework_attribute_o *self)
+tp_getter_id (framework_attribute_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -55,7 +55,7 @@ tp_getter_id (framework_attribute_o *self)
 // @return <i>name</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_name (framework_attribute_o *self)
+tp_getter_name (framework_attribute_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -113,7 +113,7 @@ tp_setter_name (framework_attribute_o *self, PyObject *value, void *)
 // @return <i>description</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_description (framework_attribute_o *self)
+tp_getter_description (framework_attribute_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -172,7 +172,7 @@ tp_setter_description (framework_attribute_o *self, PyObject *value, void *)
 // @return <i>datatype</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_datatype (framework_attribute_o *self)
+tp_getter_datatype (framework_attribute_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -230,7 +230,7 @@ tp_setter_datatype (framework_attribute_o *self, PyObject *value, void *)
 // @return <i>value_mask</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_value_mask (framework_attribute_o *self)
+tp_getter_value_mask (framework_attribute_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -289,7 +289,7 @@ tp_setter_value_mask (framework_attribute_o *self, PyObject *value, void *)
 // @return <i>index</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_index (framework_attribute_o *self)
+tp_getter_index (framework_attribute_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -347,7 +347,7 @@ tp_setter_index (framework_attribute_o *self, PyObject *value, void *)
 // @return <i>is_editable</i> attribute
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_is_editable (framework_attribute_o *self)
+tp_getter_is_editable (framework_attribute_o *self, void *)
 {
     PyObject *ret = nullptr;
 

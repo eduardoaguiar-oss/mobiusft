@@ -67,7 +67,7 @@ tp_dealloc (core_os_win_registry_registry_value_o *self)
 // @brief registry_value: name getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_name (core_os_win_registry_registry_value_o *self)
+tp_getter_name (core_os_win_registry_registry_value_o *self, void *)
 {
     PyObject *ret = nullptr;
 
@@ -87,7 +87,7 @@ tp_getter_name (core_os_win_registry_registry_value_o *self)
 // @brief registry_value: data getter
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_getter_data (core_os_win_registry_registry_value_o *self)
+tp_getter_data (core_os_win_registry_registry_value_o *self, void *)
 {
     PyObject *ret = nullptr;
 
