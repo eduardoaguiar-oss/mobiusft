@@ -24,9 +24,9 @@
 
 #include <mobius/core/exception.inc>
 #include <Python.h>
-#include <memory>
 #include <pygil.hpp>
 #include <pymobius.hpp>
+#include <memory>
 #include <stdexcept>
 
 namespace mobius::py
@@ -71,20 +71,6 @@ class function
     template <typename... Args>
     PyObject *
     operator() (Args... args)
-    {
-        mobius::py::GIL_holder holder;
-
-        return call (args...);
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Call function
-    // @param args Function arguments
-    // @return Value returned by function
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    template <typename... Args>
-    PyObject *
-    call (Args... args)
     {
         if (!impl_)
             throw std::runtime_error (

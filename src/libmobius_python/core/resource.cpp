@@ -25,6 +25,8 @@
 #include "resource.hpp"
 #include <mobius/core/exception.inc>
 #include <pycallback.hpp>
+#include <pygil.hpp>
+#include <pyfunction.hpp>
 #include <pylist.hpp>
 #include <pymobius.hpp>
 #include <pyobject.hpp>
@@ -228,14 +230,16 @@ class resource_added_callback
     void
     operator() (const std::string &id, const mobius::core::resource &r)
     {
-        f_.call (
+        mobius::py::GIL_guard gil_guard;
+
+        f_ (
             mobius::py::pystring_from_std_string (id),
             pymobius_core_resource_to_pyobject (r)
         );
     }
 
   private:
-    mobius::py::pyobject f_;
+    mobius::py::function f_;
 };
 
 mobius::py::callback<resource_added_callback> cb_1_ ("resource-added");
@@ -254,11 +258,13 @@ class resource_removed_callback
     void
     operator() (const std::string &id)
     {
-        f_.call (mobius::py::pystring_from_std_string (id));
+        mobius::py::GIL_guard gil_guard;
+
+        f_ (mobius::py::pystring_from_std_string (id));
     }
 
   private:
-    mobius::py::pyobject f_;
+    mobius::py::function f_;
 };
 
 mobius::py::callback<resource_removed_callback> cb_2_ ("resource-removed");

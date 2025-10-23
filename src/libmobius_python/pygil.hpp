@@ -76,27 +76,46 @@ class GIL
 //
 // Use: auto v = mobius::py::GILHolder ()
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class GIL_holder
+class GIL_guard
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Constructor
+    // @brief Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    GIL_holder () noexcept
-        : state_ (PyGILState_Ensure ())
+    GIL_guard (const GIL_guard &) = delete;
+    GIL_guard (GIL_guard &&) noexcept = delete;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Default constructor
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    GIL_guard () noexcept
+        : acquired_ (!PyGILState_Check ())
     {
+        if (acquired_)
+            state_ = PyGILState_Ensure ();
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Destructor
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    ~GIL_holder ()
+    ~GIL_guard ()
     {
-        PyGILState_Release (state_);
+        if (acquired_)
+            PyGILState_Release (state_);
     }
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    GIL_guard &operator= (GIL_guard &&) noexcept = delete;
+    GIL_guard &operator= (const GIL_guard &) = delete;
+
   private:
+    // @brief GIL state
     PyGILState_STATE state_;
+
+    // @brief Flag is acquired
+    bool acquired_ = false;
 };
 
 } // namespace mobius::py

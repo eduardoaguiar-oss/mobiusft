@@ -91,8 +91,6 @@ show_history (const std::string &path)
         std::cout << "\tIncremented omnibox typed score: "
                   << (entry.incremented_omnibox_typed_score ? "Yes" : "No")
                   << std::endl;
-        std::cout << "\tIs indexed: " << (entry.is_indexed ? "Yes" : "No")
-                  << std::endl;
         std::cout << "\tIs known to sync: " << (entry.is_known_to_sync ? "Yes" : "No")
                   << std::endl;
         std::cout << "\tOpener visit ID: " << entry.opener_visit << std::endl;

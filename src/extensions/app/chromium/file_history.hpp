@@ -90,9 +90,6 @@ class file_history
         // @brief Incremented omnibox typed score
         bool incremented_omnibox_typed_score = false;
 
-        // @brief Is indexed
-        bool is_indexed = false;
-
         // @brief Is known to sync
         bool is_known_to_sync = false;
 

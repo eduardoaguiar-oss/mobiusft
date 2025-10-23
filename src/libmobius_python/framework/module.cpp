@@ -139,6 +139,8 @@ class sampling_file_callback
         const std::string &sampling_id, const mobius::core::io::reader &reader
     )
     {
+        mobius::py::GIL_guard gil_guard;
+
         f_ (
             mobius::py::pystring_from_std_string (sampling_id),
             pymobius_core_io_reader_to_pyobject (reader)
@@ -167,6 +169,8 @@ class sampling_folder_callback
         const std::string &sampling_id, const mobius::core::io::folder &folder
     )
     {
+        mobius::py::GIL_guard gil_guard;
+
         f_ (
             mobius::py::pystring_from_std_string (sampling_id),
             pymobius_core_io_folder_to_pyobject (folder)

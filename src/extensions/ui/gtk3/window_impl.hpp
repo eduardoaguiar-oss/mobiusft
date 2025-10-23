@@ -57,6 +57,12 @@ class window_impl : public mobius::core::ui::window_impl_base
                        const mobius::core::functor<bool> &) final;
     void reset_callback (const std::string &) final;
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Event handlers
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool _on_delete_event ();
+    void _on_destroy_event ();
+
   private:
     // @brief Low level widget
     GtkWidget *widget_ = nullptr;
@@ -64,11 +70,14 @@ class window_impl : public mobius::core::ui::window_impl_base
     // @brief Accel group
     GtkAccelGroup *accel_group_ = nullptr;
 
-    // @brief Content widget
-    mobius::core::ui::widget content_;
+    // @brief Handler ID for delete-event signal
+    gulong delete_event_handler_id_ = 0;
 
     // @brief Callback for closing event
     mobius::core::functor<bool> closing_callback_;
+
+    // @brief Content widget
+    mobius::core::ui::widget content_;
 };
 
 } // namespace mobius::extension::ui::gtk3

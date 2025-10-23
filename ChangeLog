@@ -12,6 +12,7 @@ Mobius Forensic Toolkit 2.20
 	* app-chromium: Added support for Cookies files v6
 	* app-chromium: Added support for Login Data files v3 and v42
 	* app-chromium: Added support for Web Data files v52
+	* app-chromium: Removed is_indexed column from file_history query
 	* libmobius_core: Changed io::folder::get_children method to return std::vector
 	* libmobius_core: Changed io::folder::new_file method
 	* libmobius_core: Changed io::folder::new_folder method
@@ -35,15 +36,21 @@ Mobius Forensic Toolkit 2.20
 	* libmobius_core: Removed io::smb::folder_impl::new_folder method
 	* libmobius_core: Added new function core::ui::build_widget_from_low_level
 	* libmobius_core: Removed constructor core::ui::widget (any, bool)
+	* libmobius_core: Added new function core::ui::register_implementation
+	* libmobius_core: Added new function core::ui::unregister_implementation
+	* libmobius_core: Added new function core::ui::list_implementations
 	* libmobius_python: Changed framework/module to handle sampling_file event and callbacks
 	* libmobius_python: Changed framework/module to handle sampling_folder event and callbacks
 	* libmobius_python: Changed core.io.file module to fix PyCFunction signatures
 	* libmobius_python: Changed core.io.folder module to fix PyCFunction signatures
 	* libmobius_python: Changed core.vfs.block module to fix PyCFunction signatures
 	* libmobius_python: Changed all tp_getter_xxx functions to fix getter functions signatures
+	* libmobius_python: Changed mobius::py::GIL_holder renamed to GIL_guard
+	* libmobius_python: Changed mobius::py::GIL_guard to call PyGILState_Check before ensure/release
 	* ant.evidence.vfs.received_files: Removed utorrent code
 	* ant.evidence.vfs: Removed call to app-utorrent evidence loader
 	* pymobius.app.utorrent: Removed module
+	* ui-gtk3: Changed to use register/unregister_implementation
 
 Mobius Forensic Toolkit 2.19
 	* docs: Create directory for consolidated documentation

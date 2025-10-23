@@ -17,9 +17,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "ui_impl.hpp"
-#include <mobius/core/resource.hpp>
 #include <mobius/core/ui/ui.hpp>
+#include "ui_impl.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Extension data
@@ -28,7 +27,7 @@ extern "C"
 {
     const char *EXTENSION_ID = "ui-gtk3";
     const char *EXTENSION_NAME = "User Interface (UI) - GTK v3";
-    const char *EXTENSION_VERSION = "1.6";
+    const char *EXTENSION_VERSION = "1.7";
     const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
     const char *EXTENSION_DESCRIPTION =
         "GTK v3 User Interface abstraction layer";
@@ -40,9 +39,8 @@ extern "C"
 extern "C" void
 start ()
 {
-    mobius::core::add_resource ("ui.implementation.gtk3", "GTK v3",
-                                mobius::core::ui::make_resource<
-                                    mobius::extension::ui::gtk3::ui_impl> ());
+    mobius::core::ui::register_implementation<
+        mobius::extension::ui::gtk3::ui_impl> (EXTENSION_ID, EXTENSION_NAME);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -51,5 +49,5 @@ start ()
 extern "C" void
 stop ()
 {
-    mobius::core::remove_resource ("ui.implementation.gtk3");
+    mobius::core::ui::unregister_implementation (EXTENSION_ID);
 }

@@ -27,6 +27,7 @@
 #include "widget.hpp"
 #include <mobius/core/exception.inc>
 #include <pyfunction.hpp>
+#include <pygil.hpp>
 #include <pymobius.hpp>
 #include <stdexcept>
 
@@ -46,6 +47,8 @@ class callback_clicked
     bool
     operator() ()
     {
+        mobius::py::GIL_guard gil_guard;
+
         PyObject *py_rc = f_ ();
         bool rc = mobius::py::pybool_as_bool (py_rc);
         Py_DECREF (py_rc);

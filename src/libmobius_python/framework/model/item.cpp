@@ -23,6 +23,14 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "item.hpp"
+#include <functional>
+#include <pymobius.hpp>
+#include <pycallback.hpp>
+#include <pydict.hpp>
+#include <pyfunction.hpp>
+#include <pygil.hpp>
+#include <pylist.hpp>
+#include <pyobject.hpp>
 #include "ant.hpp"
 #include "case.hpp"
 #include "core/database/connection.hpp"
@@ -32,12 +40,6 @@
 #include "event.hpp"
 #include "evidence.hpp"
 #include "module.hpp"
-#include <functional>
-#include <pycallback.hpp>
-#include <pymobius.hpp>
-#include <pydict.hpp>
-#include <pylist.hpp>
-#include <pyobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>uid</i> attribute getter
@@ -160,7 +162,8 @@ tp_f_get_children (framework_model_item_o *self, PyObject *)
     {
         ret = mobius::py::pylist_from_cpp_container (
             self->obj->get_children (),
-            pymobius_framework_model_item_to_pyobject);
+            pymobius_framework_model_item_to_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -185,7 +188,8 @@ tp_f_get_parent (framework_model_item_o *self, PyObject *)
     try
     {
         ret = pymobius_framework_model_item_to_pyobject (
-            self->obj->get_parent ());
+            self->obj->get_parent ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -226,7 +230,8 @@ tp_f_new_child (framework_model_item_o *self, PyObject *args)
     try
     {
         ret = pymobius_framework_model_item_to_pyobject (
-            self->obj->new_child (arg_category, arg_idx));
+            self->obj->new_child (arg_category, arg_idx)
+        );
     }
     catch (const std::exception &e)
     {
@@ -275,7 +280,8 @@ tp_f_move (framework_model_item_o *self, PyObject *args)
     {
         arg_idx = mobius::py::get_arg_as_int (args, 0);
         arg_parent = mobius::py::get_arg_as_cpp (
-            args, 1, pymobius_framework_model_item_from_pyobject);
+            args, 1, pymobius_framework_model_item_from_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -350,7 +356,8 @@ tp_f_get_data_path (framework_model_item_o *self, PyObject *args)
     try
     {
         ret = mobius::py::pystring_from_std_string (
-            self->obj->get_data_path (arg_rpath));
+            self->obj->get_data_path (arg_rpath)
+        );
     }
     catch (const std::exception &e)
     {
@@ -389,7 +396,8 @@ tp_f_create_data_path (framework_model_item_o *self, PyObject *args)
     try
     {
         ret = mobius::py::pystring_from_std_string (
-            self->obj->create_data_path (arg_rpath));
+            self->obj->create_data_path (arg_rpath)
+        );
     }
     catch (const std::exception &e)
     {
@@ -465,7 +473,8 @@ tp_f_get_attribute (framework_model_item_o *self, PyObject *args)
     try
     {
         ret = pymobius_core_pod_data_to_pyobject (
-            self->obj->get_attribute (arg_id));
+            self->obj->get_attribute (arg_id)
+        );
     }
     catch (const std::exception &e)
     {
@@ -491,7 +500,8 @@ tp_f_set_attribute (framework_model_item_o *self, PyObject *args)
     {
         arg_id = mobius::py::get_arg_as_std_string (args, 0);
         arg_value = mobius::py::get_arg_as_cpp (
-            args, 1, pymobius_core_pod_data_from_pyobject);
+            args, 1, pymobius_core_pod_data_from_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -567,7 +577,8 @@ tp_f_get_attributes (framework_model_item_o *self, PyObject *)
     {
         ret = mobius::py::pydict_from_cpp_container (
             self->obj->get_attributes (), mobius::py::pystring_from_std_string,
-            pymobius_core_pod_data_to_pyobject);
+            pymobius_core_pod_data_to_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -617,7 +628,8 @@ tp_f_get_datasource (framework_model_item_o *self, PyObject *)
     try
     {
         ret = pymobius_core_datasource_datasource_to_pyobject (
-            self->obj->get_datasource ());
+            self->obj->get_datasource ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -642,7 +654,8 @@ tp_f_set_datasource (framework_model_item_o *self, PyObject *args)
     try
     {
         arg_datasource = mobius::py::get_arg_as_cpp (
-            args, 0, pymobius_core_datasource_datasource_from_pyobject);
+            args, 0, pymobius_core_datasource_datasource_from_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -843,7 +856,8 @@ tp_f_get_ants (framework_model_item_o *self, PyObject *)
     try
     {
         ret = mobius::py::pylist_from_cpp_container (
-            self->obj->get_ants (), pymobius_framework_model_ant_to_pyobject);
+            self->obj->get_ants (), pymobius_framework_model_ant_to_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -881,7 +895,8 @@ tp_f_new_evidence (framework_model_item_o *self, PyObject *args)
     try
     {
         ret = pymobius_framework_model_evidence_to_pyobject (
-            self->obj->new_evidence (arg_type));
+            self->obj->new_evidence (arg_type)
+        );
     }
     catch (const std::exception &e)
     {
@@ -907,7 +922,8 @@ tp_f_add_evidence (framework_model_item_o *self, PyObject *args)
     try
     {
         arg_evidence = mobius::py::get_arg_as_cpp (
-            args, 0, pymobius_framework_model_evidence_from_pyobject);
+            args, 0, pymobius_framework_model_evidence_from_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -961,11 +977,13 @@ tp_f_get_evidences (framework_model_item_o *self, PyObject *args)
         if (arg_type.empty ())
             ret = mobius::py::pylist_from_cpp_container (
                 self->obj->get_evidences (),
-                pymobius_framework_model_evidence_to_pyobject);
+                pymobius_framework_model_evidence_to_pyobject
+            );
         else
             ret = mobius::py::pylist_from_cpp_container (
                 self->obj->get_evidences (arg_type),
-                pymobius_framework_model_evidence_to_pyobject);
+                pymobius_framework_model_evidence_to_pyobject
+            );
     }
     catch (const std::exception &e)
     {
@@ -1044,11 +1062,13 @@ tp_f_count_evidences (framework_model_item_o *self, PyObject *args)
         if (arg_type.empty ())
         {
             ret = mobius::py::pylong_from_std_int64_t (
-                self->obj->count_evidences ());
+                self->obj->count_evidences ()
+            );
         }
         else
             ret = mobius::py::pylong_from_std_int64_t (
-                self->obj->count_evidences (arg_type));
+                self->obj->count_evidences (arg_type)
+            );
     }
     catch (const std::exception &e)
     {
@@ -1071,8 +1091,10 @@ tp_f_count_evidences_grouped (framework_model_item_o *self, PyObject *)
     try
     {
         ret = mobius::py::pydict_from_cpp_container (
-            self->obj->count_evidences_grouped (), mobius::py::pystring_from_std_string,
-            mobius::py::pylong_from_std_int64_t);
+            self->obj->count_evidences_grouped (),
+            mobius::py::pystring_from_std_string,
+            mobius::py::pylong_from_std_int64_t
+        );
     }
     catch (const std::exception &e)
     {
@@ -1132,8 +1154,8 @@ tp_f_get_events (framework_model_item_o *self, PyObject *)
     try
     {
         ret = mobius::py::pylist_from_cpp_container (
-            self->obj->get_events (),
-            pymobius_framework_model_event_to_pyobject);
+            self->obj->get_events (), pymobius_framework_model_event_to_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -1158,7 +1180,8 @@ tp_f_new_connection (framework_model_item_o *self, PyObject *)
     try
     {
         ret = pymobius_core_database_connection_to_pyobject (
-            self->obj->new_connection ());
+            self->obj->new_connection ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -1184,7 +1207,8 @@ tp_f_new_transaction (framework_model_item_o *self, PyObject *)
     try
     {
         ret = pymobius_core_database_transaction_to_pyobject (
-            self->obj->new_transaction ());
+            self->obj->new_transaction ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -1318,7 +1342,8 @@ tp_getattro (PyObject *o, PyObject *name)
 
             if (self->obj->has_attribute (s_name))
                 ret = pymobius_core_pod_data_to_pyobject (
-                    self->obj->get_attribute (s_name));
+                    self->obj->get_attribute (s_name)
+                );
 
             else
                 ret = mobius::py::pynone ();
@@ -1354,10 +1379,12 @@ tp_setattro (PyObject *o, PyObject *name, PyObject *value)
 
             if (value == nullptr)
                 mobius::py::set_invalid_type_error (
-                    "cannot delete attribute '" + s_name + "'");
+                    "cannot delete attribute '" + s_name + "'"
+                );
             else
-                mobius::py::set_invalid_type_error ("cannot set attribute '" +
-                                                    s_name + "'");
+                mobius::py::set_invalid_type_error (
+                    "cannot set attribute '" + s_name + "'"
+                );
 
             return -1;
         }
@@ -1452,8 +1479,11 @@ static Py_hash_t
 tp_hash (framework_model_item_o *self)
 {
     // As negative value indicates error, return non-negative value
-    return std::abs (static_cast<Py_hash_t> (
-        std::hash<mobius::framework::model::item> {}(*(self->obj))));
+    return std::abs (
+        static_cast<Py_hash_t> (
+            std::hash<mobius::framework::model::item> {}(*(self->obj))
+        )
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1540,10 +1570,12 @@ pymobius_framework_model_item_check (PyObject *value)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_framework_model_item_to_pyobject (
-    const mobius::framework::model::item &obj)
+    const mobius::framework::model::item &obj
+)
 {
     return mobius::py::to_pyobject_nullable<framework_model_item_o> (
-        obj, &framework_model_item_t);
+        obj, &framework_model_item_t
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1555,7 +1587,8 @@ mobius::framework::model::item
 pymobius_framework_model_item_from_pyobject (PyObject *value)
 {
     return mobius::py::from_pyobject<framework_model_item_o> (
-        value, &framework_model_item_t);
+        value, &framework_model_item_t
+    );
 }
 
 namespace
@@ -1572,18 +1605,25 @@ class attribute_modified_callback
     }
 
     void
-    operator() (const mobius::framework::model::item &item,
-                const std::string &id, const mobius::core::pod::data &old_value,
-                const mobius::core::pod::data &new_value)
+    operator() (
+        const mobius::framework::model::item &item,
+        const std::string &id,
+        const mobius::core::pod::data &old_value,
+        const mobius::core::pod::data &new_value
+    )
     {
-        f_.call (pymobius_framework_model_item_to_pyobject (item),
-                 mobius::py::pystring_from_std_string (id),
-                 pymobius_core_pod_data_to_pyobject (old_value),
-                 pymobius_core_pod_data_to_pyobject (new_value));
+        mobius::py::GIL_guard gil_guard;
+
+        f_ (
+            pymobius_framework_model_item_to_pyobject (item),
+            mobius::py::pystring_from_std_string (id),
+            pymobius_core_pod_data_to_pyobject (old_value),
+            pymobius_core_pod_data_to_pyobject (new_value)
+        );
     }
 
   private:
-    mobius::py::pyobject f_;
+    mobius::py::function f_;
 };
 
 mobius::py::callback<attribute_modified_callback> cb_1_ ("attribute-modified");
@@ -1600,16 +1640,23 @@ class attribute_removed_callback
     }
 
     void
-    operator() (const mobius::framework::model::item &item,
-                const std::string &id, const mobius::core::pod::data &old_value)
+    operator() (
+        const mobius::framework::model::item &item,
+        const std::string &id,
+        const mobius::core::pod::data &old_value
+    )
     {
-        f_.call (pymobius_framework_model_item_to_pyobject (item),
-                 mobius::py::pystring_from_std_string (id),
-                 pymobius_core_pod_data_to_pyobject (old_value));
+        mobius::py::GIL_guard gil_guard;
+
+        f_ (
+            pymobius_framework_model_item_to_pyobject (item),
+            mobius::py::pystring_from_std_string (id),
+            pymobius_core_pod_data_to_pyobject (old_value)
+        );
     }
 
   private:
-    mobius::py::pyobject f_;
+    mobius::py::function f_;
 };
 
 mobius::py::callback<attribute_removed_callback> cb_2_ ("attribute-removed");
@@ -1626,15 +1673,19 @@ class datasource_modified_callback
     }
 
     void
-    operator() (const mobius::framework::model::item &item,
-                const mobius::core::datasource::datasource &datasource)
+    operator() (
+        const mobius::framework::model::item &item,
+        const mobius::core::datasource::datasource &datasource
+    )
     {
-        f_.call (pymobius_framework_model_item_to_pyobject (item),
-                 pymobius_core_datasource_datasource_to_pyobject (datasource));
+        mobius::py::GIL_guard gil_guard;
+
+        f_ (pymobius_framework_model_item_to_pyobject (item),
+            pymobius_core_datasource_datasource_to_pyobject (datasource));
     }
 
   private:
-    mobius::py::pyobject f_;
+    mobius::py::function f_;
 };
 
 mobius::py::callback<datasource_modified_callback>
@@ -1654,11 +1705,13 @@ class datasource_removed_callback
     void
     operator() (const mobius::framework::model::item &item)
     {
-        f_.call (pymobius_framework_model_item_to_pyobject (item));
+        mobius::py::GIL_guard gil_guard;
+
+        f_ (pymobius_framework_model_item_to_pyobject (item));
     }
 
   private:
-    mobius::py::pyobject f_;
+    mobius::py::function f_;
 };
 
 mobius::py::callback<datasource_removed_callback> cb_4_ ("datasource-removed");

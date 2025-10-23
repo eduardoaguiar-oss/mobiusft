@@ -28,7 +28,18 @@ namespace
 static bool
 _callback_delete_event (GtkWidget *, GdkEvent *, gpointer data)
 {
-    return static_cast<mobius::core::functor<bool> *> (data)->operator() ();
+    return reinterpret_cast<mobius::extension::ui::gtk3::window_impl *> (data)
+        ->_on_delete_event ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Callback for <i>destroy</i>
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static void
+_callback_destroy (GtkWidget *, gpointer data)
+{
+    reinterpret_cast<mobius::extension::ui::gtk3::window_impl *> (data)
+        ->_on_destroy_event ();
 }
 
 } //  namespace
@@ -41,10 +52,13 @@ namespace mobius::extension::ui::gtk3
 window_impl::window_impl ()
 {
     widget_ = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
     accel_group_ = gtk_accel_group_new ();
-    gtk_window_add_accel_group (reinterpret_cast<GtkWindow *> (widget_),
-                                accel_group_);
+
+    gtk_window_add_accel_group (
+        reinterpret_cast<GtkWindow *> (widget_), accel_group_
+    );
+
+    g_signal_connect (widget_, "destroy", G_CALLBACK (_callback_destroy), this);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -91,16 +105,19 @@ window_impl::show_all ()
 void
 window_impl::destroy ()
 {
-    if (content_)
+    if (widget_)
+    {
         content_ = {};
 
-    g_object_unref (G_OBJECT (accel_group_));
-    accel_group_ = nullptr;
+        if (accel_group_)
+        {
+            g_object_unref (G_OBJECT (accel_group_));
+            accel_group_ = nullptr;
+        }
 
-    reset_callback ("closing");
-
-    gtk_widget_destroy (widget_);
-    widget_ = nullptr;
+        gtk_widget_destroy (widget_);
+        widget_ = nullptr;
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -110,8 +127,9 @@ window_impl::destroy ()
 void
 window_impl::set_title (const std::string &title)
 {
-    gtk_window_set_title (reinterpret_cast<GtkWindow *> (widget_),
-                          title.c_str ());
+    gtk_window_set_title (
+        reinterpret_cast<GtkWindow *> (widget_), title.c_str ()
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -142,7 +160,8 @@ window_impl::set_icon (const mobius::core::ui::icon &icon)
 
     gtk_window_set_icon (
         reinterpret_cast<GtkWindow *> (widget_),
-        gtk_image_get_pixbuf (reinterpret_cast<GtkImage *> (gtk_widget)));
+        gtk_image_get_pixbuf (reinterpret_cast<GtkImage *> (gtk_widget))
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -152,8 +171,9 @@ window_impl::set_icon (const mobius::core::ui::icon &icon)
 void
 window_impl::set_border_width (std::uint32_t width)
 {
-    gtk_container_set_border_width (reinterpret_cast<GtkContainer *> (widget_),
-                                    width);
+    gtk_container_set_border_width (
+        reinterpret_cast<GtkContainer *> (widget_), width
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -165,12 +185,15 @@ window_impl::set_content (const mobius::core::ui::widget &w)
 {
     if (content_)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("window content already set"));
+            MOBIUS_EXCEPTION_MSG ("window content already set")
+        );
 
     content_ = w;
 
-    gtk_container_add (reinterpret_cast<GtkContainer *> (widget_),
-                       content_.get_ui_widget<GtkWidget *> ());
+    gtk_container_add (
+        reinterpret_cast<GtkContainer *> (widget_),
+        content_.get_ui_widget<GtkWidget *> ()
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -191,8 +214,10 @@ window_impl::remove_content ()
 {
     if (content_)
     {
-        gtk_container_remove (reinterpret_cast<GtkContainer *> (widget_),
-                              content_.get_ui_widget<GtkWidget *> ());
+        gtk_container_remove (
+            reinterpret_cast<GtkContainer *> (widget_),
+            content_.get_ui_widget<GtkWidget *> ()
+        );
 
         content_ = {};
     }
@@ -245,8 +270,9 @@ window_impl::get_size () const
     gint width = 0;
     gint height = 0;
 
-    gtk_window_get_size (reinterpret_cast<GtkWindow *> (widget_), &width,
-                         &height);
+    gtk_window_get_size (
+        reinterpret_cast<GtkWindow *> (widget_), &width, &height
+    );
 
     return {width, height};
 }
@@ -257,24 +283,31 @@ window_impl::get_size () const
 // @param f Function or functor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-window_impl::set_callback (const std::string &event_id,
-                           const mobius::core::functor<bool> &f)
+window_impl::set_callback (
+    const std::string &event_id, const mobius::core::functor<bool> &f
+)
 {
     if (event_id == "closing")
     {
-        if (closing_callback_)
-            g_object_disconnect (G_OBJECT (widget_), "delete-event", nullptr);
+        if (delete_event_handler_id_)
+        {
+            g_signal_handler_disconnect (
+                G_OBJECT (widget_), delete_event_handler_id_
+            );
+        }
 
         closing_callback_ = f;
 
-        g_signal_connect (G_OBJECT (widget_), "delete-event",
-                          G_CALLBACK (_callback_delete_event),
-                          &closing_callback_);
+        delete_event_handler_id_ = g_signal_connect (
+            G_OBJECT (widget_), "delete-event",
+            G_CALLBACK (_callback_delete_event), this
+        );
     }
 
     else
         throw std::invalid_argument (
-            MOBIUS_EXCEPTION_MSG ("invalid event: " + event_id));
+            MOBIUS_EXCEPTION_MSG ("invalid event: " + event_id)
+        );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -286,16 +319,48 @@ window_impl::reset_callback (const std::string &event_id)
 {
     if (event_id == "closing")
     {
-        if (closing_callback_)
+        if (delete_event_handler_id_)
         {
-            g_signal_handlers_disconnect_by_data (widget_, &closing_callback_);
+            if (g_signal_handler_is_connected (
+                    G_OBJECT (widget_), delete_event_handler_id_
+                ))
+                g_signal_handler_disconnect (
+                    G_OBJECT (widget_), delete_event_handler_id_
+                );
+
+            delete_event_handler_id_ = 0;
             closing_callback_ = {};
         }
     }
 
     else
         throw std::invalid_argument (
-            MOBIUS_EXCEPTION_MSG ("invalid event: " + event_id));
+            MOBIUS_EXCEPTION_MSG ("invalid event: " + event_id)
+        );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Handler for <i>delete-event</i>
+// @return true to stop event propagation, false to continue
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+window_impl::_on_delete_event ()
+{
+    bool rc = false;
+
+    if (closing_callback_)
+        rc = closing_callback_ ();
+
+    return rc;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Handler for <i>destroy</i> event
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+window_impl::_on_destroy_event ()
+{
+    widget_ = nullptr;
 }
 
 } // namespace mobius::extension::ui::gtk3

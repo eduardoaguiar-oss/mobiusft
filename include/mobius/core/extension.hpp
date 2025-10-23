@@ -3,7 +3,9 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C) 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025 Eduardo Aguiar
+// Copyright (C)
+// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -29,43 +31,41 @@ namespace mobius::core
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class extension
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit extension (const std::string&);
-  extension (extension&&) noexcept = default;
-  extension (const extension&) noexcept = default;
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    explicit extension (const std::string &);
+    extension (extension &&) noexcept = default;
+    extension (const extension &) noexcept = default;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Operators
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  extension& operator= (const extension&) noexcept = default;
-  extension& operator= (extension&&) noexcept = default;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    extension &operator= (const extension &) noexcept = default;
+    extension &operator= (extension &&) noexcept = default;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Function prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void start ();
-  void stop ();
-  void install ();
-  void uninstall ();
-  std::string get_id () const;
-  std::string get_name () const;
-  std::string get_version () const;
-  std::string get_authors () const;
-  std::string get_description () const;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Function prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void start ();
+    void stop ();
+    void install ();
+    void uninstall ();
+    std::string get_id () const;
+    std::string get_name () const;
+    std::string get_version () const;
+    std::string get_authors () const;
+    std::string get_description () const;
 
-private:
-  // @brief Implementation class forward declaration
-  class impl;
+  private:
+    // @brief Implementation class forward declaration
+    class impl;
 
-  // @brief Implementation pointer
-  std::shared_ptr <impl> impl_;
+    // @brief Implementation pointer
+    std::shared_ptr<impl> impl_;
 };
 
 } // namespace mobius::core
 
 #endif
-
-

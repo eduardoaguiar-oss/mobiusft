@@ -20,20 +20,93 @@
 #include <mobius/core/exception.inc>
 #include <mobius/core/resource.hpp>
 #include <mobius/core/ui/ui.hpp>
+#include <mutex>
 #include <stdexcept>
+#include <unordered_map>
+#include <algorithm>
+#include <string>
 
 namespace
 {
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Global UI implementation data
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static std::shared_ptr<mobius::core::ui::ui_impl_base> g_impl_;
-static std::string g_impl_id_;
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Data
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+// @brief Map to hold UI implementation data
+static std::unordered_map<std::string, mobius::core::ui::implementation_data>
+    data;
+
+// @brief Mutex to protect access to the implementation map
+static std::mutex data_mutex;
+
+// @brief Current UI implementation instance
+std::shared_ptr<mobius::core::ui::ui_impl_base> current_impl;
+
+// @brief Current UI implementation ID
+static std::string current_impl_id;
 
 } // namespace
 
 namespace mobius::core::ui
 {
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Register an UI implementation
+// @param id Unique identifier for the UI implementation
+// @param name Name of the UI implementation
+// @param builder Function to create an instance of the UI implementation
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+register_implementation (
+    const std::string &id,
+    const std::string &name,
+    mobius::core::ui::implementation_builder builder
+)
+{
+    mobius::core::ui::implementation_data data_entry;
+    data_entry.id = id;
+    data_entry.name = name;
+    data_entry.builder = builder;
+
+    std::lock_guard<std::mutex> lock (data_mutex);
+    data[id] = data_entry;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Unregister an UI implementation
+// @param id Unique identifier for the UI implementation
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+unregister_implementation (const std::string &id)
+{
+    if (id == current_impl_id)
+    {
+        current_impl.reset ();
+        current_impl_id.clear ();
+    }
+
+    std::lock_guard<std::mutex> lock (data_mutex);
+    data.erase (id);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get all registered UI implementations
+// @return Vector of pairs containing the ID and name of each UI implementation
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<implementation_data>
+list_vfs_processor_implementations ()
+{
+    std::lock_guard<std::mutex> lock (data_mutex);
+
+    std::vector<implementation_data> implementations (data.size ());
+
+    std::transform (
+        data.begin (), data.end (), implementations.begin (),
+        [] (const auto &pair) { return pair.second; }
+    );
+
+    return implementations;
+}
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Set current UI implementation class
 // @param id UI implementation ID
@@ -41,20 +114,24 @@ namespace mobius::core::ui
 void
 set_implementation (const std::string &id)
 {
-    if (g_impl_)
+    // Check if current implementation is already set
+    if (current_impl)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("UI implementation already set"));
+            MOBIUS_EXCEPTION_MSG ("UI implementation already set")
+        );
 
     // search implementation
-    auto resource = mobius::core::get_resource ("ui.implementation." + id);
+    std::lock_guard<std::mutex> lock (data_mutex);
 
-    if (!resource)
+    auto iter = data.find (id);
+    if (iter == data.end ())
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("UI implementation '" + id + "' not found"));
+            MOBIUS_EXCEPTION_MSG ("UI implementation '" + id + "' not found")
+        );
 
-    // set implementation
-    g_impl_ = resource.get_value<resource_type> () ();
-    g_impl_id_ = id;
+    // build implementation
+    current_impl = iter->second.builder ();
+    current_impl_id = id;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -64,24 +141,24 @@ set_implementation (const std::string &id)
 std::shared_ptr<ui_impl_base>
 get_implementation ()
 {
-    // if g_impl_ is not set, create using first UI implementation available
-    if (!g_impl_)
+    // if current_impl is not set, create using first implementation available
+    if (!current_impl)
     {
-        auto resources = mobius::core::get_resources ("ui.implementation");
+        std::lock_guard<std::mutex> lock (data_mutex);
 
-        if (resources.size () == 0)
+        auto iter = data.begin ();
+
+        if (iter == data.end ())
             throw std::runtime_error (
-                MOBIUS_EXCEPTION_MSG ("no UI implementation found"));
+                MOBIUS_EXCEPTION_MSG ("no UI implementation found")
+            );
 
-        else
-        {
-            g_impl_ = resources[0].get_value<resource_type> () ();
-            g_impl_id_ = resources[0].get_id ();
-        }
+        current_impl = iter->second.builder ();
+        current_impl_id = iter->second.id;
     }
 
     // return implementation instance
-    return g_impl_;
+    return current_impl;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

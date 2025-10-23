@@ -979,7 +979,6 @@ vfs_processor_impl::_save_visited_urls ()
                 "incremented_omnibox_typed_score",
                 entry.incremented_omnibox_typed_score
             );
-            metadata.set ("is_indexed", entry.is_indexed);
             metadata.set ("is_known_to_sync", entry.is_known_to_sync);
             metadata.set ("opener_visit", entry.opener_visit);
             metadata.set ("originator_cache_guid", entry.originator_cache_guid);

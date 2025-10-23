@@ -23,13 +23,14 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "window.hpp"
-#include "icon.hpp"
-#include "widget.hpp"
 #include <mobius/core/exception.inc>
 #include <pyfunction.hpp>
+#include <pygil.hpp>
 #include <pymobius.hpp>
 #include <pyobject.hpp>
 #include <stdexcept>
+#include "icon.hpp"
+#include "widget.hpp"
 
 namespace
 {
@@ -47,7 +48,12 @@ class callback_closing
     bool
     operator() ()
     {
+        mobius::py::GIL_guard gil_guard;
+
         PyObject *py_rc = f_ ();
+        if (!py_rc)
+            throw std::runtime_error (MOBIUS_EXCEPTION_MSG (mobius::py::get_error_message ()));
+
         bool rc = mobius::py::pybool_as_bool (py_rc);
         Py_DECREF (py_rc);
 
@@ -253,7 +259,8 @@ tp_f_set_icon (core_ui_window_o *self, PyObject *args)
     try
     {
         arg_icon = mobius::py::get_arg_as_cpp (
-            args, 0, pymobius_core_ui_icon_from_pyobject);
+            args, 0, pymobius_core_ui_icon_from_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -326,7 +333,8 @@ tp_f_set_content (core_ui_window_o *self, PyObject *args)
     try
     {
         arg_w = mobius::py::get_arg_as_cpp (
-            args, 0, pymobius_core_ui_widget_from_pyobject);
+            args, 0, pymobius_core_ui_widget_from_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -451,7 +459,8 @@ tp_f_get_position (core_ui_window_o *self, PyObject *)
     {
         ret = mobius::py::pytuple_from_cpp_pair (
             self->obj->get_position (), mobius::py::pylong_from_std_uint32_t,
-            mobius::py::pylong_from_std_uint32_t);
+            mobius::py::pylong_from_std_uint32_t
+        );
     }
     catch (const std::exception &e)
     {
@@ -516,7 +525,8 @@ tp_f_get_size (core_ui_window_o *self, PyObject *)
     {
         ret = mobius::py::pytuple_from_cpp_pair (
             self->obj->get_size (), mobius::py::pylong_from_std_uint32_t,
-            mobius::py::pylong_from_std_uint32_t);
+            mobius::py::pylong_from_std_uint32_t
+        );
     }
     catch (const std::exception &e)
     {
@@ -558,8 +568,9 @@ tp_f_set_callback (core_ui_window_o *self, PyObject *args)
 
         else
         {
-            mobius::py::set_invalid_type_error ("invalid event ID: " +
-                                                arg_event_id);
+            mobius::py::set_invalid_type_error (
+                "invalid event ID: " + arg_event_id
+            );
             return nullptr;
         }
     }
@@ -782,6 +793,7 @@ pymobius_core_ui_window_to_pyobject (const mobius::core::ui::window &obj)
 mobius::core::ui::window
 pymobius_core_ui_window_from_pyobject (PyObject *value)
 {
-    return mobius::py::from_pyobject<core_ui_window_o> (value,
-                                                        &core_ui_window_t);
+    return mobius::py::from_pyobject<core_ui_window_o> (
+        value, &core_ui_window_t
+    );
 }
