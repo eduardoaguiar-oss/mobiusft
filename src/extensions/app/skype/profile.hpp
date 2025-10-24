@@ -59,7 +59,9 @@ class profile
     mobius::core::datetime::datetime get_creation_time () const;
     mobius::core::datetime::datetime get_last_modified_time () const;
 
-    //void add_phashidx_file (const mobius::core::io::file &);
+    void add_main_db_file (const mobius::core::io::file &);
+    void add_skype_db_file (const mobius::core::io::file &);
+    void add_s4l_db_file (const mobius::core::io::file &);
 
   private:
     // @brief Forward declaration

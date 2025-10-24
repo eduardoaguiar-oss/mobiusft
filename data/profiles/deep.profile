@@ -10,5 +10,6 @@ app-ares
 app-chromium
 app-emule
 app-emuletorrent
+app-skype
 app-shareaza
 app-utorrent

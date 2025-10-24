@@ -129,7 +129,9 @@ class profile::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // void add_phashidx_file (const mobius::core::io::file &);
+    void add_main_db_file (const mobius::core::io::file &);
+    void add_skype_db_file (const mobius::core::io::file &);
+    void add_s4l_db_file (const mobius::core::io::file &);
 
   private:
     // @brief Folder object
@@ -165,6 +167,33 @@ profile::impl::set_folder (const mobius::core::io::folder &f)
     last_modified_time_ = f.get_modification_time ();
     creation_time_ = f.get_creation_time ();
     username_ = get_username_from_path (f.get_path ());
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add main.db file
+// @param f Main.db file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::add_main_db_file (const mobius::core::io::file &f)
+{
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add skype.db file
+// @param f Skype.db file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::add_skype_db_file (const mobius::core::io::file &f)
+{
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add s4l-xxx.db file
+// @param f s4l-xxx.db file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::add_s4l_db_file (const mobius::core::io::file &f)
+{
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -236,13 +265,33 @@ profile::get_last_modified_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Add PHashIdx.dat file
-// @param f PHashIdx.dat file
+// @brief Add main.db file
+// @param f Main.db file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//void
-//profile::add_phashidx_file (const mobius::core::io::file &f)
-//{
-//    impl_->add_phashidx_file (f);
-//}
+void
+profile::add_main_db_file (const mobius::core::io::file &f)
+{
+    impl_->add_main_db_file (f);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add skype.db file
+// @param f Skype.db file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_skype_db_file (const mobius::core::io::file &f)
+{
+    impl_->add_skype_db_file (f);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add s4l-xxx.db file
+// @param f s4l-xxx.db file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_s4l_db_file (const mobius::core::io::file &f)
+{
+    impl_->add_s4l_db_file (f);
+}
 
 } // namespace mobius::extension::app::skype

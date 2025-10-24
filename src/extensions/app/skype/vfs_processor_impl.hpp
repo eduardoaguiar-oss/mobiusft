@@ -63,16 +63,13 @@ class vfs_processor_impl
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _scan_profile_folder (const mobius::core::io::folder &);
-    // void _scan_arestra_folder (const mobius::core::io::folder &);
-    // void _scan_ntuser_dat_folder (const mobius::core::io::folder &);
-
-    // void _decode_arestra_file (const mobius::core::io::file &);
-    // void _decode_ntuser_dat_file (const mobius::core::io::file &);
+    void _scan_s4l_files (const mobius::core::io::folder &);
+    void _decode_s4l_file (const mobius::core::io::file &);
 
     // void _save_app_profiles ();
     // void _save_autofills ();
 };
 
-} // namespace mobius::extension::app::stub
+} // namespace mobius::extension::app::skype
 
 #endif
