@@ -27,6 +27,7 @@ project(app_skype LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(app_skype MODULE
     main.cpp
+    file_main_db.cpp
     profile.cpp
     vfs_processor_impl.cpp
 )

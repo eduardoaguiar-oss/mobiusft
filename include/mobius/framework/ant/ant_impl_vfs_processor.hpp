@@ -108,6 +108,9 @@ class ant_impl_vfs_processor : public ant_impl_base
     // @brief Total number of folders processed
     size_t processed_folders_ = 0;
 
+    // @brief Total number of files processed
+    size_t processed_files_ = 0;
+
     // @brief Current folder path
     std::string current_folder_path_;
 

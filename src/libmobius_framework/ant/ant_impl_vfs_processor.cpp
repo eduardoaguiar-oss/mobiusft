@@ -45,7 +45,8 @@ ant_impl_vfs_processor::ant_impl_vfs_processor (
     : item_ (item),
       case_profile_ (case_profile),
       progress_ (0.0),
-      processed_folders_ (0)
+      processed_folders_ (0),
+      processed_files_ (0)
 {
     flag_all_folders_ = case_profile_.get_processor_scope () == "all";
 
@@ -98,6 +99,7 @@ ant_impl_vfs_processor::get_status () const
 
     mobius::core::pod::map status = {
         {"processed_folders", processed_folders_},
+        {"processed_files", processed_files_},
         {"current_folder", current_folder_path_},
         {"vfs_processors_count", implementations_.size ()},
     };
@@ -226,6 +228,12 @@ ant_impl_vfs_processor::_process_folder (const mobius::core::io::folder &folder)
         {
             if (entry.is_folder ())
                 _process_folder (entry.get_folder ());
+                
+            else
+            {
+                std::lock_guard<std::mutex> lock (status_mutex_);
+                processed_files_++;
+            }
         }
     }
     catch (const std::exception &e)

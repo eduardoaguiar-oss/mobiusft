@@ -66,7 +66,7 @@ class vfs_processor_impl
     void _scan_s4l_files (const mobius::core::io::folder &);
     void _decode_s4l_file (const mobius::core::io::file &);
 
-    // void _save_app_profiles ();
+    void _save_app_profiles ();
     // void _save_autofills ();
 };
 

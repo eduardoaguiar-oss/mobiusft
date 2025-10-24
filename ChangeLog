@@ -1,4 +1,6 @@
 Mobius Forensic Toolkit 2.21
+	* Added new C++ extension called "app-skype"
+	* libmobius_framework: Changed vfs_processor to count processed files
 
 Mobius Forensic Toolkit 2.20
 	* app-ares: Added new class profile

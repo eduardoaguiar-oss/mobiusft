@@ -18,8 +18,11 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "profile.hpp"
+#include <mobius/core/database/database.hpp>
 #include <mobius/core/io/path.hpp>
+#include <mobius/core/io/tempfile.hpp>
 #include <mobius/core/log.hpp>
+#include <mobius/core/mediator.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <mobius/core/value_selector.hpp>
 #include <algorithm>
@@ -103,7 +106,7 @@ class profile::impl
     std::string
     get_path () const
     {
-        return (folder_) ? folder_.get_path () : "";
+        return path_;
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -137,6 +140,9 @@ class profile::impl
     // @brief Folder object
     mobius::core::io::folder folder_;
 
+    // @brief Path to profile
+    std::string path_;
+
     // @brief Username
     std::string username_;
 
@@ -149,7 +155,8 @@ class profile::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void set_folder (const mobius::core::io::folder &);
+    void _set_folder (const mobius::core::io::folder &);
+    void _update_mtime (const mobius::core::io::file &);
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -157,16 +164,42 @@ class profile::impl
 // @param f Folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::impl::set_folder (const mobius::core::io::folder &f)
+profile::impl::_set_folder (const mobius::core::io::folder &f)
 {
     if (folder_ || !f)
         return;
 
     folder_ = f;
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Get data from folder
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=    
+    path_ = f.get_path ();
     last_modified_time_ = f.get_modification_time ();
     creation_time_ = f.get_creation_time ();
     username_ = get_username_from_path (f.get_path ());
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Emit sampling_folder event
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::emit (
+        "sampling_folder", std::string ("app.skype.profiles"), f
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Update last modified time based on file
+// @param f File
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_update_mtime (const mobius::core::io::file &f)
+{
+    if (!f)
+        return;
+
+    if (!last_modified_time_ ||
+        f.get_modification_time () > last_modified_time_)
+        last_modified_time_ = f.get_modification_time ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -176,6 +209,39 @@ profile::impl::set_folder (const mobius::core::io::folder &f)
 void
 profile::impl::add_main_db_file (const mobius::core::io::file &f)
 {
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        auto reader = f.new_reader ();
+        if (!reader)
+            return;
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Copy reader content to temporary file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::io::tempfile tfile;
+        tfile.copy_from (reader);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Get schema version
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::database::database db (tfile.get_path ());
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Decode file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        log.info (__LINE__, "File decoded [main.db]: " + f.get_path ());
+
+        _set_folder (f.get_parent ());
+        _update_mtime (f);
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
+        );
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
