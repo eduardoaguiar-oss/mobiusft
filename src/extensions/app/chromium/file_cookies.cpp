@@ -34,7 +34,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //
 // - cookies
-//      - browser_provenance: 12-18, 21, 23-24
+//      - browser_provenance: 12-19, 21, 23-24
 //      - creation_utc: 4-19, 21, 23-24
 //      - encrypted_value: 7-19, 21, 23-24
 //      - expires_utc: 4-19, 21, 23-24
@@ -43,7 +43,7 @@
 //      - has_expires: 5-19, 21, 23-24
 //      - host_key: 4-19, 21, 23-24
 //      - httponly: 4-9
-//      - is_edgelegacycookie: 12-18, 21, 23-24
+//      - is_edgelegacycookie: 12-19, 21, 23-24
 //      - is_httponly: 10-19, 21, 23-24
 //      - is_persistent: 10-19, 21, 23-24
 //      - is_same_party: 13-19

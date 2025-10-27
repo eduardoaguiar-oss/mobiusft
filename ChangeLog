@@ -1,5 +1,6 @@
 Mobius Forensic Toolkit 2.21
 	* Added new C++ extension called "app-skype"
+	* app-chromium: Added support for Web Data files versions 120 and 137
 	* libmobius_framework: Changed vfs_processor to count processed files
 
 Mobius Forensic Toolkit 2.20
