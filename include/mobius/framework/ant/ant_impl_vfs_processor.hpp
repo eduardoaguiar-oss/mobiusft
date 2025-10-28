@@ -106,10 +106,10 @@ class ant_impl_vfs_processor : public ant_impl_base
     double progress_ = -1.0;
 
     // @brief Total number of folders processed
-    size_t processed_folders_ = 0;
+    std::atomic<size_t> processed_folders_ = 0;
 
     // @brief Total number of files processed
-    size_t processed_files_ = 0;
+    std::atomic<size_t> processed_files_ = 0;
 
     // @brief Current folder path
     std::string current_folder_path_;
@@ -123,6 +123,7 @@ class ant_impl_vfs_processor : public ant_impl_base
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _process_folder (const mobius::core::io::folder &);
+    void _scan_user_folders (const mobius::core::io::folder &);
 };
 
 } // namespace mobius::framework::ant

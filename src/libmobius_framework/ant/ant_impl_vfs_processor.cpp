@@ -98,8 +98,8 @@ ant_impl_vfs_processor::get_status () const
     std::lock_guard<std::mutex> lock (status_mutex_);
 
     mobius::core::pod::map status = {
-        {"processed_folders", processed_folders_},
-        {"processed_files", processed_files_},
+        {"processed_folders", processed_folders_.load ()},
+        {"processed_files", processed_files_.load ()},
         {"current_folder", current_folder_path_},
         {"vfs_processors_count", implementations_.size ()},
     };
@@ -114,7 +114,8 @@ void
 ant_impl_vfs_processor::run ()
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
-    processed_folders_ = 0;
+    processed_folders_.store (0);
+    processed_files_.store (0);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Get VFS object from item
@@ -150,22 +151,7 @@ ant_impl_vfs_processor::run ()
                 _process_folder (folder);
 
             else
-            {
-                for (const auto &child : folder.get_children ())
-                {
-                    if (child.is_folder ())
-                    {
-                        auto child_folder = child.get_folder ();
-                        auto lname = mobius::core::string::tolower (
-                            child_folder.get_name ()
-                        );
-
-                        if (lname == "home" || lname == "users" ||
-                            lname == "documents and settings")
-                            _process_folder (child_folder);
-                    }
-                }
-            }
+                _scan_user_folders (folder);
         }
     }
 
@@ -189,6 +175,39 @@ ant_impl_vfs_processor::run ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Scan user folders
+// @param folder Root folder object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+ant_impl_vfs_processor::_scan_user_folders (
+    const mobius::core::io::folder &folder
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        for (const auto &child : folder.get_children ())
+        {
+            if (child.is_folder ())
+            {
+                auto child_folder = child.get_folder ();
+                auto lname =
+                    mobius::core::string::tolower (child_folder.get_name ());
+
+                if (lname == "home" || lname == "users" ||
+                    lname == "documents and settings")
+                    _process_folder (child_folder);
+            }
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Process folder
 // @param folder Folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -198,10 +217,10 @@ ant_impl_vfs_processor::_process_folder (const mobius::core::io::folder &folder)
     mobius::core::log log (__FILE__, __FUNCTION__);
 
     {
-        std::lock_guard<std::mutex> lock (status_mutex_);
+        processed_folders_.fetch_add (1);
 
+        std::lock_guard<std::mutex> lock (status_mutex_);
         current_folder_path_ = folder.get_path ();
-        processed_folders_++;
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -228,12 +247,9 @@ ant_impl_vfs_processor::_process_folder (const mobius::core::io::folder &folder)
         {
             if (entry.is_folder ())
                 _process_folder (entry.get_folder ());
-                
+
             else
-            {
-                std::lock_guard<std::mutex> lock (status_mutex_);
-                processed_files_++;
-            }
+                processed_files_.fetch_add (1);
         }
     }
     catch (const std::exception &e)

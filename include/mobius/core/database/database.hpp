@@ -22,6 +22,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/database/statement.hpp>
 #include <mobius/core/database/transaction.hpp>
+#include <cstdint>
 #include <memory>
 #include <string>
 
@@ -56,6 +57,7 @@ class database
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void execute (const std::string &);
     statement new_statement (const std::string &);
+    statement new_statement (const std::string &, std::int64_t);
     transaction new_transaction ();
     void end_transaction ();
     std::string get_path () const;

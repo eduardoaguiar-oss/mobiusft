@@ -205,6 +205,102 @@ database::new_statement (const std::string &sql)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Generate new statement with version-aware SQL column replacements
+// @param pattern The SQL patternstring with ${column:start_version-end_version} placeholders
+// @param schema_version The current schema version to check against
+// @return statement object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+statement
+database::new_statement (const std::string &pattern, int64_t schema_version)
+{
+    std::string sql = pattern;
+    std::string::size_type pos = 0;
+
+    while ((pos = sql.find ("${", pos)) != std::string::npos)
+    {
+        // Find the closing bracket
+        auto end_pos = sql.find ("}", pos);
+        if (end_pos == std::string::npos)
+        {
+            pos += 2; // Skip the "${" and continue
+            continue;
+        }
+
+        // Extract the placeholder content
+        std::string placeholder = sql.substr (pos + 2, end_pos - pos - 2);
+
+        // Split column_name:start_version-end_version
+        std::string column_name;
+        std::string::size_type colon_pos = placeholder.find (':');
+
+        if (colon_pos != std::string::npos)
+        {
+            column_name = placeholder.substr (0, colon_pos);
+            placeholder = placeholder.substr (colon_pos + 1);
+        }
+
+        else
+        {
+            column_name = placeholder;
+            placeholder.clear ();
+        }
+
+        // Get version ranges
+        int64_t start_version = -1;
+        int64_t end_version = std::numeric_limits<int64_t>::max ();
+
+        // Parse start_version if provided
+        std::string::size_type dash_pos = placeholder.find ('-');
+        if (dash_pos != std::string::npos)
+        {
+            try
+            {
+                start_version = std::stoll (placeholder.substr (0, dash_pos));
+            }
+            catch (...)
+            {
+                // Keep default if parsing fails
+            }
+
+            try
+            {
+                end_version = std::stoll (placeholder.substr (dash_pos + 1));
+            }
+            catch (...)
+            {
+                // Keep default if parsing fails
+            }
+        }
+        else if (!placeholder.empty ())
+        {
+            try
+            {
+                start_version = std::stoll (placeholder);
+            }
+            catch (...)
+            {
+                // Keep default if parsing fails
+            }
+        }
+
+        // Check if current schema version is within range
+        std::string replacement = "NULL";
+
+        if (schema_version >= start_version && schema_version <= end_version)
+            replacement = column_name;
+
+        // Replace the placeholder with the column name or empty string
+        sql.replace (pos, end_pos - pos + 1, replacement);
+
+        // Continue searching from current position
+        // No need to advance pos since the replacement might be shorter than
+        // the placeholder
+    }
+
+    return new_statement (sql);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get database file path
 // @return database file path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

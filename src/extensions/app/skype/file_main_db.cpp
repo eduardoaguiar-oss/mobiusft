@@ -231,97 +231,6 @@ get_db_schema_version (mobius::core::database::database &db)
     return schema_version;
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Generate SQL statement with version-aware column replacements
-// @param sql_template The SQL template string with
-// ${column,start_version,end_version} placeholders
-// @param schema_version The current schema version to check against
-// @return Processed SQL statement with appropriate columns based on version
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-generate_sql (const std::string &sql_template, int64_t schema_version)
-{
-    std::string result = sql_template;
-    std::string::size_type pos = 0;
-
-    while ((pos = result.find ("${", pos)) != std::string::npos)
-    {
-        // Find the closing bracket
-        auto end_pos = result.find ("}", pos);
-        if (end_pos == std::string::npos)
-        {
-            pos += 2; // Skip the "${" and continue
-            continue;
-        }
-
-        // Extract the placeholder content
-        std::string placeholder = result.substr (pos + 2, end_pos - pos - 2);
-
-        // Split by comma
-        std::vector<std::string> parts;
-        std::string::size_type prev = 0;
-        std::string::size_type comma_pos = 0;
-
-        while ((comma_pos = placeholder.find (',', prev)) != std::string::npos)
-        {
-            parts.push_back (placeholder.substr (prev, comma_pos - prev));
-            prev = comma_pos + 1;
-        }
-        parts.push_back (placeholder.substr (prev));
-
-        // Default to empty string if column should be excluded
-        std::string replacement = "NULL";
-
-        // Get column name and version ranges
-        std::string column_name = parts[0];
-        int64_t start_version = -1;
-        int64_t end_version = std::numeric_limits<int64_t>::max ();
-
-        // Parse start_version if provided
-        if (parts.size () > 1 && !parts[1].empty ())
-        {
-            try
-            {
-                start_version = std::stoll (parts[1]);
-            }
-            catch (...)
-            {
-                // Keep default if parsing fails
-            }
-        }
-
-        // Parse end_version if provided
-        if (parts.size () > 2 && !parts[2].empty ())
-        {
-            try
-            {
-                end_version = std::stoll (parts[2]);
-            }
-            catch (...)
-            {
-                // Keep default if parsing fails
-            }
-        }
-
-        // Check if current schema version is within range
-        if (schema_version >= start_version && schema_version <= end_version)
-            replacement = column_name;
-
-        // Replace the placeholder with the column name or empty string
-        result.replace (pos, end_pos - pos + 1, replacement);
-
-        // Continue searching from current position
-        // No need to advance pos since the replacement might be shorter than
-        // the placeholder
-    }
-
-    if (DEBUG)
-        std::cout << "Generated SQL (schema version=" << schema_version
-                  << "): " << result << std::endl;
-
-    return result;
-}
-
 } // namespace
 
 namespace mobius::extension::app::skype
@@ -391,7 +300,7 @@ file_main_db::_load_accounts (mobius::core::database::database &db)
 
     try
     {
-        auto stmt = db.new_statement (generate_sql (
+        auto stmt = db.new_statement (
             "SELECT about, "
             "ad_policy, "
             "added_in_shared_group, "
@@ -492,7 +401,7 @@ file_main_db::_load_accounts (mobius::core::database::database &db)
             "webpresence_policy "
             "FROM accounts",
             schema_version_
-        ));
+        );
 
         // Retrieve rows from query
         std::uint64_t idx = 0;
