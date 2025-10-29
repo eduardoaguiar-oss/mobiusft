@@ -19,6 +19,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file_main_db.hpp"
 #include <mobius/core/database/database.hpp>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/io/tempfile.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/string_functions.hpp>
@@ -199,8 +200,9 @@ get_db_schema_version (mobius::core::database::database &db)
             return 0;
         }
 
-        auto stmt =
-            db.new_statement ("SELECT SQLiteSchemaVersion FROM AppSchemaVersion");
+        auto stmt = db.new_statement (
+            "SELECT SQLiteSchemaVersion FROM AppSchemaVersion"
+        );
 
         if (stmt.fetch_row ())
         {
@@ -216,8 +218,9 @@ get_db_schema_version (mobius::core::database::database &db)
         else
         {
             log.warning (
-                __LINE__, "Schema version not found in AppSchemaVersion table. Path: " +
-                              db.get_path ()
+                __LINE__,
+                "Schema version not found in AppSchemaVersion table. Path: " +
+                    db.get_path ()
             );
         }
     }
@@ -229,6 +232,17 @@ get_db_schema_version (mobius::core::database::database &db)
     }
 
     return schema_version;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Convert Skype timestamp to date/time
+// @param timestamp Numerical value representing the timestamp
+// @return Date/time object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::datetime::datetime
+get_datetime (std::int64_t timestamp)
+{
+    return mobius::core::datetime::new_datetime_from_unix_timestamp (timestamp);
 }
 
 } // namespace
@@ -259,9 +273,6 @@ file_main_db::file_main_db (const mobius::core::io::reader &reader)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         mobius::core::database::database db (tfile.get_path ());
         schema_version_ = get_db_schema_version (db);
-
-        if (!schema_version_)
-            return;
 
         if (schema_version_ > LAST_KNOWN_SCHEMA_VERSION ||
             UNKNOWN_SCHEMA_VERSIONS.find (schema_version_) !=
@@ -325,13 +336,13 @@ file_main_db::_load_accounts (mobius::core::database::database &db)
             "cblsyncstatus, "
             "chat_policy, "
             "city, "
-            "cobrand_id, "
+            "${cobrand_id:1}, "
             "commitstatus, "
             "country, "
             "displayname, "
             "emails, "
-            "federated_presence_policy, "
-            "flamingo_xmpp_status, "
+            "${federated_presence_policy:1}, "
+            "${flamingo_xmpp_status:1}, "
             "fullname, "
             "gender, "
             "given_authlevel, "
@@ -344,7 +355,7 @@ file_main_db::_load_accounts (mobius::core::database::database &db)
             "languages, "
             "lastonline_timestamp, "
             "lastused_timestamp, "
-            "liveid_membername, "
+            "${liveid_membername:1}, "
             "logoutreason, "
             "mood_text, "
             "mood_timestamp, "
@@ -354,9 +365,9 @@ file_main_db::_load_accounts (mobius::core::database::database &db)
             "nrof_authed_buddies, "
             "offline_authreq_id, "
             "offline_callforward, "
-            "options_change_future, "
+            "${options_change_future:1}, "
             "owner_under_legal_age, "
-            "partner_channel_status, "
+            "${partner_channel_status:1}, "
             "partner_optedout, "
             "phone_home, "
             "phone_mobile, "
@@ -373,13 +384,13 @@ file_main_db::_load_accounts (mobius::core::database::database &db)
             "registration_timestamp, "
             "revoked_auth, "
             "rich_mood_text, "
-            "roaming_history_enabled, "
+            "${roaming_history_enabled:1}, "
             "sent_authrequest, "
             "sent_authrequest_serial, "
             "sent_authrequest_time, "
             "service_provider_info, "
             "set_availability, "
-            "shortcircuit_sync, "
+            "${shortcircuit_sync:72}, "
             "skype_call_policy, "
             "skypein_numbers, "
             "skypename, "
@@ -394,9 +405,9 @@ file_main_db::_load_accounts (mobius::core::database::database &db)
             "timezone, "
             "timezone_policy, "
             "type, "
-            "uses_jcs, "
-            "verified_company, "
-            "verified_email, "
+            "${uses_jcs:1}, "
+            "${verified_company:1}, "
+            "${verified_email:1}, "
             "voicemail_policy, "
             "webpresence_policy "
             "FROM accounts",
@@ -422,13 +433,13 @@ file_main_db::_load_accounts (mobius::core::database::database &db)
             a.assigned_speeddial = stmt.get_column_string (6);
             a.authorized_time = stmt.get_column_int64 (7);
             a.authreq_history = stmt.get_column_bytearray (8);
-            a.authreq_timestamp = stmt.get_column_datetime (9);
+            a.authreq_timestamp = get_datetime (stmt.get_column_int64 (9));
             a.authrequest_count = stmt.get_column_int64 (10);
             a.authrequest_policy = stmt.get_column_int64 (11);
             a.availability = stmt.get_column_int64 (12);
             a.avatar_image = stmt.get_column_bytearray (13);
             a.avatar_policy = stmt.get_column_int64 (14);
-            a.avatar_timestamp = stmt.get_column_datetime (15);
+            a.avatar_timestamp = get_datetime (stmt.get_column_int64 (15));
             a.birthday = stmt.get_column_int64 (16);
             a.buddyblob = stmt.get_column_bytearray (17);
             a.buddycount_policy = stmt.get_column_int64 (18);
@@ -452,14 +463,14 @@ file_main_db::_load_accounts (mobius::core::database::database &db)
             a.id = stmt.get_column_int64 (36);
             a.in_shared_group = stmt.get_column_int64 (37);
             a.ipcountry = stmt.get_column_string (38);
-            a.is_permanent = stmt.get_column_int64 (39);
+            a.is_permanent = stmt.get_column_bool (39);
             a.languages = stmt.get_column_string (40);
-            a.lastonline_timestamp = stmt.get_column_datetime (41);
-            a.lastused_timestamp = stmt.get_column_datetime (42);
+            a.lastonline_timestamp = get_datetime (stmt.get_column_int64 (41));
+            a.lastused_timestamp = get_datetime (stmt.get_column_int64 (42));
             a.liveid_membername = stmt.get_column_string (43);
             a.logoutreason = stmt.get_column_int64 (44);
             a.mood_text = stmt.get_column_string (45);
-            a.mood_timestamp = stmt.get_column_datetime (46);
+            a.mood_timestamp = get_datetime (stmt.get_column_int64 (46));
             a.node_capabilities = stmt.get_column_int64 (47);
             a.node_capabilities_and = stmt.get_column_int64 (48);
             a.nr_of_other_instances = stmt.get_column_int64 (49);
@@ -475,14 +486,14 @@ file_main_db::_load_accounts (mobius::core::database::database &db)
             a.phone_office = stmt.get_column_string (59);
             a.phonenumbers_policy = stmt.get_column_int64 (60);
             a.profile_attachments = stmt.get_column_bytearray (61);
-            a.profile_timestamp = stmt.get_column_datetime (62);
+            a.profile_timestamp = get_datetime (stmt.get_column_int64 (62));
             a.province = stmt.get_column_string (63);
             a.pstn_call_policy = stmt.get_column_int64 (64);
             a.pstnnumber = stmt.get_column_string (65);
             a.pwdchangestatus = stmt.get_column_int64 (66);
             a.received_authrequest = stmt.get_column_string (67);
             a.refreshing = stmt.get_column_int64 (68);
-            a.registration_timestamp = stmt.get_column_datetime (69);
+            a.registration_timestamp = get_datetime (stmt.get_column_int64 (69));
             a.revoked_auth = stmt.get_column_int64 (70);
             a.rich_mood_text = stmt.get_column_string (71);
             a.roaming_history_enabled = stmt.get_column_bool (72);

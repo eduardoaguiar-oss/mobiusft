@@ -63,7 +63,7 @@ class profile
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct account
     {
-        // @brief GUID
+        // @brief ID
         std::string id;
 
         // @brief Name

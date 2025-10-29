@@ -68,26 +68,17 @@
 //      - url: 28-30, 32-33, 36-45, 48, 50-51, 53, 55-56, 58-59, 61-63, 65-70
 //
 // - keyword_search_terms: Keyword search terms
-//      - keyword_id: 20, 22-23, 28-30, 32-33, 36-45, 48, 50-51, 53, 55-56,
-//      58-59, 61-63, 65-70
-//      - lower_term: 20, 22-23, 28-30, 32-33, 36-42
-//      - normalized_term: 42-45, 48, 50-51, 53, 55-56, 58-59, 61-63, 65-70
-//      - term: 20, 22-23, 28-30, 32-33, 36-45, 48, 50-51, 53, 55-56, 58-59,
-//      61-63, 65-70
-//      - url_id: 20, 22-23, 28-30, 32-33, 36-45, 48, 50-51, 53, 55-56, 58-59,
-//      61-63, 65-70
+//      - keyword_id: 20, 22-23, 28-30, 32-33, 36-45, 48, 50-51, 53, 55-56, 58-59, 61-63, 65-70
+//      - lower_term: 20, 22-23, 28-30, 32-33, 36-41
+//      - normalized_term: 43-45, 48, 50-51, 53, 55-56, 58-59, 61-63, 65-70
+//      - term: 20, 22-23, 28-30, 32-33, 36-45, 48, 50-51, 53, 55-56, 58-59, 61-63, 65-70
+//      - url_id: 20, 22-23, 28-30, 32-33, 36-45, 48, 50-51, 53, 55-56, 58-59, 61-63, 65-70
 //
 // - urls: URLs
-//      - activity_time: 42-43, 45, 48, 51, 62, 67, 69
-//      - display_count: 42-43, 45, 48, 51, 62, 67, 69
-//      - display_time: 42-43, 45, 48, 51, 62, 67, 69
 //      - favicon_id: 20, 22-23, 28-30, 32-33
 //      - hidden: 20, 22-23, 28-30, 32-33, 36-45, 48, 50-51, 53, 55-56, 58-59, 61-63, 65-70
 //      - id: 20, 22-23, 28-30, 32-33, 36-45, 48, 50-51, 53, 55-56, 58-59, 61-63, 65-70
-//      - last_display: 42-43, 45, 48, 51, 62, 67, 69
 //      - last_visit_time: 20, 22-23, 28-30, 32-33, 36-45, 48, 50-51, 53, 55-56, 58-59, 61-63, 65-70
-//      - links_clicked_count: 42-43, 45, 48, 51, 62, 67, 69
-//      - open_time: 42-43, 45, 48, 51, 62, 67, 69
 //      - title: 20, 22-23, 28-30, 32-33, 36-45, 48, 50-51, 53, 55-56, 58-59, 61-63, 65-70
 //      - typed_count: 20, 22-23, 28-30, 32-33, 36-45, 48, 50-51, 53, 55-56, 58-59, 61-63, 65-70
 //      - url: 20, 22-23, 28-30, 32-33, 36-45, 48, 50-51, 53, 55-56, 58-59, 61-63, 65-70
@@ -107,6 +98,7 @@
 //      - from_visit: 20, 22-23, 28-30, 32-33, 36-45, 48, 50-51, 53, 55-56, 58-59, 61-63, 65-70
 //      - id: 20, 22-23, 28-30, 32-33, 36-45, 48, 50-51, 53, 55-56, 58-59, 61-63, 65-70
 //      - incremented_omnibox_typed_score: 40-45, 48, 50-51, 53, 55-56, 58-59, 61-63, 65-70
+//      - is_indexed: 20, 22-23
 //      - is_known_to_sync: 59, 61-63, 65-70
 //      - opener_visit: 50-51, 53, 55-56, 58-59, 61-63, 65-70
 //      - originator_cache_guid: 55-56, 58-59, 61-63, 65-70
@@ -291,42 +283,42 @@ file_history::_load_downloads (mobius::core::database::database &db)
             );
 
         else
-            stmt = db.new_statement (generate_sql (
+            stmt = db.new_statement (
                 "SELECT "
                 "d.by_ext_id, "
                 "d.by_ext_name, "
-                "${d.by_web_app_id,65}, "
+                "${d.by_web_app_id:65}, "
                 "d.current_path, "
                 "d.danger_type, "
-                "${d.embedder_download_data,53}, "
+                "${d.embedder_download_data:53}, "
                 "d.end_time, "
                 "d.etag, "
                 "NULL AS full_path, "
-                "${d.guid,30}, "
-                "${d.hash,30}, "
-                "${d.http_method,30}, "
+                "${d.guid:30}, "
+                "${d.hash:30}, "
+                "${d.http_method:30}, "
                 "d.id, "
                 "d.interrupt_reason, "
-                "${d.last_access_time,36}, "
+                "${d.last_access_time:36}, "
                 "d.last_modified, "
-                "${d.mime_type,29}, "
+                "${d.mime_type:29}, "
                 "d.opened, "
-                "${d.original_mime_type,29}, "
+                "${d.original_mime_type:29}, "
                 "d.received_bytes, "
                 "d.referrer, "
-                "${d.site_url,32}, "
+                "${d.site_url:32}, "
                 "d.start_time, "
                 "d.state, "
-                "${d.tab_referrer_url,32}, "
-                "${d.tab_url,32}, "
+                "${d.tab_referrer_url:32}, "
+                "${d.tab_url:32}, "
                 "d.target_path, "
                 "d.total_bytes, "
-                "${d.transient,36}, "
+                "${d.transient:36}, "
                 "c.url "
                 "FROM downloads d "
                 "LEFT JOIN downloads_url_chains c ON d.id = c.id",
                 schema_version_
-            ));
+            );
 
         // Retrieve rows from query
         std::uint64_t idx = 0;
@@ -415,9 +407,9 @@ file_history::_load_history (mobius::core::database::database &db)
     {
         // Prepare statement
         mobius::core::database::statement stmt =
-            db.new_statement (generate_sql (
+            db.new_statement (
                 "SELECT "
-                "${u.favicon_id,20,33}, "
+                "${u.favicon_id:20-33}, "
                 "u.hidden, "
                 "u.id, "
                 "u.last_visit_time, "
@@ -425,30 +417,30 @@ file_history::_load_history (mobius::core::database::database &db)
                 "u.typed_count, "
                 "u.url, "
                 "u.visit_count, "
-                "${v.app_id,69}, "
-                "${v.consider_for_ntp_most_visited,63}, "
-                "${v.external_referrer_url,66}, "
+                "${v.app_id:69}, "
+                "${v.consider_for_ntp_most_visited:63}, "
+                "${v.external_referrer_url:66}, "
                 "v.from_visit, "
                 "v.id, "
-                "${v.incremented_omnibox_typed_score,40}, "
-                "${v.is_known_to_sync,59}, "
-                "${v.opener_visit,50}, "
-                "${v.originator_cache_guid,55}, "
-                "${v.originator_from_visit,56}, "
-                "${v.originator_opener_visit,56}, "
-                "${v.originator_visit_id,55}, "
-                "${v.publicly_routable,43,48}, "
+                "${v.incremented_omnibox_typed_score:40}, "
+                "${v.is_known_to_sync:59}, "
+                "${v.opener_visit:50}, "
+                "${v.originator_cache_guid:55}, "
+                "${v.originator_from_visit:56}, "
+                "${v.originator_opener_visit:56}, "
+                "${v.originator_visit_id:55}, "
+                "${v.publicly_routable:43-48}, "
                 "v.segment_id, "
                 "v.transition, "
                 "v.url, "
                 "v.visit_duration, "
                 "v.visit_time, "
-                "${v.visited_link_id,67} "
+                "${v.visited_link_id:67} "
                 "FROM urls u, visits v "
                 "WHERE v.url = u.id "
                 "ORDER BY v.visit_time",
                 schema_version_
-            ));
+            );
 
         // Retrieve rows from query
         std::uint64_t idx = 0;

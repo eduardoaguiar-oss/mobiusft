@@ -324,7 +324,7 @@ _get_profile_addresses (
     if (schema_version < 88 || schema_version > 113)
         return {};
 
-    mobius::core::database::statement stmt = db.new_statement (generate_sql (
+    mobius::core::database::statement stmt = db.new_statement (
         "SELECT street_address, "
         "street_name, "
         "dependent_street_name, "
@@ -337,24 +337,24 @@ _get_profile_addresses (
         "house_number_status, "
         "subpremise_status, "
         "premise_name_status, "
-        "${dependent_locality,90}, "
-        "${city,90}, "
-        "${state,90}, "
-        "${zip_code,90}, "
-        "${country_code,90}, "
-        "${dependent_locality_status,90}, "
-        "${city_status,90}, "
-        "${state_status,90}, "
-        "${zip_code_status,90}, "
-        "${country_code_status,90}, "
-        "${apartment_number,91}, "
-        "${floor,91}, "
-        "${apartment_number_status,91}, "
-        "${floor_status,91} "
+        "${dependent_locality:90}, "
+        "${city:90}, "
+        "${state:90}, "
+        "${zip_code:90}, "
+        "${country_code:90}, "
+        "${dependent_locality_status:90}, "
+        "${city_status:90}, "
+        "${state_status:90}, "
+        "${zip_code_status:90}, "
+        "${country_code_status:90}, "
+        "${apartment_number:91}, "
+        "${floor:91}, "
+        "${apartment_number_status:91}, "
+        "${floor_status:91} "
         "FROM autofill_profile_addresses "
         "WHERE guid = ?",
         schema_version
-    ));
+    );
 
     stmt.bind (1, guid);
 
@@ -403,12 +403,12 @@ _get_profile_emails (
         return emails;
 
     // Prepare statement to retrieve emails from autofill_profile_emails table
-    mobius::core::database::statement stmt = db.new_statement (generate_sql (
+    mobius::core::database::statement stmt = db.new_statement (
         "SELECT email "
         "FROM autofill_profile_emails "
         "WHERE guid = ?",
         schema_version
-    ));
+    );
 
     stmt.bind (1, guid);
 
@@ -439,20 +439,20 @@ _get_profile_names (
         return names;
 
     // Prepare statement to retrieve names from autofill_profile_names table
-    mobius::core::database::statement stmt = db.new_statement (generate_sql (
+    mobius::core::database::statement stmt = db.new_statement (
         "SELECT first_name, "
         "middle_name, "
         "last_name, "
-        "${full_name,58}, "
-        "${honorific_prefix,88}, "
-        "${first_last_name,88}, "
-        "${conjunction_last_name,88}, "
-        "${second_last_name,88}, "
-        "${full_name_with_honorific_prefix,92} "
+        "${full_name:58}, "
+        "${honorific_prefix:88}, "
+        "${first_last_name:88}, "
+        "${conjunction_last_name:88}, "
+        "${second_last_name:88}, "
+        "${full_name_with_honorific_prefix:92} "
         "FROM autofill_profile_names "
         "WHERE guid = ?",
         schema_version
-    ));
+    );
 
     stmt.bind (1, guid);
 
@@ -498,13 +498,13 @@ _get_profile_phones (
         return phones;
 
     // Prepare statement to retrieve phones from autofill_profile_phones table
-    mobius::core::database::statement stmt = db.new_statement (generate_sql (
-        "SELECT ${type,40,52}, "
+    mobius::core::database::statement stmt = db.new_statement (
+        "SELECT ${type:40-52}, "
         "number "
         "FROM autofill_profile_phones "
         "WHERE guid = ?",
         schema_version
-    ));
+    );
 
     stmt.bind (1, guid);
 
@@ -546,14 +546,14 @@ _get_server_card_metadata (
             // Prepare statement to retrieve server card metadata from the
             // database
             mobius::core::database::statement stmt =
-                db.new_statement (generate_sql (
+                db.new_statement (
                     "SELECT id, "
-                    "${billing_address_id,71}, "
+                    "${billing_address_id:71}, "
                     "use_count, "
                     "use_date "
                     "FROM server_card_metadata ",
                     schema_version
-                ));
+                );
 
             // Retrieve records from server_card_metadata table
             while (stmt.fetch_row ())
@@ -598,15 +598,15 @@ _get_unmasked_credit_cards (
         if (schema_version >= 60 && db.has_table ("unmasked_credit_cards"))
         {
             mobius::core::database::statement stmt =
-                db.new_statement (generate_sql (
+                db.new_statement (
                     "SELECT id, "
                     "card_number_encrypted, "
-                    "${use_count,64,84}, "
-                    "${use_date,64,84}, "
-                    "${unmask_date,64} "
+                    "${use_count:64-84}, "
+                    "${use_date:64-84}, "
+                    "${unmask_date:64} "
                     "FROM unmasked_credit_cards",
                     schema_version
-                ));
+                );
 
             while (stmt.fetch_row ())
             {
@@ -767,26 +767,26 @@ file_web_data::_load_autofill_profiles (mobius::core::database::database &db)
     {
         // Prepare SQL statement for table autofill_profiles
         mobius::core::database::statement stmt =
-            db.new_statement (generate_sql (
+            db.new_statement (
                 "SELECT guid, "
                 "company_name, "
-                "${address_line_1,40,52}, "
-                "${address_line_2,40,52}, "
-                "${street_address,55}, "
-                "${dependent_locality,55}, "
+                "${address_line_1:40-52}, "
+                "${address_line_2:40-52}, "
+                "${street_address:55}, "
+                "${dependent_locality:55}, "
                 "city, "
                 "state, "
                 "zipcode, "
                 "country_code, "
-                "${country,40,52}, "
-                "${date_modified,40}, "
-                "${origin,55}, "
-                "${language_code,56}, "
-                "${use_count,61}, "
-                "${use_date,61} "
+                "${country:40-52}, "
+                "${date_modified:40}, "
+                "${origin:55}, "
+                "${language_code:56}, "
+                "${use_count:61}, "
+                "${use_date:61} "
                 "FROM autofill_profiles p",
                 schema_version_
-            ));
+            );
 
         // Retrieve records from autofill_profiles table
         std::uint64_t idx = 0;
@@ -872,21 +872,21 @@ file_web_data::_load_credit_cards (mobius::core::database::database &db)
     {
         // Prepare SQL statement for table credit_cards
         mobius::core::database::statement stmt =
-            db.new_statement (generate_sql (
+            db.new_statement (
                 "SELECT guid, "
                 "name_on_card, "
                 "expiration_month, "
                 "expiration_year, "
                 "card_number_encrypted, "
-                "${date_modified,30}, "
-                "${origin,52}, "
-                "${use_count,61}, "
-                "${use_date,61}, "
-                "${billing_address_id,66}, "
-                "${nickname,87} "
+                "${date_modified:30}, "
+                "${origin:52}, "
+                "${use_count:61}, "
+                "${use_date:61}, "
+                "${billing_address_id:66}, "
+                "${nickname:87} "
                 "FROM credit_cards",
                 schema_version_
-            ));
+            );
 
         // Retrieve records from credit_cards table
         std::uint64_t idx = 0;
@@ -948,31 +948,31 @@ file_web_data::_load_masked_credit_cards (mobius::core::database::database &db)
     try
     {
         // Prepare SQL statement for table masked_credit_cards
-        auto stmt = db.new_statement (generate_sql (
-            "SELECT ${bank_name,74}, "
-            "${billing_address_id,67,70}, "
-            "${card_art_url,96}, "
-            "${card_benefit_source,141}, "
-            "${card_info_retrieval_enrollment_state,135}, "
-            "${card_issuer,86}, "
-            "${card_issuer_id,108}, "
+        auto stmt = db.new_statement (
+            "SELECT ${bank_name:74}, "
+            "${billing_address_id:67-70}, "
+            "${card_art_url:96}, "
+            "${card_benefit_source:141}, "
+            "${card_info_retrieval_enrollment_state:135}, "
+            "${card_issuer:86}, "
+            "${card_issuer_id:108}, "
             "exp_month, "
             "exp_year, "
             "id, "
-            "${instrument_id,90}, "
+            "${instrument_id:90}, "
             "last_four, "
             "name_on_card, "
-            "${network,72}, "
-            "${nickname,84}, "
-            "${product_description,102}, "
-            "${product_terms_url,125}, "
-            "${status,60,97}, "
-            "${type,60,82}, "
-            "${virtual_card_enrollment_state,96}, "
-            "${virtual_card_enrollment_type,111} "
+            "${network:72}, "
+            "${nickname:84}, "
+            "${product_description:102}, "
+            "${product_terms_url:125}, "
+            "${status:60-97}, "
+            "${type:60-82}, "
+            "${virtual_card_enrollment_state:96}, "
+            "${virtual_card_enrollment_type:111} "
             "FROM masked_credit_cards",
             schema_version_
-        ));
+        );
 
         // Retrieve records from masked_credit_cards and unmasked_credit_cards
         // tables

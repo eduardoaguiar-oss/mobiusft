@@ -34,7 +34,6 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //
 // - cookies
-//      - browser_provenance: 12-19, 21, 23-24
 //      - creation_utc: 4-19, 21, 23-24
 //      - encrypted_value: 7-19, 21, 23-24
 //      - expires_utc: 4-19, 21, 23-24
@@ -43,7 +42,6 @@
 //      - has_expires: 5-19, 21, 23-24
 //      - host_key: 4-19, 21, 23-24
 //      - httponly: 4-9
-//      - is_edgelegacycookie: 12-19, 21, 23-24
 //      - is_httponly: 10-19, 21, 23-24
 //      - is_persistent: 10-19, 21, 23-24
 //      - is_same_party: 13-19
@@ -155,34 +153,34 @@ file_cookies::_load_cookies (mobius::core::database::database &db)
         // Prepare statement
         mobius::core::database::statement stmt;
 
-        stmt = db.new_statement (generate_sql (
+        stmt = db.new_statement (
             "SELECT creation_utc, "
-            "${encrypted_value,7}, "
+            "${encrypted_value:7}, "
             "expires_utc, "
-            "${has_cross_site_ancestor,23}, "
-            "${has_expires,5}, "
+            "${has_cross_site_ancestor:23}, "
+            "${has_expires:5}, "
             "host_key, "
-            "${httponly,4,9}, "
-            "${is_httponly,10}, "
-            "${is_persistent,10}, "
-            "${is_same_party,13,19}, "
-            "${is_secure,10}, "
+            "${httponly:4-9}, "
+            "${is_httponly:10}, "
+            "${is_persistent:10}, "
+            "${is_same_party:13-19}, "
+            "${is_secure:10}, "
             "last_access_utc, "
-            "${last_update_utc,18}, "
+            "${last_update_utc:18}, "
             "name, "
             "path, "
-            "${persistent,5,9}, "
-            "${priority,6}, "
-            "${samesite,11}, "
-            "${secure,4,9}, "
-            "${source_port,13}, "
-            "${source_scheme,12}, "
-            "${source_type,23}, "
-            "${top_frame_site_key,15}, "
-            "${value,4} "
+            "${persistent:5-9}, "
+            "${priority:6}, "
+            "${samesite:11}, "
+            "${secure:4-9}, "
+            "${source_port:13}, "
+            "${source_scheme:12}, "
+            "${source_type:23}, "
+            "${top_frame_site_key:15}, "
+            "${value:4} "
             "FROM cookies ",
             schema_version_
-        ));
+        );
 
         // Retrieve rows from query
         std::uint64_t idx = 0;
@@ -201,19 +199,15 @@ file_cookies::_load_cookies (mobius::core::database::database &db)
             c.has_expires = stmt.get_column_bool (4);
             c.host_key =
                 mobius::core::string::lstrip (stmt.get_column_string (5), ".");
-            c.httponly = stmt.get_column_bool (6);
-            c.is_httponly = stmt.get_column_bool (7);
-            c.is_persistent = stmt.get_column_bool (8);
-            c.is_same_party = stmt.get_column_bool (9);
-            c.is_secure = stmt.get_column_bool (10);
+            c.is_httponly = stmt.get_column_bool (6) || stmt.get_column_bool (7);
+            c.is_persistent = stmt.get_column_bool (8) || stmt.get_column_bool (15);
+            c.is_same_party = stmt.get_column_bool (9) || stmt.get_column_bool (17);
+            c.is_secure = stmt.get_column_bool (10) || stmt.get_column_bool (18);
             c.last_access_utc = get_datetime (stmt.get_column_int64 (11));
             c.last_update_utc = get_datetime (stmt.get_column_int64 (12));
             c.name = stmt.get_column_string (13);
             c.path = stmt.get_column_string (14);
-            c.persistent = stmt.get_column_bool (15);
             c.priority = stmt.get_column_int (16);
-            c.samesite = stmt.get_column_bool (17);
-            c.secure = stmt.get_column_bool (18);
             c.source_port = stmt.get_column_int (19);
             c.source_scheme = stmt.get_column_string (20);
             c.source_type = stmt.get_column_int (21);

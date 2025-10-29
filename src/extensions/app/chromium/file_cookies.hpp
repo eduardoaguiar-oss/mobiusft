@@ -66,9 +66,6 @@ class file_cookies
         // @brief Host key
         std::string host_key;
 
-        // @brief HTTP only
-        bool httponly = false;
-
         // @brief Is HTTP only
         bool is_httponly = false;
 
@@ -93,17 +90,8 @@ class file_cookies
         // @brief Path
         std::string path;
 
-        // @brief Persistent
-        bool persistent = false;
-
         // @brief Priority
         std::uint8_t priority = 0;
-
-        // @brief SameSite attribute
-        bool samesite = false;
-
-        // @brief Secure
-        bool secure = false;
 
         // @brief Source port
         std::uint16_t source_port = 0;

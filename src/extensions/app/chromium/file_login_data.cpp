@@ -38,8 +38,7 @@
 // - logins
 //      - action_url: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-42
 //      - avatar_url: 7, 12-13
-//      - blacklisted_by_user: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35,
-//      40-42
+//      - blacklisted_by_user: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-42
 //      - date_created: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-42
 //      - date_last_filled: 42
 //      - date_last_used: 25-29, 31-35, 40-42
@@ -169,44 +168,44 @@ file_login_data::_load_logins (mobius::core::database::database &db)
         // Prepare statement
         mobius::core::database::statement stmt;
 
-        stmt = db.new_statement (generate_sql (
+        stmt = db.new_statement (
             "SELECT action_url, "
-            "${avatar_url,7,13}, "
+            "${avatar_url:7-13}, "
             "blacklisted_by_user, "
             "date_created, "
-            "${date_last_filled,42}, "
-            "${date_last_used,25}, "
-            "${date_password_modified,31}, "
-            "${date_received,40}, "
-            "${date_synced,7,29}, "
-            "${display_name,7}, "
-            "${federation_url,7}, "
-            "${generation_upload_status,12}, "
-            "${icon_url,16}, "
-            "${id,21}, "
-            "${is_zero_click,7,7}, "
-            "${keychain_identifier,40}, "
+            "${date_last_filled:42}, "
+            "${date_last_used:25}, "
+            "${date_password_modified:31}, "
+            "${date_received:40}, "
+            "${date_synced:7-29}, "
+            "${display_name:7}, "
+            "${federation_url:7}, "
+            "${generation_upload_status:12}, "
+            "${icon_url:16}, "
+            "${id:21}, "
+            "${is_zero_click:7-7}, "
+            "${keychain_identifier:40}, "
             "origin_url, "
             "password_element, "
-            "${password_type,3}, "
+            "${password_type:3}, "
             "password_value, "
-            "${preferred,1,27}, "
+            "${preferred:1-27}, "
             "scheme, "
-            "${sender_email,40}, "
-            "${sender_name,40}, "
-            "${sender_profile_image_url,41}, "
-            "${sharing_notification_displayed,40}, "
+            "${sender_email:40}, "
+            "${sender_name:40}, "
+            "${sender_profile_image_url:41}, "
+            "${sharing_notification_displayed:40}, "
             "signon_realm, "
-            "${skip_zero_click,12}, "
-            "${ssl_valid,1,17}, "
+            "${skip_zero_click:12}, "
+            "${ssl_valid:1-17}, "
             "submit_element, "
-            "${times_used,3}, "
-            "${use_additional_auth,5,7}, "
+            "${times_used:3}, "
+            "${use_additional_auth:5-7}, "
             "username_element, "
             "username_value "
             "FROM logins",
             schema_version_
-        ));
+        );
 
         // Retrieve rows from query
         std::uint64_t idx = 0;

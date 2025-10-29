@@ -78,7 +78,7 @@ vfs_processor_impl::on_complete ()
     auto transaction = item_.new_transaction ();
 
     _save_app_profiles ();
-    //_save_autofills ();
+    _save_user_accounts ();
 
     transaction.commit ();
 }
@@ -220,6 +220,44 @@ vfs_processor_impl::_save_app_profiles ()
         // Tags and sources
         e.set_tag ("app.messenger");
         // e.add_source (p.get_folder ()); // @todo add folder or file as source
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save accounts
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_user_accounts ()
+{
+    for (const auto &p : profiles_)
+    {
+        for (const auto &acc : p.get_accounts ())
+        {
+            auto e = item_.new_evidence ("user-account");
+
+            // Set attributes
+            e.set_attribute ("account_type", "app.skype");
+            e.set_attribute ("id", acc.id);
+            e.set_attribute ("password", mobius::core::bytearray {});
+            e.set_attribute ("password_found", false);
+            e.set_attribute ("is_deleted", acc.f.is_deleted ());
+            e.set_attribute ("phones", acc.phone_numbers);
+            e.set_attribute ("emails", acc.emails);
+            e.set_attribute ("organizations", acc.organizations);
+            e.set_attribute ("addresses", acc.addresses);
+            e.set_attribute ("names", acc.names);
+
+            // Set metadata
+            auto metadata = acc.metadata.clone ();
+            metadata.set ("username", p.get_username ());
+            metadata.set ("app_name", APP_NAME);
+            metadata.set ("app_id", APP_ID);
+            e.set_attribute ("metadata", metadata);
+
+            // Tags and sources
+            e.set_tag ("app.messenger");
+            e.add_source (acc.f);
+        }
     }
 }
 

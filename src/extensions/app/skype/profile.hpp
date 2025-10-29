@@ -21,7 +21,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/datetime/datetime.hpp>
+#include <mobius/core/io/file.hpp>
 #include <mobius/core/io/folder.hpp>
+#include <mobius/core/pod/map.hpp>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -36,6 +38,39 @@ namespace mobius::extension::app::skype
 class profile
 {
   public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Account structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct account
+    {
+        // @brief ID
+        std::string id;
+
+        // @brief Name
+        std::string name;
+
+        // @brief Email
+        std::vector<std::string> emails;
+
+        // @brief Phone number
+        std::vector<std::string> phone_numbers;
+
+        // @brief Organizations
+        std::vector<std::string> organizations;
+
+        // @brief Address
+        std::vector<std::string> addresses;
+
+        // @brief Names
+        std::vector<std::string> names;
+
+        // @brief Metadata
+        mobius::core::pod::map metadata;
+
+        // @brief Source file
+        mobius::core::io::file f;
+    };
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -58,6 +93,8 @@ class profile
     std::string get_path () const;
     mobius::core::datetime::datetime get_creation_time () const;
     mobius::core::datetime::datetime get_last_modified_time () const;
+    std::vector<account> get_accounts () const;
+    std::size_t size_accounts () const;
 
     void add_main_db_file (const mobius::core::io::file &);
     void add_skype_db_file (const mobius::core::io::file &);

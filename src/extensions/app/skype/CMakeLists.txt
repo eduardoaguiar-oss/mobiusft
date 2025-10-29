@@ -36,8 +36,25 @@ set_target_properties(app_skype PROPERTIES OUTPUT_NAME "app-skype" PREFIX "")
 target_link_libraries(app_skype PRIVATE Mobius::Framework Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: skype_main_db
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_executable(tools_skype_main_db
+    tools/skype_main_db.cpp
+    file_main_db.cpp
+)
+
+set_target_properties(tools_skype_main_db PROPERTIES OUTPUT_NAME "skype_main_db")
+target_link_libraries(tools_skype_main_db PRIVATE Mobius::Core)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 install(TARGETS
     app_skype LIBRARY DESTINATION share/mobiusft/extensions
 )
+
+install(TARGETS
+    tools_skype_main_db
+    RUNTIME DESTINATION share/mobiusft/tools
+)
+

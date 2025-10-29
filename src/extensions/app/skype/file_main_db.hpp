@@ -136,10 +136,10 @@ class file_main_db
         std::string emails;
 
         // @brief Federated Presence Policy
-        std::int64_t federated_presence_policy = 0;
+        std::int64_t federated_presence_policy = 0;  // skype 6
 
         // @brief Flamingo Xmpp Status
-        std::int64_t flamingo_xmpp_status = 0;
+        std::int64_t flamingo_xmpp_status = 0; // skype 6
 
         // @brief Fullname
         std::string fullname;
@@ -166,7 +166,7 @@ class file_main_db
         std::string ipcountry;
 
         // @brief Is Permanent
-        std::int64_t is_permanent = 0;
+        bool is_permanent = false;
 
         // @brief Languages
         std::string languages;
@@ -208,13 +208,13 @@ class file_main_db
         std::string offline_callforward;
 
         // @brief Options Change Future
-        mobius::core::bytearray options_change_future;
+        mobius::core::bytearray options_change_future;  // skype 6
 
         // @brief Owner Under Legal Age
         std::int64_t owner_under_legal_age = 0;
 
         // @brief Partner Channel Status
-        std::string partner_channel_status;
+        std::string partner_channel_status;  // skype 6
 
         // @brief Partner Optedout
         std::string partner_optedout;
@@ -265,7 +265,7 @@ class file_main_db
         std::string rich_mood_text;
 
         // @brief Roaming History Enabled
-        bool roaming_history_enabled = false;
+        bool roaming_history_enabled = false;  // skype 6
 
         // @brief Sent Authrequest
         std::string sent_authrequest;
@@ -283,7 +283,7 @@ class file_main_db
         std::int64_t set_availability = 0;
 
         // @brief Shortcircuit Sync
-        std::int64_t shortcircuit_sync = 0;
+        std::int64_t shortcircuit_sync = 0;   // skype 6
 
         // @brief Skype Call Policy
         std::int64_t skype_call_policy = 0;
@@ -328,13 +328,13 @@ class file_main_db
         std::int64_t type = 0;
 
         // @brief Uses Jcs
-        std::int64_t uses_jcs = 0;
+        std::int64_t uses_jcs = 0;  // skype 6
 
         // @brief Verified Company
-        mobius::core::bytearray verified_company;
+        mobius::core::bytearray verified_company;  // skype 6
 
         // @brief Verified Email
-        mobius::core::bytearray verified_email;
+        mobius::core::bytearray verified_email;  // skype 6
 
         // @brief Voicemail Policy
         std::int64_t voicemail_policy = 0;

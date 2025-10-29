@@ -82,8 +82,6 @@ show_cookies (const std::string &path)
         std::cout << "\tHas expires: " << (entry.has_expires ? "yes" : "no")
                   << std::endl;
         std::cout << "\tHost key: " << entry.host_key << std::endl;
-        std::cout << "\tHTTP only: " << (entry.httponly ? "yes" : "no")
-                  << std::endl;
         std::cout << "\tIs HTTP only: " << (entry.is_httponly ? "yes" : "no")
                   << std::endl;
         std::cout << "\tIs persistent: " << (entry.is_persistent ? "yes" : "no")
@@ -98,13 +96,8 @@ show_cookies (const std::string &path)
                   << std::endl;
         std::cout << "\tName: " << entry.name << std::endl;
         std::cout << "\tPath: " << entry.path << std::endl;
-        std::cout << "\tPersistent: " << (entry.persistent ? "yes" : "no")
-                  << std::endl;
         std::cout << "\tPriority: " << static_cast<int> (entry.priority)
                   << std::endl;
-        std::cout << "\tSameSite: " << (entry.samesite ? "yes" : "no")
-                  << std::endl;
-        std::cout << "\tSecure: " << (entry.secure ? "yes" : "no") << std::endl;
         std::cout << "\tSource port: " << entry.source_port << std::endl;
         std::cout << "\tSource scheme: " << entry.source_scheme << std::endl;
         std::cout << "\tSource type: " << static_cast<int> (entry.source_type)

@@ -24,11 +24,10 @@
 #include <mobius/core/log.hpp>
 #include <mobius/core/mediator.hpp>
 #include <mobius/core/string_functions.hpp>
-#include <mobius/core/value_selector.hpp>
-#include <algorithm>
 #include <map>
 #include <string>
 #include <vector>
+#include "file_main_db.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // References:
@@ -57,6 +56,22 @@ get_username_from_path (const std::string &path)
         return dirnames[3]; // Username is the fourth directory
 
     return {}; // No username found
+}
+
+//  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get gender from code
+// @param code Gender code
+// @return Gender string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+get_gender (std::int64_t code)
+{
+    if (code == 1)
+        return "Male";
+    else if (code == 2)
+        return "Female";
+    else
+        return "Unknown";
 }
 
 } // namespace
@@ -130,6 +145,26 @@ class profile::impl
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get accounts
+    // @return Vector of accounts
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<account>
+    get_accounts () const
+    {
+        return accounts_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of accounts
+    // @return Number of accounts
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    size_accounts () const
+    {
+        return accounts_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void add_main_db_file (const mobius::core::io::file &);
@@ -152,6 +187,9 @@ class profile::impl
     // @brief Last modified time
     mobius::core::datetime::datetime last_modified_time_;
 
+    // @brief Accounts
+    std::vector<account> accounts_;
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -173,7 +211,7 @@ profile::impl::_set_folder (const mobius::core::io::folder &f)
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Get data from folder
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=    
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     path_ = f.get_path ();
     last_modified_time_ = f.get_modification_time ();
     creation_time_ = f.get_creation_time ();
@@ -213,28 +251,96 @@ profile::impl::add_main_db_file (const mobius::core::io::file &f)
 
     try
     {
-        auto reader = f.new_reader ();
-        if (!reader)
-            return;
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Copy reader content to temporary file
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        mobius::core::io::tempfile tfile;
-        tfile.copy_from (reader);
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Get schema version
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        mobius::core::database::database db (tfile.get_path ());
-
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Decode file
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        file_main_db fm (f.new_reader ());
+
+        if (!fm)
+        {
+            log.info (__LINE__, "File is not a valid 'main.db' file");
+            return;
+        }
+
         log.info (__LINE__, "File decoded [main.db]: " + f.get_path ());
 
         _set_folder (f.get_parent ());
         _update_mtime (f);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Load accounts
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (const auto &acc : fm.get_accounts ())
+        {
+            account a;
+            a.id = acc.skypename;
+            a.name = acc.fullname;
+
+            if (!acc.phone_home.empty ())
+                a.phone_numbers.push_back (acc.phone_home);
+
+            if (!acc.phone_office.empty ())
+                a.phone_numbers.push_back (acc.phone_office);
+
+            if (!acc.phone_mobile.empty ())
+                a.phone_numbers.push_back (acc.phone_mobile);
+            
+            if (!acc.emails.empty ())
+                a.emails = mobius::core::string::split (acc.emails, " ");
+
+            // Calculate skypeout balance
+            double balance = double (acc.skypeout_balance);
+            for (int i = 0;i < acc.skypeout_precision;i++)
+                balance /= 10.0;
+
+            a.metadata.set("record_idx", acc.idx);
+            a.metadata.set("schema_version", acc.schema_version);
+            a.metadata.set("avatar_timestamp", acc.avatar_timestamp);
+            a.metadata.set("lastonline_timestamp", acc.lastonline_timestamp);
+            a.metadata.set("lastused_timestamp", acc.lastused_timestamp);
+            a.metadata.set("mood_timestamp", acc.mood_timestamp);
+            a.metadata.set("profile_timestamp", acc.profile_timestamp);
+            a.metadata.set("registration_timestamp", acc.registration_timestamp);
+            a.metadata.set("about", acc.about);
+            a.metadata.set("alertstring", acc.alertstring);
+            a.metadata.set("aliases", acc.aliases);
+            a.metadata.set("assigned_comment", acc.assigned_comment);
+            a.metadata.set("birthday", acc.birthday);
+            a.metadata.set("city", acc.city);
+            a.metadata.set("country", acc.country);
+            a.metadata.set("displayname", acc.displayname);
+            a.metadata.set("fullname", acc.fullname);
+            a.metadata.set("gender", get_gender (acc.gender));
+            a.metadata.set("given_displayname", acc.given_displayname);
+            a.metadata.set("homepage", acc.homepage);
+            a.metadata.set("ipcountry", acc.ipcountry);
+            a.metadata.set("languages", acc.languages);
+            a.metadata.set("mood_text", acc.mood_text);
+            a.metadata.set("phone_home", acc.phone_home);
+            a.metadata.set("phone_office", acc.phone_office);
+            a.metadata.set("phone_mobile", acc.phone_mobile);
+            a.metadata.set("province", acc.province);
+            a.metadata.set("rich_mood_text", acc.rich_mood_text);
+            a.metadata.set("skypename", acc.skypename);
+            a.metadata.set("skypeout_balance", balance);
+            a.metadata.set("skypeout_balance_currency", acc.skypeout_balance_currency);
+            a.metadata.set("suggested_skypename", acc.suggested_skypename);
+            a.metadata.set("timezone", acc.timezone);
+
+            a.f = f;
+
+            accounts_.push_back (a);
+        }
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Emit sampling_file event
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::emit (
+            "sampling_file",
+            "app.skype.main_db." +
+                mobius::core::string::to_string (fm.get_schema_version (), 5),
+            f.new_reader ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -328,6 +434,26 @@ mobius::core::datetime::datetime
 profile::get_last_modified_time () const
 {
     return impl_->get_last_modified_time ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get accounts
+// @return Vector of accounts
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<profile::account>
+profile::get_accounts () const
+{
+    return impl_->get_accounts ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get number of accounts
+// @return Number of accounts
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::size_t
+profile::size_accounts () const
+{
+    return impl_->size_accounts ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

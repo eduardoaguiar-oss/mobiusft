@@ -430,10 +430,7 @@ vfs_processor_impl::_save_cookies ()
             metadata.set ("is_same_party", c.is_same_party);
             metadata.set ("is_secure", c.is_secure);
             metadata.set ("path", c.path);
-            metadata.set ("persistent", c.persistent);
             metadata.set ("priority", c.priority);
-            metadata.set ("same_site", c.samesite);
-            metadata.set ("secure", c.secure);
             metadata.set ("source_port", c.source_port);
             metadata.set ("source_scheme", c.source_scheme);
             metadata.set ("source_type", c.source_type);
