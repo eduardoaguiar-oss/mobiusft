@@ -201,24 +201,12 @@ vfs_processor_impl::_save_app_profiles ()
 
         // Metadata
         auto metadata = mobius::core::pod::map ();
-
-        //metadata.set ("profile_name", p.get_profile_name ());
-        //metadata.set ("last_engagement_time", p.get_last_engagement_time ());
-        //metadata.set ("created_by_version", p.get_created_by_version ());
-        //metadata.set ("num_accounts", p.size_accounts ());
-        //metadata.set ("num_autofill_entries", p.size_autofill_entries ());
-        //metadata.set ("num_autofill_profiles", p.size_autofill_profiles ());
-        //metadata.set ("num_bookmarks", p.size_bookmarks ());
-        //metadata.set ("num_cookies", p.size_cookies ());
-        //metadata.set ("num_credit_cards", p.size_credit_cards ());
-        //metadata.set ("num_downloads", p.size_downloads ());
-        //metadata.set ("num_history_entries", p.size_history_entries ());
-        //metadata.set ("num_logins", p.size_logins ());
+        metadata.set ("num_accounts", p.size_accounts ());
 
         e.set_attribute ("metadata", metadata);
 
         // Tags and sources
-        e.set_tag ("app.messenger");
+        e.set_tag ("app.chat");
         // e.add_source (p.get_folder ()); // @todo add folder or file as source
     }
 }
@@ -255,7 +243,7 @@ vfs_processor_impl::_save_user_accounts ()
             e.set_attribute ("metadata", metadata);
 
             // Tags and sources
-            e.set_tag ("app.messenger");
+            e.set_tag ("app.chat");
             e.add_source (acc.f);
         }
     }

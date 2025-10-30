@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_SKYPE_VFS_PROCESSOR_IMPL_HPP
-#define MOBIUS_EXTENSION_APP_SKYPE_VFS_PROCESSOR_IMPL_HPP
+#ifndef MOBIUS_EXTENSION_APP_SKYPE_FILE_SKYPE_DB_HPP
+#define MOBIUS_EXTENSION_APP_SKYPE_FILE_SKYPE_DB_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -20,54 +20,59 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/core/database/database.hpp>
+#include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/io/file.hpp>
-#include <mobius/framework/ant/vfs_processor_impl_base.hpp>
-#include <mobius/framework/case_profile.hpp>
-#include <mobius/framework/model/item.hpp>
+#include <mobius/core/io/reader.hpp>
+#include <cstdint>
 #include <string>
 #include <vector>
-#include "profile.hpp"
 
 namespace mobius::extension::app::skype
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Skype <i>vfs_processor</i> implementation class
+// @brief skype.db file decoder
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class vfs_processor_impl
-    : public mobius::framework::ant::vfs_processor_impl_base
+class file_skype_db
 {
   public:
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Constructors
+    // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    explicit vfs_processor_impl (
-        const mobius::framework::model::item &,
-        const mobius::framework::case_profile &
-    );
-    
+    file_skype_db (const mobius::core::io::reader &);
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Function prototypes
+    // @brief Check if stream is an instance of skype.db file
+    // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void on_folder (const mobius::core::io::folder &) final;
-    void on_complete () final;
+    operator bool () const noexcept
+    {
+        return is_instance_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get schema version
+    // @return Schema version
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::uint32_t
+    get_schema_version () const
+    {
+        return schema_version_;
+    }
 
   private:
-    // @brief Case item
-    mobius::framework::model::item item_;
+    // @brief Flag is instance
+    bool is_instance_ = false;
 
-    // @brief Profiles found
-    std::vector<profile> profiles_;
+    // @brief Schema version
+    std::uint32_t schema_version_ = 0;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void _scan_profile_folder (const mobius::core::io::folder &);
-    void _scan_s4l_files (const mobius::core::io::folder &);
-    void _decode_s4l_file (const mobius::core::io::file &);
-
-    void _save_app_profiles ();
-    void _save_user_accounts ();
+    // void _load_accounts (mobius::core::database::database &);
 };
 
 } // namespace mobius::extension::app::skype

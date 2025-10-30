@@ -97,7 +97,7 @@ class file_main_db
         mobius::core::datetime::datetime avatar_timestamp;
 
         // @brief Birthday
-        std::int64_t birthday = 0;
+        std::string birthday;
 
         // @brief Buddyblob
         mobius::core::bytearray buddyblob;
@@ -319,7 +319,7 @@ class file_main_db
         mobius::core::bytearray synced_email;
 
         // @brief Timezone
-        std::int64_t timezone = 0;
+        std::string timezone;
 
         // @brief Timezone Policy
         std::int64_t timezone_policy = 0;

@@ -28,6 +28,8 @@
 #include <string>
 #include <vector>
 #include "file_main_db.hpp"
+#include "file_s4l_db.hpp"
+#include "file_skype_db.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // References:
@@ -284,48 +286,52 @@ profile::impl::add_main_db_file (const mobius::core::io::file &f)
 
             if (!acc.phone_mobile.empty ())
                 a.phone_numbers.push_back (acc.phone_mobile);
-            
+
             if (!acc.emails.empty ())
                 a.emails = mobius::core::string::split (acc.emails, " ");
 
             // Calculate skypeout balance
             double balance = double (acc.skypeout_balance);
-            for (int i = 0;i < acc.skypeout_precision;i++)
+            for (int i = 0; i < acc.skypeout_precision; i++)
                 balance /= 10.0;
 
-            a.metadata.set("record_idx", acc.idx);
-            a.metadata.set("schema_version", acc.schema_version);
-            a.metadata.set("avatar_timestamp", acc.avatar_timestamp);
-            a.metadata.set("lastonline_timestamp", acc.lastonline_timestamp);
-            a.metadata.set("lastused_timestamp", acc.lastused_timestamp);
-            a.metadata.set("mood_timestamp", acc.mood_timestamp);
-            a.metadata.set("profile_timestamp", acc.profile_timestamp);
-            a.metadata.set("registration_timestamp", acc.registration_timestamp);
-            a.metadata.set("about", acc.about);
-            a.metadata.set("alertstring", acc.alertstring);
-            a.metadata.set("aliases", acc.aliases);
-            a.metadata.set("assigned_comment", acc.assigned_comment);
-            a.metadata.set("birthday", acc.birthday);
-            a.metadata.set("city", acc.city);
-            a.metadata.set("country", acc.country);
-            a.metadata.set("displayname", acc.displayname);
-            a.metadata.set("fullname", acc.fullname);
-            a.metadata.set("gender", get_gender (acc.gender));
-            a.metadata.set("given_displayname", acc.given_displayname);
-            a.metadata.set("homepage", acc.homepage);
-            a.metadata.set("ipcountry", acc.ipcountry);
-            a.metadata.set("languages", acc.languages);
-            a.metadata.set("mood_text", acc.mood_text);
-            a.metadata.set("phone_home", acc.phone_home);
-            a.metadata.set("phone_office", acc.phone_office);
-            a.metadata.set("phone_mobile", acc.phone_mobile);
-            a.metadata.set("province", acc.province);
-            a.metadata.set("rich_mood_text", acc.rich_mood_text);
-            a.metadata.set("skypename", acc.skypename);
-            a.metadata.set("skypeout_balance", balance);
-            a.metadata.set("skypeout_balance_currency", acc.skypeout_balance_currency);
-            a.metadata.set("suggested_skypename", acc.suggested_skypename);
-            a.metadata.set("timezone", acc.timezone);
+            a.metadata.set ("record_idx", acc.idx);
+            a.metadata.set ("schema_version", acc.schema_version);
+            a.metadata.set ("avatar_timestamp", acc.avatar_timestamp);
+            a.metadata.set ("lastonline_timestamp", acc.lastonline_timestamp);
+            a.metadata.set ("lastused_timestamp", acc.lastused_timestamp);
+            a.metadata.set ("mood_timestamp", acc.mood_timestamp);
+            a.metadata.set ("profile_timestamp", acc.profile_timestamp);
+            a.metadata.set (
+                "registration_timestamp", acc.registration_timestamp
+            );
+            a.metadata.set ("about", acc.about);
+            a.metadata.set ("alertstring", acc.alertstring);
+            a.metadata.set ("aliases", acc.aliases);
+            a.metadata.set ("assigned_comment", acc.assigned_comment);
+            a.metadata.set ("birthday", acc.birthday);
+            a.metadata.set ("city", acc.city);
+            a.metadata.set ("country", acc.country);
+            a.metadata.set ("displayname", acc.displayname);
+            a.metadata.set ("fullname", acc.fullname);
+            a.metadata.set ("gender", get_gender (acc.gender));
+            a.metadata.set ("given_displayname", acc.given_displayname);
+            a.metadata.set ("homepage", acc.homepage);
+            a.metadata.set ("ipcountry", acc.ipcountry);
+            a.metadata.set ("languages", acc.languages);
+            a.metadata.set ("mood_text", acc.mood_text);
+            a.metadata.set ("phone_home", acc.phone_home);
+            a.metadata.set ("phone_office", acc.phone_office);
+            a.metadata.set ("phone_mobile", acc.phone_mobile);
+            a.metadata.set ("province", acc.province);
+            a.metadata.set ("rich_mood_text", acc.rich_mood_text);
+            a.metadata.set ("skypename", acc.skypename);
+            a.metadata.set ("skypeout_balance", balance);
+            a.metadata.set (
+                "skypeout_balance_currency", acc.skypeout_balance_currency
+            );
+            a.metadata.set ("suggested_skypename", acc.suggested_skypename);
+            a.metadata.set ("timezone", acc.timezone);
 
             a.f = f;
 
@@ -357,6 +363,42 @@ profile::impl::add_main_db_file (const mobius::core::io::file &f)
 void
 profile::impl::add_skype_db_file (const mobius::core::io::file &f)
 {
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Decode file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        file_skype_db fs (f.new_reader ());
+
+        if (!fs)
+        {
+            log.info (__LINE__, "File is not a valid 'skype.db' file");
+            return;
+        }
+
+        log.info (__LINE__, "File decoded [skype.db]: " + f.get_path ());
+
+        _set_folder (f.get_parent ());
+        _update_mtime (f);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Emit sampling_file event
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::emit (
+            "sampling_file",
+            "app.skype.skype_db." +
+                mobius::core::string::to_string (fs.get_schema_version (), 5),
+            f.new_reader ()
+        );
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
+        );
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -366,6 +408,42 @@ profile::impl::add_skype_db_file (const mobius::core::io::file &f)
 void
 profile::impl::add_s4l_db_file (const mobius::core::io::file &f)
 {
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Decode file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        file_s4l_db fs (f.new_reader ());
+
+        if (!fs)
+        {
+            log.info (__LINE__, "File is not a valid 's4l-xxx.db' file");
+            return;
+        }
+
+        log.info (__LINE__, "File decoded [s4l-xxx.db]: " + f.get_path ());
+
+        _set_folder (f.get_parent ());
+        _update_mtime (f);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Emit sampling_file event
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::emit (
+            "sampling_file",
+            "app.skype.s4l_db." +
+                mobius::core::string::to_string (fs.get_schema_version (), 5),
+            f.new_reader ()
+        );
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
+        );
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

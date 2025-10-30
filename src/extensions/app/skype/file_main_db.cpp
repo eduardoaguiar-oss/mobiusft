@@ -23,6 +23,7 @@
 #include <mobius/core/io/tempfile.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/string_functions.hpp>
+#include <format>
 #include <limits>
 #include <unordered_set>
 
@@ -235,6 +236,23 @@ get_db_schema_version (mobius::core::database::database &db)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Convert Skype birthday value to string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+get_birthday_string (std::int64_t value)
+{
+    if (value == 0)
+        return "Unknown";
+
+    return std::format (
+        "{:04}-{:02}-{:02}",
+        value / 10000,
+        (value / 100) % 100,
+        value % 100
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Convert Skype timestamp to date/time
 // @param timestamp Numerical value representing the timestamp
 // @return Date/time object
@@ -243,6 +261,27 @@ mobius::core::datetime::datetime
 get_datetime (std::int64_t timestamp)
 {
     return mobius::core::datetime::new_datetime_from_unix_timestamp (timestamp);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Convert timezone to string
+// @param value Numerical value representing the timezone
+// @return Timezone string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+get_timezone_string (std::int64_t value)
+{
+    std::string timezone_str;
+
+    if (value)
+    {
+        value = (value - 86400) / 60;
+        auto mm = value % 60;
+        auto hh = (value / 60);
+        timezone_str = std::format ("{:+02d}:{:02d}", hh, mm);
+    }
+
+    return timezone_str;
 }
 
 } // namespace
@@ -440,7 +479,7 @@ file_main_db::_load_accounts (mobius::core::database::database &db)
             a.avatar_image = stmt.get_column_bytearray (13);
             a.avatar_policy = stmt.get_column_int64 (14);
             a.avatar_timestamp = get_datetime (stmt.get_column_int64 (15));
-            a.birthday = stmt.get_column_int64 (16);
+            a.birthday = get_birthday_string (stmt.get_column_int64 (16));
             a.buddyblob = stmt.get_column_bytearray (17);
             a.buddycount_policy = stmt.get_column_int64 (18);
             a.capabilities = stmt.get_column_bytearray (19);
@@ -493,7 +532,8 @@ file_main_db::_load_accounts (mobius::core::database::database &db)
             a.pwdchangestatus = stmt.get_column_int64 (66);
             a.received_authrequest = stmt.get_column_string (67);
             a.refreshing = stmt.get_column_int64 (68);
-            a.registration_timestamp = get_datetime (stmt.get_column_int64 (69));
+            a.registration_timestamp =
+                get_datetime (stmt.get_column_int64 (69) * 60);
             a.revoked_auth = stmt.get_column_int64 (70);
             a.rich_mood_text = stmt.get_column_string (71);
             a.roaming_history_enabled = stmt.get_column_bool (72);
@@ -514,7 +554,7 @@ file_main_db::_load_accounts (mobius::core::database::database &db)
             a.subscriptions = stmt.get_column_string (87);
             a.suggested_skypename = stmt.get_column_string (88);
             a.synced_email = stmt.get_column_bytearray (89);
-            a.timezone = stmt.get_column_int64 (90);
+            a.timezone = get_timezone_string (stmt.get_column_int64 (90));
             a.timezone_policy = stmt.get_column_int64 (91);
             a.type = stmt.get_column_int64 (92);
             a.uses_jcs = stmt.get_column_int64 (93);

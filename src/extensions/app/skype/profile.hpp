@@ -93,6 +93,7 @@ class profile
     std::string get_path () const;
     mobius::core::datetime::datetime get_creation_time () const;
     mobius::core::datetime::datetime get_last_modified_time () const;
+
     std::vector<account> get_accounts () const;
     std::size_t size_accounts () const;
 
