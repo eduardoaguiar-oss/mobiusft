@@ -26,11 +26,17 @@
 #include <mobius/core/mediator.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <mobius/framework/model/evidence.hpp>
+#include <string>
+#include <vector>
+#include "profile.hpp"
 
 #include <iostream>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // References:
+//    - https://bebinary4n6.blogspot.com/2019/07/
+//    - https://arxiv.org/pdf/1603.05369.pdf
+//    - https://answers.microsoft.com/en-us/skype/forum/all/where-is-the-maindb-file-for-new-skype/b4d3f263-a97e-496e-aa28-e1dbb63e7687
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace
@@ -46,11 +52,50 @@ static const std::string APP_NAME = "Skype";
 namespace mobius::extension::app::skype
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Skype <i>vfs_processor</i> implementation class
+// @author Eduardo Aguiar
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+class vfs_processor_impl::impl
+{
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl (
+        const mobius::framework::model::item &,
+        const mobius::framework::case_profile &
+    );
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Function prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void on_folder (const mobius::core::io::folder &);
+    void on_complete ();
+
+  private:
+    // @brief Case item
+    mobius::framework::model::item item_;
+
+    // @brief Profiles found
+    std::vector<profile> profiles_;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Helper functions
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void _scan_profile_folder (const mobius::core::io::folder &);
+    void _scan_s4l_files (const mobius::core::io::folder &);
+    void _decode_s4l_file (const mobius::core::io::file &);
+
+    void _save_app_profiles ();
+    void _save_user_accounts ();
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // @param item Item object
 // @param case_profile Case profile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-vfs_processor_impl::vfs_processor_impl (
+vfs_processor_impl::impl::impl (
     const mobius::framework::model::item &item,
     const mobius::framework::case_profile &
 )
@@ -63,7 +108,7 @@ vfs_processor_impl::vfs_processor_impl (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
+vfs_processor_impl::impl::on_folder (const mobius::core::io::folder &folder)
 {
     _scan_profile_folder (folder);
     _scan_s4l_files (folder);
@@ -73,7 +118,7 @@ vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 // @brief Called when processing is complete
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_complete ()
+vfs_processor_impl::impl::on_complete ()
 {
     auto transaction = item_.new_transaction ();
 
@@ -88,7 +133,7 @@ vfs_processor_impl::on_complete ()
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_profile_folder (
+vfs_processor_impl::impl::_scan_profile_folder (
     const mobius::core::io::folder &folder
 )
 {
@@ -133,7 +178,9 @@ vfs_processor_impl::_scan_profile_folder (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_s4l_files (const mobius::core::io::folder &folder)
+vfs_processor_impl::impl::_scan_s4l_files (
+    const mobius::core::io::folder &folder
+)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -161,7 +208,7 @@ vfs_processor_impl::_scan_s4l_files (const mobius::core::io::folder &folder)
 // @param f s4l-xxx.db file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_decode_s4l_file (const mobius::core::io::file &f)
+vfs_processor_impl::impl::_decode_s4l_file (const mobius::core::io::file &f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -185,7 +232,7 @@ vfs_processor_impl::_decode_s4l_file (const mobius::core::io::file &f)
 // @brief Save app profiles
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_app_profiles ()
+vfs_processor_impl::impl::_save_app_profiles ()
 {
     for (const auto &p : profiles_)
     {
@@ -215,7 +262,7 @@ vfs_processor_impl::_save_app_profiles ()
 // @brief Save accounts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_user_accounts ()
+vfs_processor_impl::impl::_save_user_accounts ()
 {
     for (const auto &p : profiles_)
     {
@@ -247,6 +294,38 @@ vfs_processor_impl::_save_user_accounts ()
             e.add_source (acc.f);
         }
     }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Constructor
+// @param item Item object
+// @param case_profile Case profile object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+vfs_processor_impl::vfs_processor_impl (
+    const mobius::framework::model::item &item,
+    const mobius::framework::case_profile &case_profile
+)
+    : impl_ (std::make_shared<impl> (item, case_profile))
+{
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Scan all subfolders of a folder
+// @param folder Folder to scan
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
+{
+    impl_->on_folder (folder);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Called when processing is complete
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::on_complete ()
+{
+    impl_->on_complete ();
 }
 
 } // namespace mobius::extension::app::skype

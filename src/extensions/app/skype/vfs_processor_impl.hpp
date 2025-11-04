@@ -20,13 +20,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/io/file.hpp>
 #include <mobius/framework/ant/vfs_processor_impl_base.hpp>
 #include <mobius/framework/case_profile.hpp>
 #include <mobius/framework/model/item.hpp>
-#include <string>
-#include <vector>
-#include "profile.hpp"
+#include <memory>
 
 namespace mobius::extension::app::skype
 {
@@ -53,21 +50,11 @@ class vfs_processor_impl
     void on_complete () final;
 
   private:
-    // @brief Case item
-    mobius::framework::model::item item_;
+    // @brief Implementation class forward declaration
+    class impl;
 
-    // @brief Profiles found
-    std::vector<profile> profiles_;
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Helper functions
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void _scan_profile_folder (const mobius::core::io::folder &);
-    void _scan_s4l_files (const mobius::core::io::folder &);
-    void _decode_s4l_file (const mobius::core::io::file &);
-
-    void _save_app_profiles ();
-    void _save_user_accounts ();
+    // @brief Implementation class pointer
+    std::shared_ptr<impl> impl_;
 };
 
 } // namespace mobius::extension::app::skype

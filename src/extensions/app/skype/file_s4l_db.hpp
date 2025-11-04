@@ -26,6 +26,7 @@
 #include <mobius/core/io/reader.hpp>
 #include <cstdint>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace mobius::extension::app::skype
@@ -37,11 +38,121 @@ namespace mobius::extension::app::skype
 class file_s4l_db
 {
   public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Account structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct account
+    {
+        // @brief Skype Name
+        std::string skype_name;
+
+        // @brief App Version
+        std::string app_version;
+
+        // @brief Birthdate
+        std::string birthdate;
+
+        // @brief City
+        std::string city;
+
+        // @brief Country
+        std::string country;
+
+        // @brief Device ID
+        std::string device_id;
+
+        // @brief Emails
+        std::vector<std::string> emails;
+
+        // @brief Full Name
+        std::string full_name;
+
+        // @brief Gender
+        std::int64_t gender = 0;
+
+        // @brief Locale
+        std::string locale;
+
+        // @brief Mood text
+        std::string mood_text;
+
+        // @brief MS Account ID from Sign In
+        std::string msaid_from_signin;
+
+        // @brief MS Account CID
+        std::string msa_cid;
+
+        // @brief MS Account CID Hex
+        std::string msa_cid_hex;
+
+        // @brief MS Account ID
+        std::string msa_id;
+
+        // @brief Phone Numbers
+        std::vector<std::string> phone_numbers;
+
+        // @brief Primary Member Name
+        std::string primary_member_name;
+
+        // @brief Province
+        std::string province;
+
+        // @brief Thumbnail URL
+        std::string thumbnail_url;
+
+        // @brief Timezone
+        std::string timezone;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Contact structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct contact
+    {
+        // @brief Skype Name
+        std::string skype_name;
+
+        // @brief MRI
+        std::string mri;
+
+        // @brief Full Name
+        std::string full_name;
+
+        // @brief Birthdate
+        std::string birthdate;
+
+        // @brief Gender
+        std::int64_t gender = 0;
+
+        // @brief Country
+        std::string country;
+
+        // @brief Province
+        std::string province;
+
+        // @brief City
+        std::string city;
+
+        // @brief Emails
+        std::vector<std::string> emails;
+
+        // @brief Phone Numbers
+        std::vector<std::string> phone_numbers;
+
+        // @brief Mood text
+        std::string mood_text;
+
+        // @brief Thumbnail URL
+        std::string thumbnail_url;
+
+        // @brief Fetched time
+        mobius::core::datetime::datetime fetched_time;
+    };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    file_s4l_db (const mobius::core::io::reader &);
+    explicit file_s4l_db (const mobius::core::io::reader &);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Check if stream is an instance of s4l-*.db file
@@ -62,6 +173,31 @@ class file_s4l_db
         return schema_version_;
     }
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get account
+    // @return Account structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    account
+    get_account () const
+    {
+        return acc_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get contacts
+    // @return Vector of contacts
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<contact>
+    get_contacts () const
+    {
+        std::vector<contact> vec;
+
+        for (const auto &pair : contacts_)
+            vec.push_back (pair.second);
+
+        return vec;
+    }
+
   private:
     // @brief Flag is instance
     bool is_instance_ = false;
@@ -69,10 +205,17 @@ class file_s4l_db
     // @brief Schema version
     std::uint32_t schema_version_ = 0;
 
+    // @brief Account
+    account acc_;
+
+    // @brief Contacts
+    std::unordered_map<std::string, contact> contacts_;
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // void _load_accounts (mobius::core::database::database &);
+    void _load_account (mobius::core::database::database &);
+    void _load_contacts (mobius::core::database::database &);
 };
 
 } // namespace mobius::extension::app::skype

@@ -435,7 +435,10 @@ operator mobius::core::datetime::datetime () const
 data::
 operator std::string () const
 {
-    if (impl_->get_type () == type::string)
+    if (impl_->get_type () == type::null)
+        return std::string ();
+
+    else if (impl_->get_type () == type::string)
         return std::static_pointer_cast<data_impl_string> (impl_)->get_value ();
 
     else if (impl_->get_type () == type::bytearray)

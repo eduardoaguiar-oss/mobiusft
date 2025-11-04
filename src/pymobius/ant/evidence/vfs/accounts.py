@@ -19,7 +19,6 @@ import traceback
 
 import mobius
 import pymobius.ant.turing
-import pymobius.app.skype
 
 ANT_ID = 'accounts'
 ANT_NAME = 'Accounts'
@@ -53,7 +52,6 @@ class Ant(object):
 
         self.__entries = []
         self.__retrieve_passwords()
-        self.__retrieve_skype()
 
         self.entries = self.__entries
         self.__save_data()
@@ -117,81 +115,6 @@ class Ant(object):
 
         except Exception as e:
             mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from Skype
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_skype(self):
-        try:
-            model = pymobius.app.skype.model(self.__item)
-
-            for profile in model.get_profiles():
-                self.__retrieve_skype_profile(profile)
-
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from Skype profile
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_skype_profile(self, profile):
-        try:
-            for account in profile.get_accounts():
-                entry = pymobius.Data()
-                entry.type = 'app.skype'
-                entry.id = account.id
-                entry.name = account.fullname
-                entry.evidence_source = account.evidence_source
-                entry.password = None
-
-                entry.metadata = mobius.core.pod.map()
-                entry.metadata.set('username', profile.username)
-                entry.metadata.set('app-id', 'skype')
-                entry.metadata.set('app-name', 'Skype')
-                entry.metadata.set('profile-path', profile.path)
-                entry.metadata.set('fullname', account.fullname)
-                entry.metadata.set('mood-text', account.mood_text)
-                entry.metadata.set('city', account.city)
-                entry.metadata.set('province', account.province)
-                entry.metadata.set('country', account.country)
-                entry.metadata.set('emails', ', '.join(account.emails))
-
-                if account.birthday:
-                    entry.metadata.set('birthday', account.birthday)
-
-                if account.gender == 1:
-                    entry.metadata.set('gender', 'male')
-
-                elif account.gender == 2:
-                    entry.metadata.set('gender', 'female')
-
-                if account.type == 1:  # main.db based
-                    self.__retrieve_skype_profile_v1(entry, account)
-
-                elif account.type == 2:  # s4l.db based
-                    self.__retrieve_skype_profile_v2(entry, account)
-
-                self.__entries.append(entry)
-
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from Skype profile v1 (main.db based)
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_skype_profile_v1(self, entry, account):
-        entry.metadata.set('homepage', account.homepage)
-        entry.metadata.set('about', account.about)
-        entry.metadata.set('languages', account.languages)
-        entry.metadata.set('phone_home', account.phone_home)
-        entry.metadata.set('phone_office', account.phone_office)
-        entry.metadata.set('phone_mobile', account.phone_mobile)
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from Skype profile v2 (s4l.db based)
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_skype_profile_v2(self, entry, account):
-        entry.metadata.set('phones', ' ,'.join(account.phones))
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Save data into model

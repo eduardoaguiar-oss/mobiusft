@@ -93,7 +93,7 @@ class profile::impl
     bool
     is_valid () const
     {
-        return bool (folder_);
+        return !path_.empty ();
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -425,8 +425,53 @@ profile::impl::add_s4l_db_file (const mobius::core::io::file &f)
 
         log.info (__LINE__, "File decoded [s4l-xxx.db]: " + f.get_path ());
 
-        _set_folder (f.get_parent ());
-        _update_mtime (f);
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Get data from folder
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        path_ = f.get_path ();
+        last_modified_time_ = f.get_modification_time ();
+        creation_time_ = f.get_creation_time ();
+        username_ = get_username_from_path (f.get_path ());
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Load accounts
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto acc = fs.get_account ();
+
+        account a;
+        a.id = acc.skype_name;
+        a.name = acc.full_name;
+        a.phone_numbers = acc.phone_numbers;
+        a.emails = acc.emails;
+
+        if (!acc.full_name.empty ())
+            a.names.push_back (acc.full_name);
+
+        if (!acc.primary_member_name.empty ())
+            a.names.push_back (acc.primary_member_name);
+
+        // Metadata
+        a.metadata.set ("schema_version", fs.get_schema_version ());
+        a.metadata.set ("app_version", acc.app_version);
+        a.metadata.set ("birthday", acc.birthdate);
+        a.metadata.set ("city", acc.city);
+        a.metadata.set ("country", acc.country);
+        a.metadata.set ("device_id", acc.device_id);
+        a.metadata.set ("full_name", acc.full_name);
+        a.metadata.set ("gender", get_gender (acc.gender));
+        a.metadata.set ("locale", acc.locale);
+        a.metadata.set ("mood_text", acc.mood_text);
+        a.metadata.set ("ms_account_id", acc.msa_id);
+        a.metadata.set ("ms_account_id_from_signin", acc.msaid_from_signin);
+        a.metadata.set ("ms_account_cid", acc.msa_cid);
+        a.metadata.set ("ms_account_cid_hex", acc.msa_cid_hex);
+        a.metadata.set ("primary_member_name", acc.primary_member_name);
+        a.metadata.set ("province", acc.province);
+        a.metadata.set ("thumbnail_url", acc.thumbnail_url);
+        a.metadata.set ("timezone", acc.timezone);
+
+        a.f = f;
+        accounts_.push_back (a);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event
