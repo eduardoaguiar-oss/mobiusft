@@ -31,6 +31,20 @@ def formatter_bool(value):
     
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# @brief Duration formatter
+# @param value Duration value in seconds
+# @return String value
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+def formatter_duration(value):
+    value = value or 0
+    ss = value % 60
+    mm = (value // 60) % 60
+    hh = (value // 3600)
+
+    return f'{hh:02d}:{mm:02d}:{ss:02d}'
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Bin2Text formatter
 # @param value Bytes value
 # @return String value
@@ -144,11 +158,12 @@ def pango_escape(text):
 # @brief Data formatters
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 FORMATTERS = {
+    "bin2text": formatter_bin2text,
     "bool": formatter_bool,
     "chat-message-recipients": recipients_formatter,
     "chat-message-text": text_formatter,
-    "bin2text": formatter_bin2text,
     "datetime": pymobius.to_string,
+    "duration": formatter_duration,
     "hexstring": mobius.core.encoder.hexstring,
     "multiline": lambda lines: '\n'.join(lines or []),
     "string": pymobius.to_string,
@@ -393,16 +408,16 @@ MODEL = [
                   rows=[
                       args(id='id', name="ID"),
                       args(id='name', name="Name"),
-                      args(id='names', name='Names'),
-                      args(id='birthday', name='Birthday'),
-                      args(id='gender', name='Gender'),
-                      args(id='phones', name='Phones', format="multiline"),
-                      args(id='addresses', name='Addresses', format="multiline"),
-                      args(id='emails', name='E-mails', format="multiline"),
                       args(id='accounts', name='User accounts', format="multiline"),
-                      args(id='web_addresses', name='Web Addresses', format="multiline"),
+                      args(id='addresses', name='Addresses', format="multiline"),
+                      args(id='birthday', name='Birthday'),
+                      args(id='emails', name='E-mails', format="multiline"),
+                      args(id='gender', name='Gender'),
+                      args(id='names', name='Names', format="multiline"),
                       args(id='notes', name='Notes', format="multiline"),
                       args(id='organizations', name='Organizations', format="multiline"),
+                      args(id='phones', name='Phones', format="multiline"),
+                      args(id='web_addresses', name='Web Addresses', format="multiline"),
                   ]),
          ]
          ),
@@ -852,6 +867,29 @@ MODEL = [
                       args(id="url", name="URL"),
                       args(id='title', name="Page title"),
                       args(id='username', name="User name"),
+                  ]),
+         ]
+         ),
+    args(id="voicemail",
+         name="Voicemails",
+         description="Voicemail messages",
+         master_views=[
+             args(id="table",
+                  columns=[
+                      args(id='timestamp', name="Date/time (UTC)", format='datetime', first_sortable=True),
+                      args(id='duration', name="Duration", format='duration', is_sortable=True),
+                      args(id='username', is_sortable=True),
+                      args(id='app_name', name="Application", is_sortable=True),
+                  ]),
+         ],
+         detail_views=[
+             args(id="metadata",
+                  rows=[
+                      args(id='timestamp', name="Date/time (UTC)"),
+                      args(id='duration', name="Duration", format='duration'),
+                      args(id='username', name="User name"),
+                      args(id='app_id', name="Application ID"),
+                      args(id='app_name', name="Application"),
                   ]),
          ]
          ),

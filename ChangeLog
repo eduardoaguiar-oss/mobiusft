@@ -6,11 +6,17 @@ Mobius Forensic Toolkit 2.21
 	* app-chromium: Changed file_login_data to use database::new_statement (template, schema_version)
 	* app-chromium: Changed file_history to use database::new_statement (template, schema_version)
 	* app-chromium: Changed file_web_data to use database::new_statement (template, schema_version)
+	* evidence-viewer: Added new evidence type "voicemail"
+	* skype-agent: Removed extension
+	* skype-agent-sqlite: Removed extension
 	* libmobius_core: Added new method database::new_statement (template, schema_version)
 	* libmobius_core: Added new template method pod::data::to_list<T>
+	* libmobius_core: Added new method bytearray::to_guid
 	* libmobius_framework: Changed ant_impl_vfs_processor to count processed files
 	* libmobius_framework: Changed ant_impl_vfs_processor to simplify user folders scan
 	* ant.evidence.vfs.accounts: Removed old Skype code
+	* ant.evidence.vfs.received_files: Removed old Skype code
+	* ant.evidence.vfs.sent_files: Removed module
 
 Mobius Forensic Toolkit 2.20
 	* app-ares: Added new class profile

@@ -26,6 +26,7 @@
 #include <mobius/core/string_functions.hpp>
 #include <limits>
 #include <unordered_set>
+#include "common.hpp"
 
 #include <iostream>
 
@@ -123,17 +124,6 @@ get_db_schema_version (mobius::core::database::database &db)
     }
 
     return schema_version;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Convert Skype timestamp to date/time
-// @param timestamp Numerical value representing the timestamp
-// @return Date/time object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::core::datetime::datetime
-get_datetime (std::int64_t timestamp)
-{
-    return mobius::core::datetime::new_datetime_from_unix_timestamp (timestamp);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -394,7 +384,8 @@ file_s4l_db::_load_contacts (mobius::core::database::database &db)
             auto phone_numbers = nsp_data.get ("phones");
             if (phone_numbers.is_list ())
             {
-                for (const auto &p_data : phone_numbers.to_list<mobius::core::pod::map> ())
+                for (const auto &p_data :
+                     phone_numbers.to_list<mobius::core::pod::map> ())
                     c.phone_numbers.push_back (
                         mobius::core::string::strip (
                             p_data.get<std::string> ("number")

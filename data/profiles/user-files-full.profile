@@ -1,5 +1,5 @@
 [general]
-name=User Files (Deep Analysis)
+name=User Files (Full Analysis)
 description=User files and user activity focused profile
 
 [processor]

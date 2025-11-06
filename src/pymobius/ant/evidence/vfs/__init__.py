@@ -30,7 +30,6 @@ from . import cookies
 from . import installed_programs
 from . import opened_files
 from . import received_files
-from . import sent_files
 from . import trash_can_entries
 from . import visited_urls
 from . import wireless_connections
@@ -57,7 +56,6 @@ ANTS = [
     installed_programs.Ant,
     opened_files.Ant,
     received_files.Ant,
-    sent_files.Ant,
     trash_can_entries.Ant,
     visited_urls.Ant,
     wireless_connections.Ant,

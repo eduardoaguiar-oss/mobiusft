@@ -19,6 +19,7 @@ import threading
 import traceback
 
 import mobius
+import mobius.framework
 import pymobius
 import pymobius.ant.evidence
 from gi.repository import GLib

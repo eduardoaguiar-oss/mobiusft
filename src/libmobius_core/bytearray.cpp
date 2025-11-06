@@ -39,10 +39,7 @@ to_hex (std::uint64_t value, unsigned int siz)
     char buffer[32] = {0};
 
     snprintf (
-        buffer,
-        sizeof (buffer),
-        "%0*llx",
-        static_cast<int>(siz),
+        buffer, sizeof (buffer), "%0*llx", static_cast<int> (siz),
         static_cast<unsigned long long> (value)
     );
 
@@ -294,8 +291,7 @@ bool
 bytearray::all_equal (value_type value) const noexcept
 {
     return std::all_of (
-        data_.begin (),
-        data_.end (),
+        data_.begin (), data_.end (),
         [value] (std::uint8_t i) { return i == value; }
     );
 }
@@ -459,6 +455,39 @@ bytearray::to_string (const std::string &encoding) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Convert bytearray to GUID string
+// @return GUID string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+bytearray::to_guid () const
+{
+    if (data_.size () != 16)
+        return {};
+
+    char buffer[37] = {0};
+    sprintf (
+        buffer, "%08x-%04x-%04x-%04x-%012llx",
+        static_cast<std::uint32_t> (data_[0]) << 24 |
+            static_cast<std::uint32_t> (data_[1]) << 16 |
+            static_cast<std::uint32_t> (data_[2]) << 8 |
+            static_cast<std::uint32_t> (data_[3]),
+        static_cast<std::uint16_t> (data_[4]) << 8 |
+            static_cast<std::uint16_t> (data_[5]),
+        static_cast<std::uint16_t> (data_[6]) << 8 |
+            static_cast<std::uint16_t> (data_[7]),
+        static_cast<std::uint16_t> (data_[8]) << 8 |
+            static_cast<std::uint16_t> (data_[9]),
+        static_cast<std::uint64_t> (data_[10]) << 40 |
+            static_cast<std::uint64_t> (data_[11]) << 32 |
+            static_cast<std::uint64_t> (data_[12]) << 24 |
+            static_cast<std::uint64_t> (data_[13]) << 16 |
+            static_cast<std::uint64_t> (data_[14]) << 8 |
+            static_cast<std::uint64_t> (data_[15])
+    );
+    return std::string (buffer);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Generate hexdump from bytearray
 // @return String
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -603,7 +632,9 @@ operator!= (const bytearray &a, const bytearray &b)
 bool
 operator< (const bytearray &a, const bytearray &b)
 {
-    return std::lexicographical_compare (a.begin (), a.end (), b.begin (), b.end ());
+    return std::lexicographical_compare (
+        a.begin (), a.end (), b.begin (), b.end ()
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -635,6 +666,5 @@ right_prune (const bytearray &b, size_t n)
 
     return {b.begin (), b.end () - n};
 }
-
 
 } // namespace mobius::core

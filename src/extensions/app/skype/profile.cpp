@@ -24,6 +24,7 @@
 #include <mobius/core/log.hpp>
 #include <mobius/core/mediator.hpp>
 #include <mobius/core/string_functions.hpp>
+#include <format>
 #include <map>
 #include <string>
 #include <vector>
@@ -69,11 +70,39 @@ std::string
 get_gender (std::int64_t code)
 {
     if (code == 1)
-        return "Male";
+        return "1 (Male)";
+
     else if (code == 2)
-        return "Female";
+        return "2 (Female)";
+
     else
-        return "Unknown";
+        return std::format ("{} (Unknown)", code);
+}
+
+//  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get transfer status from code
+// @param code Status code
+// @return Status string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+get_transfer_status (std::int64_t code)
+{
+    static const std::map<std::int64_t, std::string> status_map = {
+        {0, "Not initiated"},
+        {7, "Cancelled"},
+        {8, "Completed"},
+        {9, "Error"}
+    };
+
+    std::string status;
+    auto it = status_map.find (code);
+
+    if (it != status_map.end ())
+        status = it->second;
+    else
+        status = "Unknown";
+
+    return std::format ("{} ({})", code, status);
 }
 
 } // namespace
@@ -147,6 +176,30 @@ class profile::impl
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get account ID
+    // @return Account ID
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_account_id () const
+    {
+        if (accounts_.empty ())
+            return {};
+        return accounts_.front ().id;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get account name
+    // @return Account name
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_account_name () const
+    {
+        if (accounts_.empty ())
+            return {};
+        return accounts_.front ().name;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get accounts
     // @return Vector of accounts
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -164,6 +217,66 @@ class profile::impl
     size_accounts () const
     {
         return accounts_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get contacts
+    // @return Vector of contacts
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<contact>
+    get_contacts () const
+    {
+        return contacts_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of contacts
+    // @return Number of contacts
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    size_contacts () const
+    {
+        return contacts_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get transfers
+    // @return Vector of file transfers
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<file_transfer>
+    get_file_transfers () const
+    {
+        return file_transfers_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of file transfers
+    // @return Number of transfers
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    size_file_transfers () const
+    {
+        return file_transfers_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get voicemails
+    // @return Vector of voicemails
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<voicemail>
+    get_voicemails () const
+    {
+        return voicemails_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of voicemails
+    // @return Number of voicemails
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    size_voicemails () const
+    {
+        return voicemails_.size ();
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -191,6 +304,15 @@ class profile::impl
 
     // @brief Accounts
     std::vector<account> accounts_;
+
+    // @brief Contacts
+    std::vector<contact> contacts_;
+
+    // @brief File Transfers
+    std::vector<file_transfer> file_transfers_;
+
+    // @brief Voicemails
+    std::vector<voicemail> voicemails_;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
@@ -336,6 +458,276 @@ profile::impl::add_main_db_file (const mobius::core::io::file &f)
             a.f = f;
 
             accounts_.push_back (a);
+        }
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Load contacts
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (const auto &ct : fm.get_contacts ())
+        {
+            contact c;
+            c.id = ct.skypename;
+            c.name = ct.fullname;
+            c.birthday = ct.birthday;
+            c.accounts.push_back (ct.skypename);
+            
+            if (!ct.fullname.empty ())
+                c.names.push_back (ct.fullname);
+
+            if (!ct.emails.empty ())
+                c.emails = mobius::core::string::split (ct.emails, " ");
+
+            if (!ct.phone_home.empty ())
+                c.phone_numbers.push_back (ct.phone_home);
+
+            if (!ct.phone_home_normalized.empty ())
+                c.phone_numbers.push_back (ct.phone_home_normalized);
+
+            if (!ct.phone_office.empty ())
+                c.phone_numbers.push_back (ct.phone_office);
+
+            if (!ct.phone_office_normalized.empty ())
+                c.phone_numbers.push_back (ct.phone_office_normalized);
+
+            if (!ct.phone_mobile.empty ())
+                c.phone_numbers.push_back (ct.phone_mobile);
+
+            if (!ct.phone_mobile_normalized.empty ())
+                c.phone_numbers.push_back (ct.phone_mobile_normalized);
+
+            if (!ct.pstnnumber.empty ())
+                c.phone_numbers.push_back (ct.pstnnumber);
+
+            if (!ct.homepage.empty ())
+                c.web_addresses.push_back (ct.homepage);
+
+            if (!ct.mood_text.empty ())
+                c.notes.push_back (ct.mood_text);
+
+            c.metadata.set ("record_idx", ct.idx);
+            c.metadata.set ("schema_version", fm.get_schema_version ());
+            c.metadata.set ("about", ct.about);
+            c.metadata.set (
+                "account_modification_serial_nr",
+                ct.account_modification_serial_nr
+            );
+            c.metadata.set ("added_in_shared_group", ct.added_in_shared_group);
+            c.metadata.set ("alertstring", ct.alertstring);
+            c.metadata.set ("aliases", ct.aliases);
+            c.metadata.set ("assigned_comment", ct.assigned_comment);
+            c.metadata.set ("assigned_phone1", ct.assigned_phone1);
+            c.metadata.set ("assigned_phone1_label", ct.assigned_phone1_label);
+            c.metadata.set ("assigned_phone2", ct.assigned_phone2);
+            c.metadata.set ("assigned_phone2_label", ct.assigned_phone2_label);
+            c.metadata.set ("assigned_phone3", ct.assigned_phone3);
+            c.metadata.set ("assigned_phone3_label", ct.assigned_phone3_label);
+            c.metadata.set ("assigned_speeddial", ct.assigned_speeddial);
+            c.metadata.set ("authorized_time", ct.authorized_time);
+            c.metadata.set ("authreq_crc", ct.authreq_crc);
+            c.metadata.set ("authreq_history", ct.authreq_history);
+            c.metadata.set ("authreq_initmethod", ct.authreq_initmethod);
+            c.metadata.set ("authreq_nodeinfo", ct.authreq_nodeinfo);
+            c.metadata.set ("authreq_src", ct.authreq_src);
+            c.metadata.set ("authreq_timestamp", ct.authreq_timestamp);
+            c.metadata.set ("authrequest_count", ct.authrequest_count);
+            c.metadata.set ("availability", ct.availability);
+            c.metadata.set ("avatar_hiresurl", ct.avatar_hiresurl);
+            c.metadata.set ("avatar_hiresurl_new", ct.avatar_hiresurl_new);
+            c.metadata.set ("avatar_timestamp", ct.avatar_timestamp);
+            c.metadata.set ("avatar_url", ct.avatar_url);
+            c.metadata.set ("avatar_url_new", ct.avatar_url_new);
+            c.metadata.set ("birthday", ct.birthday);
+            c.metadata.set ("buddystatus", ct.buddystatus);
+            c.metadata.set (
+                "certificate_send_count", ct.certificate_send_count
+            );
+            c.metadata.set ("city", ct.city);
+            c.metadata.set ("contactlist_track", ct.contactlist_track);
+            c.metadata.set ("country", ct.country);
+            c.metadata.set (
+                "dirblob_last_search_time", ct.dirblob_last_search_time
+            );
+            c.metadata.set ("displayname", ct.displayname);
+            c.metadata.set ("external_id", ct.external_id);
+            c.metadata.set ("external_system_id", ct.external_system_id);
+            c.metadata.set ("extprop_external_data", ct.extprop_external_data);
+            c.metadata.set (
+                "extprop_must_hide_avatar", ct.extprop_must_hide_avatar
+            );
+            c.metadata.set ("extprop_seen_birthday", ct.extprop_seen_birthday);
+            c.metadata.set (
+                "extprop_sms_pstn_contact_created",
+                ct.extprop_sms_pstn_contact_created
+            );
+            c.metadata.set ("extprop_sms_target", ct.extprop_sms_target);
+            c.metadata.set ("firstname", ct.firstname);
+            c.metadata.set ("fullname", ct.fullname);
+            c.metadata.set ("gender", get_gender (ct.gender));
+            c.metadata.set ("given_displayname", ct.given_displayname);
+            c.metadata.set ("group_membership", ct.group_membership);
+            c.metadata.set ("hashed_emails", ct.hashed_emails);
+            c.metadata.set ("homepage", ct.homepage);
+            c.metadata.set ("id", ct.id);
+            c.metadata.set ("in_shared_group", ct.in_shared_group);
+            c.metadata.set ("ipcountry", ct.ipcountry);
+            c.metadata.set ("is_auto_buddy", ct.is_auto_buddy);
+            c.metadata.set ("is_mobile", ct.is_mobile);
+            c.metadata.set ("is_permanent", ct.is_permanent);
+            c.metadata.set ("is_trusted", ct.is_trusted);
+            c.metadata.set ("isauthorized", ct.isauthorized);
+            c.metadata.set ("isblocked", ct.isblocked);
+            c.metadata.set ("languages", ct.languages);
+            c.metadata.set ("last_used_networktime", ct.last_used_networktime);
+            c.metadata.set ("lastname", ct.lastname);
+            c.metadata.set ("lastonline_timestamp", ct.lastonline_timestamp);
+            c.metadata.set ("lastused_timestamp", ct.lastused_timestamp);
+            c.metadata.set ("liveid_cid", ct.liveid_cid);
+            c.metadata.set ("main_phone", ct.main_phone);
+            c.metadata.set ("mood_text", ct.mood_text);
+            c.metadata.set ("mood_timestamp", ct.mood_timestamp);
+            c.metadata.set ("mutual_friend_count", ct.mutual_friend_count);
+            c.metadata.set ("network_availability", ct.network_availability);
+            c.metadata.set ("node_capabilities", ct.node_capabilities);
+            c.metadata.set ("node_capabilities_and", ct.node_capabilities_and);
+            c.metadata.set ("nr_of_buddies", ct.nr_of_buddies);
+            c.metadata.set ("nrof_authed_buddies", ct.nrof_authed_buddies);
+            c.metadata.set ("offline_authreq_id", ct.offline_authreq_id);
+            c.metadata.set ("phone_home", ct.phone_home);
+            c.metadata.set ("phone_home_normalized", ct.phone_home_normalized);
+            c.metadata.set ("phone_mobile", ct.phone_mobile);
+            c.metadata.set (
+                "phone_mobile_normalized", ct.phone_mobile_normalized
+            );
+            c.metadata.set ("phone_office", ct.phone_office);
+            c.metadata.set (
+                "phone_office_normalized", ct.phone_office_normalized
+            );
+            c.metadata.set ("pop_score", ct.pop_score);
+            c.metadata.set ("popularity_ord", ct.popularity_ord);
+            c.metadata.set ("profile_etag", ct.profile_etag);
+            c.metadata.set ("profile_timestamp", ct.profile_timestamp);
+            c.metadata.set ("province", ct.province);
+            c.metadata.set ("pstnnumber", ct.pstnnumber);
+            c.metadata.set ("received_authrequest", ct.received_authrequest);
+            c.metadata.set ("revoked_auth", ct.revoked_auth);
+            c.metadata.set ("rich_mood_text", ct.rich_mood_text);
+            c.metadata.set ("sent_authrequest", ct.sent_authrequest);
+            c.metadata.set (
+                "sent_authrequest_extrasbitmask",
+                ct.sent_authrequest_extrasbitmask
+            );
+            c.metadata.set (
+                "sent_authrequest_initmethod", ct.sent_authrequest_initmethod
+            );
+            c.metadata.set (
+                "sent_authrequest_serial", ct.sent_authrequest_serial
+            );
+            c.metadata.set ("sent_authrequest_time", ct.sent_authrequest_time);
+            c.metadata.set ("server_synced", ct.server_synced);
+            c.metadata.set ("skypename", ct.skypename);
+            c.metadata.set ("stack_version", ct.stack_version);
+            c.metadata.set ("timezone", ct.timezone);
+            c.metadata.set ("type", ct.type);
+            c.metadata.set ("unified_servants", ct.unified_servants);
+            c.metadata.set ("verified_company", ct.verified_company);
+            c.metadata.set ("verified_email", ct.verified_email);
+
+            contacts_.push_back (c);
+        }
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Load file transfers
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (const auto &ft : fm.get_file_transfers ())
+        {
+            file_transfer ft_obj;
+            ft_obj.timestamp = ft.starttime;
+            ft_obj.type = ft.type;
+            ft_obj.filename = ft.filename;
+            ft_obj.path = ft.filepath;
+
+            ft_obj.metadata.set ("record_idx", ft.idx);
+            ft_obj.metadata.set ("schema_version", fm.get_schema_version ());
+            ft_obj.metadata.set ("accepttime", ft.accepttime);
+            ft_obj.metadata.set ("bytespersecond", ft.bytespersecond);
+            ft_obj.metadata.set ("bytestransferred", ft.bytestransferred);
+            ft_obj.metadata.set ("chatmsg_guid", ft.chatmsg_guid);
+            ft_obj.metadata.set ("chatmsg_index", ft.chatmsg_index);
+            ft_obj.metadata.set ("convo_id", ft.convo_id);
+            ft_obj.metadata.set (
+                "extprop_handled_by_chat", ft.extprop_handled_by_chat
+            );
+            ft_obj.metadata.set (
+                "extprop_hide_from_history", ft.extprop_hide_from_history
+            );
+            ft_obj.metadata.set (
+                "extprop_localfilename", ft.extprop_localfilename
+            );
+            ft_obj.metadata.set (
+                "extprop_window_visible", ft.extprop_window_visible
+            );
+            ft_obj.metadata.set ("failurereason", ft.failurereason);
+            ft_obj.metadata.set ("filesize", ft.filesize);
+            ft_obj.metadata.set ("finishtime", ft.finishtime);
+            ft_obj.metadata.set ("flags", ft.flags);
+            ft_obj.metadata.set ("id", ft.id);
+            ft_obj.metadata.set ("is_permanent", ft.is_permanent);
+            ft_obj.metadata.set ("last_activity", ft.last_activity);
+            ft_obj.metadata.set ("nodeid", ft.nodeid.to_hexstring ());
+            ft_obj.metadata.set (
+                "offer_send_list",
+                mobius::core::string::replace (ft.offer_send_list, " ", "\n")
+            );
+            ft_obj.metadata.set ("old_filepath", ft.old_filepath);
+            ft_obj.metadata.set ("old_status", ft.old_status);
+            ft_obj.metadata.set ("parent_id", ft.parent_id);
+            ft_obj.metadata.set ("partner_dispname", ft.partner_dispname);
+            ft_obj.metadata.set ("partner_handle", ft.partner_handle);
+            ft_obj.metadata.set ("pk_id", ft.pk_id);
+            ft_obj.metadata.set ("starttime", ft.starttime);
+            ft_obj.metadata.set ("status", get_transfer_status (ft.status));
+            ft_obj.metadata.set ("type", ft.type);
+
+            file_transfers_.push_back (ft_obj);
+        }
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Load voicemails
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (const auto &vm : fm.get_voicemails ())
+        {
+            voicemail v;
+            v.timestamp = vm.timestamp;
+            v.duration = vm.duration;
+
+            v.metadata.set ("record_idx", vm.idx);
+            v.metadata.set ("schema_version", fm.get_schema_version ());
+            v.metadata.set ("allowed_duration", vm.allowed_duration);
+            v.metadata.set ("chatmsg_guid", vm.chatmsg_guid);
+            v.metadata.set ("convo_id", vm.convo_id);
+            v.metadata.set ("duration", vm.duration);
+            v.metadata.set (
+                "extprop_hide_from_history", vm.extprop_hide_from_history
+            );
+            v.metadata.set ("failurereason", vm.failurereason);
+            v.metadata.set ("failures", vm.failures);
+            v.metadata.set ("flags", vm.flags);
+            v.metadata.set ("id", vm.id);
+            v.metadata.set ("is_permanent", vm.is_permanent);
+            v.metadata.set ("notification_id", vm.notification_id);
+            v.metadata.set ("partner_dispname", vm.partner_dispname);
+            v.metadata.set ("partner_handle", vm.partner_handle);
+            v.metadata.set ("path", vm.path);
+            v.metadata.set ("playback_progress", vm.playback_progress);
+            v.metadata.set ("size", vm.size);
+            v.metadata.set ("status", vm.status);
+            v.metadata.set ("subject", vm.subject);
+            v.metadata.set ("timestamp", vm.timestamp);
+            v.metadata.set ("type", vm.type);
+            v.metadata.set ("vflags", vm.vflags);
+            v.metadata.set ("xmsg", vm.xmsg);
+
+            voicemails_.push_back (v);
         }
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -560,6 +952,26 @@ profile::get_last_modified_time () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get account ID
+// @return Account ID
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+profile::get_account_id () const
+{
+    return impl_->get_account_id ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get account name
+// @return Account name
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+profile::get_account_name () const
+{
+    return impl_->get_account_name ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get accounts
 // @return Vector of accounts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -577,6 +989,66 @@ std::size_t
 profile::size_accounts () const
 {
     return impl_->size_accounts ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get contacts
+// @return Vector of contacts
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<profile::contact>
+profile::get_contacts () const
+{
+    return impl_->get_contacts ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get number of contacts
+// @return Number of contacts
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::size_t
+profile::size_contacts () const
+{
+    return impl_->size_contacts ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get file transfers
+// @return Vector of file transfers
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<profile::file_transfer>
+profile::get_file_transfers () const
+{
+    return impl_->get_file_transfers ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get number of file transfers
+// @return Number of file transfers
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::size_t
+profile::size_file_transfers () const
+{
+    return impl_->size_file_transfers ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get voicemails
+// @return Vector of voicemails
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<profile::voicemail>
+profile::get_voicemails () const
+{
+    return impl_->get_voicemails ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get number of voicemails
+// @return Number of voicemails
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::size_t
+profile::size_voicemails () const
+{
+    return impl_->size_voicemails ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

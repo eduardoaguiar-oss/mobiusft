@@ -72,6 +72,93 @@ class profile
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Contact structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct contact
+    {
+        // @brief ID
+        std::string id;
+
+        // @brief Name
+        std::string name;
+
+        // @brief Birthday
+        std::string birthday;
+        
+        // @brief Accounts
+        std::vector<std::string> accounts;
+
+        // @brief Address
+        std::vector<std::string> addresses;
+
+        // @brief Email
+        std::vector<std::string> emails;
+
+        // @brief Phone number
+        std::vector<std::string> phone_numbers;
+
+        // @brief Names
+        std::vector<std::string> names;
+
+        // @brief Notes
+        std::vector<std::string> notes;
+
+        // @brief Organizations
+        std::vector<std::string> organizations;
+
+        // @brief Web addresses
+        std::vector<std::string> web_addresses;
+
+        // @brief Metadata
+        mobius::core::pod::map metadata;
+
+        // @brief Source file
+        mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief File Transfer structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct file_transfer
+    {
+        // @brief Transfer type (1 - received file, 2 - sent file)
+        std::int64_t type = 0;
+
+        // @brief Timestamp
+        mobius::core::datetime::datetime timestamp;
+
+        // @brief Filename
+        std::string filename;
+
+        // @brief Path
+        std::string path;
+
+        // @brief Metadata
+        mobius::core::pod::map metadata;
+
+        // @brief Source file
+        mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Voicemail structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct voicemail
+    {
+        // @brief Timestamp
+        mobius::core::datetime::datetime timestamp;
+
+        // @brief Duration
+        std::int64_t duration = 0;
+
+        // @brief Metadata
+        mobius::core::pod::map metadata;
+
+        // @brief Source file
+        mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     profile ();
@@ -94,8 +181,16 @@ class profile
     mobius::core::datetime::datetime get_creation_time () const;
     mobius::core::datetime::datetime get_last_modified_time () const;
 
+    std::string get_account_id () const;
+    std::string get_account_name () const;
     std::vector<account> get_accounts () const;
     std::size_t size_accounts () const;
+    std::vector<contact> get_contacts () const;
+    std::size_t size_contacts () const;
+    std::vector<file_transfer> get_file_transfers () const;
+    std::size_t size_file_transfers () const;
+    std::vector<voicemail> get_voicemails () const;
+    std::size_t size_voicemails () const;
 
     void add_main_db_file (const mobius::core::io::file &);
     void add_skype_db_file (const mobius::core::io::file &);

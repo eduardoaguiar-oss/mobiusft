@@ -262,6 +262,7 @@ class bytearray
     void from_hexstring (const std::string &);
     std::string to_hexstring () const;
     std::string to_string (const std::string & = {}) const;
+    std::string to_guid () const;
     std::string dump (unsigned int = 0) const;
     bytearray slice (size_type, size_type) const;
     std::vector<bytearray> split (const bytearray &) const;

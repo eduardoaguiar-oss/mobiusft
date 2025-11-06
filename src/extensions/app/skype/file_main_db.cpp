@@ -26,8 +26,7 @@
 #include <format>
 #include <limits>
 #include <unordered_set>
-
-#include <iostream>
+#include "common.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // References:
@@ -137,6 +136,177 @@
 //      - verified_email: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
 //      - voicemail_policy: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
 //      - webpresence_policy: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//
+// - Contacts
+//      - about: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - account_modification_serial_nr: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - added_in_shared_group: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - alertstring: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - aliases: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - assigned_comment: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - assigned_phone1: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - assigned_phone1_label: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - assigned_phone2: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - assigned_phone2_label: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - assigned_phone3: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - assigned_phone3_label: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - assigned_speeddial: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - authorization_certificate: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - authorized_time: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - authreq_crc: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - authreq_history: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - authreq_initmethod: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - authreq_nodeinfo: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - authreq_src: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - authreq_timestamp: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - authrequest_count: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - availability: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - avatar_hiresurl: 81, 84, 141, 162, 209, 235, 259
+//      - avatar_hiresurl_new: 81, 84, 141, 162, 209, 235, 259
+//      - avatar_image: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - avatar_timestamp: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - avatar_url: 72, 77, 81, 84-85, 133, 141, 149, 162, 164, 209, 235, 259
+//      - avatar_url_new: 81, 84, 133, 141, 149, 162, 209, 235, 259
+//      - birthday: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - buddyblob: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - buddystatus: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - capabilities: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - cbl_future: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - certificate_send_count: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - city: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - contactlist_track: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - country: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - dirblob_last_search_time: 84, 141, 162, 209, 235, 259
+//      - displayname: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - emails: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - external_id: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - external_system_id: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - extprop_external_data: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - extprop_must_hide_avatar: 66
+//      - extprop_seen_birthday: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - extprop_sms_pstn_contact_created: 97, 100, 141, 168, 308
+//      - extprop_sms_target: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - firstname: 72, 77, 81, 84-85, 133, 141, 149, 162, 164, 209, 235, 259
+//      - fullname: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - gender: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - given_authlevel: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - given_displayname: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - group_membership: 72, 77, 81, 84-85, 133, 141, 149, 162, 164, 209, 235, 259
+//      - hashed_emails: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - homepage: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - id: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - in_shared_group: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - ipcountry: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - is_auto_buddy: 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152, 162, 164, 196, 209, 235, 259
+//      - is_mobile: 72, 77, 81, 84-85, 133, 141, 149, 162, 164, 209, 235, 259
+//      - is_permanent: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - is_trusted: 72, 77, 81, 84-85, 133, 141, 149, 162, 164, 209, 235, 259
+//      - isauthorized: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - isblocked: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - languages: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - last_used_networktime: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - lastname: 72, 77, 81, 84-85, 133, 141, 149, 162, 164, 209, 235, 259
+//      - lastonline_timestamp: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - lastused_timestamp: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - liveid_cid: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - main_phone: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - mood_text: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - mood_timestamp: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - mutual_friend_count: 84, 141, 162, 209, 235, 259
+//      - network_availability: 72, 77, 81, 84-85, 133, 141, 149, 162, 164, 209, 235, 259
+//      - node_capabilities: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - node_capabilities_and: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - nr_of_buddies: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - nrof_authed_buddies: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - offline_authreq_id: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - phone_home: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - phone_home_normalized: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - phone_mobile: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - phone_mobile_normalized: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - phone_office: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - phone_office_normalized: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - pop_score: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - popularity_ord: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - profile_attachments: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - profile_etag: 84, 141, 162, 209, 235, 259
+//      - profile_json: 84, 141, 162, 209, 235, 259
+//      - profile_timestamp: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - province: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - pstnnumber: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - received_authrequest: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - refreshing: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - revoked_auth: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - rich_mood_text: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - saved_directory_blob: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - sent_authrequest: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - sent_authrequest_extrasbitmask: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - sent_authrequest_initmethod: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - sent_authrequest_serial: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - sent_authrequest_time: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - server_synced: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - skypename: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - stack_version: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - timezone: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - type: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - unified_servants: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - verified_company: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - verified_email: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
+//
+// - Transfers
+//      - accepttime: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - bytespersecond: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - bytestransferred: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - chatmsg_guid: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - chatmsg_index: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - convo_id: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - extprop_handled_by_chat: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - extprop_hide_from_history: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - extprop_localfilename: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - extprop_window_visible: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - failurereason: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - filename: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - filepath: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - filesize: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - finishtime: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - flags: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - id: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - is_permanent: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - last_activity: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - nodeid: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - offer_send_list: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - old_filepath: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - old_status: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - parent_id: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - partner_dispname: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - partner_handle: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - pk_id: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - starttime: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - status: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - type: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//
+// - Voicemails
+//      - allowed_duration: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - chatmsg_guid: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - convo_id: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - duration: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - extprop_hide_from_history: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - failurereason: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - failures: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - flags: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - id: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - is_permanent: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - notification_id: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - partner_dispname: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - partner_handle: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - path: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - playback_progress: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - size: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - status: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - subject: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - timestamp: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - type: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - vflags: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
+//      - xmsg: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace
@@ -235,55 +405,6 @@ get_db_schema_version (mobius::core::database::database &db)
     return schema_version;
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Convert Skype birthday value to string
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-get_birthday_string (std::int64_t value)
-{
-    if (value == 0)
-        return "Unknown";
-
-    return std::format (
-        "{:04}-{:02}-{:02}",
-        value / 10000,
-        (value / 100) % 100,
-        value % 100
-    );
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Convert Skype timestamp to date/time
-// @param timestamp Numerical value representing the timestamp
-// @return Date/time object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::datetime::datetime
-get_datetime (std::int64_t timestamp)
-{
-    return mobius::core::datetime::new_datetime_from_unix_timestamp (timestamp);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Convert timezone to string
-// @param value Numerical value representing the timezone
-// @return Timezone string
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-get_timezone_string (std::int64_t value)
-{
-    std::string timezone_str;
-
-    if (value)
-    {
-        value = (value - 86400) / 60;
-        auto mm = value % 60;
-        auto hh = (value / 60);
-        timezone_str = std::format ("{:+02d}:{:02d}", hh, mm);
-    }
-
-    return timezone_str;
-}
-
 } // namespace
 
 namespace mobius::extension::app::skype
@@ -327,6 +448,9 @@ file_main_db::file_main_db (const mobius::core::io::reader &reader)
         // Load data
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         _load_accounts (db);
+        _load_contacts (db);
+        _load_file_transfers (db);
+        _load_voicemails (db);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Finish decoding
@@ -479,7 +603,7 @@ file_main_db::_load_accounts (mobius::core::database::database &db)
             a.avatar_image = stmt.get_column_bytearray (13);
             a.avatar_policy = stmt.get_column_int64 (14);
             a.avatar_timestamp = get_datetime (stmt.get_column_int64 (15));
-            a.birthday = get_birthday_string (stmt.get_column_int64 (16));
+            a.birthday = get_birthday (stmt.get_column_int64 (16));
             a.buddyblob = stmt.get_column_bytearray (17);
             a.buddycount_policy = stmt.get_column_int64 (18);
             a.capabilities = stmt.get_column_bytearray (19);
@@ -554,7 +678,7 @@ file_main_db::_load_accounts (mobius::core::database::database &db)
             a.subscriptions = stmt.get_column_string (87);
             a.suggested_skypename = stmt.get_column_string (88);
             a.synced_email = stmt.get_column_bytearray (89);
-            a.timezone = get_timezone_string (stmt.get_column_int64 (90));
+            a.timezone = get_timezone (stmt.get_column_int64 (90));
             a.timezone_policy = stmt.get_column_int64 (91);
             a.type = stmt.get_column_int64 (92);
             a.uses_jcs = stmt.get_column_int64 (93);
@@ -565,6 +689,456 @@ file_main_db::_load_accounts (mobius::core::database::database &db)
 
             // Add to accounts vector
             accounts_.emplace_back (std::move (a));
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load Contacts
+// @param db Database object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file_main_db::_load_contacts (mobius::core::database::database &db)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // Contacts table was dropped between schema version 259 and 308
+    if (schema_version_ > 307)
+        return;
+
+    try
+    {
+        // Prepare SQL statement for table Contacts
+        auto stmt = db.new_statement (
+            "SELECT ${about:66-259},"
+            "${account_modification_serial_nr:66-259},"
+            "${added_in_shared_group:66-259},"
+            "${alertstring:66-259},"
+            "${aliases:66-259},"
+            "${assigned_comment:66-259},"
+            "${assigned_phone1:66-259},"
+            "${assigned_phone1_label:66-259},"
+            "${assigned_phone2:66-259},"
+            "${assigned_phone2_label:66-259},"
+            "${assigned_phone3:66-259},"
+            "${assigned_phone3_label:66-259},"
+            "${assigned_speeddial:66-259},"
+            "${authorization_certificate:66-259},"
+            "${authorized_time:66-259},"
+            "${authreq_crc:66-259},"
+            "${authreq_history:66-259},"
+            "${authreq_initmethod:66-259},"
+            "${authreq_nodeinfo:66-259},"
+            "${authreq_src:66-259},"
+            "${authreq_timestamp:66-259},"
+            "${authrequest_count:66-259},"
+            "${availability:66-259},"
+            "${avatar_hiresurl:81-259},"
+            "${avatar_hiresurl_new:81-259},"
+            "${avatar_image:66-259},"
+            "${avatar_timestamp:66-259},"
+            "${avatar_url:72-259},"
+            "${avatar_url_new:81-259},"
+            "${birthday:66-259},"
+            "${buddyblob:66-259},"
+            "${buddystatus:66-259},"
+            "${capabilities:66-259},"
+            "${cbl_future:66-259},"
+            "${certificate_send_count:66-259},"
+            "${city:66-259},"
+            "${contactlist_track:66-259},"
+            "${country:66-259},"
+            "${dirblob_last_search_time:84-259},"
+            "${displayname:66-259},"
+            "${emails:66-259},"
+            "${external_id:66-259},"
+            "${external_system_id:66-259},"
+            "${extprop_external_data:66-259},"
+            "${extprop_must_hide_avatar:66-66},"
+            "${extprop_seen_birthday:66-259},"
+            "${extprop_sms_pstn_contact_created:97-308},"
+            "${extprop_sms_target:66-259},"
+            "${firstname:72-259},"
+            "${fullname:66-259},"
+            "${gender:66-259},"
+            "${given_authlevel:66-259},"
+            "${given_displayname:66-259},"
+            "${group_membership:72-259},"
+            "${hashed_emails:66-259},"
+            "${homepage:66-259},"
+            "${id:66-308},"
+            "${in_shared_group:66-259},"
+            "${ipcountry:66-259},"
+            "${is_auto_buddy:72-259},"
+            "${is_mobile:72-259},"
+            "${is_permanent:66-308},"
+            "${is_trusted:72-259},"
+            "${isauthorized:66-259},"
+            "${isblocked:66-259},"
+            "${languages:66-259},"
+            "${last_used_networktime:66-259},"
+            "${lastname:72-259},"
+            "${lastonline_timestamp:66-259},"
+            "${lastused_timestamp:66-259},"
+            "${liveid_cid:66-259},"
+            "${main_phone:66-259},"
+            "${mood_text:66-259},"
+            "${mood_timestamp:66-259},"
+            "${mutual_friend_count:84-259},"
+            "${network_availability:72-259},"
+            "${node_capabilities:66-259},"
+            "${node_capabilities_and:66-259},"
+            "${nr_of_buddies:66-259},"
+            "${nrof_authed_buddies:66-259},"
+            "${offline_authreq_id:66-259},"
+            "${phone_home:66-259},"
+            "${phone_home_normalized:66-259},"
+            "${phone_mobile:66-259},"
+            "${phone_mobile_normalized:66-259},"
+            "${phone_office:66-259},"
+            "${phone_office_normalized:66-259},"
+            "${pop_score:66-259},"
+            "${popularity_ord:66-259},"
+            "${profile_attachments:66-259},"
+            "${profile_etag:84-259},"
+            "${profile_json:84-259},"
+            "${profile_timestamp:66-259},"
+            "${province:66-259},"
+            "${pstnnumber:66-259},"
+            "${received_authrequest:66-259},"
+            "${refreshing:66-259},"
+            "${revoked_auth:66-259},"
+            "${rich_mood_text:66-259},"
+            "${saved_directory_blob:66-259},"
+            "${sent_authrequest:66-259},"
+            "${sent_authrequest_extrasbitmask:66-259},"
+            "${sent_authrequest_initmethod:66-259},"
+            "${sent_authrequest_serial:66-259},"
+            "${sent_authrequest_time:66-259},"
+            "${server_synced:66-259},"
+            "${skypename:66-259},"
+            "${stack_version:66-259},"
+            "${timezone:66-259},"
+            "${type:66-259},"
+            "${unified_servants:66-259},"
+            "${verified_company:66-259},"
+            "${verified_email:66-259} "
+            "FROM Contacts",
+            schema_version_
+        );
+
+        // Retrieve records from Contacts table
+        std::uint64_t idx = 0;
+
+        while (stmt.fetch_row ())
+        {
+            contact obj;
+
+            obj.idx = idx++;
+            obj.about = stmt.get_column_string (0);
+            obj.account_modification_serial_nr = stmt.get_column_int64 (1);
+            obj.added_in_shared_group = stmt.get_column_int64 (2);
+            obj.alertstring = stmt.get_column_string (3);
+            obj.aliases = stmt.get_column_string (4);
+            obj.assigned_comment = stmt.get_column_string (5);
+            obj.assigned_phone1 = stmt.get_column_string (6);
+            obj.assigned_phone1_label = stmt.get_column_string (7);
+            obj.assigned_phone2 = stmt.get_column_string (8);
+            obj.assigned_phone2_label = stmt.get_column_string (9);
+            obj.assigned_phone3 = stmt.get_column_string (10);
+            obj.assigned_phone3_label = stmt.get_column_string (11);
+            obj.assigned_speeddial = stmt.get_column_string (12);
+            obj.authorization_certificate = stmt.get_column_bytearray (13);
+            obj.authorized_time = stmt.get_column_int64 (14);
+            obj.authreq_crc = stmt.get_column_int64 (15);
+            obj.authreq_history = stmt.get_column_bytearray (16);
+            obj.authreq_initmethod = stmt.get_column_int64 (17);
+            obj.authreq_nodeinfo = stmt.get_column_bytearray (18);
+            obj.authreq_src = stmt.get_column_int64 (19);
+            obj.authreq_timestamp = stmt.get_column_int64 (20);
+            obj.authrequest_count = stmt.get_column_int64 (21);
+            obj.availability = stmt.get_column_int64 (22);
+            obj.avatar_hiresurl = stmt.get_column_string (23);
+            obj.avatar_hiresurl_new = stmt.get_column_string (24);
+            obj.avatar_image = stmt.get_column_bytearray (25);
+            obj.avatar_timestamp = get_datetime (stmt.get_column_int64 (26));
+            obj.avatar_url = stmt.get_column_string (27);
+            obj.avatar_url_new = stmt.get_column_string (28);
+            obj.birthday = get_birthday (stmt.get_column_int64 (29));
+            obj.buddyblob = stmt.get_column_bytearray (30);
+            obj.buddystatus = stmt.get_column_int64 (31);
+            obj.capabilities = stmt.get_column_bytearray (32);
+            obj.cbl_future = stmt.get_column_bytearray (33);
+            obj.certificate_send_count = stmt.get_column_int64 (34);
+            obj.city = stmt.get_column_string (35);
+            obj.contactlist_track = stmt.get_column_int64 (36);
+            obj.country = stmt.get_column_string (37);
+            obj.dirblob_last_search_time = stmt.get_column_int64 (38);
+            obj.displayname = stmt.get_column_string (39);
+            obj.emails = stmt.get_column_string (40);
+            obj.external_id = stmt.get_column_string (41);
+            obj.external_system_id = stmt.get_column_string (42);
+            obj.extprop_external_data = stmt.get_column_string (43);
+            obj.extprop_must_hide_avatar = stmt.get_column_int64 (44);
+            obj.extprop_seen_birthday = stmt.get_column_int64 (45);
+            obj.extprop_sms_pstn_contact_created = stmt.get_column_int64 (46);
+            obj.extprop_sms_target = stmt.get_column_int64 (47);
+            obj.firstname = stmt.get_column_string (48);
+            obj.fullname = stmt.get_column_string (49);
+            obj.gender = stmt.get_column_int64 (50);
+            obj.given_authlevel = stmt.get_column_int64 (51);
+            obj.given_displayname = stmt.get_column_string (52);
+            obj.group_membership = stmt.get_column_int64 (53);
+            obj.hashed_emails = stmt.get_column_string (54);
+            obj.homepage = stmt.get_column_string (55);
+            obj.id = stmt.get_column_int64 (56);
+            obj.in_shared_group = stmt.get_column_int64 (57);
+            obj.ipcountry = stmt.get_column_string (58);
+            obj.is_auto_buddy = stmt.get_column_bool (59);
+            obj.is_mobile = stmt.get_column_bool (60);
+            obj.is_permanent = stmt.get_column_bool (61);
+            obj.is_trusted = stmt.get_column_bool (62);
+            obj.isauthorized = stmt.get_column_bool (63);
+            obj.isblocked = stmt.get_column_bool (64);
+            obj.languages = stmt.get_column_string (65);
+            obj.last_used_networktime = get_time (stmt.get_column_int64 (66));
+            obj.lastname = stmt.get_column_string (67);
+            obj.lastonline_timestamp =
+                get_datetime (stmt.get_column_int64 (68));
+            obj.lastused_timestamp = get_datetime (stmt.get_column_int64 (69));
+            obj.liveid_cid = stmt.get_column_string (70);
+            obj.main_phone = stmt.get_column_string (71);
+            obj.mood_text = stmt.get_column_string (72);
+            obj.mood_timestamp = get_datetime (stmt.get_column_int64 (73));
+            obj.mutual_friend_count = stmt.get_column_int64 (74);
+            obj.network_availability = stmt.get_column_int64 (75);
+            obj.node_capabilities = stmt.get_column_int64 (76);
+            obj.node_capabilities_and = stmt.get_column_int64 (77);
+            obj.nr_of_buddies = stmt.get_column_int64 (78);
+            obj.nrof_authed_buddies = stmt.get_column_int64 (79);
+            obj.offline_authreq_id = stmt.get_column_int64 (80);
+            obj.phone_home = stmt.get_column_string (81);
+            obj.phone_home_normalized = stmt.get_column_string (82);
+            obj.phone_mobile = stmt.get_column_string (83);
+            obj.phone_mobile_normalized = stmt.get_column_string (84);
+            obj.phone_office = stmt.get_column_string (85);
+            obj.phone_office_normalized = stmt.get_column_string (86);
+            obj.pop_score = stmt.get_column_int64 (87);
+            obj.popularity_ord = stmt.get_column_int64 (88);
+            obj.profile_attachments = stmt.get_column_bytearray (89);
+            obj.profile_etag = stmt.get_column_string (90);
+            obj.profile_json = stmt.get_column_string (91);
+            obj.profile_timestamp = get_datetime (stmt.get_column_int64 (92));
+            obj.province = stmt.get_column_string (93);
+            obj.pstnnumber = stmt.get_column_string (94);
+            obj.received_authrequest = stmt.get_column_string (95);
+            obj.refreshing = stmt.get_column_int64 (96);
+            obj.revoked_auth = stmt.get_column_int64 (97);
+            obj.rich_mood_text = stmt.get_column_string (98);
+            obj.saved_directory_blob = stmt.get_column_bytearray (99);
+            obj.sent_authrequest = stmt.get_column_string (100);
+            obj.sent_authrequest_extrasbitmask = stmt.get_column_int64 (101);
+            obj.sent_authrequest_initmethod = stmt.get_column_int64 (102);
+            obj.sent_authrequest_serial = stmt.get_column_int64 (103);
+            obj.sent_authrequest_time = stmt.get_column_int64 (104);
+            obj.server_synced = stmt.get_column_int64 (105);
+            obj.skypename = stmt.get_column_string (106);
+            obj.stack_version = stmt.get_column_int64 (107);
+            obj.timezone = get_timezone (stmt.get_column_int64 (108));
+            obj.type = stmt.get_column_int64 (109);
+            obj.unified_servants = stmt.get_column_string (110);
+            obj.verified_company = stmt.get_column_bytearray (111);
+            obj.verified_email = stmt.get_column_bytearray (112);
+
+            // Add contacts to the list
+            contacts_.emplace_back (std::move (obj));
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load File Transfers
+// @param db Database object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file_main_db::_load_file_transfers (mobius::core::database::database &db)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // Transfers table was dropped between schema version 259 and 308
+    if (schema_version_ > 307)
+        return;
+
+    try
+    {
+        // Prepare SQL statement for table Transfers
+        auto stmt = db.new_statement (
+            "SELECT accepttime,"
+            "bytespersecond,"
+            "bytestransferred,"
+            "chatmsg_guid,"
+            "chatmsg_index,"
+            "convo_id,"
+            "extprop_handled_by_chat,"
+            "extprop_hide_from_history,"
+            "extprop_localfilename,"
+            "extprop_window_visible,"
+            "failurereason,"
+            "filename,"
+            "filepath,"
+            "filesize,"
+            "finishtime,"
+            "flags,"
+            "id,"
+            "is_permanent,"
+            "last_activity,"
+            "nodeid,"
+            "offer_send_list,"
+            "old_filepath,"
+            "old_status,"
+            "parent_id,"
+            "partner_dispname,"
+            "partner_handle,"
+            "pk_id,"
+            "starttime,"
+            "status,"
+            "type "
+            "FROM Transfers",
+            schema_version_
+        );
+
+        // Retrieve records from Transfers table
+        std::uint64_t idx = 0;
+
+        while (stmt.fetch_row ())
+        {
+            file_transfer obj;
+
+            obj.idx = idx++;
+            obj.accepttime = get_datetime (stmt.get_column_int64 (0));
+            obj.bytespersecond = stmt.get_column_int64 (1);
+            obj.bytestransferred = stmt.get_column_string (2);
+            obj.chatmsg_guid = stmt.get_column_bytearray (3).to_guid ();
+            obj.chatmsg_index = stmt.get_column_int64 (4);
+            obj.convo_id = stmt.get_column_int64 (5);
+            obj.extprop_handled_by_chat = stmt.get_column_int64 (6);
+            obj.extprop_hide_from_history = stmt.get_column_int64 (7);
+            obj.extprop_localfilename = stmt.get_column_string (8);
+            obj.extprop_window_visible = stmt.get_column_int64 (9);
+            obj.failurereason = stmt.get_column_int64 (10);
+            obj.filename = stmt.get_column_string (11);
+            obj.filepath = stmt.get_column_string (12);
+            obj.filesize = stmt.get_column_string (13);
+            obj.finishtime = get_datetime (stmt.get_column_int64 (14));
+            obj.flags = stmt.get_column_int64 (15);
+            obj.id = stmt.get_column_int64 (16);
+            obj.is_permanent = stmt.get_column_bool (17);
+            obj.last_activity = stmt.get_column_int64 (18);
+            obj.nodeid = stmt.get_column_bytearray (19);
+            obj.offer_send_list = stmt.get_column_string (20);
+            obj.old_filepath = stmt.get_column_int64 (21);
+            obj.old_status = stmt.get_column_int64 (22);
+            obj.parent_id = stmt.get_column_int64 (23);
+            obj.partner_dispname = stmt.get_column_string (24);
+            obj.partner_handle = stmt.get_column_string (25);
+            obj.pk_id = stmt.get_column_int64 (26);
+            obj.starttime = get_datetime (stmt.get_column_int64 (27));
+            obj.status = stmt.get_column_int64 (28);
+            obj.type = stmt.get_column_int64 (29);
+
+            // Add transfers to the list
+            file_transfers_.emplace_back (std::move (obj));
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load Voicemails
+// @param db Database object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file_main_db::_load_voicemails (mobius::core::database::database &db)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // Voicemails table was dropped between schema version 259 and 308
+    if (schema_version_ > 307)
+        return;
+
+    try
+    {
+        // Prepare SQL statement for table Voicemails
+        auto stmt = db.new_statement (
+            "SELECT allowed_duration,"
+            "chatmsg_guid,"
+            "convo_id,"
+            "duration,"
+            "extprop_hide_from_history,"
+            "failurereason,"
+            "failures,"
+            "flags,"
+            "id,"
+            "is_permanent,"
+            "notification_id,"
+            "partner_dispname,"
+            "partner_handle,"
+            "path,"
+            "playback_progress,"
+            "size,"
+            "status,"
+            "subject,"
+            "timestamp,"
+            "type,"
+            "vflags,"
+            "xmsg "
+            "FROM Voicemails"
+        );
+
+        // Retrieve records from Voicemails table
+        std::uint64_t idx = 0;
+
+        while (stmt.fetch_row ())
+        {
+            voicemail obj;
+
+            obj.idx = idx++;
+            obj.allowed_duration = stmt.get_column_int64 (0);
+            obj.chatmsg_guid = stmt.get_column_bytearray (1).to_guid ();
+            obj.convo_id = stmt.get_column_int64 (2);
+            obj.duration = stmt.get_column_int64 (3);
+            obj.extprop_hide_from_history = stmt.get_column_int64 (4);
+            obj.failurereason = stmt.get_column_int64 (5);
+            obj.failures = stmt.get_column_int64 (6);
+            obj.flags = stmt.get_column_int64 (7);
+            obj.id = stmt.get_column_int64 (8);
+            obj.is_permanent = stmt.get_column_bool (9);
+            obj.notification_id = stmt.get_column_int64 (10);
+            obj.partner_dispname = stmt.get_column_string (11);
+            obj.partner_handle = stmt.get_column_string (12);
+            obj.path = stmt.get_column_string (13);
+            obj.playback_progress = stmt.get_column_int64 (14);
+            obj.size = stmt.get_column_int64 (15);
+            obj.status = stmt.get_column_int64 (16);
+            obj.subject = stmt.get_column_string (17);
+            obj.timestamp = get_datetime (stmt.get_column_int64 (18));
+            obj.type = stmt.get_column_int64 (19);
+            obj.vflags = stmt.get_column_int64 (20);
+            obj.xmsg = stmt.get_column_string (21);
+
+            // Add voicemails to the list
+            voicemails_.emplace_back (std::move (obj));
         }
     }
     catch (const std::exception &e)

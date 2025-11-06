@@ -21,7 +21,6 @@ import mobius
 import pymobius
 import pymobius.app.gecko
 import pymobius.app.itubego
-import pymobius.app.skype
 
 ANT_ID = 'received-files'
 ANT_NAME = 'Received files'
@@ -63,7 +62,6 @@ class Ant(object):
         # retrieve data
         self.__retrieve_gecko()
         self.__retrieve_itubego()
-        self.__retrieve_skype()
 
         # save data
         self.__save_data()
@@ -160,61 +158,6 @@ class Ant(object):
                 entry.metadata.set('profile-path', profile.path)
 
                 self.__entries.append(entry)
-
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from Skype
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_skype(self):
-        try:
-            model = pymobius.app.skype.model(self.__item)
-
-            for profile in model.get_profiles():
-                self.__retrieve_skype_profile(profile)
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from Skype profile
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_skype_profile(self, profile):
-        DOWNLOAD_STATE = {0: 'Not initiated', 7: 'Cancelled', 8: 'Completed', 9: 'Error'}
-
-        try:
-            for ft in profile.get_file_transfers():
-                if ft.type == 1:
-                    entry = pymobius.Data()
-
-                    entry.username = profile.username
-                    entry.timestamp = ft.start_time
-                    entry.filename = ft.filename
-                    entry.path = ft.path
-                    entry.app_id = 'skype'
-                    entry.app_name = 'Skype'
-
-                    entry.metadata = mobius.core.pod.map()
-                    entry.metadata.set('size', ft.size)
-                    entry.metadata.set('start-time', ft.start_time)
-                    entry.metadata.set('end-time', ft.finish_time)
-                    entry.metadata.set('bytes-received', ft.bytes_transferred)
-                    entry.metadata.set('transfer-state', DOWNLOAD_STATE.get(ft.status, 'Unknown (%d)' % ft.status))
-
-                    sender = ft.from_skype_account
-                    if ft.from_skype_name:
-                        sender += f' ({ft.from_skype_name})'
-
-                    receiver = ft.to_skype_account
-                    if ft.to_skype_name:
-                        receiver += f' ({ft.to_skype_name})'
-
-                    entry.metadata.set('sender-account', sender)
-                    entry.metadata.set('receiver-account', receiver)
-                    entry.metadata.set('profile-id', profile.name)
-                    entry.metadata.set('profile-path', profile.path)
-
-                    self.__entries.append(entry)
 
         except Exception as e:
             mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
