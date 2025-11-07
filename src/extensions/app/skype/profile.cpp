@@ -26,6 +26,7 @@
 #include <mobius/core/string_functions.hpp>
 #include <format>
 #include <map>
+#include <set>
 #include <string>
 #include <vector>
 #include "file_main_db.hpp"
@@ -319,6 +320,26 @@ class profile::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _set_folder (const mobius::core::io::folder &);
     void _update_mtime (const mobius::core::io::file &);
+
+    void _load_main_db_accounts (
+        const file_main_db &, const mobius::core::io::file &
+    );
+    void _load_main_db_contacts (
+        const file_main_db &, const mobius::core::io::file &
+    );
+    void _load_main_db_file_transfers (
+        const file_main_db &, const mobius::core::io::file &
+    );
+    void _load_main_db_voicemails (
+        const file_main_db &, const mobius::core::io::file &
+    );
+
+    void _load_skype_db_contacts (
+        const file_skype_db &, const mobius::core::io::file &
+    );
+
+    void
+    _load_s4l_db_accounts (const file_s4l_db &, const mobius::core::io::file &);
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -392,8 +413,45 @@ profile::impl::add_main_db_file (const mobius::core::io::file &f)
         _update_mtime (f);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Load accounts
+        // Load data
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        _load_main_db_accounts (fm, f);
+        _load_main_db_contacts (fm, f);
+        _load_main_db_file_transfers (fm, f);
+        _load_main_db_voicemails (fm, f);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Emit sampling_file event
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::emit (
+            "sampling_file",
+            "app.skype.main_db." +
+                mobius::core::string::to_string (fm.get_schema_version (), 5),
+            f.new_reader ()
+        );
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
+        );
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load main.db accounts
+// @param fm Main.db file
+// @param f Original file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_load_main_db_accounts (
+    const file_main_db &fm, const mobius::core::io::file &f
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
         for (const auto &acc : fm.get_accounts ())
         {
             account a;
@@ -459,44 +517,74 @@ profile::impl::add_main_db_file (const mobius::core::io::file &f)
 
             accounts_.push_back (a);
         }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
+        );
+    }
+}
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Load contacts
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load main.db contacts
+// @param fm Main.db file
+// @param f Original file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_load_main_db_contacts (
+    const file_main_db &fm, const mobius::core::io::file &f
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
         for (const auto &ct : fm.get_contacts ())
         {
             contact c;
             c.id = ct.skypename;
             c.name = ct.fullname;
+            c.gender = ct.gender;
             c.birthday = ct.birthday;
+
+            // Get phones
+            std::set<std::string> phones;
+
+            if (!ct.phone_home.empty ())
+                phones.insert (ct.phone_home);
+
+            if (!ct.phone_home_normalized.empty ())
+                phones.insert (ct.phone_home_normalized);
+
+            if (!ct.phone_office.empty ())
+                phones.insert (ct.phone_office);
+
+            if (!ct.phone_office_normalized.empty ())
+                phones.insert (ct.phone_office_normalized);
+
+            if (!ct.phone_mobile.empty ())
+                phones.insert (ct.phone_mobile);
+
+            if (!ct.phone_mobile_normalized.empty ())
+                phones.insert (ct.phone_mobile_normalized);
+
+            if (!ct.pstnnumber.empty ())
+                phones.insert (ct.pstnnumber);
+
+            std::copy (
+                phones.begin (), phones.end (),
+                std::back_inserter (c.phone_numbers)
+            );
+
+            // Get other fields
             c.accounts.push_back (ct.skypename);
-            
+
             if (!ct.fullname.empty ())
                 c.names.push_back (ct.fullname);
 
             if (!ct.emails.empty ())
                 c.emails = mobius::core::string::split (ct.emails, " ");
-
-            if (!ct.phone_home.empty ())
-                c.phone_numbers.push_back (ct.phone_home);
-
-            if (!ct.phone_home_normalized.empty ())
-                c.phone_numbers.push_back (ct.phone_home_normalized);
-
-            if (!ct.phone_office.empty ())
-                c.phone_numbers.push_back (ct.phone_office);
-
-            if (!ct.phone_office_normalized.empty ())
-                c.phone_numbers.push_back (ct.phone_office_normalized);
-
-            if (!ct.phone_mobile.empty ())
-                c.phone_numbers.push_back (ct.phone_mobile);
-
-            if (!ct.phone_mobile_normalized.empty ())
-                c.phone_numbers.push_back (ct.phone_mobile_normalized);
-
-            if (!ct.pstnnumber.empty ())
-                c.phone_numbers.push_back (ct.pstnnumber);
 
             if (!ct.homepage.empty ())
                 c.web_addresses.push_back (ct.homepage);
@@ -504,6 +592,7 @@ profile::impl::add_main_db_file (const mobius::core::io::file &f)
             if (!ct.mood_text.empty ())
                 c.notes.push_back (ct.mood_text);
 
+            // Set metadata
             c.metadata.set ("record_idx", ct.idx);
             c.metadata.set ("schema_version", fm.get_schema_version ());
             c.metadata.set ("about", ct.about);
@@ -531,12 +620,8 @@ profile::impl::add_main_db_file (const mobius::core::io::file &f)
             c.metadata.set ("authreq_timestamp", ct.authreq_timestamp);
             c.metadata.set ("authrequest_count", ct.authrequest_count);
             c.metadata.set ("availability", ct.availability);
-            c.metadata.set ("avatar_hiresurl", ct.avatar_hiresurl);
-            c.metadata.set ("avatar_hiresurl_new", ct.avatar_hiresurl_new);
             c.metadata.set ("avatar_timestamp", ct.avatar_timestamp);
             c.metadata.set ("avatar_url", ct.avatar_url);
-            c.metadata.set ("avatar_url_new", ct.avatar_url_new);
-            c.metadata.set ("birthday", ct.birthday);
             c.metadata.set ("buddystatus", ct.buddystatus);
             c.metadata.set (
                 "certificate_send_count", ct.certificate_send_count
@@ -634,10 +719,29 @@ profile::impl::add_main_db_file (const mobius::core::io::file &f)
 
             contacts_.push_back (c);
         }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
+        );
+    }
+}
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Load file transfers
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load main.db file transfers
+// @param fm Main.db file
+// @param f Original file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_load_main_db_file_transfers (
+    const file_main_db &fm, const mobius::core::io::file &f
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
         for (const auto &ft : fm.get_file_transfers ())
         {
             file_transfer ft_obj;
@@ -690,10 +794,29 @@ profile::impl::add_main_db_file (const mobius::core::io::file &f)
 
             file_transfers_.push_back (ft_obj);
         }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
+        );
+    }
+}
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Load voicemails
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load main.db voicemails
+// @param fm Main.db file
+// @param f Original file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_load_main_db_voicemails (
+    const file_main_db &fm, const mobius::core::io::file &f
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
         for (const auto &vm : fm.get_voicemails ())
         {
             voicemail v;
@@ -729,16 +852,6 @@ profile::impl::add_main_db_file (const mobius::core::io::file &f)
 
             voicemails_.push_back (v);
         }
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Emit sampling_file event
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        mobius::core::emit (
-            "sampling_file",
-            "app.skype.main_db." +
-                mobius::core::string::to_string (fm.get_schema_version (), 5),
-            f.new_reader ()
-        );
     }
     catch (const std::exception &e)
     {
@@ -776,6 +889,11 @@ profile::impl::add_skype_db_file (const mobius::core::io::file &f)
         _update_mtime (f);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Load data
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        _load_skype_db_contacts (fs, f);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         mobius::core::emit (
@@ -784,6 +902,41 @@ profile::impl::add_skype_db_file (const mobius::core::io::file &f)
                 mobius::core::string::to_string (fs.get_schema_version (), 5),
             f.new_reader ()
         );
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
+        );
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load skype.db contacts
+// @param fs Skype.db file
+// @param f Original file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_load_skype_db_contacts (
+    const file_skype_db &fs, const mobius::core::io::file &f
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        for (const auto &ct : fs.get_contacts ())
+        {
+            contact c;
+            //c.id = ct.skype_name;
+            c.name = ct.full_name;
+            c.gender = ct.gender;
+            c.birthday = ct.birthday;
+            //c.accounts.push_back (ct.skype_name);
+            c.f = f;
+            
+            contacts_.push_back (c);
+        }
     }
     catch (const std::exception &e)
     {
@@ -826,8 +979,42 @@ profile::impl::add_s4l_db_file (const mobius::core::io::file &f)
         username_ = get_username_from_path (f.get_path ());
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Load accounts
+        // Load data
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        _load_s4l_db_accounts (fs, f);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Emit sampling_file event
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::emit (
+            "sampling_file",
+            "app.skype.s4l_db." +
+                mobius::core::string::to_string (fs.get_schema_version (), 5),
+            f.new_reader ()
+        );
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
+        );
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load s4l-xxx.db accounts
+// @param fs s4l-xxx.db file
+// @param f Original file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_load_s4l_db_accounts (
+    const file_s4l_db &fs, const mobius::core::io::file &f
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
         auto acc = fs.get_account ();
 
         account a;
@@ -864,16 +1051,6 @@ profile::impl::add_s4l_db_file (const mobius::core::io::file &f)
 
         a.f = f;
         accounts_.push_back (a);
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Emit sampling_file event
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        mobius::core::emit (
-            "sampling_file",
-            "app.skype.s4l_db." +
-                mobius::core::string::to_string (fs.get_schema_version (), 5),
-            f.new_reader ()
-        );
     }
     catch (const std::exception &e)
     {

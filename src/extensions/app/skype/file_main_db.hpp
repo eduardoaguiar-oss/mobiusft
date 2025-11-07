@@ -420,12 +420,6 @@ class file_main_db
         // @brief Availability
         std::int64_t availability;
 
-        // @brief Avatar Hiresurl
-        std::string avatar_hiresurl;
-
-        // @brief Avatar Hiresurl New
-        std::string avatar_hiresurl_new;
-
         // @brief Avatar Image
         mobius::core::bytearray avatar_image;
 
@@ -434,9 +428,6 @@ class file_main_db
 
         // @brief Avatar Url
         std::string avatar_url;
-
-        // @brief Avatar Url New
-        std::string avatar_url_new;
 
         // @brief Birthday
         std::string birthday;

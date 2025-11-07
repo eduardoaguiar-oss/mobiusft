@@ -203,12 +203,9 @@ show_main_db_info (const std::string &path)
         std::cout << "   Authreq Timestamp: " << ct.authreq_timestamp << std::endl;
         std::cout << "   Authrequest Count: " << ct.authrequest_count << std::endl;
         std::cout << "   Availability: " << ct.availability << std::endl;
-        std::cout << "   Avatar Hiresurl: " << ct.avatar_hiresurl << std::endl;
-        std::cout << "   Avatar Hiresurl New: " << ct.avatar_hiresurl_new << std::endl;
         std::cout << "   Avatar Image:\n" << ct.avatar_image.dump (8) << std::endl;
         std::cout << "   Avatar Timestamp: " << ct.avatar_timestamp << std::endl;
         std::cout << "   Avatar Url: " << ct.avatar_url << std::endl;
-        std::cout << "   Avatar Url New: " << ct.avatar_url_new << std::endl;
         std::cout << "   Birthday: " << ct.birthday << std::endl;
         std::cout << "   Buddyblob:\n" << ct.buddyblob.dump (8) << std::endl;
         std::cout << "   Buddystatus: " << ct.buddystatus << std::endl;

@@ -284,6 +284,7 @@ vfs_processor_impl::impl::_save_contacts ()
             auto e = item_.new_evidence ("contact");
             e.set_attribute ("id", c.id);
             e.set_attribute ("name", c.name);
+            e.set_attribute ("gender", c.gender);
             e.set_attribute ("accounts", c.accounts);
             e.set_attribute ("addresses", c.addresses);
             e.set_attribute ("birthday", c.birthday);
@@ -291,7 +292,7 @@ vfs_processor_impl::impl::_save_contacts ()
             e.set_attribute ("names", c.names);
             e.set_attribute ("notes", c.notes);
             e.set_attribute ("organizations", c.organizations);
-            e.set_attribute ("phone_numbers", c.phone_numbers);
+            e.set_attribute ("phones", c.phone_numbers);
             e.set_attribute ("web_addresses", c.web_addresses);
             e.set_attribute ("app_id", APP_ID);
             e.set_attribute ("app_name", APP_NAME);

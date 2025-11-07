@@ -171,6 +171,14 @@ FORMATTERS = {
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# @brief Data domains
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+DOMAINS = {
+    "evidence.contact.gender": {1 : "Male", 2 : "Female"},
+}
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Generic getter
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def getter_generic(obj, attr_id):
@@ -192,6 +200,19 @@ def getter_encrypted(obj, attr_id):
     v = getattr(obj, attr_id, None)
     
     return formatter_bin2text(v)
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# @brief Domain value getter
+# @param obj Object
+# @param attr_id Attribute ID
+# @return domain value if domain is found or "Unknown: {value}", otherwise
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+def getter_domain(obj, attr_id):
+    domain_id = f'evidence.{obj.type}.{attr_id}'
+    domain = DOMAINS.get(domain_id, {})
+    value = getattr(obj, attr_id, None)
+    return domain.get(value, f'Unknown ({value})')
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -226,6 +247,7 @@ def getter_cookie_value(obj, attr_id):
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 GETTERS = {
     "cookie_value": getter_cookie_value,
+    "domain": getter_domain,
     "encrypted": getter_encrypted,
 }
 
@@ -399,20 +421,24 @@ MODEL = [
          master_views=[
              args(id="table",
                   columns=[
-                      args(id='id', is_sortable=True),
+                      args(id='username', is_sortable=True),
+                      args(id='app_name', name='Application', is_sortable=True),
+                      args(id='id', first_sortable=True),
                       args(id='name', is_sortable=True),
                   ]),
          ],
          detail_views=[
              args(id="metadata",
                   rows=[
+                      args(id='username'),
+                      args(id='app_name', name='Application'),
                       args(id='id', name="ID"),
                       args(id='name', name="Name"),
                       args(id='accounts', name='User accounts', format="multiline"),
                       args(id='addresses', name='Addresses', format="multiline"),
                       args(id='birthday', name='Birthday'),
                       args(id='emails', name='E-mails', format="multiline"),
-                      args(id='gender', name='Gender'),
+                      args(id='gender', name='Gender', format="domain"),
                       args(id='names', name='Names', format="multiline"),
                       args(id='notes', name='Notes', format="multiline"),
                       args(id='organizations', name='Organizations', format="multiline"),

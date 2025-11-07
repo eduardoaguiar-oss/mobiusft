@@ -82,6 +82,9 @@ class profile
         // @brief Name
         std::string name;
 
+        // @brief Gender
+        std::int64_t gender = 0;
+
         // @brief Birthday
         std::string birthday;
         

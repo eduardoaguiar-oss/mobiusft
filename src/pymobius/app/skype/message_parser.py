@@ -15,18 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+import html
 import json
 import string
 
 import mobius
-
-try:
-    # Python 2.6-2.7
-    from HTMLParser import HTMLParser
-except ImportError:
-    # Python 3
-    from html.parser import HTMLParser
-
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Format Account ID
@@ -398,16 +391,6 @@ ENTITIES = {
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Unescape entities
-# @param text Escaped text (with &amp;, ...)
-# @return Unescaped text
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-def unescape(text):
-    html = HTMLParser()
-    return html.unescape(text)
-
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Skype message parser
 # @author Eduardo Aguiar
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -541,7 +524,7 @@ class MessageParser(object):
     def __parse_entity(self, e):
         element = {
             'type': 'text',
-            'text': unescape('&' + e.text + ';')
+            'text': html.unescape('&' + e.text + ';')
         }
         self.add_element(element)
 
@@ -608,7 +591,7 @@ class MessageParser(object):
     # @brief Parse <a> node
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def _parse_a(self, e):
-        element = {'type': 'href', 'url': unescape(e.attributes.get('href'))}
+        element = {'type': 'href', 'url': html.unescape(e.attributes.get('href'))}
         self.add_element(element)
 
         value = self.__get_tag_value(e)  # ignore text and </a>
