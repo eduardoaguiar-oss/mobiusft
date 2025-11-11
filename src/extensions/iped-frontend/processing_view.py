@@ -201,6 +201,27 @@ class ProcessingView(object):
 
         grid.attach(self.__sector_size_spinbutton, 1, 2, 2, 2)
 
+        # XMM (max memory size)
+        label = mobius.core.ui.label()
+        label.set_markup('<b>Max. Mem. (XMX, in GB):</b>')
+        label.set_halign(mobius.core.ui.label.align_right)
+        label.set_visible(True)
+        grid.attach(label.get_ui_widget(), 0, 4, 1, 2)
+
+        xmx = mobius.framework.get_config('iped.xmx') or 8
+
+        self.__xmx_spinbutton = Gtk.SpinButton.new_with_range(1, 4096, 1)
+        self.__xmx_spinbutton.set_value(xmx)
+        self.__xmx_spinbutton.connect('value-changed', self.__on_xmx_value_changed)
+
+        self.__xmx_spinbutton.show()
+        grid.attach(self.__xmx_spinbutton, 1, 4, 2, 2)
+        
+        self.__gc_checkbutton = Gtk.CheckButton.new_with_label('Force full garbage collection during processing')
+        self.__gc_checkbutton.set_active(False)
+        self.__gc_checkbutton.show()
+        grid.attach(self.__gc_checkbutton, 1, 6, 2, 1)
+        
         hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_spacing(5)
         hbox.set_visible(True)
@@ -213,6 +234,13 @@ class ProcessingView(object):
         self.__execute_button.set_visible(True)
         self.__execute_button.set_callback('clicked', self.__on_execute_button_clicked)
         hbox.add_child(self.__execute_button, mobius.core.ui.box.fill_none)
+
+        self.__resume_button = mobius.core.ui.button()
+        self.__resume_button.set_icon_by_name('media-playback-start')
+        self.__resume_button.set_text('_Resume')
+        self.__resume_button.set_visible(True)
+        self.__resume_button.set_callback('clicked', self.__on_resume_button_clicked)
+        hbox.add_child(self.__resume_button, mobius.core.ui.box.fill_none)
 
         self.__open_button = mobius.core.ui.button()
         self.__open_button.set_icon_by_name('document-open')
@@ -248,8 +276,9 @@ class ProcessingView(object):
             return
 
         # enable/disable open button
-        flag_can_open = any(is_item_processed(item) for item in self.__itemlist)
-        self.__open_button.set_sensitive(flag_can_open)
+        flag_is_processed = any(is_item_processed(item) for item in self.__itemlist)
+        self.__open_button.set_sensitive(flag_is_processed)
+        self.__resume_button.set_sensitive(flag_is_processed)
 
         # set dname entry
         if len(self.__itemlist) == 1:
@@ -330,14 +359,40 @@ class ProcessingView(object):
         option = pymobius.Data()
         option.itemlist = get_datasource_items(self.__itemlist)
         option.sector_size = self.__sector_size_spinbutton.get_value_as_int()
-        option.xmx = mobius.framework.get_config('iped.xmx') or 8
+        option.xmx = self.__xmx_spinbutton.get_value_as_int()
+        option.force_gc = self.__gc_checkbutton.get_active()
+        option.continue_processing = False
 
         t = threading.Thread(target=self.__processing_thread, args=(option,), daemon=True)
         t.start()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Processing thread
+    # @brief on_resume_button_clicked event
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_resume_button_clicked(self):
+
+        # create thread
+        option = pymobius.Data()
+        option.itemlist = get_datasource_items(self.__itemlist)
+        option.sector_size = self.__sector_size_spinbutton.get_value_as_int()
+        option.xmx = self.__xmx_spinbutton.get_value_as_int()
+        option.force_gc = self.__gc_checkbutton.get_active()
+        option.continue_processing = True
+
+        t = threading.Thread(target=self.__processing_thread, args=(option,), daemon=True)
+        t.start()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Handle 'value-changed' spinbutton event
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_xmx_value_changed(self, spinbutton, *args):
+        transaction = mobius.framework.new_config_transaction()
+        mobius.framework.set_config('iped.xmx', spinbutton.get_value_as_int())
+        transaction.commit()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Processing thread
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __processing_thread(self, option):
         guard = mobius.core.thread_guard()
         case = option.itemlist[0].case
@@ -346,20 +401,27 @@ class ProcessingView(object):
         # process items
         for item in option.itemlist:
             datasource = item.get_datasource()
-            name = item.get_attribute(ATTR_DNAME).strip()
+            name = (item.get_attribute(ATTR_DNAME) or f'item-{item.uid:04d}').strip()
             logfile = case.get_path(os.path.join('history', f'{item.uid:04d}.log'))
             workdir = get_workdir_path(item)
 
-            # remove old processing files
-            if os.path.exists(logfile):
-                os.remove(logfile)
+            # remove old processing files, if necessary
+            if not option.continue_processing:
+                if os.path.exists(logfile):
+                    os.remove(logfile)
 
-            if os.path.exists(workdir):
-                self.__control.set_status(f'Removing {item.uid:04d} work directory...')
-                shutil.rmtree(workdir)
+                if os.path.exists(workdir):
+                    self.__control.set_status(f'Removing {item.uid:04d} work directory...')
+                    shutil.rmtree(workdir)
 
             # build command
-            cmd = f'java -jar {self.__iped_path}/iped.jar \
+            cmd = 'java'
+            
+            if option.force_gc:
+                new_size = (option.xmx // 4) or 1
+                cmd += f' -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=20 -XX:+UseG1GC -XX:NewSize={new_size}g -XX:MaxNewSize={new_size}g'
+                
+            cmd += f' -jar {self.__iped_path}/iped.jar \
                 -b {option.sector_size} \
                 -log "{logfile}" \
                 -Xmx{option.xmx}g \
@@ -376,6 +438,9 @@ class ProcessingView(object):
             if self.__profile and self.__profile != 'default':
                 cmd += f' -profile "{self.__profile}"'
 
+            if option.continue_processing:
+                cmd += ' --continue'
+                
             mobius.core.logf('INF ' + cmd)
 
             # run
@@ -386,9 +451,9 @@ class ProcessingView(object):
         # update panel
         self.__update_view()
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_open_button_clicked event
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_open_button_clicked(self):
         processed_items = [item for item in self.__itemlist if is_item_processed(item)]
 
@@ -396,9 +461,9 @@ class ProcessingView(object):
             t = threading.Thread(target=self.__opening_thread, args=(processed_items,), daemon=True)
             t.start()
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Opening thread
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __opening_thread(self, itemlist):
         item = itemlist[0]
         case = item.case
@@ -436,9 +501,9 @@ class ProcessingView(object):
         if tmpfile:
             os.remove(tmpfile)
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Populate profile combobox
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __populate_profile_combobox(self):
         if not self.__iped_path:
             return

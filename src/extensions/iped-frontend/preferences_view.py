@@ -71,31 +71,15 @@ class PreferencesView(object):
         self.__iped_folder_button.show()
         grid.attach(self.__iped_folder_button, 1, 0, 4, 1)
 
-        # XMM (max memory size)
-        label = mobius.core.ui.label()
-        label.set_markup('<b>Max. Memory (XMX, in GB):</b>')
-        label.set_halign(mobius.core.ui.label.align_right)
-        label.set_visible(True)
-        grid.attach(label.get_ui_widget(), 0, 1, 1, 1)
-
-        xmx = mobius.framework.get_config('iped.xmx') or 8
-
-        self.__xmx_spinbutton = Gtk.SpinButton.new_with_range(1, 4096, 1)
-        self.__xmx_spinbutton.set_value(xmx)
-        self.__xmx_spinbutton.connect('value-changed', self.__on_xmx_value_changed)
-
-        self.__xmx_spinbutton.show()
-
-        grid.attach(self.__xmx_spinbutton, 1, 1, 1, 1)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief get ui widget
+    # @brief Get ui widget
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def get_ui_widget(self):
         return self.__widget.get_ui_widget()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief set data to be viewed
+    # @brief Set data to be viewed
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def set_data(self, itemlist):
         pass
@@ -113,14 +97,6 @@ class PreferencesView(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def on_destroy(self):
         self.__mediator.clear()
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Handle 'value-changed' spinbutton event
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __on_xmx_value_changed(self, spinbutton, *args):
-        transaction = mobius.framework.new_config_transaction()
-        mobius.framework.set_config('iped.xmx', spinbutton.get_value_as_int())
-        transaction.commit()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Handle 'file-set' filechooserbutton event
