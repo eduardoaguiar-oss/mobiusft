@@ -6,7 +6,9 @@ Mobius Forensic Toolkit 2.21
 	* app-chromium: Changed file_login_data to use database::new_statement (template, schema_version)
 	* app-chromium: Changed file_history to use database::new_statement (template, schema_version)
 	* app-chromium: Changed file_web_data to use database::new_statement (template, schema_version)
-	* evidence-viewer: Added new evidence type "voicemail"
+	* evidence-viewer: Added new evidence type "Voicemail"
+	* evidence-viewer: Added new evidence type "Remote Party IP Address"
+	* evidence-viewer: Changed evidence type "P2P Remote File" to "Remote Party Shared File"
 	* iped-frontend: Added new processing option to force full garbage collection
 	* iped-frontend: Added new processing option to set XMX and XMS memory size
 	* iped-frontend: Added new processing button to resume processing

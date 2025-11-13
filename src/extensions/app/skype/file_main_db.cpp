@@ -25,6 +25,7 @@
 #include <mobius/core/string_functions.hpp>
 #include <format>
 #include <limits>
+#include <unordered_map>
 #include <unordered_set>
 #include "common.hpp"
 
@@ -137,6 +138,131 @@
 //      - voicemail_policy: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
 //      - webpresence_policy: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
 //
+// - CallMembers
+//      - admit_failure_reason: 97, 100, 141, 162, 168, 259, 308
+//      - balance_update: 97, 100, 141, 168, 308
+//      - call_db_id: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - call_duration: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - call_end_diagnostics_code: 97, 100, 141, 168, 308
+//      - call_name: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - call_session_guid: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - country: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - creation_timestamp: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - debuginfo: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - dispname: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - failurereason: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - fallback_in_progress: 72, 77, 81, 84-85, 97, 100, 133, 141, 149, 162, 164, 168, 209, 235, 259, 308
+//      - forward_targets: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - forwarded_by: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - guid: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - id: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - identity: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - identity_type: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - ip_address: 67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - is_conference: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - is_multiparty_video_capable: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - is_permanent: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - is_premium_video_sponsor: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - is_read_only: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - is_seamlessly_upgraded_call: 67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - is_server_muted: 97, 100, 141, 162, 168, 209, 235, 259, 308
+//      - is_video_codec_compatible: 67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - languages: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - light_weight_meeting_role: 97, 100, 141, 162, 168, 209, 235, 259, 308
+//      - limiting_factor: 97, 100, 141, 168, 308
+//      - mike_status: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - next_redial_time: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - nonse_word: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - nr_of_delivered_push_notifications: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - nrof_redials_done: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - nrof_redials_left: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - payment_category: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - pk_status: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - price_currency: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - price_per_minute: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - price_precision: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - prime_status: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - pstn_feedback: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - pstn_statustext: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - quality_problems: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - quality_status: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - real_identity: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - recovery_in_progress: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - role: 97, 100, 141, 168, 308
+//      - seconds_left: 97, 100, 141, 168, 308
+//      - sounderror_code: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - soundlevel: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - start_timestamp: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - stats_xml: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - status: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - target_identity: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - tenant_id: 97, 100, 141, 168, 308
+//      - transfer_active: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - transfer_status: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - transfer_topic: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - transferred_by: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - transferred_to: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - type: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - version_string: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - videostatus: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - voicechannel: 72, 77, 81, 84-85, 97, 100, 107, 133, 141, 149, 162, 164, 168, 209, 235, 259, 308
+//
+// - Calls
+//      - access_token: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - active_members: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - begin_timestamp: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - broadcast_metadata: 97, 100, 141, 168, 308
+//      - conf_participants: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - content_sharing_session_count_changed: 97, 100, 141, 168, 308
+//      - conv_dbid: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - current_video_audience: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - duration: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - failurecode: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - failurereason: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - host_identity: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - id: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - is_active: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - is_conference: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - is_incoming: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - is_incoming_one_on_one_video_call: 97, 100, 141, 168, 308
+//      - is_muted: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - is_muted_speaker: 97, 100, 141, 168, 308
+//      - is_on_hold: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - is_permanent: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - is_premium_video_sponsor: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - is_server_muted: 97, 100, 141, 162, 168, 209, 235, 259, 308
+//      - is_unseen_missed: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - joined_existing: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - light_weight_meeting_count_changed: 97, 100, 141, 162, 168, 209, 235, 259, 308
+//      - meeting_details: 97, 100, 141, 168, 308
+//      - members: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - mike_status: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - name: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - old_duration: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - old_members: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - partner_dispname: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - partner_handle: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - premium_video_is_grace_period: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - premium_video_sponsor_list: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - premium_video_status: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - pstn_number: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - pstn_status: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - quality_problems: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - queue_info: 97, 100, 168, 308
+//      - role: 97, 100, 141, 168, 308
+//      - server_identity: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - soundlevel: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - start_timestamp: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - status: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - technology: 72, 77, 81, 84-85, 97, 100, 133, 141, 149, 162, 164, 168, 209, 235, 259, 308
+//      - tenant_id: 97, 100, 141, 168, 308
+//      - topic: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - transferor_displayname: 97, 100, 168, 308
+//      - transferor_type: 97, 100, 168, 308
+//      - type: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - vaa_input_status: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//      - video_disabled: 66-67, 72, 77, 81, 84-85, 97, 100, 107, 114, 133, 141, 149, 152-153, 162, 164, 168, 196, 209, 235, 259, 308
+//
 // - Contacts
 //      - about: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
 //      - account_modification_serial_nr: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
@@ -161,12 +287,9 @@
 //      - authreq_timestamp: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
 //      - authrequest_count: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
 //      - availability: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
-//      - avatar_hiresurl: 81, 84, 141, 162, 209, 235, 259
-//      - avatar_hiresurl_new: 81, 84, 141, 162, 209, 235, 259
 //      - avatar_image: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
 //      - avatar_timestamp: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
 //      - avatar_url: 72, 77, 81, 84-85, 133, 141, 149, 162, 164, 209, 235, 259
-//      - avatar_url_new: 81, 84, 133, 141, 149, 162, 209, 235, 259
 //      - birthday: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
 //      - buddyblob: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
 //      - buddystatus: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
@@ -176,7 +299,6 @@
 //      - city: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
 //      - contactlist_track: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
 //      - country: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
-//      - dirblob_last_search_time: 84, 141, 162, 209, 235, 259
 //      - displayname: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
 //      - emails: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
 //      - external_id: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
@@ -212,7 +334,6 @@
 //      - main_phone: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
 //      - mood_text: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
 //      - mood_timestamp: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
-//      - mutual_friend_count: 84, 141, 162, 209, 235, 259
 //      - network_availability: 72, 77, 81, 84-85, 133, 141, 149, 162, 164, 209, 235, 259
 //      - node_capabilities: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
 //      - node_capabilities_and: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
@@ -228,8 +349,6 @@
 //      - pop_score: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
 //      - popularity_ord: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
 //      - profile_attachments: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
-//      - profile_etag: 84, 141, 162, 209, 235, 259
-//      - profile_json: 84, 141, 162, 209, 235, 259
 //      - profile_timestamp: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
 //      - province: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
 //      - pstnnumber: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
@@ -448,6 +567,7 @@ file_main_db::file_main_db (const mobius::core::io::reader &reader)
         // Load data
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         _load_accounts (db);
+        _load_calls (db);
         _load_contacts (db);
         _load_file_transfers (db);
         _load_voicemails (db);
@@ -698,6 +818,315 @@ file_main_db::_load_accounts (mobius::core::database::database &db)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load Calls
+// @param db Database object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file_main_db::_load_calls (mobius::core::database::database &db)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        std::unordered_multimap<std::int64_t, call_member> call_members;
+
+        // Prepare SQL statement for table CallMembers
+        auto stmt_cm = db.new_statement (
+            "SELECT ${admit_failure_reason:97},"
+            "${balance_update:97},"
+            "${call_db_id:66},"
+            "${call_duration:66},"
+            "${call_end_diagnostics_code:97},"
+            "${call_name:66},"
+            "${call_session_guid:66},"
+            "${country:66},"
+            "${creation_timestamp:66},"
+            "${debuginfo:66},"
+            "${dispname:66},"
+            "${failurereason:66},"
+            "${fallback_in_progress:72},"
+            "${forward_targets:66},"
+            "${forwarded_by:66},"
+            "${guid:66},"
+            "${id:66},"
+            "${identity:66},"
+            "${identity_type:66},"
+            "${ip_address:67},"
+            "${is_conference:66},"
+            "${is_multiparty_video_capable:66},"
+            "${is_permanent:66},"
+            "${is_premium_video_sponsor:66},"
+            "${is_read_only:66},"
+            "${is_seamlessly_upgraded_call:67},"
+            "${is_server_muted:97},"
+            "${is_video_codec_compatible:67},"
+            "${languages:66},"
+            "${light_weight_meeting_role:97},"
+            "${limiting_factor:97},"
+            "${mike_status:66},"
+            "${next_redial_time:66},"
+            "${nonse_word:66},"
+            "${nr_of_delivered_push_notifications:66},"
+            "${nrof_redials_done:66},"
+            "${nrof_redials_left:66},"
+            "${payment_category:66},"
+            "${pk_status:66},"
+            "${price_currency:66},"
+            "${price_per_minute:66},"
+            "${price_precision:66},"
+            "${prime_status:66},"
+            "${pstn_feedback:66},"
+            "${pstn_statustext:66},"
+            "${quality_problems:66},"
+            "${quality_status:66},"
+            "${real_identity:66},"
+            "${recovery_in_progress:66},"
+            "${role:97},"
+            "${seconds_left:97},"
+            "${sounderror_code:66},"
+            "${soundlevel:66},"
+            "${start_timestamp:66},"
+            "${stats_xml:66},"
+            "${status:66},"
+            "${target_identity:66},"
+            "${tenant_id:97},"
+            "${transfer_active:66},"
+            "${transfer_status:66},"
+            "${transfer_topic:66},"
+            "${transferred_by:66},"
+            "${transferred_to:66},"
+            "${type:66},"
+            "${version_string:66},"
+            "${videostatus:66},"
+            "${voicechannel:72} "
+            "FROM CallMembers",
+            schema_version_
+        );
+
+        // Retrieve records from CallMembers table
+        std::uint64_t idx = 0;
+
+        while (stmt_cm.fetch_row ())
+        {
+            call_member obj;
+
+            obj.idx = idx++;
+            obj.admit_failure_reason = stmt_cm.get_column_int64 (0);
+            obj.balance_update = stmt_cm.get_column_string (1);
+            obj.call_db_id = stmt_cm.get_column_int64 (2);
+            obj.call_duration = stmt_cm.get_column_int64 (3);
+            obj.call_end_diagnostics_code = stmt_cm.get_column_string (4);
+            obj.call_name = stmt_cm.get_column_string (5);
+            obj.call_session_guid = stmt_cm.get_column_string (6);
+            obj.country = stmt_cm.get_column_string (7);
+            obj.creation_timestamp = get_datetime (stmt_cm.get_column_int64 (8));
+            obj.debuginfo = stmt_cm.get_column_string (9);
+            obj.dispname = stmt_cm.get_column_string (10);
+            obj.failurereason = stmt_cm.get_column_int64 (11);
+            obj.fallback_in_progress = stmt_cm.get_column_int64 (12);
+            obj.forward_targets = stmt_cm.get_column_string (13);
+            obj.forwarded_by = stmt_cm.get_column_string (14);
+            obj.guid = stmt_cm.get_column_string (15);
+            obj.id = stmt_cm.get_column_int64 (16);
+            obj.identity = stmt_cm.get_column_string (17);
+            obj.identity_type = stmt_cm.get_column_int64 (18);
+            obj.ip_address = stmt_cm.get_column_string (19);
+            obj.is_conference = stmt_cm.get_column_bool (20);
+            obj.is_multiparty_video_capable = stmt_cm.get_column_bool (21);
+            obj.is_permanent = stmt_cm.get_column_bool (22);
+            obj.is_premium_video_sponsor = stmt_cm.get_column_bool (23);
+            obj.is_read_only = stmt_cm.get_column_bool (24);
+            obj.is_seamlessly_upgraded_call = stmt_cm.get_column_bool (25);
+            obj.is_server_muted = stmt_cm.get_column_bool (26);
+            obj.is_video_codec_compatible = stmt_cm.get_column_bool (27);
+            obj.languages = stmt_cm.get_column_string (28);
+            obj.light_weight_meeting_role = stmt_cm.get_column_int64 (29);
+            obj.limiting_factor = stmt_cm.get_column_int64 (30);
+            obj.mike_status = stmt_cm.get_column_int64 (31);
+            obj.next_redial_time = stmt_cm.get_column_int64 (32);
+            obj.nonse_word = stmt_cm.get_column_string (33);
+            obj.nr_of_delivered_push_notifications =
+                stmt_cm.get_column_int64 (34);
+            obj.nrof_redials_done = stmt_cm.get_column_int64 (35);
+            obj.nrof_redials_left = stmt_cm.get_column_int64 (36);
+            obj.payment_category = stmt_cm.get_column_string (37);
+            obj.pk_status = stmt_cm.get_column_int64 (38);
+            obj.price_currency = stmt_cm.get_column_string (39);
+            obj.price_per_minute = stmt_cm.get_column_int64 (40);
+            obj.price_precision = stmt_cm.get_column_int64 (41);
+            obj.prime_status = stmt_cm.get_column_int64 (42);
+            obj.pstn_feedback = stmt_cm.get_column_string (43);
+            obj.pstn_statustext = stmt_cm.get_column_string (44);
+            obj.quality_problems = stmt_cm.get_column_string (45);
+            obj.quality_status = stmt_cm.get_column_int64 (46);
+            obj.real_identity = stmt_cm.get_column_string (47);
+            obj.recovery_in_progress = stmt_cm.get_column_int64 (48);
+            obj.role = stmt_cm.get_column_string (49);
+            obj.seconds_left = stmt_cm.get_column_int64 (50);
+            obj.sounderror_code = stmt_cm.get_column_int64 (51);
+            obj.soundlevel = stmt_cm.get_column_int64 (52);
+            obj.start_timestamp = get_datetime (stmt_cm.get_column_int64 (53));
+            obj.stats_xml = stmt_cm.get_column_string (54);
+            obj.status = stmt_cm.get_column_int64 (55);
+            obj.target_identity = stmt_cm.get_column_string (56);
+            obj.tenant_id = stmt_cm.get_column_string (57);
+            obj.transfer_active = stmt_cm.get_column_int64 (58);
+            obj.transfer_status = stmt_cm.get_column_int64 (59);
+            obj.transfer_topic = stmt_cm.get_column_string (60);
+            obj.transferred_by = stmt_cm.get_column_string (61);
+            obj.transferred_to = stmt_cm.get_column_string (62);
+            obj.type = stmt_cm.get_column_int64 (63);
+            obj.version_string = stmt_cm.get_column_string (64);
+            obj.videostatus = stmt_cm.get_column_int64 (65);
+            obj.voicechannel = stmt_cm.get_column_int64 (66);
+
+            // Add callmembers to the list
+            call_members.emplace (obj.call_db_id, std::move (obj));
+        }
+
+        // Prepare SQL statement for table Calls
+        auto stmt = db.new_statement (
+            "SELECT ${access_token:66},"
+            "${active_members:66},"
+            "${begin_timestamp:66},"
+            "${broadcast_metadata:97},"
+            "${conf_participants:66},"
+            "${content_sharing_session_count_changed:97},"
+            "${conv_dbid:66},"
+            "${current_video_audience:66},"
+            "${duration:66},"
+            "${failurecode:66},"
+            "${failurereason:66},"
+            "${host_identity:66},"
+            "${id:66},"
+            "${is_active:66},"
+            "${is_conference:66},"
+            "${is_incoming:66},"
+            "${is_incoming_one_on_one_video_call:97},"
+            "${is_muted:66},"
+            "${is_muted_speaker:97},"
+            "${is_on_hold:66},"
+            "${is_permanent:66},"
+            "${is_premium_video_sponsor:66},"
+            "${is_server_muted:97},"
+            "${is_unseen_missed:66},"
+            "${joined_existing:66},"
+            "${light_weight_meeting_count_changed:97},"
+            "${meeting_details:97},"
+            "${members:66},"
+            "${mike_status:66},"
+            "${name:66},"
+            "${old_duration:66},"
+            "${old_members:66},"
+            "${partner_dispname:66},"
+            "${partner_handle:66},"
+            "${premium_video_is_grace_period:66},"
+            "${premium_video_sponsor_list:66},"
+            "${premium_video_status:66},"
+            "${pstn_number:66},"
+            "${pstn_status:66},"
+            "${quality_problems:66},"
+            "${queue_info:97},"
+            "${role:97},"
+            "${server_identity:66},"
+            "${soundlevel:66},"
+            "${start_timestamp:66},"
+            "${status:66},"
+            "${technology:72},"
+            "${tenant_id:97},"
+            "${topic:66},"
+            "${transferor_displayname:97},"
+            "${transferor_type:97},"
+            "${type:66},"
+            "${vaa_input_status:66},"
+            "${video_disabled:66} "
+            "FROM Calls",
+            schema_version_
+        );
+
+        // Retrieve records from Calls table
+        idx = 0;
+
+        while (stmt.fetch_row ())
+        {
+            call obj;
+
+            obj.idx = idx++;
+            obj.access_token = stmt.get_column_string (0);
+            obj.active_members = stmt.get_column_int64 (1);
+            obj.begin_timestamp = get_datetime (stmt.get_column_int64 (2));
+            obj.broadcast_metadata = stmt.get_column_string (3);
+            obj.conf_participants = stmt.get_column_bytearray (4);
+            obj.content_sharing_session_count_changed =
+                stmt.get_column_int64 (5);
+            obj.conv_dbid = stmt.get_column_int64 (6);
+            obj.current_video_audience = stmt.get_column_string (7);
+            obj.duration = stmt.get_column_int64 (8);
+            obj.failurecode = stmt.get_column_int64 (9);
+            obj.failurereason = stmt.get_column_int64 (10);
+            obj.host_identity = stmt.get_column_string (11);
+            obj.id = stmt.get_column_int64 (12);
+            obj.is_active = stmt.get_column_bool (13);
+            obj.is_conference = stmt.get_column_bool (14);
+            obj.is_incoming = stmt.get_column_bool (15);
+            obj.is_incoming_one_on_one_video_call = stmt.get_column_bool (16);
+            obj.is_muted = stmt.get_column_bool (17);
+            obj.is_muted_speaker = stmt.get_column_bool (18);
+            obj.is_on_hold = stmt.get_column_bool (19);
+            obj.is_permanent = stmt.get_column_bool (20);
+            obj.is_premium_video_sponsor = stmt.get_column_bool (21);
+            obj.is_server_muted = stmt.get_column_bool (22);
+            obj.is_unseen_missed = stmt.get_column_bool (23);
+            obj.joined_existing = stmt.get_column_int64 (24);
+            obj.light_weight_meeting_count_changed = stmt.get_column_int64 (25);
+            obj.meeting_details = stmt.get_column_string (26);
+            obj.members = stmt.get_column_bytearray (27);
+            obj.mike_status = stmt.get_column_int64 (28);
+            obj.name = stmt.get_column_string (29);
+            obj.old_duration = stmt.get_column_int64 (30);
+            obj.old_members = stmt.get_column_bytearray (31);
+            obj.partner_dispname = stmt.get_column_string (32);
+            obj.partner_handle = stmt.get_column_string (33);
+            obj.premium_video_is_grace_period = stmt.get_column_int64 (34);
+            obj.premium_video_sponsor_list = stmt.get_column_string (35);
+            obj.premium_video_status = stmt.get_column_int64 (36);
+            obj.pstn_number = stmt.get_column_string (37);
+            obj.pstn_status = stmt.get_column_string (38);
+            obj.quality_problems = stmt.get_column_string (39);
+            obj.queue_info = stmt.get_column_string (40);
+            obj.role = stmt.get_column_string (41);
+            obj.server_identity = stmt.get_column_string (42);
+            obj.soundlevel = stmt.get_column_int64 (43);
+            obj.start_timestamp = get_datetime (stmt.get_column_int64 (44));
+            obj.status = stmt.get_column_int64 (45);
+            obj.technology = stmt.get_column_int64 (46);
+            obj.tenant_id = stmt.get_column_string (47);
+            obj.topic = stmt.get_column_string (48);
+            obj.transferor_displayname = stmt.get_column_string (49);
+            obj.transferor_type = stmt.get_column_string (50);
+            obj.type = stmt.get_column_int64 (51);
+            obj.vaa_input_status = stmt.get_column_int64 (52);
+            obj.video_disabled = stmt.get_column_int64 (53);
+
+            // Add call members to the call object
+            auto range = call_members.equal_range (obj.id);
+            std::transform (
+                range.first, range.second,
+                std::back_inserter (obj.call_members),
+                [] (auto &pair) { return std::move (pair.second); }
+            );
+
+            // Add call to the list
+            calls_.emplace_back (std::move (obj));
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Load Contacts
 // @param db Database object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -749,7 +1178,6 @@ file_main_db::_load_contacts (mobius::core::database::database &db)
             "${city:66-259},"
             "${contactlist_track:66-259},"
             "${country:66-259},"
-            "${dirblob_last_search_time:84-259},"
             "${displayname:66-259},"
             "${emails:66-259},"
             "${external_id:66-259},"
@@ -757,7 +1185,7 @@ file_main_db::_load_contacts (mobius::core::database::database &db)
             "${extprop_external_data:66-259},"
             "${extprop_must_hide_avatar:66-66},"
             "${extprop_seen_birthday:66-259},"
-            "${extprop_sms_pstn_contact_created:97-308},"
+            "${extprop_sms_pstn_contact_created:97},"
             "${extprop_sms_target:66-259},"
             "${firstname:72-259},"
             "${fullname:66-259},"
@@ -767,12 +1195,12 @@ file_main_db::_load_contacts (mobius::core::database::database &db)
             "${group_membership:72-259},"
             "${hashed_emails:66-259},"
             "${homepage:66-259},"
-            "${id:66-308},"
+            "${id:66},"
             "${in_shared_group:66-259},"
             "${ipcountry:66-259},"
             "${is_auto_buddy:72-259},"
             "${is_mobile:72-259},"
-            "${is_permanent:66-308},"
+            "${is_permanent:66},"
             "${is_trusted:72-259},"
             "${isauthorized:66-259},"
             "${isblocked:66-259},"
@@ -785,7 +1213,6 @@ file_main_db::_load_contacts (mobius::core::database::database &db)
             "${main_phone:66-259},"
             "${mood_text:66-259},"
             "${mood_timestamp:66-259},"
-            "${mutual_friend_count:84-259},"
             "${network_availability:72-259},"
             "${node_capabilities:66-259},"
             "${node_capabilities_and:66-259},"
@@ -801,8 +1228,6 @@ file_main_db::_load_contacts (mobius::core::database::database &db)
             "${pop_score:66-259},"
             "${popularity_ord:66-259},"
             "${profile_attachments:66-259},"
-            "${profile_etag:84-259},"
-            "${profile_json:84-259},"
             "${profile_timestamp:66-259},"
             "${province:66-259},"
             "${pstnnumber:66-259},"
@@ -871,82 +1296,78 @@ file_main_db::_load_contacts (mobius::core::database::database &db)
             obj.city = stmt.get_column_string (32);
             obj.contactlist_track = stmt.get_column_int64 (33);
             obj.country = stmt.get_column_string (34);
-            obj.dirblob_last_search_time = stmt.get_column_int64 (35);
-            obj.displayname = stmt.get_column_string (36);
-            obj.emails = stmt.get_column_string (37);
-            obj.external_id = stmt.get_column_string (38);
-            obj.external_system_id = stmt.get_column_string (39);
-            obj.extprop_external_data = stmt.get_column_string (40);
-            obj.extprop_must_hide_avatar = stmt.get_column_int64 (41);
-            obj.extprop_seen_birthday = stmt.get_column_int64 (42);
-            obj.extprop_sms_pstn_contact_created = stmt.get_column_int64 (43);
-            obj.extprop_sms_target = stmt.get_column_int64 (44);
-            obj.firstname = stmt.get_column_string (45);
-            obj.fullname = stmt.get_column_string (46);
-            obj.gender = stmt.get_column_int64 (47);
-            obj.given_authlevel = stmt.get_column_int64 (48);
-            obj.given_displayname = stmt.get_column_string (49);
-            obj.group_membership = stmt.get_column_int64 (50);
-            obj.hashed_emails = stmt.get_column_string (51);
-            obj.homepage = stmt.get_column_string (52);
-            obj.id = stmt.get_column_int64 (53);
-            obj.in_shared_group = stmt.get_column_int64 (54);
-            obj.ipcountry = stmt.get_column_string (55);
-            obj.is_auto_buddy = stmt.get_column_bool (56);
-            obj.is_mobile = stmt.get_column_bool (57);
-            obj.is_permanent = stmt.get_column_bool (58);
-            obj.is_trusted = stmt.get_column_bool (59);
-            obj.isauthorized = stmt.get_column_bool (60);
-            obj.isblocked = stmt.get_column_bool (61);
-            obj.languages = stmt.get_column_string (62);
-            obj.last_used_networktime = get_time (stmt.get_column_int64 (63));
-            obj.lastname = stmt.get_column_string (64);
+            obj.displayname = stmt.get_column_string (35);
+            obj.emails = stmt.get_column_string (36);
+            obj.external_id = stmt.get_column_string (37);
+            obj.external_system_id = stmt.get_column_string (38);
+            obj.extprop_external_data = stmt.get_column_string (39);
+            obj.extprop_must_hide_avatar = stmt.get_column_int64 (40);
+            obj.extprop_seen_birthday = stmt.get_column_int64 (41);
+            obj.extprop_sms_pstn_contact_created = stmt.get_column_int64 (42);
+            obj.extprop_sms_target = stmt.get_column_int64 (43);
+            obj.firstname = stmt.get_column_string (44);
+            obj.fullname = stmt.get_column_string (45);
+            obj.gender = stmt.get_column_int64 (46);
+            obj.given_authlevel = stmt.get_column_int64 (47);
+            obj.given_displayname = stmt.get_column_string (48);
+            obj.group_membership = stmt.get_column_int64 (49);
+            obj.hashed_emails = stmt.get_column_string (50);
+            obj.homepage = stmt.get_column_string (51);
+            obj.id = stmt.get_column_int64 (52);
+            obj.in_shared_group = stmt.get_column_int64 (53);
+            obj.ipcountry = stmt.get_column_string (54);
+            obj.is_auto_buddy = stmt.get_column_bool (55);
+            obj.is_mobile = stmt.get_column_bool (56);
+            obj.is_permanent = stmt.get_column_bool (57);
+            obj.is_trusted = stmt.get_column_bool (58);
+            obj.isauthorized = stmt.get_column_bool (59);
+            obj.isblocked = stmt.get_column_bool (60);
+            obj.languages = stmt.get_column_string (61);
+            obj.last_used_networktime = get_time (stmt.get_column_int64 (62));
+            obj.lastname = stmt.get_column_string (63);
             obj.lastonline_timestamp =
-                get_datetime (stmt.get_column_int64 (65));
-            obj.lastused_timestamp = get_datetime (stmt.get_column_int64 (66));
-            obj.liveid_cid = stmt.get_column_string (67);
-            obj.main_phone = stmt.get_column_string (68);
-            obj.mood_text = stmt.get_column_string (69);
-            obj.mood_timestamp = get_datetime (stmt.get_column_int64 (70));
-            obj.mutual_friend_count = stmt.get_column_int64 (71);
-            obj.network_availability = stmt.get_column_int64 (72);
-            obj.node_capabilities = stmt.get_column_int64 (73);
-            obj.node_capabilities_and = stmt.get_column_int64 (74);
-            obj.nr_of_buddies = stmt.get_column_int64 (75);
-            obj.nrof_authed_buddies = stmt.get_column_int64 (76);
-            obj.offline_authreq_id = stmt.get_column_int64 (77);
-            obj.phone_home = stmt.get_column_string (78);
-            obj.phone_home_normalized = stmt.get_column_string (79);
-            obj.phone_mobile = stmt.get_column_string (80);
-            obj.phone_mobile_normalized = stmt.get_column_string (81);
-            obj.phone_office = stmt.get_column_string (82);
-            obj.phone_office_normalized = stmt.get_column_string (83);
-            obj.pop_score = stmt.get_column_int64 (84);
-            obj.popularity_ord = stmt.get_column_int64 (85);
-            obj.profile_attachments = stmt.get_column_bytearray (86);
-            obj.profile_etag = stmt.get_column_string (87);
-            obj.profile_json = stmt.get_column_string (88);
-            obj.profile_timestamp = get_datetime (stmt.get_column_int64 (89));
-            obj.province = stmt.get_column_string (90);
-            obj.pstnnumber = stmt.get_column_string (91);
-            obj.received_authrequest = stmt.get_column_string (92);
-            obj.refreshing = stmt.get_column_int64 (93);
-            obj.revoked_auth = stmt.get_column_int64 (94);
-            obj.rich_mood_text = stmt.get_column_string (95);
-            obj.saved_directory_blob = stmt.get_column_bytearray (96);
-            obj.sent_authrequest = stmt.get_column_string (97);
-            obj.sent_authrequest_extrasbitmask = stmt.get_column_int64 (98);
-            obj.sent_authrequest_initmethod = stmt.get_column_int64 (99);
-            obj.sent_authrequest_serial = stmt.get_column_int64 (100);
-            obj.sent_authrequest_time = stmt.get_column_int64 (101);
-            obj.server_synced = stmt.get_column_int64 (102);
-            obj.skypename = stmt.get_column_string (103);
-            obj.stack_version = stmt.get_column_int64 (104);
-            obj.timezone = get_timezone (stmt.get_column_int64 (105));
-            obj.type = stmt.get_column_int64 (106);
-            obj.unified_servants = stmt.get_column_string (107);
-            obj.verified_company = stmt.get_column_bytearray (108);
-            obj.verified_email = stmt.get_column_bytearray (109);
+                get_datetime (stmt.get_column_int64 (64));
+            obj.lastused_timestamp = get_datetime (stmt.get_column_int64 (65));
+            obj.liveid_cid = stmt.get_column_string (66);
+            obj.main_phone = stmt.get_column_string (67);
+            obj.mood_text = stmt.get_column_string (68);
+            obj.mood_timestamp = get_datetime (stmt.get_column_int64 (69));
+            obj.network_availability = stmt.get_column_int64 (70);
+            obj.node_capabilities = stmt.get_column_int64 (71);
+            obj.node_capabilities_and = stmt.get_column_int64 (72);
+            obj.nr_of_buddies = stmt.get_column_int64 (73);
+            obj.nrof_authed_buddies = stmt.get_column_int64 (74);
+            obj.offline_authreq_id = stmt.get_column_int64 (75);
+            obj.phone_home = stmt.get_column_string (76);
+            obj.phone_home_normalized = stmt.get_column_string (77);
+            obj.phone_mobile = stmt.get_column_string (78);
+            obj.phone_mobile_normalized = stmt.get_column_string (79);
+            obj.phone_office = stmt.get_column_string (80);
+            obj.phone_office_normalized = stmt.get_column_string (81);
+            obj.pop_score = stmt.get_column_int64 (82);
+            obj.popularity_ord = stmt.get_column_int64 (83);
+            obj.profile_attachments = stmt.get_column_bytearray (84);
+            obj.profile_timestamp = get_datetime (stmt.get_column_int64 (85));
+            obj.province = stmt.get_column_string (86);
+            obj.pstnnumber = stmt.get_column_string (87);
+            obj.received_authrequest = stmt.get_column_string (88);
+            obj.refreshing = stmt.get_column_int64 (89);
+            obj.revoked_auth = stmt.get_column_int64 (90);
+            obj.rich_mood_text = stmt.get_column_string (91);
+            obj.saved_directory_blob = stmt.get_column_bytearray (92);
+            obj.sent_authrequest = stmt.get_column_string (93);
+            obj.sent_authrequest_extrasbitmask = stmt.get_column_int64 (94);
+            obj.sent_authrequest_initmethod = stmt.get_column_int64 (95);
+            obj.sent_authrequest_serial = stmt.get_column_int64 (96);
+            obj.sent_authrequest_time = stmt.get_column_int64 (97);
+            obj.server_synced = stmt.get_column_int64 (98);
+            obj.skypename = stmt.get_column_string (99);
+            obj.stack_version = stmt.get_column_int64 (100);
+            obj.timezone = get_timezone (stmt.get_column_int64 (101));
+            obj.type = stmt.get_column_int64 (102);
+            obj.unified_servants = stmt.get_column_string (103);
+            obj.verified_company = stmt.get_column_bytearray (104);
+            obj.verified_email = stmt.get_column_bytearray (105);
 
             // Add contacts to the list
             contacts_.emplace_back (std::move (obj));

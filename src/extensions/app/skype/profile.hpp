@@ -72,6 +72,27 @@ class profile
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Call structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct call
+    {
+        // @brief Timestamp
+        mobius::core::datetime::datetime timestamp;
+
+        // @brief Duration
+        std::string duration;
+
+        // @brief Caller
+        std::string caller;
+
+        // @brief Callees
+        std::vector<std::string> callees;
+        
+        // @brief Metadata
+        mobius::core::pod::map metadata;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Contact structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct contact
@@ -83,7 +104,7 @@ class profile
         std::string name;
 
         // @brief Gender
-        std::int64_t gender = 0;
+        std::string gender;
 
         // @brief Birthday
         std::string birthday;
@@ -144,6 +165,27 @@ class profile
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Remote party IP address structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct remote_party_ip_address
+    {
+        // @brief Timestamp
+        mobius::core::datetime::datetime timestamp;
+
+        // @brief IP address
+        std::string ip_address;
+
+        // @brief User ID
+        std::string user_id;
+
+        // @brief Metadata
+        mobius::core::pod::map metadata;
+
+        // @brief Source file
+        mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Voicemail structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct voicemail
@@ -188,10 +230,14 @@ class profile
     std::string get_account_name () const;
     std::vector<account> get_accounts () const;
     std::size_t size_accounts () const;
+    std::vector<call> get_calls () const;
+    std::size_t size_calls () const;
     std::vector<contact> get_contacts () const;
     std::size_t size_contacts () const;
     std::vector<file_transfer> get_file_transfers () const;
     std::size_t size_file_transfers () const;
+    std::vector<remote_party_ip_address> get_remote_party_ip_addresses () const;
+    std::size_t size_remote_party_ip_addresses () const;
     std::vector<voicemail> get_voicemails () const;
     std::size_t size_voicemails () const;
 

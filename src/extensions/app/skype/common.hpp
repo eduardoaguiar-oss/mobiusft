@@ -32,6 +32,7 @@ namespace mobius::extension::app::skype
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string get_birthday (std::int64_t);
 mobius::core::datetime::datetime get_datetime (std::int64_t);
+std::string get_skype_name_from_mri (const std::string &);
 mobius::core::datetime::datetime get_time (std::int64_t);
 std::string get_timezone (std::int64_t);
 

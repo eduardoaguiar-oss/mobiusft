@@ -47,6 +47,22 @@ get_datetime (std::int64_t timestamp)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Convert MRI to skype name
+// @param mri MRI string
+// @return Skype name
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+get_skype_name_from_mri (const std::string &mri)
+{
+    auto pos = mri.find (':');
+
+    if (pos == std::string::npos)
+        return {};
+
+    return mri.substr (pos + 1);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Convert Skype time to date/time
 // @param time Numerical value representing the timestamp in minutes
 // @return Date/time object

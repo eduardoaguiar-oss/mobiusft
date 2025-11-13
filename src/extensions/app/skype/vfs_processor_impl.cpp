@@ -89,6 +89,7 @@ class vfs_processor_impl::impl
     void _save_app_profiles ();
     void _save_contacts ();
     void _save_received_files ();
+    void _save_remote_party_ip_addresses ();
     void _save_sent_files ();
     void _save_user_accounts ();
     void _save_voicemails ();
@@ -129,6 +130,7 @@ vfs_processor_impl::impl::on_complete ()
     _save_app_profiles ();
     _save_contacts ();
     _save_received_files ();
+    _save_remote_party_ip_addresses ();
     _save_sent_files ();
     _save_user_accounts ();
     _save_voicemails ();
@@ -259,8 +261,10 @@ vfs_processor_impl::impl::_save_app_profiles ()
         metadata.set ("skype_id", p.get_account_id ());
         metadata.set ("skype_name", p.get_account_name ());
         metadata.set ("num_accounts", p.size_accounts ());
+        metadata.set ("num_calls", p.size_calls ());
         metadata.set ("num_contacts", p.size_contacts ());
         metadata.set ("num_file_transfers", p.size_file_transfers ());
+        metadata.set ("num_remote_party_ip_addresses", p.size_remote_party_ip_addresses ());
         metadata.set ("num_voicemails", p.size_voicemails ());
 
         e.set_attribute ("metadata", metadata);
@@ -300,8 +304,8 @@ vfs_processor_impl::impl::_save_contacts ()
 
             // Set metadata
             auto metadata = mobius::core::pod::map ();
-            metadata.set ("skype_id", p.get_account_id ());
-            metadata.set ("skype_name", p.get_account_name ());
+            metadata.set ("host_skype_id", p.get_account_id ());
+            metadata.set ("host_skype_name", p.get_account_name ());
             metadata.update (c.metadata);
 
             e.set_attribute ("metadata", metadata);
@@ -346,6 +350,37 @@ vfs_processor_impl::impl::_save_received_files ()
                 e.set_tag ("app.chat");
                 e.add_source (ft.f);
             }
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save remote party IP addresses
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::impl::_save_remote_party_ip_addresses ()
+{
+    for (const auto &p : profiles_)
+    {
+        for (const auto &ip : p.get_remote_party_ip_addresses ())
+        {
+            auto e = item_.new_evidence ("remote-party-ip-address");
+            e.set_attribute ("timestamp", ip.timestamp);
+            e.set_attribute ("ip", ip.ip_address);
+            e.set_attribute ("user_id", ip.user_id);
+            e.set_attribute ("app_id", APP_ID);
+            e.set_attribute ("app_name", APP_NAME);
+
+            // Set metadata
+            auto metadata = mobius::core::pod::map ();
+            metadata.set ("host_skype_id", p.get_account_id ());
+            metadata.set ("host_skype_name", p.get_account_name ());
+            metadata.update (ip.metadata);
+            e.set_attribute ("metadata", metadata);
+
+            // Tags and sources
+            e.set_tag ("app.chat");
+            e.add_source (ip.f);
         }
     }
 }

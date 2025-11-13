@@ -127,22 +127,6 @@ get_db_schema_version (mobius::core::database::database &db)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Convert MRI to skype name
-// @param mri MRI string
-// @return Skype name
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static std::string
-mri_to_skype_name (const std::string &mri)
-{
-    auto pos = mri.find (':');
-
-    if (pos == std::string::npos)
-        return {};
-
-    return mri.substr (pos + 1);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get value from internalData table
 // @param db Database object
 // @param nsp_pk Key to search for
@@ -362,7 +346,7 @@ file_s4l_db::_load_contacts (mobius::core::database::database &db)
 
             contact c;
             c.mri = nsp_data.get<std::string> ("mri");
-            c.skype_name = mri_to_skype_name (c.mri);
+            c.skype_name = get_skype_name_from_mri (c.mri);
             c.birthdate = nsp_data.get<std::string> ("birthday");
             c.gender = nsp_data.get<std::int64_t> ("gender");
             c.country = nsp_data.get<std::string> ("country");
@@ -371,7 +355,9 @@ file_s4l_db::_load_contacts (mobius::core::database::database &db)
             c.mood_text = nsp_data.get<std::string> ("mood");
             c.thumbnail_url = nsp_data.get<std::string> ("thumbUrl");
             c.fetched_time =
-                get_datetime (nsp_data.get<std::int64_t> ("fetchedDate"));
+                mobius::core::datetime::new_datetime_from_unix_timestamp (
+                    nsp_data.get<std::int64_t> ("fetchedDate") / 1000
+                );
 
             c.full_name = nsp_data.get<std::string> ("fullName");
             if (c.full_name.empty ())

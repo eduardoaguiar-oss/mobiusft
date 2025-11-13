@@ -29,37 +29,34 @@
 #include <set>
 #include <string>
 #include <vector>
+#include "common.hpp"
 #include "file_main_db.hpp"
 #include "file_s4l_db.hpp"
 #include "file_skype_db.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // References:
+//
+// @see https://sqliteforensictoolkit.com/using-group_concat-to-amalgamate-the-results-of-queries/
+// @see https://arxiv.org/pdf/1603.05369.pdf
+// @see https://answers.microsoft.com/en-us/skype/forum/all/where-is-the-maindb-file-for-new-skype/b4d3f263-a97e-496e-aa28-e1dbb63e768
+// @see https://bebinary4n6.blogspot.com/2019/07/
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get username from path
-// @param path Path to profile
-// @return Username extracted from path
-//
-// @note Paths are in the following format: /FSxx/Users/username/... or
-// /FSxx/home/username/... where FSxx is the filesystem identifier.
-// Example: /FS01/Users/johndoe/AppData/Local/Google/Chrome/User Data/
-// In this case, the username is "johndoe".
-// If the path does not match the expected format, an empty string is returned.
+// @brief Convert duration to string
+// @param duration Duration in seconds
+// @return Duration string in format HH:MM:SS
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-get_username_from_path (const std::string &path)
+get_duration (std::int64_t duration)
 {
-    auto dirnames = mobius::core::string::split (path, "/");
-
-    if (dirnames.size () > 3 &&
-        (dirnames[2] == "Users" || dirnames[2] == "home"))
-        return dirnames[3]; // Username is the fourth directory
-
-    return {}; // No username found
+    auto hh = duration / 3600;
+    auto mm = (duration % 3600) / 60;
+    auto ss = duration % 60;
+    return std::format ("{:02}:{:02}:{:02}", hh, mm, ss);
 }
 
 //  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -71,13 +68,13 @@ std::string
 get_gender (std::int64_t code)
 {
     if (code == 1)
-        return "1 (Male)";
+        return "Male";
 
     else if (code == 2)
-        return "2 (Female)";
+        return "Female";
 
     else
-        return std::format ("{} (Unknown)", code);
+        return std::format ("Unknown ({})", code);
 }
 
 //  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -104,6 +101,29 @@ get_transfer_status (std::int64_t code)
         status = "Unknown";
 
     return std::format ("{} ({})", code, status);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get username from path
+// @param path Path to profile
+// @return Username extracted from path
+//
+// @note Paths are in the following format: /FSxx/Users/username/... or
+// /FSxx/home/username/... where FSxx is the filesystem identifier.
+// Example: /FS01/Users/johndoe/AppData/Local/Google/Chrome/User Data/
+// In this case, the username is "johndoe".
+// If the path does not match the expected format, an empty string is returned.
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+get_username_from_path (const std::string &path)
+{
+    auto dirnames = mobius::core::string::split (path, "/");
+
+    if (dirnames.size () > 3 &&
+        (dirnames[2] == "Users" || dirnames[2] == "home"))
+        return dirnames[3]; // Username is the fourth directory
+
+    return {}; // No username found
 }
 
 } // namespace
@@ -221,6 +241,26 @@ class profile::impl
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get calls
+    // @return Vector of calls
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<call>
+    get_calls () const
+    {
+        return calls_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of calls
+    // @return Number of calls
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    size_calls () const
+    {
+        return calls_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get contacts
     // @return Vector of contacts
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -258,6 +298,26 @@ class profile::impl
     size_file_transfers () const
     {
         return file_transfers_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get remote party IP addresses
+    // @return Vector of remote party IP addresses
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<remote_party_ip_address>
+    get_remote_party_ip_addresses () const
+    {
+        return remote_party_ip_addresses_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of remote party IP addresses
+    // @return Number of remote party IP addresses
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    size_remote_party_ip_addresses () const
+    {
+        return remote_party_ip_addresses_.size ();
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -306,11 +366,17 @@ class profile::impl
     // @brief Accounts
     std::vector<account> accounts_;
 
+    // @brief Calls
+    std::vector<call> calls_;
+
     // @brief Contacts
     std::vector<contact> contacts_;
 
     // @brief File Transfers
     std::vector<file_transfer> file_transfers_;
+
+    // @brief Remote party IP addresses
+    std::vector<remote_party_ip_address> remote_party_ip_addresses_;
 
     // @brief Voicemails
     std::vector<voicemail> voicemails_;
@@ -321,9 +387,14 @@ class profile::impl
     void _set_folder (const mobius::core::io::folder &);
     void _update_mtime (const mobius::core::io::file &);
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // main.db file helper functions
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _load_main_db_accounts (
         const file_main_db &, const mobius::core::io::file &
     );
+    void
+    _load_main_db_calls (const file_main_db &, const mobius::core::io::file &);
     void _load_main_db_contacts (
         const file_main_db &, const mobius::core::io::file &
     );
@@ -334,12 +405,20 @@ class profile::impl
         const file_main_db &, const mobius::core::io::file &
     );
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // skype.db file helper functions
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _load_skype_db_contacts (
         const file_skype_db &, const mobius::core::io::file &
     );
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // s4l-xxx.db file helper functions
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void
     _load_s4l_db_accounts (const file_s4l_db &, const mobius::core::io::file &);
+    void
+    _load_s4l_db_contacts (const file_s4l_db &, const mobius::core::io::file &);
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -416,6 +495,7 @@ profile::impl::add_main_db_file (const mobius::core::io::file &f)
         // Load data
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         _load_main_db_accounts (fm, f);
+        _load_main_db_calls (fm, f);
         _load_main_db_contacts (fm, f);
         _load_main_db_file_transfers (fm, f);
         _load_main_db_voicemails (fm, f);
@@ -527,6 +607,148 @@ profile::impl::_load_main_db_accounts (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load main.db calls
+// @param fm Main.db file
+// @param f Original file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_load_main_db_calls (
+    const file_main_db &fm, const mobius::core::io::file &f
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        for (const auto &cl : fm.get_calls ())
+        {
+            call c;
+
+            // Timestamp
+            c.timestamp = cl.begin_timestamp;
+            if (!c.timestamp)
+                c.timestamp = cl.start_timestamp;
+
+            // Other data
+            c.duration = get_duration (cl.duration);
+
+            // Caller
+            if (cl.is_incoming)
+                c.caller = cl.host_identity;
+
+            // Metadata
+            c.metadata.set ("record_idx", cl.idx);
+            c.metadata.set ("schema_version", fm.get_schema_version ());
+            c.metadata.set ("access_token", cl.access_token);
+            c.metadata.set ("active_members", cl.active_members);
+            c.metadata.set ("begin_timestamp", cl.begin_timestamp);
+            c.metadata.set ("broadcast_metadata", cl.broadcast_metadata);
+            c.metadata.set ("conf_participants", cl.conf_participants);
+            c.metadata.set (
+                "content_sharing_session_count_changed",
+                cl.content_sharing_session_count_changed
+            );
+            c.metadata.set ("conv_dbid", cl.conv_dbid);
+            c.metadata.set (
+                "current_video_audience", cl.current_video_audience
+            );
+            c.metadata.set ("duration", cl.duration);
+            c.metadata.set ("failurecode", cl.failurecode);
+            c.metadata.set ("failurereason", cl.failurereason);
+            c.metadata.set ("host_identity", cl.host_identity);
+            c.metadata.set ("id", cl.id);
+            c.metadata.set ("is_active", cl.is_active);
+            c.metadata.set ("is_conference", cl.is_conference);
+            c.metadata.set ("is_incoming", cl.is_incoming);
+            c.metadata.set (
+                "is_incoming_one_on_one_video_call",
+                cl.is_incoming_one_on_one_video_call
+            );
+            c.metadata.set ("is_muted", cl.is_muted);
+            c.metadata.set ("is_muted_speaker", cl.is_muted_speaker);
+            c.metadata.set ("is_on_hold", cl.is_on_hold);
+            c.metadata.set ("is_permanent", cl.is_permanent);
+            c.metadata.set (
+                "is_premium_video_sponsor", cl.is_premium_video_sponsor
+            );
+            c.metadata.set ("is_server_muted", cl.is_server_muted);
+            c.metadata.set ("is_unseen_missed", cl.is_unseen_missed);
+            c.metadata.set ("joined_existing", cl.joined_existing);
+            c.metadata.set (
+                "light_weight_meeting_count_changed",
+                cl.light_weight_meeting_count_changed
+            );
+            c.metadata.set ("meeting_details", cl.meeting_details);
+            c.metadata.set ("mike_status", cl.mike_status);
+            c.metadata.set ("name", cl.name);
+            c.metadata.set ("old_duration", cl.old_duration);
+            c.metadata.set ("partner_dispname", cl.partner_dispname);
+            c.metadata.set ("partner_handle", cl.partner_handle);
+            c.metadata.set (
+                "premium_video_is_grace_period",
+                cl.premium_video_is_grace_period
+            );
+            c.metadata.set (
+                "premium_video_sponsor_list", cl.premium_video_sponsor_list
+            );
+            c.metadata.set ("premium_video_status", cl.premium_video_status);
+            c.metadata.set ("pstn_number", cl.pstn_number);
+            c.metadata.set ("pstn_status", cl.pstn_status);
+            c.metadata.set ("quality_problems", cl.quality_problems);
+            c.metadata.set ("queue_info", cl.queue_info);
+            c.metadata.set ("role", cl.role);
+            c.metadata.set ("server_identity", cl.server_identity);
+            c.metadata.set ("soundlevel", cl.soundlevel);
+            c.metadata.set ("start_timestamp", cl.start_timestamp);
+            c.metadata.set ("status", cl.status);
+            c.metadata.set ("technology", cl.technology);
+            c.metadata.set ("tenant_id", cl.tenant_id);
+            c.metadata.set ("topic", cl.topic);
+            c.metadata.set (
+                "transferor_displayname", cl.transferor_displayname
+            );
+            c.metadata.set ("transferor_type", cl.transferor_type);
+            c.metadata.set ("type", cl.type);
+            c.metadata.set ("vaa_input_status", cl.vaa_input_status);
+            c.metadata.set ("video_disabled", cl.video_disabled);
+            calls_.push_back (c);
+
+            for (const auto &cm : cl.call_members)
+            {
+                if (!cm.ip_address.empty () && cm.creation_timestamp)
+                {
+                    remote_party_ip_address rpia;
+                    rpia.timestamp = cm.creation_timestamp;
+                    rpia.ip_address = cm.ip_address;
+                    rpia.user_id = cm.identity;
+                    rpia.metadata = c.metadata.clone ();
+
+                    remote_party_ip_addresses_.push_back (rpia);
+                }
+
+                if (!cm.ip_address.empty () && cm.start_timestamp &&
+                    cm.start_timestamp != cm.creation_timestamp)
+                {
+                    remote_party_ip_address rpia;
+                    rpia.timestamp = cm.start_timestamp;
+                    rpia.ip_address = cm.ip_address;
+                    rpia.user_id = cm.identity;
+                    rpia.metadata = c.metadata.clone ();
+
+                    remote_party_ip_addresses_.push_back (rpia);
+                }
+            }
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
+        );
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Load main.db contacts
 // @param fm Main.db file
 // @param f Original file
@@ -545,7 +767,7 @@ profile::impl::_load_main_db_contacts (
             contact c;
             c.id = ct.skypename;
             c.name = ct.fullname;
-            c.gender = ct.gender;
+            c.gender = get_gender (ct.gender);
             c.birthday = ct.birthday;
 
             // Get phones
@@ -629,9 +851,6 @@ profile::impl::_load_main_db_contacts (
             c.metadata.set ("city", ct.city);
             c.metadata.set ("contactlist_track", ct.contactlist_track);
             c.metadata.set ("country", ct.country);
-            c.metadata.set (
-                "dirblob_last_search_time", ct.dirblob_last_search_time
-            );
             c.metadata.set ("displayname", ct.displayname);
             c.metadata.set ("external_id", ct.external_id);
             c.metadata.set ("external_system_id", ct.external_system_id);
@@ -647,7 +866,6 @@ profile::impl::_load_main_db_contacts (
             c.metadata.set ("extprop_sms_target", ct.extprop_sms_target);
             c.metadata.set ("firstname", ct.firstname);
             c.metadata.set ("fullname", ct.fullname);
-            c.metadata.set ("gender", get_gender (ct.gender));
             c.metadata.set ("given_displayname", ct.given_displayname);
             c.metadata.set ("group_membership", ct.group_membership);
             c.metadata.set ("hashed_emails", ct.hashed_emails);
@@ -670,7 +888,6 @@ profile::impl::_load_main_db_contacts (
             c.metadata.set ("main_phone", ct.main_phone);
             c.metadata.set ("mood_text", ct.mood_text);
             c.metadata.set ("mood_timestamp", ct.mood_timestamp);
-            c.metadata.set ("mutual_friend_count", ct.mutual_friend_count);
             c.metadata.set ("network_availability", ct.network_availability);
             c.metadata.set ("node_capabilities", ct.node_capabilities);
             c.metadata.set ("node_capabilities_and", ct.node_capabilities_and);
@@ -689,7 +906,6 @@ profile::impl::_load_main_db_contacts (
             );
             c.metadata.set ("pop_score", ct.pop_score);
             c.metadata.set ("popularity_ord", ct.popularity_ord);
-            c.metadata.set ("profile_etag", ct.profile_etag);
             c.metadata.set ("profile_timestamp", ct.profile_timestamp);
             c.metadata.set ("province", ct.province);
             c.metadata.set ("pstnnumber", ct.pstnnumber);
@@ -930,11 +1146,103 @@ profile::impl::_load_skype_db_contacts (
             contact c;
             //c.id = ct.skype_name;
             c.name = ct.full_name;
-            c.gender = ct.gender;
+            c.gender = get_gender (ct.gender);
             c.birthday = ct.birthday;
-            //c.accounts.push_back (ct.skype_name);
+
+            // Get names
+            std::set<std::string> names;
+
+            if (!ct.display_name.empty ())
+                names.insert (ct.display_name);
+
+            if (!ct.full_name.empty ())
+                names.insert (ct.full_name);
+
+            std::copy (
+                names.begin (), names.end (), std::back_inserter (c.names)
+            );
+
+            // Get phones
+            std::set<std::string> phones;
+
+            if (!ct.phone_number_home.empty ())
+                phones.insert (ct.phone_number_home);
+
+            if (!ct.phone_number_office.empty ())
+                phones.insert (ct.phone_number_office);
+
+            if (!ct.phone_number_mobile.empty ())
+                phones.insert (ct.phone_number_mobile);
+
+            if (!ct.assigned_phonenumber_1.empty ())
+                phones.insert (ct.assigned_phonenumber_1);
+
+            if (!ct.assigned_phonenumber_2.empty ())
+                phones.insert (ct.assigned_phonenumber_2);
+
+            if (!ct.assigned_phonenumber_3.empty ())
+                phones.insert (ct.assigned_phonenumber_3);
+
+            std::copy (
+                phones.begin (), phones.end (),
+                std::back_inserter (c.phone_numbers)
+            );
+
+            // Get other fields
+            c.accounts.push_back (get_skype_name_from_mri (ct.mri));
+
+            if (!ct.homepage.empty ())
+                c.web_addresses.push_back (ct.homepage);
+
+            if (!ct.mood.empty ())
+                c.notes.push_back (ct.mood);
+
+            // Set metadata
+            c.metadata.set ("record_idx", ct.idx);
+            c.metadata.set ("schema_version", fs.get_schema_version ());
+            c.metadata.set ("about_me", ct.about_me);
+            c.metadata.set ("assigned_phonelabel_1", ct.assigned_phonelabel_1);
+            c.metadata.set ("assigned_phonelabel_2", ct.assigned_phonelabel_2);
+            c.metadata.set ("assigned_phonelabel_3", ct.assigned_phonelabel_3);
+            c.metadata.set (
+                "assigned_phonenumber_1", ct.assigned_phonenumber_1
+            );
+            c.metadata.set (
+                "assigned_phonenumber_2", ct.assigned_phonenumber_2
+            );
+            c.metadata.set (
+                "assigned_phonenumber_3", ct.assigned_phonenumber_3
+            );
+            c.metadata.set ("authorized", ct.authorized);
+            c.metadata.set (
+                "avatar_downloaded_from", ct.avatar_downloaded_from
+            );
+            c.metadata.set ("avatar_file_path", ct.avatar_file_path);
+            c.metadata.set ("avatar_url", ct.avatar_url);
+            c.metadata.set ("birthday", ct.birthday);
+            c.metadata.set ("blocked", ct.blocked);
+            c.metadata.set ("city", ct.city);
+            c.metadata.set ("contact_type", ct.contact_type);
+            c.metadata.set ("country", ct.country);
+            c.metadata.set ("display_name", ct.display_name);
+            c.metadata.set ("full_name", ct.full_name);
+            c.metadata.set ("gender", get_gender (ct.gender));
+            c.metadata.set ("homepage", ct.homepage);
+            c.metadata.set ("is_buddy", ct.is_buddy);
+            c.metadata.set ("is_favorite", ct.is_favorite);
+            c.metadata.set ("is_suggested", ct.is_suggested);
+            c.metadata.set ("mood", ct.mood);
+            c.metadata.set ("mri", ct.mri);
+            c.metadata.set ("phone_number_home", ct.phone_number_home);
+            c.metadata.set ("phone_number_mobile", ct.phone_number_mobile);
+            c.metadata.set ("phone_number_office", ct.phone_number_office);
+            c.metadata.set ("province", ct.province);
+            c.metadata.set ("recommendation_json", ct.recommendation_json);
+            c.metadata.set ("recommendation_rank", ct.recommendation_rank);
+            c.metadata.set ("unistore_version", ct.unistore_version);
+            c.metadata.set ("update_version", ct.update_version);
             c.f = f;
-            
+
             contacts_.push_back (c);
         }
     }
@@ -982,6 +1290,7 @@ profile::impl::add_s4l_db_file (const mobius::core::io::file &f)
         // Load data
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         _load_s4l_db_accounts (fs, f);
+        _load_s4l_db_contacts (fs, f);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event
@@ -1051,6 +1360,53 @@ profile::impl::_load_s4l_db_accounts (
 
         a.f = f;
         accounts_.push_back (a);
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
+        );
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load s4l-xxx.db contacts
+// @param fs s4l-xxx.db file
+// @param f Original file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_load_s4l_db_contacts (
+    const file_s4l_db &fs, const mobius::core::io::file &f
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        for (const auto &ct : fs.get_contacts ())
+        {
+            contact c;
+            c.id = ct.skype_name;
+            c.name = ct.full_name;
+            c.phone_numbers = ct.phone_numbers;
+            c.emails = ct.emails;
+            c.f = f;
+
+            c.metadata.set ("schema_version", fs.get_schema_version ());
+            c.metadata.set ("skype_name", ct.skype_name);
+            c.metadata.set ("mri", ct.mri);
+            c.metadata.set ("full_name", ct.full_name);
+            c.metadata.set ("birthdate", ct.birthdate);
+            c.metadata.set ("gender", get_gender (ct.gender));
+            c.metadata.set ("country", ct.country);
+            c.metadata.set ("province", ct.province);
+            c.metadata.set ("city", ct.city);
+            c.metadata.set ("mood_text", ct.mood_text);
+            c.metadata.set ("thumbnail_url", ct.thumbnail_url);
+            c.metadata.set ("fetched_time", ct.fetched_time);
+
+            contacts_.push_back (c);
+        }
     }
     catch (const std::exception &e)
     {
@@ -1169,6 +1525,26 @@ profile::size_accounts () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get calls
+// @return Vector of calls
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<profile::call>
+profile::get_calls () const
+{
+    return impl_->get_calls ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get number of calls
+// @return Number of calls
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::size_t
+profile::size_calls () const
+{
+    return impl_->size_calls ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get contacts
 // @return Vector of contacts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1206,6 +1582,26 @@ std::size_t
 profile::size_file_transfers () const
 {
     return impl_->size_file_transfers ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get remote party IP addresses
+// @return Vector of remote party IP addresses
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<profile::remote_party_ip_address>
+profile::get_remote_party_ip_addresses () const
+{
+    return impl_->get_remote_party_ip_addresses ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get number of remote party IP addresses
+// @return Number of remote party IP addresses
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::size_t
+profile::size_remote_party_ip_addresses () const
+{
+    return impl_->size_remote_party_ip_addresses ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

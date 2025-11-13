@@ -438,7 +438,7 @@ MODEL = [
                       args(id='addresses', name='Addresses', format="multiline"),
                       args(id='birthday', name='Birthday'),
                       args(id='emails', name='E-mails', format="multiline"),
-                      args(id='gender', name='Gender', format="domain"),
+                      args(id='gender', name='Gender'),
                       args(id='names', name='Names', format="multiline"),
                       args(id='notes', name='Notes', format="multiline"),
                       args(id='organizations', name='Organizations', format="multiline"),
@@ -653,9 +653,31 @@ MODEL = [
                   ]),
          ]
          ),
+    args(id="remote-party-ip-address",
+         name="Remote Party IP Addresses",
+         description="IP addresses used by remote third parties",
+         master_views=[
+             args(id="table",
+                  columns=[
+                      args(id='timestamp', name="Date/Time (UTC)", format='datetime', first_sortable=True),
+                      args(id='ip', name="IP Address", is_sortable=True),
+                      args(id='app_name', name="Application", is_sortable=True),
+                      args(id='user_id', name="User ID", is_sortable=True),
+                  ]),
+         ],
+         detail_views=[
+             args(id="metadata",
+                  rows=[
+                      args(id='timestamp', name="Date/Time (UTC)", format='datetime'),
+                      args(id='ip', name="IP Address"),
+                      args(id='app_name', name="Application"),
+                      args(id='user_id', name="User ID"),
+                  ]),
+         ]
+         ),
     args(id="p2p-remote-file",
-         name="P2P Remote Files",
-         description="Files shared/uploaded by third parties using P2P networks",
+         name="Remote Party Shared Files",
+         description="Files shared by remote third parties",
          master_views=[
              args(id="table",
                   columns=[
