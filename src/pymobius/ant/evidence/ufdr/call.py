@@ -59,7 +59,7 @@ def handler(e):
     evidence.attrs = {
         'timestamp': metadata.get('TimeStamp'),
         'duration': metadata.get('Duration'),
-        'app': metadata.get('Source'),
+        'app_name': metadata.get('Source'),
         'source': ','.join(sources),
         'destination': destinations,
         'username': metadata.get('Account'),

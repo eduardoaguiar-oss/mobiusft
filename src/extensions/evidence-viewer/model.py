@@ -377,7 +377,7 @@ MODEL = [
                       args(id='destination', is_sortable=True, format="multiline"),
                       args(id='duration', is_sortable=True),
                       args(id='username', name="User name", is_sortable=True),
-                      args(id="app", name="Application", is_sortable=True),
+                      args(id="app_name", name="Application", is_sortable=True),
                   ]),
          ],
          detail_views=[
@@ -388,7 +388,7 @@ MODEL = [
                       args(id='destination', format="multiline"),
                       args(id='duration'),
                       args(id='username', name="User name"),
-                      args(id="app", name="Application"),
+                      args(id="app_name", name="Application"),
                   ]),
          ]),
     args(id="chat-message",

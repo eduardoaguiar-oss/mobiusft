@@ -195,7 +195,12 @@ public:
     get (const std::string& key, T varg = {}) const
     {
         if (contains (key))
-            return static_cast <T> (get (key));
+        {
+            auto d = get (key);
+
+            if (!d.is_null ())
+                return static_cast <T> (get (key));
+        }
 
         return varg;
     }

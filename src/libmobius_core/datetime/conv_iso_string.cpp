@@ -33,6 +33,9 @@ namespace mobius::core::datetime
 datetime
 new_datetime_from_iso_string (const std::string &str)
 {
+    if (str.empty ())
+        return {};
+
     int year, month, day;
     int hours, minutes, seconds;
     const char *format = nullptr;

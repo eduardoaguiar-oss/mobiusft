@@ -28,10 +28,9 @@
 #include <unordered_set>
 #include "common.hpp"
 
-#include <iostream>
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // References:
+//   @see https://bebinary4n6.blogspot.com/2019/07/
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -210,8 +209,9 @@ file_s4l_db::file_s4l_db (const mobius::core::io::reader &reader)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Load data
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        _load_contacts (db);
+        _load_contacts (db); // contacts are needed by other evidence types
         _load_account (db);
+        _load_calls (db);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Finish decoding
@@ -311,6 +311,152 @@ file_s4l_db::_load_account (mobius::core::database::database &db)
                               acc_.skype_name +
                               "' not found. Path: " + db.get_path ()
             );
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__, std::string (e.what ()) + ". Path: " + db.get_path ()
+        );
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load calls data
+// @param db Database object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file_s4l_db::_load_calls (mobius::core::database::database &db)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Load calls data from calllogs table
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto stmt = db.new_statement ("SELECT nsp_pk, nsp_data FROM calllogs");
+
+        while (stmt.fetch_row ())
+        {
+            call c;
+            c.nsp_pk = stmt.get_column_string (0);
+
+            auto parser = mobius::core::decoder::json::parser (
+                stmt.get_column_bytearray (1)
+            );
+            auto nsp_data = mobius::core::pod::map (parser.parse ());
+
+            c.call_id = nsp_data.get<std::string> ("callId");
+            c.call_direction = nsp_data.get<std::string> ("callDirection");
+            c.call_type = nsp_data.get<std::string> ("callType");
+            c.call_state = nsp_data.get<std::string> ("callState");
+            c.connect_time =
+                mobius::core::datetime::new_datetime_from_iso_string (
+                    nsp_data.get<std::string> ("connectTime")
+                );
+            c.end_time = mobius::core::datetime::new_datetime_from_iso_string (
+                nsp_data.get<std::string> ("endTime")
+            );
+            c.message_id = nsp_data.get<std::string> ("messageId");
+            c.message_cuid = nsp_data.get<std::string> ("messageCuid");
+            c.originator = nsp_data.get<std::string> ("originator");
+            auto participants = nsp_data.get ("participants");
+            c.start_time =
+                mobius::core::datetime::new_datetime_from_iso_string (
+                    nsp_data.get<std::string> ("startTime")
+                );
+            c.session_type = nsp_data.get<std::string> ("sessionType");
+            c.target = nsp_data.get<std::string> ("target");
+            c.thread_id = nsp_data.get<std::string> ("threadId");
+
+            // Originator Participant
+            auto originator_participant =
+                nsp_data.get<mobius::core::pod::map> ("originatorParticipant");
+
+            if (originator_participant)
+            {
+                c.originator_participant.full_name =
+                    originator_participant.get<std::string> ("displayName");
+                c.originator_participant.mri =
+                    originator_participant.get<std::string> ("id");
+                c.originator_participant.skype_name =
+                    get_skype_name_from_mri (c.originator_participant.mri);
+                c.originator_participant.type =
+                    originator_participant.get<std::string> ("type");
+            }
+
+            // Target Participant
+            auto target_participant =
+                nsp_data.get<mobius::core::pod::map> ("targetParticipant");
+
+            if (target_participant)
+            {
+                c.target_participant.full_name =
+                    target_participant.get<std::string> ("displayName");
+                c.target_participant.mri =
+                    target_participant.get<std::string> ("id");
+                c.target_participant.skype_name =
+                    get_skype_name_from_mri (c.target_participant.mri);
+                c.target_participant.type =
+                    target_participant.get<std::string> ("type");
+
+                if (c.target_participant.full_name.empty ())
+                {
+                    // Fallback to contacts data
+                    auto iter =
+                        contacts_.find (c.target_participant.skype_name);
+
+                    if (iter != contacts_.end ())
+                        c.target_participant.full_name = iter->second.full_name;
+                }
+            }
+
+            // Participants
+            auto participant_list = nsp_data.get ("participantList");
+
+            for (const auto &p_data :
+                 participant_list.to_list<mobius::core::pod::map> ())
+            {
+                call_participant p;
+
+                p.full_name = p_data.get<std::string> ("displayName");
+                p.mri = p_data.get<std::string> ("id");
+                p.skype_name = get_skype_name_from_mri (p.mri);
+                p.type = p_data.get<std::string> ("type");
+
+                if (p.full_name.empty ())
+                {
+                    // Fallback to contacts data
+                    auto iter = contacts_.find (p.skype_name);
+
+                    if (iter != contacts_.end ())
+                        p.full_name = iter->second.full_name;
+                }
+
+                c.participants.push_back (p);
+            }
+
+            // Unhandled fields
+            auto call_attributes = nsp_data.get ("callAttributes");
+            if (!call_attributes.is_null ())
+                log.development (
+                    __LINE__, "Call attributes: " + call_attributes.to_string ()
+                );
+
+            auto forwarded_info = nsp_data.get ("forwardedInfo");
+            if (!forwarded_info.is_null ())
+                log.development (
+                    __LINE__, "Forwarded Info: " + forwarded_info.to_string ()
+                );
+
+            auto transfer_info = nsp_data.get ("transferInfo");
+            if (!transfer_info.is_null ())
+                log.development (
+                    __LINE__, "Transfer Info: " + transfer_info.to_string ()
+                );
+
+            calls_.emplace_back (std::move (c));
         }
     }
     catch (const std::exception &e)

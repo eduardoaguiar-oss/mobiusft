@@ -59,7 +59,32 @@ get_duration (std::int64_t duration)
     return std::format ("{:02}:{:02}:{:02}", hh, mm, ss);
 }
 
-//  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get skype user name
+// @param Skype name
+// @param Full name
+// @return User name
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+get_skype_user_name (
+    const std::string &skype_name, const std::string &full_name
+)
+{
+    std::string text;
+
+    if (!full_name.empty ())
+    {
+        text = full_name;
+        if (!skype_name.empty ())
+            text += " (" + skype_name + ")";
+    }
+    else
+        text = skype_name;
+
+    return text;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get gender from code
 // @param code Gender code
 // @return Gender string
@@ -417,6 +442,8 @@ class profile::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void
     _load_s4l_db_accounts (const file_s4l_db &, const mobius::core::io::file &);
+    void
+    _load_s4l_db_calls (const file_s4l_db &, const mobius::core::io::file &);
     void
     _load_s4l_db_contacts (const file_s4l_db &, const mobius::core::io::file &);
 };
@@ -1290,6 +1317,7 @@ profile::impl::add_s4l_db_file (const mobius::core::io::file &f)
         // Load data
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         _load_s4l_db_accounts (fs, f);
+        _load_s4l_db_calls (fs, f);
         _load_s4l_db_contacts (fs, f);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1360,6 +1388,84 @@ profile::impl::_load_s4l_db_accounts (
 
         a.f = f;
         accounts_.push_back (a);
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
+        );
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load s4l-xxx.db calls
+// @param fs s4l-xxx.db file
+// @param f Original file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_load_s4l_db_calls (
+    const file_s4l_db &fs, const mobius::core::io::file &f
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        for (const auto &cl : fs.get_calls ())
+        {
+            call c;
+            c.timestamp = cl.start_time;
+
+            if (cl.end_time)
+                c.duration = get_duration (cl.end_time - cl.start_time);
+
+            if (cl.call_type == "twoParty")
+            {
+                c.caller = get_skype_user_name (
+                    cl.originator_participant.skype_name,
+                    cl.originator_participant.full_name
+                );
+                c.callees.push_back (get_skype_user_name (
+                    cl.target_participant.skype_name,
+                    cl.target_participant.full_name
+                ));
+            }
+
+            else if (cl.call_type == "multiParty")
+            {
+                c.caller = get_skype_user_name (
+                    cl.originator_participant.skype_name,
+                    cl.originator_participant.full_name
+                );
+
+                for (const auto &p : cl.participants)
+                {
+                    if (p.skype_name != cl.originator_participant.skype_name)
+                        c.callees.push_back (
+                            get_skype_user_name (p.skype_name, p.full_name)
+                        );
+                }
+            }
+
+            // Metadata
+            c.metadata.set ("schema_version", fs.get_schema_version ());
+            c.metadata.set ("call_id", cl.call_id);
+            c.metadata.set ("call_direction", cl.call_direction);
+            c.metadata.set ("call_type", cl.call_type);
+            c.metadata.set ("call_state", cl.call_state);
+            c.metadata.set ("connect_time", cl.connect_time);
+            c.metadata.set ("end_time", cl.end_time);
+            c.metadata.set ("message_id", cl.message_id);
+            c.metadata.set ("message_cuid", cl.message_cuid);
+            c.metadata.set ("nsp_pk", cl.nsp_pk);
+            c.metadata.set ("originator", cl.originator);
+            c.metadata.set ("session_type", cl.session_type);
+            c.metadata.set ("target", cl.target);
+            c.metadata.set ("thread_id", cl.thread_id);
+            c.f = f;
+
+            calls_.push_back (c);
+        }
     }
     catch (const std::exception &e)
     {

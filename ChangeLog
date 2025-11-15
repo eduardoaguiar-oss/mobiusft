@@ -21,6 +21,7 @@ Mobius Forensic Toolkit 2.21
 	* libmobius_framework: Changed ant_impl_vfs_processor to simplify user folders scan
 	* ant.evidence.vfs.accounts: Removed old Skype code
 	* ant.evidence.vfs.received_files: Removed old Skype code
+	* ant.evidence.vfs.calls: Removed module
 	* ant.evidence.vfs.sent_files: Removed module
 
 Mobius Forensic Toolkit 2.20

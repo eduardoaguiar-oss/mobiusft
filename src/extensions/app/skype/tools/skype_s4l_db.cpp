@@ -63,7 +63,7 @@ show_main_db_info (const std::string &path)
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Show main db entries
+    // Show Account
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::cout << "Account:" << std::endl;
 
@@ -96,6 +96,62 @@ show_main_db_info (const std::string &path)
     std::cout << "   Thumbnail URL: " << acc.thumbnail_url << std::endl;
     std::cout << "   App Version: " << acc.app_version << std::endl;
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Show calls
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::cout << std::endl;
+    std::cout << "Calls:" << std::endl;
+
+    for (const auto &c : dat.get_calls ())
+    {
+        std::cout << std::endl;
+        std::cout << "   Call ID: " << c.call_id << std::endl;
+        std::cout << "   Call Type: " << c.call_type << std::endl;
+        std::cout << "   Call Direction: " << c.call_direction << std::endl;
+        std::cout << "   Call State: " << c.call_state << std::endl;
+        std::cout << "   Connect Time: " << c.connect_time << std::endl;
+        std::cout << "   End Time: " << c.end_time << std::endl;
+        std::cout << "   Message ID: " << c.message_id << std::endl;
+        std::cout << "   Message CUID: " << c.message_cuid << std::endl;
+        std::cout << "   Originator: " << c.originator << std::endl;
+        std::cout << "   Session Type: " << c.session_type << std::endl;
+        std::cout << "   Start Time: " << c.start_time << std::endl;
+        std::cout << "   Target: " << c.target << std::endl;
+        std::cout << "   Thread ID: " << c.thread_id << std::endl;
+
+        std::cout << "   Originator Participant: " << std::endl;
+        std::cout << "      Skype Name: " << c.originator_participant.skype_name
+                  << std::endl;
+        std::cout << "      MRI: " << c.originator_participant.mri << std::endl;
+        std::cout << "      Full Name: " << c.originator_participant.full_name
+                  << std::endl;
+        std::cout << "      Type: " << c.originator_participant.type
+                  << std::endl;
+
+        std::cout << "   Target Participants: " << std::endl;
+        std::cout << "      Skype Name: " << c.target_participant.skype_name
+                  << std::endl;
+        std::cout << "      MRI: " << c.target_participant.mri << std::endl;
+        std::cout << "      Full Name: " << c.target_participant.full_name
+                  << std::endl;
+        std::cout << "      Type: " << c.target_participant.type << std::endl;
+
+        std::cout << "   Participants: " << std::endl;
+        for (const auto &p : c.participants)
+        {
+            std::cout << std::endl;
+            std::cout << "      Skype Name: " << p.skype_name
+                      << std::endl;
+            std::cout << "      MRI: " << p.mri << std::endl;
+            std::cout << "      Full Name: " << p.full_name
+                      << std::endl;
+            std::cout << "      Type: " << p.type << std::endl;
+        }
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Show contacts
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::cout << std::endl;
     std::cout << "Contacts:" << std::endl;
 
@@ -165,9 +221,9 @@ main (int argc, char **argv)
     if (optind >= argc)
     {
         std::cerr << std::endl;
-        std::cerr
-            << "Error: you must enter at least one path to Skype s4l-xxx.db file"
-            << std::endl;
+        std::cerr << "Error: you must enter at least one path to Skype "
+                     "s4l-xxx.db file"
+                  << std::endl;
         usage ();
         exit (EXIT_FAILURE);
     }

@@ -87,6 +87,7 @@ class vfs_processor_impl::impl
     void _decode_s4l_file (const mobius::core::io::file &);
 
     void _save_app_profiles ();
+    void _save_calls ();
     void _save_contacts ();
     void _save_received_files ();
     void _save_remote_party_ip_addresses ();
@@ -128,6 +129,7 @@ vfs_processor_impl::impl::on_complete ()
     auto transaction = item_.new_transaction ();
 
     _save_app_profiles ();
+    _save_calls ();
     _save_contacts ();
     _save_received_files ();
     _save_remote_party_ip_addresses ();
@@ -272,6 +274,41 @@ vfs_processor_impl::impl::_save_app_profiles ()
         // Tags and sources
         e.set_tag ("app.chat");
         // e.add_source (p.get_folder ()); // @todo add folder or file as source
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save calls
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::impl::_save_calls ()
+{
+    for (const auto &p : profiles_)
+    {
+        for (const auto &c : p.get_calls ())
+        {
+            auto e = item_.new_evidence ("call");
+
+            // Set attributes
+            e.set_attribute ("timestamp", c.timestamp);
+            e.set_attribute ("duration", c.duration);
+            e.set_attribute ("source", c.caller);
+            e.set_attribute ("destination", c.callees);
+            e.set_attribute ("app_id", APP_ID);
+            e.set_attribute ("app_name", APP_NAME);
+            e.set_attribute ("username", p.get_username ());
+
+            // Set metadata
+            auto metadata = mobius::core::pod::map ();
+            metadata.set ("host_skype_id", p.get_account_id ());
+            metadata.set ("host_skype_name", p.get_account_name ());
+            metadata.update (c.metadata);
+            e.set_attribute ("metadata", metadata);
+
+            // Tags and sources
+            e.set_tag ("app.chat");
+            e.add_source (c.f);
+        }
     }
 }
 

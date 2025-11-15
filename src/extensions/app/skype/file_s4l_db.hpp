@@ -105,6 +105,90 @@ class file_s4l_db
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Call participant structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct call_participant
+    {
+        // @brief Skype Name
+        std::string skype_name;
+
+        // @brief MRI
+        std::string mri;
+
+        // @brief Full Name
+        std::string full_name;
+
+        // @brief Type
+        std::string type;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Call structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct call
+    {
+        // @brief Call Attributes
+        std::string call_attributes;
+
+        // @brief Call ID
+        std::string call_id;
+
+        // @brief Call Direction
+        std::string call_direction;
+
+        // @brief Call Type
+        std::string call_type;
+
+        // @brief Call State
+        std::string call_state;
+
+        // @brief Connect time
+        mobius::core::datetime::datetime connect_time;
+
+        // @brief End time
+        mobius::core::datetime::datetime end_time;
+
+        // @brief Forwarded info
+        std::string forwarded_info;
+
+        // @brief Message ID
+        std::string message_id;
+
+        // @brief Message CUID
+        std::string message_cuid;
+
+        // @brief NSP PK
+        std::string nsp_pk;
+
+        // @brief Originator
+        std::string originator;
+
+        // @brief Start time
+        mobius::core::datetime::datetime start_time;
+
+        // @brief Session type
+        std::string session_type;
+
+        // @brief Target
+        std::string target;
+
+        // @brief Originator Participant
+        call_participant originator_participant;
+
+        // @brief Participants
+        std::vector<call_participant> participants;
+
+        // @brief Target Participant
+        call_participant target_participant;
+
+        // @brief Thread ID
+        std::string thread_id;
+
+        // @brief Transfer info
+        std::string transfer_info;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Contact structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct contact
@@ -184,6 +268,16 @@ class file_s4l_db
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get calls
+    // @return Vector of calls
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<call>
+    get_calls () const
+    {
+        return calls_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get contacts
     // @return Vector of contacts
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -208,6 +302,9 @@ class file_s4l_db
     // @brief Account
     account acc_;
 
+    // @brief Calls
+    std::vector<call> calls_;
+
     // @brief Contacts
     std::unordered_map<std::string, contact> contacts_;
 
@@ -215,6 +312,7 @@ class file_s4l_db
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _load_account (mobius::core::database::database &);
+    void _load_calls (mobius::core::database::database &);
     void _load_contacts (mobius::core::database::database &);
 };
 

@@ -24,7 +24,6 @@ import pymobius.ant.turing
 from . import accounts
 from . import autofill
 from . import bookmarked_urls
-from . import calls
 from . import chat_messages
 from . import cookies
 from . import installed_programs
@@ -50,7 +49,6 @@ ANTS = [
     accounts.Ant,
     autofill.Ant,
     bookmarked_urls.Ant,
-    calls.Ant,
     chat_messages.Ant,
     cookies.Ant,
     installed_programs.Ant,

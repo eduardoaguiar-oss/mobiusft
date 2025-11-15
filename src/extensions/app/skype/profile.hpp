@@ -90,6 +90,9 @@ class profile
         
         // @brief Metadata
         mobius::core::pod::map metadata;
+
+        // @brief Source file
+        mobius::core::io::file f;
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

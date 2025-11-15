@@ -121,6 +121,9 @@ class data
     {
         std::vector<T> v;
 
+        if (is_null ())
+            return v;
+        
         for (const auto &d : std::vector<data> (*this))
             v.push_back (T (d));
 
