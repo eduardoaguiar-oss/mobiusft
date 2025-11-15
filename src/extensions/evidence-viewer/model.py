@@ -563,33 +563,6 @@ MODEL = [
                   ]),
          ]
          ),
-    args(id="instant-message",
-         name="Instant Messages",
-         description="SMS and other instant messages",
-         master_views=[
-             args(id="table",
-                  columns=[
-                      args(id='timestamp', name="Date/time (UTC)", format='datetime', first_sortable=True),
-                      args(id="message_type", name="Type", is_sortable=True),
-                      args(id='sender', is_sortable=True),
-                      args(id='recipients', format="chat-message-recipients", is_sortable=True),
-                      args(id="text"),
-                      args(id="app", name="Application", is_sortable=True),
-                  ]),
-         ],
-         detail_views=[
-             args(id="metadata",
-                  rows=[
-                      args(id='timestamp', name="Date/time (UTC)", format='datetime'),
-                      args(id="message_type", name="Type"),
-                      args(id='sender'),
-                      args(id='recipients', format="chat-message-recipients"),
-                      args(id="text"),
-                      args(id="app", name="Application"),
-                  ]),
-         ]
-         ),
-
     args(id="ip-address",
          name="IP Addresses",
          description="External IP addresses recorded by applications",
@@ -843,6 +816,32 @@ MODEL = [
                   ]),
              args(id="hashes"
                   ),
+         ]
+         ),
+    args(id="sms",
+         name="SMS/MMS Messages",
+         description="SMS and other instant messages",
+         master_views=[
+             args(id="table",
+                  columns=[
+                      args(id='timestamp', name="Date/time (UTC)", format='datetime', first_sortable=True),
+                      args(id="message_type", name="Type", is_sortable=True),
+                      args(id='sender', is_sortable=True),
+                      args(id='recipients', format="chat-message-recipients", is_sortable=True),
+                      args(id="text"),
+                      args(id="app", name="Application", is_sortable=True),
+                  ]),
+         ],
+         detail_views=[
+             args(id="metadata",
+                  rows=[
+                      args(id='timestamp', name="Date/time (UTC)", format='datetime'),
+                      args(id="message_type", name="Type"),
+                      args(id='sender'),
+                      args(id='recipients', format="chat-message-recipients"),
+                      args(id="text"),
+                      args(id="app", name="Application"),
+                  ]),
          ]
          ),
     args(id="trash-can-entry",

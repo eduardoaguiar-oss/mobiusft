@@ -1447,6 +1447,8 @@ profile::impl::_load_s4l_db_calls (
                 }
             }
 
+            std::sort (c.callees.begin (), c.callees.end ());
+
             // Metadata
             c.metadata.set ("schema_version", fs.get_schema_version ());
             c.metadata.set ("call_id", cl.call_id);

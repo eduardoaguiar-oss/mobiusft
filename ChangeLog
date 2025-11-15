@@ -9,6 +9,7 @@ Mobius Forensic Toolkit 2.21
 	* evidence-viewer: Added new evidence type "Voicemail"
 	* evidence-viewer: Added new evidence type "Remote Party IP Address"
 	* evidence-viewer: Changed evidence type "P2P Remote File" to "Remote Party Shared File"
+	* evidence-viewer: Changed evidence type "Instant Message" to "SMS/MMS Message"
 	* iped-frontend: Added new processing option to force full garbage collection
 	* iped-frontend: Added new processing option to set XMX and XMS memory size
 	* iped-frontend: Added new processing button to resume processing

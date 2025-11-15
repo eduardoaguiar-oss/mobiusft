@@ -53,7 +53,7 @@ def handler(e):
     # create evidence
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     evidence = pymobius.Data()
-    evidence.type = 'instant-message'
+    evidence.type = 'sms'
 
     evidence.attrs = {
         'timestamp': metadata.get('TimeStamp'),
