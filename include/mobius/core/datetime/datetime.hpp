@@ -21,8 +21,8 @@
 #include <mobius/core/datetime/date.hpp>
 #include <mobius/core/datetime/time.hpp>
 #include <mobius/core/datetime/timedelta.hpp>
-#include <ostream>
 #include <cstdint>
+#include <ostream>
 #include <string>
 
 namespace mobius::core::datetime
@@ -33,94 +33,97 @@ namespace mobius::core::datetime
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class datetime
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  constexpr datetime () noexcept = default;
-  datetime (const datetime&) noexcept = default;
-  datetime (datetime&&) noexcept = default;
-  explicit datetime (const date&, const time& = time ()) noexcept;
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    constexpr datetime () noexcept = default;
+    datetime (const datetime &) noexcept = default;
+    datetime (datetime &&) noexcept = default;
+    explicit datetime (const date &, const time & = time ()) noexcept;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Create datetime object from d, m, y, hh, mm, ss values
-  // @param y year
-  // @param m month (1-12)
-  // @param d day (1-31)
-  // @param hh hour (0-23)
-  // @param mm minute (0 - 59)
-  // @param ss second (0 - 59)
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  constexpr datetime (int y, int m, int d,int hh, int mm, int ss) noexcept
-    : date_ (y, m, d), time_ (hh, mm, ss), is_null_ (false)
-  {
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Create datetime object from d, m, y, hh, mm, ss values
+    // @param y year
+    // @param m month (1-12)
+    // @param d day (1-31)
+    // @param hh hour (0-23)
+    // @param mm minute (0 - 59)
+    // @param ss second (0 - 59)
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    constexpr datetime (int y, int m, int d, int hh, int mm, int ss) noexcept
+        : date_ (y, m, d),
+          time_ (hh, mm, ss),
+          is_null_ (false)
+    {
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Assignment operators
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  datetime& operator= (const datetime&) noexcept = default;
-  datetime& operator= (datetime&&) noexcept = default;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    datetime &operator= (const datetime &) noexcept = default;
+    datetime &operator= (datetime &&) noexcept = default;
+    datetime &operator+= (const timedelta &) noexcept;
+    datetime &operator-= (const timedelta &) noexcept;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get date from datetime
-  // @return date object
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  date
-  get_date () const noexcept
-  {
-    return date_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get date from datetime
+    // @return date object
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    date
+    get_date () const noexcept
+    {
+        return date_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get time from datetime
-  // @return time object
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  time
-  get_time () const noexcept
-  {
-    return time_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get time from datetime
+    // @return time object
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    time
+    get_time () const noexcept
+    {
+        return time_;
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Check if datetime is not null
-  // @return true/false
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  operator bool () const noexcept
-  {
-    return !is_null_;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if datetime is not null
+    // @return true/false
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    operator bool () const noexcept
+    {
+        return !is_null_;
+    }
 
-private:
-  date date_;
-  time time_;
-  bool is_null_ = true;
+  private:
+    date date_;
+    time time_;
+    bool is_null_ = true;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Non-member operators
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool operator== (const datetime&, const datetime&) noexcept;
-datetime operator+ (const datetime&, const timedelta&) noexcept;
-datetime operator- (const datetime&, const timedelta&) noexcept;
-std::ostream& operator<< (std::ostream&, const datetime&);
+bool operator== (const datetime &, const datetime &) noexcept;
+datetime operator+ (const datetime &, const timedelta &) noexcept;
+datetime operator- (const datetime &, const timedelta &) noexcept;
+timedelta operator- (const datetime &, const datetime &) noexcept;
+std::ostream &operator<< (std::ostream &, const datetime &);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Function prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datetime now ();
-std::string to_string (const datetime&);
+std::string to_string (const datetime &);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Builder prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datetime new_datetime_from_nt_timestamp (std::uint64_t);
 datetime new_datetime_from_unix_timestamp (std::uint64_t);
-datetime new_datetime_from_iso_string (const std::string&);
+datetime new_datetime_from_iso_string (const std::string &);
 datetime new_datetime_from_fat_time (std::uint16_t, std::uint16_t);
 
 } // namespace mobius::core::datetime
 
 #endif
-
-

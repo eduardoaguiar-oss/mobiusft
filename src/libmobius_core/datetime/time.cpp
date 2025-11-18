@@ -25,7 +25,10 @@ namespace mobius::core::datetime
 // @brief Construct time from day second number
 // @param s day second
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-time::time (day_second_type s) noexcept { from_day_seconds (s); }
+time::time (day_second_type s) noexcept
+{
+    from_day_seconds (s);
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Set time from second
@@ -66,6 +69,21 @@ operator== (const time &t1, const time &t2) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Operator- Get number of seconds
+// @param ta Time object A
+// @param tb Time object B
+// @return Timedelta with difference in seconds
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+timedelta
+operator- (const time &ta, const time &tb) noexcept
+{
+    return timedelta (
+        static_cast<timedelta::value_type> (ta.to_day_seconds ()) -
+        static_cast<timedelta::value_type> (tb.to_day_seconds ())
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Convert time to string
 // @param t time object
 // @return string
@@ -79,8 +97,10 @@ to_string (const time &t)
     {
         char buffer[64] = {0};
 
-        sprintf (buffer, "%02d:%02d:%02d", t.get_hour (), t.get_minute (),
-                 t.get_second ());
+        sprintf (
+            buffer, "%02d:%02d:%02d", t.get_hour (), t.get_minute (),
+            t.get_second ()
+        );
 
         str = buffer;
     }

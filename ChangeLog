@@ -1,6 +1,7 @@
 Mobius Forensic Toolkit 2.21
 	* Added new C++ extension called "app-skype"
-	* app-chromium: Added support for Web Data files versions 120, 137, 138 and 140
+	* app-chromium: Added support for Login Data files versions 43
+	* app-chromium: Added support for Web Data files versions 120, 137, 138, 140 and 143
 	* app-chromium: Changed file_cookies to use database::new_statement (template, schema_version)
 	* app-chromium: Changed file_cookies to fill is_permanent, is_httponly, etc.
 	* app-chromium: Changed file_login_data to use database::new_statement (template, schema_version)
@@ -15,9 +16,26 @@ Mobius Forensic Toolkit 2.21
 	* iped-frontend: Added new processing button to resume processing
 	* skype-agent: Removed extension
 	* skype-agent-sqlite: Removed extension
+	* vfs-imagefile-dossier: Using new datetime::timedelta constructor
+	* vfs-imagefile-vhd: Using new datetime::timedelta constructor
 	* libmobius_core: Added new method database::new_statement (template, schema_version)
 	* libmobius_core: Added new template method pod::data::to_list<T>
 	* libmobius_core: Added new method bytearray::to_guid
+	* libmobius_core: Added new datetime::operator- (time, time)
+	* libmobius_core: Added new datetime::operator- (datetime, datetime)
+	* libmobius_core: Added new datetime::timedelta::operator+= (timedelta)
+	* libmobius_core: Added new datetime::timedelta::operator-= (timedelta)
+	* libmobius_core: Added new datetime::timedelta::to_seconds method
+	* libmobius_core: Added new datetime::timedelta::to_nanoseconds method
+	* libmobius_core: Added new datetime::timedelta::to_days method
+	* libmobius_core: Added new datetime::timedelta::from_seconds method
+	* libmobius_core: Added new datetime::timedelta::from_nanoseconds method
+	* libmobius_core: Added new datetime::timedelta::from_days method
+	* libmobius_core: Added new datetime::operator+ (timedelta, timedelta)
+	* libmobius_core: Added new datetime::operator- (timedelta, timedelta)
+	* libmobius_core: Added new function datetime::new_timedelta_from_seconds
+	* libmobius_core: Added new function datetime::new_timedelta_from_nanoseconds
+	* libmobius_core: Added new function datetime::new_timedelta_from_days
 	* libmobius_framework: Changed ant_impl_vfs_processor to count processed files
 	* libmobius_framework: Changed ant_impl_vfs_processor to simplify user folders scan
 	* ant.evidence.vfs.accounts: Removed old Skype code

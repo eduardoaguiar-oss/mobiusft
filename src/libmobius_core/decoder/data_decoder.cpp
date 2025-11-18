@@ -295,7 +295,7 @@ data_decoder::get_hfs_datetime ()
 
     if (timestamp)
         dt = mobius::core::datetime::datetime (1904, 1, 1, 0, 0, 0) +
-             mobius::core::datetime::timedelta (0, 0, timestamp, 0);
+             mobius::core::datetime::timedelta (timestamp);
 
     return dt;
 }
@@ -327,8 +327,8 @@ data_decoder::get_iso9660_datetime ()
 
         if (offset)
         {
-            mobius::core::datetime::timedelta delta (0, 0, offset * 15 * 60, 0);
-            dt = dt + delta; // dt += delta;
+            mobius::core::datetime::timedelta delta (offset * 15 * 60);
+            dt = dt + delta;
         }
     }
 

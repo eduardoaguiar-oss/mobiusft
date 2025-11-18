@@ -59,8 +59,11 @@ imagefile_impl::is_instance (const mobius::core::io::file &f)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile_impl::imagefile_impl (const mobius::core::io::file &f)
     : file_ (f),
-      split_imagefile_impl_ (mobius::core::vfs::build_imagefile_implementation (
-          f.new_sibling_by_extension ("001"), "split"))
+      split_imagefile_impl_ (
+          mobius::core::vfs::build_imagefile_implementation (
+              f.new_sibling_by_extension ("001"), "split"
+          )
+      )
 {
 }
 
@@ -82,11 +85,13 @@ imagefile_impl::get_attribute (const std::string &name) const
 // @param value Attribute value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-imagefile_impl::set_attribute (const std::string &,
-                               const mobius::core::pod::data &)
+imagefile_impl::set_attribute (
+    const std::string &, const mobius::core::pod::data &
+)
 {
     throw std::runtime_error (
-        MOBIUS_EXCEPTION_MSG ("set_attribute not implemented"));
+        MOBIUS_EXCEPTION_MSG ("set_attribute not implemented")
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -134,11 +139,13 @@ imagefile_impl::_load_metadata () const
 
     if (!file_ || !file_.exists ())
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("image file not found"));
+            MOBIUS_EXCEPTION_MSG ("image file not found")
+        );
 
     if (file_.get_size () > LOG_MAX_SIZE)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("image file control file too large"));
+            MOBIUS_EXCEPTION_MSG ("image file control file too large")
+        );
 
     // Load metadata
     std::regex REGEX_DOSSIER_SERIAL ("Serial No.:([0-9]+)");
@@ -149,7 +156,8 @@ imagefile_impl::_load_metadata () const
     std::regex REGEX_TOTAL_SECTORS ("Total Sectors.*\r\n\\* *([0-9]+).*\\|");
     std::regex REGEX_COMPLETION_TIME (
         "Completion Time: ([0-9]{2})/([0-9]{2})/([0-9]{4}) "
-        "*([0-9]{2}):([0-9]{2}):([0-9]{2})");
+        "*([0-9]{2}):([0-9]{2}):([0-9]{2})"
+    );
 
     // parse .log file
     auto reader = file_.new_reader ();
@@ -193,13 +201,13 @@ imagefile_impl::_load_metadata () const
         mobius::core::datetime::datetime d (
             stoi (match[3].str ()), stoi (match[1].str ()),
             stoi (match[2].str ()), stoi (match[4].str ()),
-            stoi (match[5].str ()), stoi (match[6].str ()));
+            stoi (match[5].str ()), stoi (match[6].str ())
+        );
 
         if (timezone)
         {
-            mobius::core::datetime::timedelta delta;
-            delta.set_seconds (-timezone * 3600);
-            d = d + delta;
+            mobius::core::datetime::timedelta delta (-timezone * 3600);
+            d += delta;
         }
 
         acquisition_time = d;
@@ -211,8 +219,9 @@ imagefile_impl::_load_metadata () const
         std::int64_t (split_imagefile_impl_->get_attribute ("segment_size"));
     acquisition_user = file_.get_user_name ();
 
-    mobius::core::vfs::normalize_drive_info (drive_vendor, drive_model,
-                                             drive_serial_number);
+    mobius::core::vfs::normalize_drive_info (
+        drive_vendor, drive_model, drive_serial_number
+    );
 
     // fill attributes
     attributes_.set ("drive_vendor", drive_vendor);

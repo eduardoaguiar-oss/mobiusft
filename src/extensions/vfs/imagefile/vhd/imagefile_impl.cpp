@@ -46,7 +46,7 @@ decode_timestamp (std::uint32_t timestamp)
 
     if (timestamp)
         dt = mobius::core::datetime::datetime (2000, 1, 1, 0, 0, 0) +
-             mobius::core::datetime::timedelta (0, 0, timestamp, 0);
+             mobius::core::datetime::timedelta (timestamp);
 
     return dt;
 }

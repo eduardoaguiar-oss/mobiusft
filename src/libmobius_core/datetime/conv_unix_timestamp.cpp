@@ -37,11 +37,7 @@ new_datetime_from_unix_timestamp (std::uint64_t timestamp)
     datetime dt;
 
     if (timestamp)
-    {
-        timedelta delta;
-        delta.set_seconds (timestamp);
-        dt = EPOCH_UNIX_DATETIME + delta;
-    }
+        dt = EPOCH_UNIX_DATETIME + timedelta (timestamp);
 
     return dt;
 }

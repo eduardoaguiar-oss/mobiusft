@@ -887,6 +887,7 @@ vfs_processor_impl::_save_user_accounts ()
             metadata.set ("record_idx", login.idx);
             metadata.set ("schema_version", login.schema_version);
             metadata.set ("action_url", login.action_url);
+            metadata.set ("actor_login_approved", login.actor_login_approved);
             metadata.set ("avatar_url", login.avatar_url);
             metadata.set ("blacklisted_by_user", login.blacklisted_by_user);
             metadata.set ("date_created", login.date_created);

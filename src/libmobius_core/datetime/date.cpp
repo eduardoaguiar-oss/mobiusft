@@ -44,14 +44,38 @@ date::get_weekday () const noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add timedelta to a date
+// @return date object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+date&
+date::operator+= (const timedelta &delta) noexcept
+{
+    *this = date_from_julian (date_to_julian (*this) + delta.to_days ());
+    return *this;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Subtract timedelta from a date
+// @return date object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+date&
+date::operator-= (const timedelta &delta) noexcept
+{
+    *this = date_from_julian (date_to_julian (*this) - delta.to_days ());
+    return *this;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Compare two dates
 // @param d1 date object
 // @param d2 date object
 // @return true if the two dates are equal
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator== (const mobius::core::datetime::date &d1,
-            const mobius::core::datetime::date &d2) noexcept
+operator== (
+    const mobius::core::datetime::date &d1,
+    const mobius::core::datetime::date &d2
+) noexcept
 {
     return bool (d1) == bool (d2) && d1.get_year () == d2.get_year () &&
            d1.get_month () == d2.get_month () && d1.get_day () == d2.get_day ();
@@ -64,8 +88,10 @@ operator== (const mobius::core::datetime::date &d1,
 // @return true if the d1 < d2
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-operator< (const mobius::core::datetime::date &d1,
-           const mobius::core::datetime::date &d2) noexcept
+operator< (
+    const mobius::core::datetime::date &d1,
+    const mobius::core::datetime::date &d2
+) noexcept
 {
     return bool (d1) == bool (d2) && (d1.get_year () < d2.get_year () ||
                                       (d1.get_year () == d2.get_year () &&
@@ -82,7 +108,7 @@ timedelta
 operator- (const date &d1, const date &d2) noexcept
 {
     timedelta delta;
-    delta.set_days (date_to_julian (d1) - date_to_julian (d2));
+    delta.from_days (date_to_julian (d1) - date_to_julian (d2));
 
     return delta;
 }
@@ -94,10 +120,7 @@ operator- (const date &d1, const date &d2) noexcept
 date
 operator+ (const date &d, const timedelta &delta) noexcept
 {
-    date d2 (d);
-    d2.set_year (d2.get_year () + delta.get_years ());
-
-    return date_from_julian (date_to_julian (d2) + delta.get_days ());
+    return date_from_julian (date_to_julian (d) + delta.to_days ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -107,8 +130,7 @@ operator+ (const date &d, const timedelta &delta) noexcept
 date
 operator- (const date &d, const timedelta &delta) noexcept
 {
-    return d + timedelta (-delta.get_years (), -delta.get_days (),
-                          -delta.get_seconds (), -delta.get_nanoseconds ());
+    return date_from_julian (date_to_julian (d) - delta.to_days ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -125,8 +147,10 @@ to_string (const date &d)
     {
         char buffer[64] = {0};
 
-        sprintf (buffer, "%04d-%02d-%02d", d.get_year (), d.get_month (),
-                 d.get_day ());
+        sprintf (
+            buffer, "%04d-%02d-%02d", d.get_year (), d.get_month (),
+            d.get_day ()
+        );
 
         str = buffer;
     }

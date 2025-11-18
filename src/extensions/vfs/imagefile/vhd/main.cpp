@@ -29,7 +29,7 @@ extern "C"
 {
     const char *EXTENSION_ID = "imagefile-vhd";
     const char *EXTENSION_NAME = "VHD image file";
-    const char *EXTENSION_VERSION = "1.1";
+    const char *EXTENSION_VERSION = "1.2";
     const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
     const char *EXTENSION_DESCRIPTION = "VHD image file support";
 } // extern "C"

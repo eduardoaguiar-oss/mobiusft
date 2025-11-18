@@ -36,44 +36,45 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //
 // - logins
-//      - action_url: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-42
+//      - action_url: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
+//      - actor_login_approved: 43
 //      - avatar_url: 7, 12-13
-//      - blacklisted_by_user: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-42
-//      - date_created: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-42
-//      - date_last_filled: 42
-//      - date_last_used: 25-29, 31-35, 40-42
-//      - date_password_modified: 31-35, 40-42
-//      - date_received: 40-42
+//      - blacklisted_by_user: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
+//      - date_created: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
+//      - date_last_filled: 42-43
+//      - date_last_used: 25-29, 31-35, 40-43
+//      - date_password_modified: 31-35, 40-43
+//      - date_received: 40-43
 //      - date_synced: 7, 12-13, 16-19, 21-22, 24-29
-//      - display_name: 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-42
-//      - federation_url: 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-42
-//      - form_data: 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-42
-//      - generation_upload_status: 12-13, 16-19, 21-22, 24-29, 31-35, 40-42
-//      - icon_url: 16-19, 21-22, 24-29, 31-35, 40-42
-//      - id: 21-22, 24-29, 31-35, 40-42
+//      - display_name: 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
+//      - federation_url: 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
+//      - form_data: 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
+//      - generation_upload_status: 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
+//      - icon_url: 16-19, 21-22, 24-29, 31-35, 40-43
+//      - id: 21-22, 24-29, 31-35, 40-43
 //      - is_zero_click: 7
-//      - keychain_identifier: 40-42
-//      - moving_blocked_for: 27-29, 31-35, 40-42
-//      - origin_url: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-42
-//      - password_element: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-42
-//      - password_type: 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-42
-//      - password_value: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-42
-//      - possible_username_pairs: 19, 21-22, 24-29, 31-35, 40-42
+//      - keychain_identifier: 40-43
+//      - moving_blocked_for: 27-29, 31-35, 40-43
+//      - origin_url: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
+//      - password_element: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
+//      - password_type: 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
+//      - password_value: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
+//      - possible_username_pairs: 19, 21-22, 24-29, 31-35, 40-43
 //      - possible_usernames: 3, 5, 7, 12-13, 16-18
 //      - preferred: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-27
-//      - scheme: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-42
-//      - sender_email: 40-42
-//      - sender_name: 40-42
-//      - sender_profile_image_url: 41-42
-//      - sharing_notification_displayed: 40-42
-//      - signon_realm: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-42
-//      - skip_zero_click: 12-13, 16-19, 21-22, 24-29, 31-35, 40-42
+//      - scheme: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
+//      - sender_email: 40-43
+//      - sender_name: 40-43
+//      - sender_profile_image_url: 41-43
+//      - sharing_notification_displayed: 40-43
+//      - signon_realm: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
+//      - skip_zero_click: 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
 //      - ssl_valid: 1, 3, 5, 7, 12-13, 16-17
-//      - submit_element: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-42
-//      - times_used: 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-42
+//      - submit_element: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
+//      - times_used: 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
 //      - use_additional_auth: 5, 7
-//      - username_element: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-42
-//      - username_value: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-42
+//      - username_element: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
+//      - username_value: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace
@@ -94,7 +95,7 @@ static std::unordered_set<std::int64_t> UNKNOWN_SCHEMA_VERSIONS = {
 // by the current implementation. Any schema version greater than this value
 // will be considered unsupported and will trigger a warning in the log.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static constexpr std::int64_t LAST_KNOWN_SCHEMA_VERSION = 42;
+static constexpr std::int64_t LAST_KNOWN_SCHEMA_VERSION = 43;
 
 } // namespace
 
@@ -170,36 +171,37 @@ file_login_data::_load_logins (mobius::core::database::database &db)
 
         stmt = db.new_statement (
             "SELECT action_url, "
+            "${actor_login_approved:43-*}, "
             "${avatar_url:7-13}, "
             "blacklisted_by_user, "
             "date_created, "
-            "${date_last_filled:42}, "
-            "${date_last_used:25}, "
-            "${date_password_modified:31}, "
-            "${date_received:40}, "
+            "${date_last_filled:42-*}, "
+            "${date_last_used:25-*}, "
+            "${date_password_modified:31-*}, "
+            "${date_received:40-*}, "
             "${date_synced:7-29}, "
-            "${display_name:7}, "
-            "${federation_url:7}, "
-            "${generation_upload_status:12}, "
-            "${icon_url:16}, "
-            "${id:21}, "
-            "${is_zero_click:7-7}, "
-            "${keychain_identifier:40}, "
+            "${display_name:7-*}, "
+            "${federation_url:7-*}, "
+            "${generation_upload_status:12-*}, "
+            "${icon_url:16-*}, "
+            "${id:21-*}, "
+            "${is_zero_click:7}, "
+            "${keychain_identifier:40-*}, "
             "origin_url, "
             "password_element, "
-            "${password_type:3}, "
+            "${password_type:3-*}, "
             "password_value, "
             "${preferred:1-27}, "
             "scheme, "
-            "${sender_email:40}, "
-            "${sender_name:40}, "
-            "${sender_profile_image_url:41}, "
-            "${sharing_notification_displayed:40}, "
+            "${sender_email:40-*}, "
+            "${sender_name:40-*}, "
+            "${sender_profile_image_url:41-*}, "
+            "${sharing_notification_displayed:40-*}, "
             "signon_realm, "
-            "${skip_zero_click:12}, "
+            "${skip_zero_click:12-*}, "
             "${ssl_valid:1-17}, "
             "submit_element, "
-            "${times_used:3}, "
+            "${times_used:3-*}, "
             "${use_additional_auth:5-7}, "
             "username_element, "
             "username_value "
@@ -218,39 +220,40 @@ file_login_data::_load_logins (mobius::core::database::database &db)
             l.idx = idx++;
             l.schema_version = schema_version_;
             l.action_url = stmt.get_column_string (0);
-            l.avatar_url = stmt.get_column_string (1);
-            l.blacklisted_by_user = stmt.get_column_bool (2);
-            l.date_created = get_datetime (stmt.get_column_int64 (3));
-            l.date_last_filled = get_datetime (stmt.get_column_int64 (4));
-            l.date_last_used = get_datetime (stmt.get_column_int64 (5));
-            l.date_password_modified = get_datetime (stmt.get_column_int64 (6));
-            l.date_received = get_datetime (stmt.get_column_int64 (7));
-            l.date_synced = get_datetime (stmt.get_column_int64 (8));
-            l.display_name = stmt.get_column_string (9);
-            l.federation_url = stmt.get_column_string (10);
-            l.generation_upload_status = stmt.get_column_int64 (11);
-            l.icon_url = stmt.get_column_string (12);
-            l.id = stmt.get_column_string (13);
-            l.is_zero_click = stmt.get_column_bool (14);
-            l.keychain_identifier = stmt.get_column_string (15);
-            l.origin_url = stmt.get_column_string (16);
-            l.password_element = stmt.get_column_string (17);
-            l.password_type = stmt.get_column_int64 (18);
-            l.password_value = stmt.get_column_bytearray (19);
-            l.preferred = stmt.get_column_bool (20);
-            l.scheme = stmt.get_column_string (21);
-            l.sender_email = stmt.get_column_string (22);
-            l.sender_name = stmt.get_column_string (23);
-            l.sender_profile_image_url = stmt.get_column_string (24);
-            l.sharing_notification_displayed = stmt.get_column_bool (25);
-            l.signon_realm = stmt.get_column_string (26);
-            l.skip_zero_click = stmt.get_column_bool (27);
-            l.ssl_valid = stmt.get_column_bool (28);
-            l.submit_element = stmt.get_column_string (29);
-            l.times_used = stmt.get_column_int64 (30);
-            l.use_additional_auth = stmt.get_column_bool (31);
-            l.username_element = stmt.get_column_string (32);
-            l.username_value = stmt.get_column_string (33);
+            l.actor_login_approved = stmt.get_column_bool (1);
+            l.avatar_url = stmt.get_column_string (2);
+            l.blacklisted_by_user = stmt.get_column_bool (3);
+            l.date_created = get_datetime (stmt.get_column_int64 (4));
+            l.date_last_filled = get_datetime (stmt.get_column_int64 (5));
+            l.date_last_used = get_datetime (stmt.get_column_int64 (6));
+            l.date_password_modified = get_datetime (stmt.get_column_int64 (7));
+            l.date_received = get_datetime (stmt.get_column_int64 (8));
+            l.date_synced = get_datetime (stmt.get_column_int64 (9));
+            l.display_name = stmt.get_column_string (10);
+            l.federation_url = stmt.get_column_string (11);
+            l.generation_upload_status = stmt.get_column_int64 (12);
+            l.icon_url = stmt.get_column_string (13);
+            l.id = stmt.get_column_string (14);
+            l.is_zero_click = stmt.get_column_bool (15);
+            l.keychain_identifier = stmt.get_column_string (16);
+            l.origin_url = stmt.get_column_string (17);
+            l.password_element = stmt.get_column_string (18);
+            l.password_type = stmt.get_column_int64 (19);
+            l.password_value = stmt.get_column_bytearray (20);
+            l.preferred = stmt.get_column_bool (21);
+            l.scheme = stmt.get_column_string (22);
+            l.sender_email = stmt.get_column_string (23);
+            l.sender_name = stmt.get_column_string (24);
+            l.sender_profile_image_url = stmt.get_column_string (25);
+            l.sharing_notification_displayed = stmt.get_column_bool (26);
+            l.signon_realm = stmt.get_column_string (27);
+            l.skip_zero_click = stmt.get_column_bool (28);
+            l.ssl_valid = stmt.get_column_bool (29);
+            l.submit_element = stmt.get_column_string (30);
+            l.times_used = stmt.get_column_int64 (31);
+            l.use_additional_auth = stmt.get_column_bool (32);
+            l.username_element = stmt.get_column_string (33);
+            l.username_value = stmt.get_column_string (34);
 
             // Add to logins vector
             logins_.emplace_back (std::move (l));

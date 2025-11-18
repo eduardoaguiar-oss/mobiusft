@@ -1417,7 +1417,9 @@ profile::impl::_load_s4l_db_calls (
             c.timestamp = cl.start_time;
 
             if (cl.end_time)
-                c.duration = get_duration (cl.end_time - cl.start_time);
+                c.duration = get_duration (
+                    (cl.end_time - cl.start_time).to_seconds ()
+                );
 
             if (cl.call_type == "twoParty")
             {

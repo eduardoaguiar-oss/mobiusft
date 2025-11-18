@@ -54,6 +54,92 @@ class sqlite3_init
 
 static sqlite3_init sqlite3_instance;
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get column_name or NULL according to the expression and the version given
+// @param exp Expression in the format column_name:v1[-v2|*][,v3[-v4|*]]
+// @param version Schema version
+// @return Column_name or NULL if version match expression
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static std::string
+get_column (const std::string &exp, std::int64_t version)
+{
+    // Split column_name:start_version-end_version
+    std::string column_name;
+    std::string version_exp;
+    std::string::size_type colon_pos = exp.find (':');
+
+    if (colon_pos != std::string::npos)
+    {
+        column_name = exp.substr (0, colon_pos);
+        version_exp = exp.substr (colon_pos + 1);
+    }
+
+    else
+        return exp;
+
+    // Test versions in expression
+    while (!version_exp.empty ())
+    {
+        std::string::size_type comma_pos = version_exp.find (',');
+        std::string range_exp;
+
+        if (comma_pos != std::string::npos)
+        {
+            range_exp = version_exp.substr (0, comma_pos);
+            version_exp.erase (0, comma_pos);
+        }
+
+        else
+        {
+            range_exp = version_exp;
+            version_exp.clear ();
+        }
+
+        // Parse start_version if provided
+        int64_t start_version = -1;
+        int64_t end_version = std::numeric_limits<int64_t>::max ();
+
+        std::string::size_type dash_pos = range_exp.find ('-');
+
+        if (dash_pos != std::string::npos)
+        {
+            try
+            {
+                start_version = std::stoll (range_exp.substr (0, dash_pos));
+
+                auto end_version_str = range_exp.substr (dash_pos + 1);
+
+                if (end_version_str == "*")
+                    end_version = std::numeric_limits<int64_t>::max ();
+                    
+                else
+                    end_version = std::stoll (end_version_str);
+            }
+            catch (...)
+            {
+                // Keep default if parsing fails
+            }
+        }
+        else
+        {
+            try
+            {
+                start_version = std::stoll (range_exp);
+                end_version = start_version;
+            }
+            catch (...)
+            {
+                // Keep default if parsing fails
+            }
+        }
+
+        if (version >= start_version && version <= end_version)
+            return column_name;
+    }
+
+    return "NULL";
+}
+
 } // namespace
 
 namespace mobius::core::database
@@ -206,7 +292,7 @@ database::new_statement (const std::string &sql)
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Generate new statement with version-aware SQL column replacements
-// @param pattern The SQL patternstring with ${column:start_version-end_version} placeholders
+// @param pattern The SQL pattern string with ${column:start_version-end_version} placeholders
 // @param schema_version The current schema version to check against
 // @return statement object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -226,70 +312,9 @@ database::new_statement (const std::string &pattern, int64_t schema_version)
             continue;
         }
 
-        // Extract the placeholder content
-        std::string placeholder = sql.substr (pos + 2, end_pos - pos - 2);
-
-        // Split column_name:start_version-end_version
-        std::string column_name;
-        std::string::size_type colon_pos = placeholder.find (':');
-
-        if (colon_pos != std::string::npos)
-        {
-            column_name = placeholder.substr (0, colon_pos);
-            placeholder = placeholder.substr (colon_pos + 1);
-        }
-
-        else
-        {
-            column_name = placeholder;
-            placeholder.clear ();
-        }
-
-        // Get version ranges
-        int64_t start_version = -1;
-        int64_t end_version = std::numeric_limits<int64_t>::max ();
-
-        // Parse start_version if provided
-        std::string::size_type dash_pos = placeholder.find ('-');
-        if (dash_pos != std::string::npos)
-        {
-            try
-            {
-                start_version = std::stoll (placeholder.substr (0, dash_pos));
-            }
-            catch (...)
-            {
-                // Keep default if parsing fails
-            }
-
-            try
-            {
-                end_version = std::stoll (placeholder.substr (dash_pos + 1));
-            }
-            catch (...)
-            {
-                // Keep default if parsing fails
-            }
-        }
-        else if (!placeholder.empty ())
-        {
-            try
-            {
-                start_version = std::stoll (placeholder);
-            }
-            catch (...)
-            {
-                // Keep default if parsing fails
-            }
-        }
-
-        // Check if current schema version is within range
-        std::string replacement = "NULL";
-
-        if (schema_version >= start_version && schema_version <= end_version)
-            replacement = column_name;
-
-        // Replace the placeholder with the column name or empty string
+        // Replace the expression with the column name or empty string
+        std::string expression = sql.substr (pos + 2, end_pos - pos - 2);
+        std::string replacement = get_column (expression, schema_version);
         sql.replace (pos, end_pos - pos + 1, replacement);
 
         // Continue searching from current position

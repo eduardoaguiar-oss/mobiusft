@@ -51,6 +51,9 @@ class file_login_data
         // @brief Action URL
         std::string action_url;
 
+        // @brief Actor Login Approved
+        bool actor_login_approved;
+
         // @brief Avatar URL
         std::string avatar_url;
 

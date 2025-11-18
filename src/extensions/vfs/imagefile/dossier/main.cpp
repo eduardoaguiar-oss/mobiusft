@@ -29,7 +29,7 @@ extern "C"
 {
     const char *EXTENSION_ID = "imagefile-dossier";
     const char *EXTENSION_NAME = "Logicube Dossier image file";
-    const char *EXTENSION_VERSION = "1.2";
+    const char *EXTENSION_VERSION = "1.3";
     const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
     const char *EXTENSION_DESCRIPTION = "Logicube Dossier image file support";
 } // extern "C"

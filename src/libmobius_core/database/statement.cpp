@@ -17,13 +17,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <chrono>
-#include <cstring>
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/database/exception.inc>
 #include <mobius/core/database/statement.hpp>
 #include <mobius/core/datetime/conv_iso_string.hpp>
 #include <mobius/core/exception.inc>
+#include <chrono>
+#include <cstring>
 #include <sqlite3.h>
 #include <stdexcept>
 #include <thread>
@@ -60,7 +60,10 @@ statement::impl::~impl ()
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create statement object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-statement::statement () { impl_ = std::make_shared<impl> (); }
+statement::statement ()
+{
+    impl_ = std::make_shared<impl> ();
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief create statement object
@@ -128,8 +131,9 @@ statement::bind (int idx, double value)
 void
 statement::bind (int idx, const char *value)
 {
-    if (sqlite3_bind_text (impl_->stmt, idx, value, strlen (value),
-                           SQLITE_TRANSIENT) != SQLITE_OK)
+    if (sqlite3_bind_text (
+            impl_->stmt, idx, value, strlen (value), SQLITE_TRANSIENT
+        ) != SQLITE_OK)
         throw std::runtime_error (MOBIUS_EXCEPTION_SQLITE);
 }
 
@@ -141,13 +145,15 @@ statement::bind (int idx, const char *value)
 void
 statement::bind (int idx, const std::string &value)
 {
-    auto rc =
-        sqlite3_bind_text64 (impl_->stmt, idx, value.c_str (), value.length (),
-                             SQLITE_TRANSIENT, SQLITE_UTF8);
+    auto rc = sqlite3_bind_text64 (
+        impl_->stmt, idx, value.c_str (), value.length (), SQLITE_TRANSIENT,
+        SQLITE_UTF8
+    );
 
     if (rc == SQLITE_TOOBIG)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("data too big to persist"));
+            MOBIUS_EXCEPTION_MSG ("data too big to persist")
+        );
 
     else if (rc != SQLITE_OK)
         throw std::runtime_error (MOBIUS_EXCEPTION_SQLITE);
@@ -161,12 +167,14 @@ statement::bind (int idx, const std::string &value)
 void
 statement::bind (int idx, const mobius::core::bytearray &value)
 {
-    auto rc = sqlite3_bind_blob64 (impl_->stmt, idx, value.begin (),
-                                   value.size (), SQLITE_TRANSIENT);
+    auto rc = sqlite3_bind_blob64 (
+        impl_->stmt, idx, value.begin (), value.size (), SQLITE_TRANSIENT
+    );
 
     if (rc == SQLITE_TOOBIG)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("data too big to persist"));
+            MOBIUS_EXCEPTION_MSG ("data too big to persist")
+        );
 
     else if (rc != SQLITE_OK)
         throw std::runtime_error (MOBIUS_EXCEPTION_SQLITE);
@@ -184,9 +192,10 @@ statement::bind (int idx, const mobius::core::datetime::datetime &value)
     {
         auto timestamp = to_string (value);
 
-        if (sqlite3_bind_text (impl_->stmt, idx, timestamp.c_str (),
-                               timestamp.length (),
-                               SQLITE_TRANSIENT) != SQLITE_OK)
+        if (sqlite3_bind_text (
+                impl_->stmt, idx, timestamp.c_str (), timestamp.length (),
+                SQLITE_TRANSIENT
+            ) != SQLITE_OK)
             throw std::runtime_error (MOBIUS_EXCEPTION_SQLITE);
     }
 
@@ -360,7 +369,8 @@ statement::get_column_bytearray (int idx)
 
     if (p_blob && size > 0)
         value = mobius::core::bytearray (
-            reinterpret_cast<const uint8_t *> (p_blob), size);
+            reinterpret_cast<const uint8_t *> (p_blob), size
+        );
 
     return value;
 }
@@ -398,7 +408,8 @@ statement::get_column_pod (int idx)
     if (p_blob && size > 0)
     {
         mobius::core::bytearray bytes (
-            reinterpret_cast<const uint8_t *> (p_blob), size);
+            reinterpret_cast<const uint8_t *> (p_blob), size
+        );
         value = mobius::core::pod::unserialize (bytes);
     }
 
@@ -431,7 +442,8 @@ statement::step ()
 
         if (rc == SQLITE_BUSY)
             std::this_thread::sleep_for (
-                std::chrono::microseconds (SLEEP_TIME));
+                std::chrono::microseconds (SLEEP_TIME)
+            );
     }
 
     return rc;

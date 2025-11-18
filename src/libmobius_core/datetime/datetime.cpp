@@ -17,8 +17,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <chrono>
+#include <mobius/core/datetime/conv_julian.hpp>
 #include <mobius/core/datetime/datetime.hpp>
+#include <chrono>
+
+#include <iostream>
 
 namespace mobius::core::datetime
 {
@@ -35,10 +38,68 @@ datetime::datetime (const date &d, const time &t) noexcept
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Subtract timedelta from datetime object
-// @param dt datetime object
+// @brief Add timedelta to datetime object
 // @param delta timedelta object
-// @return new datetime object
+// @return Datetime reference
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+datetime &
+datetime::operator+= (const timedelta &delta) noexcept
+{
+std::cerr << "datetime::operator+=" << std::endl;
+std::cerr << "  delta.seconds=" << delta.to_seconds () << std::endl;
+    timedelta::value_type seconds =
+        static_cast<timedelta::value_type> (time_.to_day_seconds ()) +
+        delta.to_seconds ();
+std::cerr << "  seconds=" << seconds << std::endl;
+
+    constexpr timedelta::value_type SECONDS_PER_DAY = 86400;
+    auto seconds_in_day = seconds % SECONDS_PER_DAY;
+    auto days = seconds / SECONDS_PER_DAY;
+
+    if (seconds_in_day < 0)
+    {
+        seconds_in_day = SECONDS_PER_DAY + seconds_in_day;
+        days--;
+    }
+
+    timedelta d_delta;
+    d_delta.from_days (days);
+
+    date_ += d_delta;
+    time_.from_day_seconds (seconds_in_day);
+
+    std::cerr << "  date=" << date_ << std::endl;
+    std::cerr << "  time=" << time_ << std::endl;
+
+
+    return *this;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Subtract timedelta from datetime object
+// @param delta timedelta object
+// @return Datetime reference
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+datetime &
+datetime::operator-= (const timedelta &delta) noexcept
+{
+    timedelta::value_type seconds =
+        static_cast<timedelta::value_type> (time_.to_day_seconds ()) -
+        delta.to_seconds ();
+
+    constexpr timedelta::value_type SECONDS_PER_DAY = 86400;
+    time_.from_day_seconds (seconds % SECONDS_PER_DAY);
+
+    timedelta d_delta;
+    d_delta.from_days (seconds / SECONDS_PER_DAY);
+    date_ -= d_delta;
+
+    return *this;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get current date/time
+// @return Current date/time
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datetime
 now ()
@@ -47,6 +108,47 @@ now ()
     time_t t = std::chrono::system_clock::to_time_t (clock_now);
 
     return new_datetime_from_unix_timestamp (t);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add timedelta to datetime object
+// @param dt datetime object
+// @param delta timedelta object
+// @return New datetime object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+datetime
+operator+ (const datetime &dt, const timedelta &delta) noexcept
+{
+    datetime d (dt);
+    d += delta;
+    return d;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Subtract timedelta fromdatetime object
+// @param dt datetime object
+// @param delta timedelta object
+// @return New datetime object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+datetime
+operator- (const datetime &dt, const timedelta &delta) noexcept
+{
+    datetime d (dt);
+    d -= delta;
+    return d;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Subtract two datetime objects
+// @param da datetime object A
+// @param db datetime object B
+// @return timedelta object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+timedelta
+operator- (const datetime &da, const datetime &db) noexcept
+{
+    return (da.get_date () - db.get_date ()) +
+           (da.get_time () - db.get_time ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -59,56 +161,6 @@ operator== (const datetime &d1, const datetime &d2) noexcept
 {
     return bool (d1) == bool (d2) && d1.get_date () == d2.get_date () &&
            d1.get_time () == d2.get_time ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Add timedelta to datetime object
-// @param dt datetime object
-// @param delta timedelta object
-// @return new datetime object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-datetime
-operator+ (const datetime &dt, const timedelta &delta) noexcept
-{
-    using value_type = timedelta::value_type;
-    value_type seconds =
-        dt.get_time ().to_day_seconds () + delta.get_seconds ();
-    value_type days = 0;
-
-    constexpr value_type SECONDS_OF_DAY = 86400;
-
-    if (seconds >= 0)
-    {
-        days = (seconds / SECONDS_OF_DAY) + delta.get_days ();
-        seconds = seconds % SECONDS_OF_DAY;
-    }
-    else
-    {
-        seconds += SECONDS_OF_DAY;
-        days--;
-    }
-
-    // create new timedelta, with seconds = 0
-    mobius::core::datetime::timedelta delta2 (delta);
-    delta2.set_days (days);
-    delta2.set_seconds (0);
-
-    // return new datetime
-    return mobius::core::datetime::datetime (dt.get_date () + delta2,
-                                             time (seconds % SECONDS_OF_DAY));
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Subtract timedelta from datetime object
-// @param dt datetime object
-// @param delta timedelta object
-// @return new datetime object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-datetime
-operator- (const datetime &dt, const timedelta &delta) noexcept
-{
-    return dt + timedelta (-delta.get_years (), -delta.get_days (),
-                           -delta.get_seconds (), -delta.get_nanoseconds ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
