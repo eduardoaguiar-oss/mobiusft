@@ -1067,7 +1067,7 @@ file_main_db::_load_calls (mobius::core::database::database &db)
             obj.host_identity = stmt.get_column_string (11);
             obj.id = stmt.get_column_int64 (12);
             obj.is_active = stmt.get_column_bool (13);
-            obj.is_conference = stmt.get_column_bool (14);
+            obj.is_conference = stmt.get_column_int64 (14) > 0;
             obj.is_incoming = stmt.get_column_bool (15);
             obj.is_incoming_one_on_one_video_call = stmt.get_column_bool (16);
             obj.is_muted = stmt.get_column_bool (17);
@@ -1113,7 +1113,7 @@ file_main_db::_load_calls (mobius::core::database::database &db)
             std::transform (
                 range.first, range.second,
                 std::back_inserter (obj.call_members),
-                [] (auto &pair) { return std::move (pair.second); }
+                [] (auto &pair) { return pair.second; }
             );
 
             // Add call to the list

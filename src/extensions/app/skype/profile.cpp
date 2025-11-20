@@ -75,7 +75,7 @@ get_skype_user_name (
     if (!full_name.empty ())
     {
         text = full_name;
-        if (!skype_name.empty ())
+        if (!skype_name.empty () && skype_name != full_name)
             text += " (" + skype_name + ")";
     }
     else
@@ -664,12 +664,39 @@ profile::impl::_load_main_db_calls (
             if (!c.timestamp)
                 c.timestamp = cl.start_timestamp;
 
+            // Caller and callees
+            for (const auto &m : cl.call_members)
+            {
+                if (m.type == 1)
+                {
+                    c.caller = get_skype_user_name (m.identity, m.dispname);
+                }
+                else if (m.type == 2)
+                {
+                    c.callees.push_back (
+                        get_skype_user_name (m.identity, m.dispname)
+                    );
+                }
+            }
+
+            if (cl.is_incoming)
+            {
+                c.callees.push_back (
+                    get_skype_user_name (get_account_id (), get_account_name ())
+                );
+            }
+
+            else
+            {
+                c.caller = get_skype_user_name (
+                    get_account_id (), get_account_name ()
+                );
+            }
+
+            std::sort (c.callees.begin (), c.callees.end ());
+
             // Other data
             c.duration = get_duration (cl.duration);
-
-            // Caller
-            if (cl.is_incoming)
-                c.caller = cl.host_identity;
 
             // Metadata
             c.metadata.set ("record_idx", cl.idx);
@@ -1426,12 +1453,14 @@ profile::impl::_load_s4l_db_calls (
                 c.duration =
                     get_duration ((cl.end_time - cl.start_time).to_seconds ());
 
+            // Caller and callees
+            c.caller = get_skype_user_name (
+                cl.originator_participant.skype_name,
+                cl.originator_participant.full_name
+            );
+
             if (cl.call_type == "twoParty")
             {
-                c.caller = get_skype_user_name (
-                    cl.originator_participant.skype_name,
-                    cl.originator_participant.full_name
-                );
                 c.callees.push_back (get_skype_user_name (
                     cl.target_participant.skype_name,
                     cl.target_participant.full_name
@@ -1440,11 +1469,6 @@ profile::impl::_load_s4l_db_calls (
 
             else if (cl.call_type == "multiParty")
             {
-                c.caller = get_skype_user_name (
-                    cl.originator_participant.skype_name,
-                    cl.originator_participant.full_name
-                );
-
                 for (const auto &p : cl.participants)
                 {
                     if (p.skype_name != cl.originator_participant.skype_name)
