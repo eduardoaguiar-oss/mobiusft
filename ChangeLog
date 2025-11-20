@@ -16,6 +16,7 @@ Mobius Forensic Toolkit 2.21
 	* iped-frontend: Added new processing button to resume processing
 	* skype-agent: Removed extension
 	* skype-agent-sqlite: Removed extension
+	* date-code: Using new datetime::timedelta constructor
 	* vfs-imagefile-dossier: Using new datetime::timedelta constructor
 	* vfs-imagefile-vhd: Using new datetime::timedelta constructor
 	* libmobius_core: Added new method database::new_statement (template, schema_version)

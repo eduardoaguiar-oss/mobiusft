@@ -32,7 +32,7 @@ extern "C"
 {
     const char *EXTENSION_ID = "date-code";
     const char *EXTENSION_NAME = "Date Code";
-    const char *EXTENSION_VERSION = "1.0";
+    const char *EXTENSION_VERSION = "1.1";
     const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
     const char *EXTENSION_DESCRIPTION = "Seagate date-code automatic decoding";
 } // extern "C"
@@ -105,8 +105,7 @@ _callback (mobius::framework::model::item item, const std::string &attr_id,
         days += 6;
 
     // add days to first day of the fiscal year
-    mobius::core::datetime::timedelta td (0, days);
-    d = d + td;
+    d += mobius::core::datetime::new_timedelta_from_days(days);
 
     // set manufacturing date
     item.set_attribute ("manufacturing_date", to_string (d));

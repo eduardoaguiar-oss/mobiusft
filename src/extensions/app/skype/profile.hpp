@@ -224,8 +224,8 @@ class profile
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::string get_username () const;
-    mobius::core::io::folder get_folder () const;
     std::string get_path () const;
+    mobius::core::io::entry get_source () const;
     mobius::core::datetime::datetime get_creation_time () const;
     mobius::core::datetime::datetime get_last_modified_time () const;
 

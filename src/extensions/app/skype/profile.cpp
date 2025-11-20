@@ -168,7 +168,7 @@ class profile::impl
     bool
     is_valid () const
     {
-        return !path_.empty ();
+        return bool (source_);
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -182,13 +182,13 @@ class profile::impl
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get folder
-    // @return Folder object
+    // @brief Get source entry
+    // @return Source entry
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::core::io::folder
-    get_folder () const
+    mobius::core::io::entry
+    get_source () const
     {
-        return folder_;
+        return source_;
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -373,8 +373,8 @@ class profile::impl
     void add_s4l_db_file (const mobius::core::io::file &);
 
   private:
-    // @brief Folder object
-    mobius::core::io::folder folder_;
+    // @brief Source entry
+    mobius::core::io::entry source_;
 
     // @brief Path to profile
     std::string path_;
@@ -409,7 +409,7 @@ class profile::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void _set_folder (const mobius::core::io::folder &);
+    void _set_entry (const mobius::core::io::entry &);
     void _update_mtime (const mobius::core::io::file &);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -449,31 +449,39 @@ class profile::impl
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set folder
-// @param f Folder
+// @brief Set source entry
+// @param e Source entry
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::impl::_set_folder (const mobius::core::io::folder &f)
+profile::impl::_set_entry (const mobius::core::io::entry &e)
 {
-    if (folder_ || !f)
+    if (source_ || !e)
         return;
 
-    folder_ = f;
+    source_ = e;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Get data from folder
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    path_ = f.get_path ();
-    last_modified_time_ = f.get_modification_time ();
-    creation_time_ = f.get_creation_time ();
-    username_ = get_username_from_path (f.get_path ());
+    path_ = e.get_path ();
+    username_ = get_username_from_path (e.get_path ());
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Emit sampling_folder event
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::core::emit (
-        "sampling_folder", std::string ("app.skype.profiles"), f
-    );
+    if (e.is_folder ())
+    {
+        auto f = e.get_folder ();
+        last_modified_time_ = f.get_modification_time ();
+        creation_time_ = f.get_creation_time ();
+
+        mobius::core::emit (
+            "sampling_folder", std::string ("app.skype.profiles"), f
+        );
+    }
+    else
+    {
+        auto f = e.get_file ();
+        last_modified_time_ = f.get_modification_time ();
+        creation_time_ = f.get_creation_time ();
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -515,7 +523,7 @@ profile::impl::add_main_db_file (const mobius::core::io::file &f)
 
         log.info (__LINE__, "File decoded [main.db]: " + f.get_path ());
 
-        _set_folder (f.get_parent ());
+        _set_entry (mobius::core::io::entry (f.get_parent ()));
         _update_mtime (f);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1128,7 +1136,7 @@ profile::impl::add_skype_db_file (const mobius::core::io::file &f)
 
         log.info (__LINE__, "File decoded [skype.db]: " + f.get_path ());
 
-        _set_folder (f.get_parent ());
+        _set_entry (mobius::core::io::entry (f.get_parent ()));
         _update_mtime (f);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1308,10 +1316,8 @@ profile::impl::add_s4l_db_file (const mobius::core::io::file &f)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Get data from folder
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        path_ = f.get_path ();
-        last_modified_time_ = f.get_modification_time ();
-        creation_time_ = f.get_creation_time ();
-        username_ = get_username_from_path (f.get_path ());
+        _set_entry (mobius::core::io::entry (f));
+        _update_mtime (f);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Load data
@@ -1417,9 +1423,8 @@ profile::impl::_load_s4l_db_calls (
             c.timestamp = cl.start_time;
 
             if (cl.end_time)
-                c.duration = get_duration (
-                    (cl.end_time - cl.start_time).to_seconds ()
-                );
+                c.duration =
+                    get_duration ((cl.end_time - cl.start_time).to_seconds ());
 
             if (cl.call_type == "twoParty")
             {
@@ -1555,13 +1560,13 @@ profile::get_username () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get folder
-// @return Folder
+// @brief Get source entry
+// @return Source entry
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::io::folder
-profile::get_folder () const
+mobius::core::io::entry
+profile::get_source () const
 {
-    return impl_->get_folder ();
+    return impl_->get_source ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

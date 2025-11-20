@@ -266,14 +266,24 @@ vfs_processor_impl::impl::_save_app_profiles ()
         metadata.set ("num_calls", p.size_calls ());
         metadata.set ("num_contacts", p.size_contacts ());
         metadata.set ("num_file_transfers", p.size_file_transfers ());
-        metadata.set ("num_remote_party_ip_addresses", p.size_remote_party_ip_addresses ());
+        metadata.set (
+            "num_remote_party_ip_addresses", p.size_remote_party_ip_addresses ()
+        );
         metadata.set ("num_voicemails", p.size_voicemails ());
 
         e.set_attribute ("metadata", metadata);
 
-        // Tags and sources
+        // Sources
+        auto source = p.get_source ();
+
+        if (source.is_folder ())
+            e.add_source (source.get_folder ());
+
+        else if (source.is_file ())
+            e.add_source (source.get_file ());
+
+        // Tags
         e.set_tag ("app.chat");
-        // e.add_source (p.get_folder ()); // @todo add folder or file as source
     }
 }
 

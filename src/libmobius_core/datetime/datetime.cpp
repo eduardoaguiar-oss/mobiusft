@@ -45,12 +45,9 @@ datetime::datetime (const date &d, const time &t) noexcept
 datetime &
 datetime::operator+= (const timedelta &delta) noexcept
 {
-std::cerr << "datetime::operator+=" << std::endl;
-std::cerr << "  delta.seconds=" << delta.to_seconds () << std::endl;
     timedelta::value_type seconds =
         static_cast<timedelta::value_type> (time_.to_day_seconds ()) +
         delta.to_seconds ();
-std::cerr << "  seconds=" << seconds << std::endl;
 
     constexpr timedelta::value_type SECONDS_PER_DAY = 86400;
     auto seconds_in_day = seconds % SECONDS_PER_DAY;
@@ -68,10 +65,6 @@ std::cerr << "  seconds=" << seconds << std::endl;
     date_ += d_delta;
     time_.from_day_seconds (seconds_in_day);
 
-    std::cerr << "  date=" << date_ << std::endl;
-    std::cerr << "  time=" << time_ << std::endl;
-
-
     return *this;
 }
 
@@ -83,17 +76,7 @@ std::cerr << "  seconds=" << seconds << std::endl;
 datetime &
 datetime::operator-= (const timedelta &delta) noexcept
 {
-    timedelta::value_type seconds =
-        static_cast<timedelta::value_type> (time_.to_day_seconds ()) -
-        delta.to_seconds ();
-
-    constexpr timedelta::value_type SECONDS_PER_DAY = 86400;
-    time_.from_day_seconds (seconds % SECONDS_PER_DAY);
-
-    timedelta d_delta;
-    d_delta.from_days (seconds / SECONDS_PER_DAY);
-    date_ -= d_delta;
-
+    *this += timedelta (-delta.to_seconds ());
     return *this;
 }
 
