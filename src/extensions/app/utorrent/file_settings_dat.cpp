@@ -54,8 +54,19 @@ namespace mobius::extension::app::utorrent
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_settings_dat::file_settings_dat (const mobius::core::io::reader &reader)
 {
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Check for 'd' header
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     if (!reader)
         return;
+
+    auto header_reader = reader;
+    auto byte = header_reader.read (1);
+
+    if (byte.size () != 1 || byte[0] != 'd')
+        return;
+
+    header_reader.rewind ();
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Decode btencode data

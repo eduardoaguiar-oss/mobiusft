@@ -472,29 +472,29 @@ vfs_processor_impl::_save_credit_cards ()
                 );
 
             auto metadata = mobius::core::pod::map ();
-            metadata.set ("id", cc.id);
-            metadata.set ("guid", cc.guid);
-            metadata.set ("expiration_month", cc.expiration_month);
-            metadata.set ("expiration_year", cc.expiration_year);
-            metadata.set ("origin", cc.origin);
-            metadata.set ("iban", cc.iban);
-            metadata.set ("cvc", cc.cvc);
-            metadata.set ("last_four", cc.last_four);
+            metadata.set ("bank_name", cc.bank_name);
             metadata.set ("card_art_url", cc.card_art_url);
             metadata.set (
                 "card_info_retrieval_enrollment_state",
                 cc.card_info_retrieval_enrollment_state
             );
-            metadata.set ("type", cc.type);
-            metadata.set ("network", cc.network);
-            metadata.set ("bank_name", cc.bank_name);
             metadata.set ("card_issuer", cc.card_issuer);
+            metadata.set ("cvc", cc.cvc);
+            metadata.set ("date_modified", to_string (cc.date_modified));
+            metadata.set ("expiration_month", cc.expiration_month);
+            metadata.set ("expiration_year", cc.expiration_year);
+            metadata.set ("guid", cc.guid);
+            metadata.set ("iban", cc.iban);
+            metadata.set ("id", cc.id);
+            metadata.set ("last_four", cc.last_four);
+            metadata.set ("network", cc.network);
+            metadata.set ("nickname", cc.nickname);
+            metadata.set ("origin", cc.origin);
+            metadata.set ("record_number", cc.idx);
+            metadata.set ("type", cc.type);
             metadata.set ("use_count", cc.use_count);
             metadata.set ("use_date", to_string (cc.use_date));
             metadata.set ("unmasked_date", cc.unmask_date);
-            metadata.set ("date_modified", to_string (cc.date_modified));
-            metadata.set ("nickname", cc.nickname);
-            metadata.set ("record_number", cc.idx);
 
             e.set_attribute ("metadata", metadata);
 

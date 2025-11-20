@@ -224,12 +224,12 @@ namespace
 // of the web data schema in Chromium-based applications.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::unordered_set<std::int64_t> UNKNOWN_SCHEMA_VERSIONS = {
-    1,   2,   3,   4,   5,   6,   7,   8,   9,   10,  11,  12,  13,  14,  15,
-    16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,
-    31,  32,  33,  34,  35,  36,  37,  38,  39,  41,  42,  44,  46,  47,  49,
-    50,  51,  53,  54,  57,  59,  62,  63,  66,  68,  69,  73,  75,  79,
-    85,  89,  93,  94,  95,  99,  101, 102, 103, 105, 106, 114, 115, 118,
-    121, 124, 126, 129, 131, 133, 136, 139, 142
+    1,   2,   3,   4,   5,   6,   7,   8,   9,   10,  11,  12,  13,  14,
+    15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,
+    29,  30,  31,  32,  33,  34,  35,  36,  37,  38,  39,  41,  42,  44,
+    46,  47,  49,  50,  51,  53,  54,  57,  59,  62,  63,  66,  68,  69,
+    73,  75,  79,  85,  89,  93,  94,  95,  99,  101, 102, 103, 105, 106,
+    114, 115, 118, 121, 124, 126, 129, 131, 133, 136, 139, 142
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -545,15 +545,14 @@ _get_server_card_metadata (
         {
             // Prepare statement to retrieve server card metadata from the
             // database
-            mobius::core::database::statement stmt =
-                db.new_statement (
-                    "SELECT id, "
-                    "${billing_address_id:71-*}, "
-                    "use_count, "
-                    "use_date "
-                    "FROM server_card_metadata ",
-                    schema_version
-                );
+            mobius::core::database::statement stmt = db.new_statement (
+                "SELECT id, "
+                "${billing_address_id:71-*}, "
+                "use_count, "
+                "use_date "
+                "FROM server_card_metadata ",
+                schema_version
+            );
 
             // Retrieve records from server_card_metadata table
             while (stmt.fetch_row ())
@@ -597,16 +596,15 @@ _get_unmasked_credit_cards (
     {
         if (schema_version >= 60 && db.has_table ("unmasked_credit_cards"))
         {
-            mobius::core::database::statement stmt =
-                db.new_statement (
-                    "SELECT id, "
-                    "card_number_encrypted, "
-                    "${use_count:64-84}, "
-                    "${use_date:64-84}, "
-                    "${unmask_date:64-*} "
-                    "FROM unmasked_credit_cards",
-                    schema_version
-                );
+            mobius::core::database::statement stmt = db.new_statement (
+                "SELECT id, "
+                "card_number_encrypted, "
+                "${use_count:64-84}, "
+                "${use_date:64-84}, "
+                "${unmask_date:64-*} "
+                "FROM unmasked_credit_cards",
+                schema_version
+            );
 
             while (stmt.fetch_row ())
             {
@@ -766,27 +764,26 @@ file_web_data::_load_autofill_profiles (mobius::core::database::database &db)
     try
     {
         // Prepare SQL statement for table autofill_profiles
-        mobius::core::database::statement stmt =
-            db.new_statement (
-                "SELECT guid, "
-                "company_name, "
-                "${address_line_1:40-52}, "
-                "${address_line_2:40-52}, "
-                "${street_address:55-*}, "
-                "${dependent_locality:55-*}, "
-                "city, "
-                "state, "
-                "zipcode, "
-                "country_code, "
-                "${country:40-52}, "
-                "${date_modified:40-*}, "
-                "${origin:55-*}, "
-                "${language_code:56-*}, "
-                "${use_count:61-*}, "
-                "${use_date:61-*} "
-                "FROM autofill_profiles p",
-                schema_version_
-            );
+        mobius::core::database::statement stmt = db.new_statement (
+            "SELECT guid, "
+            "company_name, "
+            "${address_line_1:40-52}, "
+            "${address_line_2:40-52}, "
+            "${street_address:55-*}, "
+            "${dependent_locality:55-*}, "
+            "city, "
+            "state, "
+            "zipcode, "
+            "country_code, "
+            "${country:40-52}, "
+            "${date_modified:40-*}, "
+            "${origin:55-*}, "
+            "${language_code:56-*}, "
+            "${use_count:61-*}, "
+            "${use_date:61-*} "
+            "FROM autofill_profiles p",
+            schema_version_
+        );
 
         // Retrieve records from autofill_profiles table
         std::uint64_t idx = 0;
@@ -871,22 +868,21 @@ file_web_data::_load_credit_cards (mobius::core::database::database &db)
     try
     {
         // Prepare SQL statement for table credit_cards
-        mobius::core::database::statement stmt =
-            db.new_statement (
-                "SELECT guid, "
-                "name_on_card, "
-                "expiration_month, "
-                "expiration_year, "
-                "card_number_encrypted, "
-                "${date_modified:30-*}, "
-                "${origin:52-*}, "
-                "${use_count:61-*}, "
-                "${use_date:61-*}, "
-                "${billing_address_id:66-*}, "
-                "${nickname:87-*} "
-                "FROM credit_cards",
-                schema_version_
-            );
+        mobius::core::database::statement stmt = db.new_statement (
+            "SELECT guid, "
+            "name_on_card, "
+            "expiration_month, "
+            "expiration_year, "
+            "card_number_encrypted, "
+            "${date_modified:30-*}, "
+            "${origin:52-*}, "
+            "${use_count:61-*}, "
+            "${use_date:61-*}, "
+            "${billing_address_id:66-*}, "
+            "${nickname:87-*} "
+            "FROM credit_cards",
+            schema_version_
+        );
 
         // Retrieve records from credit_cards table
         std::uint64_t idx = 0;
@@ -910,8 +906,7 @@ file_web_data::_load_credit_cards (mobius::core::database::database &db)
             // Set name on card
             auto name_on_card = stmt.get_column_bytearray (1);
 
-            if (name_on_card.startswith ("v10") ||
-                name_on_card.startswith ("v20"))
+            if (is_encrypted (name_on_card))
                 card.name_on_card_encrypted = name_on_card;
 
             else
@@ -997,7 +992,6 @@ file_web_data::_load_masked_credit_cards (mobius::core::database::database &db)
             card.id = stmt.get_column_string (9);
             card.instrument_id = stmt.get_column_string (10);
             card.last_four = stmt.get_column_string (11);
-            card.name_on_card = stmt.get_column_string (12);
             card.network = stmt.get_column_string (13);
             card.nickname = stmt.get_column_string (14);
             card.product_description = stmt.get_column_string (15);
@@ -1010,6 +1004,14 @@ file_web_data::_load_masked_credit_cards (mobius::core::database::database &db)
             if (!card.last_four.empty ())
                 card.card_number =
                     std::string ("**** **** **** ") + card.last_four;
+
+            // name_on_card
+            auto name_on_card = stmt.get_column_bytearray (12);
+            if (is_encrypted (name_on_card))
+                card.name_on_card_encrypted = name_on_card;
+
+            else
+                card.name_on_card = name_on_card.to_string ();
 
             // If server card metadata exists, copy its data
             auto iter_server_card = server_card_metadata.find (card.id);

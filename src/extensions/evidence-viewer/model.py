@@ -186,23 +186,6 @@ def getter_generic(obj, attr_id):
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Encrypted value getter
-# @param obj Object
-# @param attr_id Attribute ID
-# @return '<ENCRYPTED>' if <attr_id>_is_encrypted is True, otherwise the value of <attr_id>
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-def getter_encrypted(obj, attr_id):
-    is_encrypted = getattr(obj, f"{attr_id}_is_encrypted", False)
-
-    if is_encrypted:
-        return '<ENCRYPTED>'
-
-    v = getattr(obj, attr_id, None)
-    
-    return formatter_bin2text(v)
-
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Domain value getter
 # @param obj Object
 # @param attr_id Attribute ID
@@ -241,6 +224,23 @@ def getter_cookie_value(obj, attr_id):
 
     return '<BINARY> ' + mobius.core.encoder.hexstring(value)
 
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# @brief Encrypted value getter
+# @param obj Object
+# @param attr_id Attribute ID
+# @return '<ENCRYPTED>' if <attr_id> is encrypted, otherwise the value of <attr_id>
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+def getter_encrypted_value(obj, attr_id):
+    value = getattr(obj, attr_id, None)
+    encrypted_value = getattr(obj, f"{attr_id}_encrypted", None)
+    
+    if value:
+        return formatter_bin2text(value)
+    
+    if encrypted_value:
+        return '<ENCRYPTED>'
+
+    return '??'    
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Getters
@@ -248,7 +248,7 @@ def getter_cookie_value(obj, attr_id):
 GETTERS = {
     "cookie_value": getter_cookie_value,
     "domain": getter_domain,
-    "encrypted": getter_encrypted,
+    "encrypted": getter_encrypted_value,
 }
 
 
@@ -484,18 +484,18 @@ MODEL = [
          master_views=[
              args(id="table",
                   columns=[
-                      args(id='number', name="Credit Card Number", first_sortable=True),
+                      args(id='number', name="Credit Card Number", first_sortable=True, format='encrypted'),
                       args(id='company', name="Company", is_sortable=True),
-                      args(id='name', name="Owner Name", is_sortable=True),
+                      args(id='name', name="Owner Name", is_sortable=True, format='encrypted'),
                       args(id='source', name="Source", is_sortable=True),
                   ]),
          ],
          detail_views=[
              args(id="metadata",
                   rows=[
-                      args(id='number', name="Credit Card Number"),
+                      args(id='number', name="Credit Card Number", format='encrypted'),
                       args(id='company', name="Company"),
-                      args(id='name', name="Owner Name"),
+                      args(id='name', name="Owner Name", format='encrypted'),
                       args(id='expiration_date', name="Expiration Date"),
                       args(id='last_used_time', name="Last used date/time (UTC)"),
                       args(id='address', name="Billing Address"),

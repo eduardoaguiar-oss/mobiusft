@@ -7,6 +7,7 @@ Mobius Forensic Toolkit 2.21
 	* app-chromium: Changed file_login_data to use database::new_statement (template, schema_version)
 	* app-chromium: Changed file_history to use database::new_statement (template, schema_version)
 	* app-chromium: Changed file_web_data to use database::new_statement (template, schema_version)
+	* app-utorrent: Improved the check for settings.dat files
 	* evidence-viewer: Added new evidence type "Voicemail"
 	* evidence-viewer: Added new evidence type "Remote Party IP Address"
 	* evidence-viewer: Changed evidence type "P2P Remote File" to "Remote Party Shared File"

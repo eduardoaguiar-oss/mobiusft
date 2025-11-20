@@ -37,6 +37,12 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static constexpr bool DEBUG = false;
 
+// @brief DPAPI prefix used to identify encrypted data
+const mobius::core::bytearray DPAPI_PREFIX = {0x01, 0x00, 0x00, 0x00, 0xd0,
+                                              0x8c, 0x9d, 0xdf, 0x01, 0x15,
+                                              0xd1, 0x11, 0x8c, 0x7a, 0x00,
+                                              0xc0, 0x4f, 0xc2, 0x97, 0xeb};
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Known Chromium browsers
 // This list is based on the Chromium-based browsers. It includes popular
@@ -258,7 +264,8 @@ get_username_from_path (const std::string &path)
     auto dirnames = mobius::core::string::split (path, "/");
 
     if (dirnames.size () > 3 &&
-        (dirnames[2] == "Users" || dirnames[2] == "home" || dirnames[2] == "Documents and Settings"))
+        (dirnames[2] == "Users" || dirnames[2] == "home" ||
+         dirnames[2] == "Documents and Settings"))
         return dirnames[3]; // Username is the fourth directory
 
     return {}; // No username found
@@ -287,6 +294,18 @@ get_app_from_path (const std::string &path)
     log.development (__LINE__, "Unknown Chromium-based browser. Path: " + path);
 
     return {"chromium", "Chromium"};
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if a bytearray represents encrypted data
+// @param data Bytearray to check
+// @return True if the bytearray represents encrypted data, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+is_encrypted (const mobius::core::bytearray &data)
+{
+    return data.startswith ("v10") || data.startswith ("v20") ||
+           data.startswith (DPAPI_PREFIX);
 }
 
 } // namespace mobius::extension::app::chromium

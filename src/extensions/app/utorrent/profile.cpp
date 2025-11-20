@@ -460,10 +460,7 @@ profile::impl::add_settings_dat_file (const mobius::core::io::file &f)
 
     file_settings_dat settings_dat (reader);
     if (!settings_dat)
-    {
-        log.warning (__LINE__, "File is not a valid settings.dat file");
         return;
-    }
 
     log.info (__LINE__, "File decoded [settings.dat]: " + f.get_path ());
 
