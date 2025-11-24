@@ -38,6 +38,48 @@ class file_skype_db
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Account structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct account
+    {
+        // @brief MRI
+        std::string mri;
+
+        // @brief Skype name
+        std::string skype_name;
+
+        // @brief Balance precision
+        std::int64_t balance_precision;
+
+        // @brief Balance currency
+        std::string balance_currency;
+
+        // @brief Full name
+        std::string full_name;
+
+        // @brief First name
+        std::string first_name;
+
+        // @brief Last name
+        std::string last_name;
+
+        // @brief Mood
+        std::string mood;
+
+        // @brief Avatar URL
+        std::string avatar_url;
+
+        // @brief Avatar File Path
+        std::string avatar_file_path;
+
+        // @brief Conversation last sync time
+        mobius::core::datetime::datetime conversation_last_sync_time;
+
+        // @brief Last seen inbox timestamp
+        mobius::core::datetime::datetime last_seen_inbox_timestamp;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Contact structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct contact
@@ -146,6 +188,75 @@ class file_skype_db
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief SMS structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct sms_message
+    {
+        // @brief Record index number
+        std::uint64_t idx = 0;
+
+        // @brief Author
+        std::string author;
+
+        // @brief Clientmessageid
+        std::int64_t clientmessageid;
+
+        // @brief Content
+        std::string content;
+
+        // @brief Convdbid
+        std::int64_t convdbid;
+
+        // @brief Dbid
+        std::int64_t dbid;
+
+        // @brief Editedtime
+        std::int64_t editedtime;
+
+        // @brief Id
+        std::int64_t id;
+
+        // @brief Is Preview
+        bool is_preview;
+
+        // @brief Json
+        std::string json;
+
+        // @brief Messagetype
+        std::int64_t messagetype;
+
+        // @brief Originalarrivaltime
+        mobius::core::datetime::datetime original_arrival_time;
+
+        // @brief Properties
+        std::string properties;
+
+        // @brief Sendingstatus
+        std::int64_t sendingstatus;
+
+        // @brief Skypeguid
+        std::string skypeguid;
+
+        // @brief Smsmessagedbid
+        std::int64_t smsmessagedbid;
+
+        // @brief Version
+        std::int64_t version;
+
+        // @brief Mmsdownloadstatus
+        std::int64_t mmsdownloadstatus;
+
+        // @brief Smstransportid
+        std::string smstransportid;
+
+        // @brief Smstransportname
+        std::string smstransportname;
+
+        // @brief Unistoreid
+        std::string unistoreid;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     file_skype_db (const mobius::core::io::reader &);
@@ -170,6 +281,16 @@ class file_skype_db
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get account
+    // @return Account
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    account
+    get_account () const
+    {
+        return account_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get contacts
     // @return Vector of contacts
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -179,6 +300,16 @@ class file_skype_db
         return contacts_;
     }
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get SMS messages
+    // @return Vector of SMS messages
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<sms_message>
+    get_sms_messages () const
+    {
+        return sms_messages_;
+    }
+
   private:
     // @brief Flag is instance
     bool is_instance_ = false;
@@ -186,13 +317,21 @@ class file_skype_db
     // @brief Schema version
     std::uint32_t schema_version_ = 0;
 
+    // @brief Account
+    account account_;
+
     // @brief Contacts
     std::vector<contact> contacts_;
+
+    // @brief SMS messages
+    std::vector<sms_message> sms_messages_;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void _load_account (mobius::core::database::database &);
     void _load_contacts (mobius::core::database::database &);
+    void _load_sms_messages (mobius::core::database::database &);
 };
 
 } // namespace mobius::extension::app::skype

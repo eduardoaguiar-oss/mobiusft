@@ -189,6 +189,30 @@ class profile
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief SMS message structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct sms
+    {
+        // @brief Timestamp
+        mobius::core::datetime::datetime timestamp;
+        
+        // @brief Text
+        std::string text;
+
+        // @brief Sender
+        std::string sender;
+
+        // @brief Recipients
+        std::vector<std::string> recipients;
+
+        // @brief Metadata
+        mobius::core::pod::map metadata;
+
+        // @brief Source file
+        mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Voicemail structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct voicemail
@@ -241,6 +265,8 @@ class profile
     std::size_t size_file_transfers () const;
     std::vector<remote_party_ip_address> get_remote_party_ip_addresses () const;
     std::size_t size_remote_party_ip_addresses () const;
+    std::vector<sms> get_sms_messages () const;
+    std::size_t size_sms_messages () const;
     std::vector<voicemail> get_voicemails () const;
     std::size_t size_voicemails () const;
 

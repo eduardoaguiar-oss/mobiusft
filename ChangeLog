@@ -44,6 +44,7 @@ Mobius Forensic Toolkit 2.21
 	* ant.evidence.vfs.received_files: Removed old Skype code
 	* ant.evidence.vfs.calls: Removed module
 	* ant.evidence.vfs.sent_files: Removed module
+	* pymobius.extension: Fatal Python error fixed
 
 Mobius Forensic Toolkit 2.20
 	* app-ares: Added new class profile

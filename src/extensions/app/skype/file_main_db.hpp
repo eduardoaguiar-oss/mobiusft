@@ -855,17 +855,8 @@ class file_main_db
         // @brief Extprop External Data
         std::string extprop_external_data;
 
-        // @brief Extprop Must Hide Avatar
-        std::int64_t extprop_must_hide_avatar;
-
-        // @brief Extprop Seen Birthday
-        std::int64_t extprop_seen_birthday;
-
         // @brief Extprop Sms Pstn Contact Created
         std::int64_t extprop_sms_pstn_contact_created;
-
-        // @brief Extprop Sms Target
-        std::int64_t extprop_sms_target;
 
         // @brief Firstname
         std::string firstname;
@@ -1080,18 +1071,6 @@ class file_main_db
         // @brief Convo Id
         std::int64_t convo_id;
 
-        // @brief Extprop Handled By Chat
-        std::int64_t extprop_handled_by_chat;
-
-        // @brief Extprop Hide From History
-        std::int64_t extprop_hide_from_history;
-
-        // @brief Extprop Localfilename
-        std::string extprop_localfilename;
-
-        // @brief Extprop Window Visible
-        std::int64_t extprop_window_visible;
-
         // @brief Failurereason
         std::int64_t failurereason;
 
@@ -1122,17 +1101,11 @@ class file_main_db
         // @brief Nodeid
         mobius::core::bytearray nodeid;
 
-        // @brief Offer Send List
-        std::string offer_send_list;
-
         // @brief Old Filepath
         std::int64_t old_filepath;
 
         // @brief Old Status
         std::int64_t old_status;
-
-        // @brief Parent Id
-        std::int64_t parent_id;
 
         // @brief Partner Dispname
         std::string partner_dispname;
@@ -1148,6 +1121,81 @@ class file_main_db
 
         // @brief Status
         std::int64_t status;
+
+        // @brief Type
+        std::int64_t type;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief SMS structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct sms
+    {
+        // @brief Record index number
+        std::uint64_t idx = 0;
+
+        // @brief Body
+        std::string body;
+
+        // @brief Chatmsg Id
+        std::int64_t chatmsg_id;
+
+        // @brief Convo Name
+        std::string convo_name;
+
+        // @brief Error Category
+        std::int64_t error_category;
+
+        // @brief Event Flags
+        std::int64_t event_flags;
+
+        // @brief Failurereason
+        std::int64_t failurereason;
+
+        // @brief Id
+        std::int64_t id;
+
+        // @brief Identity
+        std::string identity;
+
+        // @brief Is Failed Unseen
+        bool is_failed_unseen;
+
+        // @brief Is Permanent
+        bool is_permanent;
+
+        // @brief Notification Id
+        std::int64_t notification_id;
+
+        // @brief Outgoing Reply Type
+        std::int64_t outgoing_reply_type;
+
+        // @brief Price
+        std::int64_t price;
+
+        // @brief Price Currency
+        std::string price_currency;
+
+        // @brief Price Precision
+        std::int64_t price_precision;
+
+        // @brief Reply Id Number
+        std::string reply_id_number;
+
+        // @brief Reply To Number
+        std::string reply_to_number;
+
+        // @brief Status
+        std::int64_t status;
+
+        // @brief Target Numbers
+        std::string target_numbers;
+
+        // @brief Target Statuses
+        mobius::core::bytearray target_statuses;
+
+        // @brief Timestamp
+        mobius::core::datetime::datetime timestamp;
 
         // @brief Type
         std::int64_t type;
@@ -1172,9 +1220,6 @@ class file_main_db
 
         // @brief Duration
         std::int64_t duration;
-
-        // @brief Extprop Hide From History
-        std::int64_t extprop_hide_from_history;
 
         // @brief Failurereason
         std::int64_t failurereason;
@@ -1293,6 +1338,16 @@ class file_main_db
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get SMS messages
+    // @return Vector of SMS messages
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<sms>
+    get_sms_messages () const
+    {
+        return sms_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get voicemails
     // @return Vector of voicemails
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1321,6 +1376,9 @@ class file_main_db
     // @brief File Transfers
     std::vector<file_transfer> file_transfers_;
 
+    // @brief SMS
+    std::vector<sms> sms_;
+
     // @brief Voicemails
     std::vector<voicemail> voicemails_;
 
@@ -1331,6 +1389,7 @@ class file_main_db
     void _load_calls (mobius::core::database::database &);
     void _load_contacts (mobius::core::database::database &);
     void _load_file_transfers (mobius::core::database::database &);
+    void _load_sms (mobius::core::database::database &);
     void _load_voicemails (mobius::core::database::database &);
 };
 

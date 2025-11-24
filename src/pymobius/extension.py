@@ -360,11 +360,15 @@ def svc_extension_start(extension_id):
 # @brief Service: extension.stop
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def svc_extension_stop(extension_id):
-    context = g_extensions.get(extension_id)
-    pvt_stop = context.get('pvt_stop')
+    try:
+        context = g_extensions.get(extension_id)
+        pvt_stop = context.get('pvt_stop')
 
-    if pvt_stop:
-        pvt_stop()
+        if pvt_stop:
+            pvt_stop()
+    except Exception as e:
+        mobius.core.logf(
+            f'ERR Error stopping extension "{extension_id}": {str(e)}\n{traceback.format_exc()}')
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

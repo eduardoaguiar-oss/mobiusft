@@ -24,6 +24,7 @@
 #include <mobius/core/log.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <limits>
+#include <unordered_map>
 #include <unordered_set>
 #include "common.hpp"
 
@@ -69,6 +70,31 @@
 //      - recommendation_rank: 533, 561, 680, 835, 3576
 //      - unistore_version: 533, 561, 680, 835, 3576
 //      - update_version: 533, 561, 680, 835, 3576
+//
+// - messages
+//      - author: 533, 561, 680, 835, 3576
+//      - clientmessageid: 533, 561, 680, 835, 3576
+//      - content: 533, 561, 680, 835, 3576
+//      - convdbid: 533, 561, 680, 835, 3576
+//      - dbid: 533, 561, 680, 835, 3576
+//      - editedtime: 533, 561, 680, 835, 3576
+//      - id: 533, 561, 680, 835, 3576
+//      - is_preview: 533, 561, 680, 835, 3576
+//      - json: 533, 561, 680, 835, 3576
+//      - messagetype: 533, 561, 680, 835, 3576
+//      - originalarrivaltime: 533, 561, 680, 835, 3576
+//      - properties: 533, 561, 680, 835, 3576
+//      - sendingstatus: 533, 561, 680, 835, 3576
+//      - skypeguid: 533, 561, 680, 835, 3576
+//      - smsmessagedbid: 533, 561, 680, 835, 3576
+//      - version: 533, 561, 680, 835, 3576
+//
+// - sms_messages
+//      - dbid: 533, 561, 680, 835, 3576
+//      - mmsdownloadstatus: 533, 561, 680, 835, 3576
+//      - smstransportid: 533, 561, 680, 835, 3576
+//      - smstransportname: 533, 561, 680, 835, 3576
+//      - unistoreid: 533, 561, 680, 835, 3576
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace
@@ -491,12 +517,79 @@ file_skype_db::file_skype_db (const mobius::core::io::reader &reader)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Load data
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        _load_account (db);
         _load_contacts (db);
+        _load_sms_messages (db);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Finish decoding
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         is_instance_ = true;
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load account
+// @param db Database object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file_skype_db::_load_account (mobius::core::database::database &db)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        // Load key_value table into a map
+        std::unordered_map<std::string, std::string> key_value_map;
+
+        // Prepare SQL statement for table key_value
+        auto kv_stmt = db.new_statement ("SELECT key, value FROM key_value");
+
+        // Retrieve records from key_value table
+        while (kv_stmt.fetch_row ())
+        {
+            std::string key = kv_stmt.get_column_string (0);
+            std::string value = kv_stmt.get_column_string (1);
+            key_value_map[key] = value;
+        }
+
+        // Lambda function to get value from key_value_map with default
+        auto get_value_or_default = [&key_value_map] (
+                                        const std::string &key,
+                                        const std::string &default_value = {}
+                                    ) -> std::string
+        {
+            auto it = key_value_map.find (key);
+            return (it != key_value_map.end ()) ? it->second : default_value;
+        };
+
+        // Set account info
+        account_.mri = get_value_or_default ("mePersonMri");
+        account_.balance_precision =
+            std::stoi (get_value_or_default ("ACCOUNT_BALANCE_PRECISION", "0"));
+        account_.balance_currency =
+            get_value_or_default ("ACCOUNT_BALANCE_CURRENCY");
+        account_.full_name = get_value_or_default ("ACCOUNT_FULLNAME");
+        account_.first_name = get_value_or_default ("ACCOUNT_FIRSTNAME");
+        account_.last_name = get_value_or_default ("ACCOUNT_LASTNAME");
+        account_.mood = get_value_or_default ("ACCOUNT_MOOD");
+        account_.avatar_url = get_value_or_default ("ACCOUNT_AVATARURL");
+        account_.avatar_file_path =
+            get_value_or_default ("ACCOUNT_AVATARFILEPATH");
+        account_.conversation_last_sync_time = get_datetime (
+            std::stoll (get_value_or_default ("conv_lastsynctime", "0")) / 1000
+        );
+        account_.last_seen_inbox_timestamp = get_datetime (
+            std::stoll (
+                get_value_or_default ("last_seen_inbox_timestamp", "0")
+            ) /
+            1000
+        );
+        account_.skype_name = get_skype_name_from_mri (account_.mri);
     }
     catch (const std::exception &e)
     {
@@ -598,6 +691,84 @@ file_skype_db::_load_contacts (mobius::core::database::database &db)
 
             // Add contacts to the list
             contacts_.emplace_back (std::move (obj));
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load SMS messages
+// @param db Database object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file_skype_db::_load_sms_messages (mobius::core::database::database &db)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        // Prepare SQL statement for tables messages and sms_messages
+        auto stmt = db.new_statement (
+            "SELECT m.author, "
+            "m.clientmessageid, "
+            "m.content, "
+            "m.convdbid, "
+            "m.dbid, "
+            "m.editedtime,"
+            "m.id, "
+            "m.is_preview, "
+            "m.json, "
+            "m.messagetype, "
+            "m.originalarrivaltime, "
+            "m.properties, "
+            "m.sendingstatus, "
+            "m.skypeguid, "
+            "m.smsmessagedbid, "
+            "m.version, "
+            "s.mmsdownloadstatus, "
+            "s.smstransportid, "
+            "s.smstransportname, "
+            "s.unistoreid "
+            "FROM messages m, sms_messages s "
+            "WHERE m.smsmessagedbid = s.dbid",
+            schema_version_
+        );
+
+        // Retrieve records from messages table
+        std::uint64_t idx = 0;
+
+        while (stmt.fetch_row ())
+        {
+            sms_message obj;
+
+            obj.idx = idx++;
+            obj.author = stmt.get_column_string (0);
+            obj.clientmessageid = stmt.get_column_int64 (1);
+            obj.content = stmt.get_column_string (2);
+            obj.convdbid = stmt.get_column_int64 (3);
+            obj.dbid = stmt.get_column_int64 (4);
+            obj.editedtime = stmt.get_column_int64 (5);
+            obj.id = stmt.get_column_int64 (6);
+            obj.is_preview = stmt.get_column_bool (7);
+            obj.json = stmt.get_column_string (8);
+            obj.messagetype = stmt.get_column_int64 (9);
+            obj.original_arrival_time =
+                get_datetime (stmt.get_column_int64 (10) / 1000);
+            obj.properties = stmt.get_column_string (11);
+            obj.sendingstatus = stmt.get_column_int64 (12);
+            obj.skypeguid = stmt.get_column_string (13);
+            obj.smsmessagedbid = stmt.get_column_int64 (14);
+            obj.version = stmt.get_column_int64 (15);
+            obj.mmsdownloadstatus = stmt.get_column_int64 (16);
+            obj.smstransportid = stmt.get_column_string (17);
+            obj.smstransportname = stmt.get_column_string (18);
+            obj.unistoreid = stmt.get_column_string (19);
+
+            // Add messages to the list
+            sms_messages_.emplace_back (std::move (obj));
         }
     }
     catch (const std::exception &e)

@@ -46,6 +46,57 @@
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Call status domain
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+const std::map<std::int64_t, std::string> CALL_STATUS_DOMAIN = {
+    {6, "Accepted"},
+    {8, "Rejected at destination"},
+    {13, "Cancelled at origin"},
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Gender domain
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+const std::map<std::int64_t, std::string> GENDER_DOMAIN = {
+    {1, "Male"}, {2, "Female"}
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief SMS status domain
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+const std::map<std::int64_t, std::string> SMS_STATUS_DOMAIN = {
+    {1, "Draft"},  {2, "Outbox"},   {3, "Sent"},
+    {4, "Failed"}, {5, "Received"}, {6, "Deleted"},
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Transfer status domain
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+const std::map<std::int64_t, std::string> TRANSFER_STATUS_DOMAIN = {
+    {0, "Not initiated"}, {7, "Cancelled"}, {8, "Completed"}, {9, "Error"}
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get domain value
+// @param domain Domain map
+// @param code Code to lookup
+// @return Domain value string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+get_domain_value (
+    const std::map<std::int64_t, std::string> &domain, std::int64_t code
+)
+{
+    auto it = domain.find (code);
+
+    if (it != domain.end ())
+        return it->second;
+
+    else
+        return std::format ("Unknown ({})", code);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Convert duration to string
 // @param duration Duration in seconds
 // @return Duration string in format HH:MM:SS
@@ -82,50 +133,6 @@ get_skype_user_name (
         text = skype_name;
 
     return text;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get gender from code
-// @param code Gender code
-// @return Gender string
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-get_gender (std::int64_t code)
-{
-    if (code == 1)
-        return "Male";
-
-    else if (code == 2)
-        return "Female";
-
-    else
-        return std::format ("Unknown ({})", code);
-}
-
-//  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get transfer status from code
-// @param code Status code
-// @return Status string
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-get_transfer_status (std::int64_t code)
-{
-    static const std::map<std::int64_t, std::string> status_map = {
-        {0, "Not initiated"},
-        {7, "Cancelled"},
-        {8, "Completed"},
-        {9, "Error"}
-    };
-
-    std::string status;
-    auto it = status_map.find (code);
-
-    if (it != status_map.end ())
-        status = it->second;
-    else
-        status = "Unknown";
-
-    return std::format ("{} ({})", code, status);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -222,15 +229,23 @@ class profile::impl
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get account MRI
+    // @return Account MRI
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_account_mri () const
+    {
+        return account_mri_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get account ID
     // @return Account ID
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::string
     get_account_id () const
     {
-        if (accounts_.empty ())
-            return {};
-        return accounts_.front ().id;
+        return account_id_;
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -240,9 +255,7 @@ class profile::impl
     std::string
     get_account_name () const
     {
-        if (accounts_.empty ())
-            return {};
-        return accounts_.front ().name;
+        return account_name_;
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -346,6 +359,26 @@ class profile::impl
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get SMS messages
+    // @return Vector of SMS messages
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<sms>
+    get_sms_messages () const
+    {
+        return sms_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of SMS messages
+    // @return Number of SMS messages
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    size_sms_messages () const
+    {
+        return sms_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get voicemails
     // @return Vector of voicemails
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -388,6 +421,15 @@ class profile::impl
     // @brief Last modified time
     mobius::core::datetime::datetime last_modified_time_;
 
+    // @brief Account MRI
+    std::string account_mri_;
+
+    // @brief Account ID
+    std::string account_id_;
+
+    // @brief Account name
+    std::string account_name_;
+
     // @brief Accounts
     std::vector<account> accounts_;
 
@@ -402,6 +444,9 @@ class profile::impl
 
     // @brief Remote party IP addresses
     std::vector<remote_party_ip_address> remote_party_ip_addresses_;
+
+    // @brief SMS
+    std::vector<sms> sms_;
 
     // @brief Voicemails
     std::vector<voicemail> voicemails_;
@@ -426,6 +471,9 @@ class profile::impl
     void _load_main_db_file_transfers (
         const file_main_db &, const mobius::core::io::file &
     );
+    void _load_main_db_sms_messages (
+        const file_main_db &, const mobius::core::io::file &
+    );
     void _load_main_db_voicemails (
         const file_main_db &, const mobius::core::io::file &
     );
@@ -433,7 +481,13 @@ class profile::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // skype.db file helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void _load_skype_db_account (
+        const file_skype_db &, const mobius::core::io::file &
+    );
     void _load_skype_db_contacts (
+        const file_skype_db &, const mobius::core::io::file &
+    );
+    void _load_skype_db_sms_messages (
         const file_skype_db &, const mobius::core::io::file &
     );
 
@@ -533,6 +587,7 @@ profile::impl::add_main_db_file (const mobius::core::io::file &f)
         _load_main_db_calls (fm, f);
         _load_main_db_contacts (fm, f);
         _load_main_db_file_transfers (fm, f);
+        _load_main_db_sms_messages (fm, f);
         _load_main_db_voicemails (fm, f);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -609,10 +664,12 @@ profile::impl::_load_main_db_accounts (
             a.metadata.set ("country", acc.country);
             a.metadata.set ("displayname", acc.displayname);
             a.metadata.set ("fullname", acc.fullname);
-            a.metadata.set ("gender", get_gender (acc.gender));
+            a.metadata.set (
+                "gender", get_domain_value (GENDER_DOMAIN, acc.gender)
+            );
             a.metadata.set ("given_displayname", acc.given_displayname);
             a.metadata.set ("homepage", acc.homepage);
-            a.metadata.set ("ipcountry", acc.ipcountry);
+            a.metadata.set ("ip_country", acc.ipcountry);
             a.metadata.set ("languages", acc.languages);
             a.metadata.set ("mood_text", acc.mood_text);
             a.metadata.set ("phone_home", acc.phone_home);
@@ -631,6 +688,9 @@ profile::impl::_load_main_db_accounts (
             a.f = f;
 
             accounts_.push_back (a);
+
+            account_id_ = acc.skypename;
+            account_name_ = acc.fullname;
         }
     }
     catch (const std::exception &e)
@@ -762,7 +822,9 @@ profile::impl::_load_main_db_calls (
             c.metadata.set ("server_identity", cl.server_identity);
             c.metadata.set ("soundlevel", cl.soundlevel);
             c.metadata.set ("start_timestamp", cl.start_timestamp);
-            c.metadata.set ("status", cl.status);
+            c.metadata.set (
+                "status", get_domain_value (CALL_STATUS_DOMAIN, cl.status)
+            );
             c.metadata.set ("technology", cl.technology);
             c.metadata.set ("tenant_id", cl.tenant_id);
             c.metadata.set ("topic", cl.topic);
@@ -828,9 +890,13 @@ profile::impl::_load_main_db_contacts (
         {
             contact c;
             c.id = ct.skypename;
-            c.name = ct.fullname;
-            c.gender = get_gender (ct.gender);
+            c.gender = get_domain_value (GENDER_DOMAIN, ct.gender);
             c.birthday = ct.birthday;
+
+            // Get names
+            c.name = ct.fullname;
+            if (c.name.empty ())
+                c.name = ct.displayname;
 
             // Get phones
             std::set<std::string> phones;
@@ -918,14 +984,9 @@ profile::impl::_load_main_db_contacts (
             c.metadata.set ("external_system_id", ct.external_system_id);
             c.metadata.set ("extprop_external_data", ct.extprop_external_data);
             c.metadata.set (
-                "extprop_must_hide_avatar", ct.extprop_must_hide_avatar
-            );
-            c.metadata.set ("extprop_seen_birthday", ct.extprop_seen_birthday);
-            c.metadata.set (
                 "extprop_sms_pstn_contact_created",
                 ct.extprop_sms_pstn_contact_created
             );
-            c.metadata.set ("extprop_sms_target", ct.extprop_sms_target);
             c.metadata.set ("firstname", ct.firstname);
             c.metadata.set ("fullname", ct.fullname);
             c.metadata.set ("given_displayname", ct.given_displayname);
@@ -934,13 +995,13 @@ profile::impl::_load_main_db_contacts (
             c.metadata.set ("homepage", ct.homepage);
             c.metadata.set ("id", ct.id);
             c.metadata.set ("in_shared_group", ct.in_shared_group);
-            c.metadata.set ("ipcountry", ct.ipcountry);
+            c.metadata.set ("ip_country", ct.ipcountry);
             c.metadata.set ("is_auto_buddy", ct.is_auto_buddy);
             c.metadata.set ("is_mobile", ct.is_mobile);
             c.metadata.set ("is_permanent", ct.is_permanent);
             c.metadata.set ("is_trusted", ct.is_trusted);
-            c.metadata.set ("isauthorized", ct.isauthorized);
-            c.metadata.set ("isblocked", ct.isblocked);
+            c.metadata.set ("is_authorized", ct.isauthorized);
+            c.metadata.set ("is_blocked", ct.isblocked);
             c.metadata.set ("languages", ct.languages);
             c.metadata.set ("last_used_networktime", ct.last_used_networktime);
             c.metadata.set ("lastname", ct.lastname);
@@ -954,7 +1015,7 @@ profile::impl::_load_main_db_contacts (
             c.metadata.set ("node_capabilities", ct.node_capabilities);
             c.metadata.set ("node_capabilities_and", ct.node_capabilities_and);
             c.metadata.set ("nr_of_buddies", ct.nr_of_buddies);
-            c.metadata.set ("nrof_authed_buddies", ct.nrof_authed_buddies);
+            c.metadata.set ("nr_of_authed_buddies", ct.nrof_authed_buddies);
             c.metadata.set ("offline_authreq_id", ct.offline_authreq_id);
             c.metadata.set ("phone_home", ct.phone_home);
             c.metadata.set ("phone_home_normalized", ct.phone_home_normalized);
@@ -1036,18 +1097,6 @@ profile::impl::_load_main_db_file_transfers (
             ft_obj.metadata.set ("chatmsg_guid", ft.chatmsg_guid);
             ft_obj.metadata.set ("chatmsg_index", ft.chatmsg_index);
             ft_obj.metadata.set ("convo_id", ft.convo_id);
-            ft_obj.metadata.set (
-                "extprop_handled_by_chat", ft.extprop_handled_by_chat
-            );
-            ft_obj.metadata.set (
-                "extprop_hide_from_history", ft.extprop_hide_from_history
-            );
-            ft_obj.metadata.set (
-                "extprop_localfilename", ft.extprop_localfilename
-            );
-            ft_obj.metadata.set (
-                "extprop_window_visible", ft.extprop_window_visible
-            );
             ft_obj.metadata.set ("failurereason", ft.failurereason);
             ft_obj.metadata.set ("filesize", ft.filesize);
             ft_obj.metadata.set ("finishtime", ft.finishtime);
@@ -1056,21 +1105,92 @@ profile::impl::_load_main_db_file_transfers (
             ft_obj.metadata.set ("is_permanent", ft.is_permanent);
             ft_obj.metadata.set ("last_activity", ft.last_activity);
             ft_obj.metadata.set ("nodeid", ft.nodeid.to_hexstring ());
-            ft_obj.metadata.set (
-                "offer_send_list",
-                mobius::core::string::replace (ft.offer_send_list, " ", "\n")
-            );
             ft_obj.metadata.set ("old_filepath", ft.old_filepath);
             ft_obj.metadata.set ("old_status", ft.old_status);
-            ft_obj.metadata.set ("parent_id", ft.parent_id);
             ft_obj.metadata.set ("partner_dispname", ft.partner_dispname);
             ft_obj.metadata.set ("partner_handle", ft.partner_handle);
             ft_obj.metadata.set ("pk_id", ft.pk_id);
             ft_obj.metadata.set ("starttime", ft.starttime);
-            ft_obj.metadata.set ("status", get_transfer_status (ft.status));
+            ft_obj.metadata.set (
+                "status", get_domain_value (TRANSFER_STATUS_DOMAIN, ft.status)
+            );
             ft_obj.metadata.set ("type", ft.type);
 
             file_transfers_.push_back (ft_obj);
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
+        );
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load main.db SMS messages
+// @param fm Main.db file
+// @param f Original file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_load_main_db_sms_messages (
+    const file_main_db &fm, const mobius::core::io::file &f
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        for (const auto &s : fm.get_sms_messages ())
+        {
+            sms s_obj;
+            s_obj.timestamp = s.timestamp;
+            s_obj.text = s.body;
+
+            // Sender
+            if (s.type == 1)
+                s_obj.sender = s.identity;
+
+            else if (s.type == 2)
+                s_obj.sender = get_skype_user_name (
+                    get_account_id (), get_account_name ()
+                );
+
+            // Recipients
+            auto target_numbers =
+                mobius::core::string::split (s.target_numbers);
+
+            std::copy (
+                target_numbers.begin (), target_numbers.end (),
+                std::back_inserter (s_obj.recipients)
+            );
+
+            // Metadata
+            s_obj.metadata.set ("record_idx", s.idx);
+            s_obj.metadata.set ("schema_version", fm.get_schema_version ());
+            s_obj.metadata.set ("body", s.body);
+            s_obj.metadata.set ("chatmsg_id", s.chatmsg_id);
+            s_obj.metadata.set ("error_category", s.error_category);
+            s_obj.metadata.set ("event_flags", s.event_flags);
+            s_obj.metadata.set ("failurereason", s.failurereason);
+            s_obj.metadata.set ("id", s.id);
+            s_obj.metadata.set ("identity", s.identity);
+            s_obj.metadata.set ("is_failed_unseen", s.is_failed_unseen);
+            s_obj.metadata.set ("is_permanent", s.is_permanent);
+            s_obj.metadata.set ("notification_id", s.notification_id);
+            s_obj.metadata.set ("outgoing_reply_type", s.outgoing_reply_type);
+            s_obj.metadata.set ("price", s.price);
+            s_obj.metadata.set ("price_currency", s.price_currency);
+            s_obj.metadata.set ("price_precision", s.price_precision);
+            s_obj.metadata.set ("reply_id_number", s.reply_id_number);
+            s_obj.metadata.set ("reply_to_number", s.reply_to_number);
+            s_obj.metadata.set (
+                "status", get_domain_value (SMS_STATUS_DOMAIN, s.status)
+            );
+            s_obj.metadata.set ("target_numbers", s.target_numbers);
+            s_obj.metadata.set ("type", s.type);
+
+            sms_.push_back (s_obj);
         }
     }
     catch (const std::exception &e)
@@ -1107,9 +1227,6 @@ profile::impl::_load_main_db_voicemails (
             v.metadata.set ("chatmsg_guid", vm.chatmsg_guid);
             v.metadata.set ("convo_id", vm.convo_id);
             v.metadata.set ("duration", vm.duration);
-            v.metadata.set (
-                "extprop_hide_from_history", vm.extprop_hide_from_history
-            );
             v.metadata.set ("failurereason", vm.failurereason);
             v.metadata.set ("failures", vm.failures);
             v.metadata.set ("flags", vm.flags);
@@ -1170,6 +1287,7 @@ profile::impl::add_skype_db_file (const mobius::core::io::file &f)
         // Load data
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         _load_skype_db_contacts (fs, f);
+        _load_skype_db_sms_messages (fs, f);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event
@@ -1180,6 +1298,57 @@ profile::impl::add_skype_db_file (const mobius::core::io::file &f)
                 mobius::core::string::to_string (fs.get_schema_version (), 5),
             f.new_reader ()
         );
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
+        );
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load skype.db file account
+// @param fs Skype.db file
+// @param f Original file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_load_skype_db_account (
+    const file_skype_db &fs, const mobius::core::io::file &f
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        const auto &acc = fs.get_account ();
+
+        account_id_ = acc.skype_name;
+        account_name_ = acc.full_name;
+        account_mri_ = acc.mri;
+
+        account a;
+        a.id = acc.skype_name;
+        a.name = acc.full_name;
+
+        a.metadata.set ("schema_version", fs.get_schema_version ());
+        a.metadata.set ("balance_precision", acc.balance_precision);
+        a.metadata.set ("balance_currency", acc.balance_currency);
+        a.metadata.set ("mri", acc.mri);
+        a.metadata.set ("full_name", acc.full_name);
+        a.metadata.set ("first_name", acc.first_name);
+        a.metadata.set ("last_name", acc.last_name);
+        a.metadata.set ("mood", acc.mood);
+        a.metadata.set ("avatar_url", acc.avatar_url);
+        a.metadata.set ("avatar_file_path", acc.avatar_file_path);
+        a.metadata.set (
+            "conversation_last_sync_time", acc.conversation_last_sync_time
+        );
+        a.metadata.set (
+            "last_seen_inbox_timestamp", acc.last_seen_inbox_timestamp
+        );
+
+        accounts_.push_back (a);
     }
     catch (const std::exception &e)
     {
@@ -1207,11 +1376,14 @@ profile::impl::_load_skype_db_contacts (
         {
             contact c;
             //c.id = ct.skype_name;
-            c.name = ct.full_name;
-            c.gender = get_gender (ct.gender);
+            c.gender = get_domain_value (GENDER_DOMAIN, ct.gender);
             c.birthday = ct.birthday;
 
             // Get names
+            c.name = ct.full_name;
+            if (c.name.empty ())
+                c.name = ct.display_name;
+
             std::set<std::string> names;
 
             if (!ct.display_name.empty ())
@@ -1288,7 +1460,9 @@ profile::impl::_load_skype_db_contacts (
             c.metadata.set ("country", ct.country);
             c.metadata.set ("display_name", ct.display_name);
             c.metadata.set ("full_name", ct.full_name);
-            c.metadata.set ("gender", get_gender (ct.gender));
+            c.metadata.set (
+                "gender", get_domain_value (GENDER_DOMAIN, ct.gender)
+            );
             c.metadata.set ("homepage", ct.homepage);
             c.metadata.set ("is_buddy", ct.is_buddy);
             c.metadata.set ("is_favorite", ct.is_favorite);
@@ -1306,6 +1480,78 @@ profile::impl::_load_skype_db_contacts (
             c.f = f;
 
             contacts_.push_back (c);
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
+        );
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load skype.db file SMS messages
+// @param fs Skype.db file
+// @param f Original file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_load_skype_db_sms_messages (
+    const file_skype_db &fs, const mobius::core::io::file &f
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        for (const auto &s : fs.get_sms_messages ())
+        {
+            sms s_obj;
+
+            s_obj.timestamp = get_datetime (s.id / 1000);
+            s_obj.text = s.content;
+            s_obj.sender = s.author;
+
+            // Recipients
+            if (s.author == account_mri_)
+            {
+                log.development (
+                    __LINE__,
+                    "SMS message sent by account user: " +
+                        get_skype_user_name (account_id_, account_name_)
+                );
+            }
+            else
+            {
+                s_obj.recipients.push_back (
+                    get_skype_user_name (account_id_, account_name_)
+                );
+            }
+
+            // Metadata
+            s_obj.metadata.set ("record_idx", s.idx);
+            s_obj.metadata.set ("schema_version", fs.get_schema_version ());
+            s_obj.metadata.set ("author", s.author);
+            s_obj.metadata.set ("clientmessageid", s.clientmessageid);
+            s_obj.metadata.set ("content", s.content);
+            s_obj.metadata.set ("convdbid", s.convdbid);
+            s_obj.metadata.set ("dbid", s.dbid);
+            s_obj.metadata.set ("editedtime", s.editedtime);
+            s_obj.metadata.set ("id", s.id);
+            s_obj.metadata.set ("is_preview", s.is_preview);
+            s_obj.metadata.set ("json", s.json);
+            s_obj.metadata.set ("messagetype", s.messagetype);
+            s_obj.metadata.set (
+                "original_arrival_time", s.original_arrival_time
+            );
+            s_obj.metadata.set ("properties", s.properties);
+            s_obj.metadata.set ("sendingstatus", s.sendingstatus);
+            s_obj.metadata.set ("skypeguid", s.skypeguid);
+            s_obj.metadata.set ("smsmessagedbid", s.smsmessagedbid);
+            s_obj.metadata.set ("smstransportid", s.smstransportid);
+            s_obj.metadata.set ("smstransportname", s.smstransportname);
+            s_obj.metadata.set ("unistoreid", s.unistoreid);
+            sms_.push_back (s_obj);
         }
     }
     catch (const std::exception &e)
@@ -1407,7 +1653,7 @@ profile::impl::_load_s4l_db_accounts (
         a.metadata.set ("country", acc.country);
         a.metadata.set ("device_id", acc.device_id);
         a.metadata.set ("full_name", acc.full_name);
-        a.metadata.set ("gender", get_gender (acc.gender));
+        a.metadata.set ("gender", get_domain_value (GENDER_DOMAIN, acc.gender));
         a.metadata.set ("locale", acc.locale);
         a.metadata.set ("mood_text", acc.mood_text);
         a.metadata.set ("ms_account_id", acc.msa_id);
@@ -1536,7 +1782,9 @@ profile::impl::_load_s4l_db_contacts (
             c.metadata.set ("mri", ct.mri);
             c.metadata.set ("full_name", ct.full_name);
             c.metadata.set ("birthdate", ct.birthdate);
-            c.metadata.set ("gender", get_gender (ct.gender));
+            c.metadata.set (
+                "gender", get_domain_value (GENDER_DOMAIN, ct.gender)
+            );
             c.metadata.set ("country", ct.country);
             c.metadata.set ("province", ct.province);
             c.metadata.set ("city", ct.city);
@@ -1741,6 +1989,26 @@ std::size_t
 profile::size_remote_party_ip_addresses () const
 {
     return impl_->size_remote_party_ip_addresses ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get SMS messages
+// @return Vector of SMS messages
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<profile::sms>
+profile::get_sms_messages () const
+{
+    return impl_->get_sms_messages ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get number of SMS messages
+// @return Number of SMS messages
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::size_t
+profile::size_sms_messages () const
+{
+    return impl_->size_sms_messages ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

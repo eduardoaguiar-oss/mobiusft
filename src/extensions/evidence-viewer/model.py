@@ -626,55 +626,6 @@ MODEL = [
                   ]),
          ]
          ),
-    args(id="remote-party-ip-address",
-         name="Remote Party IP Addresses",
-         description="IP addresses used by remote third parties",
-         master_views=[
-             args(id="table",
-                  columns=[
-                      args(id='timestamp', name="Date/Time (UTC)", format='datetime', first_sortable=True),
-                      args(id='ip', name="IP Address", is_sortable=True),
-                      args(id='app_name', name="Application", is_sortable=True),
-                      args(id='user_id', name="User ID", is_sortable=True),
-                  ]),
-         ],
-         detail_views=[
-             args(id="metadata",
-                  rows=[
-                      args(id='timestamp', name="Date/Time (UTC)", format='datetime'),
-                      args(id='ip', name="IP Address"),
-                      args(id='app_name', name="Application"),
-                      args(id='user_id', name="User ID"),
-                  ]),
-         ]
-         ),
-    args(id="p2p-remote-file",
-         name="Remote Party Shared Files",
-         description="Files shared by remote third parties",
-         master_views=[
-             args(id="table",
-                  columns=[
-                      args(id='timestamp', name="Date/Time (UTC)", format='datetime', first_sortable=True),
-                      args(id='ip', name="IP Address"),
-                      args(id='port', name="Port number", type="int"),
-                      args(id='filename', name="File name", is_sortable=True),
-                      args(id='username', name="User account", is_sortable=True),
-                  ]),
-         ],
-         detail_views=[
-             args(id="metadata",
-                  rows=[
-                      args(id='timestamp', name="Date/Time (UTC)", format='datetime'),
-                      args(id='ip', name="IP Address"),
-                      args(id='port', name="Port number"),
-                      args(id='username', name="User account"),
-                      args(id='app_name', name="Application"),
-                      args(id='filename', name="File name"),
-                  ]),
-             args(id="hashes"
-                  ),
-         ]
-         ),
     args(id="password-hash",
          name="Password Hashes",
          description="Password hashes, such as NTLM and LM",
@@ -742,6 +693,55 @@ MODEL = [
                       args(id='app_name', name="Application"),
                       args(id='filename', name="File name"),
                       args(id='path'),
+                  ]),
+             args(id="hashes"
+                  ),
+         ]
+         ),
+    args(id="remote-party-ip-address",
+         name="Remote Party IP Addresses",
+         description="IP addresses used by remote third parties",
+         master_views=[
+             args(id="table",
+                  columns=[
+                      args(id='timestamp', name="Date/Time (UTC)", format='datetime', first_sortable=True),
+                      args(id='ip', name="IP Address", is_sortable=True),
+                      args(id='app_name', name="Application", is_sortable=True),
+                      args(id='user_id', name="User ID", is_sortable=True),
+                  ]),
+         ],
+         detail_views=[
+             args(id="metadata",
+                  rows=[
+                      args(id='timestamp', name="Date/Time (UTC)", format='datetime'),
+                      args(id='ip', name="IP Address"),
+                      args(id='app_name', name="Application"),
+                      args(id='user_id', name="User ID"),
+                  ]),
+         ]
+         ),
+    args(id="p2p-remote-file",
+         name="Remote Party Shared Files",
+         description="Files shared by remote third parties",
+         master_views=[
+             args(id="table",
+                  columns=[
+                      args(id='timestamp', name="Date/Time (UTC)", format='datetime', first_sortable=True),
+                      args(id='ip', name="IP Address"),
+                      args(id='port', name="Port number", type="int"),
+                      args(id='filename', name="File name", is_sortable=True),
+                      args(id='username', name="User account", is_sortable=True),
+                  ]),
+         ],
+         detail_views=[
+             args(id="metadata",
+                  rows=[
+                      args(id='timestamp', name="Date/Time (UTC)", format='datetime'),
+                      args(id='ip', name="IP Address"),
+                      args(id='port', name="Port number"),
+                      args(id='username', name="User account"),
+                      args(id='app_name', name="Application"),
+                      args(id='filename', name="File name"),
                   ]),
              args(id="hashes"
                   ),

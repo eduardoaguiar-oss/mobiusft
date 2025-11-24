@@ -74,7 +74,7 @@ class GIL
 // @brief GIL auto acquire/release class
 // @author Eduardo Aguiar
 //
-// Use: auto v = mobius::py::GILHolder ()
+// Use: auto v = mobius::py::GIL_guard ()
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class GIL_guard
 {
@@ -89,10 +89,12 @@ class GIL_guard
     // @brief Default constructor
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     GIL_guard () noexcept
-        : acquired_ (!PyGILState_Check ())
     {
-        if (acquired_)
+        if (!PyGILState_Check ())
+        {
             state_ = PyGILState_Ensure ();
+            acquired_ = true;
+        }
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -92,6 +92,7 @@ class vfs_processor_impl::impl
     void _save_received_files ();
     void _save_remote_party_ip_addresses ();
     void _save_sent_files ();
+    void _save_sms_messages ();
     void _save_user_accounts ();
     void _save_voicemails ();
 };
@@ -134,6 +135,7 @@ vfs_processor_impl::impl::on_complete ()
     _save_received_files ();
     _save_remote_party_ip_addresses ();
     _save_sent_files ();
+    _save_sms_messages ();
     _save_user_accounts ();
     _save_voicemails ();
 
@@ -269,6 +271,7 @@ vfs_processor_impl::impl::_save_app_profiles ()
         metadata.set (
             "num_remote_party_ip_addresses", p.size_remote_party_ip_addresses ()
         );
+        metadata.set ("num_sms_messages", p.size_sms_messages ());
         metadata.set ("num_voicemails", p.size_voicemails ());
 
         e.set_attribute ("metadata", metadata);
@@ -465,6 +468,39 @@ vfs_processor_impl::impl::_save_sent_files ()
                 e.set_tag ("app.chat");
                 e.add_source (ft.f);
             }
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save SMS messages
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::impl::_save_sms_messages ()
+{
+    for (const auto &p : profiles_)
+    {
+        for (const auto &s : p.get_sms_messages ())
+        {
+            auto e = item_.new_evidence ("sms-message");
+            e.set_attribute ("timestamp", s.timestamp);
+            e.set_attribute ("sender", s.sender);
+            e.set_attribute ("recipients", s.recipients);
+            e.set_attribute ("text", s.text);
+            e.set_attribute ("app_id", APP_ID);
+            e.set_attribute ("app_name", APP_NAME);
+            e.set_attribute ("username", p.get_username ());
+
+            // Set metadata
+            auto metadata = mobius::core::pod::map ();
+            metadata.set ("skype_id", p.get_account_id ());
+            metadata.set ("skype_name", p.get_account_name ());
+            metadata.update (s.metadata);
+            e.set_attribute ("metadata", metadata);
+
+            // Tags and sources
+            e.set_tag ("app.chat");
+            e.add_source (s.f);
         }
     }
 }

@@ -359,10 +359,7 @@ show_main_db_info (const std::string &path)
         std::cout << "   External Id: " << ct.external_id << std::endl;
         std::cout << "   External System Id: " << ct.external_system_id << std::endl;
         std::cout << "   Extprop External Data: " << ct.extprop_external_data << std::endl;
-        std::cout << "   Extprop Must Hide Avatar: " << ct.extprop_must_hide_avatar << std::endl;
-        std::cout << "   Extprop Seen Birthday: " << ct.extprop_seen_birthday << std::endl;
         std::cout << "   Extprop SMS PSTN Contact Created: " << ct.extprop_sms_pstn_contact_created << std::endl;
-        std::cout << "   Extprop SMS Target: " << ct.extprop_sms_target << std::endl;
         std::cout << "   Firstname: " << ct.firstname << std::endl;
         std::cout << "   Fullname: " << ct.fullname << std::endl;
         std::cout << "   Gender: " << ct.gender << std::endl;
@@ -443,10 +440,6 @@ show_main_db_info (const std::string &path)
         std::cout << "   Chatmsg Guid: " << ft.chatmsg_guid << std::endl;
         std::cout << "   Chatmsg Index: " << ft.chatmsg_index << std::endl;
         std::cout << "   Convo Id: " << ft.convo_id << std::endl;
-        std::cout << "   Extprop Handled By Chat: " << ft.extprop_handled_by_chat << std::endl;
-        std::cout << "   Extprop Hide From History: " << ft.extprop_hide_from_history << std::endl;
-        std::cout << "   Extprop Localfilename: " << ft.extprop_localfilename << std::endl;
-        std::cout << "   Extprop Window Visible: " << ft.extprop_window_visible << std::endl;
         std::cout << "   Failurereason: " << ft.failurereason << std::endl;
         std::cout << "   Filename: " << ft.filename << std::endl;
         std::cout << "   Filepath: " << ft.filepath << std::endl;
@@ -467,6 +460,40 @@ show_main_db_info (const std::string &path)
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Show SMS messages
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::cout << std::endl;
+    std::cout << "SMS:" << std::endl;
+
+    for (const auto &sms : dat.get_sms_messages ())
+    {
+        std::cout << std::endl;
+        std::cout << "   Record Index: " << sms.idx << std::endl;
+        std::cout << "   Body: " << sms.body << std::endl;
+        std::cout << "   Chatmsg Id: " << sms.chatmsg_id << std::endl;
+        std::cout << "   Convo Name: " << sms.convo_name << std::endl;
+        std::cout << "   Error Category: " << sms.error_category << std::endl;
+        std::cout << "   Event Flags: " << sms.event_flags << std::endl;
+        std::cout << "   Failurereason: " << sms.failurereason << std::endl;
+        std::cout << "   Id: " << sms.id << std::endl;
+        std::cout << "   Identity: " << sms.identity << std::endl;
+        std::cout << "   Is Failed Unseen: " << sms.is_failed_unseen << std::endl;
+        std::cout << "   Is Permanent: " << sms.is_permanent << std::endl;
+        std::cout << "   Notification Id: " << sms.notification_id << std::endl;
+        std::cout << "   Outgoing Reply Type: " << sms.outgoing_reply_type << std::endl;
+        std::cout << "   Price: " << sms.price << std::endl;
+        std::cout << "   Price Currency: " << sms.price_currency << std::endl;
+        std::cout << "   Price Precision: " << sms.price_precision << std::endl;
+        std::cout << "   Reply Id Number: " << sms.reply_id_number << std::endl;
+        std::cout << "   Reply To Number: " << sms.reply_to_number << std::endl;
+        std::cout << "   Status: " << sms.status << std::endl;
+        std::cout << "   Target Numbers: " << sms.target_numbers << std::endl;
+        std::cout << "   Target Statuses:\n" << sms.target_statuses.dump (8) << std::endl;
+        std::cout << "   Timestamp: " << sms.timestamp << std::endl;
+        std::cout << "   Type: " << sms.type << std::endl;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Show voicemails
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::cout << std::endl;
@@ -480,7 +507,6 @@ show_main_db_info (const std::string &path)
         std::cout << "   Chatmsg Guid: " << vm.chatmsg_guid << std::endl;
         std::cout << "   Convo Id: " << vm.convo_id << std::endl;
         std::cout << "   Duration: " << vm.duration << std::endl;
-        std::cout << "   Extprop Hide From History: " << vm.extprop_hide_from_history << std::endl;
         std::cout << "   Failurereason: " << vm.failurereason << std::endl;
         std::cout << "   Failures: " << vm.failures << std::endl;
         std::cout << "   Flags: " << vm.flags << std::endl;

@@ -64,6 +64,26 @@ show_skype_db_info (const std::string &path)
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Show account info
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto acc = dat.get_account ();
+
+    std::cout << std::endl;
+    std::cout << "Account Info:" << std::endl;
+    std::cout << "   MRI: " << acc.mri <<  std::endl;
+    std::cout << "   Skype Name: " << acc.skype_name <<  std::endl;
+    std::cout << "   Balance Precision: " << acc.balance_precision <<  std::endl;
+    std::cout << "   Balance Currency: " << acc.balance_currency <<  std::endl;
+    std::cout << "   Full Name: " << acc.full_name <<  std::endl;
+    std::cout << "   First Name: " << acc.first_name <<  std::endl;
+    std::cout << "   Last Name: " << acc.last_name <<  std::endl;
+    std::cout << "   Mood: " << acc.mood <<  std::endl;
+    std::cout << "   Avatar URL: " << acc.avatar_url <<  std::endl;
+    std::cout << "   Avatar File Path: " << acc.avatar_file_path <<  std::endl;
+    std::cout << "   Conversation Last Sync Time: " << acc.conversation_last_sync_time <<  std::endl;
+    std::cout << "   Last Seen Inbox Timestamp: " << acc.last_seen_inbox_timestamp <<  std::endl;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Show contacts
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::cout << std::endl;
@@ -106,6 +126,38 @@ show_skype_db_info (const std::string &path)
         std::cout << "   Recommendation Rank: " << ct.recommendation_rank << std::endl;
         std::cout << "   Unistore Version: " << ct.unistore_version << std::endl;
         std::cout << "   Update Version: " << ct.update_version << std::endl;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Show SMS messages
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::cout << std::endl;
+    std::cout << "SMS Messages:" << std::endl;
+    
+    for (const auto &sm : dat.get_sms_messages ())
+    {
+        std::cout << std::endl;
+        std::cout << "   Record Index: " << sm.idx << std::endl;
+        std::cout << "   Author: " << sm.author << std::endl;
+        std::cout << "   Clientmessageid: " << sm.clientmessageid << std::endl;
+        std::cout << "   Content: " << sm.content << std::endl;
+        std::cout << "   Convdbid: " << sm.convdbid << std::endl;
+        std::cout << "   Dbid: " <<  sm.dbid << std::endl;
+        std::cout << "   Editedtime: " << sm.editedtime << std::endl;
+        std::cout << "   Id: " << sm.id << std::endl;
+        std::cout << "   Is Preview: " << sm.is_preview << std::endl;
+        std::cout << "   Json: " << sm.json << std::endl;
+        std::cout << "   Messagetype: " << sm.messagetype << std::endl;
+        std::cout << "   Originalarrivaltime: " << sm.original_arrival_time << std::endl;
+        std::cout << "   Properties: " << sm.properties << std::endl;
+        std::cout << "   Sendingstatus: " << sm.sendingstatus << std::endl;
+        std::cout << "   Skypeguid: " << sm.skypeguid << std::endl;
+        std::cout << "   Smsmessagedbid: " << sm.smsmessagedbid << std::endl;
+        std::cout << "   Version: " << sm.version << std::endl;
+        std::cout << "   Mmsdownloadstatus: " << sm.mmsdownloadstatus << std::endl;
+        std::cout << "   Smstransportid: " << sm.smstransportid << std::endl;
+        std::cout << "   Smstransportname: " << sm.smstransportname << std::endl;
+        std::cout << "   Unistoreid: " << sm.unistoreid << std::endl;
     }
 }
 
