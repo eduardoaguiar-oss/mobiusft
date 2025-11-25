@@ -232,15 +232,15 @@ def getter_cookie_value(obj, attr_id):
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def getter_encrypted_value(obj, attr_id):
     value = getattr(obj, attr_id, None)
-    encrypted_value = getattr(obj, f"{attr_id}_encrypted", None)
-    
-    if value:
-        return formatter_bin2text(value)
+    encrypted_value = getattr(obj, f"encrypted_{attr_id}", None)
     
     if encrypted_value:
         return '<ENCRYPTED>'
 
-    return '??'    
+    if value:
+        return formatter_bin2text(value)
+
+    return ''
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Getters
@@ -330,14 +330,14 @@ MODEL = [
                       args(id='username', is_sortable=True, first_sortable=True),
                       args(id='app_name', name="Application", is_sortable=True),
                       args(id='field_name', name="Field Name", is_sortable=True),
-                      args(id="value", is_sortable=True),
+                      args(id="value", format='encrypted', is_sortable=True),
                   ]),
          ],
          detail_views=[
              args(id="metadata",
                   rows=[
                       args(id='field_name', name="Field Name"),
-                      args(id='value'),
+                      args(id='value', format='encrypted'),
                       args(id='username')
                   ]),
          ]
@@ -458,14 +458,14 @@ MODEL = [
                       args(id="app_name", name="Application", is_sortable=True),
                       args(id='domain', is_sortable=True),
                       args(id='name', is_sortable=True),
-                      args(id='value', format="cookie_value", is_sortable=True),
+                      args(id='value', format='encrypted', is_sortable=True),
                   ]),
          ],
          detail_views=[
              args(id="metadata",
                   rows=[
                       args(id='name'),
-                      args(id='value', format="cookie_value"),
+                      args(id='value', format="encrypted"),
                       args(id='domain'),
                       args(id='creation_time', name="Creation date/time (UTC)", format='datetime'),
                       args(id='last_access_time', name="Last access date/time (UTC)", format='datetime'),

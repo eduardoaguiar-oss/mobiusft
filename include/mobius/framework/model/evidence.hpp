@@ -22,8 +22,8 @@
 #include <mobius/core/pod/data.hpp>
 #include <mobius/framework/model/item.hpp>
 #include <cstdint>
-#include <map>
 #include <memory>
+#include <map>
 #include <set>
 #include <string>
 
@@ -35,100 +35,100 @@ namespace mobius::framework::model
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class evidence
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Datatypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  enum class source_type { none, file, evidence, folder };
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Datatypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    enum class source_type
+    {
+        none,
+        file,
+        evidence,
+        folder
+    };
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Evidence source class
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  struct source
-  {
-    source_type type;
-    std::uint64_t source_uid;
-    std::string description;
-  };
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Evidence source class
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct source
+    {
+        source_type type;
+        std::uint64_t source_uid;
+        std::string description;
+    };
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  evidence (item, std::int64_t, const std::string&);
-  evidence () noexcept = default;
-  evidence (evidence&&) noexcept = default;
-  evidence (const evidence&) noexcept = default;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    evidence (item, std::int64_t, const std::string &);
+    evidence () noexcept = default;
+    evidence (evidence &&) noexcept = default;
+    evidence (const evidence &) noexcept = default;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Operators
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  evidence& operator= (const evidence&) noexcept = default;
-  evidence& operator= (evidence&&) noexcept = default;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    evidence &operator= (const evidence &) noexcept = default;
+    evidence &operator= (evidence &&) noexcept = default;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Function prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  item get_item () const;
-  std::int64_t get_uid () const;
-  std::string get_type () const;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Function prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    item get_item () const;
+    std::int64_t get_uid () const;
+    std::string get_type () const;
 
-  bool has_attribute (const std::string&) const;
-  mobius::core::pod::data get_attribute (const std::string&) const;
-  void set_attribute (const std::string&, const mobius::core::pod::data&);
-  void set_attributes (const std::map <std::string, mobius::core::pod::data>&);
-  void remove_attribute (const std::string&);
-  std::map <std::string, mobius::core::pod::data> get_attributes () const;
+    bool has_attribute (const std::string &) const;
+    mobius::core::pod::data get_attribute (const std::string &) const;
+    void set_attribute (const std::string &, const mobius::core::pod::data &);
+    void
+    set_attributes (const std::map<std::string, mobius::core::pod::data> &);
+    void remove_attribute (const std::string &);
+    std::map<std::string, mobius::core::pod::data> get_attributes () const;
 
-  bool has_tag (const std::string&) const;
-  void set_tag (const std::string&);
-  void set_tags (const std::set <std::string>&);
-  void reset_tag (const std::string&);
-  std::set <std::string> get_tags () const;
+    bool has_tag (const std::string &) const;
+    void set_tag (const std::string &);
+    void set_tags (const std::set<std::string> &);
+    void reset_tag (const std::string &);
+    std::set<std::string> get_tags () const;
 
-  void add_source (const mobius::core::io::file&);
-  void add_source (const mobius::core::io::folder&);
-  void add_source (const evidence&);
-  std::vector <evidence::source> get_sources () const;
+    void add_source (const mobius::core::io::file &);
+    void add_source (const mobius::core::io::folder &);
+    void add_source (const evidence &);
+    std::vector<evidence::source> get_sources () const;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get attribute
-  // @param ID Attribute ID
-  // @return Attribute value
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  template <typename T> T get_attribute (const std::string& id) const
-  {
-    return static_cast <T> (get_attribute (id));
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get attribute
+    // @param id Attribute ID
+    // @param value Default value
+    // @return Attribute value
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    template <typename T>
+    T
+    get_attribute (const std::string &id, const T &value = T {}) const
+    {
+        if (has_attribute (id))
+            return static_cast<T> (get_attribute (id));
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get attribute
-  // @param id Attribute ID
-  // @param value Default value
-  // @return Attribute value
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  template <typename T> T get_attribute (const std::string& id, const T& value) const
-  {
-    if (has_attribute (id))
-      return get_attribute <T> (id);
+        return value;
+    }
 
-    return value;
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if object is valid
+    // @return true/false
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    explicit
+    operator bool () const noexcept
+    {
+        return bool (impl_);
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Check if object is valid
-  // @return true/false
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit operator bool () const noexcept
-  {
-    return bool (impl_);
-  }
+  private:
+    // @brief Implementation class forward declaration
+    class impl;
 
-private:
-  // @brief Implementation class forward declaration
-  class impl;
-
-  // @brief Implementation pointer
-  std::shared_ptr <impl> impl_;
+    // @brief Implementation pointer
+    std::shared_ptr<impl> impl_;
 };
 
 } // namespace mobius::framework::model

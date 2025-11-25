@@ -26,6 +26,7 @@
 #include <mobius/core/string_functions.hpp>
 #include <limits>
 #include <unordered_set>
+#include <set>
 #include "common.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -479,6 +480,28 @@ file_s4l_db::_load_contacts (mobius::core::database::database &db)
     try
     {
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Load phone numbers from profilecachev8_phoneNumbersIndex table
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        std::unordered_multimap<std::string, std::string> phone_numbers_index;
+
+        // Prepare SQL statement for table profilecachev8_phoneNumbersIndex
+        auto phone_stmt = db.new_statement (
+            "SELECT nsp_key,"
+            "nsp_refpk "
+            "FROM profilecachev8_phoneNumbersIndex"
+        );
+
+        while (phone_stmt.fetch_row ())
+        {
+            // Remote leading 'C' from phone number
+            std::string phone_number =
+                phone_stmt.get_column_string (0).substr (1);
+            std::string skype_name = phone_stmt.get_column_string (1);
+
+            phone_numbers_index.emplace (skype_name, phone_number);
+        }
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Load contacts data from profilecachev8 table
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         auto stmt = db.new_statement ("SELECT nsp_data FROM profilecachev8");
@@ -513,18 +536,35 @@ file_s4l_db::_load_contacts (mobius::core::database::database &db)
             if (emails.is_list ())
                 c.emails = emails.to_list<std::string> ();
 
+            // Get phone numbers
+            std::set<std::string> phone_numbers_set;
             auto phone_numbers = nsp_data.get ("phones");
             if (phone_numbers.is_list ())
             {
                 for (const auto &p_data :
                      phone_numbers.to_list<mobius::core::pod::map> ())
-                    c.phone_numbers.push_back (
+                    phone_numbers_set.insert (
                         mobius::core::string::strip (
                             p_data.get<std::string> ("number")
                         )
                     );
             }
 
+            // Add phone numbers from index table
+            auto range = phone_numbers_index.equal_range (c.skype_name);
+            std::transform (
+                range.first, range.second,
+                std::inserter (phone_numbers_set, phone_numbers_set.end ()),
+                [] (const auto &pair) { return pair.second; }
+            );
+
+            // Copy unique phone numbers to contact
+            std::copy (
+                phone_numbers_set.begin (), phone_numbers_set.end (),
+                std::back_inserter (c.phone_numbers)
+            );
+
+            // Add contact to map
             contacts_.emplace (c.skype_name, c);
         }
     }

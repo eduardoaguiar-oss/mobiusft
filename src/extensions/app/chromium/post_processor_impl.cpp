@@ -127,23 +127,17 @@ post_processor_impl::_process_cookie (
 )
 {
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Get cookie attributes
+    // Get cookie attributes. If cookie is not encrypted, do nothing
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto value = evidence.get_attribute<mobius::core::bytearray> ("value", {});
+    auto value = evidence.get_attribute<mobius::core::bytearray> ("value");
     auto encrypted_value =
-        evidence.get_attribute<mobius::core::bytearray> ("value_encrypted", {});
-    auto is_encrypted =
-        evidence.get_attribute<bool> ("value_is_encrypted", false);
+        evidence.get_attribute<mobius::core::bytearray> ("encrypted_value");
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // If cookie is not encrypted, or encrypted value is not available,
-    // nothing to do
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    if (!is_encrypted || !encrypted_value)
+    if (!encrypted_value)
         return;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Attempt to decrypt the cookie value
+    // Attempt to decrypt cookie value
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     auto [rc, decrypted_value] = _decrypt_data (encrypted_value);
 
@@ -154,7 +148,7 @@ post_processor_impl::_process_cookie (
             decrypted_value = left_prune (decrypted_value, 32);
 
         evidence.set_attribute ("value", decrypted_value);
-        evidence.set_attribute ("value_is_encrypted", false);
+        evidence.remove_attribute ("encrypted_value");
 
         // @todo notify coordinator
     }
@@ -277,6 +271,7 @@ post_processor_impl::_process_generic_evidence (
     // Process evidence
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     auto type = evidence.get_type ();
+
     auto iter = ATTRIBUTES.find (type);
 
     if (iter == ATTRIBUTES.end ())
@@ -287,25 +282,18 @@ post_processor_impl::_process_generic_evidence (
 
     for (const auto &name : iter->second)
     {
-        auto is_encrypted_value =
-            evidence.get_attribute<bool> (name + "_is_encrypted", false);
+        auto encrypted_name = "encrypted_" + name;
+        auto encrypted_value =
+            evidence.get_attribute<mobius::core::bytearray> (encrypted_name);
 
-        if (is_encrypted_value)
+        if (encrypted_value)
         {
-            auto value =
-                evidence.get_attribute<mobius::core::bytearray> (name, {});
-
-            auto encrypted_value =
-                evidence.get_attribute<mobius::core::bytearray> (
-                    name + "_encrypted", {}
-                );
-
             auto [rc, decrypted_value] = _decrypt_data (encrypted_value);
 
             if (rc)
             {
                 evidence.set_attribute (name, decrypted_value);
-                evidence.set_attribute (name + "_is_encrypted", false);
+                evidence.remove_attribute (encrypted_name);
                 is_modified = true;
             }
             else

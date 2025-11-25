@@ -408,17 +408,13 @@ vfs_processor_impl::_save_cookies ()
             e.set_attribute ("username", p.get_username ());
             e.set_attribute ("name", c.name);
             e.set_attribute ("value", c.value);
-            e.set_attribute ("value_encrypted", c.encrypted_value);
-            e.set_attribute (
-                "value_is_encrypted", !c.value && c.encrypted_value
-            );
+            e.set_attribute ("encrypted_value", c.encrypted_value);
             e.set_attribute ("domain", c.host_key);
             e.set_attribute ("creation_time", c.creation_utc);
             e.set_attribute ("last_access_time", c.last_access_utc);
             e.set_attribute ("last_update_time", c.last_update_utc);
             e.set_attribute ("expiration_time", c.expires_utc);
             e.set_attribute ("is_deleted", c.f.is_deleted ());
-            e.set_attribute ("is_encrypted", !c.value && c.encrypted_value);
 
             auto metadata = mobius::core::pod::map ();
             metadata.set ("record_idx", c.idx);
@@ -557,8 +553,7 @@ vfs_processor_impl::_save_passwords ()
             auto e = item_.new_evidence ("password");
             e.set_attribute ("password_type", "net.http/" + domain);
             e.set_attribute ("value", mobius::core::bytearray {});
-            e.set_attribute ("value_encrypted", login.password_value);
-            e.set_attribute ("value_is_encrypted", true);
+            e.set_attribute ("encrypted_value", login.password_value);
             e.set_attribute (
                 "description", "Web password. URL: " + login.origin_url
             );
@@ -873,8 +868,7 @@ vfs_processor_impl::_save_user_accounts ()
             e.set_attribute ("account_type", "net.http/" + domain);
             e.set_attribute ("id", login.username_value);
             e.set_attribute ("password", mobius::core::bytearray {});
-            e.set_attribute ("password_encrypted", login.password_value);
-            e.set_attribute ("password_is_encrypted", true);
+            e.set_attribute ("encrypted_password", login.password_value);
             e.set_attribute ("password_found", true);
             e.set_attribute ("is_deleted", login.f.is_deleted ());
             e.set_attribute ("app_family", APP_FAMILY);

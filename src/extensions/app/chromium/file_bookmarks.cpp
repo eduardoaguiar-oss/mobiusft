@@ -71,7 +71,19 @@ file_bookmarks::file_bookmarks (const mobius::core::io::reader &reader)
         }
 
         for (const auto &item : root_data.to_map ())
-            _load_entry (item.second.to_map ());
+        {
+            if (item.second.is_map ())
+                _load_entry (item.second.to_map ());
+
+            else
+                log.development (
+                    __LINE__, "Invalid root entry: " + item.first +
+                                  " - type: " +
+                                  std::to_string (
+                                      static_cast<int> (item.second.get_type ())
+                                  )
+                );
+        }
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Finish parsing
