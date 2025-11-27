@@ -1,3 +1,5 @@
+Mobius Forensic Toolkit 2.22
+
 Mobius Forensic Toolkit 2.21
 	* Added new C++ extension called "app-skype"
 	* app-chromium: Added support for Login Data files versions 43

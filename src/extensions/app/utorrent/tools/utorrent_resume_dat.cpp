@@ -17,13 +17,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "../file_resume_dat.hpp"
-#include <iostream>
 #include <mobius/core/application.hpp>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <unistd.h>
+#include <iostream>
+#include "../file_resume_dat.hpp"
 
 namespace
 {
@@ -64,25 +64,45 @@ show_resume_dat (const std::string &path)
         std::cout << std::endl;
         std::cout << "\tEntry name: " << entry.name << std::endl;
         std::cout << "\tTorrent name: " << entry.torrent_name << std::endl;
-        std::cout << "\tDownload URL: " << entry.download_url << std::endl;
-        std::cout << "\tCaption: " << entry.caption << std::endl;
-        std::cout << "\tPath: " << entry.path << std::endl;
-        std::cout << "\tSeeded seconds: " << entry.seeded_seconds << std::endl;
-        std::cout << "\tDownloaded seconds: " << entry.downloaded_seconds
-                  << std::endl;
+        std::cout << "\tActive seconds: " << entry.active_seconds << std::endl;
+        std::cout << "\tAllocation: " << entry.allocation << std::endl;
+        std::cout << "\tAuto managed: "
+                  << (entry.auto_managed ? "true" : "false") << std::endl;
+        std::cout << "\tAdded time: " << entry.added_time << std::endl;
         std::cout << "\tBlock size: " << entry.blocksize << std::endl;
         std::cout << "\tBytes downloaded: " << entry.bytes_downloaded
                   << std::endl;
         std::cout << "\tBytes uploaded: " << entry.bytes_uploaded << std::endl;
-        std::cout << "\tMetadata time: " << entry.metadata_time << std::endl;
-        std::cout << "\tAdded time: " << entry.added_time << std::endl;
+        std::cout << "\tCaption: " << entry.caption << std::endl;
         std::cout << "\tCompleted time: " << entry.completed_time << std::endl;
+        std::cout << "\tDownload URL: " << entry.download_url << std::endl;
+        std::cout << "\tDownloaded seconds: " << entry.downloaded_seconds
+                  << std::endl;
+        std::cout << "\tFile format: " << entry.file_format << std::endl;
+        std::cout << "\tFile version: " << entry.file_version << std::endl;
+        std::cout << "\tFinished seconds: " << entry.finished_seconds
+                  << std::endl;
         std::cout << "\tLast seen complete time: "
                   << entry.last_seen_complete_time << std::endl;
+        std::cout << "\tMetadata time: " << entry.metadata_time << std::endl;
+        std::cout << "\tPath: " << entry.path << std::endl;
+        std::cout << "\tPaused: " << (entry.paused ? "true" : "false")
+                  << std::endl;
+        std::cout << "\tSeeded seconds: " << entry.seeded_seconds << std::endl;
+        std::cout << "\tSequential download: "
+                  << (entry.sequential_download ? "true" : "false")
+                  << std::endl;
+        std::cout << "\tSuper seeding: "
+                  << (entry.super_seeding ? "true" : "false") << std::endl;
 
         std::cout << "\tPeers: " << std::endl;
         for (const auto &[ip, port] : entry.peers)
             std::cout << "\t\t" << ip << ":" << port << std::endl;
+
+        std::cout << "\tMetadata: " << std::endl;
+        for (const auto &[mkey, mvalue] : entry.metadata)
+            std::cout << "\t\t" << mkey << " : " << mvalue.to_string ()
+                      << std::endl;
     }
 }
 

@@ -20,12 +20,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <cstdint>
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/io/reader.hpp>
 #include <mobius/core/pod/map.hpp>
-#include <string>
+#include <cstdint>
 #include <utility>
+#include <string>
 #include <vector>
 
 namespace mobius::extension::app::utorrent
@@ -47,23 +47,20 @@ class file_resume_dat
         // @brief Entry name
         std::string name;
 
-        // @brief Metadata
-        mobius::core::pod::map metadata;
+        // @brief Torrent name
+        std::string torrent_name;
 
-        // @brief Download URL
-        std::string download_url;
+        // @brief Active seconds
+        std::uint64_t active_seconds = 0;
 
-        // @brief Caption
-        std::string caption;
+        // @brief Added time
+        mobius::core::datetime::datetime added_time;
 
-        // @brief Path
-        std::string path;
+        // @brief Allocation
+        std::string allocation;
 
-        // @brief Seeded seconds
-        std::uint64_t seeded_seconds = 0;
-
-        // @brief Downloaded seconds
-        std::uint64_t downloaded_seconds = 0;
+        // @brief Auto managed
+        bool auto_managed = false;
 
         // @brief Block size
         std::uint64_t blocksize = 0;
@@ -74,20 +71,50 @@ class file_resume_dat
         // @brief Bytes uploaded
         std::uint64_t bytes_uploaded = 0;
 
-        // @brief Metadata time
-        mobius::core::datetime::datetime metadata_time;
-
-        // @brief Added time
-        mobius::core::datetime::datetime added_time;
+        // @brief Caption
+        std::string caption;
 
         // @brief Completed time
         mobius::core::datetime::datetime completed_time;
 
+        // @brief Download URL
+        std::string download_url;
+
+        // @brief Downloaded seconds
+        std::uint64_t downloaded_seconds = 0;
+
+        // @brief File format
+        std::string file_format;
+
+        // @brief File version
+        std::uint64_t file_version = 0;
+
+        // @brief Finished seconds
+        std::uint64_t finished_seconds = 0;
+
         // @brief Last seen complete time
         mobius::core::datetime::datetime last_seen_complete_time;
 
-        // @brief Torrent name
-        std::string torrent_name;
+        // @brief Metadata time
+        mobius::core::datetime::datetime metadata_time;
+
+        // @brief Path
+        std::string path;
+
+        // @brief Paused
+        bool paused = false;
+
+        // @brief Seeded seconds
+        std::uint64_t seeded_seconds = 0;
+
+        // @brief Sequential download
+        bool sequential_download = false;
+
+        // @brief Super seeding
+        bool super_seeding = false;
+
+        // @brief Metadata
+        mobius::core::pod::map metadata;
 
         // @brief Peers
         std::vector<std::pair<std::string, std::uint16_t>> peers;
@@ -102,7 +129,10 @@ class file_resume_dat
     // @brief Check if stream is an instance of resume.dat file
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const noexcept { return is_instance_; }
+    operator bool () const noexcept
+    {
+        return is_instance_;
+    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get entries
@@ -120,6 +150,13 @@ class file_resume_dat
 
     // @brief Timestamp
     std::vector<entry> entries_;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Helper functions
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void _decode_sqlite (const mobius::core::io::reader &);
+    void _decode_btencode (const mobius::core::io::reader &);
+    void _add_entry (const std::string &, const mobius::core::pod::map &);
 };
 
 } // namespace mobius::extension::app::utorrent
