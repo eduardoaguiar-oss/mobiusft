@@ -18,8 +18,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/io/reader.hpp>
 #include <mobius/core/datetime/datetime.hpp>
+#include <mobius/core/io/reader.hpp>
+#include <mobius/core/pod/map.hpp>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -32,7 +33,7 @@ namespace mobius::core::file_decoder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class torrent
 {
-public:
+  public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief File structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -48,46 +49,58 @@ public:
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Peer structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct peer
+    {
+        std::string ip;
+        std::uint16_t port = 0;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    torrent();
-    explicit torrent(const mobius::core::io::reader&);
-    torrent(torrent&&) noexcept = default;
-    torrent(const torrent&) noexcept = default;
+    torrent ();
+    explicit torrent (const mobius::core::io::reader &);
+    torrent (torrent &&) noexcept = default;
+    torrent (const torrent &) noexcept = default;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Operators
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    torrent& operator= (const torrent&) noexcept = default;
-    torrent& operator= (torrent&&) noexcept = default;
+    torrent &operator= (const torrent &) noexcept = default;
+    torrent &operator= (torrent &&) noexcept = default;
     operator bool () const;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Function prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::int64_t get_version() const;
-    std::string get_name() const;
-    std::uint64_t get_piece_length() const;
-    std::uint64_t get_length() const;
-    mobius::core::datetime::datetime get_creation_time() const;
-    std::string get_created_by() const;
-    std::string get_encoding() const;
-    std::string get_comment() const;
-    std::string get_info_hash() const;
-    std::vector<std::string> get_announce_list() const;
-    std::vector<file> get_files() const;
-    std::vector<std::string> get_pieces() const;
+    std::string get_comment () const;
+    std::string get_created_by () const;
+    mobius::core::datetime::datetime get_creation_time () const;
+    std::string get_encoding () const;
+    std::string get_file_format () const;
+    std::string get_info_hash () const;
+    std::uint64_t get_length () const;
+    std::string get_name () const;
+    std::uint64_t get_piece_length () const;
+    std::int64_t get_version () const;
 
-private:
+    mobius::core::pod::map get_metadata () const;
+    
+    std::vector<std::string> get_announce_list () const;
+    std::vector<file> get_files () const;
+    std::vector<peer> get_peers () const;
+    std::vector<std::string> get_pieces () const;
+
+  private:
     // @brief Implementation class forward declaration
     class impl;
 
     // @brief Implementation pointer
-    std::shared_ptr <impl> impl_;
+    std::shared_ptr<impl> impl_;
 };
 
 } // namespace mobius::core::file_decoder
 
 #endif
-
-

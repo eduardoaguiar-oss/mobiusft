@@ -41,6 +41,7 @@ class file_resume_dat
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Entry structure
+    // @see docs/manual.rst@libtorrent source code
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct entry
     {
@@ -50,17 +51,14 @@ class file_resume_dat
         // @brief Torrent name
         std::string torrent_name;
 
-        // @brief Active seconds
-        std::uint64_t active_seconds = 0;
+        // @brief Active time in seconds
+        std::uint64_t active_time = 0;
 
         // @brief Added time
-        mobius::core::datetime::datetime added_time;
+        mobius::core::datetime::datetime added_timestamp;
 
         // @brief Allocation
         std::string allocation;
-
-        // @brief Auto managed
-        bool auto_managed = false;
 
         // @brief Block size
         std::uint64_t blocksize = 0;
@@ -75,13 +73,16 @@ class file_resume_dat
         std::string caption;
 
         // @brief Completed time
-        mobius::core::datetime::datetime completed_time;
+        mobius::core::datetime::datetime completed_timestamp;
 
         // @brief Download URL
         std::string download_url;
 
-        // @brief Downloaded seconds
-        std::uint64_t downloaded_seconds = 0;
+        // @brief Downloaded time in seconds
+        std::uint64_t downloaded_time = 0;
+
+        // @brief Episode number
+        std::uint64_t episode_number = 0;
 
         // @brief File format
         std::string file_format;
@@ -89,29 +90,71 @@ class file_resume_dat
         // @brief File version
         std::uint64_t file_version = 0;
 
-        // @brief Finished seconds
-        std::uint64_t finished_seconds = 0;
+        // @brief Finished time in seconds
+        std::uint64_t finished_time = 0;
 
-        // @brief Last seen complete time
-        mobius::core::datetime::datetime last_seen_complete_time;
+        // @brief Info hash
+        std::string info_hash;
 
-        // @brief Metadata time
-        mobius::core::datetime::datetime metadata_time;
+        // @brief Info hash v2
+        std::string info_hash_v2;
+
+        // @brief Is auto managed
+        bool is_auto_managed = false;
+
+        // @brief Is corrupted
+        bool is_corrupted = false;
+
+        // @brief Is paused
+        bool is_paused = false;
+
+        // @brief Is seeding
+        bool is_seeding = false;
+
+        // @brief Is sharing
+        bool is_sharing = false;
+
+        // @brief Is super seeding
+        bool is_super_seeding = false;
+
+        // @brief Is sequential downloading
+        bool is_sequential_downloading = false;
+
+        // @brief Is uploading
+        bool is_uploading = false;
+
+        // @brief Is visible
+        bool is_visible = true;
+
+        // @brief Last download timestamp
+        mobius::core::datetime::datetime last_download_timestamp;
+
+        // @brief Last seen complete timestamp
+        mobius::core::datetime::datetime last_seen_complete_timestamp;
+
+        // @brief Last upload timestamp
+        mobius::core::datetime::datetime last_upload_timestamp;
+
+        // @brief Metadata timestamp
+        mobius::core::datetime::datetime metadata_timestamp;
 
         // @brief Path
         std::string path;
 
-        // @brief Paused
-        bool paused = false;
+        // @brief Published on
+        mobius::core::datetime::datetime published_on;
 
-        // @brief Seeded seconds
-        std::uint64_t seeded_seconds = 0;
+        // @brief Root dir
+        std::string root_dir;
 
-        // @brief Sequential download
-        bool sequential_download = false;
+        // @brief Season number
+        std::uint64_t season_number = 0;
 
-        // @brief Super seeding
-        bool super_seeding = false;
+        // @brief Seeded time in seconds
+        std::uint64_t seeded_time = 0;
+
+        // @brief Tracker mode
+        std::uint64_t tracker_mode = 0;
 
         // @brief Metadata
         mobius::core::pod::map metadata;

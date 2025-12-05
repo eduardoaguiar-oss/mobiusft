@@ -29,6 +29,8 @@
 #include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/model/evidence.hpp>
 
+#include <iostream>
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // References:
 // @see
@@ -67,25 +69,37 @@ get_metadata (const mobius::extension::app::utorrent::profile::local_file &lf)
 
     lf_metadata.set ("app_id", APP_ID);
     lf_metadata.set ("app_name", APP_NAME);
-    lf_metadata.set ("download_url", lf.download_url);
-    lf_metadata.set ("caption", lf.caption);
-    lf_metadata.set ("comment", lf.comment);
-    lf_metadata.set ("size", lf.size);
-    lf_metadata.set ("seeded_seconds", lf.seeded_seconds);
-    lf_metadata.set ("downloaded_seconds", lf.downloaded_seconds);
+    lf_metadata.set ("added_time", lf.added_timestamp);
     lf_metadata.set ("blocksize", lf.blocksize);
     lf_metadata.set ("bytes_downloaded", lf.bytes_downloaded);
     lf_metadata.set ("bytes_uploaded", lf.bytes_uploaded);
-    lf_metadata.set ("creation_time", lf.creation_time);
-    lf_metadata.set ("metadata_time", lf.metadata_time);
-    lf_metadata.set ("added_time", lf.added_time);
-    lf_metadata.set ("completed_time", lf.completed_time);
-    lf_metadata.set ("last_seen_complete_time", lf.last_seen_complete_time);
-    lf_metadata.set ("torrent_name", lf.torrent_name);
+    lf_metadata.set ("caption", lf.caption);
+    lf_metadata.set ("comment", lf.comment);
+    lf_metadata.set ("completed_time", lf.completed_timestamp);
     lf_metadata.set ("created_by", lf.created_by);
+    lf_metadata.set ("creation_time", lf.creation_time);
+    lf_metadata.set ("downloaded_seconds", lf.downloaded_time);
+    lf_metadata.set ("download_url", lf.download_url);
     lf_metadata.set ("encoding", lf.encoding);
     lf_metadata.set ("info_hash", lf.info_hash);
+    lf_metadata.set ("info_hash_v2", lf.info_hash2);
+    lf_metadata.set ("is_auto_managed", lf.is_auto_managed);
+    lf_metadata.set ("is_corrupted", lf.is_corrupted);
+    lf_metadata.set ("is_paused", lf.is_paused);
+    lf_metadata.set ("is_seeding", lf.is_seeding);
+    lf_metadata.set ("is_sharing", lf.is_sharing);
+    lf_metadata.set ("is_super_seeding", lf.is_super_seeding);
+    lf_metadata.set ("is_sequential_downloading", lf.is_sequential_downloading);
+    lf_metadata.set ("is_uploading", lf.is_uploading);
+    lf_metadata.set ("is_visible", lf.is_visible);
+    lf_metadata.set ("metadata_time", lf.metadata_time);
+    lf_metadata.set ("seeded_seconds", lf.seeded_time);
+    lf_metadata.set ("size", lf.size);
+    lf_metadata.set ("last_download_time", lf.last_download_timestamp);
+    lf_metadata.set ("last_seen_complete_time", lf.last_seen_complete_timestamp);
+    lf_metadata.set ("last_upload_time", lf.last_upload_timestamp);
     lf_metadata.set ("local_file_path", lf.path);
+    lf_metadata.set ("torrent_name", lf.torrent_name);
 
     mobius::framework::evidence_flag flag_downloaded;
     mobius::framework::evidence_flag flag_uploaded;
@@ -95,10 +109,10 @@ get_metadata (const mobius::extension::app::utorrent::profile::local_file &lf)
     if (lf.resume_file)
     {
         flag_downloaded =
-            (lf.bytes_downloaded > 0 || lf.downloaded_seconds > 0);
+            (lf.bytes_downloaded > 0 || lf.downloaded_time > 0);
         flag_uploaded = (lf.bytes_uploaded > 0);
-        flag_shared = (lf.seeded_seconds > 0);
-        flag_completed = bool (lf.completed_time);
+        flag_shared = (lf.seeded_time > 0);
+        flag_completed = bool (lf.completed_timestamp);
     }
 
     lf_metadata.set ("flag_downloaded", flag_downloaded.to_string ());
@@ -183,7 +197,6 @@ void
 vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 {
     _scan_profile_folder (folder);
-    //_scan_arestra_folder (folder);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -197,7 +210,7 @@ vfs_processor_impl::on_complete ()
     _save_app_profiles ();
     _save_ip_addresses ();
     _save_local_files ();
-    _save_p2p_remote_files ();
+    _save_remote_party_shared_files ();
     _save_received_files ();
     _save_sent_files ();
     _save_shared_files ();
@@ -246,7 +259,7 @@ vfs_processor_impl::_scan_profile_folder (
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Scan .torrent files
+    // Scan .torrent files in profile folder
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     for (const auto &[name, f] : w.get_files_with_names ())
     {
@@ -417,10 +430,15 @@ vfs_processor_impl::_save_received_files ()
     {
         for (const auto &lf : profile.get_local_files ())
         {
-            if (lf.bytes_downloaded > 0 || lf.downloaded_seconds > 0)
+            std::cout << "Processing received file: " << lf.path << "\n";
+            std::cout << "Bytes downloaded: " << lf.bytes_downloaded << "\n";
+            std::cout << "Downloaded time: " << lf.downloaded_time << "\n";
+
+            if (lf.bytes_downloaded > 0 || lf.downloaded_time > 0)
             {
                 auto lf_metadata = get_metadata (lf);
                 lf_metadata.set ("username", profile.get_username ());
+                std::cout << "LF metadata: " << lf_metadata << "\n";
 
                 for (const auto &tf : lf.content_files)
                 {
@@ -429,7 +447,7 @@ vfs_processor_impl::_save_received_files ()
 
                     auto e = item_.new_evidence ("received-file");
 
-                    e.set_attribute ("timestamp", lf.added_time);
+                    e.set_attribute ("timestamp", lf.added_timestamp);
                     e.set_attribute ("username", profile.get_username ());
                     e.set_attribute ("filename", filename);
                     e.set_attribute ("path", path);
@@ -459,7 +477,7 @@ vfs_processor_impl::_save_received_files ()
 // @brief Save remote files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_p2p_remote_files ()
+vfs_processor_impl::_save_remote_party_shared_files ()
 {
     for (const auto &profile : profiles_)
     {
@@ -503,9 +521,15 @@ vfs_processor_impl::_save_p2p_remote_files ()
 
                         e.set_attribute ("metadata", tf_metadata);
 
+                        // Tags
                         e.set_tag ("p2p");
-                        for (const auto &f : lf.sources)
-                            e.add_source (f);
+                        e.set_tag ("remote-party");
+
+                        // Sources
+                        std::for_each (
+                            lf.sources.begin (), lf.sources.end (),
+                            [&] (const auto &f) { e.add_source (f); }
+                        );
                     }
                 }
             }
@@ -535,7 +559,7 @@ vfs_processor_impl::_save_sent_files ()
 
                     auto e = item_.new_evidence ("sent-file");
 
-                    e.set_attribute ("timestamp", lf.added_time);
+                    e.set_attribute ("timestamp", lf.added_timestamp);
                     e.set_attribute ("username", profile.get_username ());
                     e.set_attribute ("filename", filename);
                     e.set_attribute ("path", path);
@@ -571,7 +595,7 @@ vfs_processor_impl::_save_shared_files ()
     {
         for (const auto &lf : profile.get_local_files ())
         {
-            if (lf.seeded_seconds > 0)
+            if (lf.seeded_time > 0)
             {
                 auto lf_metadata = get_metadata (lf);
                 lf_metadata.set ("username", profile.get_username ());

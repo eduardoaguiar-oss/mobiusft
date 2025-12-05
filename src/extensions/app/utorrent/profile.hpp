@@ -143,9 +143,6 @@ class profile
         // @brief Entry name
         std::string name;
 
-        // @brief Metadata
-        mobius::core::pod::map metadata;
-
         // @brief Download URL
         std::string download_url;
 
@@ -158,11 +155,8 @@ class profile
         // @brief Size
         std::uint64_t size = 0;
 
-        // @brief Seeded seconds
-        std::uint64_t seeded_seconds = 0;
-
-        // @brief Downloaded seconds
-        std::uint64_t downloaded_seconds = 0;
+        // @brief Added timestamp
+        mobius::core::datetime::datetime added_timestamp;    
 
         // @brief Block size
         std::uint64_t blocksize = 0;
@@ -173,35 +167,77 @@ class profile
         // @brief Bytes uploaded
         std::uint64_t bytes_uploaded = 0;
 
-        // @brief Creation time
-        mobius::core::datetime::datetime creation_time;
-
-        // @brief Metadata time
-        mobius::core::datetime::datetime metadata_time;
-
-        // @brief Added time
-        mobius::core::datetime::datetime added_time;
+        // @brief Comment
+        std::string comment;
 
         // @brief Completed time
-        mobius::core::datetime::datetime completed_time;
-
-        // @brief Last seen complete time
-        mobius::core::datetime::datetime last_seen_complete_time;
-
-        // @brief Torrent name
-        std::string torrent_name;
+        mobius::core::datetime::datetime completed_timestamp;
 
         // @brief Created by
         std::string created_by;
 
+        // @brief Creation time
+        mobius::core::datetime::datetime creation_time;
+
+        // @brief Downloaded time in seconds
+        std::uint64_t downloaded_time = 0;
+
         // @brief Encoding
         std::string encoding;
 
-        // @brief Comment
-        std::string comment;
-
         // @brief Info hash
         std::string info_hash;
+
+        // @brief Info hash v2
+        std::string info_hash2;
+
+       // @brief Is auto managed
+        bool is_auto_managed = false;
+
+        // @brief Is corrupted
+        bool is_corrupted = false;
+
+        // @brief Is paused
+        bool is_paused = false;
+
+        // @brief Is seeding
+        bool is_seeding = false;
+
+        // @brief Is sharing
+        bool is_sharing = false;
+
+        // @brief Is super seeding
+        bool is_super_seeding = false;
+
+        // @brief Is sequential downloading
+        bool is_sequential_downloading = false;
+
+        // @brief Is uploading
+        bool is_uploading = false;
+
+        // @brief Is visible
+        bool is_visible = true;
+
+        // @brief Last download timestamp
+        mobius::core::datetime::datetime last_download_timestamp;
+
+        // @brief Last seen complete time
+        mobius::core::datetime::datetime last_seen_complete_timestamp;
+
+        // @brief Last upload timestamp
+        mobius::core::datetime::datetime last_upload_timestamp;
+        
+        // @brief Metadata time
+        mobius::core::datetime::datetime metadata_time;
+
+        // @brief Seeded time in seconds
+        std::uint64_t seeded_time = 0;
+
+        // @brief Torrent name
+        std::string torrent_name;
+
+        // @brief Metadata
+        mobius::core::pod::map metadata;
 
         // @brief Peers
         std::vector<std::pair<std::string, std::uint16_t>> peers;

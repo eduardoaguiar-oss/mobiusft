@@ -376,6 +376,9 @@ operator bool () const
     if (impl_->get_type () == type::boolean)
         return std::static_pointer_cast<data_impl_bool> (impl_)->get_value ();
 
+    else if (impl_->get_type () == type::integer)
+        return std::static_pointer_cast<data_impl_integer> (impl_)->get_value ();
+
     throw std::runtime_error (
         MOBIUS_EXCEPTION_MSG ("cannot convert data to bool")
     );

@@ -1,4 +1,8 @@
 Mobius Forensic Toolkit 2.22
+	* app-utorrent: Added support for uTorrent Web
+	* libmobius_core: Improved data::pod::bool operator to accept integer values
+	* libmobius_core: Improved file_decoder::torrent to retrieve peers' data
+	* ant.evidence.post.ip_addresses_from_cookies: Added decoding of both MSCC and MS-CV cookies
 
 Mobius Forensic Toolkit 2.21
 	* Added new C++ extension called "app-skype"

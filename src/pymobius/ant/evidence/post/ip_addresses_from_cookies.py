@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+import re
 import traceback
 
 import mobius
@@ -25,6 +26,7 @@ ANT_NAME = 'IP Addresses from Cookies'
 ANT_VERSION = '1.0'
 EVIDENCE_TYPE = "ip-address"
 
+RE_IPv4 = re.compile(r'\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b')
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Ant: IP Addresses
@@ -63,7 +65,7 @@ class Ant(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __retrieve_cookie(self, c):
         try:
-            ip = self.__get_cookie_ip(c)
+            ip, cookie_metadata = self.__get_cookie_ip(c)
 
             if ip:
                 entry = pymobius.Data()
@@ -78,6 +80,7 @@ class Ant(object):
                 metadata.set('cookie-name', c.name)
                 metadata.set('cookie-domain', c.domain)
                 metadata.set('cookie-evidence-source', c.evidence_source)
+                metadata.update(cookie_metadata)
                 metadata.update(c.metadata)
 
                 entry.metadata = metadata
@@ -91,6 +94,7 @@ class Ant(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __get_cookie_ip(self, c):
         ip = None
+        metadata = mobius.core.pod.map()
 
         if c.name == 'kt_ips':
             uri = mobius.core.io.uri(c.value.decode('utf-8'))
@@ -112,10 +116,24 @@ class Ant(object):
                 ip = value.rsplit(' ', 1)[1]
 
         elif c.name in ('MSCC', 'MS-CV'):
-            mobius.core.logf(f"DEV cookie of interest: {c.name}. Value:")
-            mobius.core.logf(f"DEV {pymobius.dump(c.value)}")
+            if len (c.value) > 32:
+               text = c.value[32:].decode('utf-8')
+               if '-' in text:
+                   ip, country = text.split('-', 1)
+                   metadata.set('country-code', country)
 
-        return ip
+            if c.value and not ip:
+                mobius.core.logf(f"DEV cookie of interest: {c.name}. Value:")
+                mobius.core.logf(f"DEV {pymobius.dump(c.value)}")
+               
+        else:
+            value = c.value.decode('utf-8', errors='ignore')
+            match = RE_IPv4.search(value)
+            if match:
+                mobius.core.logf(f"DEV cookie of interest: {c.name}. Value:")
+                mobius.core.logf(f"DEV {pymobius.dump(c.value)}")
+
+        return ip, metadata
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Save data into model

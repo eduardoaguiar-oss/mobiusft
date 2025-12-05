@@ -64,36 +64,53 @@ show_resume_dat (const std::string &path)
         std::cout << std::endl;
         std::cout << "\tEntry name: " << entry.name << std::endl;
         std::cout << "\tTorrent name: " << entry.torrent_name << std::endl;
-        std::cout << "\tActive seconds: " << entry.active_seconds << std::endl;
+        std::cout << "\tActive seconds: " << entry.active_time << std::endl;
         std::cout << "\tAllocation: " << entry.allocation << std::endl;
-        std::cout << "\tAuto managed: "
-                  << (entry.auto_managed ? "true" : "false") << std::endl;
-        std::cout << "\tAdded time: " << entry.added_time << std::endl;
+        std::cout << "\tAdded time: " << entry.added_timestamp << std::endl;
         std::cout << "\tBlock size: " << entry.blocksize << std::endl;
         std::cout << "\tBytes downloaded: " << entry.bytes_downloaded
                   << std::endl;
         std::cout << "\tBytes uploaded: " << entry.bytes_uploaded << std::endl;
         std::cout << "\tCaption: " << entry.caption << std::endl;
-        std::cout << "\tCompleted time: " << entry.completed_time << std::endl;
+        std::cout << "\tCompleted time: " << entry.completed_timestamp << std::endl;
         std::cout << "\tDownload URL: " << entry.download_url << std::endl;
-        std::cout << "\tDownloaded seconds: " << entry.downloaded_seconds
+        std::cout << "\tDownloaded seconds: " << entry.downloaded_time
                   << std::endl;
+        std::cout << "\tEpisode number: " << entry.episode_number << std::endl;
         std::cout << "\tFile format: " << entry.file_format << std::endl;
         std::cout << "\tFile version: " << entry.file_version << std::endl;
-        std::cout << "\tFinished seconds: " << entry.finished_seconds
+        std::cout << "\tFinished seconds: " << entry.finished_time << std::endl;
+        std::cout << "\tInfo hash: " << entry.info_hash << std::endl;
+        std::cout << "\tInfo hash v2: " << entry.info_hash_v2 << std::endl;
+        std::cout << "\tLast download time: " << entry.last_download_timestamp
                   << std::endl;
         std::cout << "\tLast seen complete time: "
-                  << entry.last_seen_complete_time << std::endl;
-        std::cout << "\tMetadata time: " << entry.metadata_time << std::endl;
+                  << entry.last_seen_complete_timestamp << std::endl;
+        std::cout << "\tLast upload time: " << entry.last_upload_timestamp
+                  << std::endl;
+        std::cout << "\tMetadata time: " << entry.metadata_timestamp << std::endl;
         std::cout << "\tPath: " << entry.path << std::endl;
-        std::cout << "\tPaused: " << (entry.paused ? "true" : "false")
+        std::cout << "\tIs auto managed: "
+                  << (entry.is_auto_managed ? "true" : "false") << std::endl;
+        std::cout << "\tIs corrupted: "
+                  << (entry.is_corrupted ? "true" : "false") << std::endl;
+        std::cout << "\tIs paused: " << (entry.is_paused ? "true" : "false")
                   << std::endl;
-        std::cout << "\tSeeded seconds: " << entry.seeded_seconds << std::endl;
-        std::cout << "\tSequential download: "
-                  << (entry.sequential_download ? "true" : "false")
+        std::cout << "\tIs seeding: " << (entry.is_seeding ? "true" : "false")
                   << std::endl;
-        std::cout << "\tSuper seeding: "
-                  << (entry.super_seeding ? "true" : "false") << std::endl;
+        std::cout << "\tIs sequential download: "
+                  << (entry.is_sequential_downloading ? "true" : "false")
+                  << std::endl;
+        std::cout << "\tIs super seeding: "
+                  << (entry.is_super_seeding ? "true" : "false") << std::endl;
+        std::cout << "\tIs uploading: "
+                  << (entry.is_uploading ? "true" : "false") << std::endl;
+        std::cout << "\tIs visible: " << (entry.is_visible ? "true" : "false")
+                  << std::endl;
+        std::cout << "\tPublished on: " << entry.published_on << std::endl;
+        std::cout << "\tRoot dir: " << entry.root_dir << std::endl;
+        std::cout << "\tSeason number: " << entry.season_number << std::endl;
+        std::cout << "\tSeeded seconds: " << entry.seeded_time << std::endl;
 
         std::cout << "\tPeers: " << std::endl;
         for (const auto &[ip, port] : entry.peers)

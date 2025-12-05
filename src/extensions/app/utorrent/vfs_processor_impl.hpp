@@ -72,7 +72,7 @@ class vfs_processor_impl
     void _save_app_profiles ();
     void _save_ip_addresses ();
     void _save_local_files ();
-    void _save_p2p_remote_files ();
+    void _save_remote_party_shared_files ();
     void _save_received_files ();
     void _save_sent_files ();
     void _save_shared_files ();

@@ -410,23 +410,39 @@ profile::impl::add_resume_dat_file (const mobius::core::io::file &f)
 
         lf.name = vs (lf.name, entry.name);
         lf.metadata = vs (lf.metadata, entry.metadata);
-        lf.download_url = vs (lf.download_url, entry.download_url);
-        lf.caption = vs (lf.caption, entry.caption);
-        lf.path = vs (lf.path, entry.path);
-        lf.seeded_seconds = vs (lf.seeded_seconds, entry.seeded_seconds);
-        lf.downloaded_seconds =
-            vs (lf.downloaded_seconds, entry.downloaded_seconds);
+        lf.added_timestamp = vs (lf.added_timestamp, entry.added_timestamp);
         lf.blocksize = vs (lf.blocksize, entry.blocksize);
         lf.bytes_downloaded = vs (lf.bytes_downloaded, entry.bytes_downloaded);
         lf.bytes_uploaded = vs (lf.bytes_uploaded, entry.bytes_uploaded);
-        lf.metadata_time = vs (lf.metadata_time, entry.metadata_time);
-        lf.added_time = vs (lf.added_time, entry.added_time);
-        lf.completed_time = vs (lf.completed_time, entry.completed_time);
-        lf.last_seen_complete_time =
-            vs (lf.last_seen_complete_time, entry.last_seen_complete_time);
-        lf.torrent_name = vs (lf.torrent_name, entry.torrent_name);
+        lf.caption = vs (lf.caption, entry.caption);
+        lf.completed_timestamp = vs (lf.completed_timestamp, entry.completed_timestamp);
+        lf.downloaded_time =
+            vs (lf.downloaded_time, entry.downloaded_time);
+        lf.download_url = vs (lf.download_url, entry.download_url);
+        lf.is_auto_managed =
+            vs (lf.is_auto_managed, entry.is_auto_managed);
+        lf.is_corrupted = vs (lf.is_corrupted, entry.is_corrupted);
+        lf.is_paused = vs (lf.is_paused, entry.is_paused);
+        lf.is_seeding = vs (lf.is_seeding, entry.is_seeding);
+        lf.is_sharing = vs (lf.is_sharing, entry.is_sharing);
+        lf.is_super_seeding =
+            vs (lf.is_super_seeding, entry.is_super_seeding);
+        lf.is_sequential_downloading =
+            vs (lf.is_sequential_downloading, entry.is_sequential_downloading);
+        lf.is_uploading = vs (lf.is_uploading, entry.is_uploading);
+        lf.is_visible = vs (lf.is_visible, entry.is_visible);
+        lf.last_download_timestamp =
+            vs (lf.last_download_timestamp, entry.last_download_timestamp);
+        lf.last_seen_complete_timestamp =
+            vs (lf.last_seen_complete_timestamp, entry.last_seen_complete_timestamp);
+        lf.last_upload_timestamp =
+            vs (lf.last_upload_timestamp, entry.last_upload_timestamp);
+        lf.metadata_time = vs (lf.metadata_time, entry.metadata_timestamp);
+        lf.path = vs (lf.path, entry.path);
+        lf.seeded_time = vs (lf.seeded_time, entry.seeded_time);
         lf.resume_file = vs (lf.resume_file, f);
         lf.sources.push_back (f);
+        lf.torrent_name = vs (lf.torrent_name, entry.torrent_name);
 
         std::copy (
             entry.peers.begin (), entry.peers.end (),
@@ -536,8 +552,8 @@ profile::impl::add_torrent_file (const mobius::core::io::file &f)
 
     log.info (__LINE__, "File decoded [torrent]: " + f.get_path ());
 
-    _update_mtime(f);
-    
+    _update_mtime (f);
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add torrent file
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

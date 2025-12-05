@@ -21,10 +21,12 @@
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/decoder/btencode.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
+#include <mobius/core/file_decoder/torrent.hpp>
 #include <mobius/core/io/tempfile.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <mobius/core/string_functions.hpp>
+#include <mobius/core/value_selector.hpp>
 
 #include <iostream>
 
@@ -162,51 +164,88 @@ file_resume_dat::_add_entry (
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Get data from metadata dictionary
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto vs = mobius::core::value_selector ();
     auto entry = mobius::extension::app::utorrent::file_resume_dat::entry ();
 
     entry.name = mobius::core::string::replace (key, ".torrent", "");
     entry.torrent_name = key;
 
-    entry.active_seconds = metadata.pop<std::int64_t> ("active_time", 0);
-    entry.added_time =
+    entry.active_time = metadata.pop<std::int64_t> ("active_time");
+
+    entry.added_timestamp =
         mobius::core::datetime::new_datetime_from_unix_timestamp (
-            metadata.pop<std::int64_t> ("added_time", 0)
+            vs (metadata.pop<std::int64_t> ("added_time"),
+                metadata.pop<std::int64_t> ("added_on"))
         );
+
     entry.allocation = metadata.pop<std::string> ("allocation");
-    entry.auto_managed = metadata.pop<std::int64_t> ("auto_managed", 0) == 1;
-    entry.blocksize = metadata.pop<std::int64_t> ("blocksize", 0);
-    entry.bytes_downloaded = metadata.pop<std::int64_t> ("downloaded", 0) +
-                             metadata.pop<std::int64_t> ("total_downloaded", 0);
-    entry.bytes_uploaded = metadata.pop<std::int64_t> ("uploaded", 0) +
-                           metadata.pop<std::int64_t> ("total_uploaded", 0);
-    entry.caption = metadata.pop<std::string> ("caption", {});
-    entry.completed_time =
+    entry.blocksize = metadata.pop<std::int64_t> ("blocksize");
+    entry.bytes_downloaded = metadata.pop<std::int64_t> ("downloaded") +
+                             metadata.pop<std::int64_t> ("total_downloaded");
+    entry.bytes_uploaded = metadata.pop<std::int64_t> ("uploaded") +
+                           metadata.pop<std::int64_t> ("total_uploaded");
+    entry.caption = metadata.pop<std::string> ("caption");
+
+    entry.completed_timestamp =
         mobius::core::datetime::new_datetime_from_unix_timestamp (
-            metadata.pop<std::int64_t> ("completed_time", 0)
+            vs (metadata.pop<std::int64_t> ("completed_time"),
+                metadata.pop<std::int64_t> ("completed_on"))
         );
+
     entry.download_url = metadata.pop<std::string> ("download_url");
-    entry.downloaded_seconds =
-        metadata.pop<std::int64_t> ("runtime", 0) - entry.seeded_seconds;
+    entry.downloaded_time =
+        metadata.pop<std::int64_t> ("runtime") - entry.seeded_time;
+    entry.episode_number = metadata.pop<std::int64_t> ("episode_number");
     entry.file_format = metadata.pop<std::string> ("file-format");
-    entry.file_version = metadata.pop<std::int64_t> ("file-version", 0);
-    entry.finished_seconds = metadata.pop<std::int64_t> ("finished_time", 0);
-    entry.last_seen_complete_time =
+    entry.file_version = metadata.pop<std::int64_t> ("file-version");
+    entry.finished_time = metadata.pop<std::int64_t> ("finished_time");
+    entry.info_hash = metadata.pop<mobius::core::bytearray> ("info-hash").to_hexstring ();
+    entry.info_hash_v2 = metadata.pop<mobius::core::bytearray> ("info-hash2").to_hexstring ();
+
+    entry.is_auto_managed = metadata.pop<bool> ("auto_managed");
+    entry.is_corrupted = metadata.pop<bool> ("corrupt");
+    entry.is_paused = metadata.pop<bool> ("paused");
+    entry.is_seeding = metadata.pop<bool> ("seeding") || metadata.pop<bool> ("seed_mode");
+    entry.is_sequential_downloading =
+        metadata.pop<bool> ("sequential_download");
+    entry.is_sharing = metadata.pop<bool> ("share_mode");
+    entry.is_super_seeding =
+        vs (metadata.pop<bool> ("super_seeding"),
+            metadata.pop<bool> ("superseed"));
+    entry.is_visible = metadata.pop<bool> ("visible", true);
+
+    entry.last_download_timestamp =
         mobius::core::datetime::new_datetime_from_unix_timestamp (
-            metadata.pop<std::int64_t> ("last_seen_complete", 0)
+            metadata.pop<std::int64_t> ("last_download_time")
         );
-    entry.metadata_time =
+    entry.last_seen_complete_timestamp =
         mobius::core::datetime::new_datetime_from_unix_timestamp (
-            metadata.pop<std::int64_t> ("time", 0)
+            vs (metadata.pop<std::int64_t> ("last_seen_complete"),
+                metadata.pop<std::int64_t> ("last seen complete"))
         );
-    entry.path = metadata.pop<std::string> ("path");
-    if (entry.path.empty ())
-        entry.path = metadata.pop<std::string> ("save_path");
-    entry.paused = metadata.pop<std::int64_t> ("paused", 0) == 1;
-    entry.seeded_seconds = metadata.pop<std::int64_t> ("seedtime", 0) +
-                           metadata.pop<std::int64_t> ("seeding_time", 0);
-    entry.sequential_download =
-        metadata.pop<std::int64_t> ("sequential_download", 0) == 1;
-    entry.super_seeding = metadata.pop<std::int64_t> ("super_seeding", 0) == 1;
+    entry.last_upload_timestamp =
+        mobius::core::datetime::new_datetime_from_unix_timestamp (
+            metadata.pop<std::int64_t> ("last_upload_time")
+        );
+    entry.metadata_timestamp =
+        mobius::core::datetime::new_datetime_from_unix_timestamp (
+            metadata.pop<std::int64_t> ("time")
+        );
+    entry.path =
+        vs (metadata.pop<std::string> ("path"),
+            metadata.pop<std::string> ("save_path"));
+
+    entry.published_on =
+        mobius::core::datetime::new_datetime_from_unix_timestamp (
+            metadata.pop<std::int64_t> ("published_on")
+        );
+
+    entry.root_dir = metadata.pop<std::string> ("rootdir");
+    entry.season_number = metadata.pop<std::int64_t> ("season_number");
+
+    entry.seeded_time = metadata.pop<std::int64_t> ("seedtime") +
+                        metadata.pop<std::int64_t> ("seeding_time");
+    entry.tracker_mode = metadata.pop<std::int64_t> ("trackermode");
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Get peers
