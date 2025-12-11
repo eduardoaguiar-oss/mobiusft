@@ -118,20 +118,39 @@ class Ant(object):
         elif c.name in ('MSCC', 'MS-CV'):
             if len (c.value) > 32:
                text = c.value[32:].decode('utf-8')
-               if '-' in text:
-                   ip, country = text.split('-', 1)
-                   metadata.set('country-code', country)
+
+            else:
+                text = c.value.decode('utf-8')
+            
+            if '-' in text:
+               ip, country = text.split('-', 1)
+               metadata.set('country-code', country)
 
             if c.value and not ip:
                 mobius.core.logf(f"DEV cookie of interest: {c.name}. Value:")
                 mobius.core.logf(f"DEV {pymobius.dump(c.value)}")
+        
+        elif c.name == 'voxusmediamanager__ip':
+            if len (c.value) > 32:
+               ip = c.value[32:].decode('utf-8')
                
+        elif c.name == 'geode':
+            data = c.value.decode('utf-8').split(':')
+            if len (data) > 1:
+                ip = data[1]
+            if len (data) > 6:
+                metadata.set('country-code', data[6])
+            if len (data) > 7:
+                metadata.set('region', data[7])
+            
         else:
             value = c.value.decode('utf-8', errors='ignore')
             match = RE_IPv4.search(value)
             if match:
                 mobius.core.logf(f"DEV cookie of interest: {c.name}. Value:")
                 mobius.core.logf(f"DEV {pymobius.dump(c.value)}")
+                
+        
 
         return ip, metadata
 

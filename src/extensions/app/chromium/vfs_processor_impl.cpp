@@ -807,7 +807,7 @@ vfs_processor_impl::_save_received_files ()
 
                 e.set_attribute ("metadata", metadata);
 
-                e.set_tag ("p2p");
+                e.set_tag ("app.browser");
                 e.add_source (entry.f);
             }
         }

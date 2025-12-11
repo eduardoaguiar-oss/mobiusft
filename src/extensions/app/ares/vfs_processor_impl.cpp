@@ -92,7 +92,7 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const std::string ANT_ID = "evidence.app-ares";
 static const std::string ANT_NAME = "App Ares Galaxy";
-static const std::string ANT_VERSION = "1.4";
+static const std::string ANT_VERSION = "1.5";
 static const std::string SAMPLING_ID = "sampling";
 static const std::string APP_NAME = "Ares Galaxy";
 static const std::string APP_ID = "ares";
@@ -599,7 +599,7 @@ vfs_processor_impl::_save_app_profiles ()
         e.set_attribute ("metadata", metadata);
 
         // Tags and sources
-        e.set_tag ("app.browser");
+        e.set_tag ("app.p2p");
         e.add_source (p.get_folder ());
     }
 }
@@ -626,7 +626,7 @@ vfs_processor_impl::_save_autofills ()
         e.set_attribute ("username", a.username);
         e.set_attribute ("is_deleted", a.is_deleted);
         e.set_attribute ("metadata", metadata);
-        e.set_tag ("p2p");
+        e.set_tag ("app.p2p");
         e.add_source (a.f);
     }
 }
@@ -684,7 +684,7 @@ vfs_processor_impl::_save_local_files ()
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Tags
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            e.set_tag ("p2p");
+            e.set_tag ("app.p2p");
 
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Sources
@@ -737,7 +737,7 @@ vfs_processor_impl::_save_p2p_remote_files ()
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Tags
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            e.set_tag ("p2p");
+            e.set_tag ("app.p2p");
 
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Sources
@@ -812,7 +812,7 @@ vfs_processor_impl::_save_received_files ()
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Tags
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            e.set_tag ("p2p");
+            e.set_tag ("app.p2p");
 
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Sources
@@ -884,7 +884,7 @@ vfs_processor_impl::_save_sent_files ()
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Tags
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            e.set_tag ("p2p");
+            e.set_tag ("app.p2p");
 
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Sources
@@ -959,7 +959,7 @@ vfs_processor_impl::_save_shared_files ()
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Tags
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            e.set_tag ("p2p");
+            e.set_tag ("app.p2p");
 
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Sources
@@ -1002,7 +1002,7 @@ vfs_processor_impl::_save_user_accounts ()
         e.set_attribute ("password_found", "no");
         e.set_attribute ("is_deleted", a.is_deleted);
         e.set_attribute ("metadata", metadata);
-        e.set_tag ("p2p");
+        e.set_tag ("app.p2p");
         e.add_source (a.f);
     }
 }

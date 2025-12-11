@@ -70,7 +70,7 @@ class Ant(object):
         self.__tag_evidences('sent-file')
         self.__tag_evidences('shared-file')
         self.__tag_evidences('local-file')
-        self.__tag_evidences('p2p-remote-file')
+        self.__tag_evidences('remote-party-shared-file')
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Tag evidences

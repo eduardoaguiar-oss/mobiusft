@@ -21,6 +21,7 @@
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/decoder/btencode.hpp>
 #include <mobius/core/encoder/hexstring.hpp>
+#include <mobius/core/log.hpp>
 #include <mobius/core/pod/map.hpp>
 
 namespace
@@ -42,6 +43,53 @@ _decode_version (const std::uint32_t value)
                   std::to_string (value & 0xffff);
 
     return version;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Convert timestamp to datetime
+// @param timestamp NT timestamp
+// @return datetime object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::datetime::datetime
+_decode_datetime (const std::int64_t timestamp)
+{
+    if (timestamp < 0x80000000)
+        return mobius::core::datetime::new_datetime_from_unix_timestamp (
+            timestamp
+        );
+
+    return mobius::core::datetime::new_datetime_from_nt_timestamp (
+        timestamp * 10000000
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Convert ISO timestamp to datetime
+// @param iso_timestamp ISO timestamp string
+// @return datetime object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::datetime::datetime
+_decode_datetime (const std::string &iso_timestamp)
+{
+    mobius::core::datetime::datetime dt;
+
+    if (!iso_timestamp.empty () && iso_timestamp != "not-a-date-time")
+    {
+        mobius::core::log log (__FILE__, __FUNCTION__);
+
+        try
+        {
+            dt = mobius::core::datetime::new_datetime_from_iso_string (
+                iso_timestamp
+            );
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (__LINE__, e.what ());
+        }
+    }
+
+    return dt;
 }
 
 } // namespace
@@ -73,32 +121,65 @@ file_settings_dat::file_settings_dat (const mobius::core::io::reader &reader)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::pod::map data (mobius::core::decoder::btencode (reader));
 
-    total_bytes_downloaded_ = data.get<std::int64_t> ("td");
-    total_bytes_uploaded_ = data.get<std::int64_t> ("tu");
-    flag_autostart_ = data.get<std::int64_t> ("autostart", 1) == 1;
+    bind_port_ = data.pop<std::int64_t> ("bind_port");
+    cached_host_ = data.pop<std::string> ("upnp_cached_host");
     computer_id_ = mobius::core::encoder::hexstring (
-        data.get<mobius::core::bytearray> ("cid"));
-    installation_time_ =
-        mobius::core::datetime::new_datetime_from_nt_timestamp (
-            data.get<std::int64_t> ("born_on", 0) * 10000000);
-    last_used_time_ = mobius::core::datetime::new_datetime_from_nt_timestamp (
-        data.get<std::int64_t> ("cold_on", 0) * 10000000);
-    last_bin_change_time_ =
-        mobius::core::datetime::new_datetime_from_nt_timestamp (
-            data.get<std::int64_t> ("bin_change", 0) * 10000000);
-    execution_count_ = data.get<std::int64_t> ("runs_since_born", 0);
-    version_ = _decode_version (data.get<std::int64_t> ("v"));
-    installation_version_ =
-        _decode_version (data.get<std::int64_t> ("initial_install_version"));
+        data.pop<mobius::core::bytearray> ("cid")
+    );
+    dir_active_downloads_ = data.pop<std::string> ("dir_active_download");
+    dir_completed_downloads_ = data.pop<std::string> ("dir_completed_download");
+    dir_torrent_files_ = data.pop<std::string> ("dir_torrent_files");
+    execution_count_ = data.pop<std::int64_t> ("runs_since_born");
+    exe_path_ = data.pop<std::string> ("exe_path");
+    external_ip_ = data.pop<std::string> ("upnp.external_ip");
+    fileguard_ = data.pop<std::string> (".fileguard");
+    flag_autostart_ = data.pop<std::int64_t> ("autostart", 1) == 1;
 
-    auto lang = data.get<std::int64_t> ("language", 0);
+    installation_time_ = _decode_datetime (data.pop<std::int64_t> ("born_on"));
+    if (!installation_time_)
+        installation_time_ =
+            _decode_datetime (data.pop<std::string> ("reset_ts"));
+
+    installation_version_ =
+        _decode_version (data.pop<std::int64_t> ("initial_install_version"));
+    if (installation_version_.empty ())
+        installation_version_ =
+            _decode_version (data.pop<std::int64_t> ("reset_version"));
+
+    last_used_time_ = _decode_datetime (data.pop<std::int64_t> ("cold_on"));
+    last_bin_change_time_ =
+        _decode_datetime (data.pop<std::int64_t> ("bin_change"));
+
+    auto lang = data.pop<std::int64_t> ("language");
     if (lang)
         language_ =
             std::string () + char (lang & 0xff) + char ((lang >> 8) & 0xff);
 
+    runtime_ = data.pop<std::int64_t> ("runtime_since_born");
+    save_path_ = data.pop<std::string> ("save_path");
+    settings_saved_time_ =
+        _decode_datetime (data.pop<std::int64_t> ("settings_saved_systime"));
+    statistics_time_ =
+        _decode_datetime (data.pop<std::string> ("stats_timestamp"));
+    ssdp_uuid_ = data.pop<std::string> ("webui.ssdp_uuid");
+
+    total_bytes_downloaded_ =
+        data.pop<std::int64_t> ("td") +
+        data.pop<std::int64_t> ("deleted_torrents_total_download") +
+        data.pop<std::int64_t> ("prev_deleted_torrents_total_download");
+
+    total_bytes_uploaded_ =
+        data.pop<std::int64_t> ("tu") +
+        data.pop<std::int64_t> ("deleted_torrents_total_upload") +
+        data.pop<std::int64_t> ("prev_deleted_torrents_total_upload");
+
+    username_ = data.pop<std::string> ("webui.username");
+    version_ = _decode_version (data.pop<std::int64_t> ("v"));
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // End decoding
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    metadata_ = data;
     is_instance_ = true;
 }
 

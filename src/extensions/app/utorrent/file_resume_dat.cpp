@@ -39,6 +39,31 @@ const mobius::core::bytearray SQLITE_HEADER = {'S', 'Q', 'L', 'i',   't', 'e',
                                                ' ', 'f', 'o', 'r',   'm', 'a',
                                                't', ' ', '3', '\x00'};
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get path from torrent path data
+// @param data Path data
+// @return Path
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static std::string
+_get_path (const mobius::core::pod::data &data)
+{
+    std::string path;
+
+    if (data.is_list ())
+    {
+        std::vector<mobius::core::pod::data> path_list (data);
+
+        for (const auto &path_item : path_list)
+        {
+            if (!path.empty ())
+                path += "/";
+            path += static_cast<std::string> (path_item);
+        }
+    }
+
+    return path;
+}
+
 } // namespace
 
 namespace mobius::extension::app::utorrent
@@ -195,17 +220,21 @@ file_resume_dat::_add_entry (
     entry.download_url = metadata.pop<std::string> ("download_url");
     entry.downloaded_time =
         metadata.pop<std::int64_t> ("runtime") - entry.seeded_time;
-    entry.episode_number = metadata.pop<std::int64_t> ("episode_number");
+    entry.episode_number = metadata.pop<std::int64_t> ("episode_number") +
+                           metadata.pop<std::int64_t> ("episode");
     entry.file_format = metadata.pop<std::string> ("file-format");
     entry.file_version = metadata.pop<std::int64_t> ("file-version");
     entry.finished_time = metadata.pop<std::int64_t> ("finished_time");
-    entry.info_hash = metadata.pop<mobius::core::bytearray> ("info-hash").to_hexstring ();
-    entry.info_hash_v2 = metadata.pop<mobius::core::bytearray> ("info-hash2").to_hexstring ();
+    entry.info_hash =
+        metadata.pop<mobius::core::bytearray> ("info-hash").to_hexstring ();
+    entry.info_hash_v2 =
+        metadata.pop<mobius::core::bytearray> ("info-hash2").to_hexstring ();
 
     entry.is_auto_managed = metadata.pop<bool> ("auto_managed");
     entry.is_corrupted = metadata.pop<bool> ("corrupt");
     entry.is_paused = metadata.pop<bool> ("paused");
-    entry.is_seeding = metadata.pop<bool> ("seeding") || metadata.pop<bool> ("seed_mode");
+    entry.is_seeding =
+        metadata.pop<bool> ("seeding") || metadata.pop<bool> ("seed_mode");
     entry.is_sequential_downloading =
         metadata.pop<bool> ("sequential_download");
     entry.is_sharing = metadata.pop<bool> ("share_mode");
@@ -241,7 +270,8 @@ file_resume_dat::_add_entry (
         );
 
     entry.root_dir = metadata.pop<std::string> ("rootdir");
-    entry.season_number = metadata.pop<std::int64_t> ("season_number");
+    entry.season_number = metadata.pop<std::int64_t> ("season_number") +
+                          metadata.pop<std::int64_t> ("season");
 
     entry.seeded_time = metadata.pop<std::int64_t> ("seedtime") +
                         metadata.pop<std::int64_t> ("seeding_time");
@@ -281,6 +311,27 @@ file_resume_dat::_add_entry (
         }
     }
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Get files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto info_map = metadata.pop_map ("info");
+
+    for (const auto &file_map :
+         info_map.get_list<mobius::core::pod::map> ("files"))
+    {
+        file_resume_dat::file file_entry;
+
+        file_entry.length = file_map.get<std::int64_t> ("length");
+
+        auto path_data = file_map.get ("path");
+        file_entry.path = _get_path (path_data);
+
+        entry.content_files.push_back (file_entry);
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Add entry
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     entry.metadata = metadata;
 
     entries_.push_back (entry);

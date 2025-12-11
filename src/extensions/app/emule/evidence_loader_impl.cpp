@@ -1027,7 +1027,7 @@ evidence_loader_impl::_save_accounts ()
             e.set_attribute ("password_found", "no");
             e.set_attribute ("is_deleted", a.is_deleted);
             e.set_attribute ("metadata", metadata.clone ());
-            e.set_tag ("p2p");
+            e.set_tag ("app.p2p");
 
             e.add_source (a.preferences_dat_f);
             e.add_source (a.preferences_ini_f);
@@ -1045,7 +1045,7 @@ evidence_loader_impl::_save_accounts ()
             e.set_attribute ("password_found", "no");
             e.set_attribute ("is_deleted", a.is_deleted);
             e.set_attribute ("metadata", metadata.clone ());
-            e.set_tag ("p2p");
+            e.set_tag ("app.p2p");
 
             e.add_source (a.preferences_dat_f);
             e.add_source (a.preferences_ini_f);
@@ -1076,7 +1076,7 @@ evidence_loader_impl::_save_autofills ()
         e.set_attribute ("is_deleted", af.is_deleted);
         e.set_attribute ("metadata", metadata);
 
-        e.set_tag ("p2p");
+        e.set_tag ("app.p2p");
         e.add_source (af.f);
     }
 }
@@ -1099,7 +1099,7 @@ evidence_loader_impl::_save_local_files ()
         e.set_attribute ("hashes", lf.hashes);
         e.set_attribute ("metadata", lf.metadata);
 
-        e.set_tag ("p2p");
+        e.set_tag ("app.p2p");
         e.add_source (lf.f);
     }
 }
@@ -1124,7 +1124,7 @@ evidence_loader_impl::_save_received_files ()
             e.set_attribute ("hashes", lf.hashes);
             e.set_attribute ("metadata", lf.metadata);
 
-            e.set_tag ("p2p");
+            e.set_tag ("app.p2p");
             e.add_source (lf.f);
         }
     }
@@ -1138,7 +1138,7 @@ evidence_loader_impl::_save_p2p_remote_files ()
 {
     for (const auto &rf : remote_files_)
     {
-        auto e = item_.new_evidence ("p2p-remote-file");
+        auto e = item_.new_evidence ("remote-party-shared-file");
 
         e.set_attribute ("timestamp", rf.timestamp);
         e.set_attribute ("ip", rf.ip);
@@ -1150,7 +1150,7 @@ evidence_loader_impl::_save_p2p_remote_files ()
         e.set_attribute ("hashes", rf.hashes);
         e.set_attribute ("metadata", rf.metadata);
 
-        e.set_tag ("p2p");
+        e.set_tag ("app.p2p");
 
         e.add_source (rf.key_index_dat_f);
         e.add_source (rf.part_met_f);
@@ -1178,7 +1178,7 @@ evidence_loader_impl::_save_sent_files ()
             e.set_attribute ("hashes", lf.hashes);
             e.set_attribute ("metadata", lf.metadata);
 
-            e.set_tag ("p2p");
+            e.set_tag ("app.p2p");
             e.add_source (lf.f);
         }
     }
@@ -1204,7 +1204,7 @@ evidence_loader_impl::_save_shared_files ()
             e.set_attribute ("hashes", lf.hashes);
             e.set_attribute ("metadata", lf.metadata);
 
-            e.set_tag ("p2p");
+            e.set_tag ("app.p2p");
             e.add_source (lf.f);
         }
     }

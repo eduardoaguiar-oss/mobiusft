@@ -29,8 +29,6 @@
 #include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/model/evidence.hpp>
 
-#include <iostream>
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // References:
 // @see
@@ -96,7 +94,9 @@ get_metadata (const mobius::extension::app::utorrent::profile::local_file &lf)
     lf_metadata.set ("seeded_seconds", lf.seeded_time);
     lf_metadata.set ("size", lf.size);
     lf_metadata.set ("last_download_time", lf.last_download_timestamp);
-    lf_metadata.set ("last_seen_complete_time", lf.last_seen_complete_timestamp);
+    lf_metadata.set (
+        "last_seen_complete_time", lf.last_seen_complete_timestamp
+    );
     lf_metadata.set ("last_upload_time", lf.last_upload_timestamp);
     lf_metadata.set ("local_file_path", lf.path);
     lf_metadata.set ("torrent_name", lf.torrent_name);
@@ -108,8 +108,7 @@ get_metadata (const mobius::extension::app::utorrent::profile::local_file &lf)
 
     if (lf.resume_file)
     {
-        flag_downloaded =
-            (lf.bytes_downloaded > 0 || lf.downloaded_time > 0);
+        flag_downloaded = (lf.bytes_downloaded > 0 || lf.downloaded_time > 0);
         flag_uploaded = (lf.bytes_uploaded > 0);
         flag_shared = (lf.seeded_time > 0);
         flag_completed = bool (lf.completed_timestamp);
@@ -314,7 +313,7 @@ vfs_processor_impl::_save_app_profiles ()
         e.set_attribute ("metadata", metadata);
 
         // Tags and sources
-        e.set_tag ("app.browser");
+        e.set_tag ("app.p2p");
         e.add_source (p.get_folder ());
     }
 }
@@ -327,31 +326,29 @@ vfs_processor_impl::_save_ip_addresses ()
 {
     for (const auto &p : profiles_)
     {
-        auto settings = p.get_main_settings ();
+        for (const auto &settings : p.get_settings ())
+        {
+            if (!settings.external_ip.empty () && settings.settings_saved_time)
+            {
+                auto e = item_.new_evidence ("ip-address");
 
-        mobius::core::pod::map metadata;
-        metadata.set ("network", "BitTorrent");
-        metadata.set (
-            "total_downloaded_bytes", settings.total_bytes_downloaded
-        );
-        metadata.set ("total_uploaded_bytes", settings.total_bytes_uploaded);
-        metadata.set ("execution_count", settings.execution_count);
-        metadata.set ("installation_time", settings.installation_time);
-        metadata.set ("last_used_time", settings.last_used_time);
-        metadata.set ("last_bin_change_time", settings.last_bin_change_time);
-        metadata.set ("version", settings.version);
-        metadata.set ("installation_version", settings.installation_version);
-        metadata.set ("language", settings.language);
-        metadata.set ("computer_id", settings.computer_id);
-        metadata.set ("auto_start", settings.auto_start ? "yes" : "no");
+                e.set_attribute ("timestamp", settings.settings_saved_time);
+                e.set_attribute ("address", settings.external_ip);
+                e.set_attribute ("app_id", APP_ID);
+                e.set_attribute ("app_name", APP_NAME);
+                e.set_attribute ("username", p.get_username ());
+
+                mobius::core::pod::map metadata;
+                metadata.set ("network", "BitTorrent");
+                metadata.update (settings.metadata);
+
+                e.set_tag ("app.p2p");
+                e.add_source (settings.f);
+            }
+        }
 
         for (const auto &account : p.get_accounts ())
         {
-            auto e_metadata = metadata.clone ();
-            e_metadata.set ("client_id", account.client_id);
-            e_metadata.set ("first_dht_timestamp", account.first_dht_timestamp);
-            e_metadata.set ("last_dht_timestamp", account.last_dht_timestamp);
-
             for (const auto &[ip, timestamp] : account.ip_addresses)
             {
                 auto e = item_.new_evidence ("ip-address");
@@ -361,13 +358,20 @@ vfs_processor_impl::_save_ip_addresses ()
                 e.set_attribute ("app_id", APP_ID);
                 e.set_attribute ("app_name", APP_NAME);
                 e.set_attribute ("username", p.get_username ());
-                e.set_attribute ("metadata", e_metadata.clone ());
-                e.set_tag ("p2p");
+
+                mobius::core::pod::map metadata;
+                metadata.set ("network", "BitTorrent");
+                metadata.set ("client_id", account.client_id);
+                metadata.set (
+                    "first_dht_timestamp", account.first_dht_timestamp
+                );
+                metadata.set ("last_dht_timestamp", account.last_dht_timestamp);
+                e.set_attribute ("metadata", metadata);
+
+                e.set_tag ("app.p2p");
 
                 for (const auto &f : account.files)
                     e.add_source (f);
-
-                e.add_source (settings.f);
             }
         }
     }
@@ -411,7 +415,7 @@ vfs_processor_impl::_save_local_files ()
 
                     e.set_attribute ("metadata", tf_metadata);
 
-                    e.set_tag ("p2p");
+                    e.set_tag ("app.p2p");
                     for (const auto &f : lf.sources)
                         e.add_source (f);
                 }
@@ -430,15 +434,10 @@ vfs_processor_impl::_save_received_files ()
     {
         for (const auto &lf : profile.get_local_files ())
         {
-            std::cout << "Processing received file: " << lf.path << "\n";
-            std::cout << "Bytes downloaded: " << lf.bytes_downloaded << "\n";
-            std::cout << "Downloaded time: " << lf.downloaded_time << "\n";
-
             if (lf.bytes_downloaded > 0 || lf.downloaded_time > 0)
             {
                 auto lf_metadata = get_metadata (lf);
                 lf_metadata.set ("username", profile.get_username ());
-                std::cout << "LF metadata: " << lf_metadata << "\n";
 
                 for (const auto &tf : lf.content_files)
                 {
@@ -464,7 +463,7 @@ vfs_processor_impl::_save_received_files ()
 
                     e.set_attribute ("metadata", tf_metadata);
 
-                    e.set_tag ("p2p");
+                    e.set_tag ("app.p2p");
                     for (const auto &f : lf.sources)
                         e.add_source (f);
                 }
@@ -474,7 +473,7 @@ vfs_processor_impl::_save_received_files ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Save remote files
+// @brief Save remote party shared files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 vfs_processor_impl::_save_remote_party_shared_files ()
@@ -496,7 +495,8 @@ vfs_processor_impl::_save_remote_party_shared_files ()
 
                     for (const auto &[ip, port] : lf.peers)
                     {
-                        auto e = item_.new_evidence ("p2p-remote-file");
+                        auto e =
+                            item_.new_evidence ("remote-party-shared-file");
 
                         e.set_attribute ("timestamp", lf.metadata_time);
                         e.set_attribute ("ip", ip);
@@ -522,8 +522,8 @@ vfs_processor_impl::_save_remote_party_shared_files ()
                         e.set_attribute ("metadata", tf_metadata);
 
                         // Tags
-                        e.set_tag ("p2p");
-                        e.set_tag ("remote-party");
+                        e.set_tag ("app.p2p");
+                        e.set_tag ("source.remote-party");
 
                         // Sources
                         std::for_each (
@@ -576,7 +576,7 @@ vfs_processor_impl::_save_sent_files ()
 
                     e.set_attribute ("metadata", tf_metadata);
 
-                    e.set_tag ("p2p");
+                    e.set_tag ("app.p2p");
                     for (const auto &f : lf.sources)
                         e.add_source (f);
                 }
@@ -623,7 +623,7 @@ vfs_processor_impl::_save_shared_files ()
 
                     e.set_attribute ("metadata", tf_metadata);
 
-                    e.set_tag ("p2p");
+                    e.set_tag ("app.p2p");
                     for (const auto &f : lf.sources)
                         e.add_source (f);
                 }
@@ -647,19 +647,7 @@ vfs_processor_impl::_save_user_accounts ()
         metadata.set ("app_name", APP_NAME);
         metadata.set ("network", "BitTorrent");
         metadata.set ("username", p.get_username ());
-        metadata.set (
-            "total_downloaded_bytes", settings.total_bytes_downloaded
-        );
-        metadata.set ("total_uploaded_bytes", settings.total_bytes_uploaded);
-        metadata.set ("execution_count", settings.execution_count);
-        metadata.set ("installation_time", settings.installation_time);
-        metadata.set ("last_used_time", settings.last_used_time);
-        metadata.set ("last_bin_change_time", settings.last_bin_change_time);
-        metadata.set ("version", settings.version);
-        metadata.set ("installation_version", settings.installation_version);
-        metadata.set ("language", settings.language);
-        metadata.set ("computer_id", settings.computer_id);
-        metadata.set ("auto_start", settings.auto_start ? "yes" : "no");
+        metadata.update (settings.metadata);
 
         for (const auto &account : p.get_accounts ())
         {
@@ -675,7 +663,7 @@ vfs_processor_impl::_save_user_accounts ()
             e.set_attribute ("password_found", "no");
             e.set_attribute ("is_deleted", account.f.is_deleted ());
             e.set_attribute ("metadata", e_metadata);
-            e.set_tag ("p2p");
+            e.set_tag ("app.p2p");
 
             for (const auto &f : account.files)
                 e.add_source (f);

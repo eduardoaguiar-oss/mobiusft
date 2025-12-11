@@ -415,18 +415,16 @@ profile::impl::add_resume_dat_file (const mobius::core::io::file &f)
         lf.bytes_downloaded = vs (lf.bytes_downloaded, entry.bytes_downloaded);
         lf.bytes_uploaded = vs (lf.bytes_uploaded, entry.bytes_uploaded);
         lf.caption = vs (lf.caption, entry.caption);
-        lf.completed_timestamp = vs (lf.completed_timestamp, entry.completed_timestamp);
-        lf.downloaded_time =
-            vs (lf.downloaded_time, entry.downloaded_time);
+        lf.completed_timestamp =
+            vs (lf.completed_timestamp, entry.completed_timestamp);
+        lf.downloaded_time = vs (lf.downloaded_time, entry.downloaded_time);
         lf.download_url = vs (lf.download_url, entry.download_url);
-        lf.is_auto_managed =
-            vs (lf.is_auto_managed, entry.is_auto_managed);
+        lf.is_auto_managed = vs (lf.is_auto_managed, entry.is_auto_managed);
         lf.is_corrupted = vs (lf.is_corrupted, entry.is_corrupted);
         lf.is_paused = vs (lf.is_paused, entry.is_paused);
         lf.is_seeding = vs (lf.is_seeding, entry.is_seeding);
         lf.is_sharing = vs (lf.is_sharing, entry.is_sharing);
-        lf.is_super_seeding =
-            vs (lf.is_super_seeding, entry.is_super_seeding);
+        lf.is_super_seeding = vs (lf.is_super_seeding, entry.is_super_seeding);
         lf.is_sequential_downloading =
             vs (lf.is_sequential_downloading, entry.is_sequential_downloading);
         lf.is_uploading = vs (lf.is_uploading, entry.is_uploading);
@@ -434,7 +432,8 @@ profile::impl::add_resume_dat_file (const mobius::core::io::file &f)
         lf.last_download_timestamp =
             vs (lf.last_download_timestamp, entry.last_download_timestamp);
         lf.last_seen_complete_timestamp =
-            vs (lf.last_seen_complete_timestamp, entry.last_seen_complete_timestamp);
+            vs (lf.last_seen_complete_timestamp,
+                entry.last_seen_complete_timestamp);
         lf.last_upload_timestamp =
             vs (lf.last_upload_timestamp, entry.last_upload_timestamp);
         lf.metadata_time = vs (lf.metadata_time, entry.metadata_timestamp);
@@ -444,10 +443,30 @@ profile::impl::add_resume_dat_file (const mobius::core::io::file &f)
         lf.sources.push_back (f);
         lf.torrent_name = vs (lf.torrent_name, entry.torrent_name);
 
-        std::copy (
+        // Peers
+        std::set<std::pair<std::string, std::uint16_t>> peers;
+        std::transform (
             entry.peers.begin (), entry.peers.end (),
-            std::back_inserter (lf.peers)
+            std::inserter (peers, peers.end ()),
+            [] (const auto &p) { return std::make_pair (p.ip, p.port); }
         );
+        lf.peers = vs (lf.peers, peers);
+
+        // Content files
+        std::vector<torrent_content_file> content_files;
+        std::transform (
+            entry.content_files.begin (), entry.content_files.end (),
+            std::back_inserter (content_files),
+            [] (const auto &file)
+            {
+                return torrent_content_file {
+                    file.name,         file.path,         file.length,
+                    file.offset,       file.piece_length, file.piece_offset,
+                    file.creation_time
+                };
+            }
+        );
+        lf.content_files = vs (lf.content_files, content_files);
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -488,18 +507,49 @@ profile::impl::add_settings_dat_file (const mobius::core::io::file &f)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     settings s;
 
-    s.computer_id = settings_dat.get_computer_id ();
-    s.auto_start = settings_dat.get_autostart ();
-    s.total_bytes_downloaded = settings_dat.get_total_bytes_downloaded ();
-    s.total_bytes_uploaded = settings_dat.get_total_bytes_uploaded ();
-    s.installation_time = settings_dat.get_installation_time ();
-    s.last_used_time = settings_dat.get_last_used_time ();
-    s.last_bin_change_time = settings_dat.get_last_bin_change_time ();
-    s.execution_count = settings_dat.get_execution_count ();
-    s.version = settings_dat.get_version ();
-    s.installation_version = settings_dat.get_installation_version ();
-    s.language = settings_dat.get_language ();
+    s.external_ip = settings_dat.get_external_ip ();
+    s.settings_saved_time = settings_dat.get_settings_saved_time ();
+
+    s.metadata.set ("auto_start", settings_dat.get_autostart ());
+    s.metadata.set ("bind_port", settings_dat.get_bind_port ());
+    s.metadata.set ("cached_host", settings_dat.get_cached_host ());
+    s.metadata.set ("computer_id", settings_dat.get_computer_id ());
+    s.metadata.set (
+        "dir_active_downloads", settings_dat.get_dir_active_downloads ()
+    );
+    s.metadata.set (
+        "dir_completed_downloads", settings_dat.get_dir_completed_downloads ()
+    );
+    s.metadata.set ("dir_torrent_files", settings_dat.get_dir_torrent_files ());
+    s.metadata.set ("execution_count", settings_dat.get_execution_count ());
+    s.metadata.set ("exe_path", settings_dat.get_exe_path ());
+    s.metadata.set ("external_ip", settings_dat.get_external_ip ());
+    s.metadata.set ("fileguard", settings_dat.get_fileguard ());
+    s.metadata.set (
+        "installation_version", settings_dat.get_installation_version ()
+    );
+    s.metadata.set ("installation_time", settings_dat.get_installation_time ());
+    s.metadata.set ("language", settings_dat.get_language ());
+    s.metadata.set (
+        "last_bin_change_time", settings_dat.get_last_bin_change_time ()
+    );
+    s.metadata.set ("last_used_time", settings_dat.get_last_used_time ());
+    s.metadata.set ("runtime", settings_dat.get_runtime ());
+    s.metadata.set ("save_path", settings_dat.get_save_path ());
+    s.metadata.set ("statistics_time", settings_dat.get_statistics_time ());
+    s.metadata.set ("ssdp_uuid", settings_dat.get_ssdp_uuid ());
+    s.metadata.set (
+        "total_bytes_downloaded", settings_dat.get_total_bytes_downloaded ()
+    );
+    s.metadata.set (
+        "total_bytes_uploaded", settings_dat.get_total_bytes_uploaded ()
+    );
+    s.metadata.set ("version", settings_dat.get_version ());
     s.f = f;
+
+    for (const auto &[k, v] : settings_dat.get_metadata ())
+        if (!v.is_map () && !v.is_list ())
+            s.metadata.set (k, v);
 
     settings_.push_back (s);
 
@@ -563,15 +613,15 @@ profile::impl::add_torrent_file (const mobius::core::io::file &f)
         !lf.torrent_file || (lf.torrent_file.is_deleted () && !f.is_deleted ());
     mobius::core::value_selector vs (overwrite);
 
-    lf.creation_time = vs (lf.creation_time, torrent.get_creation_time ());
-    lf.torrent_file = vs (lf.torrent_file, f);
     lf.blocksize = vs (lf.blocksize, torrent.get_piece_length ());
-    lf.torrent_name = vs (lf.torrent_name, torrent.get_name ());
-    lf.size = vs (lf.size, torrent.get_length ());
-    lf.created_by = vs (lf.created_by, torrent.get_created_by ());
-    lf.encoding = vs (lf.encoding, torrent.get_encoding ());
     lf.comment = vs (lf.comment, torrent.get_comment ());
+    lf.created_by = vs (lf.created_by, torrent.get_created_by ());
+    lf.creation_time = vs (lf.creation_time, torrent.get_creation_time ());
+    lf.encoding = vs (lf.encoding, torrent.get_encoding ());
     lf.info_hash = vs (lf.info_hash, torrent.get_info_hash ());
+    lf.size = vs (lf.size, torrent.get_length ());
+    lf.torrent_file = vs (lf.torrent_file, f);
+    lf.torrent_name = vs (lf.torrent_name, torrent.get_name ());
 
     std::vector<torrent_content_file> content_files;
     auto torrent_files = torrent.get_files ();

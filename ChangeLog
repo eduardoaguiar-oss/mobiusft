@@ -1,8 +1,26 @@
 Mobius Forensic Toolkit 2.22
+	* app-ares: Improved evidence tags
+	* app-ares: Changed to save remote-party-shared-file evidences
+	* app-chromium: Improved evidence tags
+	* app-emule: Improved evidence tags
+	* app-emule: Changed to save remote-party-shared-file evidences
+	* app-emuletorrent: Improved evidence tags
+	* app-emuletorrent: Changed to save remote-party-shared-file evidences
+	* app-shareaza: Improved evidence tags
+	* app-shareaza: Changed to save remote-party-shared-file evidences
 	* app-utorrent: Added support for uTorrent Web
+	* app-utorrent: Improved evidence tags
+	* app-utorrent: Changed to save remote-party-shared-file evidences
+	* evidence-viewer: Changed evidence type "P2P Remote File" to "Remote Party Shared File"
 	* libmobius_core: Improved data::pod::bool operator to accept integer values
 	* libmobius_core: Improved file_decoder::torrent to retrieve peers' data
+	* libmobius_core: Added new method pod::map::get_list<T>
+	* libmobius_core: Added new method pod::map::get_map
+	* libmobius_core: Added new method pod::map::pop_list<T>
+	* libmobius_core: Added new method pod::map::pop_map
 	* ant.evidence.post.ip_addresses_from_cookies: Added decoding of both MSCC and MS-CV cookies
+	* ant.evidence.post.ip_addresses_from_cookies: Added decoding of geode cookies
+	* ant.evidence.post.ip_addresses_from_cookies: Added decoding of voxusmediamanager__ip cookies
 
 Mobius Forensic Toolkit 2.21
 	* Added new C++ extension called "app-skype"

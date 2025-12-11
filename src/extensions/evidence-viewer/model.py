@@ -720,7 +720,7 @@ MODEL = [
                   ]),
          ]
          ),
-    args(id="p2p-remote-file",
+    args(id="remote-party-shared-file",
          name="Remote Party Shared Files",
          description="Files shared by remote third parties",
          master_views=[

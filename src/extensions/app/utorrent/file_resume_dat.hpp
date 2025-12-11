@@ -40,6 +40,29 @@ class file_resume_dat
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief File structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct file
+    {
+        std::string name;
+        std::string path;
+        std::uint64_t length = 0;
+        std::uint64_t offset = 0;
+        std::uint64_t piece_length = 0;
+        std::uint64_t piece_offset = 0;
+        mobius::core::datetime::datetime creation_time;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Peer structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct peer
+    {
+        std::string ip;
+        std::uint16_t port = 0;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Entry structure
     // @see docs/manual.rst@libtorrent source code
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -160,7 +183,10 @@ class file_resume_dat
         mobius::core::pod::map metadata;
 
         // @brief Peers
-        std::vector<std::pair<std::string, std::uint16_t>> peers;
+        std::vector<peer> peers;
+
+        // @brief Content files
+        std::vector<file> content_files;
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

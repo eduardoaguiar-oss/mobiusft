@@ -29,7 +29,7 @@ extern "C"
 {
     const char *EXTENSION_ID = "app-emule";
     const char *EXTENSION_NAME = "App Emule";
-    const char *EXTENSION_VERSION = "1.0";
+    const char *EXTENSION_VERSION = "1.1";
     const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
     const char *EXTENSION_DESCRIPTION = "Emule/Dreamule support";
 } // extern "C"

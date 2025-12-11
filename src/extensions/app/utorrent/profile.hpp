@@ -71,38 +71,14 @@ class profile
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct settings
     {
-        // @brief CID
-        std::string computer_id;
+        // @brief External IP
+        std::string external_ip;
 
-        // @brief Auto start
-        bool auto_start = false;
+        // @brief Settings saved time
+        mobius::core::datetime::datetime settings_saved_time;
 
-        // @brief Execution count
-        std::uint32_t execution_count = 0;
-
-        // @brief Total bytes downloaded
-        std::uint64_t total_bytes_downloaded = 0;
-
-        // @brief Total bytes uploaded
-        std::uint64_t total_bytes_uploaded = 0;
-
-        // @brief Installation time
-        mobius::core::datetime::datetime installation_time;
-
-        // @brief Last used time
-        mobius::core::datetime::datetime last_used_time;
-
-        // @brief Last bin change time
-        mobius::core::datetime::datetime last_bin_change_time;
-
-        // @brief Current version
-        std::string version;
-
-        // @brief Installation version
-        std::string installation_version;
-
-        // @brief Language
-        std::string language;
+        // @brief Metadata
+        mobius::core::pod::map metadata;
 
         // @brief settings.dat file object
         mobius::core::io::file f;
@@ -240,7 +216,7 @@ class profile
         mobius::core::pod::map metadata;
 
         // @brief Peers
-        std::vector<std::pair<std::string, std::uint16_t>> peers;
+        std::set<std::pair<std::string, std::uint16_t>> peers;
 
         // @brief Resume.dat file
         mobius::core::io::file resume_file;

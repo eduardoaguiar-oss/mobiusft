@@ -43,6 +43,10 @@ new_datetime_from_iso_string (const std::string &str)
 
     if (str.length () > 10 && str[10] == 'T')
         format = "%04d-%02d-%02dT%02d:%02d:%02d";
+
+    else if (str.length () > 8 && str[8] == 'T')
+        format = "%04d%02d%02dT%02d%02d%02d";
+
     else
         format = "%04d-%02d-%02d %02d:%02d:%02d";
 

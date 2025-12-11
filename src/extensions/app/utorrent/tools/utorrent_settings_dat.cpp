@@ -17,13 +17,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "../file_settings_dat.hpp"
-#include <iostream>
 #include <mobius/core/application.hpp>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <unistd.h>
+#include <iostream>
+#include "../file_settings_dat.hpp"
 
 namespace
 {
@@ -60,26 +60,51 @@ show_settings_dat (const std::string &path)
         return;
     }
 
-    std::cout << "\tTotal downloaded bytes: "
-              << settings.get_total_bytes_downloaded () << std::endl;
-    std::cout << "\tTotal uploaded bytes: "
-              << settings.get_total_bytes_uploaded () << std::endl;
     std::cout << "\tAutostart flag: "
               << (settings.get_autostart () ? "Enabled" : "Disabled")
               << std::endl;
+    std::cout << "\tBind port: " << settings.get_bind_port () << std::endl;
+    std::cout << "\tCached host: " << settings.get_cached_host () << std::endl;
     std::cout << "\tComputer ID: " << settings.get_computer_id () << std::endl;
+    std::cout << "\tDir active downloads: "
+              << settings.get_dir_active_downloads () << std::endl;
+    std::cout << "\tDir completed downloads: "
+              << settings.get_dir_completed_downloads () << std::endl;
+    std::cout << "\tDir torrent files: " << settings.get_dir_torrent_files ()
+              << std::endl;
+    std::cout << "\tExe path: " << settings.get_exe_path () << std::endl;
+    std::cout << "\tExecution count: " << settings.get_execution_count ()
+              << std::endl;
+    std::cout << "\tExternal IP: " << settings.get_external_ip () << std::endl;
     std::cout << "\tInstallation time: " << settings.get_installation_time ()
               << std::endl;
+    std::cout << "\tInstallation version: "
+              << settings.get_installation_version () << std::endl;
+    std::cout << "\tLanguage: " << settings.get_language () << std::endl;
     std::cout << "\tLast used time: " << settings.get_last_used_time ()
               << std::endl;
     std::cout << "\tLast bin change time: "
               << settings.get_last_bin_change_time () << std::endl;
-    std::cout << "\tExecution count: " << settings.get_execution_count ()
+    std::cout << "\tRuntime (seconds): " << settings.get_runtime ()
               << std::endl;
+    std::cout << "\tSave path: " << settings.get_save_path () << std::endl;
+    std::cout << "\tSettings saved time: "
+              << settings.get_settings_saved_time () << std::endl;
+    std::cout << "\tStatistics time: "
+              << settings.get_statistics_time () << std::endl;
+    std::cout << "\tSSDP UUID: " << settings.get_ssdp_uuid () << std::endl;
+    std::cout << "\tTotal downloaded bytes: "
+              << settings.get_total_bytes_downloaded () << std::endl;
+    std::cout << "\tTotal uploaded bytes: "
+              << settings.get_total_bytes_uploaded () << std::endl;
+    std::cout << "\tUsername: " << settings.get_username () << std::endl;
     std::cout << "\tVersion: " << settings.get_version () << std::endl;
-    std::cout << "\tInstallation version: "
-              << settings.get_installation_version () << std::endl;
-    std::cout << "\tLanguage: " << settings.get_language () << std::endl;
+
+    std::cout << "\tMetadata:" << std::endl;
+    for (const auto &[mkey, mvalue] : settings.get_metadata ())
+    {
+        std::cout << "\t\t" << mkey << ": " << mvalue.to_string () << std::endl;
+    }
 }
 
 } // namespace
