@@ -201,15 +201,12 @@ class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
     _scan_canonical_shareaza_data_folder (const mobius::core::io::folder &);
 
     void _decode_library_dat_file (const mobius::core::io::file &);
-    void _decode_ntuser_dat_file (const mobius::core::io::file &);
     void _decode_profile_xml_file (const mobius::core::io::file &);
     void _decode_sd_file (const mobius::core::io::file &);
     void _decode_searches_dat_file (const mobius::core::io::file &);
     void _decode_shareaza_db3_file (const mobius::core::io::file &);
 
     void _save_evidences ();
-    void _save_accounts ();
-    void _save_searched_texts ();
     void _save_local_files ();
     void _save_p2p_remote_files ();
     void _save_received_files ();

@@ -65,12 +65,6 @@ class vfs_processor_impl
     // @brief Case item
     mobius::framework::model::item item_;
 
-    // @brief User name
-    std::string username_;
-
-    // @brief Current profile
-    //profile profile_;
-
     // @brief Profiles found
     std::vector<profile> profiles_;
 
@@ -85,9 +79,8 @@ class vfs_processor_impl
     void _decode_ntuser_dat_file (const mobius::core::io::file &);
 
     void _save_autofills ();
-
-    //void _save_app_profiles ();
-    //void _save_bookmarked_urls ();
+    void _save_searched_texts ();
+    void _save_user_accounts ();
 };
 
 } // namespace mobius::extension::app::shareaza

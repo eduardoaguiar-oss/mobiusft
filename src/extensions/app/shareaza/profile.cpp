@@ -18,10 +18,14 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "profile.hpp"
+#include <mobius/core/decoder/xml/dom.hpp>
 #include <mobius/core/io/path.hpp>
 #include <mobius/core/log.hpp>
+#include <mobius/core/mediator.hpp>
 #include <mobius/core/string_functions.hpp>
+#include <mobius/core/value_selector.hpp>
 #include <string>
+#include "file_searches_dat.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // References:
@@ -67,10 +71,236 @@ profile::_set_folder (const mobius::core::io::folder &f)
         return;
 
     folder_ = f;
-
     last_modified_time_ = f.get_modification_time ();
     creation_time_ = f.get_creation_time ();
     username_ = get_username_from_path (f.get_path ());
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Emit sampling_folder event
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::emit (
+        "sampling_folder", std::string ("app.shareaza.profiles"), f
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Update last modified time based on file
+// @param f File
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::_update_mtime (const mobius::core::io::file &f)
+{
+    if (!f)
+        return;
+
+    if (!last_modified_time_ ||
+        f.get_modification_time () > last_modified_time_)
+        last_modified_time_ = f.get_modification_time ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add profile.xml file
+// @param f profile.xml file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_profile_xml_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        mobius::core::decoder::xml::dom dom (f.new_reader ());
+        auto root = dom.get_root_element ();
+
+        log.info (__LINE__, "File decoded [profile.xml]: " + f.get_path ());
+
+        bool overwrite =
+            !profile_xml_f || (profile_xml_f.is_deleted () && !f.is_deleted ());
+        mobius::core::value_selector vs (overwrite);
+
+        gnutella_guid_ =
+            vs (gnutella_guid_, mobius::core::string::toupper (
+                                    root.get_property_by_path ("gnutella/guid")
+                                ));
+        bittorrent_guid_ =
+            vs (bittorrent_guid_,
+                mobius::core::string::toupper (
+                    root.get_property_by_path ("bittorrent/guid")
+                ));
+        identity_ =
+            vs (identity_,
+                root.get_property_by_path ("identity/handle/primary"));
+
+        profile_xml_f = f;
+        source_files.push_back (f);
+
+        _set_folder (f.get_parent ());
+        _update_mtime(f);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Emit sampling_file event
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::emit (
+            "sampling_file", std::string ("app.shareaza.profile_xml"),
+            f.new_reader ()
+        );
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add Searches.dat file
+// @param f Searches.dat file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_searches_dat_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Decode file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        file_searches_dat searches_dat (f.new_reader ());
+
+        if (!searches_dat)
+        {
+            log.info (__LINE__, "File is not a valid Searches.dat file");
+            return;
+        }
+
+        log.info (__LINE__, "File decoded [searches.dat]: " + f.get_path ());
+
+        _set_folder (f.get_parent ());
+        _update_mtime(f);
+        
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Add searches
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (const auto &s : searches_dat.get_searches ())
+        {
+            auto cmanagedsearch = s.obj;
+            auto qs = cmanagedsearch.get_query_search ();
+
+            searched_text st;
+
+            // Attributes
+            st.timestamp = s.timestamp;
+            st.text = s.text;
+            st.f = f;
+
+            // Metadata
+            st.metadata.set ("search_id", qs.get_guid ());
+            st.metadata.set ("first_hit_time", s.first_hit_time);
+            st.metadata.set ("last_hit_time", s.last_hit_time);
+            st.metadata.set ("file_count", s.file_count);
+            st.metadata.set ("schema_uri", qs.get_uri ());
+            st.metadata.set ("priority", cmanagedsearch.get_priority ());
+            st.metadata.set ("flag_active", cmanagedsearch.get_flag_active ());
+            st.metadata.set (
+                "flag_receive", cmanagedsearch.get_flag_receive ()
+            );
+            st.metadata.set ("flag_allow_g1", cmanagedsearch.get_allow_g1 ());
+            st.metadata.set ("flag_allow_g2", cmanagedsearch.get_allow_g2 ());
+            st.metadata.set (
+                "flag_allow_ed2k", cmanagedsearch.get_allow_ed2k ()
+            );
+            st.metadata.set ("flag_allow_dc", cmanagedsearch.get_allow_dc ());
+            st.metadata.set ("flag_want_url", qs.get_flag_want_url ());
+            st.metadata.set ("flag_want_dn", qs.get_flag_want_dn ());
+            st.metadata.set ("flag_want_xml", qs.get_flag_want_xml ());
+            st.metadata.set ("flag_want_com", qs.get_flag_want_com ());
+            st.metadata.set ("flag_want_pfs", qs.get_flag_want_pfs ());
+            st.metadata.set ("min_size", qs.get_min_size ());
+            st.metadata.set ("max_size", qs.get_max_size ());
+            st.metadata.set (
+                "cmanagedsearch_version", cmanagedsearch.get_version ()
+            );
+            st.metadata.set ("cquerysearch_version", qs.get_version ());
+
+            searched_texts_.push_back (st);
+        }
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Add remote files
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        /*for (const auto &search_rf : searches_dat.get_remote_files ())
+        {
+            const auto &mf = search_rf.match_file;
+            const auto &q = search_rf.query_hit;
+
+            remote_file rf;
+
+            // attributes
+            rf.timestamp = mf.get_found_time ();
+            rf.ip = q.get_ip ();
+            rf.port = q.get_port ();
+            rf.filename = q.get_name ();
+            rf.username = username_;
+
+            // metadata
+            rf.metadata.set ("size", mf.get_size ());
+            rf.metadata.set ("peer_nickname", q.get_nick ());
+            rf.metadata.set ("url", q.get_url ());
+            rf.metadata.set ("schema_uri", q.get_schema_uri ());
+            rf.metadata.set ("rating", q.get_rating ());
+            rf.metadata.set ("comments", q.get_comments ());
+            rf.metadata.set ("protocol_id", q.get_protocol_id ());
+            rf.metadata.set ("protocol_name", q.get_protocol_name ());
+            rf.metadata.set ("search_id", q.get_search_id ());
+            rf.metadata.set ("client_id", q.get_client_id ());
+            rf.metadata.set ("speed", q.get_speed ());
+            rf.metadata.set ("str_speed", q.get_str_speed ());
+            rf.metadata.set ("vendor_code", q.get_vendor_code ());
+            rf.metadata.set ("vendor_name", q.get_vendor_name ());
+            rf.metadata.set ("tri_push", q.get_tri_push ());
+            rf.metadata.set ("tri_busy", q.get_tri_busy ());
+            rf.metadata.set ("tri_stable", q.get_tri_stable ());
+            rf.metadata.set ("tri_measured", q.get_tri_measured ());
+            rf.metadata.set ("up_slots", q.get_up_slots ());
+            rf.metadata.set ("up_queue", q.get_up_queue ());
+            rf.metadata.set ("b_chat", q.get_b_chat ());
+            rf.metadata.set ("b_browse_host", q.get_b_browse_host ());
+            rf.metadata.set ("b_matched", q.get_b_matched ());
+            rf.metadata.set ("b_size", q.get_b_size ());
+            rf.metadata.set ("b_preview", q.get_b_preview ());
+            rf.metadata.set ("b_collection", q.get_b_collection ());
+            rf.metadata.set ("b_bogus", q.get_b_bogus ());
+            rf.metadata.set ("b_download", q.get_b_download ());
+            rf.metadata.set ("b_exact_match", q.get_b_exact_match ());
+            rf.metadata.set ("index", q.get_index ());
+            rf.metadata.set ("hit_sources", q.get_hit_sources ());
+            rf.metadata.set ("partial", q.get_partial ());
+            rf.metadata.set ("schema_plural", q.get_schema_plural ());
+
+            for (const auto &[k, v] : q.get_pxml ().get_metadata ())
+                rf.metadata.set (k, v);
+
+            // other data
+            rf.thumbnail_data = mf.get_preview ();
+            rf.hashes = get_file_hashes (mf);
+            rf.f = f;
+
+            // add remote file
+            remote_files_.push_back (rf);
+        }*/
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Emit sampling_file event
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::emit (
+            "sampling_file", std::string ("app.shareaza.searches_dat"),
+            f.new_reader ()
+        );
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
 }
 
 } // namespace mobius::extension::app::shareaza

@@ -251,9 +251,6 @@ evidence_loader_impl::_scan_canonical_user_folder (
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Scan evidence files
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    for (const auto &f : w.get_files_by_name ("ntuser.dat"))
-        _decode_ntuser_dat_file (f);
-
     for (const auto &f :
          w.get_folders_by_path ("appdata/roaming/shareaza/data"))
         _scan_canonical_shareaza_data_folder (f);
@@ -273,24 +270,24 @@ evidence_loader_impl::_scan_canonical_shareaza_data_folder (
 {
     mobius::core::io::walker w (folder);
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Get account info first
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     for (const auto &f : w.get_files_by_name ("profile.xml"))
         _decode_profile_xml_file (f);
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Process Shareaza.db3 files
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     for (const auto &f : w.get_files_by_name ("shareaza.db3"))
         _decode_shareaza_db3_file (f);
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Process current library file
     // The current library is the library with the higher
     // last_modification_time. Active library (non deleted) is preferred.
     // @see CLibrary::Load function
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     auto lib_f = w.get_file_by_name ("library1.dat");
     auto lib2_f = w.get_file_by_name ("library2.dat");
 
@@ -304,9 +301,9 @@ evidence_loader_impl::_scan_canonical_shareaza_data_folder (
     if (lib_f)
         _decode_library_dat_file (lib_f);
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Process searches.dat files
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     for (const auto &f : w.get_files_by_name ("searches.dat"))
         _decode_searches_dat_file (f);
 }
@@ -807,89 +804,6 @@ evidence_loader_impl::_decode_sd_file (const mobius::core::io::file &f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode data from NTUSER.dat file
-// @param f File object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_decode_ntuser_dat_file (const mobius::core::io::file &f)
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    try
-    {
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Create decoder
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        auto decoder =
-            mobius::core::os::win::registry::hive_file (f.new_reader ());
-
-        if (!decoder.is_instance ())
-        {
-            log.info (__LINE__, "File " + f.get_path () + " ignored.");
-            return;
-        }
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Get evidences from Shareaza key
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        const auto &root_key = decoder.get_root_key ();
-        const auto &shareaza_key =
-            root_key.get_key_by_path ("Software\\Shareaza\\Shareaza");
-
-        if (shareaza_key)
-        {
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            // Set account
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            account acc;
-            acc.username = username_;
-            acc.is_deleted = f.is_deleted ();
-            acc.f = f;
-
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            // Load values from key
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            acc.install_path =
-                shareaza_key.get_data_by_name ("Path").get_data_as_string (
-                    "utf-16le");
-            acc.user_path = shareaza_key.get_data_by_name ("UserPath")
-                                .get_data_as_string ("utf-16le");
-
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            // Load values from Downloads key
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            const auto &download_key =
-                shareaza_key.get_key_by_name ("Downloads");
-
-            if (download_key)
-            {
-                acc.collection_path =
-                    download_key.get_data_by_name ("CollectionPath")
-                        .get_data_as_string ("utf-16le");
-                acc.complete_path =
-                    download_key.get_data_by_name ("CompletePath")
-                        .get_data_as_string ("utf-16le");
-                acc.incomplete_path =
-                    download_key.get_data_by_name ("IncompletePath")
-                        .get_data_as_string ("utf-16le");
-                acc.torrent_path = download_key.get_data_by_name ("TorrentPath")
-                                       .get_data_as_string ("utf-16le");
-            }
-
-            /*if (account_.guid.empty () ||
-                (account_.is_deleted && !acc.is_deleted))
-              account_ = acc;*/
-
-            accounts_.push_back (acc);
-        }
-    }
-    catch (const std::exception &e)
-    {
-        log.warning (__LINE__, e.what ());
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save evidences
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -897,62 +811,14 @@ evidence_loader_impl::_save_evidences ()
 {
     auto transaction = item_.new_transaction ();
 
-    _save_accounts ();
     _save_local_files ();
     _save_p2p_remote_files ();
     _save_received_files ();
-    _save_searched_texts ();
     _save_sent_files ();
     _save_shared_files ();
 
     item_.set_ant (ANT_ID, ANT_NAME, ANT_VERSION);
     transaction.commit ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Save accounts
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_save_accounts ()
-{
-    for (const auto &a : accounts_)
-    {
-        mobius::core::pod::map metadata;
-        metadata.set ("app_id", APP_ID);
-        metadata.set ("app_name", APP_NAME);
-        metadata.set ("username", a.username);
-        metadata.set ("gnutella_guid", a.gnutella_guid);
-        metadata.set ("bittorrent_guid", a.bittorrent_guid);
-        metadata.set ("identity_primary", a.identity);
-
-        if (!a.gnutella_guid.empty ())
-        {
-            auto e = item_.new_evidence ("user-account");
-
-            e.set_attribute ("account_type", "p2p.gnutella");
-            e.set_attribute ("id", a.gnutella_guid);
-            e.set_attribute ("password", {});
-            e.set_attribute ("password_found", "no");
-            e.set_attribute ("is_deleted", a.is_deleted);
-            e.set_attribute ("metadata", metadata.clone ());
-            e.set_tag ("app.p2p");
-            e.add_source (a.f);
-        }
-
-        if (!a.bittorrent_guid.empty ())
-        {
-            auto e = item_.new_evidence ("user-account");
-
-            e.set_attribute ("account_type", "p2p.bittorrent");
-            e.set_attribute ("id", a.bittorrent_guid);
-            e.set_attribute ("password", {});
-            e.set_attribute ("password_found", "no");
-            e.set_attribute ("is_deleted", a.is_deleted);
-            e.set_attribute ("metadata", metadata.clone ());
-            e.set_tag ("app.p2p");
-            e.add_source (a.f);
-        }
-    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1029,30 +895,6 @@ evidence_loader_impl::_save_p2p_remote_files ()
         e.set_tag ("app.p2p");
         e.add_source (rf.f);
         e.add_source (rf.shareaza_db3_f);
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Save searched texts
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_save_searched_texts ()
-{
-    for (const auto &search : searches_)
-    {
-        if (search.timestamp)
-        {
-            auto e = item_.new_evidence ("searched-text");
-
-            e.set_attribute ("timestamp", search.timestamp);
-            e.set_attribute ("search_type", "p2p.shareaza");
-            e.set_attribute ("text", search.text);
-            e.set_attribute ("username", search.username);
-            e.set_attribute ("metadata", search.metadata);
-
-            e.set_tag ("app.p2p");
-            e.add_source (search.f);
-        }
     }
 }
 

@@ -31,7 +31,6 @@
 #include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/model/evidence.hpp>
 
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // All Date/Times are stored in Coordinated Universal Time (UTC).
 // @see https://msdn.microsoft.com/pt-br/library/windows/desktop/ms724397(v=vs.85).aspx
@@ -126,9 +125,8 @@ vfs_processor_impl::vfs_processor_impl (
 void
 vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 {
-    //_scan_profile_folder (folder);
-    //_scan_arestra_folder (folder);
-    //_scan_ntuser_dat_folder (folder);
+    _scan_profile_folder (folder);
+    _scan_ntuser_dat_folder (folder);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -140,6 +138,8 @@ vfs_processor_impl::on_complete ()
     auto transaction = item_.new_transaction ();
 
     _save_autofills ();
+    _save_searched_texts ();
+    _save_user_accounts ();
 
     transaction.commit ();
 }
@@ -277,19 +277,18 @@ vfs_processor_impl::_scan_profile_folder (
     for (const auto &[name, f] : w.get_files_with_names ())
     {
         try
-        { /*
-            if (name == "shareh.dat")
-                p.add_shareh_file (f);
+        {
+            if (name == "profile.xml")
+                p.add_profile_xml_file (f);
 
-            else if (name == "sharel.dat")
-                p.add_sharel_file (f);
+            else if (name == "shareaza.db3")
+                ; //p.add_shareaza_db3_file (f);
 
-            else if (name == "torrenth.dat")
-                p.add_torrenth_file (f);
+            else if (name == "library1.dat" || name == "library2.dat")
+                ; //p.add_library_dat_file (f);
 
-            else if (name == "phashidx.dat" || name == "phashidxtemp.dat" ||
-                     name == "tempphash.dat")
-                p.add_phashidx_file (f);*/
+            else if (name == "searches.dat")
+                ; //p.add_searches_dat_file (f);
         }
         catch (const std::exception &e)
         {
@@ -304,9 +303,7 @@ vfs_processor_impl::_scan_profile_folder (
     // If we have a new profile, add it to the profiles list
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     if (p)
-    {
-        //profiles_.push_back (p);
-    }
+        profiles_.push_back (p);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -356,51 +353,7 @@ vfs_processor_impl::_decode_ntuser_dat_file (const mobius::core::io::file &f)
             root_key.get_key_by_path ("Software\\Shareaza\\Shareaza");
 
         if (shareaza_key)
-        {/*
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            // Set account
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            account acc;
-            acc.username = username_;
-            acc.is_deleted = f.is_deleted ();
-            acc.f = f;
-
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            // Load values from key
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            acc.install_path =
-                shareaza_key.get_data_by_name ("Path").get_data_as_string (
-                    "utf-16le");
-            acc.user_path = shareaza_key.get_data_by_name ("UserPath")
-                                .get_data_as_string ("utf-16le");
-
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            // Load values from Downloads key
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            const auto &download_key =
-                shareaza_key.get_key_by_name ("Downloads");
-
-            if (download_key)
-            {
-                acc.collection_path =
-                    download_key.get_data_by_name ("CollectionPath")
-                        .get_data_as_string ("utf-16le");
-                acc.complete_path =
-                    download_key.get_data_by_name ("CompletePath")
-                        .get_data_as_string ("utf-16le");
-                acc.incomplete_path =
-                    download_key.get_data_by_name ("IncompletePath")
-                        .get_data_as_string ("utf-16le");
-                acc.torrent_path = download_key.get_data_by_name ("TorrentPath")
-                                       .get_data_as_string ("utf-16le");
-            }
-
-            if (account_.guid.empty () ||
-                (account_.is_deleted && !acc.is_deleted))
-              account_ = acc;
-
-            accounts_.push_back (acc);*/
-
+        {
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Load autofill values
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -410,8 +363,9 @@ vfs_processor_impl::_decode_ntuser_dat_file (const mobius::core::io::file &f)
                 autofill af;
 
                 af.value = mobius::core::string::word (
-                    value.get_data ().get_data_as_string ("utf-16le"), 0, "\n");
-                af.username = username_;
+                    value.get_data ().get_data_as_string ("utf-16le"), 0, "\n"
+                );
+                af.username = get_username_from_path (f.get_path ());
                 af.id = value.get_name ().substr (7);
                 af.is_deleted = f.is_deleted ();
                 af.f = f;
@@ -449,6 +403,84 @@ vfs_processor_impl::_save_autofills ()
 
         e.set_tag ("app.p2p");
         e.add_source (a.f);
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save searched texts
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_searched_texts ()
+{
+    for (const auto &p : profiles_)
+    {
+        for (const auto &st : p.get_searched_texts ())
+        {
+            if (st.timestamp)
+            {
+                auto e = item_.new_evidence ("searched-text");
+
+                e.set_attribute ("timestamp", st.timestamp);
+                e.set_attribute ("search_type", "p2p.shareaza");
+                e.set_attribute ("text", st.text);
+                e.set_attribute ("username", p.get_username ());
+                e.set_attribute ("metadata", st.metadata);
+
+                e.set_tag ("app.p2p");
+                e.add_source (st.f);
+            }
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save user accounts
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_user_accounts ()
+{
+    for (const auto &p : profiles_)
+    {
+        auto gnutella_guid = p.get_gnutella_guid ();
+        auto bittorrent_guid = p.get_bittorrent_guid ();
+
+        mobius::core::pod::map metadata;
+        metadata.set ("app_id", APP_ID);
+        metadata.set ("app_name", APP_NAME);
+        metadata.set ("username", p.get_username ());
+        metadata.set ("gnutella_guid", gnutella_guid);
+        metadata.set ("bittorrent_guid", bittorrent_guid);
+        metadata.set ("identity_primary", p.get_identity ());
+
+        if (!gnutella_guid.empty ())
+        {
+            auto e = item_.new_evidence ("user-account");
+
+            e.set_attribute ("account_type", "p2p.gnutella");
+            e.set_attribute ("id", p.get_gnutella_guid ());
+            e.set_attribute ("password", {});
+            e.set_attribute ("password_found", "no");
+            e.set_attribute ("metadata", metadata.clone ());
+            e.set_tag ("app.p2p");
+
+            for (const auto &sf : p.get_source_files ())
+                e.add_source (sf);
+        }
+
+        if (!bittorrent_guid.empty ())
+        {
+            auto e = item_.new_evidence ("user-account");
+
+            e.set_attribute ("account_type", "p2p.bittorrent");
+            e.set_attribute ("id", bittorrent_guid);
+            e.set_attribute ("password", {});
+            e.set_attribute ("password_found", "no");
+            e.set_attribute ("metadata", metadata.clone ());
+            e.set_tag ("app.p2p");
+
+            for (const auto &sf : p.get_source_files ())
+                e.add_source (sf);
+        }
     }
 }
 
