@@ -17,51 +17,60 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/resource.hpp>
-#include <mobius/framework/ant/vfs_processor.hpp>
-#include <mobius/framework/evidence_loader.hpp>
-#include "evidence_loader_impl.hpp"
-#include "vfs_processor_impl.hpp"
+#include "profile.hpp"
+#include <mobius/core/io/path.hpp>
+#include <mobius/core/log.hpp>
+#include <mobius/core/string_functions.hpp>
+#include <string>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Extension data
+// References:
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-extern "C"
+
+namespace
 {
-    const char *EXTENSION_ID = "app-shareaza";
-    const char *EXTENSION_NAME = "App Shareaza";
-    const char *EXTENSION_VERSION = "1.3";
-    const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
-    const char *EXTENSION_DESCRIPTION = "Shareaza support";
-} // extern "C"
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Start extension
+// @brief Get username from path
+// @param path Path to profile
+// @return Username extracted from path
+//
+// @note Paths are in the following format: /FSxx/Users/username/... or
+// /FSxx/home/username/... where FSxx is the filesystem identifier.
+// Example: /FS01/Users/johndoe/AppData/Local/Google/Chrome/User Data/
+// In this case, the username is "johndoe".
+// If the path does not match the expected format, an empty string is returned.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-extern "C" void
-start ()
+std::string
+get_username_from_path (const std::string &path)
 {
-    mobius::framework::ant::register_vfs_processor_implementation<
-        mobius::extension::app::shareaza::vfs_processor_impl> (
-        EXTENSION_ID, EXTENSION_NAME
-    );
+    auto dirnames = mobius::core::string::split (path, "/");
 
-    mobius::core::add_resource (
-        "evidence_loader.builder.app-shareaza", "Shareaza evidence loader",
-        mobius::framework::new_evidence_loader_builder_resource<
-            mobius::extension::app::shareaza::evidence_loader_impl> ()
-    );
+    if (dirnames.size () > 3 &&
+        (dirnames[2] == "Users" || dirnames[2] == "home"))
+        return dirnames[3]; // Username is the fourth directory
+
+    return {}; // No username found
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Stop extension
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-extern "C" void
-stop ()
-{
-    mobius::framework::ant::unregister_vfs_processor_implementation (
-        EXTENSION_ID
-    );
+} // namespace
 
-    mobius::core::remove_resource ("evidence_loader.builder.app-shareaza");
+namespace mobius::extension::app::shareaza
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set folder
+// @param f Folder
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::_set_folder (const mobius::core::io::folder &f)
+{
+    if (folder_ || !f)
+        return;
+
+    folder_ = f;
+
+    last_modified_time_ = f.get_modification_time ();
+    creation_time_ = f.get_creation_time ();
+    username_ = get_username_from_path (f.get_path ());
 }
+
+} // namespace mobius::extension::app::shareaza

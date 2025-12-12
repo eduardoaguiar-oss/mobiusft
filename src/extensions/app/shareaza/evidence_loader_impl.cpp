@@ -881,24 +881,6 @@ evidence_loader_impl::_decode_ntuser_dat_file (const mobius::core::io::file &f)
               account_ = acc;*/
 
             accounts_.push_back (acc);
-
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            // Load autofill values
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-            for (const auto &value :
-                 shareaza_key.get_values_by_mask ("Search\\Search.*"))
-            {
-                autofill af;
-
-                af.value = mobius::core::string::word (
-                    value.get_data ().get_data_as_string ("utf-16le"), 0, "\n");
-                af.username = username_;
-                af.id = value.get_name ().substr (7);
-                af.is_deleted = acc.is_deleted;
-                af.f = f;
-
-                autofills_.push_back (af);
-            }
         }
     }
     catch (const std::exception &e)
@@ -916,7 +898,6 @@ evidence_loader_impl::_save_evidences ()
     auto transaction = item_.new_transaction ();
 
     _save_accounts ();
-    _save_autofills ();
     _save_local_files ();
     _save_p2p_remote_files ();
     _save_received_files ();
@@ -971,31 +952,6 @@ evidence_loader_impl::_save_accounts ()
             e.set_tag ("app.p2p");
             e.add_source (a.f);
         }
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Save autofill entries
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_save_autofills ()
-{
-    for (const auto &a : autofills_)
-    {
-        mobius::core::pod::map metadata;
-        metadata.set ("id", a.id);
-
-        auto e = item_.new_evidence ("autofill");
-
-        e.set_attribute ("field_name", "search");
-        e.set_attribute ("value", a.value);
-        e.set_attribute ("app_id", APP_ID);
-        e.set_attribute ("app_name", APP_NAME);
-        e.set_attribute ("username", a.username);
-        e.set_attribute ("is_deleted", a.is_deleted);
-        e.set_attribute ("metadata", metadata);
-        e.set_tag ("app.p2p");
-        e.add_source (a.f);
     }
 }
 

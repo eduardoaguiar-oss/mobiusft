@@ -56,18 +56,6 @@ struct account
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Autofill
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-struct autofill
-{
-    bool is_deleted = false;
-    std::string username;
-    std::string value;
-    std::string id;
-    mobius::core::io::file f;
-};
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Searched text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct search
@@ -194,9 +182,6 @@ class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
     // @brief Accounts found
     std::vector<account> accounts_;
 
-    // @brief Autofills found
-    std::vector<autofill> autofills_;
-
     // @brief Searched texts
     std::vector<search> searches_;
 
@@ -224,7 +209,6 @@ class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
 
     void _save_evidences ();
     void _save_accounts ();
-    void _save_autofills ();
     void _save_searched_texts ();
     void _save_local_files ();
     void _save_p2p_remote_files ();

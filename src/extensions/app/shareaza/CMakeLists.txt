@@ -45,6 +45,8 @@ add_library(app_shareaza MODULE
     CXMLElement.cpp
     evidence_loader_impl.cpp
     file_searches_dat.cpp
+    profile.cpp
+    vfs_processor_impl.cpp
 )
 
 set_target_properties(app_shareaza PROPERTIES OUTPUT_NAME "app-shareaza" PREFIX "")

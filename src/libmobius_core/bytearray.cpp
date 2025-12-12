@@ -466,7 +466,7 @@ bytearray::to_guid () const
 
     char buffer[37] = {0};
     sprintf (
-        buffer, "%08x-%04x-%04x-%04x-%012llx",
+        buffer, "%08x-%04x-%04x-%04x-%012lx",
         static_cast<std::uint32_t> (data_[0]) << 24 |
             static_cast<std::uint32_t> (data_[1]) << 16 |
             static_cast<std::uint32_t> (data_[2]) << 8 |
