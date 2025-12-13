@@ -72,6 +72,9 @@ class vfs_processor_impl
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _scan_profile_folder (const mobius::core::io::folder &);
+    void _scan_part_met_files (const mobius::core::io::folder &);
+    void _decode_part_met_file (const mobius::core::io::file &);
+    void _decode_part_met_txtsrc_file (const mobius::core::io::file &, const profile::local_file &);
 
     void _save_app_profiles ();
     void _save_autofills ();

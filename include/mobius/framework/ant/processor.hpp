@@ -59,27 +59,6 @@ class processor : public ant
     std::shared_ptr<impl> impl_;
 };
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Datatypes
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-/*using processor_impl_builder_type =
-    std::function<std::shared_ptr<processor_impl_base> (
-        const mobius::framework::model::item &
-    )>;
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Add evidence_loader builder
-// @param id Evidence loader ID
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename T>
-evidence_loader_builder_type
-new_evidence_loader_builder_resource ()
-{
-    return [] (const mobius::framework::model::item &item,
-               evidence_loader::scan_type type)
-    { return std::make_shared<T> (item, type); };
-}*/
-
 } // namespace mobius::framework::ant
 
 #endif

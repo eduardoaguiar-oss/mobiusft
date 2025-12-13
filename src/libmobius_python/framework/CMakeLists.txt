@@ -36,7 +36,6 @@ add_library(libmobius_python_framework STATIC
     attribute.cpp
     case_profile.cpp
     category.cpp
-    evidence_loader.cpp
     func_config.cpp
     processor.cpp
 )

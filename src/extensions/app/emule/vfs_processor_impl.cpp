@@ -29,6 +29,8 @@
 #include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/model/evidence.hpp>
 #include "common.hpp"
+#include "file_part_met.hpp"
+#include "file_part_met_txtsrc.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Versions examined: Emule 0.50a and DreaMule 3.2
@@ -132,7 +134,7 @@ void
 vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 {
     _scan_profile_folder (folder);
-    //_scan_arestra_folder (folder);
+    _scan_part_met_files (folder);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -225,7 +227,7 @@ vfs_processor_impl::_scan_profile_folder (
                 p.add_key_index_dat_file (f);
 
             else if (name == "known.met")
-                ; //_decode_known_met_file (f);
+                p.add_known_met_file (f);
 
             else if (name == "storedsearches.met")
                 p.add_storedsearches_met_file (f);
@@ -244,6 +246,188 @@ vfs_processor_impl::_scan_profile_folder (
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     if (p)
         profiles_.push_back (p);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Scan .part.met files in folder
+// @param folder Folder to scan
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_scan_part_met_files (
+    const mobius::core::io::folder &folder
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+    auto w = mobius::core::io::walker (folder);
+
+    try
+    {
+        for (const auto &f : w.get_files_by_pattern ("*.part.met"))
+            _decode_part_met_file (f);
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__,
+            std::string (e.what ()) + " (folder: " + folder.get_path () + ")"
+        );
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode .part.met file
+// @param f File object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_decode_part_met_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Decode file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        file_part_met part_met (f.new_reader ());
+
+        if (!part_met)
+        {
+            log.info (
+                __LINE__,
+                "File is not an instance of .part.met. Path: " + f.get_path ()
+            );
+            return;
+        }
+
+        log.info (__LINE__, "File decoded [.part.met]: " + f.get_path ());
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Create local file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto metadata = get_metadata_from_tags (part_met.get_tags ());
+
+        profile::local_file lf;
+
+        lf.username = get_username_from_path (f.get_path ());
+        lf.path = f.get_path ();
+        lf.path.erase (lf.path.size () - 4);
+        lf.filename = metadata.get<std::string> ("name");
+        lf.f = f;
+        std::tie (lf.app_id, lf.app_name) = get_app_from_path (f.get_path ());
+
+        lf.flag_downloaded = true;
+        lf.flag_uploaded = metadata.get<std::int64_t> ("uploaded_bytes") > 0;
+        lf.flag_shared = mobius::framework::evidence_flag::always;
+        lf.flag_corrupted = metadata.get<bool> ("is_corrupted");
+        lf.flag_completed = part_met.get_total_gap_size () == 0;
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Metadata
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        metadata.set ("file_version", part_met.get_version ());
+        metadata.set ("flag_downloaded", to_string (lf.flag_downloaded));
+        metadata.set ("flag_uploaded", to_string (lf.flag_uploaded));
+        metadata.set ("flag_shared", to_string (lf.flag_shared));
+        metadata.set ("flag_corrupted", to_string (lf.flag_corrupted));
+        metadata.set ("flag_completed", to_string (lf.flag_completed));
+        metadata.set ("timestamp", part_met.get_timestamp ());
+        metadata.set ("total_gap_size", part_met.get_total_gap_size ());
+        metadata.set ("network", "eDonkey");
+
+        lf.metadata = metadata;
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Content hashes
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        std::vector<mobius::core::pod::data> hashes = {
+            {"ed2k", mobius::core::string::toupper (part_met.get_hash_ed2k ())}
+        };
+
+        auto aich_hash = metadata.get<std::string> ("hash_aich");
+
+        if (!aich_hash.empty ())
+            hashes.push_back ({"aich", aich_hash});
+
+        lf.hashes = hashes;
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Add local file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        local_files_.push_back (lf);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Scan .part.met.txtsrc files
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto w = mobius::core::io::walker (f.get_parent ());
+
+        for (const auto &txtsrc_f :
+             w.get_files_by_name (f.get_name () + ".txtsrc"))
+        {
+            _decode_part_met_txtsrc_file (txtsrc_f, lf);
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode .part.met.txtsrc file
+// @param f File object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_decode_part_met_txtsrc_file (
+    const mobius::core::io::file &f, const profile::local_file &lf
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Decode file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        file_part_met_txtsrc txtsrc (f.new_reader ());
+
+        if (!txtsrc)
+        {
+            log.info (
+                __LINE__,
+                "File is not an instance of .part.met.txtsrc. Path: " +
+                    f.get_path ()
+            );
+            return;
+        }
+
+        log.info (
+            __LINE__, "File decoded [.part.met.txtsrc]: " + f.get_path ()
+        );
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Create remote file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (const auto &source : txtsrc.get_sources ())
+        {
+            auto rf = profile::remote_file ();
+
+            rf.username = username_;
+            rf.timestamp = f.get_modification_time ();
+            rf.ip = source.ip;
+            rf.port = source.port;
+            rf.filename = lf.filename;
+            rf.source_files.push_back (lf.f);
+            rf.source_files.push_back (f);
+            rf.hashes = lf.hashes.clone ();
+            rf.metadata = lf.metadata.clone ();
+
+            remote_files_.push_back (rf);
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

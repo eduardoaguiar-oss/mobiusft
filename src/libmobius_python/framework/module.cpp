@@ -29,7 +29,6 @@
 #include "attribute.hpp"
 #include "case_profile.hpp"
 #include "category.hpp"
-#include "evidence_loader.hpp"
 #include "model/module.hpp"
 
 #include <pycallback.hpp>
@@ -106,7 +105,6 @@ new_framework_module ()
     module.add_type ("attribute", new_framework_attribute_type ());
     module.add_type ("case_profile", new_framework_case_profile_type ());
     module.add_type ("category", new_framework_category_type ());
-    module.add_type ("evidence_loader", new_framework_evidence_loader_type ());
 
     // Add constants
     module.add_constant ("SCAN_TYPE_CANONICAL_FOLDERS", 1);

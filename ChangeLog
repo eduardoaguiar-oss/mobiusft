@@ -7,6 +7,7 @@ Mobius Forensic Toolkit 2.22
 	* app-emule: Added new class vfs_processor_impl
 	* app-emule: Added new class profile
 	* app-emule: Added support for aMule
+	* app-emule: Removed evidence_loader_impl class
 	* app-emuletorrent: Improved evidence tags
 	* app-emuletorrent: Changed to save remote-party-shared-file evidences
 	* app-emuletorrent: Added new class vfs_processor_impl
@@ -27,6 +28,10 @@ Mobius Forensic Toolkit 2.22
 	* libmobius_core: Added new method pod::map::get_map
 	* libmobius_core: Added new method pod::map::pop_list<T>
 	* libmobius_core: Added new method pod::map::pop_map
+	* libmobius_framework: Removed class evidence_loader
+	* libmobius_framework: Removed class evidence_loader_impl_base
+	* libmobius_framework: Removed class evidence_loader_impl_null
+	* libmobius_python: Removed class framework.evidence_loader
 	* ant.evidence.post.ip_addresses_from_cookies: Added decoding of both MSCC and MS-CV cookies
 	* ant.evidence.post.ip_addresses_from_cookies: Added decoding of geode cookies
 	* ant.evidence.post.ip_addresses_from_cookies: Added decoding of voxusmediamanager__ip cookies

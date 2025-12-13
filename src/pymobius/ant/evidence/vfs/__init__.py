@@ -60,11 +60,6 @@ ANTS = [
     wireless_networks.Ant,
 ]
 
-LOADERS = [
-    "app-emule",
-]
-
-
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Ant: VFS Evidence
 # @author Eduardo Aguiar
@@ -130,21 +125,5 @@ class Ant(object):
         self.__ant.run()
         self.__ant = None
         
-        # run evidence loader ants
-        for idx, loader in enumerate(LOADERS, 1):
-            mobius.core.logf(f"INF evidence loader started: {loader}")
-
-            try:
-                self.__item.reset_ant(f"evidence.{loader}")
-                ant = mobius.framework.evidence_loader(loader, self.__item)
-                
-                self.__step_number = f"3.{idx}"
-                self.__step_name = f"{loader} loader"
-                
-                ant.run()
-            except Exception as e:
-                mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
-
-            mobius.core.logf(f"INF evidence loader ended: {loader}")
-
+	# end processing
         mobius.core.logf(f"INF ant {self.id} ended")
