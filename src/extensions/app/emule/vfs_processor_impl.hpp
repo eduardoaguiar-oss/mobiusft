@@ -61,6 +61,12 @@ class vfs_processor_impl
 
     // @brief Profiles found
     std::vector<profile> profiles_;
+
+    // @brief Local files
+    std::vector<profile::local_file> local_files_;
+
+    // @brief Remote files
+    std::vector<profile::remote_file> remote_files_;
     
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
@@ -69,6 +75,11 @@ class vfs_processor_impl
 
     void _save_app_profiles ();
     void _save_autofills ();
+    void _save_local_files ();
+    void _save_received_files ();
+    void _save_remote_party_shared_files ();
+    void _save_sent_files ();
+    void _save_shared_files ();
     void _save_user_accounts ();
 };
 

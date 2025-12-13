@@ -26,6 +26,9 @@
 #include <mobius/core/string_functions.hpp>
 #include <mobius/core/value_selector.hpp>
 #include <string>
+#include "common.hpp"
+#include "file_key_index_dat.hpp"
+#include "file_known_met.hpp"
 #include "file_stored_searches_met.hpp"
 
 namespace
@@ -74,6 +77,7 @@ profile::_set_folder (const mobius::core::io::folder &f)
     last_modified_time_ = f.get_modification_time ();
     creation_time_ = f.get_creation_time ();
     username_ = get_username_from_path (f.get_path ());
+    std::tie (app_id_, app_name_) = get_app_from_path (f.get_path ());
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Emit sampling_folder event
@@ -149,6 +153,176 @@ profile::add_ac_searchstrings_dat_file (const mobius::core::io::file &f)
         // Emit sampling_file event
         mobius::core::emit (
             "sampling_file", std::string ("app.emule.ac_searchstrings_dat"),
+            f.new_reader ()
+        );
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add key_index.dat file
+// @param f File object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_key_index_dat_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Decode file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        file_key_index_dat key_index (f.new_reader ());
+
+        if (!key_index)
+        {
+            log.info (
+                __LINE__, "File is not an instance of KeyIndex.dat. Path: " +
+                              f.get_path ()
+            );
+            return;
+        }
+
+        log.info (__LINE__, "File decoded [key_index.dat]: " + f.get_path ());
+
+        _set_folder (f.get_parent ());
+        _update_mtime (f);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Add remote files
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (const auto &k : key_index.get_keys ())
+        {
+            for (const auto &source : k.sources)
+            {
+                auto hash_ed2k = mobius::core::string::toupper (source.id);
+
+                for (const auto &name : source.names)
+                {
+                    auto metadata = get_metadata_from_tags (name.tags);
+                    metadata.set ("network", "Kamdelia");
+                    metadata.set ("key_id", k.id);
+                    metadata.set ("lifetime", name.lifetime);
+
+                    for (const auto &ip : name.ips)
+                    {
+                        remote_file rf;
+                        rf.timestamp = ip.last_published;
+                        rf.ip = ip.value;
+                        rf.username = username_;
+                        rf.source_files.push_back (f);
+                        rf.metadata = metadata.clone ();
+                        rf.filename = metadata.get<std::string> ("name");
+
+                        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+                        // Content hashes
+                        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+                        std::vector<mobius::core::pod::data> hashes = {
+                            {"ed2k", hash_ed2k}
+                        };
+
+                        auto aich_hash =
+                            metadata.get<std::string> ("hash_aich");
+
+                        if (!aich_hash.empty ())
+                            hashes.push_back ({"aich", aich_hash});
+
+                        rf.hashes = hashes;
+
+                        remote_files_.push_back (rf);
+                    }
+                }
+            }
+        }
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Emit sampling_file event
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::emit (
+            "sampling_file", std::string ("app.emule.key_index_dat"),
+            f.new_reader ()
+        );
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add known.met file
+// @param f File object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_known_met_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Decode file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        file_known_met known_met (f.new_reader ());
+
+        if (!known_met)
+        {
+            log.info (
+                __LINE__,
+                "File is not an instance of Known.met. Path: " + f.get_path ()
+            );
+            return;
+        }
+
+        log.info (__LINE__, "File decoded [known.met]: " + f.get_path ());
+
+        _set_folder (f.get_parent ());
+        _update_mtime (f);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Add local files
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (const auto &kf : known_met.get_known_files ())
+        {
+            auto metadata = get_metadata_from_tags (kf.tags);
+
+            local_file lf;
+
+            lf.username = username_;
+            lf.filename = metadata.get<std::string> ("name");
+            lf.flag_downloaded = true;
+            lf.flag_uploaded =
+                metadata.get<std::int64_t> ("uploaded_bytes") > 0;
+            lf.flag_shared = mobius::framework::evidence_flag::always;
+            lf.flag_corrupted = metadata.get<bool> ("is_corrupted");
+            lf.flag_completed = true; // @see CPartFile::PerformFileCompleteEnd
+            lf.app_id = app_id_;
+            lf.app_name = app_name_;
+
+            metadata.set ("flag_downloaded", to_string (lf.flag_downloaded));
+            metadata.set ("flag_uploaded", to_string (lf.flag_uploaded));
+            metadata.set ("flag_shared", to_string (lf.flag_shared));
+            metadata.set ("flag_corrupted", to_string (lf.flag_corrupted));
+            metadata.set ("flag_completed", to_string (lf.flag_completed));
+            metadata.set ("last_modification_time", kf.last_modification_time);
+            metadata.set ("network", "eDonkey");
+
+            lf.metadata = metadata;
+            lf.hashes = get_file_hashes (kf);
+            lf.f = f;
+
+            local_files_.push_back (lf);
+        }
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Emit sampling_file event
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::emit (
+            "sampling_file", std::string ("app.emule.known_met"),
             f.new_reader ()
         );
     }

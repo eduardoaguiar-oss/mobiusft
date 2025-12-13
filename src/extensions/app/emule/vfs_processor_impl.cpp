@@ -28,6 +28,7 @@
 #include <mobius/core/string_functions.hpp>
 #include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/model/evidence.hpp>
+#include "common.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Versions examined: Emule 0.50a and DreaMule 3.2
@@ -106,25 +107,6 @@ get_username_from_path (const std::string &path)
     return {}; // No username found
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Update metadata map, preferring non null values
-// @param metadata Metadata map
-// @param other Other metadata map
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static void
-update_metadata (
-    mobius::core::pod::map &metadata, const mobius::core::pod::map &other
-)
-{
-    for (const auto &[k, v] : other)
-    {
-        auto old_v = metadata.get (k);
-
-        if (!metadata.contains (k) || (old_v.is_null () && !v.is_null ()))
-            metadata.set (k, v);
-    }
-}
-
 } // namespace
 
 namespace mobius::extension::app::emule
@@ -159,10 +141,45 @@ vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 void
 vfs_processor_impl::on_complete ()
 {
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Consolidate local files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &p : profiles_)
+    {
+        auto incoming_dir = p.get_incoming_dir ();
+
+        for (auto &lf : p.get_local_files ())
+        {
+            if (!incoming_dir.empty ())
+                lf.path = incoming_dir + '\\' + lf.filename;
+            local_files_.push_back (lf);
+        }
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Consolidate remote files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &p : profiles_)
+    {
+        auto remote_files = p.get_remote_files ();
+        std::copy (
+            remote_files.begin (), remote_files.end (),
+            std::back_inserter (remote_files_)
+        );
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Save evidences
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     auto transaction = item_.new_transaction ();
 
     _save_app_profiles ();
     _save_autofills ();
+    _save_local_files ();
+    _save_received_files ();
+    _save_remote_party_shared_files ();
+    _save_sent_files ();
+    _save_shared_files ();
     _save_user_accounts ();
 
     transaction.commit ();
@@ -192,11 +209,11 @@ vfs_processor_impl::_scan_profile_folder (
             if (name == "preferences.dat")
                 p.add_preferences_dat_file (f);
 
-            else if (name == "preferences.ini")
+            else if (name == "preferences.ini" || name == "amule.conf")
                 p.add_preferences_ini_file (f);
 
             else if (name == "statistics.ini" || name == "statbkup.ini")
-                p.add_statistics_ini_file(f);
+                p.add_statistics_ini_file (f);
 
             else if (name == "preferenceskad.dat")
                 p.add_preferenceskad_dat_file (f);
@@ -205,7 +222,7 @@ vfs_processor_impl::_scan_profile_folder (
                 p.add_ac_searchstrings_dat_file (f);
 
             else if (name == "key_index.dat")
-                ; //_decode_key_index_dat_file (f);
+                p.add_key_index_dat_file (f);
 
             else if (name == "known.met")
                 ; //_decode_known_met_file (f);
@@ -240,8 +257,8 @@ vfs_processor_impl::_save_app_profiles ()
         auto e = item_.new_evidence ("app-profile");
 
         // Attributes
-        e.set_attribute ("app_id", APP_ID);
-        e.set_attribute ("app_name", APP_NAME);
+        e.set_attribute ("app_id", p.get_app_id ());
+        e.set_attribute ("app_name", p.get_app_name ());
         e.set_attribute ("username", p.get_username ());
         e.set_attribute ("creation_time", p.get_creation_time ());
         e.set_attribute ("last_modified_time", p.get_last_modified_time ());
@@ -249,6 +266,9 @@ vfs_processor_impl::_save_app_profiles ()
 
         // Metadata
         auto metadata = mobius::core::pod::map ();
+        metadata.set ("num_autofills", p.get_num_autofills ());
+        metadata.set ("num_local_files", p.get_num_local_files ());
+        metadata.set ("num_remote_files", p.get_num_remote_files ());
         metadata.set ("app_version", p.get_app_version ());
         metadata.set ("auto_start", p.get_auto_start ());
         metadata.set (
@@ -284,6 +304,8 @@ vfs_processor_impl::_save_autofills ()
     for (const auto &p : profiles_)
     {
         auto username = p.get_username ();
+        auto app_id = p.get_app_id ();
+        auto app_name = p.get_app_name ();
 
         for (const auto &af : p.get_autofills ())
         {
@@ -294,8 +316,8 @@ vfs_processor_impl::_save_autofills ()
 
             e.set_attribute ("field_name", "search");
             e.set_attribute ("value", af.value);
-            e.set_attribute ("app_id", APP_ID);
-            e.set_attribute ("app_name", APP_NAME);
+            e.set_attribute ("app_id", app_id);
+            e.set_attribute ("app_name", app_name);
             e.set_attribute ("username", username);
             e.set_attribute ("is_deleted", af.is_deleted);
             e.set_attribute ("metadata", metadata);
@@ -307,7 +329,135 @@ vfs_processor_impl::_save_autofills ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Save accounts
+// @brief Save local files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_local_files ()
+{
+    for (const auto &lf : local_files_)
+    {
+        auto e = item_.new_evidence ("local-file");
+
+        e.set_attribute ("username", lf.username);
+        e.set_attribute ("filename", lf.filename);
+        e.set_attribute ("path", lf.path);
+        e.set_attribute ("app_id", lf.app_id);
+        e.set_attribute ("app_name", lf.app_name);
+        e.set_attribute ("hashes", lf.hashes);
+        e.set_attribute ("metadata", lf.metadata);
+
+        e.set_tag ("app.p2p");
+        e.add_source (lf.f);
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save received files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_received_files ()
+{
+    for (const auto &lf : local_files_)
+    {
+        if (lf.flag_downloaded.is_yes ())
+        {
+            auto e = item_.new_evidence ("received-file");
+
+            e.set_attribute ("username", lf.username);
+            e.set_attribute ("filename", lf.filename);
+            e.set_attribute ("path", lf.path);
+            e.set_attribute ("app_id", lf.app_id);
+            e.set_attribute ("app_name", lf.app_name);
+            e.set_attribute ("hashes", lf.hashes);
+            e.set_attribute ("metadata", lf.metadata);
+
+            e.set_tag ("app.p2p");
+            e.add_source (lf.f);
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save remote files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_remote_party_shared_files ()
+{
+    for (const auto &rf : remote_files_)
+    {
+        auto e = item_.new_evidence ("remote-party-shared-file");
+
+        e.set_attribute ("timestamp", rf.timestamp);
+        e.set_attribute ("ip", rf.ip);
+        e.set_attribute ("port", rf.port);
+        e.set_attribute ("filename", rf.filename);
+        e.set_attribute ("username", rf.username);
+        e.set_attribute ("app_id", APP_ID);
+        e.set_attribute ("app_name", APP_NAME);
+        e.set_attribute ("hashes", rf.hashes);
+        e.set_attribute ("metadata", rf.metadata);
+
+        e.set_tag ("app.p2p");
+
+        for (const auto &sf : rf.source_files)
+            e.add_source (sf);
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save sent files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_sent_files ()
+{
+    for (const auto &lf : local_files_)
+    {
+        if (lf.flag_uploaded.is_yes ())
+        {
+            auto e = item_.new_evidence ("sent-file");
+
+            e.set_attribute ("username", lf.username);
+            e.set_attribute ("filename", lf.filename);
+            e.set_attribute ("path", lf.path);
+            e.set_attribute ("app_id", lf.app_id);
+            e.set_attribute ("app_name", lf.app_name);
+            e.set_attribute ("hashes", lf.hashes);
+            e.set_attribute ("metadata", lf.metadata);
+
+            e.set_tag ("app.p2p");
+            e.add_source (lf.f);
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save shared files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_shared_files ()
+{
+    for (const auto &lf : local_files_)
+    {
+        if (lf.flag_shared.is_yes () || lf.flag_shared.is_always ())
+        {
+            auto e = item_.new_evidence ("shared-file");
+
+            e.set_attribute ("username", lf.username);
+            e.set_attribute ("filename", lf.filename);
+            e.set_attribute ("path", lf.path);
+            e.set_attribute ("app_id", lf.app_id);
+            e.set_attribute ("app_name", lf.app_name);
+            e.set_attribute ("hashes", lf.hashes);
+            e.set_attribute ("metadata", lf.metadata);
+
+            e.set_tag ("app.p2p");
+            e.add_source (lf.f);
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save user accounts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 vfs_processor_impl::_save_user_accounts ()
@@ -318,8 +468,8 @@ vfs_processor_impl::_save_user_accounts ()
         auto kamdelia_guid = p.get_kamdelia_guid ();
 
         mobius::core::pod::map metadata;
-        metadata.set ("app_id", APP_ID);
-        metadata.set ("app_name", APP_NAME);
+        metadata.set ("app_id", p.get_app_id ());
+        metadata.set ("app_name", p.get_app_name ());
         metadata.set ("username", p.get_username ());
         metadata.set ("emule_guid", emule_guid);
         metadata.set ("kamdelia_guid", kamdelia_guid);
@@ -329,9 +479,13 @@ vfs_processor_impl::_save_user_accounts ()
         metadata.set ("nickname", p.get_nick ());
         metadata.set ("app_version", p.get_app_version ());
         metadata.set ("auto_start", p.get_auto_start ());
-        metadata.set ("total_downloaded_bytes", p.get_total_downloaded_bytes ());
+        metadata.set (
+            "total_downloaded_bytes", p.get_total_downloaded_bytes ()
+        );
         metadata.set ("total_uploaded_bytes", p.get_total_uploaded_bytes ());
-        metadata.set ("download_completed_files", p.get_download_completed_files ());
+        metadata.set (
+            "download_completed_files", p.get_download_completed_files ()
+        );
 
         if (!emule_guid.empty ())
         {

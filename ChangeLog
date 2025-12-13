@@ -4,6 +4,9 @@ Mobius Forensic Toolkit 2.22
 	* app-chromium: Improved evidence tags
 	* app-emule: Improved evidence tags
 	* app-emule: Changed to save remote-party-shared-file evidences
+	* app-emule: Added new class vfs_processor_impl
+	* app-emule: Added new class profile
+	* app-emule: Added support for aMule
 	* app-emuletorrent: Improved evidence tags
 	* app-emuletorrent: Changed to save remote-party-shared-file evidences
 	* app-emuletorrent: Added new class vfs_processor_impl

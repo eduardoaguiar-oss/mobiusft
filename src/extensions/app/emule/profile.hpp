@@ -24,6 +24,7 @@
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/folder.hpp>
 #include <mobius/core/pod/map.hpp>
+#include <mobius/framework/evidence_flag.hpp>
 #include <string>
 #include <vector>
 
@@ -46,6 +47,57 @@ class profile
         std::string id;
         mobius::core::pod::map metadata;
         mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Local file
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct local_file
+    {
+        // attributes
+        std::string path;
+        std::string filename;
+        std::string username;
+        std::string app_id;
+        std::string app_name;
+
+        // metadata
+        mobius::core::pod::map metadata;
+
+        // hashes
+        mobius::core::pod::data hashes;
+
+        // flags
+        mobius::framework::evidence_flag flag_downloaded;
+        mobius::framework::evidence_flag flag_uploaded;
+        mobius::framework::evidence_flag flag_shared;
+        mobius::framework::evidence_flag flag_completed;
+        mobius::framework::evidence_flag flag_corrupted;
+
+        // files
+        mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Remote file
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct remote_file
+    {
+        // attributes
+        mobius::core::datetime::datetime timestamp;
+        std::string ip;
+        std::uint16_t port = 0;
+        std::string filename;
+        std::string username;
+
+        // metadata
+        mobius::core::pod::map metadata;
+
+        // hashes
+        mobius::core::pod::data hashes;
+
+        // source files
+        std::vector<mobius::core::io::file> source_files;
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -78,6 +130,26 @@ class profile
     get_username () const
     {
         return username_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get App ID
+    // @return App ID
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_app_id () const
+    {
+        return app_id_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get App Name
+    // @return App Name
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_app_name () const
+    {
+        return app_name_;
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -261,9 +333,61 @@ class profile
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of autofills
+    // @return Number of autofills
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    get_num_autofills () const
+    {
+        return autofills_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get local files
+    // @return Local files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<local_file>
+    get_local_files () const
+    {
+        return local_files_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of local files
+    // @return Number of local files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    get_num_local_files () const
+    {
+        return local_files_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get remote files
+    // @return Remote files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<remote_file>
+    get_remote_files () const
+    {
+        return remote_files_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of remote files
+    // @return Number of remote files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    get_num_remote_files () const
+    {
+        return remote_files_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void add_ac_searchstrings_dat_file (const mobius::core::io::file &);
+    void add_key_index_dat_file (const mobius::core::io::file &);
+    void add_known_met_file (const mobius::core::io::file &);
     void add_preferences_dat_file (const mobius::core::io::file &);
     void add_preferences_ini_file (const mobius::core::io::file &);
     void add_preferenceskad_dat_file (const mobius::core::io::file &);
@@ -276,6 +400,12 @@ class profile
 
     // @brief Username
     std::string username_;
+
+    // @brief App ID
+    std::string app_id_;
+
+    // @brief App Name
+    std::string app_name_;
 
     // @brief Creation time
     mobius::core::datetime::datetime creation_time_;
@@ -312,6 +442,12 @@ class profile
 
     // @brief Autofills
     std::vector<autofill> autofills_;
+
+    // @brief Local files
+    std::vector<local_file> local_files_;
+
+    // @brief Remote files
+    std::vector<remote_file> remote_files_;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions

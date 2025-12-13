@@ -27,6 +27,7 @@ project(app_emule LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(app_emule MODULE
     main.cpp
+    common.cpp
     ctag.cpp
     file_cancelled_met.cpp
     file_key_index_dat.cpp

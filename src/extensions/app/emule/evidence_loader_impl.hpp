@@ -190,19 +190,11 @@ class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
     void _scan_canonical_user_folder (const mobius::core::io::folder &);
     void
     _scan_canonical_emule_xp_folder (const mobius::core::io::folder &folder);
-    void _scan_canonical_emule_config_folder (const mobius::core::io::folder &);
     void
     _scan_canonical_emule_download_folder (const mobius::core::io::folder &);
 
-    void _decode_cancelled_met_file (const mobius::core::io::file &);
-    void _decode_key_index_dat_file (const mobius::core::io::file &);
-    void _decode_known_met_file (const mobius::core::io::file &);
     void _decode_part_met_file (const mobius::core::io::file &);
     void _decode_part_met_txtsrc_file (const mobius::core::io::file &);
-    void _decode_preferences_dat_file (const mobius::core::io::file &);
-    void _decode_preferences_ini_file (const mobius::core::io::file &);
-    void _decode_preferenceskad_dat_file (const mobius::core::io::file &);
-    void _decode_statistics_ini_file (const mobius::core::io::file &);
 
     void _save_evidences ();
     void _save_accounts ();
