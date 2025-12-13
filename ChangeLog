@@ -6,8 +6,14 @@ Mobius Forensic Toolkit 2.22
 	* app-emule: Changed to save remote-party-shared-file evidences
 	* app-emuletorrent: Improved evidence tags
 	* app-emuletorrent: Changed to save remote-party-shared-file evidences
+	* app-emuletorrent: Added new class vfs_processor_impl
+	* app-emuletorrent: Added new class profile
+	* app-emuletorrent: Removed evidence_loader_impl class
 	* app-shareaza: Improved evidence tags
 	* app-shareaza: Changed to save remote-party-shared-file evidences
+	* app-shareaza: Added new class vfs_processor_impl
+	* app-shareaza: Added new class profile
+	* app-shareaza: Removed evidence_loader_impl class
 	* app-utorrent: Added support for uTorrent Web
 	* app-utorrent: Improved evidence tags
 	* app-utorrent: Changed to save remote-party-shared-file evidences

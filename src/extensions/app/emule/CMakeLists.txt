@@ -35,6 +35,8 @@ add_library(app_emule MODULE
     file_part_met_txtsrc.cpp
     file_stored_searches_met.cpp
     evidence_loader_impl.cpp
+    profile.cpp
+    vfs_processor_impl.cpp
 )
 
 set_target_properties(app_emule PROPERTIES OUTPUT_NAME "app-emule" PREFIX "")

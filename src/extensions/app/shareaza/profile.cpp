@@ -25,6 +25,9 @@
 #include <mobius/core/string_functions.hpp>
 #include <mobius/core/value_selector.hpp>
 #include <string>
+#include "CLibrary.hpp"
+#include "CThumbCache.hpp"
+#include "common.hpp"
 #include "file_searches_dat.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -70,6 +73,9 @@ profile::_set_folder (const mobius::core::io::folder &f)
     if (folder_ || !f)
         return;
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Set data
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     folder_ = f;
     last_modified_time_ = f.get_modification_time ();
     creation_time_ = f.get_creation_time ();
@@ -99,6 +105,184 @@ profile::_update_mtime (const mobius::core::io::file &f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add library.dat file
+// @param f library.dat file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_library_dat_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Decode file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto decoder = mobius::core::decoder::mfc (f.new_reader ());
+        CLibrary clib (decoder);
+
+        if (!clib)
+        {
+            log.info (
+                __LINE__,
+                "File is not an instance of Library.dat. Path: " + f.get_path ()
+            );
+            return;
+        }
+
+        log.info (__LINE__, "File decoded [library.dat]: " + f.get_path ());
+
+        _set_folder (f.get_parent ());
+        _update_mtime (f);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Check if library file is the most recent one
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        if (!library_dat_mtime_ ||
+            library_dat_mtime_ < clib.get_last_modification_time ())
+        {
+            local_files_.clear ();
+            remote_files_.clear ();
+            library_dat_mtime_ = clib.get_last_modification_time ();
+
+            for (const auto &cfile : clib.get_all_files ())
+            {
+                local_file lf;
+
+                // Attributes
+                lf.filename = cfile.get_name ();
+                lf.path = cfile.get_path ();
+                lf.username = username_;
+                lf.hashes = get_file_hashes (cfile);
+                lf.flag_uploaded = cfile.get_uploads_started () > 0;
+                lf.flag_shared = cfile.is_shared ();
+                lf.f = f;
+
+                // Thumbnail data
+                auto thumbnail = thumbcache_.get (cfile.get_path ());
+                if (thumbnail)
+                {
+                    lf.thumbnail_data = thumbnail->image_data;
+                    lf.shareaza_db3_f = shareaza_db3_f_;
+                }
+
+                // Metadata
+                lf.metadata.set ("flag_downloaded", "unknown");
+                lf.metadata.set (
+                    "flag_uploaded", lf.flag_uploaded ? "true" : "false"
+                );
+                lf.metadata.set (
+                    "flag_shared", lf.flag_shared ? "true" : "false"
+                );
+                lf.metadata.set ("flag_corrupted", "unknown");
+                lf.metadata.set ("flag_completed", "true");
+
+                lf.metadata.set ("size", cfile.get_size ());
+                lf.metadata.set ("index", cfile.get_index ());
+                lf.metadata.set ("virtual_size", cfile.get_virtual_size ());
+                lf.metadata.set ("virtual_base", cfile.get_virtual_base ());
+                lf.metadata.set ("uri", cfile.get_uri ());
+
+                auto rating = cfile.get_rating ();
+                if (rating != -1)
+                    lf.metadata.set ("rating", rating);
+
+                lf.metadata.set ("comments", cfile.get_comments ());
+                lf.metadata.set ("share_tags", cfile.get_share_tags ());
+                lf.metadata.set ("hits_total", cfile.get_hits_total ());
+                lf.metadata.set (
+                    "uploads_started", cfile.get_uploads_started ()
+                );
+                lf.metadata.set (
+                    "last_modification_time",
+                    cfile.get_last_modification_time ()
+                );
+                lf.metadata.set ("metadata_time", cfile.get_metadata_time ());
+
+                if (thumbnail)
+                    lf.metadata.set (
+                        "thumbnail_last_write_time", thumbnail->last_write_time
+                    );
+
+                for (const auto &[k, v] : cfile.get_pxml ().get_metadata ())
+                    lf.metadata.set (k, v);
+
+                local_files_.push_back (lf);
+
+                // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+                // Add remote files
+                // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+                for (const auto &source : cfile.get_sources ())
+                {
+                    remote_file rf;
+
+                    rf.timestamp = source.get_timestamp ();
+                    rf.ip = source.get_ip ();
+                    rf.port = source.get_port ();
+                    rf.filename = cfile.get_name ();
+                    rf.username = username_;
+                    rf.hashes = get_file_hashes (cfile);
+                    rf.f = f;
+
+                    // metadata
+                    rf.metadata.set ("size", cfile.get_size ());
+                    rf.metadata.set ("index", cfile.get_index ());
+                    rf.metadata.set ("virtual_size", cfile.get_virtual_size ());
+                    rf.metadata.set ("virtual_base", cfile.get_virtual_base ());
+                    rf.metadata.set ("url", source.get_url ());
+                    rf.metadata.set ("schema_uri", cfile.get_uri ());
+
+                    auto rating = cfile.get_rating ();
+                    if (rating != -1)
+                        rf.metadata.set ("rating", rating);
+
+                    rf.metadata.set ("comments", cfile.get_comments ());
+                    rf.metadata.set ("share_tags", cfile.get_share_tags ());
+                    rf.metadata.set ("hits_total", cfile.get_hits_total ());
+                    rf.metadata.set (
+                        "uploads_started", cfile.get_uploads_started ()
+                    );
+                    rf.metadata.set (
+                        "last_modification_time",
+                        cfile.get_last_modification_time ()
+                    );
+                    rf.metadata.set (
+                        "metadata_time", cfile.get_metadata_time ()
+                    );
+
+                    if (thumbnail)
+                    {
+                        rf.metadata.set (
+                            "thumbnail_last_write_time",
+                            thumbnail->last_write_time
+                        );
+                        rf.thumbnail_data = thumbnail->image_data;
+                        rf.shareaza_db3_f = shareaza_db3_f_;
+                    }
+
+                    for (const auto &[k, v] : cfile.get_pxml ().get_metadata ())
+                        rf.metadata.set (k, v);
+
+                    remote_files_.push_back (rf);
+                }
+            }
+        }
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Emit sampling_file event
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::emit (
+            "sampling_file", std::string ("app.shareaza.library_dat"),
+            f.new_reader ()
+        );
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Add profile.xml file
 // @param f profile.xml file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -114,8 +298,8 @@ profile::add_profile_xml_file (const mobius::core::io::file &f)
 
         log.info (__LINE__, "File decoded [profile.xml]: " + f.get_path ());
 
-        bool overwrite =
-            !profile_xml_f || (profile_xml_f.is_deleted () && !f.is_deleted ());
+        bool overwrite = !profile_xml_f_ ||
+                         (profile_xml_f_.is_deleted () && !f.is_deleted ());
         mobius::core::value_selector vs (overwrite);
 
         gnutella_guid_ =
@@ -131,11 +315,11 @@ profile::add_profile_xml_file (const mobius::core::io::file &f)
             vs (identity_,
                 root.get_property_by_path ("identity/handle/primary"));
 
-        profile_xml_f = f;
+        profile_xml_f_ = f;
         source_files.push_back (f);
 
         _set_folder (f.get_parent ());
-        _update_mtime(f);
+        _update_mtime (f);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event
@@ -162,9 +346,9 @@ profile::add_searches_dat_file (const mobius::core::io::file &f)
 
     try
     {
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Decode file
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         file_searches_dat searches_dat (f.new_reader ());
 
         if (!searches_dat)
@@ -176,11 +360,11 @@ profile::add_searches_dat_file (const mobius::core::io::file &f)
         log.info (__LINE__, "File decoded [searches.dat]: " + f.get_path ());
 
         _set_folder (f.get_parent ());
-        _update_mtime(f);
-        
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        _update_mtime (f);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Add searches
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         for (const auto &s : searches_dat.get_searches ())
         {
             auto cmanagedsearch = s.obj;
@@ -225,10 +409,10 @@ profile::add_searches_dat_file (const mobius::core::io::file &f)
             searched_texts_.push_back (st);
         }
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Add remote files
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        /*for (const auto &search_rf : searches_dat.get_remote_files ())
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (const auto &search_rf : searches_dat.get_remote_files ())
         {
             const auto &mf = search_rf.match_file;
             const auto &q = search_rf.query_hit;
@@ -287,13 +471,67 @@ profile::add_searches_dat_file (const mobius::core::io::file &f)
 
             // add remote file
             remote_files_.push_back (rf);
-        }*/
+        }
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         mobius::core::emit (
             "sampling_file", std::string ("app.shareaza.searches_dat"),
+            f.new_reader ()
+        );
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add Shareaza.db3 file
+// @param f Shareaza.db3 file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_shareaza_db3_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Decode file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto thumbcache = CThumbCache (f.new_reader ());
+
+        if (!thumbcache)
+        {
+            log.info (
+                __LINE__,
+                "File is not a valid Shareaza.db3 file. Path: " + f.get_path ()
+            );
+            return;
+        }
+
+        log.info (__LINE__, "File decoded [shareaza.db3]: " + f.get_path ());
+
+        _set_folder (f.get_parent ());
+        _update_mtime (f);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Update account cache, if necessary
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        if (!shareaza_db3_f_ ||
+            (shareaza_db3_f_.is_deleted () && !f.is_deleted ()))
+        {
+            shareaza_db3_f_ = f;
+            thumbcache_ = thumbcache;
+        }
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Emit sampling_file event
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::emit (
+            "sampling_file", std::string ("app.shareaza.shareaza_db3"),
             f.new_reader ()
         );
     }

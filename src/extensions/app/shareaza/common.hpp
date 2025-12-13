@@ -1,3 +1,6 @@
+#ifndef MOBIUS_EXTENSION_APP_SHAREAZA_COMMON_HPP
+#define MOBIUS_EXTENSION_APP_SHAREAZA_COMMON_HPP
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
 // Copyright (C)
@@ -17,40 +20,37 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/framework/ant/vfs_processor.hpp>
-#include "vfs_processor_impl.hpp"
+#include <mobius/core/pod/data.hpp>
+#include <string>
+#include <vector>
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Extension data
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-extern "C"
+namespace mobius::extension::app::shareaza
 {
-    const char *EXTENSION_ID = "app-shareaza";
-    const char *EXTENSION_NAME = "App Shareaza";
-    const char *EXTENSION_VERSION = "1.3";
-    const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
-    const char *EXTENSION_DESCRIPTION = "Shareaza support";
-} // extern "C"
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get vector of hashes for a given file
+// @param f File structure
+// @return Vector
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<mobius::core::pod::data>
+get_file_hashes (const auto &f)
+{
+    std::vector<std::pair<std::string, std::string>> values = {
+        {"sha1", f.get_hash_sha1 ()}, {"tiger", f.get_hash_tiger ()},
+        {"md5", f.get_hash_md5 ()},   {"ed2k", f.get_hash_ed2k ()},
+        {"bth", f.get_hash_bth ()},
+    };
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Start extension
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-extern "C" void
-start ()
-{
-    mobius::framework::ant::register_vfs_processor_implementation<
-        mobius::extension::app::shareaza::vfs_processor_impl> (
-        EXTENSION_ID, EXTENSION_NAME
-    );
+    std::vector<mobius::core::pod::data> hashes;
+
+    for (const auto &[k, v] : values)
+    {
+        if (!v.empty ())
+            hashes.push_back ({k, v});
+    }
+
+    return hashes;
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Stop extension
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-extern "C" void
-stop ()
-{
-    mobius::framework::ant::unregister_vfs_processor_implementation (
-        EXTENSION_ID
-    );
-}
+} // namespace mobius::extension::app::shareaza
+
+#endif

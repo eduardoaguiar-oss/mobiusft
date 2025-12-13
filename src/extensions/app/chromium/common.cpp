@@ -112,6 +112,7 @@ std::vector<std::tuple<std::string, std::string, std::string>>
         {"/QQBrowser/User Data/", "qqbrowser", "QQ Browser"},
         {"/Rambox/User Data/", "rambox", "Rambox"},
         {"/Razer/Chroma/User Data/", "razer", "Razer Chroma"},
+        {"/Roaming/WhatsApp", "whatsapp", "WhatsApp"},
         {"/Rockmelt/User Data/", "rockmelt", "Rockmelt"},
         {"/Sleipnir/User Data/", "sleipnir", "Sleipnir"},
         {"/Slimjet/User Data/", "slimjet", "Slimjet"},

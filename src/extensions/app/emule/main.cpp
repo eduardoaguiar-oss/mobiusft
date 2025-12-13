@@ -17,10 +17,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "evidence_loader_impl.hpp"
-#include <mobius/core/file_decoder/decoder.hpp>
 #include <mobius/core/resource.hpp>
+#include <mobius/framework/ant/vfs_processor.hpp>
 #include <mobius/framework/evidence_loader.hpp>
+#include "evidence_loader_impl.hpp"
+#include "vfs_processor_impl.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Extension data
@@ -40,10 +41,16 @@ extern "C"
 extern "C" void
 start ()
 {
+    mobius::framework::ant::register_vfs_processor_implementation<
+        mobius::extension::app::emule::vfs_processor_impl> (
+        EXTENSION_ID, EXTENSION_NAME
+    );
+
     mobius::core::add_resource (
         "evidence_loader.builder.app-emule", "Emule evidence loader",
         mobius::framework::new_evidence_loader_builder_resource<
-            mobius::extension::app::emule::evidence_loader_impl> ());
+            mobius::extension::app::emule::evidence_loader_impl> ()
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -52,5 +59,7 @@ start ()
 extern "C" void
 stop ()
 {
-    mobius::core::remove_resource ("evidence_loader.builder.app-emule");
+    mobius::framework::ant::unregister_vfs_processor_implementation (
+        EXTENSION_ID
+    );
 }

@@ -27,6 +27,7 @@
 #include <mobius/framework/evidence_flag.hpp>
 #include <string>
 #include <vector>
+#include "CThumbCache.hpp"
 
 namespace mobius::extension::app::shareaza
 {
@@ -37,6 +38,62 @@ namespace mobius::extension::app::shareaza
 class profile
 {
   public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Local file
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct local_file
+    {
+        // attributes
+        std::string path;
+        std::string filename;
+        std::string username;
+
+        // metadata
+        mobius::core::pod::map metadata;
+
+        // hashes
+        mobius::core::pod::data hashes;
+
+        // thumbnail_data
+        mobius::core::bytearray thumbnail_data;
+
+        // flags
+        bool flag_downloaded = false;
+        bool flag_uploaded = false;
+        bool flag_shared = false;
+        bool flag_completed = false;
+
+        // files
+        mobius::core::io::file f;
+        mobius::core::io::file shareaza_db3_f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Remote file
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct remote_file
+    {
+        // attributes
+        mobius::core::datetime::datetime timestamp;
+        std::string ip;
+        std::uint16_t port = 0;
+        std::string filename;
+        std::string username;
+
+        // metadata
+        mobius::core::pod::map metadata;
+
+        // hashes
+        mobius::core::pod::data hashes;
+
+        // thumbnail_data
+        mobius::core::bytearray thumbnail_data;
+
+        // files
+        mobius::core::io::file f;
+        mobius::core::io::file shareaza_db3_f;
+    };
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Searched text
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -156,13 +213,53 @@ class profile
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get source files
-    // @return Source files
+    // @brief Get Profile.xml source file
+    // @return Profile.xml source file
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector<mobius::core::io::file>
-    get_source_files () const
+    mobius::core::io::file
+    get_file () const
     {
-        return source_files;;
+        return profile_xml_f_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get local files
+    // @return Local files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<local_file>
+    get_local_files () const
+    {
+        return local_files_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of local files
+    // @return Number of local files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    num_local_files () const
+    {
+        return local_files_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get remote files
+    // @return Remote files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<remote_file>
+    get_remote_files () const
+    {
+        return remote_files_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of remote files
+    // @return Number of remote files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    num_remote_files () const
+    {
+        return remote_files_.size ();
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -176,10 +273,32 @@ class profile
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of searched texts
+    // @return Number of searched texts
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    num_searched_texts () const
+    {
+        return searched_texts_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get source files
+    // @return Source files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<mobius::core::io::file>
+    get_source_files () const
+    {
+        return source_files;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void add_library_dat_file (const mobius::core::io::file &);
     void add_profile_xml_file (const mobius::core::io::file &);
     void add_searches_dat_file (const mobius::core::io::file &);
+    void add_shareaza_db3_file (const mobius::core::io::file &);
 
   private:
     // @brief Folder object
@@ -203,14 +322,29 @@ class profile
     // @brief User identity
     std::string identity_;
 
-    // @brief Profile.xml source file
-    mobius::core::io::file profile_xml_f;
+    // @brief Local files
+    std::vector<local_file> local_files_;
 
-    // @brief Source files
-    std::vector<mobius::core::io::file> source_files;
+    // @brief Profile.xml source file
+    mobius::core::io::file profile_xml_f_;
+
+    // @brief Shareaza.db3 source file
+    mobius::core::io::file shareaza_db3_f_;
+
+    // @brief Library.dat last modification time
+    mobius::core::datetime::datetime library_dat_mtime_;
+
+    // @brief Thumbcache
+    CThumbCache thumbcache_;
+
+    // @brief Remote files
+    std::vector<remote_file> remote_files_;
 
     // @brief Searched texts
     std::vector<searched_text> searched_texts_;
+
+    // @brief Source files
+    std::vector<mobius::core::io::file> source_files;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions

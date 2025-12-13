@@ -20,15 +20,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "CBTInfo.hpp"
-#include "CDownloadSource.hpp"
-#include "CXMLElement.hpp"
-#include <cstdint>
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/decoder/mfc.hpp>
 #include <mobius/core/io/reader.hpp>
+#include <cstdint>
 #include <string>
 #include <vector>
+#include "CBTInfo.hpp"
+#include "CDownloadSource.hpp"
+#include "CXMLElement.hpp"
 
 namespace mobius::extension::app::shareaza
 {
@@ -73,7 +73,10 @@ class CDownload
     // @brief Check if stream is an instance of .sd file
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const noexcept { return is_instance_; }
+    operator bool () const noexcept
+    {
+        return is_instance_;
+    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get file signature

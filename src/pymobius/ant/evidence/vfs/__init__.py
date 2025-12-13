@@ -62,7 +62,6 @@ ANTS = [
 
 LOADERS = [
     "app-emule",
-    "app-shareaza",
 ]
 
 

@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_SHAREAZA_VFS_PROCESSOR_IMPL_HPP
-#define MOBIUS_EXTENSION_APP_SHAREAZA_VFS_PROCESSOR_IMPL_HPP
+#ifndef MOBIUS_EXTENSION_APP_EMULE_VFS_PROCESSOR_IMPL_HPP
+#define MOBIUS_EXTENSION_APP_EMULE_VFS_PROCESSOR_IMPL_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -25,10 +25,10 @@
 #include <mobius/framework/model/item.hpp>
 #include "profile.hpp"
 
-namespace mobius::extension::app::shareaza
+namespace mobius::extension::app::emule
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Shareaza <i>vfs_processor</i> implementation class
+// @brief Emule <i>vfs_processor</i> implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class vfs_processor_impl
@@ -36,25 +36,13 @@ class vfs_processor_impl
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Autofill
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    struct autofill
-    {
-        bool is_deleted = false;
-        std::string username;
-        std::string value;
-        std::string id;
-        mobius::core::io::file f;
-    };
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     explicit vfs_processor_impl (
         const mobius::framework::model::item &,
         const mobius::framework::case_profile &
     );
-
+    
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Function prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -65,38 +53,26 @@ class vfs_processor_impl
     // @brief Case item
     mobius::framework::model::item item_;
 
+    // @brief User name
+    std::string username_;
+
+    // @brief Current profile
+    profile profile_;
+
     // @brief Profiles found
     std::vector<profile> profiles_;
-
-    // @brief Autofill data
-    std::vector<autofill> autofills_;
-
-    // @brief Local files from .sd files
-    std::vector<profile::local_file> local_files_;
-
-    // @brief Remote files from .sd files
-    std::vector<profile::remote_file> remote_files_;
-
+    
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void _scan_ntuser_dat_files (const mobius::core::io::folder &);
     void _scan_profile_folder (const mobius::core::io::folder &);
-    void _scan_sd_files (const mobius::core::io::folder &);
-    void _decode_ntuser_dat_file (const mobius::core::io::file &);
-    void _decode_sd_file (const mobius::core::io::file &);
 
-    void _save_app_profiles ();
-    void _save_autofills ();
-    void _save_local_files ();
-    void _save_received_files ();
-    void _save_remote_party_shared_files ();
-    void _save_searched_texts ();
-    void _save_sent_files ();
-    void _save_shared_files ();
-    void _save_user_accounts ();
+    //void _save_app_profiles ();
+    //void _save_autofills ();
+    //void _save_bookmarked_urls ();
+
 };
 
-} // namespace mobius::extension::app::shareaza
+} // namespace mobius::extension::app::emule
 
 #endif
