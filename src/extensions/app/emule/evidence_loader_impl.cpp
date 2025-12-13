@@ -22,7 +22,6 @@
 #include "file_known_met.hpp"
 #include "file_part_met.hpp"
 #include "file_part_met_txtsrc.hpp"
-#include "file_stored_searches_met.hpp"
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/core/decoder/inifile.hpp>
@@ -342,24 +341,12 @@ evidence_loader_impl::_scan_canonical_emule_config_folder (
     {
         const std::string lname = mobius::core::string::tolower (f.get_name ());
 
-        if (lname == "ac_searchstrings.dat")
-            _decode_ac_searchstrings_dat_file (f);
-
-        else if (lname == "key_index.dat")
+        if (lname == "key_index.dat")
             _decode_key_index_dat_file (f);
 
         else if (lname == "known.met")
             _decode_known_met_file (f);
-
-        else if (lname == "storedsearches.met")
-            _decode_storedsearches_met_file (f);
     }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Add account to accounts list
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    if (!account_.emule_guid.empty () || !account_.kamdelia_guid.empty ())
-        accounts_.push_back (account_);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -549,54 +536,6 @@ evidence_loader_impl::_decode_preferenceskad_dat_file (
                                      mobius::core::string::to_hex (c2, 8) +
                                      mobius::core::string::to_hex (c3, 8) +
                                      mobius::core::string::to_hex (c4, 8);
-        }
-    }
-    catch (const std::exception &e)
-    {
-        log.warning (__LINE__, e.what ());
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode AC_SearchStrings.dat file
-// @param f File object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_decode_ac_searchstrings_dat_file (
-    const mobius::core::io::file &f)
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    try
-    {
-        // Get reader
-        auto reader = f.new_reader ();
-        if (!reader)
-            return;
-
-        // Decode file
-        mobius::core::io::line_reader lr (reader, "utf-16", "\r\n");
-        std::string line;
-        std::size_t rec_number = 0;
-
-        while (lr.read (line))
-        {
-            ++rec_number;
-
-            if (!line.empty ())
-            {
-                autofill af;
-
-                af.is_deleted = f.is_deleted ();
-                af.username = username_;
-                af.value = line;
-                af.id = "search";
-                af.f = f;
-
-                af.metadata.set ("record_number", rec_number);
-
-                autofills_.push_back (af);
-            }
         }
     }
     catch (const std::exception &e)
@@ -915,65 +854,6 @@ evidence_loader_impl::_decode_part_met_txtsrc_file (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode StoredSearches.met file
-// @param f File object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_decode_storedsearches_met_file (
-    const mobius::core::io::file &f)
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    try
-    {
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Decode file
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        file_stored_searches_met stored_searches (f.new_reader ());
-
-        if (!stored_searches)
-        {
-            log.info (__LINE__,
-                      "File is not an instance of StoredSearches.met. Path: " +
-                          f.get_path ());
-            return;
-        }
-
-        auto version = stored_searches.get_version ();
-        log.info (__LINE__,
-                  "StoredSearches.met file decoded. Path: " + f.get_path ());
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Add searches
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        for (const auto &s : stored_searches.get_searches ())
-        {
-            autofill af;
-
-            af.is_deleted = f.is_deleted ();
-            af.username = username_;
-            af.value = s.expression;
-            af.id = "search";
-            af.f = f;
-
-            af.metadata = mobius::core::pod::map ();
-            af.metadata.set ("stored_searches_version", version);
-            af.metadata.set ("search_id", s.id);
-            af.metadata.set ("e_type", s.e_type);
-            af.metadata.set ("special_title", s.special_title);
-            af.metadata.set ("filetype", s.filetype);
-            af.metadata.set ("file_count", s.files.size ());
-
-            autofills_.push_back (af);
-        }
-    }
-    catch (const std::exception &e)
-    {
-        log.warning (__LINE__, e.what ());
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Save evidences
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -981,8 +861,6 @@ evidence_loader_impl::_save_evidences ()
 {
     auto transaction = item_.new_transaction ();
 
-    _save_accounts ();
-    _save_autofills ();
     _save_local_files ();
     _save_p2p_remote_files ();
     _save_received_files ();
@@ -991,94 +869,6 @@ evidence_loader_impl::_save_evidences ()
 
     item_.set_ant (ANT_ID, ANT_NAME, ANT_VERSION);
     transaction.commit ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Save accounts
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_save_accounts ()
-{
-    for (const auto &a : accounts_)
-    {
-        mobius::core::pod::map metadata;
-        metadata.set ("app_id", APP_ID);
-        metadata.set ("app_name", APP_NAME);
-        metadata.set ("username", a.username);
-        metadata.set ("emule_guid", a.emule_guid);
-        metadata.set ("kamdelia_guid", a.kamdelia_guid);
-        metadata.set ("kamdelia_ip", a.kamdelia_ip);
-        metadata.set ("incoming_dir", a.incoming_dir);
-        metadata.set ("temp_dir", a.temp_dir);
-        metadata.set ("nickname", a.nick);
-        metadata.set ("app_version", a.app_version);
-        metadata.set ("auto_start", to_string (a.auto_start));
-        metadata.set ("total_downloaded_bytes", a.total_downloaded_bytes);
-        metadata.set ("total_uploaded_bytes", a.total_uploaded_bytes);
-        metadata.set ("download_completed_files", a.download_completed_files);
-
-        if (!a.emule_guid.empty ())
-        {
-            auto e = item_.new_evidence ("user-account");
-
-            e.set_attribute ("account_type", "p2p.edonkey");
-            e.set_attribute ("id", a.emule_guid);
-            e.set_attribute ("password", {});
-            e.set_attribute ("password_found", "no");
-            e.set_attribute ("is_deleted", a.is_deleted);
-            e.set_attribute ("metadata", metadata.clone ());
-            e.set_tag ("app.p2p");
-
-            e.add_source (a.preferences_dat_f);
-            e.add_source (a.preferences_ini_f);
-            e.add_source (a.preferenceskad_dat_f);
-            e.add_source (a.statistics_ini_f);
-        }
-
-        if (!a.kamdelia_guid.empty ())
-        {
-            auto e = item_.new_evidence ("user-account");
-
-            e.set_attribute ("account_type", "p2p.kamdelia");
-            e.set_attribute ("id", a.kamdelia_guid);
-            e.set_attribute ("password", {});
-            e.set_attribute ("password_found", "no");
-            e.set_attribute ("is_deleted", a.is_deleted);
-            e.set_attribute ("metadata", metadata.clone ());
-            e.set_tag ("app.p2p");
-
-            e.add_source (a.preferences_dat_f);
-            e.add_source (a.preferences_ini_f);
-            e.add_source (a.preferenceskad_dat_f);
-            e.add_source (a.statistics_ini_f);
-        }
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Save autofill entries
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_loader_impl::_save_autofills ()
-{
-    for (const auto &af : autofills_)
-    {
-        mobius::core::pod::map metadata = af.metadata.clone ();
-        metadata.set ("id", af.id);
-
-        auto e = item_.new_evidence ("autofill");
-
-        e.set_attribute ("field_name", "search");
-        e.set_attribute ("value", af.value);
-        e.set_attribute ("app_id", APP_ID);
-        e.set_attribute ("app_name", APP_NAME);
-        e.set_attribute ("username", af.username);
-        e.set_attribute ("is_deleted", af.is_deleted);
-        e.set_attribute ("metadata", metadata);
-
-        e.set_tag ("app.p2p");
-        e.add_source (af.f);
-    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

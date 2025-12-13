@@ -30,7 +30,48 @@
 #include <mobius/framework/model/evidence.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// References:
+// Versions examined: Emule 0.50a and DreaMule 3.2
+//
+// Emule main forensic files:
+// @see http://www.emule-project.net/home/perl/help.cgi?l=1&rm=show_topic&topic_id=106
+//
+// . AC_SearchStrings.dat: Stores search strings
+//
+// . Cancelled.met: Files cancelled before completing downloading
+//
+// . Clients.met: Credit control file. Control credits of each peer (dl and ul)
+//
+// . Downloads.txt/bak: Summary of .part.met files (part name and url)
+//
+// . KeyIndex.dat: Kamdelia search result file, with sources, IPs and filenames
+//
+// . Known.met: Shared files, downloading files, downloaded files
+//
+// . Preferences.dat: Stores the user GUID for eDonkey network
+//
+// . PreferencesKad.dat: Stores Kademlia network client ID
+//
+// . Sharedir.dat: Stores the paths to all shared directories
+//
+// . Statistics.ini: Stores statistics about program usage
+//
+// . StoredSearches.met: Stores open searches (ongoing searches)
+//
+// . *.part.met: information about a file being downloaded (not in known.met)
+//
+// DreaMule forensic files:
+// . *.part.met.txtsrc: list of sources, with IP and expiration date/time
+//
+// Kademlia forensic files:
+// . key_index.dat: stores a chunk of Kademlia's Distributed Hash Table,
+//   including search hash value, hits (files) and peers sharing those files
+//
+// All Date/Times are stored in Coordinated Universal Time (UTC).
+// @see https://msdn.microsoft.com/pt-br/library/windows/desktop/ms724397(v=vs.85).aspx
+//
+// According to eMule Homepage: "Your Incoming and Temporary directory are
+// always shared"
+// @see https://www.emule-project.net/home/perl/help.cgi?l=1&topic_id=112&rm=show_topic
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace
@@ -108,9 +149,8 @@ vfs_processor_impl::vfs_processor_impl (
 void
 vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 {
-    //_scan_profile_folder (folder);
+    _scan_profile_folder (folder);
     //_scan_arestra_folder (folder);
-    //_scan_ntuser_dat_folder (folder);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -121,131 +161,21 @@ vfs_processor_impl::on_complete ()
 {
     auto transaction = item_.new_transaction ();
 
-    //_save_app_profiles ();
-    //_save_autofills ();
+    _save_app_profiles ();
+    _save_autofills ();
+    _save_user_accounts ();
 
     transaction.commit ();
 }
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Scan folder for ___ARESTRA___ files
-// @param folder Folder object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-/*void
-vfs_processor_impl::_scan_arestra_folder (const mobius::core::io::folder &folder)
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-    mobius::core::io::walker w (folder);
-
-    for (const auto &[name, f] : w.get_files_with_names ())
-    {
-        try
-        {
-            //if (mobius::core::string::startswith (name, "___arestra___"))
-            //    _decode_arestra_file (f);
-        }
-        catch (const std::exception &e)
-        {
-            log.warning (
-                __LINE__,
-                std::string (e.what ()) + " (file: " + f.get_path () + ")"
-            );
-        }
-    }
-}*/
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode ARESTRA file
-// @param f ARESTRA file
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-/*void
-vfs_processor_impl::_decode_arestra_file (const mobius::core::io::file &f)
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Decode file
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    file_arestra arestra (f.new_reader ());
-
-    if (!arestra)
-    {
-        log.info (
-            __LINE__,
-            "File " + f.get_path () + " is not a valid PBTHash.dat file"
-        );
-        return;
-    }
-
-    log.info (__LINE__, "File decoded [___ARESTRA___]. Path: " + f.get_path ());
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Create file object
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    profile::file fobj;
-
-    // set attributes
-    fobj.hash_sha1 = arestra.get_hash_sha1 ();
-    fobj.username = get_username_from_path (f.get_path ());
-    fobj.download_started_time = arestra.get_download_started_time ();
-    fobj.size = arestra.get_file_size ();
-    fobj.arestra_f = f;
-
-    // set filename
-    fobj.filename = mobius::core::io::path (f.get_path ()).get_filename ();
-    fobj.filename.erase (0, 13); // remove "___ARESTRA___"
-
-    // set flags
-    fobj.flag_downloaded = true;
-    fobj.flag_corrupted = arestra.is_corrupted ();
-    fobj.flag_shared = false; // @see thread_share.pas (line 1065)
-    fobj.flag_completed = arestra.is_completed ();
-
-    // add remote_sources
-    for (const auto &[ip, port] : arestra.get_alt_sources ())
-    {
-        profile::remote_source r_source;
-        r_source.timestamp = f.get_modification_time ();
-        r_source.ip = ip;
-        r_source.port = port;
-
-        fobj.remote_sources.push_back (r_source);
-    }
-
-    // set metadata
-    fobj.metadata.set ("arestra_signature", arestra.get_signature ());
-    fobj.metadata.set ("arestra_file_version", arestra.get_version ());
-    fobj.metadata.set (
-        "download_started_time", arestra.get_download_started_time ()
-    );
-    fobj.metadata.set ("downloaded_bytes", arestra.get_progress ());
-    fobj.metadata.set ("verified_bytes", arestra.get_phash_verified ());
-    fobj.metadata.set ("is_paused", arestra.is_paused ());
-    fobj.metadata.set ("media_type", arestra.get_media_type ());
-    fobj.metadata.set ("param1", arestra.get_param1 ());
-    fobj.metadata.set ("param2", arestra.get_param2 ());
-    fobj.metadata.set ("param3", arestra.get_param3 ());
-    fobj.metadata.set ("kwgenre", arestra.get_kw_genre ());
-    fobj.metadata.set ("title", arestra.get_title ());
-    fobj.metadata.set ("artist", arestra.get_artist ());
-    fobj.metadata.set ("album", arestra.get_album ());
-    fobj.metadata.set ("category", arestra.get_category ());
-    fobj.metadata.set ("year", arestra.get_year ());
-    fobj.metadata.set ("language", arestra.get_language ());
-    fobj.metadata.set ("url", arestra.get_url ());
-    fobj.metadata.set ("comment", arestra.get_comment ());
-    fobj.metadata.set ("subfolder", arestra.get_subfolder ());
-
-    files_.push_back (fobj);
-}
-*/
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Scan folder for µTorrent/BitTorrent profiles
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_profile_folder (const mobius::core::io::folder &folder)
+vfs_processor_impl::_scan_profile_folder (
+    const mobius::core::io::folder &folder
+)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -258,19 +188,30 @@ vfs_processor_impl::_scan_profile_folder (const mobius::core::io::folder &folder
     for (const auto &[name, f] : w.get_files_with_names ())
     {
         try
-        {/*
-            if (name == "shareh.dat")
-                p.add_shareh_file (f);
+        {
+            if (name == "preferences.dat")
+                p.add_preferences_dat_file (f);
 
-            else if (name == "sharel.dat")
-                p.add_sharel_file (f);
+            else if (name == "preferences.ini")
+                p.add_preferences_ini_file (f);
 
-            else if (name == "torrenth.dat")
-                p.add_torrenth_file (f);
+            else if (name == "statistics.ini" || name == "statbkup.ini")
+                p.add_statistics_ini_file(f);
 
-            else if (name == "phashidx.dat" || name == "phashidxtemp.dat" ||
-                     name == "tempphash.dat")
-                p.add_phashidx_file (f);*/
+            else if (name == "preferenceskad.dat")
+                p.add_preferenceskad_dat_file (f);
+
+            else if (name == "ac_searchstrings.dat")
+                p.add_ac_searchstrings_dat_file (f);
+
+            else if (name == "key_index.dat")
+                ; //_decode_key_index_dat_file (f);
+
+            else if (name == "known.met")
+                ; //_decode_known_met_file (f);
+
+            else if (name == "storedsearches.met")
+                p.add_storedsearches_met_file (f);
         }
         catch (const std::exception &e)
         {
@@ -285,9 +226,142 @@ vfs_processor_impl::_scan_profile_folder (const mobius::core::io::folder &folder
     // If we have a new profile, add it to the profiles list
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     if (p)
-    {
         profiles_.push_back (p);
+}
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save app profiles
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_app_profiles ()
+{
+    for (const auto &p : profiles_)
+    {
+        auto e = item_.new_evidence ("app-profile");
+
+        // Attributes
+        e.set_attribute ("app_id", APP_ID);
+        e.set_attribute ("app_name", APP_NAME);
+        e.set_attribute ("username", p.get_username ());
+        e.set_attribute ("creation_time", p.get_creation_time ());
+        e.set_attribute ("last_modified_time", p.get_last_modified_time ());
+        e.set_attribute ("path", p.get_path ());
+
+        // Metadata
+        auto metadata = mobius::core::pod::map ();
+        metadata.set ("app_version", p.get_app_version ());
+        metadata.set ("auto_start", p.get_auto_start ());
+        metadata.set (
+            "download_completed_files", p.get_download_completed_files ()
+        );
+        metadata.set ("emule_guid", p.get_emule_guid ());
+        metadata.set ("incoming_dir", p.get_incoming_dir ());
+        metadata.set ("kamdelia_guid", p.get_kamdelia_guid ());
+        metadata.set ("nick", p.get_nick ());
+        metadata.set (
+            "preferences_dat_version", p.get_preferences_dat_version ()
+        );
+        metadata.set ("temp_dir", p.get_temp_dir ());
+        metadata.set (
+            "total_downloaded_bytes", p.get_total_downloaded_bytes ()
+        );
+        metadata.set ("total_uploaded_bytes", p.get_total_uploaded_bytes ());
+
+        e.set_attribute ("metadata", metadata);
+
+        // Tags and sources
+        e.set_tag ("app.p2p");
+        e.add_source (p.get_folder ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save autofill entries
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_autofills ()
+{
+    for (const auto &p : profiles_)
+    {
+        auto username = p.get_username ();
+
+        for (const auto &af : p.get_autofills ())
+        {
+            mobius::core::pod::map metadata = af.metadata.clone ();
+            metadata.set ("id", af.id);
+
+            auto e = item_.new_evidence ("autofill");
+
+            e.set_attribute ("field_name", "search");
+            e.set_attribute ("value", af.value);
+            e.set_attribute ("app_id", APP_ID);
+            e.set_attribute ("app_name", APP_NAME);
+            e.set_attribute ("username", username);
+            e.set_attribute ("is_deleted", af.is_deleted);
+            e.set_attribute ("metadata", metadata);
+
+            e.set_tag ("app.p2p");
+            e.add_source (af.f);
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save accounts
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_user_accounts ()
+{
+    for (const auto &p : profiles_)
+    {
+        auto emule_guid = p.get_emule_guid ();
+        auto kamdelia_guid = p.get_kamdelia_guid ();
+
+        mobius::core::pod::map metadata;
+        metadata.set ("app_id", APP_ID);
+        metadata.set ("app_name", APP_NAME);
+        metadata.set ("username", p.get_username ());
+        metadata.set ("emule_guid", emule_guid);
+        metadata.set ("kamdelia_guid", kamdelia_guid);
+        metadata.set ("kamdelia_ip", p.get_kamdelia_ip ());
+        metadata.set ("incoming_dir", p.get_incoming_dir ());
+        metadata.set ("temp_dir", p.get_temp_dir ());
+        metadata.set ("nickname", p.get_nick ());
+        metadata.set ("app_version", p.get_app_version ());
+        metadata.set ("auto_start", p.get_auto_start ());
+        metadata.set ("total_downloaded_bytes", p.get_total_downloaded_bytes ());
+        metadata.set ("total_uploaded_bytes", p.get_total_uploaded_bytes ());
+        metadata.set ("download_completed_files", p.get_download_completed_files ());
+
+        if (!emule_guid.empty ())
+        {
+            auto e = item_.new_evidence ("user-account");
+
+            e.set_attribute ("account_type", "p2p.edonkey");
+            e.set_attribute ("id", emule_guid);
+            e.set_attribute ("password", {});
+            e.set_attribute ("password_found", "no");
+            e.set_attribute ("metadata", metadata.clone ());
+            e.set_tag ("app.p2p");
+
+            for (const auto &sf : p.get_source_files ())
+                e.add_source (sf);
+        }
+
+        if (!kamdelia_guid.empty ())
+        {
+            auto e = item_.new_evidence ("user-account");
+
+            e.set_attribute ("account_type", "p2p.kamdelia");
+            e.set_attribute ("id", kamdelia_guid);
+            e.set_attribute ("password", {});
+            e.set_attribute ("password_found", "no");
+            e.set_attribute ("metadata", metadata.clone ());
+            e.set_tag ("app.p2p");
+
+            for (const auto &sf : p.get_source_files ())
+                e.add_source (sf);
+        }
     }
 }
 

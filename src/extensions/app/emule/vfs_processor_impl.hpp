@@ -67,10 +67,9 @@ class vfs_processor_impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _scan_profile_folder (const mobius::core::io::folder &);
 
-    //void _save_app_profiles ();
-    //void _save_autofills ();
-    //void _save_bookmarked_urls ();
-
+    void _save_app_profiles ();
+    void _save_autofills ();
+    void _save_user_accounts ();
 };
 
 } // namespace mobius::extension::app::emule

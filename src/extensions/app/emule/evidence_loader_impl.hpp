@@ -68,19 +68,6 @@ struct account
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Autofill
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-struct autofill
-{
-    bool is_deleted = false;
-    std::string username;
-    std::string value;
-    std::string id;
-    mobius::core::pod::map metadata;
-    mobius::core::io::file f;
-};
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Local file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct local_file
@@ -186,9 +173,6 @@ class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
     // @brief Accounts found
     std::vector<account> accounts_;
 
-    // @brief Autofills found
-    std::vector<autofill> autofills_;
-
     // @brief Local files
     std::vector<local_file> local_files_;
 
@@ -210,7 +194,6 @@ class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
     void
     _scan_canonical_emule_download_folder (const mobius::core::io::folder &);
 
-    void _decode_ac_searchstrings_dat_file (const mobius::core::io::file &);
     void _decode_cancelled_met_file (const mobius::core::io::file &);
     void _decode_key_index_dat_file (const mobius::core::io::file &);
     void _decode_known_met_file (const mobius::core::io::file &);
@@ -220,11 +203,9 @@ class evidence_loader_impl : public mobius::framework::evidence_loader_impl_base
     void _decode_preferences_ini_file (const mobius::core::io::file &);
     void _decode_preferenceskad_dat_file (const mobius::core::io::file &);
     void _decode_statistics_ini_file (const mobius::core::io::file &);
-    void _decode_storedsearches_met_file (const mobius::core::io::file &);
 
     void _save_evidences ();
     void _save_accounts ();
-    void _save_autofills ();
     void _save_local_files ();
     void _save_p2p_remote_files ();
     void _save_received_files ();
