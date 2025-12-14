@@ -6,7 +6,7 @@ version: "2.22"
 
 # Mobius Forensic Toolkit
 
-**Copyright (C) 2008–2025 Eduardo Aguiar**
+**Copyright (C) 2008–2026 Eduardo Aguiar**
 
 ---
 

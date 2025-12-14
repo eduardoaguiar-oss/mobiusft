@@ -1,7 +1,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
 // Copyright (C)
-// 2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+// 2008-2026
 // Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
@@ -511,7 +511,7 @@ post_processor_impl::_decrypt_v20_encrypted_key (
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // AES-GCM Encrypted Key (protection level 1 up to 3)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        else if (key_size == 61)
+        else if (key_size >= 61)
         {
             auto protection_level = decoder.get_uint8 ();
             auto iv = decoder.get_bytearray_by_size (12);
