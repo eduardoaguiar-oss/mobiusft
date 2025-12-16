@@ -20,7 +20,7 @@ cmake_minimum_required(VERSION 3.20)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-set(MOBIUS_VERSION 2.22)
+set(MOBIUS_VERSION 2.23)
 set(MOBIUS_DESCRIPTION "Mobius Forensic Toolkit")
 
 project(mobius

@@ -1,7 +1,7 @@
 ---
 title: Mobius Forensic Toolkit
 description: "Open-source forensic framework and tools written in C++/Python"
-version: "2.22"
+version: "2.23"
 ---
 
 # Mobius Forensic Toolkit
@@ -18,8 +18,8 @@ Whether you're a digital forensics expert or a beginner, the Mobius Forensic Too
 
 #### Key Features:
 
+- Native support for **image files** (RAW, EWF, VHD, VHDX, MSR, and more), **physical devices**, and **Cellebrite's UFDR report files** for forensic analysis. It automatically decrypts MSR image files, no password needed.
 - **Comprehensive Case Management**: Organize and manage forensic cases and case items efficiently.
-- **Flexible Input Sources**: Supports **image files** (RAW, EWF, VHD, VHDX, and more), **physical devices**, and **Cellebrite's UFDR report files** for forensic analysis.
 - **Extensible Framework**: Easily create custom extensions and plugins to tailor the toolkit to your specific needs and unlock support for new evidence types.
 - **SQLite Database Integration**: Ensures reliable and scalable data storage for forensic evidence and metadata.
 - **Cross-Platform Compatibility**: Works seamlessly across multiple operating systems, making it accessible to a wide range of users.
@@ -31,10 +31,18 @@ Whether you're a digital forensics expert or a beginner, the Mobius Forensic Too
 - **User-Friendly Interface**: Designed with both beginners and advanced users in mind, offering intuitive workflows and documentation.
 - **Community Support**: Join the active community of forensic professionals and developers to share insights, ask questions, and contribute to the toolkit's growth.
 
+#### Mobius Forensic Toolkit retrieves evidence from the following applications:
+
+- P2P (*peer-to-peer*): Ares Galaxy, aMule, DreaMule, eMule, eMuleTorrent, µTorrent, µTorrent Web, Shareaza, and others.
+- Chromium based browsers, such as Chromium, Google Chrome, Opera, Microsoft Edge, Brave Browser, and many others.
+- Gecko based browsers, such as Firefox and GeckoFX.
+- Internet Explorer.
+- Skype from v4 to v14.
+- iTubeGo
+
 #### Getting Started:
-- **Quick Start Guide**: Follow the step-by-step guide to set up and start using Mobius Forensic Toolkit in minutes.
+- [**Quick Start Guide**](https://www.nongnu.org/mobiusft/support/getting_started/index.html): Follow the step-by-step guide to set up and start using Mobius Forensic Toolkit in minutes.
 - **Comprehensive Documentation**: Access detailed tutorials, API references, and case studies to maximize your efficiency.
-- **Mailing List**: Stay updated with the latest developments and connect with other users through the official Mobius mailing list.
 
 ## Getting project files
 Download the latest version of the Mobius Forensic Toolkit from GitHub:  
@@ -64,11 +72,6 @@ sudo 'cmake --install build'
 ```
 
 For detailed installation instructions, refer to the official [installation guide](docs/INSTALL.md).
-
-## Usage
-
-To get started with the Mobius Forensic Toolkit, check out the **Quick Start Guide**:  
-[https://www.nongnu.org/mobiusft/support/getting_started/index.html](https://www.nongnu.org/mobiusft/support/getting_started/index.html).
 
 ## Support this Project
 
