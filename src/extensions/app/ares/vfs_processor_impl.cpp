@@ -1,8 +1,6 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C)
-// 2008-2026
-// Eduardo Aguiar
+// Copyright (C) 2008-2026 Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -32,6 +30,7 @@
 #include <mobius/core/string_functions.hpp>
 #include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/model/evidence.hpp>
+#include <mobius/framework/utils.hpp>
 #include <iomanip>
 #include <sstream>
 #include "common.hpp"
@@ -96,29 +95,6 @@ static const std::string ANT_VERSION = "1.5";
 static const std::string SAMPLING_ID = "sampling";
 static const std::string APP_NAME = "Ares Galaxy";
 static const std::string APP_ID = "ares";
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get username from path
-// @param path Path to profile
-// @return Username extracted from path
-//
-// @note Paths are in the following format: /FSxx/Users/username/... or
-// /FSxx/home/username/... where FSxx is the filesystem identifier.
-// Example: /FS01/Users/johndoe/AppData/Local/Google/Chrome/User Data/
-// In this case, the username is "johndoe".
-// If the path does not match the expected format, an empty string is returned.
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-get_username_from_path (const std::string &path)
-{
-    auto dirnames = mobius::core::string::split (path, "/");
-
-    if (dirnames.size () > 3 &&
-        (dirnames[2] == "Users" || dirnames[2] == "home"))
-        return dirnames[3]; // Username is the fourth directory
-
-    return {}; // No username found
-}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Convert registry data into string
@@ -305,7 +281,7 @@ vfs_processor_impl::_decode_arestra_file (const mobius::core::io::file &f)
 
     // set attributes
     fobj.hash_sha1 = arestra.get_hash_sha1 ();
-    fobj.username = get_username_from_path (f.get_path ());
+    fobj.username = mobius::framework::get_username_from_path (f.get_path ());
     fobj.download_started_time = arestra.get_download_started_time ();
     fobj.size = arestra.get_file_size ();
     fobj.arestra_f = f;
@@ -414,7 +390,7 @@ vfs_processor_impl::_decode_ntuser_dat_file (const mobius::core::io::file &f)
 
     if (ares_key)
     {
-        auto username = get_username_from_path (f.get_path ());
+        auto username = mobius::framework::get_username_from_path (f.get_path ());
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Load account

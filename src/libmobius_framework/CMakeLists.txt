@@ -44,6 +44,7 @@ add_library(libmobius_framework SHARED
     category.cpp
     config.cpp
     evidence_flag.cpp
+    utils.cpp
 )
 
 set_target_properties(libmobius_framework PROPERTIES

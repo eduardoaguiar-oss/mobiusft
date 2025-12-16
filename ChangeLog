@@ -31,6 +31,7 @@ Mobius Forensic Toolkit 2.22
 	* libmobius_framework: Removed class evidence_loader
 	* libmobius_framework: Removed class evidence_loader_impl_base
 	* libmobius_framework: Removed class evidence_loader_impl_null
+	* libmobius_framework: Added new function get_username_from_path
 	* libmobius_python: Removed class framework.evidence_loader
 	* ant.evidence.post.ip_addresses_from_cookies: Added decoding of both MSCC and MS-CV cookies
 	* ant.evidence.post.ip_addresses_from_cookies: Added decoding of geode cookies

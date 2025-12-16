@@ -1,8 +1,6 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C)
-// 2008-2026
-// Eduardo Aguiar
+// Copyright (C) 2008-2026 Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -30,6 +28,7 @@
 #include <mobius/core/string_functions.hpp>
 #include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/model/evidence.hpp>
+#include <mobius/framework/utils.hpp>
 #include <iomanip>
 #include <sstream>
 #include "common.hpp"
@@ -509,7 +508,7 @@ vfs_processor_impl::_save_encryption_keys ()
     for (const auto &ek : encryption_keys_)
     {
         const auto [app_id, app_name] = get_app_from_path (ek.f.get_path ());
-        const auto username = get_username_from_path (ek.f.get_path ());
+        const auto username = mobius::framework::get_username_from_path (ek.f.get_path ());
 
         // create evidence
         auto e = item_.new_evidence ("encryption-key");

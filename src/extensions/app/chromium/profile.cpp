@@ -1,8 +1,6 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C)
-// 2008-2026
-// Eduardo Aguiar
+// Copyright (C) 2008-2026 Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -22,6 +20,7 @@
 #include <mobius/core/mediator.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <mobius/core/value_selector.hpp>
+#include <mobius/framework/utils.hpp>
 #include <algorithm>
 #include <string>
 #include "common.hpp"
@@ -440,7 +439,7 @@ profile::impl::_set_folder (const mobius::core::io::folder &f)
     // Get username, app ID and app name from path
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     auto path = f.get_path ();
-    username_ = get_username_from_path (path);
+    username_ = mobius::framework::get_username_from_path (path);
     std::tie (app_id_, app_name_) = get_app_from_path (path);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

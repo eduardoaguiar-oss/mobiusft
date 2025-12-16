@@ -1,8 +1,6 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C)
-// 2008-2026
-// Eduardo Aguiar
+// Copyright (C) 2008-2026 Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -246,30 +244,6 @@ get_db_schema_version (mobius::core::database::database db)
     }
 
     return schema_version;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get username from path
-// @param path Path to profile
-// @return Username extracted from path
-//
-// @note Paths are in the following format: /FSxx/Users/username/... or
-// /FSxx/home/username/... where FSxx is the filesystem identifier.
-// Example: /FS01/Users/johndoe/AppData/Local/Google/Chrome/User Data/
-// In this case, the username is "johndoe".
-// If the path does not match the expected format, an empty string is returned.
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-get_username_from_path (const std::string &path)
-{
-    auto dirnames = mobius::core::string::split (path, "/");
-
-    if (dirnames.size () > 3 &&
-        (dirnames[2] == "Users" || dirnames[2] == "home" ||
-         dirnames[2] == "Documents and Settings"))
-        return dirnames[3]; // Username is the fourth directory
-
-    return {}; // No username found
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

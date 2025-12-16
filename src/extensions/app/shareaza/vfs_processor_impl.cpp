@@ -1,8 +1,6 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C)
-// 2008-2026
-// Eduardo Aguiar
+// Copyright (C) 2008-2026 Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -30,6 +28,7 @@
 #include <mobius/core/string_functions.hpp>
 #include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/model/evidence.hpp>
+#include <mobius/framework/utils.hpp>
 #include "CDownload.hpp"
 #include "common.hpp"
 
@@ -60,29 +59,6 @@ namespace
 static const std::string SAMPLING_ID = "sampling";
 static const std::string APP_ID = "shareaza";
 static const std::string APP_NAME = "Shareaza";
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get username from path
-// @param path Path to profile
-// @return Username extracted from path
-//
-// @note Paths are in the following format: /FSxx/Users/username/... or
-// /FSxx/home/username/... where FSxx is the filesystem identifier.
-// Example: /FS01/Users/johndoe/AppData/Local/Google/Chrome/User Data/
-// In this case, the username is "johndoe".
-// If the path does not match the expected format, an empty string is returned.
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-get_username_from_path (const std::string &path)
-{
-    auto dirnames = mobius::core::string::split (path, "/");
-
-    if (dirnames.size () > 3 &&
-        (dirnames[2] == "Users" || dirnames[2] == "home"))
-        return dirnames[3]; // Username is the fourth directory
-
-    return {}; // No username found
-}
 
 } // namespace
 
@@ -220,7 +196,7 @@ vfs_processor_impl::_decode_ntuser_dat_file (const mobius::core::io::file &f)
                 af.value = mobius::core::string::word (
                     value.get_data ().get_data_as_string ("utf-16le"), 0, "\n"
                 );
-                af.username = get_username_from_path (f.get_path ());
+                af.username = mobius::framework::get_username_from_path (f.get_path ());
                 af.id = value.get_name ().substr (7);
                 af.is_deleted = f.is_deleted ();
                 af.f = f;
@@ -334,7 +310,7 @@ vfs_processor_impl::_decode_sd_file (const mobius::core::io::file &f)
         log.info (__LINE__, "File decoded [.sd]: " + f.get_path ());
 
         auto btinfo = sd.get_btinfo ();
-        auto username = get_username_from_path (f.get_path ());
+        auto username = mobius::framework::get_username_from_path (f.get_path ());
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Get path, if available

@@ -25,38 +25,12 @@
 #include <mobius/core/mediator.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <mobius/core/value_selector.hpp>
+#include <mobius/framework/utils.hpp>
 #include <string>
 #include "common.hpp"
 #include "file_key_index_dat.hpp"
 #include "file_known_met.hpp"
 #include "file_stored_searches_met.hpp"
-
-namespace
-{
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get username from path
-// @param path Path to profile
-// @return Username extracted from path
-//
-// @note Paths are in the following format: /FSxx/Users/username/... or
-// /FSxx/home/username/... where FSxx is the filesystem identifier.
-// Example: /FS01/Users/johndoe/AppData/Local/Google/Chrome/User Data/
-// In this case, the username is "johndoe".
-// If the path does not match the expected format, an empty string is returned.
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-get_username_from_path (const std::string &path)
-{
-    auto dirnames = mobius::core::string::split (path, "/");
-
-    if (dirnames.size () > 3 &&
-        (dirnames[2] == "Users" || dirnames[2] == "home"))
-        return dirnames[3]; // Username is the fourth directory
-
-    return {}; // No username found
-}
-
-} // namespace
 
 namespace mobius::extension::app::emule
 {
@@ -76,7 +50,7 @@ profile::_set_folder (const mobius::core::io::folder &f)
     folder_ = f;
     last_modified_time_ = f.get_modification_time ();
     creation_time_ = f.get_creation_time ();
-    username_ = get_username_from_path (f.get_path ());
+    username_ = mobius::framework::get_username_from_path (f.get_path ());
     std::tie (app_id_, app_name_) = get_app_from_path (f.get_path ());
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
