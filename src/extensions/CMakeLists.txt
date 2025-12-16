@@ -43,6 +43,7 @@ endif()
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_subdirectory(app/ares)
 add_subdirectory(app/chromium)
+add_subdirectory(app/dcpp)
 add_subdirectory(app/emule)
 add_subdirectory(app/emuletorrent)
 add_subdirectory(app/shareaza)
