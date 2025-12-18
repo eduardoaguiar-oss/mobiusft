@@ -17,9 +17,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <algorithm>
 #include <mobius/core/pod/map.hpp>
 #include <stdexcept>
+#include <algorithm>
 
 namespace mobius::core::pod
 {
@@ -56,6 +56,43 @@ map::map (const std::initializer_list<value_type> &l)
 
     for (const auto &p : l)
         set (p.first, p.second);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Pop value from map
+// @param key Key
+// @param varg Default value
+// @return Value if key is found or default value otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+data
+map::pop (const std::string &key, const data &varg)
+{
+    if (contains (key))
+    {
+        auto value = get (key);
+        remove (key);
+        return value;
+    }
+
+    // If key is not found, return default value
+    return varg;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Pop map value from map
+// @param key Key
+// @return Value if key is found or empty map otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+map
+map::pop_map (const std::string &key)
+{
+    map m;
+
+    auto d = pop (key);
+    if (d.is_map ())
+        m = d.to_map ();
+
+    return m;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
