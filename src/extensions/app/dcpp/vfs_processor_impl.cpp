@@ -28,6 +28,8 @@
 #include <mobius/framework/model/evidence.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// References: DCPlusPlus-0.883 source code
+//
 // DC++ main files (* decoded by MobiusFT):
 //
 // . ADLSearch.xml: Auto-download search configuration file

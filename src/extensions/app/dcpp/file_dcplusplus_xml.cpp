@@ -24,6 +24,7 @@ namespace mobius::extension::app::dcpp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // @param reader Reader object
+// @see SettingsManager::save@SettingsManager.cpp (DC++ Source code)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_dcplusplus_xml::file_dcplusplus_xml (
     const mobius::core::io::reader &reader
