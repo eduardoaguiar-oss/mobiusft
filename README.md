@@ -33,7 +33,7 @@ Whether you're a digital forensics expert or a beginner, the Mobius Forensic Too
 
 #### Mobius Forensic Toolkit retrieves evidence from the following applications:
 
-- P2P (*peer-to-peer*): Ares Galaxy, aMule, DreaMule, eMule, eMuleTorrent, µTorrent, µTorrent Web, Shareaza, and others.
+- P2P (*peer-to-peer*): Ares Galaxy, aMule, DC++, DreaMule, eMule, eMuleTorrent, µTorrent, µTorrent Web, Shareaza, and others.
 - Chromium based browsers, such as Chromium, Google Chrome, Opera, Microsoft Edge, Brave Browser, and many others.
 - Gecko based browsers, such as Firefox and GeckoFX.
 - Internet Explorer.

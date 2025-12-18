@@ -67,6 +67,7 @@ show_dcplusplus_xml (const std::string &path)
     std::cerr << "\tCID: " << dcplusplus_xml.get_string ("CID") << std::endl;
     std::cerr << "\tConfig Version: "
               << dcplusplus_xml.get_string ("ConfigVersion") << std::endl;
+    std::cerr << "\tExternal IP: " << dcplusplus_xml.get_string ("ExternalIp") << std::endl;
     std::cerr << "\tNick: " << dcplusplus_xml.get_string ("Nick") << std::endl;
     std::cerr << "\tTotal Downloaded: "
               << dcplusplus_xml.get_integer ("TotalDownload") << " bytes"

@@ -18,12 +18,6 @@
 #include "file_dcplusplus_xml.hpp"
 #include <mobius/core/decoder/xml/dom.hpp>
 #include <mobius/core/log.hpp>
-#include <mobius/core/string_functions.hpp>
-#include <cstdint>
-#include <algorithm>
-#include <string>
-
-#include <iostream>
 
 namespace mobius::extension::app::dcpp
 {
@@ -79,7 +73,6 @@ file_dcplusplus_xml::file_dcplusplus_xml (
     {
         log.warning (__LINE__, e.what ());
     }
-std::cerr << data_ << std::endl;
 }
 
 } // namespace mobius::extension::app::dcpp

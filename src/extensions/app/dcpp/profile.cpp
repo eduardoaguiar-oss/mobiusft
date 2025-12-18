@@ -97,12 +97,14 @@ profile::add_dcplusplus_xml_file (const mobius::core::io::file &f)
 
         _set_folder (f.get_parent ());
         _update_mtime (f);
+        source_files_.push_back (f);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Fill data
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         nickname_ = fxml.get_string ("Nick");
-        external_ip_ = fxml.get_string ("ExternalIP");
+        external_ip_ = fxml.get_string ("ExternalIp");
+        external_ip_time_ = f.get_modification_time ();
         config_version_ = fxml.get_string ("ConfigVersion");
         cid_ = fxml.get_string ("CID");
         total_downloaded_ = fxml.get_integer ("TotalDownload");
@@ -136,8 +138,27 @@ profile::add_queue_xml_file (const mobius::core::io::file &f)
         mobius::core::decoder::xml::dom dom (f.new_reader ());
         auto root = dom.get_root_element ();
 
-        log.info (__LINE__, "File decoded [Queue.xml]: " + f.get_path ());
+        if (!root || root.get_name () != "Downloads")
+        {
+            log.info (
+                __LINE__,
+                "File is not an instance of Queue.xml. Path: " + f.get_path ()
+            );
+            return;
+        }
 
+        auto children = root.get_children ();
+
+        if (children.size () > 0)
+        {
+            log.development (
+                __LINE__,
+                "New artifact found: Queue.xml file with entries. Path: " +
+                    f.get_path ()
+            );
+        }
+
+        log.info (__LINE__, "File decoded [Queue.xml]: " + f.get_path ());
         _set_folder (f.get_parent ());
         _update_mtime (f);
 
@@ -167,6 +188,27 @@ profile::add_adlsearch_xml_file (const mobius::core::io::file &f)
     {
         mobius::core::decoder::xml::dom dom (f.new_reader ());
         auto root = dom.get_root_element ();
+        auto search_group = root.get_child_by_path ("SearchGroup");
+
+        if (!root || root.get_name () != "ADLSearch" || !search_group)
+        {
+            log.info (
+                __LINE__, "File is not an instance of ADLSearch.xml. Path: " +
+                              f.get_path ()
+            );
+            return;
+        }
+
+        auto children = search_group.get_children ();
+
+        if (children.size () > 0)
+        {
+            log.development (
+                __LINE__,
+                "New artifact found: ADLSearch.xml file with entries. Path: " +
+                    f.get_path ()
+            );
+        }
 
         log.info (__LINE__, "File decoded [ADLSearch.xml]: " + f.get_path ());
 

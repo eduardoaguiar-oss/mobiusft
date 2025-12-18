@@ -118,6 +118,8 @@ public:
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     map clone () const;
+    data pop (const std::string&, const data& = {});
+    map pop_map (const std::string&);
     std::string to_string () const;
     void update (const map&);
 
@@ -233,26 +235,6 @@ public:
     // @param varg Default value
     // @return Value if key is found or default value otherwise
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    data
-    pop (const std::string& key, const data& varg = {})
-    {
-        if (contains (key))
-        {
-            auto value = get (key);
-            remove (key);
-            return value;
-        }
-
-        // If key is not found, return default value
-        return varg;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Pop value from map
-    // @param key Key
-    // @param varg Default value
-    // @return Value if key is found or default value otherwise
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     template <typename T> T
     pop (const std::string& key, T varg = {})
     {
@@ -276,17 +258,6 @@ public:
     pop_list (const std::string& key)
     {
         return pop<std::vector<T>> (key);
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Pop map value from map
-    // @param key Key
-    // @return Value if key is found or empty map otherwise
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    map
-    pop_map (const std::string& key)
-    {
-        return pop<map> (key);
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
