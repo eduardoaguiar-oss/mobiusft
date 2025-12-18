@@ -1,3 +1,7 @@
+Mobius Forensic Toolkit 2.23
+	* Added new C++ extension called "app-dcpp"
+	* libmobius_core: Improved error handling on pod::map::pop_map function
+
 Mobius Forensic Toolkit 2.22
 	* app-ares: Improved evidence tags
 	* app-ares: Changed to save remote-party-shared-file evidences

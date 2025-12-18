@@ -30,6 +30,8 @@ namespace
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const std::string VERSION = "1.0.0";
+static constexpr bool DEBUG = true;
+
 } // namespace
 
 namespace mobius::framework::ant
@@ -158,6 +160,8 @@ ant_impl_vfs_processor::run ()
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Notify implementations that processing is done
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    log.info (__LINE__, "Saving evidences");
+
     for (const auto &impl : implementations_)
     {
         try

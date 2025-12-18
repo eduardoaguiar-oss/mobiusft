@@ -1,6 +1,3 @@
-#ifndef LIBMOBIUS_PYTHON_CORE_POD_MAP_HPP
-#define LIBMOBIUS_PYTHON_CORE_POD_MAP_HPP
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
 // Copyright (C) 2008-2026 Eduardo Aguiar
@@ -18,25 +15,42 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
-#include <mobius/core/pod/map.hpp>
+#include "vfs_processor_impl.hpp"
+#include <mobius/framework/ant/vfs_processor.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Data structure
+// Extension data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-typedef struct
+extern "C"
 {
-    PyObject_HEAD mobius::core::pod::map *obj;
-} core_pod_map_o;
-
-extern PyTypeObject core_pod_map_t;
+    const char *EXTENSION_ID = "app-dcpp";
+    const char *EXTENSION_NAME = "DC++";
+    const char *EXTENSION_VERSION = "1.0";
+    const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
+    const char *EXTENSION_DESCRIPTION = "DC++ support";
+} // extern "C"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Helper functions
+// @brief Start extension
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool pymobius_core_pod_map_check (PyObject *);
-mobius::core::pod::map pymobius_core_pod_map_from_pyobject (PyObject *);
-PyObject *pymobius_core_pod_map_to_pyobject (const mobius::core::pod::map &);
-PyObject *pymobius_core_pod_map_to_python (const mobius::core::pod::map &);
+extern "C" void
+start ()
+{
+    // Register the vfs-processor implementation
+    mobius::framework::ant::register_vfs_processor_implementation<
+        mobius::extension::app::dcpp::vfs_processor_impl> (
+        EXTENSION_ID,
+        EXTENSION_NAME
+    );
+}
 
-#endif
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Stop extension
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+extern "C" void
+stop ()
+{
+    mobius::framework::ant::unregister_vfs_processor_implementation (
+        EXTENSION_ID
+    );
+}
