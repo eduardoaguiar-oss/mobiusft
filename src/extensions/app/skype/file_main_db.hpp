@@ -136,7 +136,7 @@ class file_main_db
         std::string emails;
 
         // @brief Federated Presence Policy
-        std::int64_t federated_presence_policy = 0;  // skype 6
+        std::int64_t federated_presence_policy = 0; // skype 6
 
         // @brief Flamingo Xmpp Status
         std::int64_t flamingo_xmpp_status = 0; // skype 6
@@ -208,13 +208,13 @@ class file_main_db
         std::string offline_callforward;
 
         // @brief Options Change Future
-        mobius::core::bytearray options_change_future;  // skype 6
+        mobius::core::bytearray options_change_future; // skype 6
 
         // @brief Owner Under Legal Age
         std::int64_t owner_under_legal_age = 0;
 
         // @brief Partner Channel Status
-        std::string partner_channel_status;  // skype 6
+        std::string partner_channel_status; // skype 6
 
         // @brief Partner Optedout
         std::string partner_optedout;
@@ -265,7 +265,7 @@ class file_main_db
         std::string rich_mood_text;
 
         // @brief Roaming History Enabled
-        bool roaming_history_enabled = false;  // skype 6
+        bool roaming_history_enabled = false; // skype 6
 
         // @brief Sent Authrequest
         std::string sent_authrequest;
@@ -283,7 +283,7 @@ class file_main_db
         std::int64_t set_availability = 0;
 
         // @brief Shortcircuit Sync
-        std::int64_t shortcircuit_sync = 0;   // skype 6
+        std::int64_t shortcircuit_sync = 0; // skype 6
 
         // @brief Skype Call Policy
         std::int64_t skype_call_policy = 0;
@@ -328,13 +328,13 @@ class file_main_db
         std::int64_t type = 0;
 
         // @brief Uses Jcs
-        std::int64_t uses_jcs = 0;  // skype 6
+        std::int64_t uses_jcs = 0; // skype 6
 
         // @brief Verified Company
-        mobius::core::bytearray verified_company;  // skype 6
+        mobius::core::bytearray verified_company; // skype 6
 
         // @brief Verified Email
-        mobius::core::bytearray verified_email;  // skype 6
+        mobius::core::bytearray verified_email; // skype 6
 
         // @brief Voicemail Policy
         std::int64_t voicemail_policy = 0;
@@ -1127,6 +1127,240 @@ class file_main_db
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Chat messsage participant
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct message_participant
+    {
+        // @brief Record index number
+        std::uint64_t idx = 0;
+
+        // @brief Adder
+        std::string adder;
+
+        // @brief Adding In Progress Since
+        std::int64_t adding_in_progress_since;
+
+        // @brief Convo Id
+        std::int64_t convo_id;
+
+        // @brief Debuginfo
+        std::string debuginfo;
+
+        // @brief Extprop Default Identity
+        std::int64_t extprop_default_identity;
+
+        // @brief Id
+        std::int64_t id;
+
+        // @brief Identity
+        std::string identity;
+
+        // @brief Is Multiparty Video Capable
+        std::int64_t is_multiparty_video_capable;
+
+        // @brief Is Multiparty Video Updatable
+        std::int64_t is_multiparty_video_updatable;
+
+        // @brief Is Permanent
+        bool is_permanent = false;
+
+        // @brief Is Premium Video Sponsor
+        std::int64_t is_premium_video_sponsor;
+
+        // @brief Is Seamlessly Upgraded Call
+        std::int64_t is_seamlessly_upgraded_call;
+
+        // @brief Is Video Codec Compatible
+        std::int64_t is_video_codec_compatible;
+
+        // @brief Last Leavereason
+        std::int64_t last_leavereason;
+
+        // @brief Last Voice Error
+        std::string last_voice_error;
+
+        // @brief Live Country
+        std::string live_country;
+
+        // @brief Live Fwd Identities
+        std::string live_fwd_identities;
+
+        // @brief Live Identity
+        std::string live_identity;
+
+        // @brief Live Identity To Use
+        std::string live_identity_to_use;
+
+        // @brief Live Ip Address
+        std::string live_ip_address;
+
+        // @brief Live Price For Me
+        std::string live_price_for_me;
+
+        // @brief Live Start Timestamp
+        std::int64_t live_start_timestamp;
+
+        // @brief Live Type
+        std::int64_t live_type;
+
+        // @brief Live Voicechannel
+        std::int64_t live_voicechannel;
+
+        // @brief Livesession Fallback In Progress
+        std::int64_t livesession_fallback_in_progress;
+
+        // @brief Livesession Recovery In Progress
+        std::int64_t livesession_recovery_in_progress;
+
+        // @brief Next Redial Time
+        std::int64_t next_redial_time;
+
+        // @brief Nrof Redials Left
+        std::int64_t nrof_redials_left;
+
+        // @brief Quality Problems
+        std::string quality_problems;
+
+        // @brief Rank
+        std::int64_t rank;
+
+        // @brief Real Identity
+        std::string real_identity;
+
+        // @brief Requested Rank
+        std::int64_t requested_rank;
+
+        // @brief Sound Level
+        std::int64_t sound_level;
+
+        // @brief Text Status
+        std::int64_t text_status;
+
+        // @brief Transferred By
+        std::string transferred_by;
+
+        // @brief Transferred To
+        std::string transferred_to;
+
+        // @brief Video Status
+        std::int64_t video_status;
+
+        // @brief Voice Status
+        std::int64_t voice_status;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Chat message
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct message
+    {
+        // @brief Record index number
+        std::uint64_t idx = 0;
+
+        // @brief Author
+        std::string author;
+
+        // @brief Author Was Live
+        std::int64_t author_was_live;
+
+        // @brief Body Is Rawxml
+        std::int64_t body_is_rawxml;
+
+        // @brief Body Xml
+        std::string body_xml;
+
+        // @brief Call Guid
+        std::string call_guid;
+
+        // @brief Chatmsg Status
+        std::int64_t chatmsg_status;
+
+        // @brief Chatmsg Type
+        std::int64_t chatmsg_type;
+
+        // @brief Chatname
+        std::string chatname;
+
+        // @brief Consumption Status
+        std::int64_t consumption_status;
+
+        // @brief Convo Id
+        std::int64_t convo_id;
+
+        // @brief Crc
+        std::int64_t crc;
+
+        // @brief Dialog Partner
+        std::string dialog_partner;
+
+        // @brief Edited By
+        std::string edited_by;
+
+        // @brief Edited Timestamp
+        mobius::core::datetime::datetime edited_timestamp;
+
+        // @brief Error Code
+        std::int64_t error_code;
+
+        // @brief From Dispname
+        std::string from_dispname;
+
+        // @brief Guid
+        mobius::core::bytearray guid;
+
+        // @brief Id
+        std::int64_t id;
+
+        // @brief Identities
+        std::string identities;
+
+        // @brief Is Permanent
+        bool is_permanent = false;
+
+        // @brief Leavereason
+        std::int64_t leavereason;
+
+        // @brief Newoptions
+        std::int64_t newoptions;
+
+        // @brief Newrole
+        std::int64_t newrole;
+
+        // @brief Oldoptions
+        std::int64_t oldoptions;
+
+        // @brief Param Key
+        std::int64_t param_key;
+
+        // @brief Param Value
+        std::int64_t param_value;
+
+        // @brief Participant Count
+        std::int64_t participant_count;
+
+        // @brief Pk Id
+        std::int64_t pk_id;
+
+        // @brief Reason
+        std::string reason;
+
+        // @brief Remote Id
+        std::int64_t remote_id;
+
+        // @brief Sending Status
+        std::int64_t sending_status;
+
+        // @brief Timestamp
+        mobius::core::datetime::datetime timestamp;
+
+        // @brief Type
+        std::int64_t type;
+
+        // @brief Message Participants
+        std::vector<message_participant> participants;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief SMS structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct sms
@@ -1338,6 +1572,16 @@ class file_main_db
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get messages
+    // @return Vector of messages
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<message>
+    get_messages () const
+    {
+        return messages_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get SMS messages
     // @return Vector of SMS messages
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1376,6 +1620,9 @@ class file_main_db
     // @brief File Transfers
     std::vector<file_transfer> file_transfers_;
 
+    // @brief Messages
+    std::vector<message> messages_;
+
     // @brief SMS
     std::vector<sms> sms_;
 
@@ -1389,6 +1636,7 @@ class file_main_db
     void _load_calls (mobius::core::database::database &);
     void _load_contacts (mobius::core::database::database &);
     void _load_file_transfers (mobius::core::database::database &);
+    void _load_messages (mobius::core::database::database &);
     void _load_sms (mobius::core::database::database &);
     void _load_voicemails (mobius::core::database::database &);
 };

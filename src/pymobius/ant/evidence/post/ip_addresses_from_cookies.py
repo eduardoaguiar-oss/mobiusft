@@ -25,8 +25,7 @@ ANT_ID = 'ip-addresses-from-cookies'
 ANT_NAME = 'IP Addresses from Cookies'
 ANT_VERSION = '1.0'
 EVIDENCE_TYPE = "ip-address"
-
-RE_IPv4 = re.compile(r'\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b')
+PLAIN_IPS = {"boost_banner_key", "xi_ip"}
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Ant: IP Addresses
@@ -96,7 +95,10 @@ class Ant(object):
         ip = None
         metadata = mobius.core.pod.map()
 
-        if c.name == 'kt_ips':
+        if c.name in PLAIN_IPS:
+            ip = c.value.decode('utf-8')
+
+        elif c.name == 'kt_ips':
             uri = mobius.core.io.uri(c.value.decode('utf-8'))
             value = uri.get_path('utf-8')
 
@@ -143,15 +145,6 @@ class Ant(object):
             if len (data) > 7:
                 metadata.set('region', data[7])
             
-        else:
-            value = c.value.decode('utf-8', errors='ignore')
-            match = RE_IPv4.search(value)
-            if match:
-                mobius.core.logf(f"DEV cookie of interest: {c.name}. Value:")
-                mobius.core.logf(f"DEV {pymobius.dump(c.value)}")
-                
-        
-
         return ip, metadata
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

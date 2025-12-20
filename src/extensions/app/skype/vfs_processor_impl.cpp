@@ -268,6 +268,7 @@ vfs_processor_impl::impl::_save_app_profiles ()
         metadata.set ("num_calls", p.size_calls ());
         metadata.set ("num_contacts", p.size_contacts ());
         metadata.set ("num_file_transfers", p.size_file_transfers ());
+        metadata.set ("num_messages", p.size_messages ());
         metadata.set (
             "num_remote_party_ip_addresses", p.size_remote_party_ip_addresses ()
         );

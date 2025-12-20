@@ -24,6 +24,7 @@
 #include <mobius/core/log.hpp>
 #include <mobius/core/mediator.hpp>
 #include <mobius/core/string_functions.hpp>
+#include <mobius/framework/utils.hpp>
 #include <format>
 #include <map>
 #include <set>
@@ -108,54 +109,6 @@ get_duration (std::int64_t duration)
     auto mm = (duration % 3600) / 60;
     auto ss = duration % 60;
     return std::format ("{:02}:{:02}:{:02}", hh, mm, ss);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get skype user name
-// @param Skype name
-// @param Full name
-// @return User name
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-get_skype_user_name (
-    const std::string &skype_name, const std::string &full_name
-)
-{
-    std::string text;
-
-    if (!full_name.empty ())
-    {
-        text = full_name;
-        if (!skype_name.empty () && skype_name != full_name)
-            text += " (" + skype_name + ")";
-    }
-    else
-        text = skype_name;
-
-    return text;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get username from path
-// @param path Path to profile
-// @return Username extracted from path
-//
-// @note Paths are in the following format: /FSxx/Users/username/... or
-// /FSxx/home/username/... where FSxx is the filesystem identifier.
-// Example: /FS01/Users/johndoe/AppData/Local/Google/Chrome/User Data/
-// In this case, the username is "johndoe".
-// If the path does not match the expected format, an empty string is returned.
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-get_username_from_path (const std::string &path)
-{
-    auto dirnames = mobius::core::string::split (path, "/");
-
-    if (dirnames.size () > 3 &&
-        (dirnames[2] == "Users" || dirnames[2] == "home"))
-        return dirnames[3]; // Username is the fourth directory
-
-    return {}; // No username found
 }
 
 } // namespace
@@ -339,6 +292,26 @@ class profile::impl
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get messages
+    // @return Vector of messages
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<message>
+    get_messages () const
+    {
+        return messages_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of messages
+    // @return Number of messages
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    size_messages () const
+    {
+        return messages_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get remote party IP addresses
     // @return Vector of remote party IP addresses
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -442,6 +415,9 @@ class profile::impl
     // @brief File Transfers
     std::vector<file_transfer> file_transfers_;
 
+    // @brief Messages
+    std::vector<message> messages_;
+
     // @brief Remote party IP addresses
     std::vector<remote_party_ip_address> remote_party_ip_addresses_;
 
@@ -451,11 +427,17 @@ class profile::impl
     // @brief Voicemails
     std::vector<voicemail> voicemails_;
 
+    // @brief Skype usernames cache
+    std::unordered_map<std::string, std::string> skypename_cache_;
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _set_entry (const mobius::core::io::entry &);
     void _update_mtime (const mobius::core::io::file &);
+    std::string _get_skypename (const std::string &) const;
+    void _set_skypename (const std::string &, const std::string &);
+    void _normalize_data ();
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // main.db file helper functions
@@ -469,6 +451,9 @@ class profile::impl
         const file_main_db &, const mobius::core::io::file &
     );
     void _load_main_db_file_transfers (
+        const file_main_db &, const mobius::core::io::file &
+    );
+    void _load_main_db_messages (
         const file_main_db &, const mobius::core::io::file &
     );
     void _load_main_db_sms_messages (
@@ -518,7 +503,7 @@ profile::impl::_set_entry (const mobius::core::io::entry &e)
     // Get data from folder
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     path_ = e.get_path ();
-    username_ = get_username_from_path (e.get_path ());
+    username_ = mobius::framework::get_username_from_path (e.get_path ());
 
     if (e.is_folder ())
     {
@@ -551,6 +536,46 @@ profile::impl::_update_mtime (const mobius::core::io::file &f)
     if (!last_modified_time_ ||
         f.get_modification_time () > last_modified_time_)
         last_modified_time_ = f.get_modification_time ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get skype user name
+// @param Skype name
+// @return User name
+// If skype name found in cache, return "Full Name (skype_name)". Otherwise,
+// return skype_name as is.
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+profile::impl::_get_skypename (const std::string &skype_name) const
+{
+    if (skype_name.find ('(') != std::string::npos)
+        return skype_name; // Already in "Full Name (skype_name)" format
+
+    auto it = skypename_cache_.find (skype_name);
+
+    if (it != skypename_cache_.end ())
+    {
+        auto full_name = it->second;
+
+        if (!full_name.empty () && full_name != skype_name)
+            return full_name + " (" + skype_name + ")";
+    }
+
+    return skype_name;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Set skype user name in cache
+// @param Skype name
+// @param Full name
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_set_skypename (
+    const std::string &skype_name, const std::string &full_name
+)
+{
+    if (!full_name.empty ())
+        skypename_cache_[skype_name] = full_name;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -589,6 +614,7 @@ profile::impl::add_main_db_file (const mobius::core::io::file &f)
         _load_main_db_file_transfers (fm, f);
         _load_main_db_sms_messages (fm, f);
         _load_main_db_voicemails (fm, f);
+        _normalize_data ();
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event
@@ -686,11 +712,11 @@ profile::impl::_load_main_db_accounts (
             a.metadata.set ("timezone", acc.timezone);
 
             a.f = f;
-
             accounts_.push_back (a);
 
             account_id_ = acc.skypename;
             account_name_ = acc.fullname;
+            _set_skypename (acc.skypename, acc.fullname);
         }
     }
     catch (const std::exception &e)
@@ -727,31 +753,20 @@ profile::impl::_load_main_db_calls (
             // Caller and callees
             for (const auto &m : cl.call_members)
             {
+                _set_skypename (m.identity, m.dispname);
+
                 if (m.type == 1)
-                {
-                    c.caller = get_skype_user_name (m.identity, m.dispname);
-                }
+                    c.caller = m.identity;
+
                 else if (m.type == 2)
-                {
-                    c.callees.push_back (
-                        get_skype_user_name (m.identity, m.dispname)
-                    );
-                }
+                    c.callees.push_back (m.identity);
             }
 
             if (cl.is_incoming)
-            {
-                c.callees.push_back (
-                    get_skype_user_name (get_account_id (), get_account_name ())
-                );
-            }
+                c.callees.push_back (get_account_id ());
 
             else
-            {
-                c.caller = get_skype_user_name (
-                    get_account_id (), get_account_name ()
-                );
-            }
+                c.caller = get_account_id ();
 
             std::sort (c.callees.begin (), c.callees.end ());
 
@@ -1057,6 +1072,7 @@ profile::impl::_load_main_db_contacts (
             c.metadata.set ("verified_email", ct.verified_email);
 
             contacts_.push_back (c);
+            _set_skypename (c.id, c.name);
         }
     }
     catch (const std::exception &e)
@@ -1128,6 +1144,82 @@ profile::impl::_load_main_db_file_transfers (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load main.db messages
+// @param fm Main.db file
+// @param f Original file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_load_main_db_messages (
+    const file_main_db &fm, const mobius::core::io::file &f
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        // Load messages
+        for (const auto &m : fm.get_messages ())
+        {
+            _set_skypename (m.author, m.from_dispname);
+
+            message m_obj;
+            m_obj.timestamp = m.timestamp;
+            m_obj.sender = m.author;
+            m_obj.content = m.body_xml;
+
+            for (const auto &p : m.participants)
+            {
+                if (p.identity != m.author)
+                    m_obj.recipients.push_back (p.identity);
+            }
+
+            m_obj.metadata.set ("record_idx", m.idx);
+            m_obj.metadata.set ("schema_version", fm.get_schema_version ());
+            m_obj.metadata.set ("author", m.author);
+            m_obj.metadata.set ("author_was_live", m.author_was_live);
+            m_obj.metadata.set ("body_is_rawxml", m.body_is_rawxml);
+            m_obj.metadata.set ("body_xml", m.body_xml);
+            m_obj.metadata.set ("call_guid", m.call_guid);
+            m_obj.metadata.set ("chatmsg_status", m.chatmsg_status);
+            m_obj.metadata.set ("chatmsg_type", m.chatmsg_type);
+            m_obj.metadata.set ("chatname", m.chatname);
+            m_obj.metadata.set ("consumption_status", m.consumption_status);
+            m_obj.metadata.set ("convo_id", m.convo_id);
+            m_obj.metadata.set ("crc", m.crc);
+            m_obj.metadata.set ("dialog_partner", m.dialog_partner);
+            m_obj.metadata.set ("edited_by", m.edited_by);
+            m_obj.metadata.set ("edited_timestamp", m.edited_timestamp);
+            m_obj.metadata.set ("error_code", m.error_code);
+            m_obj.metadata.set ("from_dispname", m.from_dispname);
+            m_obj.metadata.set ("guid", m.guid.to_hexstring ());
+            m_obj.metadata.set ("id", m.id);
+            m_obj.metadata.set ("identities", m.identities);
+            m_obj.metadata.set ("is_permanent", m.is_permanent);
+            m_obj.metadata.set ("leavereason", m.leavereason);
+            m_obj.metadata.set ("newoptions", m.newoptions);
+            m_obj.metadata.set ("newrole", m.newrole);
+            m_obj.metadata.set ("oldoptions", m.oldoptions);
+            m_obj.metadata.set ("param_key", m.param_key);
+            m_obj.metadata.set ("param_value", m.param_value);
+            m_obj.metadata.set ("participant_count", m.participant_count);
+            m_obj.metadata.set ("pk_id", m.pk_id);
+            m_obj.metadata.set ("reason", m.reason);
+            m_obj.metadata.set ("remote_id", m.remote_id);
+            m_obj.metadata.set ("sending_status", m.sending_status);
+            m_obj.metadata.set ("type", m.type);
+
+            messages_.push_back (m_obj);
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
+        );
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Load main.db SMS messages
 // @param fm Main.db file
 // @param f Original file
@@ -1152,9 +1244,7 @@ profile::impl::_load_main_db_sms_messages (
                 s_obj.sender = s.identity;
 
             else if (s.type == 2)
-                s_obj.sender = get_skype_user_name (
-                    get_account_id (), get_account_name ()
-                );
+                s_obj.sender = get_account_id ();
 
             // Recipients
             auto target_numbers =
@@ -1288,6 +1378,7 @@ profile::impl::add_skype_db_file (const mobius::core::io::file &f)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         _load_skype_db_contacts (fs, f);
         _load_skype_db_sms_messages (fs, f);
+        _normalize_data ();
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event
@@ -1349,6 +1440,7 @@ profile::impl::_load_skype_db_account (
         );
 
         accounts_.push_back (a);
+        _set_skypename (acc.skype_name, acc.full_name);
     }
     catch (const std::exception &e)
     {
@@ -1375,7 +1467,7 @@ profile::impl::_load_skype_db_contacts (
         for (const auto &ct : fs.get_contacts ())
         {
             contact c;
-            //c.id = ct.skype_name;
+            //c.id = ct.skypename;
             c.gender = get_domain_value (GENDER_DOMAIN, ct.gender);
             c.birthday = ct.birthday;
 
@@ -1516,17 +1608,12 @@ profile::impl::_load_skype_db_sms_messages (
             if (s.author == account_mri_)
             {
                 log.development (
-                    __LINE__,
-                    "SMS message sent by account user: " +
-                        get_skype_user_name (account_id_, account_name_)
+                    __LINE__, "SMS message sent by account user: " +
+                                  _get_skypename (account_id_)
                 );
             }
             else
-            {
-                s_obj.recipients.push_back (
-                    get_skype_user_name (account_id_, account_name_)
-                );
-            }
+                s_obj.recipients.push_back (account_id_);
 
             // Metadata
             s_obj.metadata.set ("record_idx", s.idx);
@@ -1598,6 +1685,7 @@ profile::impl::add_s4l_db_file (const mobius::core::io::file &f)
         _load_s4l_db_accounts (fs, f);
         _load_s4l_db_calls (fs, f);
         _load_s4l_db_contacts (fs, f);
+        _normalize_data ();
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event
@@ -1667,6 +1755,7 @@ profile::impl::_load_s4l_db_accounts (
 
         a.f = f;
         accounts_.push_back (a);
+        _set_skypename (acc.skype_name, acc.full_name);
     }
     catch (const std::exception &e)
     {
@@ -1700,17 +1789,19 @@ profile::impl::_load_s4l_db_calls (
                     get_duration ((cl.end_time - cl.start_time).to_seconds ());
 
             // Caller and callees
-            c.caller = get_skype_user_name (
+            c.caller = cl.originator_participant.skype_name;
+            _set_skypename (
                 cl.originator_participant.skype_name,
                 cl.originator_participant.full_name
             );
 
             if (cl.call_type == "twoParty")
             {
-                c.callees.push_back (get_skype_user_name (
+                c.callees.push_back (cl.target_participant.skype_name);
+                _set_skypename (
                     cl.target_participant.skype_name,
                     cl.target_participant.full_name
-                ));
+                );
             }
 
             else if (cl.call_type == "multiParty")
@@ -1718,9 +1809,8 @@ profile::impl::_load_s4l_db_calls (
                 for (const auto &p : cl.participants)
                 {
                     if (p.skype_name != cl.originator_participant.skype_name)
-                        c.callees.push_back (
-                            get_skype_user_name (p.skype_name, p.full_name)
-                        );
+                        c.callees.push_back (p.skype_name);
+                    _set_skypename (p.skype_name, p.full_name);
                 }
             }
 
@@ -1793,6 +1883,7 @@ profile::impl::_load_s4l_db_contacts (
             c.metadata.set ("fetched_time", ct.fetched_time);
 
             contacts_.push_back (c);
+            _set_skypename (ct.skype_name, ct.full_name);
         }
     }
     catch (const std::exception &e)
@@ -1800,6 +1891,53 @@ profile::impl::_load_s4l_db_contacts (
         log.warning (
             __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
         );
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Normalize data - Set skypenames where possible, using skype names
+// cache already built
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_normalize_data ()
+{
+    for (auto &cl : calls_)
+    {
+        // Caller
+        cl.caller = _get_skypename (cl.caller);
+
+        // Callees
+        for (auto &callee : cl.callees)
+            callee = _get_skypename (callee);
+
+        // Sort callees again after normalization
+        std::sort (cl.callees.begin (), cl.callees.end ());
+    }
+
+    for (auto &c : contacts_)
+    {
+        // ID
+        c.name = _get_skypename (c.id);
+    }
+
+    for (auto &m : messages_)
+    {
+        // Sender
+        m.sender = _get_skypename (m.sender);
+
+        // Recipients
+        for (auto &recipient : m.recipients)
+            recipient = _get_skypename (recipient);
+    }
+
+    for (auto &s : sms_)
+    {
+        // Sender
+        s.sender = _get_skypename (s.sender);
+
+        // Recipients
+        for (auto &recipient : s.recipients)
+            recipient = _get_skypename (recipient);
     }
 }
 

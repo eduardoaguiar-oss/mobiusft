@@ -146,10 +146,6 @@ class Ant(object):
 
                 self.__entries.append(ts)
 
-            else:
-                if 'busca' in h.url.lower() or 'search' in h.url.lower():
-                    mobius.core.logf('DEV ant.text_search (URL): ' + h.url)
-
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Retrieve data from browser history using subpath
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

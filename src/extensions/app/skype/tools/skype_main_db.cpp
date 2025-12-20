@@ -39,7 +39,6 @@ usage ()
     std::cerr << std::endl;
 }
 
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Show Skype Main DB info
 // @param path Main DB file path
@@ -75,23 +74,33 @@ show_main_db_info (const std::string &path)
         std::cout << "   Schema version: " << acc.schema_version << std::endl;
         std::cout << "   About: " << acc.about << std::endl;
         std::cout << "   Ad Policy: " << acc.ad_policy << std::endl;
-        std::cout << "   Added In Shared Group: " << acc.added_in_shared_group << std::endl;
+        std::cout << "   Added In Shared Group: " << acc.added_in_shared_group
+                  << std::endl;
         std::cout << "   Alertstring: " << acc.alertstring << std::endl;
         std::cout << "   Aliases: " << acc.aliases << std::endl;
-        std::cout << "   Assigned Comment: " << acc.assigned_comment << std::endl;
-        std::cout << "   Assigned Speeddial: " << acc.assigned_speeddial << std::endl;
+        std::cout << "   Assigned Comment: " << acc.assigned_comment
+                  << std::endl;
+        std::cout << "   Assigned Speeddial: " << acc.assigned_speeddial
+                  << std::endl;
         std::cout << "   Authorized Time: " << acc.authorized_time << std::endl;
-        std::cout << "   Authrequest History:\n" << acc.authreq_history.dump (8) << std::endl;
-        std::cout << "   Authreq Timestamp: " << acc.authreq_timestamp << std::endl;
-        std::cout << "   Authrequest Count: " <<  acc.authrequest_count << std::endl;
+        std::cout << "   Authrequest History:\n"
+                  << acc.authreq_history.dump (8) << std::endl;
+        std::cout << "   Authreq Timestamp: " << acc.authreq_timestamp
+                  << std::endl;
+        std::cout << "   Authrequest Count: " << acc.authrequest_count
+                  << std::endl;
         std::cout << "   Availability: " << acc.availability << std::endl;
-        std::cout << "   Avatar Image:\n" << acc.avatar_image.dump (8) << std::endl;
+        std::cout << "   Avatar Image:\n"
+                  << acc.avatar_image.dump (8) << std::endl;
         std::cout << "   Avatar Policy: " << acc.avatar_policy << std::endl;
-        std::cout << "   Avatar Timestamp: " << acc.avatar_timestamp << std::endl;
+        std::cout << "   Avatar Timestamp: " << acc.avatar_timestamp
+                  << std::endl;
         std::cout << "   Birthday: " << acc.birthday << std::endl;
         std::cout << "   Buddyblob:\n" << acc.buddyblob.dump (8) << std::endl;
-        std::cout << "   Buddycount Policy: " << acc.buddycount_policy << std::endl;
-        std::cout << "   Capabilities:\n" << acc.capabilities.dump (8) << std::endl;
+        std::cout << "   Buddycount Policy: " << acc.buddycount_policy
+                  << std::endl;
+        std::cout << "   Capabilities:\n"
+                  << acc.capabilities.dump (8) << std::endl;
         std::cout << "   Cbl Future:\n" << acc.cbl_future.dump (8) << std::endl;
         std::cout << "   Cblsyncstatus: " << acc.cblsyncstatus << std::endl;
         std::cout << "   Chat Policy: " << acc.chat_policy << std::endl;
@@ -100,74 +109,113 @@ show_main_db_info (const std::string &path)
         std::cout << "   Country: " << acc.country << std::endl;
         std::cout << "   Displayname: " << acc.displayname << std::endl;
         std::cout << "   Emails: " << acc.emails << std::endl;
-        std::cout << "   Federated Presence Policy: " << acc.federated_presence_policy << std::endl;
-        std::cout << "   Flamingo Xmpp Status: " << acc.flamingo_xmpp_status << std::endl;
+        std::cout << "   Federated Presence Policy: "
+                  << acc.federated_presence_policy << std::endl;
+        std::cout << "   Flamingo Xmpp Status: " << acc.flamingo_xmpp_status
+                  << std::endl;
         std::cout << "   Fullname: " << acc.fullname << std::endl;
         std::cout << "   Gender: " << acc.gender << std::endl;
         std::cout << "   Given Authlevel: " << acc.given_authlevel << std::endl;
-        std::cout << "   Given Displayname: " << acc.given_displayname << std::endl;
+        std::cout << "   Given Displayname: " << acc.given_displayname
+                  << std::endl;
         std::cout << "   Homepage: " << acc.homepage << std::endl;
         std::cout << "   Id: " << acc.id << std::endl;
         std::cout << "   In Shared Group: " << acc.in_shared_group << std::endl;
         std::cout << "   Ipcountry: " << acc.ipcountry << std::endl;
-        std::cout << "   Is Permanent: " << (acc.is_permanent ? "Yes" : "No") << std::endl;
+        std::cout << "   Is Permanent: " << (acc.is_permanent ? "Yes" : "No")
+                  << std::endl;
         std::cout << "   Languages: " << acc.languages << std::endl;
-        std::cout << "   Lastonline Timestamp: " << acc.lastonline_timestamp << std::endl;
-        std::cout << "   Lastused Timestamp: " << acc.lastused_timestamp << std::endl;
+        std::cout << "   Lastonline Timestamp: " << acc.lastonline_timestamp
+                  << std::endl;
+        std::cout << "   Lastused Timestamp: " << acc.lastused_timestamp
+                  << std::endl;
         std::cout << "   Logoutreason: " << acc.logoutreason << std::endl;
         std::cout << "   Mood Text: " << acc.mood_text << std::endl;
         std::cout << "   Mood Timestamp: " << acc.mood_timestamp << std::endl;
-        std::cout << "   Node Capabilities: " << acc.node_capabilities << std::endl;
-        std::cout << "   Node Capabilities And: " << acc.node_capabilities_and << std::endl;
-        std::cout << "   Nr Of Other Instances: " << acc.nr_of_other_instances << std::endl;
-        std::cout << "   Nrof Authed Buddies: " << acc.nrof_authed_buddies << std::endl;
-        std::cout << "   Offline Authreq Id: " << acc.offline_authreq_id << std::endl;
-        std::cout << "   Offline Callforward: " << acc.offline_callforward << std::endl;
-        std::cout << "   Options Change Future:\n" << acc.options_change_future.dump (8) << std::endl;
-        std::cout << "   Owner Under Legal Age: " << acc.owner_under_legal_age << std::endl;
-        std::cout << "   Partner Channel Status: " << acc.partner_channel_status << std::endl;
-        std::cout << "   Partner Optedout: " << acc.partner_optedout << std::endl;
+        std::cout << "   Node Capabilities: " << acc.node_capabilities
+                  << std::endl;
+        std::cout << "   Node Capabilities And: " << acc.node_capabilities_and
+                  << std::endl;
+        std::cout << "   Nr Of Other Instances: " << acc.nr_of_other_instances
+                  << std::endl;
+        std::cout << "   Nrof Authed Buddies: " << acc.nrof_authed_buddies
+                  << std::endl;
+        std::cout << "   Offline Authreq Id: " << acc.offline_authreq_id
+                  << std::endl;
+        std::cout << "   Offline Callforward: " << acc.offline_callforward
+                  << std::endl;
+        std::cout << "   Options Change Future:\n"
+                  << acc.options_change_future.dump (8) << std::endl;
+        std::cout << "   Owner Under Legal Age: " << acc.owner_under_legal_age
+                  << std::endl;
+        std::cout << "   Partner Channel Status: " << acc.partner_channel_status
+                  << std::endl;
+        std::cout << "   Partner Optedout: " << acc.partner_optedout
+                  << std::endl;
         std::cout << "   Phone Home: " << acc.phone_home << std::endl;
         std::cout << "   Phone Mobile: " << acc.phone_mobile << std::endl;
         std::cout << "   Phone Office: " << acc.phone_office << std::endl;
-        std::cout << "   Phonenumbers Policy: " << acc.phonenumbers_policy << std::endl;
-        std::cout << "   Profile Attachments:\n" << acc.profile_attachments.dump (8) << std::endl;
-        std::cout << "   Profile Timestamp: " << acc.profile_timestamp << std::endl;
+        std::cout << "   Phonenumbers Policy: " << acc.phonenumbers_policy
+                  << std::endl;
+        std::cout << "   Profile Attachments:\n"
+                  << acc.profile_attachments.dump (8) << std::endl;
+        std::cout << "   Profile Timestamp: " << acc.profile_timestamp
+                  << std::endl;
         std::cout << "   Province: " << acc.province << std::endl;
-        std::cout << "   Pstn Call Policy: " << acc.pstn_call_policy << std::endl;
+        std::cout << "   Pstn Call Policy: " << acc.pstn_call_policy
+                  << std::endl;
         std::cout << "   Pstnnumber: " << acc.pstnnumber << std::endl;
         std::cout << "   Pwdchangestatus: " << acc.pwdchangestatus << std::endl;
-        std::cout << "   Received Authrequest: " << acc.received_authrequest << std::endl;
+        std::cout << "   Received Authrequest: " << acc.received_authrequest
+                  << std::endl;
         std::cout << "   Refreshing: " << acc.refreshing << std::endl;
-        std::cout << "   Registration Timestamp: " << acc.registration_timestamp << std::endl;
+        std::cout << "   Registration Timestamp: " << acc.registration_timestamp
+                  << std::endl;
         std::cout << "   Revoked Auth: " << acc.revoked_auth << std::endl;
         std::cout << "   Rich Mood Text: " << acc.rich_mood_text << std::endl;
-        std::cout << "   Roaming History Enabled: " << acc.roaming_history_enabled << std::endl;
-        std::cout << "   Sent Authrequest: " << acc.sent_authrequest << std::endl;
-        std::cout << "   Sent Authrequest Serial: " << acc.sent_authrequest_serial << std::endl;
-        std::cout << "   Sent Authrequest Time: " << acc.sent_authrequest_time << std::endl;
-        std::cout << "   Service Provider Info: " << acc.service_provider_info << std::endl;
-        std::cout << "   Set Availability: " << acc.set_availability << std::endl;
-        std::cout << "   Shortcircuit Sync: " << acc.shortcircuit_sync << std::endl;
-        std::cout << "   Skype Call Policy: " << acc.skype_call_policy << std::endl;
+        std::cout << "   Roaming History Enabled: "
+                  << acc.roaming_history_enabled << std::endl;
+        std::cout << "   Sent Authrequest: " << acc.sent_authrequest
+                  << std::endl;
+        std::cout << "   Sent Authrequest Serial: "
+                  << acc.sent_authrequest_serial << std::endl;
+        std::cout << "   Sent Authrequest Time: " << acc.sent_authrequest_time
+                  << std::endl;
+        std::cout << "   Service Provider Info: " << acc.service_provider_info
+                  << std::endl;
+        std::cout << "   Set Availability: " << acc.set_availability
+                  << std::endl;
+        std::cout << "   Shortcircuit Sync: " << acc.shortcircuit_sync
+                  << std::endl;
+        std::cout << "   Skype Call Policy: " << acc.skype_call_policy
+                  << std::endl;
         std::cout << "   Skypein Numbers: " << acc.skypein_numbers << std::endl;
         std::cout << "   Skypename: " << acc.skypename << std::endl;
-        std::cout << "   Skypeout Balance: " << acc.skypeout_balance << std::endl;
-        std::cout << "   Skypeout Balance Currency: " << acc.skypeout_balance_currency << std::endl;
-        std::cout << "   Skypeout Precision: " << acc.skypeout_precision << std::endl;
+        std::cout << "   Skypeout Balance: " << acc.skypeout_balance
+                  << std::endl;
+        std::cout << "   Skypeout Balance Currency: "
+                  << acc.skypeout_balance_currency << std::endl;
+        std::cout << "   Skypeout Precision: " << acc.skypeout_precision
+                  << std::endl;
         std::cout << "   Stack Version: " << acc.stack_version << std::endl;
         std::cout << "   Status: " << acc.status << std::endl;
         std::cout << "   Subscriptions: " << acc.subscriptions << std::endl;
-        std::cout << "   Suggested Skypename: " << acc.suggested_skypename << std::endl;
-        std::cout << "   Synced Email:\n" << acc.synced_email.dump (8) << std::endl;
+        std::cout << "   Suggested Skypename: " << acc.suggested_skypename
+                  << std::endl;
+        std::cout << "   Synced Email:\n"
+                  << acc.synced_email.dump (8) << std::endl;
         std::cout << "   Timezone: " << acc.timezone << std::endl;
         std::cout << "   Timezone Policy: " << acc.timezone_policy << std::endl;
         std::cout << "   Type: " << acc.type << std::endl;
         std::cout << "   Uses Jcs: " << acc.uses_jcs << std::endl;
-        std::cout << "   Verified Company:\n" << acc.verified_company.dump (8) << std::endl;
-        std::cout << "   Verified Email:\n" << acc.verified_email.dump (8) << std::endl;
-        std::cout << "   Voicemail Policy: " << acc.voicemail_policy << std::endl;
-        std::cout << "   Webpresence Policy: " << acc.webpresence_policy << std::endl;
+        std::cout << "   Verified Company:\n"
+                  << acc.verified_company.dump (8) << std::endl;
+        std::cout << "   Verified Email:\n"
+                  << acc.verified_email.dump (8) << std::endl;
+        std::cout << "   Voicemail Policy: " << acc.voicemail_policy
+                  << std::endl;
+        std::cout << "   Webpresence Policy: " << acc.webpresence_policy
+                  << std::endl;
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -182,131 +230,216 @@ show_main_db_info (const std::string &path)
         std::cout << "   Record Index: " << call.idx << std::endl;
         std::cout << "   Access Token: " << call.access_token << std::endl;
         std::cout << "   Active Members: " << call.active_members << std::endl;
-        std::cout << "   Begin Timestamp: " << call.begin_timestamp << std::endl;
-        std::cout << "   Broadcast Metadata: " << call.broadcast_metadata << std::endl;
-        std::cout << "   Conf Participants:\n" << call.conf_participants.dump (8) << std::endl;
-        std::cout << "   Content Sharing Session Count Changed: " << call.content_sharing_session_count_changed << std::endl;
+        std::cout << "   Begin Timestamp: " << call.begin_timestamp
+                  << std::endl;
+        std::cout << "   Broadcast Metadata: " << call.broadcast_metadata
+                  << std::endl;
+        std::cout << "   Conf Participants:\n"
+                  << call.conf_participants.dump (8) << std::endl;
+        std::cout << "   Content Sharing Session Count Changed: "
+                  << call.content_sharing_session_count_changed << std::endl;
         std::cout << "   Conv Dbid: " << call.conv_dbid << std::endl;
-        std::cout << "   Current Video Audience: " << call.current_video_audience << std::endl;
+        std::cout << "   Current Video Audience: "
+                  << call.current_video_audience << std::endl;
         std::cout << "   Duration: " << call.duration << std::endl;
         std::cout << "   Failurecode: " << call.failurecode << std::endl;
         std::cout << "   Failurereason: " << call.failurereason << std::endl;
         std::cout << "   Host Identity: " << call.host_identity << std::endl;
         std::cout << "   Id: " << call.id << std::endl;
-        std::cout << "   Is Active: " << (call.is_active ? "true" : "false") << std::endl;
-        std::cout << "   Is Conference: " << (call.is_conference ? "true" : "false") << std::endl;
-        std::cout << "   Is Incoming: " << (call.is_incoming ? "true" : "false") << std::endl;
-        std::cout << "   Is Incoming One On One Video Call: " << (call.is_incoming_one_on_one_video_call ? "true" : "false") << std::endl;
-        std::cout << "   Is Muted: " << (call.is_muted ? "true" : "false") << std::endl;
-        std::cout << "   Is Muted Speaker: " << (call.is_muted_speaker ? "true" : "false") << std::endl;
-        std::cout << "   Is On Hold: " << (call.is_on_hold ? "true" : "false") << std::endl;
-        std::cout << "   Is Permanent: " << (call.is_permanent ? "true" : "false") << std::endl;
-        std::cout << "   Is Premium Video Sponsor: " << (call.is_premium_video_sponsor ? "true" : "false") << std::endl;
-        std::cout << "   Is Server Muted: " << (call.is_server_muted ? "true" : "false") << std::endl;
-        std::cout << "   Is Unseen Missed: " << (call.is_unseen_missed ? "true" : "false") << std::endl;
-        std::cout << "   Joined Existing: " << call.joined_existing << std::endl;
-        std::cout << "   Light Weight Meeting Count Changed: " << call.light_weight_meeting_count_changed << std::endl;
-        std::cout << "   Meeting Details: " << call.meeting_details << std::endl;
+        std::cout << "   Is Active: " << (call.is_active ? "true" : "false")
+                  << std::endl;
+        std::cout << "   Is Conference: "
+                  << (call.is_conference ? "true" : "false") << std::endl;
+        std::cout << "   Is Incoming: " << (call.is_incoming ? "true" : "false")
+                  << std::endl;
+        std::cout << "   Is Incoming One On One Video Call: "
+                  << (call.is_incoming_one_on_one_video_call ? "true" : "false")
+                  << std::endl;
+        std::cout << "   Is Muted: " << (call.is_muted ? "true" : "false")
+                  << std::endl;
+        std::cout << "   Is Muted Speaker: "
+                  << (call.is_muted_speaker ? "true" : "false") << std::endl;
+        std::cout << "   Is On Hold: " << (call.is_on_hold ? "true" : "false")
+                  << std::endl;
+        std::cout << "   Is Permanent: "
+                  << (call.is_permanent ? "true" : "false") << std::endl;
+        std::cout << "   Is Premium Video Sponsor: "
+                  << (call.is_premium_video_sponsor ? "true" : "false")
+                  << std::endl;
+        std::cout << "   Is Server Muted: "
+                  << (call.is_server_muted ? "true" : "false") << std::endl;
+        std::cout << "   Is Unseen Missed: "
+                  << (call.is_unseen_missed ? "true" : "false") << std::endl;
+        std::cout << "   Joined Existing: " << call.joined_existing
+                  << std::endl;
+        std::cout << "   Light Weight Meeting Count Changed: "
+                  << call.light_weight_meeting_count_changed << std::endl;
+        std::cout << "   Meeting Details: " << call.meeting_details
+                  << std::endl;
         std::cout << "   Members:\n" << call.members.dump (8) << std::endl;
         std::cout << "   Mike Status: " << call.mike_status << std::endl;
         std::cout << "   Name: " << call.name << std::endl;
         std::cout << "   Old Duration: " << call.old_duration << std::endl;
-        std::cout << "   Old Members:\n" << call.old_members.dump (8) << std::endl;
-        std::cout << "   Partner Dispname: " << call.partner_dispname << std::endl;
+        std::cout << "   Old Members:\n"
+                  << call.old_members.dump (8) << std::endl;
+        std::cout << "   Partner Dispname: " << call.partner_dispname
+                  << std::endl;
         std::cout << "   Partner Handle: " << call.partner_handle << std::endl;
-        std::cout << "   Premium Video Is Grace Period: " << call.premium_video_is_grace_period << std::endl;
-        std::cout << "   Premium Video Sponsor List: " << call.premium_video_sponsor_list << std::endl;
-        std::cout << "   Premium Video Status: " << call.premium_video_status << std::endl;
+        std::cout << "   Premium Video Is Grace Period: "
+                  << call.premium_video_is_grace_period << std::endl;
+        std::cout << "   Premium Video Sponsor List: "
+                  << call.premium_video_sponsor_list << std::endl;
+        std::cout << "   Premium Video Status: " << call.premium_video_status
+                  << std::endl;
         std::cout << "   Pstn Number: " << call.pstn_number << std::endl;
         std::cout << "   Pstn Status: " << call.pstn_status << std::endl;
-        std::cout << "   Quality Problems: " << call.quality_problems << std::endl;
+        std::cout << "   Quality Problems: " << call.quality_problems
+                  << std::endl;
         std::cout << "   Queue Info: " << call.queue_info << std::endl;
         std::cout << "   Role: " << call.role << std::endl;
-        std::cout << "   Server Identity: " << call.server_identity << std::endl;
+        std::cout << "   Server Identity: " << call.server_identity
+                  << std::endl;
         std::cout << "   Soundlevel: " << call.soundlevel << std::endl;
-        std::cout << "   Start Timestamp: " << call.start_timestamp << std::endl;
+        std::cout << "   Start Timestamp: " << call.start_timestamp
+                  << std::endl;
         std::cout << "   Status: " << call.status << std::endl;
         std::cout << "   Technology: " << call.technology << std::endl;
         std::cout << "   Tenant Id: " << call.tenant_id << std::endl;
         std::cout << "   Topic: " << call.topic << std::endl;
-        std::cout << "   Transferor Displayname: " << call.transferor_displayname << std::endl;
-        std::cout << "   Transferor Type: " << call.transferor_type << std::endl;
+        std::cout << "   Transferor Displayname: "
+                  << call.transferor_displayname << std::endl;
+        std::cout << "   Transferor Type: " << call.transferor_type
+                  << std::endl;
         std::cout << "   Type: " << call.type << std::endl;
-        std::cout << "   Vaa Input Status: " << call.vaa_input_status << std::endl;
+        std::cout << "   Vaa Input Status: " << call.vaa_input_status
+                  << std::endl;
         std::cout << "   Video Disabled: " << call.video_disabled << std::endl;
 
         for (const auto &cm : call.call_members)
         {
             std::cout << "   Call Member:" << std::endl;
             std::cout << "         Record Index: " << cm.idx << std::endl;
-            std::cout << "         Admit Failure Reason: " << cm.admit_failure_reason << std::endl;
-            std::cout << "         Balance Update: " << cm.balance_update << std::endl;
+            std::cout << "         Admit Failure Reason: "
+                      << cm.admit_failure_reason << std::endl;
+            std::cout << "         Balance Update: " << cm.balance_update
+                      << std::endl;
             std::cout << "         Call Db Id: " << cm.call_db_id << std::endl;
-            std::cout << "         Call Duration: " << cm.call_duration << std::endl;
-            std::cout << "         Call End Diagnostics Code: " << cm.call_end_diagnostics_code << std::endl;
+            std::cout << "         Call Duration: " << cm.call_duration
+                      << std::endl;
+            std::cout << "         Call End Diagnostics Code: "
+                      << cm.call_end_diagnostics_code << std::endl;
             std::cout << "         Call Name: " << cm.call_name << std::endl;
-            std::cout << "         Call Session Guid: " << cm.call_session_guid << std::endl;
+            std::cout << "         Call Session Guid: " << cm.call_session_guid
+                      << std::endl;
             std::cout << "         Country: " << cm.country << std::endl;
-            std::cout << "         Creation Timestamp: " << cm.creation_timestamp << std::endl;
+            std::cout << "         Creation Timestamp: "
+                      << cm.creation_timestamp << std::endl;
             std::cout << "         Debuginfo: " << cm.debuginfo << std::endl;
             std::cout << "         Dispname: " << cm.dispname << std::endl;
-            std::cout << "         Failurereason: " << cm.failurereason << std::endl;
-            std::cout << "         Fallback In Progress: " << cm.fallback_in_progress << std::endl;
-            std::cout << "         Forward Targets: " << cm.forward_targets << std::endl;
-            std::cout << "         Forwarded By: " << cm.forwarded_by << std::endl;
+            std::cout << "         Failurereason: " << cm.failurereason
+                      << std::endl;
+            std::cout << "         Fallback In Progress: "
+                      << cm.fallback_in_progress << std::endl;
+            std::cout << "         Forward Targets: " << cm.forward_targets
+                      << std::endl;
+            std::cout << "         Forwarded By: " << cm.forwarded_by
+                      << std::endl;
             std::cout << "         Guid: " << cm.guid << std::endl;
             std::cout << "         Id: " << cm.id << std::endl;
             std::cout << "         Identity: " << cm.identity << std::endl;
-            std::cout << "         Identity Type: " << cm.identity_type << std::endl;
+            std::cout << "         Identity Type: " << cm.identity_type
+                      << std::endl;
             std::cout << "         Ip Address: " << cm.ip_address << std::endl;
-            std::cout << "         Is Conference: " << (cm.is_conference ? "true" : "false") << std::endl;
-            std::cout << "         Is Multiparty Video Capable: " << (cm.is_multiparty_video_capable ? "true" : "false") << std::endl;
-            std::cout << "         Is Permanent: " << (cm.is_permanent ? "true" : "false") << std::endl;
-            std::cout << "         Is Premium Video Sponsor: " << (cm.is_premium_video_sponsor ? "true" : "false") << std::endl;
-            std::cout << "         Is Read Only: " << (cm.is_read_only ? "true" : "false") << std::endl;
-            std::cout << "         Is Seamlessly Upgraded Call: " << (cm.is_seamlessly_upgraded_call ? "true" : "false") << std::endl;
-            std::cout << "         Is Server Muted: " << (cm.is_server_muted ? "true" : "false") << std::endl;
-            std::cout << "         Is Video Codec Compatible: " << (cm.is_video_codec_compatible ? "true" : "false") << std::endl;
+            std::cout << "         Is Conference: "
+                      << (cm.is_conference ? "true" : "false") << std::endl;
+            std::cout << "         Is Multiparty Video Capable: "
+                      << (cm.is_multiparty_video_capable ? "true" : "false")
+                      << std::endl;
+            std::cout << "         Is Permanent: "
+                      << (cm.is_permanent ? "true" : "false") << std::endl;
+            std::cout << "         Is Premium Video Sponsor: "
+                      << (cm.is_premium_video_sponsor ? "true" : "false")
+                      << std::endl;
+            std::cout << "         Is Read Only: "
+                      << (cm.is_read_only ? "true" : "false") << std::endl;
+            std::cout << "         Is Seamlessly Upgraded Call: "
+                      << (cm.is_seamlessly_upgraded_call ? "true" : "false")
+                      << std::endl;
+            std::cout << "         Is Server Muted: "
+                      << (cm.is_server_muted ? "true" : "false") << std::endl;
+            std::cout << "         Is Video Codec Compatible: "
+                      << (cm.is_video_codec_compatible ? "true" : "false")
+                      << std::endl;
             std::cout << "         Languages: " << cm.languages << std::endl;
-            std::cout << "         Light Weight Meeting Role: " << cm.light_weight_meeting_role << std::endl;
-            std::cout << "         Limiting Factor: " << cm.limiting_factor << std::endl;
-            std::cout << "         Mike Status: " << cm.mike_status << std::endl;
-            std::cout << "         Next Redial Time: " << cm.next_redial_time << std::endl;
+            std::cout << "         Light Weight Meeting Role: "
+                      << cm.light_weight_meeting_role << std::endl;
+            std::cout << "         Limiting Factor: " << cm.limiting_factor
+                      << std::endl;
+            std::cout << "         Mike Status: " << cm.mike_status
+                      << std::endl;
+            std::cout << "         Next Redial Time: " << cm.next_redial_time
+                      << std::endl;
             std::cout << "         Nonse Word: " << cm.nonse_word << std::endl;
-            std::cout << "         Nr Of Delivered Push Notifications: " << cm.nr_of_delivered_push_notifications << std::endl;
-            std::cout << "         Nrof Redials Done: " << cm.nrof_redials_done << std::endl;
-            std::cout << "         Nrof Redials Left: " << cm.nrof_redials_left << std::endl;
-            std::cout << "         Payment Category: " << cm.payment_category << std::endl;
+            std::cout << "         Nr Of Delivered Push Notifications: "
+                      << cm.nr_of_delivered_push_notifications << std::endl;
+            std::cout << "         Nrof Redials Done: " << cm.nrof_redials_done
+                      << std::endl;
+            std::cout << "         Nrof Redials Left: " << cm.nrof_redials_left
+                      << std::endl;
+            std::cout << "         Payment Category: " << cm.payment_category
+                      << std::endl;
             std::cout << "         Pk Status: " << cm.pk_status << std::endl;
-            std::cout << "         Price Currency: " << cm.price_currency << std::endl;
-            std::cout << "         Price Per Minute: " << cm.price_per_minute << std::endl;
-            std::cout << "         Price Precision: " << cm.price_precision << std::endl;
-            std::cout << "         Prime Status: " << cm.prime_status << std::endl;
-            std::cout << "         Pstn Feedback: " << cm.pstn_feedback << std::endl;
-            std::cout << "         Pstn Statustext: " << cm.pstn_statustext << std::endl;
-            std::cout << "         Quality Problems: " << cm.quality_problems << std::endl;
-            std::cout << "         Quality Status: " << cm.quality_status << std::endl;
-            std::cout << "         Real Identity: " << cm.real_identity << std::endl;
-            std::cout << "         Recovery In Progress: " << cm.recovery_in_progress << std::endl;
+            std::cout << "         Price Currency: " << cm.price_currency
+                      << std::endl;
+            std::cout << "         Price Per Minute: " << cm.price_per_minute
+                      << std::endl;
+            std::cout << "         Price Precision: " << cm.price_precision
+                      << std::endl;
+            std::cout << "         Prime Status: " << cm.prime_status
+                      << std::endl;
+            std::cout << "         Pstn Feedback: " << cm.pstn_feedback
+                      << std::endl;
+            std::cout << "         Pstn Statustext: " << cm.pstn_statustext
+                      << std::endl;
+            std::cout << "         Quality Problems: " << cm.quality_problems
+                      << std::endl;
+            std::cout << "         Quality Status: " << cm.quality_status
+                      << std::endl;
+            std::cout << "         Real Identity: " << cm.real_identity
+                      << std::endl;
+            std::cout << "         Recovery In Progress: "
+                      << cm.recovery_in_progress << std::endl;
             std::cout << "         Role: " << cm.role << std::endl;
-            std::cout << "         Seconds Left: " << cm.seconds_left << std::endl;
-            std::cout << "         Sounderror Code: " << cm.sounderror_code << std::endl;
+            std::cout << "         Seconds Left: " << cm.seconds_left
+                      << std::endl;
+            std::cout << "         Sounderror Code: " << cm.sounderror_code
+                      << std::endl;
             std::cout << "         Soundlevel: " << cm.soundlevel << std::endl;
-            std::cout << "         Start Timestamp: " << cm.start_timestamp << std::endl;
+            std::cout << "         Start Timestamp: " << cm.start_timestamp
+                      << std::endl;
             std::cout << "         Stats Xml: " << cm.stats_xml << std::endl;
             std::cout << "         Status: " << cm.status << std::endl;
-            std::cout << "         Target Identity: " << cm.target_identity << std::endl;
+            std::cout << "         Target Identity: " << cm.target_identity
+                      << std::endl;
             std::cout << "         Tenant Id: " << cm.tenant_id << std::endl;
-            std::cout << "         Transfer Active: " << cm.transfer_active << std::endl;
-            std::cout << "         Transfer Status: " << cm.transfer_status << std::endl;
-            std::cout << "         Transfer Topic: " << cm.transfer_topic << std::endl;
-            std::cout << "         Transferred By: " << cm.transferred_by << std::endl;
-            std::cout << "         Transferred To: " << cm.transferred_to << std::endl;
+            std::cout << "         Transfer Active: " << cm.transfer_active
+                      << std::endl;
+            std::cout << "         Transfer Status: " << cm.transfer_status
+                      << std::endl;
+            std::cout << "         Transfer Topic: " << cm.transfer_topic
+                      << std::endl;
+            std::cout << "         Transferred By: " << cm.transferred_by
+                      << std::endl;
+            std::cout << "         Transferred To: " << cm.transferred_to
+                      << std::endl;
             std::cout << "         Type: " << cm.type << std::endl;
-            std::cout << "         Version String: " << cm.version_string << std::endl;
-            std::cout << "         Videostatus: " << cm.videostatus << std::endl;
-            std::cout << "         Voicechannel: " << cm.voicechannel << std::endl;
-        }   
+            std::cout << "         Version String: " << cm.version_string
+                      << std::endl;
+            std::cout << "         Videostatus: " << cm.videostatus
+                      << std::endl;
+            std::cout << "         Voicechannel: " << cm.voicechannel
+                      << std::endl;
+        }
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -320,108 +453,160 @@ show_main_db_info (const std::string &path)
         std::cout << std::endl;
         std::cout << "   Record Index: " << ct.idx << std::endl;
         std::cout << "   About: " << ct.about << std::endl;
-        std::cout << "   Account Modification Serial Nr: " << ct.account_modification_serial_nr << std::endl;
-        std::cout << "   Added In Shared Group: " << ct.added_in_shared_group << std::endl;
+        std::cout << "   Account Modification Serial Nr: "
+                  << ct.account_modification_serial_nr << std::endl;
+        std::cout << "   Added In Shared Group: " << ct.added_in_shared_group
+                  << std::endl;
         std::cout << "   Alertstring: " << ct.alertstring << std::endl;
         std::cout << "   Aliases: " << ct.aliases << std::endl;
-        std::cout << "   Assigned Comment: " << ct.assigned_comment << std::endl;
+        std::cout << "   Assigned Comment: " << ct.assigned_comment
+                  << std::endl;
         std::cout << "   Assigned Phone1: " << ct.assigned_phone1 << std::endl;
-        std::cout << "   Assigned Phone1 Label: " << ct.assigned_phone1_label << std::endl;
+        std::cout << "   Assigned Phone1 Label: " << ct.assigned_phone1_label
+                  << std::endl;
         std::cout << "   Assigned Phone2: " << ct.assigned_phone2 << std::endl;
-        std::cout << "   Assigned Phone2 Label: " << ct.assigned_phone2_label << std::endl;
+        std::cout << "   Assigned Phone2 Label: " << ct.assigned_phone2_label
+                  << std::endl;
         std::cout << "   Assigned Phone3: " << ct.assigned_phone3 << std::endl;
-        std::cout << "   Assigned Phone3 Label: " << ct.assigned_phone3_label << std::endl;
-        std::cout << "   Assigned Speeddial: " << ct.assigned_speeddial << std::endl;
-        std::cout << "   Authorization Certificate:\n" << ct.authorization_certificate.dump (8) << std::endl;
+        std::cout << "   Assigned Phone3 Label: " << ct.assigned_phone3_label
+                  << std::endl;
+        std::cout << "   Assigned Speeddial: " << ct.assigned_speeddial
+                  << std::endl;
+        std::cout << "   Authorization Certificate:\n"
+                  << ct.authorization_certificate.dump (8) << std::endl;
         std::cout << "   Authorized Time: " << ct.authorized_time << std::endl;
         std::cout << "   Authreq Crc: " << ct.authreq_crc << std::endl;
-        std::cout << "   Authreq History:\n" << ct.authreq_history.dump (8) << std::endl;
-        std::cout << "   Authreq Initmethod: " << ct.authreq_initmethod << std::endl;
-        std::cout << "   Authreq Nodeinfo:\n" << ct.authreq_nodeinfo.dump (8) << std::endl;
+        std::cout << "   Authreq History:\n"
+                  << ct.authreq_history.dump (8) << std::endl;
+        std::cout << "   Authreq Initmethod: " << ct.authreq_initmethod
+                  << std::endl;
+        std::cout << "   Authreq Nodeinfo:\n"
+                  << ct.authreq_nodeinfo.dump (8) << std::endl;
         std::cout << "   Authreq Src: " << ct.authreq_src << std::endl;
-        std::cout << "   Authreq Timestamp: " << ct.authreq_timestamp << std::endl;
-        std::cout << "   Authrequest Count: " << ct.authrequest_count << std::endl;
+        std::cout << "   Authreq Timestamp: " << ct.authreq_timestamp
+                  << std::endl;
+        std::cout << "   Authrequest Count: " << ct.authrequest_count
+                  << std::endl;
         std::cout << "   Availability: " << ct.availability << std::endl;
-        std::cout << "   Avatar Image:\n" << ct.avatar_image.dump (8) << std::endl;
-        std::cout << "   Avatar Timestamp: " << ct.avatar_timestamp << std::endl;
+        std::cout << "   Avatar Image:\n"
+                  << ct.avatar_image.dump (8) << std::endl;
+        std::cout << "   Avatar Timestamp: " << ct.avatar_timestamp
+                  << std::endl;
         std::cout << "   Avatar Url: " << ct.avatar_url << std::endl;
         std::cout << "   Birthday: " << ct.birthday << std::endl;
         std::cout << "   Buddyblob:\n" << ct.buddyblob.dump (8) << std::endl;
         std::cout << "   Buddystatus: " << ct.buddystatus << std::endl;
-        std::cout << "   Capabilities:\n" << ct.capabilities.dump (8) << std::endl;
+        std::cout << "   Capabilities:\n"
+                  << ct.capabilities.dump (8) << std::endl;
         std::cout << "   Cbl Future:\n" << ct.cbl_future.dump (8) << std::endl;
-        std::cout << "   Certificate Send Count: " << ct.certificate_send_count << std::endl;
+        std::cout << "   Certificate Send Count: " << ct.certificate_send_count
+                  << std::endl;
         std::cout << "   City: " << ct.city << std::endl;
-        std::cout << "   Contactlist Track: " << ct.contactlist_track << std::endl;
+        std::cout << "   Contactlist Track: " << ct.contactlist_track
+                  << std::endl;
         std::cout << "   Country: " << ct.country << std::endl;
         std::cout << "   Displayname: " << ct.displayname << std::endl;
         std::cout << "   Emails: " << ct.emails << std::endl;
         std::cout << "   External Id: " << ct.external_id << std::endl;
-        std::cout << "   External System Id: " << ct.external_system_id << std::endl;
-        std::cout << "   Extprop External Data: " << ct.extprop_external_data << std::endl;
-        std::cout << "   Extprop SMS PSTN Contact Created: " << ct.extprop_sms_pstn_contact_created << std::endl;
+        std::cout << "   External System Id: " << ct.external_system_id
+                  << std::endl;
+        std::cout << "   Extprop External Data: " << ct.extprop_external_data
+                  << std::endl;
+        std::cout << "   Extprop SMS PSTN Contact Created: "
+                  << ct.extprop_sms_pstn_contact_created << std::endl;
         std::cout << "   Firstname: " << ct.firstname << std::endl;
         std::cout << "   Fullname: " << ct.fullname << std::endl;
         std::cout << "   Gender: " << ct.gender << std::endl;
         std::cout << "   Given Authlevel: " << ct.given_authlevel << std::endl;
-        std::cout << "   Given Displayname: " << ct.given_displayname << std::endl;
-        std::cout << "   Group Membership: " << ct.group_membership << std::endl;
+        std::cout << "   Given Displayname: " << ct.given_displayname
+                  << std::endl;
+        std::cout << "   Group Membership: " << ct.group_membership
+                  << std::endl;
         std::cout << "   Hashed Emails: " << ct.hashed_emails << std::endl;
         std::cout << "   Homepage: " << ct.homepage << std::endl;
         std::cout << "   Id: " << ct.id << std::endl;
         std::cout << "   In Shared Group: " << ct.in_shared_group << std::endl;
         std::cout << "   Ipcountry: " << ct.ipcountry << std::endl;
-        std::cout << "   Is Auto Buddy: " << (ct.is_auto_buddy ? "Yes" : "No") << std::endl;
-        std::cout << "   Is Mobile: " << (ct.is_mobile ? "Yes" : "No") << std::endl;
-        std::cout << "   Is Permanent: " << (ct.is_permanent ? "Yes" : "No") << std::endl;
-        std::cout << "   Is Trusted: " << (ct.is_trusted ? "Yes" : "No") << std::endl;
-        std::cout << "   Isauthorized: " << (ct.isauthorized ? "Yes" : "No") << std::endl;
-        std::cout << "   Isblocked: " << (ct.isblocked ? "Yes" : "No") << std::endl;
+        std::cout << "   Is Auto Buddy: " << (ct.is_auto_buddy ? "Yes" : "No")
+                  << std::endl;
+        std::cout << "   Is Mobile: " << (ct.is_mobile ? "Yes" : "No")
+                  << std::endl;
+        std::cout << "   Is Permanent: " << (ct.is_permanent ? "Yes" : "No")
+                  << std::endl;
+        std::cout << "   Is Trusted: " << (ct.is_trusted ? "Yes" : "No")
+                  << std::endl;
+        std::cout << "   Isauthorized: " << (ct.isauthorized ? "Yes" : "No")
+                  << std::endl;
+        std::cout << "   Isblocked: " << (ct.isblocked ? "Yes" : "No")
+                  << std::endl;
         std::cout << "   Languages: " << ct.languages << std::endl;
-        std::cout << "   Last Used Networktime: " << ct.last_used_networktime << std::endl;
+        std::cout << "   Last Used Networktime: " << ct.last_used_networktime
+                  << std::endl;
         std::cout << "   Lastname: " << ct.lastname << std::endl;
-        std::cout << "   Lastonline Timestamp: " << ct.lastonline_timestamp << std::endl;
-        std::cout << "   Lastused Timestamp: " << ct.lastused_timestamp << std::endl;
+        std::cout << "   Lastonline Timestamp: " << ct.lastonline_timestamp
+                  << std::endl;
+        std::cout << "   Lastused Timestamp: " << ct.lastused_timestamp
+                  << std::endl;
         std::cout << "   Liveid Cid: " << ct.liveid_cid << std::endl;
         std::cout << "   Main Phone: " << ct.main_phone << std::endl;
         std::cout << "   Mood Text: " << ct.mood_text << std::endl;
         std::cout << "   Mood Timestamp: " << ct.mood_timestamp << std::endl;
-        std::cout << "   Network Availability: " << ct.network_availability << std::endl;
-        std::cout << "   Node Capabilities: " << ct.node_capabilities << std::endl;
-        std::cout << "   Node Capabilities And: " << ct.node_capabilities_and << std::endl;
+        std::cout << "   Network Availability: " << ct.network_availability
+                  << std::endl;
+        std::cout << "   Node Capabilities: " << ct.node_capabilities
+                  << std::endl;
+        std::cout << "   Node Capabilities And: " << ct.node_capabilities_and
+                  << std::endl;
         std::cout << "   Nr Of Buddies: " << ct.nr_of_buddies << std::endl;
-        std::cout << "   Nrof Authed Buddies: " << ct.nrof_authed_buddies << std::endl;
-        std::cout << "   Offline Authreq Id: " << ct.offline_authreq_id << std::endl;
+        std::cout << "   Nrof Authed Buddies: " << ct.nrof_authed_buddies
+                  << std::endl;
+        std::cout << "   Offline Authreq Id: " << ct.offline_authreq_id
+                  << std::endl;
         std::cout << "   Phone Home: " << ct.phone_home << std::endl;
-        std::cout << "   Phone Home Normalized: " << ct.phone_home_normalized << std::endl;
+        std::cout << "   Phone Home Normalized: " << ct.phone_home_normalized
+                  << std::endl;
         std::cout << "   Phone Mobile: " << ct.phone_mobile << std::endl;
-        std::cout << "   Phone Mobile Normalized: " << ct.phone_mobile_normalized << std::endl;
+        std::cout << "   Phone Mobile Normalized: "
+                  << ct.phone_mobile_normalized << std::endl;
         std::cout << "   Phone Office: " << ct.phone_office << std::endl;
-        std::cout << "   Phone Office Normalized: " << ct.phone_office_normalized << std::endl;
+        std::cout << "   Phone Office Normalized: "
+                  << ct.phone_office_normalized << std::endl;
         std::cout << "   Pop Score: " << ct.pop_score << std::endl;
         std::cout << "   Popularity Ord: " << ct.popularity_ord << std::endl;
-        std::cout << "   Profile Attachments:\n" << ct.profile_attachments.dump (8) << std::endl;
-        std::cout << "   Profile Timestamp: " << ct.profile_timestamp << std::endl;
+        std::cout << "   Profile Attachments:\n"
+                  << ct.profile_attachments.dump (8) << std::endl;
+        std::cout << "   Profile Timestamp: " << ct.profile_timestamp
+                  << std::endl;
         std::cout << "   Province: " << ct.province << std::endl;
         std::cout << "   Pstnnumber: " << ct.pstnnumber << std::endl;
-        std::cout << "   Received Authrequest: " << ct.received_authrequest << std::endl;
+        std::cout << "   Received Authrequest: " << ct.received_authrequest
+                  << std::endl;
         std::cout << "   Refreshing: " << ct.refreshing << std::endl;
         std::cout << "   Revoked Auth: " << ct.revoked_auth << std::endl;
         std::cout << "   Rich Mood Text: " << ct.rich_mood_text << std::endl;
-        std::cout << "   Saved Directory Blob:\n" << ct.saved_directory_blob.dump (8) << std::endl;
-        std::cout << "   Sent Authrequest: " << ct.sent_authrequest << std::endl;
-        std::cout << "   Sent Authrequest Extrasbitmask: " << ct.sent_authrequest_extrasbitmask << std::endl;
-        std::cout << "   Sent Authrequest Initmethod: " << ct.sent_authrequest_initmethod << std::endl;
-        std::cout << "   Sent Authrequest Serial: " << ct.sent_authrequest_serial << std::endl;
-        std::cout << "   Sent Authrequest Time: " << ct.sent_authrequest_time << std::endl;
+        std::cout << "   Saved Directory Blob:\n"
+                  << ct.saved_directory_blob.dump (8) << std::endl;
+        std::cout << "   Sent Authrequest: " << ct.sent_authrequest
+                  << std::endl;
+        std::cout << "   Sent Authrequest Extrasbitmask: "
+                  << ct.sent_authrequest_extrasbitmask << std::endl;
+        std::cout << "   Sent Authrequest Initmethod: "
+                  << ct.sent_authrequest_initmethod << std::endl;
+        std::cout << "   Sent Authrequest Serial: "
+                  << ct.sent_authrequest_serial << std::endl;
+        std::cout << "   Sent Authrequest Time: " << ct.sent_authrequest_time
+                  << std::endl;
         std::cout << "   Server Synced: " << ct.server_synced << std::endl;
         std::cout << "   Skypename: " << ct.skypename << std::endl;
         std::cout << "   Stack Version: " << ct.stack_version << std::endl;
         std::cout << "   Timezone: " << ct.timezone << std::endl;
         std::cout << "   Type: " << ct.type << std::endl;
-        std::cout << "   Unified Servants: " << ct.unified_servants << std::endl;
-        std::cout << "   Verified Company:\n" << ct.verified_company.dump (8) << std::endl;
-        std::cout << "   Verified Email:\n" << ct.verified_email.dump (8) << std::endl;
+        std::cout << "   Unified Servants: " << ct.unified_servants
+                  << std::endl;
+        std::cout << "   Verified Company:\n"
+                  << ct.verified_company.dump (8) << std::endl;
+        std::cout << "   Verified Email:\n"
+                  << ct.verified_email.dump (8) << std::endl;
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -436,7 +621,8 @@ show_main_db_info (const std::string &path)
         std::cout << "   Record Index: " << ft.idx << std::endl;
         std::cout << "   Accepttime: " << ft.accepttime << std::endl;
         std::cout << "   Bytespersecond: " << ft.bytespersecond << std::endl;
-        std::cout << "   Bytestransferred: " << ft.bytestransferred << std::endl;
+        std::cout << "   Bytestransferred: " << ft.bytestransferred
+                  << std::endl;
         std::cout << "   Chatmsg Guid: " << ft.chatmsg_guid << std::endl;
         std::cout << "   Chatmsg Index: " << ft.chatmsg_index << std::endl;
         std::cout << "   Convo Id: " << ft.convo_id << std::endl;
@@ -447,16 +633,140 @@ show_main_db_info (const std::string &path)
         std::cout << "   Finishtime: " << ft.finishtime << std::endl;
         std::cout << "   Flags: " << ft.flags << std::endl;
         std::cout << "   Id: " << ft.id << std::endl;
-        std::cout << "   Is Permanent: " << (ft.is_permanent ? "Yes" : "No") <<  std::endl;
+        std::cout << "   Is Permanent: " << (ft.is_permanent ? "Yes" : "No")
+                  << std::endl;
         std::cout << "   Last Activity: " << ft.last_activity << std::endl;
         std::cout << "   Nodeid:\n" << ft.nodeid.dump (8) << std::endl;
-        std::cout << "   Offer Send List: "  << std::endl;
-        std::cout << "   Partner Dispname: " << ft.partner_dispname << std::endl;
+        std::cout << "   Offer Send List: " << std::endl;
+        std::cout << "   Partner Dispname: " << ft.partner_dispname
+                  << std::endl;
         std::cout << "   Partner Handle: " << ft.partner_handle << std::endl;
         std::cout << "   Pk Id: " << ft.pk_id << std::endl;
         std::cout << "   Starttime: " << ft.starttime << std::endl;
         std::cout << "   Status: " << ft.status << std::endl;
         std::cout << "   Type: " << ft.type << std::endl;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Show chat messages
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::cout << std::endl;
+    std::cout << "Chat Messages:" << std::endl;
+
+    for (const auto &cm : dat.get_messages ())
+    {
+        std::cout << std::endl;
+        std::cout << "   Record Index: " << cm.idx << std::endl;
+        std::cout << "   Author: " << cm.author << std::endl;
+        std::cout << "   Author Was Live: " << cm.author_was_live << std::endl;
+        std::cout << "   Body Is Rawxml: " << cm.body_is_rawxml << std::endl;
+        std::cout << "   Body Xml: " << cm.body_xml << std::endl;
+        std::cout << "   Call Guid: " << cm.call_guid << std::endl;
+        std::cout << "   Chatmsg Status: " << cm.chatmsg_status << std::endl;
+        std::cout << "   Chatmsg Type: " << cm.chatmsg_type << std::endl;
+        std::cout << "   Chatname: " << cm.chatname << std::endl;
+        std::cout << "   Consumption Status: " << cm.consumption_status
+                  << std::endl;
+        std::cout << "   Convo Id: " << cm.convo_id << std::endl;
+        std::cout << "   Crc: " << cm.crc << std::endl;
+        std::cout << "   Dialog Partner: " << cm.dialog_partner << std::endl;
+        std::cout << "   Edited By: " << cm.edited_by << std::endl;
+        std::cout << "   Edited Timestamp: " << cm.edited_timestamp
+                  << std::endl;
+        std::cout << "   Error Code: " << cm.error_code << std::endl;
+        std::cout << "   From Dispname: " << cm.from_dispname << std::endl;
+        std::cout << "   Guid: " << cm.guid.to_hexstring () << std::endl;
+        std::cout << "   Id: " << cm.id << std::endl;
+        std::cout << "   Identities: " << cm.identities << std::endl;
+        std::cout << "   Is Permanent: " << (cm.is_permanent ? "Yes" : "No")
+                  << std::endl;
+        std::cout << "   Leavereason: " << cm.leavereason << std::endl;
+        std::cout << "   Newoptions: " << cm.newoptions << std::endl;
+        std::cout << "   Newrole: " << cm.newrole << std::endl;
+        std::cout << "   Oldoptions: " << cm.oldoptions << std::endl;
+        std::cout << "   Param Key: " << cm.param_key << std::endl;
+        std::cout << "   Param Value: " << cm.param_value << std::endl;
+        std::cout << "   Participant Count: " << cm.participant_count
+                  << std::endl;
+        std::cout << "   Pk Id: " << cm.pk_id << std::endl;
+        std::cout << "   Reason: " << cm.reason << std::endl;
+        std::cout << "   Remote Id: " << cm.remote_id << std::endl;
+        std::cout << "   Sending Status: " << cm.sending_status << std::endl;
+        std::cout << "   Timestamp: " << cm.timestamp << std::endl;
+        std::cout << "   Type: " << cm.type << std::endl;
+
+        for (const auto &p : cm.participants)
+        {
+            std::cout << "   Participant:" << std::endl;
+            std::cout << "         Record Index: " << p.idx << std::endl;
+            std::cout << "         Adder: " << p.adder << std::endl;
+            std::cout << "         Adding In Progress Since: "
+                      << p.adding_in_progress_since << std::endl;
+            std::cout << "         Convo Id: " << p.convo_id << std::endl;
+            std::cout << "         Debuginfo: " << p.debuginfo << std::endl;
+            std::cout << "         Extprop Default Identity: "
+                      << p.extprop_default_identity << std::endl;
+            std::cout << "         Id: " << p.id << std::endl;
+            std::cout << "         Identity: " << p.identity << std::endl;
+            std::cout << "         Is Multiparty Video Capable: "
+                      << p.is_multiparty_video_capable << std::endl;
+            std::cout << "         Is Multiparty Video Updatable: "
+                      << p.is_multiparty_video_updatable << std::endl;
+            std::cout << "         Is Permanent: "
+                      << (p.is_permanent ? "Yes" : "No") << std::endl;
+            std::cout << "         Is Premium Video Sponsor: "
+                      << p.is_premium_video_sponsor << std::endl;
+            std::cout << "         Is Seamlessly Upgraded Call: "
+                      << p.is_seamlessly_upgraded_call << std::endl;
+            std::cout << "         Is Video Codec Compatible: "
+                      << p.is_video_codec_compatible << std::endl;
+            std::cout << "         Last Leavereason: " << p.last_leavereason
+                      << std::endl;
+            std::cout << "         Last Voice Error: " << p.last_voice_error
+                      << std::endl;
+            std::cout << "         Live Country: " << p.live_country
+                      << std::endl;
+            std::cout << "         Live Fwd Identities: "
+                      << p.live_fwd_identities << std::endl;
+            std::cout << "         Live Identity: " << p.live_identity
+                      << std::endl;
+            std::cout << "         Live Identity To Use: "
+                      << p.live_identity_to_use << std::endl;
+            std::cout << "         Live Ip Address: " << p.live_ip_address
+                      << std::endl;
+            std::cout << "         Live Price For Me: " << p.live_price_for_me
+                      << std::endl;
+            std::cout << "         Live Start Timestamp: "
+                      << p.live_start_timestamp << std::endl;
+            std::cout << "         Live Type: " << p.live_type << std::endl;
+            std::cout << "         Live Voicechannel: " << p.live_voicechannel
+                      << std::endl;
+            std::cout << "         Livesession Fallback In Progress: "
+                      << p.livesession_fallback_in_progress << std::endl;
+            std::cout << "         Livesession Recovery In Progress: "
+                      << p.livesession_recovery_in_progress << std::endl;
+            std::cout << "         Next Redial Time: " << p.next_redial_time
+                      << std::endl;
+            std::cout << "         Nrof Redials Left: " << p.nrof_redials_left
+                      << std::endl;
+            std::cout << "         Quality Problems: " << p.quality_problems
+                      << std::endl;
+            std::cout << "         Rank: " << p.rank << std::endl;
+            std::cout << "         Real Identity: " << p.real_identity
+                      << std::endl;
+            std::cout << "         Requested Rank: " << p.requested_rank
+                      << std::endl;
+            std::cout << "         Sound Level: " << p.sound_level << std::endl;
+            std::cout << "         Text Status: " << p.text_status << std::endl;
+            std::cout << "         Transferred By: " << p.transferred_by
+                      << std::endl;
+            std::cout << "         Transferred To: " << p.transferred_to
+                      << std::endl;
+            std::cout << "         Video Status: " << p.video_status
+                      << std::endl;
+            std::cout << "         Voice Status: " << p.voice_status
+                      << std::endl;
+        }
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -477,10 +787,12 @@ show_main_db_info (const std::string &path)
         std::cout << "   Failurereason: " << sms.failurereason << std::endl;
         std::cout << "   Id: " << sms.id << std::endl;
         std::cout << "   Identity: " << sms.identity << std::endl;
-        std::cout << "   Is Failed Unseen: " << sms.is_failed_unseen << std::endl;
+        std::cout << "   Is Failed Unseen: " << sms.is_failed_unseen
+                  << std::endl;
         std::cout << "   Is Permanent: " << sms.is_permanent << std::endl;
         std::cout << "   Notification Id: " << sms.notification_id << std::endl;
-        std::cout << "   Outgoing Reply Type: " << sms.outgoing_reply_type << std::endl;
+        std::cout << "   Outgoing Reply Type: " << sms.outgoing_reply_type
+                  << std::endl;
         std::cout << "   Price: " << sms.price << std::endl;
         std::cout << "   Price Currency: " << sms.price_currency << std::endl;
         std::cout << "   Price Precision: " << sms.price_precision << std::endl;
@@ -488,7 +800,8 @@ show_main_db_info (const std::string &path)
         std::cout << "   Reply To Number: " << sms.reply_to_number << std::endl;
         std::cout << "   Status: " << sms.status << std::endl;
         std::cout << "   Target Numbers: " << sms.target_numbers << std::endl;
-        std::cout << "   Target Statuses:\n" << sms.target_statuses.dump (8) << std::endl;
+        std::cout << "   Target Statuses:\n"
+                  << sms.target_statuses.dump (8) << std::endl;
         std::cout << "   Timestamp: " << sms.timestamp << std::endl;
         std::cout << "   Type: " << sms.type << std::endl;
     }
@@ -503,7 +816,8 @@ show_main_db_info (const std::string &path)
     {
         std::cout << std::endl;
         std::cout << "   Record Index: " << vm.idx << std::endl;
-        std::cout << "   Allowed Duration: " << vm.allowed_duration << std::endl;
+        std::cout << "   Allowed Duration: " << vm.allowed_duration
+                  << std::endl;
         std::cout << "   Chatmsg Guid: " << vm.chatmsg_guid << std::endl;
         std::cout << "   Convo Id: " << vm.convo_id << std::endl;
         std::cout << "   Duration: " << vm.duration << std::endl;
@@ -511,12 +825,15 @@ show_main_db_info (const std::string &path)
         std::cout << "   Failures: " << vm.failures << std::endl;
         std::cout << "   Flags: " << vm.flags << std::endl;
         std::cout << "   Id: " << vm.id << std::endl;
-        std::cout << "   Is Permanent: " << (vm.is_permanent ? "Yes" : "No") << std::endl;
+        std::cout << "   Is Permanent: " << (vm.is_permanent ? "Yes" : "No")
+                  << std::endl;
         std::cout << "   Notification Id: " << vm.notification_id << std::endl;
-        std::cout << "   Partner Dispname: " << vm.partner_dispname << std::endl;
+        std::cout << "   Partner Dispname: " << vm.partner_dispname
+                  << std::endl;
         std::cout << "   Partner Handle: " << vm.partner_handle << std::endl;
         std::cout << "   Path: " << vm.path << std::endl;
-        std::cout << "   Playback Progress: " << vm.playback_progress << std::endl;
+        std::cout << "   Playback Progress: " << vm.playback_progress
+                  << std::endl;
         std::cout << "   Size: " << vm.size << std::endl;
         std::cout << "   Status: " << vm.status << std::endl;
         std::cout << "   Subject: " << vm.subject << std::endl;
@@ -568,8 +885,9 @@ main (int argc, char **argv)
     if (optind >= argc)
     {
         std::cerr << std::endl;
-        std::cerr << "Error: you must enter at least one path to Skype main.db file"
-                  << std::endl;
+        std::cerr
+            << "Error: you must enter at least one path to Skype main.db file"
+            << std::endl;
         usage ();
         exit (EXIT_FAILURE);
     }

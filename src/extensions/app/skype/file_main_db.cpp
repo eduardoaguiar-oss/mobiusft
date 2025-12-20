@@ -371,6 +371,80 @@
 //      - verified_company: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
 //      - verified_email: 66-67, 72, 77, 81, 84-85, 107, 114, 133, 141, 149, 152-153, 162, 164, 196, 209, 235, 259
 //
+// - Messages
+//      - author: 0, 66, 69, 72, 85, 114, 152, 196
+//      - author_was_live: 0, 66, 69, 72, 85, 114, 152, 196
+//      - body_is_rawxml: 0, 66, 69, 72, 85, 114, 152, 196
+//      - body_xml: 0, 66, 69, 72, 85, 114, 152, 196
+//      - call_guid: 0, 66, 69, 72, 85, 114, 152, 196
+//      - chatmsg_status: 0, 66, 69, 72, 85, 114, 152, 196
+//      - chatmsg_type: 0, 66, 69, 72, 85, 114, 152, 196
+//      - chatname: 0, 66, 69, 72, 85, 114, 152, 196
+//      - consumption_status: 0, 66, 69, 72, 85, 114, 152, 196
+//      - convo_id: 0, 66, 69, 72, 85, 114, 152, 196
+//      - crc: 0, 66, 69, 72, 85, 114, 152, 196
+//      - dialog_partner: 0, 66, 69, 72, 85, 114, 152, 196
+//      - edited_by: 0, 66, 69, 72, 85, 114, 152, 196
+//      - edited_timestamp: 0, 66, 69, 72, 85, 114, 152, 196
+//      - error_code: 0, 66, 69, 72, 85, 114, 152, 196
+//      - from_dispname: 0, 66, 69, 72, 85, 114, 152, 196
+//      - guid: 0, 66, 69, 72, 85, 114, 152, 196
+//      - id: 0, 66, 69, 72, 85, 114, 152, 196, 308
+//      - identities: 0, 66, 69, 72, 85, 114, 152, 196
+//      - is_permanent: 0, 66, 69, 72, 85, 114, 152, 196, 308
+//      - leavereason: 0, 66, 69, 72, 85, 114, 152, 196
+//      - newoptions: 0, 66, 69, 72, 85, 114, 152, 196
+//      - newrole: 0, 66, 69, 72, 85, 114, 152, 196
+//      - oldoptions: 0, 66, 69, 72, 85, 114, 152, 196
+//      - param_key: 0, 66, 69, 72, 85, 114, 152, 196
+//      - param_value: 0, 66, 69, 72, 85, 114, 152, 196
+//      - participant_count: 0, 66, 69, 72, 85, 114, 152, 196
+//      - pk_id: 0, 66, 69, 72, 85, 114, 152, 196
+//      - reason: 0, 66, 69, 72, 85, 114, 152, 196
+//      - remote_id: 0, 66, 69, 72, 85, 114, 152, 196
+//      - sending_status: 0, 66, 69, 72, 85, 114, 152, 196
+//      - timestamp: 0, 66, 69, 72, 85, 114, 152, 196
+//      - type: 0, 66, 69, 72, 85, 114, 152, 196
+//
+// - Participants
+//      - adder: 66, 69, 72, 85, 114, 152, 196
+//      - adding_in_progress_since: 69, 72, 85, 114, 152, 196
+//      - convo_id: 0, 66, 69, 72, 85, 114, 152, 196
+//      - debuginfo: 0, 66, 69, 72, 85, 114, 152, 196
+//      - id: 0, 66, 69, 72, 85, 114, 152, 196, 308
+//      - identity: 0, 66, 69, 72, 85, 114, 152, 196
+//      - is_multiparty_video_capable: 66, 69, 72, 85, 114, 152, 196
+//      - is_multiparty_video_updatable: 66, 69, 72, 85, 114, 152, 196
+//      - is_permanent: 0, 66, 69, 72, 85, 114, 152, 196, 308
+//      - is_premium_video_sponsor: 66, 69, 72, 85, 114, 152, 196
+//      - is_seamlessly_upgraded_call: 69, 72, 85, 114, 152, 196
+//      - is_video_codec_compatible: 69, 72, 85, 114, 152, 196
+//      - last_leavereason: 66, 69, 72, 85, 114, 152, 196
+//      - last_voice_error: 0, 66, 69, 72, 85, 114, 152, 196
+//      - live_country: 0, 66, 69, 72, 85, 114, 152, 196
+//      - live_fwd_identities: 0, 66, 69, 72, 85, 114, 152, 196
+//      - live_identity: 0, 66, 69, 72, 85, 114, 152, 196
+//      - live_identity_to_use: 66, 69, 72, 85, 114, 152, 196
+//      - live_ip_address: 69, 72, 85, 114, 152, 196
+//      - live_price_for_me: 0, 66, 69, 72, 85, 114, 152, 196
+//      - live_start_timestamp: 0, 66, 69, 72, 85, 114, 152, 196
+//      - live_type: 0, 66, 69, 72, 85, 114, 152, 196
+//      - live_voicechannel: 72, 85
+//      - livesession_fallback_in_progress: 72, 85
+//      - livesession_recovery_in_progress: 66, 69, 72, 85, 114, 152, 196
+//      - next_redial_time: 0, 66, 69, 72, 85, 114, 152, 196
+//      - nrof_redials_left: 0, 66, 69, 72, 85, 114, 152, 196
+//      - quality_problems: 0, 66, 69, 72, 85, 114, 152, 196
+//      - rank: 0, 66, 69, 72, 85, 114, 152, 196
+//      - real_identity: 66, 69, 72, 85, 114, 152, 196
+//      - requested_rank: 0, 66, 69, 72, 85, 114, 152, 196
+//      - sound_level: 0, 66, 69, 72, 85, 114, 152, 196
+//      - text_status: 0, 66, 69, 72, 85, 114, 152, 196
+//      - transferred_by: 0, 66, 69, 72, 85, 114, 152, 196
+//      - transferred_to: 0, 66, 69, 72, 85, 114, 152, 196
+//      - video_status: 0, 66, 69
+//      - voice_status: 0, 66, 69, 72, 85, 114, 152, 196
+//
 // - SMSes
 //      - body: 0, 66-67, 69, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
 //      - chatmsg_id: 0, 66-67, 69, 72, 77, 81, 84-85, 107, 114, 133, 149, 152-153, 162, 164, 196, 209, 235, 259
@@ -470,21 +544,21 @@ static std::unordered_set<std::int64_t> UNKNOWN_SCHEMA_VERSIONS = {
     16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,
     31,  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,
     46,  47,  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,
-    61,  62,  63,  64,  65,  68,  70,  71,  73,  74,  75,  76,  78,  79,
-    80,  82,  83,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,  96,  98,
-    99,  101, 102, 103, 104, 105, 106, 108, 109, 110, 111, 112, 113, 115, 116,
-    117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131,
-    132, 134, 135, 136, 137, 138, 139, 140, 142, 143, 144, 145, 146, 147, 148,
-    150, 151, 154, 155, 156, 157, 158, 159, 160, 161, 163, 165, 166, 167, 169,
-    170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184,
-    185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 197, 198, 199, 200,
-    201, 202, 203, 204, 205, 206, 207, 208, 210, 211, 212, 213, 214, 215, 216,
-    217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231,
-    232, 233, 234, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247,
-    248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 260, 261, 262, 263,
-    264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278,
-    279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293,
-    294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307,
+    61,  62,  63,  64,  65,  68,  70,  71,  73,  74,  75,  76,  78,  79,  80,
+    82,  83,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,  96,  98,  99,
+    101, 102, 103, 104, 105, 106, 108, 109, 110, 111, 112, 113, 115, 116, 117,
+    118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132,
+    134, 135, 136, 137, 138, 139, 140, 142, 143, 144, 145, 146, 147, 148, 150,
+    151, 154, 155, 156, 157, 158, 159, 160, 161, 163, 165, 166, 167, 169, 170,
+    171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185,
+    186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 197, 198, 199, 200, 201,
+    202, 203, 204, 205, 206, 207, 208, 210, 211, 212, 213, 214, 215, 216, 217,
+    218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232,
+    233, 234, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248,
+    249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 260, 261, 262, 263, 264,
+    265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279,
+    280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294,
+    295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307,
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -590,6 +664,7 @@ file_main_db::file_main_db (const mobius::core::io::reader &reader)
         _load_calls (db);
         _load_contacts (db);
         _load_file_transfers (db);
+        _load_messages (db);
         _load_sms (db);
         _load_voicemails (db);
 
@@ -940,7 +1015,8 @@ file_main_db::_load_calls (mobius::core::database::database &db)
             obj.call_name = stmt_cm.get_column_string (5);
             obj.call_session_guid = stmt_cm.get_column_string (6);
             obj.country = stmt_cm.get_column_string (7);
-            obj.creation_timestamp = get_datetime (stmt_cm.get_column_int64 (8));
+            obj.creation_timestamp =
+                get_datetime (stmt_cm.get_column_int64 (8));
             obj.debuginfo = stmt_cm.get_column_string (9);
             obj.dispname = stmt_cm.get_column_string (10);
             obj.failurereason = stmt_cm.get_column_int64 (11);
@@ -1483,6 +1559,219 @@ file_main_db::_load_file_transfers (mobius::core::database::database &db)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load Messages
+// @param db Database object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file_main_db::_load_messages (mobius::core::database::database &db)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // Messages table was dropped between schema version 196 and 209
+    if (schema_version_ > 196)
+        return;
+
+    try
+    {
+        std::unordered_multimap<std::int64_t, message_participant> participants;
+
+        // Prepare SQL statement for table Participants
+        auto stmt_part = db.new_statement (
+            "SELECT ${adder:66-196},"
+            "${adding_in_progress_since:69-196},"
+            "convo_id,"
+            "debuginfo,"
+            "${extprop_default_identity:114-196},"
+            "id,"
+            "identity,"
+            "${is_multiparty_video_capable:66-196},"
+            "${is_multiparty_video_updatable:66-196},"
+            "is_permanent,"
+            "${is_premium_video_sponsor:66-196},"
+            "${is_seamlessly_upgraded_call:69-196},"
+            "${is_video_codec_compatible:69-196},"
+            "${last_leavereason:66-196},"
+            "last_voice_error,"
+            "live_country,"
+            "live_fwd_identities,"
+            "live_identity,"
+            "${live_identity_to_use:66-196},"
+            "${live_ip_address:69-196},"
+            "live_price_for_me,"
+            "live_start_timestamp,"
+            "live_type,"
+            "${live_voicechannel:72-85},"
+            "${livesession_fallback_in_progress:72-85},"
+            "${livesession_recovery_in_progress:66-196},"
+            "next_redial_time,"
+            "nrof_redials_left,"
+            "quality_problems,"
+            "rank,"
+            "${real_identity:66-196},"
+            "requested_rank,"
+            "sound_level,"
+            "text_status,"
+            "transferred_by,"
+            "transferred_to,"
+            "${video_status:0-69},"
+            "voice_status "
+            "FROM Participants",
+            schema_version_
+        );
+
+        // Retrieve records from Participants table
+        std::uint64_t idx = 0;
+
+        while (stmt_part.fetch_row ())
+        {
+            message_participant obj;
+
+            obj.idx = idx++;
+            obj.adder = stmt_part.get_column_string (0);
+            obj.adding_in_progress_since = stmt_part.get_column_int64 (1);
+            obj.convo_id = stmt_part.get_column_int64 (2);
+            obj.debuginfo = stmt_part.get_column_string (3);
+            obj.extprop_default_identity = stmt_part.get_column_int64 (4);
+            obj.id = stmt_part.get_column_int64 (5);
+            obj.identity = stmt_part.get_column_string (6);
+            obj.is_multiparty_video_capable = stmt_part.get_column_int64 (7);
+            obj.is_multiparty_video_updatable = stmt_part.get_column_int64 (8);
+            obj.is_permanent = stmt_part.get_column_bool (9);
+            obj.is_premium_video_sponsor = stmt_part.get_column_int64 (10);
+            obj.is_seamlessly_upgraded_call = stmt_part.get_column_int64 (11);
+            obj.is_video_codec_compatible = stmt_part.get_column_int64 (12);
+            obj.last_leavereason = stmt_part.get_column_int64 (13);
+            obj.last_voice_error = stmt_part.get_column_string (14);
+            obj.live_country = stmt_part.get_column_string (15);
+            obj.live_fwd_identities = stmt_part.get_column_string (16);
+            obj.live_identity = stmt_part.get_column_string (17);
+            obj.live_identity_to_use = stmt_part.get_column_string (18);
+            obj.live_ip_address = stmt_part.get_column_string (19);
+            obj.live_price_for_me = stmt_part.get_column_string (20);
+            obj.live_start_timestamp = stmt_part.get_column_int64 (21);
+            obj.live_type = stmt_part.get_column_int64 (22);
+            obj.live_voicechannel = stmt_part.get_column_int64 (23);
+            obj.livesession_fallback_in_progress =
+                stmt_part.get_column_int64 (24);
+            obj.livesession_recovery_in_progress =
+                stmt_part.get_column_int64 (25);
+            obj.next_redial_time = stmt_part.get_column_int64 (26);
+            obj.nrof_redials_left = stmt_part.get_column_int64 (27);
+            obj.quality_problems = stmt_part.get_column_string (28);
+            obj.rank = stmt_part.get_column_int64 (29);
+            obj.real_identity = stmt_part.get_column_string (30);
+            obj.requested_rank = stmt_part.get_column_int64 (31);
+            obj.sound_level = stmt_part.get_column_int64 (32);
+            obj.text_status = stmt_part.get_column_int64 (33);
+            obj.transferred_by = stmt_part.get_column_string (34);
+            obj.transferred_to = stmt_part.get_column_string (35);
+            obj.video_status = stmt_part.get_column_int64 (36);
+            obj.voice_status = stmt_part.get_column_int64 (37);
+
+            // Add participants to the list
+            participants.emplace (obj.convo_id, std::move (obj));
+
+        }
+
+        // Prepare SQL statement for table Messages
+        auto stmt = db.new_statement (
+            "SELECT author,"
+            "author_was_live,"
+            "body_is_rawxml,"
+            "body_xml,"
+            "call_guid,"
+            "chatmsg_status,"
+            "chatmsg_type,"
+            "chatname,"
+            "consumption_status,"
+            "convo_id,"
+            "crc,"
+            "dialog_partner,"
+            "edited_by,"
+            "edited_timestamp,"
+            "error_code,"
+            "from_dispname,"
+            "guid,"
+            "id,"
+            "identities,"
+            "is_permanent,"
+            "leavereason,"
+            "newoptions,"
+            "newrole,"
+            "oldoptions,"
+            "param_key,"
+            "param_value,"
+            "participant_count,"
+            "pk_id,"
+            "reason,"
+            "remote_id,"
+            "sending_status,"
+            "timestamp,"
+            "type "
+            "FROM Messages"
+        );
+
+        // Retrieve records from Messages table
+        idx = 0;
+
+        while (stmt.fetch_row ())
+        {
+            message obj;
+
+            obj.idx = idx++;
+            obj.author = stmt.get_column_string (0);
+            obj.author_was_live = stmt.get_column_int64 (1);
+            obj.body_is_rawxml = stmt.get_column_int64 (2);
+            obj.body_xml = mobius::core::string::strip (stmt.get_column_string (3));
+            obj.call_guid = stmt.get_column_string (4);
+            obj.chatmsg_status = stmt.get_column_int64 (5);
+            obj.chatmsg_type = stmt.get_column_int64 (6);
+            obj.chatname = stmt.get_column_string (7);
+            obj.consumption_status = stmt.get_column_int64 (8);
+            obj.convo_id = stmt.get_column_int64 (9);
+            obj.crc = stmt.get_column_int64 (10);
+            obj.dialog_partner = stmt.get_column_string (11);
+            obj.edited_by = stmt.get_column_string (12);
+            obj.edited_timestamp = get_datetime (stmt.get_column_int64 (13));
+            obj.error_code = stmt.get_column_int64 (14);
+            obj.from_dispname = stmt.get_column_string (15);
+            obj.guid = stmt.get_column_bytearray (16);
+            obj.id = stmt.get_column_int64 (17);
+            obj.identities = stmt.get_column_string (18);
+            obj.is_permanent = stmt.get_column_bool (19);
+            obj.leavereason = stmt.get_column_int64 (20);
+            obj.newoptions = stmt.get_column_int64 (21);
+            obj.newrole = stmt.get_column_int64 (22);
+            obj.oldoptions = stmt.get_column_int64 (23);
+            obj.param_key = stmt.get_column_int64 (24);
+            obj.param_value = stmt.get_column_int64 (25);
+            obj.participant_count = stmt.get_column_int64 (26);
+            obj.pk_id = stmt.get_column_int64 (27);
+            obj.reason = stmt.get_column_string (28);
+            obj.remote_id = stmt.get_column_int64 (29);
+            obj.sending_status = stmt.get_column_int64 (30);
+            obj.timestamp = get_datetime (stmt.get_column_int64 (31));
+            obj.type = stmt.get_column_int64 (32);
+
+            // Add message participants to the message object
+            auto range = participants.equal_range (obj.convo_id);
+            std::transform (
+                range.first, range.second,
+                std::back_inserter (obj.participants),
+                [] (auto &pair) { return pair.second; }
+            );
+
+            // Add messages to the list
+            messages_.emplace_back (std::move (obj));
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Load SMSes
 // @param db Database object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1492,37 +1781,37 @@ file_main_db::_load_sms (mobius::core::database::database &db)
     mobius::core::log log (__FILE__, __FUNCTION__);
 
     // SMSes table was dropped between schema version 259 and 308
-    if (schema_version_ > 307)
+    if (schema_version_ > 259)
         return;
 
     try
     {
         // Prepare SQL statement for table SMSes
         auto stmt = db.new_statement (
-                "SELECT ${body:0-259},"
-                       "${chatmsg_id:0-259},"
-                       "${convo_name:66-259},"
-                       "${error_category:67-259},"
-                       "${event_flags:0-259},"
-                       "${failurereason:0-259},"
-                       "${id:0-308},"
-                       "${identity:0-259},"
-                       "${is_failed_unseen:0-259},"
-                       "${is_permanent:0-308},"
-                       "${notification_id:66-259},"
-                       "${outgoing_reply_type:66-259},"
-                       "${price:0-259},"
-                       "${price_currency:0-259},"
-                       "${price_precision:0-259},"
-                       "${reply_id_number:66-259},"
-                       "${reply_to_number:0-259},"
-                       "${status:0-259},"
-                       "${target_numbers:0-259},"
-                       "${target_statuses:0-259},"
-                       "${timestamp:0-259},"
-                       "${type:0-259} "
-                  "FROM SMSes",
-                schema_version_
+            "SELECT body,"
+            "chatmsg_id,"
+            "${convo_name:66-259},"
+            "${error_category:67-259},"
+            "event_flags,"
+            "failurereason,"
+            "id,"
+            "identity,"
+            "is_failed_unseen,"
+            "is_permanent,"
+            "${notification_id:66-259},"
+            "${outgoing_reply_type:66-259},"
+            "price,"
+            "price_currency,"
+            "price_precision,"
+            "${reply_id_number:66-259},"
+            "reply_to_number,"
+            "status,"
+            "target_numbers,"
+            "target_statuses,"
+            "timestamp,"
+            "type "
+            "FROM SMSes",
+            schema_version_
         );
 
         // Retrieve records from SMSes table
@@ -1553,7 +1842,7 @@ file_main_db::_load_sms (mobius::core::database::database &db)
             obj.status = stmt.get_column_int64 (17);
             obj.target_numbers = stmt.get_column_string (18);
             obj.target_statuses = stmt.get_column_bytearray (19);
-            obj.timestamp = get_datetime(stmt.get_column_int64 (20));
+            obj.timestamp = get_datetime (stmt.get_column_int64 (20));
             obj.type = stmt.get_column_int64 (21);
 
             // Add smses to the list
