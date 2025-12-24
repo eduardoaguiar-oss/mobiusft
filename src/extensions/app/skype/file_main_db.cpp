@@ -1,8 +1,6 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C)
-// 2008-2026
-// Eduardo Aguiar
+// Copyright (C) 2008-2026 Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -28,6 +26,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include "common.hpp"
+#include "parse_message.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // References:
@@ -618,6 +617,36 @@ get_db_schema_version (mobius::core::database::database &db)
     return schema_version;
 }
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get participants from chatname
+// @param chatname Chat name string in the format #participant1/$participant2;hash
+// @return Vector of participant identities
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static std::vector<std::string>
+get_participants_from_chatname (const std::string &chatname)
+{
+    std::vector<std::string> participants;
+
+    if (!chatname.empty () && chatname[0] == '#')
+    {
+        auto sep_pos = chatname.find ("/$");
+
+        if (sep_pos != std::string::npos)
+        {
+            participants.push_back (chatname.substr (1, sep_pos - 1));
+
+            auto hash_pos = chatname.find (';', sep_pos + 2);
+
+            if (hash_pos != std::string::npos)
+                participants.push_back (
+                    chatname.substr (sep_pos + 2, hash_pos - (sep_pos + 2))
+                );
+        }
+    }
+
+    return participants;
+}
+
 } // namespace
 
 namespace mobius::extension::app::skype
@@ -929,10 +958,8 @@ file_main_db::_load_calls (mobius::core::database::database &db)
         // Prepare SQL statement for table CallMembers
         auto stmt_cm = db.new_statement (
             "SELECT ${admit_failure_reason:97-*},"
-            "${balance_update:97-*},"
             "${call_db_id:66-*},"
             "${call_duration:66-*},"
-            "${call_end_diagnostics_code:97-*},"
             "${call_name:66-*},"
             "${call_session_guid:66-*},"
             "${country:66-*},"
@@ -958,7 +985,6 @@ file_main_db::_load_calls (mobius::core::database::database &db)
             "${is_video_codec_compatible:67-*},"
             "${languages:66-*},"
             "${light_weight_meeting_role:97-*},"
-            "${limiting_factor:97-*},"
             "${mike_status:66-*},"
             "${next_redial_time:66-*},"
             "${nonse_word:66-*},"
@@ -977,15 +1003,12 @@ file_main_db::_load_calls (mobius::core::database::database &db)
             "${quality_status:66-*},"
             "${real_identity:66-*},"
             "${recovery_in_progress:66-*},"
-            "${role:97-*},"
-            "${seconds_left:97-*},"
             "${sounderror_code:66-*},"
             "${soundlevel:66-*},"
             "${start_timestamp:66-*},"
             "${stats_xml:66-*},"
             "${status:66-*},"
             "${target_identity:66-*},"
-            "${tenant_id:97-*},"
             "${transfer_active:66-*},"
             "${transfer_status:66-*},"
             "${transfer_topic:66-*},"
@@ -1008,74 +1031,69 @@ file_main_db::_load_calls (mobius::core::database::database &db)
 
             obj.idx = idx++;
             obj.admit_failure_reason = stmt_cm.get_column_int64 (0);
-            obj.balance_update = stmt_cm.get_column_string (1);
-            obj.call_db_id = stmt_cm.get_column_int64 (2);
-            obj.call_duration = stmt_cm.get_column_int64 (3);
-            obj.call_end_diagnostics_code = stmt_cm.get_column_string (4);
-            obj.call_name = stmt_cm.get_column_string (5);
-            obj.call_session_guid = stmt_cm.get_column_string (6);
-            obj.country = stmt_cm.get_column_string (7);
+            obj.call_db_id = stmt_cm.get_column_int64 (1);
+            obj.call_duration = stmt_cm.get_column_int64 (2);
+            obj.call_name = stmt_cm.get_column_string (3);
+            obj.call_session_guid = stmt_cm.get_column_string (4);
+            obj.country = stmt_cm.get_column_string (5);
             obj.creation_timestamp =
-                get_datetime (stmt_cm.get_column_int64 (8));
-            obj.debuginfo = stmt_cm.get_column_string (9);
-            obj.dispname = stmt_cm.get_column_string (10);
-            obj.failurereason = stmt_cm.get_column_int64 (11);
-            obj.fallback_in_progress = stmt_cm.get_column_int64 (12);
-            obj.forward_targets = stmt_cm.get_column_string (13);
-            obj.forwarded_by = stmt_cm.get_column_string (14);
-            obj.guid = stmt_cm.get_column_string (15);
-            obj.id = stmt_cm.get_column_int64 (16);
-            obj.identity = stmt_cm.get_column_string (17);
-            obj.identity_type = stmt_cm.get_column_int64 (18);
-            obj.ip_address = stmt_cm.get_column_string (19);
-            obj.is_conference = stmt_cm.get_column_bool (20);
-            obj.is_multiparty_video_capable = stmt_cm.get_column_bool (21);
-            obj.is_permanent = stmt_cm.get_column_bool (22);
-            obj.is_premium_video_sponsor = stmt_cm.get_column_bool (23);
-            obj.is_read_only = stmt_cm.get_column_bool (24);
-            obj.is_seamlessly_upgraded_call = stmt_cm.get_column_bool (25);
-            obj.is_server_muted = stmt_cm.get_column_bool (26);
-            obj.is_video_codec_compatible = stmt_cm.get_column_bool (27);
-            obj.languages = stmt_cm.get_column_string (28);
-            obj.light_weight_meeting_role = stmt_cm.get_column_int64 (29);
-            obj.limiting_factor = stmt_cm.get_column_int64 (30);
-            obj.mike_status = stmt_cm.get_column_int64 (31);
-            obj.next_redial_time = stmt_cm.get_column_int64 (32);
-            obj.nonse_word = stmt_cm.get_column_string (33);
+                get_datetime (stmt_cm.get_column_int64 (6));
+            obj.debuginfo = stmt_cm.get_column_string (7);
+            obj.dispname = stmt_cm.get_column_string (8);
+            obj.failurereason = stmt_cm.get_column_int64 (9);
+            obj.fallback_in_progress = stmt_cm.get_column_int64 (10);
+            obj.forward_targets = stmt_cm.get_column_string (11);
+            obj.forwarded_by = stmt_cm.get_column_string (12);
+            obj.guid = stmt_cm.get_column_string (13);
+            obj.id = stmt_cm.get_column_int64 (14);
+            obj.identity = stmt_cm.get_column_string (15);
+            obj.identity_type = stmt_cm.get_column_int64 (16);
+            obj.ip_address = stmt_cm.get_column_string (17);
+            obj.is_conference = stmt_cm.get_column_bool (18);
+            obj.is_multiparty_video_capable = stmt_cm.get_column_bool (19);
+            obj.is_permanent = stmt_cm.get_column_bool (20);
+            obj.is_premium_video_sponsor = stmt_cm.get_column_bool (21);
+            obj.is_read_only = stmt_cm.get_column_bool (22);
+            obj.is_seamlessly_upgraded_call = stmt_cm.get_column_bool (23);
+            obj.is_server_muted = stmt_cm.get_column_bool (24);
+            obj.is_video_codec_compatible = stmt_cm.get_column_bool (25);
+            obj.languages = stmt_cm.get_column_string (26);
+            obj.light_weight_meeting_role = stmt_cm.get_column_int64 (27);
+            obj.mike_status = stmt_cm.get_column_int64 (28);
+            obj.next_redial_time = stmt_cm.get_column_int64 (29);
+            obj.nonse_word = stmt_cm.get_column_string (30);
             obj.nr_of_delivered_push_notifications =
-                stmt_cm.get_column_int64 (34);
-            obj.nrof_redials_done = stmt_cm.get_column_int64 (35);
-            obj.nrof_redials_left = stmt_cm.get_column_int64 (36);
-            obj.payment_category = stmt_cm.get_column_string (37);
-            obj.pk_status = stmt_cm.get_column_int64 (38);
-            obj.price_currency = stmt_cm.get_column_string (39);
-            obj.price_per_minute = stmt_cm.get_column_int64 (40);
-            obj.price_precision = stmt_cm.get_column_int64 (41);
-            obj.prime_status = stmt_cm.get_column_int64 (42);
-            obj.pstn_feedback = stmt_cm.get_column_string (43);
-            obj.pstn_statustext = stmt_cm.get_column_string (44);
-            obj.quality_problems = stmt_cm.get_column_string (45);
-            obj.quality_status = stmt_cm.get_column_int64 (46);
-            obj.real_identity = stmt_cm.get_column_string (47);
-            obj.recovery_in_progress = stmt_cm.get_column_int64 (48);
-            obj.role = stmt_cm.get_column_string (49);
-            obj.seconds_left = stmt_cm.get_column_int64 (50);
-            obj.sounderror_code = stmt_cm.get_column_int64 (51);
-            obj.soundlevel = stmt_cm.get_column_int64 (52);
-            obj.start_timestamp = get_datetime (stmt_cm.get_column_int64 (53));
-            obj.stats_xml = stmt_cm.get_column_string (54);
-            obj.status = stmt_cm.get_column_int64 (55);
-            obj.target_identity = stmt_cm.get_column_string (56);
-            obj.tenant_id = stmt_cm.get_column_string (57);
-            obj.transfer_active = stmt_cm.get_column_int64 (58);
-            obj.transfer_status = stmt_cm.get_column_int64 (59);
-            obj.transfer_topic = stmt_cm.get_column_string (60);
-            obj.transferred_by = stmt_cm.get_column_string (61);
-            obj.transferred_to = stmt_cm.get_column_string (62);
-            obj.type = stmt_cm.get_column_int64 (63);
-            obj.version_string = stmt_cm.get_column_string (64);
-            obj.videostatus = stmt_cm.get_column_int64 (65);
-            obj.voicechannel = stmt_cm.get_column_int64 (66);
+                stmt_cm.get_column_int64 (31);
+            obj.nrof_redials_done = stmt_cm.get_column_int64 (32);
+            obj.nrof_redials_left = stmt_cm.get_column_int64 (33);
+            obj.payment_category = stmt_cm.get_column_string (34);
+            obj.pk_status = stmt_cm.get_column_int64 (35);
+            obj.price_currency = stmt_cm.get_column_string (36);
+            obj.price_per_minute = stmt_cm.get_column_int64 (37);
+            obj.price_precision = stmt_cm.get_column_int64 (38);
+            obj.prime_status = stmt_cm.get_column_int64 (39);
+            obj.pstn_feedback = stmt_cm.get_column_string (40);
+            obj.pstn_statustext = stmt_cm.get_column_string (41);
+            obj.quality_problems = stmt_cm.get_column_string (42);
+            obj.quality_status = stmt_cm.get_column_int64 (43);
+            obj.real_identity = stmt_cm.get_column_string (44);
+            obj.recovery_in_progress = stmt_cm.get_column_int64 (45);
+            obj.sounderror_code = stmt_cm.get_column_int64 (46);
+            obj.soundlevel = stmt_cm.get_column_int64 (47);
+            obj.start_timestamp = get_datetime (stmt_cm.get_column_int64 (48));
+            obj.stats_xml = stmt_cm.get_column_string (49);
+            obj.status = stmt_cm.get_column_int64 (50);
+            obj.target_identity = stmt_cm.get_column_string (51);
+            obj.tenant_id = stmt_cm.get_column_string (52);
+            obj.transfer_active = stmt_cm.get_column_int64 (53);
+            obj.transfer_status = stmt_cm.get_column_int64 (54);
+            obj.transfer_topic = stmt_cm.get_column_string (55);
+            obj.transferred_by = stmt_cm.get_column_string (56);
+            obj.transferred_to = stmt_cm.get_column_string (57);
+            obj.type = stmt_cm.get_column_int64 (58);
+            obj.version_string = stmt_cm.get_column_string (59);
+            obj.videostatus = stmt_cm.get_column_int64 (60);
+            obj.voicechannel = stmt_cm.get_column_int64 (61);
 
             // Add callmembers to the list
             call_members.emplace (obj.call_db_id, std::move (obj));
@@ -1086,9 +1104,7 @@ file_main_db::_load_calls (mobius::core::database::database &db)
             "SELECT ${access_token:66-*},"
             "${active_members:66-*},"
             "${begin_timestamp:66-*},"
-            "${broadcast_metadata:97-*},"
             "${conf_participants:66-*},"
-            "${content_sharing_session_count_changed:97-*},"
             "${conv_dbid:66-*},"
             "${current_video_audience:66-*},"
             "${duration:66-*},"
@@ -1099,9 +1115,7 @@ file_main_db::_load_calls (mobius::core::database::database &db)
             "${is_active:66-*},"
             "${is_conference:66-*},"
             "${is_incoming:66-*},"
-            "${is_incoming_one_on_one_video_call:97-*},"
             "${is_muted:66-*},"
-            "${is_muted_speaker:97-*},"
             "${is_on_hold:66-*},"
             "${is_permanent:66-*},"
             "${is_premium_video_sponsor:66-*},"
@@ -1109,7 +1123,6 @@ file_main_db::_load_calls (mobius::core::database::database &db)
             "${is_unseen_missed:66-*},"
             "${joined_existing:66-*},"
             "${light_weight_meeting_count_changed:97-*},"
-            "${meeting_details:97-*},"
             "${members:66-*},"
             "${mike_status:66-*},"
             "${name:66-*},"
@@ -1123,17 +1136,12 @@ file_main_db::_load_calls (mobius::core::database::database &db)
             "${pstn_number:66-*},"
             "${pstn_status:66-*},"
             "${quality_problems:66-*},"
-            "${queue_info:97-*},"
-            "${role:97-*},"
             "${server_identity:66-*},"
             "${soundlevel:66-*},"
             "${start_timestamp:66-*},"
             "${status:66-*},"
             "${technology:72-*},"
-            "${tenant_id:97-*},"
             "${topic:66-*},"
-            "${transferor_displayname:97-*},"
-            "${transferor_type:97-*},"
             "${type:66-*},"
             "${vaa_input_status:66-*},"
             "${video_disabled:66-*} "
@@ -1152,58 +1160,47 @@ file_main_db::_load_calls (mobius::core::database::database &db)
             obj.access_token = stmt.get_column_string (0);
             obj.active_members = stmt.get_column_int64 (1);
             obj.begin_timestamp = get_datetime (stmt.get_column_int64 (2));
-            obj.broadcast_metadata = stmt.get_column_string (3);
-            obj.conf_participants = stmt.get_column_bytearray (4);
-            obj.content_sharing_session_count_changed =
-                stmt.get_column_int64 (5);
-            obj.conv_dbid = stmt.get_column_int64 (6);
-            obj.current_video_audience = stmt.get_column_string (7);
-            obj.duration = stmt.get_column_int64 (8);
-            obj.failurecode = stmt.get_column_int64 (9);
-            obj.failurereason = stmt.get_column_int64 (10);
-            obj.host_identity = stmt.get_column_string (11);
-            obj.id = stmt.get_column_int64 (12);
-            obj.is_active = stmt.get_column_bool (13);
-            obj.is_conference = stmt.get_column_int64 (14) > 0;
-            obj.is_incoming = stmt.get_column_bool (15);
-            obj.is_incoming_one_on_one_video_call = stmt.get_column_bool (16);
-            obj.is_muted = stmt.get_column_bool (17);
-            obj.is_muted_speaker = stmt.get_column_bool (18);
-            obj.is_on_hold = stmt.get_column_bool (19);
-            obj.is_permanent = stmt.get_column_bool (20);
-            obj.is_premium_video_sponsor = stmt.get_column_bool (21);
-            obj.is_server_muted = stmt.get_column_bool (22);
-            obj.is_unseen_missed = stmt.get_column_bool (23);
-            obj.joined_existing = stmt.get_column_int64 (24);
-            obj.light_weight_meeting_count_changed = stmt.get_column_int64 (25);
-            obj.meeting_details = stmt.get_column_string (26);
-            obj.members = stmt.get_column_bytearray (27);
-            obj.mike_status = stmt.get_column_int64 (28);
-            obj.name = stmt.get_column_string (29);
-            obj.old_duration = stmt.get_column_int64 (30);
-            obj.old_members = stmt.get_column_bytearray (31);
-            obj.partner_dispname = stmt.get_column_string (32);
-            obj.partner_handle = stmt.get_column_string (33);
-            obj.premium_video_is_grace_period = stmt.get_column_int64 (34);
-            obj.premium_video_sponsor_list = stmt.get_column_string (35);
-            obj.premium_video_status = stmt.get_column_int64 (36);
-            obj.pstn_number = stmt.get_column_string (37);
-            obj.pstn_status = stmt.get_column_string (38);
-            obj.quality_problems = stmt.get_column_string (39);
-            obj.queue_info = stmt.get_column_string (40);
-            obj.role = stmt.get_column_string (41);
-            obj.server_identity = stmt.get_column_string (42);
-            obj.soundlevel = stmt.get_column_int64 (43);
-            obj.start_timestamp = get_datetime (stmt.get_column_int64 (44));
-            obj.status = stmt.get_column_int64 (45);
-            obj.technology = stmt.get_column_int64 (46);
-            obj.tenant_id = stmt.get_column_string (47);
-            obj.topic = stmt.get_column_string (48);
-            obj.transferor_displayname = stmt.get_column_string (49);
-            obj.transferor_type = stmt.get_column_string (50);
-            obj.type = stmt.get_column_int64 (51);
-            obj.vaa_input_status = stmt.get_column_int64 (52);
-            obj.video_disabled = stmt.get_column_int64 (53);
+            obj.conf_participants = stmt.get_column_bytearray (3);
+            obj.conv_dbid = stmt.get_column_int64 (4);
+            obj.current_video_audience = stmt.get_column_string (5);
+            obj.duration = stmt.get_column_int64 (6);
+            obj.failurecode = stmt.get_column_int64 (7);
+            obj.failurereason = stmt.get_column_int64 (8);
+            obj.host_identity = stmt.get_column_string (9);
+            obj.id = stmt.get_column_int64 (10);
+            obj.is_active = stmt.get_column_bool (11);
+            obj.is_conference = stmt.get_column_int64 (12) > 0;
+            obj.is_incoming = stmt.get_column_bool (13);
+            obj.is_muted = stmt.get_column_bool (14);
+            obj.is_on_hold = stmt.get_column_bool (15);
+            obj.is_permanent = stmt.get_column_bool (16);
+            obj.is_premium_video_sponsor = stmt.get_column_bool (17);
+            obj.is_server_muted = stmt.get_column_bool (18);
+            obj.is_unseen_missed = stmt.get_column_bool (19);
+            obj.joined_existing = stmt.get_column_int64 (20);
+            obj.light_weight_meeting_count_changed = stmt.get_column_int64 (21);
+            obj.members = stmt.get_column_bytearray (22);
+            obj.mike_status = stmt.get_column_int64 (23);
+            obj.name = stmt.get_column_string (24);
+            obj.old_duration = stmt.get_column_int64 (25);
+            obj.old_members = stmt.get_column_bytearray (26);
+            obj.partner_dispname = stmt.get_column_string (27);
+            obj.partner_handle = stmt.get_column_string (28);
+            obj.premium_video_is_grace_period = stmt.get_column_int64 (29);
+            obj.premium_video_sponsor_list = stmt.get_column_string (30);
+            obj.premium_video_status = stmt.get_column_int64 (31);
+            obj.pstn_number = stmt.get_column_string (32);
+            obj.pstn_status = stmt.get_column_string (33);
+            obj.quality_problems = stmt.get_column_string (34);
+            obj.server_identity = stmt.get_column_string (35);
+            obj.soundlevel = stmt.get_column_int64 (36);
+            obj.start_timestamp = get_datetime (stmt.get_column_int64 (37));
+            obj.status = stmt.get_column_int64 (38);
+            obj.technology = stmt.get_column_int64 (39);
+            obj.topic = stmt.get_column_string (40);
+            obj.type = stmt.get_column_int64 (41);
+            obj.vaa_input_status = stmt.get_column_int64 (42);
+            obj.video_disabled = stmt.get_column_int64 (43);
 
             // Add call members to the call object
             auto range = call_members.equal_range (obj.id);
@@ -1280,7 +1277,6 @@ file_main_db::_load_contacts (mobius::core::database::database &db)
             "${external_id:66-259},"
             "${external_system_id:66-259},"
             "${extprop_external_data:66-259},"
-            "${extprop_sms_pstn_contact_created:97-*},"
             "${firstname:72-259},"
             "${fullname:66-259},"
             "${gender:66-259},"
@@ -1395,70 +1391,69 @@ file_main_db::_load_contacts (mobius::core::database::database &db)
             obj.external_id = stmt.get_column_string (37);
             obj.external_system_id = stmt.get_column_string (38);
             obj.extprop_external_data = stmt.get_column_string (39);
-            obj.extprop_sms_pstn_contact_created = stmt.get_column_int64 (40);
-            obj.firstname = stmt.get_column_string (41);
-            obj.fullname = stmt.get_column_string (42);
-            obj.gender = stmt.get_column_int64 (43);
-            obj.given_authlevel = stmt.get_column_int64 (44);
-            obj.given_displayname = stmt.get_column_string (45);
-            obj.group_membership = stmt.get_column_int64 (46);
-            obj.hashed_emails = stmt.get_column_string (47);
-            obj.homepage = stmt.get_column_string (48);
-            obj.id = stmt.get_column_int64 (49);
-            obj.in_shared_group = stmt.get_column_int64 (50);
-            obj.ipcountry = stmt.get_column_string (51);
-            obj.is_auto_buddy = stmt.get_column_bool (52);
-            obj.is_mobile = stmt.get_column_bool (53);
-            obj.is_permanent = stmt.get_column_bool (54);
-            obj.is_trusted = stmt.get_column_bool (55);
-            obj.isauthorized = stmt.get_column_bool (56);
-            obj.isblocked = stmt.get_column_bool (57);
-            obj.languages = stmt.get_column_string (58);
-            obj.last_used_networktime = get_time (stmt.get_column_int64 (59));
-            obj.lastname = stmt.get_column_string (60);
+            obj.firstname = stmt.get_column_string (40);
+            obj.fullname = stmt.get_column_string (41);
+            obj.gender = stmt.get_column_int64 (42);
+            obj.given_authlevel = stmt.get_column_int64 (43);
+            obj.given_displayname = stmt.get_column_string (44);
+            obj.group_membership = stmt.get_column_int64 (45);
+            obj.hashed_emails = stmt.get_column_string (46);
+            obj.homepage = stmt.get_column_string (47);
+            obj.id = stmt.get_column_int64 (48);
+            obj.in_shared_group = stmt.get_column_int64 (49);
+            obj.ipcountry = stmt.get_column_string (50);
+            obj.is_auto_buddy = stmt.get_column_bool (51);
+            obj.is_mobile = stmt.get_column_bool (52);
+            obj.is_permanent = stmt.get_column_bool (53);
+            obj.is_trusted = stmt.get_column_bool (54);
+            obj.isauthorized = stmt.get_column_bool (55);
+            obj.isblocked = stmt.get_column_bool (56);
+            obj.languages = stmt.get_column_string (57);
+            obj.last_used_networktime = get_time (stmt.get_column_int64 (58));
+            obj.lastname = stmt.get_column_string (59);
             obj.lastonline_timestamp =
-                get_datetime (stmt.get_column_int64 (61));
-            obj.lastused_timestamp = get_datetime (stmt.get_column_int64 (62));
-            obj.liveid_cid = stmt.get_column_string (63);
-            obj.main_phone = stmt.get_column_string (64);
-            obj.mood_text = stmt.get_column_string (65);
-            obj.mood_timestamp = get_datetime (stmt.get_column_int64 (66));
-            obj.network_availability = stmt.get_column_int64 (67);
-            obj.node_capabilities = stmt.get_column_int64 (68);
-            obj.node_capabilities_and = stmt.get_column_int64 (69);
-            obj.nr_of_buddies = stmt.get_column_int64 (70);
-            obj.nrof_authed_buddies = stmt.get_column_int64 (71);
-            obj.offline_authreq_id = stmt.get_column_int64 (72);
-            obj.phone_home = stmt.get_column_string (73);
-            obj.phone_home_normalized = stmt.get_column_string (74);
-            obj.phone_mobile = stmt.get_column_string (75);
-            obj.phone_mobile_normalized = stmt.get_column_string (76);
-            obj.phone_office = stmt.get_column_string (77);
-            obj.phone_office_normalized = stmt.get_column_string (78);
-            obj.pop_score = stmt.get_column_int64 (79);
-            obj.popularity_ord = stmt.get_column_int64 (80);
-            obj.profile_attachments = stmt.get_column_bytearray (81);
-            obj.profile_timestamp = get_datetime (stmt.get_column_int64 (82));
-            obj.province = stmt.get_column_string (83);
-            obj.pstnnumber = stmt.get_column_string (84);
-            obj.received_authrequest = stmt.get_column_string (85);
-            obj.refreshing = stmt.get_column_int64 (86);
-            obj.revoked_auth = stmt.get_column_int64 (87);
-            obj.rich_mood_text = stmt.get_column_string (88);
-            obj.saved_directory_blob = stmt.get_column_bytearray (89);
-            obj.sent_authrequest = stmt.get_column_string (90);
-            obj.sent_authrequest_extrasbitmask = stmt.get_column_int64 (91);
-            obj.sent_authrequest_initmethod = stmt.get_column_int64 (92);
-            obj.sent_authrequest_serial = stmt.get_column_int64 (93);
-            obj.sent_authrequest_time = stmt.get_column_int64 (94);
-            obj.server_synced = stmt.get_column_int64 (95);
-            obj.skypename = stmt.get_column_string (96);
-            obj.stack_version = stmt.get_column_int64 (97);
-            obj.timezone = get_timezone (stmt.get_column_int64 (98));
-            obj.type = stmt.get_column_int64 (99);
-            obj.unified_servants = stmt.get_column_string (100);
-            obj.verified_company = stmt.get_column_bytearray (101);
-            obj.verified_email = stmt.get_column_bytearray (102);
+                get_datetime (stmt.get_column_int64 (60));
+            obj.lastused_timestamp = get_datetime (stmt.get_column_int64 (61));
+            obj.liveid_cid = stmt.get_column_string (62);
+            obj.main_phone = stmt.get_column_string (63);
+            obj.mood_text = stmt.get_column_string (64);
+            obj.mood_timestamp = get_datetime (stmt.get_column_int64 (65));
+            obj.network_availability = stmt.get_column_int64 (66);
+            obj.node_capabilities = stmt.get_column_int64 (67);
+            obj.node_capabilities_and = stmt.get_column_int64 (68);
+            obj.nr_of_buddies = stmt.get_column_int64 (69);
+            obj.nrof_authed_buddies = stmt.get_column_int64 (70);
+            obj.offline_authreq_id = stmt.get_column_int64 (71);
+            obj.phone_home = stmt.get_column_string (72);
+            obj.phone_home_normalized = stmt.get_column_string (73);
+            obj.phone_mobile = stmt.get_column_string (74);
+            obj.phone_mobile_normalized = stmt.get_column_string (75);
+            obj.phone_office = stmt.get_column_string (76);
+            obj.phone_office_normalized = stmt.get_column_string (77);
+            obj.pop_score = stmt.get_column_int64 (78);
+            obj.popularity_ord = stmt.get_column_int64 (79);
+            obj.profile_attachments = stmt.get_column_bytearray (80);
+            obj.profile_timestamp = get_datetime (stmt.get_column_int64 (81));
+            obj.province = stmt.get_column_string (82);
+            obj.pstnnumber = stmt.get_column_string (83);
+            obj.received_authrequest = stmt.get_column_string (84);
+            obj.refreshing = stmt.get_column_int64 (85);
+            obj.revoked_auth = stmt.get_column_int64 (86);
+            obj.rich_mood_text = stmt.get_column_string (87);
+            obj.saved_directory_blob = stmt.get_column_bytearray (88);
+            obj.sent_authrequest = stmt.get_column_string (89);
+            obj.sent_authrequest_extrasbitmask = stmt.get_column_int64 (90);
+            obj.sent_authrequest_initmethod = stmt.get_column_int64 (91);
+            obj.sent_authrequest_serial = stmt.get_column_int64 (92);
+            obj.sent_authrequest_time = stmt.get_column_int64 (93);
+            obj.server_synced = stmt.get_column_int64 (94);
+            obj.skypename = stmt.get_column_string (95);
+            obj.stack_version = stmt.get_column_int64 (96);
+            obj.timezone = get_timezone (stmt.get_column_int64 (97));
+            obj.type = stmt.get_column_int64 (98);
+            obj.unified_servants = stmt.get_column_string (99);
+            obj.verified_company = stmt.get_column_bytearray (100);
+            obj.verified_email = stmt.get_column_bytearray (101);
 
             // Add contacts to the list
             contacts_.emplace_back (std::move (obj));
@@ -1581,7 +1576,6 @@ file_main_db::_load_messages (mobius::core::database::database &db)
             "${adding_in_progress_since:69-196},"
             "convo_id,"
             "debuginfo,"
-            "${extprop_default_identity:114-196},"
             "id,"
             "identity,"
             "${is_multiparty_video_capable:66-196},"
@@ -1631,46 +1625,44 @@ file_main_db::_load_messages (mobius::core::database::database &db)
             obj.adding_in_progress_since = stmt_part.get_column_int64 (1);
             obj.convo_id = stmt_part.get_column_int64 (2);
             obj.debuginfo = stmt_part.get_column_string (3);
-            obj.extprop_default_identity = stmt_part.get_column_int64 (4);
-            obj.id = stmt_part.get_column_int64 (5);
-            obj.identity = stmt_part.get_column_string (6);
-            obj.is_multiparty_video_capable = stmt_part.get_column_int64 (7);
-            obj.is_multiparty_video_updatable = stmt_part.get_column_int64 (8);
-            obj.is_permanent = stmt_part.get_column_bool (9);
-            obj.is_premium_video_sponsor = stmt_part.get_column_int64 (10);
-            obj.is_seamlessly_upgraded_call = stmt_part.get_column_int64 (11);
-            obj.is_video_codec_compatible = stmt_part.get_column_int64 (12);
-            obj.last_leavereason = stmt_part.get_column_int64 (13);
-            obj.last_voice_error = stmt_part.get_column_string (14);
-            obj.live_country = stmt_part.get_column_string (15);
-            obj.live_fwd_identities = stmt_part.get_column_string (16);
-            obj.live_identity = stmt_part.get_column_string (17);
-            obj.live_identity_to_use = stmt_part.get_column_string (18);
-            obj.live_ip_address = stmt_part.get_column_string (19);
-            obj.live_price_for_me = stmt_part.get_column_string (20);
-            obj.live_start_timestamp = stmt_part.get_column_int64 (21);
-            obj.live_type = stmt_part.get_column_int64 (22);
-            obj.live_voicechannel = stmt_part.get_column_int64 (23);
+            obj.id = stmt_part.get_column_int64 (4);
+            obj.identity = stmt_part.get_column_string (5);
+            obj.is_multiparty_video_capable = stmt_part.get_column_int64 (6);
+            obj.is_multiparty_video_updatable = stmt_part.get_column_int64 (7);
+            obj.is_permanent = stmt_part.get_column_bool (8);
+            obj.is_premium_video_sponsor = stmt_part.get_column_int64 (9);
+            obj.is_seamlessly_upgraded_call = stmt_part.get_column_int64 (10);
+            obj.is_video_codec_compatible = stmt_part.get_column_int64 (11);
+            obj.last_leavereason = stmt_part.get_column_int64 (12);
+            obj.last_voice_error = stmt_part.get_column_string (13);
+            obj.live_country = stmt_part.get_column_string (14);
+            obj.live_fwd_identities = stmt_part.get_column_string (15);
+            obj.live_identity = stmt_part.get_column_string (16);
+            obj.live_identity_to_use = stmt_part.get_column_string (17);
+            obj.live_ip_address = stmt_part.get_column_string (18);
+            obj.live_price_for_me = stmt_part.get_column_string (19);
+            obj.live_start_timestamp = stmt_part.get_column_int64 (20);
+            obj.live_type = stmt_part.get_column_int64 (21);
+            obj.live_voicechannel = stmt_part.get_column_int64 (22);
             obj.livesession_fallback_in_progress =
-                stmt_part.get_column_int64 (24);
+                stmt_part.get_column_int64 (23);
             obj.livesession_recovery_in_progress =
-                stmt_part.get_column_int64 (25);
-            obj.next_redial_time = stmt_part.get_column_int64 (26);
-            obj.nrof_redials_left = stmt_part.get_column_int64 (27);
-            obj.quality_problems = stmt_part.get_column_string (28);
-            obj.rank = stmt_part.get_column_int64 (29);
-            obj.real_identity = stmt_part.get_column_string (30);
-            obj.requested_rank = stmt_part.get_column_int64 (31);
-            obj.sound_level = stmt_part.get_column_int64 (32);
-            obj.text_status = stmt_part.get_column_int64 (33);
-            obj.transferred_by = stmt_part.get_column_string (34);
-            obj.transferred_to = stmt_part.get_column_string (35);
-            obj.video_status = stmt_part.get_column_int64 (36);
-            obj.voice_status = stmt_part.get_column_int64 (37);
+                stmt_part.get_column_int64 (24);
+            obj.next_redial_time = stmt_part.get_column_int64 (25);
+            obj.nrof_redials_left = stmt_part.get_column_int64 (26);
+            obj.quality_problems = stmt_part.get_column_string (27);
+            obj.rank = stmt_part.get_column_int64 (28);
+            obj.real_identity = stmt_part.get_column_string (29);
+            obj.requested_rank = stmt_part.get_column_int64 (30);
+            obj.sound_level = stmt_part.get_column_int64 (31);
+            obj.text_status = stmt_part.get_column_int64 (32);
+            obj.transferred_by = stmt_part.get_column_string (33);
+            obj.transferred_to = stmt_part.get_column_string (34);
+            obj.video_status = stmt_part.get_column_int64 (35);
+            obj.voice_status = stmt_part.get_column_int64 (36);
 
             // Add participants to the list
             participants.emplace (obj.convo_id, std::move (obj));
-
         }
 
         // Prepare SQL statement for table Messages
@@ -1722,7 +1714,8 @@ file_main_db::_load_messages (mobius::core::database::database &db)
             obj.author = stmt.get_column_string (0);
             obj.author_was_live = stmt.get_column_int64 (1);
             obj.body_is_rawxml = stmt.get_column_int64 (2);
-            obj.body_xml = mobius::core::string::strip (stmt.get_column_string (3));
+            obj.body_xml =
+                mobius::core::string::strip (stmt.get_column_string (3));
             obj.call_guid = stmt.get_column_string (4);
             obj.chatmsg_status = stmt.get_column_int64 (5);
             obj.chatmsg_type = stmt.get_column_int64 (6);
@@ -1753,13 +1746,55 @@ file_main_db::_load_messages (mobius::core::database::database &db)
             obj.timestamp = get_datetime (stmt.get_column_int64 (31));
             obj.type = stmt.get_column_int64 (32);
 
+            // Parse message content
+            obj.content = parse_message (obj.body_xml);
+
             // Add message participants to the message object
-            auto range = participants.equal_range (obj.convo_id);
-            std::transform (
-                range.first, range.second,
-                std::back_inserter (obj.participants),
-                [] (auto &pair) { return pair.second; }
-            );
+            if (obj.convo_id)
+            {
+                auto range = participants.equal_range (obj.convo_id);
+
+                std::transform (
+                    range.first, range.second,
+                    std::back_inserter (obj.participants),
+                    [] (auto &pair) { return pair.second; }
+                );
+            }
+
+            // Get participants from identities if convo_id is 0
+            else if (!obj.identities.empty ())
+            {
+                auto identities = mobius::core::string::split (obj.identities);
+
+                std::transform (
+                    identities.begin (), identities.end (),
+                    std::back_inserter (obj.participants),
+                    [] (auto &identity)
+                    {
+                        message_participant p;
+                        p.identity = identity;
+                        return p;
+                    }
+                );
+            }
+
+            // Get participants from chatname if convo_id is 0
+            else
+            {
+                auto participants =
+                    get_participants_from_chatname (obj.chatname);
+
+                std::transform (
+                    participants.begin (), participants.end (),
+                    std::back_inserter (obj.participants),
+                    [] (auto &identity)
+                    {
+                        message_participant p;
+                        p.identity = identity;
+                        return p;
+                    }
+                );
+            }
 
             // Add messages to the list
             messages_.emplace_back (std::move (obj));

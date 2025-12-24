@@ -1,8 +1,6 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C)
-// 2008-2026
-// Eduardo Aguiar
+// Copyright (C) 2008-2026 Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -94,7 +92,8 @@ _parse_tag_with_attributes (parser::element::type type, const std::string &text)
 
             else if (!isspace (c))
                 throw std::runtime_error (
-                    MOBIUS_EXCEPTION_MSG ("invalid attribute"));
+                    MOBIUS_EXCEPTION_MSG ("invalid attribute")
+                );
         }
 
         // state: in attr_name
@@ -112,7 +111,8 @@ _parse_tag_with_attributes (parser::element::type type, const std::string &text)
 
             else
                 throw std::runtime_error (
-                    MOBIUS_EXCEPTION_MSG ("invalid attribute"));
+                    MOBIUS_EXCEPTION_MSG ("invalid attribute")
+                );
         }
 
         // state: after attr_name
@@ -165,7 +165,8 @@ _parse_tag_with_attributes (parser::element::type type, const std::string &text)
 
             else if (c == '\'' || c == '"' || c == '=')
                 throw std::runtime_error (
-                    MOBIUS_EXCEPTION_MSG ("invalid attribute value"));
+                    MOBIUS_EXCEPTION_MSG ("invalid attribute value")
+                );
 
             else
                 attr_value.push_back (c);
@@ -195,17 +196,21 @@ _parse_start_tag (const std::string &text)
     {
         if (!mobius::core::string::endswith (text, "-->"))
             throw std::runtime_error (
-                MOBIUS_EXCEPTION_MSG ("unterminated comment"));
+                MOBIUS_EXCEPTION_MSG ("unterminated comment")
+            );
 
-        e = parser::element (parser::element::type::comment,
-                             text.substr (4, text.size () - 7));
+        e = parser::element (
+            parser::element::type::comment, text.substr (4, text.size () - 7)
+        );
     }
 
     // declaration
     else if (mobius::core::string::startswith (text, "<!"))
     {
-        e = parser::element (parser::element::type::declaration,
-                             text.substr (2, text.size () - 3));
+        e = parser::element (
+            parser::element::type::declaration,
+            text.substr (2, text.size () - 3)
+        );
     }
 
     // proper start tag <tag[ value1 value2]>
@@ -245,31 +250,76 @@ parser::get ()
 
     switch (type)
     {
-    case token_type::text:
-        e = element (element::type::text, text);
-        break;
+        case token_type::text:
+            e = element (element::type::text, text);
+            break;
 
-    case token_type::start_tag:
-        e = _parse_start_tag (text);
-        break;
+        case token_type::start_tag:
+            e = _parse_start_tag (text);
+            break;
 
-    case token_type::end_tag:
-        e = element (element::type::end_tag, text.substr (2, text.size () - 3));
-        break;
+        case token_type::end_tag:
+            e = element (
+                element::type::end_tag, text.substr (2, text.size () - 3)
+            );
+            break;
 
-    case token_type::empty_tag:
-        e = _parse_tag_with_attributes (element::type::empty_tag, text);
-        break;
+        case token_type::empty_tag:
+            e = _parse_tag_with_attributes (element::type::empty_tag, text);
+            break;
 
-    case token_type::entity:
-        e = element (element::type::entity, text.substr (1, text.size () - 2));
-        break;
+        case token_type::entity:
+            e = element (
+                element::type::entity, text.substr (1, text.size () - 2)
+            );
+            break;
 
-    case token_type::end:
-        break;
+        case token_type::end:
+            break;
     }
 
+    last_ = e;
+
     return e;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Tag constructor
+// @param parser SGML parser
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+parser::tag::tag (parser &parser)
+{
+    // Get start tag
+    auto e = parser.get_last ();
+
+    if (e.get_type () != element::type::start_tag &&
+        e.get_type () != element::type::empty_tag)
+        return;     // invalid tag
+
+    // Get tag name and attributes
+    name_ = e.get_text ();
+    attributes_ = e.get_attributes ();
+
+    if (e.get_type () == element::type::empty_tag)
+        return;
+
+    // Get children tags and content
+    e = parser.get ();
+
+    while (e.get_type () != element::type::end &&
+           (e.get_type () != element::type::end_tag || e.get_text () != name_))
+    {
+        if (e.get_type () == element::type::text)
+            content_ = mobius::core::string::strip (content_ + e.get_text ());
+
+        else if (e.get_type () == element::type::start_tag)
+        {
+            tag child_tag (parser);
+            children_.push_back (child_tag);
+        }
+
+        e = parser.get ();
+    }
 }
 
 } // namespace mobius::core::decoder::sgml

@@ -1,6 +1,10 @@
 Mobius Forensic Toolkit 2.23
 	* Added new C++ extension called "app-dcpp"
+	* app-skype: Removed non-standard columns from queries on file_main_db module
+	* app-skype: Added support for chat messages
 	* libmobius_core: Improved error handling on pod::map::pop_map function
+	* libmobius_core: Added new method decoder::sgml::parser::get_last
+	* libmobius_core: Added new method decoder::sgml::parser::get_minidom
 
 Mobius Forensic Toolkit 2.22
 	* app-ares: Improved evidence tags

@@ -1,5 +1,5 @@
-#ifndef LIBMOBIUS_PYTHON_CORE_DECODER_SGML_PARSER_HPP
-#define LIBMOBIUS_PYTHON_CORE_DECODER_SGML_PARSER_HPP
+#ifndef MOBIUS_EXTENSION_APP_SKYPE_PARSE_MESSAGE_HPP
+#define MOBIUS_EXTENSION_APP_SKYPE_PARSE_MESSAGE_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,26 +18,17 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
-#include <mobius/core/decoder/sgml/parser.hpp>
+#include <mobius/core/pod/map.hpp>
+#include <string>
+#include <vector>
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Data structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-typedef struct
+namespace mobius::extension::app::skype
 {
-    PyObject_HEAD mobius::core::decoder::sgml::parser *obj;
-} core_decoder_sgml_parser_o;
-
-extern PyTypeObject core_decoder_sgml_parser_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Helper functions
+// Function prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool pymobius_core_decoder_sgml_parser_check (PyObject *);
-PyObject *pymobius_core_decoder_sgml_parser_to_pyobject (
-    const mobius::core::decoder::sgml::parser &);
-mobius::core::decoder::sgml::parser
-pymobius_core_decoder_sgml_parser_from_pyobject (PyObject *);
+std::vector<mobius::core::pod::map> parse_message (const std::string &);
+
+} // namespace mobius::extension::app::skype
 
 #endif

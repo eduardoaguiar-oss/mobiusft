@@ -1,8 +1,6 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C)
-// 2008-2026
-// Eduardo Aguiar
+// Copyright (C) 2008-2026 Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -779,12 +777,7 @@ profile::impl::_load_main_db_calls (
             c.metadata.set ("access_token", cl.access_token);
             c.metadata.set ("active_members", cl.active_members);
             c.metadata.set ("begin_timestamp", cl.begin_timestamp);
-            c.metadata.set ("broadcast_metadata", cl.broadcast_metadata);
             c.metadata.set ("conf_participants", cl.conf_participants);
-            c.metadata.set (
-                "content_sharing_session_count_changed",
-                cl.content_sharing_session_count_changed
-            );
             c.metadata.set ("conv_dbid", cl.conv_dbid);
             c.metadata.set (
                 "current_video_audience", cl.current_video_audience
@@ -797,12 +790,7 @@ profile::impl::_load_main_db_calls (
             c.metadata.set ("is_active", cl.is_active);
             c.metadata.set ("is_conference", cl.is_conference);
             c.metadata.set ("is_incoming", cl.is_incoming);
-            c.metadata.set (
-                "is_incoming_one_on_one_video_call",
-                cl.is_incoming_one_on_one_video_call
-            );
             c.metadata.set ("is_muted", cl.is_muted);
-            c.metadata.set ("is_muted_speaker", cl.is_muted_speaker);
             c.metadata.set ("is_on_hold", cl.is_on_hold);
             c.metadata.set ("is_permanent", cl.is_permanent);
             c.metadata.set (
@@ -815,7 +803,6 @@ profile::impl::_load_main_db_calls (
                 "light_weight_meeting_count_changed",
                 cl.light_weight_meeting_count_changed
             );
-            c.metadata.set ("meeting_details", cl.meeting_details);
             c.metadata.set ("mike_status", cl.mike_status);
             c.metadata.set ("name", cl.name);
             c.metadata.set ("old_duration", cl.old_duration);
@@ -832,8 +819,6 @@ profile::impl::_load_main_db_calls (
             c.metadata.set ("pstn_number", cl.pstn_number);
             c.metadata.set ("pstn_status", cl.pstn_status);
             c.metadata.set ("quality_problems", cl.quality_problems);
-            c.metadata.set ("queue_info", cl.queue_info);
-            c.metadata.set ("role", cl.role);
             c.metadata.set ("server_identity", cl.server_identity);
             c.metadata.set ("soundlevel", cl.soundlevel);
             c.metadata.set ("start_timestamp", cl.start_timestamp);
@@ -841,12 +826,7 @@ profile::impl::_load_main_db_calls (
                 "status", get_domain_value (CALL_STATUS_DOMAIN, cl.status)
             );
             c.metadata.set ("technology", cl.technology);
-            c.metadata.set ("tenant_id", cl.tenant_id);
             c.metadata.set ("topic", cl.topic);
-            c.metadata.set (
-                "transferor_displayname", cl.transferor_displayname
-            );
-            c.metadata.set ("transferor_type", cl.transferor_type);
             c.metadata.set ("type", cl.type);
             c.metadata.set ("vaa_input_status", cl.vaa_input_status);
             c.metadata.set ("video_disabled", cl.video_disabled);
@@ -998,10 +978,6 @@ profile::impl::_load_main_db_contacts (
             c.metadata.set ("external_id", ct.external_id);
             c.metadata.set ("external_system_id", ct.external_system_id);
             c.metadata.set ("extprop_external_data", ct.extprop_external_data);
-            c.metadata.set (
-                "extprop_sms_pstn_contact_created",
-                ct.extprop_sms_pstn_contact_created
-            );
             c.metadata.set ("firstname", ct.firstname);
             c.metadata.set ("fullname", ct.fullname);
             c.metadata.set ("given_displayname", ct.given_displayname);
@@ -1165,7 +1141,7 @@ profile::impl::_load_main_db_messages (
             message m_obj;
             m_obj.timestamp = m.timestamp;
             m_obj.sender = m.author;
-            m_obj.content = m.body_xml;
+            m_obj.content = m.content;
 
             for (const auto &p : m.participants)
             {

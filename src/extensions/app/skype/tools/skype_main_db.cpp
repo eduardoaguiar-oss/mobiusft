@@ -1,8 +1,6 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C)
-// 2008-2026
-// Eduardo Aguiar
+// Copyright (C) 2008-2026 Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -232,12 +230,8 @@ show_main_db_info (const std::string &path)
         std::cout << "   Active Members: " << call.active_members << std::endl;
         std::cout << "   Begin Timestamp: " << call.begin_timestamp
                   << std::endl;
-        std::cout << "   Broadcast Metadata: " << call.broadcast_metadata
-                  << std::endl;
         std::cout << "   Conf Participants:\n"
                   << call.conf_participants.dump (8) << std::endl;
-        std::cout << "   Content Sharing Session Count Changed: "
-                  << call.content_sharing_session_count_changed << std::endl;
         std::cout << "   Conv Dbid: " << call.conv_dbid << std::endl;
         std::cout << "   Current Video Audience: "
                   << call.current_video_audience << std::endl;
@@ -252,13 +246,8 @@ show_main_db_info (const std::string &path)
                   << (call.is_conference ? "true" : "false") << std::endl;
         std::cout << "   Is Incoming: " << (call.is_incoming ? "true" : "false")
                   << std::endl;
-        std::cout << "   Is Incoming One On One Video Call: "
-                  << (call.is_incoming_one_on_one_video_call ? "true" : "false")
-                  << std::endl;
         std::cout << "   Is Muted: " << (call.is_muted ? "true" : "false")
                   << std::endl;
-        std::cout << "   Is Muted Speaker: "
-                  << (call.is_muted_speaker ? "true" : "false") << std::endl;
         std::cout << "   Is On Hold: " << (call.is_on_hold ? "true" : "false")
                   << std::endl;
         std::cout << "   Is Permanent: "
@@ -274,8 +263,6 @@ show_main_db_info (const std::string &path)
                   << std::endl;
         std::cout << "   Light Weight Meeting Count Changed: "
                   << call.light_weight_meeting_count_changed << std::endl;
-        std::cout << "   Meeting Details: " << call.meeting_details
-                  << std::endl;
         std::cout << "   Members:\n" << call.members.dump (8) << std::endl;
         std::cout << "   Mike Status: " << call.mike_status << std::endl;
         std::cout << "   Name: " << call.name << std::endl;
@@ -295,8 +282,6 @@ show_main_db_info (const std::string &path)
         std::cout << "   Pstn Status: " << call.pstn_status << std::endl;
         std::cout << "   Quality Problems: " << call.quality_problems
                   << std::endl;
-        std::cout << "   Queue Info: " << call.queue_info << std::endl;
-        std::cout << "   Role: " << call.role << std::endl;
         std::cout << "   Server Identity: " << call.server_identity
                   << std::endl;
         std::cout << "   Soundlevel: " << call.soundlevel << std::endl;
@@ -304,12 +289,7 @@ show_main_db_info (const std::string &path)
                   << std::endl;
         std::cout << "   Status: " << call.status << std::endl;
         std::cout << "   Technology: " << call.technology << std::endl;
-        std::cout << "   Tenant Id: " << call.tenant_id << std::endl;
         std::cout << "   Topic: " << call.topic << std::endl;
-        std::cout << "   Transferor Displayname: "
-                  << call.transferor_displayname << std::endl;
-        std::cout << "   Transferor Type: " << call.transferor_type
-                  << std::endl;
         std::cout << "   Type: " << call.type << std::endl;
         std::cout << "   Vaa Input Status: " << call.vaa_input_status
                   << std::endl;
@@ -321,13 +301,9 @@ show_main_db_info (const std::string &path)
             std::cout << "         Record Index: " << cm.idx << std::endl;
             std::cout << "         Admit Failure Reason: "
                       << cm.admit_failure_reason << std::endl;
-            std::cout << "         Balance Update: " << cm.balance_update
-                      << std::endl;
             std::cout << "         Call Db Id: " << cm.call_db_id << std::endl;
             std::cout << "         Call Duration: " << cm.call_duration
                       << std::endl;
-            std::cout << "         Call End Diagnostics Code: "
-                      << cm.call_end_diagnostics_code << std::endl;
             std::cout << "         Call Name: " << cm.call_name << std::endl;
             std::cout << "         Call Session Guid: " << cm.call_session_guid
                       << std::endl;
@@ -373,8 +349,6 @@ show_main_db_info (const std::string &path)
             std::cout << "         Languages: " << cm.languages << std::endl;
             std::cout << "         Light Weight Meeting Role: "
                       << cm.light_weight_meeting_role << std::endl;
-            std::cout << "         Limiting Factor: " << cm.limiting_factor
-                      << std::endl;
             std::cout << "         Mike Status: " << cm.mike_status
                       << std::endl;
             std::cout << "         Next Redial Time: " << cm.next_redial_time
@@ -409,9 +383,6 @@ show_main_db_info (const std::string &path)
                       << std::endl;
             std::cout << "         Recovery In Progress: "
                       << cm.recovery_in_progress << std::endl;
-            std::cout << "         Role: " << cm.role << std::endl;
-            std::cout << "         Seconds Left: " << cm.seconds_left
-                      << std::endl;
             std::cout << "         Sounderror Code: " << cm.sounderror_code
                       << std::endl;
             std::cout << "         Soundlevel: " << cm.soundlevel << std::endl;
@@ -512,8 +483,6 @@ show_main_db_info (const std::string &path)
                   << std::endl;
         std::cout << "   Extprop External Data: " << ct.extprop_external_data
                   << std::endl;
-        std::cout << "   Extprop SMS PSTN Contact Created: "
-                  << ct.extprop_sms_pstn_contact_created << std::endl;
         std::cout << "   Firstname: " << ct.firstname << std::endl;
         std::cout << "   Fullname: " << ct.fullname << std::endl;
         std::cout << "   Gender: " << ct.gender << std::endl;
@@ -695,6 +664,11 @@ show_main_db_info (const std::string &path)
         std::cout << "   Timestamp: " << cm.timestamp << std::endl;
         std::cout << "   Type: " << cm.type << std::endl;
 
+        std::cout << "   Parsed content: " << std::endl;
+        for (const auto &pc : cm.content)
+            std::cout << "         [" << pc.get ("type")
+                      << "]: " << pc.get ("text") << std::endl;
+
         for (const auto &p : cm.participants)
         {
             std::cout << "   Participant:" << std::endl;
@@ -704,8 +678,6 @@ show_main_db_info (const std::string &path)
                       << p.adding_in_progress_since << std::endl;
             std::cout << "         Convo Id: " << p.convo_id << std::endl;
             std::cout << "         Debuginfo: " << p.debuginfo << std::endl;
-            std::cout << "         Extprop Default Identity: "
-                      << p.extprop_default_identity << std::endl;
             std::cout << "         Id: " << p.id << std::endl;
             std::cout << "         Identity: " << p.identity << std::endl;
             std::cout << "         Is Multiparty Video Capable: "
@@ -871,14 +843,14 @@ main (int argc, char **argv)
     {
         switch (opt)
         {
-        case 'h':
-            usage ();
-            exit (EXIT_SUCCESS);
-            break;
+            case 'h':
+                usage ();
+                exit (EXIT_SUCCESS);
+                break;
 
-        default:
-            usage ();
-            exit (EXIT_FAILURE);
+            default:
+                usage ();
+                exit (EXIT_FAILURE);
         }
     }
 

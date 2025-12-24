@@ -3,9 +3,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C)
-// 2008-2026
-// Eduardo Aguiar
+// Copyright (C) 2008-2026 Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -24,6 +22,7 @@
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/reader.hpp>
+#include <mobius/core/pod/map.hpp>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -354,17 +353,11 @@ class file_main_db
         // @brief Admit Failure Reason
         std::int64_t admit_failure_reason;
 
-        // @brief Balance Update
-        std::string balance_update;
-
         // @brief Call Db Id
         std::int64_t call_db_id;
 
         // @brief Call Duration
         std::int64_t call_duration;
-
-        // @brief Call End Diagnostics Code
-        std::string call_end_diagnostics_code;
 
         // @brief Call Name
         std::string call_name;
@@ -441,9 +434,6 @@ class file_main_db
         // @brief Light Weight Meeting Role
         std::int64_t light_weight_meeting_role;
 
-        // @brief Limiting Factor
-        std::int64_t limiting_factor;
-
         // @brief Mike Status
         std::int64_t mike_status;
 
@@ -497,12 +487,6 @@ class file_main_db
 
         // @brief Recovery In Progress
         std::int64_t recovery_in_progress;
-
-        // @brief Role
-        std::string role;
-
-        // @brief Seconds Left
-        std::int64_t seconds_left;
 
         // @brief Sounderror Code
         std::int64_t sounderror_code;
@@ -570,14 +554,8 @@ class file_main_db
         // @brief Begin Timestamp
         mobius::core::datetime::datetime begin_timestamp;
 
-        // @brief Broadcast Metadata
-        std::string broadcast_metadata;
-
         // @brief Conf Participants
         mobius::core::bytearray conf_participants;
-
-        // @brief Content Sharing Session Count Changed
-        std::int64_t content_sharing_session_count_changed;
 
         // @brief Conv Dbid
         std::int64_t conv_dbid;
@@ -609,14 +587,8 @@ class file_main_db
         // @brief Is Incoming
         bool is_incoming;
 
-        // @brief Is Incoming One On One Video Call
-        bool is_incoming_one_on_one_video_call;
-
         // @brief Is Muted
         bool is_muted;
-
-        // @brief Is Muted Speaker
-        bool is_muted_speaker;
 
         // @brief Is On Hold
         bool is_on_hold;
@@ -638,9 +610,6 @@ class file_main_db
 
         // @brief Light Weight Meeting Count Changed
         std::int64_t light_weight_meeting_count_changed;
-
-        // @brief Meeting Details
-        std::string meeting_details;
 
         // @brief Members
         mobius::core::bytearray members;
@@ -681,12 +650,6 @@ class file_main_db
         // @brief Quality Problems
         std::string quality_problems;
 
-        // @brief Queue Info
-        std::string queue_info;
-
-        // @brief Role
-        std::string role;
-
         // @brief Server Identity
         std::string server_identity;
 
@@ -702,17 +665,8 @@ class file_main_db
         // @brief Technology
         std::int64_t technology;
 
-        // @brief Tenant Id
-        std::string tenant_id;
-
         // @brief Topic
         std::string topic;
-
-        // @brief Transferor Displayname
-        std::string transferor_displayname;
-
-        // @brief Transferor Type
-        std::string transferor_type;
 
         // @brief Type
         std::int64_t type;
@@ -854,9 +808,6 @@ class file_main_db
 
         // @brief Extprop External Data
         std::string extprop_external_data;
-
-        // @brief Extprop Sms Pstn Contact Created
-        std::int64_t extprop_sms_pstn_contact_created;
 
         // @brief Firstname
         std::string firstname;
@@ -1141,16 +1092,13 @@ class file_main_db
         std::int64_t adding_in_progress_since;
 
         // @brief Convo Id
-        std::int64_t convo_id;
+        std::int64_t convo_id = 0;
 
         // @brief Debuginfo
         std::string debuginfo;
 
-        // @brief Extprop Default Identity
-        std::int64_t extprop_default_identity;
-
         // @brief Id
-        std::int64_t id;
+        std::int64_t id = 0;
 
         // @brief Identity
         std::string identity;
@@ -1356,6 +1304,9 @@ class file_main_db
         // @brief Type
         std::int64_t type;
 
+        // @brief Parsed content
+        std::vector<mobius::core::pod::map> content;
+        
         // @brief Message Participants
         std::vector<message_participant> participants;
     };

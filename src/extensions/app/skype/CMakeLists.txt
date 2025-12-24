@@ -34,6 +34,7 @@ add_library(app_skype MODULE
     file_main_db.cpp
     file_s4l_db.cpp
     file_skype_db.cpp
+    parse_message.cpp
     profile.cpp
     vfs_processor_impl.cpp
 )
@@ -48,6 +49,7 @@ add_executable(tools_skype_main_db
     tools/skype_main_db.cpp
     common.cpp
     file_main_db.cpp
+    parse_message.cpp
 )
 
 set_target_properties(tools_skype_main_db PROPERTIES OUTPUT_NAME "skype_main_db")
