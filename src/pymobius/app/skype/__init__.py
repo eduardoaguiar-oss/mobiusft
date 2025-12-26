@@ -16,7 +16,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import pymobius.operating_system
-import pymobius.app.skype.skype.profile
+# import pymobius.app.skype.skype.profile
 import pymobius.app.skype.app.profile
 import pymobius.app.skype.app_v14.profile
 
@@ -50,8 +50,8 @@ class model (object):
       for user_profile in opsys.get_profiles ():
 
         # Skype
-        folder = user_profile.get_entry_by_path ('%appdata%/Skype')
-        self.__load_profiles_from_skype_folder (folder, user_profile.username)
+        # folder = user_profile.get_entry_by_path ('%appdata%/Skype')
+        # self.__load_profiles_from_skype_folder (folder, user_profile.username)
 
         # Skype App
         folder = user_profile.get_entry_by_path ('%localappdata%/Packages/Microsoft.SkypeApp_kzf8qxf38zg5c/LocalState')

@@ -402,7 +402,7 @@ MODEL = [
                       args(id='recipients', format="chat-message-recipients", is_sortable=True),
                       args(id="text", format="chat-message-text", is_sortable=True, is_markup=True),
                       args(id='username', name="User name", is_sortable=True),
-                      args(id="app", name="Application", is_sortable=True),
+                      args(id="app_name", name="Application", is_sortable=True),
                   ]),
          ],
          detail_views=[

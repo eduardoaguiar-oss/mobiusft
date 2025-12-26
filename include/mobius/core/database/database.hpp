@@ -3,9 +3,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C)
-// 2008-2026
-// Eduardo Aguiar
+// Copyright (C) 2008-2026 Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -25,6 +23,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace mobius::core::database
 {
@@ -58,6 +57,7 @@ class database
     void execute (const std::string &);
     statement new_statement (const std::string &);
     statement new_statement (const std::string &, std::int64_t);
+    statement new_select_statement (const std::string &, const std::vector<std::string>&);
     transaction new_transaction ();
     void end_transaction ();
     std::string get_path () const;

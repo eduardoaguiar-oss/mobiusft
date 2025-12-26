@@ -376,7 +376,7 @@ class TS_Property(object):
         self.name = data[pos: pos + name_length].decode('utf-16')
         pos += name_length
 
-        value = mobius.core.encoder.hexstring(data[pos: pos + value_length])
+        value = mobius.core.decoder.hexstring(data[pos: pos + value_length].decode('ascii'))
         pos += value_length
 
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -391,10 +391,10 @@ class TS_Property(object):
         elif self.name in (
         'CtxWFHomeDir', 'CtxWFHomeDirDrive', 'CtxInitialProgram', 'CtxWFProfilePath', 'CtxWorkDirectory',
         'CtxCallbackNumber'):
-            self.value = value.rstrip(' \0')
+            self.value = value.decode('cp1252').rstrip(' \0')
 
         elif self.name == 'CtxMinEncryptionLevel':
-            self.value = ord(value[0])
+            self.value = value[0]
 
         elif self.name == 'msNPAllowDialin':
             self.value = value.decode('utf-16').rstrip('\0 ')

@@ -87,6 +87,7 @@ class vfs_processor_impl::impl
     void _save_app_profiles ();
     void _save_calls ();
     void _save_contacts ();
+    void _save_messages ();
     void _save_received_files ();
     void _save_remote_party_ip_addresses ();
     void _save_sent_files ();
@@ -130,6 +131,7 @@ vfs_processor_impl::impl::on_complete ()
     _save_app_profiles ();
     _save_calls ();
     _save_contacts ();
+    _save_messages ();
     _save_received_files ();
     _save_remote_party_ip_addresses ();
     _save_sent_files ();
@@ -260,6 +262,7 @@ vfs_processor_impl::impl::_save_app_profiles ()
 
         // Metadata
         auto metadata = mobius::core::pod::map ();
+
         metadata.set ("skype_id", p.get_account_id ());
         metadata.set ("skype_name", p.get_account_name ());
         metadata.set ("num_accounts", p.size_accounts ());
@@ -362,6 +365,39 @@ vfs_processor_impl::impl::_save_contacts ()
             // Tags and sources
             e.set_tag ("app.chat");
             e.add_source (c.f);
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save messages
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::impl::_save_messages ()
+{
+    for (const auto &p : profiles_)
+    {
+        for (const auto &m : p.get_messages ())
+        {
+            auto e = item_.new_evidence ("chat-message");
+            e.set_attribute ("timestamp", m.timestamp);
+            e.set_attribute ("sender", m.sender);
+            e.set_attribute ("recipients", m.recipients);
+            e.set_attribute ("text", m.content);
+            e.set_attribute ("app_id", APP_ID);
+            e.set_attribute ("app_name", APP_NAME);
+            e.set_attribute ("username", p.get_username ());
+
+            // Set metadata
+            auto metadata = mobius::core::pod::map ();
+            metadata.set ("skype_id", p.get_account_id ());
+            metadata.set ("skype_name", p.get_account_name ());
+            metadata.update (m.metadata);
+            e.set_attribute ("metadata", metadata);
+
+            // Tags and sources
+            e.set_tag ("app.chat");
+            e.add_source (m.f);
         }
     }
 }
@@ -529,12 +565,15 @@ vfs_processor_impl::impl::_save_user_accounts ()
             e.set_attribute ("names", acc.names);
 
             // Set metadata
-            auto metadata = acc.metadata.clone ();
+            auto metadata = mobius::core::pod::map ();
+
             metadata.set ("username", p.get_username ());
             metadata.set ("skype_id", p.get_account_id ());
             metadata.set ("skype_name", p.get_account_name ());
             metadata.set ("app_id", APP_ID);
             metadata.set ("app_name", APP_NAME);
+            metadata.update (acc.metadata);
+
             e.set_attribute ("metadata", metadata);
 
             // Tags and sources

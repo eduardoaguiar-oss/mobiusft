@@ -44,9 +44,6 @@ class file_main_db
         // @brief Record Index
         std::uint64_t idx = 0;
 
-        // @brief Schema version
-        std::uint64_t schema_version = 0;
-
         // @brief About
         std::string about;
 
@@ -69,13 +66,13 @@ class file_main_db
         std::string assigned_speeddial;
 
         // @brief Authorized Time
-        std::int64_t authorized_time = 0;
+        mobius::core::datetime::datetime authorized_time;
 
         // @brief Authreq History
         mobius::core::bytearray authreq_history;
 
         // @brief Authreq Timestamp
-        std::int64_t authreq_timestamp = 0;
+        mobius::core::datetime::datetime authreq_timestamp;
 
         // @brief Authrequest Count
         std::int64_t authrequest_count = 0;
@@ -110,6 +107,9 @@ class file_main_db
         // @brief Cbl Future
         mobius::core::bytearray cbl_future;
 
+        // @brief Cbl Profile Blob
+        mobius::core::bytearray cbl_profile_blob;
+
         // @brief Cblsyncstatus
         std::int64_t cblsyncstatus = 0;
 
@@ -125,6 +125,9 @@ class file_main_db
         // @brief Commitstatus
         std::int64_t commitstatus = 0;
 
+        // @brief Contactssyncstatus
+        std::int64_t contactssyncstatus = 0;
+
         // @brief Country
         std::string country;
 
@@ -136,6 +139,9 @@ class file_main_db
 
         // @brief Federated Presence Policy
         std::int64_t federated_presence_policy = 0; // skype 6
+
+        // @brief Forward Starttime
+        mobius::core::datetime::datetime forward_starttime;
 
         // @brief Flamingo Xmpp Status
         std::int64_t flamingo_xmpp_status = 0; // skype 6
@@ -151,6 +157,9 @@ class file_main_db
 
         // @brief Given Displayname
         std::string given_displayname;
+
+        // @brief Hidden Expression Tabs
+        std::string hidden_expression_tabs;
 
         // @brief Homepage
         std::string homepage;
@@ -188,6 +197,9 @@ class file_main_db
         // @brief Mood Timestamp
         mobius::core::datetime::datetime mood_timestamp;
 
+        // @brief Msa Pmn
+        std::string msa_pmn;
+
         // @brief Node Capabilities
         std::int64_t node_capabilities = 0;
 
@@ -205,6 +217,9 @@ class file_main_db
 
         // @brief Offline Callforward
         std::string offline_callforward;
+
+        // @brief Option Ui Color
+        std::string option_ui_color;
 
         // @brief Options Change Future
         mobius::core::bytearray options_change_future; // skype 6
@@ -248,6 +263,9 @@ class file_main_db
         // @brief Pwdchangestatus
         std::int64_t pwdchangestatus = 0;
 
+        // @brief Read Receipt Optout
+        std::int64_t read_receipt_optout;
+
         // @brief Received Authrequest
         std::string received_authrequest;
 
@@ -273,7 +291,7 @@ class file_main_db
         std::int64_t sent_authrequest_serial = 0;
 
         // @brief Sent Authrequest Time
-        std::int64_t sent_authrequest_time = 0;
+        mobius::core::datetime::datetime sent_authrequest_time;
 
         // @brief Service Provider Info
         std::string service_provider_info;
@@ -283,6 +301,9 @@ class file_main_db
 
         // @brief Shortcircuit Sync
         std::int64_t shortcircuit_sync = 0; // skype 6
+
+        // @brief Signin Name
+        std::string signin_name;
 
         // @brief Skype Call Policy
         std::int64_t skype_call_policy = 0;
@@ -343,15 +364,21 @@ class file_main_db
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Call member structure
+    // @brief call_members structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct call_member
     {
         // @brief Record index number
         std::uint64_t idx = 0;
 
+        // @brief Accepted By
+        std::string accepted_by;
+
         // @brief Admit Failure Reason
         std::int64_t admit_failure_reason;
+
+        // @brief Balance Update
+        std::string balance_update;
 
         // @brief Call Db Id
         std::int64_t call_db_id;
@@ -359,11 +386,20 @@ class file_main_db
         // @brief Call Duration
         std::int64_t call_duration;
 
+        // @brief Call End Diagnostics Code
+        std::string call_end_diagnostics_code;
+
         // @brief Call Name
         std::string call_name;
 
         // @brief Call Session Guid
         std::string call_session_guid;
+
+        // @brief Capabilities
+        std::int64_t capabilities;
+
+        // @brief Content Sharing Role
+        std::int64_t content_sharing_role;
 
         // @brief Country
         std::string country;
@@ -377,6 +413,15 @@ class file_main_db
         // @brief Dispname
         std::string dispname;
 
+        // @brief Dominant Speaker Rank
+        std::int64_t dominant_speaker_rank;
+
+        // @brief Endpoint Details
+        std::string endpoint_details;
+
+        // @brief Endpoint Type
+        std::int64_t endpoint_type;
+
         // @brief Failurereason
         std::int64_t failurereason;
 
@@ -388,6 +433,9 @@ class file_main_db
 
         // @brief Forwarded By
         std::string forwarded_by;
+
+        // @brief Group Calling Capabilities
+        std::int64_t group_calling_capabilities;
 
         // @brief Guid
         std::string guid;
@@ -404,29 +452,32 @@ class file_main_db
         // @brief Ip Address
         std::string ip_address;
 
+        // @brief Is Active Speaker
+        bool is_active_speaker = false;
+
         // @brief Is Conference
-        bool is_conference;
+        bool is_conference = false;
 
         // @brief Is Multiparty Video Capable
-        bool is_multiparty_video_capable;
+        bool is_multiparty_video_capable = false;
 
         // @brief Is Permanent
-        bool is_permanent;
+        bool is_permanent = false;
 
         // @brief Is Premium Video Sponsor
-        bool is_premium_video_sponsor;
+        bool is_premium_video_sponsor = false;
 
         // @brief Is Read Only
-        bool is_read_only;
+        bool is_read_only = false;
 
         // @brief Is Seamlessly Upgraded Call
         bool is_seamlessly_upgraded_call;
 
         // @brief Is Server Muted
-        bool is_server_muted;
+        bool is_server_muted = false;
 
         // @brief Is Video Codec Compatible
-        bool is_video_codec_compatible;
+        bool is_video_codec_compatible = false;
 
         // @brief Languages
         std::string languages;
@@ -434,8 +485,14 @@ class file_main_db
         // @brief Light Weight Meeting Role
         std::int64_t light_weight_meeting_role;
 
+        // @brief Limiting Factor
+        std::int64_t limiting_factor;
+
         // @brief Mike Status
         std::int64_t mike_status;
+
+        // @brief Mri Identity
+        std::string mri_identity;
 
         // @brief Next Redial Time
         std::int64_t next_redial_time;
@@ -451,6 +508,9 @@ class file_main_db
 
         // @brief Nrof Redials Left
         std::int64_t nrof_redials_left;
+
+        // @brief Participant Sponsor
+        std::string participant_sponsor;
 
         // @brief Payment Category
         std::string payment_category;
@@ -487,6 +547,12 @@ class file_main_db
 
         // @brief Recovery In Progress
         std::int64_t recovery_in_progress;
+
+        // @brief Role
+        std::string role;
+
+        // @brief Seconds Left
+        std::int64_t seconds_left;
 
         // @brief Sounderror Code
         std::int64_t sounderror_code;
@@ -530,6 +596,9 @@ class file_main_db
         // @brief Version String
         std::string version_string;
 
+        // @brief Video Count Changed
+        std::int64_t video_count_changed;
+
         // @brief Videostatus
         std::int64_t videostatus;
 
@@ -554,17 +623,35 @@ class file_main_db
         // @brief Begin Timestamp
         mobius::core::datetime::datetime begin_timestamp;
 
+        // @brief Broadcast Metadata
+        std::string broadcast_metadata;
+
+        // @brief Caller Mri Identity
+        std::string caller_mri_identity;
+
         // @brief Conf Participants
         mobius::core::bytearray conf_participants;
+
+        // @brief Content Sharing Session Count Changed
+        std::int64_t content_sharing_session_count_changed;
 
         // @brief Conv Dbid
         std::int64_t conv_dbid;
 
+        // @brief Conversation Type
+        std::string conversation_type;
+
         // @brief Current Video Audience
         std::string current_video_audience;
 
+        // @brief Datachannel Object Id
+        std::int64_t datachannel_object_id;
+
         // @brief Duration
         std::int64_t duration;
+
+        // @brief Endpoint Details
+        std::string endpoint_details;
 
         // @brief Failurecode
         std::int64_t failurecode;
@@ -572,47 +659,77 @@ class file_main_db
         // @brief Failurereason
         std::int64_t failurereason;
 
+        // @brief Forwarding Destination Type
+        std::string forwarding_destination_type;
+
         // @brief Host Identity
         std::string host_identity;
 
         // @brief Id
         std::int64_t id;
 
+        // @brief Incoming Type
+        std::string incoming_type;
+
         // @brief Is Active
-        bool is_active;
+        bool is_active = false;
 
         // @brief Is Conference
-        bool is_conference;
+        bool is_conference = false;
+
+        // @brief Is Hostless
+        bool is_hostless = false;
 
         // @brief Is Incoming
-        bool is_incoming;
+        bool is_incoming = false;
+
+        // @brief Is Incoming One On One Video Call
+        bool is_incoming_one_on_one_video_call = false;
 
         // @brief Is Muted
-        bool is_muted;
+        bool is_muted = false;
+
+        // @brief Is Muted Speaker
+        bool is_muted_speaker = false;
 
         // @brief Is On Hold
-        bool is_on_hold;
+        bool is_on_hold = false;
 
         // @brief Is Permanent
-        bool is_permanent;
+        bool is_permanent = false;
 
         // @brief Is Premium Video Sponsor
-        bool is_premium_video_sponsor;
+        bool is_premium_video_sponsor = false;
 
         // @brief Is Server Muted
-        bool is_server_muted;
+        bool is_server_muted = false;
 
         // @brief Is Unseen Missed
-        bool is_unseen_missed;
+        bool is_unseen_missed = false;
 
         // @brief Joined Existing
         std::int64_t joined_existing;
 
+        // @brief Leg Id
+        std::string leg_id;
+
         // @brief Light Weight Meeting Count Changed
         std::int64_t light_weight_meeting_count_changed;
 
+        // @brief Max Videoconfcall Participants
+        std::int64_t max_videoconfcall_participants;
+
+        // @brief Meeting Details
+        std::string meeting_details;
+
+        // @brief Member Count Changed
+        std::int64_t member_count_changed;
+
         // @brief Members
         mobius::core::bytearray members;
+
+        // @brief Message Id
+        std::string message_id;
 
         // @brief Mike Status
         std::int64_t mike_status;
@@ -625,6 +742,12 @@ class file_main_db
 
         // @brief Old Members
         mobius::core::bytearray old_members;
+
+        // @brief Onbehalfof Mri
+        std::string onbehalfof_mri;
+
+        // @brief Optimal Remote Videos In Conference
+        std::int64_t optimal_remote_videos_in_conference;
 
         // @brief Partner Dispname
         std::string partner_dispname;
@@ -650,6 +773,12 @@ class file_main_db
         // @brief Quality Problems
         std::string quality_problems;
 
+        // @brief Queue Info
+        std::string queue_info;
+
+        // @brief Role
+        std::string role;
+
         // @brief Server Identity
         std::string server_identity;
 
@@ -665,8 +794,29 @@ class file_main_db
         // @brief Technology
         std::int64_t technology;
 
+        // @brief Tenant Id
+        std::string tenant_id;
+
+        // @brief Thread Id
+        std::string thread_id;
+
         // @brief Topic
         std::string topic;
+
+        // @brief Transfer Failure Reason
+        std::int64_t transfer_failure_reason;
+
+        // @brief Transfer Status
+        std::int64_t transfer_status;
+
+        // @brief Transferor Displayname
+        std::string transferor_displayname;
+
+        // @brief Transferor Mri
+        std::string transferor_mri;
+
+        // @brief Transferor Type
+        std::string transferor_type;
 
         // @brief Type
         std::int64_t type;
@@ -758,6 +908,12 @@ class file_main_db
         // @brief Availability
         std::int64_t availability;
 
+        // @brief Avatar Hiresurl
+        std::string avatar_hiresurl;
+
+        // @brief Avatar Hiresurl New
+        std::string avatar_hiresurl_new;
+
         // @brief Avatar Image
         mobius::core::bytearray avatar_image;
 
@@ -766,6 +922,9 @@ class file_main_db
 
         // @brief Avatar Url
         std::string avatar_url;
+
+        // @brief Avatar Url New
+        std::string avatar_url_new;
 
         // @brief Birthday
         std::string birthday;
@@ -794,6 +953,9 @@ class file_main_db
         // @brief Country
         std::string country;
 
+        // @brief Dirblob Last Search Time
+        mobius::core::datetime::datetime dirblob_last_search_time;
+
         // @brief Displayname
         std::string displayname;
 
@@ -806,8 +968,32 @@ class file_main_db
         // @brief External System Id
         std::string external_system_id;
 
+        // @brief Extprop Can Show Avatar
+        std::int64_t extprop_can_show_avatar;
+
+        // @brief Extprop Contact Ab Uuid
+        std::string extprop_contact_ab_uuid;
+
         // @brief Extprop External Data
         std::string extprop_external_data;
+
+        // @brief Extprop Last Sms Number
+        std::string extprop_last_sms_number;
+
+        // @brief Extprop Must Hide Avatar
+        std::int64_t extprop_must_hide_avatar;
+
+        // @brief Extprop Seen Birthday
+        std::int64_t extprop_seen_birthday;
+
+        // @brief Extprop Sms Pstn Contact Created
+        std::int64_t extprop_sms_pstn_contact_created;
+
+        // @brief Extprop Sms Target
+        std::int64_t extprop_sms_target;
+
+        // @brief Extprop Viral Upgrade Campaign Id
+        std::int64_t extprop_viral_upgrade_campaign_id;
 
         // @brief Firstname
         std::string firstname;
@@ -843,22 +1029,22 @@ class file_main_db
         std::string ipcountry;
 
         // @brief Is Auto Buddy
-        bool is_auto_buddy;
+        std::int64_t is_auto_buddy;
 
         // @brief Is Mobile
-        bool is_mobile;
+        std::int64_t is_mobile;
 
         // @brief Is Permanent
-        bool is_permanent;
+        std::int64_t is_permanent;
 
         // @brief Is Trusted
-        bool is_trusted;
+        std::int64_t is_trusted;
 
         // @brief Isauthorized
-        bool isauthorized;
+        std::int64_t isauthorized;
 
         // @brief Isblocked
-        bool isblocked;
+        std::int64_t isblocked;
 
         // @brief Languages
         std::string languages;
@@ -886,6 +1072,9 @@ class file_main_db
 
         // @brief Mood Timestamp
         mobius::core::datetime::datetime mood_timestamp;
+
+        // @brief Mutual Friend Count
+        std::int64_t mutual_friend_count;
 
         // @brief Network Availability
         std::int64_t network_availability;
@@ -932,6 +1121,12 @@ class file_main_db
         // @brief Profile Attachments
         mobius::core::bytearray profile_attachments;
 
+        // @brief Profile Etag
+        std::string profile_etag;
+
+        // @brief Profile Json
+        std::string profile_json;
+
         // @brief Profile Timestamp
         mobius::core::datetime::datetime profile_timestamp;
 
@@ -969,7 +1164,7 @@ class file_main_db
         std::int64_t sent_authrequest_serial;
 
         // @brief Sent Authrequest Time
-        std::int64_t sent_authrequest_time;
+        mobius::core::datetime::datetime sent_authrequest_time;
 
         // @brief Server Synced
         std::int64_t server_synced;
@@ -1022,6 +1217,21 @@ class file_main_db
         // @brief Convo Id
         std::int64_t convo_id;
 
+        // @brief Extprop Handled By Chat
+        std::int64_t extprop_handled_by_chat;
+
+        // @brief Extprop Hide From History
+        std::int64_t extprop_hide_from_history;
+
+        // @brief Extprop Localfilename
+        std::string extprop_localfilename;
+
+        // @brief Extprop Transfer Alias
+        mobius::core::bytearray extprop_transfer_alias;
+
+        // @brief Extprop Window Visible
+        std::int64_t extprop_window_visible;
+
         // @brief Failurereason
         std::int64_t failurereason;
 
@@ -1052,11 +1262,17 @@ class file_main_db
         // @brief Nodeid
         mobius::core::bytearray nodeid;
 
+        // @brief Offer Send List
+        std::string offer_send_list;
+
         // @brief Old Filepath
         std::int64_t old_filepath;
 
         // @brief Old Status
         std::int64_t old_status;
+
+        // @brief Parent Id
+        std::int64_t parent_id;
 
         // @brief Partner Dispname
         std::string partner_dispname;
@@ -1097,29 +1313,47 @@ class file_main_db
         // @brief Debuginfo
         std::string debuginfo;
 
+        // @brief Dominant Speaker Rank
+        std::int64_t dominant_speaker_rank;
+
+        // @brief Endpoint Details
+        std::string endpoint_details;
+
+        // @brief Extprop Default Identity
+        std::int64_t extprop_default_identity;
+
+        // @brief Extprop Identity To Use
+        std::int64_t extprop_identity_to_use;
+
+        // @brief Group Calling Capabilities
+        std::int64_t group_calling_capabilities;
+
         // @brief Id
         std::int64_t id = 0;
 
         // @brief Identity
         std::string identity;
 
+        // @brief Is Active Speaker
+        bool is_active_speaker = false;
+
         // @brief Is Multiparty Video Capable
-        std::int64_t is_multiparty_video_capable;
+        bool is_multiparty_video_capable = false;
 
         // @brief Is Multiparty Video Updatable
-        std::int64_t is_multiparty_video_updatable;
+        bool is_multiparty_video_updatable = false;
 
         // @brief Is Permanent
         bool is_permanent = false;
 
         // @brief Is Premium Video Sponsor
-        std::int64_t is_premium_video_sponsor;
+        bool is_premium_video_sponsor = false;
 
         // @brief Is Seamlessly Upgraded Call
-        std::int64_t is_seamlessly_upgraded_call;
+        bool is_seamlessly_upgraded_call = false;
 
         // @brief Is Video Codec Compatible
-        std::int64_t is_video_codec_compatible;
+        bool is_video_codec_compatible = false;
 
         // @brief Last Leavereason
         std::int64_t last_leavereason;
@@ -1160,6 +1394,9 @@ class file_main_db
         // @brief Livesession Recovery In Progress
         std::int64_t livesession_recovery_in_progress;
 
+        // @brief Messaging Mode
+        std::int64_t messaging_mode;
+
         // @brief Next Redial Time
         std::int64_t next_redial_time;
 
@@ -1172,6 +1409,9 @@ class file_main_db
         // @brief Rank
         std::int64_t rank;
 
+        // @brief Read Horizon
+        std::int64_t read_horizon;
+
         // @brief Real Identity
         std::string real_identity;
 
@@ -1180,6 +1420,9 @@ class file_main_db
 
         // @brief Sound Level
         std::int64_t sound_level;
+
+        // @brief Sponsor
+        std::string sponsor;
 
         // @brief Text Status
         std::int64_t text_status;
@@ -1205,6 +1448,9 @@ class file_main_db
         // @brief Record index number
         std::uint64_t idx = 0;
 
+        // @brief Annotation Version
+        std::int64_t annotation_version;
+
         // @brief Author
         std::string author;
 
@@ -1216,6 +1462,9 @@ class file_main_db
 
         // @brief Body Xml
         std::string body_xml;
+
+        // @brief Bots Settings
+        std::string bots_settings;
 
         // @brief Call Guid
         std::string call_guid;
@@ -1231,6 +1480,9 @@ class file_main_db
 
         // @brief Consumption Status
         std::int64_t consumption_status;
+
+        // @brief Content Flags
+        std::int64_t content_flags;
 
         // @brief Convo Id
         std::int64_t convo_id;
@@ -1250,6 +1502,33 @@ class file_main_db
         // @brief Error Code
         std::int64_t error_code;
 
+        // @brief Extprop Chatmsg Ft Index Timestamp
+        mobius::core::datetime::datetime extprop_chatmsg_ft_index_timestamp;
+
+        // @brief Extprop Chatmsg Is Pending
+        std::int64_t extprop_chatmsg_is_pending;
+
+        // @brief Extprop Contact Received Stamp
+        std::int64_t extprop_contact_received_stamp;
+
+        // @brief Extprop Contact Review Date
+        std::string extprop_contact_review_date;
+
+        // @brief Extprop Contact Reviewed
+        std::int64_t extprop_contact_reviewed;
+
+        // @brief Extprop Mms Msg Metadata
+        std::string extprop_mms_msg_metadata;
+
+        // @brief Extprop Sms Server Id
+        std::string extprop_sms_server_id;
+
+        // @brief Extprop Sms Src Msg Id
+        std::string extprop_sms_src_msg_id;
+
+        // @brief Extprop Sms Sync Global Id
+        std::string extprop_sms_sync_global_id;
+
         // @brief From Dispname
         std::string from_dispname;
 
@@ -1265,6 +1544,9 @@ class file_main_db
         // @brief Is Permanent
         bool is_permanent = false;
 
+        // @brief Language
+        std::string language;
+
         // @brief Leavereason
         std::int64_t leavereason;
 
@@ -1276,6 +1558,9 @@ class file_main_db
 
         // @brief Oldoptions
         std::int64_t oldoptions;
+
+        // @brief Option Bits
+        std::int64_t option_bits;
 
         // @brief Param Key
         std::int64_t param_key;
@@ -1289,6 +1574,9 @@ class file_main_db
         // @brief Pk Id
         std::int64_t pk_id;
 
+        // @brief Reaction Thread
+        std::string reaction_thread;
+
         // @brief Reason
         std::string reason;
 
@@ -1298,15 +1586,21 @@ class file_main_db
         // @brief Sending Status
         std::int64_t sending_status;
 
+        // @brief Server Id
+        std::int64_t server_id;
+
         // @brief Timestamp
         mobius::core::datetime::datetime timestamp;
+
+        // @brief Timestamp  Ms
+        std::int64_t timestamp__ms;
 
         // @brief Type
         std::int64_t type;
 
         // @brief Parsed content
         std::vector<mobius::core::pod::map> content;
-        
+
         // @brief Message Participants
         std::vector<message_participant> participants;
     };
@@ -1333,6 +1627,12 @@ class file_main_db
 
         // @brief Event Flags
         std::int64_t event_flags;
+
+        // @brief Extprop Extended
+        std::int64_t extprop_extended;
+
+        // @brief Extprop Hide From History
+        std::int64_t extprop_hide_from_history;
 
         // @brief Failurereason
         std::int64_t failurereason;
@@ -1405,6 +1705,9 @@ class file_main_db
 
         // @brief Duration
         std::int64_t duration;
+
+        // @brief Extprop Hide From History
+        std::int64_t extprop_hide_from_history;
 
         // @brief Failurereason
         std::int64_t failurereason;

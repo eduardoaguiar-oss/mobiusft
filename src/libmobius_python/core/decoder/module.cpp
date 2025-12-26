@@ -44,6 +44,7 @@ PyObject *decoder_func_base64 (PyObject *, PyObject *);
 PyObject *decoder_func_base64url (PyObject *, PyObject *);
 PyObject *decoder_func_btencode (PyObject *, PyObject *);
 PyObject *decoder_func_get_filetype (PyObject *, PyObject *);
+PyObject *decoder_func_hexstring (PyObject *, PyObject *);
 
 namespace
 {
@@ -61,6 +62,7 @@ static PyMethodDef module_methods[] = {
     {"btencode", decoder_func_btencode, METH_VARARGS, "Decode BTencode data"},
     {"get_filetype", decoder_func_get_filetype, METH_VARARGS,
      "Get filetype from file content"},
+    {"hexstring", decoder_func_hexstring, METH_VARARGS, "Decoder hex string"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 

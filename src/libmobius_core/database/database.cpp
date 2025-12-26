@@ -1,8 +1,6 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C)
-// 2008-2026
-// Eduardo Aguiar
+// Copyright (C) 2008-2026 Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -24,6 +22,7 @@
 #include <sqlite3.h>
 #include <stdexcept>
 #include <thread>
+#include <unordered_set>
 
 namespace
 {
@@ -111,7 +110,7 @@ get_column (const std::string &exp, std::int64_t version)
 
                 if (end_version_str == "*")
                     end_version = std::numeric_limits<int64_t>::max ();
-                    
+
                 else
                     end_version = std::stoll (end_version_str);
             }
@@ -321,6 +320,85 @@ database::new_statement (const std::string &pattern, int64_t schema_version)
         // No need to advance pos since the replacement might be shorter than
         // the placeholder
     }
+
+    return new_statement (sql);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create new select statement object
+// @param table_name Table name
+// @param columns Vector of column names
+// @return statement object
+// Generate a SELECT statement for the given table and columns, checking if
+// columns exist in the table. If not, use NULL as the column in the SELECT statement.
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+statement
+database::new_select_statement (
+    const std::string &table_name, const std::vector<std::string> &columns
+)
+{
+    // Query table columns via PRAGMA table_info and cache them
+    std::unordered_set<std::string> existing_columns;
+    sqlite3_stmt *pragma_stmt = nullptr;
+    std::string pragma_sql = "PRAGMA table_info('" + table_name + "')";
+
+    int rc = SQLITE_BUSY;
+    while (rc == SQLITE_BUSY)
+    {
+        rc = sqlite3_prepare_v2 (
+            impl_->db, pragma_sql.c_str (), -1, &pragma_stmt, nullptr
+        );
+
+        if (rc == SQLITE_BUSY)
+            std::this_thread::sleep_for (
+                std::chrono::microseconds (SLEEP_TIME)
+            );
+    }
+
+    if (rc != SQLITE_OK)
+    {
+        if (pragma_stmt)
+            sqlite3_finalize (pragma_stmt);
+        throw std::runtime_error (MOBIUS_EXCEPTION_SQLITE);
+    }
+
+    while (sqlite3_step (pragma_stmt) == SQLITE_ROW)
+    {
+        const unsigned char *name =
+            sqlite3_column_text (pragma_stmt, 1); // name is column index 1
+        if (name)
+            existing_columns.emplace (reinterpret_cast<const char *> (name));
+    }
+
+    sqlite3_finalize (pragma_stmt);
+
+    // Local checker that uses cached pragma results (shadows the member function)
+    auto has_column = [&] (const std::string &, const std::string &col) -> bool
+    {
+        return std::find (
+                   existing_columns.begin (), existing_columns.end (), col
+               ) != existing_columns.end ();
+    };
+
+    std::string sql = "SELECT ";
+    bool first = true;
+
+    for (const auto &column : columns)
+    {
+        std::string column_name;
+
+        if (has_column (table_name, column))
+            column_name = column;
+        else
+            column_name = "NULL";
+
+        if (!first)
+            sql += ", ";
+
+        sql += column_name;
+        first = false;
+    }
+    sql += " FROM " + table_name;
 
     return new_statement (sql);
 }

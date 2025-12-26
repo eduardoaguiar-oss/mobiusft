@@ -434,6 +434,7 @@ class profile::impl
     void _set_entry (const mobius::core::io::entry &);
     void _update_mtime (const mobius::core::io::file &);
     std::string _get_skypename (const std::string &) const;
+    std::string _get_account_name (const std::string &) const;
     void _set_skypename (const std::string &, const std::string &);
     void _normalize_data ();
 
@@ -546,20 +547,40 @@ profile::impl::_update_mtime (const mobius::core::io::file &f)
 std::string
 profile::impl::_get_skypename (const std::string &skype_name) const
 {
-    if (skype_name.find ('(') != std::string::npos)
-        return skype_name; // Already in "Full Name (skype_name)" format
+    std::string full_name;
 
+    if (!skype_name.empty ())
+    {
+        auto it = skypename_cache_.find (skype_name);
+
+        if (it != skypename_cache_.end ())
+        {
+            full_name = it->second;
+
+            if (!full_name.empty () && full_name != skype_name)
+                full_name += " (" + skype_name + ")";
+        }
+        else
+            full_name = skype_name;
+    }
+
+    return full_name;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get accout name
+// @param Skype name
+// @return Account name, if found
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+profile::impl::_get_account_name (const std::string &skype_name) const
+{
     auto it = skypename_cache_.find (skype_name);
 
     if (it != skypename_cache_.end ())
-    {
-        auto full_name = it->second;
+        return it->second;
 
-        if (!full_name.empty () && full_name != skype_name)
-            return full_name + " (" + skype_name + ")";
-    }
-
-    return skype_name;
+    return {};
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -572,7 +593,7 @@ profile::impl::_set_skypename (
     const std::string &skype_name, const std::string &full_name
 )
 {
-    if (!full_name.empty ())
+    if (!skype_name.empty () && !full_name.empty () && skype_name != full_name)
         skypename_cache_[skype_name] = full_name;
 }
 
@@ -610,6 +631,7 @@ profile::impl::add_main_db_file (const mobius::core::io::file &f)
         _load_main_db_calls (fm, f);
         _load_main_db_contacts (fm, f);
         _load_main_db_file_transfers (fm, f);
+        _load_main_db_messages (fm, f);
         _load_main_db_sms_messages (fm, f);
         _load_main_db_voicemails (fm, f);
         _normalize_data ();
@@ -670,44 +692,114 @@ profile::impl::_load_main_db_accounts (
                 balance /= 10.0;
 
             a.metadata.set ("record_idx", acc.idx);
-            a.metadata.set ("schema_version", acc.schema_version);
-            a.metadata.set ("avatar_timestamp", acc.avatar_timestamp);
-            a.metadata.set ("lastonline_timestamp", acc.lastonline_timestamp);
-            a.metadata.set ("lastused_timestamp", acc.lastused_timestamp);
-            a.metadata.set ("mood_timestamp", acc.mood_timestamp);
-            a.metadata.set ("profile_timestamp", acc.profile_timestamp);
-            a.metadata.set (
-                "registration_timestamp", acc.registration_timestamp
-            );
+            a.metadata.set ("schema_version", fm.get_schema_version ());
             a.metadata.set ("about", acc.about);
+            a.metadata.set ("ad_policy", acc.ad_policy);
+            a.metadata.set ("added_in_shared_group", acc.added_in_shared_group);
             a.metadata.set ("alertstring", acc.alertstring);
             a.metadata.set ("aliases", acc.aliases);
             a.metadata.set ("assigned_comment", acc.assigned_comment);
+            a.metadata.set ("assigned_speeddial", acc.assigned_speeddial);
+            a.metadata.set ("authorized_time", acc.authorized_time);
+            a.metadata.set ("authreq_timestamp", acc.authreq_timestamp);
+            a.metadata.set ("authrequest_count", acc.authrequest_count);
+            a.metadata.set ("authrequest_policy", acc.authrequest_policy);
+            a.metadata.set ("availability", acc.availability);
+            a.metadata.set ("avatar_policy", acc.avatar_policy);
+            a.metadata.set ("avatar_timestamp", acc.avatar_timestamp);
             a.metadata.set ("birthday", acc.birthday);
+            a.metadata.set ("buddycount_policy", acc.buddycount_policy);
+            a.metadata.set ("cblsyncstatus", acc.cblsyncstatus);
+            a.metadata.set ("chat_policy", acc.chat_policy);
             a.metadata.set ("city", acc.city);
+            a.metadata.set ("cobrand_id", acc.cobrand_id);
+            a.metadata.set ("commitstatus", acc.commitstatus);
+            a.metadata.set ("contactssyncstatus", acc.contactssyncstatus);
             a.metadata.set ("country", acc.country);
             a.metadata.set ("displayname", acc.displayname);
+            a.metadata.set (
+                "federated_presence_policy", acc.federated_presence_policy
+            );
+            a.metadata.set ("forward_starttime", acc.forward_starttime);
+            a.metadata.set ("flamingo_xmpp_status", acc.flamingo_xmpp_status);
             a.metadata.set ("fullname", acc.fullname);
             a.metadata.set (
                 "gender", get_domain_value (GENDER_DOMAIN, acc.gender)
             );
+            a.metadata.set ("given_authlevel", acc.given_authlevel);
             a.metadata.set ("given_displayname", acc.given_displayname);
+            a.metadata.set (
+                "hidden_expression_tabs", acc.hidden_expression_tabs
+            );
             a.metadata.set ("homepage", acc.homepage);
-            a.metadata.set ("ip_country", acc.ipcountry);
+            a.metadata.set ("id", acc.id);
+            a.metadata.set ("in_shared_group", acc.in_shared_group);
+            a.metadata.set ("ipcountry", acc.ipcountry);
+            a.metadata.set ("is_permanent", acc.is_permanent);
             a.metadata.set ("languages", acc.languages);
+            a.metadata.set ("lastonline_timestamp", acc.lastonline_timestamp);
+            a.metadata.set ("lastused_timestamp", acc.lastused_timestamp);
+            a.metadata.set ("liveid_membername", acc.liveid_membername);
+            a.metadata.set ("logoutreason", acc.logoutreason);
             a.metadata.set ("mood_text", acc.mood_text);
-            a.metadata.set ("phone_home", acc.phone_home);
-            a.metadata.set ("phone_office", acc.phone_office);
-            a.metadata.set ("phone_mobile", acc.phone_mobile);
+            a.metadata.set ("mood_timestamp", acc.mood_timestamp);
+            a.metadata.set ("msa_pmn", acc.msa_pmn);
+            a.metadata.set ("node_capabilities", acc.node_capabilities);
+            a.metadata.set ("node_capabilities_and", acc.node_capabilities_and);
+            a.metadata.set ("nr_of_other_instances", acc.nr_of_other_instances);
+            a.metadata.set ("nrof_authed_buddies", acc.nrof_authed_buddies);
+            a.metadata.set ("offline_authreq_id", acc.offline_authreq_id);
+            a.metadata.set ("offline_callforward", acc.offline_callforward);
+            a.metadata.set ("option_ui_color", acc.option_ui_color);
+            a.metadata.set ("owner_under_legal_age", acc.owner_under_legal_age);
+            a.metadata.set (
+                "partner_channel_status", acc.partner_channel_status
+            );
+            a.metadata.set ("partner_optedout", acc.partner_optedout);
+            a.metadata.set ("phonenumbers_policy", acc.phonenumbers_policy);
+            a.metadata.set ("profile_timestamp", acc.profile_timestamp);
             a.metadata.set ("province", acc.province);
+            a.metadata.set ("pstn_call_policy", acc.pstn_call_policy);
+            a.metadata.set ("pstnnumber", acc.pstnnumber);
+            a.metadata.set ("pwdchangestatus", acc.pwdchangestatus);
+            a.metadata.set ("read_receipt_optout", acc.read_receipt_optout);
+            a.metadata.set ("received_authrequest", acc.received_authrequest);
+            a.metadata.set ("refreshing", acc.refreshing);
+            a.metadata.set (
+                "registration_timestamp", acc.registration_timestamp
+            );
+            a.metadata.set ("revoked_auth", acc.revoked_auth);
             a.metadata.set ("rich_mood_text", acc.rich_mood_text);
+            a.metadata.set (
+                "roaming_history_enabled", acc.roaming_history_enabled
+            );
+            a.metadata.set ("sent_authrequest", acc.sent_authrequest);
+            a.metadata.set (
+                "sent_authrequest_serial", acc.sent_authrequest_serial
+            );
+            a.metadata.set ("sent_authrequest_time", acc.sent_authrequest_time);
+            a.metadata.set ("service_provider_info", acc.service_provider_info);
+            a.metadata.set ("set_availability", acc.set_availability);
+            a.metadata.set ("shortcircuit_sync", acc.shortcircuit_sync);
+            a.metadata.set ("signin_name", acc.signin_name);
+            a.metadata.set ("skype_call_policy", acc.skype_call_policy);
+            a.metadata.set ("skypein_numbers", acc.skypein_numbers);
             a.metadata.set ("skypename", acc.skypename);
-            a.metadata.set ("skypeout_balance", balance);
+            a.metadata.set ("skypeout_balance", acc.skypeout_balance);
             a.metadata.set (
                 "skypeout_balance_currency", acc.skypeout_balance_currency
             );
+            a.metadata.set ("skypeout_precision", acc.skypeout_precision);
+            a.metadata.set ("stack_version", acc.stack_version);
+            a.metadata.set ("status", acc.status);
+            a.metadata.set ("subscriptions", acc.subscriptions);
             a.metadata.set ("suggested_skypename", acc.suggested_skypename);
             a.metadata.set ("timezone", acc.timezone);
+            a.metadata.set ("timezone_policy", acc.timezone_policy);
+            a.metadata.set ("type", acc.type);
+            a.metadata.set ("uses_jcs", acc.uses_jcs);
+            a.metadata.set ("voicemail_policy", acc.voicemail_policy);
+            a.metadata.set ("webpresence_policy", acc.webpresence_policy);
 
             a.f = f;
             accounts_.push_back (a);
@@ -777,20 +869,39 @@ profile::impl::_load_main_db_calls (
             c.metadata.set ("access_token", cl.access_token);
             c.metadata.set ("active_members", cl.active_members);
             c.metadata.set ("begin_timestamp", cl.begin_timestamp);
+            c.metadata.set ("broadcast_metadata", cl.broadcast_metadata);
+            c.metadata.set ("caller_mri_identity", cl.caller_mri_identity);
             c.metadata.set ("conf_participants", cl.conf_participants);
+            c.metadata.set (
+                "content_sharing_session_count_changed",
+                cl.content_sharing_session_count_changed
+            );
             c.metadata.set ("conv_dbid", cl.conv_dbid);
+            c.metadata.set ("conversation_type", cl.conversation_type);
             c.metadata.set (
                 "current_video_audience", cl.current_video_audience
             );
+            c.metadata.set ("datachannel_object_id", cl.datachannel_object_id);
             c.metadata.set ("duration", cl.duration);
+            c.metadata.set ("endpoint_details", cl.endpoint_details);
             c.metadata.set ("failurecode", cl.failurecode);
             c.metadata.set ("failurereason", cl.failurereason);
+            c.metadata.set (
+                "forwarding_destination_type", cl.forwarding_destination_type
+            );
             c.metadata.set ("host_identity", cl.host_identity);
             c.metadata.set ("id", cl.id);
+            c.metadata.set ("incoming_type", cl.incoming_type);
             c.metadata.set ("is_active", cl.is_active);
             c.metadata.set ("is_conference", cl.is_conference);
+            c.metadata.set ("is_hostless", cl.is_hostless);
             c.metadata.set ("is_incoming", cl.is_incoming);
+            c.metadata.set (
+                "is_incoming_one_on_one_video_call",
+                cl.is_incoming_one_on_one_video_call
+            );
             c.metadata.set ("is_muted", cl.is_muted);
+            c.metadata.set ("is_muted_speaker", cl.is_muted_speaker);
             c.metadata.set ("is_on_hold", cl.is_on_hold);
             c.metadata.set ("is_permanent", cl.is_permanent);
             c.metadata.set (
@@ -799,13 +910,25 @@ profile::impl::_load_main_db_calls (
             c.metadata.set ("is_server_muted", cl.is_server_muted);
             c.metadata.set ("is_unseen_missed", cl.is_unseen_missed);
             c.metadata.set ("joined_existing", cl.joined_existing);
+            c.metadata.set ("leg_id", cl.leg_id);
             c.metadata.set (
                 "light_weight_meeting_count_changed",
                 cl.light_weight_meeting_count_changed
             );
+            c.metadata.set (
+                "max_videoconfcall_participants",
+                cl.max_videoconfcall_participants
+            );
+            c.metadata.set ("meeting_details", cl.meeting_details);
+            c.metadata.set ("member_count_changed", cl.member_count_changed);
             c.metadata.set ("mike_status", cl.mike_status);
             c.metadata.set ("name", cl.name);
             c.metadata.set ("old_duration", cl.old_duration);
+            c.metadata.set ("onbehalfof_mri", cl.onbehalfof_mri);
+            c.metadata.set (
+                "optimal_remote_videos_in_conference",
+                cl.optimal_remote_videos_in_conference
+            );
             c.metadata.set ("partner_dispname", cl.partner_dispname);
             c.metadata.set ("partner_handle", cl.partner_handle);
             c.metadata.set (
@@ -826,7 +949,18 @@ profile::impl::_load_main_db_calls (
                 "status", get_domain_value (CALL_STATUS_DOMAIN, cl.status)
             );
             c.metadata.set ("technology", cl.technology);
+            c.metadata.set ("tenant_id", cl.tenant_id);
+            c.metadata.set ("thread_id", cl.thread_id);
             c.metadata.set ("topic", cl.topic);
+            c.metadata.set (
+                "transfer_failure_reason", cl.transfer_failure_reason
+            );
+            c.metadata.set ("transfer_status", cl.transfer_status);
+            c.metadata.set (
+                "transferor_displayname", cl.transferor_displayname
+            );
+            c.metadata.set ("transferor_mri", cl.transferor_mri);
+            c.metadata.set ("transferor_type", cl.transferor_type);
             c.metadata.set ("type", cl.type);
             c.metadata.set ("vaa_input_status", cl.vaa_input_status);
             c.metadata.set ("video_disabled", cl.video_disabled);
@@ -958,15 +1092,17 @@ profile::impl::_load_main_db_contacts (
             c.metadata.set ("assigned_speeddial", ct.assigned_speeddial);
             c.metadata.set ("authorized_time", ct.authorized_time);
             c.metadata.set ("authreq_crc", ct.authreq_crc);
-            c.metadata.set ("authreq_history", ct.authreq_history);
             c.metadata.set ("authreq_initmethod", ct.authreq_initmethod);
-            c.metadata.set ("authreq_nodeinfo", ct.authreq_nodeinfo);
             c.metadata.set ("authreq_src", ct.authreq_src);
             c.metadata.set ("authreq_timestamp", ct.authreq_timestamp);
             c.metadata.set ("authrequest_count", ct.authrequest_count);
             c.metadata.set ("availability", ct.availability);
+            c.metadata.set ("avatar_hiresurl", ct.avatar_hiresurl);
+            c.metadata.set ("avatar_hiresurl_new", ct.avatar_hiresurl_new);
             c.metadata.set ("avatar_timestamp", ct.avatar_timestamp);
             c.metadata.set ("avatar_url", ct.avatar_url);
+            c.metadata.set ("avatar_url_new", ct.avatar_url_new);
+            c.metadata.set ("birthday", ct.birthday);
             c.metadata.set ("buddystatus", ct.buddystatus);
             c.metadata.set (
                 "certificate_send_count", ct.certificate_send_count
@@ -974,25 +1110,54 @@ profile::impl::_load_main_db_contacts (
             c.metadata.set ("city", ct.city);
             c.metadata.set ("contactlist_track", ct.contactlist_track);
             c.metadata.set ("country", ct.country);
+            c.metadata.set (
+                "dirblob_last_search_time", ct.dirblob_last_search_time
+            );
             c.metadata.set ("displayname", ct.displayname);
             c.metadata.set ("external_id", ct.external_id);
             c.metadata.set ("external_system_id", ct.external_system_id);
+            c.metadata.set (
+                "extprop_can_show_avatar", ct.extprop_can_show_avatar
+            );
+            c.metadata.set (
+                "extprop_contact_ab_uuid", ct.extprop_contact_ab_uuid
+            );
             c.metadata.set ("extprop_external_data", ct.extprop_external_data);
+            c.metadata.set (
+                "extprop_last_sms_number", ct.extprop_last_sms_number
+            );
+            c.metadata.set (
+                "extprop_must_hide_avatar", ct.extprop_must_hide_avatar
+            );
+            c.metadata.set ("extprop_seen_birthday", ct.extprop_seen_birthday);
+            c.metadata.set (
+                "extprop_sms_pstn_contact_created",
+                ct.extprop_sms_pstn_contact_created
+            );
+            c.metadata.set ("extprop_sms_target", ct.extprop_sms_target);
+            c.metadata.set (
+                "extprop_viral_upgrade_campaign_id",
+                ct.extprop_viral_upgrade_campaign_id
+            );
             c.metadata.set ("firstname", ct.firstname);
             c.metadata.set ("fullname", ct.fullname);
+            c.metadata.set (
+                "gender", get_domain_value (GENDER_DOMAIN, ct.gender)
+            );
+            c.metadata.set ("given_authlevel", ct.given_authlevel);
             c.metadata.set ("given_displayname", ct.given_displayname);
             c.metadata.set ("group_membership", ct.group_membership);
             c.metadata.set ("hashed_emails", ct.hashed_emails);
             c.metadata.set ("homepage", ct.homepage);
             c.metadata.set ("id", ct.id);
             c.metadata.set ("in_shared_group", ct.in_shared_group);
-            c.metadata.set ("ip_country", ct.ipcountry);
+            c.metadata.set ("ipcountry", ct.ipcountry);
             c.metadata.set ("is_auto_buddy", ct.is_auto_buddy);
             c.metadata.set ("is_mobile", ct.is_mobile);
             c.metadata.set ("is_permanent", ct.is_permanent);
             c.metadata.set ("is_trusted", ct.is_trusted);
-            c.metadata.set ("is_authorized", ct.isauthorized);
-            c.metadata.set ("is_blocked", ct.isblocked);
+            c.metadata.set ("isauthorized", ct.isauthorized);
+            c.metadata.set ("isblocked", ct.isblocked);
             c.metadata.set ("languages", ct.languages);
             c.metadata.set ("last_used_networktime", ct.last_used_networktime);
             c.metadata.set ("lastname", ct.lastname);
@@ -1002,11 +1167,12 @@ profile::impl::_load_main_db_contacts (
             c.metadata.set ("main_phone", ct.main_phone);
             c.metadata.set ("mood_text", ct.mood_text);
             c.metadata.set ("mood_timestamp", ct.mood_timestamp);
+            c.metadata.set ("mutual_friend_count", ct.mutual_friend_count);
             c.metadata.set ("network_availability", ct.network_availability);
             c.metadata.set ("node_capabilities", ct.node_capabilities);
             c.metadata.set ("node_capabilities_and", ct.node_capabilities_and);
             c.metadata.set ("nr_of_buddies", ct.nr_of_buddies);
-            c.metadata.set ("nr_of_authed_buddies", ct.nrof_authed_buddies);
+            c.metadata.set ("nrof_authed_buddies", ct.nrof_authed_buddies);
             c.metadata.set ("offline_authreq_id", ct.offline_authreq_id);
             c.metadata.set ("phone_home", ct.phone_home);
             c.metadata.set ("phone_home_normalized", ct.phone_home_normalized);
@@ -1020,10 +1186,13 @@ profile::impl::_load_main_db_contacts (
             );
             c.metadata.set ("pop_score", ct.pop_score);
             c.metadata.set ("popularity_ord", ct.popularity_ord);
+            c.metadata.set ("profile_etag", ct.profile_etag);
+            c.metadata.set ("profile_json", ct.profile_json);
             c.metadata.set ("profile_timestamp", ct.profile_timestamp);
             c.metadata.set ("province", ct.province);
             c.metadata.set ("pstnnumber", ct.pstnnumber);
             c.metadata.set ("received_authrequest", ct.received_authrequest);
+            c.metadata.set ("refreshing", ct.refreshing);
             c.metadata.set ("revoked_auth", ct.revoked_auth);
             c.metadata.set ("rich_mood_text", ct.rich_mood_text);
             c.metadata.set ("sent_authrequest", ct.sent_authrequest);
@@ -1044,8 +1213,6 @@ profile::impl::_load_main_db_contacts (
             c.metadata.set ("timezone", ct.timezone);
             c.metadata.set ("type", ct.type);
             c.metadata.set ("unified_servants", ct.unified_servants);
-            c.metadata.set ("verified_company", ct.verified_company);
-            c.metadata.set ("verified_email", ct.verified_email);
 
             contacts_.push_back (c);
             _set_skypename (c.id, c.name);
@@ -1089,7 +1256,24 @@ profile::impl::_load_main_db_file_transfers (
             ft_obj.metadata.set ("chatmsg_guid", ft.chatmsg_guid);
             ft_obj.metadata.set ("chatmsg_index", ft.chatmsg_index);
             ft_obj.metadata.set ("convo_id", ft.convo_id);
+            ft_obj.metadata.set (
+                "extprop_handled_by_chat", ft.extprop_handled_by_chat
+            );
+            ft_obj.metadata.set (
+                "extprop_hide_from_history", ft.extprop_hide_from_history
+            );
+            ft_obj.metadata.set (
+                "extprop_localfilename", ft.extprop_localfilename
+            );
+            ft_obj.metadata.set (
+                "extprop_transfer_alias", ft.extprop_transfer_alias
+            );
+            ft_obj.metadata.set (
+                "extprop_window_visible", ft.extprop_window_visible
+            );
             ft_obj.metadata.set ("failurereason", ft.failurereason);
+            ft_obj.metadata.set ("filename", ft.filename);
+            ft_obj.metadata.set ("filepath", ft.filepath);
             ft_obj.metadata.set ("filesize", ft.filesize);
             ft_obj.metadata.set ("finishtime", ft.finishtime);
             ft_obj.metadata.set ("flags", ft.flags);
@@ -1097,8 +1281,10 @@ profile::impl::_load_main_db_file_transfers (
             ft_obj.metadata.set ("is_permanent", ft.is_permanent);
             ft_obj.metadata.set ("last_activity", ft.last_activity);
             ft_obj.metadata.set ("nodeid", ft.nodeid.to_hexstring ());
+            ft_obj.metadata.set ("offer_send_list", ft.offer_send_list);
             ft_obj.metadata.set ("old_filepath", ft.old_filepath);
             ft_obj.metadata.set ("old_status", ft.old_status);
+            ft_obj.metadata.set ("parent_id", ft.parent_id);
             ft_obj.metadata.set ("partner_dispname", ft.partner_dispname);
             ft_obj.metadata.set ("partner_handle", ft.partner_handle);
             ft_obj.metadata.set ("pk_id", ft.pk_id);
@@ -1149,39 +1335,79 @@ profile::impl::_load_main_db_messages (
                     m_obj.recipients.push_back (p.identity);
             }
 
+            // Metadata
             m_obj.metadata.set ("record_idx", m.idx);
             m_obj.metadata.set ("schema_version", fm.get_schema_version ());
+            m_obj.metadata.set ("annotation_version", m.annotation_version);
             m_obj.metadata.set ("author", m.author);
             m_obj.metadata.set ("author_was_live", m.author_was_live);
             m_obj.metadata.set ("body_is_rawxml", m.body_is_rawxml);
             m_obj.metadata.set ("body_xml", m.body_xml);
+            m_obj.metadata.set ("bots_settings", m.bots_settings);
+
             m_obj.metadata.set ("call_guid", m.call_guid);
             m_obj.metadata.set ("chatmsg_status", m.chatmsg_status);
             m_obj.metadata.set ("chatmsg_type", m.chatmsg_type);
             m_obj.metadata.set ("chatname", m.chatname);
             m_obj.metadata.set ("consumption_status", m.consumption_status);
+            m_obj.metadata.set ("content_flags", m.content_flags);
             m_obj.metadata.set ("convo_id", m.convo_id);
             m_obj.metadata.set ("crc", m.crc);
             m_obj.metadata.set ("dialog_partner", m.dialog_partner);
             m_obj.metadata.set ("edited_by", m.edited_by);
             m_obj.metadata.set ("edited_timestamp", m.edited_timestamp);
             m_obj.metadata.set ("error_code", m.error_code);
+            m_obj.metadata.set (
+                "extprop_chatmsg_ft_index_timestamp",
+                m.extprop_chatmsg_ft_index_timestamp
+            );
+            m_obj.metadata.set (
+                "extprop_chatmsg_is_pending", m.extprop_chatmsg_is_pending
+            );
+            m_obj.metadata.set (
+                "extprop_contact_received_stamp",
+                m.extprop_contact_received_stamp
+            );
+            m_obj.metadata.set (
+                "extprop_contact_review_date", m.extprop_contact_review_date
+            );
+            m_obj.metadata.set (
+                "extprop_contact_reviewed", m.extprop_contact_reviewed
+            );
+            m_obj.metadata.set (
+                "extprop_mms_msg_metadata", m.extprop_mms_msg_metadata
+            );
+            m_obj.metadata.set (
+                "extprop_sms_server_id", m.extprop_sms_server_id
+            );
+            m_obj.metadata.set (
+                "extprop_sms_src_msg_id", m.extprop_sms_src_msg_id
+            );
+            m_obj.metadata.set (
+                "extprop_sms_sync_global_id", m.extprop_sms_sync_global_id
+            );
             m_obj.metadata.set ("from_dispname", m.from_dispname);
             m_obj.metadata.set ("guid", m.guid.to_hexstring ());
             m_obj.metadata.set ("id", m.id);
             m_obj.metadata.set ("identities", m.identities);
             m_obj.metadata.set ("is_permanent", m.is_permanent);
+            m_obj.metadata.set ("language", m.language);
             m_obj.metadata.set ("leavereason", m.leavereason);
             m_obj.metadata.set ("newoptions", m.newoptions);
             m_obj.metadata.set ("newrole", m.newrole);
             m_obj.metadata.set ("oldoptions", m.oldoptions);
+            m_obj.metadata.set ("option_bits", m.option_bits);
             m_obj.metadata.set ("param_key", m.param_key);
             m_obj.metadata.set ("param_value", m.param_value);
             m_obj.metadata.set ("participant_count", m.participant_count);
             m_obj.metadata.set ("pk_id", m.pk_id);
+            m_obj.metadata.set ("reaction_thread", m.reaction_thread);
             m_obj.metadata.set ("reason", m.reason);
             m_obj.metadata.set ("remote_id", m.remote_id);
             m_obj.metadata.set ("sending_status", m.sending_status);
+            m_obj.metadata.set ("server_id", m.server_id);
+            m_obj.metadata.set ("timestamp", m.timestamp);
+            m_obj.metadata.set ("timestamp__ms", m.timestamp__ms);
             m_obj.metadata.set ("type", m.type);
 
             messages_.push_back (m_obj);
@@ -1236,8 +1462,13 @@ profile::impl::_load_main_db_sms_messages (
             s_obj.metadata.set ("schema_version", fm.get_schema_version ());
             s_obj.metadata.set ("body", s.body);
             s_obj.metadata.set ("chatmsg_id", s.chatmsg_id);
+            s_obj.metadata.set ("convo_name", s.convo_name);
             s_obj.metadata.set ("error_category", s.error_category);
             s_obj.metadata.set ("event_flags", s.event_flags);
+            s_obj.metadata.set ("extprop_extended", s.extprop_extended);
+            s_obj.metadata.set (
+                "extprop_hide_from_history", s.extprop_hide_from_history
+            );
             s_obj.metadata.set ("failurereason", s.failurereason);
             s_obj.metadata.set ("id", s.id);
             s_obj.metadata.set ("identity", s.identity);
@@ -1293,6 +1524,9 @@ profile::impl::_load_main_db_voicemails (
             v.metadata.set ("chatmsg_guid", vm.chatmsg_guid);
             v.metadata.set ("convo_id", vm.convo_id);
             v.metadata.set ("duration", vm.duration);
+            v.metadata.set (
+                "extprop_hide_from_history", vm.extprop_hide_from_history
+            );
             v.metadata.set ("failurereason", vm.failurereason);
             v.metadata.set ("failures", vm.failures);
             v.metadata.set ("flags", vm.flags);
@@ -1877,6 +2111,9 @@ profile::impl::_load_s4l_db_contacts (
 void
 profile::impl::_normalize_data ()
 {
+    if (account_name_.empty ())
+        account_name_ = _get_account_name (account_id_);
+
     for (auto &cl : calls_)
     {
         // Caller
@@ -1892,8 +2129,8 @@ profile::impl::_normalize_data ()
 
     for (auto &c : contacts_)
     {
-        // ID
-        c.name = _get_skypename (c.id);
+        if (c.name.empty ())
+            c.name = _get_account_name (c.id);
     }
 
     for (auto &m : messages_)
@@ -2083,6 +2320,26 @@ std::size_t
 profile::size_file_transfers () const
 {
     return impl_->size_file_transfers ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get messages
+// @return Vector of messages
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<profile::message>
+profile::get_messages () const
+{
+    return impl_->get_messages ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get number of messages
+// @return Number of messages
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::size_t
+profile::size_messages () const
+{
+    return impl_->size_messages ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -15,62 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "parse_message.hpp"
-#include <mobius/core/decoder/sgml/parser.hpp>
+#include "message_parser.hpp"
 #include <mobius/core/io/bytearray_io.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <format>
 
-namespace
+namespace mobius::extension::app::skype
 {
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Message parser class
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class message_parser
-{
-  public:
-    message_parser (const std::string &);
-    void add_element (const mobius::core::pod::map &);
-    void parse ();
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get content vector
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector<mobius::core::pod::map>
-    get_content () const
-    {
-        return content_;
-    }
-
-  private:
-    // @brief Content vector
-    std::vector<mobius::core::pod::map> content_;
-
-    // @brief SGML parser
-    mobius::core::decoder::sgml::parser parser_;
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Add text element helper
-    // @param text Text content
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void
-    _add_text_element (const std::string &text)
-    {
-        add_element (mobius::core::pod::map {{"type", "text"}, {"text", text}});
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Helper functions
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void _parse_start_tag (const std::string &tag);
-    void _parse_end_tag (const std::string &tag);
-    void _parse_empty_tag (const std::string &tag);
-    void _parse_entity (const std::string &entity);
-
-    void _parse_partlist ();
-};
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // @param message Message string
@@ -103,10 +55,11 @@ message_parser::add_element (const mobius::core::pod::map &element)
         const auto p_type = p_element.get<std::string> ("type");
         const auto p_text = p_element.get<std::string> ("text");
 
-        if (element_type == "text" && p_type == "text")
+        if (p_type == "text" && element_type == "text")
             p_element.set ("text", p_text + element_text);
 
-        else if (element_type == "system" && p_type == "system")
+        else if (p_type == "system" &&
+                 (element_type == "system" || element_type == "text"))
             p_element.set ("text", p_text + ". " + element_text);
 
         else
@@ -131,13 +84,6 @@ message_parser::parse ()
 
     while (e.get_type () != element_type::end)
     {
-        log.debug (
-            __LINE__, std::format (
-                          "Parsing element: type={}, text='{}'",
-                          static_cast<int> (e.get_type ()), e.get_text ()
-                      )
-        );
-
         auto text = e.get_text ();
 
         switch (e.get_type ())
@@ -178,17 +124,23 @@ message_parser::_parse_start_tag (const std::string &tag)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
-    if (tag == "b")
+    if (tag == "a")
+        _parse_a ();
+
+    else if (tag == "b")
         add_element (mobius::core::pod::map {{"type", "start/b"}});
 
     else if (tag == "i")
         add_element (mobius::core::pod::map {{"type", "start/i"}});
 
-    else if (tag == "s")
-        add_element (mobius::core::pod::map {{"type", "start/s"}});
-
     else if (tag == "partlist")
         _parse_partlist ();
+
+    else if (tag == "quote")
+        _parse_quote ();
+        
+    else if (tag == "s")
+        add_element (mobius::core::pod::map {{"type", "start/s"}});
 
     else
         log.development (__LINE__, "Unhandled start tag: <" + tag + ">");
@@ -211,11 +163,11 @@ message_parser::_parse_end_tag (const std::string &tag)
     else if (tag == "i")
         element = mobius::core::pod::map {{"type", "end/i"}};
 
-    else if (tag == "s")
-        element = mobius::core::pod::map {{"type", "end/s"}};
-
     else if (tag == "quote")
         element = mobius::core::pod::map {{"type", "end/quote"}};
+
+    else if (tag == "s")
+        element = mobius::core::pod::map {{"type", "end/s"}};
 
     else
         log.development (__LINE__, "Unhandled end tag close </" + tag + ">");
@@ -237,7 +189,7 @@ message_parser::_parse_empty_tag (const std::string &tag)
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Parse entity and add to content
-// @param entity 
+// @param entity
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 message_parser::_parse_entity (const std::string &entity)
@@ -247,19 +199,19 @@ message_parser::_parse_entity (const std::string &entity)
     std::string text;
 
     // Handle predefined entities
-    if (entity == "&lt;")
+    if (entity == "lt")
         text = "<";
 
-    else if (entity == "&gt;")
+    else if (entity == "gt")
         text = ">";
 
-    else if (entity == "&amp;")
+    else if (entity == "amp")
         text = "&";
 
-    else if (entity == "&apos;")
+    else if (entity == "apos")
         text = "'";
 
-    else if (entity == "&quot;")
+    else if (entity == "quot")
         text = "\"";
 
     // Unhandled entity
@@ -274,6 +226,28 @@ message_parser::_parse_entity (const std::string &entity)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Parse a tag
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+message_parser::_parse_a ()
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // Get minidom tag
+    auto tag = parser_.get_minidom ();
+    if (!tag)
+    {
+        log.warning (__LINE__, "Invalid <a> tag");
+        return;
+    }
+
+    // Add href element
+    auto href = tag.get_attribute<std::string> ("href");
+
+    add_element (mobius::core::pod::map {{"type", "href"}, {"url", href}});
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Parse partlist tag
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -285,22 +259,13 @@ message_parser::_parse_partlist ()
     auto tag = parser_.get_minidom ();
     if (!tag)
     {
-        log.warning (__LINE__, "Invalid partlist tag");
+        log.warning (__LINE__, "Invalid <partlist> tag");
         return;
     }
 
-    // Format text
-    std::string text;
-    auto type = tag.get_attribute<std::string> ("type");
-
-    if (type == "ended")
-        text = "Call ended.";
-
-    else if (type == "started")
-        text = "Call started.";
-
     // Get participants
     std::size_t participant_count = 0;
+    std::string text;
 
     for (const auto &child : tag.get_children ())
     {
@@ -326,13 +291,50 @@ message_parser::_parse_partlist ()
         text += " No participants.";
 
     // Add system message element
-    add_element (mobius::core::pod::map {{"type", "system"}, {"text", text}});
+    add_system_element (text);
 }
 
-} // namespace
-
-namespace mobius::extension::app::skype
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Parse quote tag
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+message_parser::_parse_quote ()
 {
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // Get minidom tag
+    auto tag = parser_.get_minidom ();
+    if (!tag)
+    {
+        log.warning (__LINE__, "Invalid <quote> tag");
+        return;
+    }
+
+    // Get attributes
+    auto timestamp = tag.get_attribute<std::string> ("timestamp");
+    auto author_id = tag.get_attribute<std::string> ("author");
+    auto author_name = tag.get_attribute<std::string> ("authorname");
+
+    std::string author = author_id;
+    if (!author_name.empty ())
+        author += " (" + author_name + ")";
+
+    auto element = mobius::core::pod::map {
+        {"type", "start/quote"},
+        {"author", author},
+    };
+
+    if (!timestamp.empty ())
+        element.set (
+            "timestamp",
+            mobius::core::datetime::new_datetime_from_unix_timestamp (
+                std::stoul (timestamp)
+            )
+        );
+
+    add_element (element);
+}
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Parse Skype message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
