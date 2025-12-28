@@ -53,7 +53,7 @@ class Ant(object):
                 self.__retrieve_passwords_from_registry_lsa(registry)
                 self.__retrieve_passwords_from_registry_outlook(registry)
         except Exception as e:
-            mobius.core.logf('WRN ' + str(e) + ' ' + traceback.format_exc())
+            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Event <i>on_export_data</i>: Export data to mediator ant

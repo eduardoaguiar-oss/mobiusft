@@ -16,7 +16,6 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import pymobius.operating_system
-# import pymobius.app.skype.skype.profile
 import pymobius.app.skype.app.profile
 import pymobius.app.skype.app_v14.profile
 
@@ -48,32 +47,11 @@ class model (object):
   def __load_profiles (self):
     for opsys in pymobius.operating_system.scan (self.__item):
       for user_profile in opsys.get_profiles ():
-
-        # Skype
-        # folder = user_profile.get_entry_by_path ('%appdata%/Skype')
-        # self.__load_profiles_from_skype_folder (folder, user_profile.username)
-
         # Skype App
         folder = user_profile.get_entry_by_path ('%localappdata%/Packages/Microsoft.SkypeApp_kzf8qxf38zg5c/LocalState')
         self.__load_profiles_from_skype_app_folder (folder, user_profile.username)
 
     self.__profiles_loaded = True
-
-  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  # @brief Load profiles from AppData/Skype folder
-  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  def __load_profiles_from_skype_folder (self, folder, username):
-    if not folder:
-      return
-
-    for child in folder.get_children ():
-      if child.is_folder ():
-        main_db = child.get_child_by_name ('main.db')
-
-        if main_db:
-          p = pymobius.app.skype.skype.profile.Profile (child, self.__item)
-          p.username = username
-          self.__profiles.append (p)
 
   # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   # @brief Load profiles from SkypeApp folder

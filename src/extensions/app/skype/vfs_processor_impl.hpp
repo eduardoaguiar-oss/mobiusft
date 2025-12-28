@@ -21,7 +21,8 @@
 #include <mobius/framework/ant/vfs_processor_impl_base.hpp>
 #include <mobius/framework/case_profile.hpp>
 #include <mobius/framework/model/item.hpp>
-#include <memory>
+#include <vector>
+#include "profile.hpp"
 
 namespace mobius::extension::app::skype
 {
@@ -48,11 +49,29 @@ class vfs_processor_impl
     void on_complete () final;
 
   private:
-    // @brief Implementation class forward declaration
-    class impl;
+    // @brief Case item
+    mobius::framework::model::item item_;
 
-    // @brief Implementation class pointer
-    std::shared_ptr<impl> impl_;
+    // @brief Profiles found
+    std::vector<profile> profiles_;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Helper functions
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void _scan_profile_folder (const mobius::core::io::folder &);
+    void _scan_s4l_files (const mobius::core::io::folder &);
+    void _decode_s4l_file (const mobius::core::io::file &);
+
+    void _save_app_profiles ();
+    void _save_calls ();
+    void _save_contacts ();
+    void _save_messages ();
+    void _save_received_files ();
+    void _save_remote_party_ip_addresses ();
+    void _save_sent_files ();
+    void _save_sms_messages ();
+    void _save_user_accounts ();
+    void _save_voicemails ();
 };
 
 } // namespace mobius::extension::app::skype

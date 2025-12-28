@@ -2,6 +2,7 @@ Mobius Forensic Toolkit 2.23
 	* Added new C++ extension called "app-dcpp"
 	* app-skype: Changed file_main_db class to retrieve all columns from tables
 	* app-skype: Added support for chat messages
+	* app-skype: Removed pimpl idiom from vfs_processor_impl
 	* evidence-viewer: Changed to use chat-message.app_name attribute
 	* libmobius_core: Improved error handling on pod::map::pop_map function
 	* libmobius_core: Added new method decoder::sgml::parser::get_last
@@ -9,6 +10,7 @@ Mobius Forensic Toolkit 2.23
 	* libmobius_core: Added new method database::new_select_statement (table_name, cols names)
 	* libmobius_python: Added new function decoder::hexstring
 	* pymobius.registry.user_accounts: Fixed error in TS_Property constructor
+	* pymobius.app.skype.skype: Removed module
 
 Mobius Forensic Toolkit 2.22
 	* app-ares: Improved evidence tags
