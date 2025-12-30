@@ -16,31 +16,30 @@ The **Mobius Forensic Toolkit** is a versatile, open-source forensic framework d
 
 Whether you're a digital forensics expert or a beginner, the Mobius Forensic Toolkit provides the tools and flexibility you need to tackle complex forensic challenges. Download it today and experience the power of open-source forensic analysis.
 
-#### Key Features:
+## Key Features:
+Mobius Forensic Toolkit is a powerful, open-source digital forensics framework developed in **C++20** and **Python 3**, offering both native C++ and Python APIs (with comprehensive Python wrappers) for maximum flexibility and extensibility.
 
-- Native support for **image files** (RAW, EWF, VHD, VHDX, MSR, and more), **physical devices**, and **Cellebrite's UFDR report files** for forensic analysis. It automatically decrypts MSR image files, no password needed.
-- **Comprehensive Case Management**: Organize and manage forensic cases and case items efficiently.
-- **Extensible Framework**: Easily create custom extensions and plugins to tailor the toolkit to your specific needs and unlock support for new evidence types.
-- **SQLite Database Integration**: Ensures reliable and scalable data storage for forensic evidence and metadata.
-- **Cross-Platform Compatibility**: Works seamlessly across multiple operating systems, making it accessible to a wide range of users.
-- **Support for many applications**: Extracts evidence from Google Chrome, Mozilla Firefox, Ares Galaxy, Shareaza, uTorrent, eMule, iTubeGo, and more!
+- **Broad Data Source Support** — Natively handles a wide range of forensic inputs, including image files (RAW, split RAW, EWF, Talon, Solo, Dossier, MSR, VHD, VHDX), physical devices, and Cellebrite UFDR report files. Automatic, password-free decryption of MSR image files is provided for seamless access.
 
-#### Why Choose Mobius Forensic Toolkit?
+- **Advanced Windows Artifact Recovery** — Automatically decrypts and extracts Windows secrets, including LM/NT hashes, cached credentials, PSSP keys, LSA secrets, DPAPI blobs (v1 and v2), Windows credentials, and Wi-Fi passwords. Registry files are scanned automatically with full reconstruction of the logical Windows Registry structure.
 
-- **Open Source**: Freely available under the GNU General Public License, ensuring transparency and community-driven development.
-- **User-Friendly Interface**: Designed with both beginners and advanced users in mind, offering intuitive workflows and documentation.
-- **Community Support**: Join the active community of forensic professionals and developers to share insights, ask questions, and contribute to the toolkit's growth.
+- **Robust Case Management** — Provides comprehensive tools for creating, organizing, and managing forensic cases. All case items (evidence sources) can be consolidated and processed within a single case, with customizable **case profiles** that control processing scope (e.g., full scan vs. user folders only) and enable/disable specific processors.
 
-#### Mobius Forensic Toolkit retrieves evidence from the following applications:
+- **Modular and Extensible Architecture** — Highly extensible framework allowing users to develop custom C++ or Python extensions and plugins. New evidence types and application parsers can be added easily, supported by modern processing classes like `vfs_processor_impl` for profile-aware evidence collection.
 
-- P2P (*peer-to-peer*): aMule, Ares Galaxy, BitTorrent, DC++, DreaMule, eMule, eMuleTorrent, µTorrent, µTorrent Web, Shareaza, and others.
-- Chromium based browsers, such as Chromium, Google Chrome, Opera, Microsoft Edge, Brave Browser, and many others.
-- Gecko based browsers, such as Firefox and GeckoFX.
-- Internet Explorer.
-- Skype from v4 to v14.
-- iTubeGo
+- **Efficient Data Storage and Compatibility** — Utilizes SQLite databases for scalable, reliable storage of forensic evidence and metadata, ensuring easy integration and export to other tools.
 
-#### Getting Started:
+- **Comprehensive Application Artifact Parsing** — In-depth support for extracting digital evidence from popular applications, including:
+  - **Browsers**: Chromium-based (Google Chrome, Microsoft Edge, Brave, Opera) with automatic decryption of cookies, logins, history, bookmarks, and autofill; Mozilla Firefox; Internet Explorer.
+  - **Communication**: Skype (desktop versions 4–14, all SQLite formats including encrypted s4l-*.db).
+  - **P2P File Sharing**: aMule/eMule (including Torrent controls), Ares Galaxy, Shareaza, µTorrent/BitTorrent (including µTorrent Web), DC++, DreaMule.
+  - **Other**: iTubeGo and more.
+
+- **Additional Capabilities** — Virtual File System (VFS) for advanced block detection and decoding; post-processor framework for generating secondary evidence; integration with external tools like IPED (with enhanced memory management and resume functionality); evidence viewer with processing status, KFF alerts, and specialized views (e.g., voicemails, remote party IPs, credit cards).
+
+Mobius Forensic Toolkit combines performance, extensibility, and specialized depth—particularly in P2P and browser forensics—making it an essential tool for digital investigators, researchers, and cybersecurity professionals.
+
+## Getting Started:
 - [**Quick Start Guide**](https://www.nongnu.org/mobiusft/support/getting_started/index.html): Follow the step-by-step guide to set up and start using Mobius Forensic Toolkit in minutes.
 - **Comprehensive Documentation**: Access detailed tutorials, API references, and case studies to maximize your efficiency.
 
