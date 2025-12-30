@@ -171,7 +171,7 @@ application::start ()
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   log.info (__LINE__, "loading C++ extensions");
 
-  auto extensions_path = get_config_path ("extensions");
+  auto extensions_path = get_data_path ("extensions");
   auto folder = mobius::core::io::new_folder_by_path (extensions_path);
 
   for (auto& c : folder.get_children ())

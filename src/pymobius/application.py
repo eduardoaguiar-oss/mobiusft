@@ -57,7 +57,6 @@ class Application(object):
 
         # configure user account
         self.__configure_user()
-        self.__install_cpp_extensions()
 
         app = mobius.core.application()
         app.start()
@@ -90,35 +89,3 @@ class Application(object):
             for path in sorted(glob.glob(f'{dist_dir}/*.mobius')):
                 mobius.core.logf(f'INF Installing extension {os.path.basename(path)}')
                 pymobius.extension.install(path)
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Install C++ extensions
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __install_cpp_extensions(self):
-        app = mobius.core.application()
-        dist_dir = app.get_data_path('extensions')
-        install_dir = app.get_config_path('extensions')
-
-        for dist_path in sorted(glob.glob(f'{dist_dir}/*.so')):
-            filename = os.path.basename(dist_path)
-            install_path = os.path.join(install_dir, filename)
-            can_install = False
-
-            # compare installed version and distribution version
-            if os.path.exists(install_path):
-                ext_dist = mobius.core.extension(dist_path)
-                ext_install = mobius.core.extension(install_path)
-
-                if ext_dist.version != ext_install.version:
-                    can_install = True
-
-            else:
-                can_install = True
-
-            # install, if necessary
-            if can_install:
-                mobius.core.logf(f'INF Installing C++ extension {filename}')
-                shutil.copy(dist_path, install_path)
-
-                ext = mobius.core.extension(install_path)
-                ext.install()

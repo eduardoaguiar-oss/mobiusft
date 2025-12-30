@@ -216,19 +216,20 @@ message_parser::add_element (const mobius::core::pod::map &element)
         const auto p_text = p_element.get<std::string> ("text");
 
         if (p_type == "text" && element_type == "text")
+        {
             p_element.set ("text", p_text + element_text);
+            return;
+        }
 
-        else if (p_type == "system" &&
-                 (element_type == "system" || element_type == "text"))
+        else if (p_type == "system" && element_type == "system")
+        {
             p_element.set ("text", p_text + ". " + element_text);
-
-        else
-            content_.push_back (element);
+            return;
+        }
     }
 
     // Add new element
-    else
-        content_.push_back (element);
+    content_.push_back (element);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -289,6 +290,9 @@ message_parser::_parse_start_tag (const std::string &tag)
 
     else if (tag == "b")
         add_element (mobius::core::pod::map {{"type", "start/b"}});
+
+    else if (tag == "files")
+        _parse_files ();
 
     else if (tag == "flag")
         _parse_flag ();
@@ -420,6 +424,60 @@ message_parser::_parse_a ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Parse <files> tag
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+message_parser::_parse_files ()
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // Get minidom tag
+    auto tag = parser_.get_minidom ();
+    if (!tag)
+    {
+        log.warning (__LINE__, "Invalid <sms> tag");
+        return;
+    }
+
+    // Get files
+    std::size_t total_size = 0;
+    std::size_t file_count = 0;
+    std::string file_list;
+
+    for (const auto &child : tag.get_children ())
+    {
+        if (child.get_name () == "file")
+        {
+            auto size = stoll (child.get_attribute<std::string> ("size", "0"));
+            auto file_name = child.get_content ();
+
+            if (!file_list.empty ())
+                file_list += ", ";
+
+            file_list += file_name;
+
+            total_size += size;
+            file_count++;
+        }
+    }
+
+    // Add system message element
+    if (file_count == 1)
+        add_system_element (
+            std::format (
+                "File sent: {} (Size: {} bytes)", file_list, total_size
+            )
+        );
+
+    else if (file_count > 1)
+        add_system_element (
+            std::format (
+                "Files sent: {} (Total size: {} bytes)", file_list, total_size
+            )
+        );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Parse <flag> tag
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -510,7 +568,7 @@ message_parser::_parse_partlist ()
             auto name = name_tag ? name_tag.get_content () : std::string ();
 
             if (participant_count == 0)
-                text += " Participants: ";
+                text += "Participants: ";
 
             else
                 text += ", ";
@@ -521,7 +579,7 @@ message_parser::_parse_partlist ()
     }
 
     if (participant_count == 0)
-        text += " No participants.";
+        text += "No participants.";
 
     // Add system message element
     add_system_element (text);

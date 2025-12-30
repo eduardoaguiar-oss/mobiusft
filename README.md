@@ -70,7 +70,7 @@ cmake --build build -j 24
 sudo 'cmake --install build'
 ```
 
-For detailed installation instructions, refer to the official [installation guide](docs/INSTALL.md).
+For detailed installation instructions, refer to the official [installation guide](https://github.com/eduardoaguiar-oss/mobiusft/wiki/Installation).
 
 ## Support this Project
 

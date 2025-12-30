@@ -294,7 +294,7 @@ parser::tag::tag (parser &parser)
 
     if (e.get_type () != element::type::start_tag &&
         e.get_type () != element::type::empty_tag)
-        return;     // invalid tag
+        return; // invalid tag
 
     // Get tag name and attributes
     name_ = e.get_text ();
@@ -312,7 +312,8 @@ parser::tag::tag (parser &parser)
         if (e.get_type () == element::type::text)
             content_ = mobius::core::string::strip (content_ + e.get_text ());
 
-        else if (e.get_type () == element::type::start_tag)
+        else if (e.get_type () == element::type::start_tag ||
+                 e.get_type () == element::type::empty_tag)
         {
             tag child_tag (parser);
             children_.push_back (child_tag);
