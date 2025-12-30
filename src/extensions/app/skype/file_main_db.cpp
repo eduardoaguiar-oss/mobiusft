@@ -232,6 +232,7 @@ file_main_db::file_main_db (const mobius::core::io::reader &reader)
         _load_calls (db);
         _load_contacts (db);
         _load_file_transfers (db);
+        _load_message_participants (db);
         _load_messages (db);
         _load_sms (db);
         _load_voicemails (db);
@@ -1233,11 +1234,11 @@ file_main_db::_load_file_transfers (mobius::core::database::database &db)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Load Messages
+// @brief Load Message Participants
 // @param db Database object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-file_main_db::_load_messages (mobius::core::database::database &db)
+file_main_db::_load_message_participants (mobius::core::database::database &db)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -1247,8 +1248,6 @@ file_main_db::_load_messages (mobius::core::database::database &db)
 
     try
     {
-        std::unordered_multimap<std::int64_t, message_participant> participants;
-
         // Prepare SQL statement for table Participants
         auto stmt_part = db.new_select_statement (
             "Participants", {"adder",
@@ -1357,9 +1356,30 @@ file_main_db::_load_messages (mobius::core::database::database &db)
             obj.voice_status = stmt_part.get_column_int64 (45);
 
             // Add participants to the list
-            participants.emplace (obj.convo_id, std::move (obj));
+            message_participants_.emplace (obj.convo_id, std::move (obj));
         }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
+}
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load Messages
+// @param db Database object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file_main_db::_load_messages (mobius::core::database::database &db)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // Messages table was dropped between schema version 196 and 209
+    if (schema_version_ > 196)
+        return;
+
+    try
+    {
         // Prepare SQL statement for table Messages
         auto stmt = db.new_select_statement (
             "Messages", {"annotation_version",
@@ -1415,7 +1435,7 @@ file_main_db::_load_messages (mobius::core::database::database &db)
         );
 
         // Retrieve records from Messages table
-        idx = 0;
+        std::int64_t idx = 0;
 
         while (stmt.fetch_row ())
         {
@@ -1426,7 +1446,8 @@ file_main_db::_load_messages (mobius::core::database::database &db)
             obj.author = stmt.get_column_string (1);
             obj.author_was_live = stmt.get_column_int64 (2);
             obj.body_is_rawxml = stmt.get_column_int64 (3);
-            obj.body_xml = mobius::core::string::strip (stmt.get_column_string (4));
+            obj.body_xml =
+                mobius::core::string::strip (stmt.get_column_string (4));
             obj.bots_settings = stmt.get_column_string (5);
             obj.call_guid = stmt.get_column_string (6);
             obj.chatmsg_status = stmt.get_column_int64 (7);
@@ -1440,7 +1461,8 @@ file_main_db::_load_messages (mobius::core::database::database &db)
             obj.edited_by = stmt.get_column_string (15);
             obj.edited_timestamp = get_datetime (stmt.get_column_int64 (16));
             obj.error_code = stmt.get_column_int64 (17);
-            obj.extprop_chatmsg_ft_index_timestamp = get_datetime (stmt.get_column_int64 (18));
+            obj.extprop_chatmsg_ft_index_timestamp =
+                get_datetime (stmt.get_column_int64 (18));
             obj.extprop_chatmsg_is_pending = stmt.get_column_int64 (19);
             obj.extprop_contact_received_stamp = stmt.get_column_int64 (20);
             obj.extprop_contact_review_date = stmt.get_column_string (21);
@@ -1485,56 +1507,11 @@ file_main_db::_load_messages (mobius::core::database::database &db)
             obj.content = parser.get_content ();
 
             if (obj.content.empty ())
+            {
                 obj.content = {mobius::core::pod::map {
                     {"type", "text"},
                     {"text", obj.body_xml}
                 }};
-
-            // Add message participants to the message object
-            if (obj.convo_id)
-            {
-                auto range = participants.equal_range (obj.convo_id);
-
-                std::transform (
-                    range.first, range.second,
-                    std::back_inserter (obj.participants),
-                    [] (auto &pair) { return pair.second; }
-                );
-            }
-
-            // Get participants from identities if convo_id is 0
-            else if (!obj.identities.empty ())
-            {
-                auto identities = mobius::core::string::split (obj.identities);
-
-                std::transform (
-                    identities.begin (), identities.end (),
-                    std::back_inserter (obj.participants),
-                    [] (auto &identity)
-                    {
-                        message_participant p;
-                        p.identity = identity;
-                        return p;
-                    }
-                );
-            }
-
-            // Get participants from chatname if convo_id is 0
-            else
-            {
-                auto participants =
-                    get_participants_from_chatname (obj.chatname);
-
-                std::transform (
-                    participants.begin (), participants.end (),
-                    std::back_inserter (obj.participants),
-                    [] (auto &identity)
-                    {
-                        message_participant p;
-                        p.identity = identity;
-                        return p;
-                    }
-                );
             }
 
             // Add messages to the list
@@ -1713,6 +1690,64 @@ file_main_db::_load_voicemails (mobius::core::database::database &db)
     {
         log.warning (__LINE__, e.what ());
     }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get Message Participants
+// @param msg Message object
+// @return Vector of Message Participants
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<file_main_db::message_participant>
+file_main_db::get_message_participants (const message &msg) const
+{
+    std::vector<message_participant> participants;
+
+    // Get participants from conversation, using convo_id
+    if (msg.convo_id)
+    {
+        auto range = message_participants_.equal_range (msg.convo_id);
+
+        std::transform (
+            range.first, range.second, std::back_inserter (participants),
+            [] (auto &pair) { return pair.second; }
+        );
+    }
+
+    // Get participants from identities if convo_id is 0
+    else if (!msg.identities.empty ())
+    {
+        auto identities = mobius::core::string::split (msg.identities);
+
+        std::transform (
+            identities.begin (), identities.end (),
+            std::back_inserter (participants),
+            [] (auto &identity)
+            {
+                message_participant p;
+                p.identity = identity;
+                return p;
+            }
+        );
+    }
+
+    // Get participants from chatname if convo_id is 0
+    else
+    {
+        auto chat_participants = get_participants_from_chatname (msg.chatname);
+
+        std::transform (
+            chat_participants.begin (), chat_participants.end (),
+            std::back_inserter (participants),
+            [] (auto &identity)
+            {
+                message_participant p;
+                p.identity = identity;
+                return p;
+            }
+        );
+    }
+
+    return participants;
 }
 
 } // namespace mobius::extension::app::skype

@@ -1329,7 +1329,7 @@ profile::impl::_load_main_db_messages (
             m_obj.sender = m.author;
             m_obj.content = m.content;
 
-            for (const auto &p : m.participants)
+            for (const auto &p : fm.get_message_participants (m))
             {
                 if (p.identity != m.author)
                     m_obj.recipients.push_back (p.identity);

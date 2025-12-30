@@ -747,7 +747,7 @@ show_main_db_info (const std::string &path)
             std::cout << "         [" << pc.get ("type")
                       << "]: " << pc.get ("text") << std::endl;
 
-        for (const auto &p : cm.participants)
+        for (const auto &p : dat.get_message_participants (cm))
         {
             std::cout << "   Participant:" << std::endl;
             std::cout << "         Record Index: " << p.idx << std::endl;

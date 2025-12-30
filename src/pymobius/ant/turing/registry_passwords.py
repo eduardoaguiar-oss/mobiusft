@@ -25,11 +25,11 @@ from pymobius.registry import *
 TBAL_VALUE_NAME = '_TBAL_{68EDDCF5-0AEB-4C28-A770-AF5302ECA3C9}'
 
 
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Ant: turing.registry_passwords
 # @author Eduardo Aguiar
 # Retrieves passwords from win registry
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class Ant(object):
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -200,9 +200,9 @@ class Ant(object):
                     p.metadata.append(('user_sid', sid))
                     self.__passwords.append(p)
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Get Protected Storage password
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __get_pssp_password(self, pssp_key, idx_data):
         password = None
 
@@ -212,6 +212,6 @@ class Ant(object):
                 'Data\\220d5cc1-853a-11d0-84bc-00c04fd43f8f\\417e2d75-84bd-11d0-84bb-00c04fd43f8f\\' + value_name)
 
             if data:
-                password = data.data.rstrip('\0')
+                password = data.data.decode('cp1252').rstrip('\0')
 
         return password

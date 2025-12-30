@@ -124,7 +124,10 @@ class Ant(object):
     # @brief Retrieve DPAPI user master keys
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __retrieve_dpapi_user_master_keys(self):
+
         for opsys in pymobius.operating_system.scan(self.__item):
+
+            # User profile folders
             for user_profile in opsys.get_profiles():
                 folder = user_profile.get_appdata_entry('Microsoft/Protect')
 
@@ -132,6 +135,22 @@ class Ant(object):
                     for child in folder.get_children():
                         if child.is_folder() and child.name.startswith('S-1-'):
                             self.__retrieve_dpapi_user_master_keys_from_folder(child)
+
+            # WinXP (Documents and Settings)
+            for root_folder in opsys.get_root_folders():
+                dsp_folder = root_folder.get_child_by_name('Documents and Settings')
+
+                if dsp_folder and not dsp_folder.is_reallocated():
+                    for user_profile in dsp_folder.get_children():
+                        if user_profile.is_folder():
+                            folder = user_profile.get_child_by_path('Application Data/Microsoft/Protect')
+                            if not folder:
+                                folder = user_profile.get_child_by_path('Dados de Aplicativos/Microsoft/Protect')
+
+                            if folder and not folder.is_reallocated():
+                                for child in folder.get_children():
+                                    if child.is_folder() and child.name.startswith('S-1-'):
+                                        self.__retrieve_dpapi_user_master_keys_from_folder(child)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Retrieve DPAPI user master keys from SID folder

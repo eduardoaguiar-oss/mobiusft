@@ -21,12 +21,12 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "parser.hpp"
-#include "api_dataholder.hpp"
-#include "core/io/reader.hpp"
-#include "core/pod/map.hpp"
 #include <mobius/core/exception.inc>
 #include <pymobius.hpp>
 #include <stdexcept>
+#include "api_dataholder.hpp"
+#include "core/io/reader.hpp"
+#include "core/pod/map.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Check if object type is <i>parser</i>
@@ -36,8 +36,9 @@
 bool
 pymobius_core_decoder_sgml_parser_check (PyObject *pyobj)
 {
-    return PyObject_IsInstance (pyobj,
-                                (PyObject *) &core_decoder_sgml_parser_t);
+    return PyObject_IsInstance (
+        pyobj, (PyObject *) &core_decoder_sgml_parser_t
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -47,7 +48,8 @@ pymobius_core_decoder_sgml_parser_check (PyObject *pyobj)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_core_decoder_sgml_parser_to_pyobject (
-    const mobius::core::decoder::sgml::parser &obj)
+    const mobius::core::decoder::sgml::parser &obj
+)
 {
     PyObject *ret = _PyObject_New (&core_decoder_sgml_parser_t);
 
@@ -68,7 +70,8 @@ pymobius_core_decoder_sgml_parser_from_pyobject (PyObject *pyobj)
 {
     if (!PyObject_IsInstance (pyobj, (PyObject *) &core_decoder_sgml_parser_t))
         throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (
-            "object type must be mobius.core.decoder.sgml.parser"));
+            "object type must be mobius.core.decoder.sgml.parser"
+        ));
 
     return *(reinterpret_cast<core_decoder_sgml_parser_o *> (pyobj)->obj);
 }
@@ -94,11 +97,53 @@ tp_f_get (core_decoder_sgml_parser_o *self, PyObject *)
         if (pyobj)
         {
             api_dataholder_setattr (pyobj, "text", e.get_text ());
-            api_dataholder_setattr (pyobj, "type",
-                                    static_cast<int> (e.get_type ()));
+            api_dataholder_setattr (
+                pyobj, "type", static_cast<int> (e.get_type ())
+            );
             api_dataholder_setattr (
                 pyobj, "attributes",
-                pymobius_core_pod_map_to_pyobject (e.get_attributes ()));
+                pymobius_core_pod_map_to_pyobject (e.get_attributes ())
+            );
+            ret = reinterpret_cast<PyObject *> (pyobj);
+        }
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // Return value
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>get_last</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Pair <type, text>
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_get_last (core_decoder_sgml_parser_o *self, PyObject *)
+{
+    // Execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        auto e = self->obj->get_last ();
+
+        api_dataholder_o *pyobj = api_dataholder_new ();
+
+        if (pyobj)
+        {
+            api_dataholder_setattr (pyobj, "text", e.get_text ());
+            api_dataholder_setattr (
+                pyobj, "type", static_cast<int> (e.get_type ())
+            );
+            api_dataholder_setattr (
+                pyobj, "attributes",
+                pymobius_core_pod_map_to_pyobject (e.get_attributes ())
+            );
             ret = reinterpret_cast<PyObject *> (pyobj);
         }
     }
@@ -116,6 +161,8 @@ tp_f_get (core_decoder_sgml_parser_o *self, PyObject *)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
     {(char *) "get", (PyCFunction) tp_f_get, METH_VARARGS, "Get next element"},
+    {(char *) "get_last", (PyCFunction) tp_f_get_last, METH_VARARGS,
+     "Get last element"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
@@ -135,7 +182,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     try
     {
         arg_reader = pymobius_core_io_reader_from_pyobject (
-            mobius::py::get_arg (args, 0));
+            mobius::py::get_arg (args, 0)
+        );
     }
     catch (const std::exception &e)
     {
@@ -146,7 +194,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     // Create Python object
     core_decoder_sgml_parser_o *ret =
         reinterpret_cast<core_decoder_sgml_parser_o *> (
-            type->tp_alloc (type, 0));
+            type->tp_alloc (type, 0)
+        );
 
     if (ret)
     {
@@ -228,4 +277,5 @@ PyTypeObject core_decoder_sgml_parser_t = {
     0,                                        // tp_del
     0,                                        // tp_version_tag
     0,                                        // tp_finalize
+    nullptr,                                  // tp_vectorcall
 };

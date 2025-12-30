@@ -24,6 +24,7 @@
 #include <mobius/core/io/reader.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <cstdint>
+#include <unordered_map>
 #include <string>
 #include <vector>
 
@@ -1600,9 +1601,6 @@ class file_main_db
 
         // @brief Parsed content
         std::vector<mobius::core::pod::map> content;
-
-        // @brief Message Participants
-        std::vector<message_participant> participants;
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1765,6 +1763,8 @@ class file_main_db
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     file_main_db (const mobius::core::io::reader &);
+    std::vector<message_participant>
+    get_message_participants (const message &) const;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Check if stream is an instance of main.db file
@@ -1883,6 +1883,10 @@ class file_main_db
     // @brief Voicemails
     std::vector<voicemail> voicemails_;
 
+    // @brief Message Participants
+    std::unordered_multimap<std::int64_t, message_participant>
+        message_participants_;
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1890,6 +1894,7 @@ class file_main_db
     void _load_calls (mobius::core::database::database &);
     void _load_contacts (mobius::core::database::database &);
     void _load_file_transfers (mobius::core::database::database &);
+    void _load_message_participants (mobius::core::database::database &);
     void _load_messages (mobius::core::database::database &);
     void _load_sms (mobius::core::database::database &);
     void _load_voicemails (mobius::core::database::database &);

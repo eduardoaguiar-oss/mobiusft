@@ -102,6 +102,21 @@ class parser
         }
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // @brief Get attribute
+        // @param name Attribute name
+        // @param default_value Default value
+        // @return Attribute value
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        template <typename T>
+        T
+        get_attribute (
+            const std::string &name, const T &default_value = {}
+        ) const
+        {
+            return attributes_.get<T> (name, default_value);
+        }
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // @brief Get attributes
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         mobius::core::pod::map
@@ -123,7 +138,7 @@ class parser
     {
       public:
         tag () = default;
-        
+
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // @brief Operator bool
         // @return true if tag is valid

@@ -123,6 +123,7 @@ def text_formatter(text_segments):
 
         elif item_type == 'emoji':
             code = data.get('code')
+
             if code:
                 text += f'<span size="x-large">{code}</span>'
             else:

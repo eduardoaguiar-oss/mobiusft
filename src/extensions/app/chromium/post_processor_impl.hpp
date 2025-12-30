@@ -69,6 +69,7 @@ class post_processor_impl
     void _process_cookie (mobius::framework::model::evidence evidence);
     void _process_encryption_key (mobius::framework::model::evidence evidence);
     void _process_generic_evidence (mobius::framework::model::evidence evidence);
+    void _process_password (mobius::framework::model::evidence evidence);
 
     std::pair<bool, mobius::core::bytearray>
     _decrypt_data (const mobius::core::bytearray &) const;

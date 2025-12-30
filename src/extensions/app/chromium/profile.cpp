@@ -646,10 +646,14 @@ profile::impl::add_login_data_file (const mobius::core::io::file &f)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     for (const auto &entry : fl.get_logins ())
     {
-        login l (entry);
-        l.f = f;
+        // Blacklisted entries are those the user has chosen not to save
+        if (!entry.blacklisted_by_user)
+        {
+            login l (entry);
+            l.f = f;
 
-        logins_.push_back (l);
+            logins_.push_back (l);
+        }
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
