@@ -374,11 +374,11 @@ vfs_processor_impl::_save_bookmarked_urls ()
             e.set_attribute ("username", p.get_username ());
             e.set_attribute ("name", b.name);
             e.set_attribute ("creation_time", b.creation_time);
-            e.set_attribute ("last_modified_time", b.last_modified_time);
-            e.set_attribute ("last_used_time", b.last_used_time);
             e.set_attribute ("folder", b.folder_name);
 
             auto metadata = mobius::core::pod::map ();
+            metadata.set ("last_modified_time", b.last_modified_time);
+            metadata.set ("last_used_time", b.last_used_time);
             metadata.set ("id", b.id);
             metadata.set ("guid", b.guid);
             metadata.set ("app_id", p.get_app_id ());

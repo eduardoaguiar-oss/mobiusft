@@ -82,6 +82,7 @@ class message_parser
     void _parse_entity (const std::string &entity);
 
     void _parse_a ();
+    void _parse_contacts ();
     void _parse_files ();
     void _parse_flag ();
     void _parse_legacyquote ();
@@ -89,6 +90,7 @@ class message_parser
     void _parse_quote ();
     void _parse_sms ();
     void _parse_ss ();
+    void _parse_uriobject ();
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

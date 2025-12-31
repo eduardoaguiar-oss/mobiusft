@@ -29,90 +29,65 @@ namespace
 // @brief Emoji representation as Unicode char
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const std::unordered_map<std::string, std::string> EMOJI_CHARS = {
-    {"angel", "👼"},        {"anger", "🤯"},
-    {"angry", "😠"},        {"bandit", "😈"},
-    {"banned", "🚫"},       {"bear", "🧸"},
-    {"bike", "🚴"},         {"bombed", "💣"},
-    {"blush", "😳"},        {"bomb", "💣"},
-    {"brokenheart", "💔"},  {"brb", "🕒"},
-    {"call", "📞"},         {"camera", "📷"},
-    {"catface", "🐱"},      {"champagne", "🍾"},
-    {"chocolate", "🍫"},    {"clap", "👏"},
-    {"clapping", "👏"},     {"clownface", "🤡"},
-    {"confused", "😕"},     {"coolguy", "😎"},
-    {"crying", "😢"},       {"danceparty", "🕺"},
-    {"devilface", "😈"},    {"dogface", "🐶"},
-    {"dollar", "💵"},       {"dollars", "💵"},
-    {"dizzy", "😵"},        {"cake", "🎂"},
-    {"cash", "💰"},         {"cat", "🐈"},
-    {"claps", "👏"},        {"clown", "🤡"},
-    {"coffee_cup", "☕"},   {"coffee", "☕"},
-    {"cool", "😎"},         {"cry", "😢"},
-    {"cwl", "😂"},          {"dance", "🕺"},
-    {"devil", "😈"},        {"dog", "🐕"},
-    {"drink", "🍸"},        {"drunk", "🥴"},
-    {"dull", "🙄"},         {"emo", "🤯"},
-    {"envy", "😒"},         {"explode", "💣"},
-    {"explosion", "💣"},    {"facepalm", "🤦"},
-    {"fear", "😨"},         {"fingerscrossed", "🤞"},
-    {"ghost", "👻"},        {"gift", "🎁"},
-    {"glasses", "🕶"},      {"giggle", "🤭"},
-    {"handsinair", "🙌"},   {"happytears", "😂"},
-    {"happy", "🙂"},        {"heart", "❤"},
-    {"hearteyes", "😍"},    {"heidy", "🐿"},
-    {"hi", "👋"},           {"highfive", "🖐"},
-    {"hooray", "🎉"},       {"hug", "🧸"},
-    {"idea", "💡"},         {"innocent", "😇"},
-    {"inlove", "🥰"},       {"joy", "😂"},
-    {"kissing", "😗"},      {"kiss", "😗"},
-    {"ladyvamp", "🧛"},     {"ladyvampire", "🧛"},
-    {"laughing", "😆"},     {"laugh", "😃"},
-    {"lips", "💋"},         {"lipssealed", "🤐"},
-    {"loudlycrying", "😭"}, {"makeup", "💄"},
-    {"monocle", "🧐"},      {"mail", "✉"},
-    {"meh", "😑"},          {"money", "💰"},
-    {"mmm", "😋"},          {"monkey", "🐒"},
-    {"mooning", "🌝"},      {"muscle", "💪"},
-    {"muscleman", "💪"},    {"music", "🎶"},
-    {"nerd", "🤓"},         {"nerdy", "🤓"},
-    {"ninja", "🥷"},        {"no", "👎"},
-    {"nod", "👍"},          {"notworthy", "🙄"},
-    {"okeydokey", "👌"},    {"ok", "👌"},
-    {"party", "🥳"},        {"phone", "📱"},
-    {"pig", "🐖"},          {"poop", "💩"},
-    {"pray", "🙏"},         {"pizza", "🍕"},
-    {"praying", "🙏"},      {"puke", "🤮"},
-    {"pumpkin", "🎃"},      {"rain", "🌧"},
-    {"rofl", "🤣"},         {"rocket", "🚀"},
-    {"rock", "🤘"},         {"sadface", "😞"},
-    {"sadcry", "😭"},       {"sad", "😧"},
-    {"sadness", "😢"},      {"satisfied", "😌"},
-    {"sarcastic", "😒"},    {"scared", "😱"},
-    {"scream", "😱"},       {"shocked", "😲"},
-    {"shake", "🤝"},        {"shy", "😊"},
-    {"sick", "🤢"},         {"sleeping", "😴"},
-    {"skype", "💬"},        {"skull", "💀"},
-    {"sleepy", "😪"},       {"smile", "😄"},
-    {"smirk", "😏"},        {"speechless", "😐"},
-    {"squirrel", "🐿"},     {"star", "⭐"},
-    {"stareyes", "🤩"},     {"sun", "🌞"},
-    {"surprised", "😲"},    {"swear", "🤬"},
-    {"stop", "✋"},         {"sweat", "😓"},
-    {"think", "🤔"},        {"time", "⏲"},
-    {"tongueout", "😛"},    {"tmi", "🤭"},
-    {"toothygrin", "😁"},   {"tongue", "😛"},
-    {"thumbsdown", "👎"},   {"thumbsup", "👍"},
-    {"tired", "😫"},        {"unhappy", "☹"},
-    {"unamused", "😒"},     {"vampire", "🧛"},
-    {"victory", "✌"},       {"waiting", "⏳"},
-    {"wavehand", "👋"},     {"wave", "👋"},
-    {"weary", "😩"},        {"whistle", "😗"},
-    {"winkey", "😉"},       {"wink", "😉"},
-    {"woozy", "🥴"},        {"wasntme", "🙄"},
-    {"wave", "🌊"},         {"whew", "😮‍💨"},
-    {"worry", "😟"},        {"wonder", "🤔"},
-    {"xd", "😆"},           {"yawn", "🥱"},
-    {"yes", "👍"},          {"yoga", "🧘"},
+    {"angel", "👼"},       {"anger", "🤯"},       {"angry", "😠"},
+    {"bandit", "😈"},      {"banned", "🚫"},      {"bear", "🧸"},
+    {"bike", "🚴"},        {"bombed", "💣"},      {"blush", "😳"},
+    {"bomb", "💣"},        {"brokenheart", "💔"}, {"brb", "🕒"},
+    {"call", "📞"},        {"camera", "📷"},      {"catface", "🐱"},
+    {"champagne", "🍾"},   {"chocolate", "🍫"},   {"clap", "👏"},
+    {"clapping", "👏"},    {"clownface", "🤡"},   {"confused", "😕"},
+    {"coolguy", "😎"},     {"crying", "😢"},      {"danceparty", "🕺"},
+    {"devilface", "😈"},   {"disgust", "🤢"},     {"dogface", "🐶"},
+    {"dollarbill", "💵"},  {"dollar", "💵"},      {"dollars", "💵"},
+    {"dizzy", "😵"},       {"cake", "🎂"},        {"cash", "💰"},
+    {"cat", "🐈"},         {"claps", "👏"},       {"clown", "🤡"},
+    {"coffee_cup", "☕"},  {"coffee", "☕"},      {"cool", "😎"},
+    {"cry", "😢"},         {"cwl", "😂"},         {"dance", "🕺"},
+    {"devil", "😈"},       {"dog", "🐕"},         {"drink", "🍸"},
+    {"drunk", "🥴"},       {"dull", "🙄"},        {"emo", "🤯"},
+    {"envy", "😒"},        {"explode", "💣"},     {"explosion", "💣"},
+    {"facepalm", "🤦"},    {"fear", "😨"},        {"fingerscrossed", "🤞"},
+    {"ghost", "👻"},       {"gift", "🎁"},        {"glasses", "🕶"},
+    {"giggle", "🤭"},      {"handsinair", "🙌"},  {"happytears", "😂"},
+    {"happy", "🙂"},       {"heart", "❤"},        {"hearteyes", "😍"},
+    {"heidy", "🐿"},       {"hi", "👋"},          {"highfive", "🖐"},
+    {"hooray", "🎉"},      {"hug", "🧸"},         {"idea", "💡"},
+    {"innocent", "😇"},    {"inlove", "🥰"},      {"joy", "😂"},
+    {"kissing", "😗"},     {"kiss", "😗"},        {"ladyvamp", "🧛"},
+    {"ladyvampire", "🧛"}, {"laughing", "😆"},    {"laugh", "😃"},
+    {"lips", "💋"},        {"lipssealed", "🤐"},  {"loudlycrying", "😭"},
+    {"makeup", "💄"},      {"monocle", "🧐"},     {"mail", "✉"},
+    {"meh", "😑"},         {"money", "💰"},       {"mmm", "😋"},
+    {"monkey", "🐒"},      {"mooning", "🌝"},     {"muscle", "💪"},
+    {"muscleman", "💪"},   {"music", "🎶"},       {"nerd", "🤓"},
+    {"nerdy", "🤓"},       {"ninja", "🥷"},       {"no", "👎"},
+    {"nod", "👍"},         {"notworthy", "🙄"},   {"okeydokey", "👌"},
+    {"ok", "👌"},          {"party", "🥳"},       {"phone", "📱"},
+    {"pig", "🐖"},         {"poop", "💩"},        {"pray", "🙏"},
+    {"pizza", "🍕"},       {"praying", "🙏"},     {"puke", "🤮"},
+    {"pumpkin", "🎃"},     {"punch", "👊"},       {"priidu", "🤠"},
+    {"rolleyes", "🙄"},    {"robot", "🤖"},       {"rose", "🌹"},
+    {"rain", "🌧"},        {"roflmao", "🤣"},     {"rofl", "🤣"},
+    {"rocket", "🚀"},      {"rock", "🤘"},        {"sadface", "😞"},
+    {"sadcat", "😿"},      {"sadcry", "😭"},      {"sad", "😧"},
+    {"sadness", "😢"},     {"satisfied", "😌"},   {"sarcastic", "😒"},
+    {"scared", "😱"},      {"scream", "😱"},      {"shocked", "😲"},
+    {"shake", "🤝"},       {"shy", "😊"},         {"sick", "🤢"},
+    {"sleeping", "😴"},    {"skype", "💬"},       {"skull", "💀"},
+    {"sleepy", "😪"},      {"smile", "😄"},       {"smirk", "😏"},
+    {"speechless", "😐"},  {"squirrel", "🐿"},    {"star", "⭐"},
+    {"stareyes", "🤩"},    {"sun", "🌞"},         {"surprised", "😲"},
+    {"swear", "🤬"},       {"stop", "✋"},        {"sweat", "😓"},
+    {"think", "🤔"},       {"time", "⏲"},         {"tongueout", "😛"},
+    {"tmi", "🤭"},         {"toothygrin", "😁"},  {"tongue", "😛"},
+    {"thumbsdown", "👎"},  {"thumbsup", "👍"},    {"tired", "😫"},
+    {"tumbleweed", "🌵"},  {"unhappy", "☹"},      {"unamused", "😒"},
+    {"vampire", "🧛"},     {"victory", "✌"},      {"waiting", "⏳"},
+    {"wavehand", "👋"},    {"wave", "👋"},        {"weary", "😩"},
+    {"whistle", "😗"},     {"winkey", "😉"},      {"woozy", "🥴"},
+    {"wasntme", "🙄"},     {"wave", "🌊"},        {"whew", "😮‍💨"},
+    {"worry", "😟"},       {"wonder", "🤔"},      {"xd", "😆"},
+    {"yawn", "🥱"},        {"yes", "👍"},         {"yoga", "🧘"},
     {"zombie", "🧟"},
 };
 
@@ -291,6 +266,9 @@ message_parser::_parse_start_tag (const std::string &tag)
     else if (tag == "b")
         add_element (mobius::core::pod::map {{"type", "start/b"}});
 
+    else if (tag == "contacts")
+        _parse_contacts ();
+
     else if (tag == "files")
         _parse_files ();
 
@@ -317,6 +295,9 @@ message_parser::_parse_start_tag (const std::string &tag)
 
     else if (tag == "ss")
         _parse_ss ();
+
+    else if (tag == "URIObject")
+        _parse_uriobject ();
 
     else
         log.development (__LINE__, "Unhandled start tag: <" + tag + ">");
@@ -402,7 +383,7 @@ message_parser::_parse_entity (const std::string &entity)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Parse a tag
+// @brief Parse <a> tag
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 message_parser::_parse_a ()
@@ -421,6 +402,60 @@ message_parser::_parse_a ()
     auto href = tag.get_attribute<std::string> ("href");
 
     add_element (mobius::core::pod::map {{"type", "href"}, {"url", href}});
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Parse <contacts> tag
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+message_parser::_parse_contacts ()
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // Get minidom tag
+    auto tag = parser_.get_minidom ();
+    if (!tag)
+    {
+        log.warning (__LINE__, "Invalid <contacts> tag");
+        return;
+    }
+
+    // Get contacts
+    std::size_t contact_count = 0;
+    std::string contact_list;
+
+    for (const auto &child : tag.get_children ())
+    {
+        if (child.get_name () == "c")
+        {
+            auto type = child.get_attribute<std::string> ("t");
+            if (type != "s")
+                log.development (__LINE__, "Unhandled contact type: " + type);
+
+            auto account_id = child.get_attribute<std::string> ("s");
+            auto account_name = child.get_attribute<std::string> ("f");
+
+            if (!contact_list.empty ())
+                contact_list += "\n";
+
+            contact_list += account_name.empty ()
+                                ? account_id
+                                : account_name + " (" + account_id + ")";
+
+            contact_count++;
+        }
+    }
+
+    // Add system message element
+    if (contact_count == 1)
+        add_system_element (std::format ("Contact shared: {}", contact_list));
+
+    else if (contact_count > 1)
+        add_system_element (
+            std::format (
+                "Contacts shared ({}):\n{}", contact_count, contact_list
+            )
+        );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -734,6 +769,83 @@ message_parser::_parse_ss ()
 
     // Add element
     add_element (element);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Parse <URIObject> tag
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+message_parser::_parse_uriobject ()
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // Get minidom tag
+    auto tag = parser_.get_minidom ();
+    if (!tag)
+    {
+        log.warning (__LINE__, "Invalid <URIObject> tag");
+        return;
+    }
+
+    // Get attributes
+    auto type = tag.get_attribute<std::string> ("type");
+    auto uri = tag.get_attribute<std::string> ("uri");
+    std::string content = tag.get_content ();
+    std::size_t filesize = 0;
+    std::string title;
+    std::string description;
+    std::string name;
+
+    // Get children
+    for (const auto &child : tag.get_children ())
+    {
+        auto child_name = child.get_name ();
+
+        if (child_name == "FileSize")
+            filesize = stoll (child.get_content ());
+
+        else if (child_name == "Title")
+            title = child.get_content ();
+
+        else if (child_name == "Description")
+            description = child.get_content ();
+
+        else if (child_name == "OriginalName")
+            name = child.get_attribute<std::string> ("v");
+
+        else if (child_name == "meta")
+            name = child.get_attribute<std::string> ("originalName");
+
+        else if (child_name == "a")
+            ; // ignore link in URIObject
+
+        else
+            log.development (
+                __LINE__, "Unhandled <URIObject> child tag: " + child_name
+            );
+    }
+
+    // Create element
+    std::string text = std::format ("File \"{}\" shared", name);
+
+    if (!type.empty ())
+        text += std::format ("\nType: {}", type);
+
+    if (filesize > 0)
+        text += std::format ("\nSize: {} bytes", filesize);
+
+    if (!title.empty ())
+        text += std::format ("\nTitle: {}", title);
+
+    if (!description.empty ())
+        text += std::format ("\nDescription: {}", description);
+
+    text += std::format ("\nURI: {}", uri);
+
+    if (!content.empty ())
+        text += std::format ("\nText: {}", content);
+
+    add_system_element (text);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
