@@ -79,8 +79,6 @@ vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 void
 vfs_processor_impl::on_complete ()
 {
-    auto transaction = item_.new_transaction ();
-
     _save_app_profiles ();
     _save_calls ();
     _save_contacts ();
@@ -91,8 +89,6 @@ vfs_processor_impl::on_complete ()
     _save_sms_messages ();
     _save_user_accounts ();
     _save_voicemails ();
-
-    transaction.commit ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -160,6 +160,8 @@ ant_impl_vfs_processor::run ()
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     log.info (__LINE__, "Saving evidences");
 
+    auto transaction = item_.new_transaction ();
+
     for (const auto &impl : implementations_)
     {
         try
@@ -172,6 +174,8 @@ ant_impl_vfs_processor::run ()
             log.warning (__LINE__, e.what ());
         }
     }
+
+    transaction.commit ();
 
     log.info (__LINE__, "VFS processing completed");
 }

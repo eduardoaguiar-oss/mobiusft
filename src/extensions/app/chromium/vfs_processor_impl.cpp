@@ -60,9 +60,6 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static const std::string ANT_ID = "evidence.app-chromium";
-static const std::string ANT_NAME = "App Chromium";
-static const std::string ANT_VERSION = "1.0";
 static const std::string APP_FAMILY = "chromium";
 static const std::string APP_NAME = "Chromium";
 static const std::string APP_ID = "chromium";
@@ -258,8 +255,6 @@ vfs_processor_impl::_scan_profile (const mobius::core::io::folder &folder)
 void
 vfs_processor_impl::on_complete ()
 {
-    auto transaction = item_.new_transaction ();
-
     _save_app_profiles ();
     _save_autofills ();
     _save_bookmarked_urls ();
@@ -271,9 +266,6 @@ vfs_processor_impl::on_complete ()
     _save_received_files ();
     _save_user_accounts ();
     _save_visited_urls ();
-
-    item_.set_ant (ANT_ID, ANT_NAME, ANT_VERSION);
-    transaction.commit ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
