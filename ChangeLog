@@ -13,6 +13,8 @@ Mobius Forensic Toolkit 2.23
 	* libmobius_core: Added new method database::new_select_statement (table_name, cols names)
 	* libmobius_core: Changed to load C++ extensions directly from data/extensions folder
 	* libmobius_framework: Changed function ant_impl_vfs_processor::run to create a new transaction
+	* libmobius_framework: Added support for Windows.old/Users folders on function get_username_from_path
+	* libmobius_framework: Added support for Windows.old/Users folders on ant_impl_vfs_processor::_scan_user_folders method
 	* libmobius_python: Added new function decoder::hexstring
 	* libmobius_python: Added new method decoder.sgml.parser.get_last
 	* pymobius.registry.user_accounts: Fixed error in TS_Property constructor

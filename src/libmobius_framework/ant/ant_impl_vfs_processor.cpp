@@ -16,6 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/datasource/datasource_vfs.hpp>
+#include <mobius/core/io/walker.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/resource.hpp>
 #include <mobius/core/string_functions.hpp>
@@ -193,17 +194,21 @@ ant_impl_vfs_processor::_scan_user_folders (
 
     try
     {
-        for (const auto &child : folder.get_children ())
-        {
-            if (child.is_folder ())
-            {
-                auto child_folder = child.get_folder ();
-                auto lname =
-                    mobius::core::string::tolower (child_folder.get_name ());
+        mobius::core::io::walker w (folder);
 
-                if (lname == "home" || lname == "users" ||
-                    lname == "documents and settings")
-                    _process_folder (child_folder);
+        for (const auto &[name, child] : w.get_folders_with_names ())
+        {
+            if (name == "home" || name == "users" ||
+                name == "documents and settings")
+                _process_folder (child);
+
+            else if (name == "windows.old")
+            {
+                mobius::core::io::walker wo_walker (child);
+
+                for (const auto &user_folder :
+                     wo_walker.get_folders_by_name ("users"))
+                    _process_folder (user_folder);
             }
         }
     }

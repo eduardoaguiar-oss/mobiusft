@@ -25,8 +25,13 @@ namespace mobius::framework
 // @param path Path to profile
 // @return Username extracted from path
 //
-// @note Paths are in the following format: /FSxx/Users/username/... or
-// /FSxx/home/username/... where FSxx is the filesystem identifier.
+// @note Paths are in the following format:
+//   1. /FSxx/Users/username/
+//   2. /FSxx/home/username/
+//   3. /FSxx/Documents and Settings/username/
+//   4. /FSxx/Windows.old/Users/username/
+//
+// where FSxx is the filesystem identifier.
 // Example: /FS01/Users/johndoe/AppData/Local/Google/Chrome/User Data/
 // In this case, the username is "johndoe".
 // If the path does not match the expected format, an empty string is returned.
@@ -41,6 +46,10 @@ get_username_from_path (const std::string &path)
         (dirnames[2] == "users" || dirnames[2] == "home" ||
          dirnames[2] == "documents and settings"))
         return dirnames[3]; // Username is the fourth directory
+
+    else if (dirnames.size () > 4 && dirnames[2] == "windows.old" &&
+             dirnames[3] == "users")
+        return dirnames[4];
 
     return {}; // No username found
 }
