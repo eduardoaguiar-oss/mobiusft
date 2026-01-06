@@ -30,7 +30,7 @@ add_library(date_code MODULE
 )
 
 set_target_properties(date_code PROPERTIES OUTPUT_NAME "date-code" PREFIX "")
-target_link_libraries(date_code PRIVATE Mobius::Core)
+target_link_libraries(date_code PRIVATE Mobius::Framework Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation

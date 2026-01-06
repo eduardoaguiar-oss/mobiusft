@@ -48,6 +48,7 @@ namespace
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 constexpr std::uint64_t ATTRIBUTE_FILE_THRESHOLD = 33554432; // 32 MiB
+
 const mobius::core::bytearray ATTRIBUTE_FILE_ID = {
     0xde, 0xea, 0xbe, 0xef, 0xc0, 0xc0, 0xa0, 'M',
     'O',  'B',  'I',  'U',  'S',  'P',  'O',  'D'};

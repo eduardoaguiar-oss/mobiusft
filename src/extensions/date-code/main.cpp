@@ -15,12 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <cstdint>
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/datetime/timedelta.hpp>
 #include <mobius/core/mediator.hpp>
 #include <mobius/core/pod/data.hpp>
 #include <mobius/framework/model/item.hpp>
+#include <cstdint>
 #include <string>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -30,7 +30,7 @@ extern "C"
 {
     const char *EXTENSION_ID = "date-code";
     const char *EXTENSION_NAME = "Date Code";
-    const char *EXTENSION_VERSION = "1.1";
+    const char *EXTENSION_VERSION = "1.2";
     const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
     const char *EXTENSION_DESCRIPTION = "Seagate date-code automatic decoding";
 } // extern "C"
@@ -45,19 +45,21 @@ namespace
 static std::uint64_t subscription_id_ = -1;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//! \brief Callback to event "attribute-modified"
-//! \param item Case item
-//! \param attr_id Attribute ID
-//! \param old_value Old value
-//! \param new_value New value
-//! \see
-//! https://www.digital-detective.net/data-recovery-documents/SeagateDateCode_NoteTechnique03-v1.01.pdf
-//! \see https://www.os2museum.com/wp/decoding-seagate-date-codes/
+//! @brief Callback to event "attribute-modified"
+//! @param item Case item
+//! @param attr_id Attribute ID
+//! @param old_value Old value
+//! @param new_value New value
+//! @see https://www.digital-detective.net/data-recovery-documents/SeagateDateCode_NoteTechnique03-v1.01.pdf
+//! @see https://www.os2museum.com/wp/decoding-seagate-date-codes/
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-_callback (mobius::framework::model::item item, const std::string &attr_id,
-           const mobius::core::pod::data &,
-           const mobius::core::pod::data &new_value)
+_callback (
+    mobius::framework::model::item item,
+    const std::string &attr_id,
+    const mobius::core::pod::data &,
+    const mobius::core::pod::data &new_value
+)
 {
     // check if attribute being modified is "manufacturing_date"
     if (attr_id != "manufacturing_date" || !new_value.is_string ())
@@ -103,7 +105,7 @@ _callback (mobius::framework::model::item item, const std::string &attr_id,
         days += 6;
 
     // add days to first day of the fiscal year
-    d += mobius::core::datetime::new_timedelta_from_days(days);
+    d += mobius::core::datetime::new_timedelta_from_days (days);
 
     // set manufacturing date
     item.set_attribute ("manufacturing_date", to_string (d));
