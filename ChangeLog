@@ -5,6 +5,8 @@ Mobius Forensic Toolkit 2.23
 	* app-skype: Changed file_main_db class to retrieve all columns from tables
 	* app-skype: Added support for chat messages
 	* app-skype: Removed pimpl idiom from vfs_processor_impl
+	* app-skype: Contact's birthday calculation fixed
+	* app-skype: User accounts' birthday calculation fixed
 	* date-code: Fixed system lookup error
 	* evidence-viewer: Changed to use chat-message.app_name attribute
 	* libmobius_core: Improved error handling on pod::map::pop_map function

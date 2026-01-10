@@ -363,7 +363,7 @@ file_main_db::_load_accounts (mobius::core::database::database &db)
             obj.avatar_image = stmt.get_column_bytearray (13);
             obj.avatar_policy = stmt.get_column_int64 (14);
             obj.avatar_timestamp = get_datetime (stmt.get_column_int64 (15));
-            obj.birthday = stmt.get_column_int64 (16);
+            obj.birthday = get_birthday (stmt.get_column_int64 (16));
             obj.buddyblob = stmt.get_column_bytearray (17);
             obj.buddycount_policy = stmt.get_column_int64 (18);
             obj.capabilities = stmt.get_column_bytearray (19);
@@ -1001,7 +1001,7 @@ file_main_db::_load_contacts (mobius::core::database::database &db)
             obj.avatar_timestamp = get_datetime (stmt.get_column_int64 (26));
             obj.avatar_url = stmt.get_column_string (27);
             obj.avatar_url_new = stmt.get_column_string (28);
-            obj.birthday = stmt.get_column_int64 (29);
+            obj.birthday = get_birthday(stmt.get_column_int64 (29));
             obj.buddyblob = stmt.get_column_bytearray (30);
             obj.buddystatus = stmt.get_column_int64 (31);
             obj.capabilities = stmt.get_column_bytearray (32);
