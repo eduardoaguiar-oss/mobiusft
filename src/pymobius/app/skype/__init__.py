@@ -16,7 +16,6 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import pymobius.operating_system
-import pymobius.app.skype.app.profile
 import pymobius.app.skype.app_v14.profile
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -63,14 +62,6 @@ class model (object):
     for child in folder.get_children ():
       if child.is_reallocated ():
         pass
-
-      elif child.is_folder ():
-        skype_db = child.get_child_by_name ('skype.db')
-
-        if skype_db:
-          p = pymobius.app.skype.app.profile.Profile (child, self.__item)
-          p.username = username
-          self.__profiles.append (p)
 
       elif child.name.startswith ('s4l-') and child.name.endswith ('.db'):
         p = pymobius.app.skype.app_v14.profile.Profile (child, self.__item)

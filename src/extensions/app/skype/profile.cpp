@@ -216,7 +216,14 @@ class profile::impl
     std::vector<account>
     get_accounts () const
     {
-        return accounts_;
+        std::vector<account> accounts;
+
+        std::transform (
+            accounts_.begin (), accounts_.end (), std::back_inserter (accounts),
+            [] (const auto &pair) { return pair.second; }
+        );
+
+        return accounts;
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -402,7 +409,7 @@ class profile::impl
     std::string account_name_;
 
     // @brief Accounts
-    std::vector<account> accounts_;
+    std::unordered_map<std::string, account> accounts_;
 
     // @brief Calls
     std::vector<call> calls_;
@@ -425,17 +432,27 @@ class profile::impl
     // @brief Voicemails
     std::vector<voicemail> voicemails_;
 
-    // @brief Skype usernames cache
-    std::unordered_map<std::string, std::string> skypename_cache_;
+    // @brief Map MRI or identity -> name
+    std::unordered_map<std::string, std::string> name_cache_;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Set Skype name cache
+    // @param identity_or_mri Identity or MRI
+    // @param name Name
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void
+    _set_name (const std::string &identity_or_mri, const std::string &name)
+    {
+        if (!identity_or_mri.empty () && !name.empty () && identity_or_mri != name)
+            name_cache_[identity_or_mri] = name;
+    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _set_entry (const mobius::core::io::entry &);
     void _update_mtime (const mobius::core::io::file &);
-    std::string _get_skypename (const std::string &) const;
-    std::string _get_account_name (const std::string &) const;
-    void _set_skypename (const std::string &, const std::string &);
+    std::string _get_formatted_name (const std::string &) const;
     void _normalize_data ();
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -469,6 +486,9 @@ class profile::impl
         const file_skype_db &, const mobius::core::io::file &
     );
     void _load_skype_db_contacts (
+        const file_skype_db &, const mobius::core::io::file &
+    );
+    void _load_skype_db_messages (
         const file_skype_db &, const mobius::core::io::file &
     );
     void _load_skype_db_sms_messages (
@@ -538,63 +558,33 @@ profile::impl::_update_mtime (const mobius::core::io::file &f)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get skype user name
-// @param Skype name
+// @brief Get formatted account name
+// @param identity_or_mri Identity or MRI
 // @return User name
-// If skype name found in cache, return "Full Name (skype_name)". Otherwise,
-// return skype_name as is.
+// If skype name found in cache, return "Full Name (identity_or_mri)". Otherwise,
+// return identity_or_mri as is.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-profile::impl::_get_skypename (const std::string &skype_name) const
+profile::impl::_get_formatted_name (const std::string &identity_or_mri) const
 {
     std::string full_name;
 
-    if (!skype_name.empty ())
+    if (!identity_or_mri.empty ())
     {
-        auto it = skypename_cache_.find (skype_name);
+        auto it = name_cache_.find (identity_or_mri);
 
-        if (it != skypename_cache_.end ())
+        if (it != name_cache_.end ())
         {
             full_name = it->second;
 
-            if (!full_name.empty () && full_name != skype_name)
-                full_name += " (" + skype_name + ")";
+            if (!full_name.empty () && full_name != identity_or_mri)
+                full_name += " (" + identity_or_mri + ")";
         }
         else
-            full_name = skype_name;
+            full_name = identity_or_mri;
     }
 
     return full_name;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get accout name
-// @param Skype name
-// @return Account name, if found
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-profile::impl::_get_account_name (const std::string &skype_name) const
-{
-    auto it = skypename_cache_.find (skype_name);
-
-    if (it != skypename_cache_.end ())
-        return it->second;
-
-    return {};
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Set skype user name in cache
-// @param Skype name
-// @param Full name
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-profile::impl::_set_skypename (
-    const std::string &skype_name, const std::string &full_name
-)
-{
-    if (!skype_name.empty () && !full_name.empty () && skype_name != full_name)
-        skypename_cache_[skype_name] = full_name;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -670,10 +660,16 @@ profile::impl::_load_main_db_accounts (
     {
         for (const auto &acc : fm.get_accounts ())
         {
-            account a;
+            // Set primary account
+            account_id_ = acc.skypename;
+            account_name_ = acc.fullname;
+
+            // Create new account or update existing one
+            auto &a = accounts_.try_emplace (acc.skypename).first->second;
             a.id = acc.skypename;
             a.name = acc.fullname;
 
+            // Add phone numbers
             if (!acc.phone_home.empty ())
                 a.phone_numbers.push_back (acc.phone_home);
 
@@ -683,8 +679,11 @@ profile::impl::_load_main_db_accounts (
             if (!acc.phone_mobile.empty ())
                 a.phone_numbers.push_back (acc.phone_mobile);
 
-            if (!acc.emails.empty ())
-                a.emails = mobius::core::string::split (acc.emails, " ");
+            // Add email addresses
+            auto emails = mobius::core::string::split (acc.emails, " ");
+            std::copy (
+                emails.begin (), emails.end (), std::back_inserter (a.emails)
+            );
 
             // Calculate skypeout balance
             double balance = double (acc.skypeout_balance);
@@ -692,7 +691,7 @@ profile::impl::_load_main_db_accounts (
                 balance /= 10.0;
 
             a.metadata.set ("record_idx", acc.idx);
-            a.metadata.set ("schema_version", fm.get_schema_version ());
+            a.metadata.set ("main_db_schema_version", fm.get_schema_version ());
             a.metadata.set ("about", acc.about);
             a.metadata.set ("ad_policy", acc.ad_policy);
             a.metadata.set ("added_in_shared_group", acc.added_in_shared_group);
@@ -801,12 +800,9 @@ profile::impl::_load_main_db_accounts (
             a.metadata.set ("voicemail_policy", acc.voicemail_policy);
             a.metadata.set ("webpresence_policy", acc.webpresence_policy);
 
-            a.f = f;
-            accounts_.push_back (a);
+            a.files.push_back (f);
 
-            account_id_ = acc.skypename;
-            account_name_ = acc.fullname;
-            _set_skypename (acc.skypename, acc.fullname);
+            _set_name (acc.skypename, acc.fullname);
         }
     }
     catch (const std::exception &e)
@@ -843,7 +839,7 @@ profile::impl::_load_main_db_calls (
             // Caller and callees
             for (const auto &m : cl.call_members)
             {
-                _set_skypename (m.identity, m.dispname);
+                _set_name (m.identity, m.dispname);
 
                 if (m.type == 1)
                     c.caller = m.identity;
@@ -1215,7 +1211,7 @@ profile::impl::_load_main_db_contacts (
             c.metadata.set ("unified_servants", ct.unified_servants);
 
             contacts_.push_back (c);
-            _set_skypename (c.id, c.name);
+            _set_name (c.id, c.name);
         }
     }
     catch (const std::exception &e)
@@ -1322,7 +1318,7 @@ profile::impl::_load_main_db_messages (
         // Load messages
         for (const auto &m : fm.get_messages ())
         {
-            _set_skypename (m.author, m.from_dispname);
+            _set_name (m.author, m.from_dispname);
 
             message m_obj;
             m_obj.timestamp = m.timestamp;
@@ -1586,7 +1582,9 @@ profile::impl::add_skype_db_file (const mobius::core::io::file &f)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Load data
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        _load_skype_db_account (fs, f);
         _load_skype_db_contacts (fs, f);
+        _load_skype_db_messages (fs, f);
         _load_skype_db_sms_messages (fs, f);
         _normalize_data ();
 
@@ -1628,29 +1626,33 @@ profile::impl::_load_skype_db_account (
         account_name_ = acc.full_name;
         account_mri_ = acc.mri;
 
-        account a;
+        _set_name (acc.skype_name, acc.full_name);
+        _set_name (acc.mri, acc.full_name);
+
+        // Create new account or update existing one
+        auto &a = accounts_.try_emplace (acc.skype_name).first->second;
+
         a.id = acc.skype_name;
         a.name = acc.full_name;
+        a.names.push_back (acc.full_name);
+        a.files.push_back (f);
 
-        a.metadata.set ("schema_version", fs.get_schema_version ());
+        a.metadata.set ("skype_db_schema_version", fs.get_schema_version ());
+        a.metadata.set ("avatar_file_path", acc.avatar_file_path);
+        a.metadata.set ("avatar_url", acc.avatar_url);
         a.metadata.set ("balance_precision", acc.balance_precision);
         a.metadata.set ("balance_currency", acc.balance_currency);
-        a.metadata.set ("mri", acc.mri);
-        a.metadata.set ("full_name", acc.full_name);
-        a.metadata.set ("first_name", acc.first_name);
-        a.metadata.set ("last_name", acc.last_name);
-        a.metadata.set ("mood", acc.mood);
-        a.metadata.set ("avatar_url", acc.avatar_url);
-        a.metadata.set ("avatar_file_path", acc.avatar_file_path);
         a.metadata.set (
             "conversation_last_sync_time", acc.conversation_last_sync_time
         );
+        a.metadata.set ("first_name", acc.first_name);
+        a.metadata.set ("full_name", acc.full_name);
+        a.metadata.set ("last_name", acc.last_name);
         a.metadata.set (
             "last_seen_inbox_timestamp", acc.last_seen_inbox_timestamp
         );
-
-        accounts_.push_back (a);
-        _set_skypename (acc.skype_name, acc.full_name);
+        a.metadata.set ("mood", acc.mood);
+        a.metadata.set ("mri", acc.mri);
     }
     catch (const std::exception &e)
     {
@@ -1677,7 +1679,7 @@ profile::impl::_load_skype_db_contacts (
         for (const auto &ct : fs.get_contacts ())
         {
             contact c;
-            //c.id = ct.skypename;
+            c.id = ct.mri;
             c.gender = get_domain_value (GENDER_DOMAIN, ct.gender);
             c.birthday = ct.birthday;
 
@@ -1782,6 +1784,60 @@ profile::impl::_load_skype_db_contacts (
             c.f = f;
 
             contacts_.push_back (c);
+            _set_name (c.id, c.name);
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
+        );
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load skype.db file messages
+// @param fs Skype.db file
+// @param f Original file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_load_skype_db_messages (
+    const file_skype_db &fs, const mobius::core::io::file &f
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        for (const auto &m : fs.get_messages ())
+        {
+            message m_obj;
+
+            m_obj.timestamp = m.timestamp;
+            m_obj.sender = m.author;
+            m_obj.content = m.parsed_content;
+
+            // Recipients
+            if (m.author == account_mri_)
+                m_obj.recipients.push_back (m.conversation_mri);
+
+            else
+                m_obj.recipients.push_back (account_mri_);
+
+            // Metadata
+            m_obj.metadata.set ("record_idx", m.idx);
+            m_obj.metadata.set ("schema_version", fs.get_schema_version ());
+            m_obj.metadata.set ("author", m.author);
+            m_obj.metadata.set ("content", m.content);
+            m_obj.metadata.set ("convdbid", m.convdbid);
+            m_obj.metadata.set ("dbid", m.dbid);
+            m_obj.metadata.set ("editedtime", m.editedtime);
+            m_obj.metadata.set ("id", m.id);
+            m_obj.metadata.set ("messagetype", m.messagetype);
+            m_obj.metadata.set ("sendingstatus", m.sendingstatus);
+            m_obj.metadata.update (m.metadata);
+
+            messages_.push_back (m_obj);
         }
     }
     catch (const std::exception &e)
@@ -1819,7 +1875,7 @@ profile::impl::_load_skype_db_sms_messages (
             {
                 log.development (
                     __LINE__, "SMS message sent by account user: " +
-                                  _get_skypename (account_id_)
+                                  _get_formatted_name (account_id_)
                 );
             }
             else
@@ -1930,8 +1986,10 @@ profile::impl::_load_s4l_db_accounts (
     try
     {
         auto acc = fs.get_account ();
+        _set_name (acc.skype_name, acc.full_name);
 
-        account a;
+        // Create new account or update existing one
+        auto &a = accounts_.try_emplace (acc.skype_name).first->second;
         a.id = acc.skype_name;
         a.name = acc.full_name;
         a.phone_numbers = acc.phone_numbers;
@@ -1962,10 +2020,6 @@ profile::impl::_load_s4l_db_accounts (
         a.metadata.set ("province", acc.province);
         a.metadata.set ("thumbnail_url", acc.thumbnail_url);
         a.metadata.set ("timezone", acc.timezone);
-
-        a.f = f;
-        accounts_.push_back (a);
-        _set_skypename (acc.skype_name, acc.full_name);
     }
     catch (const std::exception &e)
     {
@@ -2000,7 +2054,7 @@ profile::impl::_load_s4l_db_calls (
 
             // Caller and callees
             c.caller = cl.originator_participant.skype_name;
-            _set_skypename (
+            _set_name (
                 cl.originator_participant.skype_name,
                 cl.originator_participant.full_name
             );
@@ -2008,7 +2062,7 @@ profile::impl::_load_s4l_db_calls (
             if (cl.call_type == "twoParty")
             {
                 c.callees.push_back (cl.target_participant.skype_name);
-                _set_skypename (
+                _set_name (
                     cl.target_participant.skype_name,
                     cl.target_participant.full_name
                 );
@@ -2020,7 +2074,7 @@ profile::impl::_load_s4l_db_calls (
                 {
                     if (p.skype_name != cl.originator_participant.skype_name)
                         c.callees.push_back (p.skype_name);
-                    _set_skypename (p.skype_name, p.full_name);
+                    _set_name (p.skype_name, p.full_name);
                 }
             }
 
@@ -2070,6 +2124,9 @@ profile::impl::_load_s4l_db_contacts (
     {
         for (const auto &ct : fs.get_contacts ())
         {
+            _set_name (ct.skype_name, ct.full_name);
+            _set_name (ct.mri, ct.full_name);
+
             contact c;
             c.id = ct.skype_name;
             c.name = ct.full_name;
@@ -2093,7 +2150,6 @@ profile::impl::_load_s4l_db_contacts (
             c.metadata.set ("fetched_time", ct.fetched_time);
 
             contacts_.push_back (c);
-            _set_skypename (ct.skype_name, ct.full_name);
         }
     }
     catch (const std::exception &e)
@@ -2112,16 +2168,16 @@ void
 profile::impl::_normalize_data ()
 {
     if (account_name_.empty ())
-        account_name_ = _get_account_name (account_id_);
+        account_name_ = _get_formatted_name (account_id_);
 
     for (auto &cl : calls_)
     {
         // Caller
-        cl.caller = _get_skypename (cl.caller);
+        cl.caller = _get_formatted_name (cl.caller);
 
         // Callees
         for (auto &callee : cl.callees)
-            callee = _get_skypename (callee);
+            callee = _get_formatted_name (callee);
 
         // Sort callees again after normalization
         std::sort (cl.callees.begin (), cl.callees.end ());
@@ -2130,27 +2186,27 @@ profile::impl::_normalize_data ()
     for (auto &c : contacts_)
     {
         if (c.name.empty ())
-            c.name = _get_account_name (c.id);
+            c.name = _get_formatted_name (c.id);
     }
 
     for (auto &m : messages_)
     {
         // Sender
-        m.sender = _get_skypename (m.sender);
+        m.sender = _get_formatted_name (m.sender);
 
         // Recipients
         for (auto &recipient : m.recipients)
-            recipient = _get_skypename (recipient);
+            recipient = _get_formatted_name (recipient);
     }
 
     for (auto &s : sms_)
     {
         // Sender
-        s.sender = _get_skypename (s.sender);
+        s.sender = _get_formatted_name (s.sender);
 
         // Recipients
         for (auto &recipient : s.recipients)
-            recipient = _get_skypename (recipient);
+            recipient = _get_formatted_name (recipient);
     }
 }
 

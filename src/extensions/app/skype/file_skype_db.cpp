@@ -21,10 +21,12 @@
 #include <mobius/core/io/tempfile.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/string_functions.hpp>
+#include <format>
 #include <limits>
 #include <unordered_map>
 #include <unordered_set>
 #include "common.hpp"
+#include "message_parser.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // skype.db file tables:
@@ -148,6 +150,8 @@ file_skype_db::file_skype_db (const mobius::core::io::reader &reader)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         _load_account (db);
         _load_contacts (db);
+        _load_corelib_messages (db);
+        _load_messages (db);
         _load_sms_messages (db);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -327,6 +331,309 @@ file_skype_db::_load_contacts (mobius::core::database::database &db)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load corelib messages
+// @param db Database object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file_skype_db::_load_corelib_messages (mobius::core::database::database &db)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=
+        // Load corelib_conversations table into a multimap
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=
+        std::unordered_map<std::int64_t, std::pair<std::string, std::string>>
+            conv_identity;
+
+        auto stmt = db.new_statement (
+            "SELECT id, identity, given_displayname FROM corelib_conversations"
+        );
+
+        // Retrieve records from corelib_conversations table
+        while (stmt.fetch_row ())
+        {
+            std::int64_t id = stmt.get_column_int64 (0);
+            std::string identity = stmt.get_column_string (1);
+            std::string given_displayname = stmt.get_column_string (2);
+
+            conv_identity.emplace (
+                id, std::make_pair (identity, given_displayname)
+            );
+        }
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=
+        // Prepare SQL statement for table corelib_messages
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=
+        stmt = db.new_select_statement (
+            "corelib_messages", {"annotation_version",
+                                 "author",
+                                 "author_was_live",
+                                 "body_is_rawxml",
+                                 "body_xml",
+                                 "bots_settings",
+                                 "call_guid",
+                                 "charmsg_type",
+                                 "chatmsg_status",
+                                 "chatname",
+                                 "consumption_status",
+                                 "content_flags",
+                                 "convo_id",
+                                 "crc",
+                                 "dialog_partner",
+                                 "edited_by",
+                                 "edited_timestamp",
+                                 "error_code",
+                                 "extprop_mms_msg_metadata",
+                                 "extprop_sms_server_id",
+                                 "extprop_sms_src_msg_id",
+                                 "extprop_sms_sync_global_id",
+                                 "from_dispname",
+                                 "guid",
+                                 "id",
+                                 "identities",
+                                 "is_parmanent",
+                                 "language",
+                                 "leavereason",
+                                 "newoptions",
+                                 "newrole",
+                                 "oldoptions",
+                                 "option_bits",
+                                 "param_key",
+                                 "param_value",
+                                 "participant_count",
+                                 "pk_id",
+                                 "reaction_thread",
+                                 "reason",
+                                 "remote_id",
+                                 "sending_status",
+                                 "server_id",
+                                 "timestamp",
+                                 "timestamp_ms",
+                                 "type"}
+        );
+
+        // Retrieve records from corelib_messages table
+        std::uint64_t idx = 0;
+
+        while (stmt.fetch_row ())
+        {
+            message obj;
+
+            // Set attributes
+            obj.idx = idx++;
+            obj.author = stmt.get_column_string (1);
+            obj.content = stmt.get_column_string (4);
+            obj.convdbid = stmt.get_column_int64 (12);
+            obj.editedtime = get_datetime (stmt.get_column_int64 (16));
+            obj.id = stmt.get_column_int64 (24);
+            obj.sendingstatus = stmt.get_column_int64 (40);
+            obj.timestamp = get_datetime (stmt.get_column_int64 (42));
+            obj.messagetype = stmt.get_column_int64 (44);
+
+            // Set metadata
+            obj.metadata.set ("annotation_version", stmt.get_column_int64 (0));
+            obj.metadata.set ("author", stmt.get_column_string (1));
+            obj.metadata.set ("author_was_live", stmt.get_column_bool (2));
+            obj.metadata.set ("body_is_rawxml", stmt.get_column_int64 (3));
+            obj.metadata.set ("body_xml", stmt.get_column_string (4));
+            obj.metadata.set ("bots_settings", stmt.get_column_string (5));
+            obj.metadata.set ("call_guid", stmt.get_column_string (6));
+            obj.metadata.set ("charmsg_type", stmt.get_column_int64 (7));
+            obj.metadata.set ("chatmsg_status", stmt.get_column_int64 (8));
+            obj.metadata.set ("chatname", stmt.get_column_string (9));
+            obj.metadata.set ("consumption_status", stmt.get_column_int64 (10));
+            obj.metadata.set ("content_flags", stmt.get_column_int64 (11));
+            obj.metadata.set ("convo_id", stmt.get_column_int64 (12));
+            obj.metadata.set ("crc", stmt.get_column_int64 (13));
+            obj.metadata.set ("dialog_partner", stmt.get_column_string (14));
+            obj.metadata.set ("edited_by", stmt.get_column_string (15));
+            obj.metadata.set (
+                "edited_timestamp", get_datetime (stmt.get_column_int64 (16))
+            );
+            obj.metadata.set ("error_code", stmt.get_column_int64 (17));
+            obj.metadata.set (
+                "extprop_mms_msg_metadata", stmt.get_column_string (18)
+            );
+            obj.metadata.set (
+                "extprop_sms_server_id", stmt.get_column_string (19)
+            );
+            obj.metadata.set (
+                "extprop_sms_src_msg_id", stmt.get_column_string (20)
+            );
+            obj.metadata.set (
+                "extprop_sms_sync_global_id", stmt.get_column_string (21)
+            );
+            obj.metadata.set ("from_dispname", stmt.get_column_string (22));
+            obj.metadata.set ("id", stmt.get_column_int64 (24));
+            obj.metadata.set ("identities", stmt.get_column_string (25));
+            obj.metadata.set ("is_parmanent", stmt.get_column_int64 (26));
+            obj.metadata.set ("language", stmt.get_column_string (27));
+            obj.metadata.set ("leavereason", stmt.get_column_int64 (28));
+            obj.metadata.set ("newoptions", stmt.get_column_int64 (29));
+            obj.metadata.set ("newrole", stmt.get_column_int64 (30));
+            obj.metadata.set ("oldoptions", stmt.get_column_int64 (31));
+            obj.metadata.set ("option_bits", stmt.get_column_int64 (32));
+            obj.metadata.set ("param_key", stmt.get_column_int64 (33));
+            obj.metadata.set ("param_value", stmt.get_column_int64 (34));
+            obj.metadata.set ("participant_count", stmt.get_column_int64 (35));
+            obj.metadata.set ("pk_id", stmt.get_column_int64 (36));
+            obj.metadata.set ("reaction_thread", stmt.get_column_string (37));
+            obj.metadata.set ("reason", stmt.get_column_string (38));
+            obj.metadata.set ("remote_id", stmt.get_column_int64 (39));
+            obj.metadata.set ("sending_status", stmt.get_column_int64 (40));
+            obj.metadata.set ("server_id", stmt.get_column_int64 (41));
+            obj.metadata.set ("timestamp", stmt.get_column_int64 (42));
+            obj.metadata.set ("timestamp_ms", stmt.get_column_int64 (43));
+            obj.metadata.set ("type", stmt.get_column_int64 (44));
+
+            // Parse message content
+            try
+            {
+                message_parser parser (obj.content);
+                parser.parse ();
+
+                obj.parsed_content = parser.get_content ();
+
+                if (obj.parsed_content.empty ())
+                {
+                    obj.content = {mobius::core::pod::map {
+                        {"type", "text"},
+                        {"text", obj.content}
+                    }};
+                }
+            }
+            catch (const std::exception &e)
+            {
+                log.warning (__LINE__, e.what ());
+                log.warning (__LINE__, "Raw message content: " + obj.content);
+            }
+
+            // Set conversation data
+            auto iter = conv_identity.find (obj.convdbid);
+
+            if (iter != conv_identity.end ())
+            {
+                obj.conversation_identity = iter->second.first;
+                obj.conversation_name = iter->second.second;
+            }
+
+            // Add messages to the list
+            messages_.emplace_back (std::move (obj));
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load messages
+// @param db Database object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file_skype_db::_load_messages (mobius::core::database::database &db)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        // Prepare SQL statement for tables messages and conversations
+        auto stmt = db.new_statement (
+            "SELECT m.author, "
+            "m.clientmessageid, "
+            "m.content, "
+            "m.convdbid, "
+            "m.dbid, "
+            "m.editedtime,"
+            "m.id, "
+            "m.is_preview, "
+            "m.json, "
+            "m.messagetype, "
+            "m.originalarrivaltime, "
+            "m.properties, "
+            "m.sendingstatus, "
+            "m.skypeguid, "
+            "m.version, "
+            "c.type, "
+            "c.id "
+            "FROM messages m, conversations c "
+            "WHERE c.dbid = m.convdbid "
+            "AND m.smsmessagedbid IS NULL"
+        );
+
+        // Retrieve records from messages table
+        std::uint64_t idx = 0;
+
+        while (stmt.fetch_row ())
+        {
+            message obj;
+
+            // Set attributes
+            obj.idx = idx++;
+            obj.author = stmt.get_column_string (0);
+            obj.content = stmt.get_column_string (2);
+            obj.convdbid = stmt.get_column_int64 (3);
+            obj.dbid = stmt.get_column_int64 (4);
+            obj.editedtime = get_time (stmt.get_column_int64 (5));
+            obj.id = stmt.get_column_int64 (6);
+            obj.messagetype = stmt.get_column_int64 (9);
+            obj.timestamp = get_datetime (stmt.get_column_int64 (10) / 1000);
+            obj.sendingstatus = stmt.get_column_int64 (12);
+            obj.conversation_type = stmt.get_column_int64 (15);
+            obj.conversation_identity = stmt.get_column_string (16);
+
+            // Set metadata
+            obj.metadata.set ("clientmessageid", stmt.get_column_int64 (1));
+            obj.metadata.set ("is_preview", stmt.get_column_bool (7));
+            obj.metadata.set ("json", stmt.get_column_string (8));
+            obj.metadata.set (
+                "original_arrival_time",
+                get_datetime (stmt.get_column_int64 (10) / 1000)
+            );
+            obj.metadata.set ("properties", stmt.get_column_string (11));
+            obj.metadata.set ("version", stmt.get_column_int64 (14));
+
+            // Set conversation MRI
+            obj.conversation_mri = std::format (
+                "{}:{}", obj.conversation_type, obj.conversation_identity
+            );
+
+            // Parse message content
+            try
+            {
+                message_parser parser (obj.content);
+                parser.parse ();
+
+                obj.parsed_content = parser.get_content ();
+
+                if (obj.parsed_content.empty ())
+                {
+                    obj.content = {mobius::core::pod::map {
+                        {"type", "text"},
+                        {"text", obj.content}
+                    }};
+                }
+            }
+            catch (const std::exception &e)
+            {
+                log.warning (__LINE__, e.what ());
+                log.warning (__LINE__, "Raw message content: " + obj.content);
+            }
+
+            // Add messages to the list
+            messages_.emplace_back (std::move (obj));
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Load SMS messages
 // @param db Database object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -376,7 +683,7 @@ file_skype_db::_load_sms_messages (mobius::core::database::database &db)
             obj.content = stmt.get_column_string (2);
             obj.convdbid = stmt.get_column_int64 (3);
             obj.dbid = stmt.get_column_int64 (4);
-            obj.editedtime = stmt.get_column_int64 (5);
+            obj.editedtime = get_time (stmt.get_column_int64 (5));
             obj.id = stmt.get_column_int64 (6);
             obj.is_preview = stmt.get_column_bool (7);
             obj.json = stmt.get_column_string (8);

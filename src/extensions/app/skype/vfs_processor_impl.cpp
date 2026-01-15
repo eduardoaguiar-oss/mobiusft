@@ -504,14 +504,14 @@ vfs_processor_impl::_save_user_accounts ()
             // Set attributes
             e.set_attribute ("account_type", "app.skype");
             e.set_attribute ("id", acc.id);
+            e.set_attribute ("name", acc.name);
             e.set_attribute ("password", mobius::core::bytearray {});
             e.set_attribute ("password_found", false);
-            e.set_attribute ("is_deleted", acc.f.is_deleted ());
-            e.set_attribute ("phones", acc.phone_numbers);
-            e.set_attribute ("emails", acc.emails);
-            e.set_attribute ("organizations", acc.organizations);
             e.set_attribute ("addresses", acc.addresses);
+            e.set_attribute ("emails", acc.emails);
             e.set_attribute ("names", acc.names);
+            e.set_attribute ("organizations", acc.organizations);
+            e.set_attribute ("phones", acc.phone_numbers);
 
             // Set metadata
             auto metadata = mobius::core::pod::map ();
@@ -527,7 +527,9 @@ vfs_processor_impl::_save_user_accounts ()
 
             // Tags and sources
             e.set_tag ("app.chat");
-            e.add_source (acc.f);
+
+            for (const auto &f : acc.files)
+                e.add_source (f);
         }
     }
 }

@@ -29,65 +29,195 @@ namespace
 // @brief Emoji representation as Unicode char
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static const std::unordered_map<std::string, std::string> EMOJI_CHARS = {
-    {"angel", "👼"},       {"anger", "🤯"},       {"angry", "😠"},
-    {"bandit", "😈"},      {"banned", "🚫"},      {"bear", "🧸"},
-    {"bike", "🚴"},        {"bombed", "💣"},      {"blush", "😳"},
-    {"bomb", "💣"},        {"brokenheart", "💔"}, {"brb", "🕒"},
-    {"call", "📞"},        {"camera", "📷"},      {"catface", "🐱"},
-    {"champagne", "🍾"},   {"chocolate", "🍫"},   {"clap", "👏"},
-    {"clapping", "👏"},    {"clownface", "🤡"},   {"confused", "😕"},
-    {"coolguy", "😎"},     {"crying", "😢"},      {"danceparty", "🕺"},
-    {"devilface", "😈"},   {"disgust", "🤢"},     {"dogface", "🐶"},
-    {"dollarbill", "💵"},  {"dollar", "💵"},      {"dollars", "💵"},
-    {"dizzy", "😵"},       {"cake", "🎂"},        {"cash", "💰"},
-    {"cat", "🐈"},         {"claps", "👏"},       {"clown", "🤡"},
-    {"coffee_cup", "☕"},  {"coffee", "☕"},      {"cool", "😎"},
-    {"cry", "😢"},         {"cwl", "😂"},         {"dance", "🕺"},
-    {"devil", "😈"},       {"dog", "🐕"},         {"drink", "🍸"},
-    {"drunk", "🥴"},       {"dull", "🙄"},        {"emo", "🤯"},
-    {"envy", "😒"},        {"explode", "💣"},     {"explosion", "💣"},
-    {"facepalm", "🤦"},    {"fear", "😨"},        {"fingerscrossed", "🤞"},
-    {"ghost", "👻"},       {"gift", "🎁"},        {"glasses", "🕶"},
-    {"giggle", "🤭"},      {"handsinair", "🙌"},  {"happytears", "😂"},
-    {"happy", "🙂"},       {"heart", "❤"},        {"hearteyes", "😍"},
-    {"heidy", "🐿"},       {"hi", "👋"},          {"highfive", "🖐"},
-    {"hooray", "🎉"},      {"hug", "🧸"},         {"idea", "💡"},
-    {"innocent", "😇"},    {"inlove", "🥰"},      {"joy", "😂"},
-    {"kissing", "😗"},     {"kiss", "😗"},        {"ladyvamp", "🧛"},
-    {"ladyvampire", "🧛"}, {"laughing", "😆"},    {"laugh", "😃"},
-    {"lips", "💋"},        {"lipssealed", "🤐"},  {"loudlycrying", "😭"},
-    {"makeup", "💄"},      {"monocle", "🧐"},     {"mail", "✉"},
-    {"meh", "😑"},         {"money", "💰"},       {"mmm", "😋"},
-    {"monkey", "🐒"},      {"mooning", "🌝"},     {"muscle", "💪"},
-    {"muscleman", "💪"},   {"music", "🎶"},       {"nerd", "🤓"},
-    {"nerdy", "🤓"},       {"ninja", "🥷"},       {"no", "👎"},
-    {"nod", "👍"},         {"notworthy", "🙄"},   {"okeydokey", "👌"},
-    {"ok", "👌"},          {"party", "🥳"},       {"phone", "📱"},
-    {"pig", "🐖"},         {"poop", "💩"},        {"pray", "🙏"},
-    {"pizza", "🍕"},       {"praying", "🙏"},     {"puke", "🤮"},
-    {"pumpkin", "🎃"},     {"punch", "👊"},       {"priidu", "🤠"},
-    {"rolleyes", "🙄"},    {"robot", "🤖"},       {"rose", "🌹"},
-    {"rain", "🌧"},        {"roflmao", "🤣"},     {"rofl", "🤣"},
-    {"rocket", "🚀"},      {"rock", "🤘"},        {"sadface", "😞"},
-    {"sadcat", "😿"},      {"sadcry", "😭"},      {"sad", "😧"},
-    {"sadness", "😢"},     {"satisfied", "😌"},   {"sarcastic", "😒"},
-    {"scared", "😱"},      {"scream", "😱"},      {"shocked", "😲"},
-    {"shake", "🤝"},       {"shy", "😊"},         {"sick", "🤢"},
-    {"sleeping", "😴"},    {"skype", "💬"},       {"skull", "💀"},
-    {"sleepy", "😪"},      {"smile", "😄"},       {"smirk", "😏"},
-    {"speechless", "😐"},  {"squirrel", "🐿"},    {"star", "⭐"},
-    {"stareyes", "🤩"},    {"sun", "🌞"},         {"surprised", "😲"},
-    {"swear", "🤬"},       {"stop", "✋"},        {"sweat", "😓"},
-    {"think", "🤔"},       {"time", "⏲"},         {"tongueout", "😛"},
-    {"tmi", "🤭"},         {"toothygrin", "😁"},  {"tongue", "😛"},
-    {"thumbsdown", "👎"},  {"thumbsup", "👍"},    {"tired", "😫"},
-    {"tumbleweed", "🌵"},  {"unhappy", "☹"},      {"unamused", "😒"},
-    {"vampire", "🧛"},     {"victory", "✌"},      {"waiting", "⏳"},
-    {"wavehand", "👋"},    {"wave", "👋"},        {"weary", "😩"},
-    {"whistle", "😗"},     {"winkey", "😉"},      {"woozy", "🥴"},
-    {"wasntme", "🙄"},     {"wave", "🌊"},        {"whew", "😮‍💨"},
-    {"worry", "😟"},       {"wonder", "🤔"},      {"xd", "😆"},
-    {"yawn", "🥱"},        {"yes", "👍"},         {"yoga", "🧘"},
+    {"angel", "👼"},
+    {"anger", "🤯"},
+    {"angry", "😠"},
+    {"bandit", "😈"},
+    {"banned", "🚫"},
+    {"bear", "🧸"},
+    {"bike", "🚴"},
+    {"bombed", "💣"},
+    {"blush", "😳"},
+    {"bomb", "💣"},
+    {"brokenheart", "💔"},
+    {"brb", "🕒"},
+    {"call", "📞"},
+    {"camera", "📷"},
+    {"catface", "🐱"},
+    {"champagne", "🍾"},
+    {"chocolate", "🍫"},
+    {"clap", "👏"},
+    {"clapping", "👏"},
+    {"clownface", "🤡"},
+    {"confused", "😕"},
+    {"coolguy", "😎"},
+    {"crying", "😢"},
+    {"danceparty", "🕺"},
+    {"devilface", "😈"},
+    {"disgust", "🤢"},
+    {"dogface", "🐶"},
+    {"dollarbill", "💵"},
+    {"dollar", "💵"},
+    {"dollars", "💵"},
+    {"dizzy", "😵"},
+    {"cake", "🎂"},
+    {"cash", "💰"},
+    {"cat", "🐈"},
+    {"claps", "👏"},
+    {"clown", "🤡"},
+    {"coffee_cup", "☕"},
+    {"coffee", "☕"},
+    {"cool", "😎"},
+    {"cry", "😢"},
+    {"cwl", "😂"},
+    {"dance", "🕺"},
+    {"devil", "😈"},
+    {"dog", "🐕"},
+    {"drink", "🍸"},
+    {"drunk", "🥴"},
+    {"dull", "🙄"},
+    {"emo", "🤯"},
+    {"envy", "😒"},
+    {"explode", "💣"},
+    {"explosion", "💣"},
+    {"evilgrin", "😈"},
+    {"facepalm", "🤦"},
+    {"fear", "😨"},
+    {"fingerscrossed", "🤞"},
+    {"ghost", "👻"},
+    {"gift", "🎁"},
+    {"glasses", "🕶"},
+    {"giggle", "🤭"},
+    {"handsinair", "🙌"},
+    {"happytears", "😂"},
+    {"happy", "🙂"},
+    {"heart", "❤"},
+    {"hearteyes", "😍"},
+    {"hearthands", "🤲"},
+    {"heidy", "🐿"},
+    {"hi", "👋"},
+    {"highfive", "🖐"},
+    {"hooray", "🎉"},
+    {"hug", "🧸"},
+    {"idea", "💡"},
+    {"iheartyou", "❤️"},
+    {"iloveyou", "❤️"},
+    {"innocent", "😇"},
+    {"inlove", "🥰"},
+    {"joy", "😂"},
+    {"kissing", "😗"},
+    {"kiss", "😗"},
+    {"ladyvamp", "🧛"},
+    {"ladyvampire", "🧛"},
+    {"laughing", "😆"},
+    {"laugh", "😃"},
+    {"like", "👍"},
+    {"lips", "💋"},
+    {"lipssealed", "🤐"},
+    {"loudlycrying", "😭"},
+    {"mansignlove", ""},
+    {"makeup", "💄"},
+    {"monocle", "🧐"},
+    {"mail", "✉"},
+    {"meh", "😑"},
+    {"money", "💰"},
+    {"mmm", "😋"},
+    {"monkey", "🐒"},
+    {"mooning", "🌝"},
+    {"muscle", "💪"},
+    {"muscleman", "💪"},
+    {"music", "🎶"},
+    {"nerd", "🤓"},
+    {"nerdy", "🤓"},
+    {"ninja", "🥷"},
+    {"no", "👎"},
+    {"nod", "👍"},
+    {"notworthy", "🙄"},
+    {"okeydokey", "👌"},
+    {"ok", "👌"},
+    {"party", "🥳"},
+    {"phone", "📱"},
+    {"pig", "🐖"},
+    {"poop", "💩"},
+    {"pray", "🙏"},
+    {"pizza", "🍕"},
+    {"praying", "🙏"},
+    {"puke", "🤮"},
+    {"pumpkin", "🎃"},
+    {"punch", "👊"},
+    {"priidu", "🤠"},
+    {"rolleyes", "🙄"},
+    {"robot", "🤖"},
+    {"rose", "🌹"},
+    {"rain", "🌧"},
+    {"roflmao", "🤣"},
+    {"rofl", "🤣"},
+    {"rocket", "🚀"},
+    {"rock", "🤘"},
+    {"sadface", "😞"},
+    {"sadcat", "😿"},
+    {"sadcry", "😭"},
+    {"sad", "😧"},
+    {"sadness", "😢"},
+    {"satisfied", "😌"},
+    {"sarcastic", "😒"},
+    {"scared", "😱"},
+    {"scream", "😱"},
+    {"shocked", "😲"},
+    {"shake", "🤝"},
+    {"shy", "😊"},
+    {"sick", "🤢"},
+    {"sleeping", "😴"},
+    {"skype", "💬"},
+    {"skull", "💀"},
+    {"sleepy", "😪"},
+    {"smile", "😄"},
+    {"smirk", "😏"},
+    {"speechless", "😐"},
+    {"squirrel", "🐿"},
+    {"star", "⭐"},
+    {"stareyes", "🤩"},
+    {"sun", "🌞"},
+    {"surprised", "😲"},
+    {"swear", "🤬"},
+    {"stop", "✋"},
+    {"sweat", "😓"},
+    {"think", "🤔"},
+    {"time", "⏲"},
+    {"tongueout", "😛"},
+    {"tmi", "🤭"},
+    {"toothygrin", "😁"},
+    {"tongue", "😛"},
+    {"thumbsdown", "👎"},
+    {"thumbsup", "👍"},
+    {"tired", "😫"},
+    {"tumbleweed", "🌵"},
+    {"unhappy", "☹"},
+    {"unamused", "😒"},
+    {"vampire", "🧛"},
+    {"victory", "✌"},
+    {"waiting", "⏳"},
+    {"wavehand", "👋"},
+    {"wave", "👋"},
+    {"weary", "😩"},
+    {"whistle", "😗"},
+    {"winkey", "😉"},
+    {"woozy", "🥴"},
+    {"wasntme", "🙄"},
+    {"wave", "🌊"},
+    {"whew", "😮‍💨"},
+    {"wink", "😉"},
+    {"womanblowkiss", "💋"},
+    {"womanfacepalm", "🤦‍♀️"},
+    {"worry", "😟"},
+    {"wonder", "🤔"},
+    {"xd", "😆"},
+    {"xmasheart", "💖"},
+    {"xmasyes", "👍"},
+    {"yawned", "🥱"},
+    {"yawn", "🥱"},
+    {"yes", "👍"},
+    {"yoga", "🧘"},
     {"zombie", "🧟"},
 };
 
@@ -268,6 +398,9 @@ message_parser::_parse_start_tag (const std::string &tag)
 
     else if (tag == "contacts")
         _parse_contacts ();
+
+    else if (tag == "deletemember")
+        _parse_deletemember ();
 
     else if (tag == "files")
         _parse_files ();
@@ -456,6 +589,62 @@ message_parser::_parse_contacts ()
                 "Contacts shared ({}):\n{}", contact_count, contact_list
             )
         );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Parse <deletemember> tag
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+message_parser::_parse_deletemember ()
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // Get minidom tag
+    auto tag = parser_.get_minidom ();
+    if (!tag)
+    {
+        log.warning (__LINE__, "Invalid <deletemember> tag");
+        return;
+    }
+
+    // Get children tags
+    mobius::core::datetime::datetime timestamp;
+    std::string initiator;
+    std::string target;
+
+    for (const auto &child : tag.get_children ())
+    {
+        auto child_name = child.get_name ();
+
+        if (child_name == "eventtime")
+        {
+            auto timestamp_str = child.get_content ();
+            timestamp =
+                mobius::core::datetime::new_datetime_from_unix_timestamp (
+                    std::stoll (timestamp_str) / 1000
+                );
+        }
+
+        else if (child_name == "initiator")
+            initiator = child.get_content ();
+
+        else if (child_name == "target")
+            target = child.get_content ();
+    }
+
+    // Format system message
+    std::string text = std::format ("Member \"{}\"", target);
+
+    if (initiator != "" && initiator != target)
+        text += std::format (" removed from chat by user \"{}\"", initiator);
+
+    else
+        text += " left chat";
+
+    if (timestamp)
+        text += std::format (" at {}", to_string (timestamp));
+
+    add_system_element (text);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -802,7 +991,7 @@ message_parser::_parse_uriobject ()
         auto child_name = child.get_name ();
 
         if (child_name == "FileSize")
-            filesize = stoll (child.get_content ());
+            filesize = stoll (child.get_attribute<std::string> ("v", "0"));
 
         else if (child_name == "Title")
             title = child.get_content ();

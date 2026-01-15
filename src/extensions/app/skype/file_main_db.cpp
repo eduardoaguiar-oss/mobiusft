@@ -1325,7 +1325,7 @@ file_main_db::_load_message_participants (mobius::core::database::database &db)
             obj.video_status = stmt_part.get_column_int64 (44);
             obj.voice_status = stmt_part.get_column_int64 (45);
 
-            // Add participants to the list
+            // Add participant to the list
             message_participants_.emplace (obj.convo_id, std::move (obj));
         }
     }

@@ -127,6 +127,48 @@ show_skype_db_info (const std::string &path)
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Show messages
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::cout << std::endl;
+    std::cout << "Messages:" << std::endl;
+
+    for (const auto &m :  dat.get_messages ())
+    {
+        std::cout << std::endl;
+        std::cout << "   Record Index: " << m.idx << std::endl;
+        std::cout << "   Author: " << m.author << std::endl;
+        std::cout << "   Content: " << m.content << std::endl;
+        std::cout << "   Convdbid: " << m.convdbid << std::endl;
+        std::cout << "   Dbid: " <<  m.dbid << std::endl;
+        std::cout << "   Editedtime: " << m.editedtime << std::endl;
+        std::cout << "   Id: " << m.id << std::endl;
+        std::cout << "   Messagetype: " << m.messagetype << std::endl;
+        std::cout << "   Sendingstatus: " << m.sendingstatus << std::endl;
+        std::cout << "   Conversation Type: " << m.conversation_type << std::endl;
+        std::cout << "   Conversation Identity: " << m.conversation_identity << std::endl;
+        std::cout << "   Conversation MRI: " << m.conversation_mri << std::endl;
+        std::cout << "   Conversation Name: " << m.conversation_name << std::endl;
+        std::cout << "   Timestamp: " << m.timestamp << std::endl;
+        
+        std::cout << "   Metadata:" << std::endl;
+        for (const auto &[key, value] : m.metadata)
+        {
+            std::cout << "      " << key << ": " << value << std::endl;
+        }
+
+        std::cout << "   Parsed Content: " << std::endl;
+        for (const auto &pc : m.parsed_content)
+        {
+            std::cout << "      {" << std::endl;
+            for (const auto &[key, value] : pc)
+            {
+                std::cout << "         " << key << ": " << value << std::endl;
+            }
+            std::cout << "      }" << std::endl;
+        }
+    }
+    
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Show SMS messages
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::cout << std::endl;

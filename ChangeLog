@@ -2,11 +2,16 @@ Mobius Forensic Toolkit 2.23
 	* Added new C++ extension called "app-dcpp"
 	* app-chromium: Changed post-processor to convert decrypted passwords to string
 	* app-chromium: Changed to ignore login data blacklisted by user
+	* app-chromium: Removed new_transaction/commit calls on function on_complete
+	* app-emuletorrent: Added support for IPv6 peer addresses
+	* app-emuletorrent: Removed new_transaction/commit calls on function on_complete
 	* app-skype: Changed file_main_db class to retrieve all columns from tables
+	* app-skype: Changed file_skype_db class to retrieve all columns from tables
 	* app-skype: Added support for chat messages
 	* app-skype: Removed pimpl idiom from vfs_processor_impl
 	* app-skype: Contact's birthday calculation fixed
 	* app-skype: User accounts' birthday calculation fixed
+	* app-skype: Removed new_transaction/commit calls on function on_complete
 	* date-code: Fixed system lookup error
 	* evidence-viewer: Changed to use chat-message.app_name attribute
 	* libmobius_core: Improved error handling on pod::map::pop_map function
@@ -21,6 +26,7 @@ Mobius Forensic Toolkit 2.23
 	* libmobius_python: Added new method decoder.sgml.parser.get_last
 	* pymobius.registry.user_accounts: Fixed error in TS_Property constructor
 	* pymobius.app.skype.skype: Removed module
+	* pymobius.app.skype.app: Removed module
 	* pymobius.ant.turing.test_case_passwords: Convert all passwords to string before testing
 	* pymobius.ant.turing.registry_passwords: Convert PSSP passwords to string before testing
 	* pymobius.ant.turing.dpapi_user_mk: Retrieve Users DPAPI keys from WinXP folders

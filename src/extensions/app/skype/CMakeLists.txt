@@ -74,6 +74,7 @@ add_executable(tools_skype_skype_db
     tools/skype_skype_db.cpp
     common.cpp
     file_skype_db.cpp
+    message_parser.cpp
 )
 
 set_target_properties(tools_skype_skype_db PROPERTIES OUTPUT_NAME "skype_skype_db")

@@ -22,6 +22,7 @@
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/reader.hpp>
+#include <mobius/core/pod/map.hpp>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -186,6 +187,60 @@ class file_skype_db
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Message structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct message
+    {
+        // @brief Record index number
+        std::uint64_t idx = 0;
+
+        // @brief Author
+        std::string author;
+
+        // @brief Content
+        std::string content;
+
+        // @brief Convdbid
+        std::int64_t convdbid;
+
+        // @brief Dbid
+        std::int64_t dbid;
+
+        // @brief Editedtime
+        mobius::core::datetime::datetime editedtime;
+
+        // @brief Id
+        std::int64_t id;
+
+        // @brief Messagetype
+        std::int64_t messagetype;
+
+        // @brief Sendingstatus
+        std::int64_t sendingstatus;
+
+        // @brief Timestamp
+        mobius::core::datetime::datetime timestamp;
+
+        // @brief Conversation type
+        std::int64_t conversation_type;
+
+        // @brief Conversation identity
+        std::string conversation_identity;
+
+        // @brief Conversation MRI
+        std::string conversation_mri;
+
+        // @brief Conversation name
+        std::string conversation_name;
+
+        // @brief Metadata
+        mobius::core::pod::map metadata;
+
+        // @brief Parsed content
+        std::vector<mobius::core::pod::map> parsed_content;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief SMS structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct sms_message
@@ -209,13 +264,13 @@ class file_skype_db
         std::int64_t dbid;
 
         // @brief Editedtime
-        std::int64_t editedtime;
+        mobius::core::datetime::datetime editedtime;
 
         // @brief Id
         std::int64_t id;
 
         // @brief Is Preview
-        bool is_preview;
+        bool is_preview = false;
 
         // @brief Json
         std::string json;
@@ -299,6 +354,16 @@ class file_skype_db
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get messages
+    // @return Vector of messages
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<message>
+    get_messages () const
+    {
+        return messages_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get SMS messages
     // @return Vector of SMS messages
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -321,6 +386,9 @@ class file_skype_db
     // @brief Contacts
     std::vector<contact> contacts_;
 
+    // @brief Messages
+    std::vector<message> messages_;
+
     // @brief SMS messages
     std::vector<sms_message> sms_messages_;
 
@@ -329,6 +397,8 @@ class file_skype_db
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _load_account (mobius::core::database::database &);
     void _load_contacts (mobius::core::database::database &);
+    void _load_corelib_messages (mobius::core::database::database &);
+    void _load_messages (mobius::core::database::database &);
     void _load_sms_messages (mobius::core::database::database &);
 };
 

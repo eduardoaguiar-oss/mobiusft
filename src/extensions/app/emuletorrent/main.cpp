@@ -25,7 +25,7 @@ extern "C"
 {
     const char *EXTENSION_ID = "app-emuletorrent";
     const char *EXTENSION_NAME = "EmuleTorrent";
-    const char *EXTENSION_VERSION = "1.3";
+    const char *EXTENSION_VERSION = "1.4";
     const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
     const char *EXTENSION_DESCRIPTION = "EmuleTorrent support";
 } // extern "C"

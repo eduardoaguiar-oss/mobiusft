@@ -83,6 +83,7 @@ class message_parser
 
     void _parse_a ();
     void _parse_contacts ();
+    void _parse_deletemember ();
     void _parse_files ();
     void _parse_flag ();
     void _parse_legacyquote ();
