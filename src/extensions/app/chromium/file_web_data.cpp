@@ -227,7 +227,7 @@ static std::unordered_set<std::int64_t> UNKNOWN_SCHEMA_VERSIONS = {
     29,  30,  31,  32,  33,  34,  35,  36,  37,  38,  39,  41,  42,  44,
     46,  47,  49,  50,  51,  53,  54,  57,  59,  62,  63,  66,  68,  69,
     73,  75,  79,  85,  89,  93,  94,  95,  99,  101, 102, 103, 105, 106,
-    114, 115, 118, 121, 124, 126, 129, 131, 133, 136, 139, 142
+    114, 115, 118, 121, 124, 126, 129, 131, 133, 136, 139, 142, 144
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -236,7 +236,7 @@ static std::unordered_set<std::int64_t> UNKNOWN_SCHEMA_VERSIONS = {
 // by the current implementation. Any schema version greater than this value
 // will be considered unsupported and will trigger a warning in the log.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static constexpr std::int64_t LAST_KNOWN_SCHEMA_VERSION = 143;
+static constexpr std::int64_t LAST_KNOWN_SCHEMA_VERSION = 145;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Server card metadata structure

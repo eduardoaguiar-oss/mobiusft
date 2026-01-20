@@ -3,6 +3,7 @@ Mobius Forensic Toolkit 2.23
 	* app-chromium: Changed post-processor to convert decrypted passwords to string
 	* app-chromium: Changed to ignore login data blacklisted by user
 	* app-chromium: Removed new_transaction/commit calls on function on_complete
+	* app-chromium: Added support for Web Data files version 145
 	* app-emuletorrent: Added support for IPv6 peer addresses
 	* app-emuletorrent: Removed new_transaction/commit calls on function on_complete
 	* app-skype: Changed file_main_db class to retrieve all columns from tables
@@ -12,6 +13,8 @@ Mobius Forensic Toolkit 2.23
 	* app-skype: Contact's birthday calculation fixed
 	* app-skype: User accounts' birthday calculation fixed
 	* app-skype: Removed new_transaction/commit calls on function on_complete
+	* app-skype: Added support for main.db files version 34
+	* app-skype: Added support for skype.db files version 75
 	* date-code: Fixed system lookup error
 	* evidence-viewer: Changed to use chat-message.app_name attribute
 	* libmobius_core: Improved error handling on pod::map::pop_map function

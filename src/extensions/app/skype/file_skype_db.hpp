@@ -187,6 +187,159 @@ class file_skype_db
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief corelib_message structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct corelib_message
+    {
+        // @brief Record index number
+        std::uint64_t idx = 0;
+
+        // @brief Annotation Version
+        std::int64_t annotation_version;
+
+        // @brief Author
+        std::string author;
+
+        // @brief Author Was Live
+        std::int64_t author_was_live;
+
+        // @brief Body Is Rawxml
+        std::int64_t body_is_rawxml;
+
+        // @brief Body Xml
+        std::string body_xml;
+
+        // @brief Bots Settings
+        std::string bots_settings;
+
+        // @brief Call Guid
+        std::string call_guid;
+
+        // @brief Charmsg Type
+        std::int64_t charmsg_type;
+
+        // @brief Chatmsg Status
+        std::int64_t chatmsg_status;
+
+        // @brief Chatname
+        std::string chatname;
+
+        // @brief Consumption Status
+        std::int64_t consumption_status;
+
+        // @brief Content Flags
+        std::int64_t content_flags;
+
+        // @brief Convo Id
+        std::int64_t convo_id;
+
+        // @brief Crc
+        std::int64_t crc;
+
+        // @brief Dialog Partner
+        std::string dialog_partner;
+
+        // @brief Edited By
+        std::string edited_by;
+
+        // @brief Edited Timestamp
+        mobius::core::datetime::datetime edited_timestamp;
+
+        // @brief Error Code
+        std::int64_t error_code;
+
+        // @brief Extprop Mms Msg Metadata
+        std::string extprop_mms_msg_metadata;
+
+        // @brief Extprop Sms Server Id
+        std::string extprop_sms_server_id;
+
+        // @brief Extprop Sms Src Msg Id
+        std::string extprop_sms_src_msg_id;
+
+        // @brief Extprop Sms Sync Global Id
+        std::string extprop_sms_sync_global_id;
+
+        // @brief From Dispname
+        std::string from_dispname;
+
+        // @brief Guid
+        mobius::core::bytearray guid;
+
+        // @brief Id
+        std::int64_t id;
+
+        // @brief Identities
+        std::string identities;
+
+        // @brief Is Parmanent
+        bool is_parmanent = false;
+
+        // @brief Language
+        std::string language;
+
+        // @brief Leavereason
+        std::int64_t leavereason;
+
+        // @brief Newoptions
+        std::int64_t newoptions;
+
+        // @brief Newrole
+        std::int64_t newrole;
+
+        // @brief Oldoptions
+        std::int64_t oldoptions;
+
+        // @brief Option Bits
+        std::int64_t option_bits;
+
+        // @brief Param Key
+        std::int64_t param_key;
+
+        // @brief Param Value
+        std::int64_t param_value;
+
+        // @brief Participant Count
+        std::int64_t participant_count;
+
+        // @brief Pk Id
+        std::int64_t pk_id;
+
+        // @brief Reaction Thread
+        std::string reaction_thread;
+
+        // @brief Reason
+        std::string reason;
+
+        // @brief Remote Id
+        std::int64_t remote_id;
+
+        // @brief Sending Status
+        std::int64_t sending_status;
+
+                // @brief Server Id
+        std::int64_t server_id;
+
+        // @brief Timestamp
+        mobius::core::datetime::datetime timestamp;
+
+        // @brief Timestamp Ms
+        std::int64_t timestamp_ms;
+
+        // @brief Type
+        std::int64_t type;
+
+        // @brief Conversation identity
+        std::string conversation_identity;
+
+        // @brief Conversation display name
+        std::string conversation_display_name;
+
+        // @brief Parsed content
+        std::vector<mobius::core::pod::map> parsed_content;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Message structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct message
@@ -196,6 +349,9 @@ class file_skype_db
 
         // @brief Author
         std::string author;
+
+        // @brief Clientmessageid
+        std::int64_t clientmessageid;
 
         // @brief Content
         std::string content;
@@ -207,34 +363,43 @@ class file_skype_db
         std::int64_t dbid;
 
         // @brief Editedtime
-        mobius::core::datetime::datetime editedtime;
+        std::int64_t editedtime;
 
         // @brief Id
         std::int64_t id;
 
+        // @brief Is Preview
+        std::int64_t is_preview;
+
+        // @brief Json
+        std::string json;
+
         // @brief Messagetype
         std::int64_t messagetype;
+
+        // @brief Originalarrivaltime
+        mobius::core::datetime::datetime originalarrivaltime;
+
+        // @brief Properties
+        std::string properties;
 
         // @brief Sendingstatus
         std::int64_t sendingstatus;
 
-        // @brief Timestamp
-        mobius::core::datetime::datetime timestamp;
+        // @brief Skypeguid
+        std::string skypeguid;
+
+        // @brief Version
+        std::int64_t version;
 
         // @brief Conversation type
-        std::int64_t conversation_type;
+        std::string conversation_type;
 
         // @brief Conversation identity
-        std::string conversation_identity;
+        std::string conversation_id;
 
         // @brief Conversation MRI
         std::string conversation_mri;
-
-        // @brief Conversation name
-        std::string conversation_name;
-
-        // @brief Metadata
-        mobius::core::pod::map metadata;
 
         // @brief Parsed content
         std::vector<mobius::core::pod::map> parsed_content;
@@ -354,6 +519,16 @@ class file_skype_db
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get corelib messages
+    // @return Vector of corelib messages
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<corelib_message>
+    get_corelib_messages () const
+    {
+        return corelib_messages_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get messages
     // @return Vector of messages
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -385,6 +560,9 @@ class file_skype_db
 
     // @brief Contacts
     std::vector<contact> contacts_;
+
+    // @brief Corelib messages
+    std::vector<corelib_message> corelib_messages_;
 
     // @brief Messages
     std::vector<message> messages_;

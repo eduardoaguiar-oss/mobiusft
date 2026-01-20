@@ -443,7 +443,8 @@ class profile::impl
     void
     _set_name (const std::string &identity_or_mri, const std::string &name)
     {
-        if (!identity_or_mri.empty () && !name.empty () && identity_or_mri != name)
+        if (!identity_or_mri.empty () && !name.empty () &&
+            identity_or_mri != name)
             name_cache_[identity_or_mri] = name;
     }
 
@@ -486,6 +487,9 @@ class profile::impl
         const file_skype_db &, const mobius::core::io::file &
     );
     void _load_skype_db_contacts (
+        const file_skype_db &, const mobius::core::io::file &
+    );
+    void _load_skype_db_corelib_messages (
         const file_skype_db &, const mobius::core::io::file &
     );
     void _load_skype_db_messages (
@@ -1584,6 +1588,7 @@ profile::impl::add_skype_db_file (const mobius::core::io::file &f)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         _load_skype_db_account (fs, f);
         _load_skype_db_contacts (fs, f);
+        _load_skype_db_corelib_messages (fs, f);
         _load_skype_db_messages (fs, f);
         _load_skype_db_sms_messages (fs, f);
         _normalize_data ();
@@ -1796,6 +1801,106 @@ profile::impl::_load_skype_db_contacts (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load skype.db corelib messages
+// @param fs Skype.db file
+// @param f Original file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_load_skype_db_corelib_messages (
+    const file_skype_db &fs, const mobius::core::io::file &f
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        for (const auto &m : fs.get_corelib_messages ())
+        {
+            _set_name(m.author, m.from_dispname);
+            _set_name(m.conversation_identity, m.conversation_display_name);
+
+            message m_obj;
+
+            m_obj.timestamp = m.timestamp;
+            m_obj.sender = m.author;
+            m_obj.content = m.parsed_content;
+
+            // Recipients
+            if (m.author == account_id_)
+                m_obj.recipients.push_back (m.conversation_identity);
+
+            else
+                m_obj.recipients.push_back (account_id_);
+
+            // Metadata
+            m_obj.metadata.set ("record_idx", m.idx);
+            m_obj.metadata.set ("schema_version", fs.get_schema_version ());
+            m_obj.metadata.set ("annotation_version", m.annotation_version);
+            m_obj.metadata.set ("author", m.author);
+            m_obj.metadata.set ("author_was_live", m.author_was_live);
+            m_obj.metadata.set ("body_is_rawxml", m.body_is_rawxml);
+            m_obj.metadata.set ("body_xml", m.body_xml);
+            m_obj.metadata.set ("bots_settings", m.bots_settings);
+            m_obj.metadata.set ("call_guid", m.call_guid);
+            m_obj.metadata.set ("chatmsg_type", m.charmsg_type);
+            m_obj.metadata.set ("chatmsg_status", m.chatmsg_status);
+            m_obj.metadata.set ("chatname", m.chatname);
+            m_obj.metadata.set ("consumption_status", m.consumption_status);
+            m_obj.metadata.set ("content_flags", m.content_flags);
+            m_obj.metadata.set ("convo_id", m.convo_id);
+            m_obj.metadata.set ("crc", m.crc);
+            m_obj.metadata.set ("dialog_partner", m.dialog_partner);
+            m_obj.metadata.set ("edited_by", m.edited_by);
+            m_obj.metadata.set ("edited_timestamp", m.edited_timestamp);
+            m_obj.metadata.set ("error_code", m.error_code);
+            m_obj.metadata.set (
+                "extprop_mms_msg_metadata", m.extprop_mms_msg_metadata
+            );
+            m_obj.metadata.set (
+                "extprop_sms_server_id", m.extprop_sms_server_id
+            );
+            m_obj.metadata.set (
+                "extprop_sms_src_msg_id", m.extprop_sms_src_msg_id
+            );
+            m_obj.metadata.set (
+                "extprop_sms_sync_global_id", m.extprop_sms_sync_global_id
+            );
+            m_obj.metadata.set ("from_dispname", m.from_dispname);
+            m_obj.metadata.set ("guid", m.guid.to_hexstring ());
+            m_obj.metadata.set ("id", m.id);
+            m_obj.metadata.set ("identities", m.identities);
+            m_obj.metadata.set ("is_permanent", m.is_parmanent);
+            m_obj.metadata.set ("language", m.language);
+            m_obj.metadata.set ("leavereason", m.leavereason);
+            m_obj.metadata.set ("newoptions", m.newoptions);
+            m_obj.metadata.set ("newrole", m.newrole);
+            m_obj.metadata.set ("oldoptions", m.oldoptions);
+            m_obj.metadata.set ("option_bits", m.option_bits);
+            m_obj.metadata.set ("param_key", m.param_key);
+            m_obj.metadata.set ("param_value", m.param_value);
+            m_obj.metadata.set ("participant_count", m.participant_count);
+            m_obj.metadata.set ("pk_id", m.pk_id);
+            m_obj.metadata.set ("reaction_thread", m.reaction_thread);
+            m_obj.metadata.set ("reason", m.reason);
+            m_obj.metadata.set ("remote_id", m.remote_id);
+            m_obj.metadata.set ("sending_status", m.sending_status);
+            m_obj.metadata.set ("server_id", m.server_id);
+            m_obj.metadata.set ("timestamp", m.timestamp);
+            m_obj.metadata.set ("timestamp__ms", m.timestamp_ms);
+            m_obj.metadata.set ("type", m.type);
+
+            messages_.push_back (m_obj);
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
+        );
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Load skype.db file messages
 // @param fs Skype.db file
 // @param f Original file
@@ -1813,7 +1918,7 @@ profile::impl::_load_skype_db_messages (
         {
             message m_obj;
 
-            m_obj.timestamp = m.timestamp;
+            m_obj.timestamp = m.originalarrivaltime;
             m_obj.sender = m.author;
             m_obj.content = m.parsed_content;
 
@@ -1828,14 +1933,21 @@ profile::impl::_load_skype_db_messages (
             m_obj.metadata.set ("record_idx", m.idx);
             m_obj.metadata.set ("schema_version", fs.get_schema_version ());
             m_obj.metadata.set ("author", m.author);
+            m_obj.metadata.set ("conversation_mri", m.conversation_mri);
+            m_obj.metadata.set ("clientmessageid", m.clientmessageid);
             m_obj.metadata.set ("content", m.content);
             m_obj.metadata.set ("convdbid", m.convdbid);
             m_obj.metadata.set ("dbid", m.dbid);
             m_obj.metadata.set ("editedtime", m.editedtime);
             m_obj.metadata.set ("id", m.id);
+            m_obj.metadata.set ("is_preview", m.is_preview);
+            m_obj.metadata.set ("json", m.json);
             m_obj.metadata.set ("messagetype", m.messagetype);
+            m_obj.metadata.set ("originalarrivaltime", m.originalarrivaltime);
+            m_obj.metadata.set ("properties", m.properties);
             m_obj.metadata.set ("sendingstatus", m.sendingstatus);
-            m_obj.metadata.update (m.metadata);
+            m_obj.metadata.set ("skypeguid", m.skypeguid);
+            m_obj.metadata.set ("version", m.version);
 
             messages_.push_back (m_obj);
         }
