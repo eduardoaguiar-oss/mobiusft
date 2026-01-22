@@ -17,6 +17,7 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import os
 import os.path
+import traceback
 
 import mobius
 import mobius.framework
@@ -468,20 +469,17 @@ class ICEWindow(object):
 # Service <app.start> implementation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def svc_app_start():
+    # mobius.core.ui.set_ui_implementation ("gtk3")
 
     # create working area
     window = ICEWindow()
     window.show()
 
     # start graphical interface
-    # mobius.core.ui.set_ui_implementation ("gtk3")
-
-    print("app start *** 1 ***")
     try:
-      mobius.core.ui.start()
+        mobius.core.ui.start()
     except Exception as e:
-      print("app start *** 2 ***", e)
-    print("app start *** 3 ***")
+        mobius.core.logf(f"ERR {e}\n{traceback.format_exc()}")
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

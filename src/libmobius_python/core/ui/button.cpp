@@ -24,6 +24,7 @@
 #include "icon.hpp"
 #include "widget.hpp"
 #include <mobius/core/exception.inc>
+#include <mobius/core/log.hpp>
 #include <pyfunction.hpp>
 #include <pygil.hpp>
 #include <pymobius.hpp>
@@ -47,11 +48,24 @@ class callback_clicked
     {
         mobius::py::GIL_guard gil_guard;
 
-        PyObject *py_rc = f_ ();
-        bool rc = mobius::py::pybool_as_bool (py_rc);
-        Py_DECREF (py_rc);
+        try
+        {
+            PyObject *py_rc = f_ ();
+            if (!py_rc)
+		return true;
 
-        return rc;
+            bool rc = mobius::py::pybool_as_bool (py_rc);
+            Py_DECREF (py_rc);
+
+            return rc;
+        }
+        catch (const std::exception& e)
+        {
+            mobius::core::log log (__FILE__, __FUNCTION__);
+            log.error (__LINE__, e.what ());
+        }
+
+        return true;
     }
 
   private:
