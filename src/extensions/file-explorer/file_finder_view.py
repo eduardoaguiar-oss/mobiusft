@@ -321,7 +321,7 @@ class FileFinderView(object):
 
             dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_error)
             dialog.text = f'Error: {str(e)}'
-            dialog.add_button(mobius.core.ui.message_dialog.BUTTON_OK)
+            dialog.add_button(mobius.core.ui.message_dialog.button_ok)
             rc = dialog.run()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
