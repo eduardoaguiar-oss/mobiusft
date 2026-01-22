@@ -24,7 +24,6 @@ import pymobius.ant.turing
 from . import accounts
 from . import autofill
 from . import bookmarked_urls
-from . import chat_messages
 from . import cookies
 from . import installed_programs
 from . import opened_files
@@ -49,7 +48,6 @@ ANTS = [
     accounts.Ant,
     autofill.Ant,
     bookmarked_urls.Ant,
-    chat_messages.Ant,
     cookies.Ant,
     installed_programs.Ant,
     opened_files.Ant,
@@ -123,7 +121,8 @@ class Ant(object):
         
         self.__ant = mobius.framework.ant.vfs_processor(self.__item, self.__profile)
         self.__ant.run()
-        self.__ant = None
         
 	# end processing
+        self.__ant = None
+
         mobius.core.logf(f"INF ant {self.id} ended")

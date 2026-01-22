@@ -62,6 +62,7 @@ add_executable(tools_skype_s4l_db
     tools/skype_s4l_db.cpp
     common.cpp
     file_s4l_db.cpp
+    message_parser.cpp
 )
 
 set_target_properties(tools_skype_s4l_db PROPERTIES OUTPUT_NAME "skype_s4l_db")

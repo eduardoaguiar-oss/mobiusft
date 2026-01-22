@@ -286,8 +286,8 @@ static const std::unordered_map<std::string, std::string> FLAG_CHARS = {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Unknown Data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::unordered_set<std::string> UNKNOWN_EMOJIS;
-std::unordered_set<std::string> UNKNOWN_FLAGS;
+static std::unordered_set<std::string> UNKNOWN_EMOJIS;
+static std::unordered_set<std::string> UNKNOWN_FLAGS;
 
 } // namespace
 
@@ -537,7 +537,9 @@ message_parser::_parse_a ()
     }
 
     // Add href element
-    auto href = tag.get_attribute<std::string> ("href");
+    auto href = mobius::core::string::html_unescape (
+        tag.get_attribute<std::string> ("href")
+    );
 
     add_element (mobius::core::pod::map {{"type", "href"}, {"url", href}});
 }

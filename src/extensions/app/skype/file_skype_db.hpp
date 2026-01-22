@@ -363,13 +363,13 @@ class file_skype_db
         std::int64_t dbid;
 
         // @brief Editedtime
-        std::int64_t editedtime;
+        mobius::core::datetime::datetime editedtime;
 
         // @brief Id
         std::int64_t id;
 
         // @brief Is Preview
-        std::int64_t is_preview;
+        bool is_preview = false;
 
         // @brief Json
         std::string json;

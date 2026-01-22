@@ -508,6 +508,8 @@ class profile::impl
     _load_s4l_db_calls (const file_s4l_db &, const mobius::core::io::file &);
     void
     _load_s4l_db_contacts (const file_s4l_db &, const mobius::core::io::file &);
+    void
+    _load_s4l_db_messages (const file_s4l_db &, const mobius::core::io::file &);
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1816,8 +1818,8 @@ profile::impl::_load_skype_db_corelib_messages (
     {
         for (const auto &m : fs.get_corelib_messages ())
         {
-            _set_name(m.author, m.from_dispname);
-            _set_name(m.conversation_identity, m.conversation_display_name);
+            _set_name (m.author, m.from_dispname);
+            _set_name (m.conversation_identity, m.conversation_display_name);
 
             message m_obj;
 
@@ -2063,6 +2065,7 @@ profile::impl::add_s4l_db_file (const mobius::core::io::file &f)
         _load_s4l_db_accounts (fs, f);
         _load_s4l_db_calls (fs, f);
         _load_s4l_db_contacts (fs, f);
+        _load_s4l_db_messages (fs, f);
         _normalize_data ();
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -2098,7 +2101,10 @@ profile::impl::_load_s4l_db_accounts (
     try
     {
         auto acc = fs.get_account ();
+        
         _set_name (acc.skype_name, acc.full_name);
+        account_id_ = acc.skype_name;
+        account_name_ = acc.full_name;
 
         // Create new account or update existing one
         auto &a = accounts_.try_emplace (acc.skype_name).first->second;
@@ -2262,6 +2268,58 @@ profile::impl::_load_s4l_db_contacts (
             c.metadata.set ("fetched_time", ct.fetched_time);
 
             contacts_.push_back (c);
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")"
+        );
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load s4l-xxx.db messages
+// @param fs s4l-xxx.db file
+// @param f Original file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::_load_s4l_db_messages (
+    const file_s4l_db &fs, const mobius::core::io::file &f
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        for (const auto &m : fs.get_messages ())
+        {
+            message m_obj;
+            m_obj.timestamp = m.created_time;
+            m_obj.sender = m.creator;
+            m_obj.content = m.parsed_content;
+
+            // Recipients
+            if (m.is_my_message)
+                m_obj.recipients.push_back (m.conversation_id);
+            else
+                m_obj.recipients.push_back (account_id_);
+
+            // Metadata
+            m_obj.metadata.set ("schema_version", fs.get_schema_version ());
+            m_obj.metadata.set ("compose_time", m.compose_time);
+            m_obj.metadata.set ("content", m.content);
+            m_obj.metadata.set ("content_type", m.content_type);
+            m_obj.metadata.set ("conversation_id", m.conversation_id);
+            m_obj.metadata.set ("created_time", m.created_time);
+            m_obj.metadata.set ("creator", m.creator);
+            m_obj.metadata.set ("cuid", m.cuid);
+            m_obj.metadata.set ("is_ephemeral", m.is_ephemeral);
+            m_obj.metadata.set ("is_my_message", m.is_my_message);
+            m_obj.metadata.set ("nsp_pk", m.nsp_pk);
+            m_obj.metadata.set ("type", m.type);
+
+            messages_.push_back (m_obj);
         }
     }
     catch (const std::exception &e)

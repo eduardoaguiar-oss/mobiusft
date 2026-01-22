@@ -26,6 +26,7 @@
 #include <unordered_set>
 #include <set>
 #include "common.hpp"
+#include "message_parser.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // References:
@@ -211,6 +212,7 @@ file_s4l_db::file_s4l_db (const mobius::core::io::reader &reader)
         _load_contacts (db); // contacts are needed by other evidence types
         _load_account (db);
         _load_calls (db);
+        _load_messages (db);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Finish decoding
@@ -564,6 +566,86 @@ file_s4l_db::_load_contacts (mobius::core::database::database &db)
 
             // Add contact to map
             contacts_.emplace (c.skype_name, c);
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (
+            __LINE__, std::string (e.what ()) + ". Path: " + db.get_path ()
+        );
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load messages
+// @param db Database object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+file_s4l_db::_load_messages (mobius::core::database::database &db)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Load messages from messagesv12 table
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto stmt =
+            db.new_statement ("SELECT nsp_pk, nsp_data FROM messagesv12");
+
+        while (stmt.fetch_row ())
+        {
+            std::string nsp_pk = stmt.get_column_string (0);
+
+            auto parser = mobius::core::decoder::json::parser (
+                stmt.get_column_bytearray (1)
+            );
+            auto nsp_data = mobius::core::pod::map (parser.parse ());
+
+            // Create message object
+            message m;
+            m.compose_time = get_datetime (
+                nsp_data.get<std::int64_t> ("composeTime") / 1000
+            );
+            m.content = mobius::core::string::c_unescape (
+                nsp_data.get<std::string> ("content")
+            );
+            m.content_type = nsp_data.get<std::string> ("contenttype");
+            m.conversation_id = nsp_data.get<std::string> ("conversationId");
+            m.created_time = get_datetime (
+                nsp_data.get<std::int64_t> ("createdTime") / 1000
+            );
+            m.creator = nsp_data.get<std::string> ("creator");
+            m.cuid = nsp_data.get<std::string> ("cuid");
+            m.is_ephemeral = nsp_data.get<bool> ("_isEphemeral");
+            m.is_my_message = nsp_data.get<bool> ("_isMyMessage");
+            m.nsp_pk = nsp_pk;
+            m.type = nsp_data.get<std::string> ("messagetype");
+
+            // Parse message content
+            try
+            {
+                message_parser parser (m.content);
+                parser.parse ();
+
+                m.parsed_content = parser.get_content ();
+
+                if (m.parsed_content.empty ())
+                {
+                    m.parsed_content = {mobius::core::pod::map {
+                        {"type", "text"},
+                        {"text", m.content}
+                    }};
+                }
+            }
+            catch (const std::exception &e)
+            {
+                log.warning (__LINE__, e.what ());
+                log.warning (__LINE__, "Raw message content: " + m.content);
+            }
+
+            // Add message to list
+            messages_.emplace_back (std::move (m));
         }
     }
     catch (const std::exception &e)

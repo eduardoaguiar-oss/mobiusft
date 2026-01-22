@@ -43,11 +43,15 @@ bool is_ipv4 (const std::string&);
 bool is_ipv6 (const std::string&);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// case functions
+// Conversion functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string tolower (const std::string&);
 std::string toupper (const std::string&);
 std::string capitalize (const std::string&);
+std::string c_escape (const std::string&);
+std::string c_unescape (const std::string&);
+std::string html_escape (const std::string&);
+std::string html_unescape (const std::string&);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // remove chars functions

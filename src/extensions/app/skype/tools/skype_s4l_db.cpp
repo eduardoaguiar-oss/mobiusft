@@ -138,11 +138,9 @@ show_main_db_info (const std::string &path)
         for (const auto &p : c.participants)
         {
             std::cout << std::endl;
-            std::cout << "      Skype Name: " << p.skype_name
-                      << std::endl;
+            std::cout << "      Skype Name: " << p.skype_name << std::endl;
             std::cout << "      MRI: " << p.mri << std::endl;
-            std::cout << "      Full Name: " << p.full_name
-                      << std::endl;
+            std::cout << "      Full Name: " << p.full_name << std::endl;
             std::cout << "      Type: " << p.type << std::endl;
         }
     }
@@ -176,6 +174,65 @@ show_main_db_info (const std::string &path)
         std::cout << "   Thumbnail URL: " << c.thumbnail_url << std::endl;
         std::cout << "   Fetched Time: " << c.fetched_time << std::endl;
     }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Show messages
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::cout << std::endl;
+    std::cout << "Messages:" << std::endl;
+
+    struct message
+    {
+        // @brief CUID
+        std::string cuid;
+
+        // @brief Display name
+        std::string from_dispname;
+
+        // @brief Is ephemeral
+        bool is_ephemeral = false;
+
+        // @brief Is my message
+        bool is_my_message = false;
+
+        // @brief NSP PK
+        std::string nsp_pk;
+
+        // @brief Type
+        std::string type;
+
+        // @brief Parsed Content
+        std::vector<mobius::core::pod::map> parsed_content;
+    };
+
+    for (const auto &m : dat.get_messages ())
+    {
+        std::cout << std::endl;
+        std::cout << "   Compose Time: " << m.compose_time << std::endl;
+        std::cout << "   Content: " << m.content << std::endl;
+        std::cout << "   Content type: " << m.content_type << std::endl;
+        std::cout << "   Conversation Id: " << m.conversation_id << std::endl;
+        std::cout << "   Created Time: " << m.created_time << std::endl;
+        std::cout << "   Creator: " << m.creator << std::endl;
+        std::cout << "   CUID: " << m.cuid << std::endl;
+        std::cout << "   Is ephemeral: " << (m.is_ephemeral ? "yes" : "no")
+                  << std::endl;
+        std::cout << "   Is my message: " << (m.is_my_message ? "yes" : "no")
+                  << std::endl;
+        std::cout << "   NSP PK: " << m.nsp_pk << std::endl;
+        std::cout << "   Type: " << m.type << std::endl;
+
+        std::cout << "   Parsed Content: " << std::endl;
+        for (const auto &pc : m.parsed_content)
+        {
+            std::cout << "      {" << std::endl;
+            for (const auto &[key, value] : pc)
+            {
+                std::cout << "         " << key << ": " << value << std::endl;
+            }
+            std::cout << "      }" << std::endl;
+        }
+    }
 }
 
 } // namespace
@@ -205,14 +262,14 @@ main (int argc, char **argv)
     {
         switch (opt)
         {
-        case 'h':
-            usage ();
-            exit (EXIT_SUCCESS);
-            break;
+            case 'h':
+                usage ();
+                exit (EXIT_SUCCESS);
+                break;
 
-        default:
-            usage ();
-            exit (EXIT_FAILURE);
+            default:
+                usage ();
+                exit (EXIT_FAILURE);
         }
     }
 

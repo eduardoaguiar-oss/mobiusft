@@ -104,6 +104,7 @@ ant_impl_vfs_processor::get_status () const
         {"current_folder", current_folder_path_},
         {"vfs_processors_count", implementations_.size ()},
     };
+    
     return status;
 }
 

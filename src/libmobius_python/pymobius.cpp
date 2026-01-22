@@ -15,12 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#define PY_SSIZE_T_CLEAN        // PEP 353
+#define PY_SSIZE_T_CLEAN // PEP 353
 
-#include <pymobius.hpp>
-#include <frameobject.h>
-#include <bytesobject.h>
 #include <mobius/core/exception.inc>
+#include <pymobius.hpp>
+#include <bytesobject.h>
+#include <frameobject.h>
 #include <stdexcept>
 
 namespace mobius::py
@@ -33,7 +33,7 @@ namespace mobius::py
 std::uint32_t
 get_arg_size (PyObject *args) noexcept
 {
-  return PyTuple_Size (args);
+    return PyTuple_Size (args);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -45,10 +45,10 @@ get_arg_size (PyObject *args) noexcept
 PyObject *
 get_arg (PyObject *args, std::uint32_t idx)
 {
-  if (idx < PyTuple_Size (args))
-    return PyTuple_GetItem (args, idx);
+    if (idx < PyTuple_Size (args))
+        return PyTuple_GetItem (args, idx);
 
-  throw std::out_of_range ("argument index out of range");
+    throw std::out_of_range ("argument index out of range");
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -60,7 +60,7 @@ get_arg (PyObject *args, std::uint32_t idx)
 std::string
 get_arg_as_std_string (PyObject *args, std::uint32_t idx)
 {
-  return pystring_as_std_string (get_arg (args, idx));
+    return pystring_as_std_string (get_arg (args, idx));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -71,12 +71,14 @@ get_arg_as_std_string (PyObject *args, std::uint32_t idx)
 // @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-get_arg_as_std_string (PyObject *args, std::uint32_t idx, const std::string& value)
+get_arg_as_std_string (
+    PyObject *args, std::uint32_t idx, const std::string &value
+)
 {
-  if (idx < get_arg_size (args))
-    return get_arg_as_std_string (args, idx);
+    if (idx < get_arg_size (args))
+        return get_arg_as_std_string (args, idx);
 
-  return value;
+    return value;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -88,7 +90,7 @@ get_arg_as_std_string (PyObject *args, std::uint32_t idx, const std::string& val
 mobius::core::bytearray
 get_arg_as_bytearray (PyObject *args, std::uint32_t idx)
 {
-  return pybytes_as_bytearray (get_arg (args, idx));
+    return pybytes_as_bytearray (get_arg (args, idx));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -99,12 +101,14 @@ get_arg_as_bytearray (PyObject *args, std::uint32_t idx)
 // @return Argument
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
-get_arg_as_bytearray (PyObject *args, std::uint32_t idx, const mobius::core::bytearray& value)
+get_arg_as_bytearray (
+    PyObject *args, std::uint32_t idx, const mobius::core::bytearray &value
+)
 {
-  if (idx < get_arg_size (args))
-    return get_arg_as_bytearray (args, idx);
+    if (idx < get_arg_size (args))
+        return get_arg_as_bytearray (args, idx);
 
-  return value;
+    return value;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -116,12 +120,12 @@ get_arg_as_bytearray (PyObject *args, std::uint32_t idx, const mobius::core::byt
 mobius::core::datetime::datetime
 get_arg_as_datetime (PyObject *args, std::uint32_t idx)
 {
-  PyObject *arg = get_arg (args, idx);
+    PyObject *arg = get_arg (args, idx);
 
-  if (!pydatetime_check (arg))
-    throw std::invalid_argument ("function arg is not datetime");
+    if (!pydatetime_check (arg))
+        throw std::invalid_argument ("function arg is not datetime");
 
-  return pydatetime_as_datetime (arg);
+    return pydatetime_as_datetime (arg);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -133,14 +137,15 @@ get_arg_as_datetime (PyObject *args, std::uint32_t idx)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::datetime::datetime
 get_arg_as_datetime (
-  PyObject *args,
-  std::uint32_t idx,
-  const mobius::core::datetime::datetime& value)
+    PyObject *args,
+    std::uint32_t idx,
+    const mobius::core::datetime::datetime &value
+)
 {
-  if (idx < get_arg_size (args))
-    return get_arg_as_datetime (args, idx);
+    if (idx < get_arg_size (args))
+        return get_arg_as_datetime (args, idx);
 
-  return value;
+    return value;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -152,7 +157,7 @@ get_arg_as_datetime (
 bool
 get_arg_as_bool (PyObject *args, std::uint32_t idx)
 {
-  return pybool_as_bool (get_arg (args, idx));
+    return pybool_as_bool (get_arg (args, idx));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -165,10 +170,10 @@ get_arg_as_bool (PyObject *args, std::uint32_t idx)
 bool
 get_arg_as_bool (PyObject *args, std::uint32_t idx, bool value)
 {
-  if (idx < get_arg_size (args))
-    return pybool_as_bool (get_arg (args, idx));
+    if (idx < get_arg_size (args))
+        return pybool_as_bool (get_arg (args, idx));
 
-  return value;
+    return value;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -180,19 +185,21 @@ get_arg_as_bool (PyObject *args, std::uint32_t idx, bool value)
 char
 get_arg_as_char (PyObject *args, std::uint32_t idx)
 {
-  Py_ssize_t siz = 0;
-  const char *buffer = PyUnicode_AsUTF8AndSize (get_arg (args, idx), &siz);
+    Py_ssize_t siz = 0;
+    const char *buffer = PyUnicode_AsUTF8AndSize (get_arg (args, idx), &siz);
 
-  if (buffer)
+    if (buffer)
     {
-      if (siz != 1)
-        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid char"));
+        if (siz != 1)
+            throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid char"));
 
-      return buffer[0];
+        return buffer[0];
     }
 
-  else
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid Python string"));
+    else
+        throw std::invalid_argument (
+            MOBIUS_EXCEPTION_MSG ("invalid Python string")
+        );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -205,10 +212,10 @@ get_arg_as_char (PyObject *args, std::uint32_t idx)
 char
 get_arg_as_char (PyObject *args, std::uint32_t idx, char c)
 {
-  if (idx < get_arg_size (args))
-    return get_arg_as_char (args, idx);
+    if (idx < get_arg_size (args))
+        return get_arg_as_char (args, idx);
 
-  return c;
+    return c;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -220,7 +227,7 @@ get_arg_as_char (PyObject *args, std::uint32_t idx, char c)
 int
 get_arg_as_int (PyObject *args, std::uint32_t idx)
 {
-  return PyLong_AsLong (get_arg (args, idx));
+    return PyLong_AsLong (get_arg (args, idx));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -233,10 +240,10 @@ get_arg_as_int (PyObject *args, std::uint32_t idx)
 int
 get_arg_as_int (PyObject *args, std::uint32_t idx, int value)
 {
-  if (idx < get_arg_size (args))
-    return PyLong_AsLong (get_arg (args, idx));
+    if (idx < get_arg_size (args))
+        return PyLong_AsLong (get_arg (args, idx));
 
-  return value;
+    return value;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -248,7 +255,7 @@ get_arg_as_int (PyObject *args, std::uint32_t idx, int value)
 std::int32_t
 get_arg_as_int32_t (PyObject *args, std::uint32_t idx)
 {
-  return pylong_as_std_int32_t (get_arg (args, idx));
+    return pylong_as_std_int32_t (get_arg (args, idx));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -261,10 +268,10 @@ get_arg_as_int32_t (PyObject *args, std::uint32_t idx)
 std::int32_t
 get_arg_as_int32_t (PyObject *args, std::uint32_t idx, std::int32_t value)
 {
-  if (idx < get_arg_size (args))
-    return pylong_as_std_int32_t (get_arg (args, idx));
+    if (idx < get_arg_size (args))
+        return pylong_as_std_int32_t (get_arg (args, idx));
 
-  return value;
+    return value;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -276,7 +283,7 @@ get_arg_as_int32_t (PyObject *args, std::uint32_t idx, std::int32_t value)
 std::int64_t
 get_arg_as_int64_t (PyObject *args, std::uint32_t idx)
 {
-  return pylong_as_std_int64_t (get_arg (args, idx));
+    return pylong_as_std_int64_t (get_arg (args, idx));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -289,10 +296,10 @@ get_arg_as_int64_t (PyObject *args, std::uint32_t idx)
 std::int64_t
 get_arg_as_int64_t (PyObject *args, std::uint32_t idx, std::int64_t value)
 {
-  if (idx < get_arg_size (args))
-    return pylong_as_std_int64_t (get_arg (args, idx));
+    if (idx < get_arg_size (args))
+        return pylong_as_std_int64_t (get_arg (args, idx));
 
-  return value;
+    return value;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -304,7 +311,7 @@ get_arg_as_int64_t (PyObject *args, std::uint32_t idx, std::int64_t value)
 std::uint8_t
 get_arg_as_uint8_t (PyObject *args, std::uint32_t idx)
 {
-  return pylong_as_std_uint8_t (get_arg (args, idx));
+    return pylong_as_std_uint8_t (get_arg (args, idx));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -317,10 +324,10 @@ get_arg_as_uint8_t (PyObject *args, std::uint32_t idx)
 std::uint8_t
 get_arg_as_uint8_t (PyObject *args, std::uint32_t idx, std::uint8_t value)
 {
-  if (idx < get_arg_size (args))
-    return get_arg_as_uint8_t (args, idx);
+    if (idx < get_arg_size (args))
+        return get_arg_as_uint8_t (args, idx);
 
-  return value;
+    return value;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -332,7 +339,7 @@ get_arg_as_uint8_t (PyObject *args, std::uint32_t idx, std::uint8_t value)
 std::uint16_t
 get_arg_as_uint16_t (PyObject *args, std::uint32_t idx)
 {
-  return pylong_as_std_uint16_t (get_arg (args, idx));
+    return pylong_as_std_uint16_t (get_arg (args, idx));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -345,10 +352,10 @@ get_arg_as_uint16_t (PyObject *args, std::uint32_t idx)
 std::uint16_t
 get_arg_as_uint16_t (PyObject *args, std::uint32_t idx, std::uint16_t value)
 {
-  if (idx < get_arg_size (args))
-    return get_arg_as_uint16_t (args, idx);
+    if (idx < get_arg_size (args))
+        return get_arg_as_uint16_t (args, idx);
 
-  return value;
+    return value;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -360,7 +367,7 @@ get_arg_as_uint16_t (PyObject *args, std::uint32_t idx, std::uint16_t value)
 std::uint32_t
 get_arg_as_uint32_t (PyObject *args, std::uint32_t idx)
 {
-  return pylong_as_std_uint32_t (get_arg (args, idx));
+    return pylong_as_std_uint32_t (get_arg (args, idx));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -373,10 +380,10 @@ get_arg_as_uint32_t (PyObject *args, std::uint32_t idx)
 std::uint32_t
 get_arg_as_uint32_t (PyObject *args, std::uint32_t idx, std::uint32_t value)
 {
-  if (idx < get_arg_size (args))
-    return get_arg_as_uint32_t (args, idx);
+    if (idx < get_arg_size (args))
+        return get_arg_as_uint32_t (args, idx);
 
-  return value;
+    return value;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -388,7 +395,7 @@ get_arg_as_uint32_t (PyObject *args, std::uint32_t idx, std::uint32_t value)
 std::uint64_t
 get_arg_as_uint64_t (PyObject *args, std::uint32_t idx)
 {
-  return pylong_as_std_uint64_t (get_arg (args, idx));
+    return pylong_as_std_uint64_t (get_arg (args, idx));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -401,10 +408,10 @@ get_arg_as_uint64_t (PyObject *args, std::uint32_t idx)
 std::uint64_t
 get_arg_as_uint64_t (PyObject *args, std::uint32_t idx, std::uint64_t value)
 {
-  if (idx < get_arg_size (args))
-    return get_arg_as_uint64_t (args, idx);
+    if (idx < get_arg_size (args))
+        return get_arg_as_uint64_t (args, idx);
 
-  return value;
+    return value;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -413,7 +420,7 @@ get_arg_as_uint64_t (PyObject *args, std::uint32_t idx, std::uint64_t value)
 void
 reset_error ()
 {
-  PyErr_Clear ();
+    PyErr_Clear ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -421,9 +428,9 @@ reset_error ()
 // @param msg Error message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-set_attribute_error (const std::string& msg)
+set_attribute_error (const std::string &msg)
 {
-  PyErr_SetString (PyExc_AttributeError, msg.c_str ());
+    PyErr_SetString (PyExc_AttributeError, msg.c_str ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -431,9 +438,9 @@ set_attribute_error (const std::string& msg)
 // @param msg Error message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-set_invalid_type_error (const std::string& msg)
+set_invalid_type_error (const std::string &msg)
 {
-  PyErr_SetString (PyExc_TypeError, msg.c_str ());
+    PyErr_SetString (PyExc_TypeError, msg.c_str ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -441,9 +448,9 @@ set_invalid_type_error (const std::string& msg)
 // @param msg Error message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-set_value_error (const std::string& msg)
+set_value_error (const std::string &msg)
 {
-  PyErr_SetString (PyExc_ValueError, msg.c_str ());
+    PyErr_SetString (PyExc_ValueError, msg.c_str ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -451,9 +458,9 @@ set_value_error (const std::string& msg)
 // @param msg Error message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-set_io_error (const std::string& msg)
+set_io_error (const std::string &msg)
 {
-  PyErr_SetString (PyExc_IOError, msg.c_str ());
+    PyErr_SetString (PyExc_IOError, msg.c_str ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -461,9 +468,9 @@ set_io_error (const std::string& msg)
 // @param msg Error message
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-set_runtime_error (const std::string& msg)
+set_runtime_error (const std::string &msg)
 {
-  PyErr_SetString (PyExc_RuntimeError, msg.c_str ());
+    PyErr_SetString (PyExc_RuntimeError, msg.c_str ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -472,7 +479,7 @@ set_runtime_error (const std::string& msg)
 void
 set_stop_iteration ()
 {
-  PyErr_SetNone (PyExc_StopIteration);
+    PyErr_SetNone (PyExc_StopIteration);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -482,28 +489,36 @@ set_stop_iteration ()
 std::string
 get_error_message ()
 {
-  PyObject *exc_type, *exc_value, *exc_traceback;
-  PyErr_Fetch (&exc_type, &exc_value, &exc_traceback);
-  PyErr_NormalizeException (&exc_type, &exc_value, &exc_traceback);
+    PyObject *exc_type, *exc_value, *exc_traceback;
+    PyErr_Fetch (&exc_type, &exc_value, &exc_traceback);
+    PyErr_NormalizeException (&exc_type, &exc_value, &exc_traceback);
 
-  std::string msg = mobius::py::pystring_as_std_string (PyObject_Str (exc_type))
-    + ' ' + mobius::py::pystring_as_std_string (PyObject_Str (exc_value));
+    std::string msg =
+        mobius::py::pystring_as_std_string (PyObject_Str (exc_type)) + ' ' +
+        mobius::py::pystring_as_std_string (PyObject_Str (exc_value));
 
-  auto p_traceback = reinterpret_cast <PyTracebackObject *> (exc_traceback);
+    auto p_traceback = reinterpret_cast<PyTracebackObject *> (exc_traceback);
 
-  while (p_traceback)
+    while (p_traceback)
     {
-      auto f_code = PyFrame_GetCode (p_traceback->tb_frame);
-      msg += "\nFile: \"" + mobius::py::pystring_as_std_string (PyObject_Str (f_code->co_filename)) + "\", line " + std::to_string (p_traceback->tb_lineno);
+        auto f_code = PyFrame_GetCode (p_traceback->tb_frame);
 
-      p_traceback = p_traceback->tb_next;
+        msg +=
+            "\nFile: \"" +
+            mobius::py::pystring_as_std_string (
+                PyObject_Str (f_code->co_filename)
+            ) +
+            "\", line " +
+            std::to_string (PyCode_Addr2Line (f_code, p_traceback->tb_lasti));
+
+        p_traceback = p_traceback->tb_next;
     }
 
-  Py_XDECREF (exc_type);
-  Py_XDECREF (exc_value);
-  Py_XDECREF (exc_traceback);
+    Py_XDECREF (exc_type);
+    Py_XDECREF (exc_value);
+    Py_XDECREF (exc_traceback);
 
-  return msg;
+    return msg;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -513,14 +528,14 @@ get_error_message ()
 int
 get_line_number ()
 {
-  int line = -1;
+    int line = -1;
 
-  PyFrameObject *frame = PyEval_GetFrame ();
+    PyFrameObject *frame = PyEval_GetFrame ();
 
-  if (frame)
-    line = PyFrame_GetLineNumber (frame);
+    if (frame)
+        line = PyFrame_GetLineNumber (frame);
 
-  return line;
+    return line;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -530,18 +545,18 @@ get_line_number ()
 std::string
 get_filename ()
 {
-  std::string filename;
+    std::string filename;
 
-  PyFrameObject *frame = PyEval_GetFrame ();
-  if (!frame)
+    PyFrameObject *frame = PyEval_GetFrame ();
+    if (!frame)
+        return filename;
+
+    auto f_code = PyFrame_GetCode (frame);
+
+    if (f_code && f_code->co_filename)
+        filename = mobius::py::pystring_as_std_string (f_code->co_filename);
+
     return filename;
-  
-  auto f_code = PyFrame_GetCode (frame);
-  
-  if (f_code && f_code->co_filename)
-    filename = mobius::py::pystring_as_std_string (f_code->co_filename);
-
-  return filename;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -551,17 +566,17 @@ get_filename ()
 std::string
 get_funcname ()
 {
-  std::string funcname;
+    std::string funcname;
 
-  PyFrameObject *frame = PyEval_GetFrame ();
-  if (!frame)
+    PyFrameObject *frame = PyEval_GetFrame ();
+    if (!frame)
+        return funcname;
+
+    auto f_code = PyFrame_GetCode (frame);
+    if (f_code && f_code->co_name)
+        funcname = mobius::py::pystring_as_std_string (f_code->co_name);
+
     return funcname;
-  
-  auto f_code = PyFrame_GetCode (frame);
-  if (f_code && f_code->co_name)
-    funcname = mobius::py::pystring_as_std_string (f_code->co_name);
-
-  return funcname;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -571,8 +586,8 @@ get_funcname ()
 PyObject *
 pynone ()
 {
-  Py_INCREF (Py_None);
-  return Py_None;
+    Py_INCREF (Py_None);
+    return Py_None;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -582,8 +597,8 @@ pynone ()
 PyObject *
 py_true ()
 {
-  Py_INCREF (Py_True);
-  return Py_True;
+    Py_INCREF (Py_True);
+    return Py_True;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -593,8 +608,8 @@ py_true ()
 PyObject *
 py_false ()
 {
-  Py_INCREF (Py_False);
-  return Py_False;
+    Py_INCREF (Py_False);
+    return Py_False;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -604,8 +619,8 @@ py_false ()
 PyObject *
 py_not_implemented ()
 {
-  Py_INCREF (Py_NotImplemented);
-  return Py_NotImplemented;
+    Py_INCREF (Py_NotImplemented);
+    return Py_NotImplemented;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -616,7 +631,7 @@ py_not_implemented ()
 bool
 pynone_check (PyObject *value)
 {
-  return value == Py_None;
+    return value == Py_None;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -627,7 +642,7 @@ pynone_check (PyObject *value)
 bool
 pystring_check (PyObject *value)
 {
-  return PyUnicode_Check (value);
+    return PyUnicode_Check (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -636,14 +651,16 @@ pystring_check (PyObject *value)
 // @return Python Unicode object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pystring_from_std_string (const std::string& s)
+pystring_from_std_string (const std::string &s)
 {
-  auto ret = PyUnicode_DecodeUTF8 (s.c_str (), s.size (), "replace");
+    auto ret = PyUnicode_DecodeUTF8 (s.c_str (), s.size (), "replace");
 
-  if (!ret)
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid C++ UTF-8 string"));
+    if (!ret)
+        throw std::invalid_argument (
+            MOBIUS_EXCEPTION_MSG ("invalid C++ UTF-8 string")
+        );
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -654,16 +671,18 @@ pystring_from_std_string (const std::string& s)
 std::string
 pystring_as_std_string (PyObject *value)
 {
-  const char *buffer = PyUnicode_AsUTF8 (value);
-  std::string str;
+    const char *buffer = PyUnicode_AsUTF8 (value);
+    std::string str;
 
-  if (buffer)
-    str = buffer;
+    if (buffer)
+        str = buffer;
 
-  else
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid Python string"));
+    else
+        throw std::invalid_argument (
+            MOBIUS_EXCEPTION_MSG ("invalid Python string")
+        );
 
-  return str;
+    return str;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -674,7 +693,7 @@ pystring_as_std_string (PyObject *value)
 bool
 pybytes_check (PyObject *value)
 {
-  return PyBytes_Check (value);
+    return PyBytes_Check (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -683,9 +702,11 @@ pybytes_check (PyObject *value)
 // @return Python Bytes object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pybytes_from_bytearray (const mobius::core::bytearray& array)
+pybytes_from_bytearray (const mobius::core::bytearray &array)
 {
-  return PyBytes_FromStringAndSize ((const char *) array.data (), array.size ());
+    return PyBytes_FromStringAndSize (
+        (const char *) array.data (), array.size ()
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -696,13 +717,15 @@ pybytes_from_bytearray (const mobius::core::bytearray& array)
 mobius::core::bytearray
 pybytes_as_bytearray (PyObject *value)
 {
-  char *buffer;
-  Py_ssize_t length;
+    char *buffer;
+    Py_ssize_t length;
 
-  if (PyBytes_AsStringAndSize (value, &buffer, &length) == -1)
-    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid bytes"));
+    if (PyBytes_AsStringAndSize (value, &buffer, &length) == -1)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid bytes"));
 
-  return mobius::core::bytearray (reinterpret_cast <const std::uint8_t *> (buffer), length);
+    return mobius::core::bytearray (
+        reinterpret_cast<const std::uint8_t *> (buffer), length
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -713,8 +736,8 @@ pybytes_as_bytearray (PyObject *value)
 PyObject *
 pybytes_from_char (char c)
 {
-  char buffer[2] = {c, 0};
-  return PyBytes_FromStringAndSize (buffer, 1);
+    char buffer[2] = {c, 0};
+    return PyBytes_FromStringAndSize (buffer, 1);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -725,7 +748,7 @@ pybytes_from_char (char c)
 bool
 pybool_check (PyObject *value)
 {
-  return PyBool_Check (value);
+    return PyBool_Check (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -736,10 +759,10 @@ pybool_check (PyObject *value)
 PyObject *
 pybool_from_bool (bool b)
 {
-  PyObject *ret = b ? Py_True : Py_False;
-  Py_INCREF (ret);
+    PyObject *ret = b ? Py_True : Py_False;
+    Py_INCREF (ret);
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -750,7 +773,7 @@ pybool_from_bool (bool b)
 bool
 pybool_as_bool (PyObject *value)
 {
-  return value == Py_True;
+    return value == Py_True;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -761,7 +784,7 @@ pybool_as_bool (PyObject *value)
 bool
 pylong_check (PyObject *value)
 {
-  return PyLong_Check (value);
+    return PyLong_Check (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -772,7 +795,7 @@ pylong_check (PyObject *value)
 PyObject *
 pylong_from_std_int8_t (std::int8_t value)
 {
-  return PyLong_FromLong (value);
+    return PyLong_FromLong (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -783,7 +806,7 @@ pylong_from_std_int8_t (std::int8_t value)
 std::int8_t
 pylong_as_std_int8_t (PyObject *value)
 {
-  return PyLong_AsLong (value);
+    return PyLong_AsLong (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -794,7 +817,7 @@ pylong_as_std_int8_t (PyObject *value)
 PyObject *
 pylong_from_std_int16_t (std::int16_t value)
 {
-  return PyLong_FromLong (value);
+    return PyLong_FromLong (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -805,7 +828,7 @@ pylong_from_std_int16_t (std::int16_t value)
 std::int16_t
 pylong_as_std_int16_t (PyObject *value)
 {
-  return PyLong_AsLong (value);
+    return PyLong_AsLong (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -816,7 +839,7 @@ pylong_as_std_int16_t (PyObject *value)
 PyObject *
 pylong_from_std_int32_t (std::int32_t value)
 {
-  return PyLong_FromLong (value);
+    return PyLong_FromLong (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -827,7 +850,7 @@ pylong_from_std_int32_t (std::int32_t value)
 std::int32_t
 pylong_as_std_int32_t (PyObject *value)
 {
-  return PyLong_AsLong (value);
+    return PyLong_AsLong (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -838,7 +861,7 @@ pylong_as_std_int32_t (PyObject *value)
 PyObject *
 pylong_from_std_uint8_t (std::uint8_t value)
 {
-  return PyLong_FromUnsignedLong (value);
+    return PyLong_FromUnsignedLong (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -849,7 +872,7 @@ pylong_from_std_uint8_t (std::uint8_t value)
 PyObject *
 pylong_from_std_uint16_t (std::uint16_t value)
 {
-  return PyLong_FromUnsignedLong (value);
+    return PyLong_FromUnsignedLong (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -860,7 +883,7 @@ pylong_from_std_uint16_t (std::uint16_t value)
 PyObject *
 pylong_from_std_uint32_t (std::uint32_t value)
 {
-  return PyLong_FromUnsignedLong (value);
+    return PyLong_FromUnsignedLong (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -871,7 +894,7 @@ pylong_from_std_uint32_t (std::uint32_t value)
 std::uint8_t
 pylong_as_std_uint8_t (PyObject *value)
 {
-  return PyLong_AsUnsignedLong (value);
+    return PyLong_AsUnsignedLong (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -882,7 +905,7 @@ pylong_as_std_uint8_t (PyObject *value)
 std::uint16_t
 pylong_as_std_uint16_t (PyObject *value)
 {
-  return PyLong_AsUnsignedLong (value);
+    return PyLong_AsUnsignedLong (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -893,7 +916,7 @@ pylong_as_std_uint16_t (PyObject *value)
 std::uint32_t
 pylong_as_std_uint32_t (PyObject *value)
 {
-  return PyLong_AsUnsignedLong (value);
+    return PyLong_AsUnsignedLong (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -904,7 +927,7 @@ pylong_as_std_uint32_t (PyObject *value)
 PyObject *
 pylong_from_std_int64_t (std::int64_t value)
 {
-  return PyLong_FromLongLong (value);
+    return PyLong_FromLongLong (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -915,7 +938,7 @@ pylong_from_std_int64_t (std::int64_t value)
 std::int64_t
 pylong_as_std_int64_t (PyObject *value)
 {
-  return PyLong_AsLongLong (value);
+    return PyLong_AsLongLong (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -926,7 +949,7 @@ pylong_as_std_int64_t (PyObject *value)
 PyObject *
 pylong_from_std_uint64_t (std::uint64_t value)
 {
-  return PyLong_FromUnsignedLongLong (value);
+    return PyLong_FromUnsignedLongLong (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -937,12 +960,12 @@ pylong_from_std_uint64_t (std::uint64_t value)
 std::uint64_t
 pylong_as_std_uint64_t (PyObject *value)
 {
-  std::uint64_t v = PyLong_AsUnsignedLongLong (value);
+    std::uint64_t v = PyLong_AsUnsignedLongLong (value);
 
-  if (PyErr_Occurred ())
-    throw std::runtime_error (get_error_message ());
+    if (PyErr_Occurred ())
+        throw std::runtime_error (get_error_message ());
 
-  return v;
+    return v;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -953,7 +976,7 @@ pylong_as_std_uint64_t (PyObject *value)
 PyObject *
 pylong_from_int (int value)
 {
-  return PyLong_FromLongLong (value);
+    return PyLong_FromLongLong (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -964,7 +987,7 @@ pylong_from_int (int value)
 int
 pylong_as_int (PyObject *value)
 {
-  return PyLong_AsLong (value);
+    return PyLong_AsLong (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -975,7 +998,7 @@ pylong_as_int (PyObject *value)
 bool
 pyfloat_check (PyObject *value)
 {
-  return PyFloat_Check (value);
+    return PyFloat_Check (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -986,7 +1009,7 @@ pyfloat_check (PyObject *value)
 double
 pyfloat_as_cpp (PyObject *value)
 {
-  return PyFloat_AS_DOUBLE (value);
+    return PyFloat_AS_DOUBLE (value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -997,9 +1020,7 @@ pyfloat_as_cpp (PyObject *value)
 PyObject *
 pyfloat_from_cpp (double value)
 {
-  return PyFloat_FromDouble (value);
+    return PyFloat_FromDouble (value);
 }
 
 } // namespace mobius::py
-
-

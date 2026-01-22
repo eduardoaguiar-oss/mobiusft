@@ -476,7 +476,12 @@ def svc_app_start():
     # start graphical interface
     # mobius.core.ui.set_ui_implementation ("gtk3")
 
-    mobius.core.ui.start()
+    print("app start *** 1 ***")
+    try:
+      mobius.core.ui.start()
+    except Exception as e:
+      print("app start *** 2 ***", e)
+    print("app start *** 3 ***")
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

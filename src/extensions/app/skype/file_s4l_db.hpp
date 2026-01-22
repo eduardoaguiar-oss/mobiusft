@@ -22,6 +22,7 @@
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/reader.hpp>
+#include <mobius/core/pod/map.hpp>
 #include <cstdint>
 #include <string>
 #include <unordered_map>
@@ -232,6 +233,48 @@ class file_s4l_db
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Message structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct message
+    {
+        // @brief Compose time
+        mobius::core::datetime::datetime compose_time;
+
+        // @brief Content
+        std::string content;
+
+        // @brief Content type
+        std::string content_type;
+
+        // @brief Conversation Identity
+        std::string conversation_id;
+
+        // @brief Created time
+        mobius::core::datetime::datetime created_time;
+
+        // @brief Creator
+        std::string creator;
+
+        // @brief CUID
+        std::string cuid;
+
+        // @brief Is ephemeral
+        bool is_ephemeral = false;
+
+        // @brief Is my message
+        bool is_my_message = false;
+
+        // @brief NSP PK
+        std::string nsp_pk;
+
+        // @brief Type
+        std::string type;
+
+        // @brief Parsed Content
+        std::vector<mobius::core::pod::map> parsed_content;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     explicit file_s4l_db (const mobius::core::io::reader &);
@@ -290,6 +333,16 @@ class file_s4l_db
         return vec;
     }
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get messages
+    // @return Vector of messages
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<message>
+    get_messages () const
+    {
+        return messages_;
+    }
+
   private:
     // @brief Flag is instance
     bool is_instance_ = false;
@@ -306,12 +359,16 @@ class file_s4l_db
     // @brief Contacts
     std::unordered_map<std::string, contact> contacts_;
 
+    // @brief Messages
+    std::vector<message> messages_;
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _load_account (mobius::core::database::database &);
     void _load_calls (mobius::core::database::database &);
     void _load_contacts (mobius::core::database::database &);
+    void _load_messages (mobius::core::database::database &);
 };
 
 } // namespace mobius::extension::app::skype

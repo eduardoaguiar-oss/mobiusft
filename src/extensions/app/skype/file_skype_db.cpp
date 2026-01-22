@@ -880,10 +880,10 @@ file_skype_db::_load_messages (mobius::core::database::database &db)
             obj.skypeguid = stmt.get_column_string (13);
             obj.version = stmt.get_column_int64 (14);
             obj.conversation_type = stmt.get_column_string (15);
-            obj.conversation_id = stmt.get_column_int64 (16);
+            obj.conversation_id = stmt.get_column_string (16);
 
             // Set conversation MRI
-            if (obj.conversation_type.empty () && !obj.conversation_id.empty ())
+            if (!obj.conversation_type.empty () && !obj.conversation_id.empty ())
                 obj.conversation_mri = std::format (
                     "{}:{}", obj.conversation_type, obj.conversation_id
                 );
@@ -898,7 +898,7 @@ file_skype_db::_load_messages (mobius::core::database::database &db)
 
                 if (obj.parsed_content.empty ())
                 {
-                    obj.content = {mobius::core::pod::map {
+                    obj.parsed_content = {mobius::core::pod::map {
                         {"type", "text"},
                         {"text", obj.content}
                     }};

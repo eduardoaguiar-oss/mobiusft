@@ -45,7 +45,8 @@ static const std::string IPV6_REGEX =
     R"((^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$)|(^([0-9a-fA-F]{1,4}:){1,7}:$)|(^:([0-9a-fA-F]{1,4}:){1,6}[0-9a-fA-F]{1,4}$)|(^([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}$)|(^([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}$)|(^([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}$)|(^([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}$)|(^([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}$)|(^[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){6}|:)$)|(^:((:[0-9a-fA-F]{1,4}){7}|:)$))";
 
 // @brief CNPJ multipliers
-static constexpr int CNPJ_MULTIPLIERS[] = {6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
+static constexpr int CNPJ_MULTIPLIERS[] = {6, 5, 4, 3, 2, 9, 8,
+                                           7, 6, 5, 4, 3, 2};
 } // namespace
 
 namespace mobius::core::string
@@ -62,9 +63,7 @@ is_digit (const std::string &str)
         return false;
 
     return std::all_of (
-        str.begin (),
-        str.end (),
-        [] (char c) { return std::isdigit (c); }
+        str.begin (), str.end (), [] (char c) { return std::isdigit (c); }
     );
 }
 
@@ -83,9 +82,7 @@ is_integer (const std::string &str)
         return false;
 
     return std::all_of (
-        str.begin (),
-        str.end (),
-        [] (char c) { return std::isdigit (c); }
+        str.begin (), str.end (), [] (char c) { return std::isdigit (c); }
     );
 }
 
@@ -101,9 +98,7 @@ is_hex (const std::string &str)
         return false;
 
     return std::all_of (
-        str.begin (),
-        str.end (),
-        [] (char c) { return std::isxdigit (c); }
+        str.begin (), str.end (), [] (char c) { return std::isxdigit (c); }
     );
 }
 
@@ -119,9 +114,7 @@ is_alpha (const std::string &str)
         return false;
 
     return std::all_of (
-        str.begin (),
-        str.end (),
-        [] (char c) { return std::isalpha (c); }
+        str.begin (), str.end (), [] (char c) { return std::isalpha (c); }
     );
 }
 
@@ -137,9 +130,7 @@ is_alnum (const std::string &str)
         return false;
 
     return std::all_of (
-        str.begin (),
-        str.end (),
-        [] (char c) { return std::isalnum (c); }
+        str.begin (), str.end (), [] (char c) { return std::isalnum (c); }
     );
 }
 
@@ -155,9 +146,7 @@ is_lower (const std::string &str)
         return false;
 
     return std::all_of (
-        str.begin (),
-        str.end (),
-        [] (char c) { return std::islower (c); }
+        str.begin (), str.end (), [] (char c) { return std::islower (c); }
     );
 }
 
@@ -173,9 +162,7 @@ is_upper (const std::string &str)
         return false;
 
     return std::all_of (
-        str.begin (),
-        str.end (),
-        [] (char c) { return std::isupper (c); }
+        str.begin (), str.end (), [] (char c) { return std::isupper (c); }
     );
 }
 
@@ -191,9 +178,7 @@ is_space (const std::string &str)
         return false;
 
     return std::all_of (
-        str.begin (),
-        str.end (),
-        [] (char c) { return std::isspace (c); }
+        str.begin (), str.end (), [] (char c) { return std::isspace (c); }
     );
 }
 
@@ -289,7 +274,7 @@ is_cnpj (const std::string &str)
     // Calculate first verification digit
     int sum = 0;
     for (int i = 0; i < 12; i++)
-        sum += (digits[i] - '0') * (CNPJ_MULTIPLIERS[i+1]);
+        sum += (digits[i] - '0') * (CNPJ_MULTIPLIERS[i + 1]);
 
     int remainder = sum % 11;
     int dv1 = remainder < 2 ? 0 : 11 - remainder;
@@ -423,7 +408,200 @@ toupper (const std::string &str)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief check if a string starts with another one
+// @brief Escape a string using C-style escape sequences
+// @param str string
+// @return escaped string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+c_escape (const std::string &str)
+{
+    std::string s;
+
+    for (const char c : str)
+    {
+        switch (c)
+        {
+            case '\n':
+                s += "\\n";
+                break;
+            case '\t':
+                s += "\\t";
+                break;
+            case '\r':
+                s += "\\r";
+                break;
+            case '\"':
+                s += "\\\"";
+                break;
+            case '\\':
+                s += "\\\\";
+                break;
+            default:
+                if (std::isprint (static_cast<unsigned char> (c)))
+                    s += c;
+                else
+                    s +=
+                        "\\x" +
+                        to_hex (
+                            static_cast<int> (static_cast<unsigned char> (c)), 2
+                        );
+                break;
+        }
+    }
+    return s;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Unescape a C-style escaped string
+// @param str string
+// @return unescaped string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+c_unescape (const std::string &str)
+{
+    std::string s;
+    std::string::size_type i = 0;
+
+    while (i < str.length ())
+    {
+        if (str[i] == '\\' && i + 1 < str.length ())
+        {
+            switch (str[i + 1])
+            {
+                case 'n':
+                    s += '\n';
+                    i += 2;
+                    break;
+                case 't':
+                    s += '\t';
+                    i += 2;
+                    break;
+                case 'r':
+                    s += '\r';
+                    i += 2;
+                    break;
+                case '\"':
+                    s += '\"';
+                    i += 2;
+                    break;
+                case '\\':
+                    s += '\\';
+                    i += 2;
+                    break;
+                case 'x':
+                    if (i + 3 < str.length ())
+                    {
+                        std::string hex_str = str.substr (i + 2, 2);
+                        char hex_char = static_cast<char> (
+                            std::stoi (hex_str, nullptr, 16)
+                        );
+                        s += hex_char;
+                        i += 4;
+                    }
+                    else
+                    {
+                        s += str[i];
+                        i++;
+                    }
+                    break;
+                default:
+                    s += str[i];
+                    i++;
+                    break;
+            }
+        }
+        else
+        {
+            s += str[i];
+            i++;
+        }
+    }
+    return s;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Escape a string for HTML
+// @param str string
+// @return escaped string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+html_escape (const std::string &str)
+{
+    std::string s;
+
+    for (const char c : str)
+    {
+        switch (c)
+        {
+            case '&':
+                s += "&amp;";
+                break;
+            case '<':
+                s += "&lt;";
+                break;
+            case '>':
+                s += "&gt;";
+                break;
+            case '\"':
+                s += "&quot;";
+                break;
+            case '\'':
+                s += "&#39;";
+                break;
+            default:
+                s += c;
+                break;
+        }
+    }
+    return s;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Unescape an HTML-escaped string
+// @param str string
+// @return unescaped string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+html_unescape (const std::string &str)
+{
+    std::string s = str;
+
+    s = replace (s, "&amp;", "&");
+    s = replace (s, "&lt;", "<");
+    s = replace (s, "&gt;", ">");
+    s = replace (s, "&quot;", "\"");
+
+    // Convert &#xx to the equivalent char
+    for (std::string::size_type pos = s.find ("&#"); pos != std::string::npos;)
+    {
+        std::string::size_type end_pos = s.find (';', pos);
+        if (end_pos != std::string::npos)
+        {
+            std::string code_str = s.substr (pos + 2, end_pos - pos - 2);
+            try
+            {
+                int code = std::stoi (code_str);
+                char ch = static_cast<char> (code);
+                s.replace (pos, end_pos - pos + 1, std::string (1, ch));
+                pos += 1; // Move past the replaced character
+            }
+            catch (...)
+            {
+                pos = end_pos + 1; // Move past the semicolon
+            }
+        }
+        else
+        {
+            break; // No closing semicolon found
+        }
+        pos = s.find ("&#", pos);
+    }
+
+    return s;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if a string starts with another one
 // @param str string
 // @param starting starting string
 // @return true if str starts with starting
@@ -446,9 +624,7 @@ endswith (const std::string &str, const std::string &ending)
 {
     return ending.length () > 0 && str.length () >= ending.length () &&
            str.compare (
-               str.length () - ending.length (),
-               ending.length (),
-               ending
+               str.length () - ending.length (), ending.length (), ending
            ) == 0;
 }
 
@@ -491,10 +667,7 @@ case_insensitive_match (const std::string &a, const std::string &b)
     return (
         a.size () == b.size () &&
         std::equal (
-            a.begin (),
-            a.end (),
-            b.begin (),
-            [] (char c1, char c2)
+            a.begin (), a.end (), b.begin (), [] (char c1, char c2)
             { return (c1 == c2 || std::toupper (c1) == std::toupper (c2)); }
         )
     );
@@ -624,7 +797,7 @@ join (const std::vector<std::string> &vec, const std::string &sep)
 {
     std::string result;
 
-    for (const auto& s : vec)
+    for (const auto &s : vec)
     {
         if (!result.empty ())
             result += sep;

@@ -15,6 +15,9 @@ Mobius Forensic Toolkit 2.23
 	* app-skype: Removed new_transaction/commit calls on function on_complete
 	* app-skype: Added support for main.db files version 34
 	* app-skype: Added support for skype.db files version 75
+	* app-skype: Added new method file_s4l_db::_load_messages
+	* app-skype: Added new method profile::_load_s4l_db_messages
+	* app-skype: Removed module pymobius.app.skype.app_v14
 	* date-code: Fixed system lookup error
 	* evidence-viewer: Changed to use chat-message.app_name attribute
 	* libmobius_core: Improved error handling on pod::map::pop_map function
@@ -22,14 +25,19 @@ Mobius Forensic Toolkit 2.23
 	* libmobius_core: Added new method decoder::sgml::parser::get_minidom
 	* libmobius_core: Added new method database::new_select_statement (table_name, cols names)
 	* libmobius_core: Changed to load C++ extensions directly from data/extensions folder
+	* libmobius_core: Added new function string::c_escape
+	* libmobius_core: Added new function string::c_unescape
+	* libmobius_core: Added new function string::html_escape
+	* libmobius_core: Added new function string::html_unescape
 	* libmobius_framework: Changed function ant_impl_vfs_processor::run to create a new transaction
 	* libmobius_framework: Added support for Windows.old/Users folders on function get_username_from_path
 	* libmobius_framework: Added support for Windows.old/Users folders on ant_impl_vfs_processor::_scan_user_folders method
 	* libmobius_python: Added new function decoder::hexstring
 	* libmobius_python: Added new method decoder.sgml.parser.get_last
+	* libmobius_python: Fixed error messages that incorrectly showed line numbers as -1
 	* pymobius.registry.user_accounts: Fixed error in TS_Property constructor
-	* pymobius.app.skype.skype: Removed module
-	* pymobius.app.skype.app: Removed module
+	* pymobius.app.skype: Removed module
+	* pymobius.ant.evidence.vfs.chat_messages: Removed module
 	* pymobius.ant.turing.test_case_passwords: Convert all passwords to string before testing
 	* pymobius.ant.turing.registry_passwords: Convert PSSP passwords to string before testing
 	* pymobius.ant.turing.dpapi_user_mk: Retrieve Users DPAPI keys from WinXP folders
