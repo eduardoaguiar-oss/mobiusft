@@ -82,15 +82,20 @@ class message_parser
     void _parse_entity (const std::string &entity);
 
     void _parse_a ();
+    void _parse_addmember ();
     void _parse_contacts ();
+    void _parse_c_i ();
     void _parse_deletemember ();
     void _parse_files ();
     void _parse_flag ();
+    void _parse_historydisclosedupdate ();
+    void _parse_joiningenabledupdate ();
     void _parse_legacyquote ();
     void _parse_partlist ();
     void _parse_quote ();
     void _parse_sms ();
     void _parse_ss ();
+    void _parse_topicupdate ();
     void _parse_uriobject ();
 };
 
@@ -98,6 +103,8 @@ class message_parser
 // Function prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector<mobius::core::pod::map> parse_message (const std::string &);
+std::vector<mobius::core::pod::map> parse_notice (const std::string &);
+std::vector<mobius::core::pod::map> parse_popcard (const std::string &);
 
 } // namespace mobius::extension::app::skype
 

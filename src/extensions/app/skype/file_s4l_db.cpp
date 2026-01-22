@@ -625,17 +625,52 @@ file_s4l_db::_load_messages (mobius::core::database::database &db)
             // Parse message content
             try
             {
-                message_parser parser (m.content);
-                parser.parse ();
+                if (m.type == "PopCard")
+                    m.parsed_content = parse_popcard (m.content);
 
-                m.parsed_content = parser.get_content ();
+                else if (m.type == "Notice")
+                    m.parsed_content = parse_notice (m.content);
 
-                if (m.parsed_content.empty ())
+                else if (m.type == "Text")
                 {
                     m.parsed_content = {mobius::core::pod::map {
                         {"type", "text"},
                         {"text", m.content}
                     }};
+                }
+
+                else if (mobius::core::string::startswith (
+                             m.type, "RichText"
+                         ) ||
+                         mobius::core::string::startswith (m.type, "Event/") ||
+                         mobius::core::string::startswith (
+                             m.type, "ThreadActivity/"
+                         ))
+                {
+                    message_parser parser (m.content);
+                    parser.parse ();
+
+                    m.parsed_content = parser.get_content ();
+
+                    if (m.parsed_content.empty ())
+                    {
+                        m.parsed_content = {mobius::core::pod::map {
+                            {"type", "text"},
+                            {"text", m.content}
+                        }};
+                    }
+                }
+
+                else
+                {
+                    m.parsed_content = {mobius::core::pod::map {
+                        {"type", "text"},
+                        {"text", m.content}
+                    }};
+                    log.development (
+                        __LINE__, "Unhandled message type: " + m.type +
+                                      ". Content: " + m.content
+                    );
                 }
             }
             catch (const std::exception &e)

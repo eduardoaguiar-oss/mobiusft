@@ -16,6 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "message_parser.hpp"
+#include <mobius/core/decoder/json/parser.hpp>
 #include <mobius/core/io/bytearray_io.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/string_functions.hpp>
@@ -398,11 +399,17 @@ message_parser::_parse_start_tag (const std::string &tag)
     if (tag == "a")
         _parse_a ();
 
+    else if (tag == "addmember")
+        _parse_addmember ();
+
     else if (tag == "b")
         add_element (mobius::core::pod::map {{"type", "start/b"}});
 
     else if (tag == "contacts")
         _parse_contacts ();
+
+    else if (tag == "c_i")
+        _parse_c_i ();
 
     else if (tag == "deletemember")
         _parse_deletemember ();
@@ -413,8 +420,14 @@ message_parser::_parse_start_tag (const std::string &tag)
     else if (tag == "flag")
         _parse_flag ();
 
+    else if (tag == "historydisclosedupdate")
+        _parse_historydisclosedupdate ();
+
     else if (tag == "i")
         add_element (mobius::core::pod::map {{"type", "start/i"}});
+
+    else if (tag == "joiningenabledupdate")
+        _parse_joiningenabledupdate ();
 
     else if (tag == "legacyquote")
         _parse_legacyquote ();
@@ -433,6 +446,9 @@ message_parser::_parse_start_tag (const std::string &tag)
 
     else if (tag == "ss")
         _parse_ss ();
+
+    else if (tag == "topicupdate")
+        _parse_topicupdate ();
 
     else if (tag == "URIObject")
         _parse_uriobject ();
@@ -545,6 +561,62 @@ message_parser::_parse_a ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Parse <addmember> tag
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+message_parser::_parse_addmember ()
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // Get minidom tag
+    auto tag = parser_.get_minidom ();
+    if (!tag)
+    {
+        log.warning (__LINE__, "Invalid <addmember> tag");
+        return;
+    }
+
+    // Get children tags
+    mobius::core::datetime::datetime timestamp;
+    std::string initiator;
+    std::string target;
+
+    for (const auto &child : tag.get_children ())
+    {
+        auto child_name = child.get_name ();
+
+        if (child_name == "eventtime")
+        {
+            auto timestamp_str = child.get_content ();
+            timestamp =
+                mobius::core::datetime::new_datetime_from_unix_timestamp (
+                    std::stoll (timestamp_str) / 1000
+                );
+        }
+
+        else if (child_name == "initiator")
+            initiator = child.get_content ();
+
+        else if (child_name == "target")
+            target = child.get_content ();
+    }
+
+    // Format system message
+    std::string text = std::format ("Member \"{}\"", target);
+
+    if (initiator != "" && initiator != target)
+        text += std::format (" added to chat by user \"{}\"", initiator);
+
+    else
+        text += " left chat";
+
+    if (timestamp)
+        text += std::format (" at {}", to_string (timestamp));
+
+    add_system_element (text);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Parse <contacts> tag
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -596,6 +668,30 @@ message_parser::_parse_contacts ()
                 "Contacts shared ({}):\n{}", contact_count, contact_list
             )
         );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Parse <c_i> tag
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+message_parser::_parse_c_i ()
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // Get minidom tag
+    auto tag = parser_.get_minidom ();
+    if (!tag)
+    {
+        log.warning (__LINE__, "Invalid <c_i> tag");
+        return;
+    }
+
+    auto id = tag.get_attribute<std::string> ("id");
+
+    // Format system message
+    add_system_element (
+        std::format ("<<Clickable Interactive Element (id={})>>", id)
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -748,6 +844,127 @@ message_parser::_parse_flag ()
 
     // Add element
     add_element (element);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Parse <historydisclosedupdate> tag
+// @see https://docs.microsoft.com/en-us/javascript/api/botbuilder/iconversationupdate?view=botbuilder-ts-3.0#botbuilder-iconversationupdate-historydisclosed
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+message_parser::_parse_historydisclosedupdate ()
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // Get minidom tag
+    auto tag = parser_.get_minidom ();
+    if (!tag)
+    {
+        log.warning (__LINE__, "Invalid <historydisclosedupdate> tag");
+        return;
+    }
+
+    // Get children tags
+    mobius::core::datetime::datetime timestamp;
+    std::string initiator;
+    std::string value;
+
+    for (const auto &child : tag.get_children ())
+    {
+        auto child_name = child.get_name ();
+
+        if (child_name == "eventtime")
+        {
+            auto timestamp_str = child.get_content ();
+            timestamp =
+                mobius::core::datetime::new_datetime_from_unix_timestamp (
+                    std::stoll (timestamp_str) / 1000
+                );
+        }
+
+        else if (child_name == "initiator")
+            initiator = child.get_content ();
+
+        else if (child_name == "value")
+            value = child.get_content ();
+    }
+
+    // Format system message
+    std::string text;
+    if (value == "true")
+        text = "Chat history disclosure enabled";
+
+    else
+        text = "Chat history disclosure disabled";
+
+    if (!initiator.empty ())
+        text += std::format (" by user \"{}\"", initiator);
+
+    if (timestamp)
+        text += std::format (" at {}", to_string (timestamp));
+
+    text += '.';
+
+    add_system_element (text);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Parse <joiningenabledupdate> tag
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+message_parser::_parse_joiningenabledupdate ()
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // Get minidom tag
+    auto tag = parser_.get_minidom ();
+    if (!tag)
+    {
+        log.warning (__LINE__, "Invalid <joiningenabledupdate> tag");
+        return;
+    }
+
+    // Get children tags
+    mobius::core::datetime::datetime timestamp;
+    std::string initiator;
+    std::string value;
+
+    for (const auto &child : tag.get_children ())
+    {
+        auto child_name = child.get_name ();
+
+        if (child_name == "eventtime")
+        {
+            auto timestamp_str = child.get_content ();
+            timestamp =
+                mobius::core::datetime::new_datetime_from_unix_timestamp (
+                    std::stoll (timestamp_str) / 1000
+                );
+        }
+
+        else if (child_name == "initiator")
+            initiator = child.get_content ();
+
+        else if (child_name == "value")
+            value = child.get_content ();
+    }
+
+    // Format system message
+    std::string text;
+    if (value == "true")
+        text = "Joining enabled";
+
+    else
+        text = "Joining disabled";
+
+    if (!initiator.empty ())
+        text += std::format (" by user \"{}\"", initiator);
+
+    if (timestamp)
+        text += std::format (" at {}", to_string (timestamp));
+
+    text += '.';
+
+    add_system_element (text);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -968,6 +1185,61 @@ message_parser::_parse_ss ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Parse <topicupdate> tag
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+message_parser::_parse_topicupdate ()
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // Get minidom tag
+    auto tag = parser_.get_minidom ();
+    if (!tag)
+    {
+        log.warning (__LINE__, "Invalid <topicupdate> tag");
+        return;
+    }
+
+    // Get children tags
+    mobius::core::datetime::datetime timestamp;
+    std::string initiator;
+    std::string value;
+
+    for (const auto &child : tag.get_children ())
+    {
+        auto child_name = child.get_name ();
+
+        if (child_name == "eventtime")
+        {
+            auto timestamp_str = child.get_content ();
+            timestamp =
+                mobius::core::datetime::new_datetime_from_unix_timestamp (
+                    std::stoll (timestamp_str) / 1000
+                );
+        }
+
+        else if (child_name == "initiator")
+            initiator = child.get_content ();
+
+        else if (child_name == "value")
+            value = child.get_content ();
+    }
+
+    // Format system message
+    std::string text = std::format ("Topic updated to \"{}\"", value);
+
+    if (!initiator.empty ())
+        text += std::format (" by user \"{}\"", initiator);
+
+    if (timestamp)
+        text += std::format (" at {}", to_string (timestamp));
+
+    text += '.';
+
+    add_system_element (text);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Parse <URIObject> tag
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -1046,6 +1318,8 @@ message_parser::_parse_uriobject ()
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Parse Skype message
+// @param message Message string
+// @return Parsed content
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector<mobius::core::pod::map>
 parse_message (const std::string &message)
@@ -1071,6 +1345,104 @@ parse_message (const std::string &message)
         log.warning (__LINE__, e.what ());
         return {};
     }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Parse Notice message
+// @param message Message string
+// @return Parsed content
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<mobius::core::pod::map>
+parse_notice (const std::string &message)
+{
+    auto parser = mobius::core::decoder::json::parser (message);
+    auto l = parser.parse ().to_list ();
+    std::string text;
+
+    for (const auto &item : l)
+    {
+        auto data = item.to_map ();
+        auto language = data.get<std::string> ("language");
+        auto client_version = data.get<std::string> ("clientVersion");
+
+        // Add text
+        if (!text.empty ())
+            text += "\n";
+
+        text += "Notice received.";
+
+        if (!language.empty ())
+            text += "\n  Language: " + language + ".";
+
+        if (!client_version.empty ())
+            text += "\n  Client version: " + client_version + ".";
+
+        // Attachments
+        auto attachments =
+            data.get_list<mobius::core::pod::map> ("attachments");
+
+        if (!attachments.empty ())
+            text += "\n  Attachments:";
+
+        for (const auto &attachment : attachments)
+        {
+            auto icon_url = attachment.get<std::string> ("iconUrl");
+            auto content = attachment.get_map ("content");
+            auto title = content.get<std::string> ("title");
+            auto modal_title = content.get<std::string> ("modalTitle");
+            auto content_text = content.get<std::string> ("text");
+            auto main_action_uri = content.get<std::string> ("mainActionUri");
+
+            if (!title.empty ())
+                text += "\n    Title: " + title;
+
+            if (!modal_title.empty ())
+                text += "\n    Modal Title: " + modal_title;
+
+            if (!content_text.empty ())
+                text += "\n    Text: " + content_text;
+
+            if (!main_action_uri.empty ())
+                text += "\n    Action URI: " + main_action_uri;
+
+            if (!icon_url.empty ())
+                text += "\n    Icon URL: " + icon_url;
+        }
+    }
+
+    // Create message element
+    if (text.empty ())
+        text = "Notice received.";
+
+    return std::vector<mobius::core::pod::map> {
+        mobius::core::pod::map {{"type", "system"}, {"text", text}}
+    };
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Parse Popcard message
+// @param message Message string
+// @return Parsed content
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<mobius::core::pod::map>
+parse_popcard (const std::string &message)
+{
+    auto parser = mobius::core::decoder::json::parser (message);
+    auto l = parser.parse ().to_list ();
+
+    if (!l.empty ())
+    {
+        auto data = l[0].to_map ();
+        auto content = data.get_map ("content");
+        auto text = content.get<std::string> ("text");
+
+        return std::vector<mobius::core::pod::map> {mobius::core::pod::map {
+            {"type", "system"},
+            {"text", "Popcard received: " + text}
+        }};
+    }
+
+    return {};
 }
 
 } // namespace mobius::extension::app::skype
