@@ -66,9 +66,10 @@ class Ant(object):
         self.__started_time = datetime.datetime.now()
         self.__phase_number = 0
         self.__phase_name = ''
-        self.__step_number = 0
+        self.__step_number = None
         self.__step_name = ''
         self.__ant = None
+        self.__finished_time = None
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Get processing status
@@ -78,11 +79,19 @@ class Ant(object):
         status = mobius.core.pod.map()
         status.set('profile_id', self.__profile.get_id())
         status.set('started_time', self.__started_time)
-        status.set('current_time', datetime.datetime.now())
-        status.set('phase_number', f"{self.__phase_number} of 3")
-        status.set('phase_name', self.__phase_name)
-        status.set('step_number', self.__step_number)
-        status.set('step_name', self.__step_name)
+
+        if self.__finished_time:
+            status.set('finished_time', self.__finished_time)
+        else:
+            status.set('current_time', datetime.datetime.now())
+
+        if self.__phase_number > 0:
+            status.set('phase_number', f"{self.__phase_number} of 3")
+            status.set('phase_name', self.__phase_name)
+
+        if self.__step_number:
+            status.set('step_number', self.__step_number)
+            status.set('step_name', self.__step_name)
 
         if self.__ant:
             ant_status = self.__ant.get_status()
@@ -172,3 +181,10 @@ class Ant(object):
                 mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
 
             mobius.core.logf(f"INF Post-processing ant ended: {ant.name}")
+
+        # reset step info
+        self.__step_number = None
+        self.__step_name = ''
+        self.__phase_number = 0
+        self.__phase_name = 'Finished processing'
+        self.__finished_time = datetime.datetime.now()

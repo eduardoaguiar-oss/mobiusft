@@ -129,12 +129,10 @@ class AttributeView(object):
     # @brief handle listview event: value edition
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def listview_after_editing_value(self, attr_id, old_value, new_value):
-        print('Editing attribute %s: %s -> %s' % (attr_id, old_value, new_value))
         transaction = self.__item.case.new_transaction()
         self.__item.set_attribute(attr_id, new_value)
         self.__item.expand_masks()
         transaction.commit()
-        print('Attribute %s updated.' % attr_id)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief handle listview event: DND get data
@@ -153,7 +151,6 @@ class AttributeView(object):
     # @brief Handle event: attribute-modified
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_attribute_modified(self, obj, attr_id, old_value, new_value):
-        print('Attribute modified: %s.%s: %s -> %s' % (obj.uid, attr_id, old_value, new_value))
         if obj == self.__item:
 
             # set new value

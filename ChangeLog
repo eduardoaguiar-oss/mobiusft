@@ -20,6 +20,7 @@ Mobius Forensic Toolkit 2.23
 	* app-skype: Removed module pymobius.app.skype.app_v14
 	* date-code: Fixed system lookup error
 	* evidence-viewer: Changed to use chat-message.app_name attribute
+	* evidence-viewer: Changed to clear processing status when done
 	* file-explorer: Fixed error showing error messages on file_finder_view module
 	* libmobius_core: Improved error handling on pod::map::pop_map function
 	* libmobius_core: Added new method decoder::sgml::parser::get_last
