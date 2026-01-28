@@ -11,6 +11,7 @@ app-chromium
 app-dcpp
 app-emule
 app-emuletorrent
+app-gecko
 app-shareaza
 app-skype
 app-utorrent

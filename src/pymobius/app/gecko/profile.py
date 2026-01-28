@@ -17,9 +17,7 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import pymobius
 import mobius
-from . import decoder_cookies
 from . import decoder_downloads
-from . import decoder_formhistory
 from . import decoder_places
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -40,11 +38,8 @@ class Profile (object):
     self.__form_history_loaded = False
     self.__places_loaded = False
 
-    self.__cookies = []
     self.__downloads = []
-    self.__form_history = []
     self.__history = []
-    self.__searches = []
     self.__bookmarks = []
 
     # beta.util.dirtree (folder)	# development only
@@ -57,22 +52,6 @@ class Profile (object):
 
     else:
       self.name = folder.name
-
-  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  # @brief Get cookies from cookies.sqlite
-  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  def get_cookies (self):
-
-    if not self.__cookies_loaded:
-      f = self.__roaming_folder.get_child_by_path ('cookies.sqlite')
-
-      if f and not f.is_reallocated ():
-        data = decoder_cookies.decode (f)
-        self.__cookies = data.cookies
-
-      self.__cookies_loaded = True
-
-    return self.__cookies
 
   # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   # @brief Get download history from downloads.sqlite
@@ -89,26 +68,6 @@ class Profile (object):
       self.__downloads_loaded = True
 
     return self.__downloads
-
-  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  # @brief Get form history
-  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  def get_form_history (self):
-
-    if not self.__form_history_loaded:
-      self.__load_form_history ()
-
-    return self.__form_history
-
-  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  # @brief Get search history
-  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  def get_searches (self):
-
-    if not self.__form_history_loaded:
-      self.__load_form_history ()
-
-    return self.__searches
 
   # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   # @brief Get URL history
@@ -160,37 +119,6 @@ class Profile (object):
         self.__bookmarks.append (b)
 
     self.__places_loaded = True
-
-  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  # @brief Load form history from formhistory.sqlite
-  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  def __load_form_history (self):
-    f = self.__roaming_folder.get_child_by_path ('formhistory.sqlite')
-
-    if f and not f.is_reallocated ():
-      self.__form_history = []
-      self.__searches = []
-
-      for entry in decoder_formhistory.decode (f):
-
-        if entry.fieldname == 'searchbar-history':
-          search = pymobius.Data ()
-          search.id = entry.id
-          search.text = entry.value
-          search.timestamp = entry.first_used_time
-          self.__searches.append (search)
-
-          if entry.last_used_time and entry.first_used_time != entry.last_used_time:
-            search = pymobius.Data ()
-            search.id = entry.id
-            search.text = entry.value
-            search.timestamp = entry.last_used_time
-            self.__searches.append (search)
-
-        else:
-          self.__form_history.append (entry)
-
-    self.__form_history_loaded = True
 
   # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   # @brief Get any file (development only)

@@ -7,4 +7,5 @@ scope=users	# all = all folders, users = only users folders and subfolders
 
 [processors]
 app-chromium
+app-gecko
 app-skype

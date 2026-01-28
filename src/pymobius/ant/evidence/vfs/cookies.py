@@ -20,12 +20,11 @@ import traceback
 import mobius
 import pymobius
 import pymobius.app.edge
-import pymobius.app.gecko
 import pymobius.app.internet_explorer
 
 ANT_ID = 'cookies'
 ANT_NAME = 'Cookies'
-ANT_VERSION = '1.4'
+ANT_VERSION = '1.5'
 EVIDENCE_TYPE = 'cookie'
 
 
@@ -53,7 +52,6 @@ class Ant(object):
             return
 
         self.__retrieve_edge()
-        self.__retrieve_gecko()
         self.__retrieve_internet_explorer()
 
         self.__save_data()
@@ -74,53 +72,6 @@ class Ant(object):
     # @brief Retrieve data from Microsoft Edge profile
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __retrieve_edge_profile(self, profile):
-        try:
-            for entry in profile.get_cookies():
-                cookie = pymobius.Data()
-                cookie.name = entry.name
-                cookie.value = entry.value
-                cookie.domain = entry.domain
-                cookie.creation_time = entry.creation_time
-                cookie.last_access_time = entry.last_access_time
-                cookie.expiration_time = entry.expiration_time
-                cookie.last_update_time = None
-                cookie.evidence_source = entry.evidence_source
-                cookie.is_deleted = entry.is_deleted
-                cookie.is_encrypted = False
-                cookie.username = profile.username
-                cookie.app_name = profile.app_name
-
-                cookie.metadata = mobius.core.pod.map()
-                cookie.metadata.set('profile-id', profile.name)
-                cookie.metadata.set('profile-path', profile.path)
-
-                if profile.creation_time:
-                    cookie.metadata.set('profile-creation-time', profile.creation_time)
-
-                cookie.metadata.set('app-id', profile.app_id)
-                cookie.metadata.set('app-name', profile.app_name)
-
-                self.__entries.append(cookie)
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from Gecko based browsers
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_gecko(self):
-        try:
-            model = pymobius.app.gecko.model(self.__item)
-
-            for profile in model.get_profiles():
-                self.__retrieve_gecko_profile(profile)
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from Gecko profile
-    # @see http://doxygen.db48x.net/mozilla/html/interfacensIDownloadManager.html
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_gecko_profile(self, profile):
         try:
             for entry in profile.get_cookies():
                 cookie = pymobius.Data()

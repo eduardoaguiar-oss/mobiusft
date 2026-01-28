@@ -1,3 +1,12 @@
+Mobius Forensic Toolkit 2.24
+	* Added new C++ extension called "app-gecko"
+	* ice: Updated project homepage on About Dialog
+	* app-emule: Removed new_transaction/commit calls on function on_complete
+	* app-emule: Enhanced profile::add_preferences_dat function with stricter file validation
+	* pymobius.ant.evidence.vfs.autofill: Removed old gecko code
+	* pymobius.ant.evidence.vfs.cookies: Removed old gecko code
+	* pymobius.app.gecko: Removed module decoder_cookies
+
 Mobius Forensic Toolkit 2.23
 	* Added new C++ extension called "app-dcpp"
 	* app-chromium: Changed post-processor to convert decrypted passwords to string
