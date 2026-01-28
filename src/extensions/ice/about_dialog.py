@@ -39,8 +39,8 @@ class AboutDialog(object):
         self.__widget.set_copyright(app.copyright)
         self.__widget.set_authors(['Eduardo Aguiar <aguiar@protonmail.ch>'])
         self.__widget.set_comments('Open-source forensic toolkit')
-        self.__widget.set_website('https://www.nongnu.org/mobiusft')
-        self.__widget.set_website_label('https://www.nongnu.org/mobiusft')
+        self.__widget.set_website('https://www.github.com/eduardoaguiar-oss/mobiusft')
+        self.__widget.set_website_label('https://www.github.com/eduardoaguiar-oss/mobiusft')
 
         # logo
         logo_path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID, 'logo.svg')
