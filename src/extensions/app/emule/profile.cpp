@@ -30,6 +30,17 @@
 #include "file_known_met.hpp"
 #include "file_stored_searches_met.hpp"
 
+namespace
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Constants
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+// @brief Latest Preferences.dat version
+static constexpr std::uint8_t LATEST_PREFERENCES_DAT_VERSION = 0x14;
+
+} // namespace
+
 namespace mobius::extension::app::emule
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -316,15 +327,35 @@ profile::add_preferences_dat_file (const mobius::core::io::file &f)
     try
     {
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Decode file
+        // Check file
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         auto reader = f.new_reader ();
         if (!reader)
             return;
 
+        auto size = f.get_size ();
+        if (size < 17 || size > 61)
+            return;
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Decode file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         mobius::core::decoder::data_decoder decoder (reader);
 
         auto version = decoder.get_uint8 ();
+        if (version > LATEST_PREFERENCES_DAT_VERSION)
+        {
+            log.development(
+                __LINE__,
+                "Unsupported Preferences.dat version: " +
+                    mobius::core::string::to_string (version) +
+                " (last supported version: " +
+                    mobius::core::string::to_string (LATEST_PREFERENCES_DAT_VERSION) +
+                ")"
+            );
+            return;
+        }
+
         auto emule_guid = decoder.get_hex_string_by_size (16);
 
         log.info (__LINE__, "File decoded [Preferences.dat]: " + f.get_path ());
