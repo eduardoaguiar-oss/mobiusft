@@ -290,6 +290,84 @@ database::new_statement (const std::string &sql)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create SQL statement from template with dynamic column placeholders
+//
+// Transforms a SQL pattern containing {table.column[:value]} placeholders
+// into a executable statement. Placeholders are resolved to actual column names
+// if they exist in the schema, or to NULL otherwise.
+//
+// @param[in] pattern SQL template string with {table.column[:value]} syntax
+// @return Prepared statement object
+//
+// @par Placeholder Syntax:
+// - `{table_name[:table_alias].column_name}`: Column from named table. If
+//   table alias is provided, it is used instead of the table_name.
+//
+// @par Example:
+// @code
+// auto stmt = createDynamicStatement(
+//     "SELECT {users:u.id}, {users:u.name} FROM users u WHERE {users.active}=1"
+// );
+// @endcode
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+statement
+database::new_statement_with_pattern (const std::string &pattern)
+{
+    std::string sql = pattern;
+    std::string::size_type pos = sql.find ("{");
+
+    while (pos != std::string::npos)
+    {
+        // Find the closing bracket
+        auto end_pos = sql.find ("}", pos);
+
+        if (end_pos == std::string::npos)
+        {
+            pos += 1; // Skip the "{" and continue
+            continue;
+        }
+
+        // Get table_name, table_alias and column_name
+        std::string expression = sql.substr (pos + 1, end_pos - pos - 1);
+        std::string::size_type dot_pos = expression.find ('.');
+
+        if (dot_pos == std::string::npos)
+        {
+            pos += 1;
+            continue;
+        }
+
+        std::string column_name = expression.substr (dot_pos + 1);
+        std::string table_name = expression.substr (0, dot_pos);
+        std::string table_alias;
+
+        std::string::size_type colon_pos = table_name.find (':');
+        if (colon_pos != std::string::npos)
+        {
+            table_alias = table_name.substr (colon_pos + 1);
+            table_name = table_name.substr (0, colon_pos);
+        }
+
+        // Replace expression
+        std::string replacement = "NULL";
+
+        if (table_has_column (table_name, column_name))
+        {
+            if (!table_alias.empty ())
+                replacement = table_alias + "." + column_name;
+            else
+                replacement = column_name;
+        }
+
+        sql.replace (pos, end_pos - pos + 1, replacement);
+
+        pos = sql.find ("{", pos);
+    }
+
+    return new_statement (sql);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Generate new statement with version-aware SQL column replacements
 // @param pattern The SQL pattern string with ${column:start_version-end_version} placeholders
 // @param schema_version The current schema version to check against

@@ -73,24 +73,26 @@ file_cookies_sqlite::_load_cookies (mobius::core::database::database &db)
     try
     {
         // Prepare SQL statement for table moz_cookies
-        auto stmt = db.new_select_statement ("moz_cookies", {"appId",
-                         "baseDomain",
-                         "creationTime",
-                         "expiry",
-                         "host",
-                         "id",
-                         "inBrowserElement",
-                         "isHttpOnly",
-                         "isSecure",
-                         "lastAccessed",
-                         "name",
-                         "originAttributes",
-                         "path",
-                         "rawSameSite",
-                         "sameSite",
-                         "value"}
+        auto stmt = db.new_statement_with_pattern (
+            "SELECT {moz_cookies.appId}, "
+            "{moz_cookies.baseDomain}, "
+            "{moz_cookies.creationTime}, "
+            "{moz_cookies.expiry}, "
+            "{moz_cookies.host}, "
+            "{moz_cookies.id}, "
+            "{moz_cookies.inBrowserElement}, "
+            "{moz_cookies.isHttpOnly}, "
+            "{moz_cookies.isSecure}, "
+            "{moz_cookies.lastAccessed}, "
+            "{moz_cookies.name}, "
+            "{moz_cookies.originAttributes}, "
+            "{moz_cookies.path}, "
+            "{moz_cookies.rawSameSite}, "
+            "{moz_cookies.sameSite}, "
+            "{moz_cookies.value} "
+            "FROM moz_cookies"
         );
-        
+
         // Retrieve records from moz_cookies table
         std::uint64_t idx = 0;
 

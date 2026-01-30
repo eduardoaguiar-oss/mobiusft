@@ -75,9 +75,15 @@ file_formhistory_sqlite::_load_form_history (
     try
     {
         // Prepare SQL statement for table moz_formhistory
-        auto stmt = db.new_select_statement (
-            "moz_formhistory", {"fieldname", "firstUsed", "guid", "id",
-                                "lastUsed", "timesUsed", "value"}
+        auto stmt = db.new_statement_with_pattern (
+            "SELECT {moz_formhistory.fieldname}, "
+            "{moz_formhistory.firstUsed}, "
+            "{moz_formhistory.guid}, "
+            "{moz_formhistory.id}, "
+            "{moz_formhistory.lastUsed}, "
+            "{moz_formhistory.timesUsed}, "
+            "{moz_formhistory.value} "
+            "FROM moz_formhistory"
         );
 
         // Retrieve records from moz_formhistory table

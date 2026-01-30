@@ -74,23 +74,25 @@ file_downloads_sqlite::_load_downloads (mobius::core::database::database &db)
     try
     {
         // Prepare SQL statement for table moz_downloads
-        auto stmt = db.new_select_statement ("moz_downloads", {"autoResume",
-                         "currBytes",
-                         "endTime",
-                         "entityID",
-                         "guid",
-                         "id",
-                         "maxBytes",
-                         "mimeType",
-                         "name",
-                         "preferredAction",
-                         "preferredApplication",
-                         "referrer",
-                         "source",
-                         "startTime",
-                         "state",
-                         "target",
-                         "tempPath"} 
+        auto stmt = db.new_statement_with_pattern (
+            "SELECT {moz_downloads.autoResume}, "
+            "{moz_downloads.currBytes}, "
+            "{moz_downloads.endTime}, "
+            "{moz_downloads.entityID}, "
+            "{moz_downloads.guid}, "
+            "{moz_downloads.id}, "
+            "{moz_downloads.maxBytes}, "
+            "{moz_downloads.mimeType}, "
+            "{moz_downloads.name}, "
+            "{moz_downloads.preferredAction}, "
+            "{moz_downloads.preferredApplication}, "
+            "{moz_downloads.referrer}, "
+            "{moz_downloads.source}, "
+            "{moz_downloads.startTime}, "
+            "{moz_downloads.state}, "
+            "{moz_downloads.target}, "
+            "{moz_downloads.tempPath} "
+            "FROM moz_downloads"
         );
 
         // Retrieve records from moz_downloads table
