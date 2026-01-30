@@ -35,6 +35,30 @@ class profile
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Bookmark structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct bookmark
+    {
+        // @brief Creation time
+        mobius::core::datetime::datetime creation_time;
+
+        // @brief Folder
+        std::string folder;
+
+        // @brief name
+        std::string name;
+
+        // @brief URL
+        std::string url;
+
+        // @brief Metadata
+        mobius::core::pod::map metadata;
+
+        // @brief Source file
+        mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Cookie structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct cookie
@@ -104,6 +128,27 @@ class profile
 
         // @brief Lastused
         mobius::core::datetime::datetime last_used;
+
+        // @brief Metadata
+        mobius::core::pod::map metadata;
+
+        // @brief Source file
+        mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Visited URL structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct visited_url
+    {
+        // @brief Timestamp
+        mobius::core::datetime::datetime timestamp;
+
+        // @brief Title
+        std::string title;
+
+        // @brief Url
+        std::string url;
 
         // @brief Metadata
         mobius::core::pod::map metadata;
@@ -215,6 +260,26 @@ class profile
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get bookmarks
+    // @return Vector of bookmarks
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<bookmark>
+    get_bookmarks () const
+    {
+        return bookmarks_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of bookmarks
+    // @return Number of bookmarks
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    get_bookmarks_count () const
+    {
+        return bookmarks_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get cookies
     // @return Vector of cookies
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -275,6 +340,26 @@ class profile
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get visited URLs
+    // @return Vector of visited URLs
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<visited_url>
+    get_visited_urls () const
+    {
+        return visited_urls_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of visited URLs
+    // @return Number of visited URLs
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    get_visited_urls_count () const
+    {
+        return visited_urls_.size ();
+    }
+    
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void add_cookies_sqlite (const mobius::core::io::file &);
@@ -305,6 +390,9 @@ class profile
     // @brief Last modified time
     mobius::core::datetime::datetime last_modified_time_;
 
+    // @brief Bookmarks
+    std::vector<bookmark> bookmarks_;
+
     // @brief Cookies
     std::vector<cookie> cookies_;
 
@@ -313,6 +401,9 @@ class profile
 
     // @brief Form history entries
     std::vector<form_history> form_history_;
+
+    // @brief Visited URLs
+    std::vector<visited_url> visited_urls_;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions

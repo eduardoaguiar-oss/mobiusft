@@ -31,6 +31,7 @@ add_library(app_gecko MODULE
     file_cookies_sqlite.cpp
     file_downloads_sqlite.cpp
     file_formhistory_sqlite.cpp
+    file_places_sqlite.cpp
     profile.cpp
     vfs_processor_impl.cpp
 )
@@ -76,11 +77,25 @@ set_target_properties(tools_gecko_formhistory PROPERTIES OUTPUT_NAME "gecko_form
 target_link_libraries(tools_gecko_formhistory PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: gecko_places
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_executable(tools_gecko_places
+    tools/gecko_places.cpp
+    common.cpp
+    file_places_sqlite.cpp
+)
+
+set_target_properties(tools_gecko_places PROPERTIES OUTPUT_NAME "gecko_places")
+target_link_libraries(tools_gecko_places PRIVATE Mobius::Core)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 install(TARGETS app_gecko LIBRARY DESTINATION share/mobiusft/extensions)
 
 install(TARGETS
     tools_gecko_cookies
+    tools_gecko_downloads
     tools_gecko_formhistory
+    tools_gecko_places
     RUNTIME DESTINATION share/mobiusft/tools)

@@ -74,9 +74,11 @@ vfs_processor_impl::on_complete ()
 {
     _save_app_profiles ();
     _save_autofills ();
+    _save_bookmarked_urls ();
     _save_cookies ();
     _save_received_files ();
     _save_searched_texts ();
+    _save_visited_urls ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -154,9 +156,11 @@ vfs_processor_impl::_save_app_profiles ()
 
         metadata.set ("app_family", APP_FAMILY);
         metadata.set ("profile_id", p.get_profile_id ());
+        metadata.set ("bookmarks_count", p.get_bookmarks_count ());
         metadata.set ("cookies_count", p.get_cookies_count ());
         metadata.set ("downloads_count", p.get_downloads_count ());
         metadata.set ("form_history_count", p.get_form_history_count ());
+        metadata.set ("visited_urls_count", p.get_visited_urls_count ());
 
         e.set_attribute ("metadata", metadata);
 
@@ -201,6 +205,40 @@ vfs_processor_impl::_save_autofills ()
                 e.set_tag ("app.browser");
                 e.add_source (fh.f);
             }
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save bookmarked URLs
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_bookmarked_urls ()
+{
+    for (const auto &p : profiles_)
+    {
+        for (const auto &b : p.get_bookmarks ())
+        {
+            // Attributes
+            auto e = item_.new_evidence ("bookmarked-url");
+            e.set_attribute ("url", b.url);
+            e.set_attribute ("app_name", p.get_app_name ());
+            e.set_attribute ("app_family", APP_FAMILY);
+            e.set_attribute ("username", p.get_username ());
+            e.set_attribute ("name", b.name);
+            e.set_attribute ("creation_time", b.creation_time);
+            e.set_attribute ("folder", b.folder);
+
+            // Metadata
+            auto metadata = mobius::core::pod::map ();
+            metadata.set ("app_family", APP_FAMILY);
+            metadata.set ("profile_id", p.get_profile_id ());
+            metadata.update (b.metadata);
+            e.set_attribute ("metadata", metadata);
+
+            // Tags and sources
+            e.set_tag ("app.browser");
+            e.add_source (b.f);
         }
     }
 }
@@ -331,6 +369,41 @@ vfs_processor_impl::_save_searched_texts ()
                     e.add_source (fh.f);
                 }
             }
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save visited URLs
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_visited_urls ()
+{
+    for (const auto &p : profiles_)
+    {
+        for (const auto &entry : p.get_visited_urls ())
+        {
+            // Attributes
+            auto e = item_.new_evidence ("visited-url");
+            e.set_attribute ("username", p.get_username ());
+            e.set_attribute ("timestamp", entry.timestamp);
+            e.set_attribute ("title", entry.title);
+            e.set_attribute ("url", entry.url);
+            e.set_attribute ("app_family", APP_FAMILY);
+
+            // Metadata
+            auto metadata = mobius::core::pod::map ();
+            metadata.set ("app_id", p.get_app_id ());
+            metadata.set ("app_name", p.get_app_name ());
+            metadata.set ("app_family", APP_FAMILY);
+            metadata.set ("profile_id", p.get_profile_id ());
+            metadata.update (entry.metadata);
+
+            e.set_attribute ("metadata", metadata);
+
+            // Tags and sources
+            e.set_tag ("app.browser");
+            e.add_source (entry.f);
         }
     }
 }

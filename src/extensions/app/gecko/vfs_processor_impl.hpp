@@ -64,9 +64,11 @@ class vfs_processor_impl
 
     void _save_app_profiles ();
     void _save_autofills ();
+    void _save_bookmarked_urls ();
     void _save_cookies ();
     void _save_received_files ();
     void _save_searched_texts ();
+    void _save_visited_urls ();
 
 };
 

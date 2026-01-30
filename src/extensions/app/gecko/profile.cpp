@@ -27,6 +27,7 @@
 #include "file_cookies_sqlite.hpp"
 #include "file_downloads_sqlite.hpp"
 #include "file_formhistory_sqlite.hpp"
+#include "file_places_sqlite.hpp"
 
 namespace
 {
@@ -379,18 +380,86 @@ profile::add_places_sqlite (const mobius::core::io::file &f)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Decode file
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // file_places_sqlite fp (f.new_reader ());
+        file_places_sqlite fp (f.new_reader ());
 
-        /*if (!fp)
-        {
-            log.info (__LINE__, "File is not a valid 'places.sqlite' file");
+        if (!fp)
             return;
-        }*/
 
         log.info (__LINE__, "File decoded [places.sqlite]: " + f.get_path ());
 
         _set_folder (f.get_parent ());
         _update_mtime (f);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Add bookmarks
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (const auto &entry : fp.get_bookmarks ())
+        {
+            bookmark b;
+            b.creation_time = entry.date_added;
+            b.folder = entry.parent_name;
+            b.name = entry.title;
+            b.url = entry.url;
+            b.f = f;
+
+            // Metadata
+            b.metadata.set ("date_added", entry.date_added);
+            b.metadata.set ("fk", entry.fk);
+            b.metadata.set ("folder_type", entry.folder_type);
+            b.metadata.set ("guid", entry.guid);
+            b.metadata.set ("id", entry.id);
+            b.metadata.set ("keyword_id", entry.keyword_id);
+            b.metadata.set ("last_modified", entry.last_modified);
+            b.metadata.set ("parent", entry.parent);
+            b.metadata.set ("position", entry.position);
+            b.metadata.set ("sync_change_counter", entry.sync_change_counter);
+            b.metadata.set ("sync_status", entry.sync_status);
+            b.metadata.set ("type", entry.type);
+
+            bookmarks_.push_back (b);
+        }
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Add visited URLs
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (const auto &entry : fp.get_visited_urls ())
+        {
+            visited_url vu;
+            vu.timestamp = entry.visit_date;
+            vu.title = entry.title;
+            vu.url = entry.url;
+            vu.f = f;
+
+            // Metadata
+            vu.metadata.set ("from_visit", entry.from_visit);
+            vu.metadata.set ("visit_id", entry.visit_id);
+            vu.metadata.set ("place_id", entry.place_id);
+            vu.metadata.set ("session", entry.session);
+            vu.metadata.set ("source", entry.source);
+            vu.metadata.set ("triggering_place_id", entry.triggering_place_id);
+            vu.metadata.set ("visit_type", entry.visit_type);
+            vu.metadata.set ("alt_frecency", entry.alt_frecency);
+            vu.metadata.set ("description", entry.description);
+            vu.metadata.set ("favicon_id", entry.favicon_id);
+            vu.metadata.set ("foreign_count", entry.foreign_count);
+            vu.metadata.set ("frecency", entry.frecency);
+            vu.metadata.set ("guid", entry.guid);
+            vu.metadata.set ("hidden", entry.hidden);
+            vu.metadata.set ("places_id", entry.places_id);
+            vu.metadata.set ("last_visit_date", entry.last_visit_date);
+            vu.metadata.set ("origin_id", entry.origin_id);
+            vu.metadata.set ("preview_image_url", entry.preview_image_url);
+            vu.metadata.set ("recalc_alt_frecency", entry.recalc_alt_frecency);
+            vu.metadata.set ("recalc_frecency", entry.recalc_frecency);
+            vu.metadata.set ("rev_host", entry.rev_host);
+            vu.metadata.set ("site_name", entry.site_name);
+            vu.metadata.set ("title", entry.title);
+            vu.metadata.set ("typed", entry.typed);
+            vu.metadata.set ("url_hash", entry.url_hash);
+            vu.metadata.set ("visit_count", entry.visit_count);
+
+            visited_urls_.push_back (vu);
+        }
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event

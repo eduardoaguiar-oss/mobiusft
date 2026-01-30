@@ -19,12 +19,11 @@ import traceback
 
 import mobius
 import pymobius
-import pymobius.app.gecko
 import pymobius.app.internet_explorer
 
 ANT_ID = 'bookmarked-urls'
 ANT_NAME = 'Bookmarked URLs'
-ANT_VERSION = '1.2'
+ANT_VERSION = '1.3'
 EVIDENCE_TYPE = 'bookmarked-url'
 
 
@@ -53,53 +52,9 @@ class Ant(object):
 
         self.__entries = []
 
-        self.__retrieve_gecko()
         self.__retrieve_internet_explorer()
 
         self.__save_data()
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from Gecko based browsers
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_gecko(self):
-        try:
-            model = pymobius.app.gecko.model(self.__item)
-
-            for profile in model.get_profiles():
-                self.__retrieve_gecko_profile(profile)
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from Gecko profile
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_gecko_profile(self, profile):
-        try:
-            for entry in profile.get_bookmarks():
-                bookmark = pymobius.Data()
-                bookmark.url = entry.url
-                bookmark.name = entry.name
-                bookmark.creation_time = entry.creation_time
-                bookmark.folder = entry.folder
-                bookmark.username = entry.username
-                bookmark.app_name = profile.app_name
-                bookmark.evidence_source = entry.evidence_source
-
-                bookmark.metadata = mobius.core.pod.map()
-                bookmark.metadata.set('id', entry.id)
-                bookmark.metadata.set('last_modification_time', entry.last_modification_time)
-                bookmark.metadata.set('profile-id', profile.name)
-                bookmark.metadata.set('profile-path', profile.path)
-
-                if profile.creation_time:
-                    bookmark.metadata.set('profile-creation-time', profile.creation_time)
-
-                bookmark.metadata.set('app-id', profile.app_id)
-                bookmark.metadata.set('app-name', profile.app_name)
-
-                self.__entries.append(bookmark)
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Retrieve data from Internet Explorer
