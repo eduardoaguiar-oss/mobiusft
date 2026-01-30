@@ -14,4 +14,5 @@ app-emuletorrent
 app-gecko
 app-shareaza
 app-skype
+app-sticky-notes
 app-utorrent

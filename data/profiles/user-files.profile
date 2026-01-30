@@ -9,3 +9,4 @@ scope=users	# all = all folders, users = only users folders and subfolders
 app-chromium
 app-gecko
 app-skype
+app-sticky-notes
