@@ -68,6 +68,27 @@ class profile
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Download structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct download
+    {
+        // @brief Timestamp
+        mobius::core::datetime::datetime timestamp;
+
+        // @brief Filename
+        std::string filename;
+
+        // @brief Path
+        std::string path;
+
+        // @brief Metadata
+        mobius::core::pod::map metadata;
+
+        // @brief Source file
+        mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Form history structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct form_history
@@ -214,6 +235,26 @@ class profile
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get downloads
+    // @return Vector of downloads
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<download>
+    get_downloads () const
+    {
+        return downloads_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of downloads
+    // @return Number of downloads
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    get_downloads_count () const
+    {
+        return downloads_.size ();
+    }
+    
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get form history entries
     // @return Vector of form history entries
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -266,6 +307,9 @@ class profile
 
     // @brief Cookies
     std::vector<cookie> cookies_;
+
+    // @brief Downloads
+    std::vector<download> downloads_;
 
     // @brief Form history entries
     std::vector<form_history> form_history_;

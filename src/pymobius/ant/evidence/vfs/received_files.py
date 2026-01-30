@@ -19,12 +19,11 @@ import traceback
 
 import mobius
 import pymobius
-import pymobius.app.gecko
 import pymobius.app.itubego
 
 ANT_ID = 'received-files'
 ANT_NAME = 'Received files'
-ANT_VERSION = '1.1'
+ANT_VERSION = '1.2'
 EVIDENCE_TYPE = 'received-file'
 
 
@@ -60,58 +59,10 @@ class Ant(object):
             raise Exception('Datasource is not available')
 
         # retrieve data
-        self.__retrieve_gecko()
         self.__retrieve_itubego()
 
         # save data
         self.__save_data()
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from Gecko based browsers
-    # @see http://doxygen.db48x.net/mozilla/html/interfacensIDownloadManager.html
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_gecko(self):
-        try:
-            model = pymobius.app.gecko.model(self.__item)
-
-            for profile in model.get_profiles():
-                self.__retrieve_gecko_profile(profile)
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from Gecko profile
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_gecko_profile(self, profile):
-        DOWNLOAD_STATE = {0: '', 1: 'Finished', 2: 'Failed', 3: 'Cancelled', 4: 'Paused', 5: 'Queued',
-                          6: 'Blocked Parental', 7: 'Scanning', 8: 'Virus Detected', 9: 'Blocked Policy'}
-
-        try:
-            for d in profile.get_downloads():
-                entry = pymobius.Data()
-
-                entry.username = profile.username
-                entry.timestamp = d.start_time
-                entry.filename = d.name
-                entry.path = d.target
-                entry.app_id = profile.app_id
-                entry.app_name = profile.app_name
-
-                entry.metadata = mobius.core.pod.map()
-                entry.metadata.set('url', d.source)
-                entry.metadata.set('size', d.size)
-                entry.metadata.set('start-time', d.start_time)
-                entry.metadata.set('end-time', d.end_time)
-                entry.metadata.set('bytes-downloaded', d.bytes_downloaded)
-                entry.metadata.set('download-state', DOWNLOAD_STATE.get(d.state, 'Unknown (%d)' % d.state))
-                entry.metadata.set('page-referrer', d.referrer)
-                entry.metadata.set('profile-id', profile.name)
-                entry.metadata.set('profile-path', profile.path)
-
-                self.__entries.append(entry)
-
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Retrieve data from iTubeGo app

@@ -75,6 +75,7 @@ vfs_processor_impl::on_complete ()
     _save_app_profiles ();
     _save_autofills ();
     _save_cookies ();
+    _save_received_files ();
     _save_searched_texts ();
 }
 
@@ -154,6 +155,7 @@ vfs_processor_impl::_save_app_profiles ()
         metadata.set ("app_family", APP_FAMILY);
         metadata.set ("profile_id", p.get_profile_id ());
         metadata.set ("cookies_count", p.get_cookies_count ());
+        metadata.set ("downloads_count", p.get_downloads_count ());
         metadata.set ("form_history_count", p.get_form_history_count ());
 
         e.set_attribute ("metadata", metadata);
@@ -238,6 +240,43 @@ vfs_processor_impl::_save_cookies ()
             // Tags and sources
             e.set_tag ("app.browser");
             e.add_source (c.f);
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save received files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_received_files ()
+{
+    for (const auto &profile : profiles_)
+    {
+        for (const auto &entry : profile.get_downloads ())
+        {
+            if (entry.timestamp)
+            {
+                // Attributes
+                auto e = item_.new_evidence ("received-file");
+                e.set_attribute ("timestamp", entry.timestamp);
+                e.set_attribute ("username", profile.get_username ());
+                e.set_attribute ("path", entry.path);
+                e.set_attribute ("filename", entry.filename);
+                e.set_attribute ("app_id", profile.get_app_id ());
+                e.set_attribute ("app_name", profile.get_app_name ());
+                e.set_attribute ("app_family", APP_FAMILY);
+
+                // Metadata
+                auto metadata = mobius::core::pod::map ();
+                metadata.set ("app_family", APP_FAMILY);
+                metadata.set ("profile_id", profile.get_profile_id ());
+                metadata.update (entry.metadata);
+                e.set_attribute ("metadata", metadata);
+
+                // Tags and sources
+                e.set_tag ("app.browser");
+                e.add_source (entry.f);
+            }
         }
     }
 }

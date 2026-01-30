@@ -17,7 +17,6 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import pymobius
 import mobius
-from . import decoder_downloads
 from . import decoder_places
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -52,22 +51,6 @@ class Profile (object):
 
     else:
       self.name = folder.name
-
-  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  # @brief Get download history from downloads.sqlite
-  # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  def get_downloads (self):
-
-    if not self.__downloads_loaded:
-      f = self.__roaming_folder.get_child_by_path ('downloads.sqlite')
-
-      if f and not f.is_reallocated ():
-        data = decoder_downloads.decode (f)
-        self.__downloads = data.downloads
-
-      self.__downloads_loaded = True
-
-    return self.__downloads
 
   # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   # @brief Get URL history

@@ -5,7 +5,11 @@ Mobius Forensic Toolkit 2.24
 	* app-emule: Enhanced profile::add_preferences_dat function with stricter file validation
 	* pymobius.ant.evidence.vfs.autofill: Removed old gecko code
 	* pymobius.ant.evidence.vfs.cookies: Removed old gecko code
+	* pymobius.ant.evidence.vfs.received_files: Removed old gecko code
 	* pymobius.app.gecko: Removed module decoder_cookies
+	* pymobius.app.gecko: Removed module decoder_downloads
+	* pymobius.app.gecko: Removed module decoder_formhistory
+	* libmobius_framework: Added new template function get_domain_text
 
 Mobius Forensic Toolkit 2.23
 	* Added new C++ extension called "app-dcpp"

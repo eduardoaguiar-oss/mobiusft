@@ -25,6 +25,7 @@
 #include <vector>
 #include "common.hpp"
 #include "file_cookies_sqlite.hpp"
+#include "file_downloads_sqlite.hpp"
 #include "file_formhistory_sqlite.hpp"
 
 namespace
@@ -37,7 +38,7 @@ namespace
 // and can change over time as new browsers are released or existing ones are
 // updated.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector<std::tuple<std::string, std::string, std::string>> geckoBrowsers = {
+std::vector<std::tuple<std::string, std::string, std::string>> GECKO_BROWSERS = {
     {"/Mozilla/Firefox/", "firefox", "Mozilla Firefox"},
     {"/Waterfox/", "waterfox", "Waterfox"},
     {"/SeaMonkey/", "seamonkey", "SeaMonkey"},
@@ -45,6 +46,22 @@ std::vector<std::tuple<std::string, std::string, std::string>> geckoBrowsers = {
     {"/K-Meleon/", "kmeleon", "K-Meleon"},
     {"/Basilisk/", "basilisk", "Basilisk"},
     {"/Comodo/ICEDragon/", "icedragon", "Comodo ICEDragon"},
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Download states mapping
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::map<std::int64_t, std::string> DOWNLOAD_STATES = {
+    {0, ""},
+    {1, "Finished"},
+    {2, "Failed"},
+    {3, "Cancelled"},
+    {4, "Paused"},
+    {5, "Queued"},
+    {6, "Blocked Parental"},
+    {7, "Scanning"},
+    {8, "Virus Detected"},
+    {9, "Blocked Policy"},
 };
 
 } // namespace
@@ -91,7 +108,7 @@ profile::_set_folder (const mobius::core::io::folder &f)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     auto path = f.get_path ();
 
-    for (const auto &browser : geckoBrowsers)
+    for (const auto &browser : GECKO_BROWSERS)
     {
         if (path.find (std::get<0> (browser)) != std::string::npos)
         {
@@ -221,13 +238,10 @@ profile::add_downloads_sqlite (const mobius::core::io::file &f)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Decode file
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // file_downloads_sqlite fd (f.new_reader ());
+        file_downloads_sqlite fd (f.new_reader ());
 
-        /*if (!fd)
-        {
-            log.info (__LINE__, "File is not a valid 'downloads.sqlite' file");
+        if (!fd)
             return;
-        }*/
 
         log.info (
             __LINE__, "File decoded [downloads.sqlite]: " + f.get_path ()
@@ -235,6 +249,43 @@ profile::add_downloads_sqlite (const mobius::core::io::file &f)
 
         _set_folder (f.get_parent ());
         _update_mtime (f);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Add downloads
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (const auto &entry : fd.get_downloads ())
+        {
+            download d;
+            d.timestamp = entry.start_time;
+            d.filename = entry.name;
+            d.path = entry.target;
+
+            d.metadata.set ("auto_resume", entry.auto_resume);
+            d.metadata.set ("curr_bytes", entry.curr_bytes);
+            d.metadata.set ("end_time", entry.end_time);
+            d.metadata.set ("entity_id", entry.entity_id);
+            d.metadata.set ("guid", entry.guid);
+            d.metadata.set ("id", entry.id);
+            d.metadata.set ("max_bytes", entry.max_bytes);
+            d.metadata.set ("mime_type", entry.mime_type);
+            d.metadata.set ("preferred_action", entry.preferred_action);
+            d.metadata.set (
+                "preferred_application", entry.preferred_application
+            );
+            d.metadata.set ("referrer", entry.referrer);
+            d.metadata.set ("source", entry.source);
+            d.metadata.set (
+                "state", mobius::framework::get_domain_text (
+                             DOWNLOAD_STATES, entry.state
+                         )
+            );
+            d.metadata.set ("start_time", entry.start_time);
+            d.metadata.set ("target", entry.target);
+            d.metadata.set ("temp_path", entry.temp_path);
+            d.f = f;
+
+            downloads_.push_back (d);
+        }
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event

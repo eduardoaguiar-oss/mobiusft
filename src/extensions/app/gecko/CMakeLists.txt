@@ -29,6 +29,7 @@ add_library(app_gecko MODULE
     main.cpp
     common.cpp
     file_cookies_sqlite.cpp
+    file_downloads_sqlite.cpp
     file_formhistory_sqlite.cpp
     profile.cpp
     vfs_processor_impl.cpp
@@ -49,6 +50,18 @@ add_executable(tools_gecko_cookies
 
 set_target_properties(tools_gecko_cookies PROPERTIES OUTPUT_NAME "gecko_cookies")
 target_link_libraries(tools_gecko_cookies PRIVATE Mobius::Core)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: gecko_downloads
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_executable(tools_gecko_downloads
+    tools/gecko_downloads.cpp
+    common.cpp
+    file_downloads_sqlite.cpp
+)
+
+set_target_properties(tools_gecko_downloads PROPERTIES OUTPUT_NAME "gecko_downloads")
+target_link_libraries(tools_gecko_downloads PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: gecko_formhistory
