@@ -120,6 +120,7 @@ std::string to_string (const datetime &);
 // Builder prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 datetime new_datetime_from_nt_timestamp (std::uint64_t);
+datetime new_datetime_from_dot_net_timestamp (std::uint64_t);
 datetime new_datetime_from_unix_timestamp (std::uint64_t);
 datetime new_datetime_from_iso_string (const std::string &);
 datetime new_datetime_from_fat_time (std::uint16_t, std::uint16_t);

@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/core/io/bytearray_io.hpp>
 #include <mobius/core/io/line_reader.hpp>
 
 namespace mobius::core::io
@@ -55,8 +56,10 @@ _detect_separator (const std::string &s)
 // @param text_reader Text reader object
 // @param separator Line separator
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-line_reader::line_reader (const mobius::core::io::text_reader &text_reader,
-                          const std::string &separator)
+line_reader::line_reader (
+    const mobius::core::io::text_reader &text_reader,
+    const std::string &separator
+)
     : text_reader_ (text_reader),
       separator_ (separator)
 {
@@ -68,11 +71,30 @@ line_reader::line_reader (const mobius::core::io::text_reader &text_reader,
 // @param encoding Charset encoding
 // @param separator Line separator
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-line_reader::line_reader (const mobius::core::io::reader &reader,
-                          const std::string &encoding,
-                          const std::string &separator)
+line_reader::line_reader (
+    const mobius::core::io::reader &reader,
+    const std::string &encoding,
+    const std::string &separator
+)
     : text_reader_ (text_reader (reader, encoding)),
       separator_ (separator)
+{
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Constructor
+// @param data String data
+// @param encoding Charset encoding
+// @param separator Line separator
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+line_reader::line_reader (
+    const mobius::core::bytearray &data,
+    const std::string &encoding,
+    const std::string &separator
+)
+    : line_reader (
+          mobius::core::io::new_bytearray_reader (data), encoding, separator
+      )
 {
 }
 

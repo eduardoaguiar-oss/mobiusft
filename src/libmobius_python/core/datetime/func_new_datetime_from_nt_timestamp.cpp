@@ -25,7 +25,10 @@
 
 namespace
 {
-static constexpr std::uint64_t MAX_PYTHON_TIMESTAMP =
+static constexpr std::uint64_t MAX_PYTHON_DOT_NET_TIMESTAMP =
+    3155378975990000000ULL; // 9999-12-31 23:59:59
+
+    static constexpr std::uint64_t MAX_PYTHON_NT_TIMESTAMP =
     2650467743990000000ULL; // 9999-12-31 23:59:59
 }
 
@@ -55,7 +58,43 @@ func_new_datetime_from_nt_timestamp (PyObject *, PyObject *args)
     {
         ret = mobius::py::pydatetime_from_datetime (
             mobius::core::datetime::new_datetime_from_nt_timestamp (
-                std::min (arg_timestamp, MAX_PYTHON_TIMESTAMP)));
+                std::min (arg_timestamp, MAX_PYTHON_NT_TIMESTAMP)));
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_io_error (e.what ());
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Function new_datetime_from_dot_net_timestamp
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_new_datetime_from_dot_net_timestamp (PyObject *, PyObject *args)
+{
+    // parse input args
+    std::uint64_t arg_timestamp;
+
+    try
+    {
+        arg_timestamp = mobius::py::get_arg_as_uint64_t (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // execute C++ code
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pydatetime_from_datetime (
+            mobius::core::datetime::new_datetime_from_dot_net_timestamp (
+                std::min (arg_timestamp, MAX_PYTHON_DOT_NET_TIMESTAMP)));
     }
     catch (const std::exception &e)
     {

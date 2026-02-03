@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/io/text_reader.hpp>
 #include <mobius/core/io/reader.hpp>
+#include <mobius/core/io/text_reader.hpp>
 
 namespace mobius::core::io
 {
@@ -29,35 +29,44 @@ namespace mobius::core::io
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class line_reader
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  line_reader () = default;
-  line_reader (const line_reader&) = default;
-  line_reader (line_reader&&) = default;
-  explicit line_reader (const mobius::core::io::text_reader&, const std::string& = {});
-  explicit line_reader (const mobius::core::io::reader&, const std::string& = "UTF-8", const std::string& = {});
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    line_reader () = default;
+    line_reader (const line_reader &) = default;
+    line_reader (line_reader &&) = default;
+    explicit line_reader (
+        const mobius::core::io::text_reader &, const std::string & = {}
+    );
+    explicit line_reader (
+        const mobius::core::io::reader &,
+        const std::string & = "UTF-8",
+        const std::string & = {}
+    );
+    explicit line_reader (
+        const mobius::core::bytearray &,
+        const std::string & = "UTF-8",
+        const std::string & = {}
+    );
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Operators
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  line_reader& operator= (const line_reader&) = default;
-  line_reader& operator= (line_reader&&) = default;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    line_reader &operator= (const line_reader &) = default;
+    line_reader &operator= (line_reader &&) = default;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  bool read (std::string&);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool read (std::string &);
 
-private:
-  mobius::core::io::text_reader text_reader_;
-  std::string separator_;
-  std::string buffer_;
+  private:
+    mobius::core::io::text_reader text_reader_;
+    std::string separator_;
+    std::string buffer_;
 };
 
 } // namespace mobius::core::io
 
 #endif
-
-

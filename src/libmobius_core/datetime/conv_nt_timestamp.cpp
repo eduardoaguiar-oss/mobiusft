@@ -21,6 +21,7 @@
 namespace mobius::core::datetime
 {
 static constexpr datetime EPOCH_NT_DATETIME (1601, 1, 1, 0, 0, 0);
+static constexpr datetime EPOCH_DOT_NET_DATETIME (1, 1, 1, 0, 0, 0);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Convert NT timestamp to datetime
@@ -36,6 +37,25 @@ new_datetime_from_nt_timestamp (std::uint64_t timestamp)
     {
         timedelta delta (timestamp / 10000000, (timestamp % 10000000) * 100);
         dt = EPOCH_NT_DATETIME + delta;
+    }
+
+    return dt;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Convert .NET timestamp to datetime
+// @param timestamp .NET timestamp (64 bits)
+// @return datetime
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+datetime
+new_datetime_from_dot_net_timestamp (std::uint64_t timestamp)
+{
+    datetime dt;
+
+    if (timestamp)
+    {
+        timedelta delta (timestamp / 10000000, (timestamp % 10000000) * 100);
+        dt = EPOCH_DOT_NET_DATETIME + delta;
     }
 
     return dt;

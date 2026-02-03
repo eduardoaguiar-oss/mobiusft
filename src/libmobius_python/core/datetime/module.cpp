@@ -26,6 +26,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Function prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *func_new_datetime_from_dot_net_timestamp (PyObject *, PyObject *);
 PyObject *func_new_datetime_from_fat_time (PyObject *, PyObject *);
 PyObject *func_new_datetime_from_iso_string (PyObject *, PyObject *);
 PyObject *func_new_datetime_from_nt_timestamp (PyObject *, PyObject *);
@@ -37,6 +38,8 @@ namespace
 // @brief Module methods
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef module_methods[] = {
+    {"new_datetime_from_dot_net_timestamp", func_new_datetime_from_dot_net_timestamp,
+     METH_VARARGS, "Create new datetime from .NET timestamp"},
     {"new_datetime_from_fat_time", func_new_datetime_from_fat_time,
      METH_VARARGS, "Create new datetime from FAT time"},
     {"new_datetime_from_iso_string", func_new_datetime_from_iso_string,
