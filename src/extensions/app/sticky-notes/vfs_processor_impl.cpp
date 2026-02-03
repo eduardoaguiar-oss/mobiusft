@@ -77,7 +77,7 @@ vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 void
 vfs_processor_impl::on_complete ()
 {
-    //_save_app_profiles ();
+    _save_app_profiles ();
     //_save_autofills ();
 }
 
@@ -120,6 +120,39 @@ vfs_processor_impl::_scan_profile_folder (const mobius::core::io::folder &folder
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     if (p)
         profiles_.push_back (p);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save app profiles
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_app_profiles ()
+{
+    for (const auto &p : profiles_)
+    {
+        auto e = item_.new_evidence ("app-profile");
+
+        // Attributes
+        e.set_attribute ("app_id", APP_ID);
+        e.set_attribute ("app_name", APP_NAME);
+        e.set_attribute ("username", p.get_username ());
+        e.set_attribute ("creation_time", p.get_creation_time ());
+        e.set_attribute ("last_modified_time", p.get_last_modified_time ());
+        e.set_attribute ("path", p.get_path ());
+
+        // Metadata
+        auto metadata = mobius::core::pod::map ();
+
+        //metadata.set ("bookmarks_count", p.get_bookmarks_count ());
+
+        e.set_attribute ("metadata", metadata);
+
+        // Sources
+        e.add_source (p.get_folder ());
+
+        // Tags
+        e.set_tag ("app.notes");
+    }
 }
 
 } // namespace mobius::extension::app::sticky_notes

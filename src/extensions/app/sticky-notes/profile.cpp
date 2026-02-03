@@ -16,13 +16,119 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "profile.hpp"
+#include <mobius/core/io/line_reader.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/mediator.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <mobius/framework/utils.hpp>
+#include "file_plum_sqlite.hpp"
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// References:
+// - https://medium.com/@two06/reading-windows-sticky-notes-5468985eff4d
+// - https://github.com/iamhunggy/StickyParser
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace mobius::extension::app::sticky_notes
 {
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Parse message line
+// @param line Line to parse
+// @return Parsed elements
+//
+// Raw text escape sequences:
+// - \b Start bold text
+// - \b0 End bold text
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<mobius::core::pod::map>
+parse_line (const std::string &text)
+{
+    std::vector<mobius::core::pod::map> elements;
+
+    mobius::core::log log (__FILE__, __FUNCTION__);
+    size_t i = 0;
+
+    while (i < text.size ())
+    {
+        // Search for next escape sequence
+        size_t pos = text.find ('\\', i);
+
+        // Generate text element, if any
+        size_t end_pos = (pos == std::string::npos) ? text.size () : pos;
+
+        if (i < end_pos)
+        {
+            elements.emplace_back (
+                mobius::core::pod::map {
+                    {"type", "text", "text", text.substr (i, end_pos - i)}
+                }
+            );
+            i = end_pos;
+        }
+
+        // Handle escape command
+        if (pos != std::string::npos)
+        {
+            // Parse command
+            size_t cmd_start = pos + 1;
+            size_t cmd_end = text.find_first_of (" \\", cmd_start);
+            std::string command = text.substr (
+                cmd_start, cmd_end == std::string::npos ? std::string::npos
+                                                        : cmd_end - cmd_start
+            );
+
+            if (command == "\\b")
+                elements.emplace_back (
+                    mobius::core::pod::map {{"type", "start/b"}}
+                );
+
+            else if (command == "\\b0")
+                elements.emplace_back (
+                    mobius::core::pod::map {{"type", "end/b"}}
+                );
+
+            else
+                log.development (__LINE__, "Unhandled command: \\" + command);
+
+            i = cmd_end == std::string::npos ? text.size () : cmd_end;
+        }
+    }
+
+    return elements;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Parse raw text into blocks structures
+// @param raw_text Raw text
+// @return Vector of blocks
+// Each line starting with "\id=" indicates a new block.
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<mobius::extension::app::sticky_notes::profile::block>
+parse_blocks (const std::string &raw_text)
+{
+    std::vector<profile::block> blocks;
+
+    mobius::core::io::line_reader lr (raw_text);
+    std::string line;
+
+    while (lr.read (line))
+    {
+        if (line.starts_with (R"(\id=)"))
+        {
+            profile::block b;
+            b.id = line.substr (4, 40);
+
+            profile::content cnt;
+            cnt.elements = parse_line (line);
+            b.contents.emplace_back (std::move (cnt));
+
+            blocks.emplace_back (std::move (b));
+        }
+    }
+
+    return blocks;
+}
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Set folder
 // @param f Folder
@@ -40,12 +146,12 @@ profile::_set_folder (const mobius::core::io::folder &f)
     last_modified_time_ = f.get_modification_time ();
     creation_time_ = f.get_creation_time ();
     username_ = mobius::framework::get_username_from_path (f.get_path ());
-    
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Emit sampling_folder event
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::emit (
-        "sampling_folder", std::string ("app.gecko.profiles"), f
+        "sampling_folder", std::string ("app.sticky_notes.profiles"), f
     );
 }
 
@@ -78,15 +184,15 @@ profile::add_plum_sqlite_file (const mobius::core::io::file &f)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Decode file
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        /*file_places_sqlite fp (f.new_reader ());
+        file_plum_sqlite fp (f.new_reader ());
 
         if (!fp)
             return;
 
-        log.info (__LINE__, "File decoded [places.sqlite]: " + f.get_path ());
+        log.info (__LINE__, "File decoded [plum.sqlite]: " + f.get_path ());
 
         _set_folder (f.get_parent ());
-        _update_mtime (f); */
+        _update_mtime (f);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event
@@ -118,15 +224,15 @@ profile::add_sticky_notes_snt_file (const mobius::core::io::file &f)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Decode file
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        /*file_places_sqlite fp (f.new_reader ());
+        /*file_sticky_notes_snt fp (f.new_reader ());
 
         if (!fp)
             return;
 
-        log.info (__LINE__, "File decoded [StickyNotes.snt]: " + f.get_path ());
+        log.info (__LINE__, "File decoded [StickyNotes.snt]: " + f.get_path ());*/
 
         _set_folder (f.get_parent ());
-        _update_mtime (f); */
+        _update_mtime (f);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event

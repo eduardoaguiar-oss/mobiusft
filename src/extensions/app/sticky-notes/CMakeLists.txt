@@ -29,6 +29,7 @@ add_library(app_sticky_notes MODULE
     main.cpp
     profile.cpp
     vfs_processor_impl.cpp
+    file_plum_sqlite.cpp
 )
 
 set_target_properties(app_sticky_notes PROPERTIES OUTPUT_NAME "app-sticky-notes" PREFIX "")
@@ -36,10 +37,21 @@ set_target_properties(app_sticky_notes PROPERTIES OUTPUT_NAME "app-sticky-notes"
 target_link_libraries(app_sticky_notes PRIVATE Mobius::Framework Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: sticky_notes_plum_sqlite
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_executable(tools_sticky_notes_plum_sqlite
+    tools/sticky_notes_plum_sqlite.cpp
+    file_plum_sqlite.cpp
+)
+
+set_target_properties(tools_sticky_notes_plum_sqlite PROPERTIES OUTPUT_NAME "sticky_notes_plum_sqlite")
+target_link_libraries(tools_sticky_notes_plum_sqlite PRIVATE Mobius::Core)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 install(TARGETS app_sticky_notes LIBRARY DESTINATION share/mobiusft/extensions)
 
-#install(TARGETS
-#    tools_dcpp_dcplusplus_xml
-#    RUNTIME DESTINATION share/mobiusft/tools)
+install(TARGETS
+    tools_sticky_notes_plum_sqlite
+    RUNTIME DESTINATION share/mobiusft/tools)

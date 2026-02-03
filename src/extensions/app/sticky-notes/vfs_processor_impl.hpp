@@ -64,11 +64,7 @@ class vfs_processor_impl
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _scan_profile_folder (const mobius::core::io::folder &);
-
-    //void _save_app_profiles ();
-    //void _save_autofills ();
-    //void _save_bookmarked_urls ();
-
+    void _save_app_profiles ();
 };
 
 } // namespace mobius::extension::app::sticky_notes
