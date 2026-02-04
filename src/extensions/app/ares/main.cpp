@@ -33,7 +33,7 @@ extern "C"
 {
     const char *EXTENSION_ID = "app-ares";
     const char *EXTENSION_NAME = "Ares Galaxy";
-    const char *EXTENSION_VERSION = "1.5";
+    const char *EXTENSION_VERSION = "1.6";
     const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
     const char *EXTENSION_DESCRIPTION = "Ares Galaxy support";
 } // extern "C"

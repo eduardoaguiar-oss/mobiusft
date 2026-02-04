@@ -89,10 +89,6 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static const std::string ANT_ID = "evidence.app-ares";
-static const std::string ANT_NAME = "App Ares Galaxy";
-static const std::string ANT_VERSION = "1.5";
-static const std::string SAMPLING_ID = "sampling";
 static const std::string APP_NAME = "Ares Galaxy";
 static const std::string APP_ID = "ares";
 
@@ -207,8 +203,6 @@ vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 void
 vfs_processor_impl::on_complete ()
 {
-    auto transaction = item_.new_transaction ();
-
     _save_app_profiles ();
     _save_autofills ();
     _save_local_files ();
@@ -217,9 +211,6 @@ vfs_processor_impl::on_complete ()
     _save_sent_files ();
     _save_shared_files ();
     _save_user_accounts ();
-
-    item_.set_ant (ANT_ID, ANT_NAME, ANT_VERSION);
-    transaction.commit ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
