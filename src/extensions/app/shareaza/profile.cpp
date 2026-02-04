@@ -90,13 +90,7 @@ profile::add_library_dat_file (const mobius::core::io::file &f)
         CLibrary clib (decoder);
 
         if (!clib)
-        {
-            log.info (
-                __LINE__,
-                "File is not an instance of Library.dat. Path: " + f.get_path ()
-            );
             return;
-        }
 
         log.info (__LINE__, "File decoded [library.dat]: " + f.get_path ());
 
@@ -261,28 +255,31 @@ profile::add_profile_xml_file (const mobius::core::io::file &f)
 
     try
     {
+        // Get data from XML
         mobius::core::decoder::xml::dom dom (f.new_reader ());
         auto root = dom.get_root_element ();
+        auto gnutella_guid = mobius::core::string::toupper (
+            root.get_property_by_path ("gnutella/guid")
+        );
+        auto bittorrent_guid = mobius::core::string::toupper (
+            root.get_property_by_path ("bittorrent/guid")
+        );
+        auto identity = root.get_property_by_path ("identity/handle/primary");
+
+        // If no GUIDs, ignore file
+        if (gnutella_guid.empty () && bittorrent_guid.empty ())
+            return;
 
         log.info (__LINE__, "File decoded [profile.xml]: " + f.get_path ());
 
+        // Update profile data, if necessary
         bool overwrite = !profile_xml_f_ ||
                          (profile_xml_f_.is_deleted () && !f.is_deleted ());
         mobius::core::value_selector vs (overwrite);
 
-        gnutella_guid_ =
-            vs (gnutella_guid_, mobius::core::string::toupper (
-                                    root.get_property_by_path ("gnutella/guid")
-                                ));
-        bittorrent_guid_ =
-            vs (bittorrent_guid_,
-                mobius::core::string::toupper (
-                    root.get_property_by_path ("bittorrent/guid")
-                ));
-        identity_ =
-            vs (identity_,
-                root.get_property_by_path ("identity/handle/primary"));
-
+        gnutella_guid_ = vs (gnutella_guid_, gnutella_guid);
+        bittorrent_guid_ = vs (bittorrent_guid_, bittorrent_guid);
+        identity_ = vs (identity_, identity);
         profile_xml_f_ = f;
         source_files.push_back (f);
 
