@@ -39,14 +39,15 @@ namespace
 // and can change over time as new browsers are released or existing ones are
 // updated.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector<std::tuple<std::string, std::string, std::string>> GECKO_BROWSERS = {
-    {"/Mozilla/Firefox/", "firefox", "Mozilla Firefox"},
-    {"/Waterfox/", "waterfox", "Waterfox"},
-    {"/SeaMonkey/", "seamonkey", "SeaMonkey"},
-    {"/Pale Moon/", "palemoon", "Pale Moon"},
-    {"/K-Meleon/", "kmeleon", "K-Meleon"},
-    {"/Basilisk/", "basilisk", "Basilisk"},
-    {"/Comodo/ICEDragon/", "icedragon", "Comodo ICEDragon"},
+std::vector<std::tuple<std::string, std::string, std::string>> GECKO_BROWSERS =
+    {
+        {"/Mozilla/Firefox/", "firefox", "Mozilla Firefox"},
+        {"/Waterfox/", "waterfox", "Waterfox"},
+        {"/SeaMonkey/", "seamonkey", "SeaMonkey"},
+        {"/Pale Moon/", "palemoon", "Pale Moon"},
+        {"/K-Meleon/", "kmeleon", "K-Meleon"},
+        {"/Basilisk/", "basilisk", "Basilisk"},
+        {"/Comodo/ICEDragon/", "icedragon", "Comodo ICEDragon"},
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -177,9 +178,9 @@ profile::add_cookies_sqlite (const mobius::core::io::file &f)
         _set_folder (f.get_parent ());
         _update_mtime (f);
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Add cookies
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         for (const auto &entry : fc.get_cookies ())
         {
             cookie c;
@@ -199,11 +200,16 @@ profile::add_cookies_sqlite (const mobius::core::io::file &f)
             c.metadata.set ("id", entry.id);
             c.metadata.set ("in_browser_element", entry.in_browser_element);
             c.metadata.set ("is_http_only", entry.is_http_only);
+            c.metadata.set (
+                "is_partitioned_attribute_set",
+                entry.is_partitioned_attribute_set
+            );
             c.metadata.set ("is_secure", entry.is_secure);
             c.metadata.set ("origin_attributes", entry.origin_attributes);
             c.metadata.set ("path", entry.path);
             c.metadata.set ("raw_same_site", entry.raw_same_site);
             c.metadata.set ("same_site", entry.same_site);
+            c.metadata.set ("scheme_map", entry.scheme_map);
             c.f = f;
 
             cookies_.push_back (c);

@@ -38,22 +38,13 @@ file_cookies_sqlite::file_cookies_sqlite (
 
     try
     {
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Copy reader content to temporary file
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         mobius::core::io::tempfile tfile;
         tfile.copy_from (reader);
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Load data
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         mobius::core::database::database db (tfile.get_path ());
         _load_cookies (db);
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Finish decoding
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
@@ -77,19 +68,21 @@ file_cookies_sqlite::_load_cookies (mobius::core::database::database &db)
             "SELECT {moz_cookies.appId}, "
             "{moz_cookies.baseDomain}, "
             "{moz_cookies.creationTime}, "
-            "{moz_cookies.expiry}, "
-            "{moz_cookies.host}, "
-            "{moz_cookies.id}, "
+            "expiry, "
+            "host, "
+            "id, "
             "{moz_cookies.inBrowserElement}, "
-            "{moz_cookies.isHttpOnly}, "
-            "{moz_cookies.isSecure}, "
-            "{moz_cookies.lastAccessed}, "
-            "{moz_cookies.name}, "
+            "isHttpOnly, "
+            "{moz_cookies.isPartitionedAttributeSet}, "
+            "isSecure, "
+            "lastAccessed, "
+            "name, "
             "{moz_cookies.originAttributes}, "
-            "{moz_cookies.path}, "
+            "path, "
             "{moz_cookies.rawSameSite}, "
             "{moz_cookies.sameSite}, "
-            "{moz_cookies.value} "
+            "{moz_cookies.schemeMap}, "
+            "value "
             "FROM moz_cookies"
         );
 
@@ -109,18 +102,22 @@ file_cookies_sqlite::_load_cookies (mobius::core::database::database &db)
             obj.id = stmt.get_column_int64 (5);
             obj.in_browser_element = stmt.get_column_int64 (6);
             obj.is_http_only = stmt.get_column_bool (7);
-            obj.is_secure = stmt.get_column_bool (8);
-            obj.last_accessed = get_datetime (stmt.get_column_int64 (9));
-            obj.name = stmt.get_column_string (10);
-            obj.origin_attributes = stmt.get_column_string (11);
-            obj.path = stmt.get_column_string (12);
-            obj.raw_same_site = stmt.get_column_int64 (13);
-            obj.same_site = stmt.get_column_int64 (14);
-            obj.value = stmt.get_column_string (15);
+            obj.is_partitioned_attribute_set = stmt.get_column_bool (8);
+            obj.is_secure = stmt.get_column_bool (9);
+            obj.last_accessed = get_datetime (stmt.get_column_int64 (10));
+            obj.name = stmt.get_column_string (11);
+            obj.origin_attributes = stmt.get_column_string (12);
+            obj.path = stmt.get_column_string (13);
+            obj.raw_same_site = stmt.get_column_int64 (14);
+            obj.same_site = stmt.get_column_int64 (15);
+            obj.scheme_map = stmt.get_column_int64 (16);
+            obj.value = stmt.get_column_string (17);
 
             // Add cookie to the list
             cookies_.emplace_back (std::move (obj));
         }
+
+        is_instance_ = true;
     }
     catch (const std::exception &e)
     {

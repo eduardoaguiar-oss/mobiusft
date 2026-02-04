@@ -39,22 +39,13 @@ file_downloads_sqlite::file_downloads_sqlite (
 
     try
     {
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Copy reader content to temporary file
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         mobius::core::io::tempfile tfile;
         tfile.copy_from (reader);
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Load data
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         mobius::core::database::database db (tfile.get_path ());
         _load_downloads (db);
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Finish decoding
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
@@ -124,6 +115,8 @@ file_downloads_sqlite::_load_downloads (mobius::core::database::database &db)
             // Add moz_downloads to the list
             downloads_.emplace_back (std::move (obj));
         }
+
+        is_instance_ = true;
     }
     catch (const std::exception &e)
     {

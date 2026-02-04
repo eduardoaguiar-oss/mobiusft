@@ -60,23 +60,14 @@ file_places_sqlite::file_places_sqlite (const mobius::core::io::reader &reader)
 
     try
     {
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Copy reader content to temporary file
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         mobius::core::io::tempfile tfile;
         tfile.copy_from (reader);
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Load data
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         mobius::core::database::database db (tfile.get_path ());
         _load_bookmarks (db);
         _load_visited_urls (db);
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Finish decoding
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
@@ -114,20 +105,20 @@ file_places_sqlite::_load_bookmarks (mobius::core::database::database &db)
         }
         // Prepare SQL statement to retrieve bookmarks
         auto stmt = db.new_statement_with_pattern (
-            "SELECT {moz_bookmarks:b.dateAdded}, "
-            "{moz_bookmarks:b.fk}, "
-            "{moz_bookmarks:b.folder_type}, "
+            "SELECT b.dateAdded, "
+            "b.fk, "
+            "b.folder_type, "
             "{moz_bookmarks:b.guid}, "
-            "{moz_bookmarks:b.id}, "
-            "{moz_bookmarks:b.keyword_id}, "
-            "{moz_bookmarks:b.lastModified}, "
-            "{moz_bookmarks:b.parent}, "
-            "{moz_bookmarks:b.position}, "
+            "b.id, "
+            "keyword_id, "
+            "b.lastModified, "
+            "b.parent, "
+            "b.position, "
             "{moz_bookmarks:b.syncChangeCounter}, "
             "{moz_bookmarks:b.syncStatus}, "
-            "{moz_bookmarks:b.title}, "
-            "{moz_bookmarks:b.type}, "
-            "{moz_places:p.url} "
+            "b.title, "
+            "b.type, "
+            "p.url "
             "FROM moz_bookmarks b, moz_places p "
             "WHERE b.fk = p.id"
         );
@@ -163,6 +154,8 @@ file_places_sqlite::_load_bookmarks (mobius::core::database::database &db)
             // Add bookmark to the list
             bookmarks_.emplace_back (std::move (obj));
         }
+
+        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
@@ -182,34 +175,34 @@ file_places_sqlite::_load_visited_urls (mobius::core::database::database &db)
     {
         // Prepare SQL statement to retrieve visited URLs
         auto stmt = db.new_statement_with_pattern (
-            "SELECT {moz_historyvisits:v.from_visit}, "
-            "{moz_historyvisits:v.id}, "
-            "{moz_historyvisits:v.place_id}, "
-            "{moz_historyvisits:v.session}, "
+            "SELECT v.from_visit, "
+            "v.id, "
+            "v.place_id, "
+            "v.session, "
             "{moz_historyvisits:v.source}, "
             "{moz_historyvisits:v.triggering_place_id}, "
-            "{moz_historyvisits:v.visit_date}, "
-            "{moz_historyvisits:v.visit_type}, "
+            "v.visit_date, "
+            "v.visit_type, "
             "{moz_places:p.alt_frecency}, "
             "{moz_places:p.description}, "
             "{moz_places:p.favicon_id}, "
             "{moz_places:p.foreign_count}, "
-            "{moz_places:p.frecency}, "
+            "p.frecency, "
             "{moz_places:p.guid}, "
-            "{moz_places:p.hidden}, "
-            "{moz_places:p.id}, "
-            "{moz_places:p.last_visit_date}, "
+            "p.hidden, "
+            "p.id, "
+            "p.last_visit_date, "
             "{moz_places:p.origin_id}, "
             "{moz_places:p.preview_image_url}, "
             "{moz_places:p.recalc_alt_frecency}, "
             "{moz_places:p.recalc_frecency}, "
-            "{moz_places:p.rev_host}, "
+            "p.rev_host, "
             "{moz_places:p.site_name}, "
-            "{moz_places:p.title}, "
-            "{moz_places:p.typed}, "
-            "{moz_places:p.url}, "
+            "p.title, "
+            "p.typed, "
+            "p.url, "
             "{moz_places:p.url_hash}, "
-            "{moz_places:p.visit_count} "
+            "p.visit_count "
             "FROM moz_historyvisits v, moz_places p "
             "WHERE v.place_id = p.id"
         );
@@ -251,6 +244,8 @@ file_places_sqlite::_load_visited_urls (mobius::core::database::database &db)
             // Add visited URL to the list
             visited_urls_.emplace_back (std::move (obj));
         }
+
+        is_instance_ = true;
     }
     catch (const std::exception &e)
     {

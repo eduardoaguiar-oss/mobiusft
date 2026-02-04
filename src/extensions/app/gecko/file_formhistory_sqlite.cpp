@@ -38,22 +38,13 @@ file_formhistory_sqlite::file_formhistory_sqlite (
 
     try
     {
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Copy reader content to temporary file
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         mobius::core::io::tempfile tfile;
         tfile.copy_from (reader);
 
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Load data
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         mobius::core::database::database db (tfile.get_path ());
         _load_form_history (db);
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Finish decoding
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
@@ -75,14 +66,14 @@ file_formhistory_sqlite::_load_form_history (
     try
     {
         // Prepare SQL statement for table moz_formhistory
-        auto stmt = db.new_statement_with_pattern (
-            "SELECT {moz_formhistory.fieldname}, "
-            "{moz_formhistory.firstUsed}, "
-            "{moz_formhistory.guid}, "
-            "{moz_formhistory.id}, "
-            "{moz_formhistory.lastUsed}, "
-            "{moz_formhistory.timesUsed}, "
-            "{moz_formhistory.value} "
+        auto stmt = db.new_statement (
+            "SELECT fieldname, "
+            "firstUsed, "
+            "guid, "
+            "id, "
+            "lastUsed, "
+            "timesUsed, "
+            "value "
             "FROM moz_formhistory"
         );
 
@@ -105,6 +96,8 @@ file_formhistory_sqlite::_load_form_history (
             // Add moz_formhistory to the list
             form_history_.emplace_back (std::move (obj));
         }
+
+        is_instance_ = true;
     }
     catch (const std::exception &e)
     {

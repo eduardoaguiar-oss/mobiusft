@@ -67,6 +67,9 @@ class file_cookies_sqlite
         // @brief Is Http Only
         bool is_http_only = false;
 
+        // @brief Is partitioned attribute set
+        bool is_partitioned_attribute_set = false;
+
         // @brief Is Secure
         bool is_secure = false;
 
@@ -87,6 +90,9 @@ class file_cookies_sqlite
 
         // @brief Same Site
         std::int64_t same_site;
+
+        // @brief Scheme map
+        std::int64_t scheme_map;
 
         // @brief Value
         std::string value;
