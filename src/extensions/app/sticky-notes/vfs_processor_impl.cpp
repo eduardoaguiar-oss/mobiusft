@@ -32,6 +32,7 @@
 //
 // - https://medium.com/@two06/reading-windows-sticky-notes-5468985eff4d
 // - https://forensics.wiki/sticky_notes/
+// - https://github.com/iamhunggy/StickyParser
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace
@@ -67,8 +68,6 @@ void
 vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 {
     _scan_profile_folder (folder);
-    //_scan_arestra_folder (folder);
-    //_scan_ntuser_dat_folder (folder);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -78,7 +77,7 @@ void
 vfs_processor_impl::on_complete ()
 {
     _save_app_profiles ();
-    //_save_autofills ();
+    _save_notes ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -142,9 +141,7 @@ vfs_processor_impl::_save_app_profiles ()
 
         // Metadata
         auto metadata = mobius::core::pod::map ();
-
-        //metadata.set ("bookmarks_count", p.get_bookmarks_count ());
-
+        metadata.set ("notes_count", p.get_note_count ());
         e.set_attribute ("metadata", metadata);
 
         // Sources
@@ -152,6 +149,38 @@ vfs_processor_impl::_save_app_profiles ()
 
         // Tags
         e.set_tag ("app.notes");
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save notes
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_notes ()
+{
+    for (const auto &p : profiles_)
+    {
+        for (const auto &n : p.get_notes ())
+        {
+            auto e = item_.new_evidence ("note");
+
+            // Attributes
+            e.set_attribute ("app_id", APP_ID);
+            e.set_attribute ("app_name", APP_NAME);
+            e.set_attribute ("username", p.get_username ());
+            e.set_attribute ("creation_time", n.creation_time);
+            e.set_attribute ("last_modification_time", n.last_modification_time);
+            e.set_attribute ("body", n.body);
+
+            // Metadata
+            e.set_attribute ("metadata", n.metadata);
+
+            // Sources
+            e.add_source (p.get_folder ());
+
+            // Tags
+            e.set_tag ("app.notes");
+        }
     }
 }
 

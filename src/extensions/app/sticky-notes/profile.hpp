@@ -35,33 +35,21 @@ class profile
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Content structure
+    // @brief Note structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    struct content
+    struct note
     {
-        // @brief Elements
-        std::vector<mobius::core::pod::map> elements;
+        // @brief Creation time
+        mobius::core::datetime::datetime creation_time;
 
-        // @brief Styles
-        mobius::core::pod::map styles;
-    };
+        // @brief Last modified time
+        mobius::core::datetime::datetime last_modification_time;
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Block structure
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    struct block
-    {
-        // @brief Block ID
-        std::string id;
+        // @brief Body
+        std::vector<mobius::core::pod::map> body;
 
-        // @brief Block type
-        std::string type;
-
-        // @brief Block style
-        mobius::core::pod::map styles;
-
-        // @brief Block content
-        std::vector<content> contents;
+        // @brief Metadata
+        mobius::core::pod::map metadata;
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -137,6 +125,26 @@ class profile
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get notes
+    // @return Vector of notes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<note>
+    get_notes () const
+    {
+        return notes_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of notes
+    // @return Number of notes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    get_note_count () const
+    {
+        return notes_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void add_plum_sqlite_file (const mobius::core::io::file &);
@@ -154,6 +162,9 @@ class profile
 
     // @brief Last modified time
     mobius::core::datetime::datetime last_modified_time_;
+
+    // @brief Notes
+    std::vector<note> notes_;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions

@@ -60,7 +60,8 @@ parse_line (const std::string &text)
         {
             elements.emplace_back (
                 mobius::core::pod::map {
-                    {"type", "text", "text", text.substr (i, end_pos - i)}
+                    {"type", "text"},
+                    {"text", text.substr (i, end_pos - i)}
                 }
             );
             i = end_pos;
@@ -90,7 +91,7 @@ parse_line (const std::string &text)
             else
                 log.development (__LINE__, "Unhandled command: \\" + command);
 
-            i = cmd_end == std::string::npos ? text.size () : cmd_end;
+            i = (cmd_end == std::string::npos) ? text.size () : cmd_end;
         }
     }
 
@@ -100,13 +101,13 @@ parse_line (const std::string &text)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Parse raw text into blocks structures
 // @param raw_text Raw text
-// @return Vector of blocks
+// @return Vector of elements
 // Each line starting with "\id=" indicates a new block.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector<mobius::extension::app::sticky_notes::profile::block>
+std::vector<mobius::core::pod::map>
 parse_blocks (const std::string &raw_text)
 {
-    std::vector<profile::block> blocks;
+    std::vector<mobius::core::pod::map> elements;
 
     mobius::core::io::line_reader lr (raw_text);
     std::string line;
@@ -115,18 +116,25 @@ parse_blocks (const std::string &raw_text)
     {
         if (line.starts_with (R"(\id=)"))
         {
-            profile::block b;
-            b.id = line.substr (4, 40);
+            // If line has more than just the ID, parse it
+            if (line.size () > 41)
+            {
+                auto line_elements = parse_line (line.substr (41));
 
-            profile::content cnt;
-            cnt.elements = parse_line (line);
-            b.contents.emplace_back (std::move (cnt));
+                std::copy (
+                    line_elements.begin (), line_elements.end (),
+                    std::back_inserter (elements)
+                );
+            }
 
-            blocks.emplace_back (std::move (b));
+            // Add newline element
+            elements.emplace_back (
+                mobius::core::pod::map {{"type", "text"}, {"text", "\n"}}
+            );
         }
     }
 
-    return blocks;
+    return elements;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -193,6 +201,43 @@ profile::add_plum_sqlite_file (const mobius::core::io::file &f)
 
         _set_folder (f.get_parent ());
         _update_mtime (f);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Add notes
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (const auto &nt : fp.get_notes ())
+        {
+            note n;
+            n.creation_time = nt.created_at;
+            n.last_modification_time = nt.updated_at;
+            n.body = parse_blocks (nt.text);
+
+            // Metadata
+            n.metadata.set ("record_idx", nt.idx);
+            n.metadata.set ("change_key", nt.change_key);
+            n.metadata.set (
+                "creation_note_id_anchor", nt.creation_note_id_anchor
+            );
+            n.metadata.set ("deleted_at", nt.deleted_at);
+            n.metadata.set ("id", nt.id);
+            n.metadata.set ("is_always_on_top", nt.is_always_on_top);
+            n.metadata.set ("is_future_note", nt.is_future_note);
+            n.metadata.set ("is_open", nt.is_open);
+            n.metadata.set (
+                "is_remote_data_invalid", nt.is_remote_data_invalid
+            );
+            n.metadata.set ("last_server_version", nt.last_server_version);
+            n.metadata.set ("parent_id", nt.parent_id);
+            n.metadata.set ("pending_insights_scan", nt.pending_insights_scan);
+            n.metadata.set ("remote_id", nt.remote_id);
+            n.metadata.set ("remote_schema_version", nt.remote_schema_version);
+            n.metadata.set ("theme", nt.theme);
+            n.metadata.set ("type", nt.type);
+            n.metadata.set ("window_position", nt.window_position);
+
+            // Add note to the list
+            notes_.emplace_back (std::move (n));
+        }
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event

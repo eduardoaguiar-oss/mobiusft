@@ -69,11 +69,6 @@ file_plum_sqlite::file_plum_sqlite (const mobius::core::io::reader &reader)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         mobius::core::database::database db (tfile.get_path ());
         _load_notes (db);
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Finish decoding
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
@@ -93,26 +88,26 @@ file_plum_sqlite::_load_notes (mobius::core::database::database &db)
     try
     {
         // Prepare SQL statement for table Note
-        auto stmt = db.new_statement_with_pattern (
-            "SELECT {Note.ChangeKey}, "
-            "{Note.CreatedAt}, "
-            "{Note.CreationNoteIdAnchor}, "
-            "{Note.DeletedAt}, "
-            "{Note.Id}, "
-            "{Note.IsAlwaysOnTop}, "
-            "{Note.IsFutureNote}, "
-            "{Note.IsOpen}, "
-            "{Note.IsRemoteDataInvalid}, "
-            "{Note.LastServerVersion}, "
-            "{Note.ParentId}, "
-            "{Note.PendingInsightsScan}, "
-            "{Note.RemoteId}, "
-            "{Note.RemoteSchemaVersion}, "
-            "{Note.Text}, "
-            "{Note.Theme}, "
-            "{Note.Type}, "
-            "{Note.UpdatedAt}, "
-            "{Note.WindowPosition} "
+        auto stmt = db.new_statement (
+            "SELECT ChangeKey, "
+            "CreatedAt, "
+            "CreationNoteIdAnchor, "
+            "DeletedAt, "
+            "Id, "
+            "IsAlwaysOnTop, "
+            "IsFutureNote, "
+            "IsOpen, "
+            "IsRemoteDataInvalid, "
+            "LastServerVersion, "
+            "ParentId, "
+            "PendingInsightsScan, "
+            "RemoteId, "
+            "RemoteSchemaVersion, "
+            "Text, "
+            "Theme, "
+            "Type, "
+            "UpdatedAt, "
+            "WindowPosition "
             "FROM Note"
         );
 
@@ -147,6 +142,8 @@ file_plum_sqlite::_load_notes (mobius::core::database::database &db)
             // Add note to the list
             notes_.emplace_back (std::move (obj));
         }
+
+        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
