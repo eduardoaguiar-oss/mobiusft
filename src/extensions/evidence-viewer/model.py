@@ -162,7 +162,7 @@ FORMATTERS = {
     "bin2text": formatter_bin2text,
     "bool": formatter_bool,
     "chat-message-recipients": recipients_formatter,
-    "chat-message-text": text_formatter,
+    "rich-text": text_formatter,
     "datetime": pymobius.to_string,
     "duration": formatter_duration,
     "hexstring": mobius.core.encoder.hexstring,
@@ -401,7 +401,7 @@ MODEL = [
                       args(id='timestamp', name="Date/time (UTC)", format='datetime', first_sortable=True),
                       args(id='sender', is_sortable=True),
                       args(id='recipients', format="chat-message-recipients", is_sortable=True),
-                      args(id="text", format="chat-message-text", is_sortable=True, is_markup=True),
+                      args(id="text", format="rich-text", is_sortable=True, is_markup=True),
                       args(id='username', name="User name", is_sortable=True),
                       args(id="app_name", name="Application", is_sortable=True),
                   ]),
@@ -412,7 +412,7 @@ MODEL = [
                       args(id='timestamp', name="Date/time (UTC)"),
                       args(id='search_type', name="Type"),
                       args(id='username', name="User name"),
-                      args(id="text", format="chat-message-text"),
+                      args(id="text", format="rich-text"),
                   ]),
          ]
          ),
@@ -605,6 +605,30 @@ MODEL = [
                   ]),
              args(id="hashes"
                   ),
+         ]
+         ),
+    args(id="note",
+         name="Notes",
+         description="Notes created by users in applications",
+         master_views=[
+             args(id="table",
+                  columns=[
+                      args(id='creation_time', name="Creation Date/time", format='datetime', first_sortable=True),
+                      args(id='last_modification_time', name="Last Modification Date/time", format='datetime', is_sortable=True),
+                      args(id='username', name="User name", is_sortable=True),
+                      args(id='app_name', name="Application", is_sortable=True),
+                      args(id="body", format="rich-text", is_sortable=True, is_markup=True),
+                  ]),
+         ],
+         detail_views=[
+             args(id="metadata",
+                  rows=[
+                      args(id='creation_time', name="Creation Date/time"),
+                      args(id='last_modification_time', name="Last Modification Date/time"),
+                      args(id='username', name="User name"),
+                      args(id='app_name', name="Application"),
+                      args(id="body", format="rich-text"),
+                  ]),
          ]
          ),
     args(id="opened-file",
