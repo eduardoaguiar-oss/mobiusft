@@ -128,14 +128,13 @@ file_resume_dat::_decode_sqlite (const mobius::core::io::reader &reader)
             if (resume_data.is_map ())
                 _add_entry (infohash + ".torrent", resume_data.to_map ());
         }
+
+        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
         log.warning (__LINE__, e.what ());
     }
-
-    // End decoding
-    is_instance_ = true;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

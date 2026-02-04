@@ -29,12 +29,9 @@
 #include "file_settings_dat.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @see
-// https://www.forensicfocus.com/articles/forensic-analysis-of-the-%CE%BCtorrent-peer-to-peer-client-in-windows/
-// @see
-// https://robertpearsonblog.wordpress.com/2016/11/10/utorrent-forensic-artifacts/
-// @see
-// https://robertpearsonblog.wordpress.com/2016/11/11/utorrent-and-windows-10-forensic-nuggets-of-info/
+// @see https://www.forensicfocus.com/articles/forensic-analysis-of-the-%CE%BCtorrent-peer-to-peer-client-in-windows/
+// @see https://robertpearsonblog.wordpress.com/2016/11/10/utorrent-forensic-artifacts/
+// @see https://robertpearsonblog.wordpress.com/2016/11/11/utorrent-and-windows-10-forensic-nuggets-of-info/
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace mobius::extension::app::utorrent
@@ -277,10 +274,7 @@ profile::impl::add_dht_dat_file (const mobius::core::io::file &f)
 
     file_dht_dat dht_dat (reader);
     if (!dht_dat)
-    {
-        log.warning (__LINE__, "File is not a valid dht.dat file");
         return;
-    }
 
     log.info (__LINE__, "File decoded [dht.dat]: " + f.get_path ());
 
@@ -355,10 +349,7 @@ profile::impl::add_resume_dat_file (const mobius::core::io::file &f)
 
     file_resume_dat resume_dat (reader);
     if (!resume_dat)
-    {
-        log.warning (__LINE__, "File is not a valid resume.dat file");
         return;
-    }
 
     log.info (__LINE__, "File decoded [resume.dat]: " + f.get_path ());
 
@@ -567,10 +558,7 @@ profile::impl::add_torrent_file (const mobius::core::io::file &f)
 
     mobius::core::file_decoder::torrent torrent (reader);
     if (!torrent)
-    {
-        log.warning (__LINE__, "File is not a valid torrent file");
         return;
-    }
 
     log.info (__LINE__, "File decoded [torrent]: " + f.get_path ());
 

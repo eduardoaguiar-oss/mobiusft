@@ -29,12 +29,9 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // References:
-// @see
-// https://www.forensicfocus.com/articles/forensic-analysis-of-the-%CE%BCtorrent-peer-to-peer-client-in-windows/
-// @see
-// https://robertpearsonblog.wordpress.com/2016/11/10/utorrent-forensic-artifacts/
-// @see
-// https://robertpearsonblog.wordpress.com/2016/11/11/utorrent-and-windows-10-forensic-nuggets-of-info/
+// @see https://www.forensicfocus.com/articles/forensic-analysis-of-the-%CE%BCtorrent-peer-to-peer-client-in-windows/
+// @see https://robertpearsonblog.wordpress.com/2016/11/10/utorrent-forensic-artifacts/
+// @see https://robertpearsonblog.wordpress.com/2016/11/11/utorrent-and-windows-10-forensic-nuggets-of-info/
 // @see libtorrent source code
 //
 // µTorrent main forensic files:
@@ -49,7 +46,6 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static const std::string SAMPLING_ID = "sampling";
 static const std::string APP_ID = "utorrent";
 static const std::string APP_NAME = "µTorrent/BitTorrent";
 
@@ -202,8 +198,6 @@ vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 void
 vfs_processor_impl::on_complete ()
 {
-    auto transaction = item_.new_transaction ();
-
     _save_app_profiles ();
     _save_ip_addresses ();
     _save_local_files ();
@@ -212,8 +206,6 @@ vfs_processor_impl::on_complete ()
     _save_sent_files ();
     _save_shared_files ();
     _save_user_accounts ();
-
-    transaction.commit ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
