@@ -99,6 +99,12 @@ fs_file::set_path (const std::string &path)
         throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
 
     path_ = path;
+
+    if (name_.empty ())
+    {
+        mobius::core::io::path p (path);
+        name_ = p.get_filename ();
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
