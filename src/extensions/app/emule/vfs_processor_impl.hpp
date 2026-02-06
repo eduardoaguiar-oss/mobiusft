@@ -48,6 +48,28 @@ class vfs_processor_impl
     void on_complete () final;
 
   private:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Struct to hold remote source data
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct remote_source
+    {
+        std::string ip;
+        int port = 0;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Struct to hold .part.met.txtsrc files data
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct txtsrc_file_data
+    {
+        mobius::core::io::file f;
+        std::vector<remote_source> sources;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Data members
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
     // @brief Case item
     mobius::framework::model::item item_;
 
@@ -65,6 +87,9 @@ class vfs_processor_impl
 
     // @brief Remote files
     std::vector<profile::remote_file> remote_files_;
+
+    // @brief Map of .part.met.txtsrc files data, keyed by file name
+    std::unordered_map<std::string, txtsrc_file_data> txtsrc_files_;
     
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
@@ -72,7 +97,7 @@ class vfs_processor_impl
     void _scan_profile_folder (const mobius::core::io::folder &);
     void _scan_part_met_files (const mobius::core::io::folder &);
     void _decode_part_met_file (const mobius::core::io::file &);
-    void _decode_part_met_txtsrc_file (const mobius::core::io::file &, const profile::local_file &);
+    void _decode_part_met_txtsrc_file (const mobius::core::io::file &);
 
     void _save_app_profiles ();
     void _save_autofills ();

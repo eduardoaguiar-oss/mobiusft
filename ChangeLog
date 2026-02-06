@@ -7,6 +7,7 @@ Mobius Forensic Toolkit 2.24
 	* app-ares: Removed new_transaction/commit calls on function on_complete
 	* app-emule: Removed new_transaction/commit calls on function on_complete
 	* app-emule: Enhanced profile::add_preferences_dat function with stricter file validation
+	* app-emule: Improved scanning performance for .part.met and .part.met.txtsrc files
 	* app-shareaza: Removed new_transaction/commit calls on function on_complete
 	* app-shareaza: Enhanced profile::add_profile_xml function with stricter file validation
 	* app-utorrent: Removed new_transaction/commit calls on function on_complete

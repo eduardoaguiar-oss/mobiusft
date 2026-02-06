@@ -81,7 +81,6 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static const std::string SAMPLING_ID = "sampling";
 static const std::string APP_ID = "emule";
 static const std::string APP_NAME = "Emule";
 
@@ -234,8 +233,21 @@ vfs_processor_impl::_scan_part_met_files (
 
     try
     {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Decode .part.met.txtsrc files first
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        txtsrc_files_.clear ();
+
+        for (const auto &f : w.get_files_by_pattern ("*.part.met.txtsrc"))
+            _decode_part_met_txtsrc_file (f);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Decode .part.met files
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         for (const auto &f : w.get_files_by_pattern ("*.part.met"))
             _decode_part_met_file (f);
+
+        txtsrc_files_.clear ();
     }
     catch (const std::exception &e)
     {
@@ -263,13 +275,7 @@ vfs_processor_impl::_decode_part_met_file (const mobius::core::io::file &f)
         file_part_met part_met (f.new_reader ());
 
         if (!part_met)
-        {
-            log.info (
-                __LINE__,
-                "File is not an instance of .part.met. Path: " + f.get_path ()
-            );
             return;
-        }
 
         log.info (__LINE__, "File decoded [.part.met]: " + f.get_path ());
 
@@ -328,14 +334,27 @@ vfs_processor_impl::_decode_part_met_file (const mobius::core::io::file &f)
         local_files_.push_back (lf);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Scan .part.met.txtsrc files
+        // Create remote file
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        auto w = mobius::core::io::walker (f.get_parent ());
+        auto iter = txtsrc_files_.find (f.get_name () + ".txtsrc");
+        if (iter == txtsrc_files_.end ())
+            return;
 
-        for (const auto &txtsrc_f :
-             w.get_files_by_name (f.get_name () + ".txtsrc"))
+        for (const auto &source : iter->second.sources)
         {
-            _decode_part_met_txtsrc_file (txtsrc_f, lf);
+            auto rf = profile::remote_file ();
+
+            rf.username = username_;
+            rf.timestamp = f.get_modification_time ();
+            rf.ip = source.ip;
+            rf.port = source.port;
+            rf.filename = lf.filename;
+            rf.source_files.push_back (lf.f);
+            rf.source_files.push_back (iter->second.f);
+            rf.hashes = lf.hashes.clone ();
+            rf.metadata = lf.metadata.clone ();
+
+            remote_files_.push_back (rf);
         }
     }
     catch (const std::exception &e)
@@ -350,7 +369,7 @@ vfs_processor_impl::_decode_part_met_file (const mobius::core::io::file &f)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 vfs_processor_impl::_decode_part_met_txtsrc_file (
-    const mobius::core::io::file &f, const profile::local_file &lf
+    const mobius::core::io::file &f
 )
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
@@ -363,38 +382,20 @@ vfs_processor_impl::_decode_part_met_txtsrc_file (
         file_part_met_txtsrc txtsrc (f.new_reader ());
 
         if (!txtsrc)
-        {
-            log.info (
-                __LINE__,
-                "File is not an instance of .part.met.txtsrc. Path: " +
-                    f.get_path ()
-            );
             return;
-        }
 
         log.info (
             __LINE__, "File decoded [.part.met.txtsrc]: " + f.get_path ()
         );
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Create remote file
+        // Store .part.met.txtsrc data in map, keyed by file name
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto [iter, _] = txtsrc_files_.try_emplace (f.get_name ());
+        iter->second.f = f;
+
         for (const auto &source : txtsrc.get_sources ())
-        {
-            auto rf = profile::remote_file ();
-
-            rf.username = username_;
-            rf.timestamp = f.get_modification_time ();
-            rf.ip = source.ip;
-            rf.port = source.port;
-            rf.filename = lf.filename;
-            rf.source_files.push_back (lf.f);
-            rf.source_files.push_back (f);
-            rf.hashes = lf.hashes.clone ();
-            rf.metadata = lf.metadata.clone ();
-
-            remote_files_.push_back (rf);
-        }
+            iter->second.sources.emplace_back (source.ip, source.port);
     }
     catch (const std::exception &e)
     {

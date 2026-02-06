@@ -162,13 +162,7 @@ profile::add_key_index_dat_file (const mobius::core::io::file &f)
         file_key_index_dat key_index (f.new_reader ());
 
         if (!key_index)
-        {
-            log.info (
-                __LINE__, "File is not an instance of KeyIndex.dat. Path: " +
-                              f.get_path ()
-            );
             return;
-        }
 
         log.info (__LINE__, "File decoded [key_index.dat]: " + f.get_path ());
 
@@ -253,13 +247,7 @@ profile::add_known_met_file (const mobius::core::io::file &f)
         file_known_met known_met (f.new_reader ());
 
         if (!known_met)
-        {
-            log.info (
-                __LINE__,
-                "File is not an instance of Known.met. Path: " + f.get_path ()
-            );
             return;
-        }
 
         log.info (__LINE__, "File decoded [known.met]: " + f.get_path ());
 
@@ -345,13 +333,14 @@ profile::add_preferences_dat_file (const mobius::core::io::file &f)
         auto version = decoder.get_uint8 ();
         if (version > LATEST_PREFERENCES_DAT_VERSION)
         {
-            log.development(
-                __LINE__,
-                "Unsupported Preferences.dat version: " +
-                    mobius::core::string::to_string (version) +
-                " (last supported version: " +
-                    mobius::core::string::to_string (LATEST_PREFERENCES_DAT_VERSION) +
-                ")"
+            log.development (
+                __LINE__, "Unsupported Preferences.dat version: " +
+                              mobius::core::string::to_string (version) +
+                              " (last supported version: " +
+                              mobius::core::string::to_string (
+                                  LATEST_PREFERENCES_DAT_VERSION
+                              ) +
+                              ")"
             );
             return;
         }
@@ -467,7 +456,7 @@ profile::add_preferenceskad_dat_file (const mobius::core::io::file &f)
         // Decode file
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         auto reader = f.new_reader ();
-        if (!reader)
+        if (!reader || reader.get_size () < 22)
             return;
 
         mobius::core::decoder::data_decoder decoder (reader);
@@ -538,22 +527,14 @@ profile::add_statistics_ini_file (const mobius::core::io::file &f)
             return;
 
         mobius::core::decoder::inifile ini (reader);
-        std::uint64_t total_downloaded_bytes = 0;
-        std::uint64_t total_uploaded_bytes = 0;
-        std::uint64_t download_completed_files = 0;
 
-        if (ini.has_value ("statistics", "TotalDownloadedBytes"))
-            total_downloaded_bytes = std::stol (
-                ini.get_value ("statistics", "TotalDownloadedBytes")
-            );
-
-        if (ini.has_value ("statistics", "TotalUploadedBytes"))
-            total_uploaded_bytes =
-                std::stol (ini.get_value ("statistics", "TotalUploadedBytes"));
-
-        if (ini.has_value ("statistics", "DownCompletedFiles"))
-            download_completed_files =
-                std::stol (ini.get_value ("statistics", "DownCompletedFiles"));
+        std::uint64_t total_downloaded_bytes = std::stol (
+            ini.get_value ("statistics", "TotalDownloadedBytes", "0")
+        );
+        std::uint64_t total_uploaded_bytes =
+            std::stol (ini.get_value ("statistics", "TotalUploadedBytes", "0"));
+        std::uint64_t download_completed_files =
+            std::stol (ini.get_value ("statistics", "DownCompletedFiles", "0"));
 
         log.info (__LINE__, "File decoded [Statistics.ini]: " + f.get_path ());
 
@@ -607,14 +588,7 @@ profile::add_storedsearches_met_file (const mobius::core::io::file &f)
         file_stored_searches_met stored_searches (f.new_reader ());
 
         if (!stored_searches)
-        {
-            log.info (
-                __LINE__,
-                "File is not an instance of StoredSearches.met. Path: " +
-                    f.get_path ()
-            );
             return;
-        }
 
         auto version = stored_searches.get_version ();
         log.info (
