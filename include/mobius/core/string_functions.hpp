@@ -52,6 +52,8 @@ std::string c_escape (const std::string&);
 std::string c_unescape (const std::string&);
 std::string html_escape (const std::string&);
 std::string html_unescape (const std::string&);
+std::string latex_escape (const std::string&);
+std::string latex_unescape (const std::string&);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // remove chars functions

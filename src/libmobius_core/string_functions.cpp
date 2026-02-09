@@ -601,6 +601,83 @@ html_unescape (const std::string &str)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Escape a string for LaTeX
+// @param str string
+// @return escaped string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+latex_escape (const std::string &str)
+{
+    std::string s;
+
+    for (const char c : str)
+    {
+        switch (c)
+        {
+            case '&':
+                s += "\\&";
+                break;
+            case '%':
+                s += "\\%";
+                break;
+            case '$':
+                s += "\\$";
+                break;
+            case '#':
+                s += "\\#";
+                break;
+            case '_':
+                s += "\\_";
+                break;
+            case '{':
+                s += "\\{";
+                break;
+            case '}':
+                s += "\\}";
+                break;
+            case '~':
+                s += "\\textasciitilde{}";
+                break;
+            case '^':
+                s += "\\textasciicircum{}";
+                break;
+            case '\\':
+                s += "\\textbackslash{}";
+                break;
+            default:
+                s += c;
+                break;
+        }
+    }
+
+    return s;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Unescape a LaTeX-escaped string
+// @param str string
+// @return unescaped string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+latex_unescape (const std::string &str)
+{
+    std::string s = str;
+
+    s = replace (s, "\\&", "&");
+    s = replace (s, "\\%", "%");
+    s = replace (s, "\\$", "$");
+    s = replace (s, "\\#", "#");
+    s = replace (s, "\\_", "_");
+    s = replace (s, "\\{", "{");
+    s = replace (s, "\\}", "}");
+    s = replace (s, "\\textasciitilde{}", "~");
+    s = replace (s, "\\textasciicircum{}", "^");
+    s = replace (s, "\\textbackslash{}", "\\");
+
+    return s;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Check if a string starts with another one
 // @param str string
 // @param starting starting string
