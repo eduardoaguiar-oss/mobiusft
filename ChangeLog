@@ -17,12 +17,16 @@ Mobius Forensic Toolkit 2.24
 	* pymobius.ant.evidence.vfs.received_files: Removed old gecko code
 	* pymobius.ant.evidence.vfs.visited_urls: Removed old gecko code
 	* pymobius.app.gecko: Removed module
+	* libmobius_core: Added new `RichText` class for structured rich text handling
 	* libmobius_core: Added new method database::new_statement_with_pattern
 	* libmobius_core: Added new method io::line_reader (bytearray)
 	* libmobius_core: Added new function datetime::new_datetime_from_dot_net_timestamp
 	* libmobius_core: Changed vfs::fs_file::set_path to also set file name
+	* libmobius_core: Added new string function latex_escape
+	* libmobius_core: Added new string function latex_unescape
 	* libmobius_framework: Added new template function get_domain_text
 	* libmobius_python: Added new function datetime.new_datetime_from_dot_net_timestamp
+	* libmobius_python: Added new `core.richtext' class
 
 Mobius Forensic Toolkit 2.23
 	* Added new C++ extension called "app-dcpp"

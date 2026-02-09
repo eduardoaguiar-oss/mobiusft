@@ -26,6 +26,7 @@
 #include "extension.hpp"
 #include "log.hpp"
 #include "resource.hpp"
+#include "richtext.hpp"
 #include "thread_guard.hpp"
 #include "crypt/module.hpp"
 #include "database/module.hpp"
@@ -110,6 +111,7 @@ new_core_module ()
   module.add_type ("extension", &core_extension_t);
   module.add_type ("log", &core_log_t);
   module.add_type ("resource", &core_resource_t);
+  module.add_type ("richtext", new_core_richtext_type ());
   module.add_type ("thread_guard", new_core_thread_guard_type ());
 
   // Build submodules

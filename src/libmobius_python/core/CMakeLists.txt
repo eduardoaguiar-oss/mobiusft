@@ -54,6 +54,7 @@ add_library(libmobius_python_core STATIC
     func_set_logfile_path.cpp
     log.cpp
     resource.cpp
+    richtext.cpp
     thread_guard.cpp
 )
 

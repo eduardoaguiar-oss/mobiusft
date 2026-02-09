@@ -104,6 +104,7 @@ add_library(mobius_core SHARED
     mediator.cpp
     metadata.cpp
     resource.cpp
+    richtext.cpp
     string_functions.cpp
     thread_guard.cpp
     unittest.cpp
