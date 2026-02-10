@@ -606,8 +606,9 @@ richtext::impl::to_html () const
         else if (segment.type == "system_text")
         {
             auto text = segment.metadata.get<std::string> ("content");
-            html_text += "<span color=\"gray\">" +
-                         mobius::core::string::html_escape (text) + "</span>";
+            html_text += "<i><font color=\"#77b\" face=\"courier\">" +
+                         mobius::core::string::html_escape (text) +
+                         "</font></i>";
         }
 
         else if (segment.type == "hyperlink")
@@ -624,12 +625,14 @@ richtext::impl::to_html () const
             auto emoji_char_it = EMOJI_CHARS.find (id);
 
             if (emoji_char_it != EMOJI_CHARS.end ())
-                html_text += "<span font=\"Emoji\" size=\"x-large\">" +
-                             emoji_char_it->second + "</span>";
+                html_text += std::format (
+                    "<font size=\"x-large\">{}</font>", emoji_char_it->second
+                );
+
             else
-                html_text +=
-                    "<span font=\"Emoji\" "
-                    "style=size=\"x-large\">❓</span>"; // Unknown emoji
+                html_text += std::format (
+                    "<font color=\"#00d000\" weight=\"bold\">({})</font>", id
+                ); // Unknown emoji
         }
 
         else if (segment.type == "flag")
@@ -637,11 +640,30 @@ richtext::impl::to_html () const
             auto id = segment.metadata.get<std::string> ("id");
             auto flag_char_it = FLAG_CHARS.find (id);
 
+            html_text += "<font size=\"x-large\">";
+
             if (flag_char_it != FLAG_CHARS.end ())
                 html_text += flag_char_it->second;
             else
-                html_text +=
-                    "<span font=\"Emoji\" size=\"x-large\">🏳️</span>"; // Unknown flag
+                html_text += "🏳️"; // Unknown flag
+
+            html_text += "</font>";
+        }
+
+        else if (segment.type == "begin/message_bubble")
+        {
+            auto timestamp = segment.metadata.get<std::string> ("timestamp");
+            auto author = segment.metadata.get<std::string> ("author");
+
+            html_text += std::format (
+                "<font color=\"#0080b0\">[{}] {}:<br/><i>", timestamp,
+                mobius::core::string::html_escape (author)
+            );
+        }
+
+        else if (segment.type == "end/message_bubble")
+        {
+            html_text += "</i></font>";
         }
     }
 
