@@ -65,6 +65,10 @@ file_formhistory_sqlite::_load_form_history (
 
     try
     {
+        // Check if table moz_formhistory exists
+        if (!db.has_table ("moz_formhistory"))
+            return;
+
         // Prepare SQL statement for table moz_formhistory
         auto stmt = db.new_statement (
             "SELECT fieldname, "

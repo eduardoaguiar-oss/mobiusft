@@ -53,7 +53,7 @@ std::vector<std::tuple<std::string, std::string, std::string>> GECKO_BROWSERS =
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Download states mapping
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::map<std::int64_t, std::string> DOWNLOAD_STATES = {
+std::unordered_map<std::int64_t, std::string> DOWNLOAD_STATES = {
     {0, ""},
     {1, "Finished"},
     {2, "Failed"},

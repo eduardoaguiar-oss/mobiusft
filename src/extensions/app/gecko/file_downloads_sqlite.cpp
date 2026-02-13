@@ -64,6 +64,10 @@ file_downloads_sqlite::_load_downloads (mobius::core::database::database &db)
 
     try
     {
+        // Check if table moz_downloads exists
+        if (!db.has_table ("moz_downloads"))
+            return;
+
         // Prepare SQL statement for table moz_downloads
         auto stmt = db.new_statement_with_pattern (
             "SELECT {moz_downloads.autoResume}, "

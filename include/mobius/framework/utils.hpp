@@ -19,7 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <format>
-#include <map>
+#include <unordered_map>
 #include <string>
 
 namespace mobius::framework
@@ -35,10 +35,9 @@ std::string get_username_from_path (const std::string &);
 // @param code Code to lookup
 // @return Domain value string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename T> std::string
-get_domain_text (
-    const std::map<T, std::string> &domain, T code
-)
+template <typename T>
+std::string
+get_domain_text (const std::unordered_map<T, std::string> &domain, T code)
 {
     auto it = domain.find (code);
 
