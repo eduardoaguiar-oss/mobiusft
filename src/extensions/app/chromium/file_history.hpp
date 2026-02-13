@@ -36,102 +36,6 @@ class file_history
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief History entry structure
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    struct history_entry
-    {
-        // @brief Record Index
-        std::uint64_t idx = 0;
-
-        // @brief Schema version
-        std::uint64_t schema_version = 0;
-
-        // @brief Favicon ID
-        std::uint64_t favicon_id = 0;
-
-        // @brief Hidden
-        bool hidden = false;
-
-        // @brief ID
-        std::uint64_t id = 0;
-
-        // @brief Last visit time
-        mobius::core::datetime::datetime last_visit_time;
-
-        // @brief Title
-        std::string title;
-
-        // @brief Typed count
-        std::uint64_t typed_count = 0;
-
-        // @brief URL
-        std::string url;
-
-        // @brief Visit count
-        std::uint64_t visit_count = 0;
-
-        // @brief App ID
-        std::string app_id;
-
-        // @brief Consider for NTP most visited
-        bool consider_for_ntp_most_visited = false;
-
-        // @brief External referrer URL
-        std::string external_referrer_url;
-
-        // @brief From visit ID
-        std::uint64_t from_visit = 0;
-
-        // @brief Visit ID
-        std::uint64_t visit_id = 0;
-
-        // @brief Incremented omnibox typed score
-        bool incremented_omnibox_typed_score = false;
-
-        // @brief Is known to sync
-        bool is_known_to_sync = false;
-
-        // @brief Opener visit ID
-        std::uint64_t opener_visit = 0;
-
-        // @brief Originator cache GUID
-        std::string originator_cache_guid;
-
-        // @brief Originator from visit ID
-        std::uint64_t originator_from_visit = 0;
-
-        // @brief Originator opener visit ID
-        std::uint64_t originator_opener_visit = 0;
-
-        // @brief Originator visit ID
-        std::uint64_t originator_visit_id = 0;
-
-        // @brief Publicly routable
-        bool publicly_routable = false;
-
-        // @brief Segment ID
-        std::uint64_t segment_id = 0;
-
-        // @brief Transition type
-        std::uint64_t transition;
-
-        // @brief Visit URL
-        std::uint64_t visit_url;
-
-        // @brief Visit duration
-        std::uint64_t visit_duration = 0;
-
-        // @brief Visit time
-        mobius::core::datetime::datetime visit_time;
-
-        // @brief Visited link ID
-        std::uint64_t visited_link_id = 0;
-
-        // @brief File object
-        mobius::core::io::file f;
-    };
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Download structure
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct download
@@ -152,7 +56,7 @@ class file_history
         std::string current_path;
 
         // @brief Danger type
-        std::string danger_type;
+        std::int64_t danger_type = 0;
 
         // @brief Embedder download data
         std::string embedder_download_data;
@@ -209,7 +113,7 @@ class file_history
         mobius::core::datetime::datetime start_time;
 
         // @brief State
-        std::string state;
+        std::int64_t state = 0;
 
         // @brief Tab referrer URL
         std::string tab_referrer_url;
@@ -228,9 +132,126 @@ class file_history
 
         // @brief URL
         std::string url;
+    };
 
-        // @brief File object
-        mobius::core::io::file f;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief History entry structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct history_entry
+    {
+        // @brief Record Index
+        std::uint64_t idx = 0;
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // From urls table
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // @brief Activity time
+        std::int64_t activity_time;
+
+        // @brief Display count
+        std::int64_t display_count;
+
+        // @brief Display time
+        std::int64_t display_time;
+
+        // @brief Emdd main
+        std::string emdd_main;
+
+        // @brief Emdd main ver
+        std::string emdd_main_ver;
+
+        // @brief Favicon id
+        std::int64_t favicon_id;
+
+        // @brief Hidden
+        bool hidden = false;
+
+        // @brief Id
+        std::int64_t id;
+
+        // @brief Last display
+        mobius::core::datetime::datetime last_display;
+
+        // @brief Last visit time
+        mobius::core::datetime::datetime last_visit_time;
+
+        // @brief Links clicked count
+        std::int64_t links_clicked_count;
+
+        // @brief Open time
+        std::int64_t open_time;
+
+        // @brief Title
+        std::string title;
+
+        // @brief Typed count
+        std::int64_t typed_count;
+
+        // @brief Url
+        std::string url;
+
+        // @brief Visit count
+        std::int64_t visit_count;
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // From visits table
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // @brief App id
+        std::string app_id;
+
+        // @brief Consider for ntp most visited
+        std::string consider_for_ntp_most_visited;
+
+        // @brief External referrer url
+        std::string external_referrer_url;
+
+        // @brief From visit
+        std::int64_t from_visit;
+
+        // @brief Id
+        std::int64_t visit_id;
+
+        // @brief Incremented omnibox typed score
+        std::string incremented_omnibox_typed_score;
+
+        // @brief Is indexed
+        bool is_indexed = false;
+
+        // @brief Is known to sync
+        bool is_known_to_sync = false;
+
+        // @brief Opener visit
+        std::int64_t opener_visit;
+
+        // @brief Originator cache guid
+        std::string originator_cache_guid;
+
+        // @brief Originator from visit
+        std::int64_t originator_from_visit;
+
+        // @brief Originator opener visit
+        std::int64_t originator_opener_visit;
+
+        // @brief Originator visit id
+        std::int64_t originator_visit_id;
+
+        // @brief Publicly routable
+        std::string publicly_routable;
+
+        // @brief Segment id
+        std::int64_t segment_id;
+
+        // @brief Transition
+        std::int64_t transition;
+
+        // @brief Visit duration
+        std::int64_t visit_duration;
+
+        // @brief Visit time
+        mobius::core::datetime::datetime visit_time;
+
+        // @brief Visited link id
+        std::int64_t visited_link_id;
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -292,6 +313,8 @@ class file_history
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _load_history (mobius::core::database::database &);
     void _load_downloads (mobius::core::database::database &);
+    void _load_downloads_01 (mobius::core::database::database &);
+    void _load_downloads_24 (mobius::core::database::database &);
     void _load_search_terms (mobius::core::database::database &);
 };
 

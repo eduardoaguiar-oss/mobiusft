@@ -52,8 +52,6 @@ class profile
     using bookmark = file_bookmarks::entry;
     using cookie = file_cookies::cookie;
     using credit_card = file_web_data::credit_card;
-    using download = file_history::download;
-    using history_entry = file_history::history_entry;
     using login = file_login_data::login;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -123,6 +121,48 @@ class profile
 
         // @brief Is encrypted
         bool is_encrypted = false;
+
+        // @brief Source file
+        mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Download structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct download
+    {
+        // @brief Timestamp
+        mobius::core::datetime::datetime timestamp;
+
+        // @brief Filename
+        std::string filename;
+
+        // @brief Path
+        std::string path;
+
+        // @brief Metadata
+        mobius::core::pod::map metadata;
+
+        // @brief Source file
+        mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief History entry structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct history_entry
+    {
+        // @brief Timestamp
+        mobius::core::datetime::datetime timestamp;
+
+        // @brief Title
+        std::string title;
+
+        // @brief Url
+        std::string url;
+
+        // @brief Metadata
+        mobius::core::pod::map metadata;
 
         // @brief Source file
         mobius::core::io::file f;

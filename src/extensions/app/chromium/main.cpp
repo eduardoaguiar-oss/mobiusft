@@ -27,7 +27,7 @@ extern "C"
 {
     const char *EXTENSION_ID = "app-chromium";
     const char *EXTENSION_NAME = "App Chromium";
-    const char *EXTENSION_VERSION = "1.6";
+    const char *EXTENSION_VERSION = "1.7";
     const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
     const char *EXTENSION_DESCRIPTION = "Chromium based browsers support";
 } // extern "C"

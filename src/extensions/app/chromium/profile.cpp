@@ -16,6 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "profile.hpp"
+#include <mobius/core/io/path.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/mediator.hpp>
 #include <mobius/core/string_functions.hpp>
@@ -23,6 +24,7 @@
 #include <mobius/framework/utils.hpp>
 #include <algorithm>
 #include <string>
+#include <unordered_map>
 #include "common.hpp"
 #include "file_bookmarks.hpp"
 #include "file_cookies.hpp"
@@ -32,11 +34,59 @@
 #include "file_web_data.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @see
-// https://github.com/obsidianforensics/hindsight/blob/main/documentation/Evolution%20of%20Chrome%20Databases%20(v35).pdf
-// @see
-// https://medium.com/@jsaxena017/web-browser-forensics-part-1-chromium-browser-family-99b807083c25
+// @see https://github.com/obsidianforensics/hindsight/blob/main/documentation/Evolution%20of%20Chrome%20Databases%20(v35).pdf
+// @see https://medium.com/@jsaxena017/web-browser-forensics-part-1-chromium-browser-family-99b807083c25
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+namespace
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Download states
+// @see https://chromium.googlesource.com/chromium/src/+/refs/heads/main/components/history/core/browser/download_constants.h
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static const std::unordered_map<std::int64_t, std::string>
+    DOWNLOAD_STATES = {
+        {-1, "invalid"},  {0, "in_progress"}, {1, "complete"},
+        {2, "cancelled"}, {3, "bug_140687"},  {4, "interrupted"},
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Download danger types
+// @see https://chromium.googlesource.com/chromium/src/+/refs/heads/main/components/history/core/browser/download_constants.h
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static const std::unordered_map<std::int64_t, std::string>
+    DOWNLOAD_DANGER_TYPES = {
+        {-1, "invalid"},
+        {0, "not_dangerous"},
+        {1, "dangerous_file"},
+        {2, "dangerous_url"},
+        {3, "dangerous_content"},
+        {4, "maybe_dangerous_content"},
+        {5, "uncommon_content"},
+        {6, "user_validated"},
+        {7, "dangerous_host"},
+        {8, "potentially_unwanted"},
+        {9, "allowlisted_by_policy"},
+        {10, "async_scanning"},
+        {11, "blocked_password_protected"},
+        {12, "blocked_too_large"},
+        {13, "sensitive_content_warning"},
+        {14, "sensitive_content_block"},
+        {15, "deep_scanned_safe"},
+        {16, "deep_scanned_opened_dangerous"},
+        {17, "prompt_for_scanning"},
+        {18, "blocked_unsupported_filetype"},
+        {19, "dangerous_account_compromise"},
+        {20, "deep_scanned_failed"},
+        {21, "prompt_for_local_password_scanning"},
+        {22, "async_local_password_scanning"},
+        {23, "blocked_scan_failed"},
+        {24, "forced_save_to_gdrive"},
+        {25, "forced_save_to_onedrive"},
+};
+
+} // namespace
+
 namespace mobius::extension::app::chromium
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -588,8 +638,48 @@ profile::impl::add_history_file (const mobius::core::io::file &f)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     for (const auto &entry : fh.get_history_entries ())
     {
-        history_entry e (entry);
+        history_entry e;
+
+        e.timestamp = entry.visit_time;
+        e.title = entry.title;
+        e.url = entry.url;
         e.f = f;
+
+        e.metadata.set ("record_idx", entry.idx);
+        e.metadata.set ("schema_version", fh.get_schema_version ());
+        e.metadata.set ("activity_time", entry.activity_time);
+        e.metadata.set ("app_id", entry.app_id);
+        e.metadata.set ("consider_for_ntp_most_visited", entry.consider_for_ntp_most_visited);
+        e.metadata.set ("display_count", entry.display_count);
+        e.metadata.set ("display_time", entry.display_time);
+        e.metadata.set ("emdd_main", entry.emdd_main);
+        e.metadata.set ("emdd_main_ver", entry.emdd_main_ver);
+        e.metadata.set ("external_referrer_url", entry.external_referrer_url);
+        e.metadata.set ("favicon_id", entry.favicon_id);
+        e.metadata.set ("from_visit", entry.from_visit);
+        e.metadata.set ("hidden", entry.hidden);
+        e.metadata.set ("id", entry.id);
+        e.metadata.set ("incremented_omnibox_typed_score", entry.incremented_omnibox_typed_score);
+        e.metadata.set ("is_indexed", entry.is_indexed);
+        e.metadata.set ("is_known_to_sync", entry.is_known_to_sync);
+        e.metadata.set ("last_display", entry.last_display);
+        e.metadata.set ("last_visit_time", entry.last_visit_time);
+        e.metadata.set ("links_clicked_count", entry.links_clicked_count);
+        e.metadata.set ("opener_visit", entry.opener_visit);
+        e.metadata.set ("open_time", entry.open_time);
+        e.metadata.set ("originator_cache_guid", entry.originator_cache_guid);
+        e.metadata.set ("originator_from_visit", entry.originator_from_visit);
+        e.metadata.set ("originator_opener_visit", entry.originator_opener_visit);
+        e.metadata.set ("originator_visit_id", entry.originator_visit_id);
+        e.metadata.set ("publicly_routable", entry.publicly_routable);
+        e.metadata.set ("segment_id", entry.segment_id);
+        e.metadata.set ("transition", entry.transition);
+        e.metadata.set ("typed_count", entry.typed_count);
+        e.metadata.set ("visit_count", entry.visit_count);
+        e.metadata.set ("visit_duration", entry.visit_duration);
+        e.metadata.set ("visited_link_id", entry.visited_link_id);
+        e.metadata.set ("visit_id", entry.visit_id);
+        e.metadata.set ("visit_time", entry.visit_time);
 
         history_entries_.push_back (e);
     }
@@ -599,7 +689,52 @@ profile::impl::add_history_file (const mobius::core::io::file &f)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     for (const auto &entry : fh.get_downloads ())
     {
-        download d (entry);
+        download d;
+
+        d.timestamp = entry.start_time;
+        d.path =
+            mobius::core::string::first_of (entry.target_path, entry.full_path);
+        ;
+        d.f = f;
+
+        if (!d.path.empty ())
+            d.filename = mobius::core::io::path (d.path).get_filename ();
+
+        d.metadata.set ("record_idx", entry.idx);
+        d.metadata.set ("schema_version", fh.get_schema_version ());
+        d.metadata.set ("by_ext_id", entry.by_ext_id);
+        d.metadata.set ("by_ext_name", entry.by_ext_name);
+        d.metadata.set ("by_web_app_id", entry.by_web_app_id);
+        d.metadata.set ("current_path", entry.current_path);
+        d.metadata.set ("danger_type", entry.danger_type);
+        d.metadata.set ("embedder_download_data", entry.embedder_download_data);
+        d.metadata.set ("end_time", entry.end_time);
+        d.metadata.set ("etag", entry.etag);
+        d.metadata.set ("full_path", entry.full_path);
+        d.metadata.set ("guid", entry.guid);
+        d.metadata.set ("hash", entry.hash);
+        d.metadata.set ("http_method", entry.http_method);
+        d.metadata.set ("id", entry.id);
+        d.metadata.set ("interrupt_reason", entry.interrupt_reason);
+        d.metadata.set ("last_access_time", entry.last_access_time);
+        d.metadata.set ("last_modified", entry.last_modified);
+        d.metadata.set ("mime_type", entry.mime_type);
+        d.metadata.set ("opened", entry.opened);
+        d.metadata.set ("original_mime_type", entry.original_mime_type);
+        d.metadata.set ("received_bytes", entry.received_bytes);
+        d.metadata.set ("referrer", entry.referrer);
+        d.metadata.set ("site_url", entry.site_url);
+        d.metadata.set ("start_time", entry.start_time);
+        d.metadata.set (
+            "state",
+            mobius::framework::get_domain_text (DOWNLOAD_STATES, entry.state)
+        );
+        d.metadata.set ("tab_referrer_url", entry.tab_referrer_url);
+        d.metadata.set ("tab_url", entry.tab_url);
+        d.metadata.set ("target_path", entry.target_path);
+        d.metadata.set ("total_bytes", entry.total_bytes);
+        d.metadata.set ("transient", entry.transient);
+        d.metadata.set ("url", entry.url);
         d.f = f;
 
         downloads_.push_back (d);

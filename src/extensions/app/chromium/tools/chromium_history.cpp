@@ -69,47 +69,58 @@ show_history (const std::string &path)
     {
         std::cout << std::endl;
         std::cout << "\tIndex: " << entry.idx << std::endl;
-        std::cout << "\tSchema version: " << entry.schema_version << std::endl;
-        std::cout << "\tFavicon ID: " << entry.favicon_id << std::endl;
-        std::cout << "\tHidden: " << (entry.hidden ? "Yes" : "No") << std::endl;
-        std::cout << "\tID: " << entry.id << std::endl;
-        std::cout << "\tLast visit time: " << entry.last_visit_time << std::endl;
-        std::cout << "\tTitle: " << entry.title << std::endl;
-        std::cout << "\tTyped count: " << entry.typed_count << std::endl;
-        std::cout << "\tURL: " << entry.url << std::endl;
-        std::cout << "\tVisit count: " << entry.visit_count << std::endl;
+        std::cout << "\tActivity time: " << entry.activity_time << std::endl;
         std::cout << "\tApp ID: " << entry.app_id << std::endl;
         std::cout << "\tConsider for NTP most visited: "
-                  << (entry.consider_for_ntp_most_visited ? "Yes" : "No")
+                  << entry.consider_for_ntp_most_visited << std::endl;
+        std::cout << "\tDisplay count: " << entry.display_count << std::endl;
+        std::cout << "\tDisplay time: " << entry.display_time << std::endl;
+        std::cout << "\tEMDD main: " << entry.emdd_main << std::endl;
+        std::cout << "\tEMDD main version: " << entry.emdd_main_ver
                   << std::endl;
         std::cout << "\tExternal referrer URL: " << entry.external_referrer_url
                   << std::endl;
-        std::cout << "\tFrom visit ID: " << entry.from_visit << std::endl;
-        std::cout << "\tVisit ID: " << entry.visit_id << std::endl;
+        std::cout << "\tFavicon ID: " << entry.favicon_id << std::endl;
+        std::cout << "\tFrom visit: " << entry.from_visit << std::endl;
+        std::cout << "\tHidden: " << entry.hidden << std::endl;
+        std::cout << "\tID: " << entry.id << std::endl;
         std::cout << "\tIncremented omnibox typed score: "
-                  << (entry.incremented_omnibox_typed_score ? "Yes" : "No")
+                  << entry.incremented_omnibox_typed_score << std::endl;
+        std::cout << "\tIs indexed: " << entry.is_indexed << std::endl;
+        std::cout << "\tIs known to sync: " << entry.is_known_to_sync
                   << std::endl;
-        std::cout << "\tIs known to sync: " << (entry.is_known_to_sync ? "Yes" : "No")
+        std::cout << "\tLast display: " << entry.last_display << std::endl;
+        std::cout << "\tLast visit time: " << entry.last_visit_time
                   << std::endl;
-        std::cout << "\tOpener visit ID: " << entry.opener_visit << std::endl;
+        std::cout << "\tLinks clicked count: " << entry.links_clicked_count
+                  << std::endl;
+        std::cout << "\tOpener visit: " << entry.opener_visit << std::endl;
+        std::cout << "\tOpen time: " << entry.open_time << std::endl;
         std::cout << "\tOriginator cache GUID: " << entry.originator_cache_guid
                   << std::endl;
-        std::cout << "\tOriginator from visit ID: " << entry.originator_from_visit
+        std::cout << "\tOriginator from visit: " << entry.originator_from_visit
                   << std::endl;
-        std::cout << "\tOriginator opener visit ID: " << entry.originator_opener_visit
-                  << std::endl;
+        std::cout << "\tOriginator opener visit: "
+                  << entry.originator_opener_visit << std::endl;
         std::cout << "\tOriginator visit ID: " << entry.originator_visit_id
                   << std::endl;
-        std::cout << "\tPublicly routable: "
-                  << (entry.publicly_routable ? "Yes" : "No") << std::endl;
+        std::cout << "\tPublicly routable: " << entry.publicly_routable
+                  << std::endl;
         std::cout << "\tSegment ID: " << entry.segment_id << std::endl;
-        std::cout << "\tTransition type: " << entry.transition << std::endl;
-        std::cout << "\tVisit URL: " << entry.visit_url << std::endl;
+        std::cout << "\tTitle: " << entry.title << std::endl;
+        std::cout << "\tTransition: " << entry.transition << std::endl;
+        std::cout << "\tTyped count: " << entry.typed_count << std::endl;
+        std::cout << "\tURL: " << entry.url << std::endl;
+        std::cout << "\tVisit count: " << entry.visit_count << std::endl;
         std::cout << "\tVisit duration: " << entry.visit_duration << std::endl;
+        std::cout << "\tVisited link ID: " << entry.visited_link_id
+                  << std::endl;
+        std::cout << "\tVisit ID: " << entry.visit_id << std::endl;
         std::cout << "\tVisit time: " << entry.visit_time << std::endl;
-        std::cout << "\tVisited link ID: " << entry.visited_link_id << std::endl;
     }
 
+    return;
+    
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Show download entries
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -153,7 +164,8 @@ show_history (const std::string &path)
         std::cout << "\tTab URL: " << entry.tab_url << std::endl;
         std::cout << "\tTarget path: " << entry.target_path << std::endl;
         std::cout << "\tTotal bytes: " << entry.total_bytes << std::endl;
-        std::cout << "\tTransient: " << (entry.transient ? "Yes" : "No") << std::endl;
+        std::cout << "\tTransient: " << (entry.transient ? "Yes" : "No")
+                  << std::endl;
         std::cout << "\tURL: " << entry.url << std::endl;
     }
 }
@@ -185,14 +197,14 @@ main (int argc, char **argv)
     {
         switch (opt)
         {
-        case 'h':
-            usage ();
-            exit (EXIT_SUCCESS);
-            break;
+            case 'h':
+                usage ();
+                exit (EXIT_SUCCESS);
+                break;
 
-        default:
-            usage ();
-            exit (EXIT_FAILURE);
+            default:
+                usage ();
+                exit (EXIT_FAILURE);
         }
     }
 
