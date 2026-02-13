@@ -152,6 +152,42 @@ tp_f_begin_italic (core_richtext_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>begin_link</i> method implementation
+// @param self Object
+// @param args Argument list
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_begin_link (core_richtext_o *self, PyObject *args)
+{
+    // Parse input args
+    std::string arg_url;
+
+    try
+    {
+        arg_url = mobius::py::get_arg_as_std_string (args, 0);
+    }
+    catch (const std::exception& e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // Execute C++ function
+    try
+    {
+        self->obj->begin_link (arg_url);
+    }
+    catch (const std::exception& e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
+    }
+
+    // return None
+    return mobius::py::pynone ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>begin_message_bubble</i> method implementation
 // @param self Object
 // @param args Argument list
@@ -272,6 +308,29 @@ tp_f_end_italic (core_richtext_o *self, PyObject *)
         self->obj->end_italic ();
     }
     catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
+    }
+
+    // return None
+    return mobius::py::pynone ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>end_link</i> method implementation
+// @param self Object
+// @param args Argument list
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_end_link (core_richtext_o *self, PyObject *)
+{
+    // Execute C++ function
+    try
+    {
+        self->obj->end_link ();
+    }
+    catch (const std::exception& e)
     {
         mobius::py::set_runtime_error (e.what ());
         return nullptr;
@@ -434,44 +493,6 @@ tp_f_add_newline (core_richtext_o *self, PyObject *)
     try
     {
         self->obj->add_newline ();
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-        return nullptr;
-    }
-
-    // return None
-    return mobius::py::pynone ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>add_hyperlink</i> method implementation
-// @param self Object
-// @param args Argument list
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_f_add_hyperlink (core_richtext_o *self, PyObject *args)
-{
-    // Parse input args
-    std::string arg_uri;
-    std::string arg_text;
-
-    try
-    {
-        arg_uri = mobius::py::get_arg_as_std_string (args, 0);
-        arg_text = mobius::py::get_arg_as_std_string (args, 1);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_invalid_type_error (e.what ());
-        return nullptr;
-    }
-
-    // Execute C++ function
-    try
-    {
-        self->obj->add_hyperlink (arg_uri, arg_text);
     }
     catch (const std::exception &e)
     {
@@ -661,43 +682,28 @@ tp_f_to_pango (core_richtext_o *self, PyObject *)
 static PyMethodDef tp_methods[] = {
     {"clear", (PyCFunction) tp_f_clear, METH_VARARGS, "Clear content"},
     {"size", (PyCFunction) tp_f_size, METH_VARARGS, "Get size"},
-    {"get_segments", (PyCFunction) tp_f_get_segments, METH_VARARGS,
-     "Get segments"},
+    {"get_segments", (PyCFunction) tp_f_get_segments, METH_VARARGS, "Get segments"},
     {"begin_bold", (PyCFunction) tp_f_begin_bold, METH_VARARGS, "Begin bold"},
-    {"begin_italic", (PyCFunction) tp_f_begin_italic, METH_VARARGS,
-     "Begin italic"},
-    {"begin_message_bubble", (PyCFunction) tp_f_begin_message_bubble,
-     METH_VARARGS, "Add reply"},
-    {"begin_strikethrough", (PyCFunction) tp_f_begin_strikethrough,
-     METH_VARARGS, "Begin strikethrough"},
-    {"begin_underline", (PyCFunction) tp_f_begin_underline, METH_VARARGS,
-     "Begin underline"},
+    {"begin_italic", (PyCFunction) tp_f_begin_italic, METH_VARARGS, "Begin italic"},
+    {"begin_link", (PyCFunction) tp_f_begin_link, METH_VARARGS, "Begin link"},
+    {"begin_message_bubble", (PyCFunction) tp_f_begin_message_bubble, METH_VARARGS, "Add reply"},
+    {"begin_strikethrough", (PyCFunction) tp_f_begin_strikethrough, METH_VARARGS, "Begin strikethrough"},
+    {"begin_underline", (PyCFunction) tp_f_begin_underline, METH_VARARGS, "Begin underline"},
     {"end_bold", (PyCFunction) tp_f_end_bold, METH_VARARGS, "End bold text"},
-    {"end_italic", (PyCFunction) tp_f_end_italic, METH_VARARGS,
-     "End italic text"},
-    {"end_message_bubble", (PyCFunction) tp_f_end_message_bubble, METH_VARARGS,
-     "End message bubble"},
-    {"end_strikethrough", (PyCFunction) tp_f_end_strikethrough, METH_VARARGS,
-     "End strikethrough"},
-    {"end_underline", (PyCFunction) tp_f_end_underline, METH_VARARGS,
-     "End underline"},
+    {"end_italic", (PyCFunction) tp_f_end_italic, METH_VARARGS, "End italic text"},
+    {"end_link", (PyCFunction) tp_f_end_link, METH_VARARGS, "End link"},
+    {"end_message_bubble", (PyCFunction) tp_f_end_message_bubble, METH_VARARGS, "End message bubble"},
+    {"end_strikethrough", (PyCFunction) tp_f_end_strikethrough, METH_VARARGS, "End strikethrough"},
+    {"end_underline", (PyCFunction) tp_f_end_underline, METH_VARARGS, "End underline"},
     {"add_text", (PyCFunction) tp_f_add_text, METH_VARARGS, "Add normal text"},
-    {"add_system_text", (PyCFunction) tp_f_add_system_text, METH_VARARGS,
-     "Add system text"},
-    {"add_newline", (PyCFunction) tp_f_add_newline, METH_VARARGS,
-     "Add newline"},
-    {"add_hyperlink", (PyCFunction) tp_f_add_hyperlink, METH_VARARGS,
-     "Add hyperlink"},
+    {"add_system_text", (PyCFunction) tp_f_add_system_text, METH_VARARGS, "Add system text"},
+    {"add_newline", (PyCFunction) tp_f_add_newline, METH_VARARGS, "Add newline"},
     {"add_emoji", (PyCFunction) tp_f_add_emoji, METH_VARARGS, "Add emoji char"},
     {"add_flag", (PyCFunction) tp_f_add_flag, METH_VARARGS, "Add flag char"},
-    {"to_html", (PyCFunction) tp_f_to_html, METH_VARARGS,
-     "Convert richtext to HTML"},
-    {"to_markdown", (PyCFunction) tp_f_to_markdown, METH_VARARGS,
-     "Convert richtext to Markdown"},
-    {"to_latex", (PyCFunction) tp_f_to_latex, METH_VARARGS,
-     "Convert richtext to LaTeX"},
-    {"to_pango", (PyCFunction) tp_f_to_pango, METH_VARARGS,
-     "Convert richtext to Pango"},
+    {"to_html", (PyCFunction) tp_f_to_html, METH_VARARGS, "Convert richtext to HTML"},
+    {"to_markdown", (PyCFunction) tp_f_to_markdown, METH_VARARGS, "Convert richtext to Markdown"},
+    {"to_latex", (PyCFunction) tp_f_to_latex, METH_VARARGS, "Convert richtext to LaTeX"},
+    {"to_pango", (PyCFunction) tp_f_to_pango, METH_VARARGS, "Convert richtext to Pango"},
     {nullptr, nullptr, 0, nullptr}, // sentinel
 };
 

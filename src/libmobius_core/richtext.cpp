@@ -294,6 +294,7 @@ class richtext::impl
     // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     impl () = default;
+    explicit impl (const std::vector<mobius::core::pod::map> &);
     impl (const impl &) = delete;
     impl (impl &&) = delete;
 
@@ -368,10 +369,30 @@ class richtext::impl
     std::string to_markdown () const;
     std::string to_latex () const;
     std::string to_pango () const;
+    std::vector<mobius::core::pod::map> to_pod () const;
 
   private:
     std::vector<segment> segments_;
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Constructor
+// @param segments Vector of segments to initialize richtext
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+richtext::impl::impl (const std::vector<mobius::core::pod::map> &segments)
+{
+    segments_.reserve (segments.size ());
+
+    std::transform (
+        segments.begin (), segments.end (), segments_.begin (),
+        [] (const mobius::core::pod::map &seg) -> segment
+        {
+            mobius::core::pod::map cmap = seg.clone ();
+            auto type = cmap.pop<std::string> ("type");
+            return {type, cmap};
+        }
+    );
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Begin bold
@@ -973,9 +994,33 @@ richtext::impl::to_pango () const
     return pango_text;
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Convert richtext to POD
+// @return Vector of POD maps representing segments
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<mobius::core::pod::map>
+richtext::impl::to_pod () const
+{
+    std::vector<mobius::core::pod::map> pod_segments (segments_.size ());
+
+    std::transform (
+        segments_.begin (), segments_.end (), pod_segments.begin (),
+        [] (const segment &segment)
+        {
+            mobius::core::pod::map pod_segment;
+            pod_segment.set ("type", segment.type);
+            pod_segment.update (segment.metadata);
+
+            return pod_segment;
+        }
+    );
+
+    return pod_segments;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief RichText constructor
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 richtext::richtext ()
     : impl_ (std::make_shared<impl> ())
 {
@@ -1220,6 +1265,16 @@ std::string
 richtext::to_pango () const
 {
     return impl_->to_pango ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Convert richtext to POD
+// @return Vector of POD maps representing segments
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<mobius::core::pod::map>
+richtext::to_pod () const
+{
+    return impl_->to_pod ();
 }
 
 } // namespace mobius::core

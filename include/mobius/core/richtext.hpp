@@ -45,6 +45,7 @@ class richtext
     // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     richtext ();
+    explicit richtext (const std::vector<mobius::core::pod::map> &);
     richtext (richtext &&) noexcept = default;
     richtext (const richtext &) noexcept = default;
 
@@ -87,6 +88,7 @@ class richtext
     std::string to_markdown () const;
     std::string to_latex () const;
     std::string to_pango () const;
+    std::vector<mobius::core::pod::map> to_pod () const;
 
   private:
     // @brief Implementation class forward declaration
