@@ -5,6 +5,9 @@ Mobius Forensic Toolkit 2.24
 	* Profiles: Added app-sticky-notes processor
 	* ice: Updated project homepage on About Dialog
 	* app-ares: Removed new_transaction/commit calls on function on_complete
+	* app-chromium: Improved browser detection to include other Chromium-based applications
+	* app-chromium: Improved download history loading with a new optimized query pattern
+	* app-chromium: Improved URL history loading with a new optimized query pattern
 	* app-emule: Removed new_transaction/commit calls on function on_complete
 	* app-emule: Enhanced profile::add_preferences_dat function with stricter file validation
 	* app-emule: Improved scanning performance for .part.met and .part.met.txtsrc files

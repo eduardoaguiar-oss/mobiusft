@@ -346,12 +346,14 @@ class richtext::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void begin_bold ();
     void begin_italic ();
+    void begin_link (const std::string &url);
     void begin_message_bubble (const std::string &, const std::string &);
     void begin_strikethrough ();
     void begin_underline ();
 
     void end_bold ();
     void end_italic ();
+    void end_link ();
     void end_message_bubble ();
     void end_strikethrough ();
     void end_underline ();
@@ -359,7 +361,6 @@ class richtext::impl
     void add_text (const std::string &);
     void add_system_text (const std::string &);
     void add_newline ();
-    void add_hyperlink (const std::string &, const std::string &);
     void add_emoji (const std::string &);
     void add_flag (const std::string &);
 
@@ -388,6 +389,16 @@ void
 richtext::impl::begin_italic ()
 {
     segments_.push_back ({"begin/i", {}});
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Begin hyperlink
+// @param url URL
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+richtext::impl::begin_link (const std::string &url)
+{
+    segments_.push_back ({"begin/link", {{"url", url}}});
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -439,6 +450,15 @@ void
 richtext::impl::end_italic ()
 {
     segments_.push_back ({"end/i", {}});
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief End hyperlink
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+richtext::impl::end_link ()
+{
+    segments_.push_back ({"end/link", {}});
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -532,17 +552,6 @@ richtext::impl::add_newline ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Add hyperlink
-// @param uri URI
-// @param text text
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-richtext::impl::add_hyperlink (const std::string &uri, const std::string &text)
-{
-    segments_.push_back ({"hyperlink", {{"uri", uri}, {"text", text}}});
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Add emoji char
 // @param id Emoji ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -584,6 +593,15 @@ richtext::impl::to_html () const
 
         else if (segment.type == "end/i")
             html_text += "</i>";
+
+        else if (segment.type == "begin/link")
+        {
+            auto url = segment.metadata.get<std::string> ("url");
+            html_text += "<a href=\"" + url + "\">";
+        }
+
+        else if (segment.type == "end/link")
+            html_text += "</a>";
 
         else if (segment.type == "begin/s")
             html_text += "<s>";
@@ -671,81 +689,6 @@ richtext::impl::to_html () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Convert richtext to Markdown
-// @return MarkDown markup text
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-richtext::impl::to_markdown () const
-{
-    std::string markdown_text;
-
-    for (const auto &segment : segments_)
-    {
-        if (segment.type == "begin/b")
-            markdown_text += "**";
-
-        else if (segment.type == "end/b")
-            markdown_text += "**";
-
-        else if (segment.type == "begin/i")
-            markdown_text += "*";
-
-        else if (segment.type == "end/i")
-            markdown_text += "*";
-
-        else if (segment.type == "begin/s")
-            markdown_text += "~~";
-
-        else if (segment.type == "end/s")
-            markdown_text += "~~";
-
-        else if (segment.type == "begin/u")
-            markdown_text += "<u>";
-
-        else if (segment.type == "end/u")
-            markdown_text += "</u>";
-
-        else if (segment.type == "text")
-        {
-            auto text = segment.metadata.get<std::string> ("content");
-            markdown_text += text;
-        }
-
-        else if (segment.type == "system_text")
-        {
-            auto text = segment.metadata.get<std::string> ("content");
-            markdown_text += std::format ("`{}`", text);
-        }
-
-        else if (segment.type == "hyperlink")
-        {
-            auto text = segment.metadata.get<std::string> ("text");
-            auto uri = segment.metadata.get<std::string> ("uri");
-            markdown_text += "[" + text + "](" + uri + ")";
-        }
-
-        else if (segment.type == "emoji")
-        {
-            auto id = segment.metadata.get<std::string> ("id");
-            markdown_text += ":" + id + ":";
-        }
-
-        else if (segment.type == "flag")
-        {
-            auto id = segment.metadata.get<std::string> ("id");
-            auto flag_char_it = FLAG_CHARS.find (id);
-
-            if (flag_char_it != FLAG_CHARS.end ())
-                markdown_text += flag_char_it->second;
-            else
-                markdown_text += ":unknown_flag:"; // Unknown flag
-        }
-    }
-
-    return markdown_text;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Convert richtext to LaTeX
 // @return LaTeX markup text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -766,6 +709,15 @@ richtext::impl::to_latex () const
             latex_text += "\\textit{";
 
         else if (segment.type == "end/i")
+            latex_text += "}";
+
+        else if (segment.type == "begin/link")
+        {
+            auto url = segment.metadata.get<std::string> ("url");
+            latex_text += "\\href{" + url + "}{";
+        }
+
+        else if (segment.type == "end/link")
             latex_text += "}";
 
         else if (segment.type == "begin/s")
@@ -828,6 +780,91 @@ richtext::impl::to_latex () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Convert richtext to Markdown
+// @return MarkDown markup text
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+richtext::impl::to_markdown () const
+{
+    std::string markdown_text;
+    std::string last_link;
+
+    for (const auto &segment : segments_)
+    {
+        if (segment.type == "begin/b")
+            markdown_text += "**";
+
+        else if (segment.type == "end/b")
+            markdown_text += "**";
+
+        else if (segment.type == "begin/i")
+            markdown_text += "*";
+
+        else if (segment.type == "end/i")
+            markdown_text += "*";
+
+        else if (segment.type == "begin/link")
+        {
+            last_link = segment.metadata.get<std::string> ("url");
+            markdown_text += "[";
+        }
+
+        else if (segment.type == "end/link")
+            markdown_text += "](" + last_link + ")";
+
+        else if (segment.type == "begin/s")
+            markdown_text += "~~";
+
+        else if (segment.type == "end/s")
+            markdown_text += "~~";
+
+        else if (segment.type == "begin/u")
+            markdown_text += "<u>";
+
+        else if (segment.type == "end/u")
+            markdown_text += "</u>";
+
+        else if (segment.type == "text")
+        {
+            auto text = segment.metadata.get<std::string> ("content");
+            markdown_text += text;
+        }
+
+        else if (segment.type == "system_text")
+        {
+            auto text = segment.metadata.get<std::string> ("content");
+            markdown_text += std::format ("`{}`", text);
+        }
+
+        else if (segment.type == "hyperlink")
+        {
+            auto text = segment.metadata.get<std::string> ("text");
+            auto uri = segment.metadata.get<std::string> ("uri");
+            markdown_text += "[" + text + "](" + uri + ")";
+        }
+
+        else if (segment.type == "emoji")
+        {
+            auto id = segment.metadata.get<std::string> ("id");
+            markdown_text += ":" + id + ":";
+        }
+
+        else if (segment.type == "flag")
+        {
+            auto id = segment.metadata.get<std::string> ("id");
+            auto flag_char_it = FLAG_CHARS.find (id);
+
+            if (flag_char_it != FLAG_CHARS.end ())
+                markdown_text += flag_char_it->second;
+            else
+                markdown_text += ":unknown_flag:"; // Unknown flag
+        }
+    }
+
+    return markdown_text;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Convert richtext to Pango
 // @return Pango markup text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -838,7 +875,20 @@ richtext::impl::to_pango () const
 
     for (const auto &segment : segments_)
     {
-        if (segment.type == "begin/b")
+        if (segment.type == "text")
+        {
+            auto text = segment.metadata.get<std::string> ("content");
+            pango_text += mobius::core::string::html_escape (text);
+        }
+
+        else if (segment.type == "system_text")
+        {
+            auto text = segment.metadata.get<std::string> ("content");
+            pango_text += "<span color=\"#77b\">" +
+                          mobius::core::string::html_escape (text) + "</span>";
+        }
+
+        else if (segment.type == "begin/b")
             pango_text += "<b>";
 
         else if (segment.type == "end/b")
@@ -849,6 +899,16 @@ richtext::impl::to_pango () const
 
         else if (segment.type == "end/i")
             pango_text += "</i>";
+
+        else if (segment.type == "begin/link")
+        {
+            auto url = segment.metadata.get<std::string> ("url");
+            pango_text +=
+                "<span underline=\"single\" color=\"blue\">" + url + " [";
+        }
+
+        else if (segment.type == "end/link")
+            pango_text += "]</span>";
 
         else if (segment.type == "begin/s")
             pango_text += "<s>";
@@ -862,26 +922,26 @@ richtext::impl::to_pango () const
         else if (segment.type == "end/u")
             pango_text += "</u>";
 
-        else if (segment.type == "text")
+        else if (segment.type == "begin/message_bubble")
         {
-            auto text = segment.metadata.get<std::string> ("content");
-            pango_text += mobius::core::string::html_escape (text);
-        }
+            auto timestamp = segment.metadata.get<std::string> ("timestamp");
+            auto author = segment.metadata.get<std::string> ("author");
 
-        else if (segment.type == "system_text")
-        {
-            auto text = segment.metadata.get<std::string> ("content");
-            pango_text += "<span foreground=\"gray\">" +
-                          mobius::core::string::html_escape (text) + "</span>";
-        }
-
-        else if (segment.type == "hyperlink")
-        {
-            auto text = segment.metadata.get<std::string> ("text");
-            auto uri = segment.metadata.get<std::string> ("uri");
+            pango_text += "<span>";
+            pango_text += std::format (
+                "\n<span weight=\"bold\" foreground=\"#1B72E8\">{}</span>",
+                author
+            );
+            pango_text += std::format (
+                "\n<span size=\"x-small\" foreground=\"#667781\">  {}</span>",
+                timestamp
+            );
             pango_text +=
-                "<span underline=\"single\" color=\"blue\">" + uri + "</span>";
+                "\n<span background=\"#E1FEC6\" foreground=\"#000000\">";
         }
+
+        else if (segment.type == "end/message_bubble")
+            pango_text += "</span>\n</span>";
 
         else if (segment.type == "emoji")
         {
@@ -889,10 +949,11 @@ richtext::impl::to_pango () const
             auto emoji_char_it = EMOJI_CHARS.find (id);
 
             if (emoji_char_it != EMOJI_CHARS.end ())
-                pango_text += "<span font=\"Emoji\" size=\"x-large\">" +
+                pango_text += "<span size=\"x-large\">" +
                               emoji_char_it->second + "</span>";
-            else
-                pango_text += "<span size=\"x-large\">(" + id + ")</span>";
+            else // unknown emoji
+                pango_text += "<span color=\"#00d000\" weight=\"bold\">(" + id +
+                              ")</span>";
         }
 
         else if (segment.type == "flag")
@@ -901,10 +962,11 @@ richtext::impl::to_pango () const
             auto flag_char_it = FLAG_CHARS.find (id);
 
             if (flag_char_it != FLAG_CHARS.end ())
-                pango_text += flag_char_it->second;
-            else
-                pango_text +=
-                    "<span font=\"Emoji\" size=\"x-large\">🏳️</span>"; // Unknown flag
+                pango_text += std::format (
+                    "<span size=\"x-large\">{}</span>", flag_char_it->second
+                );
+            else // unknown flag
+                pango_text += "<span size=\"x-large\">🏳️</span>";
         }
     }
 
@@ -977,6 +1039,16 @@ richtext::begin_italic ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Begin hyperlink
+// @param url URL
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+richtext::begin_link (const std::string &url)
+{
+    impl_->begin_link (url);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Add reply
 // @param timestamp Timestamp
 // @param author Author
@@ -1023,6 +1095,15 @@ void
 richtext::end_italic ()
 {
     impl_->end_italic ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief End hyperlink
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+richtext::end_link ()
+{
+    impl_->end_link ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1079,17 +1160,6 @@ void
 richtext::add_newline ()
 {
     impl_->add_newline ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Add hyperlink
-// @param uri URI
-// @param text text
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-richtext::add_hyperlink (const std::string &uri, const std::string &text)
-{
-    impl_->add_hyperlink (uri, text);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

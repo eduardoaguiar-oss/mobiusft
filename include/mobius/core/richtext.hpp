@@ -65,12 +65,14 @@ class richtext
 
     void begin_bold ();
     void begin_italic ();
+    void begin_link (const std::string &url);
     void begin_message_bubble (const std::string &, const std::string &);
     void begin_strikethrough ();
     void begin_underline ();
 
     void end_bold ();
     void end_italic ();
+    void end_link ();
     void end_message_bubble ();
     void end_strikethrough ();
     void end_underline ();
@@ -78,7 +80,6 @@ class richtext
     void add_text (const std::string &);
     void add_system_text (const std::string &);
     void add_newline ();
-    void add_hyperlink (const std::string &, const std::string &);
     void add_emoji (const std::string &);
     void add_flag (const std::string &);
 
