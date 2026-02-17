@@ -162,6 +162,7 @@ FORMATTERS = {
     "bin2text": formatter_bin2text,
     "bool": formatter_bool,
     "chat-message-recipients": recipients_formatter,
+    "richtext": lambda pod: mobius.core.richtext(pod).to_pango(),
     "rich-text": text_formatter,
     "datetime": pymobius.to_string,
     "duration": formatter_duration,
@@ -172,58 +173,11 @@ FORMATTERS = {
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Data domains
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-DOMAINS = {
-    "evidence.contact.gender": {1 : "Male", 2 : "Female"},
-}
-
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Generic getter
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def getter_generic(obj, attr_id):
     return getattr(obj, attr_id, None)
 
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Domain value getter
-# @param obj Object
-# @param attr_id Attribute ID
-# @return domain value if domain is found or "Unknown: {value}", otherwise
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-def getter_domain(obj, attr_id):
-    domain_id = f'evidence.{obj.type}.{attr_id}'
-    domain = DOMAINS.get(domain_id, {})
-    value = getattr(obj, attr_id, None)
-    return domain.get(value, f'Unknown ({value})')
-
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Cookie value getter
-# @param obj Object
-# @param attr_id Attribute ID
-# @return '<ENCRYPTED>' if <attr_id>_is_encrypted is True, otherwise the value of <attr_id>
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-def getter_cookie_value(obj, attr_id):
-    is_encrypted = getattr(obj, f"{attr_id}_is_encrypted", False)
-
-    if is_encrypted:
-        return '<ENCRYPTED>'
-
-    value = getattr(obj, attr_id, None)
-    if not value:
-        return ''
-
-    elif isinstance(value, str):
-        return value
-
-    try:
-        return value.decode('utf-8')
-    except UnicodeDecodeError:
-        pass
-
-    return '<BINARY> ' + mobius.core.encoder.hexstring(value)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Encrypted value getter
@@ -247,8 +201,6 @@ def getter_encrypted_value(obj, attr_id):
 # @brief Getters
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 GETTERS = {
-    "cookie_value": getter_cookie_value,
-    "domain": getter_domain,
     "encrypted": getter_encrypted_value,
 }
 
@@ -617,7 +569,7 @@ MODEL = [
                       args(id='last_modification_time', name="Last Modification Date/time", format='datetime', is_sortable=True),
                       args(id='username', name="User name", is_sortable=True),
                       args(id='app_name', name="Application", is_sortable=True),
-                      args(id="body", format="rich-text", is_sortable=True, is_markup=True),
+                      args(id="body", format="richtext", is_sortable=True, is_markup=True),
                   ]),
          ],
          detail_views=[
@@ -627,7 +579,7 @@ MODEL = [
                       args(id='last_modification_time', name="Last Modification Date/time"),
                       args(id='username', name="User name"),
                       args(id='app_name', name="Application"),
-                      args(id="body", format="rich-text"),
+                      args(id="body", format="richtext"),
                   ]),
          ]
          ),

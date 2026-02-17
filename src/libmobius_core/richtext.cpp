@@ -384,7 +384,7 @@ richtext::impl::impl (const std::vector<mobius::core::pod::map> &segments)
     segments_.reserve (segments.size ());
 
     std::transform (
-        segments.begin (), segments.end (), segments_.begin (),
+        segments.begin (), segments.end (), std::back_inserter (segments_),
         [] (const mobius::core::pod::map &seg) -> segment
         {
             mobius::core::pod::map cmap = seg.clone ();
@@ -1026,10 +1026,19 @@ richtext::richtext ()
 {
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief RichText constructor with segments
+// @param segments Vector of segments to initialize richtext
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+richtext::richtext (const std::vector<mobius::core::pod::map> &segments)
+    : impl_ (std::make_shared<impl> (segments))
+{
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Check if richtext is not empty
 // @return true if richtext has content, false otherwise
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 richtext::
 operator bool () const noexcept
 {

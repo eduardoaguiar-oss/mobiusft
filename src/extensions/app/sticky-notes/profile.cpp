@@ -19,6 +19,7 @@
 #include <mobius/core/io/line_reader.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/mediator.hpp>
+#include <mobius/core/richtext.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <mobius/framework/utils.hpp>
 #include "file_plum_sqlite.hpp"
@@ -29,85 +30,81 @@
 // - https://github.com/iamhunggy/StickyParser
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-namespace mobius::extension::app::sticky_notes
+namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Parse message line
 // @param line Line to parse
-// @return Parsed elements
+// @param rt Richtext object to populate
 //
 // Raw text escape sequences:
 // - \b Start bold text
 // - \b0 End bold text
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector<mobius::core::pod::map>
-parse_line (const std::string &text)
+void
+parse_line (const std::string &text, mobius::core::richtext &rt)
 {
-    std::vector<mobius::core::pod::map> elements;
-
     mobius::core::log log (__FILE__, __FUNCTION__);
     size_t i = 0;
 
     while (i < text.size ())
     {
-        // Search for next escape sequence
         size_t pos = text.find ('\\', i);
 
-        // Generate text element, if any
-        size_t end_pos = (pos == std::string::npos) ? text.size () : pos;
-
-        if (i < end_pos)
+        // No more escape sequences. Generate text till the end of the string
+        if (pos == std::string::npos)
         {
-            elements.emplace_back (
-                mobius::core::pod::map {
-                    {"type", "text"},
-                    {"text", text.substr (i, end_pos - i)}
-                }
-            );
-            i = end_pos;
+            rt.add_text (text.substr (i));
+            i = text.size ();
         }
-
-        // Handle escape command
-        if (pos != std::string::npos)
+        
+        else
         {
-            // Parse command
+            // Generate text, if necessary
+            if (i < pos)
+                rt.add_text (text.substr (i, pos  - i));
+
+            // Get command
             size_t cmd_start = pos + 1;
             size_t cmd_end = text.find_first_of (" \\", cmd_start);
-            std::string command = text.substr (
-                cmd_start, cmd_end == std::string::npos ? std::string::npos
-                                                        : cmd_end - cmd_start
-            );
+            std::string command;
+            
+            if (cmd_end == std::string::npos)
+            {
+                command = text.substr (cmd_start);
+                i = text.size ();
+            }
+            
+            else
+            {
+                command = text.substr (cmd_start, cmd_end - cmd_start);
+                i = cmd_end;
+            }
 
-            if (command == "\\b")
-                elements.emplace_back (
-                    mobius::core::pod::map {{"type", "start/b"}}
-                );
+            // Generate segment according to command
+            if (command == "b")
+                rt.begin_bold ();
 
-            else if (command == "\\b0")
-                elements.emplace_back (
-                    mobius::core::pod::map {{"type", "end/b"}}
-                );
+            else if (command == "b0")
+                rt.end_bold ();
 
             else
                 log.development (__LINE__, "Unhandled command: \\" + command);
-
-            i = (cmd_end == std::string::npos) ? text.size () : cmd_end;
+          
         }
     }
-
-    return elements;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Parse raw text into blocks structures
+// @brief Parse note text into richtext object
 // @param raw_text Raw text
-// @return Vector of elements
-// Each line starting with "\id=" indicates a new block.
+// @return Richtext object
+// Each line starting with "\id=" indicates a new paragraph.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector<mobius::core::pod::map>
-parse_blocks (const std::string &raw_text)
+mobius::core::richtext
+parse_note (const std::string &raw_text)
 {
-    std::vector<mobius::core::pod::map> elements;
+    mobius::core::richtext rt;
 
     mobius::core::io::line_reader lr (raw_text);
     std::string line;
@@ -117,26 +114,21 @@ parse_blocks (const std::string &raw_text)
         if (line.starts_with (R"(\id=)"))
         {
             // If line has more than just the ID, parse it
-            if (line.size () > 41)
-            {
-                auto line_elements = parse_line (line.substr (41));
-
-                std::copy (
-                    line_elements.begin (), line_elements.end (),
-                    std::back_inserter (elements)
-                );
-            }
+            if (line.size () > 40)
+                parse_line (line.substr (40), rt);
 
             // Add newline element
-            elements.emplace_back (
-                mobius::core::pod::map {{"type", "text"}, {"text", "\n"}}
-            );
+            rt.add_newline ();
         }
     }
 
-    return elements;
+    return rt;
 }
 
+} // namespace
+
+namespace mobius::extension::app::sticky_notes
+{
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Set folder
 // @param f Folder
@@ -210,7 +202,7 @@ profile::add_plum_sqlite_file (const mobius::core::io::file &f)
             note n;
             n.creation_time = nt.created_at;
             n.last_modification_time = nt.updated_at;
-            n.body = parse_blocks (nt.text);
+            n.body = parse_note (nt.text).to_pod ();
 
             // Metadata
             n.metadata.set ("record_idx", nt.idx);
