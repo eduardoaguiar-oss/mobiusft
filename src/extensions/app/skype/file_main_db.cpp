@@ -1504,15 +1504,10 @@ file_main_db::_load_messages (mobius::core::database::database &db)
 
             // Parse message content
             parser.parse ();
-            obj.content = parser.get_content ();
+            obj.content = parser.get_richtext ();
 
-            if (obj.content.empty ())
-            {
-                obj.content = {mobius::core::pod::map {
-                    {"type", "text"},
-                    {"text", obj.body_xml}
-                }};
-            }
+            if (!obj.content)
+                obj.content.add_text (obj.body_xml);
 
             // Add messages to the list
             messages_.emplace_back (std::move (obj));

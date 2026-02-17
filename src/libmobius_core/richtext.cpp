@@ -15,10 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/core/log.hpp>
 #include <mobius/core/richtext.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <format>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace
 {
@@ -279,6 +281,12 @@ static const std::unordered_map<std::string, std::string> EMOJI_CHARS = {
     {"yoga", "🧘"},
     {"zombie", "🧟"},
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Unknown Data
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static std::unordered_set<std::string> UNKNOWN_EMOJIS;
+static std::unordered_set<std::string> UNKNOWN_FLAGS;
 
 } // namespace
 
@@ -579,7 +587,18 @@ richtext::impl::add_newline ()
 void
 richtext::impl::add_emoji (const std::string &id)
 {
+    // Add segment
     segments_.push_back ({"emoji", {{"id", id}}});
+
+    // Log unknown emoji only once
+    if (EMOJI_CHARS.find (id) == EMOJI_CHARS.end () &&
+        UNKNOWN_EMOJIS.find (id) == UNKNOWN_EMOJIS.end ())
+    {
+        mobius::core::log log (__FILE__, __FUNCTION__);
+        log.development (__LINE__, "Unknown emoji: " + id);
+
+        UNKNOWN_EMOJIS.insert (id);
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -589,7 +608,18 @@ richtext::impl::add_emoji (const std::string &id)
 void
 richtext::impl::add_flag (const std::string &id)
 {
+    // Add segment
     segments_.push_back ({"flag", {{"id", id}}});
+
+    // Log unknown flag only once
+    if (FLAG_CHARS.find (id) == FLAG_CHARS.end () &&
+        UNKNOWN_FLAGS.find (id) == UNKNOWN_FLAGS.end ())
+    {
+        mobius::core::log log (__FILE__, __FUNCTION__);
+        log.development (__LINE__, "Unknown flag: " + id);
+
+        UNKNOWN_FLAGS.insert (id);
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

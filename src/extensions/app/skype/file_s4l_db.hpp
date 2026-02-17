@@ -23,6 +23,7 @@
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/reader.hpp>
 #include <mobius/core/pod/map.hpp>
+#include <mobius/core/richtext.hpp>
 #include <cstdint>
 #include <string>
 #include <unordered_map>
@@ -271,7 +272,7 @@ class file_s4l_db
         std::string type;
 
         // @brief Parsed Content
-        std::vector<mobius::core::pod::map> parsed_content;
+        mobius::core::richtext parsed_content;
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

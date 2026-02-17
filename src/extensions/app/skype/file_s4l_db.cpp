@@ -632,41 +632,25 @@ file_s4l_db::_load_messages (mobius::core::database::database &db)
                     m.parsed_content = parse_notice (m.content);
 
                 else if (m.type == "Text")
-                {
-                    m.parsed_content = {mobius::core::pod::map {
-                        {"type", "text"},
-                        {"text", m.content}
-                    }};
-                }
+                    m.parsed_content.add_text (m.content);
 
-                else if (mobius::core::string::startswith (
-                             m.type, "RichText"
-                         ) ||
-                         mobius::core::string::startswith (m.type, "Event/") ||
-                         mobius::core::string::startswith (
-                             m.type, "ThreadActivity/"
-                         ))
+                else if (m.type.starts_with ("RichText") ||
+                         m.type.starts_with ("Event/") ||
+                         m.type.starts_with ("ThreadActivity/"))
                 {
                     message_parser parser (m.content);
                     parser.parse ();
 
-                    m.parsed_content = parser.get_content ();
+                    m.parsed_content = parser.get_richtext ();
 
-                    if (m.parsed_content.empty ())
-                    {
-                        m.parsed_content = {mobius::core::pod::map {
-                            {"type", "text"},
-                            {"text", m.content}
-                        }};
-                    }
+                    if (!m.parsed_content)
+                        m.parsed_content.add_text (m.content);
                 }
 
                 else
                 {
-                    m.parsed_content = {mobius::core::pod::map {
-                        {"type", "text"},
-                        {"text", m.content}
-                    }};
+                    m.parsed_content.add_text (m.content);
+
                     log.development (
                         __LINE__, "Unhandled message type: " + m.type +
                                       ". Content: " + m.content

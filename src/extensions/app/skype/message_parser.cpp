@@ -21,276 +21,6 @@
 #include <mobius/core/log.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <format>
-#include <unordered_map>
-#include <unordered_set>
-
-namespace
-{
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Emoji representation as Unicode char
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static const std::unordered_map<std::string, std::string> EMOJI_CHARS = {
-    {"angel", "👼"},
-    {"anger", "🤯"},
-    {"angry", "😠"},
-    {"bandit", "😈"},
-    {"banned", "🚫"},
-    {"bear", "🧸"},
-    {"bike", "🚴"},
-    {"bombed", "💣"},
-    {"blush", "😳"},
-    {"bomb", "💣"},
-    {"brokenheart", "💔"},
-    {"brb", "🕒"},
-    {"call", "📞"},
-    {"camera", "📷"},
-    {"catface", "🐱"},
-    {"champagne", "🍾"},
-    {"chocolate", "🍫"},
-    {"clap", "👏"},
-    {"clapping", "👏"},
-    {"clownface", "🤡"},
-    {"confused", "😕"},
-    {"coolguy", "😎"},
-    {"crying", "😢"},
-    {"danceparty", "🕺"},
-    {"devilface", "😈"},
-    {"disgust", "🤢"},
-    {"dogface", "🐶"},
-    {"dollarbill", "💵"},
-    {"dollar", "💵"},
-    {"dollars", "💵"},
-    {"dizzy", "😵"},
-    {"cake", "🎂"},
-    {"cash", "💰"},
-    {"cat", "🐈"},
-    {"claps", "👏"},
-    {"clown", "🤡"},
-    {"coffee_cup", "☕"},
-    {"coffee", "☕"},
-    {"cool", "😎"},
-    {"cry", "😢"},
-    {"cwl", "😂"},
-    {"dance", "🕺"},
-    {"devil", "😈"},
-    {"dog", "🐕"},
-    {"drink", "🍸"},
-    {"drunk", "🥴"},
-    {"dull", "🙄"},
-    {"emo", "🤯"},
-    {"envy", "😒"},
-    {"explode", "💣"},
-    {"explosion", "💣"},
-    {"evilgrin", "😈"},
-    {"facepalm", "🤦"},
-    {"fear", "😨"},
-    {"fingerscrossed", "🤞"},
-    {"flower", "🌸"},
-    {"flushed", "😳"},
-    {"frown", "☹"},
-    {"funny", "😂"},
-    {"giftbox", "🎁"},
-    {"ghost", "👻"},
-    {"gift", "🎁"},
-    {"glasses", "🕶"},
-    {"giggle", "🤭"},
-    {"handsinair", "🙌"},
-    {"happytears", "😂"},
-    {"happy", "🙂"},
-    {"heart", "❤"},
-    {"hearteyes", "😍"},
-    {"hearthands", "🤲"},
-    {"heidy", "🐿"},
-    {"hi", "👋"},
-    {"highfive", "🖐"},
-    {"hooray", "🎉"},
-    {"hug", "🧸"},
-    {"idea", "💡"},
-    {"iheartyou", "❤️"},
-    {"iloveyou", "❤️"},
-    {"innocent", "😇"},
-    {"inlove", "🥰"},
-    {"joy", "😂"},
-    {"kissing", "😗"},
-    {"kiss", "😗"},
-    {"ladyvamp", "🧛"},
-    {"ladyvampire", "🧛"},
-    {"laughing", "😆"},
-    {"laugh", "😃"},
-    {"like", "👍"},
-    {"lips", "💋"},
-    {"lipssealed", "🤐"},
-    {"loudlycrying", "😭"},
-    {"mansignlove", ""},
-    {"makeup", "💄"},
-    {"monocle", "🧐"},
-    {"mail", "✉"},
-    {"meh", "😑"},
-    {"money", "💰"},
-    {"mmm", "😋"},
-    {"monkey", "🐒"},
-    {"mooning", "🌝"},
-    {"muscle", "💪"},
-    {"muscleman", "💪"},
-    {"music", "🎶"},
-    {"nerd", "🤓"},
-    {"nerdy", "🤓"},
-    {"ninja", "🥷"},
-    {"no", "👎"},
-    {"nod", "👍"},
-    {"notworthy", "🙄"},
-    {"okeydokey", "👌"},
-    {"ok", "👌"},
-    {"party", "🥳"},
-    {"phone", "📱"},
-    {"pig", "🐖"},
-    {"poop", "💩"},
-    {"pray", "🙏"},
-    {"pizza", "🍕"},
-    {"praying", "🙏"},
-    {"puke", "🤮"},
-    {"pumpkin", "🎃"},
-    {"punch", "👊"},
-    {"priidu", "🤠"},
-    {"rolleyes", "🙄"},
-    {"robot", "🤖"},
-    {"rose", "🌹"},
-    {"rain", "🌧"},
-    {"roflmao", "🤣"},
-    {"rofl", "🤣"},
-    {"rocket", "🚀"},
-    {"rock", "🤘"},
-    {"sadface", "😞"},
-    {"sadcat", "😿"},
-    {"sadcry", "😭"},
-    {"sad", "😧"},
-    {"sadness", "😢"},
-    {"satisfied", "😌"},
-    {"sarcastic", "😒"},
-    {"scared", "😱"},
-    {"scream", "😱"},
-    {"shocked", "😲"},
-    {"shake", "🤝"},
-    {"shy", "😊"},
-    {"sick", "🤢"},
-    {"sleeping", "😴"},
-    {"skype", "💬"},
-    {"skull", "💀"},
-    {"sleepy", "😪"},
-    {"smile", "😄"},
-    {"smirk", "😏"},
-    {"speechless", "😐"},
-    {"squirrel", "🐿"},
-    {"star", "⭐"},
-    {"stareyes", "🤩"},
-    {"sun", "🌞"},
-    {"surprised", "😲"},
-    {"swear", "🤬"},
-    {"stop", "✋"},
-    {"sweat", "😓"},
-    {"think", "🤔"},
-    {"time", "⏲"},
-    {"tongueout", "😛"},
-    {"tmi", "🤭"},
-    {"toothygrin", "😁"},
-    {"tongue", "😛"},
-    {"thumbsdown", "👎"},
-    {"thumbsup", "👍"},
-    {"tired", "😫"},
-    {"tumbleweed", "🌵"},
-    {"unhappy", "☹"},
-    {"unamused", "😒"},
-    {"vampire", "🧛"},
-    {"victory", "✌"},
-    {"waiting", "⏳"},
-    {"wavehand", "👋"},
-    {"wave", "👋"},
-    {"weary", "😩"},
-    {"whistle", "😗"},
-    {"winkey", "😉"},
-    {"woozy", "🥴"},
-    {"wasntme", "🙄"},
-    {"wave", "🌊"},
-    {"whew", "😮‍💨"},
-    {"wink", "😉"},
-    {"womanblowkiss", "💋"},
-    {"womanfacepalm", "🤦‍♀️"},
-    {"worry", "😟"},
-    {"wonder", "🤔"},
-    {"xd", "😆"},
-    {"xmasheart", "💖"},
-    {"xmasyes", "👍"},
-    {"yawned", "🥱"},
-    {"yawn", "🥱"},
-    {"yes", "👍"},
-    {"yoga", "🧘"},
-    {"zombie", "🧟"},
-};
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Flags representation as Unicode char
-// @see ISO-3166
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static const std::unordered_map<std::string, std::string> FLAG_CHARS = {
-    {"ad", "🇦🇩"}, {"ae", "🇦🇪"}, {"af", "🇦🇫"}, {"ag", "🇦🇬"}, {"ai", "🇦🇮"},
-    {"al", "🇦🇱"}, {"am", "🇦🇲"}, {"ao", "🇦🇴"}, {"aq", "🇦🇶"}, {"ar", "🇦🇷"},
-    {"as", "🇦🇸"}, {"at", "🇦🇹"}, {"au", "🇦🇺"}, {"aw", "🇦🇼"}, {"ax", "🇦🇽"},
-    {"az", "🇦🇿"}, {"ba", "🇧🇦"}, {"bb", "🇧🇧"}, {"bd", "🇧🇩"}, {"be", "🇧🇪"},
-    {"bf", "🇧🇫"}, {"bg", "🇧🇬"}, {"bh", "🇧🇭"}, {"bi", "🇧🇮"}, {"bj", "🇧🇯"},
-    {"bl", "🇧🇱"}, {"bm", "🇧🇲"}, {"bn", "🇧🇳"}, {"bo", "🇧🇴"}, {"bq", "🇧🇶"},
-    {"br", "🇧🇷"}, {"bs", "🇧🇸"}, {"bt", "🇧🇹"}, {"bv", "🇧🇻"}, {"bw", "🇧🇼"},
-    {"by", "🇧🇾"}, {"bz", "🇧🇿"}, {"ca", "🇨🇦"}, {"cc", "🇨🇨"}, {"cd", "🇨🇩"},
-    {"cf", "🇨🇫"}, {"cg", "🇨🇬"}, {"ch", "🇨🇭"}, {"ci", "🇨🇮"}, {"ck", "🇨🇰"},
-    {"cl", "🇨🇱"}, {"cm", "🇨🇲"}, {"cn", "🇨🇳"}, {"co", "🇨🇴"}, {"cr", "🇨🇷"},
-    {"cu", "🇨🇺"}, {"cv", "🇨🇻"}, {"cw", "🇨🇼"}, {"cx", "🇨🇽"}, {"cy", "🇨🇾"},
-    {"cz", "🇨🇿"}, {"de", "🇩🇪"}, {"dj", "🇩🇯"}, {"dk", "🇩🇰"}, {"dm", "🇩🇲"},
-    {"do", "🇩🇴"}, {"dz", "🇩🇿"}, {"ec", "🇪🇨"}, {"ee", "🇪🇪"}, {"eg", "🇪🇬"},
-    {"eh", "🇪🇭"}, {"er", "🇪🇷"}, {"es", "🇪🇸"}, {"et", "🇪🇹"}, {"fi", "🇫🇮"},
-    {"fj", "🇫🇯"}, {"fk", "🇫🇰"}, {"fm", "🇫🇲"}, {"fo", "🇫🇴"}, {"fr", "🇫🇷"},
-    {"ga", "🇬🇦"}, {"gb", "🇬🇧"}, {"gd", "🇬🇩"}, {"ge", "🇬🇪"}, {"gf", "🇬🇫"},
-    {"gg", "🇬🇬"}, {"gh", "🇬🇭"}, {"gi", "🇬🇮"}, {"gl", "🇬🇱"}, {"gm", "🇬🇲"},
-    {"gn", "🇬🇳"}, {"gp", "🇬🇵"}, {"gq", "🇬🇶"}, {"gr", "🇬🇷"}, {"gs", "🇬🇸"},
-    {"gt", "🇬🇹"}, {"gu", "🇬🇺"}, {"gw", "🇬🇼"}, {"gy", "🇬🇾"}, {"hk", "🇭🇰"},
-    {"hm", "🇭🇲"}, {"hn", "🇭🇳"}, {"hr", "🇭🇷"}, {"ht", "🇭🇹"}, {"hu", "🇭🇺"},
-    {"id", "🇮🇩"}, {"ie", "🇮🇪"}, {"il", "🇮🇱"}, {"im", "🇮🇲"}, {"in", "🇮🇳"},
-    {"io", "🇮🇴"}, {"iq", "🇮🇶"}, {"ir", "🇮🇷"}, {"is", "🇮🇸"}, {"it", "🇮🇹"},
-    {"je", "🇯🇪"}, {"jm", "🇯🇲"}, {"jo", "🇯🇴"}, {"jp", "🇯🇵"}, {"ke", "🇰🇪"},
-    {"kg", "🇰🇬"}, {"kh", "🇰🇭"}, {"ki", "🇰🇮"}, {"km", "🇰🇲"}, {"kn", "🇰🇳"},
-    {"kp", "🇰🇵"}, {"kr", "🇰🇷"}, {"kw", "🇰🇼"}, {"ky", "🇰🇾"}, {"kz", "🇰🇿"},
-    {"la", "🇱🇦"}, {"lb", "🇱🇧"}, {"lc", "🇱🇨"}, {"li", "🇱🇮"}, {"lk", "🇱🇰"},
-    {"lr", "🇱🇷"}, {"ls", "🇱🇸"}, {"lt", "🇱🇹"}, {"lu", "🇱🇺"}, {"lv", "🇱🇻"},
-    {"ly", "🇱🇾"}, {"ma", "🇲🇦"}, {"mc", "🇲🇨"}, {"md", "🇲🇩"}, {"me", "🇲🇪"},
-    {"mf", "🇲🇫"}, {"mg", "🇲🇬"}, {"mh", "🇲🇭"}, {"mk", "🇲🇰"}, {"ml", "🇲🇱"},
-    {"mm", "🇲🇲"}, {"mn", "🇲🇳"}, {"mo", "🇲🇴"}, {"mp", "🇲🇵"}, {"mq", "🇲🇶"},
-    {"mr", "🇲🇷"}, {"ms", "🇲🇸"}, {"mt", "🇲🇹"}, {"mu", "🇲🇺"}, {"mv", "🇲🇻"},
-    {"mw", "🇲🇼"}, {"mx", "🇲🇽"}, {"my", "🇲🇾"}, {"mz", "🇲🇿"}, {"na", "🇳🇦"},
-    {"nc", "🇳🇨"}, {"ne", "🇳🇪"}, {"nf", "🇳🇫"}, {"ng", "🇳🇬"}, {"ni", "🇳🇮"},
-    {"nl", "🇳🇱"}, {"no", "🇳🇴"}, {"np", "🇳🇵"}, {"nr", "🇳🇷"}, {"nu", "🇳🇺"},
-    {"nz", "🇳🇿"}, {"om", "🇴🇲"}, {"pa", "🇵🇦"}, {"pe", "🇵🇪"}, {"pf", "🇵🇫"},
-    {"pg", "🇵🇬"}, {"ph", "🇵🇭"}, {"pk", "🇵🇰"}, {"pl", "🇵🇱"}, {"pm", "🇵🇲"},
-    {"pn", "🇵🇳"}, {"pr", "🇵🇷"}, {"ps", "🇵🇸"}, {"pt", "🇵🇹"}, {"pw", "🇵🇼"},
-    {"py", "🇵🇾"}, {"qa", "🇶🇦"}, {"re", "🇷🇪"}, {"ro", "🇷🇴"}, {"rs", "🇷🇸"},
-    {"ru", "🇷🇺"}, {"rw", "🇷🇼"}, {"sa", "🇸🇦"}, {"sb", "🇸🇧"}, {"sc", "🇸🇨"},
-    {"sd", "🇸🇩"}, {"se", "🇸🇪"}, {"sg", "🇸🇬"}, {"sh", "🇸🇭"}, {"si", "🇸🇮"},
-    {"sj", "🇸🇯"}, {"sk", "🇸🇰"}, {"sl", "🇸🇱"}, {"sm", "🇸🇲"}, {"sn", "🇸🇳"},
-    {"so", "🇸🇴"}, {"sr", "🇸🇷"}, {"ss", "🇸🇸"}, {"st", "🇸🇹"}, {"sv", "🇸🇻"},
-    {"sx", "🇸🇽"}, {"sy", "🇸🇾"}, {"sz", "🇸🇿"}, {"tc", "🇹🇨"}, {"td", "🇹🇩"},
-    {"tf", "🇹🇫"}, {"tg", "🇹🇬"}, {"th", "🇹🇭"}, {"tj", "🇹🇯"}, {"tk", "🇹🇰"},
-    {"tl", "🇹🇱"}, {"tm", "🇹🇲"}, {"tn", "🇹🇳"}, {"to", "🇹🇴"}, {"tr", "🇹🇷"},
-    {"tt", "🇹🇹"}, {"tv", "🇹🇻"}, {"tw", "🇹🇼"}, {"tz", "🇹🇿"}, {"ua", "🇺🇦"},
-    {"ug", "🇺🇬"}, {"um", "🇺🇲"}, {"us", "🇺🇸"}, {"uy", "🇺🇾"}, {"uz", "🇺🇿"},
-    {"va", "🇻🇦"}, {"vc", "🇻🇨"}, {"ve", "🇻🇪"}, {"vg", "🇻🇬"}, {"vi", "🇻🇮"},
-    {"vn", "🇻🇳"}, {"vu", "🇻🇺"}, {"wf", "🇼🇫"}, {"ws", "🇼🇸"}, {"ye", "🇾🇪"},
-    {"yt", "🇾🇹"}, {"za", "🇿🇦"}, {"zm", "🇿🇲"}, {"zw", "🇿🇼"},
-};
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Unknown Data
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static std::unordered_set<std::string> UNKNOWN_EMOJIS;
-static std::unordered_set<std::string> UNKNOWN_FLAGS;
-
-} // namespace
 
 namespace mobius::extension::app::skype
 {
@@ -301,46 +31,6 @@ namespace mobius::extension::app::skype
 message_parser::message_parser (const std::string &message)
     : parser_ (mobius::core::io::new_bytearray_reader (message))
 {
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Add element to content list
-// @param element Element to add
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-message_parser::add_element (const mobius::core::pod::map &element)
-{
-    const auto element_type = element.get<std::string> ("type");
-    const auto element_text =
-        mobius::core::string::strip (element.get<std::string> ("text"));
-
-    // Check if text or system message is empty
-    if ((element_type == "text" || element_type == "system") &&
-        element_text.empty ())
-        return;
-
-    // Try to merge text or system message with previous element
-    if (content_.size () > 0)
-    {
-        auto p_element = content_.back ();
-        const auto p_type = p_element.get<std::string> ("type");
-        const auto p_text = p_element.get<std::string> ("text");
-
-        if (p_type == "text" && element_type == "text")
-        {
-            p_element.set ("text", p_text + element_text);
-            return;
-        }
-
-        else if (p_type == "system" && element_type == "system")
-        {
-            p_element.set ("text", p_text + ". " + element_text);
-            return;
-        }
-    }
-
-    // Add new element
-    content_.push_back (element);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -361,7 +51,7 @@ message_parser::parse ()
         switch (e.get_type ())
         {
             case element_type::text:
-                _add_text_element (text);
+                richtext_.add_text (text);
                 break;
 
             case element_type::start_tag:
@@ -403,7 +93,7 @@ message_parser::_parse_start_tag (const std::string &tag)
         _parse_addmember ();
 
     else if (tag == "b")
-        add_element (mobius::core::pod::map {{"type", "start/b"}});
+        richtext_.begin_bold ();
 
     else if (tag == "contacts")
         _parse_contacts ();
@@ -424,7 +114,7 @@ message_parser::_parse_start_tag (const std::string &tag)
         _parse_historydisclosedupdate ();
 
     else if (tag == "i")
-        add_element (mobius::core::pod::map {{"type", "start/i"}});
+        richtext_.begin_italic ();
 
     else if (tag == "joiningenabledupdate")
         _parse_joiningenabledupdate ();
@@ -439,7 +129,7 @@ message_parser::_parse_start_tag (const std::string &tag)
         _parse_quote ();
 
     else if (tag == "s")
-        add_element (mobius::core::pod::map {{"type", "start/s"}});
+        richtext_.begin_strikethrough ();
 
     else if (tag == "sms")
         _parse_sms ();
@@ -469,22 +159,19 @@ message_parser::_parse_end_tag (const std::string &tag)
     mobius::core::pod::map element;
 
     if (tag == "b")
-        element = mobius::core::pod::map {{"type", "end/b"}};
+        richtext_.end_bold ();
 
     else if (tag == "i")
-        element = mobius::core::pod::map {{"type", "end/i"}};
+        richtext_.end_italic ();
 
     else if (tag == "quote")
-        element = mobius::core::pod::map {{"type", "end/quote"}};
+        richtext_.end_message_bubble ();
 
     else if (tag == "s")
-        element = mobius::core::pod::map {{"type", "end/s"}};
+        richtext_.end_strikethrough ();
 
     else
         log.development (__LINE__, "Unhandled end tag: </" + tag + ">");
-
-    if (element)
-        add_element (element);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -533,7 +220,7 @@ message_parser::_parse_entity (const std::string &entity)
     }
 
     // Add text element
-    _add_text_element (text);
+    richtext_.add_text (text);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -546,6 +233,7 @@ message_parser::_parse_a ()
 
     // Get minidom tag
     auto tag = parser_.get_minidom ();
+
     if (!tag)
     {
         log.warning (__LINE__, "Invalid <a> tag");
@@ -553,11 +241,11 @@ message_parser::_parse_a ()
     }
 
     // Add href element
-    auto href = mobius::core::string::html_unescape (
+    auto url = mobius::core::string::html_unescape (
         tag.get_attribute<std::string> ("href")
     );
 
-    add_element (mobius::core::pod::map {{"type", "href"}, {"url", href}});
+    richtext_.begin_link (url);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -613,7 +301,7 @@ message_parser::_parse_addmember ()
     if (timestamp)
         text += std::format (" at {}", to_string (timestamp));
 
-    add_system_element (text);
+    richtext_.add_system_text (text);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -660,10 +348,12 @@ message_parser::_parse_contacts ()
 
     // Add system message element
     if (contact_count == 1)
-        add_system_element (std::format ("Contact shared: {}", contact_list));
+        richtext_.add_system_text (
+            std::format ("Contact shared: {}", contact_list)
+        );
 
     else if (contact_count > 1)
-        add_system_element (
+        richtext_.add_system_text (
             std::format (
                 "Contacts shared ({}):\n{}", contact_count, contact_list
             )
@@ -689,7 +379,7 @@ message_parser::_parse_c_i ()
     auto id = tag.get_attribute<std::string> ("id");
 
     // Format system message
-    add_system_element (
+    richtext_.add_system_text (
         std::format ("<<Clickable Interactive Element (id={})>>", id)
     );
 }
@@ -747,7 +437,7 @@ message_parser::_parse_deletemember ()
     if (timestamp)
         text += std::format (" at {}", to_string (timestamp));
 
-    add_system_element (text);
+    richtext_.add_system_text (text);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -790,14 +480,14 @@ message_parser::_parse_files ()
 
     // Add system message element
     if (file_count == 1)
-        add_system_element (
+        richtext_.add_system_text (
             std::format (
                 "File sent: {} (Size: {} bytes)", file_list, total_size
             )
         );
 
     else if (file_count > 1)
-        add_system_element (
+        richtext_.add_system_text (
             std::format (
                 "Files sent: {} (Total size: {} bytes)", file_list, total_size
             )
@@ -820,30 +510,11 @@ message_parser::_parse_flag ()
         return;
     }
 
-    // Create element
-    auto element = mobius::core::pod::map {{"type", "flag"}};
-
-    // Set emoji code
+    // Get country
     auto country = tag.get_attribute<std::string> ("country");
-    auto iter = FLAG_CHARS.find (country);
-
-    if (iter != FLAG_CHARS.end ())
-        element.set ("code", iter->second);
-
-    else if (UNKNOWN_FLAGS.find (country) == UNKNOWN_FLAGS.end ())
-    {
-        log.development (__LINE__, "Unknown flag: " + country);
-        UNKNOWN_FLAGS.insert (country);
-    }
-
-    // Set text
-    auto text = tag.get_content ();
-
-    if (!text.empty ())
-        element.set ("text", text);
 
     // Add element
-    add_element (element);
+    richtext_.add_flag (country);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -904,7 +575,7 @@ message_parser::_parse_historydisclosedupdate ()
 
     text += '.';
 
-    add_system_element (text);
+    richtext_.add_system_text (text);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -964,7 +635,7 @@ message_parser::_parse_joiningenabledupdate ()
 
     text += '.';
 
-    add_system_element (text);
+    richtext_.add_system_text (text);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1030,7 +701,7 @@ message_parser::_parse_partlist ()
         text += "No participants.";
 
     // Add system message element
-    add_system_element (text);
+    richtext_.add_system_text (text);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1060,20 +731,8 @@ message_parser::_parse_quote ()
     if (!author_name.empty ())
         author += " (" + author_name + ")";
 
-    auto element = mobius::core::pod::map {
-        {"type", "start/quote"},
-        {"author", author},
-    };
-
-    if (!timestamp.empty ())
-        element.set (
-            "timestamp",
-            mobius::core::datetime::new_datetime_from_unix_timestamp (
-                std::stoul (timestamp)
-            )
-        );
-
-    add_element (element);
+    // Start message bubble
+    richtext_.begin_message_bubble (timestamp, author);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1139,7 +798,7 @@ message_parser::_parse_sms ()
     text += ".";
 
     // Add system message element
-    add_system_element (text);
+    richtext_.add_system_text (text);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1158,30 +817,9 @@ message_parser::_parse_ss ()
         return;
     }
 
-    // Create element
-    auto element = mobius::core::pod::map {{"type", "emoji"}};
-
-    // Set emoji code
+    // Add emoji segment
     auto ss_type = tag.get_attribute<std::string> ("type");
-    auto iter = EMOJI_CHARS.find (ss_type);
-
-    if (iter != EMOJI_CHARS.end ())
-        element.set ("code", iter->second);
-
-    else if (UNKNOWN_EMOJIS.find (ss_type) == UNKNOWN_EMOJIS.end ())
-    {
-        log.development (__LINE__, "Unknown emoji type: " + ss_type);
-        UNKNOWN_EMOJIS.insert (ss_type);
-    }
-
-    // Set text
-    auto text = tag.get_content ();
-
-    if (!text.empty ())
-        element.set ("text", text);
-
-    // Add element
-    add_element (element);
+    richtext_.add_emoji (ss_type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1236,7 +874,7 @@ message_parser::_parse_topicupdate ()
 
     text += '.';
 
-    add_system_element (text);
+    richtext_.add_system_text (text);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1313,7 +951,7 @@ message_parser::_parse_uriobject ()
     if (!content.empty ())
         text += std::format ("\nText: {}", content);
 
-    add_system_element (text);
+    richtext_.add_system_text (text);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1321,9 +959,10 @@ message_parser::_parse_uriobject ()
 // @param message Message string
 // @return Parsed content
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector<mobius::core::pod::map>
+mobius::core::richtext
 parse_message (const std::string &message)
 {
+    mobius::core::richtext richtext;
     mobius::core::log log (__FILE__, __FUNCTION__);
 
     try
@@ -1331,20 +970,17 @@ parse_message (const std::string &message)
         message_parser parser (message);
         parser.parse ();
 
-        auto content = parser.get_content ();
+        richtext = parser.get_richtext ();
 
-        if (content.empty ())
-            content = {
-                mobius::core::pod::map {{"type", "text"}, {"text", message}}
-            };
-
-        return content;
+        if (!richtext)
+            richtext.add_text (message);
     }
     catch (const std::exception &e)
     {
         log.warning (__LINE__, e.what ());
-        return {};
     }
+
+    return richtext;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1352,9 +988,11 @@ parse_message (const std::string &message)
 // @param message Message string
 // @return Parsed content
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector<mobius::core::pod::map>
+mobius::core::richtext
 parse_notice (const std::string &message)
 {
+    mobius::core::richtext richtext;
+
     auto parser = mobius::core::decoder::json::parser (message);
     auto l = parser.parse ().to_list ();
     std::string text;
@@ -1414,9 +1052,8 @@ parse_notice (const std::string &message)
     if (text.empty ())
         text = "Notice received.";
 
-    return std::vector<mobius::core::pod::map> {
-        mobius::core::pod::map {{"type", "system"}, {"text", text}}
-    };
+    richtext.add_system_text (text);
+    return richtext;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1424,9 +1061,11 @@ parse_notice (const std::string &message)
 // @param message Message string
 // @return Parsed content
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector<mobius::core::pod::map>
+mobius::core::richtext
 parse_popcard (const std::string &message)
 {
+    mobius::core::richtext richtext;
+
     auto parser = mobius::core::decoder::json::parser (message);
     auto l = parser.parse ().to_list ();
 
@@ -1436,13 +1075,10 @@ parse_popcard (const std::string &message)
         auto content = data.get_map ("content");
         auto text = content.get<std::string> ("text");
 
-        return std::vector<mobius::core::pod::map> {mobius::core::pod::map {
-            {"type", "system"},
-            {"text", "Popcard received: " + text}
-        }};
+        richtext.add_system_text ("Popcard received: " + text);
     }
 
-    return {};
+    return richtext;
 }
 
 } // namespace mobius::extension::app::skype

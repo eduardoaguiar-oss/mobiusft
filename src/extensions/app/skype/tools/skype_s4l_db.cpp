@@ -223,13 +223,14 @@ show_main_db_info (const std::string &path)
         std::cout << "   Type: " << m.type << std::endl;
 
         std::cout << "   Parsed Content: " << std::endl;
-        for (const auto &pc : m.parsed_content)
+        for (const auto &[type, metadata] : m.parsed_content.get_segments ())
         {
-            std::cout << "      {" << std::endl;
-            for (const auto &[key, value] : pc)
-            {
+            std::cout << "      Type: " << type << std::endl;
+            std::cout << "      Metadata: {" << std::endl;
+
+            for (const auto &[key, value] : metadata)
                 std::cout << "         " << key << ": " << value << std::endl;
-            }
+
             std::cout << "      }" << std::endl;
         }
     }

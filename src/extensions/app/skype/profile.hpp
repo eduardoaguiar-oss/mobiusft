@@ -22,6 +22,7 @@
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/folder.hpp>
 #include <mobius/core/pod/map.hpp>
+#include <mobius/core/richtext.hpp>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -180,7 +181,7 @@ class profile
         std::vector<std::string> recipients;
 
         // @brief Content
-        std::vector<mobius::core::pod::map> content;
+        mobius::core::richtext content;
 
         // @brief Metadata
         mobius::core::pod::map metadata;

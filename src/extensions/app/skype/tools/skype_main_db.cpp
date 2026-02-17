@@ -742,10 +742,17 @@ show_main_db_info (const std::string &path)
         std::cout << "   Timestamp: " << cm.timestamp << std::endl;
         std::cout << "   Type: " << cm.type << std::endl;
 
-        std::cout << "   Parsed content: " << std::endl;
-        for (const auto &pc : cm.content)
-            std::cout << "         [" << pc.get ("type")
-                      << "]: " << pc.get ("text") << std::endl;
+        std::cout << "   Parsed Content: " << std::endl;
+        for (const auto &[type, metadata] : cm.content.get_segments ())
+        {
+            std::cout << "      Type: " << type << std::endl;
+            std::cout << "      Metadata: {" << std::endl;
+            for (const auto &[key, value] : metadata)
+            {
+                std::cout << "         " << key << ": " << value << std::endl;
+            }
+            std::cout << "      }" << std::endl;
+        }
 
         for (const auto &p : dat.get_message_participants (cm))
         {

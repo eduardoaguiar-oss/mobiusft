@@ -73,89 +73,6 @@ def recipients_formatter(value):
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Chat message text formatter
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-def text_formatter(text_segments):
-    text = ''
-    last_type = ''
-
-    for data in (text_segments or []):
-        item_type = data.get('type')
-
-        if text and text[-1] not in '\n ':
-            text += ' '
-
-        if text and last_type == 'end/quote':
-            text += '\n'
-
-        if item_type == 'text':
-            text += pango_escape(data.get('text'))
-
-        elif item_type == 'system':
-            text += f'<span color="#77b">{pango_escape(data.get("text"))}</span>'
-
-        elif item_type == 'href':
-            text += f'<span underline="single" color="#0000ee">{pango_escape(data.get("url"))}</span>'
-
-        elif item_type == 'start/b':
-            text += '<b>'
-
-        elif item_type == 'start/i':
-            text += '<i>'
-
-        elif item_type == 'start/s':
-            text += '<s>'
-
-        elif item_type == 'start/quote':
-            text += f'<span color="#0080b0">[{data.get("timestamp")}] {pango_escape(data.get("author"))}:\n<i>'
-
-        elif item_type == 'end/b':
-            text += '</b>'
-
-        elif item_type == 'end/i':
-            text += '</i>'
-
-        elif item_type == 'end/s':
-            text += '</s>'
-
-        elif item_type == 'end/quote':
-            text += '</i></span>'
-
-        elif item_type == 'emoji':
-            code = data.get('code')
-
-            if code:
-                text += f'<span size="x-large">{code}</span>'
-            else:
-                text += f'<span color="#00d000" weight="bold">{pango_escape(data.get("text"))}</span>'
-
-        elif item_type == 'flag':
-            code = data.get('code')
-            if code:
-                text += f'<span size="x-large">{code}</span>'
-            else:
-                text += f'<span color="#00d000" weight="bold">{pango_escape(data.get("text"))}</span>'
-
-        else:  # unknown markup
-            text += f'<span color="#FF0000" weight="bold">UNKNOWN: {item_type} ({pango_escape(data.get("text"))})</span>'
-
-        last_type = item_type
-
-    return text
-
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Escape pango control chars from text
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-def pango_escape(text):
-    text = text or ''
-    text = text.replace('&', '&amp;')
-    text = text.replace('<', '&lt;')
-    text = text.replace('>', '&gt;')
-    return text
-
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Data formatters
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 FORMATTERS = {
@@ -163,7 +80,6 @@ FORMATTERS = {
     "bool": formatter_bool,
     "chat-message-recipients": recipients_formatter,
     "richtext": lambda pod: mobius.core.richtext(pod).to_pango(),
-    "rich-text": text_formatter,
     "datetime": pymobius.to_string,
     "duration": formatter_duration,
     "hexstring": mobius.core.encoder.hexstring,
@@ -353,7 +269,7 @@ MODEL = [
                       args(id='timestamp', name="Date/time (UTC)", format='datetime', first_sortable=True),
                       args(id='sender', is_sortable=True),
                       args(id='recipients', format="chat-message-recipients", is_sortable=True),
-                      args(id="text", format="rich-text", is_sortable=True, is_markup=True),
+                      args(id="text", format="richtext", is_sortable=True, is_markup=True),
                       args(id='username', name="User name", is_sortable=True),
                       args(id="app_name", name="Application", is_sortable=True),
                   ]),
@@ -364,7 +280,7 @@ MODEL = [
                       args(id='timestamp', name="Date/time (UTC)"),
                       args(id='search_type', name="Type"),
                       args(id='username', name="User name"),
-                      args(id="text", format="rich-text"),
+                      args(id="text", format="richtext"),
                   ]),
          ]
          ),

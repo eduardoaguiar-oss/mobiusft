@@ -332,7 +332,7 @@ vfs_processor_impl::_save_messages ()
             e.set_attribute ("timestamp", m.timestamp);
             e.set_attribute ("sender", m.sender);
             e.set_attribute ("recipients", m.recipients);
-            e.set_attribute ("text", m.content);
+            e.set_attribute ("text", m.content.to_pod ());
             e.set_attribute ("app_id", APP_ID);
             e.set_attribute ("app_name", APP_NAME);
             e.set_attribute ("username", p.get_username ());

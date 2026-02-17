@@ -20,6 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/pod/map.hpp>
 #include <mobius/core/decoder/sgml/parser.hpp>
+#include <mobius/core/richtext.hpp>
 #include <string>
 #include <vector>
 
@@ -32,7 +33,6 @@ class message_parser
 {
   public:
     message_parser (const std::string &);
-    void add_element (const mobius::core::pod::map &);
     void parse ();
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -42,36 +42,24 @@ class message_parser
     void
     add_system_element (const std::string &text)
     {
-        add_element (
-            mobius::core::pod::map {{"type", "system"}, {"text", text}}
-        );
+        richtext_.add_system_text (text);
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get content vector
+    // @brief Get richtext context
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector<mobius::core::pod::map>
-    get_content () const
+    mobius::core::richtext
+    get_richtext () const
     {
-        return content_;
+        return richtext_;
     }
 
   private:
-    // @brief Content vector
-    std::vector<mobius::core::pod::map> content_;
+    // @brief Richtext context
+    mobius::core::richtext richtext_;
 
     // @brief SGML parser
     mobius::core::decoder::sgml::parser parser_;
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Add text element helper
-    // @param text Text content
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void
-    _add_text_element (const std::string &text)
-    {
-        add_element (mobius::core::pod::map {{"type", "text"}, {"text", text}});
-    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
@@ -102,9 +90,9 @@ class message_parser
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Function prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector<mobius::core::pod::map> parse_message (const std::string &);
-std::vector<mobius::core::pod::map> parse_notice (const std::string &);
-std::vector<mobius::core::pod::map> parse_popcard (const std::string &);
+mobius::core::richtext parse_message (const std::string &);
+mobius::core::richtext parse_notice (const std::string &);
+mobius::core::richtext parse_popcard (const std::string &);
 
 } // namespace mobius::extension::app::skype
 
