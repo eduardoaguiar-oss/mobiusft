@@ -39,5 +39,6 @@ mobius::py::pytypeobject new_core_richtext_type ();
 bool pymobius_core_richtext_check (PyObject *);
 PyObject *pymobius_core_richtext_to_pyobject (const mobius::core::richtext&);
 mobius::core::richtext pymobius_core_richtext_from_pyobject (PyObject *);
+mobius::core::richtext pymobius_core_richtext_from_python (PyObject *);
 
 #endif

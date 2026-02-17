@@ -24,6 +24,7 @@
 #include <pylist.hpp>
 #include <pymobius.hpp>
 #include <stdexcept>
+#include "pod/data.hpp"
 #include "pod/map.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -166,7 +167,7 @@ tp_f_begin_link (core_richtext_o *self, PyObject *args)
     {
         arg_url = mobius::py::get_arg_as_std_string (args, 0);
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
         mobius::py::set_invalid_type_error (e.what ());
         return nullptr;
@@ -177,7 +178,7 @@ tp_f_begin_link (core_richtext_o *self, PyObject *args)
     {
         self->obj->begin_link (arg_url);
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
         mobius::py::set_runtime_error (e.what ());
         return nullptr;
@@ -330,7 +331,7 @@ tp_f_end_link (core_richtext_o *self, PyObject *)
     {
         self->obj->end_link ();
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
         mobius::py::set_runtime_error (e.what ());
         return nullptr;
@@ -677,33 +678,75 @@ tp_f_to_pango (core_richtext_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>to_pod</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return POD representation
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_to_pod (core_richtext_o *self, PyObject *)
+{
+    // Execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = pymobius_core_pod_data_to_python (self->obj->to_pod ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // Return value
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
     {"clear", (PyCFunction) tp_f_clear, METH_VARARGS, "Clear content"},
     {"size", (PyCFunction) tp_f_size, METH_VARARGS, "Get size"},
-    {"get_segments", (PyCFunction) tp_f_get_segments, METH_VARARGS, "Get segments"},
+    {"get_segments", (PyCFunction) tp_f_get_segments, METH_VARARGS,
+     "Get segments"},
     {"begin_bold", (PyCFunction) tp_f_begin_bold, METH_VARARGS, "Begin bold"},
-    {"begin_italic", (PyCFunction) tp_f_begin_italic, METH_VARARGS, "Begin italic"},
+    {"begin_italic", (PyCFunction) tp_f_begin_italic, METH_VARARGS,
+     "Begin italic"},
     {"begin_link", (PyCFunction) tp_f_begin_link, METH_VARARGS, "Begin link"},
-    {"begin_message_bubble", (PyCFunction) tp_f_begin_message_bubble, METH_VARARGS, "Add reply"},
-    {"begin_strikethrough", (PyCFunction) tp_f_begin_strikethrough, METH_VARARGS, "Begin strikethrough"},
-    {"begin_underline", (PyCFunction) tp_f_begin_underline, METH_VARARGS, "Begin underline"},
+    {"begin_message_bubble", (PyCFunction) tp_f_begin_message_bubble,
+     METH_VARARGS, "Add reply"},
+    {"begin_strikethrough", (PyCFunction) tp_f_begin_strikethrough,
+     METH_VARARGS, "Begin strikethrough"},
+    {"begin_underline", (PyCFunction) tp_f_begin_underline, METH_VARARGS,
+     "Begin underline"},
     {"end_bold", (PyCFunction) tp_f_end_bold, METH_VARARGS, "End bold text"},
-    {"end_italic", (PyCFunction) tp_f_end_italic, METH_VARARGS, "End italic text"},
+    {"end_italic", (PyCFunction) tp_f_end_italic, METH_VARARGS,
+     "End italic text"},
     {"end_link", (PyCFunction) tp_f_end_link, METH_VARARGS, "End link"},
-    {"end_message_bubble", (PyCFunction) tp_f_end_message_bubble, METH_VARARGS, "End message bubble"},
-    {"end_strikethrough", (PyCFunction) tp_f_end_strikethrough, METH_VARARGS, "End strikethrough"},
-    {"end_underline", (PyCFunction) tp_f_end_underline, METH_VARARGS, "End underline"},
+    {"end_message_bubble", (PyCFunction) tp_f_end_message_bubble, METH_VARARGS,
+     "End message bubble"},
+    {"end_strikethrough", (PyCFunction) tp_f_end_strikethrough, METH_VARARGS,
+     "End strikethrough"},
+    {"end_underline", (PyCFunction) tp_f_end_underline, METH_VARARGS,
+     "End underline"},
     {"add_text", (PyCFunction) tp_f_add_text, METH_VARARGS, "Add normal text"},
-    {"add_system_text", (PyCFunction) tp_f_add_system_text, METH_VARARGS, "Add system text"},
-    {"add_newline", (PyCFunction) tp_f_add_newline, METH_VARARGS, "Add newline"},
+    {"add_system_text", (PyCFunction) tp_f_add_system_text, METH_VARARGS,
+     "Add system text"},
+    {"add_newline", (PyCFunction) tp_f_add_newline, METH_VARARGS,
+     "Add newline"},
     {"add_emoji", (PyCFunction) tp_f_add_emoji, METH_VARARGS, "Add emoji char"},
     {"add_flag", (PyCFunction) tp_f_add_flag, METH_VARARGS, "Add flag char"},
-    {"to_html", (PyCFunction) tp_f_to_html, METH_VARARGS, "Convert richtext to HTML"},
-    {"to_markdown", (PyCFunction) tp_f_to_markdown, METH_VARARGS, "Convert richtext to Markdown"},
-    {"to_latex", (PyCFunction) tp_f_to_latex, METH_VARARGS, "Convert richtext to LaTeX"},
-    {"to_pango", (PyCFunction) tp_f_to_pango, METH_VARARGS, "Convert richtext to Pango"},
+    {"to_html", (PyCFunction) tp_f_to_html, METH_VARARGS,
+     "Convert richtext to HTML"},
+    {"to_markdown", (PyCFunction) tp_f_to_markdown, METH_VARARGS,
+     "Convert richtext to Markdown"},
+    {"to_latex", (PyCFunction) tp_f_to_latex, METH_VARARGS,
+     "Convert richtext to LaTeX"},
+    {"to_pango", (PyCFunction) tp_f_to_pango, METH_VARARGS,
+     "Convert richtext to Pango"},
+    {"to_pod", (PyCFunction) tp_f_to_pod, METH_VARARGS,
+     "Convert richtext to POD"},
     {nullptr, nullptr, 0, nullptr}, // sentinel
 };
 
@@ -715,26 +758,29 @@ static PyMethodDef tp_methods[] = {
 // @return new <i>richtext</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_new (PyTypeObject *type, PyObject *, PyObject *)
+tp_new (PyTypeObject *, PyObject *args, PyObject *)
 {
-    core_richtext_o *ret =
-        reinterpret_cast<core_richtext_o *> (type->tp_alloc (type, 0));
+    PyObject *ret = nullptr;
 
-    if (ret)
+    try
     {
-        try
+        mobius::core::richtext rt;
+
+        if (mobius::py::get_arg_size (args) > 0)
         {
-            ret->obj = new mobius::core::richtext ();
+            rt = pymobius_core_richtext_from_python (
+                mobius::py::get_arg (args, 0)
+            );
         }
-        catch (const std::exception &e)
-        {
-            Py_DECREF (ret);
-            mobius::py::set_runtime_error (e.what ());
-            ret = nullptr;
-        }
+
+        ret = pymobius_core_richtext_to_pyobject (rt);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
     }
 
-    return reinterpret_cast<PyObject *> (ret);
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -833,7 +879,7 @@ pymobius_core_richtext_check (PyObject *value)
 PyObject *
 pymobius_core_richtext_to_pyobject (const mobius::core::richtext &obj)
 {
-    return mobius::py::to_pyobject_nullable<core_richtext_o> (
+    return mobius::py::to_pyobject<core_richtext_o> (
         obj, &core_richtext_t
     );
 }
@@ -847,4 +893,16 @@ mobius::core::richtext
 pymobius_core_richtext_from_pyobject (PyObject *value)
 {
     return mobius::py::from_pyobject<core_richtext_o> (value, &core_richtext_t);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>richtext</i> C++ object from Python value
+// @param value Python value
+// @return Richtext object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::richtext
+pymobius_core_richtext_from_python (PyObject *value)
+{
+    auto data = pymobius_core_pod_data_from_pyobject (value);
+    return mobius::core::richtext (std::vector<mobius::core::pod::map> (data));
 }

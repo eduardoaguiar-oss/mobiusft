@@ -15,11 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <cstdint>
 #include <mobius/core/bytearray.hpp>
 #include <mobius/core/encoder/data_encoder.hpp>
 #include <mobius/core/pod/data.hpp>
 #include <mobius/core/pod/map.hpp>
+#include <cstdint>
 #include <stdexcept>
 #include <vector>
 
@@ -44,86 +44,87 @@ _serialize_data (mobius::core::encoder::data_encoder &encoder, const data &data)
 {
     switch (data.get_type ())
     {
-    case data::type::null:
-        encoder.encode_uint8 ('N');
-        break;
+        case data::type::null:
+            encoder.encode_uint8 ('N');
+            break;
 
-    case data::type::boolean:
-        encoder.encode_uint8 (bool (data) ? 't' : 'f');
-        break;
+        case data::type::boolean:
+            encoder.encode_uint8 (bool (data) ? 't' : 'f');
+            break;
 
-    case data::type::integer:
-        encoder.encode_uint8 ('I');
-        encoder.encode_int64_le (std::int64_t (data));
-        break;
+        case data::type::integer:
+            encoder.encode_uint8 ('I');
+            encoder.encode_int64_le (std::int64_t (data));
+            break;
 
-    case data::type::floatn:
-    {
-        auto text = std::to_string (static_cast<long double> (data));
-        encoder.encode_uint8 ('F');
-        encoder.encode_uint16_le (text.size ());
-        encoder.encode_string_by_size (text, text.size ());
-    }
-    break;
-
-    case data::type::datetime:
-    {
-        auto text = to_string (mobius::core::datetime::datetime (data));
-        encoder.encode_uint8 ('D');
-        encoder.encode_uint16_le (text.size ());
-        encoder.encode_string_by_size (text, text.size ());
-    }
-    break;
-
-    case data::type::string:
-    {
-        auto text = std::string (data);
-        encoder.encode_uint8 ('S');
-        encoder.encode_uint64_le (text.size ());
-        encoder.encode_string_by_size (text, text.size ());
-    }
-    break;
-
-    case data::type::bytearray:
-    {
-        auto b = mobius::core::bytearray (data);
-        encoder.encode_uint8 ('B');
-        encoder.encode_uint64_le (b.size ());
-        encoder.encode_bytearray (b);
-    }
-    break;
-
-    case data::type::list:
-    {
-        auto v = std::vector<mobius::core::pod::data> (data);
-
-        encoder.encode_uint8 ('L');
-        encoder.encode_uint64_le (v.size ());
-
-        for (const auto &i : v)
-            _serialize_data (encoder, i);
-    }
-    break;
-
-    case data::type::map:
-    {
-        mobius::core::pod::map map (data);
-
-        encoder.encode_uint8 ('M');
-        encoder.encode_uint64_le (map.get_size ());
-
-        for (const auto &p : map)
+        case data::type::floatn:
         {
-            encoder.encode_uint32_le (p.first.size ());
-            encoder.encode_string_by_size (p.first, p.first.size ());
-            _serialize_data (encoder, p.second);
+            auto text = std::to_string (static_cast<long double> (data));
+            encoder.encode_uint8 ('F');
+            encoder.encode_uint16_le (text.size ());
+            encoder.encode_string_by_size (text, text.size ());
         }
-    }
-    break;
+        break;
 
-    default:
-        throw std::invalid_argument (
-            MOBIUS_EXCEPTION_MSG ("unknown data type"));
+        case data::type::datetime:
+        {
+            auto text = to_string (mobius::core::datetime::datetime (data));
+            encoder.encode_uint8 ('D');
+            encoder.encode_uint16_le (text.size ());
+            encoder.encode_string_by_size (text, text.size ());
+        }
+        break;
+
+        case data::type::string:
+        {
+            auto text = std::string (data);
+            encoder.encode_uint8 ('S');
+            encoder.encode_uint64_le (text.size ());
+            encoder.encode_string_by_size (text, text.size ());
+        }
+        break;
+
+        case data::type::bytearray:
+        {
+            auto b = mobius::core::bytearray (data);
+            encoder.encode_uint8 ('B');
+            encoder.encode_uint64_le (b.size ());
+            encoder.encode_bytearray (b);
+        }
+        break;
+
+        case data::type::list:
+        {
+            auto v = std::vector<mobius::core::pod::data> (data);
+
+            encoder.encode_uint8 ('L');
+            encoder.encode_uint64_le (v.size ());
+
+            for (const auto &i : v)
+                _serialize_data (encoder, i);
+        }
+        break;
+
+        case data::type::map:
+        {
+            mobius::core::pod::map map (data);
+
+            encoder.encode_uint8 ('M');
+            encoder.encode_uint64_le (map.get_size ());
+
+            for (const auto &p : map)
+            {
+                encoder.encode_uint32_le (p.first.size ());
+                encoder.encode_string_by_size (p.first, p.first.size ());
+                _serialize_data (encoder, p.second);
+            }
+        }
+        break;
+
+        default:
+            throw std::invalid_argument (
+                MOBIUS_EXCEPTION_MSG ("unknown data type")
+            );
     }
 }
 
