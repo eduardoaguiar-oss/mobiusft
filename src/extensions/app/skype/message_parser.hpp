@@ -22,7 +22,6 @@
 #include <mobius/core/decoder/sgml/parser.hpp>
 #include <mobius/core/richtext.hpp>
 #include <string>
-#include <vector>
 
 namespace mobius::extension::app::skype
 {
