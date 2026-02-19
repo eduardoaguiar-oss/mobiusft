@@ -69,6 +69,7 @@ add_library(mobius_core_crypt STATIC
     hash_digest.cpp
     hash_impl_adler32.cpp
     hash_impl_ed2k.cpp
+    hash_impl_fletcher16.cpp
     hash_impl_zip.cpp
     hmac.cpp
     hmac_impl_default.cpp

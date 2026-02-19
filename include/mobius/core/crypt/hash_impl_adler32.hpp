@@ -1,5 +1,5 @@
-#ifndef MOBIUS_CRYPT_HASH_IMPL_ADLER32_H
-#define MOBIUS_CRYPT_HASH_IMPL_ADLER32_H
+#ifndef MOBIUS_CRYPT_HASH_IMPL_ADLER32_HPP
+#define MOBIUS_CRYPT_HASH_IMPL_ADLER32_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -87,5 +87,3 @@ private:
 } // namespace mobius::core::crypt
 
 #endif
-
-

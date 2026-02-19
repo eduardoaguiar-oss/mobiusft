@@ -19,6 +19,7 @@
 #include <mobius/core/crypt/hash.hpp>
 #include <mobius/core/crypt/hash_impl_adler32.hpp>
 #include <mobius/core/crypt/hash_impl_ed2k.hpp>
+#include <mobius/core/crypt/hash_impl_fletcher16.hpp>
 #include <mobius/core/crypt/hash_impl_null.hpp>
 #include <mobius/core/crypt/hash_impl_zip.hpp>
 
@@ -51,6 +52,9 @@ hash::hash (const std::string &hash_id)
 
     else if (hash_id == "ed2k")
         impl_ = std::make_shared<hash_impl_ed2k> ();
+
+    else if (hash_id == "fletcher16")
+        impl_ = std::make_shared<hash_impl_fletcher16> ();
 
     else if (hash_id == "zip")
         impl_ = std::make_shared<hash_impl_zip> ();
