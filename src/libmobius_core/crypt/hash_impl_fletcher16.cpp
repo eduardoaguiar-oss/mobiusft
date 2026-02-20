@@ -57,7 +57,7 @@ hash_impl_fletcher16::update (const mobius::core::bytearray &data) noexcept
     // Final reduction
     sum1_ %= 255;
     sum2_ %= 255;
-}    
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Return hash digest
@@ -66,8 +66,9 @@ hash_impl_fletcher16::update (const mobius::core::bytearray &data) noexcept
 bytearray
 hash_impl_fletcher16::get_digest ()
 {
-    std::uint16_t s = (sum2_ << 8) | sum1_;
-    
+    std::uint16_t s = static_cast<std::uint16_t> (sum2_ << 8) |
+                      static_cast<std::uint16_t> (sum1_);
+
     return mobius::core::bytearray (
         {std::uint8_t (s & 0xff), std::uint8_t (s >> 8)}
     );
