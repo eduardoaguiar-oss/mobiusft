@@ -139,6 +139,9 @@ class ProcessingView(object):
         self.__profile_combobox.set_visible(True)
         hbox.add_child(self.__profile_combobox, mobius.core.ui.box.fill_none)
 
+        last_profile_id = mobius.framework.get_config('evidence.last_profile') or 'general'
+        self.__profile_combobox.set_active_id(last_profile_id)
+
         hbox.add_filler ()
 
         self.__execute_button = mobius.core.ui.button()
