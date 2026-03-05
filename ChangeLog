@@ -1,7 +1,11 @@
 Mobius Forensic Toolkit 2.25
 	* Added new C++ extension called `vfs-block-apfs`
-	* libmobius_core: Added new class crypt::hash_fletcher16
+	* libmobius_core: Added new class crypt::hash_impl_fletcher16
+	* libmobius_core: Added new class crypt::hash_impl_fletcher32
+	* libmobius_core: Added new class crypt::hash_impl_fletcher64
 	* libmobius_core: Added support for hash `fletcher16`
+	* libmobius_core: Added support for hash `fletcher32`
+	* libmobius_core: Added support for hash `fletcher64`
 
 Mobius Forensic Toolkit 2.24
 	* Added new C++ extension called `app-gecko`

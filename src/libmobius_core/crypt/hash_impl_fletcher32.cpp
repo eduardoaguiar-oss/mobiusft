@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/crypt/hash_impl_fletcher16.hpp>
+#include <mobius/core/crypt/hash_impl_fletcher32.hpp>
 #include <numeric>
 
 namespace mobius::core::crypt
@@ -28,36 +28,58 @@ namespace mobius::core::crypt
 // @brief Reset hash value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-hash_impl_fletcher16::reset () noexcept
+hash_impl_fletcher32::reset () noexcept
 {
-    sum1_ = 0xff;
-    sum2_ = 0xff;
+    sum1_ = 0xffff;
+    sum2_ = 0xffff;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Update hash by a given bytearray
 // @param data Data buffer
-// @see https://en.wikipedia.org/wiki/Fletcher%27s_checksum#Fletcher-16
+// @see https://en.wikipedia.org/wiki/Fletcher%27s_checksum#Fletcher-32
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-hash_impl_fletcher16::update (const mobius::core::bytearray &data) noexcept
+hash_impl_fletcher32::update (const mobius::core::bytearray &data) noexcept
 {
-    for (const std::uint32_t b : data)
-    {
-        sum1_ += b;
-        sum2_ += sum1_;
+    // Process data in blocks to avoid overflow in 64-bit accumulators
+    constexpr size_t block_size = 20000000;
+    const uint8_t *p = data.data ();
+    size_t siz = data.size ();
+    size_t count = 0;
 
-        // Reduce before we risk overflowing 16 bits significantly
-        if (sum1_ >= 0xFF00 || sum2_ >= 0xFF00)
+    while (siz >= 2)
+    {
+        sum1_ += static_cast<std::uint64_t> (p[0]) |
+                 (static_cast<std::uint64_t> (p[1]) << 8);
+        sum2_ += sum1_;
+        p += 2;
+        siz -= 2;
+        count++;
+
+        if (count >= block_size)
         {
-            sum1_ %= 255;
-            sum2_ %= 255;
+            // Apply modulo to keep values within 16-bit range
+            sum1_ = (sum1_ & 0xFFFF) + (sum1_ >> 16);
+            sum2_ = (sum2_ & 0xFFFF) + (sum2_ >> 16);
+            count = 0;
         }
     }
 
-    // Final reduction
-    sum1_ %= 255;
-    sum2_ %= 255;
+    // Handle odd byte if present
+    if (siz == 1)
+    {
+        sum1_ += static_cast<std::uint64_t> (p[0]);
+        sum2_ += sum1_;
+    }
+
+    // Final reduction to 16 bits
+    sum1_ = (sum1_ & 0xFFFF) + (sum1_ >> 16);
+    sum2_ = (sum2_ & 0xFFFF) + (sum2_ >> 16);
+
+    // One more reduction in case the previous step produced a carry
+    sum1_ = (sum1_ & 0xFFFF) + (sum1_ >> 16);
+    sum2_ = (sum2_ & 0xFFFF) + (sum2_ >> 16);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -65,13 +87,13 @@ hash_impl_fletcher16::update (const mobius::core::bytearray &data) noexcept
 // @return Hash digest
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bytearray
-hash_impl_fletcher16::get_digest ()
+hash_impl_fletcher32::get_digest ()
 {
-    std::uint16_t s = static_cast<std::uint16_t> (sum2_ << 8) |
-                      static_cast<std::uint16_t> (sum1_);
+    std::uint32_t s = (sum2_ << 16) | sum1_;
 
     return mobius::core::bytearray (
-        {std::uint8_t (s & 0xff), std::uint8_t (s >> 8)}
+        {std::uint8_t (s & 0xff), std::uint8_t ((s >> 8) & 0xff),
+         std::uint8_t ((s >> 16) & 0xff), std::uint8_t ((s >> 24) & 0xff)}
     );
 }
 
@@ -80,9 +102,9 @@ hash_impl_fletcher16::get_digest ()
 // @return Pointer to newly created object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::shared_ptr<hash_impl_base>
-hash_impl_fletcher16::clone () const
+hash_impl_fletcher32::clone () const
 {
-    auto h = std::make_shared<hash_impl_fletcher16> ();
+    auto h = std::make_shared<hash_impl_fletcher32> ();
 
     h->sum1_ = sum1_;
     h->sum2_ = sum2_;
