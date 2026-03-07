@@ -41,6 +41,7 @@ Mobius Forensic Toolkit 2.24
 	* libmobius_python: Added new function `datetime.new_datetime_from_dot_net_timestamp`
 	* libmobius_python: Added new `core.richtext' class
 	* libmobius_python: Added new template function `pylist_from_cpp_pair_transform`
+	* Improved AppImage Portability and Cross-Distro Compatibility
 
 Mobius Forensic Toolkit 2.23
 	* Added new C++ extension called "app-dcpp"

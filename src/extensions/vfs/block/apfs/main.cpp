@@ -23,15 +23,17 @@
 #include <mobius/core/vfs/block.hpp>
 #include <vector>
 
+#include <iostream>
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // References
 // @see https://developer.apple.com/support/downloads/Apple-File-System-Reference.pdf
 // @see https://github.com/sgan81/apfs-fuse
-///@see https://github.com/memecode/apfs-tools
+// @see https://github.com/memecode/apfs-tools
 // @see https://www.ntfs.com/apfs-structure.htm
 // @see https://www.mac4n6.com/blog/category/APFS
 // @see https://github.com/libyal/libfsapfs/blob/main/documentation/Apple%20File%20System%20(APFS).asciidoc
- // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace
 {
@@ -50,7 +52,7 @@ static constexpr std::size_t NX_EPH_INFO_COUNT = 4;
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct obj_phys_t
 {
-    mobius::core::bytearray checksum; // 8 bytes
+    std::uint64_t checksum;
     std::uint64_t oid;
     std::uint64_t xid;
     std::uint32_t type;
@@ -68,7 +70,7 @@ struct superblock
 {
     bool is_valid = false;
 
-    mobius::core::bytearray checksum; // 8 bytes
+    std::uint64_t checksum;
     std::uint64_t offset = 0;
     std::uint64_t oid;
     std::uint64_t xid;
@@ -128,6 +130,42 @@ struct superblock
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Test block checksum
+// @param data Block data
+// @return True if checksum is valid, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static bool
+_test_checksum (const mobius::core::bytearray &data)
+{
+    mobius::core::decoder::data_decoder decoder (data);
+
+    std::uint64_t checksum = decoder.get_uint64_le ();
+    std::size_t siz = data.size () - 8;
+    std::uint64_t sum1 = 0;
+    std::uint64_t sum2 = 0;
+
+    while (siz)
+    {
+        sum1 += decoder.get_uint32_le ();
+        sum2 += sum1;
+        sum1 %= 0xffffffff;
+        sum2 %= 0xffffffff;
+        siz -= 4;
+    }
+
+    uint32_t c0 = static_cast<uint32_t> (checksum);
+    uint32_t c1 = static_cast<uint32_t> (checksum >> 32);
+
+    sum1 = (sum1 + c0) % 0xFFFFFFFFULL;
+    sum2 = (sum2 + sum1) % 0xFFFFFFFFULL;
+
+    sum1 = (sum1 + c1) % 0xFFFFFFFFULL;
+    sum2 = (sum2 + sum1) % 0xFFFFFFFFULL;
+
+    return (sum1 == 0 && sum2 == 0);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Decode obj_phys_t structure
 // @param decoder Data decoder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -136,7 +174,7 @@ _decode_obj_phys_t (mobius::core::decoder::data_decoder &decoder)
 {
     obj_phys_t obj_phys;
 
-    obj_phys.checksum = decoder.get_bytearray_by_size (MAX_CKSUM_SIZE);
+    obj_phys.checksum = decoder.get_uint64_le ();
     obj_phys.oid = decoder.get_uint64_le ();
     obj_phys.xid = decoder.get_uint64_le ();
     obj_phys.subtype = decoder.get_uint32_le ();
@@ -168,6 +206,10 @@ _decode_superblock (mobius::core::decoder::data_decoder &decoder)
     sb.xid = obj.xid;
     sb.type = obj.type;
     sb.subtype = obj.subtype;
+
+    // Check for a valid checksum
+    if (sb.checksum == 0 || sb.checksum == 0xffffffffffffffff)
+        return sb;
 
     // Check if it's a superblock
     if (sb.oid != OID_NX_SUPERBLOCK)
@@ -252,7 +294,14 @@ _decode_superblock (mobius::core::decoder::data_decoder &decoder)
     else if (sb.incompatible_features & 0x2)
         sb.version = 2;
 
-    // @todo Test checksum
+    // Test checksum
+    decoder.seek (sb.offset);
+    auto data = decoder.get_bytearray_by_size (sb.block_size);
+
+    if (!_test_checksum (data))
+        return sb;
+
+    // If we reached this point, the superblock is valid
     sb.is_valid = true;
 
     return sb;
@@ -289,7 +338,8 @@ decoder (
         return false;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Try to find the most recent superblock on checkpoint descriptor area (steps 2-4)
+    // Try to find the most recent valid superblock on checkpoint descriptor
+    // area (steps 2-4)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     for (std::uint64_t idx = sb.xp_desc_base;
          idx < sb.xp_desc_base + sb.xp_desc_blocks; idx++)
@@ -297,11 +347,8 @@ decoder (
         decoder.seek (idx * sb.block_size);
         auto desc_sb = _decode_superblock (decoder);
 
-        if (desc_sb.is_valid)
-        {
-            if (desc_sb.xid > sb.xid)
-                sb = desc_sb;
-        }
+        if (desc_sb.is_valid && desc_sb.xid > sb.xid)
+            sb = desc_sb;
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -335,7 +382,9 @@ decoder (
     apfs_block.set_attribute ("max_file_systems", sb.max_file_systems);
     apfs_block.set_attribute ("mkb_locker_addr", sb.mkb_locker_addr);
     apfs_block.set_attribute ("mkb_locker_count", sb.mkb_locker_count);
-    apfs_block.set_attribute ("newest_mounted_version", sb.newest_mounted_version);
+    apfs_block.set_attribute (
+        "newest_mounted_version", sb.newest_mounted_version
+    );
     apfs_block.set_attribute ("next_oid", sb.next_oid);
     apfs_block.set_attribute ("next_xid", sb.next_xid);
     apfs_block.set_attribute ("omap_oid", sb.omap_oid);
@@ -348,6 +397,10 @@ decoder (
     apfs_block.set_attribute ("size", sb.size);
     apfs_block.set_attribute ("spaceman_oid", sb.spaceman_oid);
     apfs_block.set_attribute ("superblock_addr", sb.offset / sb.block_size);
+    apfs_block.set_attribute (
+        "superblock_checksum",
+        "0x" + mobius::core::string::to_hex (sb.checksum, 16)
+    );
     apfs_block.set_attribute ("superblock_offset", sb.offset);
     apfs_block.set_attribute ("superblock_xid", sb.xid);
     apfs_block.set_attribute ("supports_defrag", sb.supports_defrag);
