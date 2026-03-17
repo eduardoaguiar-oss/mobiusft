@@ -21,6 +21,7 @@
 #include <mobius/core/resource.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <mobius/core/vfs/block.hpp>
+#include <unordered_map>
 #include <vector>
 
 #include <iostream>
@@ -47,10 +48,28 @@ static constexpr std::size_t NX_MAX_FILE_SYSTEMS = 100;
 static constexpr std::size_t NX_EPH_INFO_COUNT = 4;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief obj_phys_t structure
+// Object types
+// @see Apple File System Reference - Object Types (pg. 14)
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static constexpr std::uint32_t OBJECT_TYPE_NX_SUPERBLOCK = 0x00000001;
+static constexpr std::uint32_t OBJECT_TYPE_OMAP = 0x0000000B;
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// B-Tree flags
+// @see Apple File System Reference - B-Tree Node Flags (pg. 132)
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static constexpr std::uint16_t BTNODE_ROOT = 0x0001;
+static constexpr std::uint16_t BTNODE_LEAF = 0x0002;
+static constexpr std::uint16_t BTNODE_FIXED_KV_SIZE = 0x0004;
+static constexpr std::uint16_t BTNODE_HASHED = 0x0008;
+static constexpr std::uint16_t BTNODE_NOHEADER = 0x0010;
+static constexpr std::uint16_t BTNODE_CHECK_KOFF_INVAL = 0x8000;
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief object structure
 // @see Apple File System Reference - obj_phys_t (pg. 10)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-struct obj_phys_t
+struct object
 {
     std::uint64_t checksum;
     std::uint64_t oid;
@@ -68,15 +87,14 @@ struct obj_phys_t
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct superblock
 {
+    // Indicate if superblock is valid
     bool is_valid = false;
 
-    std::uint64_t checksum;
-    std::uint64_t offset = 0;
-    std::uint64_t oid;
-    std::uint64_t xid;
-    std::uint32_t type;
-    std::uint32_t subtype;
+    // obj_phys_t structure
+    object obj;
 
+    // Attributes
+    std::uint64_t offset;
     mobius::core::bytearray signature; // 4 bytes
     std::uint32_t block_size;
     std::uint64_t block_count;
@@ -130,6 +148,55 @@ struct superblock
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief OMAP structure
+// @see Apple File System Reference - OMAP (pg. 28)
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+struct omap
+{
+    // Indicate if OMAP is valid
+    bool is_valid = false;
+
+    // obj_phys_t structure
+    object obj;
+
+    // Attributes
+    std::uint64_t offset = 0;
+    std::uint32_t flags;
+    std::uint32_t snap_count;
+    std::uint32_t tree_type;
+    std::uint32_t snapshot_tree_type;
+    std::uint64_t tree_oid;
+    std::uint64_t snapshot_tree_oid;
+    std::uint64_t most_recent_oid;
+    std::uint64_t pending_revert_min;
+    std::uint64_t pending_revert_max;
+
+    // OID to physical block mapping
+    std::unordered_map<std::uint64_t, std::uint64_t> mappings;
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief btree_node structure
+// @see Apple File System Reference - btree_node_phys_t (pg. 123)
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+struct btree_node
+{
+    object obj;
+    std::uint64_t offset;
+    std::uint16_t flags;
+    std::uint16_t level;
+    std::uint32_t num_keys;
+    std::uint16_t table_space_offset;
+    std::uint16_t table_space_len;
+    std::uint16_t free_space_offset;
+    std::uint16_t free_space_len;
+    std::uint16_t key_free_list_offset;
+    std::uint16_t key_free_list_len;
+    std::uint16_t val_free_list_offset;
+    std::uint16_t val_free_list_len;
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Test block checksum
 // @param data Block data
 // @return True if checksum is valid, false otherwise
@@ -169,29 +236,31 @@ _test_checksum (const mobius::core::bytearray &data)
 // @brief Decode obj_phys_t structure
 // @param decoder Data decoder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static obj_phys_t
+static object
 _decode_obj_phys_t (mobius::core::decoder::data_decoder &decoder)
 {
-    obj_phys_t obj_phys;
+    object obj;
 
-    obj_phys.checksum = decoder.get_uint64_le ();
-    obj_phys.oid = decoder.get_uint64_le ();
-    obj_phys.xid = decoder.get_uint64_le ();
-    obj_phys.subtype = decoder.get_uint32_le ();
+    obj.checksum = decoder.get_uint64_le ();
+    obj.oid = decoder.get_uint64_le ();
+    obj.xid = decoder.get_uint64_le ();
 
     auto type = decoder.get_uint32_le ();
-    obj_phys.type = type & 0xffff;
-    obj_phys.is_physical = (type & 0xc0000000) == 0x40000000;
-    obj_phys.is_virtual = (type & 0xc0000000) == 0x00000000;
-    obj_phys.is_ephemeral = (type & 0xc0000000) == 0x80000000;
+    obj.type = type & 0xffff;
+    obj.is_physical = (type & 0xc0000000) == 0x40000000;
+    obj.is_virtual = (type & 0xc0000000) == 0x00000000;
+    obj.is_ephemeral = (type & 0xc0000000) == 0x80000000;
 
-    return obj_phys;
+    obj.subtype = decoder.get_uint32_le ();
+
+    return obj;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode superblock structure
+// @brief Decode nx_superblock_t structure
 // @param decoder Data decoder object
 // @return Superblock structure
+// @see Apple File System Reference - nx_superblock_t (pg. 27)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static superblock
 _decode_superblock (mobius::core::decoder::data_decoder &decoder)
@@ -200,19 +269,15 @@ _decode_superblock (mobius::core::decoder::data_decoder &decoder)
     sb.offset = decoder.tell ();
 
     // Read object header
-    auto obj = _decode_obj_phys_t (decoder);
-    sb.checksum = obj.checksum;
-    sb.oid = obj.oid;
-    sb.xid = obj.xid;
-    sb.type = obj.type;
-    sb.subtype = obj.subtype;
+    sb.obj = _decode_obj_phys_t (decoder);
 
     // Check for a valid checksum
-    if (sb.checksum == 0 || sb.checksum == 0xffffffffffffffff)
+    if (sb.obj.checksum == 0 || sb.obj.checksum == 0xffffffffffffffff)
         return sb;
 
     // Check if it's a superblock
-    if (sb.oid != OID_NX_SUPERBLOCK)
+    if (sb.obj.type != OBJECT_TYPE_NX_SUPERBLOCK ||
+        sb.obj.oid != OID_NX_SUPERBLOCK)
         return sb;
 
     // Check signature
@@ -308,6 +373,148 @@ _decode_superblock (mobius::core::decoder::data_decoder &decoder)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode btree_node
+// @param decoder Data decoder object
+// @return B-Tree node structure
+// @see Apple File System Reference - btree_node_phys_t (pg. 123)
+//
+// Node is composed of the following areas:
+// 1. btree_node_phys_t structure (48 bytes)
+// 2. TOC (Table of Contents) - contains the offsets and lengths of the keys and values
+// 3. Keys
+// 4. Free space (to add new keys/values)
+// 5. Values
+// 6. btree_info_t structure (only for root nodes, contains metadata about the tree)
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static btree_node
+_decode_btree_node (mobius::core::decoder::data_decoder &decoder)
+{
+    btree_node node;
+    node.offset = decoder.tell ();
+
+    // Decode object header
+    node.obj = _decode_obj_phys_t (decoder);
+
+    // Decode btree_node_phys_t fields
+    node.flags = decoder.get_uint16_le ();
+    node.level = decoder.get_uint16_le ();
+    node.num_keys = decoder.get_uint32_le ();
+    node.table_space_offset = decoder.get_uint16_le ();
+    node.table_space_len = decoder.get_uint16_le ();
+    node.free_space_offset = decoder.get_uint16_le ();
+    node.free_space_len = decoder.get_uint16_le ();
+    node.key_free_list_offset = decoder.get_uint16_le ();
+    node.key_free_list_len = decoder.get_uint16_le ();
+    node.val_free_list_offset = decoder.get_uint16_le ();
+    node.val_free_list_len = decoder.get_uint16_le ();
+
+    // Decode Table of Contents (TOC)
+    // The offset for the table of contents is counted from the beginning of the nodeʼs btn_data,
+    // which starts immediately after the btree_node_phys_t structure.
+    // So we need to seek to the beginning of the node and then add the offset.
+    auto bnt_data_offset = decoder.tell ();
+    decoder.seek (bnt_data_offset + node.table_space_offset);
+
+    /*for (std::uint32_t i = 0; i < node.num_keys; i++)
+    {
+        if (node.flags & BTNODE_FIXED_KV_SIZE)
+        {
+            auto key_offset = decoder.get_uint16_le ();
+            auto val_offset = decoder.get_uint16_le ();
+        }
+
+        else
+        {
+            auto key_offset = decoder.get_uint16_le ();
+            auto key_length = decoder.get_uint16_le ();
+            auto val_offset = decoder.get_uint16_le ();
+            auto val_length = decoder.get_uint16_le ();
+        }
+    }*/
+
+    return node;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode container object map (omap)
+// @param decoder Data decoder object
+// @param omap_oid Omap object ID
+// @param xid Transaction ID
+// @param block_size Block size
+// @return Omap structure
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static omap
+_decode_omap (
+    mobius::core::decoder::data_decoder &decoder,
+    std::uint64_t omap_oid,
+    std::uint64_t xid,
+    std::uint64_t block_size
+)
+{
+    // Seek to OMAP object
+    decoder.seek (omap_oid * block_size);
+
+    omap om;
+    om.offset = decoder.tell ();
+
+    // Read object header
+    om.obj = _decode_obj_phys_t (decoder);
+
+    // Check for a valid checksum
+    if (om.obj.checksum == 0 || om.obj.checksum == 0xffffffffffffffff)
+        return om;
+
+    // Check if it's an object map
+    if (om.obj.type != OBJECT_TYPE_OMAP)
+        return om;
+
+    // Decode OMAP fields
+    // @see Apple File System Reference - Object Maps (pg. 44)
+    om.flags = decoder.get_uint32_le ();
+    om.snap_count = decoder.get_uint32_le ();
+    om.tree_type = decoder.get_uint32_le ();
+    om.snapshot_tree_type = decoder.get_uint32_le ();
+    om.tree_oid = decoder.get_uint64_le ();
+    om.snapshot_tree_oid = decoder.get_uint64_le ();
+    om.most_recent_oid = decoder.get_uint64_le ();
+    om.pending_revert_min = decoder.get_uint64_le ();
+    om.pending_revert_max = decoder.get_uint64_le ();
+
+    // Test checksum
+    decoder.seek (om.offset);
+    auto data = decoder.get_bytearray_by_size (block_size);
+
+    if (!_test_checksum (data))
+        return om;
+
+    // Decode B-Tree
+    // @see Apple File System Reference - B-Tree (pg. 122)
+    decoder.seek (om.tree_oid * block_size);
+    auto node = _decode_btree_node (decoder);
+    std::cerr << "B-Tree node - OID: " << node.obj.oid
+              << "\nXID: " << node.obj.xid << "\nType: " << node.obj.type
+              << "\nSubtype: " << node.obj.subtype
+              << "\nIs physical: " << node.obj.is_physical
+              << "\nIs virtual: " << node.obj.is_virtual
+              << "\nIs ephemeral: " << node.obj.is_ephemeral
+              << "\nFlags: " << node.flags << "\nLevel: " << node.level
+              << "\nNum keys: " << node.num_keys
+              << "\nTable space offset: " << node.table_space_offset
+              << "\nTable space len: " << node.table_space_len
+              << "\nFree space offset: " << node.free_space_offset
+              << "\nFree space len: " << node.free_space_len
+              << "\nKey free list offset: " << node.key_free_list_offset
+              << "\nKey free list len: " << node.key_free_list_len
+              << "\nVal free list offset: " << node.val_free_list_offset
+              << "\nVal free list len: " << node.val_free_list_len << std::endl;
+
+    // If we reached this point, the object map is valid
+    om.is_valid = true;
+
+    return om;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Try to decode block
 // @author Eduardo Aguiar
 // @param block Block object
@@ -323,8 +530,6 @@ decoder (
     std::vector<mobius::core::vfs::block> &
 )
 {
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Try to read a superblock structure from the beginning of the block (step 1)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -347,9 +552,17 @@ decoder (
         decoder.seek (idx * sb.block_size);
         auto desc_sb = _decode_superblock (decoder);
 
-        if (desc_sb.is_valid && desc_sb.xid > sb.xid)
+        if (desc_sb.is_valid && desc_sb.obj.xid > sb.obj.xid)
             sb = desc_sb;
     }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Read container object map (step 6)
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto om = _decode_omap (decoder, sb.omap_oid, sb.obj.xid, sb.block_size);
+    std::cerr << "Omap object - OID: " << om.obj.oid << ", XID: " << om.obj.xid
+              << ", Type: " << om.obj.type << ", Subtype: " << om.obj.subtype
+              << ", Is valid: " << om.is_valid << std::endl;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Create APFS container block
@@ -388,6 +601,20 @@ decoder (
     apfs_block.set_attribute ("next_oid", sb.next_oid);
     apfs_block.set_attribute ("next_xid", sb.next_xid);
     apfs_block.set_attribute ("omap_oid", sb.omap_oid);
+    apfs_block.set_attribute ("omap_flags", om.flags);
+    apfs_block.set_attribute ("omap_snap_count", om.snap_count);
+    apfs_block.set_attribute (
+        "omap_tree_type", "0x" + mobius::core::string::to_hex (om.tree_type)
+    );
+    apfs_block.set_attribute (
+        "omap_snapshot_tree_type",
+        "0x" + mobius::core::string::to_hex (om.snapshot_tree_type)
+    );
+    apfs_block.set_attribute ("omap_tree_oid", om.tree_oid);
+    apfs_block.set_attribute ("omap_snapshot_tree_oid", om.snapshot_tree_oid);
+    apfs_block.set_attribute ("omap_most_recent_oid", om.most_recent_oid);
+    apfs_block.set_attribute ("omap_pending_revert_min", om.pending_revert_min);
+    apfs_block.set_attribute ("omap_pending_revert_max", om.pending_revert_max);
     apfs_block.set_attribute ("reaper_oid", sb.reaper_oid);
     apfs_block.set_attribute (
         "incompatible_features", sb.incompatible_features
@@ -399,10 +626,10 @@ decoder (
     apfs_block.set_attribute ("superblock_addr", sb.offset / sb.block_size);
     apfs_block.set_attribute (
         "superblock_checksum",
-        "0x" + mobius::core::string::to_hex (sb.checksum, 16)
+        "0x" + mobius::core::string::to_hex (sb.obj.checksum, 16)
     );
     apfs_block.set_attribute ("superblock_offset", sb.offset);
-    apfs_block.set_attribute ("superblock_xid", sb.xid);
+    apfs_block.set_attribute ("superblock_xid", sb.obj.xid);
     apfs_block.set_attribute ("supports_defrag", sb.supports_defrag);
     apfs_block.set_attribute ("supports_fusion", sb.supports_fusion);
     apfs_block.set_attribute ("test_oid", sb.test_oid);
@@ -422,6 +649,11 @@ decoder (
 
     apfs_block.set_handled (true);
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Create APFS volume blocks
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @todo implementation
+    
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Add APFS container block to new blocks
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
