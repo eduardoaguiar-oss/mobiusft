@@ -27,6 +27,11 @@ project(vfs_block_apfs LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(vfs_block_apfs MODULE
     main.cpp
+    common.cpp
+    object.cpp
+    object_map.cpp
+    superblock.cpp
+    volume.cpp
 )
 
 set_target_properties(vfs_block_apfs PROPERTIES OUTPUT_NAME "vfs-block-apfs" PREFIX "")
