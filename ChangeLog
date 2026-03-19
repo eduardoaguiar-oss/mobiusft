@@ -6,6 +6,7 @@ Mobius Forensic Toolkit 2.25
 	* libmobius_core: Added support for hash `fletcher16`
 	* libmobius_core: Added support for hash `fletcher32`
 	* libmobius_core: Added support for hash `fletcher64`
+	* libmobius_core: Added new method decoder::data_decoder::get_apfs_datetime
 
 Mobius Forensic Toolkit 2.24
 	* Added new C++ extension called `app-gecko`

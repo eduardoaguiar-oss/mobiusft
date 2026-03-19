@@ -282,6 +282,23 @@ data_decoder::get_uint64_be ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode APFS timestamp
+// @return datetime object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::datetime::datetime
+data_decoder::get_apfs_datetime ()
+{
+    mobius::core::datetime::datetime dt;
+    auto timestamp = get_uint64_le ();
+
+    if (timestamp)
+        dt = mobius::core::datetime::new_datetime_from_unix_timestamp (
+            timestamp / 1000000000);
+
+    return dt;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Decode HFS timestamp
 // @return datetime object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
