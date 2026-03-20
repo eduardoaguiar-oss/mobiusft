@@ -94,12 +94,13 @@ superblock::superblock (mobius::core::decoder::data_decoder &decoder)
     }
 
     // Read counters
-    for (std::size_t i = 0; i < NX_NUM_COUNTERS; i++)
-        counters_.push_back (decoder.get_uint64_le ());
+    checksum_set_count_ = decoder.get_uint64_le ();
+    checksum_fail_count_ = decoder.get_uint64_le ();
+    decoder.skip ((NX_NUM_COUNTERS - 2) * sizeof(std::uint64_t));
 
     // Reader other fields
-    block_out_addr_ = decoder.get_uint64_le ();
-    block_out_count_ = decoder.get_uint64_le ();
+    blocked_out_addr_ = decoder.get_uint64_le ();
+    blocked_out_count_ = decoder.get_uint64_le ();
     evict_mapping_tree_oid_ = decoder.get_uint64_le ();
     flags_ = decoder.get_uint64_le ();
     efi_jumpstart_ = decoder.get_uint64_le ();

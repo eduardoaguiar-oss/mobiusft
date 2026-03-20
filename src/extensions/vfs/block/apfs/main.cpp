@@ -27,8 +27,6 @@
 #include "superblock.hpp"
 #include "volume.hpp"
 
-#include <iostream>
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // References:
 // @see https://developer.apple.com/support/downloads/Apple-File-System-Reference.pdf
@@ -37,6 +35,9 @@
 // @see https://www.ntfs.com/apfs-structure.htm
 // @see https://www.mac4n6.com/blog/category/APFS
 // @see https://github.com/libyal/libfsapfs/blob/main/documentation/Apple%20File%20System%20(APFS).asciidoc
+//
+// Rationale:
+// 1. 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace
@@ -59,7 +60,6 @@ decoder (
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
-    std::cerr << "*** 1 ***" << std::endl;
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Try to read a superblock structure from the beginning of the block (step 1)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -84,7 +84,6 @@ decoder (
             sb = desc_sb;
     }
 
-    std::cerr << "*** 3 ***" << std::endl;
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Read container object map (step 6)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -98,14 +97,11 @@ decoder (
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Read volumes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::cerr << "*** 4 ***" << std::endl;
     std::vector<mobius::extension::vfs::block::apfs::volume> volumes;
 
     for (std::uint64_t fs_oid : sb.get_file_system_oids ())
     {
         auto paddr = omap.get_physical_block_address (fs_oid);
-        std::cerr << "FS OID: " << fs_oid
-                  << ", Physical block address: " << paddr << std::endl;
 
         if (paddr)
         {
@@ -139,30 +135,48 @@ decoder (
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Create APFS container block
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::cerr << "*** 5 ***" << std::endl;
     auto apfs_block =
         mobius::core::vfs::new_slice_block (block, "apfs.container");
 
-    apfs_block.set_attribute ("block_size", sb.get_block_size ());
     apfs_block.set_attribute ("block_count", sb.get_block_count ());
-    apfs_block.set_attribute ("block_out_addr", sb.get_block_out_addr ());
-    apfs_block.set_attribute ("block_out_count", sb.get_block_out_count ());
+    apfs_block.set_attribute ("block_size", sb.get_block_size ());
+    apfs_block.set_attribute ("blocked_out_addr", sb.get_blocked_out_addr ());
+    apfs_block.set_attribute ("blocked_out_count", sb.get_blocked_out_count ());
+    apfs_block.set_attribute (
+        "checksum_set_count", sb.get_checksum_set_count ()
+    );
+    apfs_block.set_attribute (
+        "checksum_fail_count", sb.get_checksum_fail_count ()
+    );
     apfs_block.set_attribute (
         "description", "APFS Container - UUID: " + sb.get_uuid ()
 
     );
+    apfs_block.set_attribute ("efi_jumpstart", sb.get_efi_jumpstart ());
     apfs_block.set_attribute (
         "evict_mapping_tree_oid", sb.get_evict_mapping_tree_oid ()
     );
-    apfs_block.set_attribute ("efi_jumpstart", sb.get_efi_jumpstart ());
-    apfs_block.set_attribute ("features", sb.get_features ());
-    apfs_block.set_attribute ("flags", sb.get_flags ());
-    apfs_block.set_attribute ("flag_lcfd", sb.has_lcfd_flag ());
+    apfs_block.set_attribute (
+        "features", "0x" + mobius::core::string::to_hex (sb.get_features (), 16)
+    );
+    apfs_block.set_attribute ("flags", "0x" + mobius::core::string::to_hex (sb.get_flags (), 8));
+    apfs_block.set_attribute ("flag_lcfd", sb.get_flag_lcfd ());
+    apfs_block.set_attribute (
+        "flag_supports_defrag", sb.get_flag_supports_defrag ()
+    );
+    apfs_block.set_attribute (
+        "flag_supports_fusion", sb.get_flag_supports_fusion ()
+    );
     apfs_block.set_attribute ("fusion_mt_oid", sb.get_fusion_mt_oid ());
     apfs_block.set_attribute ("fusion_uuid", sb.get_fusion_uuid ());
     apfs_block.set_attribute ("fusion_wbc_addr", sb.get_fusion_wbc_addr ());
     apfs_block.set_attribute ("fusion_wbc_count", sb.get_fusion_wbc_count ());
     apfs_block.set_attribute ("fusion_wbc_oid", sb.get_fusion_wbc_oid ());
+    apfs_block.set_attribute (
+        "incompatible_features",
+        "0x" +
+            mobius::core::string::to_hex (sb.get_incompatible_features (), 16)
+    );
     apfs_block.set_attribute ("keylocker_addr", sb.get_keylocker_addr ());
     apfs_block.set_attribute ("keylocker_count", sb.get_keylocker_count ());
     apfs_block.set_attribute ("max_file_systems", sb.get_max_file_systems ());
@@ -187,7 +201,9 @@ decoder (
         "omap_checksum",
         "0x" + mobius::core::string::to_hex (omap.get_checksum (), 16)
     );
-    apfs_block.set_attribute ("omap_flags", omap.get_flags ());
+    apfs_block.set_attribute (
+        "omap_flags", "0x" + mobius::core::string::to_hex (omap.get_flags (), 8)
+    );
 
     apfs_block.set_attribute (
         "omap_most_recent_snap", omap.get_most_recent_snap ()
@@ -215,9 +231,9 @@ decoder (
     );
     apfs_block.set_attribute ("reaper_oid", sb.get_reaper_oid ());
     apfs_block.set_attribute (
-        "incompatible_features", sb.get_incompatible_features ()
+        "readonly_features",
+        "0x" + mobius::core::string::to_hex (sb.get_readonly_features (), 16)
     );
-    apfs_block.set_attribute ("readonly_features", sb.get_readonly_features ());
     apfs_block.set_attribute ("signature", sb.get_signature ().to_string ());
     apfs_block.set_attribute ("size", sb.get_size ());
     apfs_block.set_attribute ("spaceman_oid", sb.get_spaceman_oid ());
@@ -231,8 +247,6 @@ decoder (
     apfs_block.set_attribute ("superblock_offset", sb.get_offset ());
     apfs_block.set_attribute ("superblock_oid", sb.get_oid ());
     apfs_block.set_attribute ("superblock_xid", sb.get_xid ());
-    apfs_block.set_attribute ("supports_defrag", sb.supports_defrag ());
-    apfs_block.set_attribute ("supports_fusion", sb.supports_fusion ());
     apfs_block.set_attribute ("test_oid", sb.get_test_oid ());
     apfs_block.set_attribute ("test_type", sb.get_test_type ());
     apfs_block.set_attribute ("uuid", sb.get_uuid ());
@@ -259,21 +273,30 @@ decoder (
         auto volume_block = apfs_block.new_slice_block ("apfs.volume");
 
         volume_block.set_attribute (
+            "alloc_block_count", volume.get_alloc_block_count ()
+        );
+        volume_block.set_attribute (
             "checksum",
             "0x" + mobius::core::string::to_hex (volume.get_checksum (), 16)
         );
+        volume_block.set_attribute (
+            "cloneinfo_id_epoch", volume.get_cloneinfo_id_epoch ()
+        );
+        volume_block.set_attribute (
+            "cloneinfo_id_xid", volume.get_cloneinfo_id_xid ()
+        );
         volume_block.set_attribute ("crypto_flags", volume.get_crypto_flags ());
-        volume_block.set_attribute (
-            "crypto_major_version", volume.get_crypto_major_version ()
-        );
-        volume_block.set_attribute (
-            "crypto_minor_version", volume.get_crypto_minor_version ()
-        );
         volume_block.set_attribute (
             "crypto_key_os_version", volume.get_crypto_key_os_version ()
         );
         volume_block.set_attribute (
             "crypto_key_revision", volume.get_crypto_key_revision ()
+        );
+        volume_block.set_attribute (
+            "crypto_major_version", volume.get_crypto_major_version ()
+        );
+        volume_block.set_attribute (
+            "crypto_minor_version", volume.get_crypto_minor_version ()
         );
         volume_block.set_attribute (
             "crypto_persistent_class", volume.get_crypto_persistent_class ()
@@ -294,6 +317,7 @@ decoder (
                 "description", "APFS Volume - UUID: " + volume.get_uuid ()
             );
 
+        volume_block.set_attribute ("er_state_oid", volume.get_er_state_oid ());
         volume_block.set_attribute (
             "extentref_tree_oid", volume.get_extentref_tree_oid ()
         );
@@ -304,20 +328,58 @@ decoder (
                    )
         );
         volume_block.set_attribute ("features", volume.get_features ());
-        volume_block.set_attribute ("flags", volume.get_flags ());
         volume_block.set_attribute (
-            "flag_onekey_encrypted", volume.get_flag_onekey_encrypted ()
+            "fext_tree_oid", volume.get_fext_tree_oid ()
         );
         volume_block.set_attribute (
-            "flag_spilled_over", volume.get_flag_spilled_over ()
+            "fext_tree_type",
+            "0x" +
+                mobius::core::string::to_hex (volume.get_fext_tree_type (), 8)
+        );
+        volume_block.set_attribute ("flags", volume.get_flags ());
+        volume_block.set_attribute (
+            "flag_always_check_extentref",
+            volume.get_flag_always_check_extentref ()
+        );
+        volume_block.set_attribute (
+            "flag_case_insensitive", volume.get_flag_case_insensitive ()
+        );
+        volume_block.set_attribute (
+            "flag_dataless_snaps", volume.get_flag_dataless_snaps ()
+        );
+        volume_block.set_attribute (
+            "flag_hardlink_map_records", volume.get_flag_hardlink_map_records ()
+        );
+        volume_block.set_attribute (
+            "flag_has_changed_encryption_key",
+            volume.get_flag_has_changed_encryption_key ()
+        );
+        volume_block.set_attribute (
+            "flag_incomplete_restore", volume.get_flag_incomplete_restore ()
+        );
+        volume_block.set_attribute (
+            "flag_normalization_insensitive",
+            volume.get_flag_normalization_insensitive ()
+        );
+        volume_block.set_attribute (
+            "flag_onekey_encrypted", volume.get_flag_onekey_encrypted ()
         );
         volume_block.set_attribute (
             "flag_run_spilled_over_cleaner",
             volume.get_flag_run_spilled_over_cleaner ()
         );
         volume_block.set_attribute (
-            "flag_always_check_extentref",
-            volume.get_flag_always_check_extentref ()
+            "flag_spilled_over", volume.get_flag_spilled_over ()
+        );
+        volume_block.set_attribute (
+            "flag_strict_atime", volume.get_flag_strict_atime ()
+        );
+        volume_block.set_attribute (
+            "flag_supports_defrag", volume.get_flag_supports_defrag ()
+        );
+        volume_block.set_attribute (
+            "flag_volgrp_system_ino_space",
+            volume.get_flag_volgrp_system_ino_space ()
         );
         volume_block.set_attribute (
             "formatted_by_id", volume.get_formatted_by_id ()
@@ -328,22 +390,18 @@ decoder (
         volume_block.set_attribute (
             "formatted_by_xid", volume.get_formatted_by_xid ()
         );
-        volume_block.set_attribute (
-            "fs_alloc_count", volume.get_fs_alloc_count ()
-        );
-        volume_block.set_attribute ("fs_index", volume.get_fs_index ());
-        volume_block.set_attribute (
-            "fs_quota_block_count", volume.get_fs_quota_block_count ()
-        );
-        volume_block.set_attribute (
-            "fs_reserve_block_count", volume.get_fs_reserve_block_count ()
-        );
-        volume_block.set_attribute ("fs_uuid", volume.get_uuid ());
-        volume_block.set_attribute ("fs_xid", volume.get_xid ());
+        volume_block.set_attribute ("group_id", volume.get_group_id ());
         volume_block.set_attribute (
             "incompatible_features", volume.get_incompatible_features ()
         );
+        volume_block.set_attribute ("index", volume.get_index ());
+        volume_block.set_attribute (
+            "integrity_meta_oid", volume.get_integrity_meta_oid ()
+        );
         volume_block.set_attribute ("is_encrypted", volume.is_encrypted ());
+        volume_block.set_attribute (
+            "is_sealed_volume", volume.is_sealed_volume ()
+        );
         volume_block.set_attribute (
             "last_modification_time", volume.get_last_modification_time ()
         );
@@ -372,10 +430,22 @@ decoder (
         volume_block.set_attribute ("oid", volume.get_oid ());
         volume_block.set_attribute ("omap_oid", volume.get_omap_oid ());
         volume_block.set_attribute (
+            "quota_block_count", volume.get_quota_block_count ()
+        );
+        volume_block.set_attribute (
             "readonly_compatible_features",
             "0x" + mobius::core::string::to_hex (
                        volume.get_readonly_compatible_features (), 16
                    )
+        );
+        volume_block.set_attribute (
+            "reserve_block_count", volume.get_reserve_block_count ()
+        );
+        volume_block.set_attribute ("reserved", volume.get_reserved ());
+        volume_block.set_attribute ("reserved_oid", volume.get_reserved_oid ());
+        volume_block.set_attribute (
+            "reserved_type",
+            "0x" + mobius::core::string::to_hex (volume.get_reserved_type (), 8)
         );
         volume_block.set_attribute (
             "revert_to_sblock_oid", volume.get_revert_to_sblock_oid ()
@@ -383,6 +453,9 @@ decoder (
         volume_block.set_attribute (
             "revert_to_xid", volume.get_revert_to_xid ()
         );
+
+        volume_block.set_attribute ("role", volume.get_role ());
+        volume_block.set_attribute ("root_to_xid", volume.get_root_to_xid ());
         volume_block.set_attribute (
             "root_tree_oid", volume.get_root_tree_oid ()
         );
@@ -392,6 +465,12 @@ decoder (
                 mobius::core::string::to_hex (volume.get_root_tree_type (), 8)
         );
         volume_block.set_attribute (
+            "signature", volume.get_signature ().to_string ()
+        );
+        volume_block.set_attribute (
+            "snap_meta_ext_oid", volume.get_snap_meta_ext_oid ()
+        );
+        volume_block.set_attribute (
             "snap_meta_tree_oid", volume.get_snap_meta_tree_oid ()
         );
         volume_block.set_attribute (
@@ -399,6 +478,13 @@ decoder (
             "0x" + mobius::core::string::to_hex (
                        volume.get_snap_meta_tree_type (), 8
                    )
+        );
+        volume_block.set_attribute ("superblock_offset", volume.get_offset ());
+        volume_block.set_attribute (
+            "total_blocks_alloced", volume.get_total_blocks_alloced ()
+        );
+        volume_block.set_attribute (
+            "total_blocks_freed", volume.get_total_blocks_freed ()
         );
         volume_block.set_attribute ("unmount_time", volume.get_unmount_time ());
         volume_block.set_attribute ("uuid", volume.get_uuid ());

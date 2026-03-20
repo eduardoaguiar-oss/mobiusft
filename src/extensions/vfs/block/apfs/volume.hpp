@@ -99,13 +99,13 @@ class volume
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get volume FS index
-    // @return FS index
+    // @brief Get volume index
+    // @return Index
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::uint32_t
-    get_fs_index () const noexcept
+    get_index () const noexcept
     {
-        return fs_index_;
+        return index_;
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -149,33 +149,33 @@ class volume
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get volume FS reserve block count
-    // @return FS reserve block count
+    // @brief Get volume reserve block count
+    // @return Reserve block count
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::uint64_t
-    get_fs_reserve_block_count () const noexcept
+    get_reserve_block_count () const noexcept
     {
-        return fs_reserve_block_count_;
+        return reserve_block_count_;
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get volume FS quota block count
-    // @return FS quota block count
+    // @brief Get volume quota block count
+    // @return Quota block count
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::uint64_t
-    get_fs_quota_block_count () const noexcept
+    get_quota_block_count () const noexcept
     {
-        return fs_quota_block_count_;
+        return quota_block_count_;
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get volume FS alloc count
-    // @return FS alloc count
+    // @brief Get volume alloc block count
+    // @return Alloc block count
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::uint64_t
-    get_fs_alloc_count () const noexcept
+    get_alloc_block_count () const noexcept
     {
-        return fs_alloc_count_;
+        return alloc_block_count_;
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -519,6 +519,246 @@ class volume
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get next document ID
+    // @return Next document ID
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::uint32_t
+    get_next_doc_id () const noexcept
+    {
+        return next_doc_id_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get volume role
+    // @return Volume role
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_role () const
+    {
+        return role_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get reserved field
+    // @return Reserved field
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::uint16_t
+    get_reserved () const noexcept
+    {
+        return reserved_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get root to XID
+    // @return Root to XID
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::uint64_t
+    get_root_to_xid () const noexcept
+    {
+        return root_to_xid_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get ER state OID
+    // @return ER state OID
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::uint64_t
+    get_er_state_oid () const noexcept
+    {
+        return er_state_oid_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get cloneinfo ID epoch
+    // @return Cloneinfo ID epoch
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::uint64_t
+    get_cloneinfo_id_epoch () const noexcept
+    {
+        return cloneinfo_id_epoch_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get cloneinfo ID XID
+    // @return Cloneinfo ID XID
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::uint64_t
+    get_cloneinfo_id_xid () const noexcept
+    {
+        return cloneinfo_id_xid_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get snap meta ext OID
+    // @return Snap meta ext OID
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::uint64_t
+    get_snap_meta_ext_oid () const noexcept
+    {
+        return snap_meta_ext_oid_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get group ID
+    // @return Group ID
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_group_id () const
+    {
+        return group_id_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get integrity meta OID
+    // @return Integrity meta OID
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::uint64_t
+    get_integrity_meta_oid () const noexcept
+    {
+        return integrity_meta_oid_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get file extent tree OID
+    // @return File extent tree OID
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::uint64_t
+    get_fext_tree_oid () const noexcept
+    {
+        return fext_tree_oid_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get file extent tree type
+    // @return File extent tree type
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::uint32_t
+    get_fext_tree_type () const noexcept
+    {
+        return fext_tree_type_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get reserved type
+    // @return Reserved type
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::uint32_t
+    get_reserved_type () const noexcept
+    {
+        return reserved_type_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get reserved OID
+    // @return Reserved OID
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::uint64_t
+    get_reserved_oid () const noexcept
+    {
+        return reserved_oid_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if volume has hardlink map records
+    // @return <b>true</b> if volume has hardlink map records, <b>false</b> otherwise
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool
+    get_flag_hardlink_map_records () const noexcept
+    {
+        return flag_hardlink_map_records_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if volume supports defrag
+    // @return <b>true</b> if volume supports defrag, <b>false</b> otherwise
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool
+    get_flag_supports_defrag () const noexcept
+    {
+        return flag_supports_defrag_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if volume has strict atime
+    // @return <b>true</b> if volume has strict atime, <b>false</b> otherwise
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool
+    get_flag_strict_atime () const noexcept
+    {
+        return flag_strict_atime_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if volume has volgrp system ino space
+    // @return <b>true</b> if volume has volgrp system ino space, <b>false</b> otherwise
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool
+    get_flag_volgrp_system_ino_space () const noexcept
+    {
+        return flag_volgrp_system_ino_space_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if volume is case insensitive
+    // @return <b>true</b> if volume is case insensitive, <b>false</b> otherwise
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool
+    get_flag_case_insensitive () const noexcept
+    {
+        return flag_case_insensitive_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if volume has dataless snaps
+    // @return <b>true</b> if volume has dataless snaps, <b>false</b> otherwise
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool
+    get_flag_dataless_snaps () const noexcept
+    {
+        return flag_dataless_snaps_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if volume has changed encryption key
+    // @return <b>true</b> if volume has changed encryption key, <b>false</b> otherwise
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool
+    get_flag_has_changed_encryption_key () const noexcept
+    {
+        return flag_has_changed_encryption_key_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if volume is normalization insensitive
+    // @return <b>true</b> if volume is normalization insensitive, <b>false</b> otherwise
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool
+    get_flag_normalization_insensitive () const noexcept
+    {
+        return flag_normalization_insensitive_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if volume has incomplete restore
+    // @return <b>true</b> if volume has incomplete restore, <b>false</b> otherwise
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool
+    get_flag_incomplete_restore () const noexcept
+    {
+        return flag_incomplete_restore_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if volume is sealed
+    // @return <b>true</b> if volume is sealed, <b>false</b> otherwise
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool
+    is_sealed_volume () const noexcept
+    {
+        return is_sealed_volume_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Check if volume is encrypted
     // @return <b>true</b> if volume is encrypted, <b>false</b> otherwise
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -580,14 +820,14 @@ class volume
     // Attributes
     std::uint64_t offset_;
     mobius::core::bytearray signature_; // 4 bytes
-    std::uint32_t fs_index_;
+    std::uint32_t index_;
     std::uint64_t features_;
     std::uint64_t readonly_compatible_features_;
     std::uint64_t incompatible_features_;
     mobius::core::datetime::datetime unmount_time_;
-    std::uint64_t fs_reserve_block_count_;
-    std::uint64_t fs_quota_block_count_;
-    std::uint64_t fs_alloc_count_;
+    std::uint64_t reserve_block_count_;
+    std::uint64_t quota_block_count_;
+    std::uint64_t alloc_block_count_;
 
     // From wrapped_crypto_state_t
     std::uint16_t crypto_major_version_;
@@ -626,8 +866,36 @@ class volume
     mobius::core::datetime::datetime last_modified_by_time_;
     std::uint64_t last_modified_by_xid_;
     std::string name_;
+    std::uint32_t next_doc_id_;
+    std::string role_;
+    std::uint16_t reserved_;
+    std::uint64_t root_to_xid_;
+    std::uint64_t er_state_oid_;
+    std::uint64_t cloneinfo_id_epoch_;
+    std::uint64_t cloneinfo_id_xid_;
+    std::uint64_t snap_meta_ext_oid_;
+    std::string group_id_;
+    std::uint64_t integrity_meta_oid_;
+    std::uint64_t fext_tree_oid_;
+    std::uint32_t fext_tree_type_;
+    std::uint32_t reserved_type_;
+    std::uint64_t reserved_oid_;
 
-    // Derived attributes
+    // Derived attributes from features
+    bool flag_hardlink_map_records_ = false;
+    bool flag_supports_defrag_ = false;
+    bool flag_strict_atime_ = false;
+    bool flag_volgrp_system_ino_space_ = false;
+
+    // Derived attributes from incompatible features
+    bool flag_case_insensitive_ = false;
+    bool flag_dataless_snaps_ = false;
+    bool flag_has_changed_encryption_key_ = false;
+    bool flag_normalization_insensitive_ = false;
+    bool flag_incomplete_restore_ = false;
+    bool is_sealed_volume_ = false;
+
+    // Derived attributes from flags
     bool is_encrypted_ = false;
     bool flag_onekey_encrypted_ = false;
     bool flag_spilled_over_ = false;
