@@ -54,6 +54,10 @@ superblock::superblock (mobius::core::decoder::data_decoder &decoder)
         obj.get_oid () != OID_NX_SUPERBLOCK)
         return;
 
+    xid_ = obj.get_xid ();
+    checksum_ = obj.get_checksum ();
+    oid_ = obj.get_oid ();
+
     // Check signature
     signature_ = decoder.get_bytearray_by_size (4);
 
@@ -96,7 +100,7 @@ superblock::superblock (mobius::core::decoder::data_decoder &decoder)
     // Read counters
     checksum_set_count_ = decoder.get_uint64_le ();
     checksum_fail_count_ = decoder.get_uint64_le ();
-    decoder.skip ((NX_NUM_COUNTERS - 2) * sizeof(std::uint64_t));
+    decoder.skip ((NX_NUM_COUNTERS - 2) * sizeof (std::uint64_t));
 
     // Reader other fields
     blocked_out_addr_ = decoder.get_uint64_le ();

@@ -68,13 +68,19 @@ namespace mobius::extension::vfs::block::apfs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Volume constructor
 // @param decoder Data decoder object
+// @param paddr Physical block address of the volume
+// @param block_size Block size of the container
 // @see Apple File System Reference - Volumes (pg. 51)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 volume::volume (
-    mobius::core::decoder::data_decoder &decoder, std::uint64_t block_size
+    mobius::core::decoder::data_decoder &decoder,
+    std::uint64_t paddr,
+    std::uint64_t block_size
 )
 {
+    decoder.seek (paddr * block_size);
     offset_ = decoder.tell ();
+    block_ = paddr;
 
     // Read object header
     object obj (decoder);
@@ -194,7 +200,8 @@ volume::volume (
     flag_dataless_snaps_ = (incompatible_features_ & 0x00000002) != 0;
     flag_has_changed_encryption_key_ =
         (incompatible_features_ & 0x00000004) != 0;
-    flag_normalization_insensitive_ = (incompatible_features_ & 0x00000008) != 0;
+    flag_normalization_insensitive_ =
+        (incompatible_features_ & 0x00000008) != 0;
     flag_incomplete_restore_ = (incompatible_features_ & 0x00000010) != 0;
     is_sealed_volume_ = (incompatible_features_ & 0x00000020) != 0;
 

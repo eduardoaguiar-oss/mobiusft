@@ -16,6 +16,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "object_map.hpp"
+#include <mobius/core/log.hpp>
+#include <utility>
 #include "common.hpp"
 #include "object.hpp"
 
@@ -25,8 +27,7 @@ namespace
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static constexpr std::uint32_t OBJECT_TYPE_OMAP = 0x0000000B;
-static constexpr std::size_t BTREE_INFO_SIZE =
-    40; // Size of btree_info_t structure in bytes
+static constexpr std::size_t BTREE_INFO_SIZE = 40;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // B-Tree flags
@@ -147,14 +148,17 @@ object_map::get_physical_block_address (std::uint64_t oid) const
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Load OID to physical block mappings from B-Tree nodes
 // @param node_offset Offset of the B-Tree node to load
+// @see Apple File System Reference - B-Trees (pg. 122)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 object_map::_load_node (std::uint64_t node_offset)
 {
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
     decoder_.seek (node_offset);
 
-    // Decode object header
-    auto obj = mobius::extension::vfs::block::apfs::object (decoder_);
+    // Skip object header
+    decoder_.skip (32); // Skip checksum, oid, xid, type, subtype
 
     // Decode btree_node_phys_t fields
     auto flags = decoder_.get_uint16_le ();
@@ -162,13 +166,20 @@ object_map::_load_node (std::uint64_t node_offset)
     auto num_keys = decoder_.get_uint32_le ();
     auto table_space_offset = decoder_.get_uint16_le ();
     auto table_space_len = decoder_.get_uint16_le ();
-    auto free_space_offset = decoder_.get_uint16_le ();
-    auto free_space_len = decoder_.get_uint16_le ();
-    auto key_free_list_offset = decoder_.get_uint16_le ();
-    auto key_free_list_len = decoder_.get_uint16_le ();
-    auto val_free_list_offset = decoder_.get_uint16_le ();
-    auto val_free_list_len = decoder_.get_uint16_le ();
+
+    // Skip free_space_offset, free_space_len, key_free_list_offset,
+    // key_free_list_len, val_free_list_offset, val_free_list_len
+    decoder_.skip (12);
     auto bnt_data_offset = decoder_.tell ();
+
+    if (level)
+    {
+        log.warning (
+            __LINE__, "OMAP B-Tree node at offset " +
+                          std::to_string (node_offset) +
+                          " has non-leaf level: " + std::to_string (level)
+        );
+    }
 
     // Decode Table of Contents (TOC)
     // The offset for the table of contents is counted from the beginning of the nodeʼs btn_data,
@@ -203,11 +214,10 @@ object_map::_load_node (std::uint64_t node_offset)
     // Get keys and values. The keys in the B-tree are instances of omap_key_t
     // and the values are instances of omap_val_t.
     // @see Apple File System Reference - Object Maps (pg. 44)
-
-    // @todo Handle XID and multiple XIDs (snapshots). For now we just load the most recent one.
     std::uint64_t keys_offset =
         bnt_data_offset + table_space_offset + table_space_len;
     std::uint64_t vals_offset = node_offset + block_size_ - BTREE_INFO_SIZE;
+    std::unordered_map<std::uint64_t, std::uint64_t> last_xid;
 
     for (const auto &entry : entries)
     {
@@ -220,7 +230,36 @@ object_map::_load_node (std::uint64_t node_offset)
         auto ov_size = decoder_.get_uint32_le ();
         auto ov_paddr = decoder_.get_uint64_le ();
 
-        mappings_[ok_oid] = ov_paddr;
+        if (ov_flags)
+        {
+            log.warning (
+                __LINE__,
+                "OMAP entry for OID " + std::to_string (ok_oid) +
+                    " has non-zero flags: " + std::to_string (ov_flags)
+            );
+        }
+
+        if (ov_size != block_size_)
+        {
+            log.warning (
+                __LINE__,
+                "OMAP entry for OID " + std::to_string (ok_oid) +
+                    " has unexpected size: " + std::to_string (ov_size) +
+                    " (expected " + std::to_string (block_size_) + ")"
+            );
+        }
+
+        if (ok_xid <= xid_)
+        {
+            // If we have a mapping for this OID with a lower XID, use the one with the higher XID
+            auto it = last_xid.find (ok_oid);
+
+            if (it == last_xid.end () || it->second < ok_xid)
+            {
+                last_xid[ok_oid] = ok_xid;
+                mappings_[ok_oid] = ov_paddr;
+            }
+        }
     }
 }
 

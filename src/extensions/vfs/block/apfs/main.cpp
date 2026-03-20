@@ -18,7 +18,6 @@
 #include <mobius/core/bytearray.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/core/log.hpp>
-#include <mobius/core/resource.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <mobius/core/vfs/block.hpp>
 #include "common.hpp"
@@ -29,15 +28,40 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // References:
+//
 // @see https://developer.apple.com/support/downloads/Apple-File-System-Reference.pdf
 // @see https://github.com/sgan81/apfs-fuse
 // @see https://github.com/memecode/apfs-tools
 // @see https://www.ntfs.com/apfs-structure.htm
 // @see https://www.mac4n6.com/blog/category/APFS
 // @see https://github.com/libyal/libfsapfs/blob/main/documentation/Apple%20File%20System%20(APFS).asciidoc
-//
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Rationale:
-// 1. 
+//
+// 1. APFS containers are the main structure in the file system and they contain volumes
+//    that share the same storage area. They also have a superblock at the beginning of the
+//    container, which contains important information about the container and its volumes.
+//
+// 2. APFS containers are composed of the following areas:
+//    - Superblock: Contains metadata about the container, such as block size,
+//      block count, and pointers to other important structures.
+//    - Checkpoint Area: Contains multiple checkpoint descriptors, which are
+//      used to store the state of the file system at different points in time. Each checkpoint
+//      stores the state of the file system at different points in time. Each checkpoint
+//      descriptor contains a copy of the superblock and a pointer to the container's object map.
+//    - Space Manager Area: Contains the space manager, which is responsible for
+//      managing free space within the container.
+//    - Storage Area: Contains the actual data blocks for the volumes within the container.
+//
+// 3. The first block (usually 4096 bytes) of the container has a copy of the
+//    superblock. It might be a copy of the latest version or an old version.
+//    It should be used only to locate the checkpoint descriptor area.
+//
+// 4. The checkpoint descriptor area contains multiple checkpoint descriptors, which are
+//    used to store the state of the file system at different points in time. Each checkpoint
+//    descriptor contains a copy of the superblock and a pointer to the container's object map.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace
@@ -105,9 +129,8 @@ decoder (
 
         if (paddr)
         {
-            decoder.seek (paddr * sb.get_block_size ());
             mobius::extension::vfs::block::apfs::volume volume (
-                decoder, sb.get_block_size ()
+                decoder, paddr, sb.get_block_size ()
             );
 
             if (volume)
@@ -159,7 +182,9 @@ decoder (
     apfs_block.set_attribute (
         "features", "0x" + mobius::core::string::to_hex (sb.get_features (), 16)
     );
-    apfs_block.set_attribute ("flags", "0x" + mobius::core::string::to_hex (sb.get_flags (), 8));
+    apfs_block.set_attribute (
+        "flags", "0x" + mobius::core::string::to_hex (sb.get_flags (), 8)
+    );
     apfs_block.set_attribute ("flag_lcfd", sb.get_flag_lcfd ());
     apfs_block.set_attribute (
         "flag_supports_defrag", sb.get_flag_supports_defrag ()
@@ -273,7 +298,11 @@ decoder (
         auto volume_block = apfs_block.new_slice_block ("apfs.volume");
 
         volume_block.set_attribute (
-            "alloc_block_count", volume.get_alloc_block_count ()
+            "allocated_block_count", volume.get_alloc_block_count ()
+        );
+        volume_block.set_attribute (
+            "allocated_size",
+            volume.get_alloc_block_count () * sb.get_block_size ()
         );
         volume_block.set_attribute (
             "checksum",
@@ -309,13 +338,9 @@ decoder (
                                   : ""
         );
 
-        auto name = volume.get_name ();
-        if (!name.empty ())
-            volume_block.set_attribute ("description", "APFS Volume - " + name);
-        else
-            volume_block.set_attribute (
-                "description", "APFS Volume - UUID: " + volume.get_uuid ()
-            );
+        volume_block.set_attribute (
+            "description", "APFS Volume - UUID: " + volume.get_uuid ()
+        );
 
         volume_block.set_attribute ("er_state_oid", volume.get_er_state_oid ());
         volume_block.set_attribute (
@@ -479,7 +504,14 @@ decoder (
                        volume.get_snap_meta_tree_type (), 8
                    )
         );
-        volume_block.set_attribute ("superblock_offset", volume.get_offset ());
+        volume_block.set_attribute ("superblock_block", volume.get_block ());
+        volume_block.set_attribute (
+            "superblock_rel_offset", volume.get_offset ()
+        );
+        volume_block.set_attribute (
+            "superblock_offset",
+            block.get_attribute<std::int64_t> ("offset") + volume.get_offset ()
+        );
         volume_block.set_attribute (
             "total_blocks_alloced", volume.get_total_blocks_alloced ()
         );
@@ -520,10 +552,7 @@ extern "C"
 extern "C" void
 start ()
 {
-    mobius::core::add_resource (
-        "vfs.block.decoder.apfs", "APFS block decoder",
-        static_cast<mobius::core::vfs::block_decoder_resource_type> (decoder)
-    );
+    mobius::core::vfs::register_block_decoder ("apfs", decoder);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -532,5 +561,5 @@ start ()
 extern "C" void
 stop ()
 {
-    mobius::core::remove_resource ("vfs.block.decoder.apfs");
+    mobius::core::vfs::unregister_block_decoder ("apfs");
 }

@@ -36,7 +36,7 @@ class volume
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     volume () = default;
-    volume (mobius::core::decoder::data_decoder &, std::uint64_t);
+    volume (mobius::core::decoder::data_decoder &, std::uint64_t, std::uint64_t);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Check if volume is valid
@@ -88,6 +88,16 @@ class volume
         return offset_;
     }
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get volume block number
+    // @return Block number
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::uint64_t
+    get_block () const noexcept
+    {
+        return block_;
+    }
+    
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get volume signature
     // @return Signature
@@ -819,6 +829,7 @@ class volume
 
     // Attributes
     std::uint64_t offset_;
+    std::uint64_t block_;
     mobius::core::bytearray signature_; // 4 bytes
     std::uint32_t index_;
     std::uint64_t features_;
