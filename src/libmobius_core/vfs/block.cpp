@@ -22,7 +22,25 @@
 #include <mobius/core/vfs/block_impl_disk.hpp>
 #include <mobius/core/vfs/block_impl_null.hpp>
 #include <mobius/core/vfs/block_impl_slice.hpp>
+#include <mutex>
 #include <stdexcept>
+#include <unordered_map>
+
+namespace
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Data
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+// @brief Map of block decoders, indexed by block type
+static std::
+    unordered_map<std::string, mobius::core::vfs::block_decoder_resource_type>
+        decoders;
+
+// @brief Mutex to protect access to the implementation map
+static std::mutex data_mutex;
+
+} // namespace
 
 namespace mobius::core::vfs
 {
@@ -66,7 +84,8 @@ block::block (const mobius::core::pod::map &state)
     {
         auto builder =
             mobius::core::get_resource_value<block_builder_resource_type> (
-                "vfs.block.builder." + classname);
+                "vfs.block.builder." + classname
+            );
         *this = builder (state);
     }
 }
@@ -79,8 +98,9 @@ block::block (const mobius::core::pod::map &state)
 // @return Block object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 block
-block::new_slice_block (const std::string &type, offset_type start,
-                        offset_type end)
+block::new_slice_block (
+    const std::string &type, offset_type start, offset_type end
+)
 {
     auto b = mobius::core::vfs::new_slice_block (*this, type, start, end);
     add_child (b);
@@ -99,14 +119,18 @@ block::add_freespaces ()
     // sort blocks
     auto sorted_blocks = get_children ();
 
-    std::sort (sorted_blocks.begin (), sorted_blocks.end (),
-               [] (const block &b1, const block &b2)
-               {
-                   return static_cast<std::int64_t> (
-                              b1.get_attribute ("start_address")) <
-                          static_cast<std::int64_t> (
-                              b2.get_attribute ("start_address"));
-               });
+    std::sort (
+        sorted_blocks.begin (), sorted_blocks.end (),
+        [] (const block &b1, const block &b2)
+        {
+            return static_cast<std::int64_t> (
+                       b1.get_attribute ("start_address")
+                   ) <
+                   static_cast<std::int64_t> (
+                       b2.get_attribute ("start_address")
+                   );
+        }
+    );
 
     // fill in freespace where it is necessary
     address_type pos = 0;
@@ -128,8 +152,9 @@ block::add_freespaces ()
                 new_slice_block ("freespace", start_address, end_address);
             freespace_block.set_attribute ("start_address", start_address);
             freespace_block.set_attribute ("end_address", end_address);
-            freespace_block.set_attribute ("size",
-                                           end_address - start_address + 1);
+            freespace_block.set_attribute (
+                "size", end_address - start_address + 1
+            );
             freespace_block.set_attribute ("description", "Freespace");
 
             blocks.push_back (freespace_block);
@@ -161,6 +186,62 @@ block::add_freespaces ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Register block decoder
+// @param type Block type
+// @param decoder Decoder function
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+register_block_decoder (
+    const std::string &type, const block_decoder_resource_type &decoder
+)
+{
+    std::lock_guard<std::mutex> lock (data_mutex);
+    decoders[type] = decoder;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Unregister block decoder
+// @param type Block type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+unregister_block_decoder (const std::string &type)
+{
+    std::lock_guard<std::mutex> lock (data_mutex);
+    decoders.erase (type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get block decoders
+// @return Block decoders
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<block_decoder_resource_type>
+get_block_decoders ()
+{
+    std::vector<block_decoder_resource_type> result;
+
+    {
+        std::lock_guard<std::mutex> lock (data_mutex);
+
+        // Transform map to vector
+        std::transform (
+            decoders.begin (), decoders.end (), std::back_inserter (result),
+            [] (const auto &pair) { return pair.second; }
+        );
+    }
+
+    // @deprecated Add decoders from resources
+    auto resources = mobius::core::get_resources ("vfs.block.decoder");
+
+    std::transform (
+        resources.begin (), resources.end (), std::back_inserter (result),
+        [] (const mobius::core::resource &res)
+        { return res.get_value<block_decoder_resource_type> (); }
+    );
+
+    return result;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create slice block from block
 // @param parent_block Parent block
 // @param type Block type
@@ -169,9 +250,12 @@ block::add_freespaces ()
 // @return Block object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 block
-new_slice_block (const block &parent_block, const std::string &type,
-                 mobius::core::vfs::block::offset_type start,
-                 mobius::core::vfs::block::offset_type end)
+new_slice_block (
+    const block &parent_block,
+    const std::string &type,
+    mobius::core::vfs::block::offset_type start,
+    mobius::core::vfs::block::offset_type end
+)
 {
     // get parent block offset
     mobius::core::vfs::block::offset_type offset = 0;
@@ -181,7 +265,8 @@ new_slice_block (const block &parent_block, const std::string &type,
 
     // create slice block
     auto b = block (
-        std::make_shared<block_impl_slice> (parent_block, type, start, end));
+        std::make_shared<block_impl_slice> (parent_block, type, start, end)
+    );
     b.set_attribute ("offset", offset + start);
 
     // return newly created block

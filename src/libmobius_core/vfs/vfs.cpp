@@ -368,17 +368,8 @@ vfs::impl::_load_blocks () const
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Create decoders vector
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector<block_decoder_resource_type> decoders;
-
-    log.debug (__LINE__, "decoders:");
-
-    for (const auto &resource :
-         mobius::core::get_resources ("vfs.block.decoder"))
-    {
-        log.debug (__LINE__, resource.get_id ());
-        auto decoder = resource.get_value<block_decoder_resource_type> ();
-        decoders.push_back (decoder);
-    }
+    auto decoders = mobius::core::vfs::get_block_decoders ();
+    log.debug (__LINE__, "decoders:" + std::to_string (decoders.size ()));
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Main loop: While new blocks are handled, continue
