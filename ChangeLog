@@ -1,5 +1,6 @@
 Mobius Forensic Toolkit 2.25
 	* Added new C++ extension called `vfs-block-apfs`
+	* iped-frontend: Changed to generate reports on remote folders. Reported by Clemente Paixão
 	* libmobius_core: Added new class crypt::hash_impl_fletcher16
 	* libmobius_core: Added new class crypt::hash_impl_fletcher32
 	* libmobius_core: Added new class crypt::hash_impl_fletcher64

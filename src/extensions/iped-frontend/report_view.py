@@ -510,7 +510,8 @@ class ReportView(object):
         if os.path.exists(hashes_txt_path):
             os.remove(hashes_txt_path)
 
-        shutil.move(tmpfile, hashes_txt_path)
+        shutil.copyfile(tmpfile, hashes_txt_path)
+        os.remove(tmpfile)
 
         # calculate hashes.txt hash
         self.__calculate_hashes_txt_hash(hashes_txt_path, option.laudo)
