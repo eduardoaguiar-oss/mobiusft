@@ -293,12 +293,6 @@ class folder_impl : public mobius::core::io::folder_impl_base
 
     // @brief Name
     std::string name_;
-
-    // @brief Children loaded flag
-    mutable bool children_loaded_ = false;
-
-    // @brief Children
-    mutable std::vector<mobius::core::io::entry> children_;
 };
 
 } // namespace mobius::core::vfs::tsk

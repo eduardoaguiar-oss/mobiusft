@@ -21,7 +21,6 @@
 #include <mobius/core/vfs/tsk/fs_file.hpp>
 #include <mobius/core/vfs/tsk/stream_impl.hpp>
 #include <stdexcept>
-#include <tsk/libtsk.h>
 
 namespace mobius::core::vfs::tsk
 {
@@ -367,19 +366,26 @@ fs_file::get_children () const
          p_->meta->type != TSK_FS_META_TYPE_VIRT_DIR))
         return {};
 
-    // Try to open directory
-    TSK_FS_DIR *dir_p = tsk_fs_dir_open_meta (p_->fs_info, p_->meta->addr);
+    // Try to open directory, if necessary
+    if (!dir_p_)
+    {
+        TSK_FS_DIR *dir_p = tsk_fs_dir_open_meta (p_->fs_info, p_->meta->addr);
 
-    if (!dir_p)
-        throw std::runtime_error (TSK_EXCEPTION_MSG);
+        if (!dir_p)
+            throw std::runtime_error (TSK_EXCEPTION_MSG);
+
+        dir_p_ = std::shared_ptr<TSK_FS_DIR> (dir_p, tsk_fs_dir_close);
+    }
 
     // Read directory entries
+    auto count = tsk_fs_dir_getsize (dir_p_.get ());
+
     std::vector<fs_file> children;
-    auto count = tsk_fs_dir_getsize (dir_p);
+    children.reserve (count);
 
     for (std::size_t i = 0; i < count; i++)
     {
-        TSK_FS_FILE *fp = tsk_fs_dir_get (dir_p, i);
+        TSK_FS_FILE *fp = tsk_fs_dir_get (dir_p_.get (), i);
         if (!fp)
             throw std::runtime_error (TSK_EXCEPTION_MSG);
 
@@ -390,8 +396,6 @@ fs_file::get_children () const
             f.get_name () != "..")
             children.push_back (f);
     }
-
-    tsk_fs_dir_close (dir_p);
 
     return children;
 }
@@ -443,38 +447,38 @@ fs_file::_load_fs_name () const
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     switch (p_->name->type)
     {
-    case TSK_FS_NAME_TYPE_FIFO:
-        type_ = fs_file_type::fifo;
-        break;
+        case TSK_FS_NAME_TYPE_FIFO:
+            type_ = fs_file_type::fifo;
+            break;
 
-    case TSK_FS_NAME_TYPE_CHR:
-        type_ = fs_file_type::char_device;
-        break;
+        case TSK_FS_NAME_TYPE_CHR:
+            type_ = fs_file_type::char_device;
+            break;
 
-    case TSK_FS_NAME_TYPE_DIR:
-    case TSK_FS_NAME_TYPE_VIRT_DIR:
-        type_ = fs_file_type::folder;
-        break;
+        case TSK_FS_NAME_TYPE_DIR:
+        case TSK_FS_NAME_TYPE_VIRT_DIR:
+            type_ = fs_file_type::folder;
+            break;
 
-    case TSK_FS_NAME_TYPE_BLK:
-        type_ = fs_file_type::block_device;
-        break;
+        case TSK_FS_NAME_TYPE_BLK:
+            type_ = fs_file_type::block_device;
+            break;
 
-    case TSK_FS_NAME_TYPE_REG:
-    case TSK_FS_NAME_TYPE_VIRT:
-        type_ = fs_file_type::regular;
-        break;
+        case TSK_FS_NAME_TYPE_REG:
+        case TSK_FS_NAME_TYPE_VIRT:
+            type_ = fs_file_type::regular;
+            break;
 
-    case TSK_FS_NAME_TYPE_LNK:
-        type_ = fs_file_type::symlink;
-        break;
+        case TSK_FS_NAME_TYPE_LNK:
+            type_ = fs_file_type::symlink;
+            break;
 
-    case TSK_FS_NAME_TYPE_SOCK:
-        type_ = fs_file_type::socket;
-        break;
+        case TSK_FS_NAME_TYPE_SOCK:
+            type_ = fs_file_type::socket;
+            break;
 
-    default:
-        type_ = fs_file_type::none;
+        default:
+            type_ = fs_file_type::none;
     }
 
     fs_name_loaded_ = true;
@@ -550,38 +554,38 @@ fs_file::_load_fs_meta () const
 
             switch (p_->meta->type)
             {
-            case TSK_FS_META_TYPE_FIFO:
-                type_ = fs_file_type::fifo;
-                break;
+                case TSK_FS_META_TYPE_FIFO:
+                    type_ = fs_file_type::fifo;
+                    break;
 
-            case TSK_FS_META_TYPE_CHR:
-                type_ = fs_file_type::char_device;
-                break;
+                case TSK_FS_META_TYPE_CHR:
+                    type_ = fs_file_type::char_device;
+                    break;
 
-            case TSK_FS_META_TYPE_DIR:
-            case TSK_FS_META_TYPE_VIRT_DIR:
-                type_ = fs_file_type::folder;
-                break;
+                case TSK_FS_META_TYPE_DIR:
+                case TSK_FS_META_TYPE_VIRT_DIR:
+                    type_ = fs_file_type::folder;
+                    break;
 
-            case TSK_FS_META_TYPE_BLK:
-                type_ = fs_file_type::block_device;
-                break;
+                case TSK_FS_META_TYPE_BLK:
+                    type_ = fs_file_type::block_device;
+                    break;
 
-            case TSK_FS_META_TYPE_REG:
-            case TSK_FS_META_TYPE_VIRT:
-                type_ = fs_file_type::regular;
-                break;
+                case TSK_FS_META_TYPE_REG:
+                case TSK_FS_META_TYPE_VIRT:
+                    type_ = fs_file_type::regular;
+                    break;
 
-            case TSK_FS_META_TYPE_LNK:
-                type_ = fs_file_type::symlink;
-                break;
+                case TSK_FS_META_TYPE_LNK:
+                    type_ = fs_file_type::symlink;
+                    break;
 
-            case TSK_FS_META_TYPE_SOCK:
-                type_ = fs_file_type::socket;
-                break;
+                case TSK_FS_META_TYPE_SOCK:
+                    type_ = fs_file_type::socket;
+                    break;
 
-            default:
-                type_ = fs_file_type::none;
+                default:
+                    type_ = fs_file_type::none;
             }
         }
     }
