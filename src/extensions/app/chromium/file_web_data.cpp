@@ -31,186 +31,24 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Web Data file tables
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //
-// - autofill: autofill entries
-//      - count: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - date_created: 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - date_last_used: 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - name: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - pair_id: 40, 43, 45, 48, 52
-//      - value: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - value_lower: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//
+// - autofill: autofill entries for forms
 // - autofill_dates: autofill entry dates
-//      - date_created: 40, 43, 45, 48, 52
-//      - pair_id: 40, 43, 45, 48, 52
-//
 // - autofill_profiles: autofill profiles
-//      - address_line_1: 40, 43, 45, 48, 52
-//      - address_line_2: 40, 43, 45, 48, 52
-//      - city: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//      - company_name: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//      - country: 40, 43, 45, 48, 52
-//      - country_code: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//      - date_modified: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//      - dependent_locality: 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//      - disallow_settings_visible_updates: 96-98, 100, 104, 107-113
-//      - guid: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//      - is_client_validity_states_updated: 80-84, 86-88, 90-92, 96-98
-//      - label: 96-98, 100, 104, 107-113
-//      - language_code: 56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//      - origin: 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//      - sorting_code: 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//      - state: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//      - street_address: 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//      - use_count: 61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//      - use_date: 61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//      - validity_bitfield: 76-78, 80-84, 86-88, 90-92, 96-98
-//      - zipcode: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//
 // - autofill_profile_addresses: autofill profile addresses
-//      - apartment_number: 91-92, 96-98, 100, 104, 107-113
-//      - apartment_number_status: 91-92, 96-98, 100, 104, 107-113
-//      - city: 90-92, 96-98, 100, 104, 107-113
-//      - city_status: 90-92, 96-98, 100, 104, 107-113
-//      - country_code: 90-92, 96-98, 100, 104, 107-113
-//      - country_code_status: 90-92, 96-98, 100, 104, 107-113
-//      - dependent_locality: 90-92, 96-98, 100, 104, 107-113
-//      - dependent_locality_status: 90-92, 96-98, 100, 104, 107-113
-//      - dependent_street_name: 88, 90-92, 96-98, 100, 104, 107-113
-//      - dependent_street_name_status: 88, 90-92, 96-98, 100, 104, 107-113
-//      - floor: 91-92, 96-98, 100, 104, 107-113
-//      - floor_status: 91-92, 96-98, 100, 104, 107-113
-//      - guid: 88, 90-92, 96-98, 100, 104, 107-113
-//      - house_number: 88, 90-92, 96-98, 100, 104, 107-113
-//      - house_number_status: 88, 90-92, 96-98, 100, 104, 107-113
-//      - premise_name: 88, 90-92, 96-98, 100, 104, 107-113
-//      - premise_name_status: 88, 90-92, 96-98, 100, 104, 107-113
-//      - sorting_code: 90-92, 96-98, 100, 104, 107-113
-//      - sorting_code_status: 90-92, 96-98, 100, 104, 107-113
-//      - state: 90-92, 96-98, 100, 104, 107-113
-//      - state_status: 90-92, 96-98, 100, 104, 107-113
-//      - street_address: 88, 90-92, 96-98, 100, 104, 107-113
-//      - street_address_status: 88, 90-92, 96-98, 100, 104, 107-113
-//      - street_name: 88, 90-92, 96-98, 100, 104, 107-113
-//      - street_name_status: 88, 90-92, 96-98, 100, 104, 107-113
-//      - subpremise: 88, 90-92, 96-98, 100, 104, 107-113
-//      - subpremise_status: 88, 90-92, 96-98, 100, 104, 107-113
-//      - zip_code: 90-92, 96-98, 100, 104, 107-113
-//      - zip_code_status: 90-92, 96-98, 100, 104, 107-113
-//
 // - autofill_profile_birthdates
-//      - day: 104, 107-113
-//      - guid: 104, 107-113
-//      - month: 104, 107-113
-//      - year: 104, 107-113
-//
 // - autofill_profile_emails: autofill profile emails
-//      - email: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//      - guid: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//
 // - autofill_profile_names: autofill profile names
-//      - conjunction_last_name: 88, 90-92, 96-98, 100, 104, 107-113
-//      - conjunction_last_name_status: 88, 90-92, 96-98, 100, 104, 107-113
-//      - date_of_birth: 58, 65, 80, 88, 96
-//      - first_last_name: 88, 90-92, 96-98, 100, 104, 107-113
-//      - first_last_name_status: 88, 90-92, 96-98, 100, 104, 107-113
-//      - first_name: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//      - first_name_status: 88, 90-92, 96-98, 100, 104, 107-113
-//      - full_name: 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//      - full_name_status: 88, 90-92, 96-98, 100, 104, 107-113
-//      - full_name_with_honorific_prefix: 92, 96-98, 100, 104, 107-113
-//      - full_name_with_honorific_prefix_status: 92, 96-98, 100, 104, 107-113
-//      - gender: 58, 65, 80, 88, 96
-//      - guid: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//      - honorific_prefix: 88, 90-92, 96-98, 100, 104, 107-113
-//      - honorific_prefix_status: 88, 90-92, 96-98, 100, 104, 107-113
-//      - last_name: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//      - last_name_status: 88, 90-92, 96-98, 100, 104, 107-113
-//      - middle_name: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//      - middle_name_status: 88, 90-92, 96-98, 100, 104, 107-113
-//      - second_last_name: 88, 90-92, 96-98, 100, 104, 107-113
-//      - second_last_name_status: 88, 90-92, 96-98, 100, 104, 107-113
-//
 // - autofill_profile_phones: autofill profile phones
-//      - guid: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//      - number: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113
-//      - type: 40, 43, 45, 48, 52
-//
 // - autofill_profile_usernames
-//      - guid: 58, 65, 80, 88, 96
-//      - username: 58, 65, 80, 88, 96
-//
 // - autofill_profiles_trash: autofill entries in trash
-//      - guid: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98
-//
 // - credit_cards: credit card entries
-//      - billing_address_id: 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - card_number_encrypted: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - date_modified: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - expiration_month: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - expiration_year: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - guid: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - name_on_card: 40, 43, 45, 48, 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - nickname: 87-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - origin: 52, 55-56, 58, 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - use_count: 61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - use_date: 61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-
 // - credit_card_tags
-//      - date_modified: 90, 92
-//      - guid: 90, 92
-//      - tag: 90, 92
-//
 // - credit_card_tags_v2
-//      - date_modified: 83-84, 87-88
-//      - guid: 83-84, 87-88
-//      - tag: 83-84, 87-88
-//
 // - ibans: International Bank Account Numbers
-//      - guid: 104, 107-113, 116-117
-//      - nickname: 104, 107-113, 116-117
-//      - use_count: 104, 107-113, 116-117
-//      - use_date: 104, 107-113, 116-117
-//      - value: 104, 107-113
-//      - value_encrypted: 116-117
-//
 // - masked_credit_cards: masked credit card entries
-//      - bank_name: 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - billing_address_id: 67, 70
-//      - card_art_url: 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - card_benefit_source: 141, 143
-//      - card_info_retrieval_enrollment_state: 135, 137-138, 140-141, 143
-//      - card_issuer: 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - card_issuer_id: 108-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - exp_month: 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - exp_year: 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - id: 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - instrument_id: 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - last_four: 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - name_on_card: 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - network: 72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - nickname: 84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - product_description: 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - product_terms_url: 123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - status: 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-97
-//      - type: 60-61, 64-65, 67, 70-71, 74, 76-78, 80-82
-//      - virtual_card_enrollment_state: 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - virtual_card_enrollment_type: 111-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//
 // - server_card_metadata
-//      - billing_address_id: 71-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - id: 65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - use_count: 65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - use_date: 65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//
 // - unmasked_credit_cards: unmasked credit card entries
-//      - card_number_encrypted: 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - id: 60-61, 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - unmask_date: 64-65, 67, 70-72, 74, 76-78, 80-84, 86-88, 90-92, 96-98, 100, 104, 107-113, 116-117, 119-120, 122-123, 125, 127-128, 130, 132, 134-135, 137-138, 140-141, 143
-//      - use_count: 64-65, 67, 70-72, 74, 76-78, 80-84
-//      - use_date: 64-65, 67, 70-72, 74, 76-78, 80-84
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace
@@ -225,9 +63,9 @@ static std::unordered_set<std::int64_t> UNKNOWN_SCHEMA_VERSIONS = {
     1,   2,   3,   4,   5,   6,   7,   8,   9,   10,  11,  12,  13,  14,
     15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,
     29,  30,  31,  32,  33,  34,  35,  36,  37,  38,  39,  41,  42,  44,
-    46,  47,  49,  50,  51,  53,  54,  57,  59,  62,  63,  66,  68,  69,
-    73,  75,  79,  85,  89,  93,  94,  95,  99,  101, 102, 103, 105, 106,
-    114, 115, 118, 121, 124, 126, 129, 131, 133, 136, 139, 142, 144
+    47,  49,  50,  51,  53,  54,  57,  59,  62,  63,  66,  68,  69,  73,
+    75,  79,  85,  89,  93,  94,  95,  101, 102, 103, 105, 106, 114, 115,
+    118, 121, 124, 126, 129, 131, 133, 136, 139, 142, 144
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -322,36 +160,39 @@ _get_profile_addresses (
     if (schema_version < 88 || schema_version > 113)
         return {};
 
-    mobius::core::database::statement stmt = db.new_statement (
-        "SELECT street_address, "
-        "street_name, "
+    // Prepare SQL statement for table autofill_profile_addresses
+    auto stmt = db.new_statement_with_pattern (
+        "SELECT {autofill_profile_addresses.apartment_number}, "
+        "{autofill_profile_addresses.apartment_number_status}, "
+        "{autofill_profile_addresses.city}, "
+        "{autofill_profile_addresses.city_status}, "
+        "{autofill_profile_addresses.country_code}, "
+        "{autofill_profile_addresses.country_code_status}, "
+        "{autofill_profile_addresses.dependent_locality}, "
+        "{autofill_profile_addresses.dependent_locality_status}, "
         "dependent_street_name, "
-        "house_number, "
-        "subpremise, "
-        "premise_name, "
-        "street_address_status, "
-        "street_name_status, "
         "dependent_street_name_status, "
+        "{autofill_profile_addresses.floor}, "
+        "{autofill_profile_addresses.floor_status}, "
+        "guid, "
+        "house_number, "
         "house_number_status, "
-        "subpremise_status, "
+        "premise_name, "
         "premise_name_status, "
-        "${dependent_locality:90-*}, "
-        "${city:90-*}, "
-        "${state:90-*}, "
-        "${zip_code:90-*}, "
-        "${country_code:90-*}, "
-        "${dependent_locality_status:90-*}, "
-        "${city_status:90-*}, "
-        "${state_status:90-*}, "
-        "${zip_code_status:90-*}, "
-        "${country_code_status:90-*}, "
-        "${apartment_number:91-*}, "
-        "${floor:91-*}, "
-        "${apartment_number_status:91-*}, "
-        "${floor_status:91-*} "
+        "{autofill_profile_addresses.sorting_code}, "
+        "{autofill_profile_addresses.sorting_code_status}, "
+        "{autofill_profile_addresses.state}, "
+        "{autofill_profile_addresses.state_status}, "
+        "street_address, "
+        "street_address_status, "
+        "street_name, "
+        "street_name_status, "
+        "subpremise, "
+        "subpremise_status, "
+        "{autofill_profile_addresses.zip_code}, "
+        "{autofill_profile_addresses.zip_code_status} "
         "FROM autofill_profile_addresses "
-        "WHERE guid = ?",
-        schema_version
+        "WHERE guid = ?"
     );
 
     stmt.bind (1, guid);
@@ -360,19 +201,35 @@ _get_profile_addresses (
     while (stmt.fetch_row ())
     {
         file_web_data::autofill_profile_address address;
-        address.street_address = stmt.get_column_string (0);
-        address.street_name = stmt.get_column_string (1);
-        address.dependent_street_name = stmt.get_column_string (2);
-        address.house_number = stmt.get_column_string (3);
-        address.subpremise = stmt.get_column_string (4);
-        address.premise_name = stmt.get_column_string (5);
-        address.dependent_locality = stmt.get_column_string (12);
-        address.city = stmt.get_column_string (13);
-        address.state = stmt.get_column_string (14);
-        address.zip_code = stmt.get_column_string (15);
-        address.country_code = stmt.get_column_string (16);
-        address.apartment_number = stmt.get_column_string (22);
-        address.floor = stmt.get_column_string (23);
+        address.apartment_number = stmt.get_column_string (0);
+        // address.apartment_number_status = stmt.get_column_int64 (1);
+        address.city = stmt.get_column_string (2);
+        // address.city_status = stmt.get_column_int64 (3);
+        address.country_code = stmt.get_column_string (4);
+        // address.country_code_status = stmt.get_column_int64 (5);
+        address.dependent_locality = stmt.get_column_string (6);
+        // address.dependent_locality_status = stmt.get_column_int64 (7);
+        address.dependent_street_name = stmt.get_column_string (8);
+        // address.dependent_street_name_status = stmt.get_column_int64 (9);
+        address.floor = stmt.get_column_string (10);
+        // address.floor_status = stmt.get_column_int64 (11);
+        // address.guid = stmt.get_column_string (12);
+        address.house_number = stmt.get_column_string (13);
+        // address.house_number_status = stmt.get_column_int64 (14);
+        address.premise_name = stmt.get_column_string (15);
+        // address.premise_name_status = stmt.get_column_int64 (16);
+        // address.sorting_code = stmt.get_column_string (17);
+        // address.sorting_code_status = stmt.get_column_int64 (18);
+        address.state = stmt.get_column_string (19);
+        // address.state_status = stmt.get_column_int64 (20);
+        address.street_address = stmt.get_column_string (21);
+        // address.street_address_status = stmt.get_column_int64 (22);
+        address.street_name = stmt.get_column_string (23);
+        // address.street_name_status = stmt.get_column_int64 (24);
+        address.subpremise = stmt.get_column_string (25);
+        // address.subpremise_status = stmt.get_column_int64 (26);
+        address.zip_code = stmt.get_column_string (27);
+        // address.zip_code_status = stmt.get_column_int64 (28);
 
         // Add address to the profile
         addresses.emplace_back (std::move (address));
@@ -404,8 +261,7 @@ _get_profile_emails (
     mobius::core::database::statement stmt = db.new_statement (
         "SELECT email "
         "FROM autofill_profile_emails "
-        "WHERE guid = ?",
-        schema_version
+        "WHERE guid = ?"
     );
 
     stmt.bind (1, guid);
@@ -436,20 +292,31 @@ _get_profile_names (
     if (schema_version < 40 || schema_version > 113)
         return names;
 
-    // Prepare statement to retrieve names from autofill_profile_names table
-    mobius::core::database::statement stmt = db.new_statement (
-        "SELECT first_name, "
-        "middle_name, "
+    // Prepare SQL statement for table autofill_profile_names
+    auto stmt = db.new_statement_with_pattern (
+        "SELECT {autofill_profile_names.conjunction_last_name}, "
+        "{autofill_profile_names.conjunction_last_name_status}, "
+        "{autofill_profile_names.date_of_birth}, "
+        "{autofill_profile_names.first_last_name}, "
+        "{autofill_profile_names.first_last_name_status}, "
+        "first_name, "
+        "{autofill_profile_names.first_name_status}, "
+        "{autofill_profile_names.full_name}, "
+        "{autofill_profile_names.full_name_status}, "
+        "{autofill_profile_names.full_name_with_honorific_prefix}, "
+        "{autofill_profile_names.full_name_with_honorific_prefix_status}, "
+        "{autofill_profile_names.gender}, "
+        "guid, "
+        "{autofill_profile_names.honorific_prefix}, "
+        "{autofill_profile_names.honorific_prefix_status}, "
         "last_name, "
-        "${full_name:58-*}, "
-        "${honorific_prefix:88-*}, "
-        "${first_last_name:88-*}, "
-        "${conjunction_last_name:88-*}, "
-        "${second_last_name:88-*}, "
-        "${full_name_with_honorific_prefix:92-*} "
+        "{autofill_profile_names.last_name_status}, "
+        "middle_name, "
+        "{autofill_profile_names.middle_name_status}, "
+        "{autofill_profile_names.second_last_name}, "
+        "{autofill_profile_names.second_last_name_status} "
         "FROM autofill_profile_names "
-        "WHERE guid = ?",
-        schema_version
+        "WHERE guid = ?"
     );
 
     stmt.bind (1, guid);
@@ -459,15 +326,27 @@ _get_profile_names (
     {
         file_web_data::autofill_profile_name name;
 
-        name.first_name = stmt.get_column_string (0);
-        name.middle_name = stmt.get_column_string (1);
-        name.last_name = stmt.get_column_string (2);
-        name.full_name = stmt.get_column_string (3);
-        name.honorific_prefix = stmt.get_column_string (4);
-        name.first_last_name = stmt.get_column_string (5);
-        name.conjunction_last_name = stmt.get_column_string (6);
-        name.second_last_name = stmt.get_column_string (7);
-        name.full_name_with_honorific_prefix = stmt.get_column_string (8);
+        name.conjunction_last_name = stmt.get_column_string (0);
+        // name.conjunction_last_name_status = stmt.get_column_int64 (1);
+        // name.date_of_birth = stmt.get_column_string (2);
+        name.first_last_name = stmt.get_column_string (3);
+        // name.first_last_name_status = stmt.get_column_int64 (4);
+        name.first_name = stmt.get_column_string (5);
+        // name.first_name_status = stmt.get_column_int64 (6);
+        name.full_name = stmt.get_column_bytearray (7);
+        // name.full_name_status = stmt.get_column_int64 (8);
+        name.full_name_with_honorific_prefix = stmt.get_column_string (9);
+        //name.full_name_with_honorific_prefix_status = stmt.get_column_int64 (10);
+        // name.gender = stmt.get_column_string (11);
+        // name.guid = stmt.get_column_string (12);
+        name.honorific_prefix = stmt.get_column_string (13);
+        // name.honorific_prefix_status = stmt.get_column_int64 (14);
+        name.last_name = stmt.get_column_bytearray (15);
+        // name.last_name_status = stmt.get_column_int64 (16);
+        name.middle_name = stmt.get_column_string (17);
+        // name.middle_name_status = stmt.get_column_int64 (18);
+        name.second_last_name = stmt.get_column_string (19);
+        // name.second_last_name_status = stmt.get_column_int64 (20);
 
         // Add name to the profile
         names.emplace_back (std::move (name));
@@ -496,12 +375,11 @@ _get_profile_phones (
         return phones;
 
     // Prepare statement to retrieve phones from autofill_profile_phones table
-    mobius::core::database::statement stmt = db.new_statement (
-        "SELECT ${type:40-52}, "
-        "number "
+    auto stmt = db.new_statement_with_pattern (
+        "SELECT {autofill_profile_phones.type} "
+        "number, "
         "FROM autofill_profile_phones "
-        "WHERE guid = ?",
-        schema_version
+        "WHERE guid = ?"
     );
 
     stmt.bind (1, guid);
@@ -541,29 +419,27 @@ _get_server_card_metadata (
     {
         if (schema_version >= 65)
         {
-            // Prepare statement to retrieve server card metadata from the
-            // database
-            mobius::core::database::statement stmt = db.new_statement (
-                "SELECT id, "
-                "${billing_address_id:71-*}, "
+            // Prepare SQL statement for table server_card_metadata
+            auto stmt = db.new_statement_with_pattern (
+                "SELECT {server_card_metadata.billing_address_id}, "
+                "id, "
                 "use_count, "
                 "use_date "
-                "FROM server_card_metadata ",
-                schema_version
+                "FROM server_card_metadata"
             );
 
             // Retrieve records from server_card_metadata table
             while (stmt.fetch_row ())
             {
-                server_card_metadata metadata;
+                server_card_metadata obj;
 
-                metadata.id = stmt.get_column_string (0);
-                metadata.billing_address_id = stmt.get_column_string (1);
-                metadata.use_count = stmt.get_column_int64 (2);
-                metadata.use_date = get_datetime (stmt.get_column_int64 (3));
+                obj.billing_address_id = stmt.get_column_string (0);
+                obj.id = stmt.get_column_string (1);
+                obj.use_count = stmt.get_column_int64 (2);
+                obj.use_date = get_datetime (stmt.get_column_int64 (3));
 
-                // Add metadata to the map
-                server_card_metadata_map[metadata.id] = metadata;
+                // Add server_card_metadata to the map
+                server_card_metadata_map[obj.id] = obj;
             }
         }
     }
@@ -674,11 +550,6 @@ file_web_data::file_web_data (const mobius::core::io::reader &reader)
         _load_autofill_profiles (db);
         _load_credit_cards (db);
         _load_masked_credit_cards (db);
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Finish decoding
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
@@ -739,6 +610,8 @@ file_web_data::_load_autofill_entries (mobius::core::database::database &db)
             // Add entry to the list
             autofill_entries_.emplace_back (std::move (entry));
         }
+
+        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
@@ -762,25 +635,29 @@ file_web_data::_load_autofill_profiles (mobius::core::database::database &db)
     try
     {
         // Prepare SQL statement for table autofill_profiles
-        mobius::core::database::statement stmt = db.new_statement (
-            "SELECT guid, "
-            "company_name, "
-            "${address_line_1:40-52}, "
-            "${address_line_2:40-52}, "
-            "${street_address:55-*}, "
-            "${dependent_locality:55-*}, "
+        auto stmt = db.new_statement_with_pattern (
+            "SELECT {autofill_profiles.address_line_1}, "
+            "{autofill_profiles.address_line_2}, "
             "city, "
-            "state, "
-            "zipcode, "
+            "company_name, "
+            "{autofill_profiles.country}, "
             "country_code, "
-            "${country:40-52}, "
-            "${date_modified:40-*}, "
-            "${origin:55-*}, "
-            "${language_code:56-*}, "
-            "${use_count:61-*}, "
-            "${use_date:61-*} "
-            "FROM autofill_profiles p",
-            schema_version_
+            "date_modified, "
+            "{autofill_profiles.dependent_locality}, "
+            "{autofill_profiles.disallow_settings_visible_updates}, "
+            "guid, "
+            "{autofill_profiles.is_client_validity_states_updated}, "
+            "{autofill_profiles.label}, "
+            "{autofill_profiles.language_code}, "
+            "{autofill_profiles.origin}, "
+            "{autofill_profiles.sorting_code}, "
+            "state, "
+            "{autofill_profiles.street_address}, "
+            "{autofill_profiles.use_count}, "
+            "{autofill_profiles.use_date}, "
+            "{autofill_profiles.validity_bitfield}, "
+            "zipcode "
+            "FROM autofill_profiles"
         );
 
         // Retrieve records from autofill_profiles table
@@ -792,13 +669,18 @@ file_web_data::_load_autofill_profiles (mobius::core::database::database &db)
 
             // Set profile fields
             profile.idx = idx++;
-            profile.guid = stmt.get_column_string (0);
-            profile.company_name = stmt.get_column_string (1);
-            profile.date_modified = get_datetime (stmt.get_column_int64 (11));
-            profile.origin = stmt.get_column_string (12);
-            profile.language_code = stmt.get_column_string (13);
-            profile.use_count = stmt.get_column_int64 (14);
-            profile.date_last_used = get_datetime (stmt.get_column_int64 (15));
+            profile.company_name = stmt.get_column_string (3);
+            profile.date_modified = get_datetime (stmt.get_column_int64 (6));
+            // profile.disallow_settings_visible_updates = stmt.get_column_int64 (8);
+            profile.guid = stmt.get_column_string (9);
+            // profile.is_client_validity_states_updated = stmt.get_column_string (10);
+            // profile.label = stmt.get_column_string (11);
+            profile.language_code = stmt.get_column_string (12);
+            profile.origin = stmt.get_column_string (13);
+            // profile.sorting_code = stmt.get_column_bytearray (14);
+            profile.use_count = stmt.get_column_int64 (17);
+            profile.date_last_used = get_datetime (stmt.get_column_int64 (18));
+            // profile.validity_bitfield = stmt.get_column_string (19);
 
             profile.is_in_trash =
                 _is_profile_in_trash (db, schema_version_, profile.guid);
@@ -812,15 +694,15 @@ file_web_data::_load_autofill_profiles (mobius::core::database::database &db)
                 _get_profile_phones (db, schema_version_, profile.guid);
 
             // Create address, if available
-            auto address_line_1 = stmt.get_column_string (2);
-            auto address_line_2 = stmt.get_column_string (3);
-            auto street_address = stmt.get_column_string (4);
-            auto dependent_locality = stmt.get_column_string (5);
-            auto city = stmt.get_column_string (6);
-            auto state = stmt.get_column_string (7);
-            auto zip_code = stmt.get_column_string (8);
-            auto country_code = stmt.get_column_string (9);
-            auto country = stmt.get_column_string (10);
+            auto address_line_1 = stmt.get_column_string (0);
+            auto address_line_2 = stmt.get_column_string (1);
+            auto city = stmt.get_column_string (2);
+            auto country = stmt.get_column_string (4);
+            auto country_code = stmt.get_column_string (5);
+            auto dependent_locality = stmt.get_column_string (7);
+            auto state = stmt.get_column_string (15);
+            auto street_address = stmt.get_column_string (16);
+            auto zip_code = stmt.get_column_string (20);
 
             if (!address_line_1.empty () || !address_line_2.empty () ||
                 !street_address.empty () || !dependent_locality.empty () ||
@@ -846,6 +728,8 @@ file_web_data::_load_autofill_profiles (mobius::core::database::database &db)
             // Add profile to the list
             autofill_profiles_.emplace_back (std::move (profile));
         }
+
+        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
@@ -866,20 +750,19 @@ file_web_data::_load_credit_cards (mobius::core::database::database &db)
     try
     {
         // Prepare SQL statement for table credit_cards
-        mobius::core::database::statement stmt = db.new_statement (
-            "SELECT guid, "
-            "name_on_card, "
+        auto stmt = db.new_statement_with_pattern (
+            "SELECT {credit_cards.billing_address_id}, "
+            "card_number_encrypted, "
+            "date_modified, "
             "expiration_month, "
             "expiration_year, "
-            "card_number_encrypted, "
-            "${date_modified:30-*}, "
-            "${origin:52-*}, "
-            "${use_count:61-*}, "
-            "${use_date:61-*}, "
-            "${billing_address_id:66-*}, "
-            "${nickname:87-*} "
-            "FROM credit_cards",
-            schema_version_
+            "guid, "
+            "name_on_card, "
+            "{credit_cards.nickname}, "
+            "{credit_cards.origin}, "
+            "{credit_cards.use_count}, "
+            "{credit_cards.use_date} "
+            "FROM credit_cards"
         );
 
         // Retrieve records from credit_cards table
@@ -887,32 +770,34 @@ file_web_data::_load_credit_cards (mobius::core::database::database &db)
 
         while (stmt.fetch_row ())
         {
-            credit_card card;
+            credit_card obj;
 
-            card.idx = idx++;
-            card.guid = stmt.get_column_string (0);
-            card.expiration_month = stmt.get_column_int64 (2);
-            card.expiration_year = stmt.get_column_int64 (3);
-            card.card_number_encrypted = stmt.get_column_bytearray (4);
-            card.date_modified = get_datetime (stmt.get_column_int64 (5));
-            card.origin = stmt.get_column_string (6);
-            card.use_count = stmt.get_column_int64 (7);
-            card.use_date = get_datetime (stmt.get_column_int64 (8));
-            card.billing_address_id = stmt.get_column_string (9);
-            card.nickname = stmt.get_column_string (10);
+            obj.idx = idx++;
+            obj.billing_address_id = stmt.get_column_string (0);
+            obj.card_number_encrypted = stmt.get_column_bytearray (1);
+            obj.date_modified = get_datetime (stmt.get_column_int64 (2));
+            obj.expiration_month = stmt.get_column_bytearray (3);
+            obj.expiration_year = stmt.get_column_int64 (4);
+            obj.guid = stmt.get_column_string (5);
+            obj.nickname = stmt.get_column_string (7);
+            obj.origin = stmt.get_column_string (8);
+            obj.use_count = stmt.get_column_int64 (9);
+            obj.use_date = get_datetime (stmt.get_column_int64 (10));
 
             // Set name on card
-            auto name_on_card = stmt.get_column_bytearray (1);
+            auto name_on_card = stmt.get_column_bytearray (6);
 
             if (is_encrypted (name_on_card))
-                card.name_on_card_encrypted = name_on_card;
+                obj.name_on_card_encrypted = name_on_card;
 
             else
-                card.name_on_card = name_on_card.to_string ();
+                obj.name_on_card = name_on_card.to_string ();
 
-            // Add card to the list
-            credit_cards_.emplace_back (std::move (card));
+            // Add credit_cards to the list
+            credit_cards_.emplace_back (std::move (obj));
         }
+
+        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
@@ -941,34 +826,33 @@ file_web_data::_load_masked_credit_cards (mobius::core::database::database &db)
     try
     {
         // Prepare SQL statement for table masked_credit_cards
-        auto stmt = db.new_statement (
-            "SELECT ${bank_name:74-*}, "
-            "${billing_address_id:67-70}, "
-            "${card_art_url:96-*}, "
-            "${card_benefit_source:141-*}, "
-            "${card_info_retrieval_enrollment_state:135-*}, "
-            "${card_issuer:86-*}, "
-            "${card_issuer_id:108-*}, "
+        auto stmt = db.new_statement_with_pattern (
+            "SELECT {masked_credit_cards.bank_name}, "
+            "{masked_credit_cards.billing_address_id}, "
+            "{masked_credit_cards.card_art_url}, "
+            "{masked_credit_cards.card_benefit_source}, "
+            "{masked_credit_cards.card_creation_source}, "
+            "{masked_credit_cards.card_info_retrieval_enrollment_state}, "
+            "{masked_credit_cards.card_issuer}, "
+            "{masked_credit_cards.card_issuer_id}, "
             "exp_month, "
             "exp_year, "
             "id, "
-            "${instrument_id:90-*}, "
+            "{masked_credit_cards.instrument_id}, "
             "last_four, "
             "name_on_card, "
-            "${network:72-*}, "
-            "${nickname:84-*}, "
-            "${product_description:102-*}, "
-            "${product_terms_url:125-*}, "
-            "${status:60-97}, "
-            "${type:60-82}, "
-            "${virtual_card_enrollment_state:96-*}, "
-            "${virtual_card_enrollment_type:111-*} "
-            "FROM masked_credit_cards",
-            schema_version_
+            "{masked_credit_cards.network}, "
+            "{masked_credit_cards.nickname}, "
+            "{masked_credit_cards.product_description}, "
+            "{masked_credit_cards.product_terms_url}, "
+            "{masked_credit_cards.status}, "
+            "{masked_credit_cards.type}, "
+            "{masked_credit_cards.virtual_card_enrollment_state}, "
+            "{masked_credit_cards.virtual_card_enrollment_type} "
+            "FROM masked_credit_cards"
         );
 
-        // Retrieve records from masked_credit_cards and unmasked_credit_cards
-        // tables
+        // Retrieve records from masked_credit_cards and unmasked_credit_cards tables
         auto idx = 0;
 
         while (stmt.fetch_row ())
@@ -980,24 +864,26 @@ file_web_data::_load_masked_credit_cards (mobius::core::database::database &db)
             card.bank_name = stmt.get_column_string (0);
             card.billing_address_id = stmt.get_column_string (1);
             card.card_art_url = stmt.get_column_string (2);
-            card.card_benefit_source = stmt.get_column_string (3);
+            card.card_benefit_source = stmt.get_column_int64 (3);
+            // card.card_creation_source = stmt.get_column_int64 (4);
             card.card_info_retrieval_enrollment_state =
-                stmt.get_column_int64 (4);
-            card.card_issuer = stmt.get_column_string (5);
-            card.card_issuer_id = stmt.get_column_int64 (6);
-            card.expiration_month = stmt.get_column_int64 (7);
-            card.expiration_year = stmt.get_column_int64 (8);
-            card.id = stmt.get_column_string (9);
-            card.instrument_id = stmt.get_column_string (10);
-            card.last_four = stmt.get_column_string (11);
-            card.network = stmt.get_column_string (13);
-            card.nickname = stmt.get_column_string (14);
-            card.product_description = stmt.get_column_string (15);
-            card.product_terms_url = stmt.get_column_string (16);
-            card.status = stmt.get_column_string (17);
-            card.type = stmt.get_column_string (18);
-            card.virtual_card_enrollment_state = stmt.get_column_int64 (19);
-            card.virtual_card_enrollment_type = stmt.get_column_int64 (20);
+                stmt.get_column_int64 (5);
+            card.card_issuer = stmt.get_column_int64 (6);
+            card.card_issuer_id = stmt.get_column_string (7);
+            card.expiration_month = stmt.get_column_int64 (8);
+            card.expiration_year = stmt.get_column_int64 (9);
+            card.id = stmt.get_column_string (10);
+            card.instrument_id = stmt.get_column_int64 (11);
+            card.last_four = stmt.get_column_string (12);
+            card.name_on_card = stmt.get_column_string (13);
+            card.network = stmt.get_column_string (14);
+            card.nickname = stmt.get_column_string (15);
+            card.product_description = stmt.get_column_string (16);
+            card.product_terms_url = stmt.get_column_string (17);
+            card.status = stmt.get_column_string (18);
+            card.type = stmt.get_column_int64 (19);
+            card.virtual_card_enrollment_state = stmt.get_column_int64 (20);
+            card.virtual_card_enrollment_type = stmt.get_column_int64 (21);
 
             if (!card.last_four.empty ())
                 card.card_number =
@@ -1035,6 +921,8 @@ file_web_data::_load_masked_credit_cards (mobius::core::database::database &db)
             // Add card to the list
             credit_cards_.emplace_back (std::move (card));
         }
+
+        is_instance_ = true;
     }
     catch (const std::exception &e)
     {

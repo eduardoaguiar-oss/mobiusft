@@ -31,48 +31,15 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Login Data file tables
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //
-// - logins
-//      - action_url: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
-//      - actor_login_approved: 43
-//      - avatar_url: 7, 12-13
-//      - blacklisted_by_user: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
-//      - date_created: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
-//      - date_last_filled: 42-43
-//      - date_last_used: 25-29, 31-35, 40-43
-//      - date_password_modified: 31-35, 40-43
-//      - date_received: 40-43
-//      - date_synced: 7, 12-13, 16-19, 21-22, 24-29
-//      - display_name: 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
-//      - federation_url: 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
-//      - form_data: 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
-//      - generation_upload_status: 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
-//      - icon_url: 16-19, 21-22, 24-29, 31-35, 40-43
-//      - id: 21-22, 24-29, 31-35, 40-43
-//      - is_zero_click: 7
-//      - keychain_identifier: 40-43
-//      - moving_blocked_for: 27-29, 31-35, 40-43
-//      - origin_url: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
-//      - password_element: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
-//      - password_type: 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
-//      - password_value: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
-//      - possible_username_pairs: 19, 21-22, 24-29, 31-35, 40-43
-//      - possible_usernames: 3, 5, 7, 12-13, 16-18
-//      - preferred: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-27
-//      - scheme: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
-//      - sender_email: 40-43
-//      - sender_name: 40-43
-//      - sender_profile_image_url: 41-43
-//      - sharing_notification_displayed: 40-43
-//      - signon_realm: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
-//      - skip_zero_click: 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
-//      - ssl_valid: 1, 3, 5, 7, 12-13, 16-17
-//      - submit_element: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
-//      - times_used: 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
-//      - use_additional_auth: 5, 7
-//      - username_element: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
-//      - username_value: 1, 3, 5, 7, 12-13, 16-19, 21-22, 24-29, 31-35, 40-43
+// - logins: This table contains the login credentials and related information
+//       for websites. It includes fields such as action_url, username_element,
+//       password_element, and date_created, among others. Each record in this
+//       table represents a saved login credential.
+//
+// - meta: This table contains metadata about the database, including the
+//       schema version. It has fields such as key and value, where the key
+//       "version" indicates the schema version of the database.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 namespace
@@ -84,7 +51,7 @@ namespace
 // of the web data schema in Chromium-based applications.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::unordered_set<std::int64_t> UNKNOWN_SCHEMA_VERSIONS = {
-    2, 4, 6, 8, 9, 10, 11, 14, 15, 20, 23, 30, 36, 37, 38, 39,
+    2, 4, 6, 8, 9, 10, 11, 14, 15, 20, 23, 30, 36, 37, 38,
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -141,11 +108,6 @@ file_login_data::file_login_data (const mobius::core::io::reader &reader)
         // Load data
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         _load_logins (db);
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Finish decoding
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
@@ -164,98 +126,103 @@ file_login_data::_load_logins (mobius::core::database::database &db)
 
     try
     {
-        // Prepare statement
-        mobius::core::database::statement stmt;
-
-        stmt = db.new_statement (
-            "SELECT action_url, "
-            "${actor_login_approved:43-*}, "
-            "${avatar_url:7-13}, "
-            "blacklisted_by_user, "
-            "date_created, "
-            "${date_last_filled:42-*}, "
-            "${date_last_used:25-*}, "
-            "${date_password_modified:31-*}, "
-            "${date_received:40-*}, "
-            "${date_synced:7-29}, "
-            "${display_name:7-*}, "
-            "${federation_url:7-*}, "
-            "${generation_upload_status:12-*}, "
-            "${icon_url:16-*}, "
-            "${id:21-*}, "
-            "${is_zero_click:7}, "
-            "${keychain_identifier:40-*}, "
-            "origin_url, "
-            "password_element, "
-            "${password_type:3-*}, "
-            "password_value, "
-            "${preferred:1-27}, "
-            "scheme, "
-            "${sender_email:40-*}, "
-            "${sender_name:40-*}, "
-            "${sender_profile_image_url:41-*}, "
-            "${sharing_notification_displayed:40-*}, "
-            "signon_realm, "
-            "${skip_zero_click:12-*}, "
-            "${ssl_valid:1-17}, "
-            "submit_element, "
-            "${times_used:3-*}, "
-            "${use_additional_auth:5-7}, "
-            "username_element, "
-            "username_value "
-            "FROM logins",
-            schema_version_
+        // Prepare SQL statement for table logins
+        auto stmt = db.new_statement_with_pattern (
+           "SELECT action_url, "
+                  "{logins.actor_login_approved}, "
+                  "{logins.avatar_url}, "
+                  "blacklisted_by_user, "
+                  "date_created, "
+                  "{logins.date_last_filled}, "
+                  "{logins.date_last_used}, "
+                  "{logins.date_password_modified}, "
+                  "{logins.date_received}, "
+                  "{logins.date_synced}, "
+                  "{logins.display_name}, "
+                  "{logins.federation_url}, "
+                  "{logins.form_data}, "
+                  "{logins.generation_upload_status}, "
+                  "{logins.icon_url}, "
+                  "{logins.id}, "
+                  "{logins.is_zero_click}, "
+                  "{logins.keychain_identifier}, "
+                  "{logins.moving_blocked_for}, "
+                  "origin_url, "
+                  "password_element, "
+                  "{logins.password_type}, "
+                  "password_value, "
+                  "{logins.possible_username_pairs}, "
+                  "{logins.possible_usernames}, "
+                  "{logins.preferred}, "
+                  "scheme, "
+                  "{logins.sender_email}, "
+                  "{logins.sender_name}, "
+                  "{logins.sender_profile_image_url}, "
+                  "{logins.sharing_notification_displayed}, "
+                  "signon_realm, "
+                  "{logins.skip_zero_click}, "
+                  "{logins.ssl_valid}, "
+                  "submit_element, "
+                  "{logins.times_used}, "
+                  "{logins.use_additional_auth}, "
+                  "username_element, "
+                  "username_value "
+             "FROM logins"
         );
 
-        // Retrieve rows from query
+        // Retrieve records from logins table
         std::uint64_t idx = 0;
 
         while (stmt.fetch_row ())
         {
-            login l;
+            login obj;
 
-            // Set attributes
-            l.idx = idx++;
-            l.schema_version = schema_version_;
-            l.action_url = stmt.get_column_string (0);
-            l.actor_login_approved = stmt.get_column_bool (1);
-            l.avatar_url = stmt.get_column_string (2);
-            l.blacklisted_by_user = stmt.get_column_bool (3);
-            l.date_created = get_datetime (stmt.get_column_int64 (4));
-            l.date_last_filled = get_datetime (stmt.get_column_int64 (5));
-            l.date_last_used = get_datetime (stmt.get_column_int64 (6));
-            l.date_password_modified = get_datetime (stmt.get_column_int64 (7));
-            l.date_received = get_datetime (stmt.get_column_int64 (8));
-            l.date_synced = get_datetime (stmt.get_column_int64 (9));
-            l.display_name = stmt.get_column_string (10);
-            l.federation_url = stmt.get_column_string (11);
-            l.generation_upload_status = stmt.get_column_int64 (12);
-            l.icon_url = stmt.get_column_string (13);
-            l.id = stmt.get_column_string (14);
-            l.is_zero_click = stmt.get_column_bool (15);
-            l.keychain_identifier = stmt.get_column_string (16);
-            l.origin_url = stmt.get_column_string (17);
-            l.password_element = stmt.get_column_string (18);
-            l.password_type = stmt.get_column_int64 (19);
-            l.password_value = stmt.get_column_bytearray (20);
-            l.preferred = stmt.get_column_bool (21);
-            l.scheme = stmt.get_column_string (22);
-            l.sender_email = stmt.get_column_string (23);
-            l.sender_name = stmt.get_column_string (24);
-            l.sender_profile_image_url = stmt.get_column_string (25);
-            l.sharing_notification_displayed = stmt.get_column_bool (26);
-            l.signon_realm = stmt.get_column_string (27);
-            l.skip_zero_click = stmt.get_column_bool (28);
-            l.ssl_valid = stmt.get_column_bool (29);
-            l.submit_element = stmt.get_column_string (30);
-            l.times_used = stmt.get_column_int64 (31);
-            l.use_additional_auth = stmt.get_column_bool (32);
-            l.username_element = stmt.get_column_string (33);
-            l.username_value = stmt.get_column_string (34);
+            obj.idx = idx++;
+            obj.action_url = stmt.get_column_string (0);
+            obj.actor_login_approved = stmt.get_column_int64 (1);
+            obj.avatar_url = stmt.get_column_string (2);
+            obj.blacklisted_by_user = stmt.get_column_int64 (3);
+            obj.date_created = get_datetime (stmt.get_column_int64 (4));
+            obj.date_last_filled = get_datetime (stmt.get_column_int64 (5));
+            obj.date_last_used = get_datetime (stmt.get_column_int64 (6));
+            obj.date_password_modified = get_datetime (stmt.get_column_int64 (7));
+            obj.date_received = get_datetime (stmt.get_column_int64 (8));
+            obj.date_synced = get_datetime (stmt.get_column_int64 (9));
+            obj.display_name = stmt.get_column_string (10);
+            obj.federation_url = stmt.get_column_string (11);
+            // obj.form_data = stmt.get_column_bytearray (12);
+            obj.generation_upload_status = stmt.get_column_int64 (13);
+            obj.icon_url = stmt.get_column_string (14);
+            obj.id = stmt.get_column_int64 (15);
+            obj.is_zero_click = stmt.get_column_int64 (16);
+            obj.keychain_identifier = stmt.get_column_bytearray (17);
+            // obj.moving_blocked_for = stmt.get_column_bytearray (18);
+            obj.origin_url = stmt.get_column_string (19);
+            obj.password_element = stmt.get_column_string (20);
+            obj.password_type = stmt.get_column_int64 (21);
+            obj.password_value = stmt.get_column_bytearray (22);
+            // obj.possible_username_pairs = stmt.get_column_bytearray (23);
+            // obj.possible_usernames = stmt.get_column_bytearray (24);
+            obj.preferred = stmt.get_column_int64 (25);
+            obj.scheme = stmt.get_column_int64 (26);
+            obj.sender_email = stmt.get_column_string (27);
+            obj.sender_name = stmt.get_column_string (28);
+            obj.sender_profile_image_url = stmt.get_column_string (29);
+            obj.sharing_notification_displayed = stmt.get_column_int64 (30);
+            obj.signon_realm = stmt.get_column_string (31);
+            obj.skip_zero_click = stmt.get_column_int64 (32);
+            obj.ssl_valid = stmt.get_column_int64 (33);
+            obj.submit_element = stmt.get_column_string (34);
+            obj.times_used = stmt.get_column_int64 (35);
+            obj.use_additional_auth = stmt.get_column_int64 (36);
+            obj.username_element = stmt.get_column_string (37);
+            obj.username_value = stmt.get_column_string (38);
 
-            // Add to logins vector
-            logins_.emplace_back (std::move (l));
+            // Add logins to the list
+            logins_.emplace_back (std::move (obj));
         }
+
+        is_instance_ = true;
     }
     catch (const std::exception &e)
     {

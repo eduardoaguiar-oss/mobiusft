@@ -1,6 +1,10 @@
 Mobius Forensic Toolkit 2.25
 	* Added new C++ extension called `vfs-block-apfs`
 	* iped-frontend: Changed to generate reports on remote folders. Reported by Clemente Paixão
+	* app-chromium: Added support for "Login Data" table schema v39
+	* app-chromium: Better detection of "Login Data" files
+	* app-chromium: Added support for "Web Data" table schemas v46 and 99
+	* app-chromium: Better detection of "Web Data" files
 	* libmobius_core: Added new class crypt::hash_impl_fletcher16
 	* libmobius_core: Added new class crypt::hash_impl_fletcher32
 	* libmobius_core: Added new class crypt::hash_impl_fletcher64
@@ -11,6 +15,7 @@ Mobius Forensic Toolkit 2.25
 	* libmobius_core: Added new function `vfs::block::register_block_decoder`
 	* libmobius_core: Added new function `vfs::block::unregister_block_decoder`
 	* libmobius_core: Added new function `vfs::block::get_block_decoders`
+	* libmobius_core: Improved VFS TSK folder handling by caching the dir_p pointer, reducing memory usage and enhancing performance.
 
 Mobius Forensic Toolkit 2.24
 	* Added new C++ extension called `app-gecko`

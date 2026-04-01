@@ -311,7 +311,7 @@ class file_web_data
         std::string card_issuer;
 
         // @brief Card issuer ID
-        std::uint64_t card_issuer_id = 0;
+        std::string card_issuer_id;
 
         // @brief Instrument ID
         std::string instrument_id;
