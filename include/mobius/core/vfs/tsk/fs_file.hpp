@@ -63,7 +63,7 @@ class fs_file
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    fs_file () = default;
+    fs_file ();
     explicit fs_file (TSK_FS_FILE *);
     fs_file (const fs_file &) = default;
     fs_file (fs_file &&) noexcept = default;
@@ -73,10 +73,12 @@ class fs_file
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     fs_file &operator= (const fs_file &) = default;
     fs_file &operator= (fs_file &&) noexcept = default;
+    operator bool () const noexcept;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+    TSK_FS_FILE *get_pointer () const;
     bool exists () const;
     bool is_deleted () const;
     bool is_reallocated () const;
@@ -102,101 +104,15 @@ class fs_file
     std::vector<fs_file> get_children () const;
     std::vector<stream_type> get_streams () const;
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Check if fs_file is valid
-    // @return true/false
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const noexcept
-    {
-        return bool (p_);
-    }
+  private:
+    // @brief Forward declaration of implementation class
+    class impl;
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get internal pointer
-    // @return Pointer
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    TSK_FS_FILE *
-    get_pointer () const
-    {
-        return p_.get ();
-    }
+    // @brief Pointer to implementation
+    std::shared_ptr<impl> impl_;
 
   private:
-    // @brief libtsk file structure pointer
-    std::shared_ptr<TSK_FS_FILE> p_;
-
-    // @brief libtsk dir structure pointer (for folders)
-    mutable std::shared_ptr<TSK_FS_DIR> dir_p_;
-
-    // @brief i-node
-    mutable std::uint64_t inode_ = 0;
-
-    // @brief name
-    mutable std::string name_;
-
-    // @brief short name
-    mutable std::string short_name_;
-
-    // @brief path
-    mutable std::string path_;
-
-    // @brief deleted flag
-    mutable bool is_deleted_ = false;
-
-    // @brief file type
-    mutable fs_file_type type_ = fs_file_type::none;
-
-    // @brief size in bytes
-    mutable std::uint64_t size_ = 0;
-
-    // @brief user id
-    mutable int user_id_ = -1;
-
-    // @brief group id
-    mutable int group_id_ = -1;
-
-    // @brief RWX permissions
-    mutable int permissions_ = 0;
-
-    // @brief creation date/time
-    mutable mobius::core::datetime::datetime creation_time_;
-
-    // @brief last modification date/time
-    mutable mobius::core::datetime::datetime modification_time_;
-
-    // @brief last access date/time
-    mutable mobius::core::datetime::datetime access_time_;
-
-    // @brief last metadata modification date/time
-    mutable mobius::core::datetime::datetime metadata_time_;
-
-    // @brief deletion date/time
-    mutable mobius::core::datetime::datetime deletion_time_;
-
-    // @brief last backup date/time
-    mutable mobius::core::datetime::datetime backup_time_;
-
-    // @brief Streams
-    mutable std::vector<stream_type> streams_;
-
-    // @brief reallocated flag
-    mutable bool is_reallocated_ = false;
-
-    // @brief fs_name loaded flag
-    mutable bool fs_name_loaded_ = false;
-
-    // @brief fs_meta loaded flag
-    mutable bool fs_meta_loaded_ = false;
-
-    // @brief Streams loaded flag
-    mutable bool streams_loaded_ = false;
-
-  private:
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void _load_fs_name () const;
-    void _load_fs_meta () const;
     void _load_streams () const;
 };
 

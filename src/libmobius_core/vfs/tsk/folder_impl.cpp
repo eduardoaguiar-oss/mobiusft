@@ -180,15 +180,6 @@ folder_impl::get_children () const
         }
     );
 
-    // set children's paths
-    auto path = get_path ();
-
-    std::for_each (
-        children.begin (), children.end (),
-        [&path] (mobius::core::io::entry &e)
-        { e.set_path (path + '/' + e.get_name ()); }
-    );
-
     // Return children
     return children;
 }
