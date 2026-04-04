@@ -90,7 +90,7 @@ show_file (const mobius::core::io::file &f, const std::string &parent_path,
     std::cout << "       ctime: " << f.get_metadata_time () << '\n';
     std::cout << "      crtime: " << f.get_creation_time () << '\n';
     std::cout << "       dtime: " << f.get_deletion_time () << '\n';
-    std::cout << "     bkptime: " << f.get_backup_time () << '\n';
+    std::cout << "     bkptime: " << f.get_backup_time () << std::endl;
 
     // parent
     auto parent = f.get_parent ();
@@ -98,7 +98,7 @@ show_file (const mobius::core::io::file &f, const std::string &parent_path,
     if (parent)
     {
         std::cout << " parent name: " << parent.get_name () << '\n';
-        std::cout << " parent path: " << parent_path << '\n';
+        std::cout << " parent path: " << parent.get_path () << '\n';
     }
 
     // streams
@@ -135,7 +135,7 @@ show_folder (const mobius::core::io::folder &f, const std::string &parent_path,
     std::cout << "       mtime: " << f.get_modification_time () << '\n';
     std::cout << "       ctime: " << f.get_metadata_time () << '\n';
     std::cout << "      crtime: " << f.get_creation_time () << '\n';
-    std::cout << "       dtime: " << f.get_deletion_time () << '\n';
+    std::cout << "       dtime: " << f.get_deletion_time () << std::endl;
 
     // parent
     auto parent = f.get_parent ();
@@ -143,7 +143,7 @@ show_folder (const mobius::core::io::folder &f, const std::string &parent_path,
     if (parent)
     {
         std::cout << " parent name: " << parent.get_name () << '\n';
-        std::cout << " parent path: " << parent_path << '\n';
+        std::cout << " parent path: " << parent.get_path () << '\n';
     }
 
     // streams
@@ -175,7 +175,7 @@ show_entry (const mobius::core::io::entry &entry,
     }
     catch (const std::exception &e)
     {
-        std::cerr << "Warning: " << e.what () << '\n';
+        std::cerr << "Warning: " << e.what () << std::endl;
     }
 }
 
@@ -201,7 +201,7 @@ usage ()
         std::cerr << "       " << r.get_id () << "\t\t" << r.get_description ()
                   << '\n';
 
-    std::cerr << '\n';
+    std::cerr << std::endl;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

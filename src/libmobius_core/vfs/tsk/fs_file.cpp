@@ -16,7 +16,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/exception.inc>
-#include <mobius/core/io/path.hpp>
 #include <mobius/core/vfs/tsk/exception.hpp>
 #include <mobius/core/vfs/tsk/fs_file.hpp>
 #include <mobius/core/vfs/tsk/stream_impl.hpp>
@@ -485,8 +484,10 @@ fs_file::impl::set_path (const std::string &path)
 
     if (name_.empty ())
     {
-        mobius::core::io::path p (path);
-        name_ = p.get_filename ();
+        auto pos = path.find_last_of ('/');
+
+        if (pos != std::string::npos && pos < path.size () - 1)
+            name_ = path.substr (pos + 1);
     }
 }
 
@@ -549,6 +550,12 @@ fs_file::impl::get_parent () const
 
         // build parent object
         parent = fs_file (file_p);
+
+        auto path = get_path ();
+        auto pos = path.find_last_of ('/');
+
+        if (pos != std::string::npos && pos > 0)
+            parent.set_path (path.substr (0, pos));
     }
 
     return parent;
