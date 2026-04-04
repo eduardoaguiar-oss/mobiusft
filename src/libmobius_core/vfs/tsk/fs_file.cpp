@@ -22,8 +22,103 @@
 #include <mobius/core/vfs/tsk/stream_impl.hpp>
 #include <stdexcept>
 
+namespace
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get file type from name type
+// @param name_type Name type
+// @return File type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::vfs::tsk::fs_file::fs_file_type
+get_file_type_from_name_type (TSK_FS_NAME_TYPE_ENUM name_type)
+{
+    switch (name_type)
+    {
+        case TSK_FS_NAME_TYPE_FIFO:
+            return mobius::core::vfs::tsk::fs_file::fs_file_type::fifo;
+            break;
+
+        case TSK_FS_NAME_TYPE_CHR:
+            return mobius::core::vfs::tsk::fs_file::fs_file_type::char_device;
+            break;
+
+        case TSK_FS_NAME_TYPE_DIR:
+        case TSK_FS_NAME_TYPE_VIRT_DIR:
+            return mobius::core::vfs::tsk::fs_file::fs_file_type::folder;
+            break;
+
+        case TSK_FS_NAME_TYPE_BLK:
+            return mobius::core::vfs::tsk::fs_file::fs_file_type::block_device;
+            break;
+
+        case TSK_FS_NAME_TYPE_REG:
+        case TSK_FS_NAME_TYPE_VIRT:
+            return mobius::core::vfs::tsk::fs_file::fs_file_type::regular;
+            break;
+
+        case TSK_FS_NAME_TYPE_LNK:
+            return mobius::core::vfs::tsk::fs_file::fs_file_type::symlink;
+            break;
+
+        case TSK_FS_NAME_TYPE_SOCK:
+            return mobius::core::vfs::tsk::fs_file::fs_file_type::socket;
+            break;
+
+        default:
+            return mobius::core::vfs::tsk::fs_file::fs_file_type::none;
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get file type from meta type
+// @param meta_type Meta type
+// @return File type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::vfs::tsk::fs_file::fs_file_type
+get_file_type_from_meta_type (TSK_FS_META_TYPE_ENUM meta_type)
+{
+    switch (meta_type)
+    {
+        case TSK_FS_META_TYPE_FIFO:
+            return mobius::core::vfs::tsk::fs_file::fs_file_type::fifo;
+            break;
+
+        case TSK_FS_META_TYPE_CHR:
+            return mobius::core::vfs::tsk::fs_file::fs_file_type::char_device;
+            break;
+
+        case TSK_FS_META_TYPE_DIR:
+        case TSK_FS_META_TYPE_VIRT_DIR:
+            return mobius::core::vfs::tsk::fs_file::fs_file_type::folder;
+            break;
+
+        case TSK_FS_META_TYPE_BLK:
+            return mobius::core::vfs::tsk::fs_file::fs_file_type::block_device;
+            break;
+
+        case TSK_FS_META_TYPE_REG:
+        case TSK_FS_META_TYPE_VIRT:
+            return mobius::core::vfs::tsk::fs_file::fs_file_type::regular;
+            break;
+
+        case TSK_FS_META_TYPE_LNK:
+            return mobius::core::vfs::tsk::fs_file::fs_file_type::symlink;
+            break;
+
+        case TSK_FS_META_TYPE_SOCK:
+            return mobius::core::vfs::tsk::fs_file::fs_file_type::socket;
+            break;
+
+        default:
+            return mobius::core::vfs::tsk::fs_file::fs_file_type::none;
+    }
+}
+
+} // namespace
+
 namespace mobius::core::vfs::tsk
 {
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Initialize object
 // @param p Pointer to file structure
@@ -31,7 +126,7 @@ namespace mobius::core::vfs::tsk
 fs_file::fs_file (TSK_FS_FILE *p)
 {
     if (!p)
-        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
     p_ = std::shared_ptr<TSK_FS_FILE> (p, tsk_fs_file_close);
 }
@@ -54,7 +149,7 @@ std::string
 fs_file::get_name () const
 {
     if (!exists ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
     _load_fs_name ();
     return name_;
@@ -68,7 +163,7 @@ std::string
 fs_file::get_short_name () const
 {
     if (!exists ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
     _load_fs_name ();
     return short_name_;
@@ -82,7 +177,7 @@ std::string
 fs_file::get_path () const
 {
     if (!exists ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
     return path_;
 }
@@ -95,7 +190,7 @@ void
 fs_file::set_path (const std::string &path)
 {
     if (!exists ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
     path_ = path;
 
@@ -114,7 +209,7 @@ bool
 fs_file::is_deleted () const
 {
     if (!exists ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
     _load_fs_name ();
     return is_deleted_;
@@ -128,7 +223,7 @@ bool
 fs_file::is_reallocated () const
 {
     if (!exists ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
     _load_fs_meta ();
     return is_reallocated_;
@@ -142,7 +237,7 @@ std::uint64_t
 fs_file::get_inode () const
 {
     if (!exists ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
     if (p_->name)
         _load_fs_name ();
@@ -161,7 +256,7 @@ std::uint64_t
 fs_file::get_size () const
 {
     if (!exists ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
     _load_fs_meta ();
     return size_;
@@ -175,12 +270,14 @@ fs_file::fs_file_type
 fs_file::get_type () const
 {
     if (!exists ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
-    if (p_->name)
-        _load_fs_name ();
+    _load_fs_name ();
 
-    else
+    // _load_fs_meta is expensive, so only call it if type is not set by
+    // _load_fs_name or if file is deleted, since deleted files may have
+    // type set by _load_fs_name but it may be inaccurate
+    if (type_ == fs_file_type::none || is_deleted_)
         _load_fs_meta ();
 
     return type_;
@@ -194,7 +291,7 @@ int
 fs_file::get_user_id () const
 {
     if (!exists ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
     _load_fs_meta ();
     return user_id_;
@@ -208,7 +305,7 @@ int
 fs_file::get_group_id () const
 {
     if (!exists ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
     _load_fs_meta ();
     return group_id_;
@@ -222,7 +319,7 @@ int
 fs_file::get_permissions () const
 {
     if (!exists ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
     _load_fs_meta ();
     return permissions_;
@@ -236,7 +333,7 @@ mobius::core::datetime::datetime
 fs_file::get_creation_time () const
 {
     if (!exists ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
     _load_fs_meta ();
     return creation_time_;
@@ -250,7 +347,7 @@ mobius::core::datetime::datetime
 fs_file::get_access_time () const
 {
     if (!exists ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
     _load_fs_meta ();
     return access_time_;
@@ -264,7 +361,7 @@ mobius::core::datetime::datetime
 fs_file::get_modification_time () const
 {
     if (!exists ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
     _load_fs_meta ();
     return modification_time_;
@@ -278,7 +375,7 @@ mobius::core::datetime::datetime
 fs_file::get_metadata_time () const
 {
     if (!exists ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
     _load_fs_meta ();
     return metadata_time_;
@@ -292,7 +389,7 @@ mobius::core::datetime::datetime
 fs_file::get_deletion_time () const
 {
     if (!exists ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
     _load_fs_meta ();
     return deletion_time_;
@@ -306,7 +403,7 @@ mobius::core::datetime::datetime
 fs_file::get_backup_time () const
 {
     if (!exists ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
     _load_fs_meta ();
     return backup_time_;
@@ -330,7 +427,7 @@ fs_file
 fs_file::get_parent () const
 {
     if (!exists ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
     fs_file parent;
 
@@ -356,9 +453,11 @@ std::vector<fs_file>
 fs_file::get_children () const
 {
     if (!exists ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Check if fs_file is a folder
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     _load_fs_meta ();
 
     if (!p_->meta || !p_->meta->addr ||
@@ -366,7 +465,9 @@ fs_file::get_children () const
          p_->meta->type != TSK_FS_META_TYPE_VIRT_DIR))
         return {};
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Try to open directory, if necessary
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     if (!dir_p_)
     {
         TSK_FS_DIR *dir_p = tsk_fs_dir_open_meta (p_->fs_info, p_->meta->addr);
@@ -377,7 +478,9 @@ fs_file::get_children () const
         dir_p_ = std::shared_ptr<TSK_FS_DIR> (dir_p, tsk_fs_dir_close);
     }
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Read directory entries
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     auto count = tsk_fs_dir_getsize (dir_p_.get ());
 
     std::vector<fs_file> children;
@@ -408,7 +511,7 @@ std::vector<fs_file::stream_type>
 fs_file::get_streams () const
 {
     if (!exists ())
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("pointer is null"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid fs_file"));
 
     _load_streams ();
     return streams_;
@@ -430,9 +533,9 @@ fs_file::_load_fs_name () const
     if (fs_name_loaded_ || !p_->name)
         return;
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // set data
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     inode_ = p_->name->meta_addr;
     is_deleted_ = bool (p_->name->flags & TSK_FS_NAME_FLAG_UNALLOC);
 
@@ -442,44 +545,11 @@ fs_file::_load_fs_name () const
     if (p_->name->shrt_name)
         short_name_ = p_->name->shrt_name;
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // set file type
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    switch (p_->name->type)
-    {
-        case TSK_FS_NAME_TYPE_FIFO:
-            type_ = fs_file_type::fifo;
-            break;
-
-        case TSK_FS_NAME_TYPE_CHR:
-            type_ = fs_file_type::char_device;
-            break;
-
-        case TSK_FS_NAME_TYPE_DIR:
-        case TSK_FS_NAME_TYPE_VIRT_DIR:
-            type_ = fs_file_type::folder;
-            break;
-
-        case TSK_FS_NAME_TYPE_BLK:
-            type_ = fs_file_type::block_device;
-            break;
-
-        case TSK_FS_NAME_TYPE_REG:
-        case TSK_FS_NAME_TYPE_VIRT:
-            type_ = fs_file_type::regular;
-            break;
-
-        case TSK_FS_NAME_TYPE_LNK:
-            type_ = fs_file_type::symlink;
-            break;
-
-        case TSK_FS_NAME_TYPE_SOCK:
-            type_ = fs_file_type::socket;
-            break;
-
-        default:
-            type_ = fs_file_type::none;
-    }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (type_ == fs_file_type::none)
+        type_ = get_file_type_from_name_type (p_->name->type);
 
     fs_name_loaded_ = true;
 }
@@ -493,7 +563,9 @@ fs_file::_load_fs_meta () const
     if (fs_meta_loaded_)
         return;
 
-    // retrieve meta structure if needed
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Retrieve meta structure if needed
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     if (!p_->meta && p_->name && p_->name->meta_addr)
     {
         int rc = p_->fs_info->file_add_meta (
@@ -504,93 +576,66 @@ fs_file::_load_fs_meta () const
             throw std::runtime_error (TSK_EXCEPTION_MSG);
     }
 
-    // set metadata
-    if (p_->meta)
-    {
-        size_ = p_->meta->size;
-        user_id_ = p_->meta->uid;
-        group_id_ = p_->meta->gid;
-        permissions_ = p_->meta->mode;
-
-        // set timestamps
-        access_time_ =
-            mobius::core::datetime::new_datetime_from_unix_timestamp (
-                p_->meta->atime
-            );
-        modification_time_ =
-            mobius::core::datetime::new_datetime_from_unix_timestamp (
-                p_->meta->mtime
-            );
-        metadata_time_ =
-            mobius::core::datetime::new_datetime_from_unix_timestamp (
-                p_->meta->ctime
-            );
-        creation_time_ =
-            mobius::core::datetime::new_datetime_from_unix_timestamp (
-                p_->meta->crtime
-            );
-
-        if (p_->fs_info->ftype & TSK_FS_TYPE_EXT_DETECT)
-            deletion_time_ =
-                mobius::core::datetime::new_datetime_from_unix_timestamp (
-                    p_->meta->time2.ext2.dtime
-                );
-
-        if (p_->fs_info->ftype & TSK_FS_TYPE_HFS_DETECT)
-            backup_time_ =
-                mobius::core::datetime::new_datetime_from_unix_timestamp (
-                    p_->meta->time2.hfs.bkup_time
-                );
-
-        // if file has name, check if it is reallocated
-        if (p_->name)
-            is_reallocated_ = (p_->name->flags & TSK_FS_NAME_FLAG_UNALLOC) &&
-                              (p_->meta->flags & TSK_FS_META_FLAG_ALLOC);
-
-        // otherwise, set i-node and type
-        else
-        {
-            inode_ = p_->meta->addr;
-
-            switch (p_->meta->type)
-            {
-                case TSK_FS_META_TYPE_FIFO:
-                    type_ = fs_file_type::fifo;
-                    break;
-
-                case TSK_FS_META_TYPE_CHR:
-                    type_ = fs_file_type::char_device;
-                    break;
-
-                case TSK_FS_META_TYPE_DIR:
-                case TSK_FS_META_TYPE_VIRT_DIR:
-                    type_ = fs_file_type::folder;
-                    break;
-
-                case TSK_FS_META_TYPE_BLK:
-                    type_ = fs_file_type::block_device;
-                    break;
-
-                case TSK_FS_META_TYPE_REG:
-                case TSK_FS_META_TYPE_VIRT:
-                    type_ = fs_file_type::regular;
-                    break;
-
-                case TSK_FS_META_TYPE_LNK:
-                    type_ = fs_file_type::symlink;
-                    break;
-
-                case TSK_FS_META_TYPE_SOCK:
-                    type_ = fs_file_type::socket;
-                    break;
-
-                default:
-                    type_ = fs_file_type::none;
-            }
-        }
-    }
-
     fs_meta_loaded_ = true;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Set metadata
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (!p_->meta)
+        return;
+
+    size_ = p_->meta->size;
+    user_id_ = p_->meta->uid;
+    group_id_ = p_->meta->gid;
+    permissions_ = p_->meta->mode;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Set timestamps
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    access_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (
+        p_->meta->atime
+    );
+    modification_time_ =
+        mobius::core::datetime::new_datetime_from_unix_timestamp (
+            p_->meta->mtime
+        );
+    metadata_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (
+        p_->meta->ctime
+    );
+    creation_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (
+        p_->meta->crtime
+    );
+
+    if (p_->fs_info->ftype & TSK_FS_TYPE_EXT_DETECT)
+        deletion_time_ =
+            mobius::core::datetime::new_datetime_from_unix_timestamp (
+                p_->meta->time2.ext2.dtime
+            );
+
+    if (p_->fs_info->ftype & TSK_FS_TYPE_HFS_DETECT)
+        backup_time_ =
+            mobius::core::datetime::new_datetime_from_unix_timestamp (
+                p_->meta->time2.hfs.bkup_time
+            );
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // If file has name, check if it is reallocated
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (p_->name)
+        is_reallocated_ = (p_->name->flags & TSK_FS_NAME_FLAG_UNALLOC) &&
+                          (p_->meta->flags & TSK_FS_META_FLAG_ALLOC);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Set i-node
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (!inode_)
+        inode_ = p_->meta->addr;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Set type
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (type_ == fs_file_type::none)
+        type_ = get_file_type_from_meta_type (p_->meta->type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

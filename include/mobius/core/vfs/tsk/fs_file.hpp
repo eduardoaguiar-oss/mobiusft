@@ -144,7 +144,7 @@ class fs_file
     mutable bool is_deleted_ = false;
 
     // @brief file type
-    mutable fs_file_type type_ = {};
+    mutable fs_file_type type_ = fs_file_type::none;
 
     // @brief size in bytes
     mutable std::uint64_t size_ = 0;
