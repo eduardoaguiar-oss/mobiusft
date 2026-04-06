@@ -15,8 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <algorithm>
-#include <map>
 #include <mobius/core/bytearray.hpp>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/reader.hpp>
@@ -25,11 +23,13 @@
 #include <mobius/core/os/win/registry/registry_key_impl_container.hpp>
 #include <mobius/core/os/win/registry/registry_key_impl_link.hpp>
 #include <mobius/core/string_functions.hpp>
+#include <algorithm>
+#include <map>
 
 namespace mobius::core::os::win::registry
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// helper functions prototypes
+// Helper functions prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void registry_set_msdcc_key (registry_key);
 void registry_set_lsa_keys (registry_key, const mobius::core::bytearray &);
@@ -39,7 +39,7 @@ void registry_set_user_assist_keys (registry_key);
 namespace // local namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief create a new container key
+// @brief Create a new container key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static registry_key
 new_container_key (const std::string &name = std::string ())
@@ -53,7 +53,7 @@ new_container_key (const std::string &name = std::string ())
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief create a new link to key
+// @brief Create a new link to key
 // @param key registry key
 // @param name new name of the key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -69,7 +69,7 @@ new_link (registry_key key, const std::string &name = std::string ())
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief expand abbreviated path (HKLM, HKU, ...)
+// @brief Expand abbreviated path (HKLM, HKU, ...)
 // @param path key, value or data path
 // @return expanded path
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -126,24 +126,27 @@ expand_path (const std::string &path)
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief registry implementation class
+// @brief Registry implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class registry::impl
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // constructors
+    // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     impl ();
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief check if object is valid
+    // @brief Check if object is valid
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const { return files_.size () > 0; }
+    operator bool () const
+    {
+        return files_.size () > 0;
+    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief get files
+    // @brief Get files
     // @return files
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::vector<registry_file>
@@ -153,7 +156,7 @@ class registry::impl
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief get keys
+    // @brief Get keys
     // @return keys
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::vector<registry_key>
@@ -164,7 +167,7 @@ class registry::impl
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief get syskey
+    // @brief Get syskey
     // @return registry syskey
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::bytearray
@@ -174,14 +177,17 @@ class registry::impl
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // function prototypes
+    // Function prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    registry_file add_file_by_path (const std::string &, const std::string &,
-                                    const std::string &);
-    registry_file add_file_by_url (const std::string &, const std::string &,
-                                   const std::string &);
-    registry_file add_file_by_reader (const std::string &, const std::string &,
-                                      mobius::core::io::reader);
+    registry_file add_file_by_path (
+        const std::string &, const std::string &, const std::string &
+    );
+    registry_file add_file_by_url (
+        const std::string &, const std::string &, const std::string &
+    );
+    registry_file add_file_by_reader (
+        const std::string &, const std::string &, mobius::core::io::reader
+    );
     void remove_file (std::uint32_t);
 
     registry_key get_key_by_path (const std::string &) const;
@@ -220,7 +226,7 @@ class registry::impl
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry::impl::impl ()
     : root_ (new_container_key ())
@@ -228,16 +234,18 @@ registry::impl::impl ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief add registry file by local path
+// @brief Add registry file by local path
 // @param role file role
 // @param path original path
 // @param localpath local path
 // @return new registry file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_file
-registry::impl::add_file_by_path (const std::string &role,
-                                  const std::string &path,
-                                  const std::string &localpath)
+registry::impl::add_file_by_path (
+    const std::string &role,
+    const std::string &path,
+    const std::string &localpath
+)
 {
     auto f = mobius::core::io::new_file_by_path (localpath);
 
@@ -245,16 +253,16 @@ registry::impl::add_file_by_path (const std::string &role,
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief add registry file by URL
+// @brief Add registry file by URL
 // @param role file role
 // @param path original path
 // @param url URL
 // @return new registry file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_file
-registry::impl::add_file_by_url (const std::string &role,
-                                 const std::string &path,
-                                 const std::string &url)
+registry::impl::add_file_by_url (
+    const std::string &role, const std::string &path, const std::string &url
+)
 {
     auto f = mobius::core::io::new_file_by_url (url);
     auto reader = f.new_reader ();
@@ -263,16 +271,18 @@ registry::impl::add_file_by_url (const std::string &role,
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief add registry file by reader
+// @brief Add registry file by reader
 // @param role file role
 // @param path original path
 // @param reader generic reader
 // @return new registry file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_file
-registry::impl::add_file_by_reader (const std::string &role,
-                                    const std::string &path,
-                                    mobius::core::io::reader reader)
+registry::impl::add_file_by_reader (
+    const std::string &role,
+    const std::string &path,
+    mobius::core::io::reader reader
+)
 {
     registry_file r (next_uid_, role, path, reader);
     files_.push_back (r);
@@ -286,7 +296,7 @@ registry::impl::add_file_by_reader (const std::string &role,
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief remove registry file from registry
+// @brief Remove registry file from registry
 // @param uid unique identifier
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -294,14 +304,15 @@ registry::impl::remove_file (std::uint32_t uid)
 {
     auto lambda = [uid] (registry_file f) { return f.get_uid () == uid; };
 
-    files_.erase (std::remove_if (files_.begin (), files_.end (), lambda),
-                  files_.end ());
+    files_.erase (
+        std::remove_if (files_.begin (), files_.end (), lambda), files_.end ()
+    );
 
     keys_loaded_ = false;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get key by path
+// @brief Get key by path
 // @param name key path
 // @return key or empty key, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -313,7 +324,7 @@ registry::impl::get_key_by_path (const std::string &path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get key by mask
+// @brief Get key by mask
 // @param mask fnmatch mask
 // @return subkeys or empty vector if none found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -325,7 +336,7 @@ registry::impl::get_key_by_mask (const std::string &mask) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get value by path
+// @brief Get value by path
 // @param name value path
 // @return value or empty value, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -337,7 +348,7 @@ registry::impl::get_value_by_path (const std::string &path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get values by mask
+// @brief Get values by mask
 // @param mask value mask
 // @return values or empty vector, if no values were found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -349,7 +360,7 @@ registry::impl::get_value_by_mask (const std::string &mask) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get data by path
+// @brief Get data by path
 // @param name value path
 // @return data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -361,7 +372,7 @@ registry::impl::get_data_by_path (const std::string &path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get data by mask
+// @brief Get data by mask
 // @param mask value mask
 // @return data or empty vector, if no values were found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -373,7 +384,7 @@ registry::impl::get_data_by_mask (const std::string &mask) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief build registry keys according to the files added
+// @brief Build registry keys according to the files added
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry::impl::_load_keys () const
@@ -405,16 +416,16 @@ registry::impl::_load_keys () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief set syskey
-// @see
-// https://github.com/Neohapsis/creddump7/blob/master/framework/win32/lsasecrets.py
+// @brief Set syskey
+// @see https://github.com/Neohapsis/creddump7/blob/master/framework/win32/lsasecrets.py
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry::impl::_set_syskey () const
 {
     // load syskey
     auto lsa_key = root_.get_key_by_path (
-        "\\HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Lsa");
+        "\\HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Lsa"
+    );
 
     if (lsa_key)
     {
@@ -428,19 +439,24 @@ registry::impl::_set_syskey () const
             mobius::core::bytearray tmp;
             tmp.from_hexstring (
                 jd_key.get_classname () + skew1_key.get_classname () +
-                gbg_key.get_classname () + data_key.get_classname ());
-            syskey_ = mobius::core::bytearray (
-                {tmp[8], tmp[5], tmp[4], tmp[2], tmp[11], tmp[9], tmp[13],
-                 tmp[3], tmp[0], tmp[6], tmp[1], tmp[12], tmp[14], tmp[10],
-                 tmp[15], tmp[7]});
+                gbg_key.get_classname () + data_key.get_classname ()
+            );
+
+            if (tmp.size () > 15)
+            {
+                syskey_ = mobius::core::bytearray (
+                    {tmp[8], tmp[5], tmp[4], tmp[2], tmp[11], tmp[9], tmp[13],
+                     tmp[3], tmp[0], tmp[6], tmp[1], tmp[12], tmp[14], tmp[10],
+                     tmp[15], tmp[7]}
+                );
+            }
         }
     }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief set HKEY_LOCAL_MACHINE root key
-// @see
-// https://msdn.microsoft.com/en-us/library/windows/desktop/ms724877(v=vs.85).aspx
+// @brief Set HKEY_LOCAL_MACHINE root key
+// @see https://msdn.microsoft.com/en-us/library/windows/desktop/ms724877(v=vs.85).aspx
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry::impl::_set_hkey_local_machine () const
@@ -461,9 +477,8 @@ registry::impl::_set_hkey_local_machine () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief set HKEY_USERS root key
-// @see
-// https://msdn.microsoft.com/en-us/library/windows/desktop/ms724877(v=vs.85).aspx
+// @brief Set HKEY_USERS root key
+// @see https://msdn.microsoft.com/en-us/library/windows/desktop/ms724877(v=vs.85).aspx
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry::impl::_set_hkey_users () const
@@ -476,7 +491,8 @@ registry::impl::_set_hkey_users () const
 
     for (auto k : root_.get_key_by_mask (
              "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows "
-             "NT\\CurrentVersion\\ProfileList\\*"))
+             "NT\\CurrentVersion\\ProfileList\\*"
+         ))
     {
         auto data = k.get_data_by_name ("ProfileImagePath");
 
@@ -485,11 +501,13 @@ registry::impl::_set_hkey_users () const
             const std::string sid = k.get_name ();
 
             std::string p_path = mobius::core::string::tolower (
-                data.get_data_as_string ("utf-16"));
+                data.get_data_as_string ("utf-16")
+            );
             p_path =
                 mobius::core::string::replace (p_path, "%systemdrive%", "");
-            p_path = mobius::core::string::replace (p_path, "%systemroot%",
-                                                    "\\windows");
+            p_path = mobius::core::string::replace (
+                p_path, "%systemroot%", "\\windows"
+            );
             p_path = mobius::core::string::word (p_path, -1, ":");
             p_path += "\\ntuser.dat";
 
@@ -517,7 +535,8 @@ registry::impl::_set_hkey_users () const
             if (key_name.empty ())
             {
                 const std::string f_path = mobius::core::string::tolower (
-                    mobius::core::string::word (f.get_path (), -1, ":"));
+                    mobius::core::string::word (f.get_path (), -1, ":")
+                );
 
                 auto iter = profile_map.find (f_path);
                 if (iter != profile_map.end ())
@@ -528,7 +547,8 @@ registry::impl::_set_hkey_users () const
             if (key_name.empty ())
             {
                 auto pssp_key = key.get_key_by_path (
-                    "Software\\Microsoft\\Protected Storage System Provider");
+                    "Software\\Microsoft\\Protected Storage System Provider"
+                );
 
                 if (pssp_key && (pssp_key.begin () != pssp_key.end ()))
                     key_name = pssp_key.begin ()->get_name ();
@@ -557,7 +577,7 @@ registry::impl::_set_hkey_users () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief set HKEY_CLASSES_ROOT root key
+// @brief Set HKEY_CLASSES_ROOT root key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry::impl::_set_hkey_classes_root () const
@@ -575,7 +595,7 @@ registry::impl::_set_hkey_classes_root () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief set HKEY_CURRENT_CONFIG root key
+// @brief Set HKEY_CURRENT_CONFIG root key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry::impl::_set_hkey_current_config () const
@@ -607,14 +627,16 @@ registry::impl::_set_hkey_current_config () const
 
         // set key HKCC (HKEY_CURRENT_CONFIG)
         auto sk = system_key.get_key_by_path (
-            "CurrentControlSet\\Hardware Profiles\\0001");
+            "CurrentControlSet\\Hardware Profiles\\0001"
+        );
 
         if (sk)
         {
             hkcc = new_link (sk, "HKEY_CURRENT_CONFIG");
 
             auto hp_key = system_key.get_key_by_path (
-                "CurrentControlSet\\Hardware Profiles");
+                "CurrentControlSet\\Hardware Profiles"
+            );
 
             if (hp_key)
                 hp_key.add_key (new_link (sk, "Current"));
@@ -626,7 +648,7 @@ registry::impl::_set_hkey_current_config () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief set HKEY_CURRENT_USER root key
+// @brief Set HKEY_CURRENT_USER root key
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 registry::impl::_set_hkey_current_user () const
@@ -637,7 +659,7 @@ registry::impl::_set_hkey_current_user () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief default constructor
+// @brief Default constructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry::registry ()
     : impl_ (std::make_shared<impl> ())
@@ -645,55 +667,66 @@ registry::registry ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief check if object is valid
+// @brief Check if object is valid
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-registry::operator bool () const { return impl_->operator bool (); }
+registry::
+operator bool () const
+{
+    return impl_->operator bool ();
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief add registry file by local path
+// @brief Add registry file by local path
 // @param role file role
 // @param path original path
 // @param localpath local path
 // @return new registry file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_file
-registry::add_file_by_path (const std::string &role, const std::string &path,
-                            const std::string &localpath)
+registry::add_file_by_path (
+    const std::string &role,
+    const std::string &path,
+    const std::string &localpath
+)
 {
     return impl_->add_file_by_path (role, path, localpath);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief add registry file URL
+// @brief Add registry file URL
 // @param role file role
 // @param path original path
 // @param url URL
 // @return new registry file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_file
-registry::add_file_by_url (const std::string &role, const std::string &path,
-                           const std::string &url)
+registry::add_file_by_url (
+    const std::string &role, const std::string &path, const std::string &url
+)
 {
     return impl_->add_file_by_url (role, path, url);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief add registry file by reader
+// @brief Add registry file by reader
 // @param role file role
 // @param path original path
 // @param reader generic reader
 // @return new registry file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 registry_file
-registry::add_file_by_reader (const std::string &role, const std::string &path,
-                              mobius::core::io::reader reader)
+registry::add_file_by_reader (
+    const std::string &role,
+    const std::string &path,
+    mobius::core::io::reader reader
+)
 {
     return impl_->add_file_by_reader (role, path, reader);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief remove registry file from registry
+// @brief Remove registry file from registry
 // @param uid unique identifier
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
@@ -703,7 +736,7 @@ registry::remove_file (std::uint32_t uid)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get files
+// @brief Get files
 // @return files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector<registry_file>
@@ -713,7 +746,7 @@ registry::get_files () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get keys
+// @brief Get keys
 // @return keys
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector<registry_key>
@@ -723,7 +756,7 @@ registry::get_keys () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get key by path
+// @brief Get key by path
 // @param name key path
 // @return key or empty key, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -734,7 +767,7 @@ registry::get_key_by_path (const std::string &path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get key by mask
+// @brief Get key by mask
 // @param mask fnmatch mask
 // @return subkeys or empty vector if none found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -745,7 +778,7 @@ registry::get_key_by_mask (const std::string &mask) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get value by path
+// @brief Get value by path
 // @param name value path
 // @return value or empty value, if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -756,7 +789,7 @@ registry::get_value_by_path (const std::string &path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get values by mask
+// @brief Get values by mask
 // @param mask value mask
 // @return values or empty vector, if no values were found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -767,7 +800,7 @@ registry::get_value_by_mask (const std::string &mask) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get data by path
+// @brief Get data by path
 // @param name value path
 // @return data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -778,7 +811,7 @@ registry::get_data_by_path (const std::string &path) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get data by mask
+// @brief Get data by mask
 // @param mask value mask
 // @return data or empty vector, if no values were found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -789,7 +822,7 @@ registry::get_data_by_mask (const std::string &mask) const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get syskey
+// @brief Get syskey
 // @return registry syskey
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::bytearray
