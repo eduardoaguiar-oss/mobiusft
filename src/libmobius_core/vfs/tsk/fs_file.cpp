@@ -517,13 +517,8 @@ fs_file::impl::get_inode () const
 fs_file::fs_file_type
 fs_file::impl::get_type () const
 {
+    _load_fs_meta ();
     _load_fs_name ();
-
-    // _load_fs_meta is expensive, so only call it if type is not set by
-    // _load_fs_name or if file is deleted, since deleted files may have
-    // type set by _load_fs_name but it may be inaccurate
-    if (type_ == fs_file_type::none || is_deleted_)
-        _load_fs_meta ();
 
     return type_;
 }
@@ -639,7 +634,9 @@ fs_file::impl::_load_fs_name () const
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // set data
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    inode_ = p_->name->meta_addr;
+    if (!inode_)
+        inode_ = p_->name->meta_addr;
+
     is_deleted_ = bool (p_->name->flags & TSK_FS_NAME_FLAG_UNALLOC);
 
     if (p_->name->name)
@@ -648,12 +645,12 @@ fs_file::impl::_load_fs_name () const
     if (p_->name->shrt_name)
         short_name_ = p_->name->shrt_name;
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // set file type
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     if (type_ == fs_file_type::none)
         type_ = get_file_type_from_name_type (p_->name->type);
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Set name loaded flag
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     fs_name_loaded_ = true;
 }
 
@@ -681,6 +678,9 @@ fs_file::impl::_load_fs_meta () const
             throw std::runtime_error (TSK_EXCEPTION_MSG);
     }
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Set meta loaded flag
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     fs_meta_loaded_ = true;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

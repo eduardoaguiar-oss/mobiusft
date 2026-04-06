@@ -34,7 +34,7 @@ struct TSK_IMG_INFO_MOBIUS
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief read data from reader
+// @brief Read data from reader
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static ssize_t
 mobius_read (TSK_IMG_INFO *img, TSK_OFF_T off, char *buf, size_t len)
@@ -59,7 +59,7 @@ mobius_read (TSK_IMG_INFO *img, TSK_OFF_T off, char *buf, size_t len)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief close TSK_IMG_INFO_MOBIUS
+// @brief Close TSK_IMG_INFO_MOBIUS
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 mobius_close (TSK_IMG_INFO *img)
@@ -69,7 +69,7 @@ mobius_close (TSK_IMG_INFO *img)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief show img status
+// @brief Show img status
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 mobius_imgstat (TSK_IMG_INFO *, FILE *)
@@ -81,9 +81,9 @@ mobius_imgstat (TSK_IMG_INFO *, FILE *)
 namespace mobius::core::vfs::tsk
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief constructor
-// @param reader generic reader
-// @param offset offset in bytes from the beginning of the stream
+// @brief Constructor
+// @param reader Reader object
+// @param offset Offset in bytes from the beginning of the stream
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 adaptor::adaptor (const mobius::core::io::reader reader, std::uint64_t offset)
     : reader_ (reader),
@@ -110,7 +110,7 @@ adaptor::adaptor (const mobius::core::io::reader reader, std::uint64_t offset)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief destructor
+// @brief Destructor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 adaptor::~adaptor ()
 {
@@ -147,7 +147,7 @@ adaptor::get_root_folder () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief create TSK image and filesystem objects
+// @brief Create TSK image and filesystem objects
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 adaptor::_create_tsk () const
