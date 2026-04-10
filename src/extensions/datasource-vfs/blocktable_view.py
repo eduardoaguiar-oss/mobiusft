@@ -20,6 +20,7 @@ import mobius.core.io
 import mobius.core.pod
 import mobius.core.vfs
 import pymobius
+import os.path
 from gi.repository import GdkPixbuf
 from gi.repository import Gtk
 
@@ -224,17 +225,60 @@ class BlockTableView(object):
         fp.write("digraph VFS\n")
         fp.write("{\n")
         fp.write("  rankdir=LR\n")
-        fp.write("  node [shape=box]\n")
+        fp.write("  node [height=0.25, width=0.25 shape=\"box\" style=\"filled\" fillcolor=\"lightgray\"]\n")
+        fp.write("  edge [arrowhead=vee, arrowtail=none]\n")
 
         # blocks
+        next_ps_id = 1
+        next_fs_id = 1
+        block_nodes = {}
+
         for block in self.__vfs.get_blocks():
-            description = block.get_attribute("description") or block.type
-            fp.write('  B%d [label="%s"]\n' % (block.uid, description))
+            if block.uid not in block_nodes:
+                node_id = f"B{block.uid}"
+
+                if block.type == 'imagefile':
+                    filename = os.path.basename (block.get_attribute ('url'))
+                    fp.write(f'  {node_id} [label="Imagefile\\n{filename}"];\n')
+
+                elif block.type == 'partition_system':
+                    ps_type = block.get_attribute('ps_type')
+                    fp.write(f'  {node_id} [shape="record" fillcolor="darkseagreen1" label="<N0>[PS{next_ps_id:02d} - {ps_type} partition system]')
+
+                    for idx, child in enumerate (block.get_children(), 1):
+                        description = child.get_attribute('description')
+                        fp.write(f' | <N{idx}>{description}')
+                        block_nodes[child.uid] = node_id + ':N' + str (idx)
+
+                    fp.write('"];\n')
+                    block_nodes[block.uid] = node_id + ':N0'
+                    next_ps_id = next_ps_id + 1
+
+                elif block.type == 'filesystem':
+                    name = block.get_attribute('name')
+                    fp.write(f'  {node_id} [label="FS{next_fs_id:02d} - {name}" fillcolor="bisque2"];\n')
+                    next_fs_id = next_fs_id + 1
+            
+                elif block.type == 'apfs.volume':
+                    description = block.get_attribute('description')
+                    fp.write(f'  {node_id} [label="FS{next_fs_id:02d} - {description}" fillcolor="bisque2"];\n')
+                    next_fs_id = next_fs_id + 1
+            
+                else:
+                    description = block.get_attribute('description')
+                    fp.write (f'  {node_id} [label="{description}"];\n')
+
+                block_nodes[block.uid] = node_id
 
         # connections
+        fp.write('\n')
+
         for block in self.__vfs.get_blocks():
-            for child in block.get_children():
-                fp.write('  B%d -> B%d\n' % (block.uid, child.uid))
+            if block.type != 'partition_system':
+                for child in block.get_children():
+                    node_from = block_nodes.get(block.uid)
+                    node_to = block_nodes.get(child.uid)
+                    fp.write(f'  {node_from} -> {node_to}\n')
 
         # .dot footer
         fp.write("}\n")
