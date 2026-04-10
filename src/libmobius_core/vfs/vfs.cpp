@@ -15,7 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <algorithm>
 #include <mobius/core/exception.inc>
 #include <mobius/core/log.hpp>
 #include <mobius/core/resource.hpp>
@@ -24,7 +23,10 @@
 #include <mobius/core/vfs/block_impl_disk.hpp>
 #include <mobius/core/vfs/filesystem.hpp>
 #include <mobius/core/vfs/vfs.hpp>
+#include <mutex>
 #include <stdexcept>
+#include <unordered_map>
+#include <algorithm>
 #include <vector>
 
 namespace
@@ -38,6 +40,60 @@ inline constexpr int VERSION = 1;
 
 namespace mobius::core::vfs
 {
+namespace
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Build filesystems from 'filesystem' blocks
+// @param block Block object
+// @return Vector of filesystem objects
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<filesystem>
+filesystem_block_to_filesystems (const block &block)
+{
+    std::vector<filesystem> filesystems;
+
+    filesystems.emplace_back (
+        block.new_reader (), 0, block.get_attribute<std::string> ("impl_type")
+    );
+
+    return filesystems;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Block to filesystems functions registry
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::unordered_map<std::string, block_to_filesystems_function>
+    block_to_filesystems = {{"filesystem", filesystem_block_to_filesystems}};
+
+std::mutex block_to_filesystems_registry_mutex;
+
+} // namespace
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Register a block to filesystems function
+// @param type Block type
+// @param f Function
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+register_block_to_filesystems_function (
+    const std::string &type, block_to_filesystems_function f
+)
+{
+    std::lock_guard lock (block_to_filesystems_registry_mutex);
+    block_to_filesystems[type] = f;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Unregister a block to filesystems function
+// @param type Block type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+unregister_block_to_filesystems_function (const std::string &type)
+{
+    std::lock_guard lock (block_to_filesystems_registry_mutex);
+    block_to_filesystems.erase (type);
+}
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief vfs implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -115,16 +171,6 @@ vfs::impl::impl (const mobius::core::pod::map &state)
             disks_.emplace_back (mobius::core::pod::map (d_state));
     }
 
-    //! \deprecated since=2.5 old datasources
-    else if (state.contains ("datasources"))
-    {
-        auto disks =
-            state.get<std::vector<mobius::core::pod::data>> ("datasources");
-
-        for (const auto &d_state : disks)
-            disks_.emplace_back (mobius::core::pod::map (d_state));
-    }
-
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Create blocks
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -156,7 +202,8 @@ vfs::impl::impl (const mobius::core::pod::map &state)
 
                 else
                     throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (
-                        "invalid parent UID: " + std::to_string (parent_uid)));
+                        "invalid parent UID: " + std::to_string (parent_uid)
+                    ));
             }
 
             for (std::uint64_t child_uid : children)
@@ -166,7 +213,8 @@ vfs::impl::impl (const mobius::core::pod::map &state)
 
                 else
                     throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (
-                        "invalid child UID: " + std::to_string (child_uid)));
+                        "invalid child UID: " + std::to_string (child_uid)
+                    ));
             }
         }
 
@@ -244,8 +292,10 @@ bool
 vfs::impl::is_available () const
 {
     return !disks_.empty () &&
-           std::all_of (disks_.cbegin (), disks_.cend (),
-                        [] (const disk &d) { return d.is_available (); });
+           std::all_of (
+               disks_.cbegin (), disks_.cend (),
+               [] (const disk &d) { return d.is_available (); }
+           );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -385,19 +435,22 @@ vfs::impl::_load_blocks () const
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         std::vector<block> incomplete_blocks;
 
-        std::copy_if (blocks_.begin (), blocks_.end (),
-                      std::back_inserter (incomplete_blocks),
-                      [] (const block &b) { return !b.is_complete (); });
+        std::copy_if (
+            blocks_.begin (), blocks_.end (),
+            std::back_inserter (incomplete_blocks),
+            [] (const block &b) { return !b.is_complete (); }
+        );
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Create unknown blocks vector
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         std::vector<block> unknown_blocks;
 
-        std::copy_if (blocks_.begin (), blocks_.end (),
-                      std::back_inserter (unknown_blocks),
-                      [] (const block &b)
-                      { return !b.is_handled () && b.is_available (); });
+        std::copy_if (
+            blocks_.begin (), blocks_.end (),
+            std::back_inserter (unknown_blocks), [] (const block &b)
+            { return !b.is_handled () && b.is_available (); }
+        );
 
         log.debug (__LINE__, "Unknown blocks: ");
 
@@ -409,15 +462,17 @@ vfs::impl::_load_blocks () const
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         for (auto &b : unknown_blocks)
         {
-            log.debug (__LINE__,
-                       "Detecting block: " + std::to_string (b.get_uid ()));
+            log.debug (
+                __LINE__, "Detecting block: " + std::to_string (b.get_uid ())
+            );
 
             for (auto &decoder : decoders)
             {
                 log.debug (__LINE__, "Decoder...");
-                log.debug (__LINE__,
-                           "Children: " +
-                               std::to_string (b.get_children ().size ()));
+                log.debug (
+                    __LINE__,
+                    "Children: " + std::to_string (b.get_children ().size ())
+                );
 
                 std::string text;
                 for (const auto &vb : blocks_)
@@ -436,8 +491,10 @@ vfs::impl::_load_blocks () const
                         _add_blocks (new_blocks);
 
                         // Add blocks to current block children list
-                        std::for_each (new_blocks.begin (), new_blocks.end (),
-                                       [&b] (auto &c) { b.add_child (c); });
+                        std::for_each (
+                            new_blocks.begin (), new_blocks.end (),
+                            [&b] (auto &c) { b.add_child (c); }
+                        );
 
                         // Set current block handled
                         b.set_handled (true);
@@ -450,9 +507,10 @@ vfs::impl::_load_blocks () const
                     log.warning (__LINE__, e.what ());
                 }
 
-                log.debug (__LINE__,
-                           "Children: " +
-                               std::to_string (b.get_children ().size ()));
+                log.debug (
+                    __LINE__,
+                    "Children: " + std::to_string (b.get_children ().size ())
+                );
 
                 text.clear ();
                 for (const auto &vb : blocks_)
@@ -493,18 +551,31 @@ vfs::impl::_load_root_entries () const
 
     for (const auto &block : get_blocks ())
     {
-        if (block.get_type () == "filesystem")
+        try
         {
-            try
+            block_to_filesystems_function f;
+
             {
-                filesystems_.emplace_back (
-                    block.new_reader (), 0,
-                    block.get_attribute<std::string> ("impl_type"));
+                std::lock_guard lock (block_to_filesystems_registry_mutex);
+                auto it = block_to_filesystems.find (block.get_type ());
+
+                if (it != block_to_filesystems.end ())
+                    f = it->second;
             }
-            catch (const std::exception &e)
+
+            if (f)
             {
-                log.warning (__LINE__, e.what ());
+                auto new_filesystems = f (block);
+
+                filesystems_.insert (
+                    filesystems_.end (), new_filesystems.begin (),
+                    new_filesystems.end ()
+                );
             }
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (__LINE__, e.what ());
         }
     }
 
@@ -512,12 +583,13 @@ vfs::impl::_load_root_entries () const
     // Load root entries
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     root_entries_.clear ();
-    std::uint64_t idx = 1;
+    std::uint64_t idx = 0;
 
     for (const auto &fs : filesystems_)
     {
         try
         {
+            idx++;
             const std::string name =
                 "FS" + mobius::core::string::to_string (idx, 2);
 
@@ -526,7 +598,6 @@ vfs::impl::_load_root_entries () const
             folder.set_path ("/" + name);
 
             root_entries_.emplace_back (folder);
-            idx++;
         }
         catch (const std::exception &e)
         {

@@ -21,9 +21,7 @@
 #include <mobius/core/io/folder.hpp>
 #include <mobius/core/io/reader.hpp>
 #include <cstdint>
-
-struct TSK_IMG_INFO;
-struct TSK_FS_INFO;
+#include <memory>
 
 namespace mobius::core::vfs::tsk
 {
@@ -34,18 +32,22 @@ namespace mobius::core::vfs::tsk
 class adaptor
 {
   public:
-    adaptor (const mobius::core::io::reader, std::uint64_t);
-    ~adaptor ();
+    adaptor (const mobius::core::io::reader &, std::uint64_t);
+    adaptor (
+        const mobius::core::io::reader &,
+        std::uint64_t,
+        std::uint64_t,
+        std::uint64_t
+    );
+
     mobius::core::io::folder get_root_folder () const;
 
   private:
-    mobius::core::io::reader reader_;
-    std::uint64_t offset_;
+    // @brief Forward declaration of implementation class
+    class impl;
 
-    mutable TSK_IMG_INFO *img_info_ = nullptr;
-    mutable TSK_FS_INFO *fs_info_ = nullptr;
-
-    void _create_tsk () const;
+    // @brief Pointer to implementation class
+    std::shared_ptr<impl> impl_;
 };
 
 } // namespace mobius::core::vfs::tsk

@@ -22,6 +22,7 @@
 #include <mobius/core/pod/map.hpp>
 #include <mobius/core/vfs/block.hpp>
 #include <mobius/core/vfs/disk.hpp>
+#include <mobius/core/vfs/filesystem.hpp>
 #include <memory>
 #include <vector>
 
@@ -33,44 +34,55 @@ namespace mobius::core::vfs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class vfs
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  vfs ();
-  explicit vfs (const mobius::core::pod::map&);
-  vfs (vfs&&) noexcept = default;
-  vfs (const vfs&) noexcept = default;
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    vfs ();
+    explicit vfs (const mobius::core::pod::map &);
+    vfs (vfs &&) noexcept = default;
+    vfs (const vfs &) noexcept = default;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Operators
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  vfs& operator= (const vfs&) noexcept = default;
-  vfs& operator= (vfs&&) noexcept = default;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    vfs &operator= (const vfs &) noexcept = default;
+    vfs &operator= (vfs &&) noexcept = default;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Function prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::core::pod::map get_state () const;
-  void clear ();
-  void rescan ();
-  bool is_available () const;
-  std::size_t add_disk (const mobius::core::vfs::disk&);
-  void remove_disk (std::size_t);
-  std::vector <disk> get_disks () const;
-  std::vector <block> get_blocks () const;
-  std::vector<mobius::core::io::entry> get_root_entries () const;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Function prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::pod::map get_state () const;
+    void clear ();
+    void rescan ();
+    bool is_available () const;
+    std::size_t add_disk (const mobius::core::vfs::disk &);
+    void remove_disk (std::size_t);
+    std::vector<disk> get_disks () const;
+    std::vector<block> get_blocks () const;
+    std::vector<mobius::core::io::entry> get_root_entries () const;
 
-private:
-  // @brief Implementation class forward declaration
-  class impl;
+  private:
+    // @brief Implementation class forward declaration
+    class impl;
 
-  // @brief Implementation pointer
-  std::shared_ptr <impl> impl_;
+    // @brief Implementation pointer
+    std::shared_ptr<impl> impl_;
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Block to filesystems functions registry. Maps block types to functions that
+// build filesystems from blocks.
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+using block_to_filesystems_function =
+    std::function<std::vector<filesystem> (const block &)>;
+
+void register_block_to_filesystems_function (
+    const std::string &, block_to_filesystems_function
+);
+
+void unregister_block_to_filesystems_function (const std::string &);
 
 } // namespace mobius::core::vfs
 
 #endif
-
-

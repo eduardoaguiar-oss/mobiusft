@@ -5,6 +5,9 @@ Mobius Forensic Toolkit 2.25
 	* app-chromium: Better detection of "Login Data" files
 	* app-chromium: Added support for "Web Data" table schemas v46 and 99
 	* app-chromium: Better detection of "Web Data" files
+	* app-skype: Improved detection and validation of main.db files with stricter checks
+	* datasource-vfs: Improved .dot file generation for VFS blocks
+	* gtk-ui: Fixed incorrect dialog type error involving ReportDialog vs. Gtk.Dialog
 	* libmobius_core: Added new class crypt::hash_impl_fletcher16
 	* libmobius_core: Added new class crypt::hash_impl_fletcher32
 	* libmobius_core: Added new class crypt::hash_impl_fletcher64
@@ -20,6 +23,9 @@ Mobius Forensic Toolkit 2.25
 	* libmobius_core: vfs::tsk::fs_file::get_children changed to set children paths
 	* libmobius_core: vfs::tsk::fs_file::get_parent setting parent path
 	* libmobius_core: os::win::registry::registry::_set_syskey now properly handles an empty SYSKEY
+	* libmobius_core: Added new function vfs::register_block_to_filesystems_function
+	* libmobius_core: Added new function vfs::unregister_block_to_filesystems_function
+	* libmobius_core: Added new constructor for vfs::filesystem class
 
 Mobius Forensic Toolkit 2.24
 	* Added new C++ extension called `app-gecko`

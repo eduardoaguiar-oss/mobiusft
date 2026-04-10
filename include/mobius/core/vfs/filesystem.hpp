@@ -43,6 +43,7 @@ public:
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   filesystem ();
   filesystem (const mobius::core::io::reader&, std::uint64_t, const std::string& ="autodetect");
+  explicit filesystem (const std::shared_ptr <filesystem_impl_base>&);
   filesystem (filesystem&&) noexcept = default;
   filesystem (const filesystem&) noexcept = default;
 
