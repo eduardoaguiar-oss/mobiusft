@@ -28,9 +28,9 @@ from gi.repository import Gtk
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class ReportDialog(object):
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Build widget
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __init__(self):
         self.__widget = Gtk.Dialog(title='Choose report', modal=True)
 
@@ -133,7 +133,7 @@ class ReportDialog(object):
             report_generated = self.run_report(*args, **kwds)
 
             if not report_generated:
-                rc = Gtk.Dialog.run(self)
+                rc = self.__widget.run()
 
         return rc
 
