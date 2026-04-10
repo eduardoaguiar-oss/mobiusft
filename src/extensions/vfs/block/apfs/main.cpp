@@ -20,7 +20,9 @@
 #include <mobius/core/log.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <mobius/core/vfs/block.hpp>
+#include <mobius/core/vfs/vfs.hpp>
 #include "common.hpp"
+#include "filesystem_impl.hpp"
 #include "object.hpp"
 #include "object_map.hpp"
 #include "superblock.hpp"
@@ -553,6 +555,10 @@ extern "C" void
 start ()
 {
     mobius::core::vfs::register_block_decoder ("apfs", decoder);
+    mobius::core::vfs::register_block_to_filesystems_function (
+        "apfs.volume",
+        mobius::extension::vfs::block::apfs::apfs_volume_block_to_filesystems
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -562,4 +568,5 @@ extern "C" void
 stop ()
 {
     mobius::core::vfs::unregister_block_decoder ("apfs");
+    mobius::core::vfs::unregister_block_to_filesystems_function ("apfs.volume");
 }

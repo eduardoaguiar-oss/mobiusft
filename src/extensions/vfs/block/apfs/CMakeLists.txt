@@ -28,6 +28,7 @@ project(vfs_block_apfs LANGUAGES CXX)
 add_library(vfs_block_apfs MODULE
     main.cpp
     common.cpp
+    filesystem_impl.cpp
     object.cpp
     object_map.cpp
     superblock.cpp

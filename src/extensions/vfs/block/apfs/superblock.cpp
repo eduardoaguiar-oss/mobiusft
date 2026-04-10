@@ -70,7 +70,7 @@ superblock::superblock (mobius::core::decoder::data_decoder &decoder)
     features_ = decoder.get_uint64_le ();
     readonly_features_ = decoder.get_uint64_le ();
     incompatible_features_ = decoder.get_uint64_le ();
-    uuid_ = decoder.get_guid ();
+    uuid_ = decoder.get_uuid ();
     next_oid_ = decoder.get_uint64_le ();
     next_xid_ = decoder.get_uint64_le ();
     xp_desc_blocks_ = decoder.get_uint32_le ();
