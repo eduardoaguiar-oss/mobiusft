@@ -158,7 +158,10 @@ message_parser::_parse_end_tag (const std::string &tag)
 
     mobius::core::pod::map element;
 
-    if (tag == "b")
+    if (tag == "a")
+        richtext_.end_link ();
+
+    else if (tag == "b")
         richtext_.end_bold ();
 
     else if (tag == "i")
@@ -231,16 +234,17 @@ message_parser::_parse_a ()
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
-    // Get minidom tag
-    auto tag = parser_.get_minidom ();
-
-    if (!tag)
+    // Get last element
+    auto tag = parser_.get_last ();
+    if (tag.get_type () !=
+            mobius::core::decoder::sgml::parser::element::type::start_tag ||
+        tag.get_text () != "a")
     {
         log.warning (__LINE__, "Invalid <a> tag");
         return;
     }
 
-    // Add href element
+    // Get href element
     auto url = mobius::core::string::html_unescape (
         tag.get_attribute<std::string> ("href")
     );

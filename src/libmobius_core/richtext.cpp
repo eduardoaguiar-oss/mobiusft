@@ -955,7 +955,7 @@ richtext::impl::to_pango () const
         {
             auto url = segment.metadata.get<std::string> ("url");
             pango_text +=
-                "<span underline=\"single\" color=\"blue\">" + url + " [";
+                "<span underline=\"single\" color=\"blue\">" + mobius::core::string::html_escape (url) + " [";
         }
 
         else if (segment.type == "end/link")
@@ -980,15 +980,15 @@ richtext::impl::to_pango () const
 
             pango_text += "<span>";
             pango_text += std::format (
-                "\n<span weight=\"bold\" foreground=\"#1B72E8\">{}</span>",
+                "\n  <span weight=\"bold\" foreground=\"#1B72E8\">{}</span>",
                 author
             );
             pango_text += std::format (
-                "\n<span size=\"x-small\" foreground=\"#667781\">  {}</span>",
+                "\n  <span size=\"x-small\" foreground=\"#667781\">  {}</span>",
                 timestamp
             );
             pango_text +=
-                "\n<span background=\"#E1FEC6\" foreground=\"#000000\">";
+                "\n  <span background=\"#E1FEC6\" foreground=\"#000000\">";
         }
 
         else if (segment.type == "end/message_bubble")
