@@ -453,6 +453,9 @@ file_skype_db::file_skype_db (const mobius::core::io::reader &reader)
             );
         }
 
+        if (schema_version_)
+            is_instance_ = true;
+
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Load data
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -461,11 +464,6 @@ file_skype_db::file_skype_db (const mobius::core::io::reader &reader)
         _load_corelib_messages (db);
         _load_messages (db);
         _load_sms_messages (db);
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Finish decoding
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
@@ -531,6 +529,8 @@ file_skype_db::_load_account (mobius::core::database::database &db)
             1000
         );
         account_.skype_name = get_skype_name_from_mri (account_.mri);
+
+        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
@@ -550,40 +550,41 @@ file_skype_db::_load_contacts (mobius::core::database::database &db)
     try
     {
         // Prepare SQL statement for table contacts
-        auto stmt = db.new_select_statement (
-            "contacts", {"about_me",
-                         "assigned_phonelabel_1",
-                         "assigned_phonelabel_2",
-                         "assigned_phonelabel_3",
-                         "assigned_phonenumber_1",
-                         "assigned_phonenumber_2",
-                         "assigned_phonenumber_3",
-                         "authorized",
-                         "avatar_downloaded_from",
-                         "avatar_file_path",
-                         "avatar_url",
-                         "birthday",
-                         "blocked",
-                         "city",
-                         "contact_type",
-                         "country",
-                         "display_name",
-                         "full_name",
-                         "gender",
-                         "homepage",
-                         "is_buddy",
-                         "is_favorite",
-                         "is_suggested",
-                         "mood",
-                         "mri",
-                         "phone_number_home",
-                         "phone_number_mobile",
-                         "phone_number_office",
-                         "province",
-                         "recommendation_json",
-                         "recommendation_rank",
-                         "unistore_version",
-                         "update_version"}
+        auto stmt = db.new_statement (
+            "SELECT about_me, "
+            "assigned_phonelabel_1, "
+            "assigned_phonelabel_2, "
+            "assigned_phonelabel_3, "
+            "assigned_phonenumber_1, "
+            "assigned_phonenumber_2, "
+            "assigned_phonenumber_3, "
+            "authorized, "
+            "avatar_downloaded_from, "
+            "avatar_file_path, "
+            "avatar_url, "
+            "birthday, "
+            "blocked, "
+            "city, "
+            "contact_type, "
+            "country, "
+            "display_name, "
+            "full_name, "
+            "gender, "
+            "homepage, "
+            "is_buddy, "
+            "is_favorite, "
+            "is_suggested, "
+            "mood, "
+            "mri, "
+            "phone_number_home, "
+            "phone_number_mobile, "
+            "phone_number_office, "
+            "province, "
+            "recommendation_json, "
+            "recommendation_rank, "
+            "unistore_version, "
+            "update_version "
+            "FROM contacts"
         );
 
         // Retrieve records from contacts table
@@ -631,6 +632,8 @@ file_skype_db::_load_contacts (mobius::core::database::database &db)
             // Add contacts to the list
             contacts_.emplace_back (std::move (obj));
         }
+
+        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
@@ -674,52 +677,53 @@ file_skype_db::_load_corelib_messages (mobius::core::database::database &db)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=
         // Prepare SQL statement for table corelib_messages
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=
-        stmt = db.new_select_statement (
-            "corelib_messages", {"annotation_version",
-                                 "author",
-                                 "author_was_live",
-                                 "body_is_rawxml",
-                                 "body_xml",
-                                 "bots_settings",
-                                 "call_guid",
-                                 "charmsg_type",
-                                 "chatmsg_status",
-                                 "chatname",
-                                 "consumption_status",
-                                 "content_flags",
-                                 "convo_id",
-                                 "crc",
-                                 "dialog_partner",
-                                 "edited_by",
-                                 "edited_timestamp",
-                                 "error_code",
-                                 "extprop_mms_msg_metadata",
-                                 "extprop_sms_server_id",
-                                 "extprop_sms_src_msg_id",
-                                 "extprop_sms_sync_global_id",
-                                 "from_dispname",
-                                 "guid",
-                                 "id",
-                                 "identities",
-                                 "is_parmanent",
-                                 "language",
-                                 "leavereason",
-                                 "newoptions",
-                                 "newrole",
-                                 "oldoptions",
-                                 "option_bits",
-                                 "param_key",
-                                 "param_value",
-                                 "participant_count",
-                                 "pk_id",
-                                 "reaction_thread",
-                                 "reason",
-                                 "remote_id",
-                                 "sending_status",
-                                 "server_id",
-                                 "timestamp",
-                                 "timestamp_ms",
-                                 "type"}
+        stmt = db.new_statement (
+            "SELECT annotation_version, "
+            "author, "
+            "author_was_live, "
+            "body_is_rawxml, "
+            "body_xml, "
+            "bots_settings, "
+            "call_guid, "
+            "charmsg_type, "
+            "chatmsg_status, "
+            "chatname, "
+            "consumption_status, "
+            "content_flags, "
+            "convo_id, "
+            "crc, "
+            "dialog_partner, "
+            "edited_by, "
+            "edited_timestamp, "
+            "error_code, "
+            "extprop_mms_msg_metadata, "
+            "extprop_sms_server_id, "
+            "extprop_sms_src_msg_id, "
+            "extprop_sms_sync_global_id, "
+            "from_dispname, "
+            "guid, "
+            "id, "
+            "identities, "
+            "is_parmanent, "
+            "language, "
+            "leavereason, "
+            "newoptions, "
+            "newrole, "
+            "oldoptions, "
+            "option_bits, "
+            "param_key, "
+            "param_value, "
+            "participant_count, "
+            "pk_id, "
+            "reaction_thread, "
+            "reason, "
+            "remote_id, "
+            "sending_status, "
+            "server_id, "
+            "timestamp, "
+            "timestamp_ms, "
+            "type "
+            "FROM corelib_messages"
         );
 
         // Retrieve records from corelib_messages table

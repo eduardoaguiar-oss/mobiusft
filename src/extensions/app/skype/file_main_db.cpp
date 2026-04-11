@@ -62,23 +62,23 @@ static constexpr std::int64_t LAST_KNOWN_SCHEMA_VERSION = 308;
 static std::unordered_set<std::int64_t> UNKNOWN_SCHEMA_VERSIONS = {
     1,   2,   3,   4,   5,   6,   7,   8,   9,   10,  11,  12,  13,  14,  15,
     16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,
-    31,  32,  33,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,
-    46,  47,  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,
-    61,  62,  63,  64,  65,  68,  70,  71,  73,  74,  75,  76,  78,  79,  80,
-    82,  83,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,  96,  98,  99,
-    101, 102, 103, 104, 105, 106, 108, 109, 110, 111, 112, 113, 115, 116, 117,
-    118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132,
-    134, 135, 136, 137, 138, 139, 140, 142, 143, 144, 145, 146, 147, 148, 150,
-    151, 154, 155, 156, 157, 158, 159, 160, 161, 163, 165, 166, 167, 169, 170,
-    171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185,
-    186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 197, 198, 199, 200, 201,
-    202, 203, 204, 205, 206, 207, 208, 210, 211, 212, 213, 214, 215, 216, 217,
-    218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232,
-    233, 234, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248,
-    249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 260, 261, 262, 263, 264,
-    265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279,
-    280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294,
-    295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307,
+    31,  32,  33,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,
+    47,  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,
+    62,  63,  64,  65,  68,  70,  71,  73,  74,  75,  76,  78,  79,  80,  82,
+    83,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,  96,  98,  99,  101,
+    102, 103, 104, 105, 106, 108, 109, 110, 111, 112, 113, 115, 116, 117, 118,
+    119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 134,
+    135, 136, 137, 138, 139, 140, 142, 143, 144, 145, 146, 147, 148, 150, 151,
+    154, 155, 156, 157, 158, 159, 160, 161, 163, 165, 166, 167, 169, 170, 171,
+    172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186,
+    187, 188, 189, 190, 191, 192, 193, 194, 195, 197, 198, 199, 200, 201, 202,
+    203, 204, 205, 206, 207, 208, 210, 211, 212, 213, 214, 215, 216, 217, 218,
+    219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233,
+    234, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249,
+    250, 251, 252, 253, 254, 255, 256, 257, 258, 260, 261, 262, 263, 264, 265,
+    266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280,
+    281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295,
+    296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307,
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -220,10 +220,13 @@ file_main_db::file_main_db (const mobius::core::io::reader &reader)
                 UNKNOWN_SCHEMA_VERSIONS.end ())
         {
             log.development (
-                __LINE__, "Unhandled schema version: " +
-                              std::to_string (schema_version_)
+                __LINE__,
+                "Unhandled schema version: " + std::to_string (schema_version_)
             );
         }
+
+        if (schema_version_)
+            is_instance_ = true;
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Load data
@@ -236,11 +239,6 @@ file_main_db::file_main_db (const mobius::core::io::reader &reader)
         _load_messages (db);
         _load_sms (db);
         _load_voicemails (db);
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Finish decoding
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
@@ -259,113 +257,115 @@ file_main_db::_load_accounts (mobius::core::database::database &db)
 
     try
     {
-        auto stmt = db.new_select_statement (
-            "accounts", {"{about",
-                         "ad_policy",
-                         "added_in_shared_group",
-                         "alertstring",
-                         "aliases",
-                         "assigned_comment",
-                         "assigned_speeddial",
-                         "authorized_time",
-                         "authreq_history",
-                         "authreq_timestamp",
-                         "authrequest_count",
-                         "authrequest_policy",
-                         "availability",
-                         "avatar_image",
-                         "avatar_policy",
-                         "avatar_timestamp",
-                         "birthday",
-                         "buddyblob",
-                         "buddycount_policy",
-                         "capabilities",
-                         "cbl_future",
-                         "cbl_profile_blob",
-                         "cblsyncstatus",
-                         "chat_policy",
-                         "city",
-                         "cobrand_id",
-                         "commitstatus",
-                         "contactssyncstatus",
-                         "country",
-                         "displayname",
-                         "emails",
-                         "federated_presence_policy",
-                         "flamingo_xmpp_status",
-                         "forward_starttime",
-                         "fullname",
-                         "gender",
-                         "given_authlevel",
-                         "given_displayname",
-                         "hidden_expression_tabs",
-                         "homepage",
-                         "id",
-                         "in_shared_group",
-                         "ipcountry",
-                         "is_permanent",
-                         "languages",
-                         "lastonline_timestamp",
-                         "lastused_timestamp",
-                         "liveid_membername",
-                         "logoutreason",
-                         "mood_text",
-                         "mood_timestamp",
-                         "msa_pmn",
-                         "node_capabilities",
-                         "node_capabilities_and",
-                         "nr_of_other_instances",
-                         "nrof_authed_buddies",
-                         "offline_authreq_id",
-                         "offline_callforward",
-                         "option_ui_color",
-                         "options_change_future",
-                         "owner_under_legal_age",
-                         "partner_channel_status",
-                         "partner_optedout",
-                         "phone_home",
-                         "phone_mobile",
-                         "phone_office",
-                         "phonenumbers_policy",
-                         "profile_attachments",
-                         "profile_timestamp",
-                         "province",
-                         "pstn_call_policy",
-                         "pstnnumber",
-                         "pwdchangestatus",
-                         "read_receipt_optout",
-                         "received_authrequest",
-                         "refreshing",
-                         "registration_timestamp",
-                         "revoked_auth",
-                         "rich_mood_text",
-                         "roaming_history_enabled",
-                         "sent_authrequest",
-                         "sent_authrequest_serial",
-                         "sent_authrequest_time",
-                         "service_provider_info",
-                         "set_availability",
-                         "shortcircuit_sync",
-                         "signin_name",
-                         "skype_call_policy",
-                         "skypein_numbers",
-                         "skypename",
-                         "skypeout_balance",
-                         "skypeout_balance_currency",
-                         "skypeout_precision",
-                         "stack_version",
-                         "status",
-                         "subscriptions",
-                         "suggested_skypename",
-                         "synced_email",
-                         "timezone",
-                         "timezone_policy",
-                         "type",
-                         "uses_jcs",
-                         "verified_company",
-                         "verified_email",
-                         "voicemail_policy",
-                         "webpresence_policy"}
+        // Prepare SQL statement for table Accounts
+        auto stmt = db.new_statement_with_pattern (
+            "SELECT about, "
+            "ad_policy, "
+            "added_in_shared_group, "
+            "alertstring, "
+            "aliases, "
+            "assigned_comment, "
+            "assigned_speeddial, "
+            "authorized_time, "
+            "authreq_history, "
+            "authreq_timestamp, "
+            "authrequest_count, "
+            "authrequest_policy, "
+            "availability, "
+            "avatar_image, "
+            "avatar_policy, "
+            "avatar_timestamp, "
+            "birthday, "
+            "buddyblob, "
+            "buddycount_policy, "
+            "capabilities, "
+            "cbl_future, "
+            "{Accounts.cbl_profile_blob}, "
+            "cblsyncstatus, "
+            "chat_policy, "
+            "city, "
+            "{Accounts.cobrand_id}, "
+            "commitstatus, "
+            "{Accounts.contactssyncstatus}, "
+            "country, "
+            "displayname, "
+            "emails, "
+            "{Accounts.federated_presence_policy}, "
+            "{Accounts.flamingo_xmpp_status}, "
+            "{Accounts.forward_starttime}, "
+            "fullname, "
+            "gender, "
+            "given_authlevel, "
+            "given_displayname, "
+            "{Accounts.hidden_expression_tabs}, "
+            "homepage, "
+            "id, "
+            "in_shared_group, "
+            "ipcountry, "
+            "is_permanent, "
+            "languages, "
+            "lastonline_timestamp, "
+            "lastused_timestamp, "
+            "{Accounts.liveid_membername}, "
+            "logoutreason, "
+            "mood_text, "
+            "mood_timestamp, "
+            "{Accounts.msa_pmn}, "
+            "node_capabilities, "
+            "node_capabilities_and, "
+            "nr_of_other_instances, "
+            "nrof_authed_buddies, "
+            "offline_authreq_id, "
+            "offline_callforward, "
+            "{Accounts.option_ui_color}, "
+            "{Accounts.options_change_future}, "
+            "owner_under_legal_age, "
+            "{Accounts.partner_channel_status}, "
+            "partner_optedout, "
+            "phone_home, "
+            "phone_mobile, "
+            "phone_office, "
+            "phonenumbers_policy, "
+            "profile_attachments, "
+            "profile_timestamp, "
+            "province, "
+            "pstn_call_policy, "
+            "pstnnumber, "
+            "pwdchangestatus, "
+            "{Accounts.read_receipt_optout}, "
+            "received_authrequest, "
+            "refreshing, "
+            "registration_timestamp, "
+            "revoked_auth, "
+            "rich_mood_text, "
+            "{Accounts.roaming_history_enabled}, "
+            "sent_authrequest, "
+            "sent_authrequest_serial, "
+            "sent_authrequest_time, "
+            "service_provider_info, "
+            "set_availability, "
+            "{Accounts.shortcircuit_sync}, "
+            "{Accounts.signin_name}, "
+            "skype_call_policy, "
+            "skypein_numbers, "
+            "skypename, "
+            "skypeout_balance, "
+            "skypeout_balance_currency, "
+            "skypeout_precision, "
+            "stack_version, "
+            "status, "
+            "subscriptions, "
+            "suggested_skypename, "
+            "synced_email, "
+            "timezone, "
+            "timezone_policy, "
+            "type, "
+            "{Accounts.uses_jcs}, "
+            "{Accounts.verified_company}, "
+            "{Accounts.verified_email}, "
+            "voicemail_policy, "
+            "webpresence_policy "
+            "FROM Accounts"
         );
 
         // Retrieve rows from query
@@ -509,85 +509,86 @@ file_main_db::_load_calls (mobius::core::database::database &db)
         std::unordered_multimap<std::int64_t, call_member> call_members;
 
         // Prepare SQL statement for table CallMembers
-        auto stmt_cm = db.new_select_statement (
-            "CallMembers", {"accepted_by",
-                            "admit_failure_reason",
-                            "balance_update",
-                            "call_db_id",
-                            "call_duration",
-                            "call_end_diagnostics_code",
-                            "call_name",
-                            "call_session_guid",
-                            "capabilities",
-                            "content_sharing_role",
-                            "country",
-                            "creation_timestamp",
-                            "debuginfo",
-                            "dispname",
-                            "dominant_speaker_rank",
-                            "endpoint_details",
-                            "endpoint_type",
-                            "failurereason",
-                            "fallback_in_progress",
-                            "forward_targets",
-                            "forwarded_by",
-                            "group_calling_capabilities",
-                            "guid",
-                            "id",
-                            "identity",
-                            "identity_type",
-                            "ip_address",
-                            "is_active_speaker",
-                            "is_conference",
-                            "is_multiparty_video_capable",
-                            "is_permanent",
-                            "is_premium_video_sponsor",
-                            "is_read_only",
-                            "is_seamlessly_upgraded_call",
-                            "is_server_muted",
-                            "is_video_codec_compatible",
-                            "languages",
-                            "light_weight_meeting_role",
-                            "limiting_factor",
-                            "mike_status",
-                            "mri_identity",
-                            "next_redial_time",
-                            "nonse_word",
-                            "nr_of_delivered_push_notifications",
-                            "nrof_redials_done",
-                            "nrof_redials_left",
-                            "participant_sponsor",
-                            "payment_category",
-                            "pk_status",
-                            "price_currency",
-                            "price_per_minute",
-                            "price_precision",
-                            "prime_status",
-                            "pstn_feedback",
-                            "pstn_statustext",
-                            "quality_problems",
-                            "quality_status",
-                            "real_identity",
-                            "recovery_in_progress",
-                            "role",
-                            "seconds_left",
-                            "sounderror_code",
-                            "soundlevel",
-                            "start_timestamp",
-                            "stats_xml",
-                            "status",
-                            "target_identity",
-                            "tenant_id",
-                            "transfer_active",
-                            "transfer_status",
-                            "transfer_topic",
-                            "transferred_by",
-                            "transferred_to",
-                            "type",
-                            "version_string",
-                            "video_count_changed",
-                            "videostatus",
-                            "voicechannel"}
+        auto stmt_cm = db.new_statement_with_pattern (
+            "SELECT {CallMembers.accepted_by}, "
+            "{CallMembers.admit_failure_reason}, "
+            "{CallMembers.balance_update}, "
+            "call_db_id, "
+            "call_duration, "
+            "{CallMembers.call_end_diagnostics_code}, "
+            "call_name, "
+            "{CallMembers.call_session_guid}, "
+            "{CallMembers.capabilities}, "
+            "{CallMembers.content_sharing_role}, "
+            "country, "
+            "creation_timestamp, "
+            "debuginfo, "
+            "dispname, "
+            "{CallMembers.dominant_speaker_rank}, "
+            "{CallMembers.endpoint_details}, "
+            "{CallMembers.endpoint_type}, "
+            "failurereason, "
+            "{CallMembers.fallback_in_progress}, "
+            "forward_targets, "
+            "forwarded_by, "
+            "{CallMembers.group_calling_capabilities}, "
+            "guid, "
+            "id, "
+            "identity, "
+            "identity_type, "
+            "{CallMembers.ip_address}, "
+            "{CallMembers.is_active_speaker}, "
+            "is_conference, "
+            "{CallMembers.is_multiparty_video_capable}, "
+            "is_permanent, "
+            "{CallMembers.is_premium_video_sponsor}, "
+            "is_read_only, "
+            "{CallMembers.is_seamlessly_upgraded_call}, "
+            "{CallMembers.is_server_muted}, "
+            "{CallMembers.is_video_codec_compatible}, "
+            "languages, "
+            "{CallMembers.light_weight_meeting_role}, "
+            "{CallMembers.limiting_factor}, "
+            "mike_status, "
+            "{CallMembers.mri_identity}, "
+            "next_redial_time, "
+            "{CallMembers.nonse_word}, "
+            "{CallMembers.nr_of_delivered_push_notifications}, "
+            "nrof_redials_done, "
+            "nrof_redials_left, "
+            "{CallMembers.participant_sponsor}, "
+            "{CallMembers.payment_category}, "
+            "pk_status, "
+            "price_currency, "
+            "price_per_minute, "
+            "price_precision, "
+            "prime_status, "
+            "pstn_feedback, "
+            "pstn_statustext, "
+            "quality_problems, "
+            "quality_status, "
+            "real_identity, "
+            "{CallMembers.recovery_in_progress}, "
+            "{CallMembers.role}, "
+            "{CallMembers.seconds_left}, "
+            "sounderror_code, "
+            "soundlevel, "
+            "start_timestamp, "
+            "{CallMembers.stats_xml}, "
+            "status, "
+            "target_identity, "
+            "{CallMembers.tenant_id}, "
+            "transfer_active, "
+            "transfer_status, "
+            "transfer_topic, "
+            "transferred_by, "
+            "transferred_to, "
+            "type, "
+            "{CallMembers.version_string}, "
+            "{CallMembers.video_count_changed}, "
+            "videostatus, "
+            "{CallMembers.voicechannel} "
+            "FROM CallMembers"
         );
 
         // Retrieve records from CallMembers table
@@ -684,78 +685,79 @@ file_main_db::_load_calls (mobius::core::database::database &db)
         }
 
         // Prepare SQL statement for table Calls
-        auto stmt = db.new_select_statement (
-            "Calls", {"access_token",
-                      "active_members",
-                      "begin_timestamp",
-                      "broadcast_metadata",
-                      "caller_mri_identity",
-                      "conf_participants",
-                      "content_sharing_session_count_changed",
-                      "conv_dbid",
-                      "conversation_type",
-                      "current_video_audience",
-                      "datachannel_object_id",
-                      "duration",
-                      "endpoint_details",
-                      "failurecode",
-                      "failurereason",
-                      "forwarding_destination_type",
-                      "host_identity",
-                      "id",
-                      "incoming_type",
-                      "is_active",
-                      "is_conference",
-                      "is_hostless",
-                      "is_incoming",
-                      "is_incoming_one_on_one_video_call",
-                      "is_muted",
-                      "is_muted_speaker",
-                      "is_on_hold",
-                      "is_permanent",
-                      "is_premium_video_sponsor",
-                      "is_server_muted",
-                      "is_unseen_missed",
-                      "joined_existing",
-                      "leg_id",
-                      "light_weight_meeting_count_changed",
-                      "max_videoconfcall_participants",
-                      "meeting_details",
-                      "member_count_changed",
-                      "members",
-                      "message_id",
-                      "mike_status",
-                      "name",
-                      "old_duration",
-                      "old_members",
-                      "onbehalfof_mri",
-                      "optimal_remote_videos_in_conference",
-                      "partner_dispname",
-                      "partner_handle",
-                      "premium_video_is_grace_period",
-                      "premium_video_sponsor_list",
-                      "premium_video_status",
-                      "pstn_number",
-                      "pstn_status",
-                      "quality_problems",
-                      "queue_info",
-                      "role",
-                      "server_identity",
-                      "soundlevel",
-                      "start_timestamp",
-                      "status",
-                      "technology",
-                      "tenant_id",
-                      "thread_id",
-                      "topic",
-                      "transfer_failure_reason",
-                      "transfer_status",
-                      "transferor_displayname",
-                      "transferor_mri",
-                      "transferor_type",
-                      "type",
-                      "vaa_input_status",
-                      "video_disabled"}
+        auto stmt = db.new_statement_with_pattern (
+            "SELECT access_token, "
+            "active_members, "
+            "begin_timestamp, "
+            "{Calls.broadcast_metadata}, "
+            "{Calls.caller_mri_identity}, "
+            "conf_participants, "
+            "{Calls.content_sharing_session_count_changed}, "
+            "conv_dbid, "
+            "{Calls.conversation_type}, "
+            "current_video_audience, "
+            "{Calls.datachannel_object_id}, "
+            "duration, "
+            "{Calls.endpoint_details}, "
+            "failurecode, "
+            "failurereason, "
+            "{Calls.forwarding_destination_type}, "
+            "host_identity, "
+            "id, "
+            "{Calls.incoming_type}, "
+            "is_active, "
+            "is_conference, "
+            "{Calls.is_hostless}, "
+            "is_incoming, "
+            "{Calls.is_incoming_one_on_one_video_call}, "
+            "is_muted, "
+            "{Calls.is_muted_speaker}, "
+            "is_on_hold, "
+            "is_permanent, "
+            "{Calls.is_premium_video_sponsor}, "
+            "{Calls.is_server_muted}, "
+            "is_unseen_missed, "
+            "joined_existing, "
+            "{Calls.leg_id}, "
+            "{Calls.light_weight_meeting_count_changed}, "
+            "{Calls.max_videoconfcall_participants}, "
+            "{Calls.meeting_details}, "
+            "{Calls.member_count_changed}, "
+            "members, "
+            "{Calls.message_id}, "
+            "mike_status, "
+            "name, "
+            "old_duration, "
+            "old_members, "
+            "{Calls.onbehalfof_mri}, "
+            "{Calls.optimal_remote_videos_in_conference}, "
+            "partner_dispname, "
+            "partner_handle, "
+            "{Calls.premium_video_is_grace_period}, "
+            "{Calls.premium_video_sponsor_list}, "
+            "{Calls.premium_video_status}, "
+            "pstn_number, "
+            "pstn_status, "
+            "quality_problems, "
+            "{Calls.queue_info}, "
+            "{Calls.role}, "
+            "server_identity, "
+            "soundlevel, "
+            "start_timestamp, "
+            "status, "
+            "{Calls.technology}, "
+            "{Calls.tenant_id}, "
+            "{Calls.thread_id}, "
+            "topic, "
+            "{Calls.transfer_failure_reason}, "
+            "{Calls.transfer_status}, "
+            "{Calls.transferor_displayname}, "
+            "{Calls.transferor_mri}, "
+            "{Calls.transferor_type}, "
+            "type, "
+            "vaa_input_status, "
+            "video_disabled "
+            "FROM Calls"
         );
 
         // Retrieve records from Calls table
@@ -851,6 +853,8 @@ file_main_db::_load_calls (mobius::core::database::database &db)
             // Add call to the list
             calls_.emplace_back (std::move (obj));
         }
+
+        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
@@ -874,124 +878,125 @@ file_main_db::_load_contacts (mobius::core::database::database &db)
     try
     {
         // Prepare SQL statement for table Contacts
-        auto stmt = db.new_select_statement (
-            "Contacts", {"about",
-                         "account_modification_serial_nr",
-                         "added_in_shared_group",
-                         "alertstring",
-                         "aliases",
-                         "assigned_comment",
-                         "assigned_phone1",
-                         "assigned_phone1_label",
-                         "assigned_phone2",
-                         "assigned_phone2_label",
-                         "assigned_phone3",
-                         "assigned_phone3_label",
-                         "assigned_speeddial",
-                         "authorization_certificate",
-                         "authorized_time",
-                         "authreq_crc",
-                         "authreq_history",
-                         "authreq_initmethod",
-                         "authreq_nodeinfo",
-                         "authreq_src",
-                         "authreq_timestamp",
-                         "authrequest_count",
-                         "availability",
-                         "avatar_hiresurl",
-                         "avatar_hiresurl_new",
-                         "avatar_image",
-                         "avatar_timestamp",
-                         "avatar_url",
-                         "avatar_url_new",
-                         "birthday",
-                         "buddyblob",
-                         "buddystatus",
-                         "capabilities",
-                         "cbl_future",
-                         "certificate_send_count",
-                         "city",
-                         "contactlist_track",
-                         "country",
-                         "dirblob_last_search_time",
-                         "displayname",
-                         "emails",
-                         "external_id",
-                         "external_system_id",
-                         "extprop_can_show_avatar",
-                         "extprop_contact_ab_uuid",
-                         "extprop_external_data",
-                         "extprop_last_sms_number",
-                         "extprop_must_hide_avatar",
-                         "extprop_seen_birthday",
-                         "extprop_sms_pstn_contact_created",
-                         "extprop_sms_target",
-                         "extprop_viral_upgrade_campaign_id",
-                         "firstname",
-                         "fullname",
-                         "gender",
-                         "given_authlevel",
-                         "given_displayname",
-                         "group_membership",
-                         "hashed_emails",
-                         "homepage",
-                         "id",
-                         "in_shared_group",
-                         "ipcountry",
-                         "is_auto_buddy",
-                         "is_mobile",
-                         "is_permanent",
-                         "is_trusted",
-                         "isauthorized",
-                         "isblocked",
-                         "languages",
-                         "last_used_networktime",
-                         "lastname",
-                         "lastonline_timestamp",
-                         "lastused_timestamp",
-                         "liveid_cid",
-                         "main_phone",
-                         "mood_text",
-                         "mood_timestamp",
-                         "mutual_friend_count",
-                         "network_availability",
-                         "node_capabilities",
-                         "node_capabilities_and",
-                         "nr_of_buddies",
-                         "nrof_authed_buddies",
-                         "offline_authreq_id",
-                         "phone_home",
-                         "phone_home_normalized",
-                         "phone_mobile",
-                         "phone_mobile_normalized",
-                         "phone_office",
-                         "phone_office_normalized",
-                         "pop_score",
-                         "popularity_ord",
-                         "profile_attachments",
-                         "profile_etag",
-                         "profile_json",
-                         "profile_timestamp",
-                         "province",
-                         "pstnnumber",
-                         "received_authrequest",
-                         "refreshing",
-                         "revoked_auth",
-                         "rich_mood_text",
-                         "saved_directory_blob",
-                         "sent_authrequest",
-                         "sent_authrequest_extrasbitmask",
-                         "sent_authrequest_initmethod",
-                         "sent_authrequest_serial",
-                         "sent_authrequest_time",
-                         "server_synced",
-                         "skypename",
-                         "stack_version",
-                         "timezone",
-                         "type",
-                         "unified_servants",
-                         "verified_company",
-                         "verified_email"}
+        auto stmt = db.new_statement_with_pattern (
+            "SELECT {Contacts.about}, "
+            "{Contacts.account_modification_serial_nr}, "
+            "{Contacts.added_in_shared_group}, "
+            "{Contacts.alertstring}, "
+            "{Contacts.aliases}, "
+            "{Contacts.assigned_comment}, "
+            "{Contacts.assigned_phone1}, "
+            "{Contacts.assigned_phone1_label}, "
+            "{Contacts.assigned_phone2}, "
+            "{Contacts.assigned_phone2_label}, "
+            "{Contacts.assigned_phone3}, "
+            "{Contacts.assigned_phone3_label}, "
+            "{Contacts.assigned_speeddial}, "
+            "{Contacts.authorization_certificate}, "
+            "{Contacts.authorized_time}, "
+            "{Contacts.authreq_crc}, "
+            "{Contacts.authreq_history}, "
+            "{Contacts.authreq_initmethod}, "
+            "{Contacts.authreq_nodeinfo}, "
+            "{Contacts.authreq_src}, "
+            "{Contacts.authreq_timestamp}, "
+            "{Contacts.authrequest_count}, "
+            "{Contacts.availability}, "
+            "{Contacts.avatar_hiresurl}, "
+            "{Contacts.avatar_hiresurl_new}, "
+            "{Contacts.avatar_image}, "
+            "{Contacts.avatar_timestamp}, "
+            "{Contacts.avatar_url}, "
+            "{Contacts.avatar_url_new}, "
+            "{Contacts.birthday}, "
+            "{Contacts.buddyblob}, "
+            "{Contacts.buddystatus}, "
+            "{Contacts.capabilities}, "
+            "{Contacts.cbl_future}, "
+            "{Contacts.certificate_send_count}, "
+            "{Contacts.city}, "
+            "{Contacts.contactlist_track}, "
+            "{Contacts.country}, "
+            "{Contacts.dirblob_last_search_time}, "
+            "{Contacts.displayname}, "
+            "{Contacts.emails}, "
+            "{Contacts.external_id}, "
+            "{Contacts.external_system_id}, "
+            "{Contacts.extprop_can_show_avatar}, "
+            "{Contacts.extprop_contact_ab_uuid}, "
+            "{Contacts.extprop_external_data}, "
+            "{Contacts.extprop_last_sms_number}, "
+            "{Contacts.extprop_must_hide_avatar}, "
+            "{Contacts.extprop_seen_birthday}, "
+            "{Contacts.extprop_sms_pstn_contact_created}, "
+            "{Contacts.extprop_sms_target}, "
+            "{Contacts.extprop_viral_upgrade_campaign_id}, "
+            "{Contacts.firstname}, "
+            "{Contacts.fullname}, "
+            "{Contacts.gender}, "
+            "{Contacts.given_authlevel}, "
+            "{Contacts.given_displayname}, "
+            "{Contacts.group_membership}, "
+            "{Contacts.hashed_emails}, "
+            "{Contacts.homepage}, "
+            "id, "
+            "{Contacts.in_shared_group}, "
+            "{Contacts.ipcountry}, "
+            "{Contacts.is_auto_buddy}, "
+            "{Contacts.is_mobile}, "
+            "is_permanent, "
+            "{Contacts.is_trusted}, "
+            "{Contacts.isauthorized}, "
+            "{Contacts.isblocked}, "
+            "{Contacts.languages}, "
+            "{Contacts.last_used_networktime}, "
+            "{Contacts.lastname}, "
+            "{Contacts.lastonline_timestamp}, "
+            "{Contacts.lastused_timestamp}, "
+            "{Contacts.liveid_cid}, "
+            "{Contacts.main_phone}, "
+            "{Contacts.mood_text}, "
+            "{Contacts.mood_timestamp}, "
+            "{Contacts.mutual_friend_count}, "
+            "{Contacts.network_availability}, "
+            "{Contacts.node_capabilities}, "
+            "{Contacts.node_capabilities_and}, "
+            "{Contacts.nr_of_buddies}, "
+            "{Contacts.nrof_authed_buddies}, "
+            "{Contacts.offline_authreq_id}, "
+            "{Contacts.phone_home}, "
+            "{Contacts.phone_home_normalized}, "
+            "{Contacts.phone_mobile}, "
+            "{Contacts.phone_mobile_normalized}, "
+            "{Contacts.phone_office}, "
+            "{Contacts.phone_office_normalized}, "
+            "{Contacts.pop_score}, "
+            "{Contacts.popularity_ord}, "
+            "{Contacts.profile_attachments}, "
+            "{Contacts.profile_etag}, "
+            "{Contacts.profile_json}, "
+            "{Contacts.profile_timestamp}, "
+            "{Contacts.province}, "
+            "{Contacts.pstnnumber}, "
+            "{Contacts.received_authrequest}, "
+            "{Contacts.refreshing}, "
+            "{Contacts.revoked_auth}, "
+            "{Contacts.rich_mood_text}, "
+            "{Contacts.saved_directory_blob}, "
+            "{Contacts.sent_authrequest}, "
+            "{Contacts.sent_authrequest_extrasbitmask}, "
+            "{Contacts.sent_authrequest_initmethod}, "
+            "{Contacts.sent_authrequest_serial}, "
+            "{Contacts.sent_authrequest_time}, "
+            "{Contacts.server_synced}, "
+            "{Contacts.skypename}, "
+            "{Contacts.stack_version}, "
+            "{Contacts.timezone}, "
+            "{Contacts.type}, "
+            "{Contacts.unified_servants}, "
+            "{Contacts.verified_company}, "
+            "{Contacts.verified_email} "
+            "FROM Contacts"
         );
 
         // Retrieve records from Contacts table
@@ -1126,6 +1131,8 @@ file_main_db::_load_contacts (mobius::core::database::database &db)
             // Add contacts to the list
             contacts_.emplace_back (std::move (obj));
         }
+
+        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
@@ -1149,38 +1156,39 @@ file_main_db::_load_file_transfers (mobius::core::database::database &db)
     try
     {
         // Prepare SQL statement for table Transfers
-        auto stmt = db.new_select_statement (
-            "Transfers", {"accepttime",
-                          "bytespersecond",
-                          "bytestransferred",
-                          "chatmsg_guid",
-                          "chatmsg_index",
-                          "convo_id",
-                          "extprop_handled_by_chat",
-                          "extprop_hide_from_history",
-                          "extprop_localfilename",
-                          "extprop_transfer_alias",
-                          "extprop_window_visible",
-                          "failurereason",
-                          "filename",
-                          "filepath",
-                          "filesize",
-                          "finishtime",
-                          "flags",
-                          "id",
-                          "is_permanent",
-                          "last_activity",
-                          "nodeid",
-                          "offer_send_list",
-                          "old_filepath",
-                          "old_status",
-                          "parent_id",
-                          "partner_dispname",
-                          "partner_handle",
-                          "pk_id",
-                          "starttime",
-                          "status",
-                          "type"}
+        auto stmt = db.new_statement_with_pattern (
+            "SELECT {Transfers.accepttime}, "
+            "{Transfers.bytespersecond}, "
+            "{Transfers.bytestransferred}, "
+            "{Transfers.chatmsg_guid}, "
+            "{Transfers.chatmsg_index}, "
+            "{Transfers.convo_id}, "
+            "{Transfers.extprop_handled_by_chat}, "
+            "{Transfers.extprop_hide_from_history}, "
+            "{Transfers.extprop_localfilename}, "
+            "{Transfers.extprop_transfer_alias}, "
+            "{Transfers.extprop_window_visible}, "
+            "{Transfers.failurereason}, "
+            "{Transfers.filename}, "
+            "{Transfers.filepath}, "
+            "{Transfers.filesize}, "
+            "{Transfers.finishtime}, "
+            "{Transfers.flags}, "
+            "id, "
+            "is_permanent, "
+            "{Transfers.last_activity}, "
+            "{Transfers.nodeid}, "
+            "{Transfers.offer_send_list}, "
+            "{Transfers.old_filepath}, "
+            "{Transfers.old_status}, "
+            "{Transfers.parent_id}, "
+            "{Transfers.partner_dispname}, "
+            "{Transfers.partner_handle}, "
+            "{Transfers.pk_id}, "
+            "{Transfers.starttime}, "
+            "{Transfers.status}, "
+            "{Transfers.type} "
+            "FROM Transfers"
         );
 
         // Retrieve records from Transfers table
@@ -1226,6 +1234,8 @@ file_main_db::_load_file_transfers (mobius::core::database::database &db)
             // Add transfers to the list
             file_transfers_.emplace_back (std::move (obj));
         }
+
+        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
@@ -1243,121 +1253,122 @@ file_main_db::_load_message_participants (mobius::core::database::database &db)
     mobius::core::log log (__FILE__, __FUNCTION__);
 
     // Messages table was dropped between schema version 196 and 209
-    if (schema_version_ > 196)
+    if (schema_version_ > 208)
         return;
 
     try
     {
         // Prepare SQL statement for table Participants
-        auto stmt_part = db.new_select_statement (
-            "Participants", {"adder",
-                             "adding_in_progress_since",
-                             "convo_id",
-                             "debuginfo",
-                             "dominant_speaker_rank",
-                             "endpoint_details",
-                             "extprop_default_identity",
-                             "extprop_identity_to_use",
-                             "group_calling_capabilities",
-                             "id",
-                             "identity",
-                             "is_active_speaker",
-                             "is_multiparty_video_capable",
-                             "is_multiparty_video_updatable",
-                             "is_permanent",
-                             "is_premium_video_sponsor",
-                             "is_seamlessly_upgraded_call",
-                             "is_video_codec_compatible",
-                             "last_leavereason",
-                             "last_voice_error",
-                             "live_country",
-                             "live_fwd_identities",
-                             "live_identity",
-                             "live_identity_to_use",
-                             "live_ip_address",
-                             "live_price_for_me",
-                             "live_start_timestamp",
-                             "live_type",
-                             "live_voicechannel",
-                             "livesession_fallback_in_progress",
-                             "livesession_recovery_in_progress",
-                             "messaging_mode",
-                             "next_redial_time",
-                             "nrof_redials_left",
-                             "quality_problems",
-                             "rank",
-                             "read_horizon",
-                             "real_identity",
-                             "requested_rank",
-                             "sound_level",
-                             "sponsor",
-                             "text_status",
-                             "transferred_by",
-                             "transferred_to",
-                             "video_status",
-                             "voice_status"}
+        auto stmt = db.new_statement_with_pattern (
+            "SELECT {Participants.adder}, "
+            "{Participants.adding_in_progress_since}, "
+            "{Participants.convo_id}, "
+            "{Participants.debuginfo}, "
+            "{Participants.dominant_speaker_rank}, "
+            "{Participants.endpoint_details}, "
+            "{Participants.extprop_default_identity}, "
+            "{Participants.extprop_identity_to_use}, "
+            "{Participants.group_calling_capabilities}, "
+            "id, "
+            "{Participants.identity}, "
+            "{Participants.is_active_speaker}, "
+            "{Participants.is_multiparty_video_capable}, "
+            "{Participants.is_multiparty_video_updatable}, "
+            "is_permanent, "
+            "{Participants.is_premium_video_sponsor}, "
+            "{Participants.is_seamlessly_upgraded_call}, "
+            "{Participants.is_video_codec_compatible}, "
+            "{Participants.last_leavereason}, "
+            "{Participants.last_voice_error}, "
+            "{Participants.live_country}, "
+            "{Participants.live_fwd_identities}, "
+            "{Participants.live_identity}, "
+            "{Participants.live_identity_to_use}, "
+            "{Participants.live_ip_address}, "
+            "{Participants.live_price_for_me}, "
+            "{Participants.live_start_timestamp}, "
+            "{Participants.live_type}, "
+            "{Participants.live_voicechannel}, "
+            "{Participants.livesession_fallback_in_progress}, "
+            "{Participants.livesession_recovery_in_progress}, "
+            "{Participants.messaging_mode}, "
+            "{Participants.next_redial_time}, "
+            "{Participants.nrof_redials_left}, "
+            "{Participants.quality_problems}, "
+            "{Participants.rank}, "
+            "{Participants.read_horizon}, "
+            "{Participants.real_identity}, "
+            "{Participants.requested_rank}, "
+            "{Participants.sound_level}, "
+            "{Participants.sponsor}, "
+            "{Participants.text_status}, "
+            "{Participants.transferred_by}, "
+            "{Participants.transferred_to}, "
+            "{Participants.video_status}, "
+            "{Participants.voice_status} "
+            "FROM Participants"
         );
 
         // Retrieve records from Participants table
         std::uint64_t idx = 0;
 
-        while (stmt_part.fetch_row ())
+        while (stmt.fetch_row ())
         {
             message_participant obj;
 
             obj.idx = idx++;
-            obj.adder = stmt_part.get_column_string (0);
-            obj.adding_in_progress_since = stmt_part.get_column_int64 (1);
-            obj.convo_id = stmt_part.get_column_int64 (2);
-            obj.debuginfo = stmt_part.get_column_string (3);
-            obj.dominant_speaker_rank = stmt_part.get_column_int64 (4);
-            obj.endpoint_details = stmt_part.get_column_string (5);
-            obj.extprop_default_identity = stmt_part.get_column_int64 (6);
-            obj.extprop_identity_to_use = stmt_part.get_column_int64 (7);
-            obj.group_calling_capabilities = stmt_part.get_column_int64 (8);
-            obj.id = stmt_part.get_column_int64 (9);
-            obj.identity = stmt_part.get_column_string (10);
-            obj.is_active_speaker = stmt_part.get_column_bool (11);
-            obj.is_multiparty_video_capable = stmt_part.get_column_bool (12);
-            obj.is_multiparty_video_updatable = stmt_part.get_column_bool (13);
-            obj.is_permanent = stmt_part.get_column_bool (14);
-            obj.is_premium_video_sponsor = stmt_part.get_column_bool (15);
-            obj.is_seamlessly_upgraded_call = stmt_part.get_column_bool (16);
-            obj.is_video_codec_compatible = stmt_part.get_column_bool (17);
-            obj.last_leavereason = stmt_part.get_column_int64 (18);
-            obj.last_voice_error = stmt_part.get_column_string (19);
-            obj.live_country = stmt_part.get_column_string (20);
-            obj.live_fwd_identities = stmt_part.get_column_string (21);
-            obj.live_identity = stmt_part.get_column_string (22);
-            obj.live_identity_to_use = stmt_part.get_column_string (23);
-            obj.live_ip_address = stmt_part.get_column_string (24);
-            obj.live_price_for_me = stmt_part.get_column_string (25);
-            obj.live_start_timestamp = stmt_part.get_column_int64 (26);
-            obj.live_type = stmt_part.get_column_int64 (27);
-            obj.live_voicechannel = stmt_part.get_column_int64 (28);
-            obj.livesession_fallback_in_progress =
-                stmt_part.get_column_int64 (29);
-            obj.livesession_recovery_in_progress =
-                stmt_part.get_column_int64 (30);
-            obj.messaging_mode = stmt_part.get_column_int64 (31);
-            obj.next_redial_time = stmt_part.get_column_int64 (32);
-            obj.nrof_redials_left = stmt_part.get_column_int64 (33);
-            obj.quality_problems = stmt_part.get_column_string (34);
-            obj.rank = stmt_part.get_column_int64 (35);
-            obj.read_horizon = stmt_part.get_column_int64 (36);
-            obj.real_identity = stmt_part.get_column_string (37);
-            obj.requested_rank = stmt_part.get_column_int64 (38);
-            obj.sound_level = stmt_part.get_column_int64 (39);
-            obj.sponsor = stmt_part.get_column_string (40);
-            obj.text_status = stmt_part.get_column_int64 (41);
-            obj.transferred_by = stmt_part.get_column_string (42);
-            obj.transferred_to = stmt_part.get_column_string (43);
-            obj.video_status = stmt_part.get_column_int64 (44);
-            obj.voice_status = stmt_part.get_column_int64 (45);
+            obj.adder = stmt.get_column_string (0);
+            obj.adding_in_progress_since = stmt.get_column_int64 (1);
+            obj.convo_id = stmt.get_column_int64 (2);
+            obj.debuginfo = stmt.get_column_string (3);
+            obj.dominant_speaker_rank = stmt.get_column_int64 (4);
+            obj.endpoint_details = stmt.get_column_string (5);
+            obj.extprop_default_identity = stmt.get_column_int64 (6);
+            obj.extprop_identity_to_use = stmt.get_column_int64 (7);
+            obj.group_calling_capabilities = stmt.get_column_int64 (8);
+            obj.id = stmt.get_column_int64 (9);
+            obj.identity = stmt.get_column_string (10);
+            obj.is_active_speaker = stmt.get_column_bool (11);
+            obj.is_multiparty_video_capable = stmt.get_column_bool (12);
+            obj.is_multiparty_video_updatable = stmt.get_column_bool (13);
+            obj.is_permanent = stmt.get_column_bool (14);
+            obj.is_premium_video_sponsor = stmt.get_column_bool (15);
+            obj.is_seamlessly_upgraded_call = stmt.get_column_bool (16);
+            obj.is_video_codec_compatible = stmt.get_column_bool (17);
+            obj.last_leavereason = stmt.get_column_int64 (18);
+            obj.last_voice_error = stmt.get_column_string (19);
+            obj.live_country = stmt.get_column_string (20);
+            obj.live_fwd_identities = stmt.get_column_string (21);
+            obj.live_identity = stmt.get_column_string (22);
+            obj.live_identity_to_use = stmt.get_column_string (23);
+            obj.live_ip_address = stmt.get_column_string (24);
+            obj.live_price_for_me = stmt.get_column_string (25);
+            obj.live_start_timestamp = stmt.get_column_int64 (26);
+            obj.live_type = stmt.get_column_int64 (27);
+            obj.live_voicechannel = stmt.get_column_int64 (28);
+            obj.livesession_fallback_in_progress = stmt.get_column_int64 (29);
+            obj.livesession_recovery_in_progress = stmt.get_column_int64 (30);
+            obj.messaging_mode = stmt.get_column_int64 (31);
+            obj.next_redial_time = stmt.get_column_int64 (32);
+            obj.nrof_redials_left = stmt.get_column_int64 (33);
+            obj.quality_problems = stmt.get_column_string (34);
+            obj.rank = stmt.get_column_int64 (35);
+            obj.read_horizon = stmt.get_column_int64 (36);
+            obj.real_identity = stmt.get_column_string (37);
+            obj.requested_rank = stmt.get_column_int64 (38);
+            obj.sound_level = stmt.get_column_int64 (39);
+            obj.sponsor = stmt.get_column_string (40);
+            obj.text_status = stmt.get_column_int64 (41);
+            obj.transferred_by = stmt.get_column_string (42);
+            obj.transferred_to = stmt.get_column_string (43);
+            obj.video_status = stmt.get_column_int64 (44);
+            obj.voice_status = stmt.get_column_int64 (45);
 
             // Add participant to the list
             message_participants_.emplace (obj.convo_id, std::move (obj));
         }
+
+        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
@@ -1375,63 +1386,64 @@ file_main_db::_load_messages (mobius::core::database::database &db)
     mobius::core::log log (__FILE__, __FUNCTION__);
 
     // Messages table was dropped between schema version 196 and 209
-    if (schema_version_ > 196)
+    if (schema_version_ > 208)
         return;
 
     try
     {
         // Prepare SQL statement for table Messages
-        auto stmt = db.new_select_statement (
-            "Messages", {"annotation_version",
-                         "author",
-                         "author_was_live",
-                         "body_is_rawxml",
-                         "body_xml",
-                         "bots_settings",
-                         "call_guid",
-                         "chatmsg_status",
-                         "chatmsg_type",
-                         "chatname",
-                         "consumption_status",
-                         "content_flags",
-                         "convo_id",
-                         "crc",
-                         "dialog_partner",
-                         "edited_by",
-                         "edited_timestamp",
-                         "error_code",
-                         "extprop_chatmsg_ft_index_timestamp",
-                         "extprop_chatmsg_is_pending",
-                         "extprop_contact_received_stamp",
-                         "extprop_contact_review_date",
-                         "extprop_contact_reviewed",
-                         "extprop_mms_msg_metadata",
-                         "extprop_sms_server_id",
-                         "extprop_sms_src_msg_id",
-                         "extprop_sms_sync_global_id",
-                         "from_dispname",
-                         "guid",
-                         "id",
-                         "identities",
-                         "is_permanent",
-                         "language",
-                         "leavereason",
-                         "newoptions",
-                         "newrole",
-                         "oldoptions",
-                         "option_bits",
-                         "param_key",
-                         "param_value",
-                         "participant_count",
-                         "pk_id",
-                         "reaction_thread",
-                         "reason",
-                         "remote_id",
-                         "sending_status",
-                         "server_id",
-                         "timestamp",
-                         "timestamp__ms",
-                         "type"}
+        auto stmt = db.new_statement_with_pattern (
+            "SELECT {Messages.annotation_version}, "
+            "{Messages.author}, "
+            "{Messages.author_was_live}, "
+            "{Messages.body_is_rawxml}, "
+            "{Messages.body_xml}, "
+            "{Messages.bots_settings}, "
+            "{Messages.call_guid}, "
+            "{Messages.chatmsg_status}, "
+            "{Messages.chatmsg_type}, "
+            "{Messages.chatname}, "
+            "{Messages.consumption_status}, "
+            "{Messages.content_flags}, "
+            "{Messages.convo_id}, "
+            "{Messages.crc}, "
+            "{Messages.dialog_partner}, "
+            "{Messages.edited_by}, "
+            "{Messages.edited_timestamp}, "
+            "{Messages.error_code}, "
+            "{Messages.extprop_chatmsg_ft_index_timestamp}, "
+            "{Messages.extprop_chatmsg_is_pending}, "
+            "{Messages.extprop_contact_received_stamp}, "
+            "{Messages.extprop_contact_review_date}, "
+            "{Messages.extprop_contact_reviewed}, "
+            "{Messages.extprop_mms_msg_metadata}, "
+            "{Messages.extprop_sms_server_id}, "
+            "{Messages.extprop_sms_src_msg_id}, "
+            "{Messages.extprop_sms_sync_global_id}, "
+            "{Messages.from_dispname}, "
+            "{Messages.guid}, "
+            "id, "
+            "{Messages.identities}, "
+            "is_permanent, "
+            "{Messages.language}, "
+            "{Messages.leavereason}, "
+            "{Messages.newoptions}, "
+            "{Messages.newrole}, "
+            "{Messages.oldoptions}, "
+            "{Messages.option_bits}, "
+            "{Messages.param_key}, "
+            "{Messages.param_value}, "
+            "{Messages.participant_count}, "
+            "{Messages.pk_id}, "
+            "{Messages.reaction_thread}, "
+            "{Messages.reason}, "
+            "{Messages.remote_id}, "
+            "{Messages.sending_status}, "
+            "{Messages.server_id}, "
+            "{Messages.timestamp}, "
+            "{Messages.timestamp__ms}, "
+            "{Messages.type} "
+            "FROM Messages"
         );
 
         // Retrieve records from Messages table
@@ -1512,6 +1524,8 @@ file_main_db::_load_messages (mobius::core::database::database &db)
             // Add messages to the list
             messages_.emplace_back (std::move (obj));
         }
+
+        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
@@ -1529,37 +1543,38 @@ file_main_db::_load_sms (mobius::core::database::database &db)
     mobius::core::log log (__FILE__, __FUNCTION__);
 
     // SMSes table was dropped between schema version 259 and 308
-    if (schema_version_ > 259)
+    if (schema_version_ > 307)
         return;
 
     try
     {
         // Prepare SQL statement for table SMSes
-        auto stmt = db.new_select_statement (
-            "SMSes", {"body",
-                      "chatmsg_id",
-                      "convo_name",
-                      "error_category",
-                      "event_flags",
-                      "extprop_extended",
-                      "extprop_hide_from_history",
-                      "failurereason",
-                      "id",
-                      "identity",
-                      "is_failed_unseen",
-                      "is_permanent",
-                      "notification_id",
-                      "outgoing_reply_type",
-                      "price",
-                      "price_currency",
-                      "price_precision",
-                      "reply_id_number",
-                      "reply_to_number",
-                      "status",
-                      "target_numbers",
-                      "target_statuses",
-                      "timestamp",
-                      "type"}
+        auto stmt = db.new_statement_with_pattern (
+            "SELECT {SMSes.body}, "
+            "{SMSes.chatmsg_id}, "
+            "{SMSes.convo_name}, "
+            "{SMSes.error_category}, "
+            "{SMSes.event_flags}, "
+            "{SMSes.extprop_extended}, "
+            "{SMSes.extprop_hide_from_history}, "
+            "{SMSes.failurereason}, "
+            "id, "
+            "{SMSes.identity}, "
+            "{SMSes.is_failed_unseen}, "
+            "is_permanent, "
+            "{SMSes.notification_id}, "
+            "{SMSes.outgoing_reply_type}, "
+            "{SMSes.price}, "
+            "{SMSes.price_currency}, "
+            "{SMSes.price_precision}, "
+            "{SMSes.reply_id_number}, "
+            "{SMSes.reply_to_number}, "
+            "{SMSes.status}, "
+            "{SMSes.target_numbers}, "
+            "{SMSes.target_statuses}, "
+            "{SMSes.timestamp}, "
+            "{SMSes.type} "
+            "FROM SMSes"
         );
 
         // Retrieve records from SMSes table
@@ -1598,6 +1613,8 @@ file_main_db::_load_sms (mobius::core::database::database &db)
             // Add smses to the list
             sms_.emplace_back (std::move (obj));
         }
+
+        is_instance_ = true;
     }
     catch (const std::exception &e)
     {
@@ -1621,29 +1638,30 @@ file_main_db::_load_voicemails (mobius::core::database::database &db)
     try
     {
         // Prepare SQL statement for table Voicemails
-        auto stmt = db.new_select_statement (
-            "Voicemails", {"allowed_duration",
-                           "chatmsg_guid",
-                           "convo_id",
-                           "duration",
-                           "extprop_hide_from_history",
-                           "failurereason",
-                           "failures",
-                           "flags",
-                           "id",
-                           "is_permanent",
-                           "notification_id",
-                           "partner_dispname",
-                           "partner_handle",
-                           "path",
-                           "playback_progress",
-                           "size",
-                           "status",
-                           "subject",
-                           "timestamp",
-                           "type",
-                           "vflags",
-                           "xmsg"}
+        auto stmt = db.new_statement_with_pattern (
+            "SELECT {Voicemails.allowed_duration}, "
+            "{Voicemails.chatmsg_guid}, "
+            "{Voicemails.convo_id}, "
+            "{Voicemails.duration}, "
+            "{Voicemails.extprop_hide_from_history}, "
+            "{Voicemails.failurereason}, "
+            "{Voicemails.failures}, "
+            "{Voicemails.flags}, "
+            "id, "
+            "is_permanent, "
+            "{Voicemails.notification_id}, "
+            "{Voicemails.partner_dispname}, "
+            "{Voicemails.partner_handle}, "
+            "{Voicemails.path}, "
+            "{Voicemails.playback_progress}, "
+            "{Voicemails.size}, "
+            "{Voicemails.status}, "
+            "{Voicemails.subject}, "
+            "{Voicemails.timestamp}, "
+            "{Voicemails.type}, "
+            "{Voicemails.vflags}, "
+            "{Voicemails.xmsg} "
+            "FROM Voicemails"
         );
 
         // Retrieve records from Voicemails table
