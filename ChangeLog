@@ -5,7 +5,7 @@ Mobius Forensic Toolkit 2.25
 	* app-chromium: Better detection of "Login Data" files
 	* app-chromium: Added support for "Web Data" table schemas v46 and 99
 	* app-chromium: Better detection of "Web Data" files
-	* app-skype: Improved detection and validation of main.db files with stricter checks
+	* app-skype: Improved detection and validation of main.db and skype.db files with stricter checks
 	* datasource-vfs: Improved .dot file generation for VFS blocks
 	* gtk-ui: Fixed incorrect dialog type error involving ReportDialog vs. Gtk.Dialog
 	* libmobius_core: Added new class crypt::hash_impl_fletcher16
