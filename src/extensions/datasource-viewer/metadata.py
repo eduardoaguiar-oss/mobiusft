@@ -22,5 +22,5 @@
 EXTENSION_ID = 'datasource-viewer'
 EXTENSION_NAME = 'Datasource Viewer'
 EXTENSION_AUTHOR = 'Eduardo Aguiar'
-EXTENSION_VERSION = '2.4'
+EXTENSION_VERSION = '2.5'
 EXTENSION_DESCRIPTION = 'Extension to manage datasources'

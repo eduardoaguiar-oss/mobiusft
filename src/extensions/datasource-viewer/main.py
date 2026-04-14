@@ -75,18 +75,6 @@ class DataSourceView(object):
 
         widget_data = [('No datasource', 'null', None, None)] + list(sorted(widget_data))
 
-        # Hbox
-        self.__hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
-        self.__hbox.set_spacing(5)
-        self.__hbox.set_visible(True)
-        self.__vbox.add_child(self.__hbox, mobius.core.ui.box.fill_none)
-
-        # DND toolitem
-        self.__dnd_toolitem = self.__mediator.call('ui.new-widget', 'dnd-toolitem')
-        self.__dnd_toolitem.set_control(self)
-        self.__dnd_toolitem.show()
-        self.__hbox.add_child(self.__dnd_toolitem.get_ui_widget(), mobius.core.ui.box.fill_none)
-
         # combobox
         datastore = Gtk.ListStore.new([GdkPixbuf.Pixbuf, str, str, object])
         self.__combobox_idx = {}
@@ -106,7 +94,7 @@ class DataSourceView(object):
         renderer = Gtk.CellRendererText()
         self.__combobox.pack_start(renderer, True)
         self.__combobox.add_attribute(renderer, 'text', DS_COMBO_NAME)
-        self.__hbox.add_child(self.__combobox, mobius.core.ui.box.fill_with_widget)
+        self.__vbox.add_child(self.__combobox, mobius.core.ui.box.fill_none)
 
         # working area
         self.__working_area = mobius.core.ui.container()
