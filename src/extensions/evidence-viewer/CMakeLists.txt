@@ -36,7 +36,6 @@ set(SOURCE_FILES
     icon_view.py
     list_view.py
     metadata_view.py
-    model.py
     navigation_view.py
     processing_view.py
     sources_view.py

@@ -24,7 +24,7 @@ from common import get_icon_path
 from metadata import *
 from hashes_view import HashesView
 from metadata_view import MetadataView
-from model import Getter
+from pymobius.evidence import Getter
 from sources_view import SourcesView
 
 

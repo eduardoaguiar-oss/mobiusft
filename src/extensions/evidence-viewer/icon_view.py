@@ -22,7 +22,7 @@ from gi.repository import Gtk
 from common import count_evidences
 from common import get_icon_path
 from metadata import *
-from model import MODEL
+from pymobius.evidence import MODEL
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Constants

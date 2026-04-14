@@ -19,7 +19,7 @@ import pymobius
 import pymobius.ant.evidence
 
 from metadata import *
-from model import Getter
+from pymobius.evidence import Getter
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @class MetadataView
