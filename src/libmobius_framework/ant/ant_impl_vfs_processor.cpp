@@ -236,13 +236,13 @@ ant_impl_vfs_processor::_process_folder (const mobius::core::io::folder &folder)
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Notify implementations
+    // Notify implementations that we're entering a folder
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     for (const auto &impl : implementations_)
     {
         try
         {
-            impl->on_folder (folder);
+            impl->on_folder_enter (folder);
         }
         catch (const std::exception &e)
         {
@@ -267,6 +267,21 @@ ant_impl_vfs_processor::_process_folder (const mobius::core::io::folder &folder)
     catch (const std::exception &e)
     {
         log.warning (__LINE__, e.what ());
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Notify implementations that we're exiting a folder
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &impl : implementations_)
+    {
+        try
+        {
+            impl->on_folder_exit (folder);
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (__LINE__, e.what ());
+        }
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

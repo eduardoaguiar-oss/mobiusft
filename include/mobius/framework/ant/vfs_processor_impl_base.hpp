@@ -30,8 +30,18 @@ class vfs_processor_impl_base
 {
   public:
     virtual ~vfs_processor_impl_base () = default;
-    virtual void on_folder (const mobius::core::io::folder &) = 0;
+    virtual void on_folder (const mobius::core::io::folder &) {};
+    virtual void on_folder_exit (const mobius::core::io::folder &) {};
     virtual void on_complete () = 0;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Default implementation for on_folder_enter (to avoid forcing implementations to implement it if they don't need it)
+    // @param folder Folder being entered
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    virtual void on_folder_enter (const mobius::core::io::folder &folder)
+    {
+        on_folder (folder);
+    }
 };
 
 } // namespace mobius::framework::ant
