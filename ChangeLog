@@ -19,14 +19,13 @@ Mobius Forensic Toolkit 2.25
 	* libmobius_core: Added new function `vfs::block::register_block_decoder`
 	* libmobius_core: Added new function `vfs::block::unregister_block_decoder`
 	* libmobius_core: Added new function `vfs::block::get_block_decoders`
-	* libmobius_core: Improved vfs::tsk::folder_impl::get_children by caching the dir_p pointer, reducing memory usage and enhancing performance.
-	* libmobius_core: Improved vfs::tsk::fs_file::get_type function loading meta structure on demand.
 	* libmobius_core: vfs::tsk::fs_file::get_children changed to set children paths
 	* libmobius_core: vfs::tsk::fs_file::get_parent setting parent path
 	* libmobius_core: os::win::registry::registry::_set_syskey now properly handles an empty SYSKEY
 	* libmobius_core: Added new function vfs::register_block_to_filesystems_function
 	* libmobius_core: Added new function vfs::unregister_block_to_filesystems_function
 	* libmobius_core: Added new constructor for vfs::filesystem class
+	* libmobius_framework: Reduced memory usage when running ant::vfs_processor
 
 Mobius Forensic Toolkit 2.24
 	* Added new C++ extension called `app-gecko`

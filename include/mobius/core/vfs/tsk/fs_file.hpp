@@ -82,7 +82,6 @@ class fs_file
     bool exists () const;
     bool is_deleted () const;
     bool is_reallocated () const;
-    bool is_hidden () const;
     std::string get_name () const;
     std::string get_short_name () const;
     std::string get_path () const;
@@ -110,10 +109,6 @@ class fs_file
 
     // @brief Pointer to implementation
     std::shared_ptr<impl> impl_;
-
-  private:
-    // Helper functions
-    void _load_streams () const;
 };
 
 } // namespace mobius::core::vfs::tsk

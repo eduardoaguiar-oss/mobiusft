@@ -104,7 +104,7 @@ ant_impl_vfs_processor::get_status () const
         {"current_folder", current_folder_path_},
         {"vfs_processors_count", implementations_.size ()},
     };
-    
+
     return status;
 }
 
@@ -268,6 +268,12 @@ ant_impl_vfs_processor::_process_folder (const mobius::core::io::folder &folder)
     {
         log.warning (__LINE__, e.what ());
     }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Clear folder children cache to free memory
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto folder_proxy = folder;
+    folder_proxy.reload ();
 }
 
 } // namespace mobius::framework::ant

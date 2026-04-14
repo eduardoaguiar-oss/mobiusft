@@ -275,6 +275,9 @@ class folder_impl : public mobius::core::io::folder_impl_base
     reload () final
     {
         fs_file_.reload ();
+        
+        children_loaded_ = false;
+        children_.clear ();
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -288,11 +291,21 @@ class folder_impl : public mobius::core::io::folder_impl_base
     }
 
   private:
+    //
     // @brief libtsk fs_file object
     fs_file fs_file_;
 
     // @brief Name
     std::string name_;
+
+    // @brief Children loaded flag
+    mutable bool children_loaded_ = false;
+
+    // @brief Children
+    mutable std::vector<mobius::core::io::entry> children_;
+
+    // Helper functions
+    void _load_children () const;
 };
 
 } // namespace mobius::core::vfs::tsk

@@ -125,9 +125,9 @@ namespace mobius::core::vfs::tsk
 class fs_file::impl
 {
   public:
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Constructors and destructor
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     impl () = default;
     explicit impl (TSK_FS_FILE *);
     impl (const impl &) = delete;
@@ -143,7 +143,6 @@ class fs_file::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    bool is_hidden () const;
     void set_path (const std::string &);
     std::uint64_t get_inode () const;
     fs_file_type get_type () const;
@@ -372,9 +371,6 @@ class fs_file::impl
     // @brief libtsk file structure pointer
     TSK_FS_FILE *p_ = nullptr;
 
-    // @brief libtsk dir structure pointer (for folders)
-    mutable TSK_FS_DIR *dir_p_ = nullptr;
-
     // @brief i-node
     mutable std::uint64_t inode_ = 0;
 
@@ -463,9 +459,6 @@ fs_file::impl::impl (TSK_FS_FILE *p)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 fs_file::impl::~impl ()
 {
-    if (dir_p_)
-        tsk_fs_dir_close (dir_p_);
-
     if (p_)
         tsk_fs_file_close (p_);
 }
@@ -573,20 +566,17 @@ fs_file::impl::get_children () const
         return {};
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Try to open directory, if necessary
+    // Try to open directory
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    if (!dir_p_)
-    {
-        dir_p_ = tsk_fs_dir_open_meta (p_->fs_info, p_->meta->addr);
+    TSK_FS_DIR *dir_p = tsk_fs_dir_open_meta (p_->fs_info, p_->meta->addr);
 
-        if (!dir_p_)
-            throw std::runtime_error (TSK_EXCEPTION_MSG);
-    }
+    if (!dir_p)
+        throw std::runtime_error (TSK_EXCEPTION_MSG);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Read directory entries
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto count = tsk_fs_dir_getsize (dir_p_);
+    auto count = tsk_fs_dir_getsize (dir_p);
     auto path = get_path ();
 
     std::vector<fs_file> children;
@@ -594,9 +584,13 @@ fs_file::impl::get_children () const
 
     for (std::size_t i = 0; i < count; i++)
     {
-        TSK_FS_FILE *fp = tsk_fs_dir_get (dir_p_, i);
+        TSK_FS_FILE *fp = tsk_fs_dir_get (dir_p, i);
+
         if (!fp)
+        {
+            tsk_fs_dir_close (dir_p);
             throw std::runtime_error (TSK_EXCEPTION_MSG);
+        }
 
         // if entry is not '.' and '..', create and return true
         fs_file f (fp);
@@ -608,6 +602,8 @@ fs_file::impl::get_children () const
             children.push_back (f);
         }
     }
+
+    tsk_fs_dir_close (dir_p);
 
     return children;
 }

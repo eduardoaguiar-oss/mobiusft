@@ -155,6 +155,20 @@ folder_impl::get_parent () const
 std::vector<mobius::core::io::entry>
 folder_impl::get_children () const
 {
+    _load_children ();
+    return children_;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load children entries
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+folder_impl::_load_children () const
+{
+    // Return cached children if already loaded
+    if (children_loaded_)
+        return;
+
     // Check if fs_file_ is valid
     if (!fs_file_)
         throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("invalid folder"));
@@ -162,11 +176,10 @@ folder_impl::get_children () const
     // Create children from fs_file_ children
     auto fs_children = fs_file_.get_children ();
 
-    std::vector<mobius::core::io::entry> children;
-    children.reserve (fs_children.size ());
+    children_.reserve (fs_children.size ());
 
     std::transform (
-        fs_children.begin (), fs_children.end (), std::back_inserter (children),
+        fs_children.begin (), fs_children.end (), std::back_inserter (children_),
         [] (const fs_file &f)
         {
             if (f.get_type () == f.fs_file_type::folder)
@@ -180,8 +193,8 @@ folder_impl::get_children () const
         }
     );
 
-    // Return children
-    return children;
+    // set children loaded flag
+    children_loaded_ = true;
 }
 
 } // namespace mobius::core::vfs::tsk
