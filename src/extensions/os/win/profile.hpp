@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_GECKO_PROFILE_HPP
-#define MOBIUS_EXTENSION_APP_GECKO_PROFILE_HPP
+#ifndef MOBIUS_EXTENSION_OS_WIN_PROFILE_HPP
+#define MOBIUS_EXTENSION_OS_WIN_PROFILE_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -21,14 +21,16 @@
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/folder.hpp>
+#include <mobius/core/os/win/registry/hive_file.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <string>
 #include <vector>
+#include "common.hpp"
 
-namespace mobius::extension::app::gecko
+namespace mobius::extension::os::win
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Stub profile class
+// @brief Windows OS profile class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class profile
@@ -46,14 +48,14 @@ class profile
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     profile &operator= (const profile &) noexcept = default;
     profile &operator= (profile &&) noexcept = default;
-    
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Check if profile is valid
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     operator bool () const noexcept
     {
-        return bool (folder_);
+        return is_valid_;
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -107,8 +109,19 @@ class profile
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get installed programs
+    // @return Vector of installed programs
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<installed_program>
+    get_installed_programs () const
+    {
+        return installed_programs_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void add_ntuser_dat_file (const mobius::core::io::file &);
     //void add_dcplusplus_xml_file (const mobius::core::io::file &);
 
   private:
@@ -124,13 +137,28 @@ class profile
     // @brief Last modified time
     mobius::core::datetime::datetime last_modified_time_;
 
+    // @brief NTUSER.DAT file
+    mobius::core::io::file ntuser_dat_file_;
+
+    // @brief Installed programs
+    std::vector<installed_program> installed_programs_;
+
+    // @brief Is valid flag
+    bool is_valid_ = false;
+
+    // @brief Is deleted flag
+    bool is_deleted_ = false;
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _set_folder (const mobius::core::io::folder &);
     void _update_mtime (const mobius::core::io::file &);
+    void _load_installed_programs (
+        const mobius::core::os::win::registry::hive_file &
+    );
 };
 
-} // namespace mobius::extension::app::gecko
+} // namespace mobius::extension::os::win
 
 #endif
