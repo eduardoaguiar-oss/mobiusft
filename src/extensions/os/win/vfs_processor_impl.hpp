@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_GECKO_VFS_PROCESSOR_IMPL_HPP
-#define MOBIUS_EXTENSION_APP_GECKO_VFS_PROCESSOR_IMPL_HPP
+#ifndef MOBIUS_EXTENSION_OS_WIN_VFS_PROCESSOR_IMPL_HPP
+#define MOBIUS_EXTENSION_OS_WIN_VFS_PROCESSOR_IMPL_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -50,6 +50,10 @@ class vfs_processor_impl
   private:
     // @brief Case item
     mobius::framework::model::item item_;
+
+    // @brief Base folder is a folder that contains the Windows folder structure
+    // (e.g. "/" or "/Windows.old")
+    mobius::core::io::folder base_folder_;
 
     // @brief User name
     std::string username_;
