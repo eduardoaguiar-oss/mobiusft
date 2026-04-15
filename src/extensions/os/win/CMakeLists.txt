@@ -27,6 +27,9 @@ project(os_win LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(os_win MODULE
     main.cpp
+    common.cpp
+    os.cpp
+    profile.cpp
     vfs_processor_impl.cpp
 )
 
