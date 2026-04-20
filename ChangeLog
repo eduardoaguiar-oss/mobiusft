@@ -2,6 +2,7 @@ Mobius Forensic Toolkit 2.26
 	* Added new C++ extension called `os-win`
 	* datasource-viewer: Removed the drag-and-drop (DND) report button from the interface
 	* evidence-viewer: Moved model.py to the pymobius.evidence module
+	* evidence-viewer: Updated the refresh interval for the processing view
 	* libmobius_framework: Added new virtual method vfs_processor_impl_base::on_folder_enter
 	* libmobius_framework: Added new virtual method vfs_processor_impl_base::on_folder_exit
 

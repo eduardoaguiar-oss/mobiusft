@@ -20,9 +20,6 @@ import traceback
 import mobius
 import pymobius
 import pymobius.app.itubego
-import pymobius.registry.main
-import pymobius.registry.search_assistant
-import pymobius.registry.wordwheelquery
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -59,7 +56,6 @@ class Ant(object):
 
         self.__entries = []
         self.__retrieve_itubego()
-        self.__retrieve_win_registry()
         self.__save_data()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -88,45 +84,6 @@ class Ant(object):
                     entry.metadata.set('profile_path', profile.path)
 
                     self.__entries.append(entry)
-        except Exception as e:
-            mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Retrieve data from Windows' Registry
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __retrieve_win_registry(self):
-
-        try:
-            ant = pymobius.registry.main.Ant(self.__item)
-            for reg in ant.get_data():
-
-                # WordWheelQuery
-                for e in pymobius.registry.wordwheelquery.get(reg):
-                    entry = pymobius.Data()
-                    entry.username = e.username
-                    entry.app_id = e.app_id
-                    entry.app_name = e.app_name
-                    entry.field_name = e.fieldname
-                    entry.value = e.value
-
-                    entry.metadata = mobius.core.pod.map()
-                    entry.metadata.set('evidence-source', e.evidence_source)
-                    entry.metadata.set('mrulistex_index', e.idx)
-                    self.__entries.append(entry)
-
-                # Search Assistant
-                for e in pymobius.registry.search_assistant.get(reg):
-                    entry = pymobius.Data()
-                    entry.username = e.username
-                    entry.app_id = e.app_id
-                    entry.app_name = e.app_name
-                    entry.field_name = e.fieldname
-                    entry.value = e.value
-
-                    entry.metadata = mobius.core.pod.map()
-                    entry.metadata.set('evidence-source', e.evidence_source)
-                    self.__entries.append(entry)
-
         except Exception as e:
             mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
 
