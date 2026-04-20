@@ -31,53 +31,60 @@ static constexpr std::uint32_t INVALID_OFFSET = 0xffffffff;
 class hive_data::impl
 {
   public:
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // constructors
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     impl () = default;
-    impl (const mobius::core::io::reader &, offset_type, std::uint32_t,
-          std::uint32_t);
+    impl (
+        const mobius::core::io::reader &,
+        offset_type,
+        std::uint32_t,
+        std::uint32_t
+    );
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief check if object is valid
     // @return true/false
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const { return offset_ != INVALID_OFFSET; }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    operator bool () const
+    {
+        return offset_ != INVALID_OFFSET;
+    }
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief get offset
     // @return offset
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     offset_type
     get_offset () const
     {
         return offset_;
     }
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief get size
     // @return size
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::uint32_t
     get_size () const
     {
         return size_;
     }
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief get type
     // @return type
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     data_type
     get_type () const
     {
         return type_;
     }
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief get data
     // @return data
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     mobius::core::bytearray
     get_data () const
     {
@@ -115,9 +122,12 @@ class hive_data::impl
 // @param size Data size
 // @param type Data type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-hive_data::impl::impl (const mobius::core::io::reader &reader,
-                       offset_type offset, std::uint32_t size,
-                       std::uint32_t type)
+hive_data::impl::impl (
+    const mobius::core::io::reader &reader,
+    offset_type offset,
+    std::uint32_t size,
+    std::uint32_t type
+)
     : reader_ (reader),
       offset_ (offset),
       size_ (size),
@@ -133,11 +143,12 @@ hive_data::impl::impl (const mobius::core::io::reader &reader,
 
         if (size_)
         {
-            data_ =
-                mobius::core::bytearray {std::uint8_t (offset_ & 0xff),
-                                         std::uint8_t ((offset_ >> 8) & 0xff),
-                                         std::uint8_t ((offset_ >> 16) & 0xff),
-                                         std::uint8_t ((offset_ >> 24) & 0xff)};
+            data_ = mobius::core::bytearray {
+                std::uint8_t (offset_ & 0xff),
+                std::uint8_t ((offset_ >> 8) & 0xff),
+                std::uint8_t ((offset_ >> 16) & 0xff),
+                std::uint8_t ((offset_ >> 24) & 0xff)
+            };
 
             if (size_ < 4)
                 data_.resize (size_);
@@ -179,9 +190,12 @@ hive_data::hive_data ()
 // @param size Data size
 // @param type Data type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-hive_data::hive_data (const mobius::core::io::reader &reader,
-                      offset_type offset, std::uint32_t size,
-                      std::uint32_t type)
+hive_data::hive_data (
+    const mobius::core::io::reader &reader,
+    offset_type offset,
+    std::uint32_t size,
+    std::uint32_t type
+)
     : impl_ (std::make_shared<impl> (reader, offset, size, type))
 {
 }
@@ -190,7 +204,11 @@ hive_data::hive_data (const mobius::core::io::reader &reader,
 // @brief check if object is valid
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-hive_data::operator bool () const { return impl_->operator bool (); }
+hive_data::
+operator bool () const
+{
+    return impl_->operator bool ();
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief get offset
@@ -302,8 +320,12 @@ hive_data::get_data_as_string (const std::string &encoding) const
     auto data = get_data ();
     auto type = get_type ();
 
-    if (data && (type == data_type::reg_sz || type == data_type::reg_expand_sz))
-        str = data.to_string (encoding);
+    if (data)
+    {
+        if (type == data_type::reg_sz || type == data_type::reg_expand_sz ||
+            type == data_type::reg_binary)
+            str = data.to_string (encoding);
+    }
 
     return str;
 }

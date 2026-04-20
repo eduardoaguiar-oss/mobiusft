@@ -269,7 +269,7 @@ profile::_load_wordwheel_queries (
         {
             autofill entry;
             entry.field_name = "search_query";
-            entry.value = get_data_as_string (data, "utf-16le");
+            entry.value = data.get_data_as_string ("utf-16le");
             entry.f = ntuser_dat_file_;
 
             entry.metadata.set (

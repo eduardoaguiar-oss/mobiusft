@@ -48,26 +48,6 @@ get_data_as_string (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get registry data as string
-// @param data Hive data
-// @param encoding String encoding (e.g. "utf-16le", "utf-8")
-// @return Data as string (empty string if value doesn't exist or is not a string)
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-get_data_as_string (
-    const mobius::core::os::win::registry::hive_data &data,
-    const std::string &encoding
-)
-{
-    std::string text;
-
-    if (data)
-        text = data.get_data ().to_string (encoding);
-
-    return text;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Get MRUListEx entries
 // @param key Hive key containing MRUListEx value and MRU values
 // @return Vector of pairs (index, value) sorted by index
