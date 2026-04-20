@@ -15,3 +15,4 @@ app-gecko
 app-skype
 app-shareaza
 app-utorrent
+os-win

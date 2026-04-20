@@ -22,6 +22,7 @@
 #include <mobius/core/os/win/registry/hive_key.hpp>
 #include <string>
 #include <vector>
+#include <utility>
 
 namespace mobius::extension::os::win
 {
@@ -51,9 +52,14 @@ struct installed_program
 std::string get_data_as_string (
     const mobius::core::os::win::registry::hive_key &, const std::string &
 );
+std::string get_data_as_string (
+    const mobius::core::os::win::registry::hive_data &, const std::string &
+);
 std::vector<installed_program> get_installed_programs (
     const mobius::core::os::win::registry::hive_key &, const std::string &
 );
+std::vector<std::pair<std::size_t, mobius::core::os::win::registry::hive_data>>
+get_mrulistex (const mobius::core::os::win::registry::hive_key &);
 
 } // namespace mobius::extension::os::win
 

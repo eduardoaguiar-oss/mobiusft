@@ -26,6 +26,7 @@
 #include <mobius/core/string_functions.hpp>
 #include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/model/evidence.hpp>
+#include "profile.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // References:
@@ -65,7 +66,7 @@ vfs_processor_impl::on_folder_enter (const mobius::core::io::folder &folder)
 {
     //_scan_root_folder (folder);
     //_scan_arestra_folder (folder);
-    //_scan_ntuser_dat_folder (folder);
+    _scan_ntuser_dat_folder (folder);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -75,7 +76,9 @@ vfs_processor_impl::on_folder_enter (const mobius::core::io::folder &folder)
 void
 vfs_processor_impl::on_folder_exit (const mobius::core::io::folder &folder)
 {
-    //_scan_profile_folder (folder);
+    if (!current_profiles_.empty () &&
+        folder == current_profiles_.top ().get_folder ())
+        current_profiles_.pop ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -84,26 +87,29 @@ vfs_processor_impl::on_folder_exit (const mobius::core::io::folder &folder)
 void
 vfs_processor_impl::on_complete ()
 {
-    //_save_app_profiles ();
-    //_save_autofills ();
+    _save_app_profiles ();
+    _save_autofills ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Scan folder for ___ARESTRA___ files
-// @param folder Folder object
+// @brief Scan folder for NTUSER.DAT files
+// @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-/*void
-vfs_processor_impl::_scan_arestra_folder (const mobius::core::io::folder &folder)
+void
+vfs_processor_impl::_scan_ntuser_dat_folder (
+    const mobius::core::io::folder &folder
+)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
     mobius::core::io::walker w (folder);
 
-    for (const auto &[name, f] : w.get_files_with_names ())
+    profile p;
+
+    for (const auto &f : w.get_files_by_name ("NTUSER.DAT"))
     {
         try
         {
-            //if (mobius::core::string::startswith (name, "___arestra___"))
-            //    _decode_arestra_file (f);
+            p.add_ntuser_dat_file (f);
         }
         catch (const std::exception &e)
         {
@@ -113,141 +119,84 @@ vfs_processor_impl::_scan_arestra_folder (const mobius::core::io::folder &folder
             );
         }
     }
-}*/
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode ARESTRA file
-// @param f ARESTRA file
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-/*void
-vfs_processor_impl::_decode_arestra_file (const mobius::core::io::file &f)
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Decode file
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    file_arestra arestra (f.new_reader ());
-
-    if (!arestra)
+    if (p)
     {
-        log.info (
-            __LINE__,
-            "File " + f.get_path () + " is not a valid PBTHash.dat file"
-        );
-        return;
+        profiles_.push_back (p);
+        current_profiles_.push (p);
     }
-
-    log.info (__LINE__, "File decoded [___ARESTRA___]. Path: " + f.get_path ());
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Create file object
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    profile::file fobj;
-
-    // set attributes
-    fobj.hash_sha1 = arestra.get_hash_sha1 ();
-    fobj.username = get_username_from_path (f.get_path ());
-    fobj.download_started_time = arestra.get_download_started_time ();
-    fobj.size = arestra.get_file_size ();
-    fobj.arestra_f = f;
-
-    // set filename
-    fobj.filename = mobius::core::io::path (f.get_path ()).get_filename ();
-    fobj.filename.erase (0, 13); // remove "___ARESTRA___"
-
-    // set flags
-    fobj.flag_downloaded = true;
-    fobj.flag_corrupted = arestra.is_corrupted ();
-    fobj.flag_shared = false; // @see thread_share.pas (line 1065)
-    fobj.flag_completed = arestra.is_completed ();
-
-    // add remote_sources
-    for (const auto &[ip, port] : arestra.get_alt_sources ())
-    {
-        profile::remote_source r_source;
-        r_source.timestamp = f.get_modification_time ();
-        r_source.ip = ip;
-        r_source.port = port;
-
-        fobj.remote_sources.push_back (r_source);
-    }
-
-    // set metadata
-    fobj.metadata.set ("arestra_signature", arestra.get_signature ());
-    fobj.metadata.set ("arestra_file_version", arestra.get_version ());
-    fobj.metadata.set (
-        "download_started_time", arestra.get_download_started_time ()
-    );
-    fobj.metadata.set ("downloaded_bytes", arestra.get_progress ());
-    fobj.metadata.set ("verified_bytes", arestra.get_phash_verified ());
-    fobj.metadata.set ("is_paused", arestra.is_paused ());
-    fobj.metadata.set ("media_type", arestra.get_media_type ());
-    fobj.metadata.set ("param1", arestra.get_param1 ());
-    fobj.metadata.set ("param2", arestra.get_param2 ());
-    fobj.metadata.set ("param3", arestra.get_param3 ());
-    fobj.metadata.set ("kwgenre", arestra.get_kw_genre ());
-    fobj.metadata.set ("title", arestra.get_title ());
-    fobj.metadata.set ("artist", arestra.get_artist ());
-    fobj.metadata.set ("album", arestra.get_album ());
-    fobj.metadata.set ("category", arestra.get_category ());
-    fobj.metadata.set ("year", arestra.get_year ());
-    fobj.metadata.set ("language", arestra.get_language ());
-    fobj.metadata.set ("url", arestra.get_url ());
-    fobj.metadata.set ("comment", arestra.get_comment ());
-    fobj.metadata.set ("subfolder", arestra.get_subfolder ());
-
-    files_.push_back (fobj);
 }
-*/
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Scan folder for Gecko based browser profiles
+// @brief Scan folder for profile folders
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_profile_folder (const mobius::core::io::folder &folder)
+vfs_processor_impl::_scan_profile_folder (
+    const mobius::core::io::folder &folder
+)
 {
-/*
-    mobius::core::log log (__FILE__, __FUNCTION__);
+}
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Scan folder
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto w = mobius::core::io::walker (folder);
-    profile p;
-
-    for (const auto &[name, f] : w.get_files_with_names ())
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save application profiles
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_app_profiles ()
+{
+    for (const auto &p : profiles_)
     {
-        try
-        {/*
-            if (name == "shareh.dat")
-                p.add_shareh_file (f);
+        auto e = item_.new_evidence ("app-profile");
 
-            else if (name == "sharel.dat")
-                p.add_sharel_file (f);
+        // Attributes
+        e.set_attribute ("app_id", OS_ID);
+        e.set_attribute ("app_name", OS_NAME);
+        e.set_attribute ("username", p.get_username ());
+        e.set_attribute ("creation_time", p.get_creation_time ());
+        e.set_attribute ("last_modified_time", p.get_last_modified_time ());
+        e.set_attribute ("path", p.get_path ());
 
-            else if (name == "torrenth.dat")
-                p.add_torrenth_file (f);
+        // Metadata
+        auto metadata = mobius::core::pod::map ();
+        metadata.set ("is_active", p.is_active ());
+        metadata.set ("is_deleted", p.is_deleted ());
+        metadata.set ("num_autofill_entries", p.get_autofill_entries_count ());
+        metadata.set (
+            "num_installed_programs", p.get_installed_programs_count ()
+        );
+        e.set_attribute ("metadata", metadata);
 
-            else if (name == "phashidx.dat" || name == "phashidxtemp.dat" ||
-                     name == "tempphash.dat")
-                p.add_phashidx_file (f);
-        }
-        catch (const std::exception &e)
+        // Tags and sources
+        e.set_tag ("os");
+        e.set_tag ("os.win");
+        e.add_source (p.get_folder ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save autofill entries
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_autofills ()
+{
+    for (const auto &p : profiles_)
+    {
+        for (const auto &a : p.get_autofill_entries ())
         {
-            log.warning (
-                __LINE__,
-                std::string (e.what ()) + " (file: " + f.get_path () + ")"
-            );
+            auto e = item_.new_evidence ("autofill");
+
+            e.set_attribute ("field_name", a.field_name);
+            e.set_attribute ("app_name", OS_NAME);
+            e.set_attribute ("app_id", OS_ID);
+            e.set_attribute ("username", p.get_username ());
+            e.set_attribute ("value", a.value);
+            e.set_attribute ("metadata", a.metadata);
+
+            e.set_tag ("os");
+            e.set_tag ("os.win");
+            e.add_source (a.f);
         }
     }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // If we have a new profile, add it to the profiles list
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    if (p)
-        profiles_.push_back (p);*/
 }
 
 } // namespace mobius::extension::os::win

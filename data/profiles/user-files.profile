@@ -10,3 +10,4 @@ app-chromium
 app-gecko
 app-skype
 app-sticky-notes
+os-win

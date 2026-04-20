@@ -21,6 +21,9 @@
 #include <mobius/framework/ant/vfs_processor_impl_base.hpp>
 #include <mobius/framework/case_profile.hpp>
 #include <mobius/framework/model/item.hpp>
+#include <stack>
+#include <vector>
+#include "profile.hpp"
 
 namespace mobius::extension::os::win
 {
@@ -39,13 +42,23 @@ class vfs_processor_impl
         const mobius::framework::model::item &,
         const mobius::framework::case_profile &
     );
-    
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Function prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void on_folder_enter (const mobius::core::io::folder &) final;
     void on_folder_exit (const mobius::core::io::folder &) final;
     void on_complete () final;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Get profiles list
+    // @return Vector of profiles
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<profile>
+    get_profiles () const
+    {
+        return profiles_;
+    }
 
   private:
     // @brief Case item
@@ -58,15 +71,21 @@ class vfs_processor_impl
     // @brief User name
     std::string username_;
 
+    // @brief Profiles list
+    std::vector<profile> profiles_;
+
+    // @brief Current opened profiles
+    std::stack<profile> current_profiles_;
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void _scan_ntuser_dat_folder (const mobius::core::io::folder &);
     void _scan_profile_folder (const mobius::core::io::folder &);
 
-    //void _save_app_profiles ();
-    //void _save_autofills ();
+    void _save_app_profiles ();
+    void _save_autofills ();
     //void _save_bookmarked_urls ();
-
 };
 
 } // namespace mobius::extension::os::win

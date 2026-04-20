@@ -37,6 +37,24 @@ class profile
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Autofill structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct autofill
+    {
+        // Field name (e.g., "username", "password", "credit_card_number")
+        std::string field_name;
+
+        // Value of the autofill entry
+        std::string value;
+
+        // Metadata associated with the autofill entry
+        mobius::core::pod::map metadata;
+
+        // File object
+        mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     profile () = default;
@@ -109,6 +127,26 @@ class profile
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if profile is deleted
+    // @return true/false
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool
+    is_deleted () const
+    {
+        return is_deleted_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if profile is active
+    // @return true/false
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool
+    is_active () const
+    {
+        return is_active_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get installed programs
     // @return Vector of installed programs
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -119,10 +157,39 @@ class profile
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of installed programs
+    // @return Number of installed programs
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    get_installed_programs_count () const
+    {
+        return installed_programs_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get autofill entries
+    // @return Vector of autofill entries
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<autofill>
+    get_autofill_entries () const
+    {
+        return autofill_entries_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of autofill entries
+    // @return Number of autofill entries
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    get_autofill_entries_count () const
+    {
+        return autofill_entries_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void add_ntuser_dat_file (const mobius::core::io::file &);
-    //void add_dcplusplus_xml_file (const mobius::core::io::file &);
 
   private:
     // @brief Folder object
@@ -130,6 +197,15 @@ class profile
 
     // @brief Username
     std::string username_;
+
+    // @brief Is valid flag
+    bool is_valid_ = false;
+
+    // @brief Is deleted flag
+    bool is_deleted_ = false;
+
+    // @brief Is active flag
+    bool is_active_ = false;
 
     // @brief Creation time
     mobius::core::datetime::datetime creation_time_;
@@ -140,21 +216,25 @@ class profile
     // @brief NTUSER.DAT file
     mobius::core::io::file ntuser_dat_file_;
 
+    // @brief Autofill entries
+    std::vector<autofill> autofill_entries_;
+
     // @brief Installed programs
     std::vector<installed_program> installed_programs_;
-
-    // @brief Is valid flag
-    bool is_valid_ = false;
-
-    // @brief Is deleted flag
-    bool is_deleted_ = false;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _set_folder (const mobius::core::io::folder &);
     void _update_mtime (const mobius::core::io::file &);
+
     void _load_installed_programs (
+        const mobius::core::os::win::registry::hive_file &
+    );
+    void _load_search_assist_entries (
+        const mobius::core::os::win::registry::hive_file &
+    );
+    void _load_wordwheel_queries (
         const mobius::core::os::win::registry::hive_file &
     );
 };

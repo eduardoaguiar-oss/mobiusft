@@ -16,11 +16,93 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "common.hpp"
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/core/log.hpp>
 #include <format>
 
 namespace mobius::extension::os::win
 {
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get registry data as string
+// @param key Hive key
+// @param value_name Value name
+// @return Data as string (empty string if value doesn't exist or is not a string)
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+get_data_as_string (
+    const mobius::core::os::win::registry::hive_key &key,
+    const std::string &value_name
+)
+{
+    std::string text;
+
+    if (key)
+    {
+        auto data = key.get_data_by_name (value_name);
+
+        if (data)
+            text = data.get_data_as_string ("utf-16le");
+    }
+
+    return text;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get registry data as string
+// @param data Hive data
+// @param encoding String encoding (e.g. "utf-16le", "utf-8")
+// @return Data as string (empty string if value doesn't exist or is not a string)
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+get_data_as_string (
+    const mobius::core::os::win::registry::hive_data &data,
+    const std::string &encoding
+)
+{
+    std::string text;
+
+    if (data)
+        text = data.get_data ().to_string (encoding);
+
+    return text;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get MRUListEx entries
+// @param key Hive key containing MRUListEx value and MRU values
+// @return Vector of pairs (index, value) sorted by index
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<std::pair<std::size_t, mobius::core::os::win::registry::hive_data>>
+get_mrulistex (const mobius::core::os::win::registry::hive_key &key)
+{
+    if (!key)
+        return {};
+
+    // Get MRUListEx data
+    auto mru_data = key.get_data_by_name ("MRUListEx");
+    if (!mru_data)
+        return {};
+
+    // Parse MRUListEx data as array of int32_t
+    std::vector<
+        std::pair<std::size_t, mobius::core::os::win::registry::hive_data>>
+        entries;
+
+    mobius::core::decoder::data_decoder decoder (mru_data.get_data ());
+
+    while (decoder)
+    {
+        auto idx = decoder.get_int32_le ();
+
+        if (idx != -1)
+            entries.emplace_back (
+                idx, key.get_data_by_name (std::to_string (idx))
+            );
+    }
+
+    return entries;
+}
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Load installed programs from Uninstall hive key
 // @param root_key NTUSER.DAT root key
@@ -146,10 +228,11 @@ get_installed_programs (
                     install_date_data.get_data_as_string ("ascii");
 
                 if (program.install_date.length () == 8)
-                    program.install_date =
-                        std::format ("{}-{}-{}", program.install_date.substr (0, 4),
-                                     program.install_date.substr (4, 2),
-                                     program.install_date.substr (6, 2));
+                    program.install_date = std::format (
+                        "{}-{}-{}", program.install_date.substr (0, 4),
+                        program.install_date.substr (4, 2),
+                        program.install_date.substr (6, 2)
+                    );
             }
 
             else
@@ -166,9 +249,9 @@ get_installed_programs (
         }
 
         programs.push_back (program);
-
-        return programs;
     }
+
+    return programs;
 }
 
 } // namespace mobius::extension::os::win

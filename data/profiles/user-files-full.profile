@@ -16,3 +16,4 @@ app-shareaza
 app-skype
 app-sticky-notes
 app-utorrent
+os-win
