@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/core/os/win/registry/hive_data.hpp>
 #include <mobius/core/os/win/registry/hive_decoder.hpp>
 
@@ -281,7 +282,7 @@ hive_data::get_data_as_dword () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get data as QWORD
+// @brief Get data as QWORD
 // @return qword value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::uint64_t
@@ -306,7 +307,7 @@ hive_data::get_data_as_qword () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief get data as UTF-8 string
+// @brief Get data as UTF-8 string
 // @param encoding data encoding
 // @return string
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -328,6 +329,50 @@ hive_data::get_data_as_string (const std::string &encoding) const
     }
 
     return str;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get data as datetime
+// @return datetime value
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::datetime::datetime
+hive_data::get_data_as_datetime () const
+{
+    if (!impl_->operator bool ())
+        return {};
+
+    mobius::core::datetime::datetime dt;
+
+    auto type = get_type ();
+
+    if (type == data_type::reg_qword ||
+        (type == data_type::reg_binary && get_size () == 8))
+        dt = mobius::core::datetime::new_datetime_from_nt_timestamp (
+            get_data_as_qword ()
+        );
+
+    else if (
+        type == data_type::reg_dword || type == data_type::reg_dword_big_endian
+    )
+        dt = mobius::core::datetime::new_datetime_from_unix_timestamp (
+            get_data_as_dword ()
+        );
+
+    else if (type == data_type::reg_binary && get_size () == 16)
+    {
+        mobius::core::decoder::data_decoder decoder (get_data ());
+        auto y = decoder.get_uint16_le ();
+        auto m = decoder.get_uint16_le ();
+        decoder.skip (2); // skip day of week
+        auto d = decoder.get_uint16_le ();
+        auto hh = decoder.get_uint16_le ();
+        auto mm = decoder.get_uint16_le ();
+        auto ss = decoder.get_uint16_le ();
+
+        dt = mobius::core::datetime::datetime (y, m, d, hh, mm, ss);
+    }
+
+    return dt;
 }
 
 } // namespace mobius::core::os::win::registry

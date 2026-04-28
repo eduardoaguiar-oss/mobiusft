@@ -63,7 +63,10 @@ class hive_key::impl
     // @brief check if object is valid
     // @return true/false
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const { return offset_ != INVALID_OFFSET; }
+    operator bool () const
+    {
+        return offset_ != INVALID_OFFSET;
+    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief get offset
@@ -390,8 +393,9 @@ class hive_key::impl
 // @param reader generic reader
 // @param offset offset in bytes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-hive_key::impl::impl (const mobius::core::io::reader &reader,
-                      offset_type offset)
+hive_key::impl::impl (
+    const mobius::core::io::reader &reader, offset_type offset
+)
     : reader_ (reader),
       offset_ (offset)
 {
@@ -553,7 +557,11 @@ hive_key::hive_key (const mobius::core::io::reader &reader, offset_type offset)
 // @brief check if object is valid
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-hive_key::operator bool () const { return impl_->operator bool (); }
+hive_key::
+operator bool () const
+{
+    return impl_->operator bool ();
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief get offset
@@ -919,6 +927,34 @@ hive_key::get_value_by_name (const std::string &name) const
             return v;
 
     return hive_value ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get value by path
+// @param path value path
+// @return value or empty value, if not found
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+hive_value
+hive_key::get_value_by_path (const std::string &path) const
+{
+    hive_value value;
+
+    std::string::size_type pos = path.rfind ('\\');
+
+    if (pos == std::string::npos)
+        value = get_value_by_name (path);
+
+    else
+    {
+        const std::string key_path = path.substr (0, pos);
+        const std::string value_name = path.substr (pos + 1);
+
+        auto key = get_key_by_path (key_path);
+        if (key)
+            value = key.get_value_by_name (value_name);
+    }
+
+    return value;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

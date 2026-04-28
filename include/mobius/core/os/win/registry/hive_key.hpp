@@ -80,6 +80,7 @@ class hive_key
     std::vector<hive_key> get_keys_by_mask (const std::string &) const;
 
     hive_value get_value_by_name (const std::string &) const;
+    hive_value get_value_by_path (const std::string &) const;
     std::vector<hive_value> get_values_by_mask (const std::string &) const;
 
     hive_data get_data_by_name (const std::string &) const;

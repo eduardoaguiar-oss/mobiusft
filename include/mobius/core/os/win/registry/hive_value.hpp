@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/os/win/registry/hive_data.hpp>
 #include <mobius/core/io/reader.hpp>
+#include <mobius/core/os/win/registry/hive_data.hpp>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -32,38 +32,52 @@ namespace mobius::core::os::win::registry
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class hive_value
 {
-public:
-  // datatypes
-  using offset_type = std::uint32_t;
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Datatypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    using offset_type = std::uint32_t;
 
-  // constructors
-  hive_value ();
-  hive_value (mobius::core::io::reader, offset_type);
-  hive_value (hive_value&&) = default;
-  hive_value (const hive_value&) = default;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    hive_value ();
+    hive_value (mobius::core::io::reader, offset_type);
+    hive_value (hive_value &&) = default;
+    hive_value (const hive_value &) = default;
 
-  // operators
-  hive_value& operator= (const hive_value&) = default;
-  hive_value& operator= (hive_value&&) = default;
-  operator bool () const;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    hive_value &operator= (const hive_value &) = default;
+    hive_value &operator= (hive_value &&) = default;
+    operator bool () const;
 
-  // accessor prototypes
-  offset_type get_offset () const;
-  std::string get_signature () const;
-  std::uint16_t get_flags () const;
-  std::string get_name () const;
-  hive_data get_data () const;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Accessor prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    offset_type get_offset () const;
+    std::string get_signature () const;
+    std::uint16_t get_flags () const;
+    std::string get_name () const;
+    hive_data get_data () const;
 
-private:
-  // @brief implementation class forward declaration
-  class impl;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Data getters
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::uint32_t get_data_as_dword () const;
+    std::uint64_t get_data_as_qword () const;
+    std::string get_data_as_string (const std::string & = "ascii") const;
+    mobius::core::datetime::datetime get_data_as_datetime () const;
 
-  // @brief implementation pointer
-  std::shared_ptr <impl> impl_;
+  private:
+    // @brief implementation class forward declaration
+    class impl;
+
+    // @brief implementation pointer
+    std::shared_ptr<impl> impl_;
 };
 
 } // namespace mobius::core::os::win::registry
 
 #endif
-
-
