@@ -80,6 +80,9 @@ get_mrulistex (const mobius::core::os::win::registry::hive_key &key)
             );
     }
 
+    // MRUListEx is in reverse order, so reverse the vector to get correct order
+    std::reverse (entries.begin (), entries.end ());
+
     return entries;
 }
 
