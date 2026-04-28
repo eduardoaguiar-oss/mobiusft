@@ -139,22 +139,6 @@ class GenericView(object):
     def on_evidence_selection_changed(self, evidence):
         self.__detail_view_selector.set_data(evidence)
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Handle on_report_data event
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def master_view_on_report_data(self, widget):
-        report = pymobius.Data()
-        report.rid = f"bookmark.evidence-{self.__evidence_type}"
-        report.name = self.__evidence_name
-        report.app = f'{EXTENSION_NAME} v{EXTENSION_VERSION}'
-        report.widget = 'custom'
-
-        report.data = pymobius.Data()
-        report.data.evidence_type = self.__evidence_type
-        report.data.uid_list = [item.uid for item in self.__itemlist]
-
-        return report
-
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Master View: table
