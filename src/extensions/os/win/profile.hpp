@@ -147,6 +147,16 @@ class profile
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get profile metadata
+    // @return Profile metadata
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::pod::map
+    get_metadata () const
+    {
+        return metadata_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get installed programs
     // @return Vector of installed programs
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -216,6 +226,9 @@ class profile
     // @brief NTUSER.DAT file
     mobius::core::io::file ntuser_dat_file_;
 
+    // @brief Profile metadata
+    mobius::core::pod::map metadata_;
+
     // @brief Autofill entries
     std::vector<autofill> autofill_entries_;
 
@@ -231,6 +244,7 @@ class profile
     void _load_installed_programs (
         const mobius::core::os::win::registry::hive_file &
     );
+    void _load_metadata (const mobius::core::os::win::registry::hive_file &);
     void _load_search_assist_entries (
         const mobius::core::os::win::registry::hive_file &
     );

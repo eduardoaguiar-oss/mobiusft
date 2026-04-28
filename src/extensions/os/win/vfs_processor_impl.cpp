@@ -157,7 +157,7 @@ vfs_processor_impl::_save_app_profiles ()
         e.set_attribute ("path", p.get_path ());
 
         // Metadata
-        auto metadata = mobius::core::pod::map ();
+        auto metadata = p.get_metadata ().clone ();
         metadata.set ("is_active", p.is_active ());
         metadata.set ("is_deleted", p.is_deleted ());
         metadata.set ("num_autofill_entries", p.get_autofill_entries_count ());

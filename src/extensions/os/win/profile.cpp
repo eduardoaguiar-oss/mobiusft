@@ -104,6 +104,7 @@ profile::add_ntuser_dat_file (const mobius::core::io::file &f)
     autofill_entries_.clear ();
 
     // Load artifacts
+    _load_metadata (hive_file);
     _load_installed_programs (hive_file);
     _load_search_assist_entries (hive_file);
     _load_wordwheel_queries (hive_file);
@@ -123,6 +124,100 @@ profile::add_ntuser_dat_file (const mobius::core::io::file &f)
     // Set profile flags
     is_deleted_ = f.is_deleted ();
     is_valid_ = true;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load metadata from NTUSER.DAT hive file
+// @param hive_file NTUSER.DAT hive file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::_load_metadata (
+    const mobius::core::os::win::registry::hive_file &hive_file
+)
+{
+    mobius::core::log log (__FILE__, __func__);
+
+    try
+    {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Get root key
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto root_key = hive_file.get_root_key ();
+        if (!root_key)
+            return;
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Extract user SID from UserSid value, if it exists
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto user_sid_value = root_key.get_value_by_path (
+            "\\Software\\Microsoft\\Windows\\CurrentVersion\\FileAssociations\\"
+            "UserSid"
+        );
+
+        metadata_.set ("user_sid", user_sid_value.get_data_as_string ("utf-16le"));
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Get current locale
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto locale_value = root_key.get_value_by_path (
+            "Control Panel\\International\\LocaleName"
+        );
+
+        metadata_.set ("locale", locale_value.get_data_as_string ("utf-16le"));
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Get current country
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto country_value = root_key.get_value_by_path (
+            "Control Panel\\International\\Geo\\Name"
+        );
+
+        metadata_.set ("country", country_value.get_data_as_string ("utf-16le"));
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // If LogonStats key exists, extract logon-related metadata
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto logon_stats_key = root_key.get_key_by_path (
+            "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\LogonStats"
+        );
+
+        if (logon_stats_key)
+        {
+            auto first_logon_time_value =
+                logon_stats_key.get_value_by_name ("FirstLogonTime");
+            metadata_.set (
+                "first_logon_time",
+                first_logon_time_value.get_data_as_datetime ()
+            );
+
+            auto first_logon_time_on_current_installation =
+                logon_stats_key.get_value_by_name (
+                    "FirstLogonTimeOnCurrentInstallation"
+                );
+            metadata_.set (
+                "first_logon_time_on_current_installation",
+                first_logon_time_on_current_installation.get_data_as_datetime ()
+            );
+
+            auto last_logon_build_number =
+                logon_stats_key.get_value_by_name ("LastLogonBuildNumber");
+            metadata_.set (
+                "last_logon_build_number",
+                last_logon_build_number.get_data_as_dword ()
+            );
+
+            auto last_logon_build_revision =
+                logon_stats_key.get_value_by_name ("LastLogonBuildRevision");
+            metadata_.set (
+                "last_logon_build_revision",
+                last_logon_build_revision.get_data_as_dword ()
+            );
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

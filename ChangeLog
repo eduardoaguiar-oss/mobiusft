@@ -3,12 +3,18 @@ Mobius Forensic Toolkit 2.26
 	* datasource-viewer: Removed the drag-and-drop (DND) report button from the interface
 	* evidence-viewer: Moved model.py to the pymobius.evidence module
 	* evidence-viewer: Updated the refresh interval for the processing view
+	* evidence-viewer: Removed the drag-and-drop (DND) report button from the interface
 	* iped-frontend: Changed to call service `pf.generate-report`
-	* iped-frontend: Removed resource/html.zip file
 	* iped-frontend: Updated report_view.py to invoke service pf.generate-report in place of the _generate_pf_reports function
 	* iped-frontend: Removed html.zip file from resource
 	* iped-frontend: Added trailing slash to report_path in report_view.py mkisofs command
 	* libmobius_core: Changed hive_data::get_data_as_string to properly handle REG_BINARY values
+	* libmobius_core: Added new method os::win::registry::hive_key::get_data_by_path
+	* libmobius_core: Added new method os::win::registry::hive_value::get_data_as_dword
+	* libmobius_core: Added new method os::win::registry::hive_value::get_data_as_qword
+	* libmobius_core: Added new method os::win::registry::hive_value::get_data_as_string
+	* libmobius_core: Added new method os::win::registry::hive_data::get_data_as_datetime
+	* libmobius_core: Added new method os::win::registry::hive_value::get_data_as_datetime
 	* libmobius_framework: Added new virtual method vfs_processor_impl_base::on_folder_enter
 	* libmobius_framework: Added new virtual method vfs_processor_impl_base::on_folder_exit
 	* pymobius.ant.evidence.vfs.autofill: Removed legacy Windows-specific code
