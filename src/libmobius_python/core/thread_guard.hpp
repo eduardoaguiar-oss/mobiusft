@@ -18,28 +18,27 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/core/thread_guard.hpp>
 #include <Python.h>
 #include <pytypeobject.hpp>
-#include <mobius/core/thread_guard.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
-  PyObject_HEAD
-  mobius::core::thread_guard *obj;
+    PyObject_HEAD // Python object header
+    mobius::core::thread_guard *obj;
 } core_thread_guard_o;
-
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject new_core_thread_guard_type ();
 bool pymobius_core_thread_guard_check (PyObject *);
-PyObject *pymobius_core_thread_guard_to_pyobject (const mobius::core::thread_guard&);
-mobius::core::thread_guard pymobius_core_thread_guard_from_pyobject (PyObject *);
+PyObject *
+pymobius_core_thread_guard_to_pyobject (const mobius::core::thread_guard &);
+mobius::core::thread_guard
+pymobius_core_thread_guard_from_pyobject (PyObject *);
 
 #endif
-
-

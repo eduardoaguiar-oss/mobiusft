@@ -19,6 +19,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
+#include <pytypeobject.hpp>
 #include <mobius/core/extension.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -30,11 +31,10 @@ typedef struct
   mobius::core::extension *obj;
 } core_extension_o;
 
-extern PyTypeObject core_extension_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_core_extension_type ();
 bool pymobius_core_extension_check (PyObject *);
 PyObject *pymobius_core_extension_to_pyobject (const mobius::core::extension&);
 mobius::core::extension pymobius_core_extension_from_pyobject (PyObject *);

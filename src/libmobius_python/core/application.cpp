@@ -24,45 +24,12 @@
 #include <pymobius.hpp>
 #include "core/pod/data.hpp"
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief application: tp_new (default constructor)
-// @param type type object
-// @param args argument list
-// @param kwds keywords dict
-// @return new application object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_new (PyTypeObject *type, PyObject *, PyObject *)
+namespace
 {
-    PyObject *ret = type->tp_alloc (type, 0);
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_application_type = nullptr;
 
-    if (ret)
-    {
-        try
-        {
-            ((core_application_o *) ret)->obj =
-                new mobius::core::application ();
-        }
-        catch (const std::exception &e)
-        {
-            Py_DECREF (ret);
-            mobius::py::set_io_error (e.what ());
-            ret = nullptr;
-        }
-    }
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Application: tp_dealloc
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static void
-tp_dealloc (core_application_o *self)
-{
-    delete self->obj;
-    Py_TYPE (self)->tp_free ((PyObject *) self);
-}
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Application: name getter
@@ -335,56 +302,138 @@ static PyMethodDef tp_methods[] = {
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief application: type structure
+// @brief application: tp_new (default constructor)
+// @param type type object
+// @param args argument list
+// @param kwds keywords dict
+// @return new application object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_application_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.application",                // tp_name
-    sizeof (core_application_o),              // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_vectorcall_offset
-    nullptr,                                  // tp_getattr
-    nullptr,                                  // tp_setattr
-    nullptr,                                  // tp_as_async
-    nullptr,                                  // tp_repr
-    nullptr,                                  // tp_as_number
-    nullptr,                                  // tp_as_sequence
-    nullptr,                                  // tp_as_mapping
-    nullptr,                                  // tp_hash
-    nullptr,                                  // tp_call
-    nullptr,                                  // tp_str
-    nullptr,                                  // tp_getattro
-    nullptr,                                  // tp_setattro
-    nullptr,                                  // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "application class",                      // tp_doc
-    nullptr,                                  // tp_traverse
-    nullptr,                                  // tp_clear
-    nullptr,                                  // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    nullptr,                                  // tp_iter
-    nullptr,                                  // tp_iternext
-    tp_methods,                               // tp_methods
-    nullptr,                                  // tp_members
-    tp_getset,                                // tp_getset
-    nullptr,                                  // tp_base
-    nullptr,                                  // tp_dict
-    nullptr,                                  // tp_descr_get
-    nullptr,                                  // tp_descr_set
-    0,                                        // tp_dictoffset
-    nullptr,                                  // tp_init
-    nullptr,                                  // tp_alloc
-    tp_new,                                   // tp_new
-    nullptr,                                  // tp_free
-    nullptr,                                  // tp_is_gc
-    nullptr,                                  // tp_bases
-    nullptr,                                  // tp_mro
-    nullptr,                                  // tp_cache
-    nullptr,                                  // tp_subclasses
-    nullptr,                                  // tp_weaklist
-    nullptr,                                  // tp_del
-    0,                                        // tp_version_tag
-    nullptr,                                  // tp_finalize
-    nullptr,                                  // tp_vectorcall
+static PyObject *
+tp_new (PyTypeObject *type, PyObject *, PyObject *)
+{
+    core_application_o *ret =
+        reinterpret_cast<core_application_o *> (type->tp_alloc (type, 0));
+
+    if (ret)
+    {
+        try
+        {
+            ret->obj = new mobius::core::application ();
+        }
+        catch (const std::exception &e)
+        {
+            Py_DECREF (ret);
+            mobius::py::set_runtime_error (e.what ());
+            ret = nullptr;
+        }
+    }
+
+    return reinterpret_cast<PyObject *> (ret);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Application: tp_dealloc
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static void
+tp_dealloc (core_application_o *self)
+{
+    delete self->obj;
+    Py_TYPE (self)->tp_free ((PyObject *) self);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_application_slots[] = {
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("Application")},
+    {Py_tp_new, reinterpret_cast<void *> (tp_new)},
+    {Py_tp_getset, reinterpret_cast<void *> (tp_getset)},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_application_spec = {
+    .name = "mobius.core.application",
+    .basicsize = sizeof (core_application_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_application_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.core.application</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_core_application_type ()
+{
+    // If type is already created, return it
+    if (core_application_type)
+        return mobius::py::pytypeobject (core_application_type);
+
+    // Allocate type from spec
+    core_application_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&core_application_spec)
+    );
+
+    // Create type
+    mobius::py::pytypeobject type (core_application_type);
+    type.create ();
+
+    return type;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>application</i>
+// @param value Python value
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+pymobius_core_application_check (PyObject *value)
+{
+    if (!core_application_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("application type is not initialized")
+        );
+
+    return mobius::py::isinstance (value, core_application_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>application</i> Python object from C++ object
+// @param obj C++ object
+// @return New application object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_core_application_to_pyobject (const mobius::core::application &obj)
+{
+    if (!core_application_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("application type is not initialized")
+        );
+
+    return mobius::py::to_pyobject<core_application_o> (
+        obj, core_application_type
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>application</i> C++ object from Python object
+// @param value Python value
+// @return Application object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::application
+pymobius_core_application_from_pyobject (PyObject *value)
+{
+    if (!core_application_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("application type is not initialized")
+        );
+
+    return mobius::py::from_pyobject<core_application_o> (
+        value, core_application_type
+    );
+}

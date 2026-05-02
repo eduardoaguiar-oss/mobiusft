@@ -17,8 +17,12 @@ Mobius Forensic Toolkit 2.26
 	* libmobius_core: Added new method os::win::registry::hive_value::get_data_as_datetime
 	* libmobius_framework: Added new virtual method vfs_processor_impl_base::on_folder_enter
 	* libmobius_framework: Added new virtual method vfs_processor_impl_base::on_folder_exit
-	* libmobius_python: Improved mobius.core.thread_guard class using the PyType_FromSpec API
+	* libmobius_python: Improved mobius.core.application class using the PyType_FromSpec API
+	* libmobius_python: Improved mobius.core.extension class using the PyType_FromSpec API
+	* libmobius_python: Improved mobius.core.log class using the PyType_FromSpec API
+	* libmobius_python: Improved mobius.core.resource class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.core.richtext class using the PyType_FromSpec API
+	* libmobius_python: Improved mobius.core.thread_guard class using the PyType_FromSpec API
 	* pymobius.ant.evidence.vfs.autofill: Removed legacy Windows-specific code
 
 Mobius Forensic Toolkit 2.25

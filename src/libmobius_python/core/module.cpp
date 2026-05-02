@@ -108,10 +108,10 @@ new_core_module ()
     mobius::py::pymodule module (&module_def);
 
     // Add types
-    module.add_type ("application", &core_application_t);
-    module.add_type ("extension", &core_extension_t);
-    module.add_type ("log", &core_log_t);
-    module.add_type ("resource", &core_resource_t);
+    module.add_type ("application", new_core_application_type ());
+    module.add_type ("extension", new_core_extension_type ());
+    module.add_type ("log", new_core_log_type ());
+    module.add_type ("resource", new_core_resource_type ());
     module.add_type ("richtext", new_core_richtext_type ());
     module.add_type ("thread_guard", new_core_thread_guard_type ());
 
