@@ -21,11 +21,19 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "richtext.hpp"
+#include <mobius/core/exception.inc>
 #include <pylist.hpp>
 #include <pymobius.hpp>
 #include <stdexcept>
 #include "pod/data.hpp"
 #include "pod/map.hpp"
+
+namespace
+{
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_richtext_type = nullptr;
+
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>clear</i> method implementation
@@ -795,57 +803,25 @@ tp_dealloc (core_richtext_o *self)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
+// @brief Type Slots
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyTypeObject core_richtext_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.richtext",                   // tp_name
-    sizeof (core_richtext_o),                 // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "RichText class",                         // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    0,                                        // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    tp_new,                                   // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
+static PyType_Slot core_richtext_slots[] = {
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("RichText class")},
+    {Py_tp_new, reinterpret_cast<void *> (tp_new)},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_richtext_spec = {
+    .name = "mobius.core.richtext",
+    .basicsize = sizeof (core_richtext_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_richtext_slots,
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -854,7 +830,17 @@ static PyTypeObject core_richtext_t = {
 mobius::py::pytypeobject
 new_core_richtext_type ()
 {
-    mobius::py::pytypeobject type (&core_richtext_t);
+    // If type is already created, return it
+    if (core_richtext_type)
+        return mobius::py::pytypeobject (core_richtext_type);
+
+    // Allocate type from spec
+    core_richtext_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&core_richtext_spec)
+    );
+
+    // Create type
+    mobius::py::pytypeobject type (core_richtext_type);
     type.create ();
 
     return type;
@@ -868,7 +854,12 @@ new_core_richtext_type ()
 bool
 pymobius_core_richtext_check (PyObject *value)
 {
-    return mobius::py::isinstance (value, &core_richtext_t);
+    if (!core_richtext_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("richtext type is not initialized")
+         );
+
+    return mobius::py::isinstance (value, core_richtext_type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -877,11 +868,14 @@ pymobius_core_richtext_check (PyObject *value)
 // @return New richtext object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_core_richtext_to_pyobject (const mobius::core::richtext &obj)
+pymobius_core_richtext_to_pyobject (const mobius::core::richtext& obj)
 {
-    return mobius::py::to_pyobject<core_richtext_o> (
-        obj, &core_richtext_t
-    );
+    if (!core_richtext_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("richtext type is not initialized")
+         );
+
+    return mobius::py::to_pyobject_nullable <core_richtext_o> (obj, core_richtext_type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -892,7 +886,12 @@ pymobius_core_richtext_to_pyobject (const mobius::core::richtext &obj)
 mobius::core::richtext
 pymobius_core_richtext_from_pyobject (PyObject *value)
 {
-    return mobius::py::from_pyobject<core_richtext_o> (value, &core_richtext_t);
+    if (!core_richtext_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("richtext type is not initialized")
+         );
+
+    return mobius::py::from_pyobject <core_richtext_o> (value, core_richtext_type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
