@@ -26,7 +26,6 @@ from . import autofill
 from . import bookmarked_urls
 from . import cookies
 from . import installed_programs
-from . import opened_files
 from . import received_files
 from . import trash_can_entries
 from . import visited_urls
@@ -50,7 +49,6 @@ ANTS = [
     bookmarked_urls.Ant,
     cookies.Ant,
     installed_programs.Ant,
-    opened_files.Ant,
     received_files.Ant,
     trash_can_entries.Ant,
     visited_urls.Ant,
