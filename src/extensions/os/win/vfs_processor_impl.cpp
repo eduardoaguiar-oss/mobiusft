@@ -64,9 +64,8 @@ vfs_processor_impl::vfs_processor_impl (
 void
 vfs_processor_impl::on_folder_enter (const mobius::core::io::folder &folder)
 {
-    //_scan_root_folder (folder);
-    //_scan_arestra_folder (folder);
     _scan_ntuser_dat_folder (folder);
+    _scan_recent_folder (folder);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -76,9 +75,14 @@ vfs_processor_impl::on_folder_enter (const mobius::core::io::folder &folder)
 void
 vfs_processor_impl::on_folder_exit (const mobius::core::io::folder &folder)
 {
-    if (!current_profiles_.empty () &&
-        folder == current_profiles_.top ().get_folder ())
-        current_profiles_.pop ();
+    if (!current_profiles_.empty ())
+    {
+        auto current_profile_folder = current_profiles_.top ().get_folder ();
+
+        if (current_profile_folder.get_path () == folder.get_path () &&
+            current_profile_folder.get_inode () == folder.get_inode ())
+            current_profiles_.pop ();
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -89,6 +93,7 @@ vfs_processor_impl::on_complete ()
 {
     _save_app_profiles ();
     _save_autofills ();
+    _save_opened_files ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -128,14 +133,33 @@ vfs_processor_impl::_scan_ntuser_dat_folder (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Scan folder for profile folders
+// @brief Scan recent folder
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_profile_folder (
-    const mobius::core::io::folder &folder
-)
+vfs_processor_impl::_scan_recent_folder (const mobius::core::io::folder &folder)
 {
+    if (folder.get_name () != "Recent")
+        return;
+
+    mobius::core::log log (__FILE__, __FUNCTION__);
+    mobius::core::io::walker w (folder);
+
+    for (const auto &f : w.get_files_by_pattern ("*.lnk"))
+    {
+        try
+        {
+            if (!current_profiles_.empty ())
+                current_profiles_.top ().add_recent_lnk_file (f);
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (
+                __LINE__,
+                std::string (e.what ()) + " (file: " + f.get_path () + ")"
+            );
+        }
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -164,6 +188,7 @@ vfs_processor_impl::_save_app_profiles ()
         metadata.set (
             "num_installed_programs", p.get_installed_programs_count ()
         );
+        metadata.set ("num_opened_files", p.get_opened_files_count ());
         e.set_attribute ("metadata", metadata);
 
         // Tags and sources
@@ -195,6 +220,32 @@ vfs_processor_impl::_save_autofills ()
             e.set_tag ("os");
             e.set_tag ("os.win");
             e.add_source (a.f);
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save opened files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+vfs_processor_impl::_save_opened_files ()
+{
+    for (const auto &p : profiles_)
+    {
+        for (const auto &of : p.get_opened_files ())
+        {
+            auto e = item_.new_evidence ("opened-file");
+
+            e.set_attribute ("timestamp", of.timestamp);
+            e.set_attribute ("path", of.path);
+            e.set_attribute ("username", p.get_username ());
+            e.set_attribute ("app_id", OS_ID);
+            e.set_attribute ("app_name", OS_NAME);
+            e.set_attribute ("metadata", of.metadata);
+
+            e.set_tag ("os");
+            e.set_tag ("os.win");
+            e.add_source (of.f);
         }
     }
 }

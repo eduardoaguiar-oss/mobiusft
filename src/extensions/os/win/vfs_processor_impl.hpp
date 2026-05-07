@@ -81,11 +81,11 @@ class vfs_processor_impl
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _scan_ntuser_dat_folder (const mobius::core::io::folder &);
-    void _scan_profile_folder (const mobius::core::io::folder &);
+    void _scan_recent_folder (const mobius::core::io::folder &);
 
     void _save_app_profiles ();
     void _save_autofills ();
-    //void _save_bookmarked_urls ();
+    void _save_opened_files ();
 };
 
 } // namespace mobius::extension::os::win

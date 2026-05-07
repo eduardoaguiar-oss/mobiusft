@@ -23,6 +23,7 @@
 #include <mobius/core/io/folder.hpp>
 #include <mobius/core/os/win/registry/hive_file.hpp>
 #include <mobius/core/pod/map.hpp>
+#include <memory>
 #include <string>
 #include <vector>
 #include "common.hpp"
@@ -55,9 +56,27 @@ class profile
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Opened file structure
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct opened_file
+    {
+        // Timestamp
+        mobius::core::datetime::datetime timestamp;
+
+        // Path of the opened file
+        std::string path;
+
+        // Metadata associated with the opened file
+        mobius::core::pod::map metadata;
+
+        // File object
+        mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    profile () = default;
+    profile ();
     profile (const profile &) noexcept = default;
     profile (profile &&) noexcept = default;
 
@@ -66,142 +85,35 @@ class profile
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     profile &operator= (const profile &) noexcept = default;
     profile &operator= (profile &&) noexcept = default;
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Check if profile is valid
-    // @return true/false
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    operator bool () const noexcept
-    {
-        return is_valid_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get username
-    // @return username
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::string
-    get_username () const
-    {
-        return username_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get folder
-    // @return Folder object
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::core::io::folder
-    get_folder () const
-    {
-        return folder_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get path to profile
-    // @return Path to profile
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::string
-    get_path () const
-    {
-        return (folder_) ? folder_.get_path () : "";
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get creation time
-    // @return Creation time
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::core::datetime::datetime
-    get_creation_time () const
-    {
-        return creation_time_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get last modified time
-    // @return Last modified time
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::core::datetime::datetime
-    get_last_modified_time () const
-    {
-        return last_modified_time_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Check if profile is deleted
-    // @return true/false
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    bool
-    is_deleted () const
-    {
-        return is_deleted_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Check if profile is active
-    // @return true/false
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    bool
-    is_active () const
-    {
-        return is_active_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get profile metadata
-    // @return Profile metadata
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::core::pod::map
-    get_metadata () const
-    {
-        return metadata_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get installed programs
-    // @return Vector of installed programs
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector<installed_program>
-    get_installed_programs () const
-    {
-        return installed_programs_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get number of installed programs
-    // @return Number of installed programs
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::size_t
-    get_installed_programs_count () const
-    {
-        return installed_programs_.size ();
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get autofill entries
-    // @return Vector of autofill entries
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector<autofill>
-    get_autofill_entries () const
-    {
-        return autofill_entries_;
-    }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get number of autofill entries
-    // @return Number of autofill entries
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::size_t
-    get_autofill_entries_count () const
-    {
-        return autofill_entries_.size ();
-    }
+    operator bool () const noexcept;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool is_active () const;
+    bool is_deleted () const;
+    std::string get_username () const;
+    mobius::core::io::folder get_folder () const;
+    std::string get_path () const;
+    mobius::core::datetime::datetime get_creation_time () const;
+    mobius::core::datetime::datetime get_last_modified_time () const;
+    mobius::core::pod::map get_metadata () const;
+    std::vector<installed_program> get_installed_programs () const;
+    std::size_t get_installed_programs_count () const;
+    std::vector<autofill> get_autofill_entries () const;
+    std::size_t get_autofill_entries_count () const;
+    std::vector<opened_file> get_opened_files () const;
+    std::size_t get_opened_files_count () const;
     void add_ntuser_dat_file (const mobius::core::io::file &);
+    void add_recent_lnk_file (const mobius::core::io::file &);
 
   private:
+    // Implementation class forward declaration
+    class impl;
+
+    // Implementation pointer
+    std::shared_ptr<impl> impl_;
+
     // @brief Folder object
     mobius::core::io::folder folder_;
 
@@ -234,6 +146,9 @@ class profile
 
     // @brief Installed programs
     std::vector<installed_program> installed_programs_;
+
+    // @brief Opened files
+    std::vector<opened_file> opened_files_;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions

@@ -16,12 +16,16 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "profile.hpp"
+#include <mobius/core/decoder/lnk.hpp>
+#include <mobius/core/io/path.hpp>
+#include <mobius/core/io/walker.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/mediator.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <mobius/framework/utils.hpp>
 #include <format>
 #include <unordered_map>
+#include <set>
 #include <string>
 
 namespace
@@ -41,11 +45,240 @@ const std::unordered_map<std::string, std::string> SEARCH_ASSIST_FIELDS = {
 namespace mobius::extension::os::win
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Profile implementation class
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+class profile::impl
+{
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl () = default;
+    impl (const impl &) noexcept = delete;
+    impl (impl &&) noexcept = delete;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl &operator= (const impl &) noexcept = delete;
+    impl &operator= (impl &&) noexcept = delete;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if profile is valid
+    // @return true/false
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    operator bool () const noexcept
+    {
+        return is_valid_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get username
+    // @return username
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_username () const
+    {
+        return username_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get folder
+    // @return Folder object
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::io::folder
+    get_folder () const
+    {
+        return folder_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get path to profile
+    // @return Path to profile
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_path () const
+    {
+        return (folder_) ? folder_.get_path () : "";
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get creation time
+    // @return Creation time
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::datetime::datetime
+    get_creation_time () const
+    {
+        return creation_time_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get last modified time
+    // @return Last modified time
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::datetime::datetime
+    get_last_modified_time () const
+    {
+        return last_modified_time_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if profile is deleted
+    // @return true/false
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool
+    is_deleted () const
+    {
+        return is_deleted_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if profile is active
+    // @return true/false
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool
+    is_active () const
+    {
+        return is_active_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get profile metadata
+    // @return Profile metadata
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::pod::map
+    get_metadata () const
+    {
+        return metadata_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get installed programs
+    // @return Vector of installed programs
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<installed_program>
+    get_installed_programs () const
+    {
+        return installed_programs_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of installed programs
+    // @return Number of installed programs
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    get_installed_programs_count () const
+    {
+        return installed_programs_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get autofill entries
+    // @return Vector of autofill entries
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<autofill>
+    get_autofill_entries () const
+    {
+        return autofill_entries_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of autofill entries
+    // @return Number of autofill entries
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    get_autofill_entries_count () const
+    {
+        return autofill_entries_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get opened files
+    // @return Vector of opened files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<opened_file>
+    get_opened_files () const
+    {
+        return opened_files_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of opened files
+    // @return Number of opened files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    get_opened_files_count () const
+    {
+        return opened_files_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void add_ntuser_dat_file (const mobius::core::io::file &);
+    void add_recent_lnk_file (const mobius::core::io::file &);
+
+  private:
+    // @brief Folder object
+    mobius::core::io::folder folder_;
+
+    // @brief Username
+    std::string username_;
+
+    // @brief Is valid flag
+    bool is_valid_ = false;
+
+    // @brief Is deleted flag
+    bool is_deleted_ = false;
+
+    // @brief Is active flag
+    bool is_active_ = false;
+
+    // @brief Creation time
+    mobius::core::datetime::datetime creation_time_;
+
+    // @brief Last modified time
+    mobius::core::datetime::datetime last_modified_time_;
+
+    // @brief NTUSER.DAT file
+    mobius::core::io::file ntuser_dat_file_;
+
+    // @brief Profile metadata
+    mobius::core::pod::map metadata_;
+
+    // @brief Autofill entries
+    std::vector<autofill> autofill_entries_;
+
+    // @brief Installed programs
+    std::vector<installed_program> installed_programs_;
+
+    // @brief Opened files
+    std::vector<opened_file> opened_files_;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Helper functions
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void _set_folder (const mobius::core::io::folder &);
+    void _update_mtime (const mobius::core::io::file &);
+
+    void _load_installed_programs (
+        const mobius::core::os::win::registry::hive_file &
+    );
+    void _load_metadata (const mobius::core::os::win::registry::hive_file &);
+    void _load_search_assist_entries (
+        const mobius::core::os::win::registry::hive_file &
+    );
+    void _load_wordwheel_queries (
+        const mobius::core::os::win::registry::hive_file &
+    );
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Set folder
 // @param f Folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::_set_folder (const mobius::core::io::folder &f)
+profile::impl::_set_folder (const mobius::core::io::folder &f)
 {
     if (folder_ || !f)
         return;
@@ -69,7 +302,7 @@ profile::_set_folder (const mobius::core::io::folder &f)
 // @param f File
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::_update_mtime (const mobius::core::io::file &f)
+profile::impl::_update_mtime (const mobius::core::io::file &f)
 {
     if (!f)
         return;
@@ -84,7 +317,7 @@ profile::_update_mtime (const mobius::core::io::file &f)
 // @param file NTUSER.DAT file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::add_ntuser_dat_file (const mobius::core::io::file &f)
+profile::impl::add_ntuser_dat_file (const mobius::core::io::file &f)
 {
     // Check if it is a valid NTUSER.DAT file
     if (!f || f.get_size () == 0)
@@ -124,6 +357,10 @@ profile::add_ntuser_dat_file (const mobius::core::io::file &f)
     // Set profile flags
     is_deleted_ = f.is_deleted ();
     is_valid_ = true;
+
+    // Write info to log
+    mobius::core::log log (__FILE__, __func__);
+    log.info (__LINE__, "File decoded [NTUSER.DAT]: " + f.get_path ());
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -131,7 +368,7 @@ profile::add_ntuser_dat_file (const mobius::core::io::file &f)
 // @param hive_file NTUSER.DAT hive file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::_load_metadata (
+profile::impl::_load_metadata (
     const mobius::core::os::win::registry::hive_file &hive_file
 )
 {
@@ -154,7 +391,9 @@ profile::_load_metadata (
             "UserSid"
         );
 
-        metadata_.set ("user_sid", user_sid_value.get_data_as_string ("utf-16le"));
+        metadata_.set (
+            "user_sid", user_sid_value.get_data_as_string ("utf-16le")
+        );
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Get current locale
@@ -172,7 +411,9 @@ profile::_load_metadata (
             "Control Panel\\International\\Geo\\Name"
         );
 
-        metadata_.set ("country", country_value.get_data_as_string ("utf-16le"));
+        metadata_.set (
+            "country", country_value.get_data_as_string ("utf-16le")
+        );
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // If LogonStats key exists, extract logon-related metadata
@@ -226,7 +467,7 @@ profile::_load_metadata (
 // @see Forensic Analysis of the Windows Registry, by Lih Wern Wong, p.8
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::_load_installed_programs (
+profile::impl::_load_installed_programs (
     const mobius::core::os::win::registry::hive_file &hive_file
 )
 {
@@ -268,7 +509,7 @@ profile::_load_installed_programs (
 // @param hive_file NTUSER.DAT hive file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::_load_search_assist_entries (
+profile::impl::_load_search_assist_entries (
     const mobius::core::os::win::registry::hive_file &hive_file
 )
 {
@@ -338,7 +579,7 @@ profile::_load_search_assist_entries (
 // @param hive_file NTUSER.DAT hive file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::_load_wordwheel_queries (
+profile::impl::_load_wordwheel_queries (
     const mobius::core::os::win::registry::hive_file &hive_file
 )
 {
@@ -380,6 +621,263 @@ profile::_load_wordwheel_queries (
     {
         log.warning (__LINE__, e.what ());
     }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add recent file
+// @param file Recent file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::add_recent_lnk_file (const mobius::core::io::file &f)
+{
+    // Get reader
+    if (!f || f.is_deleted () || f.get_size () < 0x4c)
+        return;
+
+    auto reader = f.new_reader ();
+    if (!reader)
+        return;
+
+    // Decode file as LNK file
+    auto lnkfile = mobius::core::decoder::lnk (f.new_reader ());
+    auto local_base_path = lnkfile.get_local_base_path ();
+
+    if (local_base_path.empty ())
+        return;
+
+    // If file's creation time is different, we have two separated events
+    std::set<mobius::core::datetime::datetime> timestamps;
+
+    auto creation_time = f.get_creation_time ();
+
+    if (creation_time)
+        timestamps.insert (creation_time);
+
+    auto modification_time = f.get_modification_time ();
+
+    if (modification_time)
+        timestamps.insert (modification_time);
+
+    // Create an opened_file entry for each different timestamp
+    for (const auto &timestamp : timestamps)
+    {
+        opened_file entry;
+        entry.timestamp = timestamp;
+        entry.path = local_base_path;
+        entry.f = f;
+
+        // If the LNK file has a common path suffix, append it to the path.
+        // This is because some LNK files (e.g. from Quick Access) only store the filename in the local
+        auto common_path_suffix = lnkfile.get_common_path_suffix ();
+
+        if (!common_path_suffix.empty ())
+        {
+            if (!entry.path.ends_with ('\\'))
+                entry.path += '\\';
+            entry.path += common_path_suffix;
+        }
+
+        // Set metadata
+        entry.metadata.set (
+            "lnk-path", mobius::core::io::to_win_path (f.get_path ())
+        );
+        entry.metadata.set (
+            "target-creation-time", lnkfile.get_creation_time ()
+        );
+        entry.metadata.set ("target-access-time", lnkfile.get_access_time ());
+        entry.metadata.set ("target-write-time", lnkfile.get_write_time ());
+        entry.metadata.set ("target-size", lnkfile.get_file_size ());
+        entry.metadata.set ("netbios-name", lnkfile.get_netbios_name ());
+        entry.metadata.set (
+            "drive-serial-number",
+            std::format ("0x{:08x}", lnkfile.get_drive_serial_number ())
+        );
+        entry.metadata.set ("relative-path", lnkfile.get_relative_path ());
+
+        // Add entry to opened files
+        opened_files_.push_back (entry);
+    }
+
+    mobius::core::log log (__FILE__, __func__);
+    log.info (__LINE__, "File decoded [Recent .lnk]: " + f.get_path ());
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Constructor
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+profile::profile ()
+    : impl_ (std::make_shared<impl> ())
+{
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if profile is valid
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+profile::
+operator bool () const noexcept
+{
+    return impl_->operator bool ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get username
+// @return username
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+profile::get_username () const
+{
+    return impl_->get_username ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get folder
+// @return Folder object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::io::folder
+profile::get_folder () const
+{
+    return impl_->get_folder ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get path to profile
+// @return Path to profile
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+profile::get_path () const
+{
+    return impl_->get_path ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get creation time
+// @return Creation time
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::datetime::datetime
+profile::get_creation_time () const
+{
+    return impl_->get_creation_time ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get last modified time
+// @return Last modified time
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::datetime::datetime
+profile::get_last_modified_time () const
+{
+    return impl_->get_last_modified_time ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if profile is deleted
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+profile::is_deleted () const
+{
+    return impl_->is_deleted ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if profile is active
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+profile::is_active () const
+{
+    return impl_->is_active ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get profile metadata
+// @return Profile metadata
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::pod::map
+profile::get_metadata () const
+{
+    return impl_->get_metadata ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get installed programs
+// @return Vector of installed programs
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<installed_program>
+profile::get_installed_programs () const
+{
+    return impl_->get_installed_programs ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get number of installed programs
+// @return Number of installed programs
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::size_t
+profile::get_installed_programs_count () const
+{
+    return impl_->get_installed_programs_count ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get autofill entries
+// @return Vector of autofill entries
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<profile::autofill>
+profile::get_autofill_entries () const
+{
+    return impl_->get_autofill_entries ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get number of autofill entries
+// @return Number of autofill entries
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::size_t
+profile::get_autofill_entries_count () const
+{
+    return impl_->get_autofill_entries_count ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get opened files
+// @return Vector of opened files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<profile::opened_file>
+profile::get_opened_files () const
+{
+    return impl_->get_opened_files ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get number of opened files
+// @return Number of opened files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::size_t
+profile::get_opened_files_count () const
+{
+    return impl_->get_opened_files_count ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add NTUSER.DAT file
+// @param file NTUSER.DAT file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_ntuser_dat_file (const mobius::core::io::file &f)
+{
+    impl_->add_ntuser_dat_file (f);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add recent file
+// @param file Recent file
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_recent_lnk_file (const mobius::core::io::file &f)
+{
+    impl_->add_recent_lnk_file (f);
 }
 
 } // namespace mobius::extension::os::win
