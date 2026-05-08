@@ -12,6 +12,7 @@ app-dcpp
 app-emule
 app-emuletorrent
 app-gecko
+app-itubego
 app-skype
 app-shareaza
 app-sticky-notes

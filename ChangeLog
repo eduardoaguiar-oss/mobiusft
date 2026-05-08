@@ -1,5 +1,6 @@
 Mobius Forensic Toolkit 2.26
 	* Added new C++ extension called `os-win`
+	* Added new C++ extension called `app-itubego`
 	* datasource-viewer: Removed the drag-and-drop (DND) report button from the interface
 	* evidence-viewer: Moved model.py to the pymobius.evidence module
 	* evidence-viewer: Updated the refresh interval for the processing view
@@ -23,8 +24,10 @@ Mobius Forensic Toolkit 2.26
 	* libmobius_python: Improved mobius.core.resource class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.core.richtext class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.core.thread_guard class using the PyType_FromSpec API
-	* pymobius.ant.evidence.vfs.autofill: Removed legacy Windows-specific code
+	* pymobius.ant.evidence.vfs.autofill: Removed legacy module
 	* pymobius.ant.evidence.vfs.opened_files: Removed legacy module
+	* pymobius.ant.evidence.vfs.received_files: Removed legacy module
+	* pymobius.app.itubego: Removed legacy module
 
 Mobius Forensic Toolkit 2.25
 	* Added new C++ extension called `vfs-block-apfs`
