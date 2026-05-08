@@ -22,11 +22,9 @@ import mobius.framework
 import pymobius.ant.turing
 
 from . import accounts
-from . import autofill
 from . import bookmarked_urls
 from . import cookies
 from . import installed_programs
-from . import received_files
 from . import trash_can_entries
 from . import visited_urls
 from . import wireless_connections
@@ -45,11 +43,9 @@ ANT_VERSION = '1.1'
 ANTS = [
     pymobius.ant.turing.Ant,
     accounts.Ant,
-    autofill.Ant,
     bookmarked_urls.Ant,
     cookies.Ant,
     installed_programs.Ant,
-    received_files.Ant,
     trash_can_entries.Ant,
     visited_urls.Ant,
     wireless_connections.Ant,
