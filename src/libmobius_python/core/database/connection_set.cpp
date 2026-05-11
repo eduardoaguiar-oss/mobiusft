@@ -20,28 +20,18 @@
 // @file connection_set.cc C++ API <i>mobius.core.database.connection_set</i> class wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <pymobius.hpp>
 #include "connection_set.hpp"
+#include <mobius/core/exception.inc>
+#include <pymobius.hpp>
+#include <stdexcept>
 #include "connection.hpp"
-#include "module.hpp"
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief create <i>connection_set</i> Python object from C++ object
-// @param obj C++ object
-// @return New connection_set object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_core_database_connection_set_to_pyobject (
-  const mobius::core::database::connection_set& obj
-)
+namespace
 {
-  PyObject *ret = _PyObject_New (&core_database_connection_set_t);
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_database_connection_set_type = nullptr;
 
-  if (ret)
-    ((core_database_connection_set_o *) ret)->obj = new mobius::core::database::connection_set (obj);
-
-  return ret;
-}
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>add</i> method implementation
@@ -51,33 +41,35 @@ pymobius_core_database_connection_set_to_pyobject (
 static PyObject *
 tp_f_add (core_database_connection_set_o *self, PyObject *args)
 {
-  // parse input args
-  mobius::core::database::connection arg_connection;
+    // parse input args
+    mobius::core::database::connection arg_connection;
 
-  try
+    try
     {
-      arg_connection = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_database_connection_from_pyobject);
+        arg_connection = mobius::py::get_arg_as_cpp (
+            args, 0, pymobius_core_database_connection_from_pyobject
+        );
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_invalid_type_error (e.what ());
-      return nullptr;
-    }
-
-  // execute C++ code
-  PyObject *ret = nullptr;
-
-  try
-    {
-      self->obj->add (arg_connection);
-      ret = mobius::py::pynone ();
-    }
-  catch (const std::exception& e)
-    {
-      mobius::py::set_runtime_error (e.what ());
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
     }
 
-  return ret;
+    // execute C++ code
+    PyObject *ret = nullptr;
+
+    try
+    {
+        self->obj->add (arg_connection);
+        ret = mobius::py::pynone ();
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -88,40 +80,29 @@ tp_f_add (core_database_connection_set_o *self, PyObject *args)
 static PyObject *
 tp_f_release (core_database_connection_set_o *self, PyObject *)
 {
-  // execute C++ code
-  PyObject *ret = nullptr;
+    // execute C++ code
+    PyObject *ret = nullptr;
 
-  try
+    try
     {
-      self->obj->release ();
-      ret = mobius::py::pynone ();
+        self->obj->release ();
+        ret = mobius::py::pynone ();
     }
-  catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-      mobius::py::set_runtime_error (e.what ());
+        mobius::py::set_runtime_error (e.what ());
     }
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyMethodDef tp_methods[] =
-{
-  {
-    (char *) "add",
-    (PyCFunction) tp_f_add,
-    METH_VARARGS,
-    "Add connection"
-  },
-  {
-    (char *) "release",
-    (PyCFunction) tp_f_release,
-    METH_VARARGS,
-    "Release connections"
-  },
-  {nullptr, nullptr, 0, nullptr} // sentinel
+static PyMethodDef tp_methods[] = {
+    {"add", (PyCFunction) tp_f_add, METH_VARARGS, "Add connection"},
+    {"release", (PyCFunction) tp_f_release, METH_VARARGS, "Release connection"},
+    {nullptr, nullptr, 0, nullptr}, // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -131,63 +112,103 @@ static PyMethodDef tp_methods[] =
 static void
 tp_dealloc (core_database_connection_set_o *self)
 {
-  delete self->obj;
-  Py_TYPE (self)->tp_free ((PyObject*) self);
+    delete self->obj;
+    Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_database_connection_set_t =
-{
-  PyVarObject_HEAD_INIT (nullptr, 0)                    // header
-  "mobius.core.database.connection_set",            		// tp_name
-  sizeof (core_database_connection_set_o),          		// tp_basicsize
-  0,                                       		// tp_itemsize
-  (destructor) tp_dealloc,                 		// tp_dealloc
-  0,                                       		// tp_print
-  0,                                       		// tp_getattr
-  0,                                       		// tp_setattr
-  0,                                       		// tp_compare
-  0,                                       		// tp_repr
-  0,                                       		// tp_as_number
-  0,                                       		// tp_as_sequence
-  0,                                       		// tp_as_mapping
-  0,                                       		// tp_hash
-  0,                                       		// tp_call
-  0,                                       		// tp_str
-  0,                                       		// tp_getattro
-  0,                                       		// tp_setattro
-  0,                                       		// tp_as_buffer
-  Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,		// tp_flags
-  "database connection_set class",             		// tp_doc
-  0,                                       		// tp_traverse
-  0,                                       		// tp_clear
-  0,                                       		// tp_richcompare
-  0,                                       		// tp_weaklistoffset
-  0,                                       		// tp_iter
-  0,                                       		// tp_iternext
-  tp_methods,                                       		// tp_methods
-  0,                                       		// tp_members
-  0,                                       		// tp_getset
-  0,                                       		// tp_base
-  0,                                       		// tp_dict
-  0,                                       		// tp_descr_get
-  0,                                       		// tp_descr_set
-  0,                                       		// tp_dictoffset
-  0,                                       		// tp_init
-  0,                                       		// tp_alloc
-  0,                                  			// tp_new
-  0,                                       		// tp_free
-  0,                                       		// tp_is_gc
-  0,                                       		// tp_bases
-  0,                                       		// tp_mro
-  0,                                       		// tp_cache
-  0,                                       		// tp_subclasses
-  0,                                       		// tp_weaklist
-  0,                                       		// tp_del
-  0,                                       		// tp_version_tag
-  0,                                       		// tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_database_connection_set_slots[] = {
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("database connection set class")},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_database_connection_set_spec = {
+    .name = "mobius.core.database.connection_set",
+    .basicsize = sizeof (core_database_connection_set_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_database_connection_set_slots,
+};
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.core.database.connection_set</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_core_database_connection_set_type ()
+{
+    // If type is already created, return it
+    if (core_database_connection_set_type)
+        return mobius::py::pytypeobject (core_database_connection_set_type);
+
+    // Allocate type from spec
+    core_database_connection_set_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&core_database_connection_set_spec)
+    );
+
+    // Create type
+    mobius::py::pytypeobject type (core_database_connection_set_type);
+    type.create ();
+
+    return type;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>connection_set</i>
+// @param value Python value
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+pymobius_core_database_connection_set_check (PyObject *value)
+{
+    if (!core_database_connection_set_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("connection_set type is not initialized")
+        );
+
+    return mobius::py::isinstance (value, core_database_connection_set_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>connection_set</i> Python object from C++ object
+// @param obj C++ object
+// @return New connection_set object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_core_database_connection_set_to_pyobject (
+    const mobius::core::database::connection_set &obj
+)
+{
+    if (!core_database_connection_set_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("connection_set type is not initialized")
+        );
+
+    return mobius::py::to_pyobject<core_database_connection_set_o> (
+        obj, core_database_connection_set_type
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>connection_set</i> C++ object from Python object
+// @param value Python value
+// @return Connection_set object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::database::connection_set
+pymobius_core_database_connection_set_from_pyobject (PyObject *value)
+{
+    if (!core_database_connection_set_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("connection_set type is not initialized")
+        );
+
+    return mobius::py::from_pyobject<core_database_connection_set_o> (
+        value, core_database_connection_set_type
+    );
+}

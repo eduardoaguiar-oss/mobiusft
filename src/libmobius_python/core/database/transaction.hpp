@@ -18,25 +18,27 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
 #include <mobius/core/database/transaction.hpp>
+#include <Python.h>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
-  PyObject_HEAD
-  mobius::core::database::transaction *obj;
+    PyObject_HEAD mobius::core::database::transaction *obj;
 } core_database_transaction_o;
-
-extern PyTypeObject core_database_transaction_t;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *pymobius_core_database_transaction_to_pyobject (mobius::core::database::transaction);
+mobius::py::pytypeobject new_core_database_transaction_type ();
+bool pymobius_core_database_transaction_check (PyObject *);
+PyObject *pymobius_core_database_transaction_to_pyobject (
+    const mobius::core::database::transaction &
+);
+mobius::core::database::transaction
+pymobius_core_database_transaction_from_pyobject (PyObject *);
 
 #endif
-
-

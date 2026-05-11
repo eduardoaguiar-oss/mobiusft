@@ -18,27 +18,27 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
 #include <mobius/core/database/connection.hpp>
+#include <Python.h>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
-  PyObject_HEAD
-  mobius::core::database::connection *obj;
+    PyObject_HEAD mobius::core::database::connection *obj;
 } core_database_connection_o;
-
-extern PyTypeObject core_database_connection_t;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_core_database_connection_type ();
 bool pymobius_core_database_connection_check (PyObject *);
-PyObject *pymobius_core_database_connection_to_pyobject (const mobius::core::database::connection&);
-mobius::core::database::connection pymobius_core_database_connection_from_pyobject (PyObject *);
+PyObject *pymobius_core_database_connection_to_pyobject (
+    const mobius::core::database::connection &
+);
+mobius::core::database::connection
+pymobius_core_database_connection_from_pyobject (PyObject *);
 
 #endif
-
-

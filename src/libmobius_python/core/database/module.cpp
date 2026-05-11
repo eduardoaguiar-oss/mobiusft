@@ -31,17 +31,16 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Module definition structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyModuleDef module_def =
-{
-  PyModuleDef_HEAD_INIT,
-  "mobius.core.database",
-  "Mobius Forensic Toolkit mobius.core.database module",
-  -1,
-  nullptr,
-  nullptr,
-  nullptr,
-  nullptr,
-  nullptr
+static PyModuleDef module_def = {
+    PyModuleDef_HEAD_INIT,
+    "mobius.core.database",
+    "Mobius Forensic Toolkit mobius.core.database module",
+    -1,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr
 };
 
 } // namespace
@@ -52,16 +51,16 @@ static PyModuleDef module_def =
 mobius::py::pymodule
 new_core_database_module ()
 {
-  // Initialize module
-  mobius::py::pymodule module (&module_def);
+    // Initialize module
+    mobius::py::pymodule module (&module_def);
 
-  // Add types
-  module.add_type ("connection", &core_database_connection_t);
-  module.add_type ("connection_set", &core_database_connection_set_t);
-  module.add_type ("transaction", &core_database_transaction_t);
+    // Add types
+    module.add_type ("connection", new_core_database_connection_type ());
+    module.add_type (
+        "connection_set", new_core_database_connection_set_type ()
+    );
+    module.add_type ("transaction", new_core_database_transaction_type ());
 
-  // Return module
-  return module;
+    // Return module
+    return module;
 }
-
-
