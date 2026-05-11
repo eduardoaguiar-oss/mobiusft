@@ -21,6 +21,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
+#include <pytypeobject.hpp>
 #include <mobius/core/crypt/hmac.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -36,5 +37,9 @@ extern PyTypeObject core_crypt_hmac_t;
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_core_crypt_hmac_type ();
+bool pymobius_core_crypt_hmac_check (PyObject *);
+PyObject *pymobius_core_crypt_hmac_to_pyobject (const mobius::core::crypt::hmac&);
+mobius::core::crypt::hmac pymobius_core_crypt_hmac_from_pyobject (PyObject *);
 
 #endif

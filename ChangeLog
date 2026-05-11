@@ -1,3 +1,8 @@
+Mobius Forensic Toolkit 2.27
+	* libmobius_python: Improved mobius.core.crypt.cipher class using the PyType_FromSpec API
+	* libmobius_python: Improved mobius.core.crypt.hash class using the PyType_FromSpec API
+	* libmobius_python: Improved mobius.core.crypt.hmac class using the PyType_FromSpec API
+
 Mobius Forensic Toolkit 2.26
 	* Added new C++ extension called `os-win`
 	* Added new C++ extension called `app-itubego`

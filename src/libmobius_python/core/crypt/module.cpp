@@ -104,9 +104,9 @@ new_core_crypt_module ()
     mobius::py::pymodule module (&module_def);
 
     // Add types
-    module.add_type ("cipher", &core_crypt_cipher_t),
-        module.add_type ("hash", &core_crypt_hash_t);
-    module.add_type ("hmac", &core_crypt_hmac_t);
+    module.add_type ("cipher", new_core_crypt_cipher_type ());
+    module.add_type ("hash", new_core_crypt_hash_type ());
+    module.add_type ("hmac", new_core_crypt_hmac_type ());
 
     // Return module
     return module;
