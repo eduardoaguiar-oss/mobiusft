@@ -22,62 +22,19 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "datasource.hpp"
-#include "datasource_vfs.hpp"
-#include "core/pod/map.hpp"
-#include "ufdr/datasource.hpp"
 #include <mobius/core/exception.inc>
 #include <pymobius.hpp>
 #include <stdexcept>
+#include "core/pod/map.hpp"
+#include "datasource_vfs.hpp"
+#include "ufdr/datasource.hpp"
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if value is an instance of <i>datasource</i>
-// @param value Python value
-// @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-pymobius_core_datasource_datasource_check (PyObject *value)
+namespace
 {
-    return mobius::py::isinstance (value, &core_datasource_datasource_t);
-}
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_datasource_datasource_type = nullptr;
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>datasource</i> Python object from C++ object
-// @param obj C++ object
-// @return New datasource object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_core_datasource_datasource_to_pyobject (
-    const mobius::core::datasource::datasource &obj)
-{
-    if (!obj)
-        return mobius::py::pynone ();
-
-    else if (obj.get_type () == "ufdr")
-        return mobius::py::to_pyobject<core_datasource_ufdr_datasource_o> (
-            mobius::core::datasource::ufdr::datasource (obj),
-            &core_datasource_ufdr_datasource_t);
-
-    else if (obj.get_type () == "vfs")
-        return mobius::py::to_pyobject<core_datasource_datasource_vfs_o> (
-            mobius::core::datasource::datasource_vfs (obj),
-            &core_datasource_datasource_vfs_t);
-
-    else
-        return mobius::py::to_pyobject<core_datasource_datasource_o> (
-            obj, &core_datasource_datasource_t);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>datasource</i> C++ object from Python object
-// @param value Python value
-// @return Datasource object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::datasource::datasource
-pymobius_core_datasource_datasource_from_pyobject (PyObject *value)
-{
-    return mobius::py::from_pyobject<core_datasource_datasource_o> (
-        value, &core_datasource_datasource_t);
-}
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>get_type</i> method implementation
@@ -178,56 +135,115 @@ tp_dealloc (core_datasource_datasource_o *self)
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_datasource_datasource_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.datasource.datasource",      // tp_name
-    sizeof (core_datasource_datasource_o),    // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "Datasource class",                       // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    0,                                        // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    0,                                        // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_datasource_datasource_slots[] = {
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("Datasource class")},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_datasource_datasource_spec = {
+    .name = "mobius.core.datasource.datasource",
+    .basicsize = sizeof (core_datasource_datasource_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_datasource_datasource_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.core.datasource.datasource</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_core_datasource_datasource_type ()
+{
+    // If type is already created, return it
+    if (core_datasource_datasource_type)
+        return mobius::py::pytypeobject (core_datasource_datasource_type);
+
+    // Allocate type from spec
+    core_datasource_datasource_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&core_datasource_datasource_spec)
+    );
+
+    // Create type
+    mobius::py::pytypeobject type (core_datasource_datasource_type);
+    type.create ();
+
+    return type;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>datasource</i>
+// @param value Python value
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+pymobius_core_datasource_datasource_check (PyObject *value)
+{
+    if (!core_datasource_datasource_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("datasource type is not initialized")
+        );
+
+    return mobius::py::isinstance (value, core_datasource_datasource_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>datasource</i> Python object from C++ object
+// @param obj C++ object
+// @return New datasource object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_core_datasource_datasource_to_pyobject (
+    const mobius::core::datasource::datasource &obj
+)
+{
+    if (!core_datasource_datasource_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("datasource type is not initialized")
+        );
+
+    if (!obj)
+        return mobius::py::pynone ();
+
+    else if (obj.get_type () == "ufdr")
+        return mobius::py::to_pyobject<core_datasource_ufdr_datasource_o> (
+            mobius::core::datasource::ufdr::datasource (obj),
+            new_core_datasource_ufdr_datasource_type ().get ()
+        );
+
+    else if (obj.get_type () == "vfs")
+        return mobius::py::to_pyobject<core_datasource_datasource_vfs_o> (
+            mobius::core::datasource::datasource_vfs (obj),
+            new_core_datasource_datasource_vfs_type ().get ()
+        );
+
+    else
+        return mobius::py::to_pyobject<core_datasource_datasource_o> (
+            obj, new_core_datasource_datasource_type ().get ()
+        );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>datasource</i> C++ object from Python object
+// @param value Python value
+// @return Datasource object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::datasource::datasource
+pymobius_core_datasource_datasource_from_pyobject (PyObject *value)
+{
+    if (!core_datasource_datasource_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("datasource type is not initialized")
+        );
+
+    return mobius::py::from_pyobject<core_datasource_datasource_o> (
+        value, core_datasource_datasource_type
+    );
+}

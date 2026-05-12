@@ -22,47 +22,18 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "datasource_vfs.hpp"
-#include "core/vfs/vfs.hpp"
-#include "datasource.hpp"
 #include <mobius/core/exception.inc>
 #include <pymobius.hpp>
 #include <stdexcept>
+#include "core/vfs/vfs.hpp"
+#include "datasource.hpp"
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if value is an instance of <i>datasource_vfs</i>
-// @param value Python value
-// @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-pymobius_core_datasource_datasource_vfs_check (PyObject *value)
+namespace
 {
-    return mobius::py::isinstance (value, &core_datasource_datasource_vfs_t);
-}
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_datasource_datasource_vfs_type = nullptr;
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>datasource_vfs</i> Python object from C++ object
-// @param obj C++ object
-// @return New datasource_vfs object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_core_datasource_datasource_vfs_to_pyobject (
-    const mobius::core::datasource::datasource_vfs &obj)
-{
-    return mobius::py::to_pyobject<core_datasource_datasource_vfs_o> (
-        obj, &core_datasource_datasource_vfs_t);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>datasource_vfs</i> C++ object from Python object
-// @param value Python value
-// @return Datasource_vfs object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::datasource::datasource_vfs
-pymobius_core_datasource_datasource_vfs_from_pyobject (PyObject *value)
-{
-    return mobius::py::from_pyobject<core_datasource_datasource_vfs_o> (
-        value, &core_datasource_datasource_vfs_t);
-}
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>get_vfs</i> method implementation
@@ -109,56 +80,101 @@ tp_dealloc (core_datasource_datasource_vfs_o *self)
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_datasource_datasource_vfs_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)         // header
-    "mobius.core.datasource.datasource_vfs",   // tp_name
-    sizeof (core_datasource_datasource_vfs_o), // tp_basicsize
-    0,                                         // tp_itemsize
-    (destructor) tp_dealloc,                   // tp_dealloc
-    0,                                         // tp_print
-    0,                                         // tp_getattr
-    0,                                         // tp_setattr
-    0,                                         // tp_compare
-    0,                                         // tp_repr
-    0,                                         // tp_as_number
-    0,                                         // tp_as_sequence
-    0,                                         // tp_as_mapping
-    0,                                         // tp_hash
-    0,                                         // tp_call
-    0,                                         // tp_str
-    0,                                         // tp_getattro
-    0,                                         // tp_setattro
-    0,                                         // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,  // tp_flags
-    "VFS datasource class",                    // tp_doc
-    0,                                         // tp_traverse
-    0,                                         // tp_clear
-    0,                                         // tp_richcompare
-    0,                                         // tp_weaklistoffset
-    0,                                         // tp_iter
-    0,                                         // tp_iternext
-    tp_methods,                                // tp_methods
-    0,                                         // tp_members
-    0,                                         // tp_getset
-    &core_datasource_datasource_t,             // tp_base
-    0,                                         // tp_dict
-    0,                                         // tp_descr_get
-    0,                                         // tp_descr_set
-    0,                                         // tp_dictoffset
-    0,                                         // tp_init
-    0,                                         // tp_alloc
-    0,                                         // tp_new
-    0,                                         // tp_free
-    0,                                         // tp_is_gc
-    0,                                         // tp_bases
-    0,                                         // tp_mro
-    0,                                         // tp_cache
-    0,                                         // tp_subclasses
-    0,                                         // tp_weaklist
-    0,                                         // tp_del
-    0,                                         // tp_version_tag
-    0,                                         // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_datasource_datasource_vfs_slots[] = {
+    {Py_tp_base,
+     reinterpret_cast<void *> (static_cast<PyObject *> (new_core_datasource_datasource_type ()))},
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("VFS datasource class")},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_datasource_datasource_vfs_spec = {
+    .name = "mobius.core.datasource.datasource_vfs",
+    .basicsize = sizeof (core_datasource_datasource_vfs_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_datasource_datasource_vfs_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.core.datasource.datasource_vfs</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_core_datasource_datasource_vfs_type ()
+{
+    // If type is already created, return it
+    if (core_datasource_datasource_vfs_type)
+        return mobius::py::pytypeobject (core_datasource_datasource_vfs_type);
+
+    // Allocate type from spec
+    core_datasource_datasource_vfs_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&core_datasource_datasource_vfs_spec)
+    );
+
+    // Create type
+    mobius::py::pytypeobject type (core_datasource_datasource_vfs_type);
+    type.create ();
+
+    return type;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>datasource_vfs</i>
+// @param value Python value
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+pymobius_core_datasource_datasource_vfs_check (PyObject *value)
+{
+    if (!core_datasource_datasource_vfs_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("datasource_vfs type is not initialized")
+        );
+
+    return mobius::py::isinstance (value, core_datasource_datasource_vfs_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>datasource_vfs</i> Python object from C++ object
+// @param obj C++ object
+// @return New datasource_vfs object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_core_datasource_datasource_vfs_to_pyobject (
+    const mobius::core::datasource::datasource_vfs &obj
+)
+{
+    if (!core_datasource_datasource_vfs_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("datasource_vfs type is not initialized")
+        );
+
+    return mobius::py::to_pyobject<core_datasource_datasource_vfs_o> (
+        obj, core_datasource_datasource_vfs_type
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>datasource_vfs</i> C++ object from Python object
+// @param value Python value
+// @return Datasource_vfs object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::datasource::datasource_vfs
+pymobius_core_datasource_datasource_vfs_from_pyobject (PyObject *value)
+{
+    if (!core_datasource_datasource_vfs_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("datasource_vfs type is not initialized")
+        );
+
+    return mobius::py::from_pyobject<core_datasource_datasource_vfs_o> (
+        value, core_datasource_datasource_vfs_type
+    );
+}

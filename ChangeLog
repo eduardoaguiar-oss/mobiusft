@@ -5,6 +5,11 @@ Mobius Forensic Toolkit 2.27
 	* libmobius_python: Improved mobius.core.database.connection class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.core.database.connection_set class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.core.database.transaction class using the PyType_FromSpec API
+	* libmobius_python: Improved mobius.core.datasource.datasource class using the PyType_FromSpec API
+	* libmobius_python: Improved mobius.core.datasource.datasource_vfs class using the PyType_FromSpec API
+	* libmobius_python: Improved mobius.core.datasource.ufdr.datasource class using the PyType_FromSpec API
+	* libmobius_python: Improved mobius.core.datasource.ufdr.extraction class using the PyType_FromSpec API
+	* libmobius_python: Added new method pytypeobject::get
 
 Mobius Forensic Toolkit 2.26
 	* Added new C++ extension called `os-win`

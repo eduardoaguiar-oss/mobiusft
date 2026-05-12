@@ -21,9 +21,9 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "module.hpp"
+#include <pymobius.hpp>
 #include "datasource.hpp"
 #include "extraction.hpp"
-#include <pymobius.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Function prototypes
@@ -51,7 +51,8 @@ static PyModuleDef module_def = {
     nullptr,
     nullptr,
     nullptr,
-    nullptr};
+    nullptr
+};
 
 } // namespace
 
@@ -65,8 +66,8 @@ new_core_datasource_ufdr_module ()
     mobius::py::pymodule module (&module_def);
 
     // Add types
-    module.add_type ("datasource", &core_datasource_ufdr_datasource_t);
-    module.add_type ("extraction", &core_datasource_ufdr_extraction_t);
+    module.add_type ("datasource", new_core_datasource_ufdr_datasource_type ());
+    module.add_type ("extraction", new_core_datasource_ufdr_extraction_type ());
 
     // Return module
     return module;

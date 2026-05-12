@@ -20,8 +20,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
 #include <mobius/core/datasource/ufdr/datasource.hpp>
+#include <Python.h>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -31,14 +32,14 @@ typedef struct
     PyObject_HEAD mobius::core::datasource::ufdr::datasource *obj;
 } core_datasource_ufdr_datasource_o;
 
-extern PyTypeObject core_datasource_ufdr_datasource_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_core_datasource_ufdr_datasource_type ();
 bool pymobius_core_datasource_ufdr_datasource_check (PyObject *);
 PyObject *pymobius_core_datasource_ufdr_datasource_to_pyobject (
-    const mobius::core::datasource::ufdr::datasource &);
+    const mobius::core::datasource::ufdr::datasource &
+);
 mobius::core::datasource::ufdr::datasource
 pymobius_core_datasource_ufdr_datasource_from_pyobject (PyObject *);
 

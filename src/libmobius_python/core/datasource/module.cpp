@@ -21,19 +21,19 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "module.hpp"
+#include <pymobius.hpp>
 #include "datasource.hpp"
 #include "datasource_vfs.hpp"
 #include "ufdr/module.hpp"
-#include <pymobius.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Function prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *func_datasource_new_datasource_from_vfs (PyObject *, PyObject *);
-PyObject *func_datasource_new_datasource_by_imagefile_path (PyObject *,
-                                                            PyObject *);
-PyObject *func_datasource_new_datasource_by_imagefile_url (PyObject *,
-                                                           PyObject *);
+PyObject *
+func_datasource_new_datasource_by_imagefile_path (PyObject *, PyObject *);
+PyObject *
+func_datasource_new_datasource_by_imagefile_url (PyObject *, PyObject *);
 PyObject *func_datasource_new_datasource_by_ufdr_path (PyObject *, PyObject *);
 PyObject *func_datasource_new_datasource_by_ufdr_url (PyObject *, PyObject *);
 
@@ -70,7 +70,8 @@ static PyModuleDef module_def = {
     nullptr,
     nullptr,
     nullptr,
-    nullptr};
+    nullptr
+};
 
 } // namespace
 
@@ -84,8 +85,10 @@ new_core_datasource_module ()
     mobius::py::pymodule module (&module_def);
 
     // Add types
-    module.add_type ("datasource", &core_datasource_datasource_t);
-    module.add_type ("datasource_vfs", &core_datasource_datasource_vfs_t);
+    module.add_type ("datasource", new_core_datasource_datasource_type ());
+    module.add_type (
+        "datasource_vfs", new_core_datasource_datasource_vfs_type ()
+    );
 
     // Build submodules
     module.add_submodule ("ufdr", new_core_datasource_ufdr_module ());
