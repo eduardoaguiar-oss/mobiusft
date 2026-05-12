@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#define PY_SSIZE_T_CLEAN        // PEP 353
+#define PY_SSIZE_T_CLEAN // PEP 353
 #include <Python.h>
 #include <memory>
 #include <string>
@@ -31,37 +31,36 @@ namespace mobius::py
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class pytypeobject
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  explicit pytypeobject (PyTypeObject *);
-  pytypeobject (pytypeobject&&) noexcept = default;
-  pytypeobject (const pytypeobject&) noexcept = default;
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    explicit pytypeobject (PyTypeObject *);
+    pytypeobject (pytypeobject &&) noexcept = default;
+    pytypeobject (const pytypeobject &) noexcept = default;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Operators
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  pytypeobject& operator= (const pytypeobject&) noexcept = default;
-  pytypeobject& operator= (pytypeobject&&) noexcept = default;
-  operator PyObject * () const noexcept;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    pytypeobject &operator= (const pytypeobject &) noexcept = default;
+    pytypeobject &operator= (pytypeobject &&) noexcept = default;
+    operator PyObject *() const noexcept;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void create ();
-  void add_constant (const std::string&, int);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void create ();
+    void add_constant (const std::string &, int);
+    PyTypeObject *get () const noexcept;
 
-private:
-  // @brief Implementation class forward declaration
-  class impl;
+  private:
+    // @brief Implementation class forward declaration
+    class impl;
 
-  // @brief Implementation pointer
-  std::shared_ptr <impl> impl_;
+    // @brief Implementation pointer
+    std::shared_ptr<impl> impl_;
 };
 
 } // namespace mobius::py
 
 #endif
-
-

@@ -16,9 +16,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "pytypeobject.hpp"
+#include <mobius/core/exception.inc>
 #include <Python.h>
 #include <stdexcept>
-#include <mobius/core/exception.inc>
 
 namespace mobius::py
 {
@@ -27,40 +27,39 @@ namespace mobius::py
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class pytypeobject::impl
 {
-public:
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors and destructor
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl (const impl &) = delete;
+    impl (impl &&) = delete;
+    impl (PyTypeObject *);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors and destructor
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  impl (const impl&) = delete;
-  impl (impl&&) = delete;
-  impl (PyTypeObject *);
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    impl &operator= (const impl &) = delete;
+    impl &operator= (impl &&) = delete;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Operators
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  impl& operator= (const impl&) = delete;
-  impl& operator= (impl&&) = delete;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get pointer
+    // @return PyObject pointer
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    PyObject *
+    pointer ()
+    {
+        return reinterpret_cast<PyObject *> (obj_);
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get pointer
-  // @return PyObject pointer
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  PyObject *
-  pointer ()
-  {
-    return reinterpret_cast <PyObject *> (obj_);
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void create ();
+    void add_constant (const std::string &, int);
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void create ();
-  void add_constant (const std::string&, int);
-
-private:
-  // @brief Python object
-  PyTypeObject *obj_ = nullptr;
+  private:
+    // @brief Python object
+    PyTypeObject *obj_ = nullptr;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -68,7 +67,7 @@ private:
 // @param p Pointer to PyTypeObject structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 pytypeobject::impl::impl (PyTypeObject *p)
-  : obj_ (p)
+    : obj_ (p)
 {
 }
 
@@ -78,8 +77,10 @@ pytypeobject::impl::impl (PyTypeObject *p)
 void
 pytypeobject::impl::create ()
 {
-  if (PyType_Ready (obj_) < 0)
-   throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("could not build type"));
+    if (PyType_Ready (obj_) < 0)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("could not build type")
+        );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -88,32 +89,37 @@ pytypeobject::impl::create ()
 // @param value Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-pytypeobject::impl::add_constant (const std::string& name, int value)
+pytypeobject::impl::add_constant (const std::string &name, int value)
 {
-  PyObject *dict = obj_->tp_dict; //PyType_GetDict (obj_);
-  if (!dict)
-      throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("could not get type dict"));
+    PyObject *dict = obj_->tp_dict; //PyType_GetDict (obj_);
+    if (!dict)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("could not get type dict")
+        );
 
-  PyObject *py_value = PyLong_FromLong (value);
-  if (!py_value)
-      throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("error creating constant value"));
+    PyObject *py_value = PyLong_FromLong (value);
+    if (!py_value)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("error creating constant value")
+        );
 
-  if (PyDict_SetItemString (dict, name.c_str (), py_value) == -1)
+    if (PyDict_SetItemString (dict, name.c_str (), py_value) == -1)
     {
-      Py_DECREF (py_value);
-      throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("error setting constant value"));
+        Py_DECREF (py_value);
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("error setting constant value")
+        );
     }
 
-  Py_DECREF (py_value);
+    Py_DECREF (py_value);
 }
-
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // @param p Pointer to PyTypeObject structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 pytypeobject::pytypeobject (PyTypeObject *p)
- : impl_ (std::make_shared <impl> (p))
+    : impl_ (std::make_shared<impl> (p))
 {
 }
 
@@ -121,9 +127,10 @@ pytypeobject::pytypeobject (PyTypeObject *p)
 // @brief Get PyObject pointer
 // @return PyObject pointer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-pytypeobject::operator PyObject * () const noexcept
+pytypeobject::
+operator PyObject *() const noexcept
 {
-  return impl_->pointer ();
+    return impl_->pointer ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -132,7 +139,7 @@ pytypeobject::operator PyObject * () const noexcept
 void
 pytypeobject::create ()
 {
-  impl_->create ();
+    impl_->create ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -141,11 +148,19 @@ pytypeobject::create ()
 // @param value Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-pytypeobject::add_constant (const std::string& name, int value)
+pytypeobject::add_constant (const std::string &name, int value)
 {
-  impl_->add_constant (name, value);
+    impl_->add_constant (name, value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get PyTypeObject pointer
+// @return PyTypeObject pointer
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyTypeObject *
+pytypeobject::get () const noexcept
+{
+    return reinterpret_cast<PyTypeObject *> (impl_->pointer ());
 }
 
 } // namespace mobius::py
-
-
