@@ -38,7 +38,8 @@ static PyModuleDef module_def = {
     nullptr,
     nullptr,
     nullptr,
-    nullptr};
+    nullptr
+};
 
 } // namespace
 
@@ -52,8 +53,8 @@ new_core_decoder_sgml_module ()
     mobius::py::pymodule module (&module_def);
 
     // Add types
-    module.add_type ("tokenizer", &core_decoder_sgml_tokenizer_t);
-    module.add_type ("parser", &core_decoder_sgml_parser_t);
+    module.add_type ("tokenizer", new_core_decoder_sgml_tokenizer_type ());
+    module.add_type ("parser", new_core_decoder_sgml_parser_type ());
 
     // Return module
     return module;

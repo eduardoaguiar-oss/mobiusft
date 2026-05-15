@@ -28,53 +28,12 @@
 #include "core/io/reader.hpp"
 #include "core/pod/map.hpp"
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if object type is <i>parser</i>
-// @param pyobj Python object
-// @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-pymobius_core_decoder_sgml_parser_check (PyObject *pyobj)
+namespace
 {
-    return PyObject_IsInstance (
-        pyobj, (PyObject *) &core_decoder_sgml_parser_t
-    );
-}
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_decoder_sgml_parser_type = nullptr;
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>parser</i> Python object from C++ object
-// @param obj C++ object
-// @return new parser object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_core_decoder_sgml_parser_to_pyobject (
-    const mobius::core::decoder::sgml::parser &obj
-)
-{
-    PyObject *ret = _PyObject_New (&core_decoder_sgml_parser_t);
-
-    if (ret)
-        ((core_decoder_sgml_parser_o *) ret)->obj =
-            new mobius::core::decoder::sgml::parser (obj);
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>parser</i> C++ object from Python object
-// @param pyobj Python object
-// @return parser object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::decoder::sgml::parser
-pymobius_core_decoder_sgml_parser_from_pyobject (PyObject *pyobj)
-{
-    if (!PyObject_IsInstance (pyobj, (PyObject *) &core_decoder_sgml_parser_t))
-        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (
-            "object type must be mobius.core.decoder.sgml.parser"
-        ));
-
-    return *(reinterpret_cast<core_decoder_sgml_parser_o *> (pyobj)->obj);
-}
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>get</i> method implementation
@@ -225,57 +184,100 @@ tp_dealloc (core_decoder_sgml_parser_o *self)
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_decoder_sgml_parser_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.decoder.sgml.parser",        // tp_name
-    sizeof (core_decoder_sgml_parser_o),      // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "SGML parser class",                      // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    0,                                        // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    tp_new,                                   // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
-    nullptr,                                  // tp_vectorcall
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_decoder_sgml_parser_slots[] = {
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("parser class")},
+    {Py_tp_new, reinterpret_cast<void *> (tp_new)},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_decoder_sgml_parser_spec = {
+    .name = "mobius.core.decoder.sgml.parser",
+    .basicsize = sizeof (core_decoder_sgml_parser_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_decoder_sgml_parser_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.core.decoder.sgml.parser</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_core_decoder_sgml_parser_type ()
+{
+    // If type is already created, return it
+    if (core_decoder_sgml_parser_type)
+        return mobius::py::pytypeobject (core_decoder_sgml_parser_type);
+
+    // Allocate type from spec
+    core_decoder_sgml_parser_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&core_decoder_sgml_parser_spec)
+    );
+
+    // Create type
+    mobius::py::pytypeobject type (core_decoder_sgml_parser_type);
+    type.create ();
+
+    return type;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>parser</i>
+// @param value Python value
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+pymobius_core_decoder_sgml_parser_check (PyObject *value)
+{
+    if (!core_decoder_sgml_parser_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("parser type is not initialized")
+        );
+
+    return mobius::py::isinstance (value, core_decoder_sgml_parser_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>parser</i> Python object from C++ object
+// @param obj C++ object
+// @return New parser object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_core_decoder_sgml_parser_to_pyobject (
+    const mobius::core::decoder::sgml::parser &obj
+)
+{
+    if (!core_decoder_sgml_parser_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("parser type is not initialized")
+        );
+
+    return mobius::py::to_pyobject<core_decoder_sgml_parser_o> (
+        obj, core_decoder_sgml_parser_type
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>parser</i> C++ object from Python object
+// @param value Python value
+// @return Parser object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::decoder::sgml::parser
+pymobius_core_decoder_sgml_parser_from_pyobject (PyObject *value)
+{
+    if (!core_decoder_sgml_parser_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("parser type is not initialized")
+        );
+
+    return mobius::py::from_pyobject<core_decoder_sgml_parser_o> (
+        value, core_decoder_sgml_parser_type
+    );
+}
