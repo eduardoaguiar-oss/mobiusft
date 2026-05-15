@@ -18,14 +18,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#define PY_SSIZE_T_CLEAN        // PEP 353
+#define PY_SSIZE_T_CLEAN // PEP 353
 
-#include <Python.h>
 #include <mobius/core/exception.inc>
+#include <Python.h>
 #include <cstdint>
-#include <string>
+#include <pymobius.hpp>
 #include <stdexcept>
 #include <map>
+#include <string>
 
 namespace mobius::py
 {
@@ -36,39 +37,40 @@ namespace mobius::py
 // @param pyfv Function to convert C++ values to Python objects
 // @return Python dict
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename C, typename FK, typename FV> PyObject *
-pydict_from_cpp_container (const C& container, FK pyfk, FV pyfv)
+template <typename C, typename FK, typename FV>
+PyObject *
+pydict_from_cpp_container (const C &container, FK pyfk, FV pyfv)
 {
-  PyObject *ret = PyDict_New ();
+    PyObject *ret = PyDict_New ();
 
-  if (!ret)
-    return nullptr;
+    if (!ret)
+        return nullptr;
 
-  for (const auto& p : container)
+    for (const auto &p : container)
     {
-      PyObject *py_key = pyfk (p.first);
+        PyObject *py_key = pyfk (p.first);
 
-      if (!py_key)
+        if (!py_key)
         {
-          Py_CLEAR (ret);
-          return nullptr;
+            Py_CLEAR (ret);
+            return nullptr;
         }
 
-      PyObject *py_value = pyfv (p.second);
+        PyObject *py_value = pyfv (p.second);
 
-      if (!py_value)
+        if (!py_value)
         {
-          Py_DECREF (py_key);
-          Py_CLEAR (ret);
-          return nullptr;
+            Py_DECREF (py_key);
+            Py_CLEAR (ret);
+            return nullptr;
         }
 
-      PyDict_SetItem (ret, py_key, py_value);
-      Py_DECREF (py_key);
-      Py_DECREF (py_value);
+        PyDict_SetItem (ret, py_key, py_value);
+        Py_DECREF (py_key);
+        Py_DECREF (py_value);
     }
 
-  return ret;
+    return ret;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -77,21 +79,25 @@ pydict_from_cpp_container (const C& container, FK pyfk, FV pyfv)
 // @param cppfunc Function to Python objects to C++ items
 // @return Vector
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename F1, typename F2> auto
-pydict_to_cpp_container (PyObject *py_dict, F1 cppfunc1, F2 cppfunc2) -> std::map <decltype (cppfunc1 (nullptr)), decltype (cppfunc2 (nullptr))>
+template <typename F1, typename F2>
+auto
+pydict_to_cpp_container (PyObject *py_dict, F1 cppfunc1, F2 cppfunc2)
+    -> std::map<decltype (cppfunc1 (nullptr)), decltype (cppfunc2 (nullptr))>
 {
-  std::map <decltype (cppfunc1 (nullptr)), decltype (cppfunc2 (nullptr))> m;
+    std::map<decltype (cppfunc1 (nullptr)), decltype (cppfunc2 (nullptr))> m;
 
-  if (!PyDict_Check (py_dict))
-    throw std::invalid_argument (MOBIUS_EXCEPTION_MSG ("argument is not a dict"));
+    if (!PyDict_Check (py_dict))
+        throw std::invalid_argument (
+            MOBIUS_EXCEPTION_MSG ("argument is not a dict")
+        );
 
-  PyObject *key, *value;
-  Py_ssize_t pos = 0;
+    PyObject *key, *value;
+    Py_ssize_t pos = 0;
 
-  while (PyDict_Next (py_dict, &pos, &key, &value))
-    m[cppfunc1 (key)] = cppfunc2 (value);
+    while (PyDict_Next (py_dict, &pos, &key, &value))
+        m[cppfunc1 (key)] = cppfunc2 (value);
 
-  return m;
+    return m;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -102,14 +108,13 @@ pydict_to_cpp_container (PyObject *py_dict, F1 cppfunc1, F2 cppfunc2) -> std::ma
 // @param f2 Conversion function 2
 // @return C++ map
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-template <typename F1, typename F2> decltype (auto)
+template <typename F1, typename F2>
+decltype (auto)
 get_arg_as_cpp_map (PyObject *args, std::uint32_t idx, F1 f1, F2 f2)
 {
-  return pydict_to_cpp_container (get_arg (args, idx), f1, f2);
+    return pydict_to_cpp_container (get_arg (args, idx), f1, f2);
 }
 
 } // namespace mobius::py
 
 #endif
-
-

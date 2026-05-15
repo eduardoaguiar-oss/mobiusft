@@ -20,8 +20,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
 #include <mobius/core/decoder/data_decoder.hpp>
+#include <Python.h>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -31,12 +32,15 @@ typedef struct
     PyObject_HEAD mobius::core::decoder::data_decoder *obj;
 } core_decoder_data_decoder_o;
 
-extern PyTypeObject core_decoder_data_decoder_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Helper functions
+// Functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_core_decoder_data_decoder_type ();
+bool pymobius_core_decoder_data_decoder_check (PyObject *);
 PyObject *pymobius_core_decoder_data_decoder_to_pyobject (
-    mobius::core::decoder::data_decoder);
+    const mobius::core::decoder::data_decoder &
+);
+mobius::core::decoder::data_decoder
+pymobius_core_decoder_data_decoder_from_pyobject (PyObject *);
 
 #endif
