@@ -91,7 +91,7 @@ new_core_decoder_module ()
 
     // Add types
     module.add_type ("data_decoder", &core_decoder_data_decoder_t);
-    module.add_type ("inifile", new_decoder_inifile_type ());
+    module.add_type ("inifile", new_core_decoder_inifile_type ());
     module.add_type ("lnk", &core_decoder_lnk_t);
     module.add_type ("mfc", &core_decoder_mfc_t);
     module.add_type ("qdatastream", new_decoder_qdatastream_type ());

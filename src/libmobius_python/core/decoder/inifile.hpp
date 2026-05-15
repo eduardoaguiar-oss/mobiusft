@@ -3,9 +3,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C)
-// 2008-2026
-// Eduardo Aguiar
+// Copyright (C) 2008-2026 Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -20,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
 #include <mobius/core/decoder/inifile.hpp>
+#include <Python.h>
 #include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -35,10 +33,11 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pytypeobject new_decoder_inifile_type ();
+mobius::py::pytypeobject new_core_decoder_inifile_type ();
 bool pymobius_core_decoder_inifile_check (PyObject *);
 PyObject *pymobius_core_decoder_inifile_to_pyobject (
-    const mobius::core::decoder::inifile &);
+    const mobius::core::decoder::inifile &
+);
 mobius::core::decoder::inifile
 pymobius_core_decoder_inifile_from_pyobject (PyObject *);
 
