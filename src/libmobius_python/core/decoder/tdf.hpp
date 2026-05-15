@@ -18,8 +18,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
 #include <mobius/core/decoder/tdf.hpp>
+#include <Python.h>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -29,11 +30,10 @@ typedef struct
     PyObject_HEAD mobius::core::decoder::tdf *obj;
 } core_decoder_tdf_o;
 
-extern PyTypeObject core_decoder_tdf_t;
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Helper functions
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Functions
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_core_decoder_tdf_type ();
 bool pymobius_core_decoder_tdf_check (PyObject *);
 PyObject *
 pymobius_core_decoder_tdf_to_pyobject (const mobius::core::decoder::tdf &);

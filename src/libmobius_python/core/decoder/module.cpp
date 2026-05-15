@@ -97,7 +97,7 @@ new_core_decoder_module ()
     module.add_type ("mfc", new_core_decoder_mfc_type ());
     module.add_type ("qdatastream", new_core_decoder_qdatastream_type ());
     module.add_type ("sourcecode", new_core_decoder_sourcecode_type ());
-    module.add_type ("tdf", &core_decoder_tdf_t);
+    module.add_type ("tdf", new_core_decoder_tdf_type ());
 
     // Build submodules
     module.add_submodule ("sgml", new_core_decoder_sgml_module ());
