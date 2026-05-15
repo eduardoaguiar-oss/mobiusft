@@ -52,8 +52,8 @@ new_core_decoder_xml_module ()
     mobius::py::pymodule module (&module_def);
 
     // Add types
-    module.add_type ("dom", new_decoder_xml_dom_type ());
-    module.add_type ("element", new_decoder_xml_element_type ());
+    module.add_type ("dom", new_core_decoder_xml_dom_type ());
+    module.add_type ("element", new_core_decoder_xml_element_type ());
 
     // Return module
     return module;

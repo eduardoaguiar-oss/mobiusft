@@ -20,8 +20,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
 #include <mobius/core/decoder/xml/element.hpp>
+#include <Python.h>
 #include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -35,10 +35,11 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pytypeobject new_decoder_xml_element_type ();
+mobius::py::pytypeobject new_core_decoder_xml_element_type ();
 bool pymobius_core_decoder_xml_element_check (PyObject *);
 PyObject *pymobius_core_decoder_xml_element_to_pyobject (
-    const mobius::core::decoder::xml::element &);
+    const mobius::core::decoder::xml::element &
+);
 mobius::core::decoder::xml::element
 pymobius_core_decoder_xml_element_from_pyobject (PyObject *);
 
