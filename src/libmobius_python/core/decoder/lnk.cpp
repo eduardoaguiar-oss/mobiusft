@@ -21,54 +21,17 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "lnk.hpp"
-#include "core/io/reader.hpp"
 #include <mobius/core/exception.inc>
 #include <pymobius.hpp>
 #include <stdexcept>
+#include "core/io/reader.hpp"
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if value is an instance of <i>lnk</i>
-// @param value Python value
-// @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-pymobius_core_decoder_lnk_check (PyObject *value)
+namespace
 {
-    return PyObject_IsInstance (
-        value, reinterpret_cast<PyObject *> (&core_decoder_lnk_t));
-}
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_decoder_lnk_type = nullptr;
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>lnk</i> Python object from C++ object
-// @param obj C++ object
-// @return New lnk object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_core_decoder_lnk_to_pyobject (const mobius::core::decoder::lnk &obj)
-{
-    PyObject *ret = _PyObject_New (&core_decoder_lnk_t);
-
-    if (ret)
-        ((core_decoder_lnk_o *) ret)->obj =
-            new mobius::core::decoder::lnk (obj);
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>lnk</i> C++ object from Python object
-// @param value Python value
-// @return Lnk object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::decoder::lnk
-pymobius_core_decoder_lnk_from_pyobject (PyObject *value)
-{
-    if (!pymobius_core_decoder_lnk_check (value))
-        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (
-            "object must be an instance of mobius.core.decoder.lnk"));
-
-    return *(reinterpret_cast<core_decoder_lnk_o *> (value)->obj);
-}
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>header_size</i> Attribute getter
@@ -83,7 +46,8 @@ tp_getter_header_size (core_decoder_lnk_o *self, void *)
     try
     {
         ret = mobius::py::pylong_from_std_uint32_t (
-            self->obj->get_header_size ());
+            self->obj->get_header_size ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -150,7 +114,8 @@ tp_getter_file_attributes (core_decoder_lnk_o *self, void *)
     try
     {
         ret = mobius::py::pylong_from_std_uint32_t (
-            self->obj->get_file_attributes ());
+            self->obj->get_file_attributes ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -173,7 +138,8 @@ tp_getter_creation_time (core_decoder_lnk_o *self, void *)
     try
     {
         ret = mobius::py::pydatetime_from_datetime (
-            self->obj->get_creation_time ());
+            self->obj->get_creation_time ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -196,7 +162,8 @@ tp_getter_access_time (core_decoder_lnk_o *self, void *)
     try
     {
         ret = mobius::py::pydatetime_from_datetime (
-            self->obj->get_access_time ());
+            self->obj->get_access_time ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -288,7 +255,8 @@ tp_getter_show_command (core_decoder_lnk_o *self, void *)
     try
     {
         ret = mobius::py::pylong_from_std_uint32_t (
-            self->obj->get_show_command ());
+            self->obj->get_show_command ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -333,7 +301,8 @@ tp_getter_volume_label (core_decoder_lnk_o *self, void *)
     try
     {
         ret = mobius::py::pystring_from_std_string (
-            self->obj->get_volume_label ());
+            self->obj->get_volume_label ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -379,7 +348,8 @@ tp_getter_drive_serial_number (core_decoder_lnk_o *self, void *)
     try
     {
         ret = mobius::py::pylong_from_std_uint32_t (
-            self->obj->get_drive_serial_number ());
+            self->obj->get_drive_serial_number ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -402,7 +372,8 @@ tp_getter_local_base_path (core_decoder_lnk_o *self, void *)
     try
     {
         ret = mobius::py::pystring_from_std_string (
-            self->obj->get_local_base_path ());
+            self->obj->get_local_base_path ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -425,7 +396,8 @@ tp_getter_common_path_suffix (core_decoder_lnk_o *self, void *)
     try
     {
         ret = mobius::py::pystring_from_std_string (
-            self->obj->get_common_path_suffix ());
+            self->obj->get_common_path_suffix ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -470,7 +442,8 @@ tp_getter_device_name (core_decoder_lnk_o *self, void *)
     try
     {
         ret = mobius::py::pystring_from_std_string (
-            self->obj->get_device_name ());
+            self->obj->get_device_name ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -493,7 +466,8 @@ tp_getter_network_provider_type (core_decoder_lnk_o *self, void *)
     try
     {
         ret = mobius::py::pylong_from_std_uint32_t (
-            self->obj->get_network_provider_type ());
+            self->obj->get_network_provider_type ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -538,7 +512,8 @@ tp_getter_relative_path (core_decoder_lnk_o *self, void *)
     try
     {
         ret = mobius::py::pystring_from_std_string (
-            self->obj->get_relative_path ());
+            self->obj->get_relative_path ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -561,7 +536,8 @@ tp_getter_working_dir (core_decoder_lnk_o *self, void *)
     try
     {
         ret = mobius::py::pystring_from_std_string (
-            self->obj->get_working_dir ());
+            self->obj->get_working_dir ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -607,7 +583,8 @@ tp_getter_icon_location (core_decoder_lnk_o *self, void *)
     try
     {
         ret = mobius::py::pystring_from_std_string (
-            self->obj->get_icon_location ());
+            self->obj->get_icon_location ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -630,7 +607,8 @@ tp_getter_netbios_name (core_decoder_lnk_o *self, void *)
     try
     {
         ret = mobius::py::pystring_from_std_string (
-            self->obj->get_netbios_name ());
+            self->obj->get_netbios_name ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -653,7 +631,8 @@ tp_getter_header_offset (core_decoder_lnk_o *self, void *)
     try
     {
         ret = mobius::py::pylong_from_std_uint64_t (
-            self->obj->get_header_offset ());
+            self->obj->get_header_offset ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -676,7 +655,8 @@ tp_getter_link_target_id_list_offset (core_decoder_lnk_o *self, void *)
     try
     {
         ret = mobius::py::pylong_from_std_uint64_t (
-            self->obj->get_link_target_id_list_offset ());
+            self->obj->get_link_target_id_list_offset ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -699,7 +679,8 @@ tp_getter_link_info_offset (core_decoder_lnk_o *self, void *)
     try
     {
         ret = mobius::py::pylong_from_std_uint64_t (
-            self->obj->get_link_info_offset ());
+            self->obj->get_link_info_offset ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -963,7 +944,8 @@ tp_f_is_target_reparse_point (core_decoder_lnk_o *self, PyObject *)
     try
     {
         ret = mobius::py::pybool_from_bool (
-            self->obj->is_target_reparse_point ());
+            self->obj->is_target_reparse_point ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -1039,7 +1021,8 @@ tp_f_is_target_content_indexed (core_decoder_lnk_o *self, PyObject *)
     try
     {
         ret = mobius::py::pybool_from_bool (
-            self->obj->is_target_content_indexed ());
+            self->obj->is_target_content_indexed ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -1090,7 +1073,8 @@ tp_f_is_run_in_separate_process (core_decoder_lnk_o *self, PyObject *)
     try
     {
         ret = mobius::py::pybool_from_bool (
-            self->obj->is_run_in_separate_process ());
+            self->obj->is_run_in_separate_process ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -1180,7 +1164,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     try
     {
         arg_reader = mobius::py::get_arg_as_cpp (
-            args, 0, pymobius_core_io_reader_from_pyobject);
+            args, 0, pymobius_core_io_reader_from_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -1220,56 +1205,99 @@ tp_dealloc (core_decoder_lnk_o *self)
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_decoder_lnk_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.decoder.lnk",                // tp_name
-    sizeof (core_decoder_lnk_o),              // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "lnk class",                              // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    tp_getset,                                // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    tp_new,                                   // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_decoder_lnk_slots[] = {
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("lnk class")},
+    {Py_tp_new, reinterpret_cast<void *> (tp_new)},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {Py_tp_getset, reinterpret_cast<void *> (tp_getset)},
+    {0, nullptr} // Sentinel
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_decoder_lnk_spec = {
+    .name = "mobius.core.decoder.lnk",
+    .basicsize = sizeof (core_decoder_lnk_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_decoder_lnk_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.core.decoder.lnk</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_core_decoder_lnk_type ()
+{
+    // If type is already created, return it
+    if (core_decoder_lnk_type)
+        return mobius::py::pytypeobject (core_decoder_lnk_type);
+
+    // Allocate type from spec
+    core_decoder_lnk_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&core_decoder_lnk_spec)
+    );
+
+    // Create type
+    mobius::py::pytypeobject type (core_decoder_lnk_type);
+    type.create ();
+
+    return type;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>lnk</i>
+// @param value Python value
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+pymobius_core_decoder_lnk_check (PyObject *value)
+{
+    if (!core_decoder_lnk_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("lnk type is not initialized")
+        );
+
+    return mobius::py::isinstance (value, core_decoder_lnk_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>lnk</i> Python object from C++ object
+// @param obj C++ object
+// @return New lnk object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_core_decoder_lnk_to_pyobject (const mobius::core::decoder::lnk &obj)
+{
+    if (!core_decoder_lnk_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("lnk type is not initialized")
+        );
+
+    return mobius::py::to_pyobject<core_decoder_lnk_o> (
+        obj, core_decoder_lnk_type
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>lnk</i> C++ object from Python object
+// @param value Python value
+// @return Lnk object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::decoder::lnk
+pymobius_core_decoder_lnk_from_pyobject (PyObject *value)
+{
+    if (!core_decoder_lnk_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("lnk type is not initialized")
+        );
+
+    return mobius::py::from_pyobject<core_decoder_lnk_o> (
+        value, core_decoder_lnk_type
+    );
+}
