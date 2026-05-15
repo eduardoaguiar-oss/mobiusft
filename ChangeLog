@@ -11,6 +11,7 @@ Mobius Forensic Toolkit 2.27
 	* libmobius_python: Improved mobius.core.datasource.ufdr.extraction class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.core.decoder.data_decoder class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.core.decoder.inifile class using the PyType_FromSpec API
+	* libmobius_python: Improved mobius.core.decoder.mfc class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.core.decoder.sourcecode class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.core.decoder.xml.dom using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.core.decoder.xml.element using the PyType_FromSpec API

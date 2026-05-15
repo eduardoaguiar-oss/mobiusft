@@ -21,26 +21,18 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "mfc.hpp"
+#include <mobius/core/exception.inc>
+#include <pymobius.hpp>
+#include <stdexcept>
 #include "core/io/reader.hpp"
 #include "module.hpp"
-#include <pymobius.hpp>
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief create <i>mfc</i> Python object from C++ object
-// @param obj C++ object
-// @return new mfc object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_core_decoder_mfc_to_pyobject (mobius::core::decoder::mfc obj)
+namespace
 {
-    PyObject *ret = _PyObject_New (&core_decoder_mfc_t);
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_decoder_mfc_type = nullptr;
 
-    if (ret)
-        ((core_decoder_mfc_o *) ret)->obj =
-            new mobius::core::decoder::mfc (obj);
-
-    return ret;
-}
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>skip</i> method implementation
@@ -308,7 +300,8 @@ tp_f_get_hex_string (core_decoder_mfc_o *self, PyObject *args)
     try
     {
         ret = mobius::py::pystring_from_std_string (
-            self->obj->get_hex_string (arg_size));
+            self->obj->get_hex_string (arg_size)
+        );
     }
     catch (const std::exception &e)
     {
@@ -511,7 +504,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     try
     {
         arg_reader = pymobius_core_io_reader_from_pyobject (
-            mobius::py::get_arg (args, 0));
+            mobius::py::get_arg (args, 0)
+        );
     }
     catch (const std::exception &e)
     {
@@ -551,56 +545,98 @@ tp_dealloc (core_decoder_mfc_o *self)
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_decoder_mfc_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.decoder.mfc",                // tp_name
-    sizeof (core_decoder_mfc_o),              // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "mfc class",                              // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    0,                                        // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    tp_new,                                   // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_decoder_mfc_slots[] = {
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("mfc class")},
+    {Py_tp_new, reinterpret_cast<void *> (tp_new)},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_decoder_mfc_spec = {
+    .name = "mobius.core.decoder.mfc",
+    .basicsize = sizeof (core_decoder_mfc_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_decoder_mfc_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.core.decoder.mfc</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_core_decoder_mfc_type ()
+{
+    // If type is already created, return it
+    if (core_decoder_mfc_type)
+        return mobius::py::pytypeobject (core_decoder_mfc_type);
+
+    // Allocate type from spec
+    core_decoder_mfc_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&core_decoder_mfc_spec)
+    );
+
+    // Create type
+    mobius::py::pytypeobject type (core_decoder_mfc_type);
+    type.create ();
+
+    return type;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>mfc</i>
+// @param value Python value
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+pymobius_core_decoder_mfc_check (PyObject *value)
+{
+    if (!core_decoder_mfc_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("mfc type is not initialized")
+        );
+
+    return mobius::py::isinstance (value, core_decoder_mfc_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mfc</i> Python object from C++ object
+// @param obj C++ object
+// @return New mfc object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_core_decoder_mfc_to_pyobject (const mobius::core::decoder::mfc &obj)
+{
+    if (!core_decoder_mfc_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("mfc type is not initialized")
+        );
+
+    return mobius::py::to_pyobject<core_decoder_mfc_o> (
+        obj, core_decoder_mfc_type
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mfc</i> C++ object from Python object
+// @param value Python value
+// @return Mfc object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::decoder::mfc
+pymobius_core_decoder_mfc_from_pyobject (PyObject *value)
+{
+    if (!core_decoder_mfc_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("mfc type is not initialized")
+        );
+
+    return mobius::py::from_pyobject<core_decoder_mfc_o> (
+        value, core_decoder_mfc_type
+    );
+}
