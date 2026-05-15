@@ -21,6 +21,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
+#include <pytypeobject.hpp>
 #include <mobius/core/decoder/sourcecode.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -31,15 +32,12 @@ typedef struct
     PyObject_HEAD mobius::core::decoder::sourcecode *obj;
 } core_decoder_sourcecode_o;
 
-extern PyTypeObject core_decoder_sourcecode_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_core_decoder_sourcecode_type ();
 bool pymobius_core_decoder_sourcecode_check (PyObject *);
-PyObject *pymobius_core_decoder_sourcecode_to_pyobject (
-    mobius::core::decoder::sourcecode);
-mobius::core::decoder::sourcecode
-pymobius_core_decoder_sourcecode_from_pyobject (PyObject *);
+PyObject *pymobius_core_decoder_sourcecode_to_pyobject (const mobius::core::decoder::sourcecode&);
+mobius::core::decoder::sourcecode pymobius_core_decoder_sourcecode_from_pyobject (PyObject *);
 
 #endif

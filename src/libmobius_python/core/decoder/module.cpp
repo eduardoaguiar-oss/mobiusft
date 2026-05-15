@@ -21,6 +21,7 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "module.hpp"
+#include <pymobius.hpp>
 #include "data_decoder.hpp"
 #include "inifile.hpp"
 #include "lnk.hpp"
@@ -30,7 +31,6 @@
 #include "sourcecode.hpp"
 #include "tdf.hpp"
 #include "xml/module.hpp"
-#include <pymobius.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Function prototypes
@@ -76,7 +76,8 @@ static PyModuleDef module_def = {
     nullptr,
     nullptr,
     nullptr,
-    nullptr};
+    nullptr
+};
 
 } // namespace
 
@@ -95,7 +96,7 @@ new_core_decoder_module ()
     module.add_type ("lnk", &core_decoder_lnk_t);
     module.add_type ("mfc", &core_decoder_mfc_t);
     module.add_type ("qdatastream", new_decoder_qdatastream_type ());
-    module.add_type ("sourcecode", &core_decoder_sourcecode_t);
+    module.add_type ("sourcecode", new_core_decoder_sourcecode_type ());
     module.add_type ("tdf", &core_decoder_tdf_t);
 
     // Build submodules

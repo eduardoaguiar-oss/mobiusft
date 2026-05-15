@@ -22,54 +22,17 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "sourcecode.hpp"
-#include "core/io/reader.hpp"
 #include <mobius/core/exception.inc>
 #include <pymobius.hpp>
 #include <stdexcept>
+#include "core/io/reader.hpp"
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if object type is <i>sourcecode</i>
-// @param pyobj Python object
-// @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-pymobius_core_decoder_sourcecode_check (PyObject *pyobj)
+namespace
 {
-    return PyObject_IsInstance (pyobj, (PyObject *) &core_decoder_sourcecode_t);
-}
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_decoder_sourcecode_type = nullptr;
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>sourcecode</i> Python object from C++ object
-// @param obj C++ object
-// @return new sourcecode object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_core_decoder_sourcecode_to_pyobject (
-    mobius::core::decoder::sourcecode obj)
-{
-    PyObject *ret = _PyObject_New (&core_decoder_sourcecode_t);
-
-    if (ret)
-        ((core_decoder_sourcecode_o *) ret)->obj =
-            new mobius::core::decoder::sourcecode (obj);
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>sourcecode</i> C++ object from Python object
-// @param pyobj Python object
-// @return sourcecode object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::decoder::sourcecode
-pymobius_core_decoder_sourcecode_from_pyobject (PyObject *pyobj)
-{
-    if (!PyObject_IsInstance (pyobj, (PyObject *) &core_decoder_sourcecode_t))
-        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (
-            "object type must be mobius.core.decoder.sourcecode"));
-
-    return *(reinterpret_cast<core_decoder_sourcecode_o *> (pyobj)->obj);
-}
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>get</i> method implementation
@@ -148,7 +111,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     try
     {
         arg_reader = pymobius_core_io_reader_from_pyobject (
-            mobius::py::get_arg (args, 0));
+            mobius::py::get_arg (args, 0)
+        );
     }
     catch (const std::exception &e)
     {
@@ -159,7 +123,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     // Create Python object
     core_decoder_sourcecode_o *ret =
         reinterpret_cast<core_decoder_sourcecode_o *> (
-            type->tp_alloc (type, 0));
+            type->tp_alloc (type, 0)
+        );
 
     if (ret)
     {
@@ -189,56 +154,100 @@ tp_dealloc (core_decoder_sourcecode_o *self)
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_decoder_sourcecode_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.decoder.sourcecode",         // tp_name
-    sizeof (core_decoder_sourcecode_o),       // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "sourcecode class",                       // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    0,                                        // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    tp_new,                                   // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_decoder_sourcecode_slots[] = {
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("sourcecode class")},
+    {Py_tp_new, reinterpret_cast<void *> (tp_new)},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_decoder_sourcecode_spec = {
+    .name = "mobius.core.decoder.sourcecode",
+    .basicsize = sizeof (core_decoder_sourcecode_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_decoder_sourcecode_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.core.decoder.sourcecode</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_core_decoder_sourcecode_type ()
+{
+    // If type is already created, return it
+    if (core_decoder_sourcecode_type)
+        return mobius::py::pytypeobject (core_decoder_sourcecode_type);
+
+    // Allocate type from spec
+    core_decoder_sourcecode_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&core_decoder_sourcecode_spec)
+    );
+
+    // Create type
+    mobius::py::pytypeobject type (core_decoder_sourcecode_type);
+    type.create ();
+
+    return type;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>sourcecode</i>
+// @param value Python value
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+pymobius_core_decoder_sourcecode_check (PyObject *value)
+{
+    if (!core_decoder_sourcecode_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("sourcecode type is not initialized")
+        );
+
+    return mobius::py::isinstance (value, core_decoder_sourcecode_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>sourcecode</i> Python object from C++ object
+// @param obj C++ object
+// @return New sourcecode object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_core_decoder_sourcecode_to_pyobject (
+    const mobius::core::decoder::sourcecode &obj
+)
+{
+    if (!core_decoder_sourcecode_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("sourcecode type is not initialized")
+        );
+
+    return mobius::py::to_pyobject<core_decoder_sourcecode_o> (
+        obj, core_decoder_sourcecode_type
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>sourcecode</i> C++ object from Python object
+// @param value Python value
+// @return Sourcecode object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::decoder::sourcecode
+pymobius_core_decoder_sourcecode_from_pyobject (PyObject *value)
+{
+    if (!core_decoder_sourcecode_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("sourcecode type is not initialized")
+        );
+
+    return mobius::py::from_pyobject<core_decoder_sourcecode_o> (
+        value, core_decoder_sourcecode_type
+    );
+}
