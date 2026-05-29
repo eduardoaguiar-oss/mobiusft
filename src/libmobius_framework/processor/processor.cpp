@@ -15,11 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/core/log.hpp>
 #include <mobius/framework/processor/processor.hpp>
 #include <mutex>
+#include <optional>
 #include <unordered_map>
 #include <string>
 
+namespace mobius::framework::processor
+{
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -27,18 +31,32 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // @brief Map to hold processor implementation data
-static std::unordered_map<
-    std::string,
-    mobius::framework::processor::processor_implementation_data>
-    data;
+static std::unordered_map<std::string, processor_implementation_data> data;
 
 // @brief Mutex to protect access to the factories map
 static std::mutex mutex;
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get a registered processor implementation
+// @param id Unique identifier for the processor
+// @return Optional containing the processor implementation data if found,
+// empty optional otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static std::optional<processor_implementation_data>
+get_processor_implementation (const std::string &id)
+{
+    std::lock_guard<std::mutex> lock (mutex);
+
+    auto iter = data.find (id);
+
+    if (iter != data.end ())
+        return iter->second;
+
+    return std::nullopt;
+}
+
 } // namespace
 
-namespace mobius::framework::processor
-{
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief processor implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -50,10 +68,7 @@ class processor::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     impl (const impl &) = delete;
     impl (impl &&) = delete;
-    impl (
-        const mobius::framework::model::item &,
-        const profile &
-    );
+    impl (const mobius::framework::model::item &, const profile &);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Operators
@@ -68,6 +83,26 @@ class processor::impl
     mobius::framework::model::item get_item () const;
     profile get_profile () const;
     mobius::core::pod::map get_status () const;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Add a processor implementation to the processor
+    // @param impl Shared pointer to the processor implementation to add
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void
+    add_implementation (const std::shared_ptr<processor_impl_base> &impl)
+    {
+        implementations_.emplace_back (impl);
+    }
+
+  private:
+    // @brief Case item
+    mobius::framework::model::item item_;
+
+    // @brief Case profile
+    profile profile_;
+
+    // @brief Processor implementations
+    std::vector<std::shared_ptr<processor_impl_base>> implementations_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -76,11 +111,11 @@ class processor::impl
 // @param profile Case profile
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 processor::impl::impl (
-    const mobius::framework::model::item &item,
-    const profile &profile
+    const mobius::framework::model::item &item, const profile &profile
 )
+    : item_ (item),
+      profile_ (profile)
 {
-    // @todo Code implementation
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -89,7 +124,71 @@ processor::impl::impl (
 void
 processor::impl::run ()
 {
-    // @todo Code implementation
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Call on_start for all implementations
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &impl : implementations_)
+    {
+        try
+        {
+            impl->on_start ();
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (__LINE__, e.what ());
+        }
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Call on_run for all implementations
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &impl : implementations_)
+    {
+        try
+        {
+            impl->on_run ();
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (__LINE__, e.what ());
+        }
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Call on_complete for all implementations
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto transaction = item_.new_transaction ();
+
+    for (const auto &impl : implementations_)
+    {
+        try
+        {
+            impl->on_complete ();
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (__LINE__, e.what ());
+        }
+    }
+
+    transaction.commit ();
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Call on_stop for all implementations
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &impl : implementations_)
+    {
+        try
+        {
+            impl->on_stop ();
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (__LINE__, e.what ());
+        }
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -99,7 +198,7 @@ processor::impl::run ()
 mobius::framework::model::item
 processor::impl::get_item () const
 {
-    // @todo Code implementation
+    return item_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -109,7 +208,7 @@ processor::impl::get_item () const
 profile
 processor::impl::get_profile () const
 {
-    // @todo Code implementation
+    return profile_;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -119,7 +218,22 @@ processor::impl::get_profile () const
 mobius::core::pod::map
 processor::impl::get_status () const
 {
-    // @todo Code implementation
+    mobius::core::pod::map status;
+
+    for (const auto &impl : implementations_)
+    {
+        try
+        {
+            status.update (impl->get_status ());
+        }
+        catch (const std::exception &e)
+        {
+            mobius::core::log log (__FILE__, __FUNCTION__);
+            log.warning (__LINE__, e.what ());
+        }
+    }
+
+    return status;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -128,11 +242,43 @@ processor::impl::get_status () const
 // @param profile Case profile
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 processor::processor (
-    const mobius::framework::model::item &item,
-    const profile &profile
+    const mobius::framework::model::item &item, const profile &profile
 )
     : impl_ (std::make_shared<impl> (item, profile))
 {
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Build processor implementations
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &processor_id : profile.get_processors ())
+    {
+        auto data = get_processor_implementation (processor_id);
+
+        if (data)
+        {
+            try
+            {
+                impl_->add_implementation (data->factory (*this));
+            }
+            catch (const std::exception &e)
+            {
+                log.warning (
+                    __LINE__, "Failed to create processor implementation for "
+                              "processor '" +
+                                  processor_id + "': " + e.what ()
+                );
+            }
+        }
+
+        else
+        {
+            log.warning (
+                __LINE__, "No processor implementation found for processor '" +
+                              processor_id + "'"
+            );
+        }
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -204,25 +350,6 @@ unregister_processor_implementation (const std::string &id)
 {
     std::lock_guard<std::mutex> lock (mutex);
     data.erase (id);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get a registered processor implementation
-// @param id Unique identifier for the processor
-// @return Optional containing the processor implementation data if found,
-// empty optional otherwise
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::optional<mobius::framework::processor::processor_implementation_data>
-get_processor_implementation (const std::string &id)
-{
-    std::lock_guard<std::mutex> lock (mutex);
-
-    auto iter = data.find (id);
-
-    if (iter != data.end ())
-        return iter->second;
-
-    return std::nullopt;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

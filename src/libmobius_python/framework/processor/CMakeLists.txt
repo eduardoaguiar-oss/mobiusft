@@ -20,43 +20,23 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.20)
-project(libmobius_python_framework LANGUAGES CXX)
+project(mobius_python_framework_processor LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Build sub-libraries
+# Target: mobius_python_framework_processor.la
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_subdirectory(ant)
-add_subdirectory(model)
-add_subdirectory(processor)
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Target: mobius_python_framework.la
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(libmobius_python_framework STATIC
+add_library(mobius_python_framework_processor STATIC
     module.cpp
-    attribute.cpp
-    case_profile.cpp
-    category.cpp
-    func_config.cpp
     processor.cpp
+    profile.cpp
 )
 
-set_target_properties(libmobius_python_framework PROPERTIES
-    PREFIX ""
-)
-
-target_include_directories(libmobius_python_framework PRIVATE
+target_include_directories(mobius_python_framework_processor PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_link_libraries(libmobius_python_framework
-   PRIVATE
-     "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_python_framework_ant>"
-     "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_python_framework_model>"
-     "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_python_framework_processor>"
-   PUBLIC Mobius::Framework
-)
+target_link_libraries(mobius_python_framework_processor PUBLIC Mobius::Core)
 
-target_compile_options(libmobius_python_framework PRIVATE -fno-strict-aliasing -fPIC)
+target_compile_options(mobius_python_framework_processor PRIVATE -fno-strict-aliasing -fPIC)

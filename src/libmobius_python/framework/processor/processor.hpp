@@ -1,5 +1,5 @@
-#ifndef MOBIUS_FRAMEWORK_PROCESSOR_PROCESSOR_IMPL_BASE_HPP
-#define MOBIUS_FRAMEWORK_PROCESSOR_PROCESSOR_IMPL_BASE_HPP
+#ifndef MOBIUS_PYTHON_FRAMEWORK_ANT_VFS_PROCESSOR_HPP
+#define MOBIUS_PYTHON_FRAMEWORK_ANT_VFS_PROCESSOR_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,34 +18,26 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/pod/map.hpp>
-#include <mobius/framework/model/evidence.hpp>
+#include <Python.h>
+#include <pytypeobject.hpp>
+#include <mobius/framework/processor/processor.hpp>
 
-namespace mobius::framework::processor
-{
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>processor_impl_base</i> class
-// @author Eduardo Aguiar
+// @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class processor_impl_base
+typedef struct
 {
-  public:
-    virtual ~processor_impl_base () = default;
+    PyObject_HEAD
+    mobius::framework::processor::processor *obj;
+} framework_processor_processor_o;
 
-    virtual void on_start () {};
-    virtual void on_run () {};
-    virtual void on_complete () {};
-    virtual void on_evidence_created (mobius::framework::model::evidence &) {};
-    virtual void on_evidence_modified (mobius::framework::model::evidence &) {};
-    virtual void on_stop () {};
-    
-    virtual mobius::core::pod::map
-    get_status () const
-    {
-        return {};
-    }
-};
 
-} // namespace mobius::framework::processor
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Functions
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_framework_processor_processor_type ();
+bool pymobius_framework_processor_processor_check (PyObject *);
+PyObject *pymobius_framework_processor_processor_to_pyobject (const mobius::framework::processor::processor&);
+mobius::framework::processor::processor pymobius_framework_processor_processor_from_pyobject (PyObject *);
 
 #endif

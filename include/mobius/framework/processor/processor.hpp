@@ -23,8 +23,6 @@
 #include <mobius/framework/processor/profile.hpp>
 #include <functional>
 #include <memory>
-#include <optional>
-#include <utility>
 #include <string>
 #include <vector>
 
@@ -37,10 +35,7 @@ namespace mobius::framework::processor
 class processor
 {
   public:
-    processor (
-        const mobius::framework::model::item &,
-        const profile &
-    );
+    processor (const mobius::framework::model::item &, const profile &);
     processor (processor &&) noexcept = default;
     processor (const processor &) noexcept = default;
 
@@ -70,10 +65,7 @@ class processor
 // @brief Processor implementation functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 using processor_implementation_builder =
-    std::function<std::shared_ptr<processor_impl_base> (
-        const mobius::framework::model::item &,
-        const profile &
-    )>;
+    std::function<std::shared_ptr<processor_impl_base> (const processor &)>;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure to hold processor implementation data
@@ -98,10 +90,6 @@ void register_processor_implementation (
 );
 
 void unregister_processor_implementation (const std::string &);
-
-std::optional<processor_implementation_data>
-get_processor_implementation (const std::string &);
-
 std::vector<processor_implementation_data> list_processor_implementations ();
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -117,10 +105,7 @@ register_processor_implementation (
 )
 {
     register_processor_implementation (
-        id, name,
-        [] (const mobius::framework::model::item &item,
-            const profile &profile)
-        { return std::make_shared<T> (item, profile); }
+        id, name, [] (const processor &p) { return std::make_shared<T> (p); }
     );
 }
 
