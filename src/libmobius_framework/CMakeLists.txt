@@ -34,6 +34,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_subdirectory(ant)
 add_subdirectory(model)
+add_subdirectory(processor)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
@@ -54,6 +55,7 @@ set_target_properties(libmobius_framework PROPERTIES
 target_link_libraries(libmobius_framework PRIVATE
     "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_framework_ant>"
     "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_framework_model>"
+    "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_framework_processor>"
 )
 
 target_link_libraries(libmobius_framework PRIVATE

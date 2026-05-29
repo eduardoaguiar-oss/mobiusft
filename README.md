@@ -33,7 +33,7 @@ Mobius Forensic Toolkit is a powerful, open-source digital forensics framework d
   - **Browsers**: Chromium-based (Google Chrome, Microsoft Edge, Brave, Opera) with automatic decryption of cookies, logins, history, bookmarks, and autofill; Mozilla Firefox; Internet Explorer.
   - **Communication**: Skype (desktop versions 4–14, all SQLite formats including encrypted s4l-*.db).
   - **P2P File Sharing**: aMule/eMule (including Torrent controls), Ares Galaxy, Shareaza, µTorrent/BitTorrent (including µTorrent Web), DC++, DreaMule.
-  - **Other**: iTubeGo and more.
+  - **Other**: iTubeGo, Sticky Notes and more.
 
 - **Additional Capabilities** — Virtual File System (VFS) for advanced block detection and decoding; post-processor framework for generating secondary evidence; integration with external tools like IPED (with enhanced memory management and resume functionality); evidence viewer with processing status, KFF alerts, and specialized views (e.g., voicemails, remote party IPs, credit cards).
 
