@@ -36,7 +36,8 @@ class processor_impl_base
     virtual void on_run () {};
     virtual void on_complete () {};
     virtual void on_evidence_created (mobius::framework::model::evidence &) {};
-    virtual void on_evidence_modified (mobius::framework::model::evidence &) {};
+    virtual void on_evidence_attribute_modified (mobius::framework::model::evidence &, const std::string &) {};
+    virtual void on_evidence_tag_modified (mobius::framework::model::evidence &, const std::string &) {};
     virtual void on_stop () {};
     
     virtual mobius::core::pod::map

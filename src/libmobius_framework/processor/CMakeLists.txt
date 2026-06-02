@@ -26,6 +26,7 @@ project(libmobius-framework-processor LANGUAGES CXX)
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(mobius_framework_processor STATIC
+    mediator.cpp
     processor.cpp
     profile.cpp
 )

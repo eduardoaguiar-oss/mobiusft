@@ -161,16 +161,14 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
     // Parse input args
     mobius::framework::model::item arg_item;
-    mobius::framework::processor::profile arg_profile;
+    std::string arg_profile_id;
 
     try
     {
         arg_item = mobius::py::get_arg_as_cpp (
             args, 0, pymobius_framework_model_item_from_pyobject
         );
-        arg_profile = mobius::py::get_arg_as_cpp (
-            args, 1, pymobius_framework_processor_profile_from_pyobject
-        );
+        arg_profile_id = mobius::py::get_arg_as_std_string (args, 1);
     }
     catch (const std::exception &e)
     {
@@ -189,7 +187,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
         try
         {
             ret->obj = new mobius::framework::processor::processor (
-                arg_item, arg_profile
+                arg_item, arg_profile_id
             );
         }
         catch (const std::exception &e)

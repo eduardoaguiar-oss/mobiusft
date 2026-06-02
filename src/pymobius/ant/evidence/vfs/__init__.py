@@ -113,6 +113,9 @@ class Ant(object):
         self.__step_number = "2"
         self.__step_name = "VFS Processor"
         
+        self.__ant = mobius.framework.processor.processor(self.__item, self.__profile.get_id())
+        self.__ant.run()
+
         self.__ant = mobius.framework.ant.vfs_processor(self.__item, self.__profile)
         self.__ant.run()
         

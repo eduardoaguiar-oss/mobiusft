@@ -18,11 +18,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/core/pod/map.hpp>
 #include <mobius/framework/model/item.hpp>
+#include <mobius/framework/processor/mediator.hpp>
 #include <mobius/framework/processor/processor_impl_base.hpp>
 #include <mobius/framework/processor/profile.hpp>
 #include <functional>
 #include <memory>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -35,7 +38,7 @@ namespace mobius::framework::processor
 class processor
 {
   public:
-    processor (const mobius::framework::model::item &, const profile &);
+    processor (const mobius::framework::model::item &, const std::string &);
     processor (processor &&) noexcept = default;
     processor (const processor &) noexcept = default;
 
@@ -65,7 +68,11 @@ class processor
 // @brief Processor implementation functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 using processor_implementation_builder =
-    std::function<std::shared_ptr<processor_impl_base> (const processor &)>;
+    std::function<std::shared_ptr<processor_impl_base> (
+        const mobius::framework::model::item &,
+        const profile &,
+        const mediator &
+    )>;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure to hold processor implementation data
@@ -90,6 +97,10 @@ void register_processor_implementation (
 );
 
 void unregister_processor_implementation (const std::string &);
+
+std::optional<processor_implementation_data>
+get_processor_implementation (const std::string &);
+
 std::vector<processor_implementation_data> list_processor_implementations ();
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
