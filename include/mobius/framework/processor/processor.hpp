@@ -52,6 +52,7 @@ class processor
     // Function prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void run ();
+    void update ();
     mobius::framework::model::item get_item () const;
     profile get_profile () const;
     mobius::core::pod::map get_status () const;

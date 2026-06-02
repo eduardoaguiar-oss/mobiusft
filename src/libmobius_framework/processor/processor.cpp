@@ -15,8 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/core/datasource/datasource.hpp>
+#include <mobius/core/datasource/datasource_vfs.hpp>
+#include <mobius/core/io/walker.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/framework/processor/processor.hpp>
+#include <atomic>
 #include <mutex>
 #include <optional>
 #include <unordered_map>
@@ -24,20 +28,6 @@
 
 namespace mobius::framework::processor
 {
-namespace
-{
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Data
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-// @brief Map to hold processor implementation data
-static std::unordered_map<std::string, processor_implementation_data> data;
-
-// @brief Mutex to protect access to the factories map
-static std::mutex mutex;
-
-} // namespace
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>processor</i> implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -61,6 +51,7 @@ class processor::impl
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void run ();
+    void update ();
     mobius::framework::model::item get_item () const;
     profile get_profile () const;
     mobius::core::pod::map get_status () const;
@@ -75,14 +66,39 @@ class processor::impl
     // @brief Mediator
     mediator mediator_;
 
+    // @brief Processor implementations
+    std::vector<std::shared_ptr<processor_impl_base>> implementations_;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Processing status
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Started processing time
     mobius::core::datetime::datetime started_time_;
 
     // @brief Finished processing time
     mobius::core::datetime::datetime finished_time_;
 
-    // @brief Processor implementations
-    std::vector<std::shared_ptr<processor_impl_base>> implementations_;
+    // @brief Total number of folders processed
+    std::atomic<size_t> processed_folders_ = 0;
+
+    // @brief Total number of files processed
+    std::atomic<size_t> processed_files_ = 0;
+
+    // @brief Current folder path
+    std::string current_folder_path_;
+
+    // @brief Mutex for status updates
+    mutable std::mutex status_mutex_;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Helper functions
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void _on_start ();
+    void _on_load_evidences ();
+    void _on_run_vfs ();
+    void _on_process_folder (const mobius::core::io::folder &);
+    void _on_complete ();
+    void _on_stop ();
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -139,72 +155,43 @@ processor::impl::impl (
 void
 processor::impl::run ()
 {
-    mobius::core::log log (__FILE__, __FUNCTION__);
     started_time_ = mobius::core::datetime::now ();
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Call on_start for all implementations
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    for (const auto &impl : implementations_)
-    {
-        try
-        {
-            impl->on_start ();
-        }
-        catch (const std::exception &e)
-        {
-            log.warning (__LINE__, e.what ());
-        }
-    }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Get datasource from item
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto datasource = item_.get_datasource ();
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Call on_run for all implementations
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    for (const auto &impl : implementations_)
-    {
-        try
-        {
-            impl->on_run ();
-        }
-        catch (const std::exception &e)
-        {
-            log.warning (__LINE__, e.what ());
-        }
-    }
+    if (!datasource)
+        throw std::runtime_error ("Item has no datasource");
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Call on_complete for all implementations
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto transaction = item_.new_transaction ();
+    if (!datasource.is_available ())
+        throw std::runtime_error ("Datasource is not available");
 
-    for (const auto &impl : implementations_)
-    {
-        try
-        {
-            impl->on_complete ();
-        }
-        catch (const std::exception &e)
-        {
-            log.warning (__LINE__, e.what ());
-        }
-    }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Run
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    _on_start ();
+    _on_load_evidences ();
+    _on_run_vfs ();
+    _on_complete ();
+    _on_stop ();
 
-    transaction.commit ();
+    finished_time_ = mobius::core::datetime::now ();
+}
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Call on_stop for all implementations
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    for (const auto &impl : implementations_)
-    {
-        try
-        {
-            impl->on_stop ();
-        }
-        catch (const std::exception &e)
-        {
-            log.warning (__LINE__, e.what ());
-        }
-    }
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Update processing
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+processor::impl::update ()
+{
+    started_time_ = mobius::core::datetime::now ();
+
+    _on_start ();
+    _on_load_evidences ();
+    _on_complete ();
+    _on_stop ();
 
     finished_time_ = mobius::core::datetime::now ();
 }
@@ -239,6 +226,7 @@ processor::impl::get_status () const
     // Start with basic status information
     mobius::core::pod::map status = {
         {"profile", profile_.get_id ()},
+        {"subprocessors", implementations_.size ()},
         {"started_time", started_time_},
     };
 
@@ -247,6 +235,18 @@ processor::impl::get_status () const
 
     else
         status.set ("current_time", mobius::core::datetime::now ());
+
+    // Add current folder path if available
+    {
+        std::lock_guard<std::mutex> lock (status_mutex_);
+
+        if (!current_folder_path_.empty ())
+            status.set ("current_folder", current_folder_path_);
+    }
+
+    // Add total processed folders and files
+    status.set ("processed_folders", processed_folders_.load ());
+    status.set ("processed_files", processed_files_.load ());
 
     // Aggregate status from all implementations
     for (const auto &impl : implementations_)
@@ -263,6 +263,244 @@ processor::impl::get_status () const
     }
 
     return status;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Call on_start for all implementations
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+processor::impl::_on_start ()
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    for (const auto &impl : implementations_)
+    {
+        try
+        {
+            impl->on_start ();
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (__LINE__, e.what ());
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Call on_stop for all implementations
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+processor::impl::_on_stop ()
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    for (const auto &impl : implementations_)
+    {
+        try
+        {
+            impl->on_stop ();
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (__LINE__, e.what ());
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Call on_complete for all implementations
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+processor::impl::_on_complete ()
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    auto transaction = item_.new_transaction ();
+
+    for (const auto &impl : implementations_)
+    {
+        try
+        {
+            impl->on_complete ();
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (__LINE__, e.what ());
+        }
+    }
+
+    transaction.commit ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load evidences already processed and feed them back into the
+// processor, to feed events to implementations.
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+processor::impl::_on_load_evidences ()
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    for (auto &e : item_.get_evidences ())
+    {
+        for (const auto &impl : implementations_)
+        {
+            try
+            {
+                impl->on_evidence_created (e);
+            }
+            catch (const std::exception &e)
+            {
+                log.warning (__LINE__, e.what ());
+            }
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Run VFS processor implementation
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+processor::impl::_on_run_vfs ()
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Get datasource from item
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto datasource = item_.get_datasource ();
+
+    if (!datasource)
+        throw std::runtime_error ("Item has no datasource");
+
+    if (!datasource.is_available ())
+        throw std::runtime_error ("Datasource is not available");
+
+    if (datasource.get_type () != "vfs")
+    {
+        log.info (__LINE__, "Datasource is not VFS, skipping VFS processing");
+        return;
+    }
+
+    mobius::core::datasource::datasource_vfs d_vfs (datasource);
+    auto vfs = d_vfs.get_vfs ();
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Get root entries. If "all folders" flag is set, process all folders.
+    // Otherwise, process only "home", "users" and "documents and settings"
+    // folders.
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    log.info (__LINE__, "Starting VFS processing");
+    processed_folders_.store (0);
+    processed_files_.store (0);
+
+    auto flag_all_folders = profile_.get_processor_scope () == "all";
+
+    for (const auto &entry : vfs.get_root_entries ())
+    {
+        if (entry.is_folder ())
+        {
+            auto folder = entry.get_folder ();
+
+            if (flag_all_folders)
+                _on_process_folder (folder);
+
+            else
+            {
+                mobius::core::io::walker w (folder);
+
+                for (const auto &[name, child] : w.get_folders_with_names ())
+                {
+                    if (name == "home" || name == "users" ||
+                        name == "documents and settings")
+                        _on_process_folder (child);
+
+                    else if (name == "windows.old")
+                    {
+                        mobius::core::io::walker wo_walker (child);
+
+                        for (const auto &user_folder :
+                             wo_walker.get_folders_by_name ("users"))
+                            _on_process_folder (user_folder);
+                    }
+                }
+            }
+        }
+    }
+
+    log.info (__LINE__, "Finished VFS processing");
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Process folder
+// @param folder Folder object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+processor::impl::_on_process_folder (const mobius::core::io::folder &folder)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    {
+        processed_folders_.fetch_add (1);
+
+        std::lock_guard<std::mutex> lock (status_mutex_);
+        current_folder_path_ = folder.get_path ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Notify implementations that we're entering a folder
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &impl : implementations_)
+    {
+        try
+        {
+            impl->on_folder_entered (folder);
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (__LINE__, e.what ());
+        }
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Process children
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    try
+    {
+        for (const auto &entry : folder.get_children ())
+        {
+            if (entry.is_folder ())
+                _on_process_folder (entry.get_folder ());
+
+            else
+                processed_files_.fetch_add (1);
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Notify implementations that we're exiting a folder
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &impl : implementations_)
+    {
+        try
+        {
+            impl->on_folder_exited (folder);
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (__LINE__, e.what ());
+        }
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Clear folder children cache to free memory
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto folder_proxy = folder;
+    folder_proxy.reload ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -284,6 +522,15 @@ void
 processor::run ()
 {
     impl_->run ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Update processing
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+processor::update ()
+{
+    impl_->update ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -315,6 +562,16 @@ processor::get_status () const
 {
     return impl_->get_status ();
 }
+
+namespace
+{
+// @brief Map to hold processor implementation data
+static std::unordered_map<std::string, processor_implementation_data> data;
+
+// @brief Mutex to protect access to the factories map
+static std::mutex mutex;
+
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Register a processor

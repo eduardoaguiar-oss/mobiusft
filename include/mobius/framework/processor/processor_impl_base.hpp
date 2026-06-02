@@ -18,6 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/core/io/folder.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <mobius/framework/model/evidence.hpp>
 
@@ -32,14 +33,35 @@ class processor_impl_base
   public:
     virtual ~processor_impl_base () = default;
 
+    // @brief Called when processing starts
     virtual void on_start () {};
-    virtual void on_run () {};
-    virtual void on_complete () {};
-    virtual void on_evidence_created (mobius::framework::model::evidence &) {};
-    virtual void on_evidence_attribute_modified (mobius::framework::model::evidence &, const std::string &) {};
-    virtual void on_evidence_tag_modified (mobius::framework::model::evidence &, const std::string &) {};
+
+    // @brief Called when processing stops
     virtual void on_stop () {};
-    
+
+    // @brief Called when processing is complete
+    virtual void on_complete () {};
+
+    // @brief Called when a folder is entered
+    virtual void on_folder_entered (const mobius::core::io::folder &) {};
+
+    // @brief Called when a folder is exited
+    virtual void on_folder_exited (const mobius::core::io::folder &) {};
+
+    // @brief Called when a new evidence is created
+    virtual void on_evidence_created (mobius::framework::model::evidence) {};
+
+    // @brief Called when an evidence attribute is modified
+    virtual void on_evidence_attribute_modified (
+        mobius::framework::model::evidence, const std::string &
+    ) {};
+
+    // @brief Called when an evidence tag is modified
+    virtual void on_evidence_tag_modified (
+        mobius::framework::model::evidence, const std::string &
+    ) {};
+
+    // @brief Get current status
     virtual mobius::core::pod::map
     get_status () const
     {

@@ -29,6 +29,7 @@ Mobius Forensic Toolkit 2.27
 	* libmobius_python: Added new submodule `framework.processor`
 	* libmobius_python: Added new class framework.processor.processor 
 	* libmobius_python: Added new class framework.processor.profile
+	* pymobius.ant.evidence: Changed to call mobius.framework.processor.processor class
 
 Mobius Forensic Toolkit 2.26
 	* Added new C++ extension called `os-win`
