@@ -86,7 +86,7 @@ class Ant(object):
             status.set('current_time', datetime.datetime.now())
 
         if self.__phase_number > 0:
-            status.set('phase_number', f"{self.__phase_number} of 3")
+            status.set('phase_number', f"{self.__phase_number} of 4")
             status.set('phase_name', self.__phase_name)
 
         if self.__step_number:

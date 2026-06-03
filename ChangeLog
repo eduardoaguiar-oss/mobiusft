@@ -26,6 +26,10 @@ Mobius Forensic Toolkit 2.27
 	* libmobius_framework: Added new class processor::processor
 	* libmobius_framework: Added new class processor::profile
 	* libmobius_framework: Added new class processor::mediator
+	* libmobius_framework: Added new function processor::register_processor_implementation
+	* libmobius_framework: Added new function processor::unregister_processor_implementation
+	* libmobius_framework: Added new function processor::get_processor_implementation
+	* libmobius_framework: Added new function processor::list_processor_implementation
 	* libmobius_python: Added new submodule `framework.processor`
 	* libmobius_python: Added new class framework.processor.processor 
 	* libmobius_python: Added new class framework.processor.profile

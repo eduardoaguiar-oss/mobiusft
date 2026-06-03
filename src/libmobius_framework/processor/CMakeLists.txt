@@ -28,6 +28,7 @@ project(libmobius-framework-processor LANGUAGES CXX)
 add_library(mobius_framework_processor STATIC
     mediator.cpp
     processor.cpp
+    processor_registry.cpp
     profile.cpp
 )
 
