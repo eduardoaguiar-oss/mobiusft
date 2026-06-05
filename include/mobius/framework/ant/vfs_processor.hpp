@@ -67,9 +67,6 @@ void unregister_vfs_processor_implementation (const std::string &);
 std::optional<vfs_processor_implementation_data>
 get_vfs_processor_implementation (const std::string &);
 
-std::vector<vfs_processor_implementation_data>
-list_vfs_processor_implementations ();
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Register a vfs-processor implementation
 // @param id Unique identifier for the vfs-processor

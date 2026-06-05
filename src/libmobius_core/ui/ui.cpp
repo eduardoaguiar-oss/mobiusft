@@ -91,7 +91,7 @@ unregister_implementation (const std::string &id)
 // @return Vector of pairs containing the ID and name of each UI implementation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::vector<implementation_data>
-list_vfs_processor_implementations ()
+list_implementations ()
 {
     std::lock_guard<std::mutex> lock (data_mutex);
 

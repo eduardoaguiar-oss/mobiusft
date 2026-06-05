@@ -32,6 +32,7 @@ Mobius Forensic Toolkit 2.27
 	* libmobius_framework: Added new function processor::list_evidence_processor_implementation
 	* libmobius_framework: Removed deprecated class ant::vfs_processor 
 	* libmobius_framework: Removed deprecated class ant::ant_impl_vfs_processor
+	* libmobius_framework: Removed deprecated function ant::list_vfs_processor_implementations
 	* libmobius_python: Added new submodule `framework.evidence_processor`
 	* libmobius_python: Added new class framework.evidence_processor.engine 
 	* libmobius_python: Added new class framework.evidence_processor.profile

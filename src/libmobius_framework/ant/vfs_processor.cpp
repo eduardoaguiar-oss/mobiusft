@@ -89,23 +89,4 @@ get_vfs_processor_implementation (const std::string &id)
     return std::nullopt;
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get all registered vfs-processor implementations
-// @return Vector of pairs containing the ID and name of each vfs-processor
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector<mobius::framework::ant::vfs_processor_implementation_data>
-list_vfs_processor_implementations ()
-{
-    std::lock_guard<std::mutex> lock (mutex);
-    std::vector<mobius::framework::ant::vfs_processor_implementation_data>
-        implementations (data.size ());
-
-    std::transform (
-        data.begin (), data.end (), implementations.begin (),
-        [] (const auto &pair) { return pair.second; }
-    );
-
-    return implementations;
-}
-
 } // namespace mobius::framework::ant
