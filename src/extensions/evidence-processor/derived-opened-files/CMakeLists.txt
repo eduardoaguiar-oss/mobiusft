@@ -20,21 +20,21 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.20)
-project(post_processor_opened_files LANGUAGES CXX)
+project(evidence_processor_derived_opened_files LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(post_processor_opened_files MODULE
+add_library(evidence_processor_derived_opened_files MODULE
     main.cpp
-    post_processor_impl.cpp
+    evidence_processor_impl.cpp
 )
 
-set_target_properties(post_processor_opened_files PROPERTIES OUTPUT_NAME "post-processor-opened-files" PREFIX "")
+set_target_properties(evidence_processor_derived_opened_files PROPERTIES OUTPUT_NAME "evidence-processor-derived-opened-files" PREFIX "")
 
-target_link_libraries(post_processor_opened_files PRIVATE Mobius::Framework Mobius::Core)
+target_link_libraries(evidence_processor_derived_opened_files PRIVATE Mobius::Framework Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-install(TARGETS post_processor_opened_files LIBRARY DESTINATION share/mobiusft/extensions)
+install(TARGETS evidence_processor_derived_opened_files LIBRARY DESTINATION share/mobiusft/extensions)

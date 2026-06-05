@@ -282,7 +282,7 @@ engine::impl::get_status () const
     // Start with basic status information
     mobius::core::pod::map status = {
         {"profile", profile_.get_id ()},
-        {"subprocessors", implementations_.size ()},
+        {"evidence_processors", implementations_.size () + vfs_implementations_.size ()},
         {"started_time", started_time_},
     };
 
