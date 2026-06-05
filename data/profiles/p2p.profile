@@ -17,4 +17,5 @@ app-skype
 app-shareaza
 app-utorrent
 derived-opened-files
+derived-pdis
 os-win

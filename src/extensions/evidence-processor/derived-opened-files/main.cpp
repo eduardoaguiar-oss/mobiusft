@@ -37,7 +37,6 @@ extern "C"
 extern "C" void
 start ()
 {
-    // Register the evidence-processor implementation
     mobius::framework::evidence_processor::
         register_evidence_processor_implementation<
             mobius::extension::evidence_processor::derived_opened_files::
@@ -50,7 +49,6 @@ start ()
 extern "C" void
 stop ()
 {
-    // Unregister the evidence-processor implementation
     mobius::framework::evidence_processor::
         unregister_evidence_processor_implementation (EXTENSION_ID);
 }

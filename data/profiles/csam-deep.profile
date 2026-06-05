@@ -18,4 +18,5 @@ app-shareaza
 app-sticky-notes
 app-utorrent
 derived-opened-files
+derived-pdis
 os-win

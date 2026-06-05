@@ -20,24 +20,24 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.20)
-project(post_processor_pdi LANGUAGES CXX)
+project(evidence_processor_derived_pdis LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(post_processor_pdi MODULE
+add_library(evidence_processor_derived_pdis MODULE
     main.cpp
-    post_processor_impl.cpp
+    evidence_processor_impl.cpp
 )
 
-set_target_properties(post_processor_pdi PROPERTIES OUTPUT_NAME "post-processor-pdi" PREFIX "")
+set_target_properties(evidence_processor_derived_pdis PROPERTIES OUTPUT_NAME "derived-pdis" PREFIX "")
 
-target_link_libraries(post_processor_pdi PRIVATE Mobius::Framework Mobius::Core)
+target_link_libraries(evidence_processor_derived_pdis PRIVATE Mobius::Framework Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-install(TARGETS post_processor_pdi LIBRARY DESTINATION share/mobiusft/extensions)
+install(TARGETS evidence_processor_derived_pdis LIBRARY DESTINATION share/mobiusft/extensions)
 
 install(
     FILES pdi_autofill.txt

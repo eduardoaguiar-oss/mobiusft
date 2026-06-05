@@ -41,7 +41,9 @@ Mobius Forensic Toolkit 2.27
 	* pymobius.ant.evidence.vfs: Removed usage of the deprecated class vfs_processor
 	* Created new package src/extensions/evidence-processor
 	* post-processor/opened-files: Migrated to evidence-processor/derived-opened-files
+	* post-processor/pdi: Migrated to evidence-processor/derived-pdis
 	* evidence-processor/derived-opened-files: Implemented the evidence_processor_impl interface
+	* evidence-processor/derived-pdis: Implemented the evidence_processor_impl interface
 
 Mobius Forensic Toolkit 2.26
 	* Added new C++ extension called `os-win`

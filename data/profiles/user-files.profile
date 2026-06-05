@@ -12,4 +12,5 @@ app-itubego
 app-skype
 app-sticky-notes
 derived-opened-files
+derived-pdis
 os-win

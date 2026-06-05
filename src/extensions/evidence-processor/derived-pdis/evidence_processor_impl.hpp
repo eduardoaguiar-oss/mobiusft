@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_EVIDENCE_PROCESSOR_DERIVED_OPENED_FILES_EVIDENCE_PROCESSOR_IMPL_HPP
-#define MOBIUS_EXTENSION_EVIDENCE_PROCESSOR_DERIVED_OPENED_FILES_EVIDENCE_PROCESSOR_IMPL_HPP
+#ifndef MOBIUS_EXTENSION_EVIDENCE_PROCESSOR_DERIVED_PDIS_EVIDENCE_PROCESSOR_IMPL_HPP
+#define MOBIUS_EXTENSION_EVIDENCE_PROCESSOR_DERIVED_PDIS_EVIDENCE_PROCESSOR_IMPL_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -24,25 +24,22 @@
 #include <mobius/framework/model/item.hpp>
 #include <atomic>
 
-namespace mobius::extension::evidence_processor::derived_opened_files
+namespace mobius::extension::evidence_processor::derived_pdis
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Derived Opened Files evidence-processor implementation class
+// @brief PDI evidence-processor implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class evidence_processor_impl
     : public mobius::framework::evidence_processor::evidence_processor_impl_base
 {
   public:
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Prototypes
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     explicit evidence_processor_impl (
         const mobius::framework::model::item &,
         const mobius::framework::evidence_processor::profile &,
         const mobius::framework::evidence_processor::mediator &
     );
-
+    
     void on_evidence_created (mobius::framework::model::evidence) final;
     void on_stop () final;
 
@@ -60,6 +57,6 @@ class evidence_processor_impl
     std::atomic<std::uint64_t> evidences_derived_ {0};
 };
 
-} // namespace mobius::extension::evidence_processor::derived_opened_files
+} // namespace mobius::extension::evidence_processor::derived_pdis
 
 #endif

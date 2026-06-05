@@ -15,11 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "post_processor_impl.hpp"
+#include "evidence_processor_impl.hpp"
 #include <mobius/core/application.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <mobius/core/string_functions.hpp>
+#include <format>
 #include <fstream>
 #include <unordered_map>
 #include <string>
@@ -116,19 +117,21 @@ _format_value (const std::string &type, const std::string &value)
 
 } // namespace
 
-namespace mobius::extension
+namespace mobius::extension::evidence_processor::derived_pdis
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Post-processor implementation constructor
-// @param coordinator Post-processor coordinator
+// @brief Evidence-processor implementation constructor
 // @param item Case item
+// @param profile Evidence-processor profile
+// @param mediator Evidence-processor mediator
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-post_processor_impl::post_processor_impl (
-    mobius::framework::ant::post_processor_coordinator &coordinator,
-    const mobius::framework::model::item &item
+evidence_processor_impl::evidence_processor_impl (
+    const mobius::framework::model::item &item,
+    const mobius::framework::evidence_processor::profile &,
+    const mobius::framework::evidence_processor::mediator &mediator
 )
-    : coordinator_ (coordinator),
-      item_ (item)
+    : item_ (item),
+      mediator_ (mediator)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -161,11 +164,11 @@ post_processor_impl::post_processor_impl (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Process evidence
+// @brief Handle evidence creation
 // @param evidence Evidence to process
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-post_processor_impl::process_evidence (
+evidence_processor_impl::on_evidence_created (
     mobius::framework::model::evidence evidence
 )
 {
@@ -213,7 +216,7 @@ post_processor_impl::process_evidence (
                 e.add_source (evidence);
 
                 // Notify the coordinator about the new evidence
-                coordinator_.on_new_evidence (e);
+                mediator_.on_evidence_created (e);
                 handled = true;
             }
         }
@@ -239,4 +242,20 @@ post_processor_impl::process_evidence (
     }
 }
 
-} // namespace mobius::extension
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Handle processing stop event
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_processor_impl::on_stop ()
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    log.info (
+        __LINE__, std::format (
+                      "Evidences derived/processed: {} of {}",
+                      evidences_derived_.load (), evidences_processed_.load ()
+                  )
+    );
+}
+
+} // namespace mobius::extension::evidence_processor::derived_pdis
