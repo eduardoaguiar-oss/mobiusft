@@ -19,6 +19,7 @@
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/io/walker.hpp>
 #include <mobius/core/log.hpp>
+#include <mobius/framework/ant/vfs_processor.hpp> // @deprecated, remove when vfs_processor is removed
 #include <mobius/framework/evidence_processor/engine.hpp>
 #include <mobius/framework/evidence_processor/evidence_processor_registry.hpp>
 #include <mobius/framework/evidence_processor/mediator.hpp>
@@ -77,6 +78,11 @@ class engine::impl
 
     // @brief Processor implementations
     std::vector<std::shared_ptr<evidence_processor_impl_base>> implementations_;
+
+    // @deprecated VFS processor implementations
+    std::vector<
+        std::shared_ptr<mobius::framework::ant::vfs_processor_impl_base>>
+        vfs_implementations_;
 
     // @brief Current mode
     mode current_mode_ = mode::none;
@@ -144,19 +150,53 @@ engine::impl::impl (
             catch (const std::exception &e)
             {
                 log.warning (
-                    __LINE__, "Failed to create evidence_processor implementation for "
-                              "processor '" +
-                                  processor_id + "': " + e.what ()
+                    __LINE__,
+                    "Failed to create evidence_processor implementation for "
+                    "processor '" +
+                        processor_id + "': " + e.what ()
                 );
             }
         }
 
         else
         {
-            log.warning (
-                __LINE__, "No evidence_processor implementation found for processor '" +
-                              processor_id + "'"
-            );
+            // @begin-deprecated vfs_processor support, remove when all vfs_processor_impl
+            // are migrated to evidence_processor_impl
+            auto vfs_data =
+                mobius::framework::ant::get_vfs_processor_implementation (
+                    processor_id
+                );
+
+            if (vfs_data)
+            {
+                try
+                {
+                    mobius::framework::case_profile case_profile (profile_id);
+
+                    vfs_implementations_.emplace_back (
+                        vfs_data->factory (item_, case_profile)
+                    );
+                }
+                catch (const std::exception &e)
+                {
+                    log.warning (
+                        __LINE__,
+                        "Failed to create VFS processor implementation for "
+                        "processor '" +
+                            processor_id + "': " + e.what ()
+                    );
+                }
+            }
+
+            // @end-deprecated
+            else
+            {
+                log.warning (
+                    __LINE__, "No evidence_processor implementation found for "
+                              "processor '" +
+                                  processor_id + "'"
+                );
+            }
         }
     }
 }
@@ -334,7 +374,25 @@ engine::impl::_on_complete ()
 
     auto transaction = item_.new_transaction ();
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Notify implementations that processing is complete
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     for (const auto &impl : implementations_)
+    {
+        try
+        {
+            impl->on_complete ();
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (__LINE__, e.what ());
+        }
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @deprecated Notify VFS implementations that processing is complete
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &impl : vfs_implementations_)
     {
         try
         {
@@ -480,6 +538,21 @@ engine::impl::_on_process_folder (const mobius::core::io::folder &folder)
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @deprecated Notify VFS implementations that we're entering a folder
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &impl : vfs_implementations_)
+    {
+        try
+        {
+            impl->on_folder_enter (folder);
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (__LINE__, e.what ());
+        }
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Process children
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     try
@@ -506,6 +579,21 @@ engine::impl::_on_process_folder (const mobius::core::io::folder &folder)
         try
         {
             impl->on_folder_exited (folder);
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (__LINE__, e.what ());
+        }
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @deprecated Notify VFS implementations that we're exiting a folder
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (const auto &impl : vfs_implementations_)
+    {
+        try
+        {
+            impl->on_folder_exit (folder);
         }
         catch (const std::exception &e)
         {

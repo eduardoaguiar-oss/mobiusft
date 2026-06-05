@@ -21,19 +21,20 @@ Mobius Forensic Toolkit 2.27
 	* libmobius_python: Improved mobius.core.decoder.xml.dom using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.core.decoder.xml.element using the PyType_FromSpec API
 	* libmobius_python: Added new method pytypeobject::get
-	* libmobius_framework: Added new submodule `processor`
-	* libmobius_framework: Added new class processor::processor_impl_base 
-	* libmobius_framework: Added new class processor::processor
-	* libmobius_framework: Added new class processor::profile
-	* libmobius_framework: Added new class processor::mediator
-	* libmobius_framework: Added new function processor::register_processor_implementation
-	* libmobius_framework: Added new function processor::unregister_processor_implementation
-	* libmobius_framework: Added new function processor::get_processor_implementation
-	* libmobius_framework: Added new function processor::list_processor_implementation
-	* libmobius_python: Added new submodule `framework.processor`
-	* libmobius_python: Added new class framework.processor.processor 
-	* libmobius_python: Added new class framework.processor.profile
-	* pymobius.ant.evidence: Changed to call mobius.framework.processor.processor class
+	* libmobius_framework: Added new submodule `evidence_processor`
+	* libmobius_framework: Added new class evidence_processor::evidence_processor_impl_base 
+	* libmobius_framework: Added new class evidence_processor::engine
+	* libmobius_framework: Added new class evidence_processor::profile
+	* libmobius_framework: Added new class evidence_processor::mediator
+	* libmobius_framework: Added new function processor::register_evidence_processor_implementation
+	* libmobius_framework: Added new function processor::unregister_evidence_processor_implementation
+	* libmobius_framework: Added new function processor::get_evidence_processor_implementation
+	* libmobius_framework: Added new function processor::list_evidence_processor_implementation
+	* libmobius_python: Added new submodule `framework.evidence_processor`
+	* libmobius_python: Added new class framework.evidence_processor.engine 
+	* libmobius_python: Added new class framework.evidence_processor.profile
+	* pymobius.ant.evidence: Changed to use mobius.framework.evidence_processor.engine class
+	* pymobius.ant.evidence.vfs: Removed usage of the deprecated vfs_processor
 
 Mobius Forensic Toolkit 2.26
 	* Added new C++ extension called `os-win`
