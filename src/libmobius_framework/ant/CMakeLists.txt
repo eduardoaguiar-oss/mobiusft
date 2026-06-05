@@ -28,7 +28,6 @@ project(libmobius-framework-ant LANGUAGES CXX)
 add_library(mobius_framework_ant STATIC
     ant.cpp
     ant_impl_post_processor.cpp
-    ant_impl_vfs_processor.cpp
     post_processor.cpp
     vfs_processor.cpp
 )

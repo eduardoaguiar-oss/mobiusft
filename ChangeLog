@@ -30,11 +30,14 @@ Mobius Forensic Toolkit 2.27
 	* libmobius_framework: Added new function processor::unregister_evidence_processor_implementation
 	* libmobius_framework: Added new function processor::get_evidence_processor_implementation
 	* libmobius_framework: Added new function processor::list_evidence_processor_implementation
+	* libmobius_framework: Removed deprecated class ant::vfs_processor 
+	* libmobius_framework: Removed deprecated class ant::ant_impl_vfs_processor
 	* libmobius_python: Added new submodule `framework.evidence_processor`
 	* libmobius_python: Added new class framework.evidence_processor.engine 
 	* libmobius_python: Added new class framework.evidence_processor.profile
+	* libmobius_python: Removed deprecated class ant.vfs_processor
 	* pymobius.ant.evidence: Changed to use mobius.framework.evidence_processor.engine class
-	* pymobius.ant.evidence.vfs: Removed usage of the deprecated vfs_processor
+	* pymobius.ant.evidence.vfs: Removed usage of the deprecated class vfs_processor
 
 Mobius Forensic Toolkit 2.26
 	* Added new C++ extension called `os-win`

@@ -15,7 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/framework/ant/ant_impl_vfs_processor.hpp>
 #include <mobius/framework/ant/vfs_processor.hpp>
 #include <mutex>
 #include <unordered_map>
@@ -40,19 +39,6 @@ static std::mutex mutex;
 
 namespace mobius::framework::ant
 {
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Constructor
-// @param item Case item object
-// @param case_profile Case profile object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-vfs_processor::vfs_processor (
-    const mobius::framework::model::item &item,
-    const mobius::framework::case_profile &case_profile
-)
-    : ant (std::make_shared<ant_impl_vfs_processor> (item, case_profile))
-{
-}
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Register a vfs-processor
 // @param id Unique identifier for the vfs-processor

@@ -18,32 +18,17 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/framework/ant/ant.hpp>
 #include <mobius/framework/ant/vfs_processor_impl_base.hpp>
 #include <mobius/framework/case_profile.hpp>
 #include <mobius/framework/model/item.hpp>
 #include <functional>
 #include <optional>
 #include <memory>
-#include <utility>
 #include <string>
 #include <vector>
 
 namespace mobius::framework::ant
 {
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>vfs_processor</i> ANT class
-// @author Eduardo Aguiar
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class vfs_processor : public ant
-{
-  public:
-    explicit vfs_processor (
-        const mobius::framework::model::item &,
-        const mobius::framework::case_profile &
-    );
-};
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // VFS processor implementation functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
