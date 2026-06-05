@@ -37,23 +37,6 @@ class evidence_processor_impl
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Opened file structure
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    struct opened_file
-    {
-        std::string app_id;
-        std::string app_name;
-        std::string app_family;
-        std::string page_title;
-        std::string path;
-        std::string timestamp;
-        std::string username;
-        std::string visited_url;
-        mobius::core::pod::map metadata;
-        mobius::framework::model::evidence source_evidence;
-    };
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     explicit evidence_processor_impl (
@@ -63,7 +46,6 @@ class evidence_processor_impl
     );
 
     void on_evidence_created (mobius::framework::model::evidence) final;
-    void on_complete () final;
     void on_stop () final;
 
   private:
@@ -72,9 +54,6 @@ class evidence_processor_impl
 
     // @brief Mediator
     mobius::framework::evidence_processor::mediator mediator_;
-
-    // @brief Opened files
-    std::vector<opened_file> opened_files_;
 
     // @brief Evidences processed
     std::atomic<std::uint64_t> evidences_processed_ {0};

@@ -67,69 +67,43 @@ evidence_processor_impl::on_evidence_created (
         // Create opened file
         auto metadata = evidence.get_attribute ("metadata").to_map ();
 
-        opened_file of;
-
-        of.path = url.get_path ();
-        of.app_id = metadata.get<std::string> ("app_id");
-        of.app_name = metadata.get<std::string> ("app_name");
-        of.app_family = metadata.get<std::string> ("app_family");
-        of.page_title = evidence.get_attribute<std::string> ("title");
-        of.timestamp =
+        auto e = item_.new_evidence ("opened-file");
+        e.set_attribute ("path", url.get_path ());
+        e.set_attribute (
+            "timestamp",
             evidence.get_attribute<mobius::core::datetime::datetime> (
                 "timestamp"
-            );
-        of.username = evidence.get_attribute<std::string> ("username");
-        of.visited_url = visited_url;
-        of.metadata = metadata;
-        of.source_evidence = evidence;
+            )
+        );
+        e.set_attribute (
+            "username", evidence.get_attribute<std::string> ("username")
+        );
+        e.set_attribute ("app_id", metadata.get<std::string> ("app_id"));
+        e.set_attribute ("app_name", metadata.get<std::string> ("app_name"));
+        e.set_attribute (
+            "app_family", metadata.get<std::string> ("app_family")
+        );
 
-        opened_files_.push_back (of);
-    }
-    catch (const std::exception &e)
-    {
-        log.warning (__LINE__, e.what ());
-    }
-}
+        // Set metadata
+        mobius::core::pod::map e_metadata = metadata.clone ();
+        e_metadata.set ("url", visited_url);
+        e_metadata.set (
+            "page_title", evidence.get_attribute<std::string> ("title")
+        );
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Handle processing complete event
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_processor_impl::on_complete ()
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
+        e.set_attribute ("metadata", e_metadata);
 
-    try
-    {
-        for (const auto &of : opened_files_)
-        {
-            auto e = item_.new_evidence ("opened-file");
-            e.set_attribute ("path", of.path);
-            e.set_attribute ("timestamp", of.timestamp);
-            e.set_attribute ("username", of.username);
-            e.set_attribute ("app_id", of.app_id);
-            e.set_attribute ("app_name", of.app_name);
-            e.set_attribute ("app_family", of.app_family);
+        // Tags
+        e.set_tag ("app.browser");
 
-            // Set metadata
-            mobius::core::pod::map metadata = of.metadata.clone ();
-            metadata.set ("url", of.visited_url);
-            metadata.set ("page_title", of.page_title);
+        // Add source
+        e.add_source (evidence);
 
-            e.set_attribute ("metadata", metadata);
+        // Update evidences derived count
+        evidences_derived_++;
 
-            // Tags
-            e.set_tag ("app.browser");
-
-            // Add source
-            e.add_source (of.source_evidence);
-
-            // Update evidences derived count
-            evidences_derived_++;
-
-            // Tell mediator about new evidence
-            mediator_.on_evidence_created (e);
-        }
+        // Tell mediator about new evidence
+        mediator_.on_evidence_created (e);
     }
     catch (const std::exception &e)
     {
