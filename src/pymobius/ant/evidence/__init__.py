@@ -154,13 +154,13 @@ class Ant(object):
 
         # run newer processor
         self.__phase_number = 2
-        self.__phase_name = f"Processor"
+        self.__phase_name = f"Evidence Processor"
 
-        self.__ant = mobius.framework.processor.processor(self.__item, self.__profile.get_id())
+        self.__ant = mobius.framework.evidence_processor.engine(self.__item, self.__profile.get_id())
 
-        mobius.core.logf(f"INF mobius.framework.processor.processor started")
+        mobius.core.logf(f"INF mobius.framework.evidence_processor.engine started")
         self.__ant.run()
-        mobius.core.logf(f"INF mobius.framework.processor.processor ended")
+        mobius.core.logf(f"INF mobius.framework.evidence_processor.engine ended")
 
         # run post-processing ant
         self.__phase_number = 3

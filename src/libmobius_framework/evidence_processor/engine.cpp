@@ -19,24 +19,29 @@
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/io/walker.hpp>
 #include <mobius/core/log.hpp>
-#include <mobius/framework/processor/mediator.hpp>
-#include <mobius/framework/processor/processor.hpp>
-#include <mobius/framework/processor/processor_registry.hpp>
+#include <mobius/framework/evidence_processor/engine.hpp>
+#include <mobius/framework/evidence_processor/evidence_processor_registry.hpp>
+#include <mobius/framework/evidence_processor/mediator.hpp>
 #include <atomic>
 #include <mutex>
 #include <optional>
 #include <unordered_map>
 #include <string>
 
-namespace mobius::framework::processor
+namespace mobius::framework::evidence_processor
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>processor</i> implementation class
+// @brief <i>engine</i> implementation class
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class processor::impl
+class engine::impl
 {
   public:
-    enum class mode { none, run, update };
+    enum class mode
+    {
+        none,
+        run,
+        update
+    };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Constructors
@@ -71,7 +76,7 @@ class processor::impl
     mediator mediator_;
 
     // @brief Processor implementations
-    std::vector<std::shared_ptr<processor_impl_base>> implementations_;
+    std::vector<std::shared_ptr<evidence_processor_impl_base>> implementations_;
 
     // @brief Current mode
     mode current_mode_ = mode::none;
@@ -113,11 +118,11 @@ class processor::impl
 // @param item Case item
 // @param profile_id Profile ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-processor::impl::impl (
+engine::impl::impl (
     const mobius::framework::model::item &item, const std::string &profile_id
 )
     : item_ (item),
-      profile_ (mobius::framework::processor::profile (profile_id))
+      profile_ (mobius::framework::evidence_processor::profile (profile_id))
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -126,7 +131,7 @@ processor::impl::impl (
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     for (const auto &processor_id : profile_.get_processors ())
     {
-        auto data = get_processor_implementation (processor_id);
+        auto data = get_evidence_processor_implementation (processor_id);
 
         if (data)
         {
@@ -139,7 +144,7 @@ processor::impl::impl (
             catch (const std::exception &e)
             {
                 log.warning (
-                    __LINE__, "Failed to create processor implementation for "
+                    __LINE__, "Failed to create evidence_processor implementation for "
                               "processor '" +
                                   processor_id + "': " + e.what ()
                 );
@@ -149,7 +154,7 @@ processor::impl::impl (
         else
         {
             log.warning (
-                __LINE__, "No processor implementation found for processor '" +
+                __LINE__, "No evidence_processor implementation found for processor '" +
                               processor_id + "'"
             );
         }
@@ -160,7 +165,7 @@ processor::impl::impl (
 // @brief Run processor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-processor::impl::run ()
+engine::impl::run ()
 {
     current_mode_ = mode::run;
     started_time_ = mobius::core::datetime::now ();
@@ -193,7 +198,7 @@ processor::impl::run ()
 // @brief Update processing
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-processor::impl::update ()
+engine::impl::update ()
 {
     current_mode_ = mode::update;
     started_time_ = mobius::core::datetime::now ();
@@ -212,7 +217,7 @@ processor::impl::update ()
 // @return Case item
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::framework::model::item
-processor::impl::get_item () const
+engine::impl::get_item () const
 {
     return item_;
 }
@@ -222,7 +227,7 @@ processor::impl::get_item () const
 // @return Case profile
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 profile
-processor::impl::get_profile () const
+engine::impl::get_profile () const
 {
     return profile_;
 }
@@ -232,7 +237,7 @@ processor::impl::get_profile () const
 // @return Current status
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::pod::map
-processor::impl::get_status () const
+engine::impl::get_status () const
 {
     // Start with basic status information
     mobius::core::pod::map status = {
@@ -281,7 +286,7 @@ processor::impl::get_status () const
 // @brief Call on_start for all implementations
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-processor::impl::_on_start ()
+engine::impl::_on_start ()
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -302,7 +307,7 @@ processor::impl::_on_start ()
 // @brief Call on_stop for all implementations
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-processor::impl::_on_stop ()
+engine::impl::_on_stop ()
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -323,7 +328,7 @@ processor::impl::_on_stop ()
 // @brief Call on_complete for all implementations
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-processor::impl::_on_complete ()
+engine::impl::_on_complete ()
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -349,7 +354,7 @@ processor::impl::_on_complete ()
 // processor, to feed events to implementations.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-processor::impl::_on_load_evidences ()
+engine::impl::_on_load_evidences ()
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -373,7 +378,7 @@ processor::impl::_on_load_evidences ()
 // @brief Run VFS processor implementation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-processor::impl::_on_run_vfs ()
+engine::impl::_on_run_vfs ()
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -448,7 +453,7 @@ processor::impl::_on_run_vfs ()
 // @param folder Folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-processor::impl::_on_process_folder (const mobius::core::io::folder &folder)
+engine::impl::_on_process_folder (const mobius::core::io::folder &folder)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -520,7 +525,7 @@ processor::impl::_on_process_folder (const mobius::core::io::folder &folder)
 // @param item Case item
 // @param profile_id Profile ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-processor::processor (
+engine::engine (
     const mobius::framework::model::item &item, const std::string &profile_id
 )
     : impl_ (std::make_shared<impl> (item, profile_id))
@@ -531,7 +536,7 @@ processor::processor (
 // @brief Run processor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-processor::run ()
+engine::run ()
 {
     impl_->run ();
 }
@@ -540,7 +545,7 @@ processor::run ()
 // @brief Update processing
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-processor::update ()
+engine::update ()
 {
     impl_->update ();
 }
@@ -550,7 +555,7 @@ processor::update ()
 // @return Case item
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::framework::model::item
-processor::get_item () const
+engine::get_item () const
 {
     return impl_->get_item ();
 }
@@ -560,7 +565,7 @@ processor::get_item () const
 // @return Profile
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 profile
-processor::get_profile () const
+engine::get_profile () const
 {
     return impl_->get_profile ();
 }
@@ -570,9 +575,9 @@ processor::get_profile () const
 // @return Current status
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::pod::map
-processor::get_status () const
+engine::get_status () const
 {
     return impl_->get_status ();
 }
 
-} // namespace mobius::framework::processor
+} // namespace mobius::framework::evidence_processor

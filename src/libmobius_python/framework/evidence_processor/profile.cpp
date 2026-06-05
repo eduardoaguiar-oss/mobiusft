@@ -211,7 +211,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
         try
         {
-            ret->obj = new mobius::framework::processor::profile (arg_id);
+            ret->obj = new mobius::framework::evidence_processor::profile (arg_id);
         }
         catch (const std::exception &e)
         {
@@ -302,7 +302,7 @@ pymobius_framework_evidence_processor_profile_check (PyObject *value)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_framework_evidence_processor_profile_to_pyobject (
-    const mobius::framework::processor::profile &obj
+    const mobius::framework::evidence_processor::profile &obj
 )
 {
     if (!framework_evidence_processor_profile_type)
@@ -320,7 +320,7 @@ pymobius_framework_evidence_processor_profile_to_pyobject (
 // @param value Python value
 // @return Profile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::framework::processor::profile
+mobius::framework::evidence_processor::profile
 pymobius_framework_evidence_processor_profile_from_pyobject (PyObject *value)
 {
     if (!framework_evidence_processor_profile_type)
@@ -345,7 +345,7 @@ pymobius_framework_evidence_processor_list_profiles (PyObject *, PyObject *)
     try
     {
         ret = mobius::py::pylist_from_cpp_container (
-            mobius::framework::processor::list_profiles (),
+            mobius::framework::evidence_processor::list_profiles (),
             pymobius_framework_evidence_processor_profile_to_pyobject
         );
     }

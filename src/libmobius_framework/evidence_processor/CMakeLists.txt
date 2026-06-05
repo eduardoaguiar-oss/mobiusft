@@ -20,20 +20,20 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.20)
-project(libmobius-framework-processor LANGUAGES CXX)
+project(libmobius-framework-evidence-processor LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_framework_processor STATIC
+add_library(mobius_framework_evidence_processor STATIC
     mediator.cpp
-    processor.cpp
-    processor_registry.cpp
+    engine.cpp
+    evidence_processor_registry.cpp
     profile.cpp
 )
 
-target_link_libraries(mobius_framework_processor PRIVATE
+target_link_libraries(mobius_framework_evidence_processor PRIVATE
     Mobius::Core
 )
 
-target_compile_options(mobius_framework_processor PRIVATE -fno-strict-aliasing -fPIC)
+target_compile_options(mobius_framework_evidence_processor PRIVATE -fno-strict-aliasing -fPIC)

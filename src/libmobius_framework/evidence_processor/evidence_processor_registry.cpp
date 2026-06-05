@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/framework/processor/processor_registry.hpp>
+#include <mobius/framework/evidence_processor/evidence_processor_registry.hpp>
 #include <mutex>
 #include <unordered_map>
 #include <string>
@@ -25,7 +25,8 @@ namespace
 // @brief Map to hold processor implementation data
 static std::unordered_map<
     std::string,
-    mobius::framework::processor::processor_implementation_data>
+    mobius::framework::evidence_processor::
+        evidence_processor_implementation_data>
     data;
 
 // @brief Mutex to protect access to the factories map
@@ -33,22 +34,23 @@ static std::mutex mutex;
 
 } // namespace
 
-namespace mobius::framework::processor
+namespace mobius::framework::evidence_processor
 {
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Register a processor
+// @brief Register a evidence processor
 // @param id Unique identifier for the processor
 // @param factory Function to create an instance of the processor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-register_processor_implementation (
+register_evidence_processor_implementation (
     const std::string &id,
     const std::string &name,
-    mobius::framework::processor::processor_implementation_builder factory
+    mobius::framework::evidence_processor::
+        evidence_processor_implementation_builder factory
 )
 {
-    processor_implementation_data data_entry;
+    evidence_processor_implementation_data data_entry;
     data_entry.id = id;
     data_entry.name = name;
     data_entry.factory = factory;
@@ -58,24 +60,24 @@ register_processor_implementation (
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Unregister a processor
+// @brief Unregister a evidence processor
 // @param id Unique identifier for the processor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-unregister_processor_implementation (const std::string &id)
+unregister_evidence_processor_implementation (const std::string &id)
 {
     std::lock_guard<std::mutex> lock (mutex);
     data.erase (id);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get processor implementation data by ID
+// @brief Get evidence processor implementation data by ID
 // @param id Unique identifier for the processor
-// @return Optional containing the processor implementation data if found, or
+// @return Optional containing the evidence processor implementation data if found, or
 //         std::nullopt if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::optional<processor_implementation_data>
-get_processor_implementation (const std::string &id)
+std::optional<evidence_processor_implementation_data>
+get_evidence_processor_implementation (const std::string &id)
 {
     std::lock_guard<std::mutex> lock (mutex);
 
@@ -88,14 +90,16 @@ get_processor_implementation (const std::string &id)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get all registered processor implementations
-// @return Vector of pairs containing the ID and name of each processor
+// @brief Get all registered evidence processor implementations
+// @return Vector of pairs containing the ID and name of each evidence processor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector<mobius::framework::processor::processor_implementation_data>
-list_processor_implementations ()
+std::vector<mobius::framework::evidence_processor::
+                evidence_processor_implementation_data>
+list_evidence_processor_implementations ()
 {
     std::lock_guard<std::mutex> lock (mutex);
-    std::vector<mobius::framework::processor::processor_implementation_data>
+    std::vector<mobius::framework::evidence_processor::
+                    evidence_processor_implementation_data>
         implementations (data.size ());
 
     std::transform (
@@ -106,4 +110,4 @@ list_processor_implementations ()
     return implementations;
 }
 
-} // namespace mobius::framework::processor
+} // namespace mobius::framework::evidence_processor

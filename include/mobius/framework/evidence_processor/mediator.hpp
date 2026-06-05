@@ -1,5 +1,5 @@
-#ifndef MOBIUS_FRAMEWORK_PROCESSOR_MEDIATOR_HPP
-#define MOBIUS_FRAMEWORK_PROCESSOR_MEDIATOR_HPP
+#ifndef MOBIUS_FRAMEWORK_EVIDENCE_PROCESSOR_MEDIATOR_HPP
+#define MOBIUS_FRAMEWORK_EVIDENCE_PROCESSOR_MEDIATOR_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,12 +18,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/framework/evidence_processor/evidence_processor_impl_base.hpp>
 #include <mobius/framework/model/evidence.hpp>
-#include <mobius/framework/processor/processor_impl_base.hpp>
 #include <memory>
 #include <string>
 
-namespace mobius::framework::processor
+namespace mobius::framework::evidence_processor
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>mediator</i> class
@@ -48,7 +48,7 @@ class mediator
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Function prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void add_processor (std::shared_ptr<processor_impl_base>);
+    void add_evidence_processor (std::shared_ptr<evidence_processor_impl_base>);
 
     void on_evidence_created (mobius::framework::model::evidence &);
     void on_evidence_attribute_modified (
@@ -66,6 +66,6 @@ class mediator
     std::shared_ptr<impl> impl_;
 };
 
-} // namespace mobius::framework::processor
+} // namespace mobius::framework::evidence_processor
 
 #endif

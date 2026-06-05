@@ -1,7 +1,7 @@
-#ifndef MOBIUS_FRAMEWORK_PROCESSOR_PROCESSOR_HPP
-#define MOBIUS_FRAMEWORK_PROCESSOR_PROCESSOR_HPP
+#ifndef MOBIUS_FRAMEWORK_EVIDENCE_PROCESSOR_PROFILE_HPP
+#define MOBIUS_FRAMEWORK_EVIDENCE_PROCESSOR_PROFILE_HPP
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
 // Copyright (C) 2008-2026 Eduardo Aguiar
 //
@@ -17,41 +17,42 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/pod/map.hpp>
-#include <mobius/framework/model/item.hpp>
-#include <mobius/framework/processor/processor_impl_base.hpp>
-#include <mobius/framework/processor/profile.hpp>
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <memory>
 #include <string>
+#include <vector>
 
-namespace mobius::framework::processor
+namespace mobius::framework::evidence_processor
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>processor</i> class
+// @brief Processor profile class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class processor
+class profile
 {
   public:
-    processor (const mobius::framework::model::item &, const std::string &);
-    processor (processor &&) noexcept = default;
-    processor (const processor &) noexcept = default;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    profile ();
+    explicit profile (const std::string &);
+    profile (profile &&) noexcept = default;
+    profile (const profile &) noexcept = default;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Operators
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    processor &operator= (const processor &) noexcept = default;
-    processor &operator= (processor &&) noexcept = default;
+    profile &operator= (const profile &) noexcept = default;
+    profile &operator= (profile &&) noexcept = default;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Function prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void run ();
-    void update ();
-    mobius::framework::model::item get_item () const;
-    profile get_profile () const;
-    mobius::core::pod::map get_status () const;
+    std::string get_id () const;
+    std::string get_name () const;
+    std::string get_description () const;
+    std::string get_processor_scope () const;
+    std::vector<std::string> get_processors () const;
 
   private:
     // @brief Implementation class forward declaration
@@ -61,6 +62,11 @@ class processor
     std::shared_ptr<impl> impl_;
 };
 
-} // namespace mobius::framework::processor
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Functions
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<profile> list_profiles ();
+
+} // namespace mobius::framework::evidence_processor
 
 #endif

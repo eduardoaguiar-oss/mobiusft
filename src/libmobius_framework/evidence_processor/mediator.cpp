@@ -16,9 +16,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/log.hpp>
-#include <mobius/framework/processor/mediator.hpp>
+#include <mobius/framework/evidence_processor/mediator.hpp>
 
-namespace mobius::framework::processor
+namespace mobius::framework::evidence_processor
 {
 // ==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>mediator</i> implementation class
@@ -42,7 +42,7 @@ class mediator::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Function prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void add_processor (std::shared_ptr<processor_impl_base>);
+    void add_evidence_processor (std::shared_ptr<evidence_processor_impl_base>);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Event handlers
@@ -57,15 +57,17 @@ class mediator::impl
 
   private:
     // @brief Implementations
-    std::vector<std::shared_ptr<processor_impl_base>> implementations_;
+    std::vector<std::shared_ptr<evidence_processor_impl_base>> implementations_;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Add processor implementation
-// @param implementation Processor implementation to add
+// @brief Add evidence_processor implementation
+// @param implementation Evidence processor implementation to add
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-mediator::impl::add_processor (std::shared_ptr<processor_impl_base> processor)
+mediator::impl::add_evidence_processor (
+    std::shared_ptr<evidence_processor_impl_base> processor
+)
 {
     implementations_.emplace_back (std::move (processor));
 }
@@ -157,13 +159,15 @@ mediator::mediator ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Add processor implementation
+// @brief Add evidence_processor implementation
 // @param implementation Processor implementation to add
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-mediator::add_processor (std::shared_ptr<processor_impl_base> processor)
+mediator::add_evidence_processor (
+    std::shared_ptr<evidence_processor_impl_base> processor
+)
 {
-    impl_->add_processor (std::move (processor));
+    impl_->add_evidence_processor (std::move (processor));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -203,4 +207,4 @@ mediator::on_evidence_tag_modified (
     impl_->on_evidence_tag_modified (evidence, tag);
 }
 
-} // namespace mobius::framework::processor
+} // namespace mobius::framework::evidence_processor

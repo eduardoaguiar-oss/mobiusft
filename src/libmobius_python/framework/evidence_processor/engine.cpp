@@ -186,7 +186,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
         try
         {
-            ret->obj = new mobius::framework::processor::processor (
+            ret->obj = new mobius::framework::evidence_processor::engine (
                 arg_item, arg_profile_id
             );
         }
@@ -279,7 +279,7 @@ pymobius_framework_evidence_processor_engine_check (PyObject *value)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_framework_evidence_processor_engine_to_pyobject (
-    const mobius::framework::processor::processor &obj
+    const mobius::framework::evidence_processor::engine &obj
 )
 {
     if (!framework_evidence_processor_engine_type)
@@ -297,7 +297,7 @@ pymobius_framework_evidence_processor_engine_to_pyobject (
 // @param value Python value
 // @return Engine object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::framework::processor::processor
+mobius::framework::evidence_processor::engine
 pymobius_framework_evidence_processor_engine_from_pyobject (PyObject *value)
 {
     if (!framework_evidence_processor_engine_type)

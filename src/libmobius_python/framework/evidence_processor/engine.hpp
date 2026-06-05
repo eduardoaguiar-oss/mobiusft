@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pytypeobject.hpp>
-#include <mobius/framework/processor/processor.hpp>
+#include <mobius/framework/evidence_processor/engine.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -28,7 +28,7 @@
 typedef struct
 {
     PyObject_HEAD
-    mobius::framework::processor::processor *obj;
+    mobius::framework::evidence_processor::engine *obj;
 } framework_evidence_processor_engine_o;
 
 
@@ -37,7 +37,7 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject new_framework_evidence_processor_engine_type ();
 bool pymobius_framework_evidence_processor_engine_check (PyObject *);
-PyObject *pymobius_framework_evidence_processor_engine_to_pyobject (const mobius::framework::processor::processor&);
-mobius::framework::processor::processor pymobius_framework_evidence_processor_engine_from_pyobject (PyObject *);
+PyObject *pymobius_framework_evidence_processor_engine_to_pyobject (const mobius::framework::evidence_processor::engine&);
+mobius::framework::evidence_processor::engine pymobius_framework_evidence_processor_engine_from_pyobject (PyObject *);
 
 #endif

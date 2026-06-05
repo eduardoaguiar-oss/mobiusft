@@ -1,5 +1,5 @@
-#ifndef MOBIUS_FRAMEWORK_PROCESSOR_PROCESSOR_IMPL_BASE_HPP
-#define MOBIUS_FRAMEWORK_PROCESSOR_PROCESSOR_IMPL_BASE_HPP
+#ifndef MOBIUS_FRAMEWORK_EVIDENCE_PROCESSOR_EVIDENCE_PROCESSOR_IMPL_BASE_HPP
+#define MOBIUS_FRAMEWORK_EVIDENCE_PROCESSOR_EVIDENCE_PROCESSOR_IMPL_BASE_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -22,16 +22,16 @@
 #include <mobius/core/pod/map.hpp>
 #include <mobius/framework/model/evidence.hpp>
 
-namespace mobius::framework::processor
+namespace mobius::framework::evidence_processor
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>processor_impl_base</i> class
+// @brief <i>evidence_processor_impl_base</i> class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class processor_impl_base
+class evidence_processor_impl_base
 {
   public:
-    virtual ~processor_impl_base () = default;
+    virtual ~evidence_processor_impl_base () = default;
 
     // @brief Called when processing starts
     virtual void on_start () {};
@@ -69,6 +69,6 @@ class processor_impl_base
     }
 };
 
-} // namespace mobius::framework::processor
+} // namespace mobius::framework::evidence_processor
 
 #endif

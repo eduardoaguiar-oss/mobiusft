@@ -20,12 +20,12 @@
 #include <mobius/core/exception.inc>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/io/walker.hpp>
-#include <mobius/framework/processor/profile.hpp>
+#include <mobius/framework/evidence_processor/profile.hpp>
 #include <algorithm>
 #include <stdexcept>
 #include <map>
 
-namespace mobius::framework::processor
+namespace mobius::framework::evidence_processor
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>profile</i> implementation class
@@ -273,4 +273,4 @@ list_profiles ()
     return result;
 }
 
-} // namespace mobius::framework::processor
+} // namespace mobius::framework::evidence_processor
