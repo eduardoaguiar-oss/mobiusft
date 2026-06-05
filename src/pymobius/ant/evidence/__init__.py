@@ -152,8 +152,18 @@ class Ant(object):
             self.__ant = vfs.Ant(self.__item, self.__profile)
             self.__ant.run()
 
-        # run post-processing ant
+        # run newer processor
         self.__phase_number = 2
+        self.__phase_name = f"Processor"
+
+        self.__ant = mobius.framework.processor.processor(self.__item, self.__profile.get_id())
+
+        mobius.core.logf(f"INF mobius.framework.processor.processor started")
+        self.__ant.run()
+        mobius.core.logf(f"INF mobius.framework.processor.processor ended")
+
+        # run post-processing ant
+        self.__phase_number = 3
         self.__phase_name = f"ant.post_processor"
         self.__ant = None
 
@@ -163,7 +173,7 @@ class Ant(object):
         mobius.core.logf(f"INF ant.post_processor ended")
 
         # run post-processing ants (from resources)
-        self.__phase_number = 3
+        self.__phase_number = 4
         self.__phase_name = f"Post-processing ants"
         ants = ANTS + [r.value for r in mobius.core.get_resources('evidence.post')]
 
@@ -181,16 +191,6 @@ class Ant(object):
                 mobius.core.logf(f'WRN {str(e)}\n{traceback.format_exc()}')
 
             mobius.core.logf(f"INF Post-processing ant ended: {ant.name}")
-
-	# run newer processor
-        self.__phase_number = 4
-        self.__phase_name = f"Processor"
-
-        self.__ant = mobius.framework.processor.processor(self.__item, self.__profile.get_id())
-
-        mobius.core.logf(f"INF mobius.framework.processor.processor started")
-        self.__ant.run()
-        mobius.core.logf(f"INF mobius.framework.processor.processor ended")
 
         # reset step info
         self.__step_number = None

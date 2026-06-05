@@ -20,23 +20,23 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.20)
-project(mobius_python_framework_processor LANGUAGES CXX)
+project(mobius_python_framework_evidence_processor LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Target: mobius_python_framework_processor.la
+# Target: mobius_python_framework_evidence_processor.la
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_python_framework_processor STATIC
+add_library(mobius_python_framework_evidence_processor STATIC
     module.cpp
-    processor.cpp
+    engine.cpp
     profile.cpp
 )
 
-target_include_directories(mobius_python_framework_processor PRIVATE
+target_include_directories(mobius_python_framework_evidence_processor PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_link_libraries(mobius_python_framework_processor PUBLIC Mobius::Core)
+target_link_libraries(mobius_python_framework_evidence_processor PUBLIC Mobius::Core)
 
-target_compile_options(mobius_python_framework_processor PRIVATE -fno-strict-aliasing -fPIC)
+target_compile_options(mobius_python_framework_evidence_processor PRIVATE -fno-strict-aliasing -fPIC)

@@ -27,8 +27,8 @@
 #include "attribute.hpp"
 #include "case_profile.hpp"
 #include "category.hpp"
+#include "evidence_processor/module.hpp"
 #include "model/module.hpp"
-#include "processor/module.hpp"
 
 #include <pycallback.hpp>
 #include <pyfunction.hpp>
@@ -112,8 +112,8 @@ new_framework_module ()
 
     // Add submodules
     module.add_submodule ("ant", new_framework_ant_module ());
+    module.add_submodule ("evidence_processor", new_framework_evidence_processor_module ());
     module.add_submodule ("model", new_framework_model_module ());
-    module.add_submodule ("processor", new_framework_processor_module ());
 
     // Return module
     return module;

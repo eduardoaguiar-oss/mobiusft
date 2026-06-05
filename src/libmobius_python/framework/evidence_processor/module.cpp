@@ -22,13 +22,13 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "module.hpp"
 #include <pymobius.hpp>
-#include "processor.hpp"
+#include "engine.hpp"
 #include "profile.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Functions prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *pymobius_framework_processor_list_profiles (PyObject *, PyObject *);
+PyObject *pymobius_framework_evidence_processor_list_profiles (PyObject *, PyObject *);
 
 namespace
 {
@@ -36,7 +36,7 @@ namespace
 // @brief Module methods
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef module_methods[] = {
-    {"list_profiles", (PyCFunction) pymobius_framework_processor_list_profiles,
+    {"list_profiles", (PyCFunction) pymobius_framework_evidence_processor_list_profiles,
      METH_NOARGS, "List available processor profiles."},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
@@ -46,8 +46,8 @@ static PyMethodDef module_methods[] = {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyModuleDef module_def = {
     PyModuleDef_HEAD_INIT,
-    "mobius.framework.processor",
-    "Mobius Forensic Toolkit mobius.framework.processor module",
+    "mobius.framework.evidence_processor",
+    "Mobius Forensic Toolkit mobius.framework.evidence_processor module",
     -1,
     module_methods,
     nullptr,
@@ -62,14 +62,14 @@ static PyModuleDef module_def = {
 // @brief Create module
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pymodule
-new_framework_processor_module ()
+new_framework_evidence_processor_module ()
 {
     // Initialize module
     mobius::py::pymodule module (&module_def);
 
     // Add types
-    module.add_type ("processor", new_framework_processor_processor_type ());
-    module.add_type ("profile", new_framework_processor_profile_type ());
+    module.add_type ("engine", new_framework_evidence_processor_engine_type ());
+    module.add_type ("profile", new_framework_evidence_processor_profile_type ());
 
     // Return module
     return module;

@@ -20,6 +20,6 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pymodule.hpp>
 
-mobius::py::pymodule new_framework_processor_module ();
+mobius::py::pymodule new_framework_evidence_processor_module ();
 
 #endif

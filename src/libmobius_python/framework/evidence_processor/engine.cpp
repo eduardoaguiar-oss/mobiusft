@@ -17,36 +17,63 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @file profile.cpp C++ API <i>mobius.framework.processor.profile</i> class wrapper
+// @file engine.cpp C++ API <i>mobius.framework.evidence_processor.engine</i>
+// class wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "profile.hpp"
-#include <pylist.hpp>
+#include "engine.hpp"
 #include <pymobius.hpp>
 #include <stdexcept>
+#include "core/pod/map.hpp"
+#include "framework/model/item.hpp"
+#include "profile.hpp"
 
 namespace
 {
 // @brief Global pointer to hold the heap-allocated type
-static PyTypeObject *framework_processor_profile_type = nullptr;
+static PyTypeObject *framework_evidence_processor_engine_type = nullptr;
 
 } // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>get_id</i> method implementation
+// @brief <i>run</i> method implementation
 // @param self Object
 // @param args Argument list
-// @return Profile ID
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_get_id (framework_processor_profile_o *self, PyObject *)
+tp_f_run (framework_evidence_processor_engine_o *self, PyObject *)
+{
+    // Execute C++ function
+    try
+    {
+        self->obj->run ();
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
+    }
+
+    // return None
+    return mobius::py::pynone ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>get_item</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return None
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_get_item (framework_evidence_processor_engine_o *self, PyObject *)
 {
     // Execute C++ function
     PyObject *ret = nullptr;
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_id ());
+        ret =
+            pymobius_framework_model_item_to_pyobject (self->obj->get_item ());
     }
     catch (const std::exception &e)
     {
@@ -58,46 +85,21 @@ tp_f_get_id (framework_processor_profile_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>get_name</i> method implementation
+// @brief <i>get_profile</i> method implementation
 // @param self Object
 // @param args Argument list
-// @return Profile name
+// @return None
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_get_name (framework_processor_profile_o *self, PyObject *)
+tp_f_get_profile (framework_evidence_processor_engine_o *self, PyObject *)
 {
     // Execute C++ function
     PyObject *ret = nullptr;
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (self->obj->get_name ());
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    // Return value
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>get_description</i> method implementation
-// @param self Object
-// @param args Argument list
-// @return Profile description
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_f_get_description (framework_processor_profile_o *self, PyObject *)
-{
-    // Execute C++ function
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::pystring_from_std_string (
-            self->obj->get_description ()
+        ret = pymobius_framework_evidence_processor_profile_to_pyobject (
+            self->obj->get_profile ()
         );
     }
     catch (const std::exception &e)
@@ -110,49 +112,20 @@ tp_f_get_description (framework_processor_profile_o *self, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>get_processor_scope</i> method implementation
+// @brief <i>get_status</i> method implementation
 // @param self Object
 // @param args Argument list
-// @return Processor scope
+// @return None
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
-tp_f_get_processor_scope (framework_processor_profile_o *self, PyObject *)
+tp_f_get_status (framework_evidence_processor_engine_o *self, PyObject *)
 {
     // Execute C++ function
     PyObject *ret = nullptr;
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
-            self->obj->get_processor_scope ()
-        );
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    // Return value
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>get_processors</i> method implementation
-// @param self Object
-// @param args Argument list
-// @return List of processors
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_f_get_processors (framework_processor_profile_o *self, PyObject *)
-{
-    // Execute C++ function
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::pylist_from_cpp_container (
-            self->obj->get_processors (), mobius::py::pystring_from_std_string
-        );
+        ret = pymobius_core_pod_map_to_pyobject (self->obj->get_status ());
     }
     catch (const std::exception &e)
     {
@@ -167,33 +140,35 @@ tp_f_get_processors (framework_processor_profile_o *self, PyObject *)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {"get_id", (PyCFunction) tp_f_get_id, METH_VARARGS, "Get ID"},
-    {"get_name", (PyCFunction) tp_f_get_name, METH_VARARGS, "Get name"},
-    {"get_description", (PyCFunction) tp_f_get_description, METH_VARARGS,
-     "Get description"},
-    {"get_processor_scope", (PyCFunction) tp_f_get_processor_scope,
-     METH_VARARGS, "Get processor scope"},
-    {"get_processors", (PyCFunction) tp_f_get_processors, METH_VARARGS,
-     "Get list of processors"},
+    {"run", (PyCFunction) tp_f_run, METH_VARARGS, "Run processor"},
+    {"get_item", (PyCFunction) tp_f_get_item, METH_VARARGS, "Get case item"},
+    {"get_profile", (PyCFunction) tp_f_get_profile, METH_VARARGS,
+     "Get case profile"},
+    {"get_status", (PyCFunction) tp_f_get_status, METH_VARARGS,
+     "Get current status"},
     {nullptr, nullptr, 0, nullptr}, // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>processor_profile</i> Constructor
+// @brief <i>processor</i> Constructor
 // @param type Type object
 // @param args Argument list
 // @param kwds Keywords dict
-// @return new <i>profile</i> object
+// @return new <i>processor</i> object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyObject *
 tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 {
     // Parse input args
-    std::string arg_id;
+    mobius::framework::model::item arg_item;
+    std::string arg_profile_id;
 
     try
     {
-        arg_id = mobius::py::get_arg_as_std_string (args, 0);
+        arg_item = mobius::py::get_arg_as_cpp (
+            args, 0, pymobius_framework_model_item_from_pyobject
+        );
+        arg_profile_id = mobius::py::get_arg_as_std_string (args, 1);
     }
     catch (const std::exception &e)
     {
@@ -202,8 +177,8 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     }
 
     // Create Python object
-    framework_processor_profile_o *ret =
-        reinterpret_cast<framework_processor_profile_o *> (
+    framework_evidence_processor_engine_o *ret =
+        reinterpret_cast<framework_evidence_processor_engine_o *> (
             type->tp_alloc (type, 0)
         );
 
@@ -211,7 +186,9 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     {
         try
         {
-            ret->obj = new mobius::framework::processor::profile (arg_id);
+            ret->obj = new mobius::framework::processor::processor (
+                arg_item, arg_profile_id
+            );
         }
         catch (const std::exception &e)
         {
@@ -225,11 +202,11 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>profile</i> deallocator
+// @brief <i>processor</i> deallocator
 // @param self Object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-tp_dealloc (framework_processor_profile_o *self)
+tp_dealloc (framework_evidence_processor_engine_o *self)
 {
     delete self->obj;
     Py_TYPE (self)->tp_free ((PyObject *) self);
@@ -238,9 +215,9 @@ tp_dealloc (framework_processor_profile_o *self)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Type Slots
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyType_Slot framework_processor_profile_slots[] = {
+static PyType_Slot framework_evidence_processor_engine_slots[] = {
     {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
-    {Py_tp_doc, const_cast<char *> ("Processor profile class")},
+    {Py_tp_doc, const_cast<char *> ("processor class")},
     {Py_tp_new, reinterpret_cast<void *> (tp_new)},
     {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
     {0, nullptr} // Sentinel
@@ -249,110 +226,86 @@ static PyType_Slot framework_processor_profile_slots[] = {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Type specification
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyType_Spec framework_processor_profile_spec = {
-    .name = "mobius.framework.processor.profile",
-    .basicsize = sizeof (framework_processor_profile_o),
+static PyType_Spec framework_evidence_processor_engine_spec = {
+    .name = "mobius.framework.evidence_processor.engine",
+    .basicsize = sizeof (framework_evidence_processor_engine_o),
     .itemsize = 0,
     .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
-    .slots = framework_processor_profile_slots,
+    .slots = framework_evidence_processor_engine_slots,
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>mobius.framework.processor.profile</i> type
+// @brief Create <i>mobius.framework.evidence_processor.engine</i> type
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
-new_framework_processor_profile_type ()
+new_framework_evidence_processor_engine_type ()
 {
     // If type is already created, return it
-    if (framework_processor_profile_type)
-        return mobius::py::pytypeobject (framework_processor_profile_type);
+    if (framework_evidence_processor_engine_type)
+        return mobius::py::pytypeobject (framework_evidence_processor_engine_type);
 
     // Allocate type from spec
-    framework_processor_profile_type = reinterpret_cast<PyTypeObject *> (
-        PyType_FromSpec (&framework_processor_profile_spec)
+    framework_evidence_processor_engine_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&framework_evidence_processor_engine_spec)
     );
 
     // Create type
-    mobius::py::pytypeobject type (framework_processor_profile_type);
+    mobius::py::pytypeobject type (framework_evidence_processor_engine_type);
     type.create ();
 
     return type;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if value is an instance of <i>profile</i>
+// @brief Check if value is an instance of <i>processor</i>
 // @param value Python value
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-pymobius_framework_processor_profile_check (PyObject *value)
+pymobius_framework_evidence_processor_engine_check (PyObject *value)
 {
-    if (!framework_processor_profile_type)
+    if (!framework_evidence_processor_engine_type)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("profile type is not initialized")
+            MOBIUS_EXCEPTION_MSG ("engine type is not initialized")
         );
 
-    return mobius::py::isinstance (value, framework_processor_profile_type);
+    return mobius::py::isinstance (value, framework_evidence_processor_engine_type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>profile</i> Python object from C++ object
+// @brief Create <i>engine</i> Python object from C++ object
 // @param obj C++ object
-// @return New profile object
+// @return New engine object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_framework_processor_profile_to_pyobject (
-    const mobius::framework::processor::profile &obj
+pymobius_framework_evidence_processor_engine_to_pyobject (
+    const mobius::framework::processor::processor &obj
 )
 {
-    if (!framework_processor_profile_type)
+    if (!framework_evidence_processor_engine_type)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("profile type is not initialized")
+            MOBIUS_EXCEPTION_MSG ("engine type is not initialized")
         );
 
-    return mobius::py::to_pyobject<framework_processor_profile_o> (
-        obj, framework_processor_profile_type
+    return mobius::py::to_pyobject<framework_evidence_processor_engine_o> (
+        obj, framework_evidence_processor_engine_type
     );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>profile</i> C++ object from Python object
+// @brief Create <i>engine</i> C++ object from Python object
 // @param value Python value
-// @return Profile object
+// @return Engine object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::framework::processor::profile
-pymobius_framework_processor_profile_from_pyobject (PyObject *value)
+mobius::framework::processor::processor
+pymobius_framework_evidence_processor_engine_from_pyobject (PyObject *value)
 {
-    if (!framework_processor_profile_type)
+    if (!framework_evidence_processor_engine_type)
         throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("profile type is not initialized")
+            MOBIUS_EXCEPTION_MSG ("engine type is not initialized")
         );
 
-    return mobius::py::from_pyobject<framework_processor_profile_o> (
-        value, framework_processor_profile_type
+    return mobius::py::from_pyobject<framework_evidence_processor_engine_o> (
+        value, framework_evidence_processor_engine_type
     );
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief <i>list_profiles</i> function implementation
-// @return List of profiles
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_framework_processor_list_profiles (PyObject *, PyObject *)
-{
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::pylist_from_cpp_container (
-            mobius::framework::processor::list_profiles (),
-            pymobius_framework_processor_profile_to_pyobject
-        );
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    return ret;
 }

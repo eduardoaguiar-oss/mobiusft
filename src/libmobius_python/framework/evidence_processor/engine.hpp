@@ -1,5 +1,5 @@
-#ifndef MOBIUS_PYTHON_FRAMEWORK_PROCESSOR_PROFILE_HPP
-#define MOBIUS_PYTHON_FRAMEWORK_PROCESSOR_PROFILE_HPP
+#ifndef MOBIUS_PYTHON_FRAMEWORK_EVIDENCE_PROCESSOR_ENGINE_HPP
+#define MOBIUS_PYTHON_FRAMEWORK_EVIDENCE_PROCESSOR_ENGINE_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -20,7 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <pytypeobject.hpp>
-#include <mobius/framework/processor/profile.hpp>
+#include <mobius/framework/processor/processor.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -28,17 +28,16 @@
 typedef struct
 {
     PyObject_HEAD
-    mobius::framework::processor::profile *obj;
-} framework_processor_profile_o;
+    mobius::framework::processor::processor *obj;
+} framework_evidence_processor_engine_o;
 
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pytypeobject new_framework_processor_profile_type ();
-bool pymobius_framework_processor_profile_check (PyObject *);
-PyObject *pymobius_framework_processor_profile_to_pyobject (const mobius::framework::processor::profile&);
-mobius::framework::processor::profile pymobius_framework_processor_profile_from_pyobject (PyObject *);
-PyObject *pymobius_framework_list_processor_profiles (PyObject *, PyObject *);
+mobius::py::pytypeobject new_framework_evidence_processor_engine_type ();
+bool pymobius_framework_evidence_processor_engine_check (PyObject *);
+PyObject *pymobius_framework_evidence_processor_engine_to_pyobject (const mobius::framework::processor::processor&);
+mobius::framework::processor::processor pymobius_framework_evidence_processor_engine_from_pyobject (PyObject *);
 
 #endif

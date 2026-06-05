@@ -36,6 +36,8 @@ namespace mobius::framework::processor
 class processor::impl
 {
   public:
+    enum class mode { none, run, update };
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -70,6 +72,9 @@ class processor::impl
 
     // @brief Processor implementations
     std::vector<std::shared_ptr<processor_impl_base>> implementations_;
+
+    // @brief Current mode
+    mode current_mode_ = mode::none;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Processing status
@@ -157,6 +162,7 @@ processor::impl::impl (
 void
 processor::impl::run ()
 {
+    current_mode_ = mode::run;
     started_time_ = mobius::core::datetime::now ();
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -180,6 +186,7 @@ processor::impl::run ()
     _on_stop ();
 
     finished_time_ = mobius::core::datetime::now ();
+    current_mode_ = mode::none;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -188,6 +195,7 @@ processor::impl::run ()
 void
 processor::impl::update ()
 {
+    current_mode_ = mode::update;
     started_time_ = mobius::core::datetime::now ();
 
     _on_start ();
@@ -196,6 +204,7 @@ processor::impl::update ()
     _on_stop ();
 
     finished_time_ = mobius::core::datetime::now ();
+    current_mode_ = mode::none;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -232,25 +241,26 @@ processor::impl::get_status () const
         {"started_time", started_time_},
     };
 
+    // Add finished time if processing is complete, otherwise add current time
     if (finished_time_)
         status.set ("finished_time", finished_time_);
 
     else
         status.set ("current_time", mobius::core::datetime::now ());
 
-    // Add current folder path if available
+    // Mode run status
+    if (current_mode_ == mode::run)
     {
+        status.set ("processed_folders", processed_folders_.load ());
+        status.set ("processed_files", processed_files_.load ());
+
         std::lock_guard<std::mutex> lock (status_mutex_);
 
         if (!current_folder_path_.empty ())
             status.set ("current_folder", current_folder_path_);
     }
 
-    // Add total processed folders and files
-    status.set ("processed_folders", processed_folders_.load ());
-    status.set ("processed_files", processed_files_.load ());
-
-    // Aggregate status from all implementations
+    // Aggregate status from implementations
     for (const auto &impl : implementations_)
     {
         try
