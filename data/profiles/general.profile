@@ -11,4 +11,5 @@ app-gecko
 app-itubego
 app-skype
 app-sticky-notes
+derived-opened-files
 os-win

@@ -30,7 +30,7 @@ add_library(evidence_processor_derived_opened_files MODULE
     evidence_processor_impl.cpp
 )
 
-set_target_properties(evidence_processor_derived_opened_files PROPERTIES OUTPUT_NAME "evidence-processor-derived-opened-files" PREFIX "")
+set_target_properties(evidence_processor_derived_opened_files PROPERTIES OUTPUT_NAME "derived-opened-files" PREFIX "")
 
 target_link_libraries(evidence_processor_derived_opened_files PRIVATE Mobius::Framework Mobius::Core)
 

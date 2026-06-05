@@ -23,7 +23,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 extern "C"
 {
-    const char *EXTENSION_ID = "evidence-processor-derived-opened-files";
+    const char *EXTENSION_ID = "derived-opened-files";
     const char *EXTENSION_NAME = "Derived Opened Files evidence-processor";
     const char *EXTENSION_VERSION = "1.0";
     const char *EXTENSION_AUTHORS = "Eduardo Aguiar";

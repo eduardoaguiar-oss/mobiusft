@@ -18,6 +18,7 @@
 #include "evidence_processor_impl.hpp"
 #include <mobius/core/io/uri.hpp>
 #include <mobius/core/log.hpp>
+#include <format>
 
 namespace mobius::extension::evidence_processor::derived_opened_files
 {
@@ -145,12 +146,10 @@ evidence_processor_impl::on_stop ()
     mobius::core::log log (__FILE__, __FUNCTION__);
 
     log.info (
-        __LINE__,
-        "Evidences processed: " + std::to_string (evidences_processed_.load ())
-    );
-    log.info (
-        __LINE__,
-        "Evidences derived: " + std::to_string (evidences_derived_.load ())
+        __LINE__, std::format (
+                      "Evidences derived/processed: {} of {}",
+                      evidences_derived_.load (), evidences_processed_.load ()
+                  )
     );
 }
 

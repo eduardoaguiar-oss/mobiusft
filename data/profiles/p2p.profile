@@ -16,4 +16,5 @@ app-itubego
 app-skype
 app-shareaza
 app-utorrent
+derived-opened-files
 os-win

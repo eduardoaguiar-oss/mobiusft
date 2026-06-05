@@ -17,4 +17,5 @@ app-shareaza
 app-skype
 app-sticky-notes
 app-utorrent
+derived-opened-files
 os-win
