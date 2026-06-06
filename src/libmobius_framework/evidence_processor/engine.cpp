@@ -184,7 +184,7 @@ engine::impl::impl (
 
                     log.info (
                         __LINE__,
-                        "evidence_processor implementation: " + processor_id
+                        "evidence_processor implementation (deprecated): " + processor_id
                     );
                 }
                 catch (const std::exception &e)
@@ -235,7 +235,6 @@ engine::impl::run ()
     // Run
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     _on_start ();
-    _on_load_evidences ();
     _on_run_vfs ();
     _on_complete ();
     _on_stop ();
@@ -386,9 +385,9 @@ engine::impl::_on_complete ()
     auto transaction = item_.new_transaction ();
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Notify implementations that processing is complete
+    // @deprecated Notify VFS implementations that processing is complete
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    for (const auto &impl : implementations_)
+    for (const auto &impl : vfs_implementations_)
     {
         try
         {
@@ -400,10 +399,12 @@ engine::impl::_on_complete ()
         }
     }
 
+    _on_load_evidences ();
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @deprecated Notify VFS implementations that processing is complete
+    // Notify implementations that processing is complete
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    for (const auto &impl : vfs_implementations_)
+    for (const auto &impl : implementations_)
     {
         try
         {
