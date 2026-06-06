@@ -97,6 +97,11 @@ class evidence
     void add_source (const evidence &);
     std::vector<evidence::source> get_sources () const;
 
+    void add_hash (const std::string &, const std::string &);
+    void remove_hash (const std::string &);
+    std::string get_hash (const std::string &) const;
+    std::map<std::string, std::string> get_hashes () const;
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get attribute
     // @param id Attribute ID

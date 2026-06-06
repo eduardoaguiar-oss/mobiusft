@@ -28,7 +28,7 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static constexpr int SCHEMA_VERSION = 13;
+static constexpr int SCHEMA_VERSION = 14;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // History
@@ -66,6 +66,8 @@ static constexpr int SCHEMA_VERSION = 13;
  *
  *      13      New table event
  *
+ *      14      New table evidence_hash
+ * 
  * Create new table                     Rename old table
  * Copy data                            Create new table
  * Drop old table                       Copy data
@@ -245,6 +247,24 @@ case_schema (mobius::core::database::database db)
     db.execute (
         "CREATE UNIQUE INDEX IF NOT EXISTS idx_evidence_tag "
         "ON evidence_tag (evidence_uid, name)"
+    );
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // create table 'evidence_hash'
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    db.execute (
+        "CREATE TABLE IF NOT EXISTS evidence_hash ("
+        "uid INTEGER PRIMARY KEY AUTOINCREMENT,"
+        "evidence_uid INTEGER,"
+        "type TEXT NOT NULL,"
+        "value TEXT NOT NULL,"
+        "FOREIGN KEY (evidence_uid) REFERENCES evidence (uid) ON "
+        "DELETE CASCADE);"
+    );
+
+    db.execute (
+        "CREATE UNIQUE INDEX IF NOT EXISTS idx_evidence_hash "
+        "ON evidence_hash (evidence_uid, type)"
     );
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

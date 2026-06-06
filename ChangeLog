@@ -1,4 +1,20 @@
 Mobius Forensic Toolkit 2.27
+	* libmobius_framework: Added new submodule `evidence_processor`
+	* libmobius_framework: Added new class evidence_processor::evidence_processor_impl_base 
+	* libmobius_framework: Added new class evidence_processor::engine
+	* libmobius_framework: Added new class evidence_processor::profile
+	* libmobius_framework: Added new class evidence_processor::mediator
+	* libmobius_framework: Added new function processor::register_evidence_processor_implementation
+	* libmobius_framework: Added new function processor::unregister_evidence_processor_implementation
+	* libmobius_framework: Added new function processor::get_evidence_processor_implementation
+	* libmobius_framework: Added new function processor::list_evidence_processor_implementation
+	* libmobius_framework: Removed deprecated class ant::vfs_processor 
+	* libmobius_framework: Removed deprecated class ant::ant_impl_vfs_processor
+	* libmobius_framework: Removed deprecated function ant::list_vfs_processor_implementations
+	* libmobius_framework: Added new method model::evidence::add_hash
+	* libmobius_framework: Added new method model::evidence::remove_hash
+	* libmobius_framework: Added new method model::evidence::get_hash
+	* libmobius_framework: Added new method model::evidence::get_hashes
 	* libmobius_python: Improved mobius.core.crypt.cipher class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.core.crypt.hash class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.core.crypt.hmac class using the PyType_FromSpec API
@@ -21,22 +37,15 @@ Mobius Forensic Toolkit 2.27
 	* libmobius_python: Improved mobius.core.decoder.xml.dom using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.core.decoder.xml.element using the PyType_FromSpec API
 	* libmobius_python: Added new method pytypeobject::get
-	* libmobius_framework: Added new submodule `evidence_processor`
-	* libmobius_framework: Added new class evidence_processor::evidence_processor_impl_base 
-	* libmobius_framework: Added new class evidence_processor::engine
-	* libmobius_framework: Added new class evidence_processor::profile
-	* libmobius_framework: Added new class evidence_processor::mediator
-	* libmobius_framework: Added new function processor::register_evidence_processor_implementation
-	* libmobius_framework: Added new function processor::unregister_evidence_processor_implementation
-	* libmobius_framework: Added new function processor::get_evidence_processor_implementation
-	* libmobius_framework: Added new function processor::list_evidence_processor_implementation
-	* libmobius_framework: Removed deprecated class ant::vfs_processor 
-	* libmobius_framework: Removed deprecated class ant::ant_impl_vfs_processor
-	* libmobius_framework: Removed deprecated function ant::list_vfs_processor_implementations
 	* libmobius_python: Added new submodule `framework.evidence_processor`
 	* libmobius_python: Added new class framework.evidence_processor.engine 
 	* libmobius_python: Added new class framework.evidence_processor.profile
 	* libmobius_python: Removed deprecated class ant.vfs_processor
+	* libmobius_python: Added new method framework.model.evidence.add_hash
+	* libmobius_python: Added new method framework.model.evidence.remove_hash
+	* libmobius_python: Added new method framework.model.evidence.get_hash
+	* libmobius_python: Added new method framework.model.evidence.get_hashes
+	* libmobius_python: Improved mobius.framework.model.evidence class using the PyType_FromSpec API
 	* pymobius.ant.evidence: Changed to use mobius.framework.evidence_processor.engine class
 	* pymobius.ant.evidence.vfs: Removed usage of the deprecated class vfs_processor
 	* Created new package src/extensions/evidence-processor
@@ -44,7 +53,7 @@ Mobius Forensic Toolkit 2.27
 	* evidence-processor/derived-opened-files: Implemented the evidence_processor_impl interface
 	* post-processor/pdi: Migrated to evidence-processor/derived-pdis
 	* evidence-processor/derived-pdis: Implemented the evidence_processor_impl interface
-	* evidence-processor/tag-alert-kff: Added new extension to tag evidences matching the KFF database
+	* evidence-processor/tag-alert-kff: Added new C++ extension to tag evidences matching the KFF database
 	* pymobius.ant.evidence: Removed call to post.kff_alert
 	* pymobius.ant.evidence.post.kff_alert: Removed module
 

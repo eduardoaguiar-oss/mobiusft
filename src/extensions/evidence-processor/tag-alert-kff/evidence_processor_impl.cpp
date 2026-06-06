@@ -41,27 +41,56 @@ evidence_processor_impl::evidence_processor_impl (
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Check if evidence hashes match any KFF hash
-// @param hashes List
-// @return True if any hash matches a known KFF hash, false otherwise
+// @param e Evidence to check
+// @return True if any evidence hashes matches a known KFF hash, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 evidence_processor_impl::_is_kff_alert (
-    const std::vector<mobius::core::pod::data> &hashes
+    mobius::framework::model::evidence e
 ) const
 {
-    for (const auto &hash_data : hashes)
+    auto hash_map = e.get_hashes ();
+
+    // If the evidence has hashes as attributes, check them directly.
+    if (!hash_map.empty ())
     {
-        if (!hash_data.is_list ())
-            return false;
-
-        auto hash_list = hash_data.to_list ();
-        auto hash_type = hash_list[0].to_string ();
-        auto hash_value = hash_list[1].to_string ();
-
-        if (kff_.lookup (hash_type, hash_value) == 'A')
-            return true;
+        for (const auto &[hash_type, hash_value] : hash_map)
+        {
+            if (kff_.lookup (hash_type, hash_value) == 'A')
+                return true;
+        }
     }
 
+    // @deprecated since v2.27
+    // Otherwise, check if it has a deprecated attribute "hashes" with a list of hashes and check them.
+    else
+    {
+        // Check if the evidence has attribute "hashes"
+        if (!e.has_attribute ("hashes"))
+            return false;
+
+        // Check if hashes attribute is a list
+        auto hashes_data = e.get_attribute ("hashes");
+
+        if (!hashes_data.is_list ())
+            return false;
+
+        // Check if any of the hashes is a known KFF hash
+        for (const auto &hash_data : hashes_data.to_list ())
+        {
+            if (!hash_data.is_list ())
+                return false;
+
+            auto hash_list = hash_data.to_list ();
+            std::string hash_type = hash_list[0].to_string ();
+            std::string hash_value = hash_list[1].to_string ();
+
+            if (kff_.lookup (hash_type, hash_value) == 'A')
+                return true;
+        }
+    }
+
+    // No hashes matched
     return false;
 }
 
@@ -80,30 +109,16 @@ evidence_processor_impl::on_evidence_created (
     {
         evidences_processed_++;
 
-        // Check if the evidence has attribute "hashes"
-        if (!evidence.has_attribute ("hashes"))
-            return;
+        if (_is_kff_alert (evidence))
+        {
+            evidence.set_tag ("alert");
+            evidence.set_tag ("alert.kff");
 
-        // Check if hashes attribute is a list
-        auto hashes_data = evidence.get_attribute ("hashes");
+            evidences_tagged_++;
 
-        if (!hashes_data.is_list ())
-            return;
-
-        // Check if any of the hashes is a known KFF hash
-        if (!_is_kff_alert (hashes_data.to_list ()))
-            return;
-
-        // Evidence matches KFF hash, tag it and break loop
-        evidence.set_tag ("alert");
-        evidence.set_tag ("alert.kff");
-
-        // Update evidences tagged count
-        evidences_tagged_++;
-
-        // Tell mediator about new tags
-        mediator_.on_evidence_tag_modified (evidence, "alert");
-        mediator_.on_evidence_tag_modified (evidence, "alert.kff");
+            mediator_.on_evidence_tag_modified (evidence, "alert");
+            mediator_.on_evidence_tag_modified (evidence, "alert.kff");
+        }
     }
     catch (const std::exception &e)
     {

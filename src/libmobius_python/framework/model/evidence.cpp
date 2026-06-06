@@ -22,19 +22,22 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "evidence.hpp"
+#include <mobius/core/exception.inc>
+#include <pydict.hpp>
+#include <pylist.hpp>
+#include <pymobius.hpp>
+#include <pyset.hpp>
+#include <stdexcept>
 #include "api_dataholder.hpp"
 #include "case.hpp"
 #include "core/pod/data.hpp"
 #include "item.hpp"
-#include <mobius/core/exception.inc>
-#include <pymobius.hpp>
-#include <pydict.hpp>
-#include <pylist.hpp>
-#include <pyset.hpp>
-#include <stdexcept>
 
 namespace
 {
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *framework_model_evidence_type = nullptr;
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create dataholder from evidence::source object
 // @param source Evidence source object
@@ -42,7 +45,8 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 _evidence_source_as_dataholder (
-    const mobius::framework::model::evidence::source &source)
+    const mobius::framework::model::evidence::source &source
+)
 {
     api_dataholder_o *pyobj = api_dataholder_new ();
 
@@ -57,42 +61,6 @@ _evidence_source_as_dataholder (
 }
 
 } // namespace
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if value is an instance of <i>evidence</i>
-// @param value Python value
-// @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-pymobius_framework_model_evidence_check (PyObject *value)
-{
-    return mobius::py::isinstance (value, &framework_model_evidence_t);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>evidence</i> Python object from C++ object
-// @param obj C++ object
-// @return New evidence object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_framework_model_evidence_to_pyobject (
-    const mobius::framework::model::evidence &obj)
-{
-    return mobius::py::to_pyobject_nullable<framework_model_evidence_o> (
-        obj, &framework_model_evidence_t);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>evidence</i> C++ object from Python object
-// @param value Python value
-// @return Evidence object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::framework::model::evidence
-pymobius_framework_model_evidence_from_pyobject (PyObject *value)
-{
-    return mobius::py::from_pyobject<framework_model_evidence_o> (
-        value, &framework_model_evidence_t);
-}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>item</i> Attribute getter
@@ -240,7 +208,8 @@ tp_f_get_attribute (framework_model_evidence_o *self, PyObject *args)
     try
     {
         ret = pymobius_core_pod_data_to_pyobject (
-            self->obj->get_attribute (arg_id));
+            self->obj->get_attribute (arg_id)
+        );
     }
     catch (const std::exception &e)
     {
@@ -267,7 +236,8 @@ tp_f_set_attribute (framework_model_evidence_o *self, PyObject *args)
     {
         arg_id = mobius::py::get_arg_as_std_string (args, 0);
         arg_value = mobius::py::get_arg_as_cpp (
-            args, 1, pymobius_core_pod_data_from_pyobject);
+            args, 1, pymobius_core_pod_data_from_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -305,7 +275,8 @@ tp_f_set_attributes (framework_model_evidence_o *self, PyObject *args)
     {
         arg_attributes = mobius::py::get_arg_as_cpp_map (
             args, 0, mobius::py::pystring_as_std_string,
-            pymobius_core_pod_data_from_pyobject);
+            pymobius_core_pod_data_from_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -380,7 +351,8 @@ tp_f_get_attributes (framework_model_evidence_o *self, PyObject *)
     {
         ret = mobius::py::pydict_from_cpp_container (
             self->obj->get_attributes (), mobius::py::pystring_from_std_string,
-            pymobius_core_pod_data_to_pyobject);
+            pymobius_core_pod_data_to_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -479,7 +451,8 @@ tp_f_set_tags (framework_model_evidence_o *self, PyObject *args)
     try
     {
         arg_tags = mobius::py::get_arg_as_cpp_set (
-            args, 0, mobius::py::pystring_as_std_string);
+            args, 0, mobius::py::pystring_as_std_string
+        );
     }
     catch (const std::exception &e)
     {
@@ -553,7 +526,8 @@ tp_f_get_tags (framework_model_evidence_o *self, PyObject *)
     try
     {
         ret = mobius::py::pyset_from_cpp_container (
-            self->obj->get_tags (), mobius::py::pystring_from_std_string);
+            self->obj->get_tags (), mobius::py::pystring_from_std_string
+        );
     }
     catch (const std::exception &e)
     {
@@ -577,8 +551,9 @@ tp_f_get_sources (framework_model_evidence_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pylist_from_cpp_container (self->obj->get_sources (),
-                                                     _evidence_source_as_dataholder);
+        ret = mobius::py::pylist_from_cpp_container (
+            self->obj->get_sources (), _evidence_source_as_dataholder
+        );
     }
     catch (const std::exception &e)
     {
@@ -588,33 +563,177 @@ tp_f_get_sources (framework_model_evidence_o *self, PyObject *)
     return ret;
 }
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>add_hash</i> method implementation
+// @param self Object
+// @param args Argument list
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_add_hash (framework_model_evidence_o *self, PyObject *args)
+{
+    // Parse input args
+    std::string arg_type;
+    std::string arg_value;
+
+    try
+    {
+        arg_type = mobius::py::get_arg_as_std_string (args, 0);
+        arg_value = mobius::py::get_arg_as_std_string (args, 1);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // Execute C++ function
+    try
+    {
+        self->obj->add_hash (arg_type, arg_value);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
+    }
+
+    // return None
+    return mobius::py::pynone ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>remove_hash</i> method implementation
+// @param self Object
+// @param args Argument list
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_remove_hash (framework_model_evidence_o *self, PyObject *args)
+{
+    // Parse input args
+    std::string arg_type;
+
+    try
+    {
+        arg_type = mobius::py::get_arg_as_std_string (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // Execute C++ function
+    try
+    {
+        self->obj->remove_hash (arg_type);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
+    }
+
+    // return None
+    return mobius::py::pynone ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>get_hash</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Hash or empty string if not found
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_get_hash (framework_model_evidence_o *self, PyObject *args)
+{
+    // Parse input args
+    std::string arg_type;
+
+    try
+    {
+        arg_type = mobius::py::get_arg_as_std_string (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // Execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pystring_from_std_string (
+            self->obj->get_hash (arg_type)
+        );
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // Return value
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>get_hashes</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return Map of hashes
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_get_hashes (framework_model_evidence_o *self, PyObject *)
+{
+    // Execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pydict_from_cpp_container (
+            self->obj->get_hashes (), mobius::py::pystring_from_std_string,
+            mobius::py::pystring_from_std_string
+        );
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // Return value
+    return ret;
+}
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {(char *) "has_attribute", (PyCFunction) tp_f_has_attribute, METH_VARARGS,
+    {"has_attribute", (PyCFunction) tp_f_has_attribute, METH_VARARGS,
      "Check if attribute exists"},
-    {(char *) "get_attribute", (PyCFunction) tp_f_get_attribute, METH_VARARGS,
+    {"get_attribute", (PyCFunction) tp_f_get_attribute, METH_VARARGS,
      "Get attribute value"},
-    {(char *) "set_attribute", (PyCFunction) tp_f_set_attribute, METH_VARARGS,
+    {"set_attribute", (PyCFunction) tp_f_set_attribute, METH_VARARGS,
      "Set attribute value"},
-    {(char *) "set_attributes", (PyCFunction) tp_f_set_attributes, METH_VARARGS,
+    {"set_attributes", (PyCFunction) tp_f_set_attributes, METH_VARARGS,
      "Set attributes"},
-    {(char *) "remove_attribute", (PyCFunction) tp_f_remove_attribute,
-     METH_VARARGS, "Remove attribute"},
-    {(char *) "get_attributes", (PyCFunction) tp_f_get_attributes, METH_VARARGS,
+    {"remove_attribute", (PyCFunction) tp_f_remove_attribute, METH_VARARGS,
+     "Remove attribute"},
+    {"get_attributes", (PyCFunction) tp_f_get_attributes, METH_VARARGS,
      "Get attributes as dict"},
-    {(char *) "has_tag", (PyCFunction) tp_f_has_tag, METH_VARARGS,
+    {"has_tag", (PyCFunction) tp_f_has_tag, METH_VARARGS,
      "Check if evidence has a given tag"},
-    {(char *) "set_tag", (PyCFunction) tp_f_set_tag, METH_VARARGS, "Set tag"},
-    {(char *) "set_tags", (PyCFunction) tp_f_set_tags, METH_VARARGS,
-     "Set tags"},
-    {(char *) "reset_tag", (PyCFunction) tp_f_reset_tag, METH_VARARGS,
-     "Reset tag"},
-    {(char *) "get_tags", (PyCFunction) tp_f_get_tags, METH_VARARGS,
-     "Get tags"},
-    {(char *) "get_sources", (PyCFunction) tp_f_get_sources, METH_VARARGS,
+    {"set_tag", (PyCFunction) tp_f_set_tag, METH_VARARGS, "Set tag"},
+    {"set_tags", (PyCFunction) tp_f_set_tags, METH_VARARGS, "Set tags"},
+    {"reset_tag", (PyCFunction) tp_f_reset_tag, METH_VARARGS, "Reset tag"},
+    {"get_tags", (PyCFunction) tp_f_get_tags, METH_VARARGS, "Get tags"},
+    {"get_sources", (PyCFunction) tp_f_get_sources, METH_VARARGS,
      "Get evidence sources"},
+    {"add_hash", (PyCFunction) tp_f_add_hash, METH_VARARGS, "Add hash"},
+    {"remove_hash", (PyCFunction) tp_f_remove_hash, METH_VARARGS,
+     "Remove hash"},
+    {"get_hash", (PyCFunction) tp_f_get_hash, METH_VARARGS, "Get hash"},
+    {"get_hashes", (PyCFunction) tp_f_get_hashes, METH_VARARGS, "Get hashes"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
@@ -656,7 +775,8 @@ tp_getattro (PyObject *o, PyObject *name)
 
             if (self->obj->has_attribute (s_name))
                 ret = pymobius_core_pod_data_to_pyobject (
-                    self->obj->get_attribute (s_name));
+                    self->obj->get_attribute (s_name)
+                );
 
             else
                 ret = mobius::py::pynone ();
@@ -692,10 +812,12 @@ tp_setattro (PyObject *o, PyObject *name, PyObject *value)
 
             if (value == nullptr)
                 mobius::py::set_invalid_type_error (
-                    "cannot delete attribute '" + s_name + "'");
+                    "cannot delete attribute '" + s_name + "'"
+                );
             else
-                mobius::py::set_invalid_type_error ("cannot set attribute '" +
-                                                    s_name + "'");
+                mobius::py::set_invalid_type_error (
+                    "cannot set attribute '" + s_name + "'"
+                );
 
             return -1;
         }
@@ -726,56 +848,102 @@ tp_setattro (PyObject *o, PyObject *name, PyObject *value)
     return 0;
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject framework_model_evidence_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.framework.model.evidence",        // tp_name
-    sizeof (framework_model_evidence_o),      // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    tp_getattro,                              // tp_getattro
-    tp_setattro,                              // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "Evidence object",                        // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    tp_getset,                                // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    0,                                        // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot framework_model_evidence_slots[] = {
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("Evidence object")},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {Py_tp_getset, reinterpret_cast<void *> (tp_getset)},
+    {Py_tp_getattro, reinterpret_cast<void *> (tp_getattro)},
+    {Py_tp_setattro, reinterpret_cast<void *> (tp_setattro)},
+    {0, nullptr} // Sentinel
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec framework_model_evidence_spec = {
+    .name = "mobius.framework.model.evidence",
+    .basicsize = sizeof (framework_model_evidence_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = framework_model_evidence_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.framework.model.evidence</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_framework_model_evidence_type ()
+{
+    // If type is already created, return it
+    if (framework_model_evidence_type)
+        return mobius::py::pytypeobject (framework_model_evidence_type);
+
+    // Allocate type from spec
+    framework_model_evidence_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&framework_model_evidence_spec)
+    );
+
+    // Create type
+    mobius::py::pytypeobject type (framework_model_evidence_type);
+    type.create ();
+
+    return type;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>evidence</i>
+// @param value Python value
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+pymobius_framework_model_evidence_check (PyObject *value)
+{
+    if (!framework_model_evidence_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("evidence type is not initialized")
+        );
+
+    return mobius::py::isinstance (value, framework_model_evidence_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>evidence</i> Python object from C++ object
+// @param obj C++ object
+// @return New evidence object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_framework_model_evidence_to_pyobject (
+    const mobius::framework::model::evidence &obj
+)
+{
+    if (!framework_model_evidence_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("evidence type is not initialized")
+        );
+
+    return mobius::py::to_pyobject_nullable<framework_model_evidence_o> (
+        obj, framework_model_evidence_type
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>evidence</i> C++ object from Python object
+// @param value Python value
+// @return Evidence object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::framework::model::evidence
+pymobius_framework_model_evidence_from_pyobject (PyObject *value)
+{
+    if (!framework_model_evidence_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("evidence type is not initialized")
+        );
+
+    return mobius::py::from_pyobject<framework_model_evidence_o> (
+        value, framework_model_evidence_type
+    );
+}

@@ -92,6 +92,11 @@ class evidence::impl
     void add_source (evidence::source_type, std::uint64_t, const std::string &);
     std::vector<evidence::source> get_sources () const;
 
+    void add_hash (const std::string &, const std::string &);
+    void remove_hash (const std::string &);
+    std::string get_hash (const std::string &) const;
+    std::map<std::string, std::string> get_hashes () const;
+
   private:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get database
@@ -322,8 +327,7 @@ void
 evidence::impl::set_tags (const std::set<std::string> &tags)
 {
     std::for_each (
-        tags.cbegin (),
-        tags.end (),
+        tags.cbegin (), tags.end (),
         [this] (const std::string &tag) { set_tag (tag); }
     );
 }
@@ -434,6 +438,102 @@ evidence::impl::get_sources () const
     }
 
     return sources;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add hash
+// @param type Hash type (e.g. "md5")
+// @param value Hash value
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence::impl::add_hash (const std::string &type, const std::string &value)
+{
+    auto db = _get_database ();
+
+    mobius::core::database::statement stmt = db.new_statement (
+        "INSERT OR REPLACE INTO evidence_hash (evidence_uid, type, value) "
+        "VALUES (?, ?, ?)"
+    );
+
+    stmt.bind (1, get_uid ());
+    stmt.bind (2, type);
+    stmt.bind (3, value);
+
+    stmt.execute ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Remove hash
+// @param type Hash type (e.g. "md5")
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence::impl::remove_hash (const std::string &type)
+{
+    auto db = _get_database ();
+
+    mobius::core::database::statement stmt = db.new_statement (
+        "DELETE FROM evidence_hash "
+        "WHERE evidence_uid = ? AND type = ?"
+    );
+
+    stmt.bind (1, get_uid ());
+    stmt.bind (2, type);
+
+    stmt.execute ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get hash value
+// @param type Hash type (e.g. "md5")
+// @return Hash value or empty string if not found
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+evidence::impl::get_hash (const std::string &type) const
+{
+    auto db = _get_database ();
+
+    auto stmt = db.new_statement (
+        "SELECT value "
+        "FROM evidence_hash "
+        "WHERE evidence_uid = ? AND type = ?"
+    );
+
+    stmt.bind (1, get_uid ());
+    stmt.bind (2, type);
+
+    if (stmt.fetch_row ())
+        return stmt.get_column_string (0);
+
+    return {};
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get hashes
+// @return Map with hash type -> hash value
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::map<std::string, std::string>
+evidence::impl::get_hashes () const
+{
+    auto db = _get_database ();
+
+    auto stmt = db.new_statement (
+        "SELECT type, value "
+        "FROM evidence_hash "
+        "WHERE evidence_uid = ?"
+    );
+
+    stmt.bind (1, get_uid ());
+
+    std::map<std::string, std::string> hashes;
+
+    while (stmt.fetch_row ())
+    {
+        std::string type = stmt.get_column_string (0);
+        std::string value = stmt.get_column_string (1);
+        hashes[type] = value;
+    }
+
+    return hashes;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -557,8 +657,7 @@ evidence::set_attributes (
         );
 
     std::for_each (
-        attributes.cbegin (),
-        attributes.cend (),
+        attributes.cbegin (), attributes.cend (),
         [this] (const auto &it) { set_attribute (it.first, it.second); }
     );
 }
@@ -684,8 +783,7 @@ evidence::add_source (const mobius::core::io::file &f)
     if (f)
     {
         impl_->add_source (
-            source_type::file,
-            0,
+            source_type::file, 0,
             f.get_path () + " (i-node: " + std::to_string (f.get_inode ()) + ')'
         );
     }
@@ -706,8 +804,7 @@ evidence::add_source (const mobius::core::io::folder &f)
     if (f)
     {
         impl_->add_source (
-            source_type::folder,
-            0,
+            source_type::folder, 0,
             f.get_path () + " (i-node: " + std::to_string (f.get_inode ()) + ')'
         );
     }
@@ -726,8 +823,7 @@ evidence::add_source (const evidence &e)
         );
 
     impl_->add_source (
-        source_type::evidence,
-        e.get_uid (),
+        source_type::evidence, e.get_uid (),
         e.get_type () + " (UID: " + std::to_string (e.get_uid ()) + ')'
     );
 }
@@ -745,6 +841,68 @@ evidence::get_sources () const
         );
 
     return impl_->get_sources ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add hash
+// @param type Hash type (e.g. "md5")
+// @param value Hash value
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence::add_hash (const std::string &type, const std::string &value)
+{
+    if (!impl_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
+
+    impl_->add_hash (type, value);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Remove hash
+// @param type Hash type (e.g. "md5")
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence::remove_hash (const std::string &type)
+{
+    if (!impl_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
+
+    impl_->remove_hash (type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get hash value
+// @param type Hash type (e.g. "md5")
+// @return Hash value or empty string if not found
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+evidence::get_hash (const std::string &type) const
+{
+    if (!impl_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
+
+    return impl_->get_hash (type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get hashes
+// @return Map with hash type -> hash value
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::map<std::string, std::string>
+evidence::get_hashes () const
+{
+    if (!impl_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
+
+    return impl_->get_hashes ();
 }
 
 } // namespace mobius::framework::model

@@ -71,8 +71,7 @@ class evidence_processor_impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    bool
-    _is_kff_alert (const std::vector<mobius::core::pod::data> &hashes) const;
+    bool _is_kff_alert (mobius::framework::model::evidence) const;
 };
 
 } // namespace mobius::extension::evidence_processor::tag_alert_kff
