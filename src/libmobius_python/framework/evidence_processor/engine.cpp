@@ -23,6 +23,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "engine.hpp"
 #include <pymobius.hpp>
+#include <pygil.hpp>
 #include <stdexcept>
 #include "core/pod/map.hpp"
 #include "framework/model/item.hpp"
@@ -46,6 +47,7 @@ tp_f_run (framework_evidence_processor_engine_o *self, PyObject *)
     // Execute C++ function
     try
     {
+        mobius::py::GIL gil;
         self->obj->run ();
     }
     catch (const std::exception &e)
