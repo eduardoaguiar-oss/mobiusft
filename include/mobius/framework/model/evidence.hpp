@@ -99,6 +99,7 @@ class evidence
 
     void add_hash (const std::string &, const std::string &);
     void remove_hash (const std::string &);
+    void remove_hashes ();
     std::string get_hash (const std::string &) const;
     std::map<std::string, std::string> get_hashes () const;
 

@@ -94,6 +94,7 @@ class evidence::impl
 
     void add_hash (const std::string &, const std::string &);
     void remove_hash (const std::string &);
+    void remove_hashes ();
     std::string get_hash (const std::string &) const;
     std::map<std::string, std::string> get_hashes () const;
 
@@ -479,6 +480,23 @@ evidence::impl::remove_hash (const std::string &type)
     stmt.bind (1, get_uid ());
     stmt.bind (2, type);
 
+    stmt.execute ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Remove all hashes
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence::impl::remove_hashes ()
+{
+    auto db = _get_database ();
+
+    mobius::core::database::statement stmt = db.new_statement (
+        "DELETE FROM evidence_hash "
+        "WHERE evidence_uid = ?"
+    );
+
+    stmt.bind (1, get_uid ());
     stmt.execute ();
 }
 
@@ -872,6 +890,20 @@ evidence::remove_hash (const std::string &type)
         );
 
     impl_->remove_hash (type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Remove all hashes
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence::remove_hashes ()
+{
+    if (!impl_)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("evidence object is null")
+        );
+
+    impl_->remove_hashes ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

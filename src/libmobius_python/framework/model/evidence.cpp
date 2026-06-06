@@ -638,6 +638,29 @@ tp_f_remove_hash (framework_model_evidence_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>remove_hashes</i> method implementation
+// @param self Object
+// @param args Argument list
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_remove_hashes (framework_model_evidence_o *self, PyObject *)
+{
+    // Execute C++ function
+    try
+    {
+        self->obj->remove_hashes ();
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
+    }
+
+    // return None
+    return mobius::py::pynone ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>get_hash</i> method implementation
 // @param self Object
 // @param args Argument list
@@ -732,6 +755,8 @@ static PyMethodDef tp_methods[] = {
     {"add_hash", (PyCFunction) tp_f_add_hash, METH_VARARGS, "Add hash"},
     {"remove_hash", (PyCFunction) tp_f_remove_hash, METH_VARARGS,
      "Remove hash"},
+    {"remove_hashes", (PyCFunction) tp_f_remove_hashes, METH_VARARGS,
+     "Remove all hashes"},
     {"get_hash", (PyCFunction) tp_f_get_hash, METH_VARARGS, "Get hash"},
     {"get_hashes", (PyCFunction) tp_f_get_hashes, METH_VARARGS, "Get hashes"},
     {nullptr, nullptr, 0, nullptr} // sentinel

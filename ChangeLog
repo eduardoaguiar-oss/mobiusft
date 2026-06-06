@@ -1,4 +1,11 @@
 Mobius Forensic Toolkit 2.27
+	* evidence-viewer: Changed to use new evidence.get_hashes method
+	* Created new package src/extensions/evidence-processor
+	* post-processor/opened-files: Migrated to evidence-processor/derived-opened-files
+	* evidence-processor/derived-opened-files: Implemented the evidence_processor_impl interface
+	* post-processor/pdi: Migrated to evidence-processor/derived-pdis
+	* evidence-processor/derived-pdis: Implemented the evidence_processor_impl interface
+	* evidence-processor/tag-alert-kff: Added new C++ extension to tag evidences matching the KFF database
 	* libmobius_framework: Added new submodule `evidence_processor`
 	* libmobius_framework: Added new class evidence_processor::evidence_processor_impl_base 
 	* libmobius_framework: Added new class evidence_processor::engine
@@ -48,12 +55,6 @@ Mobius Forensic Toolkit 2.27
 	* libmobius_python: Improved mobius.framework.model.evidence class using the PyType_FromSpec API
 	* pymobius.ant.evidence: Changed to use mobius.framework.evidence_processor.engine class
 	* pymobius.ant.evidence.vfs: Removed usage of the deprecated class vfs_processor
-	* Created new package src/extensions/evidence-processor
-	* post-processor/opened-files: Migrated to evidence-processor/derived-opened-files
-	* evidence-processor/derived-opened-files: Implemented the evidence_processor_impl interface
-	* post-processor/pdi: Migrated to evidence-processor/derived-pdis
-	* evidence-processor/derived-pdis: Implemented the evidence_processor_impl interface
-	* evidence-processor/tag-alert-kff: Added new C++ extension to tag evidences matching the KFF database
 	* pymobius.ant.evidence: Removed call to post.kff_alert
 	* pymobius.ant.evidence.post.kff_alert: Removed module
 
