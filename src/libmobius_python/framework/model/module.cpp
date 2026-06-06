@@ -81,7 +81,7 @@ new_framework_model_module ()
     module.add_type ("ant", &framework_model_ant_t);
     module.add_type ("case", &framework_model_case_t);
     module.add_type ("event", new_model_event_type ());
-    module.add_type ("evidence", &framework_model_evidence_t);
+    module.add_type ("evidence", new_framework_model_evidence_type ());
     module.add_type ("item", new_model_item_type ());
 
     // Return module

@@ -21,6 +21,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
+#include <pytypeobject.hpp>
 #include <mobius/framework/model/evidence.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -31,11 +32,10 @@ typedef struct
     PyObject_HEAD mobius::framework::model::evidence *obj;
 } framework_model_evidence_o;
 
-extern PyTypeObject framework_model_evidence_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_framework_model_evidence_type ();
 bool pymobius_framework_model_evidence_check (PyObject *);
 PyObject *pymobius_framework_model_evidence_to_pyobject (
     const mobius::framework::model::evidence &);

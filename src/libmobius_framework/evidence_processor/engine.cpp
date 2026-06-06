@@ -146,6 +146,11 @@ engine::impl::impl (
                 implementations_.emplace_back (
                     data->factory (item_, profile_, mediator_)
                 );
+
+                log.info (
+                    __LINE__,
+                    "evidence_processor implementation: " + processor_id
+                );
             }
             catch (const std::exception &e)
             {
@@ -175,6 +180,11 @@ engine::impl::impl (
 
                     vfs_implementations_.emplace_back (
                         vfs_data->factory (item_, case_profile)
+                    );
+
+                    log.info (
+                        __LINE__,
+                        "evidence_processor implementation: " + processor_id
                     );
                 }
                 catch (const std::exception &e)
@@ -282,7 +292,8 @@ engine::impl::get_status () const
     // Start with basic status information
     mobius::core::pod::map status = {
         {"profile", profile_.get_id ()},
-        {"evidence_processors", implementations_.size () + vfs_implementations_.size ()},
+        {"evidence_processors",
+         implementations_.size () + vfs_implementations_.size ()},
         {"started_time", started_time_},
     };
 

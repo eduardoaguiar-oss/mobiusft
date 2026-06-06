@@ -74,7 +74,7 @@ class HashesView(object):
             # @deprecated hashes attribute is deprecated, use only get_hashes() method instead
             hashes = evidence.get_hashes().items() or evidence.hashes or []
 
-            for hash_type, hash_value in hashes:
+            for hash_type, hash_value in sorted(hashes):
                 self.__details_view.add_row((hash_type.upper(), hash_value))
 
             self.__details_view.set_report_name(f'Evidence <{evidence.id}> hashes')
