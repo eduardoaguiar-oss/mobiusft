@@ -1,10 +1,6 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @file hashes_view.py
-# @brief Contains the implementation of the HashesView class, which provides 
-#        a user interface widget for viewing hashes associated with evidence.
-# 
 # Mobius Forensic Toolkit
-# Copyright (C) 2008-2025 Eduardo Aguiar
+# Copyright (C) 2008-2026 Eduardo Aguiar
 # 
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the 
@@ -75,7 +71,8 @@ class HashesView(object):
         self.__details_view.clear()
 
         if evidence:
-            hashes = evidence.hashes or []
+            # @deprecated hashes attribute is deprecated, use only get_hashes() method instead
+            hashes = evidence.get_hashes().items() or evidence.hashes or []
 
             for hash_type, hash_value in hashes:
                 self.__details_view.add_row((hash_type.upper(), hash_value))
