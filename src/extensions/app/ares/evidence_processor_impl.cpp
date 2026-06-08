@@ -152,22 +152,6 @@ update_metadata (
     }
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get vector of hashes for a given file
-// @param f File structure
-// @return Vector
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector<mobius::core::pod::data>
-get_file_hashes (const mobius::extension::app::ares::profile::file &f)
-{
-    std::vector<mobius::core::pod::data> hashes;
-
-    if (!f.hash_sha1.empty ())
-        hashes.push_back ({"sha1", f.hash_sha1});
-
-    return hashes;
-}
-
 } // namespace
 
 namespace mobius::extension::app::ares
@@ -617,20 +601,19 @@ evidence_processor_impl::_save_local_files ()
     {
         if (!f.path.empty ())
         {
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Create evidence
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             auto e = item_.new_evidence ("local-file");
 
             e.set_attribute ("username", f.username);
             e.set_attribute ("path", f.path);
             e.set_attribute ("app_id", APP_ID);
             e.set_attribute ("app_name", APP_NAME);
-            e.set_attribute ("hashes", get_file_hashes (f));
 
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Metadata
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             mobius::core::pod::map metadata;
 
             metadata.set ("size", f.size);
@@ -657,14 +640,20 @@ evidence_processor_impl::_save_local_files ()
 
             e.set_attribute ("metadata", metadata);
 
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Hashes
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            if (!f.hash_sha1.empty ())
+                e.add_hash ("sha1", f.hash_sha1);
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Tags
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             e.set_tag ("app.p2p");
 
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Sources
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             e.add_source (f.shareh_f);
             e.add_source (f.sharel_f);
             e.add_source (f.phashidx_f);
@@ -697,7 +686,6 @@ evidence_processor_impl::_save_p2p_remote_files ()
             e.set_attribute ("username", f.username);
             e.set_attribute ("app_id", APP_ID);
             e.set_attribute ("app_name", APP_NAME);
-            e.set_attribute ("hashes", get_file_hashes (f));
 
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Metadata
@@ -709,6 +697,12 @@ evidence_processor_impl::_save_p2p_remote_files ()
             update_metadata (metadata, f.metadata);
 
             e.set_attribute ("metadata", metadata);
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Hashes
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            if (!f.hash_sha1.empty ())
+                e.add_hash ("sha1", f.hash_sha1);
 
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Tags
@@ -756,7 +750,6 @@ evidence_processor_impl::_save_received_files ()
             e.set_attribute ("username", f.username);
             e.set_attribute ("app_id", APP_ID);
             e.set_attribute ("app_name", APP_NAME);
-            e.set_attribute ("hashes", get_file_hashes (f));
 
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Metadata
@@ -784,6 +777,12 @@ evidence_processor_impl::_save_received_files ()
             update_metadata (metadata, f.metadata);
 
             e.set_attribute ("metadata", metadata);
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Hashes
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            if (!f.hash_sha1.empty ())
+                e.add_hash ("sha1", f.hash_sha1);
 
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Tags
@@ -815,9 +814,9 @@ evidence_processor_impl::_save_sent_files ()
     {
         if (f.flag_uploaded.is_yes ())
         {
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Create evidence
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             auto e = item_.new_evidence ("sent-file");
 
             if (f.upload_started_time)
@@ -828,11 +827,10 @@ evidence_processor_impl::_save_sent_files ()
             e.set_attribute ("username", f.username);
             e.set_attribute ("app_id", APP_ID);
             e.set_attribute ("app_name", APP_NAME);
-            e.set_attribute ("hashes", get_file_hashes (f));
 
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Metadata
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             mobius::core::pod::map metadata;
             metadata.set ("flag_downloaded", to_string (f.flag_downloaded));
             metadata.set ("flag_uploaded", to_string (f.flag_uploaded));
@@ -857,14 +855,21 @@ evidence_processor_impl::_save_sent_files ()
 
             e.set_attribute ("metadata", metadata);
 
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Hashes
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            if (!f.hash_sha1.empty ())
+                e.add_hash ("sha1", f.hash_sha1);
+
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Tags
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             e.set_tag ("app.p2p");
 
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Sources
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             e.add_source (f.shareh_f);
             e.add_source (f.sharel_f);
             e.add_source (f.torrenth_f);
@@ -887,9 +892,9 @@ evidence_processor_impl::_save_shared_files ()
     {
         if (f.flag_shared.is_yes () || f.flag_shared.is_always ())
         {
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Create evidence
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             auto e = item_.new_evidence ("shared-file");
 
             e.set_attribute ("username", f.username);
@@ -898,14 +903,9 @@ evidence_processor_impl::_save_shared_files ()
             e.set_attribute ("app_id", APP_ID);
             e.set_attribute ("app_name", APP_NAME);
 
-            std::vector<mobius::core::pod::data> hashes = {
-                {"sha1", f.hash_sha1}
-            };
-            e.set_attribute ("hashes", hashes);
-
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Metadata
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             mobius::core::pod::map metadata;
 
             metadata.set ("size", f.size);
@@ -932,14 +932,21 @@ evidence_processor_impl::_save_shared_files ()
 
             e.set_attribute ("metadata", metadata);
 
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // Hashes
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            if (!f.hash_sha1.empty ())
+                e.add_hash ("sha1", f.hash_sha1);
+
+
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Tags
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             e.set_tag ("app.p2p");
 
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Sources
-            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+            // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             e.add_source (f.shareh_f);
             e.add_source (f.sharel_f);
             e.add_source (f.torrenth_f);
