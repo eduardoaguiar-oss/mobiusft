@@ -27,8 +27,8 @@ project(app_dcpp LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(app_dcpp MODULE
     main.cpp
+    evidence_processor_impl.cpp
     profile.cpp
-    vfs_processor_impl.cpp
     file_dcplusplus_xml.cpp
 )
 

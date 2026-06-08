@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "vfs_processor_impl.hpp"
+#include "evidence_processor_impl.hpp"
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/io/path.hpp>
 #include <mobius/core/io/uri.hpp>
@@ -54,11 +54,13 @@ namespace mobius::extension::app::dcpp
 // @param item Item object
 // @param case_profile Case profile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-vfs_processor_impl::vfs_processor_impl (
+evidence_processor_impl::evidence_processor_impl (
     const mobius::framework::model::item &item,
-    const mobius::framework::case_profile &
+    const mobius::framework::evidence_processor::profile &,
+    const mobius::framework::evidence_processor::mediator &mediator
 )
-    : item_ (item)
+    : item_ (item),
+      mediator_ (mediator)
 {
 }
 
@@ -67,7 +69,9 @@ vfs_processor_impl::vfs_processor_impl (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
+evidence_processor_impl::on_folder_entered (
+    const mobius::core::io::folder &folder
+)
 {
     _scan_profile_folder (folder);
 }
@@ -76,7 +80,7 @@ vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 // @brief Called when processing is complete
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_complete ()
+evidence_processor_impl::on_complete ()
 {
     _save_app_profiles ();
     _save_ip_addresses ();
@@ -88,7 +92,7 @@ vfs_processor_impl::on_complete ()
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_profile_folder (
+evidence_processor_impl::_scan_profile_folder (
     const mobius::core::io::folder &folder
 )
 {
@@ -133,7 +137,7 @@ vfs_processor_impl::_scan_profile_folder (
 // @brief Save app profiles
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_app_profiles ()
+evidence_processor_impl::_save_app_profiles ()
 {
     for (const auto &p : profiles_)
     {
@@ -167,6 +171,9 @@ vfs_processor_impl::_save_app_profiles ()
         // Tags and sources
         e.set_tag ("app.p2p");
         e.add_source (p.get_folder ());
+
+        // Tell mediator about the new evidence
+        mediator_.on_evidence_created (e);
     }
 }
 
@@ -174,7 +181,7 @@ vfs_processor_impl::_save_app_profiles ()
 // @brief Save IP addresses
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_ip_addresses ()
+evidence_processor_impl::_save_ip_addresses ()
 {
     for (const auto &p : profiles_)
     {
@@ -213,6 +220,9 @@ vfs_processor_impl::_save_ip_addresses ()
 
             for (const auto &sf : p.get_source_files ())
                 e.add_source (sf);
+
+            // Tell mediator about the new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -221,7 +231,7 @@ vfs_processor_impl::_save_ip_addresses ()
 // @brief Save user accounts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_user_accounts ()
+evidence_processor_impl::_save_user_accounts ()
 {
     for (const auto &p : profiles_)
     {
@@ -262,6 +272,9 @@ vfs_processor_impl::_save_user_accounts ()
 
             for (const auto &sf : p.get_source_files ())
                 e.add_source (sf);
+
+            // Tell mediator about the new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }

@@ -176,7 +176,9 @@ evidence_processor_impl::evidence_processor_impl (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::on_folder_entered (const mobius::core::io::folder &folder)
+evidence_processor_impl::on_folder_entered (
+    const mobius::core::io::folder &folder
+)
 {
     _scan_profile_folder (folder);
     _scan_arestra_folder (folder);
@@ -346,7 +348,9 @@ evidence_processor_impl::_scan_ntuser_dat_folder (
 // @param f NTUSER.DAT file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::_decode_ntuser_dat_file (const mobius::core::io::file &f)
+evidence_processor_impl::_decode_ntuser_dat_file (
+    const mobius::core::io::file &f
+)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -561,6 +565,9 @@ evidence_processor_impl::_save_app_profiles ()
         // Tags and sources
         e.set_tag ("app.p2p");
         e.add_source (p.get_folder ());
+
+        // Tell mediator about the new evidence
+        mediator_.on_evidence_created (e);
     }
 }
 
@@ -588,6 +595,9 @@ evidence_processor_impl::_save_autofills ()
         e.set_attribute ("metadata", metadata);
         e.set_tag ("app.p2p");
         e.add_source (a.f);
+
+        // Tell mediator about the new evidence
+        mediator_.on_evidence_created (e);
     }
 }
 
@@ -661,6 +671,9 @@ evidence_processor_impl::_save_local_files ()
             e.add_source (f.tempdl_pbthash_f);
             e.add_source (f.tempdl_phash_f);
             e.add_source (f.tempul_udpphash_f);
+
+            // Tell mediator about the new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -720,6 +733,9 @@ evidence_processor_impl::_save_p2p_remote_files ()
             e.add_source (f.tempdl_pbthash_f);
             e.add_source (f.tempdl_phash_f);
             e.add_source (f.tempul_udpphash_f);
+
+            // Tell mediator about the new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -800,6 +816,9 @@ evidence_processor_impl::_save_received_files ()
             e.add_source (f.tempdl_pbthash_f);
             e.add_source (f.tempdl_phash_f);
             e.add_source (f.tempul_udpphash_f);
+
+            // Tell mediator about the new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -861,7 +880,6 @@ evidence_processor_impl::_save_sent_files ()
             if (!f.hash_sha1.empty ())
                 e.add_hash ("sha1", f.hash_sha1);
 
-
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Tags
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -878,6 +896,9 @@ evidence_processor_impl::_save_sent_files ()
             e.add_source (f.tempdl_pbthash_f);
             e.add_source (f.tempdl_phash_f);
             e.add_source (f.tempul_udpphash_f);
+
+            // Tell mediator about the new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -938,7 +959,6 @@ evidence_processor_impl::_save_shared_files ()
             if (!f.hash_sha1.empty ())
                 e.add_hash ("sha1", f.hash_sha1);
 
-
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
             // Tags
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -955,6 +975,9 @@ evidence_processor_impl::_save_shared_files ()
             e.add_source (f.tempdl_pbthash_f);
             e.add_source (f.tempdl_phash_f);
             e.add_source (f.tempul_udpphash_f);
+
+            // Tell mediator about the new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -987,6 +1010,9 @@ evidence_processor_impl::_save_user_accounts ()
         e.set_attribute ("metadata", metadata);
         e.set_tag ("app.p2p");
         e.add_source (a.f);
+
+        // Tell mediator about the new evidence
+        mediator_.on_evidence_created (e);
     }
 }
 

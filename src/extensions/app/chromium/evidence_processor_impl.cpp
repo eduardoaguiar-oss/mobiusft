@@ -88,7 +88,9 @@ evidence_processor_impl::evidence_processor_impl (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::on_folder_entered (const mobius::core::io::folder &folder)
+evidence_processor_impl::on_folder_entered (
+    const mobius::core::io::folder &folder
+)
 {
     _scan_local_state (folder);
     _scan_profile (folder);
@@ -99,7 +101,9 @@ evidence_processor_impl::on_folder_entered (const mobius::core::io::folder &fold
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::_scan_local_state (const mobius::core::io::folder &folder)
+evidence_processor_impl::_scan_local_state (
+    const mobius::core::io::folder &folder
+)
 {
     auto w = mobius::core::io::walker (folder);
 
@@ -112,7 +116,9 @@ evidence_processor_impl::_scan_local_state (const mobius::core::io::folder &fold
 // @param f Local State file to decode
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::_decode_local_state_file (const mobius::core::io::file &f)
+evidence_processor_impl::_decode_local_state_file (
+    const mobius::core::io::file &f
+)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -286,6 +292,9 @@ evidence_processor_impl::_save_app_profiles ()
         // Tags and sources
         e.set_tag ("app.browser");
         e.add_source (p.get_folder ());
+
+        // Tell mediator about the new evidence
+        mediator_.on_evidence_created (e);
     }
 }
 
@@ -322,6 +331,9 @@ evidence_processor_impl::_save_autofills ()
 
             e.set_tag ("app.browser");
             e.add_source (a.f);
+
+            // Tell mediator about the new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -356,6 +368,9 @@ evidence_processor_impl::_save_bookmarked_urls ()
 
             e.set_tag ("app.browser");
             e.add_source (b.f);
+
+            // Tell mediator about the new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -404,6 +419,9 @@ evidence_processor_impl::_save_cookies ()
 
             e.set_tag ("app.browser");
             e.add_source (c.f);
+
+            // Tell mediator about the new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -465,6 +483,9 @@ evidence_processor_impl::_save_credit_cards ()
 
             e.set_tag ("app.browser");
             e.add_source (cc.f);
+
+            // Tell mediator about the new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -478,7 +499,8 @@ evidence_processor_impl::_save_encryption_keys ()
     for (const auto &ek : encryption_keys_)
     {
         const auto [app_id, app_name] = get_app_from_path (ek.f.get_path ());
-        const auto username = mobius::framework::get_username_from_path (ek.f.get_path ());
+        const auto username =
+            mobius::framework::get_username_from_path (ek.f.get_path ());
 
         // create evidence
         auto e = item_.new_evidence ("encryption-key");
@@ -502,6 +524,9 @@ evidence_processor_impl::_save_encryption_keys ()
         // tag and source
         e.set_tag ("app.browser");
         e.add_source (ek.f);
+
+        // Tell mediator about the new evidence
+        mediator_.on_evidence_created (e);
     }
 }
 
@@ -579,6 +604,9 @@ evidence_processor_impl::_save_passwords ()
 
             e.set_tag ("app.browser");
             e.add_source (login.f);
+
+            // Tell mediator about the new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -615,6 +643,9 @@ evidence_processor_impl::_save_pdis ()
 
                     e.set_tag ("app.browser");
                     e.add_source (ap.f);
+
+                    // Tell mediator about the new evidence
+                    mediator_.on_evidence_created (e);
                 }
             }
 
@@ -641,6 +672,9 @@ evidence_processor_impl::_save_pdis ()
 
                     e.set_tag ("app.browser");
                     e.add_source (ap.f);
+
+                    // Tell mediator about the new evidence
+                    mediator_.on_evidence_created (e);
                 }
             }
 
@@ -678,6 +712,9 @@ evidence_processor_impl::_save_pdis ()
 
                     e.set_tag ("app.browser");
                     e.add_source (ap.f);
+
+                    // Tell mediator about the new evidence
+                    mediator_.on_evidence_created (e);
                 }
             }
 
@@ -708,6 +745,9 @@ evidence_processor_impl::_save_pdis ()
 
                     e.set_tag ("app.browser");
                     e.add_source (ap.f);
+
+                    // Tell mediator about the new evidence
+                    mediator_.on_evidence_created (e);
                 }
             }
         }
@@ -740,6 +780,9 @@ evidence_processor_impl::_save_received_files ()
 
                 e.set_tag ("app.browser");
                 e.add_source (entry.f);
+
+                // Tell mediator about the new evidence
+                mediator_.on_evidence_created (e);
             }
         }
     }
@@ -783,6 +826,9 @@ evidence_processor_impl::_save_user_accounts ()
             // Tags and sources
             e.set_tag ("app.browser");
             e.add_source (acc.f);
+
+            // Tell mediator about the new evidence
+            mediator_.on_evidence_created (e);
         }
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -857,6 +903,9 @@ evidence_processor_impl::_save_user_accounts ()
             // Tags and sources
             e.set_tag ("app.browser");
             e.add_source (login.f);
+
+            // Tell mediator about the new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -872,7 +921,7 @@ evidence_processor_impl::_save_visited_urls ()
         for (const auto &entry : p.get_history_entries ())
         {
             auto e = item_.new_evidence ("visited-url");
-            
+
             e.set_attribute ("username", p.get_username ());
             e.set_attribute ("url", entry.url);
             e.set_attribute ("title", entry.title);
@@ -882,6 +931,9 @@ evidence_processor_impl::_save_visited_urls ()
 
             e.set_tag ("app.browser");
             e.add_source (entry.f);
+
+            // Tell mediator about the new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
