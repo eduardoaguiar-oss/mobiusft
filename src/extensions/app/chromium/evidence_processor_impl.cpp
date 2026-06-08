@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "vfs_processor_impl.hpp"
+#include "evidence_processor_impl.hpp"
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/decoder/inifile.hpp>
 #include <mobius/core/decoder/json/parser.hpp>
@@ -73,11 +73,13 @@ namespace mobius::extension::app::chromium
 // @param item Item object
 // @param case_profile Case profile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-vfs_processor_impl::vfs_processor_impl (
+evidence_processor_impl::evidence_processor_impl (
     const mobius::framework::model::item &item,
-    const mobius::framework::case_profile &
+    const mobius::framework::evidence_processor::profile &,
+    const mobius::framework::evidence_processor::mediator &mediator
 )
-    : item_ (item)
+    : item_ (item),
+      mediator_ (mediator)
 {
 }
 
@@ -86,7 +88,7 @@ vfs_processor_impl::vfs_processor_impl (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
+evidence_processor_impl::on_folder_entered (const mobius::core::io::folder &folder)
 {
     _scan_local_state (folder);
     _scan_profile (folder);
@@ -97,7 +99,7 @@ vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_local_state (const mobius::core::io::folder &folder)
+evidence_processor_impl::_scan_local_state (const mobius::core::io::folder &folder)
 {
     auto w = mobius::core::io::walker (folder);
 
@@ -110,7 +112,7 @@ vfs_processor_impl::_scan_local_state (const mobius::core::io::folder &folder)
 // @param f Local State file to decode
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_decode_local_state_file (const mobius::core::io::file &f)
+evidence_processor_impl::_decode_local_state_file (const mobius::core::io::file &f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -163,7 +165,7 @@ vfs_processor_impl::_decode_local_state_file (const mobius::core::io::file &f)
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_profile (const mobius::core::io::folder &folder)
+evidence_processor_impl::_scan_profile (const mobius::core::io::folder &folder)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -229,7 +231,7 @@ vfs_processor_impl::_scan_profile (const mobius::core::io::folder &folder)
 // @brief Called when processing is complete
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_complete ()
+evidence_processor_impl::on_complete ()
 {
     _save_app_profiles ();
     _save_autofills ();
@@ -248,7 +250,7 @@ vfs_processor_impl::on_complete ()
 // @brief Save app profiles
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_app_profiles ()
+evidence_processor_impl::_save_app_profiles ()
 {
     for (const auto &p : profiles_)
     {
@@ -291,7 +293,7 @@ vfs_processor_impl::_save_app_profiles ()
 // @brief Save autofill entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_autofills ()
+evidence_processor_impl::_save_autofills ()
 {
     for (const auto &p : profiles_)
     {
@@ -329,7 +331,7 @@ vfs_processor_impl::_save_autofills ()
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void
-vfs_processor_impl::_save_bookmarked_urls ()
+evidence_processor_impl::_save_bookmarked_urls ()
 {
     for (const auto &p : profiles_)
     {
@@ -362,7 +364,7 @@ vfs_processor_impl::_save_bookmarked_urls ()
 // @brief Save cookies
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_cookies ()
+evidence_processor_impl::_save_cookies ()
 {
     for (const auto &p : profiles_)
     {
@@ -410,7 +412,7 @@ vfs_processor_impl::_save_cookies ()
 // @brief Save credit cards
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_credit_cards ()
+evidence_processor_impl::_save_credit_cards ()
 {
     for (const auto &p : profiles_)
     {
@@ -471,7 +473,7 @@ vfs_processor_impl::_save_credit_cards ()
 // @brief Save encryption keys
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_encryption_keys ()
+evidence_processor_impl::_save_encryption_keys ()
 {
     for (const auto &ek : encryption_keys_)
     {
@@ -507,7 +509,7 @@ vfs_processor_impl::_save_encryption_keys ()
 // @brief Save passwords
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_passwords ()
+evidence_processor_impl::_save_passwords ()
 {
     for (const auto &p : profiles_)
     {
@@ -585,7 +587,7 @@ vfs_processor_impl::_save_passwords ()
 // @brief Save PDI entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_pdis ()
+evidence_processor_impl::_save_pdis ()
 {
     for (const auto &p : profiles_)
     {
@@ -716,7 +718,7 @@ vfs_processor_impl::_save_pdis ()
 // @brief Save received files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_received_files ()
+evidence_processor_impl::_save_received_files ()
 {
     for (const auto &profile : profiles_)
     {
@@ -747,7 +749,7 @@ vfs_processor_impl::_save_received_files ()
 // @brief Save accounts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_user_accounts ()
+evidence_processor_impl::_save_user_accounts ()
 {
     for (const auto &p : profiles_)
     {
@@ -863,7 +865,7 @@ vfs_processor_impl::_save_user_accounts ()
 // @brief Save visited URLs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_visited_urls ()
+evidence_processor_impl::_save_visited_urls ()
 {
     for (const auto &p : profiles_)
     {

@@ -1,5 +1,7 @@
 Mobius Forensic Toolkit 2.27
 	* app-ares: Implemented the evidence_processor_impl interface
+	* app-ares: Changed to use evidence.add_hash method
+	* app-chromium: Implemented the evidence_processor_impl interface
 	* evidence-viewer: Changed to use new evidence.get_hashes method
 	* Created new package src/extensions/evidence-processor
 	* post-processor/opened-files: Migrated to evidence-processor/derived-opened-files

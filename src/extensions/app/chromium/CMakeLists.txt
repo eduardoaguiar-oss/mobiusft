@@ -28,6 +28,7 @@ project(app_chromium LANGUAGES CXX)
 add_library(app_chromium MODULE
     main.cpp
     common.cpp
+    evidence_processor_impl.cpp
     file_bookmarks.cpp
     file_cookies.cpp
     file_history.cpp
@@ -37,7 +38,6 @@ add_library(app_chromium MODULE
     file_web_data.cpp
     post_processor_impl.cpp
     profile.cpp
-    vfs_processor_impl.cpp
 )
 
 set_target_properties(app_chromium PROPERTIES OUTPUT_NAME "app-chromium" PREFIX "")
