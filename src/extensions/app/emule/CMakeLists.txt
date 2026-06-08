@@ -29,6 +29,7 @@ add_library(app_emule MODULE
     main.cpp
     common.cpp
     ctag.cpp
+    evidence_processor_impl.cpp
     file_cancelled_met.cpp
     file_key_index_dat.cpp
     file_known_met.cpp
@@ -36,7 +37,6 @@ add_library(app_emule MODULE
     file_part_met_txtsrc.cpp
     file_stored_searches_met.cpp
     profile.cpp
-    vfs_processor_impl.cpp
 )
 
 set_target_properties(app_emule PROPERTIES OUTPUT_NAME "app-emule" PREFIX "")

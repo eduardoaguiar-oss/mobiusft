@@ -23,6 +23,7 @@
 #include <mobius/core/io/folder.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <mobius/framework/evidence_flag.hpp>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -63,7 +64,7 @@ class profile
         mobius::core::pod::map metadata;
 
         // hashes
-        mobius::core::pod::data hashes;
+        std::map<std::string, std::string> hashes;
 
         // flags
         mobius::framework::evidence_flag flag_downloaded;
@@ -92,7 +93,7 @@ class profile
         mobius::core::pod::map metadata;
 
         // hashes
-        mobius::core::pod::data hashes;
+        std::map<std::string, std::string> hashes;
 
         // source files
         std::vector<mobius::core::io::file> source_files;

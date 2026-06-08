@@ -198,17 +198,13 @@ profile::add_key_index_dat_file (const mobius::core::io::file &f)
                         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
                         // Content hashes
                         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-                        std::vector<mobius::core::pod::data> hashes = {
-                            {"ed2k", hash_ed2k}
-                        };
+                        rf.hashes["ed2k"] = hash_ed2k;
 
                         auto aich_hash =
                             metadata.get<std::string> ("hash_aich");
 
                         if (!aich_hash.empty ())
-                            hashes.push_back ({"aich", aich_hash});
-
-                        rf.hashes = hashes;
+                            rf.hashes["aich"] = aich_hash;
 
                         remote_files_.push_back (rf);
                     }
@@ -273,7 +269,9 @@ profile::add_known_met_file (const mobius::core::io::file &f)
             lf.flag_completed = true; // @see CPartFile::PerformFileCompleteEnd
             lf.app_id = app_id_;
             lf.app_name = app_name_;
+            lf.f = f;
 
+            // Metadata
             metadata.set ("flag_downloaded", to_string (lf.flag_downloaded));
             metadata.set ("flag_uploaded", to_string (lf.flag_uploaded));
             metadata.set ("flag_shared", to_string (lf.flag_shared));
@@ -283,9 +281,17 @@ profile::add_known_met_file (const mobius::core::io::file &f)
             metadata.set ("network", "eDonkey");
 
             lf.metadata = metadata;
-            lf.hashes = get_file_hashes (kf);
-            lf.f = f;
 
+            // Content hashes
+            lf.hashes["ed2k"] = mobius::core::string::toupper (kf.hash_ed2k);
+
+            for (const auto &tag : kf.tags)
+            {
+                if (tag.get_id () == 0x27) // FT_AICH_HASH
+                    lf.hashes["aich"] = tag.get_value<std::string> ();
+            }
+
+            // Add local file
             local_files_.push_back (lf);
         }
 
