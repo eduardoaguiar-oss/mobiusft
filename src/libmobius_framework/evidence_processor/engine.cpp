@@ -112,7 +112,6 @@ class engine::impl
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _on_start ();
-    void _on_load_evidences ();
     void _on_run_vfs ();
     void _on_process_folder (const mobius::core::io::folder &);
     void _on_complete ();
@@ -253,7 +252,6 @@ engine::impl::update ()
     started_time_ = mobius::core::datetime::now ();
 
     _on_start ();
-    _on_load_evidences ();
     _on_complete ();
     _on_stop ();
 
@@ -399,7 +397,24 @@ engine::impl::_on_complete ()
         }
     }
 
-    _on_load_evidences ();
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @deprecated Load evidences created by deprecated implementations and
+    // feed them back into the processor, to feed events to implementations.
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (auto &e : item_.get_evidences ())
+    {
+        for (const auto &impl : implementations_)
+        {
+            try
+            {
+                impl->on_evidence_created (e);
+            }
+            catch (const std::exception &e)
+            {
+                log.warning (__LINE__, e.what ());
+            }
+        }
+    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Notify implementations that processing is complete
@@ -417,31 +432,6 @@ engine::impl::_on_complete ()
     }
 
     transaction.commit ();
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Load evidences already processed and feed them back into the
-// processor, to feed events to implementations.
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-engine::impl::_on_load_evidences ()
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    for (auto &e : item_.get_evidences ())
-    {
-        for (const auto &impl : implementations_)
-        {
-            try
-            {
-                impl->on_evidence_created (e);
-            }
-            catch (const std::exception &e)
-            {
-                log.warning (__LINE__, e.what ());
-            }
-        }
-    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "vfs_processor_impl.hpp"
+#include "evidence_processor_impl.hpp"
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/decoder/hexstring.hpp>
 #include <mobius/core/decoder/inifile.hpp>
@@ -177,11 +177,13 @@ namespace mobius::extension::app::ares
 // @param item Item object
 // @param case_profile Case profile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-vfs_processor_impl::vfs_processor_impl (
+evidence_processor_impl::evidence_processor_impl (
     const mobius::framework::model::item &item,
-    const mobius::framework::case_profile &
+    const mobius::framework::evidence_processor::profile &,
+    const mobius::framework::evidence_processor::mediator &mediator
 )
-    : item_ (item)
+    : item_ (item),
+      mediator_ (mediator)
 {
 }
 
@@ -190,7 +192,7 @@ vfs_processor_impl::vfs_processor_impl (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
+evidence_processor_impl::on_folder_entered (const mobius::core::io::folder &folder)
 {
     _scan_profile_folder (folder);
     _scan_arestra_folder (folder);
@@ -201,7 +203,7 @@ vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 // @brief Called when processing is complete
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_complete ()
+evidence_processor_impl::on_complete ()
 {
     _save_app_profiles ();
     _save_autofills ();
@@ -218,7 +220,9 @@ vfs_processor_impl::on_complete ()
 // @param folder Folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_arestra_folder (const mobius::core::io::folder &folder)
+evidence_processor_impl::_scan_arestra_folder (
+    const mobius::core::io::folder &folder
+)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
     mobius::core::io::walker w (folder);
@@ -245,7 +249,7 @@ vfs_processor_impl::_scan_arestra_folder (const mobius::core::io::folder &folder
 // @param f ARESTRA file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_decode_arestra_file (const mobius::core::io::file &f)
+evidence_processor_impl::_decode_arestra_file (const mobius::core::io::file &f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -330,7 +334,7 @@ vfs_processor_impl::_decode_arestra_file (const mobius::core::io::file &f)
 // @param folder Folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_ntuser_dat_folder (
+evidence_processor_impl::_scan_ntuser_dat_folder (
     const mobius::core::io::folder &folder
 )
 {
@@ -358,7 +362,7 @@ vfs_processor_impl::_scan_ntuser_dat_folder (
 // @param f NTUSER.DAT file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_decode_ntuser_dat_file (const mobius::core::io::file &f)
+evidence_processor_impl::_decode_ntuser_dat_file (const mobius::core::io::file &f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -381,7 +385,8 @@ vfs_processor_impl::_decode_ntuser_dat_file (const mobius::core::io::file &f)
 
     if (ares_key)
     {
-        auto username = mobius::framework::get_username_from_path (f.get_path ());
+        auto username =
+            mobius::framework::get_username_from_path (f.get_path ());
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Load account
@@ -433,7 +438,9 @@ vfs_processor_impl::_decode_ntuser_dat_file (const mobius::core::io::file &f)
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_profile_folder (const mobius::core::io::folder &folder)
+evidence_processor_impl::_scan_profile_folder (
+    const mobius::core::io::folder &folder
+)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -456,8 +463,10 @@ vfs_processor_impl::_scan_profile_folder (const mobius::core::io::folder &folder
             else if (name == "torrenth.dat")
                 p.add_torrenth_file (f);
 
-            else if (name == "phashidx.dat" || name == "phashidxtemp.dat" ||
-                     name == "tempphash.dat")
+            else if (
+                name == "phashidx.dat" || name == "phashidxtemp.dat" ||
+                name == "tempphash.dat"
+            )
                 p.add_phashidx_file (f);
         }
         catch (const std::exception &e)
@@ -494,7 +503,7 @@ vfs_processor_impl::_scan_profile_folder (const mobius::core::io::folder &folder
 // @param folder Ares/Data/TempDL folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_tempdl_folder (
+evidence_processor_impl::_scan_tempdl_folder (
     profile &p, const mobius::core::io::folder &folder
 )
 {
@@ -522,7 +531,7 @@ vfs_processor_impl::_scan_tempdl_folder (
 // @param folder Ares/Data/TempUL folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_tempul_folder (
+evidence_processor_impl::_scan_tempul_folder (
     profile &p, const mobius::core::io::folder &folder
 )
 {
@@ -545,7 +554,7 @@ vfs_processor_impl::_scan_tempul_folder (
 // @brief Save app profiles
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_app_profiles ()
+evidence_processor_impl::_save_app_profiles ()
 {
     for (const auto &p : profiles_)
     {
@@ -575,7 +584,7 @@ vfs_processor_impl::_save_app_profiles ()
 // @brief Save autofill entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_autofills ()
+evidence_processor_impl::_save_autofills ()
 {
     for (const auto &a : autofills_)
     {
@@ -602,7 +611,7 @@ vfs_processor_impl::_save_autofills ()
 // @brief Save local files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_local_files ()
+evidence_processor_impl::_save_local_files ()
 {
     for (const auto &f : files_)
     {
@@ -671,7 +680,7 @@ vfs_processor_impl::_save_local_files ()
 // @brief Save remote files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_p2p_remote_files ()
+evidence_processor_impl::_save_p2p_remote_files ()
 {
     for (const auto &f : files_)
     {
@@ -725,7 +734,7 @@ vfs_processor_impl::_save_p2p_remote_files ()
 // @brief Save received files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_received_files ()
+evidence_processor_impl::_save_received_files ()
 {
     for (const auto &f : files_)
     {
@@ -800,7 +809,7 @@ vfs_processor_impl::_save_received_files ()
 // @brief Save sent files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_sent_files ()
+evidence_processor_impl::_save_sent_files ()
 {
     for (const auto &f : files_)
     {
@@ -872,7 +881,7 @@ vfs_processor_impl::_save_sent_files ()
 // @brief Save shared files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_shared_files ()
+evidence_processor_impl::_save_shared_files ()
 {
     for (const auto &f : files_)
     {
@@ -947,7 +956,7 @@ vfs_processor_impl::_save_shared_files ()
 // @brief Save accounts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_user_accounts ()
+evidence_processor_impl::_save_user_accounts ()
 {
     for (const auto &a : accounts_)
     {

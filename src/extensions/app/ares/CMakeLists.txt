@@ -34,6 +34,7 @@ add_library(app_ares MODULE
     decoder_impl_shareh.cpp
     decoder_impl_sharel.cpp
     decoder_impl_torrenth.cpp
+    evidence_processor_impl.cpp
     file_arestra.cpp
     file_pbthash.cpp
     file_phash.cpp
@@ -41,7 +42,6 @@ add_library(app_ares MODULE
     file_sharel.cpp
     file_torrenth.cpp
     profile.cpp
-    vfs_processor_impl.cpp
 )
 
 set_target_properties(app_ares PROPERTIES OUTPUT_NAME "app-ares" PREFIX "")

@@ -55,7 +55,7 @@ def func_slideplayer_com_br(c, data):
 # @brief Decode hotmart.com __kdtc cookie
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def func_hotmart_com(c, data):
-    # s = 'cid%3Dswdsil%40yahoo.com.br%3Bt%3D1569186164243'
+    # s = 'cid%3Dtwesif%40yahoo.com.br%3Bt%3D1579186164243'
     u = mobius.core.io.uri(c.value.decode('ascii'))
     text = u.get_path('utf-8')
 

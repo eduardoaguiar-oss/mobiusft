@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_APP_ARES_VFS_PROCESSOR_IMPL_HPP
-#define MOBIUS_EXTENSION_APP_ARES_VFS_PROCESSOR_IMPL_HPP
+#ifndef MOBIUS_EXTENSION_APP_ARES_EVIDENCE_PROCESSOR_IMPL_HPP
+#define MOBIUS_EXTENSION_APP_ARES_EVIDENCE_PROCESSOR_IMPL_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -19,9 +19,11 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/io/file.hpp>
-#include <mobius/framework/ant/vfs_processor_impl_base.hpp>
-#include <mobius/framework/case_profile.hpp>
+#include <mobius/framework/evidence_processor/evidence_processor_impl_base.hpp>
+#include <mobius/framework/evidence_processor/mediator.hpp>
+#include <mobius/framework/evidence_processor/profile.hpp>
 #include <mobius/framework/model/item.hpp>
+#include <atomic>
 #include <string>
 #include <vector>
 #include "profile.hpp"
@@ -29,11 +31,11 @@
 namespace mobius::extension::app::ares
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Ares Galaxy <i>vfs_processor</i> implementation class
+// @brief Ares Galaxy <i>evidence_processor</i> implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class vfs_processor_impl
-    : public mobius::framework::ant::vfs_processor_impl_base
+class evidence_processor_impl
+    : public mobius::framework::evidence_processor::evidence_processor_impl_base
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -66,20 +68,24 @@ class vfs_processor_impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    explicit vfs_processor_impl (
+    explicit evidence_processor_impl (
         const mobius::framework::model::item &,
-        const mobius::framework::case_profile &
+        const mobius::framework::evidence_processor::profile &,
+        const mobius::framework::evidence_processor::mediator &
     );
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Function prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void on_folder (const mobius::core::io::folder &) final;
+    void on_folder_entered (const mobius::core::io::folder &) final;
     void on_complete () final;
 
   private:
     // @brief Case item
     mobius::framework::model::item item_;
+
+    // @brief Mediator
+    mobius::framework::evidence_processor::mediator mediator_;
 
     // @brief Profiles found
     std::vector<profile> profiles_;
