@@ -176,6 +176,8 @@ evidence_processor_impl::on_evidence_created (
 
     try
     {
+        evidences_processed_++;
+
         // Check if the evidence type is "autofill"
         if (evidence.get_type () != "autofill")
             return;
@@ -217,6 +219,7 @@ evidence_processor_impl::on_evidence_created (
 
                 // Notify the coordinator about the new evidence
                 mediator_.on_evidence_created (e);
+                evidences_derived_++;
                 handled = true;
             }
         }
