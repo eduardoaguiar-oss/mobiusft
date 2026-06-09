@@ -28,12 +28,12 @@ project(app_gecko LANGUAGES CXX)
 add_library(app_gecko MODULE
     main.cpp
     common.cpp
+    evidence_processor_impl.cpp
     file_cookies_sqlite.cpp
     file_downloads_sqlite.cpp
     file_formhistory_sqlite.cpp
     file_places_sqlite.cpp
     profile.cpp
-    vfs_processor_impl.cpp
 )
 
 set_target_properties(app_gecko PROPERTIES OUTPUT_NAME "app-gecko" PREFIX "")

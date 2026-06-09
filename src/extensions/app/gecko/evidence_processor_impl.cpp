@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "vfs_processor_impl.hpp"
+#include "evidence_processor_impl.hpp"
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/io/walker.hpp>
 #include <mobius/core/log.hpp>
@@ -46,11 +46,13 @@ namespace mobius::extension::app::gecko
 // @param item Item object
 // @param case_profile Case profile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-vfs_processor_impl::vfs_processor_impl (
+evidence_processor_impl::evidence_processor_impl (
     const mobius::framework::model::item &item,
-    const mobius::framework::case_profile &
+    const mobius::framework::evidence_processor::profile &,
+    const mobius::framework::evidence_processor::mediator &mediator
 )
-    : item_ (item)
+    : item_ (item),
+      mediator_ (mediator)
 {
 }
 
@@ -59,18 +61,16 @@ vfs_processor_impl::vfs_processor_impl (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
+evidence_processor_impl::on_folder_entered (const mobius::core::io::folder &folder)
 {
     _scan_profile_folder (folder);
-    //_scan_arestra_folder (folder);
-    //_scan_ntuser_dat_folder (folder);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Called when processing is complete
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_complete ()
+evidence_processor_impl::on_complete ()
 {
     _save_app_profiles ();
     _save_autofills ();
@@ -86,7 +86,7 @@ vfs_processor_impl::on_complete ()
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_profile_folder (
+evidence_processor_impl::_scan_profile_folder (
     const mobius::core::io::folder &folder
 )
 {
@@ -137,7 +137,7 @@ vfs_processor_impl::_scan_profile_folder (
 // @brief Save app profiles
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_app_profiles ()
+evidence_processor_impl::_save_app_profiles ()
 {
     for (const auto &p : profiles_)
     {
@@ -169,6 +169,9 @@ vfs_processor_impl::_save_app_profiles ()
 
         // Tags
         e.set_tag ("app.browser");
+
+        // Tell mediator we have a new evidence
+        mediator_.on_evidence_created (e);
     }
 }
 
@@ -176,7 +179,7 @@ vfs_processor_impl::_save_app_profiles ()
 // @brief Save autofill entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_autofills ()
+evidence_processor_impl::_save_autofills ()
 {
     for (const auto &p : profiles_)
     {
@@ -204,6 +207,9 @@ vfs_processor_impl::_save_autofills ()
                 // Tags and sources
                 e.set_tag ("app.browser");
                 e.add_source (fh.f);
+
+                // Tell mediator we have a new evidence
+                mediator_.on_evidence_created (e);
             }
         }
     }
@@ -213,7 +219,7 @@ vfs_processor_impl::_save_autofills ()
 // @brief Save bookmarked URLs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_bookmarked_urls ()
+evidence_processor_impl::_save_bookmarked_urls ()
 {
     for (const auto &p : profiles_)
     {
@@ -239,6 +245,9 @@ vfs_processor_impl::_save_bookmarked_urls ()
             // Tags and sources
             e.set_tag ("app.browser");
             e.add_source (b.f);
+
+            // Tell mediator we have a new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -247,7 +256,7 @@ vfs_processor_impl::_save_bookmarked_urls ()
 // @brief Save cookies
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_cookies ()
+evidence_processor_impl::_save_cookies ()
 {
     for (const auto &p : profiles_)
     {
@@ -278,6 +287,9 @@ vfs_processor_impl::_save_cookies ()
             // Tags and sources
             e.set_tag ("app.browser");
             e.add_source (c.f);
+
+            // Tell mediator we have a new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -286,7 +298,7 @@ vfs_processor_impl::_save_cookies ()
 // @brief Save received files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_received_files ()
+evidence_processor_impl::_save_received_files ()
 {
     for (const auto &profile : profiles_)
     {
@@ -314,6 +326,9 @@ vfs_processor_impl::_save_received_files ()
                 // Tags and sources
                 e.set_tag ("app.browser");
                 e.add_source (entry.f);
+
+                // Tell mediator we have a new evidence
+                mediator_.on_evidence_created (e);
             }
         }
     }
@@ -323,7 +338,7 @@ vfs_processor_impl::_save_received_files ()
 // @brief Save searched texts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_searched_texts ()
+evidence_processor_impl::_save_searched_texts ()
 {
     for (const auto &p : profiles_)
     {
@@ -348,6 +363,9 @@ vfs_processor_impl::_save_searched_texts ()
 
                     e.set_tag ("app.browser");
                     e.add_source (fh.f);
+
+                    // Tell mediator we have a new evidence
+                    mediator_.on_evidence_created (e);
                 }
 
                 if (fh.last_used && fh.last_used != fh.first_used)
@@ -367,6 +385,9 @@ vfs_processor_impl::_save_searched_texts ()
 
                     e.set_tag ("app.browser");
                     e.add_source (fh.f);
+
+                    // Tell mediator we have a new evidence
+                    mediator_.on_evidence_created (e);
                 }
             }
         }
@@ -377,7 +398,7 @@ vfs_processor_impl::_save_searched_texts ()
 // @brief Save visited URLs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_visited_urls ()
+evidence_processor_impl::_save_visited_urls ()
 {
     for (const auto &p : profiles_)
     {
@@ -404,6 +425,9 @@ vfs_processor_impl::_save_visited_urls ()
             // Tags and sources
             e.set_tag ("app.browser");
             e.add_source (entry.f);
+
+            // Tell mediator we have a new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
