@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "vfs_processor_impl.hpp"
+#include "evidence_processor_impl.hpp"
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/io/path.hpp>
 #include <mobius/core/io/uri.hpp>
@@ -50,7 +50,6 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static const std::string SAMPLING_ID = "sampling";
 static const std::string APP_ID = "emuletorrent";
 static const std::string APP_NAME = "EmuleTorrent";
 
@@ -73,28 +72,6 @@ _update_metadata (
     }
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get vector of hashes for a given file
-// @param f File structure
-// @return Vector
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector<mobius::core::pod::data>
-_get_file_hashes (const auto &f)
-{
-    std::vector<mobius::core::pod::data> hashes;
-
-    if (!f.hash_ed2k.empty ())
-        hashes.push_back ({"ed2k", f.hash_ed2k});
-
-    if (!f.hash_sha1.empty ())
-        hashes.push_back ({"sha1", f.hash_sha1});
-
-    if (!f.hash_sha2_256.empty ())
-        hashes.push_back ({"sha2-256", f.hash_sha2_256});
-
-    return hashes;
-}
-
 } // namespace
 
 namespace mobius::extension::app::emuletorrent
@@ -104,11 +81,13 @@ namespace mobius::extension::app::emuletorrent
 // @param item Item object
 // @param case_profile Case profile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-vfs_processor_impl::vfs_processor_impl (
+evidence_processor_impl::evidence_processor_impl (
     const mobius::framework::model::item &item,
-    const mobius::framework::case_profile &
+    const mobius::framework::evidence_processor::profile &,
+    const mobius::framework::evidence_processor::mediator &mediator
 )
-    : item_ (item)
+    : item_ (item),
+      mediator_ (mediator)
 {
 }
 
@@ -117,7 +96,9 @@ vfs_processor_impl::vfs_processor_impl (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
+evidence_processor_impl::on_folder_entered (
+    const mobius::core::io::folder &folder
+)
 {
     _scan_roaming_folder (folder);
     _scan_local_folder (folder);
@@ -127,7 +108,7 @@ vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 // @brief Called when processing is complete
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_complete ()
+evidence_processor_impl::on_complete ()
 {
     _save_app_profiles ();
     _save_local_files ();
@@ -143,7 +124,7 @@ vfs_processor_impl::on_complete ()
 // @param folder Folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_roaming_folder (
+evidence_processor_impl::_scan_roaming_folder (
     const mobius::core::io::folder &folder
 )
 {
@@ -164,7 +145,9 @@ vfs_processor_impl::_scan_roaming_folder (
 // @param folder Folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_local_folder (const mobius::core::io::folder &folder)
+evidence_processor_impl::_scan_local_folder (
+    const mobius::core::io::folder &folder
+)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
     mobius::core::io::walker w (folder);
@@ -184,7 +167,9 @@ vfs_processor_impl::_scan_local_folder (const mobius::core::io::folder &folder)
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_decode_bt_fastresume_file (const mobius::core::io::file &f)
+evidence_processor_impl::_decode_bt_fastresume_file (
+    const mobius::core::io::file &f
+)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -195,7 +180,8 @@ vfs_processor_impl::_decode_bt_fastresume_file (const mobius::core::io::file &f)
         for (const auto &tf : bt.get_files ())
         {
             file et_file;
-            et_file.username = mobius::framework::get_username_from_path (f.get_path ());
+            et_file.username =
+                mobius::framework::get_username_from_path (f.get_path ());
             et_file.filename = tf.name;
             et_file.size = tf.size;
 
@@ -257,7 +243,7 @@ vfs_processor_impl::_decode_bt_fastresume_file (const mobius::core::io::file &f)
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_decode_ed2k_fastresume_file (
+evidence_processor_impl::_decode_ed2k_fastresume_file (
     const mobius::core::io::file &f
 )
 {
@@ -269,7 +255,8 @@ vfs_processor_impl::_decode_ed2k_fastresume_file (
 
         file et_file;
         et_file.hash_ed2k = ed2k.get_hash_ed2k ();
-        et_file.username = mobius::framework::get_username_from_path (f.get_path ());
+        et_file.username =
+            mobius::framework::get_username_from_path (f.get_path ());
         et_file.filename = ed2k.get_filename ();
         et_file.path = ed2k.get_path ();
         et_file.size = ed2k.get_file_size ();
@@ -310,7 +297,7 @@ vfs_processor_impl::_decode_ed2k_fastresume_file (
 // @brief Save app profiles
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_app_profiles ()
+evidence_processor_impl::_save_app_profiles ()
 {
     for (const auto &p : profiles_)
     {
@@ -344,6 +331,9 @@ vfs_processor_impl::_save_app_profiles ()
         // Tags and sources
         e.set_tag ("app.p2p");
         e.add_source (p.get_folder ());
+
+        // Tell mediator about new evidence
+        mediator_.on_evidence_created (e);
     }
 }
 
@@ -351,7 +341,7 @@ vfs_processor_impl::_save_app_profiles ()
 // @brief Save local files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_local_files ()
+evidence_processor_impl::_save_local_files ()
 {
     for (const auto &f : files_)
     {
@@ -364,7 +354,6 @@ vfs_processor_impl::_save_local_files ()
             e.set_attribute ("path", f.path);
             e.set_attribute ("app_id", APP_ID);
             e.set_attribute ("app_name", APP_NAME);
-            e.set_attribute ("hashes", _get_file_hashes (f));
 
             // Metadata
             mobius::core::pod::map metadata;
@@ -379,11 +368,24 @@ vfs_processor_impl::_save_local_files ()
             _update_metadata (metadata, f.metadata);
             e.set_attribute ("metadata", metadata);
 
+            // Hashes
+            if (!f.hash_ed2k.empty ())
+                e.add_hash ("ed2k", f.hash_ed2k);
+
+            if (!f.hash_sha1.empty ())
+                e.add_hash ("sha1", f.hash_sha1);
+
+            if (!f.hash_sha2_256.empty ())
+                e.add_hash ("sha2-256", f.hash_sha2_256);
+
             // Tags
             e.set_tag ("app.p2p");
 
             // Sources
             e.add_source (f.f);
+
+            // Tell mediator about new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -392,7 +394,7 @@ vfs_processor_impl::_save_local_files ()
 // @brief Save received files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_received_files ()
+evidence_processor_impl::_save_received_files ()
 {
     for (const auto &f : files_)
     {
@@ -406,7 +408,6 @@ vfs_processor_impl::_save_received_files ()
             e.set_attribute ("username", f.username);
             e.set_attribute ("app_id", APP_ID);
             e.set_attribute ("app_name", APP_NAME);
-            e.set_attribute ("hashes", _get_file_hashes (f));
 
             // Metadata
             mobius::core::pod::map metadata;
@@ -419,11 +420,24 @@ vfs_processor_impl::_save_received_files ()
 
             e.set_attribute ("metadata", metadata);
 
+            // Hashes
+            if (!f.hash_ed2k.empty ())
+                e.add_hash ("ed2k", f.hash_ed2k);
+
+            if (!f.hash_sha1.empty ())
+                e.add_hash ("sha1", f.hash_sha1);
+
+            if (!f.hash_sha2_256.empty ())
+                e.add_hash ("sha2-256", f.hash_sha2_256);
+
             // Tags
             e.set_tag ("app.p2p");
 
             // Sources
             e.add_source (f.f);
+
+            // Tell mediator about new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -432,7 +446,7 @@ vfs_processor_impl::_save_received_files ()
 // @brief Save remote files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_remote_party_shared_files ()
+evidence_processor_impl::_save_remote_party_shared_files ()
 {
     for (const auto &f : files_)
     {
@@ -447,7 +461,6 @@ vfs_processor_impl::_save_remote_party_shared_files ()
             e.set_attribute ("username", f.username);
             e.set_attribute ("app_id", APP_ID);
             e.set_attribute ("app_name", APP_NAME);
-            e.set_attribute ("hashes", _get_file_hashes (f));
 
             // Metadata
             mobius::core::pod::map metadata;
@@ -457,11 +470,24 @@ vfs_processor_impl::_save_remote_party_shared_files ()
 
             e.set_attribute ("metadata", metadata);
 
+            // Hashes
+            if (!f.hash_ed2k.empty ())
+                e.add_hash ("ed2k", f.hash_ed2k);
+
+            if (!f.hash_sha1.empty ())
+                e.add_hash ("sha1", f.hash_sha1);
+
+            if (!f.hash_sha2_256.empty ())
+                e.add_hash ("sha2-256", f.hash_sha2_256);
+
             // Tags
             e.set_tag ("app.p2p");
 
             // Sources
             e.add_source (f.f);
+
+            // Tell mediator about new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -470,7 +496,7 @@ vfs_processor_impl::_save_remote_party_shared_files ()
 // @brief Save sent files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_sent_files ()
+evidence_processor_impl::_save_sent_files ()
 {
     for (const auto &f : files_)
     {
@@ -484,7 +510,6 @@ vfs_processor_impl::_save_sent_files ()
             e.set_attribute ("username", f.username);
             e.set_attribute ("app_id", APP_ID);
             e.set_attribute ("app_name", APP_NAME);
-            e.set_attribute ("hashes", _get_file_hashes (f));
 
             // Metadata
             mobius::core::pod::map metadata;
@@ -498,11 +523,24 @@ vfs_processor_impl::_save_sent_files ()
 
             e.set_attribute ("metadata", metadata);
 
+            // Hashes
+            if (!f.hash_ed2k.empty ())
+                e.add_hash ("ed2k", f.hash_ed2k);
+
+            if (!f.hash_sha1.empty ())
+                e.add_hash ("sha1", f.hash_sha1);
+
+            if (!f.hash_sha2_256.empty ())
+                e.add_hash ("sha2-256", f.hash_sha2_256);
+
             // Tags
             e.set_tag ("app.p2p");
 
             // Sources
             e.add_source (f.f);
+
+            // Tell mediator about new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -511,7 +549,7 @@ vfs_processor_impl::_save_sent_files ()
 // @brief Save shared files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_shared_files ()
+evidence_processor_impl::_save_shared_files ()
 {
     for (const auto &f : files_)
     {
@@ -525,7 +563,6 @@ vfs_processor_impl::_save_shared_files ()
             e.set_attribute ("path", f.path);
             e.set_attribute ("app_id", APP_ID);
             e.set_attribute ("app_name", APP_NAME);
-            e.set_attribute ("hashes", _get_file_hashes (f));
 
             // Metadata
             mobius::core::pod::map metadata;
@@ -540,11 +577,24 @@ vfs_processor_impl::_save_shared_files ()
 
             e.set_attribute ("metadata", metadata);
 
+            // Hashes
+            if (!f.hash_ed2k.empty ())
+                e.add_hash ("ed2k", f.hash_ed2k);
+
+            if (!f.hash_sha1.empty ())
+                e.add_hash ("sha1", f.hash_sha1);
+
+            if (!f.hash_sha2_256.empty ())
+                e.add_hash ("sha2-256", f.hash_sha2_256);
+
             // Tags
             e.set_tag ("app.p2p");
 
             // Sources
             e.add_source (f.f);
+
+            // Tell mediator about new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -553,7 +603,7 @@ vfs_processor_impl::_save_shared_files ()
 // @brief Save user accounts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_user_accounts ()
+evidence_processor_impl::_save_user_accounts ()
 {
     for (const auto &p : profiles_)
     {
@@ -587,6 +637,9 @@ vfs_processor_impl::_save_user_accounts ()
 
         e.set_tag ("app.p2p");
         e.add_source (f);
+
+        // Tell mediator about new evidence
+        mediator_.on_evidence_created (e);
     }
 }
 

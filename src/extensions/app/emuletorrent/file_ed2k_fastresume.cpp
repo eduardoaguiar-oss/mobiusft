@@ -16,13 +16,20 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file_ed2k_fastresume.hpp"
-#include <algorithm>
 #include <mobius/core/decoder/btencode.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/core/io/path.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <mobius/core/string_functions.hpp>
+#include <algorithm>
+#include <set>
+
+namespace
+{
+// @brief Set of uint32_t values found in metadata, for debugging purposes
+std::set<std::uint32_t> u1_values;
+} // namespace
 
 namespace mobius::extension::app::emuletorrent
 {
@@ -31,7 +38,8 @@ namespace mobius::extension::app::emuletorrent
 // @param reader Reader object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_ed2k_fastresume::file_ed2k_fastresume (
-    const mobius::core::io::reader &reader)
+    const mobius::core::io::reader &reader
+)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -55,11 +63,20 @@ file_ed2k_fastresume::file_ed2k_fastresume (
 
     auto path_size = decoder.get_uint16_le ();
     path_ = mobius::core::string::replace (
-        decoder.get_string_by_size (path_size), "\\", "/");
+        decoder.get_string_by_size (path_size), "\\", "/"
+    );
 
     file_size_ = decoder.get_uint64_le ();
     auto u1 = decoder.get_uint32_le ();
-    log.development (__LINE__, "u1 = " + std::to_string (u1));
+
+    if (u1_values.find (u1) == u1_values.end ())
+    {
+        u1_values.insert (u1);
+
+        log.development (
+            __LINE__, "u1 = 0x" + mobius::core::string::to_hex (u1, 8)
+        );
+    }
 
     header_section.end ();
 

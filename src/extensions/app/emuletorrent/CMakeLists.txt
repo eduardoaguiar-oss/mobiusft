@@ -27,10 +27,10 @@ project(app_emuletorrent LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(app_emuletorrent MODULE
     main.cpp
+    evidence_processor_impl.cpp
     file_bt_fastresume.cpp
     file_ed2k_fastresume.cpp
     profile.cpp
-    vfs_processor_impl.cpp
 )
 
 set_target_properties(app_emuletorrent PROPERTIES OUTPUT_NAME "app-emuletorrent" PREFIX "")

@@ -5,6 +5,9 @@ Mobius Forensic Toolkit 2.27
 	* app-dcpp: Implemented the evidence_processor_impl interface
 	* app-emule: Implemented the evidence_processor_impl interface
 	* app-emule: Changed to use evidence.add_hash method
+	* app-emuletorrent: Implemented the evidence_processor_impl interface
+	* app-emuletorrent: Changed to use evidence.add_hash method
+	* app-emuletorrent Changed to cache unknown u1 values on file_ed2k_fastresume
 	* evidence-viewer: Changed to use new evidence.get_hashes method
 	* Created new package src/extensions/evidence-processor
 	* post-processor/opened-files: Migrated to evidence-processor/derived-opened-files
