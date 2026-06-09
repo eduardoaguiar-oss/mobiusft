@@ -146,6 +146,8 @@ engine::impl::impl (
                     data->factory (item_, profile_, mediator_)
                 );
 
+                mediator_.add_evidence_processor (implementations_.back ());
+
                 log.info (
                     __LINE__,
                     "evidence_processor implementation: " + processor_id
@@ -183,7 +185,8 @@ engine::impl::impl (
 
                     log.info (
                         __LINE__,
-                        "evidence_processor implementation (deprecated): " + processor_id
+                        "evidence_processor implementation (deprecated): " +
+                            processor_id
                     );
                 }
                 catch (const std::exception &e)

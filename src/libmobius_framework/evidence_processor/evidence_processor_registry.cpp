@@ -98,6 +98,7 @@ std::vector<mobius::framework::evidence_processor::
 list_evidence_processor_implementations ()
 {
     std::lock_guard<std::mutex> lock (mutex);
+    
     std::vector<mobius::framework::evidence_processor::
                     evidence_processor_implementation_data>
         implementations (data.size ());

@@ -47,12 +47,12 @@ class mediator::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Event handlers
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void on_evidence_created (mobius::framework::model::evidence &);
+    void on_evidence_created (mobius::framework::model::evidence);
     void on_evidence_attribute_modified (
-        mobius::framework::model::evidence &, const std::string &
+        mobius::framework::model::evidence, const std::string &
     );
     void on_evidence_tag_modified (
-        mobius::framework::model::evidence &, const std::string &
+        mobius::framework::model::evidence, const std::string &
     );
 
   private:
@@ -78,7 +78,7 @@ mediator::impl::add_evidence_processor (
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 mediator::impl::on_evidence_created (
-    mobius::framework::model::evidence &evidence
+    mobius::framework::model::evidence evidence
 )
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
@@ -91,7 +91,6 @@ mediator::impl::on_evidence_created (
         }
         catch (const std::exception &e)
         {
-            mobius::core::log log (__FILE__, __FUNCTION__);
             log.warning (__LINE__, e.what ());
         }
     }
@@ -104,7 +103,7 @@ mediator::impl::on_evidence_created (
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 mediator::impl::on_evidence_attribute_modified (
-    mobius::framework::model::evidence &evidence,
+    mobius::framework::model::evidence evidence,
     const std::string &attribute_id
 )
 {
@@ -118,7 +117,6 @@ mediator::impl::on_evidence_attribute_modified (
         }
         catch (const std::exception &e)
         {
-            mobius::core::log log (__FILE__, __FUNCTION__);
             log.warning (__LINE__, e.what ());
         }
     }
@@ -131,7 +129,7 @@ mediator::impl::on_evidence_attribute_modified (
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 mediator::impl::on_evidence_tag_modified (
-    mobius::framework::model::evidence &evidence, const std::string &tag
+    mobius::framework::model::evidence evidence, const std::string &tag
 )
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
@@ -144,7 +142,6 @@ mediator::impl::on_evidence_tag_modified (
         }
         catch (const std::exception &e)
         {
-            mobius::core::log log (__FILE__, __FUNCTION__);
             log.warning (__LINE__, e.what ());
         }
     }
@@ -175,7 +172,7 @@ mediator::add_evidence_processor (
 // @param evidence Reference to the created evidence
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-mediator::on_evidence_created (mobius::framework::model::evidence &evidence)
+mediator::on_evidence_created (mobius::framework::model::evidence evidence)
 {
     impl_->on_evidence_created (evidence);
 }
@@ -187,7 +184,7 @@ mediator::on_evidence_created (mobius::framework::model::evidence &evidence)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 mediator::on_evidence_attribute_modified (
-    mobius::framework::model::evidence &evidence,
+    mobius::framework::model::evidence evidence,
     const std::string &attribute_id
 )
 {
@@ -201,7 +198,7 @@ mediator::on_evidence_attribute_modified (
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 mediator::on_evidence_tag_modified (
-    mobius::framework::model::evidence &evidence, const std::string &tag
+    mobius::framework::model::evidence evidence, const std::string &tag
 )
 {
     impl_->on_evidence_tag_modified (evidence, tag);

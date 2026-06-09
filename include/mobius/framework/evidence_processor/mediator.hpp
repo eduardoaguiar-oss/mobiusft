@@ -50,12 +50,12 @@ class mediator
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void add_evidence_processor (std::shared_ptr<evidence_processor_impl_base>);
 
-    void on_evidence_created (mobius::framework::model::evidence &);
+    void on_evidence_created (mobius::framework::model::evidence);
     void on_evidence_attribute_modified (
-        mobius::framework::model::evidence &, const std::string &
+        mobius::framework::model::evidence, const std::string &
     );
     void on_evidence_tag_modified (
-        mobius::framework::model::evidence &, const std::string &
+        mobius::framework::model::evidence, const std::string &
     );
 
   private:
