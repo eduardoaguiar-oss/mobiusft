@@ -28,10 +28,10 @@ project(app_itubego LANGUAGES CXX)
 add_library(app_itubego MODULE
     main.cpp
     common.cpp
+    evidence_processor_impl.cpp
     file_download_list_dat.cpp
     file_history_dat.cpp
     profile.cpp
-    vfs_processor_impl.cpp
 )
 
 set_target_properties(app_itubego PROPERTIES OUTPUT_NAME "app-itubego" PREFIX "")

@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "vfs_processor_impl.hpp"
+#include "evidence_processor_impl.hpp"
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/io/path.hpp>
 #include <mobius/core/io/uri.hpp>
@@ -44,11 +44,12 @@ namespace mobius::extension::app::itubego
 // @param item Item object
 // @param case_profile Case profile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-vfs_processor_impl::vfs_processor_impl (
+evidence_processor_impl::evidence_processor_impl (
     const mobius::framework::model::item &item,
-    const mobius::framework::case_profile &
+    const mobius::framework::evidence_processor::profile &profile,
+    const mobius::framework::evidence_processor::mediator &mediator
 )
-    : item_ (item)
+    : item_ (item), mediator_ (mediator)
 {
 }
 
@@ -57,7 +58,7 @@ vfs_processor_impl::vfs_processor_impl (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_folder_enter (const mobius::core::io::folder &folder)
+evidence_processor_impl::on_folder_entered (const mobius::core::io::folder &folder)
 {
     _scan_profile_folder (folder);
 }
@@ -66,7 +67,7 @@ vfs_processor_impl::on_folder_enter (const mobius::core::io::folder &folder)
 // @brief Called when processing is complete
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_complete ()
+evidence_processor_impl::on_complete ()
 {
     _save_app_profiles ();
     _save_autofills ();
@@ -78,7 +79,7 @@ vfs_processor_impl::on_complete ()
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_profile_folder (const mobius::core::io::folder &folder)
+evidence_processor_impl::_scan_profile_folder (const mobius::core::io::folder &folder)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -118,7 +119,7 @@ vfs_processor_impl::_scan_profile_folder (const mobius::core::io::folder &folder
 // @brief Save app profiles
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_app_profiles ()
+evidence_processor_impl::_save_app_profiles ()
 {
     for (const auto &p : profiles_)
     {
@@ -141,6 +142,9 @@ vfs_processor_impl::_save_app_profiles ()
         // Tags and sources
         e.set_tag ("app.downloader");
         e.add_source (p.get_folder ());
+
+        // Tell mediator we have a new evidence
+        mediator_.on_evidence_created (e);
     }
 }
 
@@ -148,7 +152,7 @@ vfs_processor_impl::_save_app_profiles ()
 // @brief Save autofills
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_autofills ()
+evidence_processor_impl::_save_autofills ()
 {
     for (const auto &p : profiles_)
     {
@@ -156,18 +160,24 @@ vfs_processor_impl::_save_autofills ()
         {
             auto e = item_.new_evidence ("autofill");
 
+            // Set attributes
             e.set_attribute ("field_name", "url");
             e.set_attribute ("app_name", APP_NAME);
             e.set_attribute ("app_id", APP_ID);
             e.set_attribute ("username", p.get_username ());
             e.set_attribute ("value", entry.url);
 
+            // Set metadata
             auto metadata = mobius::core::pod::map ();
             metadata.set ("idx", entry.idx);
             e.set_attribute ("metadata", metadata);
 
+            // Set tags and sources
             e.set_tag ("app.downloader");
             e.add_source (entry.f);
+
+            // Tell mediator we have a new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -176,7 +186,7 @@ vfs_processor_impl::_save_autofills ()
 // @brief Save received files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_received_files ()
+evidence_processor_impl::_save_received_files ()
 {
     for (const auto &p : profiles_)
     {
@@ -198,6 +208,9 @@ vfs_processor_impl::_save_received_files ()
             // Set tags and sources
             e.set_tag ("app.downloader");
             e.add_source (file.f);
+
+            // Tell mediator we have a new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
