@@ -27,9 +27,9 @@ project(app_sticky_notes LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(app_sticky_notes MODULE
     main.cpp
-    profile.cpp
-    vfs_processor_impl.cpp
+    evidence_processor_impl.cpp
     file_plum_sqlite.cpp
+    profile.cpp
 )
 
 set_target_properties(app_sticky_notes PROPERTIES OUTPUT_NAME "app-sticky-notes" PREFIX "")

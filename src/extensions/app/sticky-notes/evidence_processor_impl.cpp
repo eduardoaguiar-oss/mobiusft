@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "vfs_processor_impl.hpp"
+#include "evidence_processor_impl.hpp"
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/io/path.hpp>
 #include <mobius/core/io/uri.hpp>
@@ -52,11 +52,13 @@ namespace mobius::extension::app::sticky_notes
 // @param item Item object
 // @param case_profile Case profile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-vfs_processor_impl::vfs_processor_impl (
+evidence_processor_impl::evidence_processor_impl (
     const mobius::framework::model::item &item,
-    const mobius::framework::case_profile &
+    const mobius::framework::evidence_processor::profile &,
+    const mobius::framework::evidence_processor::mediator &mediator
 )
-    : item_ (item)
+    : item_ (item),
+      mediator_ (mediator)
 {
 }
 
@@ -65,7 +67,7 @@ vfs_processor_impl::vfs_processor_impl (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
+evidence_processor_impl::on_folder_entered (const mobius::core::io::folder &folder)
 {
     _scan_profile_folder (folder);
 }
@@ -74,7 +76,7 @@ vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 // @brief Called when processing is complete
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_complete ()
+evidence_processor_impl::on_complete ()
 {
     _save_app_profiles ();
     _save_notes ();
@@ -85,7 +87,9 @@ vfs_processor_impl::on_complete ()
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_profile_folder (const mobius::core::io::folder &folder)
+evidence_processor_impl::_scan_profile_folder (
+    const mobius::core::io::folder &folder
+)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -125,7 +129,7 @@ vfs_processor_impl::_scan_profile_folder (const mobius::core::io::folder &folder
 // @brief Save app profiles
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_app_profiles ()
+evidence_processor_impl::_save_app_profiles ()
 {
     for (const auto &p : profiles_)
     {
@@ -149,6 +153,9 @@ vfs_processor_impl::_save_app_profiles ()
 
         // Tags
         e.set_tag ("app.notes");
+
+        // Notify mediator
+        mediator_.on_evidence_created (e);
     }
 }
 
@@ -156,7 +163,7 @@ vfs_processor_impl::_save_app_profiles ()
 // @brief Save notes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_notes ()
+evidence_processor_impl::_save_notes ()
 {
     for (const auto &p : profiles_)
     {
@@ -169,7 +176,9 @@ vfs_processor_impl::_save_notes ()
             e.set_attribute ("app_name", APP_NAME);
             e.set_attribute ("username", p.get_username ());
             e.set_attribute ("creation_time", n.creation_time);
-            e.set_attribute ("last_modification_time", n.last_modification_time);
+            e.set_attribute (
+                "last_modification_time", n.last_modification_time
+            );
             e.set_attribute ("body", n.body);
 
             // Metadata
@@ -180,6 +189,9 @@ vfs_processor_impl::_save_notes ()
 
             // Tags
             e.set_tag ("app.notes");
+
+            // Notify mediator
+            mediator_.on_evidence_created (e);
         }
     }
 }
