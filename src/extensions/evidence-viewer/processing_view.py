@@ -128,7 +128,7 @@ class ProcessingView(object):
         self.__profile_combobox = Gtk.ComboBox.new_with_model(model)
         model = self.__profile_combobox.get_model()
 
-        for profile in mobius.framework.list_case_profiles():
+        for profile in mobius.framework.evidence_processor.list_profiles():
             model.append((profile.get_id(), profile.get_name()))
 
         # Create a renderer to display the items
