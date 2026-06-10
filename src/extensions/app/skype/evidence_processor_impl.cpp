@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "vfs_processor_impl.hpp"
+#include "evidence_processor_impl.hpp"
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/io/path.hpp>
 #include <mobius/core/io/uri.hpp>
@@ -54,11 +54,13 @@ namespace mobius::extension::app::skype
 // @param item Item object
 // @param case_profile Case profile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-vfs_processor_impl::vfs_processor_impl (
+evidence_processor_impl::evidence_processor_impl (
     const mobius::framework::model::item &item,
-    const mobius::framework::case_profile &
+    const mobius::framework::evidence_processor::profile &,
+    const mobius::framework::evidence_processor::mediator &mediator
 )
-    : item_ (item)
+    : item_ (item),
+      mediator_ (mediator)
 {
 }
 
@@ -67,7 +69,7 @@ vfs_processor_impl::vfs_processor_impl (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
+evidence_processor_impl::on_folder_entered (const mobius::core::io::folder &folder)
 {
     _scan_profile_folder (folder);
     _scan_s4l_files (folder);
@@ -77,7 +79,7 @@ vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 // @brief Called when processing is complete
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_complete ()
+evidence_processor_impl::on_complete ()
 {
     _save_app_profiles ();
     _save_calls ();
@@ -96,7 +98,7 @@ vfs_processor_impl::on_complete ()
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_profile_folder (
+evidence_processor_impl::_scan_profile_folder (
     const mobius::core::io::folder &folder
 )
 {
@@ -141,7 +143,7 @@ vfs_processor_impl::_scan_profile_folder (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_s4l_files (
+evidence_processor_impl::_scan_s4l_files (
     const mobius::core::io::folder &folder
 )
 {
@@ -171,7 +173,7 @@ vfs_processor_impl::_scan_s4l_files (
 // @param f s4l-xxx.db file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_decode_s4l_file (const mobius::core::io::file &f)
+evidence_processor_impl::_decode_s4l_file (const mobius::core::io::file &f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -195,7 +197,7 @@ vfs_processor_impl::_decode_s4l_file (const mobius::core::io::file &f)
 // @brief Save app profiles
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_app_profiles ()
+evidence_processor_impl::_save_app_profiles ()
 {
     for (const auto &p : profiles_)
     {
@@ -238,6 +240,9 @@ vfs_processor_impl::_save_app_profiles ()
 
         // Tags
         e.set_tag ("app.chat");
+
+        // Tell mediator we have a new evidence
+        mediator_.on_evidence_created (e);
     }
 }
 
@@ -245,7 +250,7 @@ vfs_processor_impl::_save_app_profiles ()
 // @brief Save calls
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_calls ()
+evidence_processor_impl::_save_calls ()
 {
     for (const auto &p : profiles_)
     {
@@ -272,6 +277,9 @@ vfs_processor_impl::_save_calls ()
             // Tags and sources
             e.set_tag ("app.chat");
             e.add_source (c.f);
+
+            // Tell mediator we have a new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -280,7 +288,7 @@ vfs_processor_impl::_save_calls ()
 // @brief Save contacts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_contacts ()
+evidence_processor_impl::_save_contacts ()
 {
     for (const auto &p : profiles_)
     {
@@ -314,6 +322,9 @@ vfs_processor_impl::_save_contacts ()
             // Tags and sources
             e.set_tag ("app.chat");
             e.add_source (c.f);
+
+            // Tell mediator we have a new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -322,7 +333,7 @@ vfs_processor_impl::_save_contacts ()
 // @brief Save messages
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_messages ()
+evidence_processor_impl::_save_messages ()
 {
     for (const auto &p : profiles_)
     {
@@ -347,6 +358,9 @@ vfs_processor_impl::_save_messages ()
             // Tags and sources
             e.set_tag ("app.chat");
             e.add_source (m.f);
+
+            // Tell mediator we have a new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -355,7 +369,7 @@ vfs_processor_impl::_save_messages ()
 // @brief Save received files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_received_files ()
+evidence_processor_impl::_save_received_files ()
 {
     for (const auto &p : profiles_)
     {
@@ -383,6 +397,9 @@ vfs_processor_impl::_save_received_files ()
                 // Tags and sources
                 e.set_tag ("app.chat");
                 e.add_source (ft.f);
+
+                // Tell mediator we have a new evidence
+                mediator_.on_evidence_created (e);
             }
         }
     }
@@ -392,7 +409,7 @@ vfs_processor_impl::_save_received_files ()
 // @brief Save remote party IP addresses
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_remote_party_ip_addresses ()
+evidence_processor_impl::_save_remote_party_ip_addresses ()
 {
     for (const auto &p : profiles_)
     {
@@ -415,6 +432,9 @@ vfs_processor_impl::_save_remote_party_ip_addresses ()
             // Tags and sources
             e.set_tag ("app.chat");
             e.add_source (ip.f);
+
+            // Tell mediator we have a new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -423,7 +443,7 @@ vfs_processor_impl::_save_remote_party_ip_addresses ()
 // @brief Save sent files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_sent_files ()
+evidence_processor_impl::_save_sent_files ()
 {
     for (const auto &p : profiles_)
     {
@@ -451,6 +471,9 @@ vfs_processor_impl::_save_sent_files ()
                 // Tags and sources
                 e.set_tag ("app.chat");
                 e.add_source (ft.f);
+
+                // Tell mediator we have a new evidence
+                mediator_.on_evidence_created (e);
             }
         }
     }
@@ -460,7 +483,7 @@ vfs_processor_impl::_save_sent_files ()
 // @brief Save SMS messages
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_sms_messages ()
+evidence_processor_impl::_save_sms_messages ()
 {
     for (const auto &p : profiles_)
     {
@@ -485,6 +508,9 @@ vfs_processor_impl::_save_sms_messages ()
             // Tags and sources
             e.set_tag ("app.chat");
             e.add_source (s.f);
+
+            // Tell mediator we have a new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -493,7 +519,7 @@ vfs_processor_impl::_save_sms_messages ()
 // @brief Save accounts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_user_accounts ()
+evidence_processor_impl::_save_user_accounts ()
 {
     for (const auto &p : profiles_)
     {
@@ -530,6 +556,9 @@ vfs_processor_impl::_save_user_accounts ()
 
             for (const auto &f : acc.files)
                 e.add_source (f);
+
+            // Tell mediator we have a new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -538,7 +567,7 @@ vfs_processor_impl::_save_user_accounts ()
 // @brief Save voicemails
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_voicemails ()
+evidence_processor_impl::_save_voicemails ()
 {
     for (const auto &p : profiles_)
     {
@@ -563,6 +592,9 @@ vfs_processor_impl::_save_voicemails ()
             // Tags and sources
             e.set_tag ("app.chat");
             e.add_source (vm.f);
+
+            // Tell mediator we have a new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }

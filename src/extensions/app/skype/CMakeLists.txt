@@ -31,12 +31,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_library(app_skype MODULE
     main.cpp
     common.cpp
+    evidence_processor_impl.cpp
     file_main_db.cpp
     file_s4l_db.cpp
     file_skype_db.cpp
     message_parser.cpp
     profile.cpp
-    vfs_processor_impl.cpp
 )
 
 set_target_properties(app_skype PROPERTIES OUTPUT_NAME "app-skype" PREFIX "")
