@@ -35,7 +35,6 @@ add_subdirectory(model)
 add_library(libmobius_python_framework STATIC
     module.cpp
     attribute.cpp
-    case_profile.cpp
     category.cpp
     func_config.cpp
     processor.cpp

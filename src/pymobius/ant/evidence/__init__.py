@@ -60,7 +60,7 @@ class Ant(object):
         self.name = ANT_NAME
         self.version = ANT_VERSION
         self.__item = item
-        self.__profile = mobius.framework.case_profile(profile_id)
+        self.__profile = mobius.framework.evidence_processor.profile(profile_id)
         self.__started_time = datetime.datetime.now()
         self.__phase_number = 0
         self.__phase_name = ''
