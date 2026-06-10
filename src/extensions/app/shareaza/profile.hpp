@@ -23,6 +23,7 @@
 #include <mobius/core/io/folder.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <mobius/framework/evidence_flag.hpp>
+#include <map>
 #include <string>
 #include <vector>
 #include "CThumbCache.hpp"
@@ -50,7 +51,7 @@ class profile
         mobius::core::pod::map metadata;
 
         // hashes
-        mobius::core::pod::data hashes;
+        std::map<std::string, std::string> hashes;
 
         // thumbnail_data
         mobius::core::bytearray thumbnail_data;
@@ -82,7 +83,7 @@ class profile
         mobius::core::pod::map metadata;
 
         // hashes
-        mobius::core::pod::data hashes;
+        std::map<std::string, std::string> hashes;
 
         // thumbnail_data
         mobius::core::bytearray thumbnail_data;

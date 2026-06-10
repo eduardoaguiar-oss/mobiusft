@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "vfs_processor_impl.hpp"
+#include "evidence_processor_impl.hpp"
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/io/path.hpp>
 #include <mobius/core/io/uri.hpp>
@@ -56,7 +56,6 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Constants
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static const std::string SAMPLING_ID = "sampling";
 static const std::string APP_ID = "shareaza";
 static const std::string APP_NAME = "Shareaza";
 
@@ -69,11 +68,13 @@ namespace mobius::extension::app::shareaza
 // @param item Item object
 // @param case_profile Case profile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-vfs_processor_impl::vfs_processor_impl (
+evidence_processor_impl::evidence_processor_impl (
     const mobius::framework::model::item &item,
-    const mobius::framework::case_profile &
+    const mobius::framework::evidence_processor::profile &,
+    const mobius::framework::evidence_processor::mediator &mediator
 )
-    : item_ (item)
+    : item_ (item),
+      mediator_ (mediator)
 {
 }
 
@@ -82,7 +83,9 @@ vfs_processor_impl::vfs_processor_impl (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
+evidence_processor_impl::on_folder_entered (
+    const mobius::core::io::folder &folder
+)
 {
     _scan_ntuser_dat_files (folder);
     _scan_profile_folder (folder);
@@ -93,7 +96,7 @@ vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 // @brief Called when processing is complete
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_complete ()
+evidence_processor_impl::on_complete ()
 {
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Consolidate local files
@@ -138,7 +141,7 @@ vfs_processor_impl::on_complete ()
 // @param folder Folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_ntuser_dat_files (
+evidence_processor_impl::_scan_ntuser_dat_files (
     const mobius::core::io::folder &folder
 )
 {
@@ -154,7 +157,9 @@ vfs_processor_impl::_scan_ntuser_dat_files (
 // @param f NTUSER.DAT file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_decode_ntuser_dat_file (const mobius::core::io::file &f)
+evidence_processor_impl::_decode_ntuser_dat_file (
+    const mobius::core::io::file &f
+)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -192,7 +197,8 @@ vfs_processor_impl::_decode_ntuser_dat_file (const mobius::core::io::file &f)
                 af.value = mobius::core::string::word (
                     value.get_data ().get_data_as_string ("utf-16le"), 0, "\n"
                 );
-                af.username = mobius::framework::get_username_from_path (f.get_path ());
+                af.username =
+                    mobius::framework::get_username_from_path (f.get_path ());
                 af.id = value.get_name ().substr (7);
                 af.is_deleted = f.is_deleted ();
                 af.f = f;
@@ -212,7 +218,7 @@ vfs_processor_impl::_decode_ntuser_dat_file (const mobius::core::io::file &f)
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_profile_folder (
+evidence_processor_impl::_scan_profile_folder (
     const mobius::core::io::folder &folder
 )
 {
@@ -234,8 +240,10 @@ vfs_processor_impl::_scan_profile_folder (
             else if (name == "shareaza.db3")
                 p.add_shareaza_db3_file (f);
 
-            else if (name == "library1.dat" || name == "library2.dat" ||
-                     name == "library.dat")
+            else if (
+                name == "library1.dat" || name == "library2.dat" ||
+                name == "library.dat"
+            )
                 p.add_library_dat_file (f);
 
             else if (name == "searches.dat")
@@ -262,7 +270,7 @@ vfs_processor_impl::_scan_profile_folder (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_sd_files (const mobius::core::io::folder &folder)
+evidence_processor_impl::_scan_sd_files (const mobius::core::io::folder &folder)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
     mobius::core::io::walker w (folder);
@@ -283,7 +291,7 @@ vfs_processor_impl::_scan_sd_files (const mobius::core::io::folder &folder)
 // @param f .sd file
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_decode_sd_file (const mobius::core::io::file &f)
+evidence_processor_impl::_decode_sd_file (const mobius::core::io::file &f)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -306,7 +314,8 @@ vfs_processor_impl::_decode_sd_file (const mobius::core::io::file &f)
         log.info (__LINE__, "File decoded [.sd]: " + f.get_path ());
 
         auto btinfo = sd.get_btinfo ();
-        auto username = mobius::framework::get_username_from_path (f.get_path ());
+        auto username =
+            mobius::framework::get_username_from_path (f.get_path ());
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Get path, if available
@@ -436,7 +445,7 @@ vfs_processor_impl::_decode_sd_file (const mobius::core::io::file &f)
 // @brief Save app profiles
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_app_profiles ()
+evidence_processor_impl::_save_app_profiles ()
 {
     for (const auto &p : profiles_)
     {
@@ -465,6 +474,9 @@ vfs_processor_impl::_save_app_profiles ()
         // Tags and sources
         e.set_tag ("app.p2p");
         e.add_source (p.get_folder ());
+
+        // Tell mediator that we have a new evidence
+        mediator_.on_evidence_created (e);
     }
 }
 
@@ -472,12 +484,13 @@ vfs_processor_impl::_save_app_profiles ()
 // @brief Save autofill entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_autofills ()
+evidence_processor_impl::_save_autofills ()
 {
     for (const auto &a : autofills_)
     {
         auto e = item_.new_evidence ("autofill");
 
+        // Attributes
         e.set_attribute ("field_name", "search");
         e.set_attribute ("value", a.value);
         e.set_attribute ("app_id", APP_ID);
@@ -485,12 +498,17 @@ vfs_processor_impl::_save_autofills ()
         e.set_attribute ("username", a.username);
         e.set_attribute ("is_deleted", a.is_deleted);
 
+        // Metadata
         mobius::core::pod::map metadata;
         metadata.set ("id", a.id);
         e.set_attribute ("metadata", metadata);
 
+        // Tags and sources
         e.set_tag ("app.p2p");
         e.add_source (a.f);
+
+        // Tell mediator that we have a new evidence
+        mediator_.on_evidence_created (e);
     }
 }
 
@@ -498,23 +516,31 @@ vfs_processor_impl::_save_autofills ()
 // @brief Save local files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_local_files ()
+evidence_processor_impl::_save_local_files ()
 {
     for (const auto &lf : local_files_)
     {
         auto e = item_.new_evidence ("local-file");
 
+        // Attributes
         e.set_attribute ("username", lf.username);
         e.set_attribute ("filename", lf.filename);
         e.set_attribute ("path", lf.path);
         e.set_attribute ("app_id", APP_ID);
         e.set_attribute ("app_name", APP_NAME);
-        e.set_attribute ("hashes", lf.hashes);
         e.set_attribute ("metadata", lf.metadata);
 
+        // Tags and sources
         e.set_tag ("app.p2p");
         e.add_source (lf.f);
         e.add_source (lf.shareaza_db3_f);
+
+        // Add hashes
+        for (const auto &[k, v] : lf.hashes)
+            e.add_hash (k, v);
+
+        // Tell mediator that we have a new evidence
+        mediator_.on_evidence_created (e);
     }
 }
 
@@ -522,7 +548,7 @@ vfs_processor_impl::_save_local_files ()
 // @brief Save received files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_received_files ()
+evidence_processor_impl::_save_received_files ()
 {
     for (const auto &lf : local_files_)
     {
@@ -530,16 +556,24 @@ vfs_processor_impl::_save_received_files ()
         {
             auto e = item_.new_evidence ("received-file");
 
+            // Attributes
             e.set_attribute ("username", lf.username);
             e.set_attribute ("filename", lf.filename);
             e.set_attribute ("path", lf.path);
             e.set_attribute ("app_id", APP_ID);
             e.set_attribute ("app_name", APP_NAME);
-            e.set_attribute ("hashes", lf.hashes);
             e.set_attribute ("metadata", lf.metadata);
 
+            // Tags and sources
             e.set_tag ("app.p2p");
             e.add_source (lf.f);
+
+            // Add hashes
+            for (const auto &[k, v] : lf.hashes)
+                e.add_hash (k, v);
+
+            // Tell mediator that we have a new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -548,12 +582,13 @@ vfs_processor_impl::_save_received_files ()
 // @brief Save remote party shared files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_remote_party_shared_files ()
+evidence_processor_impl::_save_remote_party_shared_files ()
 {
     for (const auto &rf : remote_files_)
     {
         auto e = item_.new_evidence ("remote-party-shared-file");
 
+        // Attributes
         e.set_attribute ("timestamp", rf.timestamp);
         e.set_attribute ("ip", rf.ip);
         e.set_attribute ("port", rf.port);
@@ -561,13 +596,20 @@ vfs_processor_impl::_save_remote_party_shared_files ()
         e.set_attribute ("username", rf.username);
         e.set_attribute ("app_id", APP_ID);
         e.set_attribute ("app_name", APP_NAME);
-        e.set_attribute ("hashes", rf.hashes);
         e.set_attribute ("thumbnail_data", rf.thumbnail_data);
         e.set_attribute ("metadata", rf.metadata);
 
+        // Tags and sources
         e.set_tag ("app.p2p");
         e.add_source (rf.f);
         e.add_source (rf.shareaza_db3_f);
+
+        // Add hashes
+        for (const auto &[k, v] : rf.hashes)
+            e.add_hash (k, v);
+
+        // Tell mediator that we have a new evidence
+        mediator_.on_evidence_created (e);
     }
 }
 
@@ -575,7 +617,7 @@ vfs_processor_impl::_save_remote_party_shared_files ()
 // @brief Save searched texts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_searched_texts ()
+evidence_processor_impl::_save_searched_texts ()
 {
     for (const auto &p : profiles_)
     {
@@ -585,14 +627,19 @@ vfs_processor_impl::_save_searched_texts ()
             {
                 auto e = item_.new_evidence ("searched-text");
 
+                // Attributes
                 e.set_attribute ("timestamp", st.timestamp);
                 e.set_attribute ("search_type", "p2p.shareaza");
                 e.set_attribute ("text", st.text);
                 e.set_attribute ("username", p.get_username ());
                 e.set_attribute ("metadata", st.metadata);
 
+                // Tags and sources
                 e.set_tag ("app.p2p");
                 e.add_source (st.f);
+
+                // Tell mediator that we have a new evidence
+                mediator_.on_evidence_created (e);
             }
         }
     }
@@ -602,7 +649,7 @@ vfs_processor_impl::_save_searched_texts ()
 // @brief Save sent files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_sent_files ()
+evidence_processor_impl::_save_sent_files ()
 {
     for (const auto &lf : local_files_)
     {
@@ -610,17 +657,25 @@ vfs_processor_impl::_save_sent_files ()
         {
             auto e = item_.new_evidence ("sent-file");
 
+            // Attributes
             e.set_attribute ("username", lf.username);
             e.set_attribute ("filename", lf.filename);
             e.set_attribute ("path", lf.path);
             e.set_attribute ("app_id", APP_ID);
             e.set_attribute ("app_name", APP_NAME);
-            e.set_attribute ("hashes", lf.hashes);
             e.set_attribute ("metadata", lf.metadata);
 
+            // Tags and sources
             e.set_tag ("app.p2p");
             e.add_source (lf.f);
             e.add_source (lf.shareaza_db3_f);
+
+            // Add hashes
+            for (const auto &[k, v] : lf.hashes)
+                e.add_hash (k, v);
+
+            // Tell mediator that we have a new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -629,7 +684,7 @@ vfs_processor_impl::_save_sent_files ()
 // @brief Save shared files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_shared_files ()
+evidence_processor_impl::_save_shared_files ()
 {
     for (const auto &lf : local_files_)
     {
@@ -637,17 +692,25 @@ vfs_processor_impl::_save_shared_files ()
         {
             auto e = item_.new_evidence ("shared-file");
 
+            // Attributes
             e.set_attribute ("username", lf.username);
             e.set_attribute ("filename", lf.filename);
             e.set_attribute ("path", lf.path);
             e.set_attribute ("app_id", APP_ID);
             e.set_attribute ("app_name", APP_NAME);
-            e.set_attribute ("hashes", lf.hashes);
             e.set_attribute ("metadata", lf.metadata);
 
+            // Tags and sources
             e.set_tag ("app.p2p");
             e.add_source (lf.f);
             e.add_source (lf.shareaza_db3_f);
+
+            // Add hashes
+            for (const auto &[k, v] : lf.hashes)
+                e.add_hash (k, v);
+
+            // Tell mediator that we have a new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -656,7 +719,7 @@ vfs_processor_impl::_save_shared_files ()
 // @brief Save user accounts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_user_accounts ()
+evidence_processor_impl::_save_user_accounts ()
 {
     for (const auto &p : profiles_)
     {
@@ -675,26 +738,38 @@ vfs_processor_impl::_save_user_accounts ()
         {
             auto e = item_.new_evidence ("user-account");
 
+            // Attributes
             e.set_attribute ("account_type", "p2p.gnutella");
             e.set_attribute ("id", p.get_gnutella_guid ());
             e.set_attribute ("password", {});
             e.set_attribute ("password_found", "no");
             e.set_attribute ("metadata", metadata.clone ());
+
+            // Tags and sources
             e.set_tag ("app.p2p");
             e.add_source (p.get_file ());
+
+            // Tell mediator that we have a new evidence
+            mediator_.on_evidence_created (e);
         }
 
         if (!bittorrent_guid.empty ())
         {
             auto e = item_.new_evidence ("user-account");
 
+            // Attributes
             e.set_attribute ("account_type", "p2p.bittorrent");
             e.set_attribute ("id", bittorrent_guid);
             e.set_attribute ("password", {});
             e.set_attribute ("password_found", "no");
             e.set_attribute ("metadata", metadata.clone ());
+
+            // Tags and sources
             e.set_tag ("app.p2p");
             e.add_source (p.get_file ());
+
+            // Tell mediator that we have a new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }

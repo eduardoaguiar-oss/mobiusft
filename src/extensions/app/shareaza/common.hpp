@@ -19,32 +19,40 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/pod/data.hpp>
+#include <map>
 #include <string>
-#include <vector>
 
 namespace mobius::extension::app::shareaza
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Get vector of hashes for a given file
+// @brief Get map of hashes for a given file
 // @param f File structure
-// @return Vector
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector<mobius::core::pod::data>
+// @return Map of hashes
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::map<std::string, std::string>
 get_file_hashes (const auto &f)
 {
-    std::vector<std::pair<std::string, std::string>> values = {
-        {"sha1", f.get_hash_sha1 ()}, {"tiger", f.get_hash_tiger ()},
-        {"md5", f.get_hash_md5 ()},   {"ed2k", f.get_hash_ed2k ()},
-        {"bth", f.get_hash_bth ()},
-    };
+    std::map<std::string, std::string> hashes;
 
-    std::vector<mobius::core::pod::data> hashes;
+    auto hash_sha1 = f.get_hash_sha1 ();
+    if (!hash_sha1.empty ())
+        hashes["sha1"] = hash_sha1;
 
-    for (const auto &[k, v] : values)
-    {
-        if (!v.empty ())
-            hashes.push_back ({k, v});
-    }
+    auto hash_tiger = f.get_hash_tiger ();
+    if (!hash_tiger.empty ())
+        hashes["tiger"] = hash_tiger;
+
+    auto hash_md5 = f.get_hash_md5 ();
+    if (!hash_md5.empty ())
+        hashes["md5"] = hash_md5;
+
+    auto hash_ed2k = f.get_hash_ed2k ();
+    if (!hash_ed2k.empty ())
+        hashes["ed2k"] = hash_ed2k;
+
+    auto hash_bth = f.get_hash_bth ();
+    if (!hash_bth.empty ())
+        hashes["bth"] = hash_bth;
 
     return hashes;
 }
