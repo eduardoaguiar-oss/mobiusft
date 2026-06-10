@@ -39,6 +39,9 @@ Mobius Forensic Toolkit 2.27
 	* libmobius_framework: Added new method model::evidence::remove_hash
 	* libmobius_framework: Added new method model::evidence::get_hash
 	* libmobius_framework: Added new method model::evidence::get_hashes
+	* libmobius_framework: Removed support for vfs_processor_impl instances on engine
+	* libmobius_framework: Removed deprecated functions from ant::vfs_processor module
+	* libmobius_framework: Removed deprecated class ant::vfs_processor_impl_base
 	* libmobius_python: Improved mobius.core.crypt.cipher class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.core.crypt.hash class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.core.crypt.hmac class using the PyType_FromSpec API
