@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "vfs_processor_impl.hpp"
+#include "evidence_processor_impl.hpp"
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/io/path.hpp>
 #include <mobius/core/io/uri.hpp>
@@ -49,11 +49,13 @@ namespace mobius::extension::os::win
 // @param item Item object
 // @param case_profile Case profile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-vfs_processor_impl::vfs_processor_impl (
+evidence_processor_impl::evidence_processor_impl (
     const mobius::framework::model::item &item,
-    const mobius::framework::case_profile &
+    const mobius::framework::evidence_processor::profile &,
+    const mobius::framework::evidence_processor::mediator &mediator
 )
-    : item_ (item)
+    : item_ (item),
+      mediator_ (mediator)
 {
 }
 
@@ -62,7 +64,7 @@ vfs_processor_impl::vfs_processor_impl (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_folder_enter (const mobius::core::io::folder &folder)
+evidence_processor_impl::on_folder_entered (const mobius::core::io::folder &folder)
 {
     _scan_ntuser_dat_folder (folder);
     _scan_recent_folder (folder);
@@ -73,7 +75,7 @@ vfs_processor_impl::on_folder_enter (const mobius::core::io::folder &folder)
 // @param folder Folder being exited
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_folder_exit (const mobius::core::io::folder &folder)
+evidence_processor_impl::on_folder_exited (const mobius::core::io::folder &folder)
 {
     if (!current_profiles_.empty ())
     {
@@ -89,7 +91,7 @@ vfs_processor_impl::on_folder_exit (const mobius::core::io::folder &folder)
 // @brief Called when processing is complete
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_complete ()
+evidence_processor_impl::on_complete ()
 {
     _save_app_profiles ();
     _save_autofills ();
@@ -101,7 +103,7 @@ vfs_processor_impl::on_complete ()
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_ntuser_dat_folder (
+evidence_processor_impl::_scan_ntuser_dat_folder (
     const mobius::core::io::folder &folder
 )
 {
@@ -137,7 +139,7 @@ vfs_processor_impl::_scan_ntuser_dat_folder (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_recent_folder (const mobius::core::io::folder &folder)
+evidence_processor_impl::_scan_recent_folder (const mobius::core::io::folder &folder)
 {
     if (folder.get_name () != "Recent")
         return;
@@ -166,7 +168,7 @@ vfs_processor_impl::_scan_recent_folder (const mobius::core::io::folder &folder)
 // @brief Save application profiles
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_app_profiles ()
+evidence_processor_impl::_save_app_profiles ()
 {
     for (const auto &p : profiles_)
     {
@@ -195,6 +197,9 @@ vfs_processor_impl::_save_app_profiles ()
         e.set_tag ("os");
         e.set_tag ("os.win");
         e.add_source (p.get_folder ());
+
+        // Tell mediator about new evidence
+        mediator_.on_evidence_created (e);
     }
 }
 
@@ -202,7 +207,7 @@ vfs_processor_impl::_save_app_profiles ()
 // @brief Save autofill entries
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_autofills ()
+evidence_processor_impl::_save_autofills ()
 {
     for (const auto &p : profiles_)
     {
@@ -210,6 +215,7 @@ vfs_processor_impl::_save_autofills ()
         {
             auto e = item_.new_evidence ("autofill");
 
+            // Attributes
             e.set_attribute ("field_name", a.field_name);
             e.set_attribute ("app_name", OS_NAME);
             e.set_attribute ("app_id", OS_ID);
@@ -217,9 +223,13 @@ vfs_processor_impl::_save_autofills ()
             e.set_attribute ("value", a.value);
             e.set_attribute ("metadata", a.metadata);
 
+            // Tags and sources
             e.set_tag ("os");
             e.set_tag ("os.win");
             e.add_source (a.f);
+
+            // Tell mediator about new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }
@@ -228,7 +238,7 @@ vfs_processor_impl::_save_autofills ()
 // @brief Save opened files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_opened_files ()
+evidence_processor_impl::_save_opened_files ()
 {
     for (const auto &p : profiles_)
     {
@@ -236,6 +246,7 @@ vfs_processor_impl::_save_opened_files ()
         {
             auto e = item_.new_evidence ("opened-file");
 
+            // Attributes
             e.set_attribute ("timestamp", of.timestamp);
             e.set_attribute ("path", of.path);
             e.set_attribute ("username", p.get_username ());
@@ -243,9 +254,13 @@ vfs_processor_impl::_save_opened_files ()
             e.set_attribute ("app_name", OS_NAME);
             e.set_attribute ("metadata", of.metadata);
 
+            // Tags and sources
             e.set_tag ("os");
             e.set_tag ("os.win");
             e.add_source (of.f);
+
+            // Tell mediator about new evidence
+            mediator_.on_evidence_created (e);
         }
     }
 }

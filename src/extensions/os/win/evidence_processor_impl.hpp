@@ -1,5 +1,5 @@
-#ifndef MOBIUS_EXTENSION_OS_WIN_VFS_PROCESSOR_IMPL_HPP
-#define MOBIUS_EXTENSION_OS_WIN_VFS_PROCESSOR_IMPL_HPP
+#ifndef MOBIUS_EXTENSION_OS_WIN_EVIDENCE_PROCESSOR_IMPL_HPP
+#define MOBIUS_EXTENSION_OS_WIN_EVIDENCE_PROCESSOR_IMPL_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -18,8 +18,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/framework/ant/vfs_processor_impl_base.hpp>
-#include <mobius/framework/case_profile.hpp>
+#include <mobius/framework/evidence_processor/evidence_processor_impl_base.hpp>
+#include <mobius/framework/evidence_processor/mediator.hpp>
+#include <mobius/framework/evidence_processor/profile.hpp>
 #include <mobius/framework/model/item.hpp>
 #include <stack>
 #include <vector>
@@ -28,26 +29,27 @@
 namespace mobius::extension::os::win
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Windows OS <i>vfs_processor</i> implementation class
+// @brief Windows OS <i>evidence_processor</i> implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class vfs_processor_impl
-    : public mobius::framework::ant::vfs_processor_impl_base
+class evidence_processor_impl
+    : public mobius::framework::evidence_processor::evidence_processor_impl_base
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    explicit vfs_processor_impl (
+    explicit evidence_processor_impl (
         const mobius::framework::model::item &,
-        const mobius::framework::case_profile &
+        const mobius::framework::evidence_processor::profile &,
+        const mobius::framework::evidence_processor::mediator &
     );
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Function prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void on_folder_enter (const mobius::core::io::folder &) final;
-    void on_folder_exit (const mobius::core::io::folder &) final;
+    void on_folder_entered (const mobius::core::io::folder &) final;
+    void on_folder_exited (const mobius::core::io::folder &) final;
     void on_complete () final;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -63,6 +65,9 @@ class vfs_processor_impl
   private:
     // @brief Case item
     mobius::framework::model::item item_;
+
+    // @brief Mediator
+    mobius::framework::evidence_processor::mediator mediator_;
 
     // @brief Base folder is a folder that contains the Windows folder structure
     // (e.g. "/" or "/Windows.old")

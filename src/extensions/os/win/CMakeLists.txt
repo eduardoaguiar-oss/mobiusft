@@ -28,9 +28,9 @@ project(os_win LANGUAGES CXX)
 add_library(os_win MODULE
     main.cpp
     common.cpp
+    evidence_processor_impl.cpp
     os.cpp
     profile.cpp
-    vfs_processor_impl.cpp
 )
 
 set_target_properties(os_win PROPERTIES OUTPUT_NAME "os-win" PREFIX "")
