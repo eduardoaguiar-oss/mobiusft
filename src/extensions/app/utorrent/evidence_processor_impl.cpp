@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include "vfs_processor_impl.hpp"
+#include "evidence_processor_impl.hpp"
 #include <mobius/core/datasource/datasource_vfs.hpp>
 #include <mobius/core/io/path.hpp>
 #include <mobius/core/io/uri.hpp>
@@ -174,11 +174,14 @@ namespace mobius::extension::app::utorrent
 // @param item Item object
 // @param case_profile Case profile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-vfs_processor_impl::vfs_processor_impl (
+evidence_processor_impl::evidence_processor_impl (
     const mobius::framework::model::item &item,
-    const mobius::framework::case_profile &
+    const mobius::framework::evidence_processor::profile &,
+    const mobius::framework::evidence_processor::mediator &mediator
 )
-    : item_ (item)
+    : item_ (item),
+      mediator_ (mediator)
+
 {
 }
 
@@ -187,7 +190,7 @@ vfs_processor_impl::vfs_processor_impl (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
+evidence_processor_impl::on_folder_entered (const mobius::core::io::folder &folder)
 {
     _scan_profile_folder (folder);
 }
@@ -196,7 +199,7 @@ vfs_processor_impl::on_folder (const mobius::core::io::folder &folder)
 // @brief Called when processing is complete
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::on_complete ()
+evidence_processor_impl::on_complete ()
 {
     _save_app_profiles ();
     _save_ip_addresses ();
@@ -213,7 +216,7 @@ vfs_processor_impl::on_complete ()
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_scan_profile_folder (
+evidence_processor_impl::_scan_profile_folder (
     const mobius::core::io::folder &folder
 )
 {
@@ -282,7 +285,7 @@ vfs_processor_impl::_scan_profile_folder (
 // @brief Save app profiles
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_app_profiles ()
+evidence_processor_impl::_save_app_profiles ()
 {
     for (const auto &p : profiles_)
     {
@@ -305,6 +308,9 @@ vfs_processor_impl::_save_app_profiles ()
         // Tags and sources
         e.set_tag ("app.p2p");
         e.add_source (p.get_folder ());
+
+        // Notify mediator
+        mediator_.on_evidence_created (e);
     }
 }
 
@@ -312,7 +318,7 @@ vfs_processor_impl::_save_app_profiles ()
 // @brief Save IP addresses
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_ip_addresses ()
+evidence_processor_impl::_save_ip_addresses ()
 {
     for (const auto &p : profiles_)
     {
@@ -334,6 +340,9 @@ vfs_processor_impl::_save_ip_addresses ()
 
                 e.set_tag ("app.p2p");
                 e.add_source (settings.f);
+
+                // Notify mediator
+                mediator_.on_evidence_created (e);
             }
         }
 
@@ -362,6 +371,9 @@ vfs_processor_impl::_save_ip_addresses ()
 
                 for (const auto &f : account.files)
                     e.add_source (f);
+
+                // Notify mediator
+                mediator_.on_evidence_created (e);
             }
         }
     }
@@ -371,7 +383,7 @@ vfs_processor_impl::_save_ip_addresses ()
 // @brief Save local files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_local_files ()
+evidence_processor_impl::_save_local_files ()
 {
     for (const auto &profile : profiles_)
     {
@@ -394,7 +406,6 @@ vfs_processor_impl::_save_local_files ()
                     e.set_attribute ("path", path);
                     e.set_attribute ("app_id", APP_ID);
                     e.set_attribute ("app_name", APP_NAME);
-                    // e.set_attribute ("hashes", get_file_hashes (tf));
 
                     auto tf_metadata = lf_metadata.clone ();
                     tf_metadata.set ("torrent_path", tf.path);
@@ -408,6 +419,9 @@ vfs_processor_impl::_save_local_files ()
                     e.set_tag ("app.p2p");
                     for (const auto &f : lf.sources)
                         e.add_source (f);
+
+                    // Notify mediator
+                    mediator_.on_evidence_created (e);
                 }
             }
         }
@@ -418,7 +432,7 @@ vfs_processor_impl::_save_local_files ()
 // @brief Save received files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_received_files ()
+evidence_processor_impl::_save_received_files ()
 {
     for (const auto &profile : profiles_)
     {
@@ -442,7 +456,6 @@ vfs_processor_impl::_save_received_files ()
                     e.set_attribute ("path", path);
                     e.set_attribute ("app_id", APP_ID);
                     e.set_attribute ("app_name", APP_NAME);
-                    // e.set_attribute ("hashes", get_file_hashes (tf));
 
                     auto tf_metadata = lf_metadata.clone ();
                     tf_metadata.set ("torrent_path", tf.path);
@@ -456,6 +469,9 @@ vfs_processor_impl::_save_received_files ()
                     e.set_tag ("app.p2p");
                     for (const auto &f : lf.sources)
                         e.add_source (f);
+
+                    // Notify mediator
+                    mediator_.on_evidence_created (e);
                 }
             }
         }
@@ -466,7 +482,7 @@ vfs_processor_impl::_save_received_files ()
 // @brief Save remote party shared files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_remote_party_shared_files ()
+evidence_processor_impl::_save_remote_party_shared_files ()
 {
     for (const auto &profile : profiles_)
     {
@@ -496,7 +512,6 @@ vfs_processor_impl::_save_remote_party_shared_files ()
                         e.set_attribute ("app_id", APP_ID);
                         e.set_attribute ("app_name", APP_NAME);
                         e.set_attribute ("path", path);
-                        // e.set_attribute ("hashes", get_file_hashes (tf));
 
                         auto tf_metadata = lf_metadata.clone ();
                         tf_metadata.set ("torrent_path", tf.path);
@@ -520,6 +535,9 @@ vfs_processor_impl::_save_remote_party_shared_files ()
                             lf.sources.begin (), lf.sources.end (),
                             [&] (const auto &f) { e.add_source (f); }
                         );
+
+                        // Notify mediator
+                        mediator_.on_evidence_created (e);
                     }
                 }
             }
@@ -531,7 +549,7 @@ vfs_processor_impl::_save_remote_party_shared_files ()
 // @brief Save sent files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_sent_files ()
+evidence_processor_impl::_save_sent_files ()
 {
     for (const auto &profile : profiles_)
     {
@@ -555,7 +573,6 @@ vfs_processor_impl::_save_sent_files ()
                     e.set_attribute ("path", path);
                     e.set_attribute ("app_id", APP_ID);
                     e.set_attribute ("app_name", APP_NAME);
-                    // e.set_attribute ("hashes", get_file_hashes (tf));
 
                     auto tf_metadata = lf_metadata.clone ();
                     tf_metadata.set ("torrent_path", tf.path);
@@ -569,6 +586,9 @@ vfs_processor_impl::_save_sent_files ()
                     e.set_tag ("app.p2p");
                     for (const auto &f : lf.sources)
                         e.add_source (f);
+
+                    // Notify mediator
+                    mediator_.on_evidence_created (e);
                 }
             }
         }
@@ -579,7 +599,7 @@ vfs_processor_impl::_save_sent_files ()
 // @brief Save shared files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_shared_files ()
+evidence_processor_impl::_save_shared_files ()
 {
     for (const auto &profile : profiles_)
     {
@@ -602,7 +622,6 @@ vfs_processor_impl::_save_shared_files ()
                     e.set_attribute ("path", path);
                     e.set_attribute ("app_id", APP_ID);
                     e.set_attribute ("app_name", APP_NAME);
-                    // e.set_attribute ("hashes", get_file_hashes (tf));
 
                     auto tf_metadata = lf_metadata.clone ();
                     tf_metadata.set ("torrent_path", tf.path);
@@ -616,6 +635,9 @@ vfs_processor_impl::_save_shared_files ()
                     e.set_tag ("app.p2p");
                     for (const auto &f : lf.sources)
                         e.add_source (f);
+
+                    // Notify mediator
+                    mediator_.on_evidence_created (e);
                 }
             }
         }
@@ -626,7 +648,7 @@ vfs_processor_impl::_save_shared_files ()
 // @brief Save user accounts
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-vfs_processor_impl::_save_user_accounts ()
+evidence_processor_impl::_save_user_accounts ()
 {
     for (const auto &p : profiles_)
     {
@@ -659,6 +681,9 @@ vfs_processor_impl::_save_user_accounts ()
                 e.add_source (f);
 
             e.add_source (settings.f);
+
+            // Notify mediator
+            mediator_.on_evidence_created (e);
         }
     }
 }
