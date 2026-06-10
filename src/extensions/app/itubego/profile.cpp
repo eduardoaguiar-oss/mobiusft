@@ -324,8 +324,6 @@ profile::impl::add_history_list_dat_file (const mobius::core::io::file &f)
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
-// @param item Item object
-// @param case_profile Case profile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 profile::profile ()
     : impl_ (std::make_shared<impl> ())

@@ -52,7 +52,8 @@ namespace mobius::extension::app::dcpp
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor
 // @param item Item object
-// @param case_profile Case profile object
+// @param profile Profile object
+// @param mediator Mediator object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 evidence_processor_impl::evidence_processor_impl (
     const mobius::framework::model::item &item,

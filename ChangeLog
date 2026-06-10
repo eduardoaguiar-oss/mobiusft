@@ -16,6 +16,7 @@ Mobius Forensic Toolkit 2.27
 	* app-sticky-notes: Implemented the evidence_processor_impl interface
 	* app-utorrent: Implemented the evidence_processor_impl interface
 	* evidence-viewer: Changed to use new evidence.get_hashes method
+	* evidence-viewer: Changed to use framework.evidence_processor.list_profiles function
 	* os-win: Implemented the evidence_processor_impl interface
 	* Created new package src/extensions/evidence-processor
 	* post-processor/opened-files: Migrated to evidence-processor/derived-opened-files
@@ -42,6 +43,7 @@ Mobius Forensic Toolkit 2.27
 	* libmobius_framework: Removed support for vfs_processor_impl instances on engine
 	* libmobius_framework: Removed deprecated functions from ant::vfs_processor module
 	* libmobius_framework: Removed deprecated class ant::vfs_processor_impl_base
+	* libmobius_framework: Removed deprecated class case_profile
 	* libmobius_python: Improved mobius.core.crypt.cipher class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.core.crypt.hash class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.core.crypt.hmac class using the PyType_FromSpec API
@@ -73,6 +75,7 @@ Mobius Forensic Toolkit 2.27
 	* libmobius_python: Added new method framework.model.evidence.get_hash
 	* libmobius_python: Added new method framework.model.evidence.get_hashes
 	* libmobius_python: Improved mobius.framework.model.evidence class using the PyType_FromSpec API
+	* libmobius_python: Removed deprecated class case_profile
 	* pymobius.ant.evidence: Changed to use mobius.framework.evidence_processor.engine class
 	* pymobius.ant.evidence.vfs: Removed usage of the deprecated class vfs_processor
 	* pymobius.ant.evidence: Removed call to post.kff_alert

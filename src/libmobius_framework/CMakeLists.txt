@@ -41,7 +41,6 @@ add_subdirectory(model)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(libmobius_framework SHARED
     attribute.cpp
-    case_profile.cpp
     category.cpp
     config.cpp
     evidence_flag.cpp
