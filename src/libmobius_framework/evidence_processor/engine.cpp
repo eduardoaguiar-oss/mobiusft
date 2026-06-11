@@ -105,11 +105,12 @@ class engine::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void _on_start ();
-    void _on_run_vfs ();
-    void _on_process_folder (const mobius::core::io::folder &);
-    void _on_complete ();
-    void _on_stop ();
+    void _complete ();
+    void _load_evidences ();
+    void _process_folder (const mobius::core::io::folder &);
+    void _run_vfs ();
+    void _start ();
+    void _stop ();
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -178,24 +179,10 @@ engine::impl::run ()
     current_mode_ = mode::run;
     started_time_ = mobius::core::datetime::now ();
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Get datasource from item
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto datasource = item_.get_datasource ();
-
-    if (!datasource)
-        throw std::runtime_error ("Item has no datasource");
-
-    if (!datasource.is_available ())
-        throw std::runtime_error ("Datasource is not available");
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Run
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    _on_start ();
-    _on_run_vfs ();
-    _on_complete ();
-    _on_stop ();
+    _start ();
+    _run_vfs ();
+    _complete ();
+    _stop ();
 
     finished_time_ = mobius::core::datetime::now ();
     current_mode_ = mode::none;
@@ -210,9 +197,10 @@ engine::impl::update ()
     current_mode_ = mode::update;
     started_time_ = mobius::core::datetime::now ();
 
-    _on_start ();
-    _on_complete ();
-    _on_stop ();
+    _start ();
+    _load_evidences ();
+    _complete ();
+    _stop ();
 
     finished_time_ = mobius::core::datetime::now ();
     current_mode_ = mode::none;
@@ -290,10 +278,10 @@ engine::impl::get_status () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Call on_start for all implementations
+// @brief Start engine processing and call on_start for all implementations
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-engine::impl::_on_start ()
+engine::impl::_start ()
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -311,10 +299,10 @@ engine::impl::_on_start ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Call on_stop for all implementations
+// @brief Stop engine processing and call on_stop for all implementations
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-engine::impl::_on_stop ()
+engine::impl::_stop ()
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -332,10 +320,10 @@ engine::impl::_on_stop ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Call on_complete for all implementations
+// @brief Complete engine processing and call on_complete for all implementations
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-engine::impl::_on_complete ()
+engine::impl::_complete ()
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -360,10 +348,34 @@ engine::impl::_on_complete ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Load evidences already processed
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+engine::impl::_load_evidences ()
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    for (auto &e : item_.get_evidences ())
+    {
+        for (const auto &impl : implementations_)
+        {
+            try
+            {
+                impl->on_evidence_loaded (e);
+            }
+            catch (const std::exception &e)
+            {
+                log.warning (__LINE__, e.what ());
+            }
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Run VFS processor implementation
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-engine::impl::_on_run_vfs ()
+engine::impl::_run_vfs ()
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -387,6 +399,25 @@ engine::impl::_on_run_vfs ()
     mobius::core::datasource::datasource_vfs d_vfs (datasource);
     auto vfs = d_vfs.get_vfs ();
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @deprecated Load evidences created by deprecated implementations and
+    // feed them back into the processor, to feed events to implementations.
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    for (auto &e : item_.get_evidences ())
+    {
+        for (const auto &impl : implementations_)
+        {
+            try
+            {
+                impl->on_evidence_created (e);
+            }
+            catch (const std::exception &e)
+            {
+                log.warning (__LINE__, e.what ());
+            }
+        }
+    }
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Get root entries. If "all folders" flag is set, process all folders.
     // Otherwise, process only "home", "users" and "documents and settings"
@@ -405,7 +436,7 @@ engine::impl::_on_run_vfs ()
             auto folder = entry.get_folder ();
 
             if (flag_all_folders)
-                _on_process_folder (folder);
+                _process_folder (folder);
 
             else
             {
@@ -415,7 +446,7 @@ engine::impl::_on_run_vfs ()
                 {
                     if (name == "home" || name == "users" ||
                         name == "documents and settings")
-                        _on_process_folder (child);
+                        _process_folder (child);
 
                     else if (name == "windows.old")
                     {
@@ -423,7 +454,7 @@ engine::impl::_on_run_vfs ()
 
                         for (const auto &user_folder :
                              wo_walker.get_folders_by_name ("users"))
-                            _on_process_folder (user_folder);
+                            _process_folder (user_folder);
                     }
                 }
             }
@@ -438,7 +469,7 @@ engine::impl::_on_run_vfs ()
 // @param folder Folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-engine::impl::_on_process_folder (const mobius::core::io::folder &folder)
+engine::impl::_process_folder (const mobius::core::io::folder &folder)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -472,7 +503,7 @@ engine::impl::_on_process_folder (const mobius::core::io::folder &folder)
         for (const auto &entry : folder.get_children ())
         {
             if (entry.is_folder ())
-                _on_process_folder (entry.get_folder ());
+                _process_folder (entry.get_folder ());
 
             else
                 processed_files_.fetch_add (1);

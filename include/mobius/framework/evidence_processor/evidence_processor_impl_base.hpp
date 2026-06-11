@@ -51,6 +51,9 @@ class evidence_processor_impl_base
     // @brief Called when a new evidence is created
     virtual void on_evidence_created (mobius::framework::model::evidence) {};
 
+    // @brief Called when an evidence is loaded from storage
+    virtual void on_evidence_loaded (mobius::framework::model::evidence) {};
+
     // @brief Called when an evidence attribute is modified
     virtual void on_evidence_attribute_modified (
         mobius::framework::model::evidence, const std::string &

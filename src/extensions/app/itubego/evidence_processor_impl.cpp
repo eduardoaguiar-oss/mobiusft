@@ -47,10 +47,11 @@ namespace mobius::extension::app::itubego
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 evidence_processor_impl::evidence_processor_impl (
     const mobius::framework::model::item &item,
-    const mobius::framework::evidence_processor::profile &profile,
+    const mobius::framework::evidence_processor::profile &,
     const mobius::framework::evidence_processor::mediator &mediator
 )
-    : item_ (item), mediator_ (mediator)
+    : item_ (item),
+      mediator_ (mediator)
 {
 }
 
@@ -59,7 +60,9 @@ evidence_processor_impl::evidence_processor_impl (
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::on_folder_entered (const mobius::core::io::folder &folder)
+evidence_processor_impl::on_folder_entered (
+    const mobius::core::io::folder &folder
+)
 {
     _scan_profile_folder (folder);
 }
@@ -80,7 +83,9 @@ evidence_processor_impl::on_complete ()
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::_scan_profile_folder (const mobius::core::io::folder &folder)
+evidence_processor_impl::_scan_profile_folder (
+    const mobius::core::io::folder &folder
+)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -157,7 +162,7 @@ evidence_processor_impl::_save_autofills ()
 {
     for (const auto &p : profiles_)
     {
-        for (const auto& entry : p.get_history_entries ())
+        for (const auto &entry : p.get_history_entries ())
         {
             auto e = item_.new_evidence ("autofill");
 
@@ -191,7 +196,7 @@ evidence_processor_impl::_save_received_files ()
 {
     for (const auto &p : profiles_)
     {
-        for (const auto& file : p.get_downloaded_files ())
+        for (const auto &file : p.get_downloaded_files ())
         {
             auto e = item_.new_evidence ("received-file");
 
