@@ -45,6 +45,9 @@ Mobius Forensic Toolkit 2.27
 	* libmobius_framework: Removed deprecated functions from ant::vfs_processor module
 	* libmobius_framework: Removed deprecated class ant::vfs_processor_impl_base
 	* libmobius_framework: Removed deprecated class case_profile
+	* libmobius_framework: Removed deprecated class ant::post_processor
+	* libmobius_framework: Removed deprecated class ant::ant_impl_post_processor
+	* libmobius_framework: Removed deprecated class ant::post_processor_impl_base
 	* libmobius_python: Improved mobius.core.crypt.cipher class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.core.crypt.hash class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.core.crypt.hmac class using the PyType_FromSpec API
