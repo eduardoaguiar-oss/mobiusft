@@ -160,18 +160,8 @@ class Ant(object):
         self.__ant.run()
         mobius.core.logf(f"INF mobius.framework.evidence_processor.engine ended")
 
-        # run post-processing ant
-        self.__phase_number = 3
-        self.__phase_name = f"ant.post_processor"
-        self.__ant = None
-
-        ant = mobius.framework.ant.post_processor(self.__item)
-        mobius.core.logf(f"INF ant.post_processor started")
-        ant.run()
-        mobius.core.logf(f"INF ant.post_processor ended")
-
         # run post-processing ants (from resources)
-        self.__phase_number = 4
+        self.__phase_number = 3
         self.__phase_name = f"Post-processing ants"
         ants = ANTS + [r.value for r in mobius.core.get_resources('evidence.post')]
 

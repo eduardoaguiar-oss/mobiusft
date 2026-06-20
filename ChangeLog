@@ -2,6 +2,7 @@ Mobius Forensic Toolkit 2.27
 	* app-ares: Implemented the evidence_processor_impl interface
 	* app-ares: Changed to use evidence.add_hash method
 	* app-chromium: Implemented the evidence_processor_impl interface
+	* app-chromium: Unified post-processor on evidence_processor_impl
 	* app-dcpp: Implemented the evidence_processor_impl interface
 	* app-emule: Implemented the evidence_processor_impl interface
 	* app-emule: Changed to use evidence.add_hash method
@@ -77,6 +78,7 @@ Mobius Forensic Toolkit 2.27
 	* libmobius_python: Improved mobius.framework.model.evidence class using the PyType_FromSpec API
 	* libmobius_python: Removed deprecated class case_profile
 	* pymobius.ant.evidence: Changed to use mobius.framework.evidence_processor.engine class
+	* pymobius.ant.evidence: Removed usage of deprecated class framework.ant.post_processor
 	* pymobius.ant.evidence.vfs: Removed usage of the deprecated class vfs_processor
 	* pymobius.ant.evidence: Removed call to post.kff_alert
 	* pymobius.ant.evidence.post.kff_alert: Removed module
