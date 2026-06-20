@@ -18,6 +18,7 @@ Mobius Forensic Toolkit 2.27
 	* app-utorrent: Implemented the evidence_processor_impl interface
 	* evidence-viewer: Changed to use new evidence.get_hashes method
 	* evidence-viewer: Changed to use framework.evidence_processor.list_profiles function
+	* evidence-viewer: Added option to trigger processing update
 	* os-win: Implemented the evidence_processor_impl interface
 	* Created new package src/extensions/evidence-processor
 	* post-processor/opened-files: Migrated to evidence-processor/derived-opened-files

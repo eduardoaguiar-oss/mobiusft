@@ -22,8 +22,8 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "engine.hpp"
-#include <pymobius.hpp>
 #include <pygil.hpp>
+#include <pymobius.hpp>
 #include <stdexcept>
 #include "core/pod/map.hpp"
 #include "framework/model/item.hpp"
@@ -49,6 +49,30 @@ tp_f_run (framework_evidence_processor_engine_o *self, PyObject *)
     {
         mobius::py::GIL gil;
         self->obj->run ();
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+        return nullptr;
+    }
+
+    // return None
+    return mobius::py::pynone ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>update</i> method implementation
+// @param self Object
+// @param args Argument list
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_update (framework_evidence_processor_engine_o *self, PyObject *)
+{
+    // Execute C++ function
+    try
+    {
+        mobius::py::GIL gil;
+        self->obj->update ();
     }
     catch (const std::exception &e)
     {
@@ -143,6 +167,7 @@ tp_f_get_status (framework_evidence_processor_engine_o *self, PyObject *)
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
     {"run", (PyCFunction) tp_f_run, METH_VARARGS, "Run processor"},
+    {"update", (PyCFunction) tp_f_update, METH_VARARGS, "Update processing"},
     {"get_item", (PyCFunction) tp_f_get_item, METH_VARARGS, "Get case item"},
     {"get_profile", (PyCFunction) tp_f_get_profile, METH_VARARGS,
      "Get case profile"},
@@ -244,12 +269,15 @@ new_framework_evidence_processor_engine_type ()
 {
     // If type is already created, return it
     if (framework_evidence_processor_engine_type)
-        return mobius::py::pytypeobject (framework_evidence_processor_engine_type);
+        return mobius::py::pytypeobject (
+            framework_evidence_processor_engine_type
+        );
 
     // Allocate type from spec
-    framework_evidence_processor_engine_type = reinterpret_cast<PyTypeObject *> (
-        PyType_FromSpec (&framework_evidence_processor_engine_spec)
-    );
+    framework_evidence_processor_engine_type =
+        reinterpret_cast<PyTypeObject *> (
+            PyType_FromSpec (&framework_evidence_processor_engine_spec)
+        );
 
     // Create type
     mobius::py::pytypeobject type (framework_evidence_processor_engine_type);
@@ -271,7 +299,9 @@ pymobius_framework_evidence_processor_engine_check (PyObject *value)
             MOBIUS_EXCEPTION_MSG ("engine type is not initialized")
         );
 
-    return mobius::py::isinstance (value, framework_evidence_processor_engine_type);
+    return mobius::py::isinstance (
+        value, framework_evidence_processor_engine_type
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

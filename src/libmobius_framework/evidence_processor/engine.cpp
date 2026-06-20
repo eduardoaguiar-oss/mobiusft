@@ -96,6 +96,9 @@ class engine::impl
     // @brief Total number of files processed
     std::atomic<size_t> processed_files_ = 0;
 
+    // @brief Total of number of evidences loaded (for update mode)
+    std::atomic<size_t> loaded_evidences_ = 0;
+
     // @brief Current folder path
     std::string current_folder_path_;
 
@@ -260,6 +263,12 @@ engine::impl::get_status () const
             status.set ("current_folder", current_folder_path_);
     }
 
+    // Mode update status
+    else if (current_mode_ == mode::update)
+    {
+        status.set ("loaded_evidences", loaded_evidences_.load ());
+    }
+
     // Aggregate status from implementations
     for (const auto &impl : implementations_)
     {
@@ -354,6 +363,7 @@ void
 engine::impl::_load_evidences ()
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
+    loaded_evidences_.store (0);
 
     for (auto &e : item_.get_evidences ())
     {
@@ -362,6 +372,7 @@ engine::impl::_load_evidences ()
             try
             {
                 impl->on_evidence_loaded (e);
+                loaded_evidences_.fetch_add (1);
             }
             catch (const std::exception &e)
             {

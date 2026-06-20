@@ -152,6 +152,14 @@ class ProcessingView(object):
         self.__execute_button.set_callback('clicked', self.__on_execute_button_clicked)
         hbox.add_child(self.__execute_button, mobius.core.ui.box.fill_none)
 
+        self.__update_button = mobius.core.ui.button()
+        self.__update_button.set_icon_by_name('view-refresh')
+        self.__update_button.set_text('_Update')
+        self.__update_button.set_visible(True)
+        self.__update_button.set_sensitive(False)
+        self.__update_button.set_callback('clicked', self.__on_update_button_clicked)
+        hbox.add_child(self.__update_button, mobius.core.ui.box.fill_none)
+
         # Show initial message
         self.__widget.set_message("Select a case item")
 
@@ -292,8 +300,10 @@ class ProcessingView(object):
         selected_rows = self.__status_tableview.get_selected_rows()
         selected_items = [row[3] for (row_id, row) in selected_rows]
         can_run = any(item for item in selected_items if item.has_datasource() and item not in self.__running_items)
+        can_update = any(item for item in selected_items if item.has_ant('evidence') and item not in self.__running_items)
 
         self.__execute_button.set_sensitive(can_run)
+        self.__update_button.set_sensitive(can_update)
         self.__profile_combobox.set_sensitive(can_run)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -384,13 +394,37 @@ class ProcessingView(object):
                 transaction.commit()
 
             # Iterate over selected items and start a new thread for each item that has data source,
-            # using the __thread_begin method. Each thread is set as a daemon,
+            # using the __thread_execute method. Each thread is set as a daemon,
             # meaning it will not prevent the program from exiting. The running threads are
             # stored in the running_items dictionary with the corresponding item as the key.
             for item in can_run_items:
                 ant = pymobius.ant.evidence.Ant(item, profile_id)
 
-                t = threading.Thread(target=self.__thread_begin, args=(ant, item), daemon=True)
+                t = threading.Thread(target=self.__thread_execute, args=(ant, item), daemon=True)
+                t.start()
+                
+                self.__running_items[item] = (t, ant)
+                self.__update_item_status(item)
+
+        except Exception as e:
+            mobius.core.logf(f"WRN {str(e)}\n{traceback.format_exc()}")
+            self.__widget.set_message(str(e))
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Handle the "Update" button click event to refresh the processing view.
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_update_button_clicked(self):
+        try:
+            selected_rows = self.__status_tableview.get_selected_rows()
+            selected_items = [row[3] for (row_id, row) in selected_rows]
+            can_update_items = [item for item in selected_items if item.has_ant('evidence') and item not in self.__running_items]
+
+            # Iterate over selected items and start a new thread for each item that
+            # can be updated
+            for item in can_update_items:
+                ant = mobius.framework.evidence_processor.engine(item, self.__profile_combobox.get_active_id())
+
+                t = threading.Thread(target=self.__thread_update, args=(ant, item), daemon=True)
                 t.start()
                 
                 self.__running_items[item] = (t, ant)
@@ -413,11 +447,24 @@ class ProcessingView(object):
     # After starting, the function immediately returns control to the caller while
     # the processing continues asynchronously.
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __thread_begin(self, ant, item):
+    def __thread_execute(self, ant, item):
         guard = mobius.core.thread_guard()
 
         ant.reset()
         ant.run()
+
+        GLib.idle_add(self.__thread_end, item)
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Entry point for updating an evidence item in a new thread.
+    # @param ant The ANT instance responsible for updating the evidence item.
+    # @param item The evidence item to be updated.
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __thread_update(self, ant, item):
+        guard = mobius.core.thread_guard()
+        connection = item.new_connection()
+
+        ant.update()
 
         GLib.idle_add(self.__thread_end, item)
 
