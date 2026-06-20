@@ -36,7 +36,6 @@ add_library(app_chromium MODULE
     file_login_data.cpp
     file_preferences.cpp
     file_web_data.cpp
-    post_processor_impl.cpp
     profile.cpp
 )
 

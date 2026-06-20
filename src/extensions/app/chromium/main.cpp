@@ -15,10 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/framework/ant/post_processor.hpp>
 #include <mobius/framework/evidence_processor/evidence_processor_registry.hpp>
 #include "evidence_processor_impl.hpp"
-#include "post_processor_impl.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Extension data
@@ -38,18 +36,11 @@ extern "C"
 extern "C" void
 start ()
 {
-    // Register the evidence-processor implementation
     mobius::framework::evidence_processor::
         register_evidence_processor_implementation<
             mobius::extension::app::chromium::evidence_processor_impl> (
             EXTENSION_ID, EXTENSION_NAME
         );
-
-    // Register the post-processor implementation
-    mobius::framework::ant::register_post_processor_implementation<
-        mobius::extension::app::chromium::post_processor_impl> (
-        "chromium-decrypt", "Decrypt Chromium Data"
-    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -60,8 +51,4 @@ stop ()
 {
     mobius::framework::evidence_processor::
         unregister_evidence_processor_implementation (EXTENSION_ID);
-
-    mobius::framework::ant::unregister_post_processor_implementation (
-        "chromium-decrypt"
-    );
 }

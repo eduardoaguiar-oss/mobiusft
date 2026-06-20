@@ -22,6 +22,8 @@
 #include <mobius/framework/evidence_processor/mediator.hpp>
 #include <mobius/framework/evidence_processor/profile.hpp>
 #include <mobius/framework/model/item.hpp>
+#include <unordered_map>
+#include <set>
 #include <string>
 #include <vector>
 #include "file_local_state.hpp"
@@ -55,6 +57,8 @@ class evidence_processor_impl
     // Function prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void on_folder_entered (const mobius::core::io::folder &) final;
+    void on_evidence_created (mobius::framework::model::evidence) final;
+    void on_evidence_loaded (mobius::framework::model::evidence) final;
     void on_complete () final;
 
   private:
@@ -76,13 +80,25 @@ class evidence_processor_impl
     // @brief Encryption keys found
     std::vector<encryption_key> encryption_keys_;
 
+    // @brief DPAPI encryption keys
+    std::unordered_map<std::string, mobius::core::bytearray> dpapi_keys_;
+
+    // @brief Chromium encryption keys (both v10 and v20)
+    std::set<mobius::core::bytearray> chromium_keys_;
+
+    // @brief Pending evidences to process later
+    std::vector<mobius::framework::model::evidence> pending_evidences_;
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Helper functions
+    // Scanning functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _scan_local_state (const mobius::core::io::folder &);
     void _scan_profile (const mobius::core::io::folder &);
     void _decode_local_state_file (const mobius::core::io::file &);
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Evidence saving functions
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _save_app_profiles ();
     void _save_autofills ();
     void _save_bookmarked_urls ();
@@ -94,6 +110,32 @@ class evidence_processor_impl
     void _save_received_files ();
     void _save_user_accounts ();
     void _save_visited_urls ();
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Evidence processing functions
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void _process_evidence (mobius::framework::model::evidence);
+    void _process_cookie (mobius::framework::model::evidence);
+    void _process_encryption_key (mobius::framework::model::evidence);
+    void _process_generic_evidence (mobius::framework::model::evidence);
+    void _process_password (mobius::framework::model::evidence);
+    void _process_new_encryption_key (
+        const std::string &,
+        const std::string &,
+        const mobius::core::bytearray &
+    );
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Decryption functions
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::pair<bool, mobius::core::bytearray>
+    _decrypt_data (const mobius::core::bytearray &) const;
+    std::pair<bool, mobius::core::bytearray>
+    _decrypt_dpapi_value (const mobius::core::bytearray &) const;
+    std::pair<bool, mobius::core::bytearray>
+    _decrypt_v_value (const mobius::core::bytearray &) const;
+    mobius::core::bytearray
+    _decrypt_v20_encrypted_key (const mobius::core::bytearray &) const;
 };
 
 } // namespace mobius::extension::app::chromium
