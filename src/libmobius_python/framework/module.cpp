@@ -23,7 +23,6 @@
 #include "module.hpp"
 #include <pygil.hpp>
 #include <pymobius.hpp>
-#include "ant/module.hpp"
 #include "attribute.hpp"
 #include "category.hpp"
 #include "evidence_processor/module.hpp"
@@ -107,7 +106,6 @@ new_framework_module ()
     module.add_constant ("SCAN_TYPE_ALL_FILES", 3);
 
     // Add submodules
-    module.add_submodule ("ant", new_framework_ant_module ());
     module.add_submodule ("evidence_processor", new_framework_evidence_processor_module ());
     module.add_submodule ("model", new_framework_model_module ());
 

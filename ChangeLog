@@ -77,6 +77,9 @@ Mobius Forensic Toolkit 2.27
 	* libmobius_python: Added new method framework.model.evidence.get_hashes
 	* libmobius_python: Improved mobius.framework.model.evidence class using the PyType_FromSpec API
 	* libmobius_python: Removed deprecated class case_profile
+	* libmobius_python: Removed deprecated class ant.post_processor
+	* libmobius_python: Removed deprecated class ant.ant
+	* libmobius_python: Removed deprecated module ant
 	* pymobius.ant.evidence: Changed to use mobius.framework.evidence_processor.engine class
 	* pymobius.ant.evidence: Removed usage of deprecated class framework.ant.post_processor
 	* pymobius.ant.evidence.vfs: Removed usage of the deprecated class vfs_processor

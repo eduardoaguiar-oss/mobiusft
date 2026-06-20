@@ -25,7 +25,6 @@ project(libmobius_python_framework LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Build sub-libraries
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_subdirectory(ant)
 add_subdirectory(evidence_processor)
 add_subdirectory(model)
 
@@ -52,7 +51,6 @@ target_include_directories(libmobius_python_framework PRIVATE
 
 target_link_libraries(libmobius_python_framework
    PRIVATE
-     "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_python_framework_ant>"
      "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_python_framework_evidence_processor>"
      "$<LINK_LIBRARY:WHOLE_ARCHIVE,mobius_python_framework_model>"
    PUBLIC Mobius::Framework
