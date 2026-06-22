@@ -875,7 +875,7 @@ pymobius_core_richtext_to_pyobject (const mobius::core::richtext& obj)
             MOBIUS_EXCEPTION_MSG ("richtext type is not initialized")
          );
 
-    return mobius::py::to_pyobject_nullable <core_richtext_o> (obj, core_richtext_type);
+    return mobius::py::to_pyobject <core_richtext_o> (obj, core_richtext_type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
