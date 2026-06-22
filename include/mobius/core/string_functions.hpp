@@ -40,6 +40,7 @@ bool is_numeric_cpf (const std::string&);
 bool is_formatted_cnpj (const std::string&);
 bool is_numeric_cnpj (const std::string&);
 bool is_email (const std::string&);
+bool is_mobile_phone (const std::string&);
 bool is_url (const std::string&);
 bool is_ipv4 (const std::string&);
 bool is_ipv6 (const std::string&);

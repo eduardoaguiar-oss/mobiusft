@@ -16,103 +16,108 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "evidence_processor_impl.hpp"
-#include <mobius/core/application.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <format>
-#include <fstream>
 #include <unordered_map>
 #include <string>
 
 namespace
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Known field names
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static std::unordered_multimap<std::string, std::string> FIELDS;
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Format CPF string
-// @param cpf CPF string
-// @return Formatted CPF string in the format "xxx.xxx.xxx-xx"
+// @brief Return formatted CPF if valid, empty string otherwise
+// @param field_name Name of the field associated with the CPF
+// @param text Text to validate as CPF
+// @return Validated CPF string or empty string if invalid
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-_format_cpf (const std::string &cpf)
+_cpf_validator (const std::string &, const std::string &text)
 {
-    if (cpf.length () == 11)
-        return cpf.substr (0, 3) + "." + cpf.substr (3, 3) + "." +
-               cpf.substr (6, 3) + "-" + cpf.substr (9, 2);
-    return cpf;
+    if (mobius::core::string::is_formatted_cpf (text))
+        return text;
+
+    if (mobius::core::string::is_numeric_cpf (text))
+    {
+        return text.substr (0, 3) + "." + text.substr (3, 3) + "." +
+               text.substr (6, 3) + "-" + text.substr (9, 2);
+    }
+
+    return {};
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Return formatted CNPJ if valid, empty string otherwise
+// @param field_name Name of the field associated with the CNPJ
+// @param text Text to validate as CNPJ
+// @return Validated CNPJ string or empty string if invalid
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+_cnpj_validator (const std::string &, const std::string &text)
+{
+    if (mobius::core::string::is_formatted_cnpj (text))
+        return text;
+
+    if (mobius::core::string::is_numeric_cnpj (text))
+    {
+        return text.substr (0, 2) + "." + text.substr (2, 3) + "." +
+               text.substr (5, 3) + "/" + text.substr (8, 4) + "-" +
+               text.substr (12, 2);
+    }
+
+    return {};
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Return e-mail if valid, empty string otherwise
+// @param field_name Name of the field associated with the e-mail
+// @param text Text to validate as e-mail
+// @return Validated e-mail string or empty string if invalid
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+_email_validator (const std::string &field_name, const std::string &text)
+{
+    const std::string lower_field_name =
+        mobius::core::string::tolower (field_name);
+
+    if (lower_field_name.find ("email") != std::string::npos &&
+        mobius::core::string::is_email (text))
+        return text;
+
+    return {};
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Format CNPJ string
-// @param cnpj CNPJ string
-// @return Formatted CNPJ string in the format "xx.xxx.xxx/xxxx-xx"
+// @brief Value validators
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-_format_cnpj (const std::string &cnpj)
-{
-    if (cnpj.length () == 14)
-        return cnpj.substr (0, 2) + "." + cnpj.substr (2, 3) + "." +
-               cnpj.substr (5, 3) + "/" + cnpj.substr (8, 4) + "-" +
-               cnpj.substr (12, 2);
-    return cnpj;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type validators for PDI values
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static const std::
-    unordered_map<std::string, std::function<bool (const std::string &)>>
-        TYPE_VALIDATORS = {
-            {"cnpj", mobius::core::string::is_numeric_cnpj},
-            {"cpf", mobius::core::string::is_numeric_cpf},
-            {"email", mobius::core::string::is_email},
-};
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type formatters for PDI values
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static const std::
-    unordered_map<std::string, std::function<std::string (const std::string &)>>
-        TYPE_FORMATTERS = {
-            {"cnpj", _format_cnpj},
-            {"cpf", _format_cpf},
+static const std::unordered_multimap<
+    std::string,
+    std::function<std::string (const std::string &, const std::string &)>>
+    VALUE_VALIDATORS = {
+        {"cpf", _cpf_validator},
+        {"cnpj", _cnpj_validator},
+        {"email", _email_validator},
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Validate value
 // @brief type Type of value to validate
 // @param value Value to validate
-// @return true if valid, false otherwise
+// @return Type, formatted value if valid, empty string otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-_validate_value (const std::string &type, const std::string &value)
+std::pair<std::string, std::string>
+_validate_value (const std::string &field_name, const std::string &value)
 {
-    auto iter = TYPE_VALIDATORS.find (type);
+    // Check if the value is valid for any known field name and derive PDI evidence
+    for (const auto &[type, validator] : VALUE_VALIDATORS)
+    {
+        auto validated_value = validator (field_name, value);
 
-    if (iter != TYPE_VALIDATORS.end ())
-        return iter->second (value);
+        if (!validated_value.empty ())
+            return {type, validated_value};
+    }
 
-    return true;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Format value based on its type
-// @param type Type of value to format
-// @param value Value to format
-// @return Formatted value as a string
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::string
-_format_value (const std::string &type, const std::string &value)
-{
-    auto iter = TYPE_FORMATTERS.find (type);
-    if (iter != TYPE_FORMATTERS.end ())
-        return iter->second (value);
-
-    return value;
+    return {"", ""};
 }
 
 } // namespace
@@ -133,34 +138,6 @@ evidence_processor_impl::evidence_processor_impl (
     : item_ (item),
       mediator_ (mediator)
 {
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    auto app = mobius::core::application ();
-    auto path = app.get_data_path ("data/pdi_autofill.txt");
-
-    // Load the autofill configuration
-    std::ifstream file (path);
-    if (!file)
-    {
-        log.error (__LINE__, "Failed to open autofill configuration file");
-        return;
-    }
-
-    std::string line;
-    while (std::getline (file, line))
-    {
-        if (!line.empty () && line[0] != '#')
-        {
-            auto pos = line.find ('\t');
-
-            if (pos != std::string::npos)
-            {
-                auto key = line.substr (0, pos);
-                auto value = line.substr (pos + 1);
-                FIELDS.emplace (key, value);
-            }
-        }
-    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -179,20 +156,10 @@ evidence_processor_impl::on_evidence_created (
         evidences_processed_++;
 
         if (e.get_type () == "autofill")
-        {
-            const auto field_name = e.get_attribute<std::string> ("field_name");
-            const auto value = e.get_attribute<std::string> ("value");
-
-            _process_evidence (e, field_name, value);
-        }
+            _process_autofill (e);
 
         else if (e.get_type () == "searched-text")
-        {
-            const auto field_name = e.get_attribute<std::string> ("search_type");
-            const auto value = e.get_attribute<std::string> ("text");
-
-            _process_evidence (e, field_name, value);
-        }
+            _process_searched_text (e);
     }
     catch (const std::exception &e)
     {
@@ -211,20 +178,10 @@ evidence_processor_impl::on_evidence_attribute_modified (
 )
 {
     if (e.get_type () == "autofill" && attr_id == "value")
-    {
-        const auto field_name = e.get_attribute<std::string> ("field_name");
-        const auto value = e.get_attribute<std::string> ("value");
-
-        _process_evidence (e, field_name, value);
-    }
+        _process_autofill (e);
 
     else if (e.get_type () == "searched-text" && attr_id == "text")
-    {
-        const auto field_name = e.get_attribute<std::string> ("search_type");
-        const auto value = e.get_attribute<std::string> ("text");
-
-        _process_evidence (e, field_name, value);
-    }
+        _process_searched_text (e);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -244,69 +201,87 @@ evidence_processor_impl::on_stop ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Process evidence and derive new PDI evidence if applicable
+// @brief Process autofill evidence
 // @param e Evidence to process
-// @param field_name Name of the field associated with the evidence
-// @param value Value of the field associated with the evidence
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::_process_evidence (
-    mobius::framework::model::evidence e,
-    const std::string &field_name,
-    const std::string &value
+evidence_processor_impl::_process_autofill (
+    mobius::framework::model::evidence e
 )
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
     try
     {
-        if (field_name.empty () || value.empty ())
-            return;
+        const auto field_name = e.get_attribute<std::string> ("field_name");
+        const auto value = e.get_attribute<std::string> ("value");
+        auto [pdi_type, pdi_value] = _validate_value (field_name, value);
 
-        // Check if the field name is known
-        const auto l_field_name = mobius::core::string::tolower (field_name);
-        auto range = FIELDS.equal_range (l_field_name);
-        bool handled = false;
-
-        for (auto iter = range.first; iter != range.second; ++iter)
+        if (!pdi_type.empty ())
         {
-            auto type = iter->second;
+            auto pdi_e = item_.new_evidence ("pdi");
 
-            if (_validate_value (type, value))
-            {
-                auto pdi_e = item_.new_evidence ("pdi");
-                pdi_e.set_attribute ("pdi_type", type);
-                pdi_e.set_attribute ("value", _format_value (type, value));
+            pdi_e.set_attribute ("pdi_type", pdi_type);
+            pdi_e.set_attribute ("value", pdi_value);
 
-                mobius::core::pod::map metadata = {
-                    {"username", e.get_attribute<std::string> ("username")},
-                    {"app_name", e.get_attribute<std::string> ("app_name")},
-                    {"field_name", e.get_attribute<std::string> ("field_name")},
-                };
+            mobius::core::pod::map metadata = {
+                {"field_name", field_name},
+                {"original_value", value},
+                {"username", e.get_attribute<std::string> ("username")},
+                {"app_name", e.get_attribute<std::string> ("app_name")},
+            };
 
-                pdi_e.set_attribute ("metadata", metadata);
-                pdi_e.add_source (e);
+            pdi_e.set_attribute ("metadata", metadata);
+            pdi_e.add_source (e);
 
-                // Notify the coordinator about the new evidence
-                mediator_.on_evidence_created (pdi_e);
-                evidences_derived_++;
-                handled = true;
-            }
+            // Notify the coordinator about the new evidence
+            mediator_.on_evidence_created (pdi_e);
+            evidences_derived_++;
         }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
+}
 
-        // If field name is not known, use PDI validators to gather new field
-        // names
-        if (!handled)
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Process searched-text evidence
+// @param e Evidence to process
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_processor_impl::_process_searched_text (
+    mobius::framework::model::evidence e
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        const auto search_type = e.get_attribute<std::string> ("search_type");
+        const auto text = e.get_attribute<std::string> ("text");
+        auto [pdi_type, pdi_value] = _validate_value (search_type, text);
+
+        if (!pdi_type.empty ())
         {
-            for (const auto &validator : TYPE_VALIDATORS)
-            {
-                if (validator.second (value))
-                    log.development (
-                        __LINE__,
-                        validator.first +
-                            " value found. Autofill field_name=" + field_name
-                    );
-            }
+            auto pdi_e = item_.new_evidence ("pdi");
+
+            pdi_e.set_attribute ("pdi_type", pdi_type);
+            pdi_e.set_attribute ("value", pdi_value);
+
+            mobius::core::pod::map metadata = {
+                {"search_type", search_type},
+                {"text", text},
+                {"username", e.get_attribute<std::string> ("username")},
+                {"timestamp", e.get_attribute ("timestamp")},
+            };
+
+            pdi_e.set_attribute ("metadata", metadata);
+            pdi_e.add_source (e);
+
+            // Notify the coordinator about the new evidence
+            mediator_.on_evidence_created (pdi_e);
+            evidences_derived_++;
         }
     }
     catch (const std::exception &e)

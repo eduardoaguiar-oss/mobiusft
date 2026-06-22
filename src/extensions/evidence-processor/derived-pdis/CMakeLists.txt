@@ -38,8 +38,3 @@ target_link_libraries(evidence_processor_derived_pdis PRIVATE Mobius::Framework 
 # Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 install(TARGETS evidence_processor_derived_pdis LIBRARY DESTINATION share/mobiusft/extensions)
-
-install(
-    FILES pdi_autofill.txt
-    DESTINATION share/mobiusft/data
-)

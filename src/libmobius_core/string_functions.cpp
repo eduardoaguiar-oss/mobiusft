@@ -29,20 +29,32 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // @brief Basic email validation regex
-static const std::string EMAIL_REGEX =
-    R"(^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$)";
+static const std::regex
+    EMAIL_REGEX (R"(^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$)");
 
 // @brief Basic URL validation regex
-static const std::string URL_REGEX =
-    R"((http|https)://([a-zA-Z0-9.-]+)(:[0-9]+)?(/.*)?)";
+static const std::regex
+    URL_REGEX (R"((http|https)://([a-zA-Z0-9.-]+)(:[0-9]+)?(/.*)?)");
 
 // @brief Basic IPv4 validation regex
-static const std::string IPV4_REGEX =
-    R"((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))";
+static const std::regex IPV4_REGEX (
+    R"((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))"
+);
 
 // @brief Basic IPv6 validation regex
-static const std::string IPV6_REGEX =
-    R"((^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$)|(^([0-9a-fA-F]{1,4}:){1,7}:$)|(^:([0-9a-fA-F]{1,4}:){1,6}[0-9a-fA-F]{1,4}$)|(^([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}$)|(^([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}$)|(^([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}$)|(^([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}$)|(^([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}$)|(^[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){6}|:)$)|(^:((:[0-9a-fA-F]{1,4}){7}|:)$))";
+static const std::regex IPV6_REGEX (
+    R"((^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$)|(^([0-9a-fA-F]{1,4}:){1,7}:$)|(^:([0-9a-fA-F]{1,4}:){1,6}[0-9a-fA-F]{1,4}$)|(^([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}$)|(^([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}$)|(^([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}$)|(^([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}$)|(^([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}$)|(^[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){6}|:)$)|(^:((:[0-9a-fA-F]{1,4}){7}|:)$))"
+);
+
+// @brief Cell phone (Brazil)
+static const std::regex BRAZIL_MOBILE_REGEX (
+    R"(^(\+?55\s?)?\(?(\d{2})\)?[\s.-]?9\d{4}[\s.-]?\d{4}$)"
+);
+
+// USA
+static const std::regex USA_MOBILE_REGEX (
+    R"(^(\+?1\s?)?\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$)"
+);
 
 // @brief CNPJ multipliers
 static constexpr int CNPJ_MULTIPLIERS[] = {6, 5, 4, 3, 2, 9, 8,
@@ -249,16 +261,18 @@ is_numeric_cpf (const std::string &str)
 bool
 is_formatted_cnpj (const std::string &str)
 {
-    if (str.length () != 18 || str[2] != '.' || str[6] != '.' || str[10] != '/' ||
-        str[15] != '-' || !isdigit (str[0]) || !isdigit (str[1]) ||
-        !isdigit (str[3]) || !isdigit (str[4]) || !isdigit (str[5]) ||
-        !isdigit (str[7]) || !isdigit (str[8]) || !isdigit (str[9]) ||
-        !isdigit (str[11]) || !isdigit (str[12]) || !isdigit (str[13]) ||
-        !isdigit (str[14]) || !isdigit (str[16]) || !isdigit (str[17]))
+    if (str.length () != 18 || str[2] != '.' || str[6] != '.' ||
+        str[10] != '/' || str[15] != '-' || !isdigit (str[0]) ||
+        !isdigit (str[1]) || !isdigit (str[3]) || !isdigit (str[4]) ||
+        !isdigit (str[5]) || !isdigit (str[7]) || !isdigit (str[8]) ||
+        !isdigit (str[9]) || !isdigit (str[11]) || !isdigit (str[12]) ||
+        !isdigit (str[13]) || !isdigit (str[14]) || !isdigit (str[16]) ||
+        !isdigit (str[17]))
         return false;
 
-    const std::string digits = str.substr (0, 2) + str.substr (3, 3) + str.substr (7, 3) +
-                 str.substr (11, 4) + str.substr (16, 2);
+    const std::string digits = str.substr (0, 2) + str.substr (3, 3) +
+                               str.substr (7, 3) + str.substr (11, 4) +
+                               str.substr (16, 2);
 
     return is_numeric_cnpj (digits);
 }
@@ -301,6 +315,18 @@ is_numeric_cnpj (const std::string &str)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Test if a string is a valid mobile phone number (Brazil or USA)
+// @param str string
+// @return true if str is a valid mobile phone number, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+is_mobile_phone (const std::string &str)
+{
+    return std::regex_match (str, BRAZIL_MOBILE_REGEX) ||
+           std::regex_match (str, USA_MOBILE_REGEX);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Test if a string is a valid email address
 // @param str string
 // @return true if str is a valid email address, false otherwise
@@ -308,7 +334,7 @@ is_numeric_cnpj (const std::string &str)
 bool
 is_email (const std::string &str)
 {
-    return std::regex_match (str, std::regex (EMAIL_REGEX));
+    return std::regex_match (str, EMAIL_REGEX);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -319,7 +345,7 @@ is_email (const std::string &str)
 bool
 is_url (const std::string &str)
 {
-    return std::regex_match (str, std::regex (URL_REGEX));
+    return std::regex_match (str, URL_REGEX);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -330,7 +356,7 @@ is_url (const std::string &str)
 bool
 is_ipv4 (const std::string &str)
 {
-    return std::regex_match (str, std::regex (IPV4_REGEX));
+    return std::regex_match (str, IPV4_REGEX);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -341,7 +367,7 @@ is_ipv4 (const std::string &str)
 bool
 is_ipv6 (const std::string &str)
 {
-    return std::regex_match (str, std::regex (IPV6_REGEX));
+    return std::regex_match (str, IPV6_REGEX);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
