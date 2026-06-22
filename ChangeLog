@@ -14,6 +14,7 @@ Mobius Forensic Toolkit 2.27
 	* app-shareaza: Implemented the evidence_processor_impl interface
 	* app-shareaza: Changed to use evidence.add_hash method
 	* app-skype: Implemented the evidence_processor_impl interface
+	* app-skype: Changed to set evidence sources
 	* app-sticky-notes: Implemented the evidence_processor_impl interface
 	* app-utorrent: Implemented the evidence_processor_impl interface
 	* evidence-viewer: Changed to use new evidence.get_hashes method
@@ -22,8 +23,10 @@ Mobius Forensic Toolkit 2.27
 	* os-win: Implemented the evidence_processor_impl interface
 	* Created new package src/extensions/evidence-processor
 	* post-processor/opened-files: Migrated to evidence-processor/derived-opened-files
-	* evidence-processor/derived-opened-files: Implemented the evidence_processor_impl interface
+	* derived-opened-files: Implemented the evidence_processor_impl interface
 	* post-processor/pdi: Migrated to evidence-processor/derived-pdis
+	* derived-pdis: Removed usage of the pdi_autofill.txt file
+	* derived-pdis: Extended to extract all CPF, CPNJ, email addresses from evidences
 	* evidence-processor/derived-pdis: Implemented the evidence_processor_impl interface
 	* evidence-processor/tag-alert-kff: Added new C++ extension to tag evidences matching the KFF database
 	* libmobius_core: Added new function string::is_formatted_cpf
@@ -91,6 +94,7 @@ Mobius Forensic Toolkit 2.27
 	* libmobius_python: Removed deprecated class ant.post_processor
 	* libmobius_python: Removed deprecated class ant.ant
 	* libmobius_python: Removed deprecated module ant
+	* libmobius_python: Fixed mobius.core.richtext constructor to never return None
 	* pymobius.ant.evidence: Changed to use mobius.framework.evidence_processor.engine class
 	* pymobius.ant.evidence: Removed usage of deprecated class framework.ant.post_processor
 	* pymobius.ant.evidence.vfs: Removed usage of the deprecated class vfs_processor

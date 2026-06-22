@@ -864,6 +864,7 @@ profile::impl::_load_main_db_calls (
 
             // Other data
             c.duration = get_duration (cl.duration);
+            c.f = f;
 
             // Metadata
             c.metadata.set ("record_idx", cl.idx);
@@ -977,6 +978,7 @@ profile::impl::_load_main_db_calls (
                     rpia.ip_address = cm.ip_address;
                     rpia.user_id = cm.identity;
                     rpia.metadata = c.metadata.clone ();
+                    rpia.f = f;
 
                     remote_party_ip_addresses_.push_back (rpia);
                 }
@@ -989,6 +991,7 @@ profile::impl::_load_main_db_calls (
                     rpia.ip_address = cm.ip_address;
                     rpia.user_id = cm.identity;
                     rpia.metadata = c.metadata.clone ();
+                    rpia.f = f;
 
                     remote_party_ip_addresses_.push_back (rpia);
                 }
@@ -1023,6 +1026,7 @@ profile::impl::_load_main_db_contacts (
             c.id = ct.skypename;
             c.gender = get_domain_value (GENDER_DOMAIN, ct.gender);
             c.birthday = ct.birthday;
+            c.f = f;
 
             // Get names
             c.name = ct.fullname;
@@ -1249,6 +1253,7 @@ profile::impl::_load_main_db_file_transfers (
             ft_obj.type = ft.type;
             ft_obj.filename = ft.filename;
             ft_obj.path = ft.filepath;
+            ft_obj.f = f;
 
             ft_obj.metadata.set ("record_idx", ft.idx);
             ft_obj.metadata.set ("schema_version", fm.get_schema_version ());
@@ -1330,6 +1335,7 @@ profile::impl::_load_main_db_messages (
             m_obj.timestamp = m.timestamp;
             m_obj.sender = m.author;
             m_obj.content = m.content;
+            m_obj.f = f;
 
             for (const auto &p : fm.get_message_participants (m))
             {
@@ -1442,6 +1448,7 @@ profile::impl::_load_main_db_sms_messages (
             sms s_obj;
             s_obj.timestamp = s.timestamp;
             s_obj.text = s.body;
+            s_obj.f = f;
 
             // Sender
             if (s.type == 1)
@@ -1519,6 +1526,7 @@ profile::impl::_load_main_db_voicemails (
             voicemail v;
             v.timestamp = vm.timestamp;
             v.duration = vm.duration;
+            v.f = f;
 
             v.metadata.set ("record_idx", vm.idx);
             v.metadata.set ("schema_version", fm.get_schema_version ());
@@ -1689,6 +1697,7 @@ profile::impl::_load_skype_db_contacts (
             c.id = ct.mri;
             c.gender = get_domain_value (GENDER_DOMAIN, ct.gender);
             c.birthday = ct.birthday;
+            c.f = f;
 
             // Get names
             c.name = ct.full_name;
@@ -1788,7 +1797,6 @@ profile::impl::_load_skype_db_contacts (
             c.metadata.set ("recommendation_rank", ct.recommendation_rank);
             c.metadata.set ("unistore_version", ct.unistore_version);
             c.metadata.set ("update_version", ct.update_version);
-            c.f = f;
 
             contacts_.push_back (c);
             _set_name (c.id, c.name);
@@ -1826,6 +1834,7 @@ profile::impl::_load_skype_db_corelib_messages (
             m_obj.timestamp = m.timestamp;
             m_obj.sender = m.author;
             m_obj.content = m.parsed_content;
+            m_obj.f = f;
 
             // Recipients
             if (m.author == account_id_)
@@ -1923,6 +1932,7 @@ profile::impl::_load_skype_db_messages (
             m_obj.timestamp = m.originalarrivaltime;
             m_obj.sender = m.author;
             m_obj.content = m.parsed_content;
+            m_obj.f = f;
 
             // Recipients
             if (m.author == account_mri_)
@@ -1983,6 +1993,7 @@ profile::impl::_load_skype_db_sms_messages (
             s_obj.timestamp = get_datetime (s.id / 1000);
             s_obj.text = s.content;
             s_obj.sender = s.author;
+            s_obj.f = f;
 
             // Recipients
             if (s.author == account_mri_)
@@ -2112,6 +2123,7 @@ profile::impl::_load_s4l_db_accounts (
         a.name = acc.full_name;
         a.phone_numbers = acc.phone_numbers;
         a.emails = acc.emails;
+        a.files.push_back (f);
 
         if (!acc.full_name.empty ())
             a.names.push_back (acc.full_name);
@@ -2165,6 +2177,7 @@ profile::impl::_load_s4l_db_calls (
         {
             call c;
             c.timestamp = cl.start_time;
+            c.f = f;
 
             if (cl.end_time)
                 c.duration =
@@ -2213,7 +2226,6 @@ profile::impl::_load_s4l_db_calls (
             c.metadata.set ("session_type", cl.session_type);
             c.metadata.set ("target", cl.target);
             c.metadata.set ("thread_id", cl.thread_id);
-            c.f = f;
 
             calls_.push_back (c);
         }
@@ -2298,6 +2310,7 @@ profile::impl::_load_s4l_db_messages (
             m_obj.timestamp = m.created_time;
             m_obj.sender = m.creator;
             m_obj.content = m.parsed_content;
+            m_obj.f = f;
 
             // Recipients
             if (m.is_my_message)
