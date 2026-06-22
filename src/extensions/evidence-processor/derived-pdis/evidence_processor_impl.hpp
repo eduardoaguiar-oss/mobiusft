@@ -41,6 +41,9 @@ class evidence_processor_impl
     );
 
     void on_evidence_created (mobius::framework::model::evidence) final;
+    void on_evidence_attribute_modified (
+        mobius::framework::model::evidence, const std::string &
+    ) final;
     void on_stop () final;
 
   private:
@@ -55,6 +58,9 @@ class evidence_processor_impl
 
     // @brief Evidences derived
     std::atomic<std::uint64_t> evidences_derived_ {0};
+
+    // Helper functions
+    void _process_autofill (mobius::framework::model::evidence);
 };
 
 } // namespace mobius::extension::evidence_processor::derived_pdis

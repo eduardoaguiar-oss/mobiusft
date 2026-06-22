@@ -178,14 +178,61 @@ evidence_processor_impl::on_evidence_created (
     {
         evidences_processed_++;
 
-        // Check if the evidence type is "autofill"
-        if (evidence.get_type () != "autofill")
-            return;
+        if (evidence.get_type () == "autofill")
+            _process_autofill (evidence);
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
+}
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Handle evidence attribute modification
+// @param e Evidence being modified
+// @param attr_id ID of the modified attribute
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_processor_impl::on_evidence_attribute_modified (
+    mobius::framework::model::evidence e, const std::string &attr_id
+)
+{
+    if (e.get_type () == "autofill" && attr_id == "value")
+        _process_autofill (e);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Handle processing stop event
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_processor_impl::on_stop ()
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    log.info (
+        __LINE__, std::format (
+                      "Evidences derived/processed: {} of {}",
+                      evidences_derived_.load (), evidences_processed_.load ()
+                  )
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Process autofill evidence
+// @param e Evidence to process
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_processor_impl::_process_autofill (
+    mobius::framework::model::evidence e
+)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
         // Get the field name and value attributes
-        const auto field_name =
-            evidence.get_attribute<std::string> ("field_name");
-        const auto value = evidence.get_attribute<std::string> ("value");
+        const auto field_name = e.get_attribute<std::string> ("field_name");
+        const auto value = e.get_attribute<std::string> ("value");
 
         if (field_name.empty () || value.empty ())
             return;
@@ -201,24 +248,21 @@ evidence_processor_impl::on_evidence_created (
 
             if (_validate_value (type, value))
             {
-                auto e = item_.new_evidence ("pdi");
-                e.set_attribute ("pdi_type", type);
-                e.set_attribute ("value", _format_value (type, value));
+                auto pdi_e = item_.new_evidence ("pdi");
+                pdi_e.set_attribute ("pdi_type", type);
+                pdi_e.set_attribute ("value", _format_value (type, value));
 
                 mobius::core::pod::map metadata = {
-                    {"username",
-                     evidence.get_attribute<std::string> ("username")},
-                    {"app_name",
-                     evidence.get_attribute<std::string> ("app_name")},
-                    {"field_name",
-                     evidence.get_attribute<std::string> ("field_name")},
+                    {"username", e.get_attribute<std::string> ("username")},
+                    {"app_name", e.get_attribute<std::string> ("app_name")},
+                    {"field_name", e.get_attribute<std::string> ("field_name")},
                 };
 
-                e.set_attribute ("metadata", metadata);
-                e.add_source (evidence);
+                pdi_e.set_attribute ("metadata", metadata);
+                pdi_e.add_source (e);
 
                 // Notify the coordinator about the new evidence
-                mediator_.on_evidence_created (e);
+                mediator_.on_evidence_created (pdi_e);
                 evidences_derived_++;
                 handled = true;
             }
@@ -243,22 +287,6 @@ evidence_processor_impl::on_evidence_created (
     {
         log.warning (__LINE__, e.what ());
     }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Handle processing stop event
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-evidence_processor_impl::on_stop ()
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    log.info (
-        __LINE__, std::format (
-                      "Evidences derived/processed: {} of {}",
-                      evidences_derived_.load (), evidences_processed_.load ()
-                  )
-    );
 }
 
 } // namespace mobius::extension::evidence_processor::derived_pdis
