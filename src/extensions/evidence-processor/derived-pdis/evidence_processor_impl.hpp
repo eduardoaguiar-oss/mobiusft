@@ -60,7 +60,11 @@ class evidence_processor_impl
     std::atomic<std::uint64_t> evidences_derived_ {0};
 
     // Helper functions
-    void _process_autofill (mobius::framework::model::evidence);
+    void _process_evidence (
+        mobius::framework::model::evidence,
+        const std::string &,
+        const std::string &
+    );
 };
 
 } // namespace mobius::extension::evidence_processor::derived_pdis

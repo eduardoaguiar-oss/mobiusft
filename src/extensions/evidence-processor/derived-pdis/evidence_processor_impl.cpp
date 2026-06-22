@@ -165,11 +165,11 @@ evidence_processor_impl::evidence_processor_impl (
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Handle evidence creation
-// @param evidence Evidence to process
+// @param e Evidence to process
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
 evidence_processor_impl::on_evidence_created (
-    mobius::framework::model::evidence evidence
+    mobius::framework::model::evidence e
 )
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
@@ -178,8 +178,21 @@ evidence_processor_impl::on_evidence_created (
     {
         evidences_processed_++;
 
-        if (evidence.get_type () == "autofill")
-            _process_autofill (evidence);
+        if (e.get_type () == "autofill")
+        {
+            const auto field_name = e.get_attribute<std::string> ("field_name");
+            const auto value = e.get_attribute<std::string> ("value");
+
+            _process_evidence (e, field_name, value);
+        }
+
+        else if (e.get_type () == "searched-text")
+        {
+            const auto field_name = e.get_attribute<std::string> ("search_type");
+            const auto value = e.get_attribute<std::string> ("text");
+
+            _process_evidence (e, field_name, value);
+        }
     }
     catch (const std::exception &e)
     {
@@ -198,7 +211,20 @@ evidence_processor_impl::on_evidence_attribute_modified (
 )
 {
     if (e.get_type () == "autofill" && attr_id == "value")
-        _process_autofill (e);
+    {
+        const auto field_name = e.get_attribute<std::string> ("field_name");
+        const auto value = e.get_attribute<std::string> ("value");
+
+        _process_evidence (e, field_name, value);
+    }
+
+    else if (e.get_type () == "searched-text" && attr_id == "text")
+    {
+        const auto field_name = e.get_attribute<std::string> ("search_type");
+        const auto value = e.get_attribute<std::string> ("text");
+
+        _process_evidence (e, field_name, value);
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -218,22 +244,22 @@ evidence_processor_impl::on_stop ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Process autofill evidence
+// @brief Process evidence and derive new PDI evidence if applicable
 // @param e Evidence to process
+// @param field_name Name of the field associated with the evidence
+// @param value Value of the field associated with the evidence
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::_process_autofill (
-    mobius::framework::model::evidence e
+evidence_processor_impl::_process_evidence (
+    mobius::framework::model::evidence e,
+    const std::string &field_name,
+    const std::string &value
 )
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
     try
     {
-        // Get the field name and value attributes
-        const auto field_name = e.get_attribute<std::string> ("field_name");
-        const auto value = e.get_attribute<std::string> ("value");
-
         if (field_name.empty () || value.empty ())
             return;
 
