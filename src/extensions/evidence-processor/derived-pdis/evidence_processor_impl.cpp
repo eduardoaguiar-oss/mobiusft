@@ -67,8 +67,8 @@ _format_cnpj (const std::string &cnpj)
 static const std::
     unordered_map<std::string, std::function<bool (const std::string &)>>
         TYPE_VALIDATORS = {
-            {"cnpj", mobius::core::string::is_cnpj},
-            {"cpf", mobius::core::string::is_cpf},
+            {"cnpj", mobius::core::string::is_numeric_cnpj},
+            {"cpf", mobius::core::string::is_numeric_cpf},
             {"email", mobius::core::string::is_email},
 };
 

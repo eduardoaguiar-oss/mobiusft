@@ -26,6 +26,10 @@ Mobius Forensic Toolkit 2.27
 	* post-processor/pdi: Migrated to evidence-processor/derived-pdis
 	* evidence-processor/derived-pdis: Implemented the evidence_processor_impl interface
 	* evidence-processor/tag-alert-kff: Added new C++ extension to tag evidences matching the KFF database
+	* libmobius_core: Added new function string::is_formatted_cpf
+	* libmobius_core: Added new function string::is_numeric_cpf
+	* libmobius_core: Added new function string::is_formatted_cnpj
+	* libmobius_core: Added new function string::is_numeric_cnpj
 	* libmobius_framework: Added new submodule `evidence_processor`
 	* libmobius_framework: Added new class evidence_processor::evidence_processor_impl_base 
 	* libmobius_framework: Added new class evidence_processor::engine

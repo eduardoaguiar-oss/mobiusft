@@ -183,117 +183,121 @@ is_space (const std::string &str)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Test if a string is a valid CPF (Brazilian individual taxpayer
-// identification number)
-// @param str string
+// @brief Test if a string is a valid formatted CPF (Brazilian individual taxpayer identification number)
+// @param str string in the format 999.999.999-99
 // @return true if str is a valid CPF, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-is_cpf (const std::string &str)
+is_formatted_cpf (const std::string &str)
 {
-    std::string digits;
-
-    // Check if it's a formatted CPF (999.999.999-99)
-    if (str.length () == 14 && str[3] == '.' && str[7] == '.' &&
-        str[11] == '-' && isdigit (str[0]) && isdigit (str[1]) &&
-        isdigit (str[2]) && isdigit (str[4]) && isdigit (str[5]) &&
-        isdigit (str[6]) && isdigit (str[8]) && isdigit (str[9]) &&
-        isdigit (str[10]) && isdigit (str[12]) && isdigit (str[13]))
-        digits = str.substr (0, 3) + str.substr (4, 3) + str.substr (8, 3) +
-                 str.substr (12, 2);
-
-    // Unformatted CPF (11 digits)
-    else if (str.length () == 11 && is_digit (str))
-        digits = str;
-
-    else
+    if (str.length () != 14 || str[3] != '.' || str[7] != '.' ||
+        str[11] != '-' || !isdigit (str[0]) || !isdigit (str[1]) ||
+        !isdigit (str[2]) || !isdigit (str[4]) || !isdigit (str[5]) ||
+        !isdigit (str[6]) || !isdigit (str[8]) || !isdigit (str[9]) ||
+        !isdigit (str[10]) || !isdigit (str[12]) || !isdigit (str[13]))
         return false;
 
+    const std::string digits = str.substr (0, 3) + str.substr (4, 3) +
+                               str.substr (8, 3) + str.substr (12, 2);
+
+    return is_numeric_cpf (digits);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Test if a string is a valid numeric CPF (Brazilian individual taxpayer identification number)
+// @param str string
+// @return true if str is a valid numeric CPF, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+is_numeric_cpf (const std::string &str)
+{
     // CPF must have 11 digits
-    if (digits.length () != 11)
+    if (str.length () != 11 || !is_digit (str))
         return false;
 
     // Calculate first verification digit
     int sum = 0;
     for (int i = 0; i < 9; i++)
-    {
-        sum += (digits[i] - '0') * (10 - i);
-    }
+        sum += (str[i] - '0') * (10 - i);
+
     int remainder = sum % 11;
     int dv1 = remainder < 2 ? 0 : 11 - remainder;
 
     // Check first verification digit
-    if (dv1 != (digits[9] - '0'))
+    if (dv1 != (str[9] - '0'))
         return false;
 
     // Calculate second verification digit
     sum = 0;
     for (int i = 0; i < 10; i++)
     {
-        sum += (digits[i] - '0') * (11 - i);
+        sum += (str[i] - '0') * (11 - i);
     }
     remainder = sum % 11;
     int dv2 = remainder < 2 ? 0 : 11 - remainder;
 
     // Check second verification digit
-    return dv2 == (digits[10] - '0');
+    return dv2 == (str[10] - '0');
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Test if a string is a valid CNPJ (Brazilian National Registry of Legal
 // Entities)
-// @param str string
+// @param str string in the format 99.999.999/9999-99
 // @return true if str is a valid CNPJ, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-is_cnpj (const std::string &str)
+is_formatted_cnpj (const std::string &str)
 {
-    std::string digits;
-
-    // Check if it's a formatted CNPJ (99.999.999/9999-99)
-    if (str.length () == 18 && str[2] == '.' && str[6] == '.' &&
-        str[10] == '/' && str[15] == '-' && isdigit (str[0]) &&
-        isdigit (str[1]) && isdigit (str[3]) && isdigit (str[4]) &&
-        isdigit (str[5]) && isdigit (str[7]) && isdigit (str[8]) &&
-        isdigit (str[9]) && isdigit (str[11]) && isdigit (str[12]) &&
-        isdigit (str[13]) && isdigit (str[14]))
-        digits = str.substr (0, 2) + str.substr (3, 3) + str.substr (7, 3) +
-                 str.substr (11, 4) + str.substr (16, 2);
-
-    // Unformatted CNPJ (14 digits)
-    else if (str.length () == 14 && is_digit (str))
-        digits = str;
-
-    else
+    if (str.length () != 18 || str[2] != '.' || str[6] != '.' || str[10] != '/' ||
+        str[15] != '-' || !isdigit (str[0]) || !isdigit (str[1]) ||
+        !isdigit (str[3]) || !isdigit (str[4]) || !isdigit (str[5]) ||
+        !isdigit (str[7]) || !isdigit (str[8]) || !isdigit (str[9]) ||
+        !isdigit (str[11]) || !isdigit (str[12]) || !isdigit (str[13]) ||
+        !isdigit (str[14]) || !isdigit (str[16]) || !isdigit (str[17]))
         return false;
 
+    const std::string digits = str.substr (0, 2) + str.substr (3, 3) + str.substr (7, 3) +
+                 str.substr (11, 4) + str.substr (16, 2);
+
+    return is_numeric_cnpj (digits);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Test if a string is a valid numeric CNPJ (Brazilian National Registry of Legal Entities)
+// @param str string Unformatted CNPJ (14 digits)
+// @return true if str is a valid CNPJ, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+is_numeric_cnpj (const std::string &str)
+{
     // CNPJ must have 14 digits
-    if (digits.length () != 14)
+    if (str.length () != 14 || !is_digit (str))
         return false;
 
     // Calculate first verification digit
     int sum = 0;
     for (int i = 0; i < 12; i++)
-        sum += (digits[i] - '0') * (CNPJ_MULTIPLIERS[i + 1]);
+        sum += (str[i] - '0') * (CNPJ_MULTIPLIERS[i + 1]);
 
     int remainder = sum % 11;
     int dv1 = remainder < 2 ? 0 : 11 - remainder;
 
     // Check first verification digit
-    if (dv1 != (digits[12] - '0'))
+    if (dv1 != (str[12] - '0'))
         return false;
 
     // Calculate second verification digit
     sum = 0;
     for (int i = 0; i < 12; i++)
-        sum += (digits[i] - '0') * (CNPJ_MULTIPLIERS[i]);
+        sum += (str[i] - '0') * (CNPJ_MULTIPLIERS[i]);
 
     sum += dv1 * 2;
     remainder = sum % 11;
     int dv2 = remainder < 2 ? 0 : 11 - remainder;
 
     // Check second verification digit
-    return dv2 == (digits[13] - '0');
+    return dv2 == (str[13] - '0');
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -39,7 +39,7 @@ class evidence_processor_impl
         const mobius::framework::evidence_processor::profile &,
         const mobius::framework::evidence_processor::mediator &
     );
-    
+
     void on_evidence_created (mobius::framework::model::evidence) final;
     void on_stop () final;
 
