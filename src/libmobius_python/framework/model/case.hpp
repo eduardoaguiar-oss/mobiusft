@@ -20,8 +20,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
 #include <mobius/framework/model/case.hpp>
+#include <Python.h>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -31,14 +32,14 @@ typedef struct
     PyObject_HEAD mobius::framework::model::Case *obj;
 } framework_model_case_o;
 
-extern PyTypeObject framework_model_case_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_framework_model_case_type ();
 bool pymobius_framework_model_case_check (PyObject *);
 PyObject *pymobius_framework_model_case_to_pyobject (
-    const mobius::framework::model::Case &);
+    const mobius::framework::model::Case &
+);
 mobius::framework::model::Case
 pymobius_framework_model_case_from_pyobject (PyObject *);
 

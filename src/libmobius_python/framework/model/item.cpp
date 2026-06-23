@@ -22,12 +22,12 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "item.hpp"
 #include <functional>
-#include <pymobius.hpp>
 #include <pycallback.hpp>
 #include <pydict.hpp>
 #include <pyfunction.hpp>
 #include <pygil.hpp>
 #include <pylist.hpp>
+#include <pymobius.hpp>
 #include <pyobject.hpp>
 #include "ant.hpp"
 #include "case.hpp"
@@ -38,6 +38,13 @@
 #include "event.hpp"
 #include "evidence.hpp"
 #include "module.hpp"
+
+namespace
+{
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *framework_model_item_type = nullptr;
+
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>uid</i> attribute getter
@@ -1437,29 +1444,29 @@ tp_richcompare (PyObject *py_a, PyObject *py_b, int op)
 
         switch (op)
         {
-        case Py_EQ:
-            rc = (a == b);
-            break;
+            case Py_EQ:
+                rc = (a == b);
+                break;
 
-        case Py_NE:
-            rc = (a != b);
-            break;
+            case Py_NE:
+                rc = (a != b);
+                break;
 
-        case Py_LT:
-            rc = (a < b);
-            break;
+            case Py_LT:
+                rc = (a < b);
+                break;
 
-        case Py_LE:
-            rc = (a <= b);
-            break;
+            case Py_LE:
+                rc = (a <= b);
+                break;
 
-        case Py_GT:
-            rc = (a > b);
-            break;
+            case Py_GT:
+                rc = (a > b);
+                break;
 
-        case Py_GE:
-            rc = (a >= b);
-            break;
+            case Py_GE:
+                rc = (a >= b);
+                break;
         }
 
         ret = rc ? mobius::py::py_true () : mobius::py::py_false ();
@@ -1484,108 +1491,106 @@ tp_hash (framework_model_item_o *self)
     );
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject framework_model_item_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.framework.model.item",            // tp_name
-    sizeof (framework_model_item_o),          // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    reinterpret_cast<hashfunc> (tp_hash),     // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    tp_getattro,                              // tp_getattro
-    tp_setattro,                              // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "item class",                             // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    tp_richcompare,                           // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    tp_getset,                                // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    tp_new,                                   // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot framework_model_item_slots[] = {
+    {Py_tp_new, reinterpret_cast<void *> (tp_new)},
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("framework.model.item class")},
+    {Py_tp_getset, reinterpret_cast<void *> (tp_getset)},
+    {Py_tp_getattro, reinterpret_cast<void *> (tp_getattro)},
+    {Py_tp_hash, reinterpret_cast<void *> (tp_hash)},
+    {Py_tp_setattro, reinterpret_cast<void *> (tp_setattro)},
+    {Py_tp_richcompare, reinterpret_cast<void *> (tp_richcompare)},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec framework_model_item_spec = {
+    .name = "mobius.framework.model.item",
+    .basicsize = sizeof (framework_model_item_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = framework_model_item_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create <i>mobius.framework.model.item</i> type
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
-new_model_item_type ()
+new_framework_model_item_type ()
 {
-    mobius::py::pytypeobject type (&framework_model_item_t);
+    // If type is already created, return it
+    if (framework_model_item_type)
+        return mobius::py::pytypeobject (framework_model_item_type);
+
+    // Allocate type from spec
+    framework_model_item_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&framework_model_item_spec)
+    );
+
+    // Create type
+    mobius::py::pytypeobject type (framework_model_item_type);
     type.create ();
 
     return type;
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if value is an instance of <i>item</i>
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>framework.model.item</i>
 // @param value Python value
 // @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_framework_model_item_check (PyObject *value)
 {
-    return mobius::py::isinstance (value, &framework_model_item_t);
+    if (!framework_model_item_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG (
+            "framework.model.item type is not initialized"
+        ));
+
+    return mobius::py::isinstance (value, framework_model_item_type);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>item</i> Python object from C++ object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>framework.model.item</i> Python object from C++ object
 // @param obj C++ object
-// @return New item object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @return New framework.model.item object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_framework_model_item_to_pyobject (
     const mobius::framework::model::item &obj
 )
 {
+    if (!framework_model_item_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG (
+            "framework.model.item type is not initialized"
+        ));
+
     return mobius::py::to_pyobject_nullable<framework_model_item_o> (
-        obj, &framework_model_item_t
+        obj, framework_model_item_type
     );
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>item</i> C++ object from Python object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>framework.model.item</i> C++ object from Python object
 // @param value Python value
-// @return Item object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @return framework.model.item object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::framework::model::item
 pymobius_framework_model_item_from_pyobject (PyObject *value)
 {
+    if (!framework_model_item_type)
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG (
+            "framework.model.item type is not initialized"
+        ));
+
     return mobius::py::from_pyobject<framework_model_item_o> (
-        value, &framework_model_item_t
+        value, framework_model_item_type
     );
 }
 
@@ -1612,12 +1617,10 @@ class attribute_modified_callback
     {
         mobius::py::GIL_guard gil_guard;
 
-        f_ (
-            pymobius_framework_model_item_to_pyobject (item),
+        f_ (pymobius_framework_model_item_to_pyobject (item),
             mobius::py::pystring_from_std_string (id),
             pymobius_core_pod_data_to_pyobject (old_value),
-            pymobius_core_pod_data_to_pyobject (new_value)
-        );
+            pymobius_core_pod_data_to_pyobject (new_value));
     }
 
   private:
@@ -1646,11 +1649,9 @@ class attribute_removed_callback
     {
         mobius::py::GIL_guard gil_guard;
 
-        f_ (
-            pymobius_framework_model_item_to_pyobject (item),
+        f_ (pymobius_framework_model_item_to_pyobject (item),
             mobius::py::pystring_from_std_string (id),
-            pymobius_core_pod_data_to_pyobject (old_value)
-        );
+            pymobius_core_pod_data_to_pyobject (old_value));
     }
 
   private:

@@ -29,49 +29,12 @@
 #include <pylist.hpp>
 #include <pymobius.hpp>
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if object is an instance of <i>mobius.framework.model.case</i>
-// @param pyobj Python object
-// @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-pymobius_framework_model_case_check (PyObject *pyobj)
+namespace
 {
-    return PyObject_IsInstance (pyobj, (PyObject *) &framework_model_case_t);
-}
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *framework_model_case_type = nullptr;
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>Case</i> Python object from C++ object
-// @param obj C++ object
-// @return new Case object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_framework_model_case_to_pyobject (
-    const mobius::framework::model::Case &obj)
-{
-    PyObject *ret = _PyObject_New (&framework_model_case_t);
-
-    if (ret)
-        ((framework_model_case_o *) ret)->obj =
-            new mobius::framework::model::Case (obj);
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>case</i> C++ object from Python object
-// @param value Python object
-// @return reader object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::framework::model::Case
-pymobius_framework_model_case_from_pyobject (PyObject *value)
-{
-    if (!pymobius_framework_model_case_check (value))
-        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (
-            "object must be an instance of mobius.framework.model.case"));
-
-    return *(reinterpret_cast<framework_model_case_o *> (value)->obj);
-}
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>root_item</i> attribute getter
@@ -454,56 +417,100 @@ tp_richcompare (PyObject *py_a, PyObject *py_b, int op)
     return ret;
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject framework_model_case_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.framework.model.case",            // tp_name
-    sizeof (framework_model_case_o),          // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "Case class",                             // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    tp_richcompare,                           // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    tp_getset,                                // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    tp_new,                                   // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot framework_model_case_slots[] = {
+    {Py_tp_new, reinterpret_cast<void *> (tp_new)},
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("framework.model.case class")},
+    {Py_tp_getset, reinterpret_cast<void *> (tp_getset)},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {Py_tp_richcompare, reinterpret_cast<void *> (tp_richcompare)},
+    {0, nullptr} // Sentinel
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec framework_model_case_spec = {
+    .name = "mobius.framework.model.case",
+    .basicsize = sizeof (framework_model_case_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = framework_model_case_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.framework.model.case</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_framework_model_case_type ()
+{
+    // If type is already created, return it
+    if (framework_model_case_type)
+        return mobius::py::pytypeobject (framework_model_case_type);
+
+    // Allocate type from spec
+    framework_model_case_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&framework_model_case_spec)
+    );
+
+    // Create type
+    mobius::py::pytypeobject type (framework_model_case_type);
+    type.create ();
+
+    return type;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>framework.model.case</i>
+// @param value Python value
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+pymobius_framework_model_case_check (PyObject *value)
+{
+    if (!framework_model_case_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("framework.model.case type is not initialized")
+        );
+
+    return mobius::py::isinstance (value, framework_model_case_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>framework.model.case</i> Python object from C++ object
+// @param obj C++ object
+// @return New framework.model.case object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_framework_model_case_to_pyobject (const mobius::framework::model::Case &obj)
+{
+    if (!framework_model_case_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("framework.model.case type is not initialized")
+        );
+
+    return mobius::py::to_pyobject<framework_model_case_o> (
+        obj, framework_model_case_type
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>framework.model.case</i> C++ object from Python object
+// @param value Python value
+// @return framework.model.case object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::framework::model::Case
+pymobius_framework_model_case_from_pyobject (PyObject *value)
+{
+    if (!framework_model_case_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("framework.model.case type is not initialized")
+        );
+
+    return mobius::py::from_pyobject<framework_model_case_o> (
+        value, framework_model_case_type
+    );
+}

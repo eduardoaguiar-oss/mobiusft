@@ -20,8 +20,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
 #include <mobius/framework/model/ant.hpp>
+#include <Python.h>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -31,12 +32,15 @@ typedef struct
     PyObject_HEAD mobius::framework::model::ant *obj;
 } framework_model_ant_o;
 
-extern PyTypeObject framework_model_ant_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_framework_model_ant_type ();
+bool pymobius_framework_model_ant_check (PyObject *);
 PyObject *pymobius_framework_model_ant_to_pyobject (
-    const mobius::framework::model::ant &);
+    const mobius::framework::model::ant &
+);
+mobius::framework::model::ant
+pymobius_framework_model_ant_from_pyobject (PyObject *);
 
 #endif

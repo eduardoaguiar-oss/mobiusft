@@ -25,6 +25,13 @@
 #include <pymobius.hpp>
 #include <stdexcept>
 
+namespace
+{
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *framework_model_event_type = nullptr;
+
+} // namespace
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>get_timestamp</i> method implementation
 // @param self Object
@@ -97,104 +104,97 @@ tp_dealloc (framework_model_event_o *self)
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyTypeObject framework_model_event_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)             // header
-    "mobius.framework.model.event",                // tp_name
-    sizeof (framework_model_event_o),              // tp_basicsize
-    0,                                             // tp_itemsize
-    (destructor) tp_dealloc,                       // tp_dealloc
-    0,                                             // tp_print
-    0,                                             // tp_getattr
-    0,                                             // tp_setattr
-    0,                                             // tp_compare
-    0,                                             // tp_repr
-    0,                                             // tp_as_number
-    0,                                             // tp_as_sequence
-    0,                                             // tp_as_mapping
-    0,                                             // tp_hash
-    0,                                             // tp_call
-    0,                                             // tp_str
-    0,                                             // tp_getattro
-    0,                                             // tp_setattro
-    0,                                             // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,      // tp_flags
-    "Item event",                                  // tp_doc
-    0,                                             // tp_traverse
-    0,                                             // tp_clear
-    0,                                             // tp_richcompare
-    0,                                             // tp_weaklistoffset
-    0,                                             // tp_iter
-    0,                                             // tp_iternext
-    tp_methods,                                    // tp_methods
-    0,                                             // tp_members
-    0,                                             // tp_getset
-    0,                                             // tp_base
-    0,                                             // tp_dict
-    0,                                             // tp_descr_get
-    0,                                             // tp_descr_set
-    0,                                             // tp_dictoffset
-    0,                                             // tp_init
-    0,                                             // tp_alloc
-    0,                                             // tp_new
-    0,                                             // tp_free
-    0,                                             // tp_is_gc
-    0,                                             // tp_bases
-    0,                                             // tp_mro
-    0,                                             // tp_cache
-    0,                                             // tp_subclasses
-    0,                                             // tp_weaklist
-    0,                                             // tp_del
-    0,                                             // tp_version_tag
-    0,                                             // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot framework_model_event_slots[] = {
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("framework.model.event class")},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec framework_model_event_spec = {
+    .name = "mobius.framework.model.event",
+    .basicsize = sizeof (framework_model_event_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = framework_model_event_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create <i>mobius.framework.model.event</i> type
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
-new_model_event_type ()
+new_framework_model_event_type ()
 {
-    mobius::py::pytypeobject type (&framework_model_event_t);
+    // If type is already created, return it
+    if (framework_model_event_type)
+        return mobius::py::pytypeobject (framework_model_event_type);
+
+    // Allocate type from spec
+    framework_model_event_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&framework_model_event_spec)
+    );
+
+    // Create type
+    mobius::py::pytypeobject type (framework_model_event_type);
     type.create ();
 
     return type;
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if value is an instance of <i>event</i>
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>framework.model.event</i>
 // @param value Python value
 // @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_framework_model_event_check (PyObject *value)
 {
-    return mobius::py::isinstance (value, &framework_model_event_t);
+    if (!framework_model_event_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("framework.model.event type is not initialized")
+        );
+
+    return mobius::py::isinstance (value, framework_model_event_type);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>event</i> Python object from C++ object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>framework.model.event</i> Python object from C++ object
 // @param obj C++ object
-// @return New event object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @return New framework.model.event object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_framework_model_event_to_pyobject (
-    const mobius::framework::model::event &obj)
+pymobius_framework_model_event_to_pyobject (const mobius::framework::model::event &obj)
 {
+    if (!framework_model_event_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("framework.model.event type is not initialized")
+        );
+
     return mobius::py::to_pyobject<framework_model_event_o> (
-        obj, &framework_model_event_t);
+        obj, framework_model_event_type
+    );
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>event</i> C++ object from Python object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>framework.model.event</i> C++ object from Python object
 // @param value Python value
-// @return Event object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @return framework.model.event object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::framework::model::event
 pymobius_framework_model_event_from_pyobject (PyObject *value)
 {
+    if (!framework_model_event_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("framework.model.event type is not initialized")
+        );
+
     return mobius::py::from_pyobject<framework_model_event_o> (
-        value, &framework_model_event_t);
+        value, framework_model_event_type
+    );
 }

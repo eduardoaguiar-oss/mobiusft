@@ -78,11 +78,11 @@ new_framework_model_module ()
     mobius::py::pymodule module (&module_def);
 
     // Add types
-    module.add_type ("ant", &framework_model_ant_t);
-    module.add_type ("case", &framework_model_case_t);
-    module.add_type ("event", new_model_event_type ());
+    module.add_type ("ant", new_framework_model_ant_type ());
+    module.add_type ("case", new_framework_model_case_type ());
+    module.add_type ("event", new_framework_model_event_type ());
     module.add_type ("evidence", new_framework_model_evidence_type ());
-    module.add_type ("item", new_model_item_type ());
+    module.add_type ("item", new_framework_model_item_type ());
 
     // Return module
     return module;

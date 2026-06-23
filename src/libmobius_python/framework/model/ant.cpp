@@ -25,30 +25,12 @@
 #include "module.hpp"
 #include <pymobius.hpp>
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>ant</i> Python object from C++ object
-// @param obj C++ object
-// @return new ant object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_framework_model_ant_to_pyobject (
-    const mobius::framework::model::ant &obj)
+namespace
 {
-    PyObject *ret = nullptr;
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *framework_model_ant_type = nullptr;
 
-    if (obj)
-    {
-        ret = _PyObject_New (&framework_model_ant_t);
-
-        if (ret)
-            ((framework_model_ant_o *) ret)->obj =
-                new mobius::framework::model::ant (obj);
-    }
-    else
-        ret = mobius::py::pynone ();
-
-    return ret;
-}
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>item</i> Attribute getter
@@ -190,56 +172,97 @@ tp_dealloc (framework_model_ant_o *self)
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject framework_model_ant_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.framework.model.ant",             // tp_name
-    sizeof (framework_model_ant_o),           // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "ANT executed",                           // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    0,                                        // tp_methods
-    0,                                        // tp_members
-    tp_getset,                                // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    0,                                        // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot framework_model_ant_slots[] = {
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("framework.model.ant class")},
+    {Py_tp_getset, reinterpret_cast<void *> (tp_getset)},
+    {0, nullptr} // Sentinel
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec framework_model_ant_spec = {
+    .name = "mobius.framework.model.ant",
+    .basicsize = sizeof (framework_model_ant_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = framework_model_ant_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.framework.model.ant</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_framework_model_ant_type ()
+{
+    // If type is already created, return it
+    if (framework_model_ant_type)
+        return mobius::py::pytypeobject (framework_model_ant_type);
+
+    // Allocate type from spec
+    framework_model_ant_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&framework_model_ant_spec)
+    );
+
+    // Create type
+    mobius::py::pytypeobject type (framework_model_ant_type);
+    type.create ();
+
+    return type;
+}
+    
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>framework.model.ant</i>
+// @param value Python value
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+pymobius_framework_model_ant_check (PyObject *value)
+{
+    if (!framework_model_ant_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("framework.model.ant type is not initialized")
+        );
+
+    return mobius::py::isinstance (value, framework_model_ant_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>framework.model.ant</i> Python object from C++ object
+// @param obj C++ object
+// @return New framework.model.ant object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_framework_model_ant_to_pyobject (const mobius::framework::model::ant &obj)
+{
+    if (!framework_model_ant_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("framework.model.ant type is not initialized")
+        );
+
+    return mobius::py::to_pyobject_nullable<framework_model_ant_o> (
+        obj, framework_model_ant_type
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>framework.model.ant</i> C++ object from Python object
+// @param value Python value
+// @return framework.model.ant object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::framework::model::ant
+pymobius_framework_model_ant_from_pyobject (PyObject *value)
+{
+    if (!framework_model_ant_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("framework.model.ant type is not initialized")
+        );
+
+    return mobius::py::from_pyobject<framework_model_ant_o> (
+        value, framework_model_ant_type
+    );
+}

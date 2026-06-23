@@ -3,9 +3,7 @@
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
-// Copyright (C)
-// 2008-2026
-// Eduardo Aguiar
+// Copyright (C) 2008-2026 Eduardo Aguiar
 //
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
@@ -35,7 +33,7 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pytypeobject new_model_item_type ();
+mobius::py::pytypeobject new_framework_model_item_type ();
 bool pymobius_framework_model_item_check (PyObject *);
 PyObject *pymobius_framework_model_item_to_pyobject (
     const mobius::framework::model::item &);
