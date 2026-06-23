@@ -1,3 +1,5 @@
+Mobius Forensic Toolkit 2.28
+
 Mobius Forensic Toolkit 2.27
 	* app-ares: Implemented the evidence_processor_impl interface
 	* app-ares: Changed to use evidence.add_hash method
