@@ -25,6 +25,13 @@
 #include <pymobius.hpp>
 #include <stdexcept>
 
+namespace
+{
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *framework_attribute_type = nullptr;
+
+} // namespace
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>id</i> Attribute getter
 // @param self Object
@@ -393,104 +400,97 @@ tp_dealloc (framework_attribute_o *self)
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyTypeObject framework_attribute_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)           // header
-    "mobius.framework.attribute",             // tp_name
-    sizeof (framework_attribute_o),           // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "attribute class",                        // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    0,                                        // tp_methods
-    0,                                        // tp_members
-    tp_getset,                                // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    0,                                        // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot framework_attribute_slots[] = {
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("framework.attribute class")},
+    {Py_tp_getset, reinterpret_cast<void *> (tp_getset)},
+    {0, nullptr} // Sentinel
 };
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec framework_attribute_spec = {
+    .name = "mobius.framework.attribute",
+    .basicsize = sizeof (framework_attribute_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = framework_attribute_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create <i>mobius.framework.attribute</i> type
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
 new_framework_attribute_type ()
 {
-    mobius::py::pytypeobject type (&framework_attribute_t);
+    // If type is already created, return it
+    if (framework_attribute_type)
+        return mobius::py::pytypeobject (framework_attribute_type);
+
+    // Allocate type from spec
+    framework_attribute_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&framework_attribute_spec)
+    );
+
+    // Create type
+    mobius::py::pytypeobject type (framework_attribute_type);
     type.create ();
 
     return type;
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if value is an instance of <i>attribute</i>
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>framework.attribute</i>
 // @param value Python value
 // @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_framework_attribute_check (PyObject *value)
 {
-    return mobius::py::isinstance (value, &framework_attribute_t);
+    if (!framework_attribute_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("framework.attribute type is not initialized")
+        );
+
+    return mobius::py::isinstance (value, framework_attribute_type);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>attribute</i> Python object from C++ object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>framework.attribute</i> Python object from C++ object
 // @param obj C++ object
-// @return New attribute object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @return New framework.attribute object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_framework_attribute_to_pyobject (
-    const mobius::framework::attribute &obj)
+pymobius_framework_attribute_to_pyobject (const mobius::framework::attribute &obj)
 {
+    if (!framework_attribute_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("framework.attribute type is not initialized")
+        );
+
     return mobius::py::to_pyobject<framework_attribute_o> (
-        obj, &framework_attribute_t);
+        obj, framework_attribute_type
+    );
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>attribute</i> C++ object from Python object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>framework.attribute</i> C++ object from Python object
 // @param value Python value
-// @return Attribute object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @return framework.attribute object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::framework::attribute
 pymobius_framework_attribute_from_pyobject (PyObject *value)
 {
+    if (!framework_attribute_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("framework.attribute type is not initialized")
+        );
+
     return mobius::py::from_pyobject<framework_attribute_o> (
-        value, &framework_attribute_t);
+        value, framework_attribute_type
+    );
 }
