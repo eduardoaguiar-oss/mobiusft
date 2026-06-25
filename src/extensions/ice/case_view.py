@@ -127,7 +127,10 @@ class CaseView(object):
 
         # add other views
         for resource in mobius.core.get_resources('view'):
-            self.__view_selector.add(resource.id, resource.value())
+            try:
+                self.__view_selector.add(resource.id, resource.value())
+            except Exception as e:
+                mobius.core.logf(f'ERR {str(e)}\n{traceback.format_exc()}')
 
         # subscribe to events
         self.__event_uid_1 = mobius.core.subscribe('attribute-modified', self.__on_attribute_modified)

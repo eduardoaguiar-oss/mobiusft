@@ -6,6 +6,7 @@ Mobius Forensic Toolkit 2.28
 	* libmobius_python: Improved mobius.framework.model.event class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.framework.model.item class using the PyType_FromSpec API
 	* libmobius_python: Updated copyright header format from multi-line to single-line across source files
+	* ice: Improved error handling when creating views
 
 Mobius Forensic Toolkit 2.27
 	* app-ares: Implemented the evidence_processor_impl interface

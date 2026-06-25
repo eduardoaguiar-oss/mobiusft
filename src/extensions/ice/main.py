@@ -471,15 +471,14 @@ class ICEWindow(object):
 def svc_app_start():
     # mobius.core.ui.set_ui_implementation ("gtk3")
 
-    # create working area
-    window = ICEWindow()
-    window.show()
-
     # start graphical interface
     try:
+        window = ICEWindow()
+        window.show()
         mobius.core.ui.start()
     except Exception as e:
         mobius.core.logf(f"ERR {e}\n{traceback.format_exc()}")
+        print(f"Error: {e}\n{traceback.format_exc()}")
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
