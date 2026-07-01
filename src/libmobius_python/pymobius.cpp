@@ -17,8 +17,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #define PY_SSIZE_T_CLEAN // PEP 353
 
-#include <mobius/core/exception.inc>
 #include <pymobius.hpp>
+#include <mobius/core/exception.inc>
 #include <bytesobject.h>
 #include <frameobject.h>
 #include <stdexcept>
@@ -489,8 +489,14 @@ set_stop_iteration ()
 std::string
 get_error_message ()
 {
-    PyObject *exc_type, *exc_value, *exc_traceback;
+    PyObject *exc_type = nullptr;
+    PyObject *exc_value = nullptr;
+    PyObject *exc_traceback = nullptr;
+
     PyErr_Fetch (&exc_type, &exc_value, &exc_traceback);
+    if (!exc_type)
+        return "Unknown Python error (no exception set)";
+
     PyErr_NormalizeException (&exc_type, &exc_value, &exc_traceback);
 
     std::string msg =
@@ -503,13 +509,23 @@ get_error_message ()
     {
         auto f_code = PyFrame_GetCode (p_traceback->tb_frame);
 
-        msg +=
-            "\nFile: \"" +
-            mobius::py::pystring_as_std_string (
-                PyObject_Str (f_code->co_filename)
-            ) +
-            "\", line " +
-            std::to_string (PyCode_Addr2Line (f_code, p_traceback->tb_lasti));
+        if (f_code)
+        {
+            msg += "\nFile: \"" +
+                   mobius::py::pystring_as_std_string (
+                       PyObject_Str (f_code->co_filename)
+                   ) +
+                   "\", line " +
+                   std::to_string (
+                       PyCode_Addr2Line (f_code, p_traceback->tb_lasti)
+                   ) +
+                   ", in " +
+                   mobius::py::pystring_as_std_string (
+                       PyObject_Str (f_code->co_name)
+                   );
+
+            Py_DECREF (f_code);
+        }
 
         p_traceback = p_traceback->tb_next;
     }
