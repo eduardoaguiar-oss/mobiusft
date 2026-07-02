@@ -25,13 +25,11 @@ project(report_template_media_tailwind LANGUAGES NONE)  # No compiled language n
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-file(GLOB RESOURCE_FILES resource/*.png)
-
 set(SOURCE_FILES
     main.py
     metadata.py
     icon.png
-    ${RESOURCE_FILES}
+    resource
 )
 
 # Custom command to zip files into report-template-media-tailwind.mobius
