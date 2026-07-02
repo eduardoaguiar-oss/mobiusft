@@ -1,5 +1,7 @@
 Mobius Forensic Toolkit 2.28
 	* report-generator: Added new extension
+	* report-template-media-tailwind: Added new extension
+	* ice: Improved error handling when creating views
 	* libmobius_python: Improved mobius.framework.attribute class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.framework.category class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.framework.model.ant class using the PyType_FromSpec API
@@ -8,7 +10,6 @@ Mobius Forensic Toolkit 2.28
 	* libmobius_python: Improved mobius.framework.model.item class using the PyType_FromSpec API
 	* libmobius_python: Updated copyright header format from multi-line to single-line across source files
 	* libmobius_python: get_error_message function now returns full Python traceback
-	* ice: Improved error handling when creating views
 
 Mobius Forensic Toolkit 2.27
 	* app-ares: Implemented the evidence_processor_impl interface

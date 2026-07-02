@@ -31,40 +31,116 @@ from metadata import *
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class ReportGeneratorView(object):
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Initialize widget
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __init__(self):
         self.__mediator = pymobius.mediator.copy()
-        self.__iped_path = None
+        self.__template_id = None
+        self.__output_folder = None
+        self.__itemlist = []
 
         self.name = f'{EXTENSION_NAME} v{EXTENSION_VERSION}'
         icon_path = self.__mediator.call('extension.get-icon-path', EXTENSION_ID)
         self.icon_data = open(icon_path, 'rb').read()
 
-        # vbox
-        vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
-        vbox.set_visible(True)
-        self.__widget = vbox
+        # widget
+        self.__widget = mobius.core.ui.container()
+        self.__widget.show()
 
-        # Generate button
+        vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
+        vbox.set_border_width(5)
+        vbox.set_spacing(10)
+        vbox.set_visible(True)
+        self.__widget.set_content(vbox)
+
+        grid = Gtk.Grid.new()
+        grid.set_row_spacing(10)
+        grid.set_column_spacing(5)
+        grid.show()
+        vbox.add_child(grid, mobius.core.ui.box.fill_with_widget)
+
+        label = mobius.core.ui.label()
+        label.set_markup('<b>Template:</b>')
+        label.set_halign(mobius.core.ui.label.align_right)
+        label.set_visible(True)
+        grid.attach(label.get_ui_widget(), 0, 0, 1, 1)
+
+        # Template combobox
+        self.__template_model = Gtk.ListStore.new([str, str, object])
+
+        for r in mobius.core.get_resources('report-template'):
+            generator = r.value()
+
+            for template in generator.templates:
+                t_id = template['id']
+                t_type = template['type']   # @todo select icon according to type
+                t_description = template['description']
+                self.__template_model.append([t_id, t_description, generator])
+
+        self.__template_combobox = Gtk.ComboBox.new_with_model(self.__template_model)
+        self.__template_combobox.set_hexpand(True)
+
+        renderer = Gtk.CellRendererText()
+        self.__template_combobox.pack_start(renderer, True)
+        self.__template_combobox.add_attribute(renderer, 'text', 1)
+        self.__template_combobox.set_id_column(0)
+        self.__template_combobox.connect('changed', self.__on_template_changed)
+        self.__template_combobox.show()
+        grid.attach(self.__template_combobox, 1, 0, 2, 1)
+
+        # Output directory
+        label = mobius.core.ui.label()
+        label.set_markup('<b>Output folder:</b>')
+        label.set_halign(mobius.core.ui.label.align_right)
+        label.set_visible(True)
+        grid.attach(label.get_ui_widget(), 0, 1, 1, 2)
+
+        # Output folder chooser button
+        self.__output_folder_button = mobius.core.ui.button()
+        self.__output_folder_button.set_icon_by_name('folder')
+        self.__output_folder_button.set_text('Select output folder...')
+        self.__output_folder_button.set_visible(True)
+        self.__output_folder_button.set_callback('clicked', self.__on_click_output_folder)
+        grid.attach(self.__output_folder_button.get_ui_widget(), 1, 1, 2, 2)
+
+        # Buttons
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
+        hbox.set_spacing(5)
+        hbox.set_visible(True)
+        hbox.add_filler ()
+        vbox.add_child(hbox, mobius.core.ui.box.fill_none)
+
         self.__generate_button = mobius.core.ui.button()
-        self.__generate_button.set_icon_by_name('list-add')
-        self.__generate_button.set_text("_Add")
+        self.__generate_button.set_icon_by_name('system-run')
+        self.__generate_button.set_text("_Execute")
         self.__generate_button.set_visible(True)
+        self.__generate_button.set_sensitive(False)
         self.__generate_button.set_callback('clicked', self.__on_generate_report)
-        vbox.add_child(self.__generate_button, mobius.core.ui.box.fill_none)
-        
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        hbox.add_child(self.__generate_button, mobius.core.ui.box.fill_none)
+
+        # Set panel state
+        last_template = mobius.framework.get_config('report-generator.last_template')
+        if last_template:
+            self.__template_combobox.set_active_id(last_template)
+
+        last_output_dir = mobius.framework.get_config('report-generator.last_output_dir')
+        if last_output_dir:
+            self.__output_folder_button.set_text(last_output_dir)
+            self.__output_folder = last_output_dir
+
+        self.__update_options()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Get ui widget
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def get_ui_widget(self):
         return self.__widget.get_ui_widget()
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Set status text
     # @param text Text
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def set_status(self, text):
         if text:
             t = str(datetime.datetime.now())[:19]
@@ -72,196 +148,84 @@ class ReportGeneratorView(object):
 
         GLib.idle_add(self.__status_label.set_text, text or '')
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief set data to be viewed
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def set_data(self, itemlist):
-        self.__itemlist = itemlist
+       self.__itemlist = itemlist
+       self.__update_options()
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Set IPED path
-    # @param path Full path
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def set_iped_path(self, path):
-        self.__iped_path = path
-
-        self.__processing_view.set_iped_path(path)
-        self.__report_view.set_iped_path(path)
-        self.__preferences_view.set_iped_path(path)
-
-        if not path:
-            self.__view_selector.set_current_view('preferences')
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_destroy view
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def on_destroy(self):
         self.__mediator.clear()
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Update panel options
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __update_options(self):
+
+        if self.__itemlist:
+            self.__widget.show_content()
+        else:
+            self.__widget.set_message('Select item(s) to generate report')
+
+        can_generate = bool(self.__template_id) and bool(self.__output_folder) and bool(self.__itemlist)
+        self.__generate_button.set_sensitive(can_generate)
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief on_template_changed
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_template_changed(self, combobox, *args):
+        self.__template_id = combobox.get_active_id()
+
+        if self.__template_id:
+            transaction = mobius.framework.new_config_transaction()
+            mobius.framework.set_config('report-generator.last_template', self.__template_id)
+            transaction.commit()
+
+            self.__update_options()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief on_click_output_folder button clicked
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_click_output_folder(self):
+        dialog = Gtk.FileChooserDialog(title='Select output folder', action=Gtk.FileChooserAction.SELECT_FOLDER)
+        dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
+
+        if self.__output_folder:
+            dialog.set_current_folder(self.__output_folder)
+
+        response = dialog.run()
+
+        if response == Gtk.ResponseType.OK:
+            self.__output_folder = dialog.get_filename()
+            self.__output_folder_button.set_text(self.__output_folder)
+
+            transaction = mobius.framework.new_config_transaction()
+            mobius.framework.set_config('report-generator.last_output_dir', self.__output_folder)
+            transaction.commit()
+
+        dialog.destroy()
+        self.__update_options()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_generate_report button clicked
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_generate_report(self):
-        generate_report (self.__itemlist, '/home/aguiar/src/mobius-dev/beta/report/media.en_US.tailwind')
+        treemodel = self.__template_combobox.get_model()
+        treeiter = self.__template_combobox.get_active_iter()
+        generator = treemodel[treeiter][2]
 
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Generate report
-# @param itemlist List of items to be included in the report
-# @param path Output path
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-def generate_report(itemlist, path):
+        model = {
+            'template_id': self.__template_id,
+            'output_dir': self.__output_folder,
+            'items': self.__itemlist
+        }
 
-    items_js_path = os.path.join(path, 'data', 'items.js')
+        generator.run(model)
 
-    f = mobius.core.io.new_file_by_path(items_js_path)
-    fp = mobius.core.io.text_writer(f.new_writer())
-
-    # Create data
-    fp.write('// Generated by Mobius Forensic Toolkit\n')
-    fp.write('// Warning: This file is automatically generated. Do not edit manually.\n')
-    fp.write('\n')
-
-    app = mobius.core.application()
-    fp.write(f'window.VERSION = "{app.version}";\n')
-
-    fp.write('\n')
-    fp.write('const ITEMS = [\n')
-
-    for item in itemlist:
-        generate_item(item, fp)
-
-    fp.write('];\n')
-    fp.write('\n')
-    fp.write('window.ITEMS = ITEMS;\n')
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Generate item
-# @param item Item
-# @param fp File pointer
-# @param parent Parent item
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-def generate_item(item, fp, parent=None):
-    fp.write('  {\n')
-    fp.write(f'    uid: {item.uid},\n')
-    fp.write(f'    name: "{item.name}",\n')
-
-    # Metadata
-    fp.write('    metadata: [\n')
-    category = mobius.framework.get_category(item.category)
-
-    for attr in category.get_attributes():
-        if attr.name and attr.name[0].islower():
-            name = attr.name[0].upper() + attr.name[1:]
-        else:
-            name = attr.name
-
-        if attr.id == 'uid':
-            value = item.uid
-
-        elif attr.id == 'category':
-            value = item.category
-
-        else:
-            value = item.get_attribute(attr.id)
-
-        if value is None:
-            value = ''
-
-        fp.write(f'      {{ id: "{attr.id}", name: "{name}", value: "{value}" }},\n')
-
-    fp.write('    ],\n')
-
-    # Parent item
-    if parent:
-        fp.write(f'    parent: {parent.uid},\n')
-    else:
-        fp.write('    parent: null,\n')
-
-    # Children items
-    fp.write (f'    children: [{", ".join(str(child.uid) for child in item.get_children())}],\n')
-
-    # Datasource data
-    datasource = item.get_datasource()
-
-    if datasource:
-        if datasource.get_type() == 'vfs':
-            generate_vfs(datasource, fp)
-
-        elif datasource.get_type() == 'ufdr':
-            generate_ufdr(datasource, fp)
-
-    # Finish item
-    fp.write('  },\n')
-
-    # Generate children items
-    for child in item.get_children():
-        generate_item(child, fp, item)
-
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Generate VFS data
-# @param datasource Datasource object
-# @param fp Writer object
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-def generate_vfs(datasource, fp):
-    vfs = datasource.get_vfs()
-    fp.write('    vfs: {\n')
-    fp.write('      blocks: [\n')
-
-    for block in vfs.get_blocks():
-        fp.write('      {\n')
-        fp.write(f'        id: {block.uid},\n')
-        fp.write(f'        type: "{block.type}",\n')
-        fp.write(f'        size: {block.size},\n')
-        fp.write(f'        description: "{block.get_attribute("description")}",\n')
-        fp.write(f'        parents: [{", ".join(str(parent.uid) for parent in block.get_parents())}],\n')
-        fp.write('        metadata: [\n')
-
-        for name, value in block.get_attributes().get_values():
-            name = name.replace('_', ' ').capitalize()
-            fp.write(f'          {{ name: "{name}", value: "{value}" }},\n')
-        fp.write('        ],\n')
-
-        fp.write('      },\n')
-
-    fp.write('    ]\n')
-    fp.write('  },\n')
-
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Generate UFDR data
-# @param datasource Datasource object
-# @param fp Writer object
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-def generate_ufdr(datasource, fp):
-    fp.write('    ufdr: [\n')
-
-    # Case info
-    case_info = datasource.get_case_info()
-    fp.write ('      { type: "case_info", description: "Case information", metadata: [\n')
-
-    for name, value in case_info.get_values():
-        name = name.replace('_', ' ').capitalize()
-        fp.write(f'        {{ name: "{name}", value: "{value}" }},\n')
-    fp.write('        ]\n')
-    fp.write('      },\n')
-
-    # Extractions
-    for e in datasource.get_extractions():
-        fp.write(f'      {{ type: "extraction", name: "{e.name}", metadata: [\n')
-
-        fp.write(f'        {{ name: "ID", value: "{e.id}" }},\n')
-        fp.write(f'        {{ name: "Type", value: "{e.type}" }},\n')
-        fp.write(f'        {{ name: "Name", value: "{e.name}" }},\n')
-        fp.write(f'        {{ name: "Device Name", value: "{e.device_name}" }},\n')
-
-        for name, value in e.get_metadata():
-            fp.write(f'        {{ name: "{name}", value: "{value}" }},\n')
-
-        fp.write('        ]\n')
-        fp.write('      },\n')
-
-    fp.write('    ],\n')
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Start function
