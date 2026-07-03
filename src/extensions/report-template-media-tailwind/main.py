@@ -94,8 +94,10 @@ class Generator(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __generate_static_files(self):
         resource_path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID)
+        language = self.__template_id.split('.')[-1]
+        
         shutil.copytree(os.path.join(resource_path, 'common'), self.__output_dir, dirs_exist_ok=True)
-        shutil.copytree(os.path.join(resource_path, 'en_US'), self.__output_dir, dirs_exist_ok=True)
+        shutil.copytree(os.path.join(resource_path, language), self.__output_dir, dirs_exist_ok=True)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Generate items.js file
