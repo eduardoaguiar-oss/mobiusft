@@ -18,6 +18,8 @@
 import json
 import os.path
 import mobius
+import pymobius
+import shutil
 
 from metadata import *
 
@@ -76,21 +78,34 @@ class Generator(object):
     # @param model Model
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def run(self, model):
-        f = mobius.core.io.new_folder_by_path(model['output_dir'])
+        self.__output_dir = model['output_dir']
+        self.__items = model['items']
+        self.__template_id = model['template_id']
+
+        f = mobius.core.io.new_folder_by_path(self.__output_dir)
         if not f.exists():
             f.create()
 
-        self.__generate_items_js(model)
+        self.__generate_static_files()
+        self.__generate_items_js()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Generate static files
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __generate_static_files(self):
+        resource_path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID)
+        shutil.copytree(os.path.join(resource_path, 'common'), self.__output_dir, dirs_exist_ok=True)
+        shutil.copytree(os.path.join(resource_path, 'en_US'), self.__output_dir, dirs_exist_ok=True)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Generate items.js file
     # @param model Model
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __generate_items_js(self, model):
-        items = model['items']
+    def __generate_items_js(self):
 
         # Create data folder, if necessary
-        data_path = os.path.join(model['output_dir'], 'data')
+        data_path = os.path.join(self.__output_dir, 'data')
+
         f = mobius.core.io.new_folder_by_path(data_path)
         if not f.exists():
             f.create()
@@ -113,7 +128,7 @@ class Generator(object):
 
         items_data = []
         
-        for item in items:
+        for item in self.__items:
             item_data = self.__generate_item(item)
             items_data.append(item_data)
 
