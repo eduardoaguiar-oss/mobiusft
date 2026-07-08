@@ -16,15 +16,16 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import datetime
-import os.path
 
 import mobius
 import pymobius
 from gi.repository import GLib
 from gi.repository import Gtk
+from gi.repository import GdkPixbuf
 
 from metadata import *
 
+TEMPLATE_ICON, TEMPLATE_ID, TEMPLATE_NAME, TEMPLATE_OBJ = range(4)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Report Generator view
@@ -38,13 +39,14 @@ class ReportGeneratorView(object):
         self.__mediator = pymobius.mediator.copy()
         self.__template_id = None
         self.__output_folder = None
+        self.__asap_path = None
         self.__itemlist = []
 
         self.name = f'{EXTENSION_NAME} v{EXTENSION_VERSION}'
         icon_path = self.__mediator.call('extension.get-icon-path', EXTENSION_ID)
         self.icon_data = open(icon_path, 'rb').read()
 
-        # widget
+        # Widget
         self.__widget = mobius.core.ui.container()
         self.__widget.show()
 
@@ -57,6 +59,7 @@ class ReportGeneratorView(object):
         grid = Gtk.Grid.new()
         grid.set_row_spacing(10)
         grid.set_column_spacing(5)
+        grid.set_column_homogeneous(False)
         grid.show()
         vbox.add_child(grid, mobius.core.ui.box.fill_with_widget)
 
@@ -66,35 +69,47 @@ class ReportGeneratorView(object):
         label.set_visible(True)
         grid.attach(label.get_ui_widget(), 0, 0, 1, 1)
 
-        # Template combobox
-        self.__template_model = Gtk.ListStore.new([str, str, object])
+        # Template combobox model
+        self.__template_model = Gtk.ListStore.new([GdkPixbuf.Pixbuf, str, str, object])
+
+        path = self.__mediator.call('extension.get-resource-path', EXTENSION_ID, 'media.png')
+        media_icon = GdkPixbuf.Pixbuf.new_from_file_at_size(path, 24, 24)
+
+        path = self.__mediator.call('extension.get-resource-path', EXTENSION_ID, 'report.png')
+        report_icon = GdkPixbuf.Pixbuf.new_from_file_at_size(path, 24, 24)
 
         for r in mobius.core.get_resources('report-template'):
             generator = r.value()
 
             for template in generator.templates:
                 t_id = template['id']
-                t_type = template['type']   # @todo select icon according to type
+                t_type = template['type']
+                t_icon = media_icon if t_type == 'media' else report_icon
                 t_description = template['description']
-                self.__template_model.append([t_id, t_description, generator])
+                self.__template_model.append([t_icon, t_id, t_description, generator])
 
+        # Template combobox widget
         self.__template_combobox = Gtk.ComboBox.new_with_model(self.__template_model)
         self.__template_combobox.set_hexpand(True)
 
+        renderer = Gtk.CellRendererPixbuf()
+        self.__template_combobox.pack_start(renderer, False)
+        self.__template_combobox.add_attribute(renderer, 'pixbuf', TEMPLATE_ICON)
+
         renderer = Gtk.CellRendererText()
         self.__template_combobox.pack_start(renderer, True)
-        self.__template_combobox.add_attribute(renderer, 'text', 1)
-        self.__template_combobox.set_id_column(0)
+        self.__template_combobox.add_attribute(renderer, 'text', TEMPLATE_NAME)
+        self.__template_combobox.set_id_column(TEMPLATE_ID)
         self.__template_combobox.connect('changed', self.__on_template_changed)
         self.__template_combobox.show()
         grid.attach(self.__template_combobox, 1, 0, 2, 1)
 
-        # Output directory
+        # Output folder
         label = mobius.core.ui.label()
         label.set_markup('<b>Output folder:</b>')
         label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
-        grid.attach(label.get_ui_widget(), 0, 1, 1, 2)
+        grid.attach(label.get_ui_widget(), 0, 1, 1, 1)
 
         # Output folder chooser button
         self.__output_folder_button = mobius.core.ui.button()
@@ -102,7 +117,35 @@ class ReportGeneratorView(object):
         self.__output_folder_button.set_text('Select output folder...')
         self.__output_folder_button.set_visible(True)
         self.__output_folder_button.set_callback('clicked', self.__on_click_output_folder)
-        grid.attach(self.__output_folder_button.get_ui_widget(), 1, 1, 2, 2)
+        grid.attach(self.__output_folder_button.get_ui_widget(), 1, 1, 2, 1)
+
+        # .ASAP file path
+        label = mobius.core.ui.label()
+        label.set_markup('<b>.ASAP file (optional):</b>')
+        label.set_halign(mobius.core.ui.label.align_right)
+        label.set_visible(True)
+        grid.attach(label.get_ui_widget(), 0, 2, 1, 1)
+
+        asap_hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
+        asap_hbox.set_spacing(5)
+        asap_hbox.set_visible(True)
+        grid.attach(asap_hbox.get_ui_widget(), 1, 2, 2, 1)
+
+        # .ASAP file chooser button
+        self.__asap_file_button = mobius.core.ui.button()
+        self.__asap_file_button.set_icon_by_name('folder')
+        self.__asap_file_button.set_text('Select a .ASAP file from the Federal Police of Brazil...')
+        self.__asap_file_button.set_visible(True)
+        self.__asap_file_button.set_callback('clicked', self.__on_click_asap_file)
+        asap_hbox.add_child(self.__asap_file_button, mobius.core.ui.box.fill_with_widget)
+
+        # .ASAP clear button
+        self.__asap_clear_button = mobius.core.ui.button()
+        self.__asap_clear_button.set_icon_by_name('edit-clear')
+        self.__asap_clear_button.set_visible(True)
+        self.__asap_clear_button.set_sensitive(False)
+        self.__asap_clear_button.set_callback('clicked', self.__on_click_asap_clear_file)
+        asap_hbox.add_child(self.__asap_clear_button, mobius.core.ui.box.fill_none)
 
         # Buttons
         hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
@@ -120,13 +163,12 @@ class ReportGeneratorView(object):
         hbox.add_child(self.__generate_button, mobius.core.ui.box.fill_none)
 
         # Set panel state
-        last_template = mobius.framework.get_config('report-generator.last_template')
+        last_template = mobius.framework.get_config('last_report_template')
         if last_template:
             self.__template_combobox.set_active_id(last_template)
 
-        last_output_dir = mobius.framework.get_config('report-generator.last_output_dir')
+        last_output_dir = mobius.framework.get_config('last_report_dir')
         if last_output_dir:
-            self.__output_folder_button.set_text(last_output_dir)
             self.__output_folder = last_output_dir
 
         self.__update_options()
@@ -171,6 +213,18 @@ class ReportGeneratorView(object):
         else:
             self.__widget.set_message('Select item(s) to generate report')
 
+        if self.__output_folder:
+            self.__output_folder_button.set_text(self.__output_folder)
+        else:
+            self.__output_folder_button.set_text('Select output folder...')
+
+        if self.__asap_path:
+            self.__asap_file_button.set_text(self.__asap_path)
+            self.__asap_clear_button.set_sensitive(True)
+        else:
+            self.__asap_file_button.set_text('Select a .ASAP file from the Federal Police of Brazil...')
+            self.__asap_clear_button.set_sensitive(False)
+
         can_generate = bool(self.__template_id) and bool(self.__output_folder) and bool(self.__itemlist)
         self.__generate_button.set_sensitive(can_generate)
 
@@ -182,7 +236,7 @@ class ReportGeneratorView(object):
 
         if self.__template_id:
             transaction = mobius.framework.new_config_transaction()
-            mobius.framework.set_config('report-generator.last_template', self.__template_id)
+            mobius.framework.set_config('last_report_template', self.__template_id)
             transaction.commit()
 
             self.__update_options()
@@ -204,10 +258,41 @@ class ReportGeneratorView(object):
             self.__output_folder_button.set_text(self.__output_folder)
 
             transaction = mobius.framework.new_config_transaction()
-            mobius.framework.set_config('report-generator.last_output_dir', self.__output_folder)
+            mobius.framework.set_config('last_report_dir', self.__output_folder)
             transaction.commit()
 
         dialog.destroy()
+        self.__update_options()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief on_click_asap_file button clicked
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_click_asap_file(self):
+        dialog = Gtk.FileChooserDialog(title='Select .ASAP file', action=Gtk.FileChooserAction.OPEN)
+        dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
+
+        if self.__asap_path:
+            dialog.set_current_folder(self.__asap_path)
+
+        response = dialog.run()
+
+        if response == Gtk.ResponseType.OK:
+            self.__asap_path = dialog.get_filename()
+            self.__asap_file_button.set_text(self.__asap_path)
+
+            transaction = mobius.framework.new_config_transaction()
+            mobius.framework.set_config('last_asap_file', self.__asap_path)
+            transaction.commit()
+
+        dialog.destroy()
+        self.__update_options()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief on_click_asap_clear_file button clicked
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_click_asap_clear_file(self):
+        self.__asap_path = None
+        self.__asap_file_button.set_text('Select a .ASAP file from the Federal Police of Brazil...')
         self.__update_options()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -218,13 +303,36 @@ class ReportGeneratorView(object):
         treeiter = self.__template_combobox.get_active_iter()
         generator = treemodel[treeiter][2]
 
+        # Build model
         model = {
             'template_id': self.__template_id,
             'output_dir': self.__output_folder,
             'items': self.__itemlist
         }
 
+        # Add .ASAP data if available
+        if self.__asap_path:
+            model['asap'] = self.__parse_asap_file(self.__asap_path)
+
         generator.run(model)
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Parse .ASAP file
+    # @param path .ASAP file path
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __parse_asap_file(self, path):
+        f = mobius.core.io.new_file_by_path(path)
+
+        if not f.exists():
+            raise Exception(f'File not found: {path}')
+        
+        data = {}
+
+        ini = mobius.core.decoder.inifile(path, "iso-8859-1")
+        data['laudo'] = dict((k.lower(), v) for (k, v) in ini.get_values('LAUDO'))
+        data['solicitacao'] = dict((k.lower(), v) for (k, v) in ini.get_values('SOLICITACAO'))
+
+        return data
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
