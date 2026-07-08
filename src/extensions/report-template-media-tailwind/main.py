@@ -212,6 +212,9 @@ class Generator(object):
             elif datasource.get_type() == 'ufdr':
                 data['ufdr'] = self.__generate_ufdr(datasource)
 
+        # Evidence counts
+        data['evidence_counts'] = item.count_evidences_grouped()
+
         # Generate children items
         children = []
 
