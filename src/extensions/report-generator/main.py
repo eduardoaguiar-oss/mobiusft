@@ -16,16 +16,19 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import datetime
+import json
 
 import mobius
 import pymobius
+from pymobius import app
+import pymobius.evidence
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import GdkPixbuf
 
 from metadata import *
 
-TEMPLATE_ICON, TEMPLATE_ID, TEMPLATE_NAME, TEMPLATE_OBJ = range(4)
+TEMPLATE_ICON, TEMPLATE_ID, TEMPLATE_NAME, GENERATOR_OBJ = range(4)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Report Generator view
@@ -301,21 +304,45 @@ class ReportGeneratorView(object):
     def __on_generate_report(self):
         treemodel = self.__template_combobox.get_model()
         treeiter = self.__template_combobox.get_active_iter()
-        generator = treemodel[treeiter][2]
+        generator = treemodel[treeiter][GENERATOR_OBJ]
 
         # Build model
         model = {
             'template_id': self.__template_id,
             'output_dir': self.__output_folder,
-            'items': self.__itemlist
+            'items': self.__itemlist,
+            'evidence_types': self.__get_evidence_types(),
         }
 
         # Add .ASAP data if available
         if self.__asap_path:
             model['asap'] = self.__parse_asap_file(self.__asap_path)
 
+        # Generate report
         generator.run(model)
 
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Get evidence types
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __get_evidence_types(self):
+        evidence_types = []
+
+        app = mobius.core.application()
+        icons_path = app.get_data_path('icons/evidence')
+
+        for t in pymobius.evidence.MODEL[:]:
+
+            # Add icon to evidence type
+            t['icon'] = f"{icons_path}/{t['id']}.png"
+
+            # Clean up master_views.exporters
+            for mv in t.get('master_views', []):
+                mv.pop('exporters', None)
+
+            evidence_types.append(t)
+
+        return evidence_types
+    
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Parse .ASAP file
     # @param path .ASAP file path
