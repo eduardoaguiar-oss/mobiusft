@@ -88,8 +88,8 @@ class Generator(object):
             f.create()
 
         self.__generate_static_files()
-        self.__generate_model_js()
         self.__generate_evidence_icons()
+        self.__generate_model_js()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Generate static files
@@ -305,7 +305,8 @@ class Generator(object):
         # Copy icon files
         for et in self.__evidence_types:
             icon_path = et['icon']
-            shutil.copy(icon_path, evidences_path) #os.path.join(evidences_path, f"{et['id']}.png"))
+            shutil.copy(icon_path, evidences_path)
+            et['icon'] = os.path.join('img', 'evidences', f"{et['id']}.png")
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
