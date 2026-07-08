@@ -141,41 +141,54 @@
                 </div>
             </div>
         
-            <!-- 4. EVIDENCES (Added isolated scrolling controls so massive accordion trees operate smoothly) -->
-            <div id="panel-evidences" class="panel-content hidden h-full overflow-y-auto pr-1">
-                <h3 class="text-lg font-bold text-zinc-900 mb-2 flex items-center gap-2">
-                    <i class="fa-solid fa-building-shield text-zinc-400"></i> Parsed Evidence Artifacts
-                </h3>
-                <p class="text-zinc-500 text-sm mb-6">Recovered data sets extracted directly from this device item node.</p>
-
-                <div class="space-y-4">
-                    <!-- Accordion Widget Layer 1 -->
-                    <div class="border border-zinc-200 rounded-lg overflow-hidden shadow-sm">
-                        <div class="bg-zinc-50 border-b border-zinc-200 px-4 py-3 flex justify-between items-center">
-                            <span class="text-sm font-bold text-zinc-700 flex items-center gap-2">
-                                <i class="fa-solid fa-box text-blue-500"></i> Windows Registry Artifacts
-                            </span>
-                            <span class="bg-blue-50 text-blue-700 text-xs px-2.5 py-0.5 rounded-full font-medium border border-blue-100">4 Items Found</span>
+            <!-- PANEL 4: EVIDENCES TAB (Dynamic Master / Detail Layout) -->
+            <div id="panel-evidences" class="panel-content hidden h-full flex flex-col overflow-hidden">
+                <div class="mb-4 flex-shrink-0">
+                    <h3 class="text-lg font-bold text-zinc-900 flex items-center gap-2">
+                        <i class="fa-solid fa-boxes-stacked text-teal-600"></i> Evidence Analysis
+                    </h3>
+                    <p class="text-zinc-500 text-sm">Select an evidence type row to view evidences.</p>
+                </div>
+                
+                <!-- MAIN CONTAINER -->
+                <div class="flex-1 flex flex-col min-h-0 space-y-4 mt-2 overflow-hidden">
+                    
+                    <!-- MASTER SECTION (TOP) - Locked to exactly 180px with strict native block overflow handling -->
+                    <div class="border border-zinc-200 rounded-xl bg-white shadow-sm flex-shrink-0" style="height: 180px; display: block; overflow: hidden;">
+                        <div style="height: 100%; overflow-y: auto; width: 100%;">
+                            <table class="w-full border-collapse text-left text-xs text-zinc-600 table-fixed">
+                                <thead class="bg-zinc-50 border-b border-zinc-200 text-[10px] font-bold uppercase tracking-wider text-zinc-500 sticky top-0 z-50">
+                                    <tr>
+                                        <th scope="col" class="w-12 text-center py-2 px-3 bg-zinc-50"></th>
+                                        <th scope="col" class="text-left py-2 px-3 bg-zinc-50">Evidence Type</th>
+                                        <th scope="col" class="w-24 text-right py-2 px-4 bg-zinc-50">Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="evidence-master-table-body" class="divide-y divide-zinc-100 bg-white">
+                                    <!-- Dynamic evidence rows inject here -->
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="p-4 bg-white text-sm text-zinc-600 space-y-1">
-                            <div class="flex justify-between py-1.5 border-b border-zinc-100"><span>Userassist Execution Hashes</span> <span class="font-mono text-xs text-zinc-400">registry/userassist.dat</span></div>
-                            <div class="flex justify-between py-1.5"><span>Shellbags Directory Traversal History</span> <span class="font-mono text-xs text-zinc-400">registry/ntuser_shellbags.dat</span></div>
+                    </div>
+
+                    <!-- DETAIL CONTAINER SECTION (BOTTOM) - 40 / 60 Horizontal Layout Grid -->
+                    <div id="evidence-details-container" class="flex-1 flex min-h-0 gap-4 overflow-hidden">
+                        <!-- Left Side: 40% Width List Wrapper -->
+                        <div class="w-[40%] flex flex-col border border-zinc-200 rounded-xl bg-white p-3 shadow-sm min-h-0 overflow-y-auto">
+                            <div class="text-center py-12 text-zinc-400 italic my-auto">
+                                <i class="fa-solid fa-arrow-pointer text-xl mb-1 text-zinc-300 block"></i>
+                                Select type to view list
+                            </div>
+                        </div>
+                        <!-- Right Side: 60% Width Metadata Details Viewer Wrapper -->
+                        <div class="w-[60%] flex flex-col border border-zinc-200 rounded-xl bg-white p-3 shadow-sm min-h-0 overflow-y-auto">
+                            <div class="text-center py-12 text-zinc-400 italic my-auto">
+                                <i class="fa-solid fa-circle-info text-xl mb-1 text-zinc-300 block"></i>
+                                Select record for metadata
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Accordion Widget Layer 2 -->
-                    <div class="border border-zinc-200 rounded-lg overflow-hidden shadow-sm">
-                        <div class="bg-zinc-50 border-b border-zinc-200 px-4 py-3 flex justify-between items-center">
-                            <span class="text-sm font-bold text-zinc-700 flex items-center gap-2">
-                                <i class="fa-solid fa-box text-emerald-500"></i> Web Browser Artifacts
-                            </span>
-                            <span class="bg-emerald-50 text-emerald-700 text-xs px-2.5 py-0.5 rounded-full font-medium border border-emerald-100">12 Items Found</span>
-                        </div>
-                        <div class="p-4 bg-white text-sm text-zinc-600 space-y-1">
-                            <div class="flex justify-between py-1.5 border-b border-zinc-100"><span>Chrome SQLite Cookies Database</span> <span class="font-mono text-xs text-zinc-400">browser/chrome_cookies.db</span></div>
-                            <div class="flex justify-between py-1.5"><span>Edge Download History Ledger</span> <span class="font-mono text-xs text-zinc-400">browser/edge_history.db</span></div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -252,7 +265,11 @@
                 ufdrTab.title = "No UFDR extraction data available for this item";
                 ufdrTab.classList.add('opacity-40', 'cursor-not-allowed', 'pointer-events-none');
                 ufdrTab.classList.remove('hover:text-zinc-800', 'hover:bg-zinc-50');
-            }            
+            }
+            
+            // Render evidence panel
+            renderEvidencePanel(currentItem);
+            
         });
 
         /**
@@ -310,7 +327,8 @@
                     activeIcon.classList.add('text-zinc-500');
                 }
             }
-}
+        }
+
 
         /**
          * Recursively searches an array of items and their children for a specific UID
@@ -680,6 +698,84 @@
             `;
         }
 
+        // Track active evidence selection state
+        let activeEvidenceTypeId = null;
+
+        /**
+         * Initializes and updates the Evidence Panel view for the selected item
+         * @param {Object} selectedItem - The current active item object from window.ITEMS
+         */
+        function renderEvidencePanel(selectedItem) {
+            const tableBody = document.getElementById('evidence-master-table-body');
+            const detailsContainer = document.getElementById('evidence-details-container');
+            
+            // Clear dynamic body elements
+            tableBody.innerHTML = '';
+            activeEvidenceTypeId = null;
+            resetEvidenceDetailPlaceholder(detailsContainer);
+
+            if (!selectedItem || !window.EVIDENCE_TYPES) return;
+
+            // Build compact rows for the Master Section
+            window.EVIDENCE_TYPES.forEach(type => {
+                const count = selectedItem.evidence_counts?.[type.id] || 0;
+                
+                const tr = document.createElement('tr');
+                // Dense table row heights with uniform interactive animation styles
+                tr.className = 'hover:bg-zinc-50 cursor-pointer transition-colors duration-150 group h-8';
+                tr.dataset.typeId = type.id;
+
+                tr.innerHTML = `
+                    <td class="text-center whitespace-nowrap py-1 px-3 w-12 h-8">
+                        <img src="img/evidences/${type.id}.png" 
+                             alt="${type.name}" 
+                             class="w-5 h-5 object-contain inline-block transform group-hover:scale-105 transition-transform" 
+                             onerror="this.src='img/evidences/default.png'">
+                    </td>
+                    <td class="font-semibold text-zinc-950 py-1 px-3 h-8">
+                        <span class="block truncate w-full">${type.name}</span>
+                    </td>
+                    <td class="text-right whitespace-nowrap py-1 px-4 w-24 h-8">
+                        <span class="inline-block w-full text-right font-mono text-xs ${count > 0 ? 'text-zinc-900 font-bold' : 'text-zinc-400 font-normal'}">
+                            ${count}
+                        </span>
+                    </td>
+                `;
+
+                // Row selection interaction event handler
+                tr.addEventListener('click', () => {
+                    // Clear prior selection indicators
+                    tableBody.querySelectorAll('tr').forEach(row => {
+                        row.classList.remove('bg-teal-50/50', 'border-l-2', 'border-teal-500');
+                    });
+                    
+                    // Apply targeted highlights to selected record path
+                    tr.classList.add('bg-teal-50/50', 'border-l-2', 'border-teal-500');
+                    
+                    activeEvidenceTypeId = type.id;
+                    console.log("Active Master Row Type selected:", activeEvidenceTypeId);
+                    // Next: renderSplitEvidenceDetails(selectedItem, type);
+                });
+
+                tableBody.appendChild(tr);
+            });
+        }
+
+        function resetEvidenceDetailPlaceholder(container) {
+            container.innerHTML = `
+                <div class="w-[40%] flex flex-col border border-zinc-200 rounded-xl bg-white p-3 shadow-sm min-h-0 overflow-y-auto">
+                    <div class="text-center py-12 text-zinc-400 italic my-auto">
+                        <i class="fa-solid fa-arrow-pointer text-xl mb-1 text-zinc-300 block"></i>
+                        Select type to view list
+                    </div>
+                </div>
+                <div class="w-[60%] flex flex-col border border-zinc-200 rounded-xl bg-white p-3 shadow-sm min-h-0 overflow-y-auto">
+                    <div class="text-center py-12 text-zinc-400 italic my-auto">
+                        <i class="fa-solid fa-circle-info text-xl mb-1 text-zinc-300 block"></i>
+                        Select record for metadata
+                    </div>
+                </div>`;
+        }
         
 </script>
 </body>
