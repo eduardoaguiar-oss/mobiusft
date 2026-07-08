@@ -88,7 +88,8 @@ class Generator(object):
             f.create()
 
         self.__generate_static_files()
-        self.__generate_items_js()
+        self.__generate_model_js()
+        self.__generate_evidence_icons()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Generate static files
@@ -104,7 +105,7 @@ class Generator(object):
     # @brief Generate model.js file
     # @param model Model
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __generate_items_js(self):
+    def __generate_model_js(self):
 
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         # Create data folder, if necessary
@@ -288,6 +289,23 @@ class Generator(object):
 
         # Return data
         return data
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Generate evidence icons
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __generate_evidence_icons(self):
+
+        # Create img/evidences folder, if necessary
+        evidences_path = os.path.join(self.__output_dir, 'img', 'evidences')
+
+        f = mobius.core.io.new_folder_by_path(evidences_path)
+        if not f.exists():
+            f.create()
+
+        # Copy icon files
+        for et in self.__evidence_types:
+            icon_path = et['icon']
+            shutil.copy(icon_path, evidences_path) #os.path.join(evidences_path, f"{et['id']}.png"))
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
