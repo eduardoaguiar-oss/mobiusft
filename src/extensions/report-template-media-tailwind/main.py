@@ -81,6 +81,7 @@ class Generator(object):
         self.__output_dir = model['output_dir']
         self.__items = model['items']
         self.__template_id = model['template_id']
+        self.__evidence_types = model['evidence_types']
 
         f = mobius.core.io.new_folder_by_path(self.__output_dir)
         if not f.exists():
@@ -100,20 +101,24 @@ class Generator(object):
         shutil.copytree(os.path.join(resource_path, language), self.__output_dir, dirs_exist_ok=True)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Generate items.js file
+    # @brief Generate model.js file
     # @param model Model
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __generate_items_js(self):
 
+        # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         # Create data folder, if necessary
+        # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         data_path = os.path.join(self.__output_dir, 'data')
 
         f = mobius.core.io.new_folder_by_path(data_path)
         if not f.exists():
             f.create()
 
-        # Create data/items.js file
-        items_js_path = os.path.join(data_path, 'items.js')
+        # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        # Create data/model.js file
+        # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        items_js_path = os.path.join(data_path, 'model.js')
 
         f = mobius.core.io.new_file_by_path(items_js_path)
         fp = mobius.core.io.text_writer(f.new_writer())
@@ -125,6 +130,17 @@ class Generator(object):
         app = mobius.core.application()
         fp.write(f'window.VERSION = "{app.version}";\n')
 
+        # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        # Generate EVIDENCE_TYPES variable
+        # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        fp.write('\n')
+        fp.write('const EVIDENCE_TYPES = ')
+        json.dump(self.__evidence_types, fp, ensure_ascii=False, separators=(',', ':'))
+        fp.write(';\n')
+
+        # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        # Generate ITEMS variable
+        # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         fp.write('\n')
         fp.write('const ITEMS = ')
 
@@ -135,11 +151,17 @@ class Generator(object):
             items_data.append(item_data)
 
         json.dump(items_data, fp, ensure_ascii=False, separators=(',', ':'))
-        fp.write(';\n\n')
+        fp.write(';\n')
+
+        # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        # Generate window variables
+        # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        fp.write('\n')
+        fp.write('window.EVIDENCE_TYPES = EVIDENCE_TYPES;\n')
         fp.write('window.ITEMS = ITEMS;\n')
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Generate items.js item
+    # @brief Generate model.js item
     # @param item Item
     # @param fp File pointer
     # @param parent Parent item

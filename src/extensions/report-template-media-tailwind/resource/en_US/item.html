@@ -183,7 +183,7 @@
     </div>
 
     <!-- 1. Load shared data layer -->
-    <script src="data/items.js"></script>
+    <script src="data/model.js"></script>
     
     <!-- 2. Combined JavaScript logic -->
     <script>
@@ -197,7 +197,7 @@
 
             // Fail-safe check for missing data layer
             if (!window.ITEMS || !Array.isArray(window.ITEMS)) {
-                renderError(container, 'Error: Data layer (ITEMS) failed to load. Ensure "data/items.js" exposes window.ITEMS.');
+                renderError(container, 'Error: Data layer (ITEMS) failed to load. Ensure "data/model.js" exposes window.ITEMS.');
                 return;
             }
 
