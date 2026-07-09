@@ -24,6 +24,45 @@ import shutil
 from metadata import *
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# @brief Evidence types names by language
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+EVIDENCE_TYPE_NAMES = {
+    'pt_BR': {
+        'app-profile' : "Perfis de programas",
+        'autofill' : "Dados de preenchimento automático",
+        'bookmarked-url' : "URLs favoritas",
+        'call' : "Chamadas telefônicas",
+        'chat-message' : "Mensagens de chat",
+        'contact' : "Contatos",
+        'cookie' : "Cookies",
+        'credit-card' : "Cartões de crédito",
+        'crypto-wallet' : "Carteiras de criptomoedas",
+        'encryption-key' : "Chaves de criptografia",
+        'installed-program' : "Programas instalados",
+        'ip-address' : "Endereços IP",
+        'local-file' : "Arquivos locais",
+        'note' : "Notas",
+        'opened-file' : "Arquivos abertos",
+        'password-hash' : "Hashes de senhas",
+        'password' : "Senhas",
+        'pdi' : "Identificador Pessoal Direto (PDI)",
+        'received-file' : "Arquivos recebidos",
+        'remote-party-ip-address' : "Endereços IP de terceiros remotos",
+        'remote-party-shared-file' : "Arquivos compartilhados por terceiros remotos",
+        'searched-text' : "Textos pesquisados",
+        'sent-file' : "Arquivos enviados",
+        'shared-file' : "Arquivos compartilhados",
+        'sms' : "Mensagens SMS/MMS",
+        'trash-can-entry' : "Entradas da lixeira",
+        'user-account' : "Contas de usuário",
+        'visited-url' : "URLs visitadas",
+        'voicemail' : "Mensagens de voz",
+        'wireless-connection' : "Conexões sem fio",
+        'wireless-network' : "Redes sem fio",
+    },
+}
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Format ID
 # @param text Text to format
 # @return Formatted text
@@ -82,6 +121,7 @@ class Generator(object):
         self.__items = model['items']
         self.__template_id = model['template_id']
         self.__evidence_types = model['evidence_types']
+        self.__language = self.__template_id.split('.')[-1]
 
         f = mobius.core.io.new_folder_by_path(self.__output_dir)
         if not f.exists():
@@ -97,10 +137,9 @@ class Generator(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __generate_static_files(self):
         resource_path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID)
-        language = self.__template_id.split('.')[-1]
         
         shutil.copytree(os.path.join(resource_path, 'common'), self.__output_dir, dirs_exist_ok=True)
-        shutil.copytree(os.path.join(resource_path, language), self.__output_dir, dirs_exist_ok=True)
+        shutil.copytree(os.path.join(resource_path, self.__language), self.__output_dir, dirs_exist_ok=True)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Generate model.js file
@@ -136,11 +175,12 @@ class Generator(object):
         # Generate EVIDENCE_TYPES variable
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         types_data = []
+        names_dict = EVIDENCE_TYPE_NAMES.get(self.__language, {})
 
         for m in self.__evidence_types:
             type_data = {
                 'id': m['id'],
-                'name': m['name'],
+                'name': names_dict.get(m['id'], m['name']),
                 'icon': m['icon'],
                 'description': m['description']
             }
@@ -148,7 +188,10 @@ class Generator(object):
             for mv in m.get('master_views', []):
                 if mv['id'] == 'table':
                     type_data['columns'] = mv['columns']
+
             types_data.append(type_data)
+
+        types_data = sorted(types_data, key=lambda x: x['name'].lower())
 
         fp.write('\n')
         fp.write('const EVIDENCE_TYPES = ')
