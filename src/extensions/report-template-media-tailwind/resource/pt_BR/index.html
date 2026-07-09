@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title>Mobius Forensic Toolkit Report</title>
+    <link rel="stylesheet" href="tailwind.min.css">    
+    <link rel="stylesheet" href="css/all.min.css">
+    
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        .menu-item {
+            transition: all 0.2s;
+        }
+        .menu-item:hover {
+            background-color: #f1f5f9;
+        }
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .submenu.open {
+            max-height: 2000px; /* Increased to support large nested forensic lists */
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .active {
+            background-color: #fefce8;
+            border-left: 4px solid #eab308;
+        }
+    </style>
+</head>
+
+<body class="bg-zinc-100 min-h-screen overflow-hidden">
+
+    <div class="flex h-screen">
+        
+        <!-- Persistent Left Sidebar -->
+        <div class="w-auto bg-white border-r border-zinc-200 shadow-sm flex flex-col">
+            
+            <!-- Header -->
+            <div class="px-6 py-6 border-b border-zinc-100 flex flex-col items-center text-center">
+                <img src="img/icon.svg" alt="Relatório - Mobius Forensic Toolkit" class="h-40 mb-4">
+                <p><b>Relatório - Mobius Forensic Toolkit</b></p>
+            </div>
+
+            <!-- Menu -->
+            <div class="flex-1 overflow-y-auto py-6 px-3 space-y-1">
+
+               <!-- Case Items Container (Renders components directly at top-level) -->
+                <div id="direct-items-container" class="space-y-1">
+                    <!-- Top-level forensic items will be dynamically injected here -->
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="p-4 border-t border-zinc-100 text-center text-xs text-zinc-400">
+                Mobius Forensic Toolkit • <span id="app-version">v2.28</span>
+            </div>            
+        </div>
+
+        <!-- Main Content with Iframe -->
+        <div class="flex-1 flex flex-col">
+            <iframe id="contentFrame" name="contentFrame"></iframe>
+        </div>
+    </div>
+
+    <!-- Load structural vectors using standardized deferred evaluation -->
+    <script src="data/model.js" defer></script>
+
+<script>
+    // Global Menu Toggler Function
+    function toggleMenu(menuId) {
+        const menu = document.getElementById(menuId);
+        const icon = document.getElementById(`icon-${menuId}`);
+        if (menu) {
+            menu.classList.toggle('open');
+            if (icon) {
+                icon.style.transform = menu.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
+        }
+    }
+
+    function getItemIcon(category) {
+        const cat = (category || '').toLowerCase().trim();
+        if (cat == 'ssd' || cat == 'harddisk') return 'fa-hdd';
+        if (cat == 'pendrive' || cat == 'thumbdrive') return 'fa-usb';
+        if (cat == 'memorycard') return 'fa-sd-card';
+        if (cat == 'bluray' || cat == 'cd' || cat == 'dvd') return 'fa-compact-disc';
+        if (cat == 'notebook') return 'fa-laptop';
+        if (cat == 'computer') return 'fa-desktop';
+        if (cat == 'cellphone') return 'fa-mobile';
+        return 'fa-file';
+    }
+
+    function createMenuItemElement(item, isChild = false) {
+        try {
+            const wrapper = document.createElement('div');
+            wrapper.className = isChild ? 'ml-4' : 'mx-2';
+
+            const nameMeta = item.metadata?.find(m => m.id === 'name');
+            const idMeta   = item.metadata?.find(m => m.id === 'id');
+            const catMeta  = item.metadata?.find(m => m.id === 'category');
+
+            const label = nameMeta?.value || idMeta?.value || `Item ${item.uid || ''}`;
+            const category = catMeta?.value || '';
+            const iconClass = getItemIcon(category);
+            const hasChildren = Array.isArray(item.children) && item.children.length > 0;
+
+            const headerContainer = document.createElement('div');
+            headerContainer.className = 'flex items-center justify-between w-full rounded-2xl menu-item text-zinc-700 hover:text-zinc-900';
+
+            const link = document.createElement('a');
+            link.href = `item.html?uid=${String(item.uid || 0)}`;
+            link.target = 'contentFrame';
+            link.className = `flex-1 flex items-center gap-3 px-5 py-2.5 submenu-item text-zinc-600 text-sm ${isChild ? 'text-xs py-1.5' : 'font-medium'}`;
+            link.innerHTML = `
+                <i class="fa-solid ${iconClass} w-4 flex-shrink-0 text-teal-500"></i>
+                <span class="truncate">${label}</span>
+            `;
+
+            link.addEventListener('click', (e) => {
+                document.querySelectorAll('.submenu-item').forEach(el => el.classList.remove('active'));
+                link.classList.add('active');
+            });
+
+            headerContainer.appendChild(link);
+
+            let childrenContainer = null;
+
+            if (hasChildren) {
+                const toggleButton = document.createElement('button');
+                toggleButton.className = 'px-4 py-3 text-zinc-400 hover:text-zinc-700 transition-colors flex items-center justify-center';
+                toggleButton.innerHTML = `<i class="fa-solid fa-chevron-down text-xs transition-transform duration-200"></i>`;
+                
+                childrenContainer = document.createElement('div');
+                childrenContainer.className = 'submenu open mt-1 space-y-0.5 border-l border-zinc-200 ml-4 pl-2';
+
+                const toggleDrawer = () => {
+                    childrenContainer.classList.toggle('open');
+                    const chevronIcon = toggleButton.querySelector('i');
+                    if (chevronIcon) {
+                        chevronIcon.style.transform = childrenContainer.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+                    }
+                };
+
+                toggleButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleDrawer();
+                });
+
+                link.addEventListener('click', () => {
+                    if (!childrenContainer.classList.contains('open')) {
+                        toggleDrawer();
+                    }
+                });
+
+                headerContainer.appendChild(toggleButton);
+                wrapper.appendChild(headerContainer);
+
+                item.children.forEach(child => {
+                    const childEl = createMenuItemElement(child, true);
+                    if (childEl) childrenContainer.appendChild(childEl);
+                });
+                wrapper.appendChild(childrenContainer);
+            } else {
+                wrapper.appendChild(headerContainer);
+            }
+            
+            return wrapper;
+        } catch (err) {
+            console.error('Error creating menu item:', err, item);
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'text-red-500 text-xs px-5 py-1';
+            errorDiv.textContent = 'Error loading item';
+            return errorDiv;
+        }
+    }
+
+    function rebuildTreeFromVector(flatArray) {
+        const itemMap = new Map();
+        const childUids = new Set();
+
+        flatArray.forEach(item => {
+            const intUid = parseInt(item.uid, 10);
+            itemMap.set(intUid, {
+                ...item,
+                uid: intUid,
+                children: Array.isArray(item.children) ? [...item.children] : []
+            });
+        });
+
+        itemMap.forEach(item => {
+            item.children.forEach(childUid => {
+                childUids.add(parseInt(childUid, 10));
+            });
+        });
+
+        itemMap.forEach(item => {
+            item.children = item.children
+                .map(childUid => itemMap.get(parseInt(childUid, 10)))
+                .filter(Boolean);
+        });
+
+        const rootNodes = [];
+        itemMap.forEach(item => {
+            if (!childUids.has(item.uid)) {
+                rootNodes.push(item);
+            }
+        });
+
+        return rootNodes;
+    }
+
+    function populateCaseItems() {
+        const container = document.getElementById('direct-items-container');
+        if (!container) return;
+
+        // Check window.ITEMS directly
+        const sourceData = window.ITEMS;
+
+        if (!sourceData || !Array.isArray(sourceData)) {
+            container.innerHTML = '<div class="px-5 py-2 text-xs text-red-500">No items loaded</div>';
+            return;
+        }
+
+        container.innerHTML = '';
+
+        const structuralTree = rebuildTreeFromVector(sourceData);
+
+        structuralTree.forEach(rootItem => {
+            const el = createMenuItemElement(rootItem);
+            if (el) {
+                container.appendChild(el);
+            }
+        });
+        
+        console.log('%c[Menu] Case Items tree assembled and populated successfully', 'color:#22c55e');
+        
+        const firstMenuItemLink = container.querySelector('.submenu-item');
+        if (firstMenuItemLink) {
+            firstMenuItemLink.click();
+            firstMenuItemLink.classList.add('active');
+            console.log(`%c[Automation] Automatically targeted and selected item node path UID: ${firstMenuItemLink.href.split('uid=')[1]}`, 'color:#3b82f6');
+        }
+    }
+
+    // =====================================================
+    // Combined/Unified Safe Boot Execution Path
+    // =====================================================
+    window.addEventListener('load', () => {
+    
+        // Set app version
+        const versionContainer = document.getElementById('app-version');
+        if (versionContainer) {
+            versionContainer.textContent = window.VERSION;
+        }    
+        
+        // Populate case items
+        populateCaseItems();
+
+        // Resolve layout menu container states cleanly
+        const relatorios = document.getElementById('relatorios');
+        const icon = document.getElementById('icon-relatorios');
+        if (relatorios && icon) {
+            relatorios.classList.add('open');
+            icon.style.transform = 'rotate(180deg)';
+        }
+    });
+
+    function toggleMenu(section) {
+        const submenu = document.getElementById(section);
+        const icon = document.getElementById(`icon-${section}`);
+        if (!submenu || !icon) return;
+
+        document.querySelectorAll('.submenu').forEach(el => {
+            if (el.id !== section) {
+                el.classList.remove('open');
+                const otherIcon = document.getElementById(`icon-${el.id}`);
+                if (otherIcon) otherIcon.style.transform = 'rotate(0deg)';
+            }
+        });
+
+        submenu.classList.toggle('open');
+        icon.style.transform = submenu.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+    }
+</script>
+</body>
+</html>
