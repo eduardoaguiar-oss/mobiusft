@@ -141,56 +141,56 @@
                 </div>
             </div>
         
-            <!-- PANEL 4: EVIDENCES TAB (Dynamic Master / Detail Layout) -->
-            <div id="panel-evidences" class="panel-content hidden h-full flex flex-col overflow-hidden">
-                <div class="mb-4 flex-shrink-0">
-                    <h3 class="text-lg font-bold text-zinc-900 flex items-center gap-2">
-                        <i class="fa-solid fa-boxes-stacked text-teal-600"></i> Evidence Analysis
-                    </h3>
-                    <p class="text-zinc-500 text-sm">Select an evidence type row to view evidences.</p>
-                </div>
-                
-                <!-- MAIN CONTAINER -->
-                <div class="flex-1 flex flex-col min-h-0 space-y-4 mt-2 overflow-hidden">
-                    
-                    <!-- MASTER SECTION (TOP) - Locked to exactly 180px with strict native block overflow handling -->
-                    <div class="border border-zinc-200 rounded-xl bg-white shadow-sm flex-shrink-0" style="height: 180px; display: block; overflow: hidden;">
-                        <div style="height: 100%; overflow-y: auto; width: 100%;">
-                            <table class="w-full border-collapse text-left text-xs text-zinc-600 table-fixed">
-                                <thead class="bg-zinc-50 border-b border-zinc-200 text-[10px] font-bold uppercase tracking-wider text-zinc-500 sticky top-0 z-50">
-                                    <tr>
-                                        <th scope="col" class="w-12 text-center py-2 px-3 bg-zinc-50"></th>
-                                        <th scope="col" class="text-left py-2 px-3 bg-zinc-50">Evidence Type</th>
-                                        <th scope="col" class="w-24 text-right py-2 px-4 bg-zinc-50">Count</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="evidence-master-table-body" class="divide-y divide-zinc-100 bg-white">
-                                    <!-- Dynamic evidence rows inject here -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- DETAIL CONTAINER SECTION (BOTTOM) - 40 / 60 Horizontal Layout Grid -->
-                    <div id="evidence-details-container" class="flex-1 flex min-h-0 gap-4 overflow-hidden">
-                        <!-- Left Side: 40% Width List Wrapper -->
-                        <div class="w-[40%] flex flex-col border border-zinc-200 rounded-xl bg-white p-3 shadow-sm min-h-0 overflow-y-auto">
-                            <div class="text-center py-12 text-zinc-400 italic my-auto">
-                                <i class="fa-solid fa-arrow-pointer text-xl mb-1 text-zinc-300 block"></i>
-                                Select type to view list
-                            </div>
-                        </div>
-                        <!-- Right Side: 60% Width Metadata Details Viewer Wrapper -->
-                        <div class="w-[60%] flex flex-col border border-zinc-200 rounded-xl bg-white p-3 shadow-sm min-h-0 overflow-y-auto">
-                            <div class="text-center py-12 text-zinc-400 italic my-auto">
-                                <i class="fa-solid fa-circle-info text-xl mb-1 text-zinc-300 block"></i>
-                                Select record for metadata
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+        <!-- PANEL 4: EVIDENCES TAB (Dynamic Master / Detail Layout) -->
+        <div id="panel-evidences" class="panel-content hidden h-full flex flex-col overflow-hidden">
+            <div class="mb-4 flex-shrink-0">
+                <h3 class="text-lg font-bold text-zinc-900 flex items-center gap-2">
+                    <i class="fa-solid fa-boxes-stacked text-teal-600"></i> Evidence Analysis
+                </h3>
+                <p class="text-zinc-500 text-sm">Select an evidence type row to view evidences.</p>
             </div>
+            
+            <!-- MAIN CONTAINER - Locked to fill full container heights cleanly -->
+            <div class="flex-1 flex flex-col min-h-0 space-y-4 mt-2 overflow-hidden w-full" style="height: calc(100% - 60px);">
+                
+                <!-- MASTER SECTION (TOP) - Fixed at exactly 30% of your workspace view -->
+                <div class="border border-zinc-200 rounded-xl bg-white shadow-sm flex-shrink-0 flex flex-col" style="height: 25%; overflow: hidden;">
+                    <div style="height: 100%; overflow-y: auto; width: 100%;">
+                        <table class="w-full border-collapse text-left text-xs text-zinc-600 table-fixed">
+                            <thead class="bg-zinc-50 border-b border-zinc-200 text-[10px] font-bold uppercase tracking-wider text-zinc-500 sticky top-0 z-50">
+                                <tr>
+                                    <th scope="col" class="w-12 text-center py-2 px-3 bg-zinc-50"></th>
+                                    <th scope="col" class="text-left py-2 px-3 bg-zinc-50">Evidence Type</th>
+                                    <th scope="col" class="w-24 text-right py-2 px-4 bg-zinc-50">Count</th>
+                                </tr>
+                            </thead>
+                            <tbody id="evidence-master-table-body" class="divide-y divide-zinc-100 bg-white">
+                                <!-- Dynamic evidence rows inject here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- DETAIL CONTAINER SECTION (BOTTOM) - Fixed at exactly 70% of the total workspace view -->
+                <div id="evidence-details-container" class="border border-transparent flex flex-col min-h-0 gap-4 overflow-hidden" style="height: 70%;">
+                    <!-- Left Side child (Top Sub-Table) -->
+                    <div class="w-full border border-zinc-200 rounded-xl bg-white p-3 shadow-sm overflow-hidden" style="height: 60%;">
+                        <div class="text-center py-8 text-zinc-400 italic my-auto">
+                            <i class="fa-solid fa-arrow-pointer text-xl mb-1 text-zinc-300 block"></i>
+                            Select type to view list
+                        </div>
+                    </div>
+                    <!-- Right Side child (Bottom Sub-Table Meta) -->
+                    <div class="w-full border border-zinc-200 rounded-xl bg-white p-3 shadow-sm overflow-hidden" style="height: 40%;">
+                        <div class="text-center py-8 text-zinc-400 italic my-auto">
+                            <i class="fa-solid fa-circle-info text-xl mb-1 text-zinc-300 block"></i>
+                            Select record for metadata
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
         </div>
     </div>
@@ -697,7 +697,7 @@
                 </div>
             `;
         }
-
+        
         // Track active evidence selection state
         let activeEvidenceTypeId = null;
 
@@ -719,47 +719,57 @@
             // Build compact rows for the Master Section
             window.EVIDENCE_TYPES.forEach(type => {
                 const count = selectedItem.evidence_counts?.[type.id] || 0;
+                const hasRecords = count > 0;
                 
                 const tr = document.createElement('tr');
-                // Dense table row heights with uniform interactive animation styles
-                tr.className = 'hover:bg-zinc-50 cursor-pointer transition-colors duration-150 group h-8';
                 tr.dataset.typeId = type.id;
+
+                // 1. Apply interactive or disabled conditional Tailwind styles based on count
+                if (hasRecords) {
+                    tr.className = 'hover:bg-zinc-50 cursor-pointer transition-colors duration-150 group h-8';
+                } else {
+                    // Faded opacity, pointer events disabled, not allowed cursor feedback
+                    tr.className = 'opacity-40 cursor-not-allowed pointer-events-none h-8 bg-zinc-50/30';
+                }
 
                 tr.innerHTML = `
                     <td class="text-center whitespace-nowrap py-1 px-3 w-12 h-8">
                         <img src="img/evidences/${type.id}.png" 
                              alt="${type.name}" 
-                             class="w-5 h-5 object-contain inline-block transform group-hover:scale-105 transition-transform" 
+                             class="w-5 h-5 object-contain inline-block ${hasRecords ? 'transform group-hover:scale-105 transition-transform' : ''}" 
                              onerror="this.src='img/evidences/default.png'">
                     </td>
                     <td class="font-semibold text-zinc-950 py-1 px-3 h-8">
                         <span class="block truncate w-full">${type.name}</span>
                     </td>
                     <td class="text-right whitespace-nowrap py-1 px-4 w-24 h-8">
-                        <span class="inline-block w-full text-right font-mono text-xs ${count > 0 ? 'text-zinc-900 font-bold' : 'text-zinc-400 font-normal'}">
+                        <span class="inline-block w-full text-right font-mono text-xs ${hasRecords ? 'text-zinc-900 font-bold' : 'text-zinc-400 font-normal'}">
                             ${count}
                         </span>
                     </td>
                 `;
 
-                // Row selection interaction event handler
-                tr.addEventListener('click', () => {
-                    // Clear prior selection indicators
-                    tableBody.querySelectorAll('tr').forEach(row => {
-                        row.classList.remove('bg-teal-50/50', 'border-l-2', 'border-teal-500');
+                // 2. Row selection interaction event handler (Only executed if count > 0 due to pointer-events-none guard)
+                if (hasRecords) {
+                    tr.addEventListener('click', () => {
+                        // Clear active selected styling from all sibling rows
+                        tableBody.querySelectorAll('tr').forEach(row => {
+                            row.classList.remove('bg-teal-50/60', 'border-l-2', 'border-teal-500', 'font-medium');
+                        });
+                        
+                        // Apply targeted active highlights to the selected item path
+                        tr.classList.add('bg-teal-50/60', 'border-l-2', 'border-teal-500', 'font-medium');
+                        
+                        activeEvidenceTypeId = type.id;
+                        console.log("Active Master Row Type selected:", activeEvidenceTypeId);
+                        renderSplitEvidenceDetails(selectedItem, type);
                     });
-                    
-                    // Apply targeted highlights to selected record path
-                    tr.classList.add('bg-teal-50/50', 'border-l-2', 'border-teal-500');
-                    
-                    activeEvidenceTypeId = type.id;
-                    console.log("Active Master Row Type selected:", activeEvidenceTypeId);
-                    // Next: renderSplitEvidenceDetails(selectedItem, type);
-                });
+                }
 
                 tableBody.appendChild(tr);
             });
         }
+
 
         function resetEvidenceDetailPlaceholder(container) {
             container.innerHTML = `
@@ -777,6 +787,225 @@
                 </div>`;
         }
         
+        /**
+         * Renders the stacked bottom layout containing evidence records on top and metadata attributes below
+         * @param {Object} selectedItem - The current active item (contains selectedItem.uid or selectedItem.id)
+         * @param {Object} type - The evidence type schema block containing columns structural configuration
+         */
+        function renderSplitEvidenceDetails(selectedItem, type) {
+            const detailsContainer = document.getElementById('evidence-details-container');
+            if (!detailsContainer || !selectedItem || !type) return;
+
+            // Direct the layout engine to stack containers while filling 100% space
+            detailsContainer.className = "flex flex-col min-h-0 gap-4 overflow-hidden";
+            detailsContainer.style.height = "70%";
+
+            const listContainer = detailsContainer.children[0];
+            const metaContainer = detailsContainer.children[1];
+
+            if (!listContainer || !metaContainer) return;
+
+            // Force panels to span full widths and split vertical territory proportionally
+            listContainer.className = "w-full flex flex-col border border-zinc-200 rounded-xl bg-white p-3 shadow-sm overflow-hidden";
+            metaContainer.className = "w-full flex flex-col border border-zinc-200 rounded-xl bg-white p-3 shadow-sm overflow-hidden";
+            
+            // Explicitly lock heights to an exact split to prevent collapsing or expansion errors
+            listContainer.style.height = "calc(50% - 8px)";
+            metaContainer.style.height = "calc(50% - 8px)";
+            listContainer.style.display = "flex";
+            listContainer.style.flexDirection = "column";
+            metaContainer.style.overflowY = "auto";
+
+            // 1. Show a loading visual inside the containers while fetching the external file
+            listContainer.innerHTML = `
+                <div class="text-center py-6 text-zinc-400 italic my-auto w-full">
+                    <i class="fa-solid fa-spinner fa-spin text-xl mb-1 text-teal-500 block"></i>
+                    Loading records...
+                </div>`;
+            metaContainer.innerHTML = `
+                <div class="text-center py-6 text-zinc-400 italic my-auto w-full">
+                    <i class="fa-solid fa-circle-info text-xl mb-1 text-zinc-300 block"></i>
+                    Select record for metadata
+                </div>`;
+
+            // 2. Pad the item UID to a 4-digit formatted string context (e.g., 5 -> "0005")
+            const itemUid = selectedItem.uid !== undefined ? selectedItem.uid : selectedItem.id;
+            const paddedUid = String(itemUid).padStart(4, '0');
+            
+            // Append a unique timestamp query parameter to bypass browser file caching issues
+            const scriptUrl = `data/${paddedUid}/${type.id}.js?t=${Date.now()}`;
+
+            // 3. Remove existing dynamic script tags to allow refreshed data state loads
+            const existingScript = document.getElementById('dynamic-evidence-loader');
+            if (existingScript) existingScript.remove();
+
+            // 4. Inject the targeted evidence data file dynamically
+            const script = document.createElement('script');
+            script.id = 'dynamic-evidence-loader';
+            script.src = scriptUrl;
+
+            script.onload = () => {
+                const records = window.EVIDENCES || [];
+                
+                if (records.length === 0) {
+                    listContainer.innerHTML = `
+                        <div class="text-center py-6 text-zinc-400 italic my-auto w-full">
+                            <i class="fa-solid fa-folder-open text-xl mb-1 text-zinc-300 block"></i>
+                            No evidence records found.
+                        </div>`;
+                    return;
+                }
+
+                // 5. Read ALL columns from type.columns schema definition
+                const targetColumns = (type.columns && type.columns.length > 0) 
+                    ? type.columns 
+                    : [{ id: 'username', name: 'User' }];
+
+                // 6. Generate Left Container Layout dynamically with solid overflow configurations
+                listContainer.innerHTML = `
+                    <div class="flex flex-col w-full h-full min-h-0 overflow-hidden">
+                        <div class="flex items-center justify-between pb-2 mb-2 border-b border-zinc-100 flex-shrink-0">
+                            <span class="text-xs font-bold text-zinc-700 uppercase tracking-wider">Records</span>
+                            <span class="text-[10px] bg-zinc-100 text-zinc-600 px-1.5 py-0.5 rounded font-bold font-mono">${records.length}</span>
+                        </div>
+                        
+                        <!-- AUTO SCROLL REGION -->
+                        <div class="flex-1 min-h-0 overflow-auto border border-zinc-100 rounded-lg bg-white relative">
+                            <table class="min-w-full border-collapse text-left text-xs text-zinc-600">
+                                <thead class="bg-zinc-50 border-b border-zinc-200 text-[10px] font-bold uppercase tracking-wider text-zinc-500 sticky top-0 z-10">
+                                    <tr>
+                                        ${targetColumns.map(col => `
+                                            <th scope="col" class="px-3 py-2 bg-zinc-50 whitespace-nowrap min-w-[120px] max-w-[200px] truncate">
+                                                ${col.name || col.id}
+                                            </th>
+                                        `).join('')}
+                                    </tr>
+                                </thead>
+                                <tbody id="evidence-sub-table-body" class="divide-y divide-zinc-100 bg-white">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>`;
+
+                const subTableBody = document.getElementById('evidence-sub-table-body');
+
+                // 7. Populate Left Table Rows
+                records.forEach((record) => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-zinc-50 cursor-pointer transition-colors duration-150 h-8 text-[11px]';
+                    
+                    tr.innerHTML = targetColumns.map(col => {
+                        const rawVal = record.attrs?.[col.id] || '';
+                        return `
+                            <td class="px-3 py-1 truncate text-zinc-800 font-medium whitespace-nowrap max-w-[200px]">
+                                ${rawVal}
+                            </td>`;
+                    }).join('');
+
+                    // 8. Click Interaction to populate the Metadata Viewer below
+                    tr.addEventListener('click', () => {
+                        subTableBody.querySelectorAll('tr').forEach(r => r.classList.remove('bg-teal-50/50', 'border-l-2', 'border-teal-500'));
+                        tr.classList.add('bg-teal-50/50', 'border-l-2', 'border-teal-500');
+
+                        renderMetadataInspector(record, metaContainer);
+                    });
+
+                    subTableBody.appendChild(tr);
+                });
+            };
+
+            script.onerror = () => {
+                listContainer.innerHTML = `
+                    <div class="text-center py-6 text-rose-500 italic my-auto w-full">
+                        <i class="fa-solid fa-triangle-exclamation text-xl mb-1 text-rose-400 block"></i>
+                        Failed to load file source.
+                    </div>`;
+            };
+
+            document.head.appendChild(script);
+        }
+        
+        /**
+         * Builds a structured, scrollable table layout for selected sub-items
+         * @param {Object} record - Individual evidence entry configuration containing attributes, tags, metadata, and hashes
+         * @param {HTMLElement} container - Target metadata viewer container context (60% right wrapper panel)
+         */
+        function renderMetadataInspector(record, container) {
+            if (!record) return;
+
+            // 1. Process and format data blocks safely using array copies
+            const sortedTags = record.tags && record.tags.length > 0 
+                ? [...record.tags].sort().join(', ') 
+                : '-';
+
+            const sortedMetadata = record.metadata && record.metadata.length > 0
+                ? [...record.metadata].sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+                : [];
+
+            const hashEntries = record.hashes 
+                ? Object.entries(record.hashes).sort((a, b) => a[0].localeCompare(b[0])) 
+                : [];
+
+            // 2. Generate unified table injection block with an inner scroll wrapper context
+            container.innerHTML = `
+                <div class="flex flex-col h-full w-full min-h-0 text-xs font-sans">
+                    
+                    <!-- PANEL HEADER -->
+                    <div class="flex items-center justify-between pb-2 mb-2 border-b border-zinc-100 flex-shrink-0">
+                        <span class="text-xs font-bold text-zinc-700 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-fingerprint text-teal-600"></i> Metadata Inspector
+                        </span>
+                    </div>
+                    
+                    <!-- FIXED HIGH-DENSITY INNER SCROLL WRAPPER -->
+                    <div class="flex-1 min-h-0 overflow-auto border border-zinc-100 rounded-lg bg-white relative">
+                        <table class="w-full border-collapse text-left text-xs text-zinc-600 table-fixed">
+                            <thead class="bg-zinc-50 border-b border-zinc-200 text-[10px] font-bold uppercase tracking-wider text-zinc-500 sticky top-0 z-10">
+                                <tr>
+                                    <th scope="col" class="w-1/3 py-2 px-3 bg-zinc-50">Name</th>
+                                    <th scope="col" class="w-2/3 py-2 px-3 bg-zinc-50">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-zinc-100 bg-white">
+                                
+                                <!-- Line 1: Evidence UID -->
+                                <tr class="hover:bg-zinc-50/50 h-8">
+                                    <td class="px-3 py-1 font-medium text-zinc-500 truncate bg-zinc-50/20">UID</td>
+                                    <td class="px-3 py-1 text-zinc-900 font-mono text-[11px] font-bold select-all break-all">${record.uid || 'N/A'}</td>
+                                </tr>
+                                
+                                <!-- Line 2: Sorted Tags -->
+                                <tr class="hover:bg-zinc-50/50 h-8">
+                                    <td class="px-3 py-1 font-medium text-zinc-500 truncate bg-zinc-50/20">Tags</td>
+                                    <td class="px-3 py-1 text-zinc-700 text-[11px] select-all break-words whitespace-pre-wrap">${sortedTags}</td>
+                                </tr>
+
+                                <!-- Application Metadata Fields Loops -->
+                                ${sortedMetadata.map(meta => `
+                                    <tr class="hover:bg-zinc-50/50 h-8">
+                                        <td class="px-3 py-1 font-medium text-zinc-500 truncate capitalize bg-zinc-50/20">
+                                            ${(meta.name || '').replace(/_/g, ' ')}
+                                        </td>
+                                        <td class="px-3 py-1 text-zinc-800 font-sans text-[11px] select-all break-all">
+                                            ${meta.value !== null && meta.value !== 'None' ? meta.value : '-'}
+                                        </td>
+                                    </tr>
+                                `).join('')}
+
+                                <!-- Evidence Hash Values Loops -->
+                                ${hashEntries.map(([hashType, hashValue]) => `
+                                    <tr class="hover:bg-zinc-50/50 h-8">
+                                        <td class="px-3 py-1 font-medium text-zinc-500 truncate uppercase bg-zinc-50/20">${hashType}</td>
+                                        <td class="px-3 py-1 text-zinc-900 font-mono text-[11px] select-all break-all">${hashValue || '-'}</td>
+                                    </tr>
+                                `).join('')}
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>`;
+        }
+
 </script>
 </body>
 </html>
