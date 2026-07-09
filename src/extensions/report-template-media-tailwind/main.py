@@ -135,9 +135,24 @@ class Generator(object):
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         # Generate EVIDENCE_TYPES variable
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        types_data = []
+
+        for m in self.__evidence_types:
+            type_data = {
+                'id': m['id'],
+                'name': m['name'],
+                'icon': m['icon'],
+                'description': m['description']
+            }
+            
+            for mv in m.get('master_views', []):
+                if mv['id'] == 'table':
+                    type_data['columns'] = mv['columns']
+            types_data.append(type_data)
+
         fp.write('\n')
         fp.write('const EVIDENCE_TYPES = ')
-        json.dump(self.__evidence_types, fp, ensure_ascii=False, separators=(',', ':'))
+        json.dump(types_data, fp, ensure_ascii=False, separators=(',', ':'))
         fp.write(';\n')
 
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
