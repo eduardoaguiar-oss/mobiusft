@@ -61,7 +61,7 @@
                     <h3 class="text-lg font-bold text-zinc-900 flex items-center gap-2">
                         <i class="fa-solid fa-folder-tree text-zinc-400"></i> I18N{report.panel.vfs:Virtual File System (VFS)}
                     </h3>
-                    <p class="text-zinc-500 text-sm">I18N{report.select_block:Select any block to inspect metadata.}</p>
+                    <p class="text-zinc-500 text-sm">I18N{text.select_block:Select any block to inspect metadata.}</p>
                 </div>
 
                 <!-- Master/Detail Split Grid System (Set to take remaining space dynamically) -->
@@ -95,7 +95,7 @@
                     <div id="vfs-detail-pane" class="xl:col-span-4 border border-zinc-200 rounded-xl bg-white shadow-sm p-5 h-[95%] overflow-y-auto">
                         <div id="vfs-detail-content" class="text-center py-16 text-zinc-400 italic">
                             <i class="fa-solid fa-arrow-pointer text-2xl mb-2 text-zinc-300 block"></i>
-                            I18N{text.select_row:Select a row to view metadata.}
+                            I18N{text.select_row:Select a row to view metadata}.
                         </div>
                     </div>
 
@@ -108,7 +108,7 @@
                     <h3 class="text-lg font-bold text-zinc-900 flex items-center gap-2">
                         <i class="fa-solid fa-mobile-screen-button text-teal-600"></i> I18N{report.panel.ufdr:UFDR Data}
                     </h3>
-                    <p class="text-zinc-500 text-sm">I18N{text.select_row:Select a row to view metadata.}</p>
+                    <p class="text-zinc-500 text-sm">I18N{text.select_row:Select a row to view metadata}.</p>
                 </div>
                 
                 <div class="flex-1 flex flex-col min-h-0 space-y-4 mt-2">
@@ -134,7 +134,7 @@
                     <div class="flex-1 flex flex-col border border-zinc-200 rounded-xl bg-white p-3 shadow-sm min-h-0 overflow-y-auto">
                         <div id="ufdr-details-container" class="text-center py-16 text-zinc-400 italic">
                             <i class="fa-solid fa-arrow-pointer text-2xl mb-2 text-zinc-300 block"></i>
-                            I18N{text.select_row:Select a row to view metadata.}
+                            I18N{text.select_row:Select a row to view metadata}.
                         </div>
                     </div>
 
@@ -147,7 +147,7 @@
                 <h3 class="text-lg font-bold text-zinc-900 flex items-center gap-2">
                     <i class="fa-solid fa-boxes-stacked text-teal-600"></i>I18N{report.panel.evidences:Evidences}
                 </h3>
-                <p class="text-zinc-500 text-sm">I18N{report.select_evidence_type:Select an evidence type row to view evidences.}</p>
+                <p class="text-zinc-500 text-sm">I18N{text.select_evidence_type:Select an evidence type to view evidences}.</p>
             </div>
             
             <!-- MAIN CONTAINER - Locked to fill full container heights cleanly -->
@@ -177,14 +177,14 @@
                     <div class="w-full border border-zinc-200 rounded-xl bg-white p-3 shadow-sm overflow-hidden" style="height: 60%;">
                         <div class="text-center py-8 text-zinc-400 italic my-auto">
                             <i class="fa-solid fa-arrow-pointer text-xl mb-1 text-zinc-300 block"></i>
-                            I18N{text.select_evidence_type:Select evidence type to view list}
+                            I18N{text.select_evidence_type:Select an evidence type to view evidences}.
                         </div>
                     </div>
                     <!-- Right Side child (Bottom Sub-Table Meta) -->
                     <div class="w-full border border-zinc-200 rounded-xl bg-white p-3 shadow-sm overflow-hidden" style="height: 40%;">
                         <div class="text-center py-8 text-zinc-400 italic my-auto">
                             <i class="fa-solid fa-circle-info text-xl mb-1 text-zinc-300 block"></i>
-                            I18N{text.select_row:Select a row to view metadata.}
+                            I18N{text.select_row:Select a row to view metadata}.
                         </div>
                     </div>
                 </div>
@@ -376,8 +376,8 @@
                         <table class="w-full border-collapse text-left text-sm text-slate-600">
                             <thead class="bg-slate-100 text-xs font-semibold uppercase tracking-wider text-slate-700 border-b border-slate-200 sticky top-0 z-10 shadow-sm">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3.5 w-1/3">I18N{text.property:Atributo}</th>
-                                    <th scope="col" class="px-6 py-3.5">I18N{text.value:Conteúdo}</th>
+                                    <th scope="col" class="px-6 py-3.5 w-1/3">I18N{text.property:Property}</th>
+                                    <th scope="col" class="px-6 py-3.5">I18N{text.value:Value}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-200 bg-white">
@@ -776,13 +776,13 @@
                 <div class="w-[40%] flex flex-col border border-zinc-200 rounded-xl bg-white p-3 shadow-sm min-h-0 overflow-y-auto">
                     <div class="text-center py-12 text-zinc-400 italic my-auto">
                         <i class="fa-solid fa-arrow-pointer text-xl mb-1 text-zinc-300 block"></i>
-                        I18N{report.select_evidence_type:Select type to view list}
+                        I18N{text.select_evidence_type:Select an evidence type to view evidences}.
                     </div>
                 </div>
                 <div class="w-[60%] flex flex-col border border-zinc-200 rounded-xl bg-white p-3 shadow-sm min-h-0 overflow-y-auto">
                     <div class="text-center py-12 text-zinc-400 italic my-auto">
                         <i class="fa-solid fa-circle-info text-xl mb-1 text-zinc-300 block"></i>
-                        I18N{text.select_row:Select a row to view metadata.}
+                        I18N{text.select_row:Select a row to view metadata}.
                     </div>
                 </div>`;
         }
@@ -825,7 +825,7 @@
             metaContainer.innerHTML = `
                 <div class="text-center py-6 text-zinc-400 italic my-auto w-full">
                     <i class="fa-solid fa-circle-info text-xl mb-1 text-zinc-300 block"></i>
-                    I18N{text.select_row:Select a row to view metadata}
+                    I18N{text.select_row:Select a row to view metadata}.
                 </div>`;
 
             // 2. Pad the item UID to a 4-digit formatted string context (e.g., 5 -> "0005")
@@ -987,7 +987,7 @@
                         <table class="w-full border-collapse text-left text-xs text-zinc-600 table-fixed">
                             <thead class="bg-zinc-50 border-b border-zinc-200 text-[10px] font-bold uppercase tracking-wider text-zinc-500 sticky top-0 z-10">
                                 <tr>
-                                    <th scope="col" class="w-1/3 py-2 px-3 bg-zinc-50">I18N{text.property:Name}</th>
+                                    <th scope="col" class="w-1/3 py-2 px-3 bg-zinc-50">I18N{text.property:Property}</th>
                                     <th scope="col" class="w-2/3 py-2 px-3 bg-zinc-50">I18N{text.value:Value}</th>
                                 </tr>
                             </thead>
