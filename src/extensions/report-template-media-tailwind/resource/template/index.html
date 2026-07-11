@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-    <title>Mobius Forensic Toolkit Report</title>
+    <title>I18N{report.title:Mobius Forensic Toolkit Report}</title>
     <link rel="stylesheet" href="tailwind.min.css">    
     <link rel="stylesheet" href="css/all.min.css">
     
@@ -46,7 +46,7 @@
             <!-- Header -->
             <div class="px-6 py-6 border-b border-zinc-100 flex flex-col items-center text-center">
                 <img src="img/icon.svg" alt="Mobius Forensic Toolkit Report" class="h-40 mb-4">
-                <p><b>Mobius Forensic Toolkit Report</b></p>
+                <p><b>I18N{report.title:Mobius Forensic Toolkit Report}</b></p>
             </div>
 
             <!-- Menu -->
@@ -226,7 +226,7 @@
         const sourceData = window.ITEMS;
 
         if (!sourceData || !Array.isArray(sourceData)) {
-            container.innerHTML = '<div class="px-5 py-2 text-xs text-red-500">No items loaded</div>';
+            container.innerHTML = '<div class="px-5 py-2 text-xs text-red-500">I18N{report.no_items: No items loaded}</div>';
             return;
         }
 

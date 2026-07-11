@@ -30,8 +30,6 @@ set(SOURCE_FILES
     metadata.py
     icon.png
     resource/src/input.css
-    resource/en_US/index.html
-    resource/en_US/item.html
     resource/common/tailwind.min.css
     resource/common/webfonts/fa-regular-400.woff2
     resource/common/webfonts/fa-v4compatibility.woff2
@@ -40,8 +38,8 @@ set(SOURCE_FILES
     resource/common/css/all.min.css
     resource/common/img/alert.png
     resource/common/img/icon.svg
-    resource/pt_BR/index.html
-    resource/pt_BR/item.html
+    resource/template/index.html
+    resource/template/item.html
 )
 
 # Custom command to zip files into report-template-media-tailwind.mobius

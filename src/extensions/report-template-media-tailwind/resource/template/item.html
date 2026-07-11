@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobius Forensic Toolkit - Item do caso</title>
+    <title>I18N{report.title.case_item:Mobius Forensic Toolkit - Case Item}</title>
     <link rel="stylesheet" href="tailwind.min.css">    
     <link rel="stylesheet" href="css/all.min.css">
 </head>
@@ -18,25 +18,25 @@
            <!-- Tab 1: Info Selector -->
             <button onclick="switchPanel('info')" id="tab-info" 
                 class="tab-btn flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-t-lg border-t-2 border-x transition-all duration-150 bg-white border-zinc-200 border-t-blue-600 text-blue-600 z-10 -mb-[1px]">
-                <i class="fa-solid fa-circle-info text-zinc-500"></i> Informações
+                <i class="fa-solid fa-circle-info text-zinc-500"></i>I18N{report.tab.info:Info}
             </button>
             
             <!-- Tab 2: VFS Selector -->
             <button onclick="switchPanel('vfs')" id="tab-vfs" 
                 class="tab-btn flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-t-lg border-t-2 border-x border-transparent text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50 z-10 -mb-[1px]">
-                <i class="fa-solid fa-folder-tree text-zinc-400"></i> Sistema de Arquivos Virtual (VFS)
+                <i class="fa-solid fa-folder-tree text-zinc-400"></i> I18N{report.tab.vfs:Virtual File System (VFS)}
             </button>
 
             <!-- Tab 3: UFDR Selector -->
             <button onclick="switchPanel('ufdr')" id="tab-ufdr" 
                 class="tab-btn flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-t-lg border-t-2 border-x border-transparent text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50 z-10 -mb-[1px]">
-                <i class="fa-solid fa-mobile-screen-button text-teal-600"></i> Dados do UFDR
+                <i class="fa-solid fa-mobile-screen-button text-teal-600"></i> I18N{report.tab.ufdr:UFDR Data}
             </button>
 
             <!-- Tab 4: Evidences Selector -->
             <button onclick="switchPanel('evidences')" id="tab-evidences" 
                 class="tab-btn flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-t-lg border-t-2 border-x border-transparent text-zinc-500 hover:text-zinc-800 hover:bg-zinc-50 z-10 -mb-[1px]">
-                <i class="fa-solid fa-boxes-stacked text-zinc-400"></i> Evidências
+                <i class="fa-solid fa-boxes-stacked text-zinc-400"></i> I18N{report.tab.evidences:Evidences}
             </button>
         </div>
 
@@ -46,12 +46,12 @@
             <!-- PANEL 1: METADATA INFO -->
             <div id="panel-info" class="panel-content block h-full max-h-full flex flex-col overflow-hidden">
                 <h3 class="text-lg font-bold text-zinc-900 mb-4 flex items-center gap-2 flex-shrink-0">
-                    <i class="fa-solid fa-microchip text-zinc-400"></i> Informações do Item
+                    <i class="fa-solid fa-microchip text-zinc-400"></i>I18N{report.panel.case_info: Case Item Information}
                 </h3>
                 
                 <!-- THE DYNAMIC TARGET DIV -->
                 <div id="metadata-container" class="text-zinc-500 italic flex-1 h-[calc(100%-3rem)] max-h-[calc(100%-3rem)] overflow-y-auto pr-1">
-                    Carregando metadados dinâmicos do relatório forense...
+                    Loading dynamic forensic report metadata...
                 </div>
             </div>
             
@@ -59,9 +59,9 @@
             <div id="panel-vfs" class="panel-content hidden h-full flex flex-col">
                 <div class="mb-4 flex-shrink-0">
                     <h3 class="text-lg font-bold text-zinc-900 flex items-center gap-2">
-                        <i class="fa-solid fa-folder-tree text-zinc-400"></i> Sistema de Arquivos Virtual (VFS)
+                        <i class="fa-solid fa-folder-tree text-zinc-400"></i> I18N{report.panel.vfs:Virtual File System (VFS)}
                     </h3>
-                    <p class="text-zinc-500 text-sm">Selecione qualquer bloco para inspecionar os metadados.</p>
+                    <p class="text-zinc-500 text-sm">I18N{report.select_block:Select any block to inspect metadata.}</p>
                 </div>
 
                 <!-- Master/Detail Split Grid System (Set to take remaining space dynamically) -->
@@ -76,15 +76,15 @@
                                     <tr>
                                         <th scope="col" class="px-3 py-3 w-10 text-center"></th>
                                         <th scope="col" class="px-3 py-3 w-12 text-center">#</th>
-                                        <th scope="col" class="px-3 py-3 w-20">Pais</th>
-                                        <th scope="col" class="px-3 py-3 w-28">Tipo</th>
-                                        <th scope="col" class="px-4 py-3 w-44">Tamanho</th>
-                                        <th scope="col" class="px-4 py-3">Descrição</th>
+                                        <th scope="col" class="px-3 py-3 w-20">I18N{report.header.parents:Parents}</th>
+                                        <th scope="col" class="px-3 py-3 w-28">I18N{report.header.type:Type}</th>
+                                        <th scope="col" class="px-4 py-3 w-44">I18N{report.header.size:Size}</th>
+                                        <th scope="col" class="px-4 py-3">I18N{report.header.description:Description}</th>
                                     </tr>
                                 </thead>
                                 <tbody id="vfs-master-table-body" class="divide-y divide-zinc-100 bg-white">
                                     <tr>
-                                        <td colspan="6" class="text-zinc-400 italic p-8 text-center text-sm">Carregando tabela de dados do VFS...</td>
+                                        <td colspan="6" class="text-zinc-400 italic p-8 text-center text-sm">Loading VFS data table...</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -95,7 +95,7 @@
                     <div id="vfs-detail-pane" class="xl:col-span-4 border border-zinc-200 rounded-xl bg-white shadow-sm p-5 h-[95%] overflow-y-auto">
                         <div id="vfs-detail-content" class="text-center py-16 text-zinc-400 italic">
                             <i class="fa-solid fa-arrow-pointer text-2xl mb-2 text-zinc-300 block"></i>
-                            Selecione um bloco para visualizar os atributos de metadados
+                            I18N{text.select_row:Select a row to view metadata.}
                         </div>
                     </div>
 
@@ -106,9 +106,9 @@
             <div id="panel-ufdr" class="panel-content hidden h-full flex flex-col overflow-hidden">
                 <div class="mb-4 flex-shrink-0">
                     <h3 class="text-lg font-bold text-zinc-900 flex items-center gap-2">
-                        <i class="fa-solid fa-mobile-screen-button text-teal-600"></i> Dados do UFDR
+                        <i class="fa-solid fa-mobile-screen-button text-teal-600"></i> I18N{report.panel.ufdr:UFDR Data}
                     </h3>
-                    <p class="text-zinc-500 text-sm">Selecione uma linha para listar os metadados.</p>
+                    <p class="text-zinc-500 text-sm">I18N{text.select_row:Select a row to view metadata.}</p>
                 </div>
                 
                 <div class="flex-1 flex flex-col min-h-0 space-y-4 mt-2">
@@ -120,7 +120,7 @@
                                 <thead class="bg-zinc-50 border-b border-zinc-200 text-[10px] font-bold uppercase tracking-wider text-zinc-500 sticky top-0 z-10">
                                     <tr>
                                         <th scope="col" class="px-4 py-2.5 w-12 text-center"></th>
-                                        <th scope="col" class="px-4 py-2.5">Descrição</th>
+                                        <th scope="col" class="px-4 py-2.5">I18N{text.description:Description}</th>
                                     </tr>
                                 </thead>
                                 <tbody id="ufdr-master-table-body" class="divide-y divide-zinc-100 bg-white">
@@ -134,7 +134,7 @@
                     <div class="flex-1 flex flex-col border border-zinc-200 rounded-xl bg-white p-3 shadow-sm min-h-0 overflow-y-auto">
                         <div id="ufdr-details-container" class="text-center py-16 text-zinc-400 italic">
                             <i class="fa-solid fa-arrow-pointer text-2xl mb-2 text-zinc-300 block"></i>
-                            Selecione uma linha para visualizar os metadados
+                            I18N{text.select_row:Select a row to view metadata.}
                         </div>
                     </div>
 
@@ -145,9 +145,9 @@
         <div id="panel-evidences" class="panel-content hidden h-full flex flex-col overflow-hidden">
             <div class="mb-4 flex-shrink-0">
                 <h3 class="text-lg font-bold text-zinc-900 flex items-center gap-2">
-                    <i class="fa-solid fa-boxes-stacked text-teal-600"></i> Análise de Evidências
+                    <i class="fa-solid fa-boxes-stacked text-teal-600"></i>I18N{report.panel.evidences:Evidences}
                 </h3>
-                <p class="text-zinc-500 text-sm">Selecione um tipo de evidência para visualizar as evidências.</p>
+                <p class="text-zinc-500 text-sm">I18N{report.select_evidence_type:Select an evidence type row to view evidences.}</p>
             </div>
             
             <!-- MAIN CONTAINER - Locked to fill full container heights cleanly -->
@@ -160,8 +160,8 @@
                             <thead class="bg-zinc-50 border-b border-zinc-200 text-[10px] font-bold uppercase tracking-wider text-zinc-500 sticky top-0 z-50">
                                 <tr>
                                     <th scope="col" class="w-12 text-center py-2 px-3 bg-zinc-50"></th>
-                                    <th scope="col" class="text-left py-2 px-3 bg-zinc-50">Tipo de Evidência</th>
-                                    <th scope="col" class="w-24 text-right py-2 px-4 bg-zinc-50">Total</th>
+                                    <th scope="col" class="text-left py-2 px-3 bg-zinc-50">I18N{text.evidence_type:Evidence Type}</th>
+                                    <th scope="col" class="w-24 text-right py-2 px-4 bg-zinc-50">I18N{text.count:Count}</th>
                                 </tr>
                             </thead>
                             <tbody id="evidence-master-table-body" class="divide-y divide-zinc-100 bg-white">
@@ -177,14 +177,14 @@
                     <div class="w-full border border-zinc-200 rounded-xl bg-white p-3 shadow-sm overflow-hidden" style="height: 60%;">
                         <div class="text-center py-8 text-zinc-400 italic my-auto">
                             <i class="fa-solid fa-arrow-pointer text-xl mb-1 text-zinc-300 block"></i>
-                            Selecione um tipo para visualizar a lista de evidências
+                            I18N{text.select_evidence_type:Select evidence type to view list}
                         </div>
                     </div>
                     <!-- Right Side child (Bottom Sub-Table Meta) -->
                     <div class="w-full border border-zinc-200 rounded-xl bg-white p-3 shadow-sm overflow-hidden" style="height: 40%;">
                         <div class="text-center py-8 text-zinc-400 italic my-auto">
                             <i class="fa-solid fa-circle-info text-xl mb-1 text-zinc-300 block"></i>
-                            Selecione um registro para visualizar os metadados
+                            I18N{text.select_row:Select a row to view metadata.}
                         </div>
                     </div>
                 </div>
@@ -376,8 +376,8 @@
                         <table class="w-full border-collapse text-left text-sm text-slate-600">
                             <thead class="bg-slate-100 text-xs font-semibold uppercase tracking-wider text-slate-700 border-b border-slate-200 sticky top-0 z-10 shadow-sm">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3.5 w-1/3">Atributo</th>
-                                    <th scope="col" class="px-6 py-3.5">Conteúdo</th>
+                                    <th scope="col" class="px-6 py-3.5 w-1/3">I18N{text.property:Atributo}</th>
+                                    <th scope="col" class="px-6 py-3.5">I18N{text.value:Conteúdo}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-200 bg-white">
@@ -450,7 +450,7 @@
                 tableBody.innerHTML = `
                     <tr>
                         <td colspan="6" class="text-zinc-400 italic p-8 text-center text-sm bg-white">
-                            <i class="fa-solid fa-circle-info mr-1.5 text-zinc-300"></i> Item não possui VFS definido.
+                            <i class="fa-solid fa-circle-info mr-1.5 text-zinc-300"></i> Item has no VFS set.
                         </td>
                     </tr>
                 `;
@@ -460,7 +460,7 @@
                     detailContent.innerHTML = `
                         <div class="text-center py-16 text-zinc-400 italic">
                             <i class="fa-solid fa-ban text-2xl mb-2 text-zinc-300 block"></i>
-                            Metadados VFS indisponíveis
+                            VFS metadata unavailable
                         </div>
                     `;
                 }
@@ -538,22 +538,22 @@
                     `;
                 });
             } else {
-                metaRows = `<p class="text-xs italic text-zinc-400 py-6 text-center">Não há metadados.</p>`;
+                metaRows = `<p class="text-xs italic text-zinc-400 py-6 text-center">No metadata.</p>`;
             }
 
             detailContent.innerHTML = `
                 <div class="text-left animate-fadeIn">
                     <div class="border-b border-zinc-200 pb-3 mb-4 flex items-center justify-between">
                         <div>
-                            <h4 class="text-sm font-bold text-zinc-900">Metadados do Bloco</h4>
-                            <p class="text-[10px] text-zinc-400 font-mono mt-0.5">ID do Bloco: #${block.id}</p>
+                            <h4 class="text-sm font-bold text-zinc-900">I18N{report.section.block_metadata:Block Metadata}</h4>
+                            <p class="text-[10px] text-zinc-400 font-mono mt-0.5">I18N{text.block_id:Block ID}: #${block.id}</p>
                         </div>
                         <i class="fa-solid ${getVfsIcon(block.type)} text-lg text-zinc-400"></i>
                     </div>
                     
                     <div class="space-y-2">
                         <div class="flex justify-between py-1 border-b border-zinc-100 text-xs">
-                            <span class="text-zinc-500 font-medium">Tipo de Bloco</span>
+                            <span class="text-zinc-500 font-medium">Block Type</span>
                             <span class="font-semibold text-zinc-700">${block.type}</span>
                         </div>
                         ${metaRows}
@@ -578,7 +578,7 @@
                 tbody.innerHTML = `
                     <tr>
                         <td colspan="2" class="text-zinc-400 text-xs px-4 py-6 italic text-center">
-                            Dados do UFDR não disponíveis.
+                            No UFDR data available.
                         </td>
                     </tr>
                 `;
@@ -588,7 +588,7 @@
                     detailContent.innerHTML = `
                         <div class="text-center py-16 text-zinc-400 italic">
                             <i class="fa-solid fa-ban text-2xl mb-2 text-zinc-300 block"></i>
-                            Metadados do UFDR não disponíveis
+                            UFDR metadata unavailable
                         </div>
                     `;
                 }
@@ -603,12 +603,12 @@
                 // Formulate icon classifications and description titles
                 if (row.type === 'case_info') {
                     iconClass = 'fa-circle-info text-blue-500';
-                    labelText = 'Informações do Caso';
+                    labelText = 'I18N{text.case_info:Case Information}';
                 } else if (row.type === 'extraction') {
                     iconClass = 'fa-microchip text-amber-500';
-                    labelText = `Extração: ${row.name || 'Sem rótulo'}`;
+                    labelText = `I18N{text.extraction:Extraction}: ${row.name || 'Unlabeled'}`;
                 } else {
-                    labelText = row.description || `Registro de Log #${index + 1}`;
+                    labelText = row.description || `Log Record #${index + 1}`;
                 }
 
                 // Generate Master list table row element instead of a button
@@ -668,13 +668,13 @@
                     `;
                 });
             } else {
-                metaRows = `<p class="text-xs italic text-zinc-400 py-6 text-center">Nenhum atributo de metadado encontrado.</p>`;
+                metaRows = `<p class="text-xs italic text-zinc-400 py-6 text-center">I18N{text.no_metadata:No metadata found}.</p>`;
             }
 
             // Determine formatting based on the record structural classification type
             const isCaseInfo = row.type === 'case_info';
-            const headerTitle = isCaseInfo ? 'Detalhes do Caso' : 'Metadados da Extração';
-            const headerSub = isCaseInfo ? 'Informações Gerais' : `Extração: ${row.name || 'Sem label'}`;
+            const headerTitle = isCaseInfo ? 'I18N{report.section.case_details:Case Details}' : 'I18N{report.section.extraction_metadata:Extraction Metadata}';
+            const headerSub = isCaseInfo ? 'I18N{text.general_info:General Information}' : `I18N{text.extraction:Extraction}: ${row.name || 'Unlabeled'}`;
             const trackingIcon = isCaseInfo ? 'fa-circle-info text-blue-500' : 'fa-microchip text-amber-500';
 
             detailContent.innerHTML = `
@@ -689,7 +689,7 @@
                     
                     <div class="space-y-1">
                         <div class="flex justify-between py-1.5 border-b border-zinc-100 text-xs">
-                            <span class="text-zinc-500 font-medium">Tipo de Registro</span>
+                            <span class="text-zinc-500 font-medium">Record Type</span>
                             <span class="font-bold text-zinc-700 capitalize">${row.type}</span>
                         </div>
                         ${metaRows}
@@ -776,13 +776,13 @@
                 <div class="w-[40%] flex flex-col border border-zinc-200 rounded-xl bg-white p-3 shadow-sm min-h-0 overflow-y-auto">
                     <div class="text-center py-12 text-zinc-400 italic my-auto">
                         <i class="fa-solid fa-arrow-pointer text-xl mb-1 text-zinc-300 block"></i>
-                        Selecione o tipo para visualizar a lista
+                        I18N{report.select_evidence_type:Select type to view list}
                     </div>
                 </div>
                 <div class="w-[60%] flex flex-col border border-zinc-200 rounded-xl bg-white p-3 shadow-sm min-h-0 overflow-y-auto">
                     <div class="text-center py-12 text-zinc-400 italic my-auto">
                         <i class="fa-solid fa-circle-info text-xl mb-1 text-zinc-300 block"></i>
-                        Selecione um registro para visualizar os metadados
+                        I18N{text.select_row:Select a row to view metadata.}
                     </div>
                 </div>`;
         }
@@ -820,12 +820,12 @@
             listContainer.innerHTML = `
                 <div class="text-center py-6 text-zinc-400 italic my-auto w-full">
                     <i class="fa-solid fa-spinner fa-spin text-xl mb-1 text-teal-500 block"></i>
-                    Carregando registros...
+                    Loading records...
                 </div>`;
             metaContainer.innerHTML = `
                 <div class="text-center py-6 text-zinc-400 italic my-auto w-full">
                     <i class="fa-solid fa-circle-info text-xl mb-1 text-zinc-300 block"></i>
-                    Selecione um registro para visualizar os metadados
+                    I18N{text.select_row:Select a row to view metadata}
                 </div>`;
 
             // 2. Pad the item UID to a 4-digit formatted string context (e.g., 5 -> "0005")
@@ -877,7 +877,7 @@
                     listContainer.innerHTML = `
                         <div class="text-center py-6 text-zinc-400 italic my-auto w-full">
                             <i class="fa-solid fa-folder-open text-xl mb-1 text-zinc-300 block"></i>
-                            Nenhum registro de evidência encontrado.
+                            No evidence records found.
                         </div>`;
                     return;
                 }
@@ -891,7 +891,7 @@
                 listContainer.innerHTML = `
                     <div class="flex flex-col w-full h-full min-h-0 overflow-hidden">
                         <div class="flex items-center justify-between pb-2 mb-2 border-b border-zinc-100 flex-shrink-0">
-                            <span class="text-xs font-bold text-zinc-700 uppercase tracking-wider">Registros</span>
+                            <span class="text-xs font-bold text-zinc-700 uppercase tracking-wider">I18N{report.section.records:Records}</span>
                             <span class="text-[10px] bg-zinc-100 text-zinc-600 px-1.5 py-0.5 rounded font-bold font-mono">${records.length}</span>
                         </div>
                         
@@ -978,7 +978,7 @@
                     <!-- PANEL HEADER -->
                     <div class="flex items-center justify-between pb-2 mb-2 border-b border-zinc-100 flex-shrink-0">
                         <span class="text-xs font-bold text-zinc-700 uppercase tracking-wider flex items-center gap-1.5">
-                            <i class="fa-solid fa-fingerprint text-teal-600"></i> Visualizador de Metadados
+                            <i class="fa-solid fa-fingerprint text-teal-600"></i> I18N{report.section.metadata:Metadata}
                         </span>
                     </div>
                     
@@ -987,8 +987,8 @@
                         <table class="w-full border-collapse text-left text-xs text-zinc-600 table-fixed">
                             <thead class="bg-zinc-50 border-b border-zinc-200 text-[10px] font-bold uppercase tracking-wider text-zinc-500 sticky top-0 z-10">
                                 <tr>
-                                    <th scope="col" class="w-1/3 py-2 px-3 bg-zinc-50">Atributo</th>
-                                    <th scope="col" class="w-2/3 py-2 px-3 bg-zinc-50">Conteúdo</th>
+                                    <th scope="col" class="w-1/3 py-2 px-3 bg-zinc-50">I18N{text.property:Name}</th>
+                                    <th scope="col" class="w-2/3 py-2 px-3 bg-zinc-50">I18N{text.value:Value}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-zinc-100 bg-white">

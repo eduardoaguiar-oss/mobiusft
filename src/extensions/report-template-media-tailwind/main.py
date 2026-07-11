@@ -17,6 +17,7 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import json
 import os.path
+import re
 import mobius
 import pymobius
 import shutil
@@ -24,41 +25,77 @@ import shutil
 from metadata import *
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Evidence types names by language
+# @brief I18N dictionary for text
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-EVIDENCE_TYPE_NAMES = {
+I18N = {
     'pt_BR': {
-        'app-profile' : "Perfis de programas",
-        'autofill' : "Dados de preenchimento automático",
-        'bookmarked-url' : "URLs favoritas",
-        'call' : "Chamadas telefônicas",
-        'chat-message' : "Mensagens de chat",
-        'contact' : "Contatos",
-        'cookie' : "Cookies",
-        'credit-card' : "Cartões de crédito",
-        'crypto-wallet' : "Carteiras de criptomoedas",
-        'encryption-key' : "Chaves de criptografia",
-        'installed-program' : "Programas instalados",
-        'ip-address' : "Endereços IP",
-        'local-file' : "Arquivos locais",
-        'note' : "Notas",
-        'opened-file' : "Arquivos abertos",
-        'password-hash' : "Hashes de senhas",
-        'password' : "Senhas",
-        'pdi' : "Identificador Pessoal Direto (PDI)",
-        'received-file' : "Arquivos recebidos",
-        'remote-party-ip-address' : "Endereços IP de terceiros remotos",
-        'remote-party-shared-file' : "Arquivos compartilhados por terceiros remotos",
-        'searched-text' : "Textos pesquisados",
-        'sent-file' : "Arquivos enviados",
-        'shared-file' : "Arquivos compartilhados",
-        'sms' : "Mensagens SMS/MMS",
-        'trash-can-entry' : "Entradas da lixeira",
-        'user-account' : "Contas de usuário",
-        'visited-url' : "URLs visitadas",
-        'voicemail' : "Mensagens de voz",
-        'wireless-connection' : "Conexões sem fio",
-        'wireless-network' : "Redes sem fio",
+        'column.timestamp' : "Data/Hora (UTC)",
+        'column.username' : "Usuário",
+        'report.header.parents' : "Pais",
+        'report.header.type' : "Tipo",
+        'report.header.size' : "Tamanho",
+        'report.header.description' : "Descrição",
+        'report.section.block_metadata' : "Metadados do Bloco",
+        'report.section.case_details' : "Detalhes do Caso",
+        'report.section.extraction_metadata' : "Metadados da Extração",
+        'report.section.metadata' : "Metadados",
+        'report.section.records' : "Registros",
+        'report.title' : "Relatório Técnico - Mobius Forensic Toolkit",
+        'report.title.case_item' : "Mobius Forensic Toolkit - Item do Caso",
+        'report.tab.info' : "Informações",
+        'report.tab.vfs' : "Sistema de Arquivos Virtual (VFS)",
+        'report.tab.ufdr' : "Dados UFDR",
+        'report.tab.evidences' : "Evidências",
+        'report.panel.case_info' : "Informações do Item",
+        'report.panel.vfs' : "Sistema de Arquivos Virtual (VFS)",
+        'report.panel.ufdr' : "Dados UFDR",
+        'report.panel.evidences' : "Evidências",
+        'report.select_block' : "Selecione um bloco para visualizar os metadados.",
+        'report.select_evidence_type' : "Selecione um tipo de evidência para visualizar a lista.",
+        'text.block_id' : "ID do Bloco",
+        'text.case_info' : "Informações do Caso",
+        'text.count' : "Total",
+        'text.description' : "Descrição",
+        'text.evidence_type' : "Tipo de Evidência",
+        'text.extraction' : "Extração",
+        'text.general_info' : "Informações Gerais",
+        'text.no_items' : "Nenhum item carregado",
+        'text.no_metadata' : "Nenhum metadado encontrado",
+        'text.property' : "Atributo",
+        'text.select_row' : "Selecione uma linha para visualizar os metadados.",
+        'text.select_evidence_type' : "Selecione o tipo de evidência para visualizar a lista.",
+        'text.value' : "Conteúdo",
+        'type.app-profile' : "Perfis de programas",
+        'type.autofill' : "Dados de preenchimento automático",
+        'type.bookmarked-url' : "URLs favoritas",
+        'type.call' : "Chamadas telefônicas",
+        'type.chat-message' : "Mensagens de chat",
+        'type.contact' : "Contatos",
+        'type.cookie' : "Cookies",
+        'type.credit-card' : "Cartões de crédito",
+        'type.crypto-wallet' : "Carteiras de criptomoedas",
+        'type.encryption-key' : "Chaves de criptografia",
+        'type.installed-program' : "Programas instalados",
+        'type.ip-address' : "Endereços IP",
+        'type.local-file' : "Arquivos locais",
+        'type.note' : "Notas",
+        'type.opened-file' : "Arquivos abertos",
+        'type.password-hash' : "Hashes de senhas",
+        'type.password' : "Senhas",
+        'type.pdi' : "Identificador Pessoal Direto (PDI)",
+        'type.received-file' : "Arquivos recebidos",
+        'type.remote-party-ip-address' : "Endereços IP de terceiros remotos",
+        'type.remote-party-shared-file' : "Arquivos compartilhados por terceiros remotos",
+        'type.searched-text' : "Textos pesquisados",
+        'type.sent-file' : "Arquivos enviados",
+        'type.shared-file' : "Arquivos compartilhados",
+        'type.sms' : "Mensagens SMS/MMS",
+        'type.trash-can-entry' : "Entradas da lixeira",
+        'type.user-account' : "Contas de usuário",
+        'type.visited-url' : "URLs visitadas",
+        'type.voicemail' : "Mensagens de voz",
+        'type.wireless-connection' : "Conexões sem fio",
+        'type.wireless-network' : "Redes sem fio",
     },
 }
 
@@ -128,6 +165,7 @@ class Generator(object):
             f.create()
 
         self.__generate_static_files()
+        self.__generate_templates()
         self.__generate_evidence_icons()
         self.__generate_model_js()
         self.__generate_evidence_js()
@@ -136,10 +174,38 @@ class Generator(object):
     # @brief Generate static files
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __generate_static_files(self):
-        resource_path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID)
-        
-        shutil.copytree(os.path.join(resource_path, 'common'), self.__output_dir, dirs_exist_ok=True)
-        shutil.copytree(os.path.join(resource_path, self.__language), self.__output_dir, dirs_exist_ok=True)
+        common_path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID, 'common')
+        shutil.copytree(common_path, self.__output_dir, dirs_exist_ok=True)
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Generate static content from templates
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __generate_templates(self):
+        template_path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID, 'template')
+
+        for filename in os.listdir(template_path):
+            src_path = os.path.join(template_path, filename)
+
+            if os.path.isfile(src_path):
+                dst_path = os.path.join(self.__output_dir, filename)
+                self.__generate_template_from_file(src_path, dst_path)
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Generate static content from a template file
+    # @param src_path Source template file path
+    # @param dst_path Destination file path
+    # It replaces all instances of I18N{key:text} mask with the corresponding
+    # text from the I18N dictionary for the current language.
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __generate_template_from_file(self, src_path, dst_path):
+        i18n_dict = I18N.get(self.__language, {})
+
+        with open(src_path, 'r', encoding='utf-8') as src_file:
+            content = src_file.read()
+            content = re.sub(r'I18N\{([^:}]+):([^}]+)\}', lambda m: i18n_dict.get(m.group(1), m.group(2)), content)
+
+        with open(dst_path, 'w', encoding='utf-8') as dst_file:
+            dst_file.write(content)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Generate model.js file
@@ -174,20 +240,26 @@ class Generator(object):
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         # Generate EVIDENCE_TYPES variable
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        i18n_dict = I18N.get(self.__language, {})
         types_data = []
-        names_dict = EVIDENCE_TYPE_NAMES.get(self.__language, {})
 
         for m in self.__evidence_types:
             type_data = {
                 'id': m['id'],
-                'name': names_dict.get(m['id'], m['name']),
+                'name': i18n_dict.get(f'type.{m["id"]}', m['name']),
                 'icon': m['icon'],
-                'description': m['description']
             }
             
             for mv in m.get('master_views', []):
                 if mv['id'] == 'table':
-                    type_data['columns'] = mv['columns']
+                    columns = []
+                    for c in mv['columns']:
+                        name = i18n_dict.get(f'column.{c["id"]}', None) or i18n_dict.get(f'column.{m["id"]}.{c["id"]}.name', c['name'])
+                        columns.append({
+                            'id': c['id'],
+                            'name': name,
+                            'format': c.get('format', None)
+                        })
 
             types_data.append(type_data)
 
