@@ -29,8 +29,33 @@ from metadata import *
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 I18N = {
     'pt_BR': {
+        'column.app_name' : "Programa",
+        'column.creation_time' : "Data/Hora de Criação",
+        'column.deletion_time' : "Data/Hora de Exclusão",
+        'column.description' : "Descrição",
+        'column.duration' : "Duração",
+        'column.field_name' : "Campo",
+        'column.filename' : "Nome do Arquivo",
+        'column.id' : "ID",
+        'column.last_modified_time' : "Última Modificação",
+        'column.last_modification_time' : "Última Modificação",
+        'column.name' : "Nome",
+        'column.path' : "Caminho do arquivo",
+        'column.password' : "Senha",
+        'column.text' : "Texto",
         'column.timestamp' : "Data/Hora (UTC)",
         'column.username' : "Usuário",
+        'column.value' : "Conteúdo",
+        'column.version' : "Versão",
+        'column.cookie.domain' : "Domínio",
+        'column.encryption-key.key_type' : "Tipo",
+        'column.ip-address.address' : "Endereço IP",
+        'column.note.body' : "Conteúdo",
+        'column.password.password_type' : "Tipo",
+        'column.pdi.pdi_type' : "Tipo",
+        'column.searched-text.search_type' : "Tipo",
+        'column.user-account.account_type' : "Tipo",
+        'column.user-account.password_found' : "Senha Encontrada",
         'report.header.parents' : "Pais",
         'report.header.type' : "Tipo",
         'report.header.size' : "Tamanho",
@@ -244,22 +269,31 @@ class Generator(object):
         types_data = []
 
         for m in self.__evidence_types:
+            m_id = m['id']
+
             type_data = {
-                'id': m['id'],
-                'name': i18n_dict.get(f'type.{m["id"]}', m['name']),
+                'id': m_id,
+                'name': i18n_dict.get(f'type.{m_id}', m['name']),
                 'icon': m['icon'],
             }
             
             for mv in m.get('master_views', []):
                 if mv['id'] == 'table':
                     columns = []
+
                     for c in mv['columns']:
-                        name = i18n_dict.get(f'column.{c["id"]}', None) or i18n_dict.get(f'column.{m["id"]}.{c["id"]}.name', c['name'])
+                        c_id = c['id']
+                        c_name = i18n_dict.get(f'column.{m_id}.{c_id}', None) or \
+                                 i18n_dict.get(f'column.{c_id}', None) or \
+                                 c.get('name', None) or \
+                                 format_id(c_id)
                         columns.append({
-                            'id': c['id'],
-                            'name': name,
+                            'id': c_id,
+                            'name': c_name,
                             'format': c.get('format', None)
                         })
+
+                    type_data['columns'] = columns
 
             types_data.append(type_data)
 
