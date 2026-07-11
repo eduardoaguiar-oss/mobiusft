@@ -29,7 +29,6 @@ set(SOURCE_FILES
     main.py
     metadata.py
     icon.png
-    resource/src/input.css
     resource/common/tailwind.min.css
     resource/common/webfonts/fa-regular-400.woff2
     resource/common/webfonts/fa-v4compatibility.woff2
@@ -38,6 +37,8 @@ set(SOURCE_FILES
     resource/common/css/all.min.css
     resource/common/img/alert.png
     resource/common/img/icon.svg
+    resource/lang/pt_BR.txt
+    resource/lang/en_US.txt
     resource/template/index.html
     resource/template/item.html
 )

@@ -1,0 +1,91 @@
+column.app_name	Programa
+column.creation_time	Data/Hora de Criação
+column.deletion_time	Data/Hora de Exclusão
+column.description	Descrição
+column.duration	Duração
+column.field_name	Campo
+column.filename	Nome do Arquivo
+column.id	ID
+column.last_modified_time	Última Modificação
+column.last_modification_time	Última Modificação
+column.name	Nome
+column.path	Caminho do arquivo
+column.password	Senha
+column.text	Texto
+column.timestamp	Data/Hora (UTC)
+column.username	Usuário
+column.value	Conteúdo
+column.version	Versão
+column.cookie.domain	Domínio
+column.encryption-key.key_type	Tipo
+column.ip-address.address	Endereço IP
+column.note.body	Conteúdo
+column.password.password_type	Tipo
+column.pdi.pdi_type	Tipo
+column.searched-text.search_type	Tipo
+column.user-account.account_type	Tipo
+column.user-account.password_found	Senha Encontrada
+report.header.parents	Pais
+report.header.type	Tipo
+report.header.size	Tamanho
+report.header.description	Descrição
+report.panel.case_info	Informações do Item
+report.panel.evidences	Evidências
+report.panel.ufdr	Dados UFDR
+report.panel.vfs	Sistema de Arquivos Virtual (VFS)
+report.section.block_metadata	Metadados do Bloco
+report.section.case_details	Detalhes do Caso
+report.section.extraction_metadata	Metadados da Extração
+report.section.metadata	Metadados
+report.section.records	Registros
+report.tab.evidences	Evidências
+report.tab.info	Informações
+report.tab.ufdr	Dados UFDR
+report.tab.vfs	Sistema de Arquivos Virtual (VFS)
+report.title	Relatório Técnico - Mobius Forensic Toolkit
+report.title.case_item	Mobius Forensic Toolkit - Item do Caso
+text.block_id	ID do Bloco
+text.case_info	Informações do Caso
+text.count	Total
+text.description	Descrição
+text.evidence_type	Tipo de Evidência
+text.extraction	Extração
+text.general_info	Informações Gerais
+text.no_items	Nenhum item carregado
+text.no_metadata	Nenhum metadado encontrado
+text.property	Atributo
+text.select_block	Selecione um bloco para visualizar os metadados
+text.select_evidence_type	Selecione o tipo de evidência para visualizar a lista
+text.select_row	Selecione uma linha para visualizar os metadados
+text.value	Conteúdo
+type.app-profile	Perfis de programas
+type.autofill	Dados de preenchimento automático
+type.bookmarked-url	URLs favoritas
+type.call	Chamadas telefônicas
+type.chat-message	Mensagens de chat
+type.contact	Contatos
+type.cookie	Cookies
+type.credit-card	Cartões de crédito
+type.crypto-wallet	Carteiras de criptomoedas
+type.encryption-key	Chaves de criptografia
+type.installed-program	Programas instalados
+type.ip-address	Endereços IP
+type.local-file	Arquivos locais
+type.note	Notas
+type.opened-file	Arquivos abertos
+type.password-hash	Hashes de senhas
+type.password	Senhas
+type.pdi	Identificador Pessoal Direto (PDI)
+type.received-file	Arquivos recebidos
+type.remote-party-ip-address	Endereços IP de terceiros remotos
+type.remote-party-shared-file	Arquivos compartilhados por terceiros remotos
+type.searched-text	Textos pesquisados
+type.sent-file	Arquivos enviados
+type.shared-file	Arquivos compartilhados
+type.sms	Mensagens SMS/MMS
+type.trash-can-entry	Entradas da lixeira
+type.user-account	Contas de usuário
+type.visited-url	URLs visitadas
+type.voicemail	Mensagens de voz
+type.wireless-connection	Conexões sem fio
+type.wireless-network	Redes sem fio

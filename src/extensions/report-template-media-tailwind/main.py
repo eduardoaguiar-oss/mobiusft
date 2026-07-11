@@ -25,106 +25,6 @@ import shutil
 from metadata import *
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief I18N dictionary for text
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-I18N = {
-    'pt_BR': {
-        'column.app_name' : "Programa",
-        'column.creation_time' : "Data/Hora de Criação",
-        'column.deletion_time' : "Data/Hora de Exclusão",
-        'column.description' : "Descrição",
-        'column.duration' : "Duração",
-        'column.field_name' : "Campo",
-        'column.filename' : "Nome do Arquivo",
-        'column.id' : "ID",
-        'column.last_modified_time' : "Última Modificação",
-        'column.last_modification_time' : "Última Modificação",
-        'column.name' : "Nome",
-        'column.path' : "Caminho do arquivo",
-        'column.password' : "Senha",
-        'column.text' : "Texto",
-        'column.timestamp' : "Data/Hora (UTC)",
-        'column.username' : "Usuário",
-        'column.value' : "Conteúdo",
-        'column.version' : "Versão",
-        'column.cookie.domain' : "Domínio",
-        'column.encryption-key.key_type' : "Tipo",
-        'column.ip-address.address' : "Endereço IP",
-        'column.note.body' : "Conteúdo",
-        'column.password.password_type' : "Tipo",
-        'column.pdi.pdi_type' : "Tipo",
-        'column.searched-text.search_type' : "Tipo",
-        'column.user-account.account_type' : "Tipo",
-        'column.user-account.password_found' : "Senha Encontrada",
-        'report.header.parents' : "Pais",
-        'report.header.type' : "Tipo",
-        'report.header.size' : "Tamanho",
-        'report.header.description' : "Descrição",
-        'report.section.block_metadata' : "Metadados do Bloco",
-        'report.section.case_details' : "Detalhes do Caso",
-        'report.section.extraction_metadata' : "Metadados da Extração",
-        'report.section.metadata' : "Metadados",
-        'report.section.records' : "Registros",
-        'report.title' : "Relatório Técnico - Mobius Forensic Toolkit",
-        'report.title.case_item' : "Mobius Forensic Toolkit - Item do Caso",
-        'report.tab.info' : "Informações",
-        'report.tab.vfs' : "Sistema de Arquivos Virtual (VFS)",
-        'report.tab.ufdr' : "Dados UFDR",
-        'report.tab.evidences' : "Evidências",
-        'report.panel.case_info' : "Informações do Item",
-        'report.panel.vfs' : "Sistema de Arquivos Virtual (VFS)",
-        'report.panel.ufdr' : "Dados UFDR",
-        'report.panel.evidences' : "Evidências",
-        'report.select_block' : "Selecione um bloco para visualizar os metadados.",
-        'report.select_evidence_type' : "Selecione um tipo de evidência para visualizar a lista.",
-        'text.block_id' : "ID do Bloco",
-        'text.case_info' : "Informações do Caso",
-        'text.count' : "Total",
-        'text.description' : "Descrição",
-        'text.evidence_type' : "Tipo de Evidência",
-        'text.extraction' : "Extração",
-        'text.general_info' : "Informações Gerais",
-        'text.no_items' : "Nenhum item carregado",
-        'text.no_metadata' : "Nenhum metadado encontrado",
-        'text.property' : "Atributo",
-        'text.select_row' : "Selecione uma linha para visualizar os metadados.",
-        'text.select_evidence_type' : "Selecione o tipo de evidência para visualizar a lista.",
-        'text.value' : "Conteúdo",
-        'type.app-profile' : "Perfis de programas",
-        'type.autofill' : "Dados de preenchimento automático",
-        'type.bookmarked-url' : "URLs favoritas",
-        'type.call' : "Chamadas telefônicas",
-        'type.chat-message' : "Mensagens de chat",
-        'type.contact' : "Contatos",
-        'type.cookie' : "Cookies",
-        'type.credit-card' : "Cartões de crédito",
-        'type.crypto-wallet' : "Carteiras de criptomoedas",
-        'type.encryption-key' : "Chaves de criptografia",
-        'type.installed-program' : "Programas instalados",
-        'type.ip-address' : "Endereços IP",
-        'type.local-file' : "Arquivos locais",
-        'type.note' : "Notas",
-        'type.opened-file' : "Arquivos abertos",
-        'type.password-hash' : "Hashes de senhas",
-        'type.password' : "Senhas",
-        'type.pdi' : "Identificador Pessoal Direto (PDI)",
-        'type.received-file' : "Arquivos recebidos",
-        'type.remote-party-ip-address' : "Endereços IP de terceiros remotos",
-        'type.remote-party-shared-file' : "Arquivos compartilhados por terceiros remotos",
-        'type.searched-text' : "Textos pesquisados",
-        'type.sent-file' : "Arquivos enviados",
-        'type.shared-file' : "Arquivos compartilhados",
-        'type.sms' : "Mensagens SMS/MMS",
-        'type.trash-can-entry' : "Entradas da lixeira",
-        'type.user-account' : "Contas de usuário",
-        'type.visited-url' : "URLs visitadas",
-        'type.voicemail' : "Mensagens de voz",
-        'type.wireless-connection' : "Conexões sem fio",
-        'type.wireless-network' : "Redes sem fio",
-    },
-}
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Format ID
 # @param text Text to format
 # @return Formatted text
@@ -179,16 +79,34 @@ class Generator(object):
     # @param model Model
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def run(self, model):
+
+        # Set up control variables
         self.__output_dir = model['output_dir']
         self.__items = model['items']
         self.__template_id = model['template_id']
         self.__evidence_types = model['evidence_types']
         self.__language = self.__template_id.split('.')[-1]
+        self.__i18n_dict = {}
 
-        f = mobius.core.io.new_folder_by_path(self.__output_dir)
-        if not f.exists():
-            f.create()
+        # Load I18N dictionary for the current language, if available
+        lang_path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID, 'lang', f'{self.__language}.txt')
+        f = mobius.core.io.new_file_by_path(lang_path)
 
+        if f.exists():
+            reader = mobius.core.io.line_reader(f.new_reader())
+            for line in reader:
+                line = line.strip()
+                print(f'line: {line}')
+                if line and not line.startswith('#'):
+                    key, value = line.split('\t', 1)
+                    self.__i18n_dict[key.strip()] = value.strip()
+
+        # Create output folder, if necessary
+        folder = mobius.core.io.new_folder_by_path(self.__output_dir)
+        if not folder.exists():
+            folder.create()
+
+        # Generate static files, templates, evidence icons, model.js, and evidence.js
         self.__generate_static_files()
         self.__generate_templates()
         self.__generate_evidence_icons()
@@ -223,11 +141,10 @@ class Generator(object):
     # text from the I18N dictionary for the current language.
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __generate_template_from_file(self, src_path, dst_path):
-        i18n_dict = I18N.get(self.__language, {})
 
         with open(src_path, 'r', encoding='utf-8') as src_file:
             content = src_file.read()
-            content = re.sub(r'I18N\{([^:}]+):([^}]+)\}', lambda m: i18n_dict.get(m.group(1), m.group(2)), content)
+            content = re.sub(r'I18N\{([^:}]+):([^}]+)\}', lambda m: self.__i18n_dict.get(m.group(1), m.group(2)), content)
 
         with open(dst_path, 'w', encoding='utf-8') as dst_file:
             dst_file.write(content)
@@ -265,7 +182,6 @@ class Generator(object):
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         # Generate EVIDENCE_TYPES variable
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        i18n_dict = I18N.get(self.__language, {})
         types_data = []
 
         for m in self.__evidence_types:
@@ -273,7 +189,7 @@ class Generator(object):
 
             type_data = {
                 'id': m_id,
-                'name': i18n_dict.get(f'type.{m_id}', m['name']),
+                'name': self.__i18n_dict.get(f'type.{m_id}', m['name']),
                 'icon': m['icon'],
             }
             
@@ -283,8 +199,8 @@ class Generator(object):
 
                     for c in mv['columns']:
                         c_id = c['id']
-                        c_name = i18n_dict.get(f'column.{m_id}.{c_id}', None) or \
-                                 i18n_dict.get(f'column.{c_id}', None) or \
+                        c_name = self.__i18n_dict.get(f'column.{m_id}.{c_id}', None) or \
+                                 self.__i18n_dict.get(f'column.{c_id}', None) or \
                                  c.get('name', None) or \
                                  format_id(c_id)
                         columns.append({
@@ -292,6 +208,8 @@ class Generator(object):
                             'name': c_name,
                             'format': c.get('format', None)
                         })
+                        print(f'column.{m_id}.{c_id}\t{c_name}')
+                        print(f'column.{c_id}\t{c_name}')
 
                     type_data['columns'] = columns
 
