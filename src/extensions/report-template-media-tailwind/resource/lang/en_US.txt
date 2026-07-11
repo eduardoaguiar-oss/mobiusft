@@ -27,67 +27,69 @@ column.timestamp	Date/Time (UTC)
 column.username	User name
 column.value	Value
 column.version	Version
-report.header.description       Description
-report.header.parents   Parents
-report.header.size      Size
-report.header.type      Type
-report.panel.case_info   Case Item Information
-report.panel.evidences  Evidences
-report.panel.ufdr       UFDR Data
-report.panel.vfs        Virtual File System (VFS)
-report.section.block_metadata   Block Metadata
-report.section.case_details     Case Details
-report.section.extraction_metadata      Extraction Metadata
-report.section.metadata Metadata
-report.section.records  Records
-report.tab.evidences    Evidences
-report.tab.info Info
-report.tab.ufdr UFDR Data
-report.tab.vfs  Virtual File System (VFS)
-report.title    Mobius Forensic Toolkit Report
-report.title.case_item  Mobius Forensic Toolkit - Case Item
-text.block_id   Block ID
-text.case_info  Case Information
-text.count      Count
-text.description        Description
-text.evidence_type      Evidence Type
-text.extraction Extraction
-text.general_info       General Information
-text.no_items    No items loaded
-text.no_metadata        No metadata found
-text.property   Property
-text.select_block       Select any block to inspect metadata.
-text.select_evidence_type       Select an evidence type to view evidences
-text.select_row Select a row to view metadata
-text.value      Value
-type.app-profile        Application Profiles
-type.autofill   Autofill Data
-type.bookmarked-url     Bookmarked URLs
-type.call       Call Logs
-type.chat-message       Chat Messages
-type.contact    Contacts
-type.cookie     Cookies
-type.credit-card        Credit Cards
-type.crypto-wallet      Crypto Wallets
-type.encryption-key     Encryption Keys
-type.installed-program  Installed Programs
-type.ip-address IP Addresses
-type.local-file Local Files
-type.note       Notes
-type.opened-file        Opened Files
-type.password   Passwords
-type.password-hash      Password Hashes
-type.pdi        Personal Direct Identifier
-type.received-file      Received Files
-type.remote-party-ip-address    Remote Party IP Addresses
-type.remote-party-shared-file   Remote Party Shared Files
-type.searched-text      Searched Texts
-type.sent-file  Sent Files
-type.shared-file        Shared Files
-type.sms        SMS/MMS Messages
-type.trash-can-entry    Trash Can Entries
-type.user-account       User Accounts
-type.visited-url        Visited URLs
-type.voicemail  Voicemails
-type.wireless-connection        Wireless Connections
-type.wireless-network   Wireless Networks
+report.header.description	Description
+report.header.parents	Parents
+report.header.size	Size
+report.header.type	Type
+report.panel.case_info	Case Item Information
+report.panel.evidences	Evidences
+report.panel.ufdr	UFDR Data
+report.panel.vfs	Virtual File System (VFS)
+report.section.block_metadata	Block Metadata
+report.section.case_details	Case Details
+report.section.extraction_metadata	Extraction Metadata
+report.section.metadata	Metadata
+report.section.records	Records
+report.tab.evidences	Evidences
+report.tab.info	Info
+report.tab.ufdr	UFDR Data
+report.tab.vfs	Virtual File System (VFS)
+report.title	Mobius Forensic Toolkit Report
+report.title.case_item	Mobius Forensic Toolkit - Case Item
+text.block_id	Block ID
+text.case_info	Case Information
+text.count	Count
+text.description	Description
+text.evidence_type	Evidence Type
+text.extraction	Extraction
+text.general_info	General Information
+text.loading_metadata	Loading item metadata...
+text.loading_vfs	Loading VFS data table...
+text.no_items	No items loaded
+text.no_metadata	No metadata found
+text.property	Property
+text.select_block	Select any block to inspect metadata.
+text.select_evidence_type	Select an evidence type to view evidences
+text.select_row	Select a row to view metadata
+text.value	Value
+type.app-profile	Application Profiles
+type.autofill	Autofill Data
+type.bookmarked-url	Bookmarked URLs
+type.call	Call Logs
+type.chat-message	Chat Messages
+type.contact	Contacts
+type.cookie	Cookies
+type.credit-card	Credit Cards
+type.crypto-wallet	Crypto Wallets
+type.encryption-key	Encryption Keys
+type.installed-program	Installed Programs
+type.ip-address	IP Addresses
+type.local-file	Local Files
+type.note	Notes
+type.opened-file	Opened Files
+type.password	Passwords
+type.password-hash	Password Hashes
+type.pdi	Personal Direct Identifier
+type.received-file	Received Files
+type.remote-party-ip-address	Remote Party IP Addresses
+type.remote-party-shared-file	Remote Party Shared Files
+type.searched-text	Searched Texts
+type.sent-file	Sent Files
+type.shared-file	Shared Files
+type.sms	SMS/MMS Messages
+type.trash-can-entry	Trash Can Entries
+type.user-account	User Accounts
+type.visited-url	Visited URLs
+type.voicemail	Voicemails
+type.wireless-connection	Wireless Connections
+type.wireless-network	Wireless Networks

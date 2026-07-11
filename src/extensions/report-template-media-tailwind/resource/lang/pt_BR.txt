@@ -51,6 +51,8 @@ text.description	Descrição
 text.evidence_type	Tipo de Evidência
 text.extraction	Extração
 text.general_info	Informações Gerais
+text.loading_metadata	Carregando metadados do item...
+text.loading_vfs	Carregando dados do VFS...
 text.no_items	Nenhum item carregado
 text.no_metadata	Nenhum metadado encontrado
 text.property	Atributo

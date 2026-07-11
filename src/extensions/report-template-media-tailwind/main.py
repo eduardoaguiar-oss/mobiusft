@@ -96,7 +96,6 @@ class Generator(object):
             reader = mobius.core.io.line_reader(f.new_reader())
             for line in reader:
                 line = line.strip()
-                print(f'line: {line}')
                 if line and not line.startswith('#'):
                     key, value = line.split('\t', 1)
                     self.__i18n_dict[key.strip()] = value.strip()

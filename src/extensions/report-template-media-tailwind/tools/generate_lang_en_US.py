@@ -8,9 +8,9 @@ import re
 dictionary = []
 
 # I18N masks in templates
-for filename in os.listdir('../template'):
+for filename in os.listdir('resource/template'):
     if filename.endswith('.html'):
-        src_path = os.path.join('../template', filename)
+        src_path = os.path.join('resource/template', filename)
 
         with open(src_path, 'r', encoding='utf-8') as src_file:
             content = src_file.read()

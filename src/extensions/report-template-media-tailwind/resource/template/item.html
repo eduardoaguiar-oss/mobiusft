@@ -51,7 +51,7 @@
                 
                 <!-- THE DYNAMIC TARGET DIV -->
                 <div id="metadata-container" class="text-zinc-500 italic flex-1 h-[calc(100%-3rem)] max-h-[calc(100%-3rem)] overflow-y-auto pr-1">
-                    Loading dynamic forensic report metadata...
+                    I18N{text.loading_metadata:Loading item metadata...}
                 </div>
             </div>
             
@@ -84,7 +84,7 @@
                                 </thead>
                                 <tbody id="vfs-master-table-body" class="divide-y divide-zinc-100 bg-white">
                                     <tr>
-                                        <td colspan="6" class="text-zinc-400 italic p-8 text-center text-sm">Loading VFS data table...</td>
+                                        <td colspan="6" class="text-zinc-400 italic p-8 text-center text-sm">I18N{text.loading_vfs:Loading VFS data table...}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -460,7 +460,7 @@
                     detailContent.innerHTML = `
                         <div class="text-center py-16 text-zinc-400 italic">
                             <i class="fa-solid fa-ban text-2xl mb-2 text-zinc-300 block"></i>
-                            VFS metadata unavailable
+                            I18N{text.no_metadata:No metadata found}.
                         </div>
                     `;
                 }
@@ -538,7 +538,7 @@
                     `;
                 });
             } else {
-                metaRows = `<p class="text-xs italic text-zinc-400 py-6 text-center">No metadata.</p>`;
+                metaRows = `<p class="text-xs italic text-zinc-400 py-6 text-center">I18N{text.no_metadata:No metadata found}.</p>`;
             }
 
             detailContent.innerHTML = `
