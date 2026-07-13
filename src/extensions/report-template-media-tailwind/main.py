@@ -207,8 +207,6 @@ class Generator(object):
                             'name': c_name,
                             'format': c.get('format', None)
                         })
-                        print(f'column.{m_id}.{c_id}\t{c_name}')
-                        print(f'column.{c_id}\t{c_name}')
 
                     type_data['columns'] = columns
 
