@@ -16,11 +16,11 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import datetime
-import json
+import os
+import shutil
 
 import mobius
 import pymobius
-from pymobius import app
 import pymobius.evidence
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -43,6 +43,7 @@ class ReportGeneratorView(object):
         self.__template_id = None
         self.__output_folder = None
         self.__asap_path = None
+        self.__generate_hashes = True
         self.__itemlist = []
 
         self.name = f'{EXTENSION_NAME} v{EXTENSION_VERSION}'
@@ -149,6 +150,14 @@ class ReportGeneratorView(object):
         self.__asap_clear_button.set_sensitive(False)
         self.__asap_clear_button.set_callback('clicked', self.__on_click_asap_clear_file)
         asap_hbox.add_child(self.__asap_clear_button, mobius.core.ui.box.fill_none)
+
+        # Generate hashes.txt checkbutton
+        self.__generate_hashes_check = Gtk.CheckButton.new_with_label("Generate hashes.txt file")
+        self.__generate_hashes_check.set_visible(True)
+        self.__generate_hashes_check.set_active(True)
+        self.__generate_hashes_check.set_margin_start(0)
+        self.__generate_hashes_check.connect('toggled', self.__on_generate_hashes_toggled)
+        grid.attach(self.__generate_hashes_check, 1, 3, 2, 1)
 
         # Buttons
         hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
@@ -299,6 +308,13 @@ class ReportGeneratorView(object):
         self.__update_options()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief on_generate_hashes_toggled checkbutton toggled
+    # @param checkbutton Checkbutton
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_generate_hashes_toggled(self, checkbutton):
+        self.__generate_hashes = checkbutton.get_active()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_generate_report button clicked
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_generate_report(self):
@@ -320,6 +336,10 @@ class ReportGeneratorView(object):
 
         # Generate report
         generator.run(model)
+
+        # Generate hashes.txt if requested
+        if self.__generate_hashes:
+            self.__generate_hashes_txt(self.__output_folder)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Get evidence types
@@ -360,6 +380,60 @@ class ReportGeneratorView(object):
         data['solicitacao'] = dict((k.lower(), v) for (k, v) in ini.get_values('SOLICITACAO'))
 
         return data
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Generate hashes.txt
+    # @param output_path Output directory path
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __generate_hashes_txt(self, output_path):
+        #option.control.set_status("Generating hashes.txt file...")
+        hashes_txt_path = os.path.join(output_path, "hashes.txt")
+
+        # remove old hashes.txt, if any
+        old_f = mobius.core.io.new_file_by_path(hashes_txt_path)
+        if old_f.exists():
+            old_f.remove()
+
+        # create temporary file
+        f = mobius.core.io.tempfile()
+        writer = mobius.core.io.text_writer(f.new_writer())
+
+        # generate hashes.txt
+        pos = len(output_path) + 1
+
+        for root, dirs, files in os.walk(output_path, topdown=False):
+            for name in files:
+                path = os.path.join(root, name)
+                hash_value = self.__get_hash(path)
+                filename = path[pos:]
+                writer.write(f"{hash_value} ?SHA256*{filename}\n")
+
+        writer.flush()
+
+        # move file to output_path
+        shutil.copyfile(f.path, hashes_txt_path)
+        os.remove(f.path)
+
+        # calculate hashes.txt hash
+        h = self.__get_hash(hashes_txt_path)
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Calculate file hash
+    # @param path File path
+    # @return Hash as string
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __get_hash(self, path):
+        h = mobius.core.crypt.hash("sha2-256")
+        f = mobius.core.io.new_file_by_path(path)
+        reader = f.new_reader()
+        block_size = 512 * 1024  # 512 KB
+
+        data = reader.read(block_size)
+        while data:
+            h.update(data)
+            data = reader.read(block_size)
+
+        return h.get_hex_digest()
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
