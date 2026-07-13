@@ -205,7 +205,9 @@ class Generator(object):
                         columns.append({
                             'id': c_id,
                             'name': c_name,
-                            'format': c.get('format', None)
+                            'format': c.get('format', None),
+                            'is_sortable': c.get('is_sortable', False),
+                            'first_sortable': c.get('first_sortable', False),
                         })
 
                     type_data['columns'] = columns
