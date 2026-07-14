@@ -76,17 +76,18 @@ class Generator(object):
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Run report generator
-    # @param model Model
+    # @param model Model data structure
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def run(self, model):
 
         # Set up control variables
-        self.__output_dir = model['output_dir']
-        self.__items = model['items']
-        self.__template_id = model['template_id']
-        self.__evidence_types = model['evidence_types']
+        self.__output_dir = model.output_folder
+        self.__items = model.items
+        self.__template_id = model.template_id
+        self.__evidence_types = model.evidence_types
         self.__language = self.__template_id.split('.')[-1]
         self.__i18n_dict = {}
+        self.__set_status = model.set_status
 
         # Load I18N dictionary for the current language, if available
         lang_path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID, 'lang', f'{self.__language}.txt')
@@ -116,6 +117,7 @@ class Generator(object):
     # @brief Generate static files
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __generate_static_files(self):
+        self.__set_status("Generating static files...")
         common_path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID, 'common')
         shutil.copytree(common_path, self.__output_dir, dirs_exist_ok=True)
 
@@ -123,6 +125,7 @@ class Generator(object):
     # @brief Generate static content from templates
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __generate_templates(self):
+        self.__set_status("Generating templates...")
         template_path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID, 'template')
 
         for filename in os.listdir(template_path):
@@ -181,6 +184,7 @@ class Generator(object):
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         # Generate EVIDENCE_TYPES variable
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        self.__set_status("Generating EVIDENCE_TYPES variable...")
         types_data = []
 
         for m in self.__evidence_types:
@@ -224,6 +228,7 @@ class Generator(object):
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         # Generate ITEMS variable
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        self.__set_status("Generating ITEMS variable...")
         fp.write('\n')
         fp.write('const ITEMS = ')
 
@@ -250,6 +255,7 @@ class Generator(object):
     # @param parent Parent item
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __generate_item(self, item, parent=None):
+        self.__set_status(f"Generating item data (UID={item.uid}): {item.name}...")
         data = {'uid': item.uid, 'name': item.name, 'category': item.category}
 
         # Metadata
