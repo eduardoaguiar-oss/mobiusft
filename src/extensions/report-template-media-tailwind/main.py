@@ -88,6 +88,7 @@ class Generator(object):
         self.__language = self.__template_id.split('.')[-1]
         self.__i18n_dict = {}
         self.__set_status = model.set_status
+        self.__asap = model.asap
 
         # Load I18N dictionary for the current language, if available
         lang_path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID, 'lang', f'{self.__language}.txt')
@@ -242,11 +243,21 @@ class Generator(object):
         fp.write(';\n')
 
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        # Generate ASAP variable
+        # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        self.__set_status("Generating ASAP variable...")
+        fp.write('\n')
+        fp.write('const ASAP = ')
+        json.dump(self.__asap, fp, ensure_ascii=False, separators=(',', ':'))
+        fp.write(';\n')
+
+        # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         # Generate window variables
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         fp.write('\n')
         fp.write('window.EVIDENCE_TYPES = EVIDENCE_TYPES;\n')
         fp.write('window.ITEMS = ITEMS;\n')
+        fp.write('window.ASAP = ASAP;\n')
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Generate model.js item

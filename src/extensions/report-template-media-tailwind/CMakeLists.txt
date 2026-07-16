@@ -29,12 +29,12 @@ set(SOURCE_FILES
     main.py
     metadata.py
     icon.png
-    resource/common/tailwind.min.css
+    resource/common/css/fontawesome.min.css
+    resource/common/css/tailwind.min.css
     resource/common/webfonts/fa-regular-400.woff2
     resource/common/webfonts/fa-v4compatibility.woff2
     resource/common/webfonts/fa-solid-900.woff2
     resource/common/webfonts/fa-brands-400.woff2
-    resource/common/css/all.min.css
     resource/common/img/alert.png
     resource/common/img/icon.svg
     resource/lang/pt_BR.txt
