@@ -17,6 +17,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/application.hpp>
 #include <mobius/core/database/database.hpp>
+#include <mobius/core/mediator.hpp>
 #include <mobius/core/thread_guard.hpp>
 #include <mobius/framework/config.hpp>
 
@@ -54,9 +55,11 @@ _get_database ()
         // create db tables, if necessary
         auto transaction = db.new_transaction ();
 
-        db.execute ("CREATE TABLE IF NOT EXISTS configuration"
-                    "(var TEXT PRIMARY KEY,"
-                    "value BLOB NULL);");
+        db.execute (
+            "CREATE TABLE IF NOT EXISTS configuration"
+            "(var TEXT PRIMARY KEY,"
+            "value BLOB NULL);"
+        );
 
         transaction.commit ();
 
@@ -92,9 +95,11 @@ has_config (const std::string &name)
 {
     auto db = _get_database ();
 
-    auto statement = db.new_statement ("SELECT 1 "
-                                       "FROM configuration "
-                                       "WHERE var = ?");
+    auto statement = db.new_statement (
+        "SELECT 1 "
+        "FROM configuration "
+        "WHERE var = ?"
+    );
 
     statement.bind (1, name);
 
@@ -111,9 +116,11 @@ get_config (const std::string &name)
 {
     auto db = _get_database ();
 
-    auto statement = db.new_statement ("SELECT value "
-                                       "FROM configuration "
-                                       "WHERE var = ?");
+    auto statement = db.new_statement (
+        "SELECT value "
+        "FROM configuration "
+        "WHERE var = ?"
+    );
 
     statement.bind (1, name);
 
@@ -135,12 +142,16 @@ set_config (const std::string &name, const mobius::core::pod::data &value)
 {
     auto db = _get_database ();
 
-    auto statement = db.new_statement ("INSERT OR REPLACE INTO configuration "
-                                       "VALUES (?, ?)");
+    auto statement = db.new_statement (
+        "INSERT OR REPLACE INTO configuration "
+        "VALUES (?, ?)"
+    );
 
     statement.bind (1, name);
     statement.bind (2, value);
     statement.execute ();
+
+    mobius::core::emit ("config-set", name, value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -152,11 +163,15 @@ remove_config (const std::string &name)
 {
     auto db = _get_database ();
 
-    auto statement = db.new_statement ("DELETE FROM configuration "
-                                       "WHERE var = ?");
+    auto statement = db.new_statement (
+        "DELETE FROM configuration "
+        "WHERE var = ?"
+    );
 
     statement.bind (1, name);
     statement.execute ();
+
+    mobius::core::emit ("config-remove", name);
 }
 
 } // namespace mobius::framework
