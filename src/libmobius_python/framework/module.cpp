@@ -32,6 +32,7 @@
 #include <pyfunction.hpp>
 #include "core/io/folder.hpp"
 #include "core/io/reader.hpp"
+#include "core/pod/data.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Functions prototypes
@@ -106,7 +107,9 @@ new_framework_module ()
     module.add_constant ("SCAN_TYPE_ALL_FILES", 3);
 
     // Add submodules
-    module.add_submodule ("evidence_processor", new_framework_evidence_processor_module ());
+    module.add_submodule (
+        "evidence_processor", new_framework_evidence_processor_module ()
+    );
     module.add_submodule ("model", new_framework_model_module ());
 
     // Return module
@@ -133,10 +136,8 @@ class sampling_file_callback
     {
         mobius::py::GIL_guard gil_guard;
 
-        f_ (
-            mobius::py::pystring_from_std_string (sampling_id),
-            pymobius_core_io_reader_to_pyobject (reader)
-        );
+        f_ (mobius::py::pystring_from_std_string (sampling_id),
+            pymobius_core_io_reader_to_pyobject (reader));
     }
 
   private:
@@ -163,10 +164,8 @@ class sampling_folder_callback
     {
         mobius::py::GIL_guard gil_guard;
 
-        f_ (
-            mobius::py::pystring_from_std_string (sampling_id),
-            pymobius_core_io_folder_to_pyobject (folder)
-        );
+        f_ (mobius::py::pystring_from_std_string (sampling_id),
+            pymobius_core_io_folder_to_pyobject (folder));
     }
 
   private:
@@ -174,5 +173,56 @@ class sampling_folder_callback
 };
 
 mobius::py::callback<sampling_folder_callback> cb_2_ ("sampling_folder");
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <b>config-set</b> event callback
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+class config_set_callback
+{
+  public:
+    config_set_callback (PyObject *f)
+        : f_ (f)
+    {
+    }
+
+    void
+    operator() (const std::string &name, const mobius::core::pod::data &value)
+    {
+        mobius::py::GIL_guard gil_guard;
+
+        f_ (mobius::py::pystring_from_std_string (name),
+            pymobius_core_pod_data_to_python (value));
+    }
+
+  private:
+    mobius::py::function f_;
+};
+
+mobius::py::callback<config_set_callback> cb_3_ ("config-set");
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <b>config-remove</b> event callback
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+class config_remove_callback
+{
+  public:
+    config_remove_callback (PyObject *f)
+        : f_ (f)
+    {
+    }
+
+    void
+    operator() (const std::string &name)
+    {
+        mobius::py::GIL_guard gil_guard;
+
+        f_ (mobius::py::pystring_from_std_string (name));
+    }
+
+  private:
+    mobius::py::function f_;
+};
+
+mobius::py::callback<config_remove_callback> cb_4_ ("config-remove");
 
 } // namespace
