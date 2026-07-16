@@ -30,7 +30,7 @@ from gi.repository import GdkPixbuf
 
 from metadata import *
 
-TEMPLATE_ICON, TEMPLATE_ID, TEMPLATE_NAME, GENERATOR_OBJ = range(4)
+TEMPLATE_ICON, TEMPLATE_ID, TEMPLATE_TYPE, TEMPLATE_NAME, GENERATOR_OBJ = range(5)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Report Generator view
@@ -44,7 +44,7 @@ class ReportGeneratorView(object):
         self.__mediator = pymobius.mediator.copy()
         self.__template_id = None
         self.__output_folder = None
-        self.__asap_path = None
+        self.__asap_file = None
         self.__generate_hashes = True
         self.__is_running = False
         self.__hashes_txt_value = None
@@ -94,7 +94,7 @@ class ReportGeneratorView(object):
         )
 
         # Template combobox model
-        self.__template_model = Gtk.ListStore.new([GdkPixbuf.Pixbuf, str, str, object])
+        self.__template_model = Gtk.ListStore.new([GdkPixbuf.Pixbuf, str, str, str, object])
 
         path = self.__mediator.call('extension.get-resource-path', EXTENSION_ID, 'media.png')
         media_icon = GdkPixbuf.Pixbuf.new_from_file_at_size(path, 24, 24)
@@ -110,22 +110,32 @@ class ReportGeneratorView(object):
                 t_type = template['type']
                 t_icon = media_icon if t_type == 'media' else report_icon
                 t_description = template['description']
-                self.__template_model.append([t_icon, t_id, t_description, generator])
+                self.__template_model.append([t_icon, t_id, t_type, t_description, generator])
 
         # Template combobox widget
         self.__template_combobox = Gtk.ComboBox.new_with_model(self.__template_model)
         self.__template_combobox.set_hexpand(True)
+        self.__template_combobox.set_halign(Gtk.Align.FILL)
+
+        spacer = Gtk.CellRendererText()
+        self.__template_combobox.pack_start(spacer, True)
+        spacer.set_property("xalign", 1.0)
 
         renderer = Gtk.CellRendererPixbuf()
         self.__template_combobox.pack_start(renderer, False)
         self.__template_combobox.add_attribute(renderer, 'pixbuf', TEMPLATE_ICON)
 
         renderer = Gtk.CellRendererText()
-        self.__template_combobox.pack_start(renderer, True)
+        self.__template_combobox.pack_start(renderer, False)
         self.__template_combobox.add_attribute(renderer, 'text', TEMPLATE_NAME)
         self.__template_combobox.set_id_column(TEMPLATE_ID)
         self.__template_combobox.connect('changed', self.__on_template_changed)
         self.__template_combobox.show()
+
+        spacer = Gtk.CellRendererText()
+        self.__template_combobox.pack_start(spacer, True)
+        spacer.set_property("xalign", 0)
+
         grid.attach(self.__template_combobox, 1, 0, 2, 1)
 
         # Output folder
@@ -171,31 +181,50 @@ class ReportGeneratorView(object):
         self.__asap_clear_button.set_callback('clicked', self.__on_click_asap_clear_file)
         asap_hbox.add_child(self.__asap_clear_button, mobius.core.ui.box.fill_none)
 
+        # Media options revealer
+        self.__media_options_revealer = Gtk.Revealer.new()
+        self.__media_options_revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN)
+        self.__media_options_revealer.set_reveal_child(False)
+        self.__media_options_revealer.set_visible(True)
+        grid.attach(self.__media_options_revealer, 1, 3, 2, 1)
+
+        media_vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
+        media_vbox.set_spacing(10)
+        media_vbox.set_border_width(10)
+        media_vbox.set_visible(True)
+        self.__media_options_revealer.add(media_vbox.get_ui_widget())
+
+        label = mobius.core.ui.label()
+        label.set_markup("<b>Media options:</b>")
+        label.set_halign(mobius.core.ui.label.align_left)
+        label.set_visible(True)
+        media_vbox.add_child(label.get_ui_widget(), mobius.core.ui.box.fill_none)
+
         # Generate hashes.txt checkbutton
         self.__generate_hashes_check = Gtk.CheckButton.new_with_label("Generate hashes.txt file")
         self.__generate_hashes_check.set_visible(True)
         self.__generate_hashes_check.set_active(True)
         self.__generate_hashes_check.set_margin_start(0)
         self.__generate_hashes_check.connect('toggled', self.__on_generate_hashes_toggled)
-        grid.attach(self.__generate_hashes_check, 1, 3, 2, 1)
+        media_vbox.add_child(self.__generate_hashes_check, mobius.core.ui.box.fill_none)
 
         # Hashes.txt value and copy button
+        hashes_hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
+        hashes_hbox.set_spacing(10)
+        hashes_hbox.set_visible(True)
+        media_vbox.add_child(hashes_hbox, mobius.core.ui.box.fill_none)
+
         label = mobius.core.ui.label()
         label.set_markup("<b>Hashes.txt (SHA2-256):</b>")
         label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
-        grid.attach(label.get_ui_widget(), 0, 4, 1, 1)
-
-        hashes_txt_hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
-        hashes_txt_hbox.set_spacing(10)
-        hashes_txt_hbox.set_visible(True)
-        grid.attach(hashes_txt_hbox.get_ui_widget(), 1, 4, 2, 1)
+        hashes_hbox.add_child(label.get_ui_widget(), mobius.core.ui.box.fill_none)
 
         frame = Gtk.Frame()
         frame.set_shadow_type(Gtk.ShadowType.IN)
         frame.set_name("text-frame")
         frame.show()
-        hashes_txt_hbox.add_child(frame, mobius.core.ui.box.fill_with_widget)
+        hashes_hbox.add_child(frame, mobius.core.ui.box.fill_with_widget)
 
         self.__hashes_txt_hash_label = mobius.core.ui.label()
         self.__hashes_txt_hash_label.set_halign(mobius.core.ui.label.align_left)
@@ -208,7 +237,7 @@ class ReportGeneratorView(object):
         self.__hashes_txt_copy_button.set_visible(True)
         self.__hashes_txt_copy_button.set_sensitive(False)
         self.__hashes_txt_copy_button.set_callback('clicked', self.__on_click_hashes_txt_copy)
-        hashes_txt_hbox.add_child(self.__hashes_txt_copy_button, mobius.core.ui.box.fill_none)
+        hashes_hbox.add_child(self.__hashes_txt_copy_button, mobius.core.ui.box.fill_none)
 
         # Status bar and Buttons
         hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
@@ -247,8 +276,16 @@ class ReportGeneratorView(object):
         if last_output_folder:
             self.__output_folder = last_output_folder
 
+        last_asap_file = mobius.framework.get_config('last_asap_file')
+        if last_asap_file:
+            self.__asap_file = last_asap_file
+
         self.__update_hashes_txt_label()
         self.__update_options()
+
+        # Subscribe to events
+        self.__event_uid1 = mobius.core.subscribe('config-set', self.__on_config_set)
+        self.__event_uid2 = mobius.core.subscribe('config-remove', self.__on_config_remove)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Get ui widget
@@ -270,6 +307,8 @@ class ReportGeneratorView(object):
     # @brief on_destroy view
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def on_destroy(self):
+        mobius.core.unsubscribe(self.__event_uid1)
+        mobius.core.unsubscribe(self.__event_uid2)
         self.__mediator.clear()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -298,8 +337,8 @@ class ReportGeneratorView(object):
         else:
             self.__output_folder_button.set_text('Select output folder...')
 
-        if self.__asap_path:
-            self.__asap_file_button.set_text(self.__asap_path)
+        if self.__asap_file:
+            self.__asap_file_button.set_text(self.__asap_file)
             self.__asap_clear_button.set_sensitive(True)
         else:
             self.__asap_file_button.set_text('Select a .ASAP file from the Federal Police of Brazil...')
@@ -310,6 +349,20 @@ class ReportGeneratorView(object):
         else:
             self.__hashes_txt_copy_button.set_sensitive(False)
 
+        # Media releaver
+        treemodel = self.__template_combobox.get_model()
+        treeiter = self.__template_combobox.get_active_iter()
+
+        if treeiter:
+            template_type = treemodel[treeiter][TEMPLATE_TYPE]
+            is_media = (template_type == 'media')
+        else:
+            is_media = False
+
+        self.__media_options_revealer.set_reveal_child(is_media)
+        self.__generate_hashes_check.set_sensitive(is_media)
+
+        # Execute button
         can_generate = not self.__is_running and bool(self.__template_id) and bool(self.__output_folder) and bool(self.__itemlist)
         self.__generate_button.set_sensitive(can_generate)
 
@@ -317,7 +370,9 @@ class ReportGeneratorView(object):
     # @brief on_template_changed
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_template_changed(self, combobox, *args):
-        self.__template_id = combobox.get_active_id()
+        treemodel = combobox.get_model()
+        treeiter = combobox.get_active_iter()
+        self.__template_id = treemodel[treeiter][TEMPLATE_ID]
 
         if self.__template_id:
             transaction = mobius.framework.new_config_transaction()
@@ -340,16 +395,12 @@ class ReportGeneratorView(object):
 
         if response == Gtk.ResponseType.OK:
             self.__output_folder = dialog.get_filename()
-            self.__output_folder_button.set_text(self.__output_folder)
 
             transaction = mobius.framework.new_config_transaction()
             mobius.framework.set_config('last_report_folder', self.__output_folder)
             transaction.commit()
 
         dialog.destroy()
-
-        self.__update_hashes_txt_label()
-        self.__update_options()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_click_asap_file button clicked
@@ -358,17 +409,17 @@ class ReportGeneratorView(object):
         dialog = Gtk.FileChooserDialog(title='Select .ASAP file', action=Gtk.FileChooserAction.OPEN)
         dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
 
-        if self.__asap_path:
-            dialog.set_current_folder(self.__asap_path)
+        if self.__asap_file:
+            dialog.set_current_folder(self.__asap_file)
 
         response = dialog.run()
 
         if response == Gtk.ResponseType.OK:
-            self.__asap_path = dialog.get_filename()
-            self.__asap_file_button.set_text(self.__asap_path)
+            self.__asap_file = dialog.get_filename()
+            self.__asap_file_button.set_text(self.__asap_file)
 
             transaction = mobius.framework.new_config_transaction()
-            mobius.framework.set_config('last_asap_file', self.__asap_path)
+            mobius.framework.set_config('last_asap_file', self.__asap_file)
             transaction.commit()
 
         dialog.destroy()
@@ -378,7 +429,7 @@ class ReportGeneratorView(object):
     # @brief on_click_asap_clear_file button clicked
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_click_asap_clear_file(self):
-        self.__asap_path = None
+        self.__asap_file = None
         self.__asap_file_button.set_text('Select a .ASAP file from the Federal Police of Brazil...')
         self.__update_options()
 
@@ -396,6 +447,35 @@ class ReportGeneratorView(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_generate_hashes_toggled(self, checkbutton):
         self.__generate_hashes = checkbutton.get_active()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief on_config_set event handler
+    # @param name Config name
+    # @param value Config value
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_config_set(self, name, value):
+        if name == 'last_report_folder':
+            self.__output_folder = value
+            self.__update_hashes_txt_label()
+            self.__update_options()
+
+        elif name == 'last_asap_file':
+            self.__asap_file = value
+            self.__update_options()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief on_config_remove event handler
+    # @param name Config name
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_config_remove(self, name):
+        if name == 'last_report_folder':
+            self.__output_folder = None
+            self.__update_hashes_txt_label()
+            self.__update_options()
+
+        elif name == 'last_asap_file':
+            self.__asap_file = None
+            self.__update_options()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_generate_report button clicked
@@ -432,8 +512,8 @@ class ReportGeneratorView(object):
         model.set_status = self.__set_status
 
         # Add .ASAP data if available
-        if self.__asap_path:
-            model.asap = self.__parse_asap_file(self.__asap_path)
+        if self.__asap_file:
+            model.asap = self.__parse_asap_file(self.__asap_file)
         else:
             model.asap = None
 
@@ -451,22 +531,27 @@ class ReportGeneratorView(object):
     # @brief Report generation thread
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __generate_report_thread(self, model):
+        mobius.core.logf("DBG [report-generator] Starting report generation thread...")
         guard = mobius.core.thread_guard()
         connection = model.case.new_connection()
 
-        # Generate report
+        # Generate report using generator
+        mobius.core.logf("DBG [report-generator] Generating report...")
         self.__set_status("Generating report...")
         generator = model.generator
         generator.run(model)
+        mobius.core.logf("DBG [report-generator] Report generation completed.")
 
         # Generate hashes.txt if requested
         if model.generate_hashes_txt:
+            mobius.core.logf("DBG [report-generator] Generating hashes.txt...")
             self.__generate_hashes_txt(model.output_folder)
+            mobius.core.logf("DBG [report-generator] Finished generating hashes.txt.")
 
         # Reset running state
         self.__is_running = False
         self.__set_status("Report generation completed.")
-        self.__update_options()
+        GLib.idle_add(self.__update_options)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Get evidence types
@@ -500,11 +585,11 @@ class ReportGeneratorView(object):
         if not f.exists():
             raise Exception(f'File not found: {path}')
         
-        data = {}
+        ini = mobius.core.decoder.inifile(f.new_reader(), "ISO-8859-1")
 
-        ini = mobius.core.decoder.inifile(path, "iso-8859-1")
-        data['laudo'] = dict((k.lower(), v) for (k, v) in ini.get_values('LAUDO'))
-        data['solicitacao'] = dict((k.lower(), v) for (k, v) in ini.get_values('SOLICITACAO'))
+        data = {}
+        data['laudo'] = ini.get_values('laudo')
+        data['solicitacao'] = ini.get_values('solicitacao')
 
         return data
 
