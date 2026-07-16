@@ -2,6 +2,12 @@ Mobius Forensic Toolkit 2.28
 	* report-generator: Added new extension
 	* report-template-media-tailwind: Added new extension
 	* ice: Improved error handling when creating views
+	* iped-frontend: Added options for Wordlist path and wordlist clear
+	* iped-frontend: Added option "No content"
+	* iped-frontend: Removed option "Generate hashes.txt"
+	* iped-frontend: Removed option "Generate .iso"
+	* libmobius_framework: Post config-set event following framework.set_config invocation
+	* libmobius_framework: Post config-remove event following framework.remove_config invocation
 	* libmobius_python: Improved mobius.framework.attribute class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.framework.category class using the PyType_FromSpec API
 	* libmobius_python: Improved mobius.framework.model.ant class using the PyType_FromSpec API
@@ -10,6 +16,8 @@ Mobius Forensic Toolkit 2.28
 	* libmobius_python: Improved mobius.framework.model.item class using the PyType_FromSpec API
 	* libmobius_python: Updated copyright header format from multi-line to single-line across source files
 	* libmobius_python: get_error_message function now returns full Python traceback
+	* libmobius_python: Implemented callback for config-set event
+	* libmobius_python: Implemented callback for config-remove event
 
 Mobius Forensic Toolkit 2.27
 	* app-ares: Implemented the evidence_processor_impl interface

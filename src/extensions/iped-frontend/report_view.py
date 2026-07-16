@@ -15,10 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-import hashlib
 import os
 import shutil
-import tempfile
 import threading
 
 import mobius
@@ -27,6 +25,173 @@ import pymobius
 from gi.repository import Gtk
 
 from metadata import *
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# @brief NoContent list widget
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+class NoContentListWidget(object):
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Initialize widget
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __init__(self):
+        self.__items = []  # internal list of strings
+
+        # Main container
+        self.widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        self.widget.set_visible(True)
+
+        # === Input row: Entry + Add button ===
+        input_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        input_box.set_visible(True)
+        self.widget.pack_start(input_box, False, False, 0)
+
+        self.__entry = Gtk.Entry()
+        self.__entry.set_placeholder_text("Enter value to exclude (e.g. /tmp, *.tmp, ...)")
+        self.__entry.set_hexpand(True)
+        self.__entry.set_visible(True)
+        self.__entry.connect("activate", self.__on_add_clicked)  # Enter key adds
+        input_box.pack_start(self.__entry, True, True, 0)
+
+        add_button = Gtk.Button.new_with_label("Add")
+        add_button.set_visible(True)
+        add_button.connect("clicked", self.__on_add_clicked)
+        input_box.pack_start(add_button, False, False, 0)
+
+        # === List ===
+        scrolled = Gtk.ScrolledWindow()
+        scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        scrolled.set_min_content_height(120)   # adjust as needed
+        scrolled.set_visible(True)
+        self.widget.pack_start(scrolled, True, True, 0)
+
+        self.__listbox = Gtk.ListBox()
+        self.__listbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
+        self.__listbox.set_visible(True)
+        scrolled.add(self.__listbox)
+
+        # Add last saved items to the listbox
+        last_no_content_items = sorted(mobius.framework.get_config('iped.last_no_content_items')) or []
+        self.set_items(last_no_content_items)
+
+        # Optional: allow removing with Delete key
+        self.__listbox.connect("key-press-event", self.__on_key_press)
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Get UI widget
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def get_ui_widget(self):
+        return self.widget
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Set visibility of the widget
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def set_visible(self, visible):
+        self.widget.set_visible(visible)
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Get current list of items
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def get_items(self):
+        return self.__items.copy()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Replace the current list with new items
+    # @param items List of strings to set
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def set_items(self, items):
+        self.clear()
+        for item in items:
+            self.__items.append(item)
+            self.__add_row(item)
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Clear the list
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def clear(self):
+        self.__items.clear()
+        for row in self.__listbox.get_children():
+            self.__listbox.remove(row)
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Add item to the list
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_add_clicked(self, widget):
+        text = self.__entry.get_text().strip()
+        if not text:
+            return
+
+        if text in self.__items:
+            # Optional: prevent duplicates
+            self.__entry.set_text("")
+            return
+
+        self.__items.append(text)
+        self.__add_row(text)
+        self.__entry.set_text("")
+        self.__entry.grab_focus()
+
+        # Save the updated list to config
+        transaction = mobius.framework.new_config_transaction()
+        mobius.framework.set_config('iped.last_no_content_items', self.__items)
+        transaction.commit()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Add a row to the listbox
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __add_row(self, text):
+        row = Gtk.ListBoxRow()
+        row.set_visible(True)
+
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        hbox.set_visible(True)
+        hbox.set_margin_start(6)
+        hbox.set_margin_end(6)
+        hbox.set_margin_top(4)
+        hbox.set_margin_bottom(4)
+
+        label = Gtk.Label(label=text)
+        label.set_xalign(0)
+        label.set_hexpand(True)
+        label.set_visible(True)
+        hbox.pack_start(label, True, True, 0)
+
+        remove_btn = Gtk.Button.new_from_icon_name("edit-delete-symbolic", Gtk.IconSize.BUTTON)
+        remove_btn.set_tooltip_text("Remove this entry")
+        remove_btn.set_visible(True)
+        remove_btn.connect("clicked", self.__on_remove_clicked, row, text)
+        hbox.pack_start(remove_btn, False, False, 0)
+
+        row.add(hbox)
+        self.__listbox.add(row)
+        row.show_all()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Remove item from the list
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_remove_clicked(self, button, row, text):
+        if text in self.__items:
+            self.__items.remove(text)
+        self.__listbox.remove(row)
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Handle key press events for the listbox
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_key_press(self, widget, event):
+        if event.keyval == Gdk.KEY_Delete:
+            row = self.__listbox.get_selected_row()
+            if row:
+                # Find the text from the label
+                hbox = row.get_child()
+                for child in hbox.get_children():
+                    if isinstance(child, Gtk.Label):
+                        text = child.get_text()
+                        if text in self.__items:
+                            self.__items.remove(text)
+                        break
+                self.__listbox.remove(row)
+                return True
+        return False
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -41,15 +206,16 @@ class ReportView(object):
         self.__mediator = pymobius.mediator.copy()
         self.__control = control
         self.__iped_path = None
+        self.__output_folder = None
+        self.__asap_file = None
+        self.__wordlist_file = None
+        self.__is_running = False
         self.__itemlist = None
         self.__processed_items = []
         self.__laudo = None
-        self.__uids = []
         self.name = "Generate Report"
 
-        path = self.__mediator.call(
-            "extension.get-resource-path", EXTENSION_ID, "report.png"
-        )
+        path = self.__mediator.call("extension.get-resource-path", EXTENSION_ID, "report.png")
         self.icon_data = open(path, "rb").read()
 
         # widget
@@ -65,54 +231,96 @@ class ReportView(object):
         grid = Gtk.Grid.new()
         grid.set_row_spacing(10)
         grid.set_column_spacing(5)
+        grid.set_column_homogeneous(False)
         grid.show()
         vbox.add_child(grid, mobius.core.ui.box.fill_with_widget)
 
+        # Output folder
         label = mobius.core.ui.label()
-        label.set_markup("<b>Report ID</b>")
+        label.set_markup('<b>Output folder:</b>')
         label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
         grid.attach(label.get_ui_widget(), 0, 0, 1, 1)
 
-        self.__report_id_entry = Gtk.Entry()
-        self.__report_id_entry.set_sensitive(False)
-        self.__report_id_entry.set_hexpand(True)
-        self.__report_id_entry.show()
-        self.__report_id_entry.connect("changed", self.__on_report_id_changed)
-        grid.attach(self.__report_id_entry, 1, 0, 2, 1)
+        # Output folder chooser button
+        self.__output_folder_button = mobius.core.ui.button()
+        self.__output_folder_button.set_icon_by_name('folder')
+        self.__output_folder_button.set_text('Select output folder...')
+        self.__output_folder_button.set_visible(True)
+        self.__output_folder_button.set_callback('clicked', self.__on_click_output_folder)
+        self.__output_folder_button.get_ui_widget().set_hexpand(True)
+        grid.attach(self.__output_folder_button.get_ui_widget(), 1, 0, 2, 1)
 
-        self.__hashes_txt_checkbutton = Gtk.CheckButton.new_with_mnemonic(
-            "Generate _hashes.txt"
-        )
-        self.__hashes_txt_checkbutton.show()
-        self.__hashes_txt_checkbutton.set_sensitive(False)
-        self.__hashes_txt_checkbutton.connect(
-            "toggled", self.__on_hashes_txt_checkbutton_toggled
-        )
-        grid.attach(self.__hashes_txt_checkbutton, 1, 1, 2, 1)
-
-        self.__generate_iso_checkbutton = Gtk.CheckButton.new_with_mnemonic(
-            "Generate _.iso file"
-        )
-        self.__generate_iso_checkbutton.show()
-        self.__generate_iso_checkbutton.set_sensitive(False)
-        self.__hashes_txt_checkbutton.connect(
-            "toggled", self.__on_generate_iso_checkbutton_toggled
-        )
-        grid.attach(self.__generate_iso_checkbutton, 1, 2, 2, 1)
-
+        # .ASAP file path
         label = mobius.core.ui.label()
-        label.set_markup("<b>Hashes.txt SHA2-256</b>")
+        label.set_markup('<b>.ASAP file (optional):</b>')
         label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
-        grid.attach(label.get_ui_widget(), 0, 3, 1, 1)
+        grid.attach(label.get_ui_widget(), 0, 1, 1, 1)
 
-        self.__hashes_txt_hash_label = mobius.core.ui.label()
-        self.__hashes_txt_hash_label.set_halign(mobius.core.ui.label.align_left)
-        self.__hashes_txt_hash_label.set_selectable(True)
-        self.__hashes_txt_hash_label.show()
-        grid.attach(self.__hashes_txt_hash_label.get_ui_widget(), 1, 3, 2, 1)
+        asap_hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
+        asap_hbox.set_spacing(5)
+        asap_hbox.set_visible(True)
+        grid.attach(asap_hbox.get_ui_widget(), 1, 1, 2, 1)
 
+        # .ASAP file chooser button
+        self.__asap_file_button = mobius.core.ui.button()
+        self.__asap_file_button.set_icon_by_name('folder')
+        self.__asap_file_button.set_text('Select a .ASAP file from the Federal Police of Brazil...')
+        self.__asap_file_button.set_visible(True)
+        self.__asap_file_button.set_callback('clicked', self.__on_click_asap_file)
+        asap_hbox.add_child(self.__asap_file_button, mobius.core.ui.box.fill_with_widget)
+
+        # .ASAP clear button
+        self.__asap_clear_button = mobius.core.ui.button()
+        self.__asap_clear_button.set_icon_by_name('edit-clear')
+        self.__asap_clear_button.set_visible(True)
+        self.__asap_clear_button.set_sensitive(False)
+        self.__asap_clear_button.set_callback('clicked', self.__on_click_asap_clear_file)
+        asap_hbox.add_child(self.__asap_clear_button, mobius.core.ui.box.fill_none)
+
+        # Wordlist file path
+        label = mobius.core.ui.label()
+        label.set_markup('<b>Wordlist (optional):</b>')
+        label.set_halign(mobius.core.ui.label.align_right)
+        label.set_visible(True)
+        grid.attach(label.get_ui_widget(), 0, 2, 1, 1)
+
+        wordlist_hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
+        wordlist_hbox.set_spacing(5)
+        wordlist_hbox.set_visible(True)
+        grid.attach(wordlist_hbox.get_ui_widget(), 1, 2, 2, 1)
+
+        # Wordlist file chooser button
+        self.__wordlist_file_button = mobius.core.ui.button()
+        self.__wordlist_file_button.set_icon_by_name('folder')
+        self.__wordlist_file_button.set_text('Select a wordlist file...')
+        self.__wordlist_file_button.set_visible(True)
+        self.__wordlist_file_button.set_callback('clicked', self.__on_click_wordlist_file)
+        wordlist_hbox.add_child(self.__wordlist_file_button, mobius.core.ui.box.fill_with_widget)
+
+        # Wordlist clear button
+        self.__wordlist_clear_button = mobius.core.ui.button()
+        self.__wordlist_clear_button.set_icon_by_name('edit-clear')
+        self.__wordlist_clear_button.set_visible(True)
+        self.__wordlist_clear_button.set_sensitive(False)
+        self.__wordlist_clear_button.set_callback('clicked', self.__on_click_wordlist_clear_file)
+        wordlist_hbox.add_child(self.__wordlist_clear_button, mobius.core.ui.box.fill_none)
+
+        # No content label
+        self.__no_content_label = mobius.core.ui.label()
+        self.__no_content_label.set_markup('\n<b>No content options:</b>')
+        self.__no_content_label.set_halign(mobius.core.ui.label.align_right)
+        self.__no_content_label.set_valign(mobius.core.ui.label.align_top)
+        self.__no_content_label.set_visible(True)
+        grid.attach(self.__no_content_label.get_ui_widget(), 0, 3, 1, 1)
+
+        # No content widget
+        self.__no_content_widget = NoContentListWidget()
+        self.__no_content_widget.set_visible(True)
+        grid.attach(self.__no_content_widget.get_ui_widget(), 1, 3, 2, 1)
+
+        # Buttons
         hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_visible(True)
         hbox.add_filler()
@@ -126,6 +334,21 @@ class ReportView(object):
         self.__generate_report_button.set_callback("clicked", self.__on_generate_report)
         hbox.add_child(self.__generate_report_button, mobius.core.ui.box.fill_none)
 
+        # Set panel state
+        last_output_folder = mobius.framework.get_config('last_report_folder')
+        if last_output_folder:
+            self.__output_folder = last_output_folder
+
+        last_asap_file = mobius.framework.get_config('last_asap_file')
+        if last_asap_file:
+            self.__asap_file = last_asap_file
+
+        self.__update_options()
+
+        # Subscribe to config events
+        self.__event_uid1 = mobius.core.subscribe("config-set", self.__on_config_set)
+        self.__event_uid2 = mobius.core.subscribe("config-remove", self.__on_config_remove)
+
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Get ui widget
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -136,6 +359,8 @@ class ReportView(object):
     # @brief Save current state
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def on_destroy(self):
+        mobius.core.unsubscribe(self.__event_uid1)
+        mobius.core.unsubscribe(self.__event_uid2)
         self.__mediator.clear()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -147,11 +372,7 @@ class ReportView(object):
         self.__laudo = None
 
         if self.__itemlist:
-            if self.__is_laudo_container(itemlist):
-                self.__set_laudo_container(itemlist[0])
-
-            else:
-                self.__set_selected_items(self.__itemlist)
+            self.__set_selected_items(self.__itemlist)
 
         else:
             self.__widget.set_message("Select item(s) to generate report")
@@ -171,130 +392,192 @@ class ReportView(object):
             )
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Set laudo container (Brazilian Federal Police)
-    # @param item Container item
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __set_laudo_container(self, item):
-        case = item.case
-        self.__laudo = None
-        self.__processed_items = []
-
-        for c in item.get_children():
-            if c.category == "laudo":
-                self.__laudo = c
-
-            elif c.category == "report-data" and c.rid == "item.attributes":
-                data = c.data
-                uid = data.uid
-                self.__add_processed_item(case.get_item_by_uid(uid))
-
-        if self.__laudo and self.__processed_items:
-            numero, ano = [int(x) for x in self.__laudo.numero.split("/")]
-            report_id = f"{ano:04d}-{numero:04d}"
-
-            self.__report_id_entry.set_text(report_id)
-            self.__report_id_entry.set_sensitive(False)
-            self.__hashes_txt_checkbutton.set_active(True)
-            self.__hashes_txt_checkbutton.set_sensitive(False)
-            self.__generate_iso_checkbutton.set_active(True)
-            self.__generate_iso_checkbutton.set_sensitive(False)
-
-            hashes_txt_path = case.get_path(
-                os.path.join("report", report_id, "hashes.txt")
-            )
-            hashes_txt_value = self.__laudo.hashes_txt
-
-            if hashes_txt_value:
-                self.__hashes_txt_hash_label.set_text(hashes_txt_value)
-
-            elif os.path.exists(hashes_txt_path):
-                self.__calculate_hashes_txt_hash(hashes_txt_path, self.__laudo)
-
-            else:
-                self.__hashes_txt_hash_label.set_text("")
-
-            self.__control.set_status("")
-            self.__widget.show_content()
-
-        else:
-            self.__widget.set_message("No processed item(s) selected")
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Set selected items
     # @param itemlist Case item list
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __set_selected_items(self, itemlist):
+        self.__processed_items = self.__get_processed_items(itemlist)
 
-        # Search for processed items
-        self.__processed_items = []
-
-        for item in itemlist:
-            self.__add_processed_item(item)
-
-        # Enable Report ID entry
-        if self.__processed_items:
-            self.__report_id_entry.set_text("")
-            self.__report_id_entry.set_sensitive(True)
-            self.__hashes_txt_checkbutton.set_sensitive(True)
-            self.__hashes_txt_checkbutton.set_active(
-                mobius.framework.get_config("iped.generate_hashes_txt") == "True"
-            )
-            self.__generate_iso_checkbutton.set_sensitive(True)
-            self.__generate_iso_checkbutton.set_active(
-                mobius.framework.get_config("iped.generate_iso") == "True"
-            )
+        if self.__processed_items or True:      # @todo: remove "or True" when report generation is implemented for unprocessed items
             self.__widget.show_content()
         else:
             self.__widget.set_message("No processed item(s) selected")
 
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Update panel options
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __update_options(self):
+
+        if self.__itemlist:
+            self.__widget.show_content()
+        else:
+            self.__widget.set_message('Select item(s) to generate report')
+
+        if self.__output_folder:
+            self.__output_folder_button.set_text(self.__output_folder)
+        else:
+            self.__output_folder_button.set_text('Select output folder...')
+
+        if self.__asap_file:
+            self.__asap_file_button.set_text(self.__asap_file)
+            self.__asap_clear_button.set_sensitive(True)
+        else:
+            self.__asap_file_button.set_text('Select a .ASAP file from the Federal Police of Brazil...')
+            self.__asap_clear_button.set_sensitive(False)
+
+        if self.__wordlist_file:
+            self.__wordlist_file_button.set_text(self.__wordlist_file)
+            self.__wordlist_clear_button.set_sensitive(True)
+        else:
+            self.__wordlist_file_button.set_text('Select a wordlist file...')
+            self.__wordlist_clear_button.set_sensitive(False)
+
+        can_generate = not self.__is_running and bool(self.__output_folder) and bool(self.__itemlist)
+        self.__generate_report_button.set_sensitive(can_generate)
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief on_click_output_folder button clicked
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_click_output_folder(self):
+        dialog = Gtk.FileChooserDialog(title='Select output folder', action=Gtk.FileChooserAction.SELECT_FOLDER)
+        dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
+
+        if self.__output_folder:
+            dialog.set_current_folder(self.__output_folder)
+
+        response = dialog.run()
+
+        if response == Gtk.ResponseType.OK:
+            self.__output_folder = dialog.get_filename()
+            self.__output_folder_button.set_text(self.__output_folder)
+
+            transaction = mobius.framework.new_config_transaction()
+            mobius.framework.set_config('last_report_folder', self.__output_folder)
+            transaction.commit()
+
+        dialog.destroy()
+
+        self.__update_options()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief on_click_asap_file button clicked
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_click_asap_file(self):
+        dialog = Gtk.FileChooserDialog(title='Select .ASAP file', action=Gtk.FileChooserAction.OPEN)
+        dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
+
+        if self.__asap_file:
+            dialog.set_current_folder(self.__asap_file)
+
+        filefilter = Gtk.FileFilter()
+        filefilter.set_name("ASAP files")
+        filefilter.add_pattern("*.asap")
+        dialog.add_filter(filefilter)
+
+        response = dialog.run()
+
+        if response == Gtk.ResponseType.OK:
+            self.__asap_file = dialog.get_filename()
+        
+            transaction = mobius.framework.new_config_transaction()
+            mobius.framework.set_config('last_asap_file', self.__asap_file)
+            transaction.commit()
+
+        dialog.destroy()
+
+        self.__update_options()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief on_click_asap_clear_file button clicked
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_click_asap_clear_file(self):
+        self.__asap_file = None
+        self.__update_options()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief on_click_wordlist_file button clicked
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_click_wordlist_file(self):
+        dialog = Gtk.FileChooserDialog(title='Select wordlist file', action=Gtk.FileChooserAction.OPEN)
+        dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
+
+        filefilter = Gtk.FileFilter()
+        filefilter.set_name("Text files")
+        filefilter.add_mime_type("text/plain")
+        dialog.add_filter(filefilter)
+
+        response = dialog.run()
+
+        if response == Gtk.ResponseType.OK:
+            self.__wordlist_file = dialog.get_filename()
+
+            transaction = mobius.framework.new_config_transaction()
+            mobius.framework.set_config('last_wordlist_file', self.__wordlist_file)
+            transaction.commit()
+
+        dialog.destroy()
+
+        self.__update_options()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief on_click_wordlist_clear_file button clicked
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_click_wordlist_clear_file(self):
+        self.__wordlist_file = None
+        self.__update_options()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief on_config_set event handler
+    # @param name Config name
+    # @param value Config value
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_config_set(self, name, value):
+        if name == 'last_report_folder':
+            self.__output_folder = value
+            self.__update_options()
+
+        elif name == 'last_asap_file':
+            self.__asap_file = value
+            self.__update_options()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief on_config_remove event handler
+    # @param name Config name
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_config_remove(self, name):
+        if name == 'last_report_folder':
+            self.__output_folder = None
+            self.__update_options()
+
+        elif name == 'last_asap_file':
+            self.__asap_file = None
+            self.__update_options()
+
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Add processed item UID to list
+    # @brief Get processed items from item list, including subitems
+    # @param itemlist Case item list
+    # @return List of processed items
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __get_processed_items(self, itemlist):
+        processed_items = []
+
+        for item in itemlist:
+            if self.__is_processed_item(item):
+                processed_items.append(item)
+
+            processed_items.extend(self.__get_processed_items(item.get_children()))
+
+        return processed_items
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Check if item is already processed by IPED
     # @param item Case item
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __add_processed_item(self, item):
+    def __is_processed_item(self, item):
         case = item.case
         search_path = case.get_path(f"work/{item.uid:04d}/iped/lib/iped-search-app.jar")
 
-        if os.path.exists(search_path):
-            self.__processed_items.append(item)
-
-        for child in item.get_children():
-            self.__add_processed_item(child)
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Check if selected item is a laudo (Brazilian Federal Police) container
-    # @param itemlist Case item list
-    # @return True/False
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __is_laudo_container(self, itemlist):
-        return len(itemlist) == 1 and any(
-            c for c in itemlist[0].get_children() if c.category == "laudo"
-        )
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief on_report_id_changed event
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __on_report_id_changed(self, entry, *args):
-        can_generate_report = entry.get_text() != ""
-        self.__generate_report_button.set_sensitive(can_generate_report)
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief on_hashes_txt_checkbutton_toggled
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __on_hashes_txt_checkbutton_toggled(self, checkbutton, *args):
-        transaction = mobius.framework.new_config_transaction()
-        mobius.framework.set_config(
-            "iped.generate_hashes_txt", str(checkbutton.get_active())
-        )
-        transaction.commit()
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief on_generate_iso_checkbutton_toggled
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __on_generate_iso_checkbutton_toggled(self, checkbutton, *args):
-        transaction = mobius.framework.new_config_transaction()
-        mobius.framework.set_config("iped.generate_iso", str(checkbutton.get_active()))
-        transaction.commit()
+        return os.path.exists(search_path)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_generate_report event
@@ -325,12 +608,9 @@ class ReportView(object):
                 return
 
         option = pymobius.Data()
-        option.flag_generate_hashes_txt = self.__hashes_txt_checkbutton.get_active()
-        option.flag_generate_iso = self.__generate_iso_checkbutton.get_active()
         option.report_id = report_id
         option.report_path = report_path
         option.report_log_path = report_path + ".log"
-        option.report_iso_path = report_path + ".iso"
         option.case = case
         option.laudo = self.__laudo
         option.itemlist = self.__itemlist[:]
@@ -355,9 +635,6 @@ class ReportView(object):
         # remove previous report folder and .log
         if os.path.exists(option.report_log_path):
             os.remove(option.report_log_path)
-
-        if os.path.exists(option.report_iso_path):
-            os.remove(option.report_iso_path)
 
         if os.path.exists(option.report_path):
             option.control.set_status("Removing old report...")
@@ -394,18 +671,6 @@ class ReportView(object):
         mobius.core.logf("INF " + cmd)
         option.control.set_status("Running IPED report...")
         os.system(cmd)
-
-        # run pf.midia.principal report template (Brazilian Federal Police only, for now)
-        if option.laudo:
-            self.__mediator.call("pf.generate-report", option)
-
-        # generate hashes.txt, if necessary
-        if option.flag_generate_hashes_txt:
-            self.__generate_hashes_txt(option)
-
-        # generate .iso, if necessary
-        if option.flag_generate_iso:
-            self.__generate_iso(option)
 
         # final message
         option.control.set_status(f"Report {option.report_id} generated.")
@@ -449,87 +714,3 @@ class ReportView(object):
         fp.flush()
 
         return asap_path
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Generate hashes.txt
-    # @param option Option object
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __generate_hashes_txt(self, option):
-        option.control.set_status("Generating hashes.txt file...")
-
-        # remove old hashes.txt, if any
-        path = os.path.join(option.report_path, "hashes.txt")
-        if os.path.exists(path):
-            os.remove(path)
-
-        # create temporary file
-        fd, tmpfile = tempfile.mkstemp(".txt")
-        os.close(fd)
-
-        # generate hashes.txt
-        f = mobius.core.io.new_file_by_path(tmpfile)
-        fp = mobius.core.io.text_writer(f.new_writer())
-        pos = len(option.report_path) + 1
-
-        for root, dirs, files in os.walk(option.report_path, topdown=False):
-            for name in files:
-                path = os.path.join(root, name)
-                hash_value = self.__get_hash(path)
-                filename = path[pos:]
-                fp.write(f"{hash_value} ?SHA256*{filename}\n")
-
-        fp.flush()
-
-        # move file to report_path
-        hashes_txt_path = os.path.join(option.report_path, "hashes.txt")
-
-        if os.path.exists(hashes_txt_path):
-            os.remove(hashes_txt_path)
-
-        shutil.copyfile(tmpfile, hashes_txt_path)
-        os.remove(tmpfile)
-
-        # calculate hashes.txt hash
-        self.__calculate_hashes_txt_hash(hashes_txt_path, option.laudo)
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Calculate hashes.txt SHA2-256 hash
-    # @param path Hashes.txt path
-    # @param laudo Laudo object
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __calculate_hashes_txt_hash(self, path, laudo):
-        self.__control.set_status("Calculating hashes.txt file SHA2-256 hash value...")
-        hash_value = self.__get_hash(path)
-        self.__hashes_txt_hash_label.set_text(hash_value)
-        laudo.hashes_txt = hash_value
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Calculate file hash
-    # @param path File path
-    # @return Hash as string
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __get_hash(self, path):
-        h = hashlib.sha256()
-        fp = open(path, "rb")
-
-        data = fp.read(65536)
-        while data:
-            h.update(data)
-            data = fp.read(65536)
-
-        fp.close()
-        return h.hexdigest()
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Generate .iso file
-    # @param option Option object
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __generate_iso(self, option):
-        option.control.set_status(
-            f"Generating {os.path.basename(option.report_path)}.iso file..."
-        )
-
-        iso_path = option.report_path + ".iso"
-        cmd = f'mkisofs -udf -iso-level 3 -quiet -V {option.report_id} -o "{iso_path}" "{option.report_path}/"'
-        mobius.core.logf("INF " + cmd)
-        os.system(cmd)
