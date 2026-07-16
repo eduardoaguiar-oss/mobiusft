@@ -586,10 +586,13 @@ class ReportGeneratorView(object):
             raise Exception(f'File not found: {path}')
         
         ini = mobius.core.decoder.inifile(f.new_reader(), "ISO-8859-1")
-
         data = {}
-        data['laudo'] = ini.get_values('laudo')
-        data['solicitacao'] = ini.get_values('solicitacao')
+
+        for k, v in ini.get_values('laudo').items():
+            data[f'laudo.{k.lower()}'] = v
+
+        for k, v in ini.get_values('solicitacao').items():
+            data[f'solicitacao.{k.lower()}'] = v
 
         return data
 
