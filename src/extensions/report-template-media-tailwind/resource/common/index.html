@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-    <title>I18N{report.title:Mobius Forensic Toolkit Report}</title>
+    <title i18n="report.title">Mobius Forensic Toolkit Report</title>
     <link rel="stylesheet" href="css/tailwind.min.css">    
     <link rel="stylesheet" href="css/fontawesome.min.css">
     
@@ -46,7 +46,7 @@
             <!-- Header -->
             <div class="px-6 py-6 border-b border-zinc-100 flex flex-col items-center text-center">
                 <img src="img/icon.svg" alt="Mobius Forensic Toolkit Report" class="h-40 mb-4">
-                <p><b>I18N{report.title:Mobius Forensic Toolkit Report}</b></p>
+                <p><b><span i18n="report.title">Mobius Forensic Toolkit Report</span></b></p>
             </div>
 
             <!-- Menu -->
@@ -236,7 +236,7 @@
         const sourceData = window.ITEMS;
 
         if (!sourceData || !Array.isArray(sourceData)) {
-            container.innerHTML = '<div class="px-5 py-2 text-xs text-red-500">I18N{text.no_items: No items loaded}</div>';
+            container.innerHTML = '<div class="px-5 py-2 text-xs text-red-500"><span i18n="text.no_items">No items loaded</span></div>';
             return;
         }
 
@@ -313,7 +313,7 @@
         const versionContainer = document.getElementById('app-version');
         if (versionContainer) {
             versionContainer.textContent = window.VERSION;
-        }    
+        }
         
         // Populate extra pages
         populateExtraPages();
@@ -347,5 +347,31 @@
         icon.style.transform = submenu.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
     }
 </script>
+
+    <!-- Load language dictionary and populate fields -->
+    <script src="data/lang.js"></script>
+    <script>
+        function populateI18N() {
+            if (typeof window.LANG === 'undefined') {
+                console.warn('Language dictionary (data/lang.js) not loaded');
+                return;
+            }
+
+            document.querySelectorAll('[i18n]').forEach(element => {
+                const key = element.getAttribute('i18n');
+                const value = window.LANG[key];
+                
+                if (value !== undefined && value !== null && value !== '') {
+                    element.textContent = value;
+                } else {
+                    element.textContent = '—';
+                }
+            });
+        }
+
+        // Populate when page loads
+        document.addEventListener('DOMContentLoaded', populateI18N);
+    </script>
+
 </body>
 </html>
