@@ -510,6 +510,7 @@ class ReportGeneratorView(object):
         model.evidence_types = self.__get_evidence_types()
         model.extra_pages = []
         model.set_status = self.__set_status
+        model.report_title = None
 
         # Add .ASAP data if available
         if self.__asap_file:
