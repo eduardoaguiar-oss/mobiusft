@@ -18,6 +18,7 @@ Mobius Forensic Toolkit 2.28
 	* libmobius_python: get_error_message function now returns full Python traceback
 	* libmobius_python: Implemented callback for config-set event
 	* libmobius_python: Implemented callback for config-remove event
+	* pymobius.evidence: Added table master view for 'password-hash' evidence type
 
 Mobius Forensic Toolkit 2.27
 	* app-ares: Implemented the evidence_processor_impl interface

@@ -470,7 +470,7 @@ class ReportView(object):
             dialog.set_current_folder(self.__asap_file)
 
         filefilter = Gtk.FileFilter()
-        filefilter.set_name("ASAP files")
+        filefilter.set_name("ASAP files (*.asap)")
         filefilter.add_pattern("*.asap")
         dialog.add_filter(filefilter)
 
