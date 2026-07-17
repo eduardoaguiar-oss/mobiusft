@@ -114,10 +114,29 @@ def getter_encrypted_value(obj, attr_id):
     return ''
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# @brief Password status getter
+# @param obj Object
+# @param attr_id Attribute ID
+# @return 'ok' if password is valid, otherwise 'invalid'
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+def getter_password_status(obj, attr_id):
+    STATUS = ['not found', 'found', 'first half found', 'second half found']
+    turing = mobius.core.turing.turing()
+
+    if obj.has_attribute("password"):
+        status = 1
+
+    else:
+        status, password = turing.get_hash_password(obj.password_hash_type, obj.value)
+
+    return STATUS[status]
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Getters
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 GETTERS = {
     "encrypted": getter_encrypted_value,
+    "password_status": getter_password_status,
 }
 
 
@@ -523,6 +542,26 @@ MODEL = [
          name="Password Hashes",
          description="Password hashes, such as NTLM and LM",
          view_id="password-hashes",
+         master_views=[
+             args(id="table",
+                  columns=[
+                      args(id='password_hash_type', name="Hash Type", first_sortable=True),
+                      args(id='value', name="Hash Value"),
+                      args(id='password', name="Password"),
+                      args(id='status', name="Status", format="password_status"),
+                      args(id='description'),
+                  ]),
+         ],
+         detail_views=[
+             args(id="metadata",
+                  rows=[
+                      args(id='password_hash_type', name="Hash Type"),
+                      args(id='value', name="Hash Value"),
+                      args(id='password', name="Password"),
+                      args(id='status', name="Status", format="password_status"),
+                      args(id='description'),
+                  ]),
+         ]
          ),
     args(id="password",
          name="Passwords",
