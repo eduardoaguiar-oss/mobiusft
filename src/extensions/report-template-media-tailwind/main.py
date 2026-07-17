@@ -89,6 +89,7 @@ class Generator(object):
         self.__i18n_dict = {}
         self.__set_status = model.set_status
         self.__asap = model.asap
+        self.__extra_pages = model.extra_pages
 
         # Load I18N dictionary for the current language, if available
         lang_path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID, 'lang', f'{self.__language}.txt')
@@ -244,11 +245,21 @@ class Generator(object):
         fp.write(';\n')
 
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        # Generate EXTRA_PAGES variable
+        # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        self.__set_status("Generating EXTRA_PAGES variable...")
+        fp.write('\n')
+        fp.write('const EXTRA_PAGES = ')
+        json.dump(self.__extra_pages, fp, ensure_ascii=False, separators=(',', ':'))
+        fp.write(';\n')
+
+        # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         # Generate window variables
         # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         fp.write('\n')
         fp.write('window.EVIDENCE_TYPES = EVIDENCE_TYPES;\n')
         fp.write('window.ITEMS = ITEMS;\n')
+        fp.write('window.EXTRA_PAGES = EXTRA_PAGES;\n')
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Generate model.js item
@@ -384,6 +395,7 @@ class Generator(object):
     # @brief Generate evidence icons
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __generate_evidence_icons(self):
+        self.__set_status("Generating evidence icons...")
 
         # Create img/evidences folder, if necessary
         evidences_path = os.path.join(self.__output_dir, 'img', 'evidences')
@@ -402,6 +414,10 @@ class Generator(object):
     # @brief Generate ASAP.js file
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __generate_asap_js(self):
+        if not self.__asap:
+            return
+
+        self.__set_status("Generating data/asap.js file...")
 
         # Create data folder, if necessary
         data_path = os.path.join(self.__output_dir, 'data')
@@ -457,6 +473,7 @@ class Generator(object):
     # @param evidence_type Evidence type
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __generate_item_evidence_js(self, item, evidence_type):
+        self.__set_status(f"Generating data/{item.uid:04d}/{evidence_type}.js file...")
 
         # Create data/<uid> folder, if necessary
         base_dir = os.path.join(self.__output_dir, 'data', f'{item.uid:04d}')
