@@ -52,7 +52,17 @@
             <!-- Menu -->
             <div class="flex-1 overflow-y-auto py-6 px-3 space-y-1">
 
-               <!-- Case Items Container (Renders components directly at top-level) -->
+                <!-- EXTRA PAGES SECTION -->
+                <div id="extra-pages-container" class="space-y-1 mb-2">
+                    <!-- Extra pages will be dynamically injected here -->
+                </div>
+
+                <!-- Separator -->
+                <div id="extra-pages-separator" class="hidden mx-3 my-2">
+                    <hr class="border-zinc-200">
+                </div>
+
+                <!-- Case Items Container -->
                 <div id="direct-items-container" class="space-y-1">
                     <!-- Top-level forensic items will be dynamically injected here -->
                 </div>
@@ -250,6 +260,49 @@
             console.log(`%c[Automation] Automatically targeted and selected item node path UID: ${firstMenuItemLink.href.split('uid=')[1]}`, 'color:#3b82f6');
         }
     }
+    
+    function populateExtraPages() {
+        const container = document.getElementById('extra-pages-container');
+        const separator = document.getElementById('extra-pages-separator');
+        
+        if (!container || !window.EXTRA_PAGES || !Array.isArray(window.EXTRA_PAGES)) {
+            if (separator) separator.classList.add('hidden');
+            return;
+        }
+
+        container.innerHTML = '';
+
+        if (window.EXTRA_PAGES.length === 0) {
+            if (separator) separator.classList.add('hidden');
+            return;
+        }
+
+        // Show separator
+        if (separator) separator.classList.remove('hidden');
+
+        window.EXTRA_PAGES.forEach(page => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'mx-2';
+
+            const link = document.createElement('a');
+            link.href = page.href;
+            link.target = 'contentFrame';
+            link.className = 'flex items-center gap-3 px-5 py-2.5 rounded-2xl menu-item text-zinc-700 hover:text-zinc-900 text-sm font-medium submenu-item';
+
+            link.innerHTML = `
+                <i class="fa-solid fa-info-circle w-4 flex-shrink-0 text-blue-500"></i>
+                <span class="truncate">${page.title}</span>
+            `;
+
+            link.addEventListener('click', () => {
+                document.querySelectorAll('.submenu-item').forEach(el => el.classList.remove('active'));
+                link.classList.add('active');
+            });
+
+            wrapper.appendChild(link);
+            container.appendChild(wrapper);
+        });
+    }    
 
     // =====================================================
     // Combined/Unified Safe Boot Execution Path
@@ -261,6 +314,9 @@
         if (versionContainer) {
             versionContainer.textContent = window.VERSION;
         }    
+        
+        // Populate extra pages
+        populateExtraPages();
         
         // Populate case items
         populateCaseItems();
