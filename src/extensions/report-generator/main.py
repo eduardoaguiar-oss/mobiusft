@@ -410,7 +410,12 @@ class ReportGeneratorView(object):
         dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
 
         if self.__asap_file:
-            dialog.set_current_folder(self.__asap_file)
+            dialog.set_filename(self.__asap_file)
+
+        filefilter = Gtk.FileFilter()
+        filefilter.set_name("ASAP files (*.asap)")
+        filefilter.add_pattern("*.asap")
+        dialog.add_filter(filefilter)
 
         response = dialog.run()
 
