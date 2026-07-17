@@ -31,16 +31,16 @@ set(SOURCE_FILES
     icon.png
     resource/common/css/fontawesome.min.css
     resource/common/css/tailwind.min.css
-    resource/common/webfonts/fa-regular-400.woff2
-    resource/common/webfonts/fa-v4compatibility.woff2
-    resource/common/webfonts/fa-solid-900.woff2
-    resource/common/webfonts/fa-brands-400.woff2
     resource/common/img/alert.png
     resource/common/img/icon.svg
-    resource/lang/pt_BR.txt
+    resource/common/index.html
+    resource/common/item.html
+    resource/common/webfonts/fa-brands-400.woff2
+    resource/common/webfonts/fa-regular-400.woff2
+    resource/common/webfonts/fa-solid-900.woff2
+    resource/common/webfonts/fa-v4compatibility.woff2
     resource/lang/en_US.txt
-    resource/template/index.html
-    resource/template/item.html
+    resource/lang/pt_BR.txt
 )
 
 # Custom command to zip files into report-template-media-tailwind.mobius
