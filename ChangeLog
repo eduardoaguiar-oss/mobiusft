@@ -6,6 +6,11 @@ Mobius Forensic Toolkit 2.28
 	* iped-frontend: Added option "No content"
 	* iped-frontend: Removed option "Generate hashes.txt"
 	* iped-frontend: Removed option "Generate .iso"
+	* iped-frontend: Removed .asap generation
+	* iped-frontend: Check if there is a report on output folder
+	* iped-frontend: Added option -keywordlist
+	* iped-frontend: Added option -nocontent
+	* iped-frontend: Use subprocess.call instead of os.system function
 	* libmobius_framework: Post config-set event following framework.set_config invocation
 	* libmobius_framework: Post config-remove event following framework.remove_config invocation
 	* libmobius_python: Improved mobius.framework.attribute class using the PyType_FromSpec API
