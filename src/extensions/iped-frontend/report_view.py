@@ -17,11 +17,13 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import os
 import shutil
+import subprocess
 import threading
 
 import mobius
 import mobius.core.io
 import pymobius
+from gi.repository import Gdk
 from gi.repository import Gtk
 
 from metadata import *
@@ -71,7 +73,7 @@ class NoContentListWidget(object):
         scrolled.add(self.__listbox)
 
         # Add last saved items to the listbox
-        last_no_content_items = sorted(mobius.framework.get_config('iped.last_no_content_items')) or []
+        last_no_content_items = sorted(mobius.framework.get_config('iped.last_no_content_items') or [])
         self.set_items(last_no_content_items)
 
         # Optional: allow removing with Delete key
@@ -349,23 +351,23 @@ class ReportView(object):
         self.__event_uid1 = mobius.core.subscribe("config-set", self.__on_config_set)
         self.__event_uid2 = mobius.core.subscribe("config-remove", self.__on_config_remove)
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Get ui widget
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def get_ui_widget(self):
         return self.__widget.get_ui_widget()
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Save current state
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def on_destroy(self):
         mobius.core.unsubscribe(self.__event_uid1)
         mobius.core.unsubscribe(self.__event_uid2)
         self.__mediator.clear()
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Set data to be viewed
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def set_data(self, itemlist):
         self.__itemlist = itemlist
         self.__processed_items = []
@@ -377,10 +379,10 @@ class ReportView(object):
         else:
             self.__widget.set_message("Select item(s) to generate report")
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Set IPED path
     # @param path Full path
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def set_iped_path(self, path):
         self.__iped_path = path
 
@@ -391,10 +393,10 @@ class ReportView(object):
                 "You must set IPED path before generating reports"
             )
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Set selected items
     # @param itemlist Case item list
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __set_selected_items(self, itemlist):
         self.__processed_items = self.__get_processed_items(itemlist)
 
@@ -553,11 +555,11 @@ class ReportView(object):
             self.__asap_file = None
             self.__update_options()
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Get processed items from item list, including subitems
     # @param itemlist Case item list
     # @return List of processed items
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __get_processed_items(self, itemlist):
         processed_items = []
 
@@ -569,36 +571,36 @@ class ReportView(object):
 
         return processed_items
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Check if item is already processed by IPED
     # @param item Case item
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __is_processed_item(self, item):
         case = item.case
         search_path = case.get_path(f"work/{item.uid:04d}/iped/lib/iped-search-app.jar")
 
         return os.path.exists(search_path)
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Check if report already exists in the output folder
+    # @return True if report exists, False otherwise
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __has_report(self):
+        if not self.__output_folder:
+            return False
+        
+        search_path = os.path.join(self.__output_folder, "iped", "lib", "iped-search-app.jar")
+        return os.path.exists(search_path)
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_generate_report event
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_generate_report(self):
-        case = self.__itemlist[0].case
-        report_id = self.__report_id_entry.get_text()
-        report_path = case.get_path(os.path.join("report", report_id))
-
-        # create main report folder, if necessary
-        main_report_path = case.get_path("report")
-
-        if not os.path.exists(main_report_path):
-            os.makedirs(main_report_path)
 
         # check if there is an older report
-        if os.path.exists(report_path):
-            dialog = mobius.core.ui.message_dialog(
-                mobius.core.ui.message_dialog.type_question
-            )
-            dialog.text = f"Do you want to overwrite '{report_id}' report?"
+        if self.__has_report():
+            dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
+            dialog.text = f"Report found on '{self.__output_folder}'. Do you want to overwrite?"
             dialog.add_button(mobius.core.ui.message_dialog.button_yes)
             dialog.add_button(mobius.core.ui.message_dialog.button_no)
             dialog.set_default_response(mobius.core.ui.message_dialog.button_no)
@@ -608,26 +610,25 @@ class ReportView(object):
                 return
 
         option = pymobius.Data()
-        option.report_id = report_id
-        option.report_path = report_path
-        option.report_log_path = report_path + ".log"
-        option.case = case
-        option.laudo = self.__laudo
+        option.report_path = self.__output_folder
+        option.report_log_path = self.__output_folder + "/report.log" # @todo report.log path
+        option.case = self.__itemlist[0].case
         option.itemlist = self.__itemlist[:]
         option.processed_items = self.__processed_items[:]
         option.control = self.__control
         option.iped_path = self.__iped_path
+        option.asap_file = self.__asap_file
+        option.wordlist_file = self.__wordlist_file
+        option.no_content_items = self.__no_content_widget.get_items()
         option.xmx = mobius.framework.get_config("iped.xmx") or 8
 
         # create thread
-        t = threading.Thread(
-            target=self.__generate_report_thread, args=(option,), daemon=True
-        )
+        t = threading.Thread(target=self.__generate_report_thread, args=(option,), daemon=True)
         t.start()
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Report generation thread
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __generate_report_thread(self, option):
         guard = mobius.core.thread_guard()
         connection = option.case.new_connection()
@@ -644,73 +645,41 @@ class ReportView(object):
 
         # build command line
         # create one xxxx.iped file for each 'bookmarks.iped' file, because each file name must have a unique name
-        cmd = f'java -jar {option.iped_path}/iped.jar \
-            -log "{option.report_log_path}"  \
-            -Xmx{option.xmx}g \
-            -Xms{option.xmx}g \
-            -o "{option.report_path}"'
+        cmd = [
+            'java', '-jar', f'{option.iped_path}/iped.jar',
+            '-log', option.report_log_path,
+            f'-Xmx{option.xmx}g',
+            f'-Xms{option.xmx}g',
+            '-o', option.report_path
+        ]
 
         for item in option.processed_items:
             case = item.case
-            indexer_path = case.get_path(
-                os.path.join("work", f"{item.uid:04d}", "iped")
-            )
+            indexer_path = case.get_path(os.path.join("work", f"{item.uid:04d}", "iped"))
             bookmarks_default_path = os.path.join(indexer_path, "bookmarks.iped")
 
             if os.path.exists(bookmarks_default_path):
                 bookmarks_path = os.path.join(indexer_path, f"{item.uid:04d}.iped")
                 shutil.copyfile(bookmarks_default_path, bookmarks_path)
-                cmd += f' -d "{bookmarks_path}"'
+                cmd += ['-d', bookmarks_path]
 
-        # generate .asap file, if necessary
-        if option.laudo:
-            asap_path = self.__generate_asap(option)
-            cmd += f' -asap "{asap_path}"'
+        # add .asap file, if available
+        if option.asap_file:
+            cmd += ['-asap', option.asap_file]
+
+        # add wordlist file, if available
+        if option.wordlist_file:
+            cmd += ['-keywordlist', option.wordlist_file]
+
+        # add -nocontent for each no content item
+        for arg in option.no_content_items:
+            cmd += ['-nocontent', arg]
 
         # run report
-        mobius.core.logf("INF " + cmd)
+        mobius.core.logf("INF " + ' '.join(cmd))
         option.control.set_status("Running IPED report...")
-        os.system(cmd)
+
+        rc = subprocess.call(cmd)
 
         # final message
-        option.control.set_status(f"Report {option.report_id} generated.")
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Generate .asap file (Brazilian Federal Police)
-    # @param option Option object
-    # @return .asap generated file path
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __generate_asap(self, option):
-        asap_path = option.report_path + ".asap"
-        laudo = option.laudo
-
-        f = mobius.core.io.new_file_by_path(asap_path)
-        fp = mobius.core.io.text_writer(f.new_writer(), "iso-8859-1")
-        fp.write("[LAUDO]\n")
-        fp.write("TITULO=%s\n" % laudo.titulo)
-        fp.write("SUBTITULO=%s\n" % laudo.subtitulo)
-        fp.write("UNIDADE=%s\n" % laudo.unidade)
-        fp.write("NUMERO=%s\n" % laudo.numero)
-        fp.write("DATA=%s\n" % laudo.data)
-        fp.write("PCF1=%s|%s|E|M\n" % (laudo.perito1_nome, laudo.perito1_matricula))
-        fp.write(
-            "MATERIAL=%s\n" % "|".join(item.name for item in option.processed_items)
-        )
-        fp.write(
-            "MATERIAL_DESCR=%s\n"
-            % "|".join(item.name for item in option.processed_items)
-        )
-        fp.write("CODIGO_BARRA=%s\n" % laudo.codigo_barra)
-        fp.write("\n")
-
-        fp.write("[SOLICITACAO]\n")
-        fp.write("NUMERO_IPL=%s\n" % laudo.ipl)
-        fp.write("AUTORIDADE=%s\n" % laudo.requisitante)
-        fp.write("DOCUMENTO=%s\n" % laudo.documento)
-        fp.write("DATA_DOCUMENTO=%s\n" % laudo.data_documento)
-        fp.write("NUMERO_SIAPRO=%s\n" % laudo.numero_sei)
-        fp.write("NUMERO_CRIMINALISTICA=%s\n" % laudo.protocolo)
-        fp.write("DATA_CRIMINALISTICA=%s\n" % laudo.data_protocolo)
-        fp.flush()
-
-        return asap_path
+        option.control.set_status(f"Report generated. RC={rc}.")
