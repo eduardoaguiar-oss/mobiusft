@@ -512,6 +512,7 @@ class ReportGeneratorView(object):
         model.output_folder = self.__output_folder
         model.items = self.__itemlist[:]
         model.template_id = self.__template_id
+        model.template_type = treemodel[treeiter][TEMPLATE_TYPE]
         model.evidence_types = self.__get_evidence_types()
         model.extra_pages = []
         model.set_status = self.__set_status
@@ -520,8 +521,10 @@ class ReportGeneratorView(object):
         # Add .ASAP data if available
         if self.__asap_file:
             model.asap = self.__parse_asap_file(self.__asap_file)
+            model.asap_path = self.__asap_file
         else:
             model.asap = None
+            model.asap_path = None
 
         # create thread
         t = threading.Thread(
@@ -537,26 +540,28 @@ class ReportGeneratorView(object):
     # @brief Report generation thread
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __generate_report_thread(self, model):
-        mobius.core.logf("DBG [report-generator] Starting report generation thread...")
-        guard = mobius.core.thread_guard()
-        connection = model.case.new_connection()
+        try:
+            guard = mobius.core.thread_guard()
+            connection = model.case.new_connection()
 
-        # Generate report using generator
-        mobius.core.logf("DBG [report-generator] Generating report...")
-        self.__set_status("Generating report...")
-        generator = model.generator
-        generator.run(model)
-        mobius.core.logf("DBG [report-generator] Report generation completed.")
+            # Generate report using generator
+            self.__set_status("Generating report...")
+            generator = model.generator
+            generator.run(model)
 
-        # Generate hashes.txt if requested
-        if model.generate_hashes_txt:
-            mobius.core.logf("DBG [report-generator] Generating hashes.txt...")
-            self.__generate_hashes_txt(model.output_folder)
-            mobius.core.logf("DBG [report-generator] Finished generating hashes.txt.")
+            # Generate hashes.txt if template is media and option is enabled
+            if model.template_type == 'media' and model.generate_hashes_txt:
+                self.__generate_hashes_txt(model)
+                GLib.idle_add(self.__update_hashes_txt_label)
 
-        # Reset running state
+            # Update UI
+            self.__set_status("Report generation completed.")
+
+        except Exception as e:
+            self.__set_status(f"Error generating report: {e}")
+
+        # Set running state
         self.__is_running = False
-        self.__set_status("Report generation completed.")
         GLib.idle_add(self.__update_options)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -604,12 +609,12 @@ class ReportGeneratorView(object):
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Generate hashes.txt
-    # @param output_path Output directory path
+    # @param model Model data structure
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __generate_hashes_txt(self, output_path):
+    def __generate_hashes_txt(self, model):
 
         self.__set_status("Generating hashes.txt file...")
-        hashes_txt_path = os.path.join(output_path, "hashes.txt")
+        hashes_txt_path = os.path.join(model.output_folder, "hashes.txt")
 
         # remove old hashes.txt, if any
         old_f = mobius.core.io.new_file_by_path(hashes_txt_path)
@@ -621,9 +626,9 @@ class ReportGeneratorView(object):
         writer = mobius.core.io.text_writer(f.new_writer())
 
         # generate hashes.txt
-        pos = len(output_path) + 1
+        pos = len(model.output_folder) + 1
 
-        for root, dirs, files in os.walk(output_path, topdown=False):
+        for root, dirs, files in os.walk(model.output_folder, topdown=False):
             for name in files:
                 path = os.path.join(root, name)
                 hash_value = self.__get_hash(path)
@@ -636,8 +641,12 @@ class ReportGeneratorView(object):
         shutil.copyfile(f.path, hashes_txt_path)
         os.remove(f.path)
 
-        # update hashes.txt label
-        self.__update_hashes_txt_label()
+        # calculate hash of hashes.txt
+        self.__hashes_txt_value = self.__get_hash(hashes_txt_path)
+
+        # Write hashes_txt value back to .asap file if available
+        if model.asap_path:
+            self.__update_asap_file(model.asap_path, self.__hashes_txt_value)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Update hashes.txt label
@@ -661,11 +670,11 @@ class ReportGeneratorView(object):
         self.__set_status("<b>hashes.txt</b> file hash value calculated.")
         self.__hashes_txt_copy_button.set_sensitive(True)
 
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Calculate file hash
     # @param path File path
     # @return Hash as string
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __get_hash(self, path):
         h = mobius.core.crypt.hash("sha2-256")
         f = mobius.core.io.new_file_by_path(path)
@@ -678,6 +687,36 @@ class ReportGeneratorView(object):
             data = reader.read(block_size)
 
         return h.get_hex_digest()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Update .ASAP file with hashes.txt value
+    # @param path .ASAP file path
+    # @param hashes_txt_value Hashes.txt value
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __update_asap_file(self, path, hashes_txt_value):
+        f = mobius.core.io.new_file_by_path(path)
+
+        if not f.exists():
+            raise Exception(f'File not found: {path}')
+        
+        fp = mobius.core.io.line_reader(f.new_reader(), "ISO-8859-1")
+        tmpf = mobius.core.io.tempfile()
+        fw = mobius.core.io.text_writer(tmpf.new_writer(), "ISO-8859-1")
+        is_hashes_txt_updated = False
+
+        for line in fp:
+
+            # Ignore old MIDIA_GERADA_HASHES_TXT line
+            if not line.startswith("MIDIA_GERADA_HASHES_TXT="):
+                fw.write(line + "\n")
+
+            # Create new MIDIA_GERADA_HASHES_TXT line if not present
+            if line.startswith("MIDIA_GERADA_DESCRICAO="):
+                fw.write(f"MIDIA_GERADA_HASHES_TXT={hashes_txt_value}\n")
+
+        fw.flush()
+        shutil.copyfile(tmpf.path, path)
+        os.remove(tmpf.path)
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
