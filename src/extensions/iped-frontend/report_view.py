@@ -325,6 +325,7 @@ class ReportView(object):
         # Buttons
         hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_visible(True)
+        hbox.set_spacing(10)
         hbox.add_filler()
         vbox.add_child(hbox, mobius.core.ui.box.fill_none)
 
@@ -336,6 +337,14 @@ class ReportView(object):
         self.__generate_report_button.set_callback("clicked", self.__on_generate_report)
         hbox.add_child(self.__generate_report_button, mobius.core.ui.box.fill_none)
 
+        self.__open_report_button = mobius.core.ui.button()
+        self.__open_report_button.set_icon_by_name("folder")
+        self.__open_report_button.set_text("_Open report")
+        self.__open_report_button.set_sensitive(False)
+        self.__open_report_button.set_visible(True)
+        self.__open_report_button.set_callback("clicked", self.__on_click_open_report_button)
+        hbox.add_child(self.__open_report_button, mobius.core.ui.box.fill_none)
+       
         # Set panel state
         last_output_folder = mobius.framework.get_config('last_report_folder')
         if last_output_folder:
@@ -400,8 +409,9 @@ class ReportView(object):
     def __set_selected_items(self, itemlist):
         self.__processed_items = self.__get_processed_items(itemlist)
 
-        if self.__processed_items or True:      # @todo: remove "or True" when report generation is implemented for unprocessed items
+        if self.__processed_items:
             self.__widget.show_content()
+            self.__update_options()
         else:
             self.__widget.set_message("No processed item(s) selected")
 
@@ -436,6 +446,9 @@ class ReportView(object):
 
         can_generate = not self.__is_running and bool(self.__output_folder) and bool(self.__itemlist)
         self.__generate_report_button.set_sensitive(can_generate)
+
+        can_open = self.__has_report()
+        self.__open_report_button.set_sensitive(can_open)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_click_output_folder button clicked
@@ -683,3 +696,16 @@ class ReportView(object):
 
         # final message
         option.control.set_status(f"Report generated. RC={rc}.")
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief on_click_open_report_button event
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_click_open_report_button(self):
+        if not self.__output_folder or not os.path.exists(self.__output_folder):
+            return
+        
+        iped_search_app_path = os.path.join(self.__output_folder, "iped", "lib", "iped-search-app.jar")
+        if not os.path.exists(iped_search_app_path):
+            return
+        
+        subprocess.call(['java', '-jar', iped_search_app_path])
