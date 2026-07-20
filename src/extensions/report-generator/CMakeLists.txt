@@ -30,6 +30,8 @@ file(GLOB RESOURCE_FILES resource/*.png)
 set(SOURCE_FILES
     main.py
     metadata.py
+    media_view.py
+    report_view.py
     icon.png
     ${RESOURCE_FILES}
 )
