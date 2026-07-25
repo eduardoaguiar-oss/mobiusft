@@ -193,41 +193,6 @@
         }
     }
 
-    function rebuildTreeFromVector(flatArray) {
-        const itemMap = new Map();
-        const childUids = new Set();
-
-        flatArray.forEach(item => {
-            const intUid = parseInt(item.uid, 10);
-            itemMap.set(intUid, {
-                ...item,
-                uid: intUid,
-                children: Array.isArray(item.children) ? [...item.children] : []
-            });
-        });
-
-        itemMap.forEach(item => {
-            item.children.forEach(childUid => {
-                childUids.add(parseInt(childUid, 10));
-            });
-        });
-
-        itemMap.forEach(item => {
-            item.children = item.children
-                .map(childUid => itemMap.get(parseInt(childUid, 10)))
-                .filter(Boolean);
-        });
-
-        const rootNodes = [];
-        itemMap.forEach(item => {
-            if (!childUids.has(item.uid)) {
-                rootNodes.push(item);
-            }
-        });
-
-        return rootNodes;
-    }
-
     function populateCaseItems() {
         const container = document.getElementById('direct-items-container');
         if (!container) return;
@@ -242,15 +207,13 @@
 
         container.innerHTML = '';
 
-        const structuralTree = rebuildTreeFromVector(sourceData);
-
-        structuralTree.forEach(rootItem => {
-            const el = createMenuItemElement(rootItem);
-            if (el) {
-                container.appendChild(el);
-            }
+        window.ITEMS.forEach(rootItem => {
+                    const el = createMenuItemElement(rootItem);
+                    if (el) {
+                        container.appendChild(el);
+                    }
         });
-        
+
         console.log('%c[Menu] Case Items tree assembled and populated successfully', 'color:#22c55e');
         
         const firstMenuItemLink = container.querySelector('.submenu-item');
