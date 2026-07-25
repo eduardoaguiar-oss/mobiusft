@@ -481,10 +481,19 @@ class Generator(object):
                         attributes.append((attr_id, attr_getter))
                     self.__getters[evidence_type] = attributes
 
-        # Generate data/<uid>/<evidence-type>.js files for each item and evidence type
         for item in self.__items:
-            for evidence_type in item.count_evidences_grouped().keys():
-                self.__generate_item_evidence_js(item, evidence_type)
+            self.__generate_evidence_js_for_item(item)
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Generate data/<uid>/<evidence-type>.js files for a given item and subitems
+    # @param item Case item
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __generate_evidence_js_for_item(self, item):
+        for evidence_type in item.count_evidences_grouped().keys():
+            self.__generate_item_evidence_js(item, evidence_type)
+
+        for child in item.get_children():
+            self.__generate_evidence_js_for_item(child)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Generate data/<uid>/<evidence-type>.js files for an item
