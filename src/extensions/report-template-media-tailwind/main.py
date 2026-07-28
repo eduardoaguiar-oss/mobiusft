@@ -63,14 +63,14 @@ class Generator(object):
     def __init__(self):
         self.templates = [
             {
-                'id' : 'media.tailwind.en_US',
+                'id' : 'media.tailwind.tabbed.en_US',
                 'type' : 'media',
-                'description' : 'Media: Tailwind CSS (en_US)'
+                'description' : 'Media: Tailwind CSS - Tabbed (en_US)'
             },
             {
-                'id' : 'media.tailwind.pt_BR',
+                'id' : 'media.tailwind.tabbed.pt_BR',
                 'type' : 'media',
-                'description' : 'Media: Tailwind CSS (pt_BR)'
+                'description' : 'Media: Tailwind CSS - Tabbed (pt_BR)'
             },
         ]
 
@@ -85,7 +85,8 @@ class Generator(object):
         self.__items = model.items
         self.__template_id = model.template_id
         self.__evidence_types = model.evidence_types
-        self.__language = self.__template_id.split('.')[-1]
+        self.__layout = self.__template_id.split('.')[2]
+        self.__language = self.__template_id.split('.')[3]
         self.__i18n_dict = {}
         self.__set_status = model.set_status
         self.__asap = model.asap
@@ -102,6 +103,7 @@ class Generator(object):
 
         # Generate static files, templates, evidence icons, model.js, and evidence.js
         self.__generate_static_files()
+        self.__generate_category_icons()
         self.__generate_evidence_icons()
         self.__generate_lang_js()
         self.__generate_model_js()
@@ -141,7 +143,50 @@ class Generator(object):
     def __generate_static_files(self):
         self.__set_status("Generating static files...")
         common_path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID, 'common')
+        layout_path = pymobius.mediator.call('extension.get-resource-path', EXTENSION_ID, 'layout', self.__layout)
         shutil.copytree(common_path, self.__output_dir, dirs_exist_ok=True)
+        shutil.copytree(layout_path, self.__output_dir, dirs_exist_ok=True)
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Generate category icons
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __generate_category_icons(self):
+        self.__set_status("Generating category icons...")
+
+        # Create img/categories folder, if necessary
+        categories_path = os.path.join(self.__output_dir, 'img', 'categories')
+
+        folder = mobius.core.io.new_folder_by_path(categories_path)
+        if not folder.exists():
+            folder.create()
+
+        # Create icon files
+        for category in mobius.framework.get_categories():
+            icon_data = category.icon_data
+
+            f = mobius.core.io.new_file_by_path(os.path.join(categories_path, f"{category.id}.png"))
+            writer = f.new_writer()
+            writer.write(icon_data)
+            writer.flush()
+            
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Generate evidence icons
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __generate_evidence_icons(self):
+        self.__set_status("Generating evidence icons...")
+
+        # Create img/evidences folder, if necessary
+        evidences_path = os.path.join(self.__output_dir, 'img', 'evidences')
+
+        f = mobius.core.io.new_folder_by_path(evidences_path)
+        if not f.exists():
+            f.create()
+
+        # Copy icon files
+        for et in self.__evidence_types:
+            icon_path = et['icon']
+            shutil.copy(icon_path, evidences_path)
+            et['icon'] = os.path.join('img', 'evidences', f"{et['id']}.png")
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Generate lang.js file
@@ -409,25 +454,6 @@ class Generator(object):
 
         # Return data
         return data
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Generate evidence icons
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __generate_evidence_icons(self):
-        self.__set_status("Generating evidence icons...")
-
-        # Create img/evidences folder, if necessary
-        evidences_path = os.path.join(self.__output_dir, 'img', 'evidences')
-
-        f = mobius.core.io.new_folder_by_path(evidences_path)
-        if not f.exists():
-            f.create()
-
-        # Copy icon files
-        for et in self.__evidence_types:
-            icon_path = et['icon']
-            shutil.copy(icon_path, evidences_path)
-            et['icon'] = os.path.join('img', 'evidences', f"{et['id']}.png")
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Generate ASAP.js file
