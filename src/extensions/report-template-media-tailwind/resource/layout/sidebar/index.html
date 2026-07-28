@@ -106,26 +106,33 @@
             }
         }
 
-        // Create a menu item element recursively, including its metadata and children
         function createMenuItemElement(item, level = 0) {
             try {
                 const wrapper = document.createElement('div');
                 wrapper.className = level === 0 ? 'mx-2' : '';
 
                 const nameMeta = item.metadata?.find(m => m.id === 'name');
-                const idMeta = item.metadata?.find(m => m.id === 'id');
+                const idMeta   = item.metadata?.find(m => m.id === 'id');
 
                 const label = nameMeta?.value || idMeta?.value || `Item ${item.uid || ''}`;
-                const hasRealChildren = Array.isArray(item.children) && item.children.length > 0;
+                const hasChildren = Array.isArray(item.children) && item.children.length > 0;
 
                 // ---------- HEADER ----------
                 const headerContainer = document.createElement('div');
                 headerContainer.className = 'flex items-center w-full rounded-2xl menu-item text-zinc-700 hover:text-zinc-900 cursor-pointer';
 
-                // Left arrow (always present)
-                const arrowIcon = document.createElement('i');
-                arrowIcon.className = 'fa-solid fa-chevron-right text-xs text-zinc-400 w-5 text-center transition-transform duration-200 flex-shrink-0';
-                headerContainer.appendChild(arrowIcon);
+                // Left arrow – only when there are real children
+                let arrowIcon = null;
+                if (hasChildren) {
+                    arrowIcon = document.createElement('i');
+                    arrowIcon.className = 'fa-solid fa-chevron-right text-xs text-zinc-400 w-5 text-center transition-transform duration-200 flex-shrink-0';
+                    headerContainer.appendChild(arrowIcon);
+                } else {
+                    // Spacer to keep alignment with items that have an arrow
+                    const spacer = document.createElement('span');
+                    spacer.className = 'w-5 inline-block flex-shrink-0';
+                    headerContainer.appendChild(spacer);
+                }
 
                 // Icon + label
                 const link = document.createElement('a');
@@ -141,49 +148,51 @@
                 headerContainer.appendChild(link);
                 wrapper.appendChild(headerContainer);
 
-                // ---------- SUB-ITEMS CONTAINER ----------
-                const subItemsContainer = document.createElement('div');
-                // Start CLOSED (no "open" class)
-                subItemsContainer.className = 'submenu mt-1 space-y-0.5 border-l border-zinc-200 ml-5 pl-2';
+                // ---------- CHILDREN CONTAINER (only if real children exist) ----------
+                let childrenContainer = null;
 
-                // 1. Metadata (always first)
-                subItemsContainer.appendChild(createMetadataSubItem(item));
+                if (hasChildren) {
+                    childrenContainer = document.createElement('div');
+                    // Start collapsed
+                    childrenContainer.className = 'submenu mt-1 space-y-0.5 border-l border-zinc-200 ml-5 pl-2';
 
-                // 2. Real children
-                if (hasRealChildren) {
                     item.children.forEach(child => {
                         const childEl = createMenuItemElement(child, level + 1);
                         if (childEl) {
-                            subItemsContainer.appendChild(childEl);
+                            childrenContainer.appendChild(childEl);
                         }
                     });
+
+                    wrapper.appendChild(childrenContainer);
                 }
 
-                wrapper.appendChild(subItemsContainer);
-
-                // ---------- TOGGLE LOGIC ----------
-                const toggleDrawer = (e) => {
+                // ---------- CLICK BEHAVIOUR ----------
+                headerContainer.addEventListener('click', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
 
-                    const isOpen = subItemsContainer.classList.contains('open');
-
-                    if (isOpen) {
-                        subItemsContainer.classList.remove('open');
-                        arrowIcon.style.transform = 'rotate(0deg)';
-                    } else {
-                        subItemsContainer.classList.add('open');
-                        arrowIcon.style.transform = 'rotate(90deg)';
+                    // 1. Always show metadata when the item is clicked
+                    const contentArea = document.getElementById('contentArea');
+                    if (contentArea) {
+                        renderMetadataTable(item, contentArea);
                     }
-                };
 
-                // Clicking the whole header expands/collapses
-                headerContainer.addEventListener('click', toggleDrawer);
-
-                // Active state
-                link.addEventListener('click', (e) => {
+                    // 2. Active state
                     document.querySelectorAll('.submenu-item').forEach(el => el.classList.remove('active'));
                     link.classList.add('active');
+
+                    // 3. Toggle children (only if they exist)
+                    if (hasChildren && childrenContainer) {
+                        const isOpen = childrenContainer.classList.contains('open');
+
+                        if (isOpen) {
+                            childrenContainer.classList.remove('open');
+                            if (arrowIcon) arrowIcon.style.transform = 'rotate(0deg)';
+                        } else {
+                            childrenContainer.classList.add('open');
+                            if (arrowIcon) arrowIcon.style.transform = 'rotate(90deg)';
+                        }
+                    }
                 });
 
                 return wrapper;
@@ -197,39 +206,6 @@
             }
         }
 
-        // Create a metadata sub-item for a given item
-        function createMetadataSubItem(item) {
-            const wrapper = document.createElement('div');
-
-            const link = document.createElement('a');
-            link.href = '#';
-            link.className = 'flex items-center gap-3 px-5 py-1.5 submenu-item text-zinc-600 text-xs hover:text-zinc-900 rounded-lg';
-            link.innerHTML = `
-                <img src="img/info.png" class="w-5 h-5 object-contain inline-block"/>
-                <span>Metadata</span>
-            `;
-
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation(); // important!
-
-                document.querySelectorAll('.submenu-item').forEach(el => el.classList.remove('active'));
-                link.classList.add('active');
-
-                const contentArea = document.getElementById('contentArea');
-                if (contentArea) {
-                    renderMetadataTable(item, contentArea);
-                } else {
-                    console.error('Element #contentArea not found');
-                }
-            });
-
-            wrapper.appendChild(link);
-            return wrapper;
-        }
-
-
-        // Render a metadata table for a given item into the target container
         function renderMetadataTable(item, targetContainer) {
             let html = `
                 <div class="max-w-[90%] mx-auto bg-white rounded-xl shadow-sm border border-zinc-200 overflow-hidden h-full flex flex-col">
@@ -465,7 +441,7 @@
         // Populate when page loads
         document.addEventListener('DOMContentLoaded', populateI18N);
     </script>
-
+    
 </body>
 
 </html>
