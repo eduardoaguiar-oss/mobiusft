@@ -717,7 +717,13 @@
             if (!selectedItem || !window.EVIDENCE_TYPES) return;
 
             // Build compact rows for the Master Section
-            window.EVIDENCE_TYPES.forEach(type => {
+            const sortedTypes = [...window.EVIDENCE_TYPES].sort((a, b) => {
+                const nameA = (LANG['type.' + a.id] || ('Artifact ' + a.id)).toLowerCase();
+                const nameB = (LANG['type.' + b.id] || ('Artifact ' + b.id)).toLowerCase();
+                return nameA.localeCompare(nameB);
+            });
+
+            sortedTypes.forEach(type => {
                 const count = selectedItem.evidence_counts?.[type.id] || 0;
                 const hasRecords = count > 0;
                 
@@ -732,15 +738,17 @@
                     tr.className = 'opacity-40 cursor-not-allowed pointer-events-none h-8 bg-zinc-50/30';
                 }
 
+                const type_name = LANG['type.' + type.id] || 'Artifact ' + type.id;
+
                 tr.innerHTML = `
                     <td class="text-center whitespace-nowrap py-1 px-3 w-12 h-8">
                         <img src="img/evidences/${type.id}.png" 
-                             alt="${type.name}" 
+                             alt="${type_name}" 
                              class="w-5 h-5 object-contain inline-block ${hasRecords ? 'transform group-hover:scale-105 transition-transform' : ''}" 
                              onerror="this.src='img/evidences/default.png'">
                     </td>
                     <td class="font-semibold text-zinc-950 py-1 px-3 h-8">
-                        <span class="block truncate w-full">${type.name}</span>
+                        <span class="block truncate w-full">${type_name}</span>
                     </td>
                     <td class="text-right whitespace-nowrap py-1 px-4 w-24 h-8">
                         <span class="inline-block w-full text-right font-mono text-xs ${hasRecords ? 'text-zinc-900 font-bold' : 'text-zinc-400 font-normal'}">
@@ -925,7 +933,7 @@
                                             return `
                                                 <th scope="col" data-sort-id="${col.id}" class="px-3 py-2 bg-zinc-50 whitespace-nowrap min-w-[120px] max-w-[200px] truncate ${sortableClass}">
                                                     <div class="flex items-center gap-1">
-                                                        <span>${col.name || col.id}</span>
+                                                        <span>${LANG['column.' + type.id + '.' + col.id] || LANG['column.' + col.id] || col.name || col.id}</span>
                                                         ${col.is_sortable || col.first_sortable ? `<i class="sort-icon fa-solid fa-sort text-[8px] text-zinc-300 group-hover:text-zinc-500 transition-colors"></i>` : ''}
                                                     </div>
                                                 </th>`;
