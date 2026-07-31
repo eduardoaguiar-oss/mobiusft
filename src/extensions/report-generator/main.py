@@ -19,6 +19,7 @@ import datetime
 import os
 import shutil
 import threading
+import traceback
 
 import mobius
 import pymobius
@@ -793,6 +794,7 @@ class ReportGeneratorView(object):
 
         except Exception as e:
             self.__set_status(f"Error generating report: {e}")
+            mobius.core.logf(f"ERR Error generating report: {str(e)}\n{traceback.format_exc()}")
 
         # Set running state
         self.__is_running = False
