@@ -1,15 +1,19 @@
 Mobius Forensic Toolkit 2.28
 	* report-generator: Added new extension
 	* report-template-media-tailwind: Added new extension
+	* report-template-media-tailwind: Added new report media.tailwind.sidebar.en_US
+	* report-template-media-tailwind: Added new report media.tailwind.sidebar.pt_BR
+	* report-template-media-tailwind: Added new report media.tailwind.tabbed.en_US
+	* report-template-media-tailwind: Added new report media.tailwind.tabbed.pt_BR
 	* ice: Improved error handling when creating views
-	* iped-frontend: Add Wordlist path and clear options
-	* iped-frontend: Add "No content" UI option (generates --nocontent flag)
-	* iped-frontend: Add keyword list UI option (generates --keywordlist flag)
+	* iped-frontend: Added Wordlist path and clear options
+	* iped-frontend: Added "No content" UI option (generates --nocontent flag)
+	* iped-frontend: Added keyword list UI option (generates --keywordlist flag)
 	* iped-frontend: Remove deprecated hashes.txt and .iso generation options
 	* iped-frontend: Remove .asap file generation
 	* iped-frontend: Validate report existence in output folder
 	* iped-frontend: Replace os.system with subprocess.call
-	* iped-frontend: Add "Open report" button
+	* iped-frontend: Added "Open report" button
 	* libmobius_framework: Post config-set event following framework.set_config invocation
 	* libmobius_framework: Post config-remove event following framework.remove_config invocation
 	* libmobius_python: Improved mobius.framework.attribute class using the PyType_FromSpec API
