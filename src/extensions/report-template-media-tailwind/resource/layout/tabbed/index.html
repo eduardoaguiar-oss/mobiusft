@@ -282,6 +282,12 @@
         // =====================================================
         window.addEventListener('load', () => {
 
+            // Set report title
+            const titleElement = document.getElementById('report.title');
+            if (titleElement) {
+                titleElement.textContent = window.REPORT_TITLE || LANG['report.title'];
+            }
+
             // Set app version
             const versionContainer = document.getElementById('app-version');
             if (versionContainer) {
@@ -334,11 +340,15 @@
                 const key = element.getAttribute('i18n');
                 const value = window.LANG[key];
 
-                if (value !== undefined && value !== null && value !== '') {
+                if (key == 'report.title')
+                    element.textContent = window.REPORT_TITLE || value;
+
+                else if (value !== undefined && value !== null && value !== '')
                     element.textContent = value;
-                } else {
+
+                else
                     element.textContent = '—';
-                }
+                
             });
         }
 
