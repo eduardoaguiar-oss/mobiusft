@@ -1338,8 +1338,8 @@
                 ? [...record.metadata].sort((a, b) => (a.name || '').localeCompare(b.name || ''))
                 : [];
 
-            const hashEntries = record.hashes 
-                ? Object.entries(record.hashes).sort((a, b) => a.localeCompare(b)) 
+            const hashEntries = record.hashes
+                ? Object.entries(record.hashes).sort()
                 : [];
 
             // 3. Generate unified table injection block with an inner scroll wrapper context
@@ -1403,7 +1403,7 @@
                                 <!-- Artifact Hash Values Loops -->
                                 ${hashEntries.map(([hashType, hashValue]) => `
                                     <tr class="hover:bg-zinc-50/50 h-8">
-                                        <td class="px-3 py-1 font-medium text-zinc-500 truncate uppercase bg-zinc-50/20">${hashType}</td>
+                                        <td class="px-3 py-1 font-medium text-zinc-500 truncate uppercase bg-zinc-50/20">Hash ${hashType}</td>
                                         <td class="px-3 py-1 text-zinc-900 font-mono text-[11px] select-all break-all">${hashValue || '-'}</td>
                                     </tr>
                                 `).join('')}
