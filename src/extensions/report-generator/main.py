@@ -17,6 +17,7 @@
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import datetime
 import os
+import os.path
 import shutil
 import threading
 import traceback
@@ -31,227 +32,11 @@ from gi.repository import GdkPixbuf
 
 from metadata import *
 
-class Model(object):
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Initialize model
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __init__(self):
-        self.output_folder = None
-        self.asap_file = None
-        self.items = []
-        self.template_id = None
-        self.actions = []
-        self.generate_hashes_txt = False
-        self.update_hashes_txt = False
-        self.update_asap_file = False
-        self.hashes_txt_hash_type = "sha2-256"
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Clone object
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def clone(self):
-        new_model = Model()
-        new_model.output_folder = self.output_folder
-        new_model.asap_file = self.asap_file
-        new_model.items = self.items[:]
-        new_model.template_id = self.template_id
-        new_model.generate_hashes_txt = self.generate_hashes_txt
-        new_model.update_hashes_txt = self.update_hashes_txt
-        new_model.update_asap_file = self.update_asap_file
-        new_model.hashes_txt_hash_type = self.hashes_txt_hash_type
-        new_model.actions = self.actions[:]
-
-        return new_model
-    
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Add action
-    # @param action Action
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def add_action(self, action):
-        self.actions.append(action)
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Update model
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def update(self):
-        flag_update = True
-
-        while(flag_update):
-            flag_update = False
-
-            for action in self.actions:
-                flag_update |= action.update()
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Action to generate hashes.txt file
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class HashesTxtAction(object):
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Initialize action
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __init__(self, model):
-        self.__name = "Generate hashes.txt"
-        self.__model = model
-        self.__model.generate_hashes_txt = False
-        self.__model.update_hashes_txt = False
-        self.__model.update_asap_file = False
-        self.__model.hashes_txt_hash_type = "sha2-256"
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Build widget
-    # @param grid Grid
-    # @param row Row
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def build_widget(self, grid, row):
-        self.__switch = Gtk.Switch(active=self.is_enabled())
-        self.__switch.set_visible(True)
-        self.__switch.connect('state-set', self.__on_switch_action)
-        grid.attach(self.__switch, 0, row, 1, 1)
-
-        label = mobius.core.ui.label()
-        label.set_markup(f"<b>{self.get_name()}</b>")
-        label.set_halign(mobius.core.ui.label.align_left)
-        label.set_visible(True)
-        grid.attach(label.get_ui_widget(), 1, row, 1, 1)
-
-        label = mobius.core.ui.label()
-        label.set_markup(f"<i>{self.get_options_text()}</i>")
-        label.set_halign(mobius.core.ui.label.align_left)
-        label.set_visible(True)
-        label.get_ui_widget().set_hexpand(True)
-        grid.attach(label.get_ui_widget(), 2, row, 1, 1)
-
-        self.__options_button = mobius.core.ui.button()
-        self.__options_button.set_icon_by_name('preferences-system')
-        self.__options_button.set_visible(True)
-        self.__options_button.set_sensitive(False)
-        self.__options_button.set_callback('clicked', self.__on_click_action_options)
-        grid.attach(self.__options_button.get_ui_widget(), 3, row, 1, 1)
-
-        self.__revealer = Gtk.Revealer.new()
-        self.__revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN)
-        self.__revealer.set_reveal_child(False)
-        self.__revealer.set_visible(True)
-        grid.attach(self.__revealer, 0, row + 1, 3, 1)
-
-        # Options widget
-        self.__options_widget = Gtk.Grid.new()
-        self.__options_widget.set_row_spacing(10)
-        self.__options_widget.set_column_spacing(5)
-        self.__options_widget.set_column_homogeneous(False)
-        self.__options_widget.show()
-
-        label = mobius.core.ui.label()
-        label.set_markup('<b>Update hashes.txt file:</b>')
-        label.set_halign(mobius.core.ui.label.align_right)
-        label.set_visible(True)
-        self.__options_widget.attach(label.get_ui_widget(), 0, 0, 1, 1)
-
-        self.__update_hashes_switch = Gtk.Switch.new()
-        self.__update_hashes_switch.set_visible(True)
-        self.__update_hashes_switch.set_active(False)
-        #self.__update_hashes_switch.connect('state-set', self.__on_update_hashes_switch_state_set)
-        self.__options_widget.attach(self.__update_hashes_switch, 1, 0, 1, 1)
-
-        self.__revealer.add(self.__options_widget)
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Check if action is enabled
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def is_enabled(self):
-        return self.__model.generate_hashes_txt
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Get action name
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def get_name(self):
-        return self.__name
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Get widget
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def get_widget(self):
-        return self.__widget
-    
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Get options text
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def get_options_text(self):
-        if not self.__model.generate_hashes_txt:
-            return ""
-        
-        text = f"Hash type: {self.__model.hashes_txt_hash_type.upper()}"
-
-        if self.__model.update_hashes_txt:
-            text += ", update hashes.txt"
-        else:
-            text += ", overwrite hashes.txt"
-
-        if self.__model.update_asap_file:
-            text += ", update .ASAP file"
-
-        return text
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Set enabled option
-    # @param enabled Enabled
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def set_enabled(self, enabled):
-        self.__switch.set_active(enabled)
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Update options
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def update(self):
-        flag_updated = False
-
-        if not self.__model.output_folder and self.__model.generate_hashes_txt:
-            self.__model.generate_hashes_txt = False
-            flag_updated = True
-
-        if not self.__model.asap_file and self.__model.update_asap_file:
-            self.__model.update_asap_file = False
-            flag_updated = True
-
-        is_enabled = self.is_enabled()
-        self.__options_button.set_sensitive(is_enabled)
-        if not is_enabled:
-            self.__revealer.set_reveal_child(False)
-
-        return flag_updated
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Run action
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def run(self, model):
-        self.__view.__generate_hashes_txt(model)
-        GLib.idle_add(self.__view.__update_hashes_txt_label)
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief on_switch_action switch toggled
-    # @param switch Switch
-    # @param action Action
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __on_switch_action(self, switch, active):
-        self.__model.generate_hashes_txt = active
-        self.__model.update()
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief on_click_action_options button clicked
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __on_click_action_options(self):
-        is_revealed = self.__revealer.get_reveal_child()
-        self.__revealer.set_reveal_child(not is_revealed)
-
-
-
-TEMPLATE_ICON, TEMPLATE_ID, TEMPLATE_TYPE, TEMPLATE_NAME, GENERATOR_OBJ = range(5)
-
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Report generator view
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+TEMPLATE_ICON, TEMPLATE_ID, TEMPLATE_TYPE, TEMPLATE_NAME, GENERATOR_OBJ = range(5)
+
 class ReportGeneratorView(object):
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -260,17 +45,14 @@ class ReportGeneratorView(object):
     def __init__(self):
         self.__mediator = pymobius.mediator.copy()
 
-        # Initialize model
-        self.__model = Model()
-        self.__model.add_action(HashesTxtAction(self.__model))
-
         # Control variables
         self.__template_id = None
+        self.__template_type = None
+        self.__output_folder = None
         self.__asap_file = None
-        self.__generate_hashes = True
-        self.__is_running = False
         self.__hashes_txt_value = None
         self.__itemlist = []
+        self.__is_running = False
 
         self.name = f'{EXTENSION_NAME} v{EXTENSION_VERSION}'
         icon_path = self.__mediator.call('extension.get-icon-path', EXTENSION_ID)
@@ -291,7 +73,7 @@ class ReportGeneratorView(object):
         grid.set_column_spacing(5)
         grid.set_column_homogeneous(False)
         grid.show()
-        vbox.add_child(grid, mobius.core.ui.box.fill_with_widget)
+        vbox.add_child(grid, mobius.core.ui.box.fill_none)
 
         label = mobius.core.ui.label()
         label.set_markup('<b>Template:</b>')
@@ -360,32 +142,17 @@ class ReportGeneratorView(object):
 
         grid.attach(self.__template_combobox, 1, 0, 2, 1)
 
-        # Output folder
-        label = mobius.core.ui.label()
-        label.set_markup('<b>Output folder:</b>')
-        label.set_halign(mobius.core.ui.label.align_right)
-        label.set_visible(True)
-        grid.attach(label.get_ui_widget(), 0, 1, 1, 1)
-
-        # Output folder chooser button
-        self.__output_folder_button = mobius.core.ui.button()
-        self.__output_folder_button.set_icon_by_name('folder')
-        self.__output_folder_button.set_text('Select output folder...')
-        self.__output_folder_button.set_visible(True)
-        self.__output_folder_button.set_callback('clicked', self.__on_click_output_folder)
-        grid.attach(self.__output_folder_button.get_ui_widget(), 1, 1, 2, 1)
-
         # .ASAP file path
         label = mobius.core.ui.label()
         label.set_markup('<b>.ASAP file (optional):</b>')
         label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
-        grid.attach(label.get_ui_widget(), 0, 2, 1, 1)
+        grid.attach(label.get_ui_widget(), 0, 1, 1, 1)
 
         asap_hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         asap_hbox.set_spacing(5)
         asap_hbox.set_visible(True)
-        grid.attach(asap_hbox.get_ui_widget(), 1, 2, 2, 1)
+        grid.attach(asap_hbox.get_ui_widget(), 1, 1, 2, 1)
 
         # .ASAP file chooser button
         self.__asap_file_button = mobius.core.ui.button()
@@ -403,64 +170,78 @@ class ReportGeneratorView(object):
         self.__asap_clear_button.set_callback('clicked', self.__on_click_asap_clear_file)
         asap_hbox.add_child(self.__asap_clear_button, mobius.core.ui.box.fill_none)
 
-        # Actions
+        # Output folder
         label = mobius.core.ui.label()
-        label.set_markup('<b>Actions:</b>')
+        label.set_markup('<b>Output folder:</b>')
         label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
-        grid.attach(label.get_ui_widget(), 0, 3, 1, 1)
+        grid.attach(label.get_ui_widget(), 0, 2, 1, 1)
 
-        actions_grid = Gtk.Grid.new()
-        actions_grid.set_row_spacing(10)
-        actions_grid.set_column_spacing(5)
-        actions_grid.set_column_homogeneous(False)
-        actions_grid.set_visible(True)
-        grid.attach(actions_grid, 1, 3, 2, 1)
-
-        # Each action has a switch, a label, an option list, an options button
-        # and an options revealer
-        row = 0
-
-        for action in self.__model.actions:
-            action.build_widget(actions_grid, row)
-            row += 2
+        # Output folder chooser button
+        self.__output_folder_button = mobius.core.ui.button()
+        self.__output_folder_button.set_icon_by_name('folder')
+        self.__output_folder_button.set_text('Select output folder...')
+        self.__output_folder_button.set_visible(True)
+        self.__output_folder_button.set_callback('clicked', self.__on_click_output_folder)
+        grid.attach(self.__output_folder_button.get_ui_widget(), 1, 2, 2, 1)
 
         # Media options revealer
-        self.__media_options_revealer = Gtk.Revealer.new()
+        self.__media_options_label = mobius.core.ui.label()
+        self.__media_options_label.set_markup("<b>Media options:</b>")
+        self.__media_options_label.set_halign(mobius.core.ui.label.align_right)
+        self.__media_options_label.set_visible(True)
+        grid.attach(self.__media_options_label.get_ui_widget(), 0, 3, 1, 1)
+       
+        self.__media_options_revealer = Gtk.Revealer()
         self.__media_options_revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN)
-        self.__media_options_revealer.set_reveal_child(False)
         self.__media_options_revealer.set_visible(True)
-        grid.attach(self.__media_options_revealer, 1, 4, 2, 1)
+        self.__media_options_revealer.set_reveal_child(False)
+        grid.attach(self.__media_options_revealer, 1, 3, 2, 1)
 
-        media_vbox = mobius.core.ui.box(mobius.core.ui.box.orientation_vertical)
-        media_vbox.set_spacing(10)
-        media_vbox.set_border_width(10)
-        media_vbox.set_visible(True)
-        self.__media_options_revealer.add(media_vbox.get_ui_widget())
+        media_options_grid = Gtk.Grid.new()
+        media_options_grid.set_row_spacing(5)
+        media_options_grid.set_column_spacing(5)
+        media_options_grid.set_column_homogeneous(False)
+        media_options_grid.show()
+        self.__media_options_revealer.add(media_options_grid)
 
+        # Media option: Update hashes.txt
         label = mobius.core.ui.label()
-        label.set_markup("<b>Media options:</b>")
-        label.set_halign(mobius.core.ui.label.align_left)
+        label.set_markup('<b>Update hashes.txt file:</b>')
+        label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
-        media_vbox.add_child(label.get_ui_widget(), mobius.core.ui.box.fill_none)
+        media_options_grid.attach(label.get_ui_widget(), 0, 0, 1, 1)
+
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
+        hbox.set_spacing(5)
+        hbox.set_visible(True)
+        media_options_grid.attach(hbox.get_ui_widget(), 1, 0, 2, 1)
+
+        self.__update_hashes_switch = Gtk.Switch.new()
+        self.__update_hashes_switch.set_visible(True)
+        self.__update_hashes_switch.set_active(False)
+        #self.__update_hashes_switch.connect('state-set', self.__on_update_hashes_switch_state_set)
+        hbox.add_child(self.__update_hashes_switch, mobius.core.ui.box.fill_none)
+        hbox.add_filler()
 
         # Hashes.txt value and copy button
-        hashes_hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
-        hashes_hbox.set_spacing(10)
-        hashes_hbox.set_visible(True)
-        media_vbox.add_child(hashes_hbox, mobius.core.ui.box.fill_none)
-
         label = mobius.core.ui.label()
         label.set_markup("<b>Hashes.txt (SHA2-256):</b>")
         label.set_halign(mobius.core.ui.label.align_right)
         label.set_visible(True)
-        hashes_hbox.add_child(label.get_ui_widget(), mobius.core.ui.box.fill_none)
+        media_options_grid.attach(label.get_ui_widget(), 0, 2, 1, 1)
+
+        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
+        hbox.set_spacing(5)
+        hbox.set_visible(True)
+        hbox.get_ui_widget().set_hexpand(True)
+        media_options_grid.attach(hbox.get_ui_widget(), 1, 2, 2, 1)
 
         frame = Gtk.Frame()
         frame.set_shadow_type(Gtk.ShadowType.IN)
         frame.set_name("text-frame")
         frame.show()
-        hashes_hbox.add_child(frame, mobius.core.ui.box.fill_with_widget)
+        hbox.add_child(frame, mobius.core.ui.box.fill_with_widget)
 
         self.__hashes_txt_hash_label = mobius.core.ui.label()
         self.__hashes_txt_hash_label.set_halign(mobius.core.ui.label.align_left)
@@ -473,9 +254,11 @@ class ReportGeneratorView(object):
         self.__hashes_txt_copy_button.set_visible(True)
         self.__hashes_txt_copy_button.set_sensitive(False)
         self.__hashes_txt_copy_button.set_callback('clicked', self.__on_click_hashes_txt_copy)
-        hashes_hbox.add_child(self.__hashes_txt_copy_button, mobius.core.ui.box.fill_none)
+        hbox.add_child(self.__hashes_txt_copy_button, mobius.core.ui.box.fill_none)
 
         # Status bar and Buttons
+        vbox.add_filler()
+
         hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
         hbox.set_spacing(10)
         hbox.set_visible(True)
@@ -510,7 +293,9 @@ class ReportGeneratorView(object):
 
         last_output_folder = mobius.framework.get_config('last_report_folder')
         if last_output_folder:
-            self.__model.output_folder = last_output_folder
+            self.__output_folder = last_output_folder
+            if os.path.exists(os.path.join(self.__output_folder, "hashes.txt")):
+                self.__update_hashes_switch.set_active(True)
 
         last_asap_file = mobius.framework.get_config('last_asap_file')
         if last_asap_file:
@@ -518,10 +303,6 @@ class ReportGeneratorView(object):
 
         self.__update_hashes_txt_label()
         self.__update_options()
-
-        # Subscribe to events
-        self.__event_uid1 = mobius.core.subscribe('config-set', self.__on_config_set)
-        self.__event_uid2 = mobius.core.subscribe('config-remove', self.__on_config_remove)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Get ui widget
@@ -543,8 +324,6 @@ class ReportGeneratorView(object):
     # @brief on_destroy view
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def on_destroy(self):
-        mobius.core.unsubscribe(self.__event_uid1)
-        mobius.core.unsubscribe(self.__event_uid2)
         self.__mediator.clear()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -559,6 +338,41 @@ class ReportGeneratorView(object):
         GLib.idle_add(self.__status_label.set_markup, text or '')
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Set output folder
+    # @param path Output folder path
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __set_output_folder(self, path):
+        self.__output_folder = path
+
+        transaction = mobius.framework.new_config_transaction()
+        mobius.framework.set_config('last_report_folder', self.__output_folder)
+        transaction.commit()
+
+        if os.path.exists(os.path.join(path, "hashes.txt")):
+            self.__update_hashes_switch.set_active(True)
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Update output folder based on .ASAP file path and on template type selected
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __update_output_folder(self):
+        if not self.__asap_file:
+            return
+
+        if self.__template_type == 'media':
+            if self.__itemlist:
+                case = self.__itemlist[0].case
+                filename = os.path.basename(self.__asap_file)
+
+                if filename.startswith("AsAP_Laudo_") and filename.endswith(".asap"):
+                    parts = filename[len("AsAP_Laudo_"):-len(".asap")].split("-")
+                    if len(parts) == 2:
+                        number, year = parts
+                        self.__set_output_folder(case.get_path(f"report/{year}-{number}"))
+
+        elif self.__template_type == 'report':
+            self.__set_output_folder(os.path.dirname(self.__asap_file))
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Update panel options
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __update_options(self):
@@ -568,8 +382,8 @@ class ReportGeneratorView(object):
         else:
             self.__widget.set_message('Select item(s) to generate report')
 
-        if self.__model.output_folder:
-            self.__output_folder_button.set_text(self.__model.output_folder)
+        if self.__output_folder:
+            self.__output_folder_button.set_text(self.__output_folder)
         else:
             self.__output_folder_button.set_text('Select output folder...')
 
@@ -585,20 +399,23 @@ class ReportGeneratorView(object):
         else:
             self.__hashes_txt_copy_button.set_sensitive(False)
 
-        # Media releaver
-        treemodel = self.__template_combobox.get_model()
-        treeiter = self.__template_combobox.get_active_iter()
-
-        if treeiter:
-            template_type = treemodel[treeiter][TEMPLATE_TYPE]
-            is_media = (template_type == 'media')
+        # Media options
+        if self.__template_type == 'media':
+            is_media = True
         else:
             is_media = False
 
+        if self.__output_folder and os.path.exists(os.path.join(self.__output_folder, "hashes.txt")):
+            has_hashes_txt = True
+        else:
+            has_hashes_txt = False
+
+        self.__update_hashes_switch.set_sensitive(has_hashes_txt)
+        self.__media_options_label.set_visible(is_media)
         self.__media_options_revealer.set_reveal_child(is_media)
 
         # Execute button
-        can_generate = not self.__is_running and bool(self.__model. template_id) and bool(self.__model.output_folder) and bool(self.__itemlist)
+        can_generate = not self.__is_running and bool(self.__template_id) and bool(self.__output_folder) and bool(self.__itemlist)
         self.__generate_button.set_sensitive(can_generate)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -609,14 +426,21 @@ class ReportGeneratorView(object):
         treeiter = combobox.get_active_iter()
 
         if treeiter:
-            self.__model.template_id = treemodel[treeiter][TEMPLATE_ID]
+            self.__template_id = treemodel[treeiter][TEMPLATE_ID]
+            self.__template_type = treemodel[treeiter][TEMPLATE_TYPE]
 
-            if self.__model.template_id:
+            if self.__template_id:
                 transaction = mobius.framework.new_config_transaction()
-                mobius.framework.set_config('last_report_template', self.__model.template_id)
+                mobius.framework.set_config('last_report_template', self.__template_id)
                 transaction.commit()
 
-            self.__update_options()
+                self.__update_output_folder()
+
+        else:
+            self.__template_id = None
+            self.__template_type = None
+
+        self.__update_options()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_click_output_folder button clicked
@@ -625,24 +449,24 @@ class ReportGeneratorView(object):
         dialog = Gtk.FileChooserDialog(title='Select output folder', action=Gtk.FileChooserAction.SELECT_FOLDER)
         dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
 
-        if self.__model.output_folder:
-            dialog.set_current_folder(self.__model.output_folder)
+        if self.__output_folder:
+            dialog.set_current_folder(self.__output_folder)
 
         response = dialog.run()
 
         if response == Gtk.ResponseType.OK:
-            self.__model.output_folder = dialog.get_filename()
-
-            transaction = mobius.framework.new_config_transaction()
-            mobius.framework.set_config('last_report_folder', self.__model.output_folder)
-            transaction.commit()
+            self.__set_output_folder(dialog.get_filename())
 
         dialog.destroy()
+
+        self.__update_options()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_click_asap_file button clicked
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_click_asap_file(self):
+
+        # Run dialog
         dialog = Gtk.FileChooserDialog(title='Select .ASAP file', action=Gtk.FileChooserAction.OPEN)
         dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
 
@@ -655,16 +479,23 @@ class ReportGeneratorView(object):
         dialog.add_filter(filefilter)
 
         response = dialog.run()
-
-        if response == Gtk.ResponseType.OK:
-            self.__asap_file = dialog.get_filename()
-            self.__asap_file_button.set_text(self.__asap_file)
-
-            transaction = mobius.framework.new_config_transaction()
-            mobius.framework.set_config('last_asap_file', self.__asap_file)
-            transaction.commit()
-
+        selected_path = dialog.get_filename()
         dialog.destroy()
+
+        if response != Gtk.ResponseType.OK:
+            return
+
+        # Set selected .ASAP file
+        self.__asap_file = selected_path
+
+        transaction = mobius.framework.new_config_transaction()
+        mobius.framework.set_config('last_asap_file', self.__asap_file)
+        transaction.commit()
+
+        # Update output folder based on .ASAP file if available
+        self.__update_output_folder()
+
+        # Update panel options
         self.__update_options()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -672,7 +503,6 @@ class ReportGeneratorView(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_click_asap_clear_file(self):
         self.__asap_file = None
-        self.__asap_file_button.set_text('Select a .ASAP file from the Federal Police of Brazil...')
         self.__update_options()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -684,48 +514,12 @@ class ReportGeneratorView(object):
             clipboard.set_text(self.__hashes_txt_value, -1)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief on_generate_hashes_toggled checkbutton toggled
-    # @param checkbutton Checkbutton
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __on_generate_hashes_toggled(self, checkbutton):
-        self.__generate_hashes = checkbutton.get_active()
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief on_config_set event handler
-    # @param name Config name
-    # @param value Config value
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __on_config_set(self, name, value):
-        if name == 'last_report_folder':
-            self.__model.output_folder = value
-            self.__update_hashes_txt_label()
-            self.__update_options()
-
-        elif name == 'last_asap_file':
-            self.__asap_file = value
-            self.__update_options()
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief on_config_remove event handler
-    # @param name Config name
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __on_config_remove(self, name):
-        if name == 'last_report_folder':
-            self.__model.output_folder = None
-            self.__update_hashes_txt_label()
-            self.__update_options()
-
-        elif name == 'last_asap_file':
-            self.__asap_file = None
-            self.__update_options()
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_generate_report button clicked
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_generate_report(self):
 
         # check if there is an older report
-        if os.path.exists(os.path.join(self.__model.output_folder, "index.html")):
+        if os.path.exists(os.path.join(self.__output_folder, "index.html")):
             dialog = mobius.core.ui.message_dialog(
                 mobius.core.ui.message_dialog.type_question
             )
@@ -742,11 +536,14 @@ class ReportGeneratorView(object):
         treemodel = self.__template_combobox.get_model()
         treeiter = self.__template_combobox.get_active_iter()
 
-        model = self.__model.clone()
+        model = pymobius.Data()
+        model.template_id = self.__template_id
+        model.template_type = treemodel[treeiter][TEMPLATE_TYPE]
         model.generator = treemodel[treeiter][GENERATOR_OBJ]
+        model.output_folder = self.__output_folder
+        model.update_hashes_txt = self.__update_hashes_switch.get_active()
         model.case = self.__itemlist[0].case
         model.items = self.__itemlist[:]
-        model.template_type = treemodel[treeiter][TEMPLATE_TYPE]
         model.evidence_types = self.__get_evidence_types()
         model.extra_pages = []
         model.set_status = self.__set_status
@@ -775,6 +572,7 @@ class ReportGeneratorView(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __generate_report_thread(self, model):
         try:
+            # Multithreading guard to ensure thread safety when accessing Mobius core resources
             guard = mobius.core.thread_guard()
             connection = model.case.new_connection()
 
@@ -784,19 +582,18 @@ class ReportGeneratorView(object):
             generator.run(model)
 
             # Generate hashes.txt if template is media and option is enabled
-            print("model.template_type, model.generate_hashes_txt", model.template_type, model.generate_hashes_txt)
-            if model.template_type == 'media' and model.generate_hashes_txt:
+            if model.template_type == 'media':
                 self.__generate_hashes_txt(model)
                 GLib.idle_add(self.__update_hashes_txt_label)
 
-            # Update UI
+            # Update status
             self.__set_status("Report generation completed.")
 
         except Exception as e:
             self.__set_status(f"Error generating report: {e}")
             mobius.core.logf(f"ERR Error generating report: {str(e)}\n{traceback.format_exc()}")
 
-        # Set running state
+        # Update UI
         self.__is_running = False
         GLib.idle_add(self.__update_options)
 
@@ -852,7 +649,20 @@ class ReportGeneratorView(object):
         self.__set_status("Generating hashes.txt file...")
         hashes_txt_path = os.path.join(model.output_folder, "hashes.txt")
 
-        # remove old hashes.txt, if any
+        # If model.update_hashes_txt is True, read hashes from current hashes.txt
+        cached_hashes = {}
+        hashes_txt_mtime = None
+
+        if model.update_hashes_txt and os.path.exists(hashes_txt_path):
+            hashes_txt_mtime = os.path.getmtime(hashes_txt_path)
+
+            with open(hashes_txt_path, 'r') as hf:
+                for line in hf:
+                    parts = line.strip().split(' ?SHA256*')
+                    if len(parts) == 2:
+                        cached_hashes[parts[1]] = parts[0]
+
+        # Remove old hashes.txt, if any
         old_f = mobius.core.io.new_file_by_path(hashes_txt_path)
         if old_f.exists():
             old_f.remove()
@@ -867,8 +677,13 @@ class ReportGeneratorView(object):
         for root, dirs, files in os.walk(model.output_folder, topdown=False):
             for name in files:
                 path = os.path.join(root, name)
-                hash_value = self.__get_hash(path)
                 filename = path[pos:]
+
+                if cached_hashes and os.path.getmtime(path) < hashes_txt_mtime:
+                    hash_value = cached_hashes.get(filename, self.__get_hash(path))
+                else:
+                    hash_value = self.__get_hash(path)
+
                 writer.write(f"{hash_value} ?SHA256*{filename}\n")
 
         writer.flush()
@@ -877,7 +692,7 @@ class ReportGeneratorView(object):
         shutil.copyfile(f.path, hashes_txt_path)
         os.remove(f.path)
 
-        # calculate hash of hashes.txt
+        # Calculate hash of hashes.txt
         self.__hashes_txt_value = self.__get_hash(hashes_txt_path)
 
         # Write hashes_txt value back to .asap file if available
@@ -891,10 +706,10 @@ class ReportGeneratorView(object):
         self.__hashes_txt_hash_label.set_text('')
         self.__hashes_txt_copy_button.set_sensitive(False)
 
-        if not self.__model.output_folder:
+        if not self.__output_folder:
             return
         
-        hashes_txt_path = os.path.join(self.__model.output_folder, "hashes.txt")
+        hashes_txt_path = os.path.join(self.__output_folder, "hashes.txt")
         if not os.path.exists(hashes_txt_path):
             return
                 
@@ -903,7 +718,7 @@ class ReportGeneratorView(object):
         self.__hashes_txt_value = self.__get_hash(hashes_txt_path)
         self.__hashes_txt_hash_label.set_text(self.__hashes_txt_value)
 
-        self.__set_status("<b>hashes.txt</b> file hash value calculated.")
+        self.__set_status("Calculated hash for <b>hashes.txt</b>.")
         self.__hashes_txt_copy_button.set_sensitive(True)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
