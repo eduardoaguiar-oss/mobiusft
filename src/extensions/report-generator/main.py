@@ -185,63 +185,43 @@ class ReportGeneratorView(object):
         self.__output_folder_button.set_callback('clicked', self.__on_click_output_folder)
         grid.attach(self.__output_folder_button.get_ui_widget(), 1, 2, 2, 1)
 
-        # Media options revealer
-        self.__media_options_label = mobius.core.ui.label()
-        self.__media_options_label.set_markup("<b>Media options:</b>")
-        self.__media_options_label.set_halign(mobius.core.ui.label.align_right)
-        self.__media_options_label.set_visible(True)
-        grid.attach(self.__media_options_label.get_ui_widget(), 0, 3, 1, 1)
-       
-        self.__media_options_revealer = Gtk.Revealer()
-        self.__media_options_revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN)
-        self.__media_options_revealer.set_visible(True)
-        self.__media_options_revealer.set_reveal_child(False)
-        grid.attach(self.__media_options_revealer, 1, 3, 2, 1)
-
-        media_options_grid = Gtk.Grid.new()
-        media_options_grid.set_row_spacing(5)
-        media_options_grid.set_column_spacing(5)
-        media_options_grid.set_column_homogeneous(False)
-        media_options_grid.show()
-        self.__media_options_revealer.add(media_options_grid)
-
         # Media option: Update hashes.txt
-        label = mobius.core.ui.label()
-        label.set_markup('<b>Update hashes.txt file:</b>')
-        label.set_halign(mobius.core.ui.label.align_right)
-        label.set_visible(True)
-        media_options_grid.attach(label.get_ui_widget(), 0, 0, 1, 1)
+        self.__update_hashes_txt_option_label = mobius.core.ui.label()
+        self.__update_hashes_txt_option_label.set_markup('<b>Update hashes.txt file:</b>')
+        self.__update_hashes_txt_option_label.set_halign(mobius.core.ui.label.align_right)
+        self.__update_hashes_txt_option_label.set_visible(True)
+        grid.attach(self.__update_hashes_txt_option_label.get_ui_widget(), 0, 3, 1, 1)
 
-        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
-        hbox.set_spacing(5)
-        hbox.set_visible(True)
-        media_options_grid.attach(hbox.get_ui_widget(), 1, 0, 2, 1)
+        self.__update_hashes_txt_option_hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
+        self.__update_hashes_txt_option_hbox.set_spacing(5)
+        self.__update_hashes_txt_option_hbox.set_visible(True)
+        grid.attach(self.__update_hashes_txt_option_hbox.get_ui_widget(), 1, 3, 2, 1)
 
-        self.__update_hashes_switch = Gtk.Switch.new()
-        self.__update_hashes_switch.set_visible(True)
-        self.__update_hashes_switch.set_active(False)
-        #self.__update_hashes_switch.connect('state-set', self.__on_update_hashes_switch_state_set)
-        hbox.add_child(self.__update_hashes_switch, mobius.core.ui.box.fill_none)
-        hbox.add_filler()
+        self.__update_hashes_txt_option_switch = Gtk.Switch.new()
+        self.__update_hashes_txt_option_switch.set_visible(True)
+        self.__update_hashes_txt_option_switch.set_active(False)
+        #self.__update_hashes_txt_option_switch.connect('state-set', self.__on_update_hashes_switch_state_set)
+        self.__update_hashes_txt_option_hbox.add_child(self.__update_hashes_txt_option_switch, mobius.core.ui.box.fill_none)
+        self.__update_hashes_txt_option_hbox.add_filler()
 
         # Hashes.txt value and copy button
-        label = mobius.core.ui.label()
-        label.set_markup("<b>Hashes.txt (SHA2-256):</b>")
-        label.set_halign(mobius.core.ui.label.align_right)
-        label.set_visible(True)
-        media_options_grid.attach(label.get_ui_widget(), 0, 2, 1, 1)
+        self.__hashes_txt_value_label = mobius.core.ui.label()
+        self.__hashes_txt_value_label.set_markup("<b>Hashes.txt (SHA2-256):</b>")
+        self.__hashes_txt_value_label.set_halign(mobius.core.ui.label.align_right)
+        self.__hashes_txt_value_label.set_visible(True)
+        grid.attach(self.__hashes_txt_value_label.get_ui_widget(), 0, 4, 1, 1)
 
-        hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
-        hbox.set_spacing(5)
-        hbox.set_visible(True)
-        hbox.get_ui_widget().set_hexpand(True)
-        media_options_grid.attach(hbox.get_ui_widget(), 1, 2, 2, 1)
+        self.__hashes_txt_value_hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
+        self.__hashes_txt_value_hbox.set_spacing(5)
+        self.__hashes_txt_value_hbox.set_visible(True)
+        self.__hashes_txt_value_hbox.get_ui_widget().set_hexpand(True)
+        grid.attach(self.__hashes_txt_value_hbox.get_ui_widget(), 1, 4, 2, 1)
 
         frame = Gtk.Frame()
         frame.set_shadow_type(Gtk.ShadowType.IN)
         frame.set_name("text-frame")
         frame.show()
-        hbox.add_child(frame, mobius.core.ui.box.fill_with_widget)
+        self.__hashes_txt_value_hbox.add_child(frame, mobius.core.ui.box.fill_with_widget)
 
         self.__hashes_txt_hash_label = mobius.core.ui.label()
         self.__hashes_txt_hash_label.set_halign(mobius.core.ui.label.align_left)
@@ -254,7 +234,7 @@ class ReportGeneratorView(object):
         self.__hashes_txt_copy_button.set_visible(True)
         self.__hashes_txt_copy_button.set_sensitive(False)
         self.__hashes_txt_copy_button.set_callback('clicked', self.__on_click_hashes_txt_copy)
-        hbox.add_child(self.__hashes_txt_copy_button, mobius.core.ui.box.fill_none)
+        self.__hashes_txt_value_hbox.add_child(self.__hashes_txt_copy_button, mobius.core.ui.box.fill_none)
 
         # Status bar and Buttons
         vbox.add_filler()
@@ -295,7 +275,7 @@ class ReportGeneratorView(object):
         if last_output_folder:
             self.__output_folder = last_output_folder
             if os.path.exists(os.path.join(self.__output_folder, "hashes.txt")):
-                self.__update_hashes_switch.set_active(True)
+                self.__update_hashes_txt_option_switch.set_active(True)
 
         last_asap_file = mobius.framework.get_config('last_asap_file')
         if last_asap_file:
@@ -349,7 +329,7 @@ class ReportGeneratorView(object):
         transaction.commit()
 
         if os.path.exists(os.path.join(path, "hashes.txt")):
-            self.__update_hashes_switch.set_active(True)
+            self.__update_hashes_txt_option_switch.set_active(True)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Update output folder based on .ASAP file path and on template type selected
@@ -405,18 +385,25 @@ class ReportGeneratorView(object):
         else:
             is_media = False
 
-        if self.__output_folder and os.path.exists(os.path.join(self.__output_folder, "hashes.txt")):
+        if is_media and self.__output_folder and os.path.exists(os.path.join(self.__output_folder, "hashes.txt")):
             has_hashes_txt = True
         else:
             has_hashes_txt = False
 
-        self.__update_hashes_switch.set_sensitive(has_hashes_txt)
-        self.__media_options_label.set_visible(is_media)
-        self.__media_options_revealer.set_reveal_child(is_media)
+        self.__update_hashes_txt_option_label.set_visible(has_hashes_txt)
+        self.__update_hashes_txt_option_hbox.set_visible(has_hashes_txt)
+        self.__hashes_txt_value_label.set_visible(has_hashes_txt)
+        self.__hashes_txt_value_hbox.set_visible(has_hashes_txt)
 
         # Execute button
         can_generate = not self.__is_running and bool(self.__template_id) and bool(self.__output_folder) and bool(self.__itemlist)
         self.__generate_button.set_sensitive(can_generate)
+
+        # Status bar
+        if self.__is_running:
+            self.__set_status("Generating report...")
+        else:
+            self.__set_status("")
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_template_changed
@@ -541,7 +528,7 @@ class ReportGeneratorView(object):
         model.template_type = treemodel[treeiter][TEMPLATE_TYPE]
         model.generator = treemodel[treeiter][GENERATOR_OBJ]
         model.output_folder = self.__output_folder
-        model.update_hashes_txt = self.__update_hashes_switch.get_active()
+        model.update_hashes_txt = self.__update_hashes_txt_option_switch.get_active()
         model.case = self.__itemlist[0].case
         model.items = self.__itemlist[:]
         model.evidence_types = self.__get_evidence_types()
