@@ -27,6 +27,7 @@ from metadata import *
 from preferences_view import PreferencesView
 from processing_view import ProcessingView
 from report_view import ReportView
+from report_action import IPEDReportGeneratorAction
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -139,6 +140,7 @@ class IPEDView(object):
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def pvt_start():
     mobius.core.add_resource('view.iped-frontend', 'IPED Frontend view', IPEDView)
+    mobius.core.add_resource('report.action.iped', "IPED report generator action", IPEDReportGeneratorAction)
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -146,3 +148,4 @@ def pvt_start():
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def pvt_stop():
     mobius.core.remove_resource('view.iped-frontend')
+    mobius.core.remove_resource('report.action.iped')
