@@ -25,12 +25,14 @@ project(report_generator LANGUAGES NONE)  # No compiled language needed
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+file(GLOB ACTION_FILES action/*.py)
 file(GLOB RESOURCE_FILES resource/*.png)
 
 set(SOURCE_FILES
     main.py
     metadata.py
     icon.png
+    ${ACTION_FILES}
     ${RESOURCE_FILES}
 )
 
