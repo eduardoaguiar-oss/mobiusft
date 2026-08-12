@@ -29,6 +29,7 @@ file(GLOB RESOURCE_FILES resource/*.png)
 
 set(SOURCE_FILES
     main.py
+    common.py
     metadata.py
     preferences_view.py
     processing_view.py

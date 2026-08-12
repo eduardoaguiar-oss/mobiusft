@@ -23,12 +23,11 @@ import pymobius
 from gi.repository import GLib
 from gi.repository import Gtk
 
+from common import *
 from metadata import *
 from preferences_view import PreferencesView
 from processing_view import ProcessingView
 from report_view import ReportView
-from report_action import IPEDReportGeneratorAction
-
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief IPED Front End view
@@ -40,7 +39,7 @@ class IPEDView(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __init__(self):
         self.__mediator = pymobius.mediator.copy()
-        self.__iped_path = None
+        self.__itemlist = []
 
         self.name = f'{EXTENSION_NAME} v{EXTENSION_VERSION}'
         icon_path = self.__mediator.call('extension.get-icon-path', EXTENSION_ID)
@@ -106,9 +105,17 @@ class IPEDView(object):
         GLib.idle_add(self.__status_label.set_text, text or '')
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief set data to be viewed
+    # @brief Set data to be viewed
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def set_data(self, itemlist):
+        self.__itemlist = itemlist
+
+        if any(is_processed(item) for item in self.__itemlist):
+            self.__view_selector.set_current_view('report')
+
+        else:
+            self.__view_selector.set_current_view('processing')
+
         self.__view_selector.set_data(itemlist)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -116,8 +123,6 @@ class IPEDView(object):
     # @param path Full path
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def set_iped_path(self, path):
-        self.__iped_path = path
-
         self.__processing_view.set_iped_path(path)
         self.__report_view.set_iped_path(path)
         self.__preferences_view.set_iped_path(path)
@@ -140,7 +145,6 @@ class IPEDView(object):
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def pvt_start():
     mobius.core.add_resource('view.iped-frontend', 'IPED Frontend view', IPEDView)
-    mobius.core.add_resource('report.action.iped', "IPED report generator action", IPEDReportGeneratorAction)
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -148,4 +152,3 @@ def pvt_start():
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def pvt_stop():
     mobius.core.remove_resource('view.iped-frontend')
-    mobius.core.remove_resource('report.action.iped')

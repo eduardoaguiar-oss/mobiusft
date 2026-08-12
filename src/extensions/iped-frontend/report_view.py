@@ -28,6 +28,7 @@ from gi.repository import Gtk
 from gi.repository import GLib
 
 from metadata import *
+from common import *
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief NoContent list widget
@@ -561,22 +562,12 @@ class ReportView(object):
         processed_items = []
 
         for item in itemlist:
-            if self.__is_processed_item(item):
+            if is_processed(item):
                 processed_items.append(item)
 
             processed_items.extend(self.__get_processed_items(item.get_children()))
 
         return processed_items
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief Check if item is already processed by IPED
-    # @param item Case item
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __is_processed_item(self, item):
-        case = item.case
-        search_path = case.get_path(f"work/{item.uid:04d}/iped/lib/iped-search-app.jar")
-
-        return os.path.exists(search_path)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Check if report already exists in the output folder
