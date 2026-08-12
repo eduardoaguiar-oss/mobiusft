@@ -351,10 +351,6 @@ class ReportView(object):
         if last_output_folder:
             self.__output_folder = last_output_folder
 
-        last_asap_file = mobius.framework.get_config('last_asap_file')
-        if last_asap_file:
-            self.__asap_file = last_asap_file
-
         self.__update_options()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -394,9 +390,7 @@ class ReportView(object):
         if path:
             self.__widget.show_content()
         else:
-            self.__widget.set_message(
-                "You must set IPED path before generating reports"
-            )
+            self.__widget.set_message("You must set IPED path before generating reports")
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Set selected items
@@ -493,20 +487,19 @@ class ReportView(object):
         dialog.add_filter(filefilter)
 
         response = dialog.run()
-        filename = dialog.get_filename()
+        path = dialog.get_filename()
         dialog.destroy()
 
         if response != Gtk.ResponseType.OK:
             return
 
         # Update ASAP file path and save to config
-        self.__asap_file = filename
-        self.__set_config('last_asap_file', self.__asap_file)
+        self.__asap_file = path
 
         # Update output folder based on the selected .ASAP file name
         if self.__itemlist:
             case = self.__itemlist[0].case
-            filename = os.path.basename(self.__asap_file)
+            filename = os.path.basename(path)
 
             if filename.startswith("AsAP_Laudo_") and filename.endswith(".asap"):
                 parts = filename[len("AsAP_Laudo_"):-len(".asap")].split("-")
