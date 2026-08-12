@@ -213,6 +213,7 @@ class ReportView(object):
         self.__output_folder = None
         self.__asap_file = None
         self.__wordlist_file = None
+        self.__report_log_path = None
         self.__is_running = False
         self.__itemlist = None
         self.__processed_items = []
@@ -495,8 +496,9 @@ class ReportView(object):
 
         # Update ASAP file path and save to config
         self.__asap_file = path
+        self.__set_config('last_asap_file', self.__asap_file)
 
-        # Update output folder based on the selected .ASAP file name
+        # Update output folder and report log path based on the selected .ASAP file name
         if self.__itemlist:
             case = self.__itemlist[0].case
             filename = os.path.basename(path)
@@ -506,6 +508,7 @@ class ReportView(object):
                 if len(parts) == 2:
                     number, year = parts
                     self.__output_folder = case.get_path(f"report/{year}-{number}")
+                    self.__report_log_path = case.get_path(f"history/report-{year}-{number}.log")
 
         # Update the UI and options
         self.__update_options()
@@ -567,11 +570,11 @@ class ReportView(object):
     # @return True if report exists, False otherwise
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __has_report(self):
-        if not self.__output_folder:
-            return False
-        
-        search_path = os.path.join(self.__output_folder, "iped", "lib", "iped-search-app.jar")
-        return os.path.exists(search_path)
+        if self.__output_folder:
+            search_path = os.path.join(self.__output_folder, "iped", "lib", "iped-search-app.jar")
+            return os.path.exists(search_path)
+
+        return False
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_generate_report event
@@ -593,7 +596,7 @@ class ReportView(object):
         # Prepare options for report generation
         option = pymobius.Data()
         option.report_path = self.__output_folder
-        option.report_log_path = self.__output_folder + "/report.log" # @todo report.log path
+        option.report_log_path = self.__report_log_path
         option.case = self.__itemlist[0].case
         option.itemlist = self.__itemlist[:]
         option.processed_items = self.__processed_items[:]
@@ -633,7 +636,6 @@ class ReportView(object):
         # create one xxxx.iped file for each 'bookmarks.iped' file, because each file name must have a unique name
         cmd = [
             'java', '-jar', f'{option.iped_path}/iped.jar',
-            '-log', option.report_log_path,
             f'-Xmx{option.xmx}g',
             f'-Xms{option.xmx}g',
             '-o', option.report_path
@@ -648,6 +650,10 @@ class ReportView(object):
                 bookmarks_path = os.path.join(indexer_path, f"{item.uid:04d}.iped")
                 shutil.copyfile(bookmarks_default_path, bookmarks_path)
                 cmd += ['-d', bookmarks_path]
+
+        # add log file path, if available
+        if option.report_log_path:
+            cmd += ['-log', option.report_log_path]
 
         # add .asap file, if available
         if option.asap_file:
@@ -670,7 +676,6 @@ class ReportView(object):
         # final message
         option.control.set_status(f"Report generated.")
         GLib.idle_add(self.__update_options)
-
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_click_open_report_button event

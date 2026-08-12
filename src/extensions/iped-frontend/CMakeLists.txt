@@ -33,7 +33,6 @@ set(SOURCE_FILES
     metadata.py
     preferences_view.py
     processing_view.py
-    report_action.py
     report_view.py
     icon.png
     ${RESOURCE_FILES}
