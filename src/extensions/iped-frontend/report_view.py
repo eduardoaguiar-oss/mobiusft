@@ -364,8 +364,6 @@ class ReportView(object):
     # @brief Save current state
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def on_destroy(self):
-        mobius.core.unsubscribe(self.__event_uid1)
-        mobius.core.unsubscribe(self.__event_uid2)
         self.__mediator.clear()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
