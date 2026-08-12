@@ -25,6 +25,7 @@ import mobius.core.io
 import pymobius
 from gi.repository import Gdk
 from gi.repository import Gtk
+from gi.repository import GLib
 
 from metadata import *
 
@@ -214,7 +215,6 @@ class ReportView(object):
         self.__is_running = False
         self.__itemlist = None
         self.__processed_items = []
-        self.__laudo = None
         self.name = "Generate Report"
 
         path = self.__mediator.call("extension.get-resource-path", EXTENSION_ID, "report.png")
@@ -376,7 +376,6 @@ class ReportView(object):
     def set_data(self, itemlist):
         self.__itemlist = itemlist
         self.__processed_items = []
-        self.__laudo = None
 
         if self.__itemlist:
             self.__set_selected_items(self.__itemlist)
@@ -479,11 +478,13 @@ class ReportView(object):
     # @brief on_click_asap_file button clicked
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_click_asap_file(self):
+
+        # Show file chooser dialog to select .ASAP file
         dialog = Gtk.FileChooserDialog(title='Select .ASAP file', action=Gtk.FileChooserAction.OPEN)
         dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
 
         if self.__asap_file:
-            dialog.set_current_folder(self.__asap_file)
+            dialog.set_current_folder(os.path.dirname(self.__asap_file))
 
         filefilter = Gtk.FileFilter()
         filefilter.set_name("ASAP files (*.asap)")
@@ -491,13 +492,28 @@ class ReportView(object):
         dialog.add_filter(filefilter)
 
         response = dialog.run()
-
-        if response == Gtk.ResponseType.OK:
-            self.__asap_file = dialog.get_filename()
-            self.__set_config('last_asap_file', self.__asap_file)
-
+        filename = dialog.get_filename()
         dialog.destroy()
 
+        if response != Gtk.ResponseType.OK:
+            return
+
+        # Update ASAP file path and save to config
+        self.__asap_file = filename
+        self.__set_config('last_asap_file', self.__asap_file)
+
+        # Update output folder based on the selected .ASAP file name
+        if self.__itemlist:
+            case = self.__itemlist[0].case
+            filename = os.path.basename(self.__asap_file)
+
+            if filename.startswith("AsAP_Laudo_") and filename.endswith(".asap"):
+                parts = filename[len("AsAP_Laudo_"):-len(".asap")].split("-")
+                if len(parts) == 2:
+                    number, year = parts
+                    self.__output_folder = case.get_path(f"report/{year}-{number}")
+
+        # Update the UI and options
         self.__update_options()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -578,7 +594,7 @@ class ReportView(object):
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_generate_report(self):
 
-        # check if there is an older report
+        # Check if there is an older report
         if self.__has_report():
             dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
             dialog.text = f"Report found on '{self.__output_folder}'. Do you want to overwrite?"
@@ -590,6 +606,7 @@ class ReportView(object):
             if rc != mobius.core.ui.message_dialog.button_yes:
                 return
 
+        # Prepare options for report generation
         option = pymobius.Data()
         option.report_path = self.__output_folder
         option.report_log_path = self.__output_folder + "/report.log" # @todo report.log path
@@ -603,7 +620,11 @@ class ReportView(object):
         option.no_content_items = self.__no_content_widget.get_items()
         option.xmx = mobius.framework.get_config("iped.xmx") or 8
 
-        # create thread
+        # Disable buttons while generating report
+        self.__generate_report_button.set_sensitive(False)
+        self.__open_report_button.set_sensitive(False)
+
+        # Create thread
         t = threading.Thread(target=self.__generate_report_thread, args=(option,), daemon=True)
         t.start()
 
@@ -663,7 +684,9 @@ class ReportView(object):
         rc = subprocess.call(cmd)
 
         # final message
-        option.control.set_status(f"Report generated. RC={rc}.")
+        option.control.set_status(f"Report generated.")
+        GLib.idle_add(self.__update_options)
+
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_click_open_report_button event
