@@ -15,11 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+import shutil
+import subprocess
+
 from gi.repository import Gtk
 from gi.repository import Gdk
 
 import os
 import mobius
+import pymobius
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -287,7 +291,6 @@ class IPEDReportGeneratorAction(object):
         if last_wordlist_path:
             self.__options.iped_wordlist_path = last_wordlist_path
 
-        self.set_output_folder(self.__output_folder)
         self.update_options()
 
         return row + 4
@@ -321,8 +324,6 @@ class IPEDReportGeneratorAction(object):
         processed_items = self.__get_processed_items(self.__options.itemlist)
         is_available = self.__options.template_type == 'media' and bool(self.__output_folder) and bool(processed_items)
         is_enabled = is_available and self.__action_switch.get_active()
-        print(f"IPED report options updated: is_available={is_available}, is_enabled={is_enabled}")
-        print(f"IPED report options: output_folder={self.__output_folder}, template_type={self.__options.template_type}, processed_items={len(processed_items)}")
 
         # Show action, if action can run
         self.__placeholder.set_visible(is_available)
@@ -343,7 +344,69 @@ class IPEDReportGeneratorAction(object):
     # @brief Run action
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def run(self):
-        print("IPED report generation requested.")
+        option = pymobius.Data()
+        option.report_path = self.__output_folder
+        option.report_log_path = self.__output_folder + "/report.log" # @todo report.log path
+        option.case = self.__itemlist[0].case
+        option.itemlist = self.__itemlist[:]
+        option.processed_items = self.__processed_items[:]
+        option.control = self.__control
+        option.iped_path = self.__iped_path
+        option.asap_file = self.__asap_file
+        option.wordlist_file = self.__wordlist_file
+        option.no_content_items = self.__no_content_widget.get_items()
+        option.xmx = mobius.framework.get_config("iped.xmx") or 8
+
+        # remove previous report folder and .log
+        if os.path.exists(option.report_log_path):
+            os.remove(option.report_log_path)
+
+        if os.path.exists(option.report_path):
+            option.control.set_status("Removing old report...")
+            shutil.rmtree(option.report_path)
+
+        os.makedirs(option.report_path)
+
+        # build command line
+        # create one xxxx.iped file for each 'bookmarks.iped' file, because each file name must be unique
+        cmd = [
+            'java', '-jar', f'{option.iped_path}/iped.jar',
+            '-log', option.report_log_path,
+            f'-Xmx{option.xmx}g',
+            f'-Xms{option.xmx}g',
+            '-o', option.report_path
+        ]
+
+        for item in option.processed_items:
+            case = item.case
+            indexer_path = case.get_path(os.path.join("work", f"{item.uid:04d}", "iped"))
+            bookmarks_default_path = os.path.join(indexer_path, "bookmarks.iped")
+
+            if os.path.exists(bookmarks_default_path):
+                bookmarks_path = os.path.join(indexer_path, f"{item.uid:04d}.iped")
+                shutil.copyfile(bookmarks_default_path, bookmarks_path)
+                cmd += ['-d', bookmarks_path]
+
+        # add .asap file, if available
+        if option.asap_file:
+            cmd += ['-asap', option.asap_file]
+
+        # add wordlist file, if available
+        if option.wordlist_file:
+            cmd += ['-keywordlist', option.wordlist_file]
+
+        # add -nocontent for each no content item
+        for arg in option.no_content_items:
+            cmd += ['-nocontent', arg]
+
+        # run report
+        mobius.core.logf("INF " + ' '.join(cmd))
+        option.control.set_status("Running IPED report...")
+
+        rc = subprocess.call(cmd)
+
+        # final message
+        option.control.set_status(f"Report generated. RC={rc}.")
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Get processed items from item list, including subitems

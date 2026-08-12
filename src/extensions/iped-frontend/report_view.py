@@ -356,10 +356,6 @@ class ReportView(object):
 
         self.__update_options()
 
-        # Subscribe to config events
-        self.__event_uid1 = mobius.core.subscribe("config-set", self.__on_config_set)
-        self.__event_uid2 = mobius.core.subscribe("config-remove", self.__on_config_remove)
-
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Get ui widget
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -451,6 +447,14 @@ class ReportView(object):
         self.__open_report_button.set_sensitive(can_open)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Set config variable
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __set_config(self, key, value):
+        transaction = mobius.framework.new_config_transaction()
+        mobius.framework.set_config(key, value)
+        transaction.commit()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_click_output_folder button clicked
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_click_output_folder(self):
@@ -465,10 +469,7 @@ class ReportView(object):
         if response == Gtk.ResponseType.OK:
             self.__output_folder = dialog.get_filename()
             self.__output_folder_button.set_text(self.__output_folder)
-
-            transaction = mobius.framework.new_config_transaction()
-            mobius.framework.set_config('last_report_folder', self.__output_folder)
-            transaction.commit()
+            self.__set_config('last_report_folder', self.__output_folder)
 
         dialog.destroy()
 
@@ -493,10 +494,7 @@ class ReportView(object):
 
         if response == Gtk.ResponseType.OK:
             self.__asap_file = dialog.get_filename()
-        
-            transaction = mobius.framework.new_config_transaction()
-            mobius.framework.set_config('last_asap_file', self.__asap_file)
-            transaction.commit()
+            self.__set_config('last_asap_file', self.__asap_file)
 
         dialog.destroy()
 
@@ -525,10 +523,7 @@ class ReportView(object):
 
         if response == Gtk.ResponseType.OK:
             self.__wordlist_file = dialog.get_filename()
-
-            transaction = mobius.framework.new_config_transaction()
-            mobius.framework.set_config('last_wordlist_file', self.__wordlist_file)
-            transaction.commit()
+            self.__set_config('last_wordlist_file', self.__wordlist_file)
 
         dialog.destroy()
 
@@ -540,33 +535,6 @@ class ReportView(object):
     def __on_click_wordlist_clear_file(self):
         self.__wordlist_file = None
         self.__update_options()
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief on_config_set event handler
-    # @param name Config name
-    # @param value Config value
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __on_config_set(self, name, value):
-        if name == 'last_report_folder':
-            self.__output_folder = value
-            self.__update_options()
-
-        elif name == 'last_asap_file':
-            self.__asap_file = value
-            self.__update_options()
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief on_config_remove event handler
-    # @param name Config name
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __on_config_remove(self, name):
-        if name == 'last_report_folder':
-            self.__output_folder = None
-            self.__update_options()
-
-        elif name == 'last_asap_file':
-            self.__asap_file = None
-            self.__update_options()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Get processed items from item list, including subitems
