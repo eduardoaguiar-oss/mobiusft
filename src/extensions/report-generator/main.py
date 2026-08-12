@@ -25,18 +25,21 @@ import mobius
 import pymobius
 import pymobius.evidence
 from gi.repository import GLib
-from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GdkPixbuf
 
 from metadata import *
-from action.generate_hashes_txt import GenerateHashesTxtAction
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Report actions
+# @brief Set config value
+# @param name Config name
+# @param value Config value
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-ACTIONS = [GenerateHashesTxtAction
-           ]
+def set_config(name, value):
+    transaction = mobius.framework.new_config_transaction()
+    mobius.framework.set_config(name, value)
+    transaction.commit()
+
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Report generator view
@@ -52,14 +55,11 @@ class ReportGeneratorView(object):
         self.__mediator = pymobius.mediator.copy()
 
         # Control variables
-        self.__options = pymobius.Data()
-        self.__options.template_id = None
-        self.__options.template_type = None
-        self.__options.output_folder = None
-        self.__options.asap_file = None
-        self.__options.hashes_txt_value = None
-        self.__options.itemlist = []
-        self.__actions = []
+        self.__output_folder = None
+        self.__asap_path = None
+        self.__template_id = None
+        self.__template_type = None
+        self.__itemlist = []
         self.__is_running = False
 
         self.name = f'{EXTENSION_NAME} v{EXTENSION_VERSION}'
@@ -189,19 +189,6 @@ class ReportGeneratorView(object):
         self.__output_folder_button.set_callback('clicked', self.__on_click_output_folder)
         grid.attach(self.__output_folder_button.get_ui_widget(), 1, 3, 2, 1)
 
-        # Add actions
-        row = 4
-
-        for r in mobius.core.get_resources('report.action'):
-            action = r.value(self.__options)
-            row = action.build_widget(grid, row)
-            self.__actions.append(action)
-
-        for a in ACTIONS:
-            action = a(self.__options)
-            row = action.build_widget(grid, row)
-            self.__actions.append(action)
-
         # Status bar and Buttons
         vbox.add_filler()
 
@@ -240,11 +227,11 @@ class ReportGeneratorView(object):
         if last_output_folder:
             self.__set_output_folder(last_output_folder)
 
-        last_asap_file = mobius.framework.get_config('last_asap_file')
-        if last_asap_file:
-            self.__options.asap_file = last_asap_file
-
         self.__update_options()
+
+        # Subscribe to config events
+        self.__event_uid1 = mobius.core.subscribe("config-set", self.__on_config_set)
+        self.__event_uid2 = mobius.core.subscribe("config-remove", self.__on_config_remove)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Get ui widget
@@ -259,13 +246,15 @@ class ReportGeneratorView(object):
        if self.__is_running:
            return
        
-       self.__options.itemlist = itemlist
+       self.__itemlist = itemlist
        self.__update_options()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_destroy view
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def on_destroy(self):
+        mobius.core.unsubscribe(self.__event_uid1)
+        mobius.core.unsubscribe(self.__event_uid2)
         self.__mediator.clear()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -284,27 +273,20 @@ class ReportGeneratorView(object):
     # @param path Output folder path
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __set_output_folder(self, path):
-        if self.__options.output_folder != path:
-            self.__options.output_folder = path
-
-            transaction = mobius.framework.new_config_transaction()
-            mobius.framework.set_config('last_report_folder', self.__options.output_folder)
-            transaction.commit()
-
-        for action in self.__actions:
-            action.set_output_folder(path)
+        self.__output_folder = path
+        set_config('last_report_folder', self.__output_folder)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Update output folder based on .ASAP file path and on template type selected
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __update_output_folder(self):
-        if not self.__options.asap_file:
+        if not self.__asap_path:
             return
 
-        if self.__options.template_type == 'media':
-            if self.__options.itemlist:
-                case = self.__options.itemlist[0].case
-                filename = os.path.basename(self.__options.asap_file)
+        if self.__template_type == 'media':
+            if self.__itemlist:
+                case = self.__itemlist[0].case
+                filename = os.path.basename(self.__asap_path)
 
                 if filename.startswith("AsAP_Laudo_") and filename.endswith(".asap"):
                     parts = filename[len("AsAP_Laudo_"):-len(".asap")].split("-")
@@ -312,37 +294,34 @@ class ReportGeneratorView(object):
                         number, year = parts
                         self.__set_output_folder(case.get_path(f"report/{year}-{number}"))
 
-        elif self.__options.template_type == 'report':
-            self.__set_output_folder(os.path.dirname(self.__options.asap_file))
+        elif self.__template_type == 'report':
+            self.__set_output_folder(os.path.dirname(self.__asap_path))
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Update panel options
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __update_options(self):
 
-        if self.__options.itemlist:
-            self.__widget.show_content()
-        else:
+        if not self.__itemlist:
             self.__widget.set_message('Select item(s) to generate report')
+            return
 
-        if self.__options.output_folder:
-            self.__output_folder_button.set_text(self.__options.output_folder)
+        self.__widget.show_content()
+
+        if self.__output_folder:
+            self.__output_folder_button.set_text(self.__output_folder)
         else:
             self.__output_folder_button.set_text('Select output folder...')
 
-        if self.__options.asap_file:
-            self.__asap_file_button.set_text(self.__options.asap_file)
+        if self.__asap_path:
+            self.__asap_file_button.set_text(self.__asap_path)
             self.__asap_clear_button.set_sensitive(True)
         else:
             self.__asap_file_button.set_text('Select a .ASAP file from the Federal Police of Brazil...')
             self.__asap_clear_button.set_sensitive(False)
 
-        # Actions
-        for action in self.__actions:
-            action.update_options()
-
         # Execute button
-        can_generate = not self.__is_running and bool(self.__options.template_id) and bool(self.__options.output_folder) and bool(self.__options.itemlist)
+        can_generate = not self.__is_running and bool(self.__template_id) and bool(self.__output_folder) and bool(self.__itemlist)
         self.__generate_button.set_sensitive(can_generate)
 
         # Status bar
@@ -352,6 +331,33 @@ class ReportGeneratorView(object):
             self.__set_status("")
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief on_config_set event handler
+    # @param name Config name
+    # @param value Config value
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_config_set(self, name, value):
+        if name == 'last_report_folder':
+            self.__output_folder = value
+            self.__update_options()
+
+        elif name == 'last_asap_file':
+            self.__asap_path = value
+            self.__update_options()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief on_config_remove event handler
+    # @param name Config name
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_config_remove(self, name):
+        if name == 'last_report_folder':
+            self.__output_folder = None
+            self.__update_options()
+
+        elif name == 'last_asap_file':
+            self.__asap_path = None
+            self.__update_options()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_template_changed
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_template_changed(self, combobox, *args):
@@ -359,19 +365,16 @@ class ReportGeneratorView(object):
         treeiter = combobox.get_active_iter()
 
         if treeiter:
-            self.__options.template_id = treemodel[treeiter][TEMPLATE_ID]
-            self.__options.template_type = treemodel[treeiter][TEMPLATE_TYPE]
+            self.__template_id = treemodel[treeiter][TEMPLATE_ID]
+            self.__template_type = treemodel[treeiter][TEMPLATE_TYPE]
 
-            if self.__options.template_id:
-                transaction = mobius.framework.new_config_transaction()
-                mobius.framework.set_config('last_report_template', self.__options.template_id)
-                transaction.commit()
-
+            if self.__template_id:
+                set_config('last_report_template', self.__template_id)
                 self.__update_output_folder()
 
         else:
-            self.__options.template_id = None
-            self.__options.template_type = None
+            self.__template_id = None
+            self.__template_type = None
 
         self.__update_options()
 
@@ -382,8 +385,8 @@ class ReportGeneratorView(object):
         dialog = Gtk.FileChooserDialog(title='Select output folder', action=Gtk.FileChooserAction.SELECT_FOLDER)
         dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
 
-        if self.__options.output_folder:
-            dialog.set_current_folder(self.__options.output_folder)
+        if self.__output_folder:
+            dialog.set_current_folder(self.__output_folder)
 
         response = dialog.run()
 
@@ -403,8 +406,8 @@ class ReportGeneratorView(object):
         dialog = Gtk.FileChooserDialog(title='Select .ASAP file', action=Gtk.FileChooserAction.OPEN)
         dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
 
-        if self.__options.asap_file:
-            dialog.set_filename(self.__options.asap_file)
+        if self.__asap_path:
+            dialog.set_filename(self.__asap_path)
 
         filefilter = Gtk.FileFilter()
         filefilter.set_name("ASAP files (*.asap)")
@@ -419,11 +422,8 @@ class ReportGeneratorView(object):
             return
 
         # Set selected .ASAP file
-        self.__options.asap_file = selected_path
-
-        transaction = mobius.framework.new_config_transaction()
-        mobius.framework.set_config('last_asap_file', self.__options.asap_file)
-        transaction.commit()
+        self.__asap_path = selected_path
+        set_config('last_asap_file', self.__asap_path)
 
         # Update output folder based on .ASAP file if available
         self.__update_output_folder()
@@ -435,7 +435,7 @@ class ReportGeneratorView(object):
     # @brief on_click_asap_clear_file button clicked
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_click_asap_clear_file(self):
-        self.__options.asap_file = None
+        self.__asap_path = None
         self.__update_options()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -444,7 +444,7 @@ class ReportGeneratorView(object):
     def __on_generate_report(self):
 
         # check if there is an older report
-        if os.path.exists(os.path.join(self.__options.output_folder, "index.html")):
+        if os.path.exists(os.path.join(self.__output_folder, "index.html")):
             dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_question)
             dialog.text = f"Output folder already contains a report. Do you want to overwrite it?"
             dialog.add_button(mobius.core.ui.message_dialog.button_yes)
@@ -460,22 +460,22 @@ class ReportGeneratorView(object):
         treeiter = self.__template_combobox.get_active_iter()
 
         model = pymobius.Data()
-        model.template_id = self.__options.template_id
+        model.template_id = self.__template_id
         model.template_type = treemodel[treeiter][TEMPLATE_TYPE]
         model.generator = treemodel[treeiter][GENERATOR_OBJ]
-        model.output_folder = self.__options.output_folder
+        model.output_folder = self.__output_folder
         model.update_hashes_txt = self.__update_hashes_txt_option_switch.get_active()
-        model.case = self.__options.itemlist[0].case
-        model.items = self.__options.itemlist[:]
+        model.case = self.__itemlist[0].case
+        model.items = self.__itemlist[:]
         model.evidence_types = self.__get_evidence_types()
         model.extra_pages = []
         model.set_status = self.__set_status
         model.report_title = None
 
         # Add .ASAP data if available
-        if self.__options.asap_file:
-            model.asap = self.__parse_asap_file(self.__options.asap_file)
-            model.asap_path = self.__options.asap_file
+        if self.__asap_path:
+            model.asap = self.__parse_asap_file(self.__asap_path)
+            model.asap_path = self.__asap_path
         else:
             model.asap = None
             model.asap_path = None
