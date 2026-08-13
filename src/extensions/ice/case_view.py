@@ -20,7 +20,6 @@ import traceback
 import mobius
 import mobius.framework
 import pymobius
-import pymobius.item_browser
 from gi.repository import Gtk
 from add_item_dialog import AddItemDialog
 from case_treeview import CaseTreeView
@@ -47,7 +46,6 @@ class CaseView(object):
         self.__mediator = pymobius.mediator.copy()
         self.__case = None
         self.__groups = []
-        self.__itemlist = []
 
         # hpaned
         self.__hpaned = Gtk.HPaned()
@@ -94,19 +92,6 @@ class CaseView(object):
         self.remove_toolitem.show()
         self.remove_toolitem.set_tooltip_text("Remove items from case")
         toolbar.insert(self.remove_toolitem, -1)
-
-        # toolitem: run report
-        self.report_toolitem = Gtk.ToolButton.new()
-
-        image = mobius.core.ui.new_icon_by_name('report-run', mobius.core.ui.icon.size_toolbar)
-        image.show()
-        self.report_toolitem.set_icon_widget(image.get_ui_widget())
-
-        self.report_toolitem.set_sensitive(False)
-        self.report_toolitem.connect("clicked", self.__on_report_item)
-        self.report_toolitem.show()
-        self.report_toolitem.set_tooltip_text("Run report on selected item")
-        toolbar.insert(self.report_toolitem, -1)
 
         # add view groups
         for resource in mobius.core.get_resources('group-view'):
@@ -194,20 +179,6 @@ class CaseView(object):
         mobius.core.unsubscribe(self.__event_uid_4)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    # @brief call report item dialog
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    def __on_report_item(self, widget, *args):
-        selected_items = self.__treeview.get_selected_items()
-
-        if len(selected_items) == 1:
-            item = selected_items[0]
-            item_proxy = pymobius.item_browser.ItemBrowser(item)
-
-            dialog = self.__mediator.call('report.run-dialog')
-            dialog.run(item_proxy)
-            dialog.destroy()
-
-    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief handle treeview->retrieve-icon
     # @param item treeitem
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -219,7 +190,6 @@ class CaseView(object):
     # @brief Handle treeview->selection-changed
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def treeview_on_selection_changed(self, itemlist):
-        self.__itemlist = itemlist
 
         # can add item
         add_item_enabled = len(itemlist) == 1
@@ -228,13 +198,9 @@ class CaseView(object):
         has_case_item = any(item for item in itemlist if item.category == 'case')
         remove_item_enabled = len(itemlist) > 0 and not has_case_item
 
-        # can run report
-        report_run_enabled = len(itemlist) == 1
-
         # enable/disable widgets
         self.add_toolitem.set_sensitive(add_item_enabled)
         self.remove_toolitem.set_sensitive(remove_item_enabled)
-        self.report_toolitem.set_sensitive(report_run_enabled)
 
         # update view selector
         self.__view_selector.set_data(itemlist)
