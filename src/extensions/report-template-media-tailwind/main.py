@@ -63,6 +63,16 @@ class Generator(object):
     def __init__(self):
         self.templates = [
             {
+                'id' : 'media.tailwind.sidebar.en_US',
+                'type' : 'media',
+                'description' : 'Media: Tailwind CSS - Sidebar (en_US)'
+            },
+            {
+                'id' : 'media.tailwind.sidebar.pt_BR',
+                'type' : 'media',
+                'description' : 'Media: Tailwind CSS - Sidebar (pt_BR)'
+            },
+            {
                 'id' : 'media.tailwind.tabbed.en_US',
                 'type' : 'media',
                 'description' : 'Media: Tailwind CSS - Tabbed (en_US)'
