@@ -21,7 +21,6 @@ import pymobius
 from attributelist import AttributeListWidget
 from dnd_toolitem import DNDToolItem
 from hex_view import HexViewWidget
-from report_dialog import ReportDialog
 from tableview import TableViewWidget
 from view_selector import ViewSelectorWidget
 from widetableview import WideTableViewWidget
@@ -74,13 +73,6 @@ def svc_ui_new_widget(classid):
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# @brief Service <report.run-dialog> implementation
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-def svc_report_run_dialog():
-    return ReportDialog()
-
-
-# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Start function
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 def pvt_start():
@@ -111,4 +103,3 @@ def pvt_start_api():
     pymobius.mediator.advertise('ui.dnd-pop', svc_ui_dnd_pop)
     pymobius.mediator.advertise('ui.dnd-push', svc_ui_dnd_push)
     pymobius.mediator.advertise('ui.new-widget', svc_ui_new_widget)
-    pymobius.mediator.advertise('report.run-dialog', svc_report_run_dialog)

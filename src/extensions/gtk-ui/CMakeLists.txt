@@ -35,7 +35,6 @@ set(SOURCE_FILES
     dnd_toolitem.py
     gtk_image_buffer.py
     hex_view.py
-    report_dialog.py
     tableview.py
     view_selector.py
     widetableview.py
