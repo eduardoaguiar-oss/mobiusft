@@ -6,6 +6,9 @@ Mobius Forensic Toolkit 2.28
 	* report-template-media-tailwind: Added new report media.tailwind.tabbed.en_US
 	* report-template-media-tailwind: Added new report media.tailwind.tabbed.pt_BR
 	* ice: Improved error handling when creating views
+	* ice: Remove "Report run" toolbar item
+	* gtk-ui: Remove "report.run-dialog" service
+	* gtk-ui: Remove report_dialog widget
 	* iped-frontend: Added Wordlist path and clear options
 	* iped-frontend: Added "No content" UI option (generates --nocontent flag)
 	* iped-frontend: Added keyword list UI option (generates --keywordlist flag)

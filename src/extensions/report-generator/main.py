@@ -18,6 +18,7 @@
 import datetime
 import os
 import os.path
+import shutil
 import threading
 import traceback
 
@@ -26,6 +27,7 @@ import pymobius
 import pymobius.evidence
 from gi.repository import GLib
 from gi.repository import Gtk
+from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 
 from metadata import *
@@ -39,6 +41,21 @@ def set_config(name, value):
     transaction = mobius.framework.new_config_transaction()
     mobius.framework.set_config(name, value)
     transaction.commit()
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# @brief Get all items from the list of items, including their children
+# @param itemlist List of items
+# @return List of all items, including children
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+def get_all_items(itemlist):
+    all_items = []
+
+    for item in itemlist:
+        all_items.append(item)
+        all_items.extend(get_all_items(item.get_children()))
+
+    return all_items
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -60,6 +77,7 @@ class ReportGeneratorView(object):
         self.__template_id = None
         self.__template_type = None
         self.__itemlist = []
+        self.__hashes_txt_value = None
         self.__is_running = False
 
         self.name = f'{EXTENSION_NAME} v{EXTENSION_VERSION}'
@@ -189,6 +207,38 @@ class ReportGeneratorView(object):
         self.__output_folder_button.set_callback('clicked', self.__on_click_output_folder)
         grid.attach(self.__output_folder_button.get_ui_widget(), 1, 3, 2, 1)
 
+        # Media option: Update hashes.txt
+        self.__update_hashes_txt_label = mobius.core.ui.label()
+        self.__update_hashes_txt_label.set_markup('<b>Update hashes.txt file:</b>')
+        self.__update_hashes_txt_label.set_halign(mobius.core.ui.label.align_right)
+        self.__update_hashes_txt_label.set_visible(True)
+        grid.attach(self.__update_hashes_txt_label.get_ui_widget(), 0, 4, 1, 1)
+
+        self.__update_hashes_txt_hbox = mobius.core.ui.box(mobius.core.ui.box.orientation_horizontal)
+        self.__update_hashes_txt_hbox.set_spacing(5)
+        self.__update_hashes_txt_hbox.set_visible(True)
+        grid.attach(self.__update_hashes_txt_hbox.get_ui_widget(), 1, 4, 2, 1)
+
+        self.__update_hashes_txt_switch = Gtk.Switch.new()
+        self.__update_hashes_txt_switch.set_visible(True)
+        self.__update_hashes_txt_switch.set_active(False)
+        self.__update_hashes_txt_hbox.add_child(self.__update_hashes_txt_switch, mobius.core.ui.box.fill_none)
+        self.__update_hashes_txt_hbox.add_filler()
+
+        # Hashes.txt value and copy button
+        self.__hashes_txt_label = mobius.core.ui.label()
+        self.__hashes_txt_label.set_markup("<b>Hashes.txt (SHA2-256):</b>")
+        self.__hashes_txt_label.set_halign(mobius.core.ui.label.align_right)
+        self.__hashes_txt_label.set_visible(True)
+        grid.attach(self.__hashes_txt_label.get_ui_widget(), 0, 5, 1, 1)
+
+        self.__hashes_txt_copy_button = mobius.core.ui.button()
+        self.__hashes_txt_copy_button.set_icon_by_name('edit-copy')
+        self.__hashes_txt_copy_button.set_visible(True)
+        self.__hashes_txt_copy_button.set_sensitive(False)
+        self.__hashes_txt_copy_button.set_callback('clicked', self.__on_click_hashes_txt_copy_button)
+        grid.attach(self.__hashes_txt_copy_button.get_ui_widget(), 1, 5, 2, 1)
+
         # Status bar and Buttons
         vbox.add_filler()
 
@@ -227,6 +277,7 @@ class ReportGeneratorView(object):
         if last_output_folder:
             self.__set_output_folder(last_output_folder)
 
+        self.__update_hashes_txt_value()
         self.__update_options()
 
         # Subscribe to config events
@@ -319,6 +370,16 @@ class ReportGeneratorView(object):
         else:
             self.__asap_file_button.set_text('Select a .ASAP file from the Federal Police of Brazil...')
             self.__asap_clear_button.set_sensitive(False)
+
+        # Hashes.txt options visibility
+        has_hashes_txt = self.__output_folder and os.path.exists(os.path.join(self.__output_folder, "hashes.txt"))
+        self.__update_hashes_txt_label.set_visible(has_hashes_txt)
+        self.__update_hashes_txt_hbox.set_visible(has_hashes_txt)
+        self.__hashes_txt_label.set_visible(has_hashes_txt)
+        self.__hashes_txt_copy_button.set_visible(has_hashes_txt)
+
+        can_copy_hashes_txt = has_hashes_txt and self.__hashes_txt_value is not None
+        self.__hashes_txt_copy_button.set_sensitive(can_copy_hashes_txt)
 
         # Execute button
         can_generate = not self.__is_running and bool(self.__template_id) and bool(self.__output_folder) and bool(self.__itemlist)
@@ -439,6 +500,14 @@ class ReportGeneratorView(object):
         self.__update_options()
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief on_click_hashes_txt_copy button clicked
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __on_click_hashes_txt_copy_button(self):
+        if self.__hashes_txt_value:
+            clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+            clipboard.set_text(self.__hashes_txt_value, -1)
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_generate_report button clicked
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def __on_generate_report(self):
@@ -464,9 +533,10 @@ class ReportGeneratorView(object):
         model.template_type = treemodel[treeiter][TEMPLATE_TYPE]
         model.generator = treemodel[treeiter][GENERATOR_OBJ]
         model.output_folder = self.__output_folder
-        model.update_hashes_txt = self.__update_hashes_txt_option_switch.get_active()
+        model.update_hashes_txt = self.__update_hashes_txt_switch.get_active()
         model.case = self.__itemlist[0].case
         model.items = self.__itemlist[:]
+        model.all_items = get_all_items(self.__itemlist)
         model.evidence_types = self.__get_evidence_types()
         model.extra_pages = []
         model.set_status = self.__set_status
@@ -507,7 +577,7 @@ class ReportGeneratorView(object):
             # Generate hashes.txt if template is media and option is enabled
             if model.template_type == 'media':
                 self.__generate_hashes_txt(model)
-                GLib.idle_add(self.__update_hashes_txt_label)
+                GLib.idle_add(self.__update_hashes_txt_value)
 
             # Update status
             self.__set_status("Report generation completed.")
@@ -519,6 +589,64 @@ class ReportGeneratorView(object):
         # Update UI
         self.__is_running = False
         GLib.idle_add(self.__update_options)
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Generate hashes.txt
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __generate_hashes_txt(self, model):
+        self.__set_status("Generating hashes.txt file...")
+        hashes_txt_path = os.path.join(model.output_folder, "hashes.txt")
+
+        # If model.update_hashes_txt is True, read hashes from current hashes.txt
+        cached_hashes = {}
+        hashes_txt_mtime = None
+
+        if model.update_hashes_txt and os.path.exists(hashes_txt_path):
+            hashes_txt_mtime = os.path.getmtime(hashes_txt_path)
+
+            with open(hashes_txt_path, 'r') as hf:
+                for line in hf:
+                    parts = line.strip().split(' ?SHA256*')
+                    if len(parts) == 2:
+                        cached_hashes[parts[1]] = parts[0]
+
+        # Remove old hashes.txt, if any
+        old_f = mobius.core.io.new_file_by_path(hashes_txt_path)
+        if old_f.exists():
+            old_f.remove()
+
+        # create temporary file
+        f = mobius.core.io.tempfile()
+        writer = mobius.core.io.text_writer(f.new_writer())
+
+        # generate hashes.txt
+        pos = len(model.output_folder) + 1
+
+        for root, dirs, files in os.walk(model.output_folder, topdown=False):
+            for name in files:
+                path = os.path.join(root, name)
+                filename = path[pos:]
+
+                if cached_hashes and os.path.getmtime(path) < hashes_txt_mtime:
+                    hash_value = cached_hashes.get(filename, self.__get_hash(path))
+                else:
+                    hash_value = self.__get_hash(path)
+                    print(f"Calculated hash for {filename}: {hash_value}")
+
+                writer.write(f"{hash_value} ?SHA256*{filename}\n")
+
+        writer.flush()
+
+        # move file to output_path
+        shutil.copyfile(f.path, hashes_txt_path)
+        os.remove(f.path)
+
+        # Calculate hash of hashes.txt
+        self.__hashes_txt_value = self.__get_hash(hashes_txt_path)
+
+        # Write hashes_txt value back to .asap file if available
+        if model.asap_path:
+            self.__update_asap_file(model.asap_path, self.__hashes_txt_value)
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Get evidence types
@@ -562,6 +690,75 @@ class ReportGeneratorView(object):
             data[f'solicitacao.{k.lower()}'] = v
 
         return data
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Update hashes.txt label
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __update_hashes_txt_value(self):
+        self.__hashes_txt_copy_button.set_sensitive(False)
+        self.__hashes_txt_copy_button.set_text('')
+
+        if not self.__output_folder:
+            return
+        
+        hashes_txt_path = os.path.join(self.__output_folder, "hashes.txt")
+        if not os.path.exists(hashes_txt_path):
+            return
+                
+        self.__set_status("Calculating <b>hashes.txt</b> hash...")
+     
+        self.__hashes_txt_value = self.__get_hash(hashes_txt_path)
+        self.__hashes_txt_copy_button.set_text(self.__hashes_txt_value)
+        self.__hashes_txt_copy_button.set_sensitive(True)
+
+        self.__set_status("Calculated hash for <b>hashes.txt</b>.")
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Calculate file hash
+    # @param path File path
+    # @return Hash as string
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __get_hash(self, path):
+        h = mobius.core.crypt.hash("sha2-256")
+        f = mobius.core.io.new_file_by_path(path)
+        reader = f.new_reader()
+        block_size = 512 * 1024  # 512 KB
+
+        data = reader.read(block_size)
+        while data:
+            h.update(data)
+            data = reader.read(block_size)
+
+        return h.get_hex_digest()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Update .ASAP file with hashes.txt value
+    # @param path .ASAP file path
+    # @param hashes_txt_value Hashes.txt value
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __update_asap_file(self, path, hashes_txt_value):
+        f = mobius.core.io.new_file_by_path(path)
+
+        if not f.exists():
+            raise Exception(f'File not found: {path}')
+        
+        fp = mobius.core.io.line_reader(f.new_reader(), "ISO-8859-1")
+        tmpf = mobius.core.io.tempfile()
+        fw = mobius.core.io.text_writer(tmpf.new_writer(), "ISO-8859-1")
+
+        for line in fp:
+
+            # Ignore old MIDIA_GERADA_HASHES_TXT line
+            if not line.startswith("MIDIA_GERADA_HASHES_TXT="):
+                fw.write(line + "\n")
+
+            # Create new MIDIA_GERADA_HASHES_TXT line if not present
+            if line.startswith("MIDIA_GERADA_DESCRICAO="):
+                fw.write(f"MIDIA_GERADA_HASHES_TXT={hashes_txt_value}\n")
+
+        fw.flush()
+        shutil.copyfile(tmpf.path, path)
+        os.remove(tmpf.path)
 
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
