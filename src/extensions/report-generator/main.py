@@ -16,6 +16,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 import datetime
+from email.mime import text
 import os
 import os.path
 import shutil
@@ -320,6 +321,18 @@ class ReportGeneratorView(object):
         GLib.idle_add(self.__status_label.set_markup, text or '')
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Show error dialog
+    # @param text Error text
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __show_error_dialog(self, text, info):
+        dialog = mobius.core.ui.message_dialog(mobius.core.ui.message_dialog.type_error)
+        dialog.text = text
+        dialog.informative_text = info
+        dialog.add_button(mobius.core.ui.message_dialog.button_ok)
+        dialog.set_default_response(mobius.core.ui.message_dialog.button_ok)
+        dialog.run()
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Set output folder
     # @param path Output folder path
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -384,12 +397,6 @@ class ReportGeneratorView(object):
         # Execute button
         can_generate = not self.__is_running and bool(self.__template_id) and bool(self.__output_folder) and bool(self.__itemlist)
         self.__generate_button.set_sensitive(can_generate)
-
-        # Status bar
-        if self.__is_running:
-            self.__set_status("Generating report...")
-        else:
-            self.__set_status("")
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief on_config_set event handler
@@ -583,8 +590,9 @@ class ReportGeneratorView(object):
             self.__set_status("Report generation completed.")
 
         except Exception as e:
-            self.__set_status(f"Error generating report: {e}")
+            self.__set_status(f"<b>Error generating report:</b> {e}")
             mobius.core.logf(f"ERR Error generating report: {str(e)}\n{traceback.format_exc()}")
+            GLib.idle_add(self.__show_error_dialog, f"Error: {e}", traceback.format_exc())
 
         # Update UI
         self.__is_running = False
