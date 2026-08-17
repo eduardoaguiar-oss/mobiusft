@@ -52,7 +52,7 @@ new_core_turing_module ()
     mobius::py::pymodule module (&module_def);
 
     // Add types
-    module.add_type ("turing", &core_turing_turing_t);
+    module.add_type ("turing", new_core_turing_turing_type ());
 
     // Return module
     return module;

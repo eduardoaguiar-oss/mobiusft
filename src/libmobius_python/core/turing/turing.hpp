@@ -20,6 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <mobius/core/turing/turing.hpp>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -29,12 +30,12 @@ typedef struct
     PyObject_HEAD mobius::core::turing::turing *obj;
 } core_turing_turing_o;
 
-extern PyTypeObject core_turing_turing_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_core_turing_turing_to_pyobject (const mobius::core::turing::turing &);
+mobius::py::pytypeobject new_core_turing_turing_type ();
+bool pymobius_core_turing_turing_check (PyObject *);
+PyObject *pymobius_core_turing_turing_to_pyobject (const mobius::core::turing::turing &);
+mobius::core::turing::turing pymobius_core_turing_turing_from_pyobject (PyObject *);
 
 #endif
