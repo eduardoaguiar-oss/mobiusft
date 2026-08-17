@@ -20,6 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <mobius/core/system/device.hpp>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief data structure
@@ -29,12 +30,12 @@ typedef struct
     PyObject_HEAD mobius::core::system::device *obj;
 } core_system_device_o;
 
-extern PyTypeObject core_system_device_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-    pymobius_core_system_device_to_pyobject (mobius::core::system::device);
+mobius::py::pytypeobject new_core_system_device_type ();
+bool pymobius_core_system_device_check (PyObject *);
+PyObject *pymobius_core_system_device_to_pyobject (const mobius::core::system::device &);
+mobius::core::system::device pymobius_core_system_device_from_pyobject (PyObject *);
 
 #endif

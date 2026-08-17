@@ -65,7 +65,7 @@ new_core_system_module ()
     mobius::py::pymodule module (&module_def);
 
     // Add types
-    module.add_type ("device", &core_system_device_t);
+    module.add_type ("device", new_core_system_device_type ());
 
     // Return module
     return module;
