@@ -68,8 +68,8 @@ new_core_pod_module ()
     mobius::py::pymodule module (&module_def);
 
     // Add types
-    module.add_type ("data", &core_pod_data_t);
-    module.add_type ("map", &core_pod_map_t);
+    module.add_type ("data", new_core_pod_data_type ());
+    module.add_type ("map", new_core_pod_map_type ());
 
     // Return module
     return module;

@@ -21,16 +21,19 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "data.hpp"
-#include "map.hpp"
 #include <mobius/core/exception.inc>
 #include <pylist.hpp>
 #include <pymobius.hpp>
 #include <pyobject.hpp>
 #include <stdexcept>
 #include <vector>
+#include "map.hpp"
 
 namespace
 {
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_pod_data_type = nullptr;
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create std::vector <data> from PyTuple
 // @param py_value Python object
@@ -49,7 +52,8 @@ pymobius_core_pod_data_vector_from_pytuple (PyObject *py_value)
 
         if (!item)
             throw std::runtime_error (
-                MOBIUS_EXCEPTION_MSG (mobius::py::get_error_message ()));
+                MOBIUS_EXCEPTION_MSG (mobius::py::get_error_message ())
+            );
 
         v.push_back (pymobius_core_pod_data_from_pyobject (item));
     }
@@ -70,7 +74,8 @@ pymobius_core_pod_data_vector_from_pyset (PyObject *py_value)
     mobius::py::pyobject iter = PyObject_GetIter (py_value);
     if (!iter)
         throw std::invalid_argument (
-            MOBIUS_EXCEPTION_MSG (mobius::py::get_error_message ()));
+            MOBIUS_EXCEPTION_MSG (mobius::py::get_error_message ())
+        );
 
     mobius::py::pyobject item = PyIter_Next (iter);
 
@@ -98,7 +103,8 @@ tp_getter_type (core_pod_data_o *self, void *)
     try
     {
         ret = mobius::py::pylong_from_int (
-            static_cast<int> (self->obj->get_type ()));
+            static_cast<int> (self->obj->get_type ())
+        );
     }
     catch (const std::exception &e)
     {
@@ -429,135 +435,88 @@ tp_dealloc (core_pod_data_o *self)
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_pod_data_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.pod.data",                   // tp_name
-    sizeof (core_pod_data_o),                 // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "data class",                             // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    tp_getset,                                // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    0,                                        // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_pod_data_slots[] = {
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("core.pod.data class")},
+    {Py_tp_getset, reinterpret_cast<void *> (tp_getset)},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_pod_data_spec = {
+    .name = "mobius.core.pod.data",
+    .basicsize = sizeof (core_pod_data_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_pod_data_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.core.pod.data</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_core_pod_data_type ()
+{
+    // If type is already created, return it
+    if (core_pod_data_type)
+        return mobius::py::pytypeobject (core_pod_data_type);
+
+    // Allocate type from spec
+    core_pod_data_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&core_pod_data_spec)
+    );
+
+    // Create type
+    mobius::py::pytypeobject type (core_pod_data_type);
+    type.create ();
+
+    return type;
+}
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if object type is an instance of <i>mobius.core.pod.data</i>
-// @param pyobj Python object
+// @brief Get <i>mobius.core.pod.data</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyTypeObject *
+get_core_pod_data_type ()
+{
+    return core_pod_data_type;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>core.pod.data</i>
+// @param value Python value
 // @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-pymobius_core_pod_data_check (PyObject *pyobj)
+pymobius_core_pod_data_check (PyObject *value)
 {
-    return PyObject_IsInstance (pyobj, (PyObject *) &core_pod_data_t);
+    if (!core_pod_data_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.pod.data type is not initialized")
+        );
+
+    return mobius::py::isinstance (value, core_pod_data_type);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create mobius.core.pod.data value from Python object
-// @param py_value Python object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::pod::data
-pymobius_core_pod_data_from_pyobject (PyObject *py_value)
-{
-    mobius::core::pod::data data;
-
-    if (pymobius_core_pod_data_check (py_value))
-        data = *(reinterpret_cast<core_pod_data_o *> (py_value)->obj);
-
-    else if (mobius::py::pynone_check (py_value))
-        ;
-
-    else if (mobius::py::pybool_check (py_value))
-        data = mobius::core::pod::data (py_value == Py_True);
-
-    else if (mobius::py::pylong_check (py_value))
-        data = mobius::core::pod::data (
-            mobius::py::pylong_as_std_int64_t (py_value));
-
-    else if (mobius::py::pyfloat_check (py_value))
-        data = mobius::core::pod::data (PyFloat_AS_DOUBLE ((py_value)));
-
-    else if (mobius::py::pydatetime_check (py_value))
-        data = mobius::core::pod::data (
-            mobius::py::pydatetime_as_datetime (py_value));
-
-    else if (mobius::py::pybytes_check (py_value))
-        data = mobius::core::pod::data (
-            mobius::py::pybytes_as_bytearray (py_value));
-
-    else if (mobius::py::pystring_check (py_value))
-        data = mobius::core::pod::data (
-            mobius::py::pystring_as_std_string (py_value));
-
-    else if (PyList_Check (py_value))
-        data = mobius::py::pylist_to_cpp_container (
-            py_value, pymobius_core_pod_data_from_pyobject);
-
-    else if (PyTuple_Check (py_value))
-        data = pymobius_core_pod_data_vector_from_pytuple (py_value);
-
-    else if (PySet_Check (py_value))
-        data = pymobius_core_pod_data_vector_from_pyset (py_value);
-
-    else if (PyDict_Check (py_value))
-        data = pymobius_core_pod_map_from_pyobject (py_value);
-
-    else
-        data = pymobius_core_pod_map_from_pyobject (py_value);
-
-    return data;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create Python object from mobius.core.pod.data value
-// @param value mobius.core.pod.data value
-// @return New Python object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.pod.data</i> Python object from C++ object
+// @param value C++ object
+// @return New core.pod.data object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
 pymobius_core_pod_data_to_pyobject (const mobius::core::pod::data &value)
 {
+    if (!core_pod_data_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.pod.data type is not initialized")
+        );
+
     PyObject *ret = nullptr;
 
     if (value.is_null ())
@@ -574,19 +533,22 @@ pymobius_core_pod_data_to_pyobject (const mobius::core::pod::data &value)
 
     else if (value.is_datetime ())
         ret = mobius::py::pydatetime_from_datetime (
-            mobius::core::datetime::datetime (value));
+            mobius::core::datetime::datetime (value)
+        );
 
     else if (value.is_string ())
         ret = mobius::py::pystring_from_std_string (std::string (value));
 
     else if (value.is_bytearray ())
         ret = mobius::py::pybytes_from_bytearray (
-            mobius::core::bytearray (value));
+            mobius::core::bytearray (value)
+        );
 
     else if (value.is_list ())
         ret = mobius::py::pylist_from_cpp_container (
             std::vector<mobius::core::pod::data> (value),
-            pymobius_core_pod_data_to_pyobject);
+            pymobius_core_pod_data_to_pyobject
+        );
 
     else if (value.is_map ())
         ret =
@@ -594,9 +556,77 @@ pymobius_core_pod_data_to_pyobject (const mobius::core::pod::data &value)
 
     else
         throw std::invalid_argument (
-            MOBIUS_EXCEPTION_MSG ("unknown mobius.core.pod.data type"));
+            MOBIUS_EXCEPTION_MSG ("unknown mobius.core.pod.data type")
+        );
 
     return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.pod.data</i> C++ object from Python object
+// @param value Python value
+// @return core.pod.data object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::pod::data
+pymobius_core_pod_data_from_pyobject (PyObject *value)
+{
+    if (!core_pod_data_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.pod.data type is not initialized")
+        );
+
+    mobius::core::pod::data data;
+
+    if (pymobius_core_pod_data_check (value))
+        data = *(reinterpret_cast<core_pod_data_o *> (value)->obj);
+
+    else if (mobius::py::pynone_check (value))
+        ;
+
+    else if (mobius::py::pybool_check (value))
+        data = mobius::core::pod::data (value == Py_True);
+
+    else if (mobius::py::pylong_check (value))
+        data = mobius::core::pod::data (
+            mobius::py::pylong_as_std_int64_t (value)
+        );
+
+    else if (mobius::py::pyfloat_check (value))
+        data = mobius::core::pod::data (PyFloat_AS_DOUBLE ((value)));
+
+    else if (mobius::py::pydatetime_check (value))
+        data = mobius::core::pod::data (
+            mobius::py::pydatetime_as_datetime (value)
+        );
+
+    else if (mobius::py::pybytes_check (value))
+        data = mobius::core::pod::data (
+            mobius::py::pybytes_as_bytearray (value)
+        );
+
+    else if (mobius::py::pystring_check (value))
+        data = mobius::core::pod::data (
+            mobius::py::pystring_as_std_string (value)
+        );
+
+    else if (PyList_Check (value))
+        data = mobius::py::pylist_to_cpp_container (
+            value, pymobius_core_pod_data_from_pyobject
+        );
+
+    else if (PyTuple_Check (value))
+        data = pymobius_core_pod_data_vector_from_pytuple (value);
+
+    else if (PySet_Check (value))
+        data = pymobius_core_pod_data_vector_from_pyset (value);
+
+    else if (PyDict_Check (value))
+        data = pymobius_core_pod_map_from_pyobject (value);
+
+    else
+        data = pymobius_core_pod_map_from_pyobject (value);
+
+    return data;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -607,12 +637,18 @@ pymobius_core_pod_data_to_pyobject (const mobius::core::pod::data &value)
 PyObject *
 pymobius_core_pod_data_to_python (const mobius::core::pod::data &value)
 {
+    if (!core_pod_data_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.pod.data type is not initialized")
+        );
+
     PyObject *ret = nullptr;
 
     if (value.is_list ())
         ret = mobius::py::pylist_from_cpp_container (
             std::vector<mobius::core::pod::data> (value),
-            pymobius_core_pod_data_to_python);
+            pymobius_core_pod_data_to_python
+        );
 
     else if (value.is_map ())
         ret = pymobius_core_pod_map_to_python (mobius::core::pod::map (value));

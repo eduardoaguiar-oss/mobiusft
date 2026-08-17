@@ -20,6 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <mobius/core/pod/data.hpp>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -29,11 +30,11 @@ typedef struct
     PyObject_HEAD mobius::core::pod::data *obj;
 } core_pod_data_o;
 
-extern PyTypeObject core_pod_data_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_core_pod_data_type ();
+PyTypeObject *get_core_pod_data_type ();
 bool pymobius_core_pod_data_check (PyObject *);
 mobius::core::pod::data pymobius_core_pod_data_from_pyobject (PyObject *);
 PyObject *pymobius_core_pod_data_to_pyobject (const mobius::core::pod::data &);

@@ -20,6 +20,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <Python.h>
 #include <mobius/core/pod/map.hpp>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -29,11 +30,10 @@ typedef struct
     PyObject_HEAD mobius::core::pod::map *obj;
 } core_pod_map_o;
 
-extern PyTypeObject core_pod_map_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_core_pod_map_type ();
 bool pymobius_core_pod_map_check (PyObject *);
 mobius::core::pod::map pymobius_core_pod_map_from_pyobject (PyObject *);
 PyObject *pymobius_core_pod_map_to_pyobject (const mobius::core::pod::map &);

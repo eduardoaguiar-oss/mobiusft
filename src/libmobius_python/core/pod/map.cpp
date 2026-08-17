@@ -21,18 +21,21 @@
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "map.hpp"
-#include "api_dataholder.hpp"
-#include "data.hpp"
-#include "pyobject.hpp"
 #include <mobius/core/exception.inc>
 #include <mobius/core/string_functions.hpp>
 #include <pydict.hpp>
 #include <pylist.hpp>
 #include <pymobius.hpp>
 #include <stdexcept>
+#include "api_dataholder.hpp"
+#include "data.hpp"
+#include "pyobject.hpp"
 
 namespace
 {
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_pod_map_type = nullptr;
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create Python object from POD map
 // @param value POD map
@@ -47,7 +50,8 @@ map_to_object (const mobius::core::pod::map &value)
     {
         if (p.first != ".object")
             api_dataholder_setattr (
-                data, p.first, pymobius_core_pod_data_to_pyobject (p.second));
+                data, p.first, pymobius_core_pod_data_to_pyobject (p.second)
+            );
     }
 
     return reinterpret_cast<PyObject *> (data);
@@ -66,7 +70,8 @@ map_from_object (PyObject *obj)
 
     for (const auto &[key, value] : py_obj.get_attributes ())
     {
-        if (!mobius::core::string::startswith (key, "__") &&
+        if (
+            !mobius::core::string::startswith (key, "__") &&
             value &&                 // not null
             !value.is_callable () && // eliminate functions
             obj != value             // eliminate self references
@@ -80,99 +85,6 @@ map_from_object (PyObject *obj)
 }
 
 } // namespace
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if object type is <i>map</i>
-// @param pyobj Python object
-// @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-pymobius_core_pod_map_check (PyObject *pyobj)
-{
-    return PyObject_IsInstance (pyobj, (PyObject *) &core_pod_map_t);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>map</i> Python object from C++ object
-// @param map POD map object
-// @return new map object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_core_pod_map_to_pyobject (const mobius::core::pod::map &map)
-{
-    PyObject *ret = nullptr;
-
-    if (map.contains (".object"))
-        ret = map_to_object (map);
-
-    else
-    {
-        ret = _PyObject_New (&core_pod_map_t);
-
-        if (ret)
-            ((core_pod_map_o *) ret)->obj = new mobius::core::pod::map (map);
-    }
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create pure Python object from C++ object
-// @param map POD map object
-// @return Dict object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_core_pod_map_to_python (const mobius::core::pod::map &map)
-{
-    PyObject *ret = nullptr;
-
-    try
-    {
-        ret = mobius::py::pydict_from_cpp_container (
-            map, mobius::py::pystring_from_std_string,
-            pymobius_core_pod_data_to_python);
-    }
-    catch (const std::exception &e)
-    {
-        mobius::py::set_runtime_error (e.what ());
-    }
-
-    return ret;
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>map</i> C++ object from Python object
-// @param py_value Python object
-// @return map object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::pod::map
-pymobius_core_pod_map_from_pyobject (PyObject *py_value)
-{
-    mobius::core::pod::map map;
-
-    if (pymobius_core_pod_map_check (py_value))
-        map = *(reinterpret_cast<core_pod_map_o *> (py_value)->obj);
-
-    else if (PyDict_Check (py_value))
-    {
-        PyObject *key, *value;
-        Py_ssize_t pos = 0;
-
-        while (PyDict_Next (py_value, &pos, &key, &value))
-        {
-            auto cpp_key = mobius::py::pystring_as_std_string (key);
-            auto cpp_value = pymobius_core_pod_data_from_pyobject (value);
-
-            map.set (cpp_key, cpp_value);
-        }
-    }
-
-    // Read attributes from Python object
-    else
-        map = map_from_object (py_value);
-
-    return map;
-}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>get_size</i> method implementation
@@ -255,7 +167,8 @@ tp_f_get (core_pod_map_o *self, PyObject *args)
         arg_key = mobius::py::get_arg_as_std_string (args, 0);
         arg_varg = mobius::py::get_arg_as_cpp (
             args, 1, pymobius_core_pod_data_from_pyobject,
-            mobius::core::pod::data ());
+            mobius::core::pod::data ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -269,7 +182,8 @@ tp_f_get (core_pod_map_o *self, PyObject *args)
     try
     {
         ret = pymobius_core_pod_data_to_pyobject (
-            self->obj->get (arg_key, arg_varg));
+            self->obj->get (arg_key, arg_varg)
+        );
     }
     catch (const std::exception &e)
     {
@@ -297,7 +211,8 @@ tp_f_set (core_pod_map_o *self, PyObject *args)
     {
         arg_key = mobius::py::get_arg_as_std_string (args, 0);
         arg_value = mobius::py::get_arg_as_cpp (
-            args, 1, pymobius_core_pod_data_from_pyobject);
+            args, 1, pymobius_core_pod_data_from_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -369,7 +284,8 @@ tp_f_update (core_pod_map_o *self, PyObject *args)
     try
     {
         arg_map = mobius::py::get_arg_as_cpp (
-            args, 0, pymobius_core_pod_map_from_pyobject);
+            args, 0, pymobius_core_pod_map_from_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -407,7 +323,8 @@ tp_f_to_python (core_pod_map_o *self, PyObject *)
     {
         ret = mobius::py::pydict_from_cpp_container (
             *self->obj, mobius::py::pystring_from_std_string,
-            pymobius_core_pod_data_to_pyobject);
+            pymobius_core_pod_data_to_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -432,7 +349,8 @@ tp_f_get_values (core_pod_map_o *self, PyObject *)
     {
         ret = mobius::py::pylist_from_cpp_pair_container (
             *self->obj, mobius::py::pystring_from_std_string,
-            pymobius_core_pod_data_to_pyobject);
+            pymobius_core_pod_data_to_pyobject
+        );
     }
     catch (const std::exception &e)
     {
@@ -480,7 +398,8 @@ tp_new (PyTypeObject *, PyObject *args, PyObject *)
 
         if (mobius::py::get_arg_size (args) > 0)
             map = pymobius_core_pod_map_from_pyobject (
-                mobius::py::get_arg (args, 0));
+                mobius::py::get_arg (args, 0)
+            );
 
         ret = pymobius_core_pod_map_to_pyobject (map);
     }
@@ -503,56 +422,155 @@ tp_dealloc (core_pod_map_o *self)
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_pod_map_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.pod.map",                    // tp_name
-    sizeof (core_pod_map_o),                  // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "map class",                              // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    0,                                        // tp_getset
-    &core_pod_data_t,                         // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    tp_new,                                   // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_pod_map_slots[] = {
+    {Py_tp_base, reinterpret_cast<void *> (new_core_pod_data_type ().get())},
+    {Py_tp_new, reinterpret_cast<void *> (tp_new)},
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("core.pod.map class")},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_pod_map_spec = {
+    .name = "mobius.core.pod.map",
+    .basicsize = sizeof (core_pod_map_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_pod_map_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.core.pod.map</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_core_pod_map_type ()
+{
+    // If type is already created, return it
+    if (core_pod_map_type)
+        return mobius::py::pytypeobject (core_pod_map_type);
+
+    // Allocate type from spec
+    core_pod_map_type =
+        reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_pod_map_spec));
+
+    // Create type
+    mobius::py::pytypeobject type (core_pod_map_type);
+    type.create ();
+
+    return type;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>core.pod.map</i>
+// @param value Python value
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+pymobius_core_pod_map_check (PyObject *value)
+{
+    if (!core_pod_map_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.pod.map type is not initialized")
+        );
+
+    return mobius::py::isinstance (value, core_pod_map_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>map</i> Python object from C++ object
+// @param map POD map object
+// @return new map object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_core_pod_map_to_pyobject (const mobius::core::pod::map &map)
+{
+    if (!core_pod_map_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.pod.map type is not initialized")
+        );
+
+    PyObject *ret = nullptr;
+
+    if (map.contains (".object"))
+        ret = map_to_object (map);
+
+    else
+        ret = mobius::py::to_pyobject<core_pod_map_o> (map, core_pod_map_type);
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create pure Python object from C++ object
+// @param map POD map object
+// @return Dict object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_core_pod_map_to_python (const mobius::core::pod::map &map)
+{
+    if (!core_pod_map_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.pod.map type is not initialized")
+        );
+
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pydict_from_cpp_container (
+            map, mobius::py::pystring_from_std_string,
+            pymobius_core_pod_data_to_python
+        );
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>map</i> C++ object from Python object
+// @param py_value Python object
+// @return map object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::pod::map
+pymobius_core_pod_map_from_pyobject (PyObject *py_value)
+{
+    if (!core_pod_map_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.pod.map type is not initialized")
+        );
+
+    mobius::core::pod::map map;
+
+    if (pymobius_core_pod_map_check (py_value))
+        map = *(reinterpret_cast<core_pod_map_o *> (py_value)->obj);
+
+    else if (PyDict_Check (py_value))
+    {
+        PyObject *key, *value;
+        Py_ssize_t pos = 0;
+
+        while (PyDict_Next (py_value, &pos, &key, &value))
+        {
+            auto cpp_key = mobius::py::pystring_as_std_string (key);
+            auto cpp_value = pymobius_core_pod_data_from_pyobject (value);
+
+            map.set (cpp_key, cpp_value);
+        }
+    }
+
+    // Read attributes from Python object
+    else
+        map = map_from_object (py_value);
+
+    return map;
+}
