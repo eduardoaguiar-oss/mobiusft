@@ -1,3 +1,6 @@
+Mobius Forensic Toolkit 2.29
+
+
 Mobius Forensic Toolkit 2.28
 	* Bundle girepository libraries to improve AppImage portability
 	* report-generator: Added new extension
