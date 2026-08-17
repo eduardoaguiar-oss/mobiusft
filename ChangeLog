@@ -4,6 +4,7 @@ Mobius Forensic Toolkit 2.29
     * libmobius_python: Improve mobius.core.pod classes using the PyType_FromSpec API
     * libmobius_python: Improve mobius.core.system classes using the PyType_FromSpec API
     * libmobius_python: Improve mobius.core.turing classes using the PyType_FromSpec API
+    * libmobius_python: Improve api_dataholder class using the PyType_FromSpec API
 
 Mobius Forensic Toolkit 2.28
 	* Bundle girepository libraries to improve AppImage portability

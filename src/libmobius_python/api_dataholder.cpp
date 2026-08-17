@@ -20,8 +20,23 @@
 // @brief  C++ API module wrapper
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <pymobius.hpp>
 #include "api_dataholder.hpp"
+#include <pymobius.hpp>
+
+namespace
+{
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *api_dataholder_type = nullptr;
+
+} // namespace
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Getters and setters
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyGetSetDef tp_getset[] = {
+    {"__dict__", PyObject_GenericGetDict, PyObject_GenericSetDict, "Type dictionary", nullptr},
+    {nullptr, nullptr, nullptr, nullptr, nullptr} // Sentinel
+};
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief tp_dir implementation
@@ -29,87 +44,74 @@
 static PyObject *
 tp_dir (api_dataholder_o *self, PyObject *)
 {
-  return PyDict_Keys (self->dict);
+    PyObject *dict = PyObject_GenericGetDict(reinterpret_cast<PyObject *> (self), nullptr);
+    return PyDict_Keys (dict);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyMethodDef tp_methods[] =
-{
-  {
-    (char *) "__dir__",
-    (PyCFunction) tp_dir,
-    METH_VARARGS,
-    "dir function implementation"
-  },
-  {NULL, NULL, 0, NULL} // sentinel
+static PyMethodDef tp_methods[] = {
+    {(char *) "__dir__", (PyCFunction) tp_dir, METH_VARARGS, "Dir function implementation"},
+    {NULL, NULL, 0, NULL} // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief api.dataholder: tp_dealloc
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
-api_dataholder_tp_dealloc (api_dataholder_o *self)
+tp_dealloc (api_dataholder_o *self)
 {
-  Py_DECREF (self->dict);
-  Py_TYPE (self)->tp_free ((PyObject*) self);
+    PyObject_GenericSetDict(reinterpret_cast<PyObject *> (self), nullptr, nullptr);
+    Py_TYPE (self)->tp_free (reinterpret_cast<PyObject *> (self));
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief api.dataholder: type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject api_dataholder_t =
-{
-  PyVarObject_HEAD_INIT (NULL, 0)
-  "api.dataholder",                      		// tp_name
-  sizeof (api_dataholder_o),             		// tp_basicsize
-  0,                                          		// tp_itemsize
-  (destructor) api_dataholder_tp_dealloc,		// tp_dealloc
-  0,                                          		// tp_print
-  0,                                          		// tp_getattr
-  0,                                          		// tp_setattr
-  0,                                          		// tp_compare
-  0,                                          		// tp_repr
-  0,                                          		// tp_as_number
-  0,                                          		// tp_as_sequence
-  0,                                          		// tp_as_mapping
-  0,                                          		// tp_hash
-  0,                                          		// tp_call
-  0,                                          		// tp_str
-  PyObject_GenericGetAttr,                    		// tp_getattro
-  PyObject_GenericSetAttr,                     		// tp_setattro
-  0,                                          		// tp_as_buffer
-  Py_TPFLAGS_DEFAULT,   		                // tp_flags
-  "generic dataholder class",                  		// tp_doc
-  0,                                          		// tp_traverse
-  0,                                          		// tp_clear
-  0,                                          		// tp_richcompare
-  0,                                          		// tp_weaklistoffset
-  0,                                          		// tp_iter
-  0,                                          		// tp_iternext
-  tp_methods,                                  		// tp_methods
-  0,                                          		// tp_members
-  0,                                         		// tp_getset
-  0,                                          		// tp_base
-  0,                                          		// tp_dict
-  0,                                          		// tp_descr_get
-  0,
-  offsetof (api_dataholder_o, dict),           		// tp_dictoffset
-  0,                                          		// tp_init
-  0,                                    		// tp_alloc
-  PyType_GenericNew,                      		// tp_new
-  0,                                       		// tp_free
-  0,                                       		// tp_is_gc
-  0,                                       		// tp_bases
-  0,                                       		// tp_mro
-  0,                                       		// tp_cache
-  0,                                       		// tp_subclasses
-  0,                                       		// tp_weaklist
-  0,                                       		// tp_del
-  0,                                       		// tp_version_tag
-  0,                                       		// tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot api_dataholder_slots[] = {
+    {Py_tp_new, reinterpret_cast<void *> (PyType_GenericNew)},
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("api_dataholder class")},
+    {Py_tp_getset, reinterpret_cast<void *> (tp_getset)},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {Py_tp_getattro, reinterpret_cast<void *> (PyObject_GenericGetAttr)},
+    {Py_tp_setattro, reinterpret_cast<void *> (PyObject_GenericSetAttr)},
+    {0, nullptr} // Sentinel
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec api_dataholder_spec = {
+    .name = "mobius.api_dataholder",
+    .basicsize = sizeof (api_dataholder_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE | Py_TPFLAGS_MANAGED_DICT,
+    .slots = api_dataholder_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.api_dataholder</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_api_dataholder_type ()
+{
+    // If type is already created, return it
+    if (api_dataholder_type)
+        return mobius::py::pytypeobject (api_dataholder_type);
+
+    // Allocate type from spec
+    api_dataholder_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&api_dataholder_spec)
+    );
+
+    // Create type
+    mobius::py::pytypeobject type (api_dataholder_type);
+    type.create ();
+
+    return type;
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief api.dataholder: create new object
@@ -117,12 +119,15 @@ PyTypeObject api_dataholder_t =
 api_dataholder_o *
 api_dataholder_new ()
 {
-  api_dataholder_o *self = (api_dataholder_o *) _PyObject_New (&api_dataholder_t);
+    if (!api_dataholder_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("api_dataholder type is not initialized")
+        );
 
-  if (self)
-    self->dict = PyDict_New ();
+    api_dataholder_o *self =
+        (api_dataholder_o *) _PyObject_New (api_dataholder_type);
 
-  return self;
+    return self;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -132,11 +137,14 @@ api_dataholder_new ()
 // @param value value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-api_dataholder_setattr (api_dataholder_o *obj, const std::string& name, const std::string& value)
+api_dataholder_setattr (
+    api_dataholder_o *obj, const std::string &name, const std::string &value
+)
 {
-  PyObject_GenericSetAttr ((PyObject *) obj,
-                           mobius::py::pystring_from_std_string (name),
-                           mobius::py::pystring_from_std_string (value));
+    PyObject_GenericSetAttr (
+        (PyObject *) obj, mobius::py::pystring_from_std_string (name),
+        mobius::py::pystring_from_std_string (value)
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -146,11 +154,14 @@ api_dataholder_setattr (api_dataholder_o *obj, const std::string& name, const st
 // @param value value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-api_dataholder_setattr (api_dataholder_o *obj, const std::string& name, std::int64_t value)
+api_dataholder_setattr (
+    api_dataholder_o *obj, const std::string &name, std::int64_t value
+)
 {
-  PyObject_GenericSetAttr ((PyObject *) obj,
-                           mobius::py::pystring_from_std_string (name),
-                           mobius::py::pylong_from_std_int64_t (value));
+    PyObject_GenericSetAttr (
+        (PyObject *) obj, mobius::py::pystring_from_std_string (name),
+        mobius::py::pylong_from_std_int64_t (value)
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -160,11 +171,16 @@ api_dataholder_setattr (api_dataholder_o *obj, const std::string& name, std::int
 // @param value value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-api_dataholder_setattr (api_dataholder_o *obj, const std::string& name, const mobius::core::datetime::datetime& value)
+api_dataholder_setattr (
+    api_dataholder_o *obj,
+    const std::string &name,
+    const mobius::core::datetime::datetime &value
+)
 {
-  PyObject_GenericSetAttr ((PyObject *) obj,
-                           mobius::py::pystring_from_std_string (name),
-                           mobius::py::pydatetime_from_datetime (value));
+    PyObject_GenericSetAttr (
+        (PyObject *) obj, mobius::py::pystring_from_std_string (name),
+        mobius::py::pydatetime_from_datetime (value)
+    );
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -174,11 +190,11 @@ api_dataholder_setattr (api_dataholder_o *obj, const std::string& name, const mo
 // @param value value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-api_dataholder_setattr (api_dataholder_o *obj, const std::string& name, PyObject *value)
+api_dataholder_setattr (
+    api_dataholder_o *obj, const std::string &name, PyObject *value
+)
 {
-  PyObject_GenericSetAttr ((PyObject *) obj,
-                           mobius::py::pystring_from_std_string (name),
-                           value);
+    PyObject_GenericSetAttr (
+        (PyObject *) obj, mobius::py::pystring_from_std_string (name), value
+    );
 }
-
-

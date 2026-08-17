@@ -18,9 +18,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
 #include <mobius/core/datetime/datetime.hpp>
+#include <Python.h>
 #include <cstddef>
+#include <pytypeobject.hpp>
 #include <string>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -28,21 +29,17 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
-  PyObject_HEAD
-  PyObject *dict;
+    PyObject_HEAD
 } api_dataholder_o;
-
-extern PyTypeObject api_dataholder_t;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject new_api_dataholder_type ();
 api_dataholder_o *api_dataholder_new ();
-void api_dataholder_setattr (api_dataholder_o *, const std::string&, std::int64_t);
-void api_dataholder_setattr (api_dataholder_o *, const std::string&, const std::string&);
-void api_dataholder_setattr (api_dataholder_o *, const std::string&, const mobius::core::datetime::datetime&);
-void api_dataholder_setattr (api_dataholder_o *, const std::string&, PyObject *);
+void api_dataholder_setattr (api_dataholder_o *, const std::string &, std::int64_t);
+void api_dataholder_setattr (api_dataholder_o *, const std::string &, const std::string &);
+void api_dataholder_setattr (api_dataholder_o *, const std::string &, const mobius::core::datetime::datetime &);
+void api_dataholder_setattr (api_dataholder_o *, const std::string &, PyObject *);
 
 #endif
-
-

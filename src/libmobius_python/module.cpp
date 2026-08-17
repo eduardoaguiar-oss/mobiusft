@@ -64,7 +64,7 @@ PyInit_mobius (void)
         mobius::py::pymodule module (&module_def);
 
         // Add types
-        module.add_type ("dataholder", &api_dataholder_t);
+        module.add_type ("dataholder", new_api_dataholder_type ());
 
         // Build submodules
         module.add_submodule ("core", new_core_module ());
