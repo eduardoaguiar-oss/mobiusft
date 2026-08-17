@@ -32,26 +32,25 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Module methods
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyMethodDef module_methods[] =
-{
-  {"new_decoder_by_id", pymobius_core_file_decoder_new_decoder_by_uid, METH_VARARGS, "Create decoder by filetype ID"},
-  {nullptr, nullptr, 0, nullptr}, // sentinel
+static PyMethodDef module_methods[] = {
+    {"new_decoder_by_id", pymobius_core_file_decoder_new_decoder_by_uid,
+     METH_VARARGS, "Create decoder by filetype ID"},
+    {nullptr, nullptr, 0, nullptr}, // sentinel
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Module definition structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyModuleDef module_def =
-{
-  PyModuleDef_HEAD_INIT,
-  "mobius.core.file_decoder",
-  "Mobius Forensic Toolkit mobius.core.file_decoder module",
-  -1,
-  module_methods,
-  nullptr,
-  nullptr,
-  nullptr,
-  nullptr
+static PyModuleDef module_def = {
+    PyModuleDef_HEAD_INIT,
+    "mobius.core.file_decoder",
+    "Mobius Forensic Toolkit mobius.core.file_decoder module",
+    -1,
+    module_methods,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr
 };
 
 } // namespace
@@ -62,20 +61,18 @@ static PyModuleDef module_def =
 mobius::py::pymodule
 new_core_file_decoder_module ()
 {
-  // Initialize module
-  mobius::py::pymodule module (&module_def);
+    // Initialize module
+    mobius::py::pymodule module (&module_def);
 
-  // Add types
-  module.add_type ("entry", new_core_file_decoder_entry_type ());
-  module.add_type ("file_decoder", new_core_file_decoder_decoder_type ());
-  module.add_type ("metadata", new_core_file_decoder_metadata_type ());
-  module.add_type ("section", new_core_file_decoder_section_type ());
+    // Add types
+    module.add_type ("entry", new_core_file_decoder_entry_type ());
+    module.add_type ("file_decoder", new_core_file_decoder_decoder_type ());
+    module.add_type ("metadata", new_core_file_decoder_metadata_type ());
+    module.add_type ("section", new_core_file_decoder_section_type ());
 
-  // Build submodules
-  // module.add_submodule ("xxx", new_core_decoder_xxx_module ());
+    // Build submodules
+    // module.add_submodule ("xxx", new_core_decoder_xxx_module ());
 
-  // Return module
-  return module;
+    // Return module
+    return module;
 }
-
-

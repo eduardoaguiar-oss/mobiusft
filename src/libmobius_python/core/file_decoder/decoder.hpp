@@ -18,29 +18,29 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include <mobius/core/file_decoder/decoder.hpp>
 #include <Python.h>
 #include <pytypeobject.hpp>
-#include <mobius/core/file_decoder/decoder.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 typedef struct
 {
-  PyObject_HEAD
-  mobius::core::file_decoder::decoder *obj;
+    PyObject_HEAD mobius::core::file_decoder::decoder *obj;
 } core_file_decoder_decoder_o;
-
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject new_core_file_decoder_decoder_type ();
 bool pymobius_core_file_decoder_decoder_check (PyObject *);
-PyObject *pymobius_core_file_decoder_decoder_to_pyobject (const mobius::core::file_decoder::decoder&);
-mobius::core::file_decoder::decoder pymobius_core_file_decoder_decoder_from_pyobject (PyObject *);
+PyObject *pymobius_core_file_decoder_decoder_to_pyobject (
+    const mobius::core::file_decoder::decoder &
+);
+mobius::core::file_decoder::decoder
+pymobius_core_file_decoder_decoder_from_pyobject (PyObject *);
 
-PyObject *pymobius_core_file_decoder_new_decoder_by_uid (PyObject *, PyObject *);
+PyObject *
+pymobius_core_file_decoder_new_decoder_by_uid (PyObject *, PyObject *);
 #endif
-
-
