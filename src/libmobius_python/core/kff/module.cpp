@@ -53,8 +53,8 @@ new_core_kff_module ()
     mobius::py::pymodule module (&module_def);
 
     // Add types
-    module.add_type ("kff", &core_kff_kff_t);
-    module.add_type ("hashset", &core_kff_hashset_t);
+    module.add_type ("kff", new_core_kff_kff_type ());
+    module.add_type ("hashset", new_core_kff_hashset_type ());
 
     // Return module
     return module;

@@ -28,40 +28,12 @@
 #include <pymobius.hpp>
 #include <stdexcept>
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if value is an instance of <i>hashset</i>
-// @param value Python value
-// @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool
-pymobius_core_kff_hashset_check (PyObject *value)
+namespace
 {
-    return mobius::py::isinstance (value, &core_kff_hashset_t);
-}
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_kff_hashset_type = nullptr;
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>hashset</i> Python object from C++ object
-// @param obj C++ object
-// @return New hashset object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-pymobius_core_kff_hashset_to_pyobject (const mobius::core::kff::hashset &obj)
-{
-    return mobius::py::to_pyobject<core_kff_hashset_o> (obj,
-                                                        &core_kff_hashset_t);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>hashset</i> C++ object from Python object
-// @param value Python value
-// @return Hashset object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::core::kff::hashset
-pymobius_core_kff_hashset_from_pyobject (PyObject *value)
-{
-    return mobius::py::from_pyobject<core_kff_hashset_o> (value,
-                                                          &core_kff_hashset_t);
-}
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>description</i> Attribute getter
@@ -388,56 +360,98 @@ tp_dealloc (core_kff_hashset_o *self)
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_kff_hashset_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.kff.hashset",                // tp_name
-    sizeof (core_kff_hashset_o),              // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "Hash set",                               // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    tp_getset,                                // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    0,                                        // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_kff_hashset_slots[] = {
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("core.kff.hashset class")},
+    {Py_tp_getset, reinterpret_cast<void *> (tp_getset)},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_kff_hashset_spec = {
+    .name = "mobius.core.kff.hashset",
+    .basicsize = sizeof (core_kff_hashset_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_kff_hashset_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>mobius.core.kff.hashset</i> type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::py::pytypeobject
+new_core_kff_hashset_type ()
+{
+    // If type is already created, return it
+    if (core_kff_hashset_type)
+        return mobius::py::pytypeobject (core_kff_hashset_type);
+
+    // Allocate type from spec
+    core_kff_hashset_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&core_kff_hashset_spec)
+    );
+
+    // Create type
+    mobius::py::pytypeobject type (core_kff_hashset_type);
+    type.create ();
+
+    return type;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>core.kff.hashset</i>
+// @param value Python value
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+pymobius_core_kff_hashset_check (PyObject *value)
+{
+    if (!core_kff_hashset_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.kff.hashset type is not initialized")
+        );
+
+    return mobius::py::isinstance (value, core_kff_hashset_type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.kff.hashset</i> Python object from C++ object
+// @param obj C++ object
+// @return New core.kff.hashset object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+pymobius_core_kff_hashset_to_pyobject (const mobius::core::kff::hashset &obj)
+{
+    if (!core_kff_hashset_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.kff.hashset type is not initialized")
+        );
+
+    return mobius::py::to_pyobject<core_kff_hashset_o> (
+        obj, core_kff_hashset_type
+    );
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.kff.hashset</i> C++ object from Python object
+// @param value Python value
+// @return core.kff.hashset object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::kff::hashset
+pymobius_core_kff_hashset_from_pyobject (PyObject *value)
+{
+    if (!core_kff_hashset_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.kff.hashset type is not initialized")
+        );
+
+    return mobius::py::from_pyobject<core_kff_hashset_o> (
+        value, core_kff_hashset_type
+    );
+}
