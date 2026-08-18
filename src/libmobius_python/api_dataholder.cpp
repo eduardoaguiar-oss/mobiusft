@@ -22,6 +22,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "api_dataholder.hpp"
 #include <pymobius.hpp>
+#include <structmember.h>
 
 namespace
 {
@@ -30,41 +31,25 @@ static PyTypeObject *api_dataholder_type = nullptr;
 
 } // namespace
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Getters and setters
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyGetSetDef tp_getset[] = {
-    {"__dict__", PyObject_GenericGetDict, PyObject_GenericSetDict, "Type dictionary", nullptr},
-    {nullptr, nullptr, nullptr, nullptr, nullptr} // Sentinel
-};
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief tp_dir implementation
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyObject *
-tp_dir (api_dataholder_o *self, PyObject *)
-{
-    PyObject *dict = PyObject_GenericGetDict(reinterpret_cast<PyObject *> (self), nullptr);
-    return PyDict_Keys (dict);
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Methods structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static PyMethodDef tp_methods[] = {
-    {(char *) "__dir__", (PyCFunction) tp_dir, METH_VARARGS, "Dir function implementation"},
-    {NULL, NULL, 0, NULL} // sentinel
-};
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief api.dataholder: tp_dealloc
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static void
 tp_dealloc (api_dataholder_o *self)
 {
-    PyObject_GenericSetDict(reinterpret_cast<PyObject *> (self), nullptr, nullptr);
-    Py_TYPE (self)->tp_free (reinterpret_cast<PyObject *> (self));
+    Py_XDECREF(self->dict);
+
+    PyTypeObject *tp = Py_TYPE(self);
+    tp->tp_free((PyObject *) self);
 }
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief api.dataholder: members structure
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyMemberDef tp_members[] = {
+    {"__dictoffset__", T_PYSSIZET, offsetof (api_dataholder_o, dict), READONLY, nullptr},
+    {nullptr, 0, 0, 0, nullptr} // Sentinel
+};
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Type Slots
@@ -73,8 +58,7 @@ static PyType_Slot api_dataholder_slots[] = {
     {Py_tp_new, reinterpret_cast<void *> (PyType_GenericNew)},
     {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
     {Py_tp_doc, const_cast<char *> ("api_dataholder class")},
-    {Py_tp_getset, reinterpret_cast<void *> (tp_getset)},
-    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {Py_tp_members, tp_members},
     {Py_tp_getattro, reinterpret_cast<void *> (PyObject_GenericGetAttr)},
     {Py_tp_setattro, reinterpret_cast<void *> (PyObject_GenericSetAttr)},
     {0, nullptr} // Sentinel
@@ -87,7 +71,7 @@ static PyType_Spec api_dataholder_spec = {
     .name = "mobius.api_dataholder",
     .basicsize = sizeof (api_dataholder_o),
     .itemsize = 0,
-    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE | Py_TPFLAGS_MANAGED_DICT,
+    .flags = Py_TPFLAGS_DEFAULT,
     .slots = api_dataholder_slots,
 };
 
@@ -124,8 +108,11 @@ api_dataholder_new ()
             MOBIUS_EXCEPTION_MSG ("api_dataholder type is not initialized")
         );
 
-    api_dataholder_o *self =
-        (api_dataholder_o *) _PyObject_New (api_dataholder_type);
+   api_dataholder_o *self = (api_dataholder_o *) 
+        api_dataholder_type->tp_alloc(api_dataholder_type, 0);
+
+    if (self != nullptr)
+        self->dict = nullptr; 
 
     return self;
 }
