@@ -134,7 +134,7 @@ engine::impl::impl (
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     for (const auto &processor_id : profile_.get_processors ())
     {
-        auto data = get_evidence_processor_implementation (processor_id);
+        auto data = get_implementation (processor_id);
 
         if (data)
         {

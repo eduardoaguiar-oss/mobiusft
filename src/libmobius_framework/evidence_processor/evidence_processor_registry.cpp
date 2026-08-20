@@ -23,11 +23,7 @@
 namespace
 {
 // @brief Map to hold processor implementation data
-static std::unordered_map<
-    std::string,
-    mobius::framework::evidence_processor::
-        evidence_processor_implementation_data>
-    data;
+static std::unordered_map<std::string, mobius::framework::evidence_processor::implementation_data> data;
 
 // @brief Mutex to protect access to the factories map
 static std::mutex mutex;
@@ -43,14 +39,13 @@ namespace mobius::framework::evidence_processor
 // @param factory Function to create an instance of the processor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-register_evidence_processor_implementation (
+register_implementation (
     const std::string &id,
     const std::string &name,
-    mobius::framework::evidence_processor::
-        evidence_processor_implementation_builder factory
+    mobius::framework::evidence_processor::implementation_builder factory
 )
 {
-    evidence_processor_implementation_data data_entry;
+    implementation_data data_entry;
     data_entry.id = id;
     data_entry.name = name;
     data_entry.factory = factory;
@@ -64,7 +59,7 @@ register_evidence_processor_implementation (
 // @param id Unique identifier for the processor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-unregister_evidence_processor_implementation (const std::string &id)
+unregister_implementation (const std::string &id)
 {
     std::lock_guard<std::mutex> lock (mutex);
     data.erase (id);
@@ -76,8 +71,8 @@ unregister_evidence_processor_implementation (const std::string &id)
 // @return Optional containing the evidence processor implementation data if found, or
 //         std::nullopt if not found
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::optional<evidence_processor_implementation_data>
-get_evidence_processor_implementation (const std::string &id)
+std::optional<implementation_data>
+get_implementation (const std::string &id)
 {
     std::lock_guard<std::mutex> lock (mutex);
 
@@ -93,22 +88,31 @@ get_evidence_processor_implementation (const std::string &id)
 // @brief Get all registered evidence processor implementations
 // @return Vector of pairs containing the ID and name of each evidence processor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector<mobius::framework::evidence_processor::
-                evidence_processor_implementation_data>
-list_evidence_processor_implementations ()
+std::vector<mobius::framework::evidence_processor::implementation_data>
+list_implementations ()
 {
     std::lock_guard<std::mutex> lock (mutex);
-    
-    std::vector<mobius::framework::evidence_processor::
-                    evidence_processor_implementation_data>
-        implementations (data.size ());
+
+    std::vector<mobius::framework::evidence_processor::implementation_data> implementations (data.size ());
 
     std::transform (
-        data.begin (), data.end (), implementations.begin (),
+        data.begin (),
+        data.end (),
+        implementations.begin (),
         [] (const auto &pair) { return pair.second; }
     );
 
     return implementations;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Unregister a evidence processor
+// @param id Unique identifier for the processor
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+unregister_evidence_processor_implementation (const std::string &id)
+{
+    unregister_implementation (id);
 }
 
 } // namespace mobius::framework::evidence_processor

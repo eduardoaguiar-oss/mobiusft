@@ -34,17 +34,14 @@ namespace mobius::framework::evidence_processor
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Evidence processor implementation functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-using evidence_processor_implementation_builder =
-    std::function<std::shared_ptr<evidence_processor_impl_base> (
-        const mobius::framework::model::item &,
-        const profile &,
-        const mediator &
-    )>;
+using implementation_builder = std::function<std::shared_ptr<evidence_processor_impl_base> (
+    const mobius::framework::model::item &, const profile &, const mediator &
+)>;
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure to hold evidence processor implementation data
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-struct evidence_processor_implementation_data
+struct implementation_data
 {
     // @brief Unique identifier for the processor
     std::string id;
@@ -53,26 +50,36 @@ struct evidence_processor_implementation_data
     std::string name;
 
     // @brief Function to create an instance of the processor
-    mobius::framework::evidence_processor::
-        evidence_processor_implementation_builder factory;
+    mobius::framework::evidence_processor::implementation_builder factory;
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Evidence processor implementation prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void register_evidence_processor_implementation (
-    const std::string &,
-    const std::string &,
-    evidence_processor_implementation_builder
-);
+void register_implementation (const std::string &, const std::string &, implementation_builder);
+void unregister_implementation (const std::string &);
+std::optional<implementation_data> get_implementation (const std::string &);
+std::vector<implementation_data> list_implementations ();
 
 void unregister_evidence_processor_implementation (const std::string &);
 
-std::optional<evidence_processor_implementation_data>
-get_evidence_processor_implementation (const std::string &);
-
-std::vector<evidence_processor_implementation_data>
-list_evidence_processor_implementations ();
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Register an evidence processor implementation
+// @param id Unique identifier for the processor
+// @param name Name of the processor
+// @tparam T Type of the processor implementation
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <typename T>
+void
+register_implementation (const std::string &id, const std::string &name)
+{
+    register_implementation (
+        id,
+        name,
+        [] (const mobius::framework::model::item &item, const profile &prof, const mediator &med)
+        { return std::make_shared<T> (item, prof, med); }
+    );
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Register a evidence processor implementation
@@ -82,14 +89,12 @@ list_evidence_processor_implementations ();
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 template <typename T>
 void
-register_evidence_processor_implementation (
-    const std::string &id, const std::string &name
-)
+register_evidence_processor_implementation (const std::string &id, const std::string &name)
 {
-    register_evidence_processor_implementation (
-        id, name,
-        [] (const mobius::framework::model::item &item, const profile &prof,
-            const mediator &med)
+    register_implementation (
+        id,
+        name,
+        [] (const mobius::framework::model::item &item, const profile &prof, const mediator &med)
         { return std::make_shared<T> (item, prof, med); }
     );
 }
