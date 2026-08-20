@@ -29,7 +29,6 @@ add_library(mobius_core_datetime STATIC
     conv_fat_time.cpp
     conv_iso_string.cpp
     conv_julian.cpp
-    conv_nt_timestamp.cpp
     conv_unix_timestamp.cpp
     date.cpp
     datetime.cpp

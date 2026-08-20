@@ -172,4 +172,68 @@ operator<< (std::ostream &stream, const datetime &dt)
     return stream;
 }
 
+namespace
+{
+static constexpr datetime EPOCH_NT_DATETIME (1601, 1, 1, 0, 0, 0);
+static constexpr datetime EPOCH_DOT_NET_DATETIME (1, 1, 1, 0, 0, 0);
+static constexpr datetime EPOCH_COCOA_DATETIME (2001, 1, 1, 0, 0, 0);
+} // namespace
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Convert Cocoa timestamp to datetime
+// @param timestamp Cocoa timestamp (64 bits)
+// @return datetime
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+datetime
+new_datetime_from_cocoa_timestamp (std::uint64_t timestamp)
+{
+    datetime dt;
+
+    if (timestamp)
+    {
+        timedelta delta (timestamp, 0);
+        dt = EPOCH_COCOA_DATETIME + delta;
+    }
+
+    return dt;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Convert .NET timestamp to datetime
+// @param timestamp .NET timestamp (64 bits)
+// @return datetime
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+datetime
+new_datetime_from_dot_net_timestamp (std::uint64_t timestamp)
+{
+    datetime dt;
+
+    if (timestamp)
+    {
+        timedelta delta (timestamp / 10000000, (timestamp % 10000000) * 100);
+        dt = EPOCH_DOT_NET_DATETIME + delta;
+    }
+
+    return dt;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Convert NT timestamp to datetime
+// @param timestamp NT timestamp (64 bits)
+// @return datetime
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+datetime
+new_datetime_from_nt_timestamp (std::uint64_t timestamp)
+{
+    datetime dt;
+
+    if (timestamp)
+    {
+        timedelta delta (timestamp / 10000000, (timestamp % 10000000) * 100);
+        dt = EPOCH_NT_DATETIME + delta;
+    }
+
+    return dt;
+}
+
 } // namespace mobius::core::datetime
