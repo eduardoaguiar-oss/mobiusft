@@ -57,7 +57,7 @@ class profile
     std::string get_path () const;
     mobius::core::datetime::datetime get_creation_time () const;
     mobius::core::datetime::datetime get_last_modified_time () const;
-    //void add_dcplusplus_xml_file (const mobius::core::io::file &);
+    void add_history_db_file (const mobius::core::io::file &);
 
   private:
     // Implementation class forward declaration

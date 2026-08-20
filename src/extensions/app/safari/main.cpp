@@ -36,7 +36,6 @@ extern "C"
 extern "C" void
 start ()
 {
-    // Register the evidence-processor implementation
     mobius::framework::evidence_processor::register_implementation<
         mobius::extension::app::safari::evidence_processor_impl> (EXTENSION_ID, EXTENSION_NAME);
 }

@@ -100,11 +100,8 @@ evidence_processor_impl::_scan_profile_folder (
     {
         try
         {
-            /*if (name == "plum.sqlite")
-                p.add_plum_sqlite_file (f);
-
-            else if (name == "stickynotes.snt")
-                p.add_sticky_notes_snt_file (f);*/
+            if (name == "history.db")
+                p.add_history_db_file (f);
         }
         catch (const std::exception &e)
         {

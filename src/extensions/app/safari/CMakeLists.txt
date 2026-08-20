@@ -27,8 +27,9 @@ project(app_safari LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(app_safari MODULE
     main.cpp
+    evidence_processor_impl.cpp
+    file_history_db.cpp
     profile.cpp
-    #vfs_processor_impl.cpp
 )
 
 set_target_properties(app_safari PROPERTIES OUTPUT_NAME "app-safari" PREFIX "")
@@ -36,10 +37,21 @@ set_target_properties(app_safari PROPERTIES OUTPUT_NAME "app-safari" PREFIX "")
 target_link_libraries(app_safari PRIVATE Mobius::Framework Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: safari_history
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_executable(tools_safari_history
+    tools/safari_history.cpp
+    file_history_db.cpp
+)
+
+set_target_properties(tools_safari_history PROPERTIES OUTPUT_NAME "safari_history")
+target_link_libraries(tools_safari_history PRIVATE Mobius::Core)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 install(TARGETS app_safari LIBRARY DESTINATION share/mobiusft/extensions)
 
-#install(TARGETS
-#    tools_dcpp_dcplusplus_xml
-#    RUNTIME DESTINATION share/mobiusft/tools)
+install(TARGETS
+    tools_safari_history
+    RUNTIME DESTINATION share/mobiusft/tools)

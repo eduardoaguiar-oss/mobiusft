@@ -1,6 +1,7 @@
 Mobius Forensic Toolkit 2.29
 	* app-safari: Add new C++ extension for Safari browser support
 	* os-win: Retrieve LID, PUID, and GDID from Win Profiles
+	* libmobius_core: Add new function datetime::new_datetime_from_cocoa_timestamp
 	* libmobius_framework: Rename register_evidence_processor_implementation to register_implementation
 	* libmobius_framework: Create new function evidence_processor::unregister_implementation
 	* libmobius_framework: Rename get_evidence_processor_implementation to get_implementation
@@ -11,6 +12,7 @@ Mobius Forensic Toolkit 2.29
 	* libmobius_python: Improve mobius.core.system classes using the PyType_FromSpec API
 	* libmobius_python: Improve mobius.core.turing classes using the PyType_FromSpec API
 	* libmobius_python: Improve api_dataholder class using the PyType_FromSpec API
+	* libmobius_python: Add new function datetime.new_datetime_from_cocoa_timestamp
 
 Mobius Forensic Toolkit 2.28
 	* Bundle girepository libraries to improve AppImage portability

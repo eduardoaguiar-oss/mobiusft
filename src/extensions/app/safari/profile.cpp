@@ -16,6 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "profile.hpp"
+#include "file_history_db.hpp"
 #include <mobius/core/log.hpp>
 #include <mobius/core/mediator.hpp>
 #include <mobius/core/string_functions.hpp>
@@ -42,7 +43,7 @@ class profile::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     impl &operator= (const impl &) noexcept = delete;
     impl &operator= (impl &&) noexcept = delete;
-    
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Check if profile is valid
     // @return true/false
@@ -105,7 +106,7 @@ class profile::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    //void add_dcplusplus_xml_file (const mobius::core::io::file &);
+    void add_history_db_file (const mobius::core::io::file &);
 
   private:
     // @brief Folder object
@@ -144,13 +145,11 @@ profile::impl::_set_folder (const mobius::core::io::folder &f)
     last_modified_time_ = f.get_modification_time ();
     creation_time_ = f.get_creation_time ();
     username_ = mobius::framework::get_username_from_path (f.get_path ());
-    
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Emit sampling_folder event
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::core::emit (
-        "sampling_folder", std::string ("app.stub.profiles"), f
-    );
+    mobius::core::emit ("sampling_folder", std::string ("app.stub.profiles"), f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -163,9 +162,38 @@ profile::impl::_update_mtime (const mobius::core::io::file &f)
     if (!f)
         return;
 
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
+    if (!last_modified_time_ || f.get_modification_time () > last_modified_time_)
         last_modified_time_ = f.get_modification_time ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add history.db file
+// @param f File object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::add_history_db_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Decode file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        file_history_db fh (f.new_reader ());
+
+        if (!fh)
+            return;
+
+        log.info (__LINE__, "File decoded [history.db]: " + f.get_path ());
+
+        _set_folder (f.get_parent ());
+        _update_mtime (f);
+    }
+    catch (const std::exception &e)
+    {
+        log.error (__LINE__, e.what ());
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -174,7 +202,7 @@ profile::impl::_update_mtime (const mobius::core::io::file &f)
 // @param case_profile Case profile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 profile::profile ()
-    : impl_ (std::make_shared <impl> ())
+    : impl_ (std::make_shared<impl> ())
 {
 }
 
@@ -182,7 +210,8 @@ profile::profile ()
 // @brief Check if profile is valid
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-profile::operator bool () const noexcept
+profile::
+operator bool () const noexcept
 {
     return impl_->operator bool ();
 }
@@ -235,6 +264,16 @@ mobius::core::datetime::datetime
 profile::get_last_modified_time () const
 {
     return impl_->get_last_modified_time ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add history.db file
+// @param f File object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_history_db_file (const mobius::core::io::file &f)
+{
+    impl_->add_history_db_file (f);
 }
 
 } // namespace mobius::extension::app::safari
