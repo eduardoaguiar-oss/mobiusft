@@ -143,6 +143,46 @@ class profile::impl
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get LID
+    // @return LID
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_lid () const
+    {
+        return lid_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get PUID
+    // @return PUID
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_puid () const
+    {
+        return puid_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get GDID
+    // @return GDID
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_gdid () const
+    {
+        return gdid_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get GDID type
+    // @return GDID type
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    int
+    get_gdid_type () const
+    {
+        return gdid_type_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get profile metadata
     // @return Profile metadata
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -233,6 +273,18 @@ class profile::impl
 
     // @brief Is active flag
     bool is_active_ = false;
+
+    // @brief LID
+    std::string lid_;
+
+    // @brief PUID
+    std::string puid_;
+
+    // @brief GDID
+    std::string gdid_;
+
+    // @brief GDID type
+    int gdid_type_ = 0;
 
     // @brief Creation time
     mobius::core::datetime::datetime creation_time_;
@@ -394,6 +446,25 @@ profile::impl::_load_metadata (
         metadata_.set (
             "user_sid", user_sid_value.get_data_as_string ("utf-16le")
         );
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Extract LID, PUID, GDID, and GDID type
+        // @see https://zerotracelab.com/blog/gdid-windows-tracking
+        // @see https://github.com/SmtimesIWndr/gdid-reversal
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto lid_value = root_key.get_value_by_path (
+            "\\SOFTWARE\\Microsoft\\IdentityCRL\\ExtendedProperties\\LID"
+        );
+
+        if (lid_value)
+        {
+            lid_ = lid_value.get_data_as_string ("utf-16le");
+            puid_  = std::to_string (std::strtoull (lid_.c_str (), nullptr, 16));
+            gdid_ = "g:" + lid_;
+
+            const auto gdid_type_str = lid_.substr (0, 4);
+            gdid_type_ = std::strtol (gdid_type_str.c_str (), nullptr, 16);
+        }
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Get current locale
@@ -788,6 +859,46 @@ bool
 profile::is_active () const
 {
     return impl_->is_active ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get LID
+// @return LID
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+profile::get_lid () const
+{
+    return impl_->get_lid ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get PUID
+// @return PUID
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+profile::get_puid () const
+{
+    return impl_->get_puid ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get GDID
+// @return GDID
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+profile::get_gdid () const
+{
+    return impl_->get_gdid ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get GDID type
+// @return GDID type
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+int
+profile::get_gdid_type () const
+{
+    return impl_->get_gdid_type ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

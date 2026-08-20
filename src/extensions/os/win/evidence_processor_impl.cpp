@@ -104,9 +104,7 @@ evidence_processor_impl::on_complete ()
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::_scan_ntuser_dat_folder (
-    const mobius::core::io::folder &folder
-)
+evidence_processor_impl::_scan_ntuser_dat_folder (const mobius::core::io::folder &folder)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
     mobius::core::io::walker w (folder);
@@ -121,10 +119,7 @@ evidence_processor_impl::_scan_ntuser_dat_folder (
         }
         catch (const std::exception &e)
         {
-            log.warning (
-                __LINE__,
-                std::string (e.what ()) + " (file: " + f.get_path () + ")"
-            );
+            log.warning (__LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")");
         }
     }
 
@@ -157,10 +152,7 @@ evidence_processor_impl::_scan_recent_folder (const mobius::core::io::folder &fo
         }
         catch (const std::exception &e)
         {
-            log.warning (
-                __LINE__,
-                std::string (e.what ()) + " (file: " + f.get_path () + ")"
-            );
+            log.warning (__LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")");
         }
     }
 }
@@ -187,10 +179,13 @@ evidence_processor_impl::_save_app_profiles ()
         auto metadata = p.get_metadata ().clone ();
         metadata.set ("is_active", p.is_active ());
         metadata.set ("is_deleted", p.is_deleted ());
+        metadata.set ("lid", p.get_lid ());
+        metadata.set ("puid", p.get_puid ());
+        metadata.set ("gdid", p.get_gdid ());
+        metadata.set ("gdid_type", p.get_gdid_type ());
+
         metadata.set ("num_autofill_entries", p.get_autofill_entries_count ());
-        metadata.set (
-            "num_installed_programs", p.get_installed_programs_count ()
-        );
+        metadata.set ("num_installed_programs", p.get_installed_programs_count ());
         metadata.set ("num_opened_files", p.get_opened_files_count ());
         e.set_attribute ("metadata", metadata);
 

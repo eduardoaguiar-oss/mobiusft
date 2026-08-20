@@ -95,6 +95,10 @@ class profile
     std::string get_username () const;
     mobius::core::io::folder get_folder () const;
     std::string get_path () const;
+    std::string get_lid () const;
+    std::string get_puid () const;
+    std::string get_gdid () const;
+    int get_gdid_type () const;
     mobius::core::datetime::datetime get_creation_time () const;
     mobius::core::datetime::datetime get_last_modified_time () const;
     mobius::core::pod::map get_metadata () const;
