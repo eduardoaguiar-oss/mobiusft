@@ -26,6 +26,7 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Function prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *func_new_datetime_from_cocoa_timestamp (PyObject *, PyObject *);
 PyObject *func_new_datetime_from_dot_net_timestamp (PyObject *, PyObject *);
 PyObject *func_new_datetime_from_fat_time (PyObject *, PyObject *);
 PyObject *func_new_datetime_from_iso_string (PyObject *, PyObject *);
@@ -38,16 +39,27 @@ namespace
 // @brief Module methods
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef module_methods[] = {
-    {"new_datetime_from_dot_net_timestamp", func_new_datetime_from_dot_net_timestamp,
-     METH_VARARGS, "Create new datetime from .NET timestamp"},
-    {"new_datetime_from_fat_time", func_new_datetime_from_fat_time,
-     METH_VARARGS, "Create new datetime from FAT time"},
-    {"new_datetime_from_iso_string", func_new_datetime_from_iso_string,
-     METH_VARARGS, "Create new datetime from ISO 8601 string"},
-    {"new_datetime_from_nt_timestamp", func_new_datetime_from_nt_timestamp,
-     METH_VARARGS, "Create new datetime from NT timestamp"},
-    {"new_datetime_from_unix_timestamp", func_new_datetime_from_unix_timestamp,
-     METH_VARARGS, "Create new datetime from UNIX timestamp"},
+    {"new_datetime_from_cocoa_timestamp",
+     func_new_datetime_from_cocoa_timestamp,
+     METH_VARARGS,
+     "Create new datetime from Cocoa timestamp"},
+    {"new_datetime_from_dot_net_timestamp",
+     func_new_datetime_from_dot_net_timestamp,
+     METH_VARARGS,
+     "Create new datetime from .NET timestamp"},
+    {"new_datetime_from_fat_time", func_new_datetime_from_fat_time, METH_VARARGS, "Create new datetime from FAT time"},
+    {"new_datetime_from_iso_string",
+     func_new_datetime_from_iso_string,
+     METH_VARARGS,
+     "Create new datetime from ISO 8601 string"},
+    {"new_datetime_from_nt_timestamp",
+     func_new_datetime_from_nt_timestamp,
+     METH_VARARGS,
+     "Create new datetime from NT timestamp"},
+    {"new_datetime_from_unix_timestamp",
+     func_new_datetime_from_unix_timestamp,
+     METH_VARARGS,
+     "Create new datetime from UNIX timestamp"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
@@ -63,7 +75,8 @@ static PyModuleDef module_def = {
     nullptr,
     nullptr,
     nullptr,
-    nullptr};
+    nullptr
+};
 
 } // namespace
 
