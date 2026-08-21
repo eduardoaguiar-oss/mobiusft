@@ -104,6 +104,26 @@ class profile::impl
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get visited URLs
+    // @return Vector of visited URLs
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<visited_url>
+    get_visited_urls () const
+    {
+        return visited_urls_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Count visited URLs
+    // @return Count of visited URLs
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    count_visited_urls () const
+    {
+        return visited_urls_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void add_history_db_file (const mobius::core::io::file &);
@@ -120,6 +140,9 @@ class profile::impl
 
     // @brief Last modified time
     mobius::core::datetime::datetime last_modified_time_;
+
+    // @brief Visited URLs
+    std::vector<visited_url> visited_urls_;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
@@ -149,7 +172,7 @@ profile::impl::_set_folder (const mobius::core::io::folder &f)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Emit sampling_folder event
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::core::emit ("sampling_folder", std::string ("app.stub.profiles"), f);
+    mobius::core::emit ("sampling_folder", std::string ("app.safari.profiles"), f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -189,6 +212,52 @@ profile::impl::add_history_db_file (const mobius::core::io::file &f)
 
         _set_folder (f.get_parent ());
         _update_mtime (f);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Add visited URLs
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (const auto &entry : fh.get_visited_urls ())
+        {
+            visited_url vu;
+            vu.timestamp = entry.visit_time;
+            vu.title = entry.title;
+            vu.url = entry.url;
+            vu.f = f;
+
+            // Metadata
+            vu.metadata.set ("idx", entry.idx);
+            vu.metadata.set ("attributes", entry.attributes);
+            vu.metadata.set ("autocomplete_triggers", entry.autocomplete_triggers);
+            vu.metadata.set ("daily_visit_counts", entry.daily_visit_counts);
+            vu.metadata.set ("domain_expansion", entry.domain_expansion);
+            vu.metadata.set ("generation", entry.generation);
+            vu.metadata.set ("history_item", entry.history_item);
+            vu.metadata.set ("http_non_get", entry.http_non_get);
+            vu.metadata.set ("item_id", entry.item_id);
+            vu.metadata.set ("load_successful", entry.load_successful);
+            vu.metadata.set ("origin", entry.origin);
+            vu.metadata.set ("redirect_destination", entry.redirect_destination);
+            vu.metadata.set ("redirect_source", entry.redirect_source);
+            vu.metadata.set ("score", entry.score);
+            vu.metadata.set ("should_recompute_derived_visit_counts", entry.should_recompute_derived_visit_counts);
+            vu.metadata.set ("status_code", entry.status_code);
+            vu.metadata.set ("synthesized", entry.synthesized);
+            vu.metadata.set ("visit_count", entry.visit_count);
+            vu.metadata.set ("visit_count_score", entry.visit_count_score);
+            vu.metadata.set ("visit_id", entry.visit_id);
+            vu.metadata.set ("weekly_visit_counts", entry.weekly_visit_counts);
+
+            // Add to visited URLs
+            visited_urls_.push_back (vu);
+        }
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Emit sampling_file event
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::emit (
+            "sampling_file", std::string ("app.safari.history_db"),
+            f.new_reader ()
+        );
     }
     catch (const std::exception &e)
     {
@@ -264,6 +333,26 @@ mobius::core::datetime::datetime
 profile::get_last_modified_time () const
 {
     return impl_->get_last_modified_time ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get visited URLs
+// @return Vector of visited URLs
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<profile::visited_url>
+profile::get_visited_urls () const
+{
+    return impl_->get_visited_urls ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Count visited URLs
+// @return Count of visited URLs
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::size_t
+profile::count_visited_urls () const
+{
+    return impl_->count_visited_urls ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

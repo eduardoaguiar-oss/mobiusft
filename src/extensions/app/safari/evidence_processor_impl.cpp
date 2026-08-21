@@ -77,6 +77,8 @@ void
 evidence_processor_impl::on_complete ()
 {
     _save_app_profiles ();
+    _save_downloads ();
+    _save_visited_urls ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -145,10 +147,57 @@ evidence_processor_impl::_save_app_profiles ()
         e.add_source (p.get_folder ());
 
         // Tags
-        e.set_tag ("app.notes");
+        e.set_tag ("app.browser");
 
         // Notify mediator
         mediator_.on_evidence_created (e);
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save downloads
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_processor_impl::_save_downloads ()
+{
+    for (const auto &p : profiles_)
+    {
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save visited URLs
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_processor_impl::_save_visited_urls ()
+{
+    for (const auto &p : profiles_)
+    {
+        for (const auto &entry : p.get_visited_urls ())
+        {
+            // Attributes
+            auto e = item_.new_evidence ("visited-url");
+            e.set_attribute ("username", p.get_username ());
+            e.set_attribute ("timestamp", entry.timestamp);
+            e.set_attribute ("title", entry.title);
+            e.set_attribute ("url", entry.url);
+
+            // Metadata
+            auto metadata = mobius::core::pod::map ();
+            metadata.set ("app_id", APP_ID);
+            metadata.set ("app_name", APP_NAME);
+            metadata.set ("num_visited_urls", p.count_visited_urls ());
+            metadata.update (entry.metadata);
+
+            e.set_attribute ("metadata", metadata);
+
+            // Tags and sources
+            e.set_tag ("app.browser");
+            e.add_source (entry.f);
+
+            // Notify mediator
+            mediator_.on_evidence_created (e);
+        }
     }
 }
 
