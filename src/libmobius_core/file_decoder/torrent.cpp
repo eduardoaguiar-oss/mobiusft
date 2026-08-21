@@ -39,14 +39,13 @@ _get_path (const mobius::core::pod::data &data)
 
     if (data.is_list ())
     {
-        std::vector<mobius::core::pod::data> path_list (data);
+        auto path_list = data.to_list<std::string> ();
 
         for (const auto &path_item : path_list)
         {
             if (!path.empty ())
                 path += "/";
-            path +=
-                static_cast<mobius::core::bytearray> (path_item).to_string ();
+            path += path_item;
         }
     }
 
@@ -389,9 +388,8 @@ torrent::impl::_load_data () const
     if (comment_.empty ())
         comment_ = metadata.pop<std::string> ("comment");
 
-    creation_time_ = mobius::core::datetime::new_datetime_from_unix_timestamp (
-        metadata.pop<std::int64_t> ("creation date")
-    );
+    creation_time_ =
+        mobius::core::datetime::new_datetime_from_unix_timestamp (metadata.pop<std::int64_t> ("creation date"));
 
     info_hash_ = metadata.get<std::string> ("info hash");
     if (info_hash_.empty ())
@@ -412,9 +410,7 @@ torrent::impl::_load_data () const
             {
                 std::vector<mobius::core::pod::data> announce_items (announce);
                 for (const auto &item : announce_items)
-                    announce_list_.emplace_back (
-                        static_cast<mobius::core::bytearray> (item).to_string ()
-                    );
+                    announce_list_.emplace_back (item.to_bytearray ().to_string ());
             }
         }
     }
@@ -507,7 +503,7 @@ torrent::impl::_load_data () const
     auto pieces_data = info.get ("pieces");
     if (pieces_data.is_bytearray ())
     {
-        auto pieces = static_cast<mobius::core::bytearray> (pieces_data);
+        auto pieces = pieces_data.to_bytearray ();
 
         for (std::size_t i = 0; i < pieces.size (); i += 20)
         {

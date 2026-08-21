@@ -127,9 +127,7 @@ data::data (std::int64_t i)
 // @param i Integer value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (std::uint64_t i)
-    : impl_ (
-          std::make_shared<data_impl_integer> (static_cast<std::int64_t> (i))
-      )
+    : impl_ (std::make_shared<data_impl_integer> (static_cast<std::int64_t> (i)))
 {
 }
 
@@ -138,9 +136,7 @@ data::data (std::uint64_t i)
 // @param i Integer value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 data::data (std::uint32_t i)
-    : impl_ (
-          std::make_shared<data_impl_integer> (static_cast<std::int64_t> (i))
-      )
+    : impl_ (std::make_shared<data_impl_integer> (static_cast<std::int64_t> (i)))
 {
 }
 
@@ -368,8 +364,8 @@ data::operator= (const std::vector<data> &v)
 // @brief Convert data to boolean
 // @return Bool value if type == boolean, otherwise exception
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data::
-operator bool () const
+bool
+data::to_bool () const
 {
     if (impl_->get_type () == type::boolean)
         return std::static_pointer_cast<data_impl_bool> (impl_)->get_value ();
@@ -377,56 +373,46 @@ operator bool () const
     else if (impl_->get_type () == type::integer)
         return std::static_pointer_cast<data_impl_integer> (impl_)->get_value ();
 
-    throw std::runtime_error (
-        MOBIUS_EXCEPTION_MSG ("cannot convert data to bool")
-    );
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot convert data to bool"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Convert data to int64_t
 // @return int64_t value if type == integer, otherwise exception
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data::
-operator std::int64_t () const
+std::int64_t
+data::to_integer () const
 {
     if (impl_->get_type () == type::integer)
-        return std::static_pointer_cast<data_impl_integer> (impl_)
-            ->get_value ();
+        return std::static_pointer_cast<data_impl_integer> (impl_)->get_value ();
 
-    throw std::runtime_error (
-        MOBIUS_EXCEPTION_MSG ("cannot convert data to std::int64_t")
-    );
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot convert data to std::int64_t"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Convert data to long double
 // @return Long double value if type == real, otherwise exception
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data::
-operator long double () const
+long double
+data::to_float () const
 {
     if (impl_->get_type () == type::floatn)
         return std::static_pointer_cast<data_impl_float> (impl_)->get_value ();
 
-    throw std::runtime_error (
-        MOBIUS_EXCEPTION_MSG ("cannot convert data to long double")
-    );
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot convert data to long double"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Convert data to datetime
 // @return Long double value if type == datetime, otherwise exception
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data::
-operator mobius::core::datetime::datetime () const
+mobius::core::datetime::datetime
+data::to_datetime () const
 {
     if (impl_->get_type () == type::datetime)
-        return std::static_pointer_cast<data_impl_datetime> (impl_)
-            ->get_value ();
+        return std::static_pointer_cast<data_impl_datetime> (impl_)->get_value ();
 
-    throw std::runtime_error (
-        MOBIUS_EXCEPTION_MSG ("cannot convert data to datetime")
-    );
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot convert data to datetime"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -443,42 +429,33 @@ operator std::string () const
         return std::static_pointer_cast<data_impl_string> (impl_)->get_value ();
 
     else if (impl_->get_type () == type::bytearray)
-        return std::static_pointer_cast<data_impl_bytearray> (impl_)
-            ->get_value ()
-            .to_string ();
+        return std::static_pointer_cast<data_impl_bytearray> (impl_)->get_value ().to_string ();
 
     else if (impl_->get_type () == type::integer)
-        return std::to_string (
-            std::static_pointer_cast<data_impl_integer> (impl_)->get_value ()
-        );
+        return std::to_string (std::static_pointer_cast<data_impl_integer> (impl_)->get_value ());
 
-    throw std::runtime_error (
-        MOBIUS_EXCEPTION_MSG ("cannot convert data to string")
-    );
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot convert data to string"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Convert data to bytearray
 // @return Bytearray value if type == bytearray, otherwise exception
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data::
-operator mobius::core::bytearray () const
+mobius::core::bytearray
+data::to_bytearray () const
 {
     if (impl_->get_type () == type::bytearray)
-        return std::static_pointer_cast<data_impl_bytearray> (impl_)
-            ->get_value ();
+        return std::static_pointer_cast<data_impl_bytearray> (impl_)->get_value ();
 
-    throw std::runtime_error (
-        MOBIUS_EXCEPTION_MSG ("cannot convert data to bytearray")
-    );
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot convert data to bytearray"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Convert data to std::vector <data>
 // @return Vector value if type == list, otherwise exception
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data::
-operator std::vector<data> () const
+std::vector<data>
+data::to_list () const
 {
     if (impl_->get_type () == type::list)
     {
@@ -486,9 +463,7 @@ operator std::vector<data> () const
         return std::vector<data> (p->begin (), p->end ());
     }
 
-    throw std::runtime_error (
-        MOBIUS_EXCEPTION_MSG ("cannot convert data to list")
-    );
+    throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot convert data to list"));
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -502,34 +477,22 @@ data::clone () const
         return data ();
 
     else if (is_bool ())
-        return data (
-            std::static_pointer_cast<data_impl_bool> (impl_)->get_value ()
-        );
+        return data (std::static_pointer_cast<data_impl_bool> (impl_)->get_value ());
 
     else if (is_integer ())
-        return data (
-            std::static_pointer_cast<data_impl_integer> (impl_)->get_value ()
-        );
+        return data (std::static_pointer_cast<data_impl_integer> (impl_)->get_value ());
 
     else if (is_float ())
-        return data (
-            std::static_pointer_cast<data_impl_float> (impl_)->get_value ()
-        );
+        return data (std::static_pointer_cast<data_impl_float> (impl_)->get_value ());
 
     else if (is_datetime ())
-        return data (
-            std::static_pointer_cast<data_impl_datetime> (impl_)->get_value ()
-        );
+        return data (std::static_pointer_cast<data_impl_datetime> (impl_)->get_value ());
 
     else if (is_string ())
-        return data (
-            std::static_pointer_cast<data_impl_string> (impl_)->get_value ()
-        );
+        return data (std::static_pointer_cast<data_impl_string> (impl_)->get_value ());
 
     else if (is_bytearray ())
-        return data (
-            std::static_pointer_cast<data_impl_bytearray> (impl_)->get_value ()
-        );
+        return data (std::static_pointer_cast<data_impl_bytearray> (impl_)->get_value ());
 
     else if (is_list ())
         return list_clone (std::vector<data> (*this));
@@ -557,24 +520,22 @@ data::to_string () const
         return std::to_string (operator std::int64_t ());
 
     else if (is_float ())
-        return std::to_string (operator long double ());
+        return std::to_string (to_float ());
 
     else if (is_datetime ())
-        return mobius::core::datetime::to_string (
-            operator mobius::core::datetime::datetime ()
-        );
+        return mobius::core::datetime::to_string (to_datetime ());
 
     else if (is_string ())
         return operator std::string ();
 
     else if (is_bytearray ())
-        return "0x" + operator mobius::core::bytearray ().to_hexstring ();
+        return "0x" + to_bytearray ().to_hexstring ();
 
     else if (is_list ())
-        return list_to_string (std::vector<data> (*this));
+        return list_to_string (to_list ());
 
     else if (is_map ())
-        return map (*this).to_string ();
+        return to_map ().to_string ();
 
     return "<unknown value>";
 }
@@ -609,41 +570,37 @@ operator<< (std::ostream &os, const mobius::core::pod::data &d)
 bool
 operator== (const data &a, const data &b)
 {
-    bool rc = false;
+    if (a.get_type () != b.get_type ())
+        return false;
 
-    if (a.get_type () == b.get_type ())
-    {
-        if (a.is_null ())
-            rc = true;
+    if (a.is_null ())
+        return true;
 
-        else if (a.is_bool ())
-            rc = (bool (a) == bool (b));
+    else if (a.is_bool ())
+        return a.to_bool () == b.to_bool ();
 
-        else if (a.is_integer ())
-            rc = (std::int64_t (a) == std::int64_t (b));
+    else if (a.is_integer ())
+        return a.to_integer () == b.to_integer ();
 
-        else if (a.is_float ())
-            rc = (static_cast<long double> (a) == static_cast<long double> (b));
+    else if (a.is_float ())
+        return a.to_float () == b.to_float ();
 
-        else if (a.is_datetime ())
-            rc =
-                (mobius::core::datetime::datetime (a) ==
-                 mobius::core::datetime::datetime (b));
+    else if (a.is_datetime ())
+        return a.to_datetime () == b.to_datetime ();
 
-        else if (a.is_string ())
-            rc = (std::string (a) == std::string (b));
+    else if (a.is_string ())
+        return std::string (a) == std::string (b);
 
-        else if (a.is_bytearray ())
-            rc = (bytearray (a) == bytearray (b));
+    else if (a.is_bytearray ())
+        return a.to_bytearray () == b.to_bytearray ();
 
-        else if (a.is_list ())
-            rc = (std::vector<data> (a) == std::vector<data> (b));
+    else if (a.is_list ())
+        return std::vector<data> (a) == std::vector<data> (b);
 
-        else if (a.is_map ())
-            rc = (map (a) == map (b));
-    }
+    else if (a.is_map ())
+        return a.to_map () == b.to_map ();
 
-    return rc;
+    return false;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

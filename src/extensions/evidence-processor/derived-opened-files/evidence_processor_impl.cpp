@@ -43,9 +43,7 @@ evidence_processor_impl::evidence_processor_impl (
 // @param evidence Evidence to process
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::on_evidence_created (
-    mobius::framework::model::evidence evidence
-)
+evidence_processor_impl::on_evidence_created (mobius::framework::model::evidence evidence)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -69,27 +67,16 @@ evidence_processor_impl::on_evidence_created (
 
         auto e = item_.new_evidence ("opened-file");
         e.set_attribute ("path", url.get_path ());
-        e.set_attribute (
-            "timestamp",
-            evidence.get_attribute<mobius::core::datetime::datetime> (
-                "timestamp"
-            )
-        );
-        e.set_attribute (
-            "username", evidence.get_attribute<std::string> ("username")
-        );
+        e.set_attribute ("timestamp", evidence.get_attribute<mobius::core::datetime::datetime> ("timestamp"));
+        e.set_attribute ("username", evidence.get_attribute<std::string> ("username"));
         e.set_attribute ("app_id", metadata.get<std::string> ("app_id"));
         e.set_attribute ("app_name", metadata.get<std::string> ("app_name"));
-        e.set_attribute (
-            "app_family", metadata.get<std::string> ("app_family")
-        );
+        e.set_attribute ("app_family", metadata.get<std::string> ("app_family"));
 
         // Set metadata
         mobius::core::pod::map e_metadata = metadata.clone ();
         e_metadata.set ("url", visited_url);
-        e_metadata.set (
-            "page_title", evidence.get_attribute<std::string> ("title")
-        );
+        e_metadata.set ("page_title", evidence.get_attribute<std::string> ("title"));
 
         e.set_attribute ("metadata", e_metadata);
 
@@ -120,10 +107,8 @@ evidence_processor_impl::on_stop ()
     mobius::core::log log (__FILE__, __FUNCTION__);
 
     log.info (
-        __LINE__, std::format (
-                      "Evidences derived/processed: {} of {}",
-                      evidences_derived_.load (), evidences_processed_.load ()
-                  )
+        __LINE__,
+        std::format ("Evidences derived/processed: {} of {}", evidences_derived_.load (), evidences_processed_.load ())
     );
 }
 

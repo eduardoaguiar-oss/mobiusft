@@ -526,33 +526,31 @@ pymobius_core_pod_data_to_pyobject (const mobius::core::pod::data &value)
         ret = mobius::py::pybool_from_bool (bool (value));
 
     else if (value.is_integer ())
-        ret = mobius::py::pylong_from_std_int64_t (std::int64_t (value));
+        ret = mobius::py::pylong_from_std_int64_t (value.to_integer ());
 
     else if (value.is_float ())
-        ret = mobius::py::pyfloat_from_cpp (static_cast<long double> (value));
+        ret = mobius::py::pyfloat_from_cpp (value.to_float ());
 
     else if (value.is_datetime ())
-        ret = mobius::py::pydatetime_from_datetime (
-            mobius::core::datetime::datetime (value)
-        );
+        ret = mobius::py::pydatetime_from_datetime (value.to_datetime ());
 
     else if (value.is_string ())
-        ret = mobius::py::pystring_from_std_string (std::string (value));
+        ret = mobius::py::pystring_from_std_string (value.to_string ());
 
     else if (value.is_bytearray ())
         ret = mobius::py::pybytes_from_bytearray (
-            mobius::core::bytearray (value)
+            value.to_bytearray ()
         );
 
     else if (value.is_list ())
         ret = mobius::py::pylist_from_cpp_container (
-            std::vector<mobius::core::pod::data> (value),
+            value.to_list (),
             pymobius_core_pod_data_to_pyobject
         );
 
     else if (value.is_map ())
         ret =
-            pymobius_core_pod_map_to_pyobject (mobius::core::pod::map (value));
+            pymobius_core_pod_map_to_pyobject (value.to_map ());
 
     else
         throw std::invalid_argument (

@@ -49,17 +49,17 @@ _serialize_data (mobius::core::encoder::data_encoder &encoder, const data &data)
             break;
 
         case data::type::boolean:
-            encoder.encode_uint8 (bool (data) ? 't' : 'f');
+            encoder.encode_uint8 (data.to_bool () ? 't' : 'f');
             break;
 
         case data::type::integer:
             encoder.encode_uint8 ('I');
-            encoder.encode_int64_le (std::int64_t (data));
+            encoder.encode_int64_le (data.to_integer ());
             break;
 
         case data::type::floatn:
         {
-            auto text = std::to_string (static_cast<long double> (data));
+            auto text = std::to_string (data.to_float ());
             encoder.encode_uint8 ('F');
             encoder.encode_uint16_le (text.size ());
             encoder.encode_string_by_size (text, text.size ());
@@ -68,7 +68,7 @@ _serialize_data (mobius::core::encoder::data_encoder &encoder, const data &data)
 
         case data::type::datetime:
         {
-            auto text = to_string (mobius::core::datetime::datetime (data));
+            auto text = to_string (data.to_datetime ());
             encoder.encode_uint8 ('D');
             encoder.encode_uint16_le (text.size ());
             encoder.encode_string_by_size (text, text.size ());
@@ -77,7 +77,7 @@ _serialize_data (mobius::core::encoder::data_encoder &encoder, const data &data)
 
         case data::type::string:
         {
-            auto text = std::string (data);
+            auto text = data.to_string ();
             encoder.encode_uint8 ('S');
             encoder.encode_uint64_le (text.size ());
             encoder.encode_string_by_size (text, text.size ());
@@ -86,7 +86,7 @@ _serialize_data (mobius::core::encoder::data_encoder &encoder, const data &data)
 
         case data::type::bytearray:
         {
-            auto b = mobius::core::bytearray (data);
+            auto b = data.to_bytearray ();
             encoder.encode_uint8 ('B');
             encoder.encode_uint64_le (b.size ());
             encoder.encode_bytearray (b);
@@ -95,7 +95,7 @@ _serialize_data (mobius::core::encoder::data_encoder &encoder, const data &data)
 
         case data::type::list:
         {
-            auto v = std::vector<mobius::core::pod::data> (data);
+            auto v = data.to_list ();
 
             encoder.encode_uint8 ('L');
             encoder.encode_uint64_le (v.size ());
@@ -107,7 +107,7 @@ _serialize_data (mobius::core::encoder::data_encoder &encoder, const data &data)
 
         case data::type::map:
         {
-            mobius::core::pod::map map (data);
+            auto map = data.to_map ();
 
             encoder.encode_uint8 ('M');
             encoder.encode_uint64_le (map.get_size ());

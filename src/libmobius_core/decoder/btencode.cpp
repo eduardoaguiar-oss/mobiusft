@@ -31,14 +31,10 @@ namespace
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Prototypes
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-static mobius::core::pod::map
-_decode_dict (mobius::core::io::sequential_reader_adaptor &);
-static std::vector<mobius::core::pod::data>
-_decode_list (mobius::core::io::sequential_reader_adaptor &);
-static mobius::core::pod::data
-_decode_string (mobius::core::io::sequential_reader_adaptor &);
-static mobius::core::pod::data
-_decode_integer (mobius::core::io::sequential_reader_adaptor &);
+static mobius::core::pod::map _decode_dict (mobius::core::io::sequential_reader_adaptor &);
+static std::vector<mobius::core::pod::data> _decode_list (mobius::core::io::sequential_reader_adaptor &);
+static mobius::core::pod::data _decode_string (mobius::core::io::sequential_reader_adaptor &);
+static mobius::core::pod::data _decode_integer (mobius::core::io::sequential_reader_adaptor &);
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Decode btencode data, according to type
@@ -65,9 +61,11 @@ _decode_data (mobius::core::io::sequential_reader_adaptor &adaptor)
         data = _decode_string (adaptor);
 
     else
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG (std::string (
-            "invalid byte (" + mobius::core::string::to_hex (b, 2) +
-            " at pos " + std::to_string (adaptor.tell ()))));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG (
+            std::string (
+                "invalid byte (" + mobius::core::string::to_hex (b, 2) + " at pos " + std::to_string (adaptor.tell ())
+            )
+        ));
 
     return data;
 }
@@ -86,7 +84,7 @@ _decode_dict (mobius::core::io::sequential_reader_adaptor &adaptor)
 
     while (adaptor.peek () != 'e')
     {
-        auto key_value = mobius::core::bytearray (_decode_data (adaptor));
+        auto key_value = _decode_data (adaptor).to_bytearray ();
         auto key = key_value.to_string ();
         auto value = _decode_data (adaptor);
         m.set (key, value);

@@ -76,10 +76,7 @@ class data
     template <typename T> data (const std::vector<T> &vec)
     {
         std::vector<data> vdata (vec.size ());
-        std::transform (
-            vec.begin (), vec.end (), vdata.begin (),
-            [] (const auto &item) { return data (item); }
-        );
+        std::transform (vec.begin (), vec.end (), vdata.begin (), [] (const auto &item) { return data (item); });
         *this = vdata;
     }
 
@@ -100,14 +97,57 @@ class data
     data &operator= (const mobius::core::bytearray &);
     data &operator= (const std::initializer_list<data> &);
     data &operator= (const std::vector<data> &);
-
-    explicit operator bool () const;
-    explicit operator std::int64_t () const;
-    explicit operator long double () const;
-    explicit operator mobius::core::datetime::datetime () const;
     explicit operator std::string () const;
-    explicit operator mobius::core::bytearray () const;
-    explicit operator std::vector<data> () const;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    data clone () const;
+    bool to_bool () const;
+    std::int64_t to_integer () const;
+    mobius::core::datetime::datetime to_datetime () const;
+    std::string to_string () const;
+    mobius::core::bytearray to_bytearray () const;
+    long double to_float () const;
+    std::vector<data> to_list () const;
+    map to_map () const;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Convert data to bool, if applicable
+    // @return bool value
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    explicit operator bool () const
+    {
+        return to_bool ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Convert data to int64_t, if applicable
+    // @return int64_t value
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    explicit operator std::int64_t () const
+    {
+        return to_integer ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Convert data to datetime, if applicable
+    // @return datetime value
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    explicit operator mobius::core::datetime::datetime () const
+    {
+        return to_datetime ();
+    }
+    
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Convert data to bytearray, if applicable
+    // @return bytearray value
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    explicit
+    operator mobius::core::bytearray () const
+    {
+        return to_bytearray ();
+    }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Convert list to vector of a given type T
@@ -117,23 +157,8 @@ class data
     explicit
     operator std::vector<T> () const
     {
-        std::vector<T> v;
-
-        if (is_null ())
-            return v;
-        
-        for (const auto &d : std::vector<data> (*this))
-            v.push_back (T (d));
-
-        return v;
+        return to_list<T> ();
     }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Prototypes
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    data clone () const;
-    std::string to_string () const;
-    map to_map () const;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get data type
@@ -239,20 +264,19 @@ class data
     // @brief Convert data to C++ vector, if applicable
     // @return C++ vector
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::vector<data>
+    template <typename T>
+    std::vector<T>
     to_list () const
     {
-        return static_cast<std::vector<data>> (*this);
-    }
+        std::vector<T> v;
 
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Convert data to C++ vector, if applicable
-    // @return C++ vector
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    template <typename T> std::vector<T>
-    to_list () const
-    {
-        return static_cast<std::vector<T>> (*this);
+        if (is_null ())
+            return v;
+
+        for (const auto &d : to_list ())
+            v.push_back (T (d));
+
+        return v;
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
