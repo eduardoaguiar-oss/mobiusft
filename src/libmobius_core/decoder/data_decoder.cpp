@@ -15,13 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <cstdio>
 #include <mobius/core/charset.hpp>
 #include <mobius/core/datetime/datetime.hpp>
 #include <mobius/core/datetime/timedelta.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/core/exception.inc>
 #include <mobius/core/io/bytearray_io.hpp>
+#include <cstdio>
+#include <cstring>
+#include <limits>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -42,8 +44,7 @@ read (mobius::core::io::reader &reader, std::size_t size)
     auto data = reader.read (size);
 
     if (data.size () < size)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("cannot read enough bytes"));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("cannot read enough bytes"));
 
     return data;
 }
@@ -72,7 +73,11 @@ data_decoder::data_decoder (const mobius::core::bytearray &data)
 // @brief Operator bool
 // @return true If there is data to read, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-data_decoder::operator bool () const { return !in_.eof (); }
+data_decoder::
+operator bool () const
+{
+    return !in_.eof ();
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Skip n bytes
@@ -231,8 +236,8 @@ data_decoder::get_uint32_le ()
     const bytearray data = read (in_, 4);
     const uint8_t *p = data.begin ();
 
-    return std::uint32_t (*p) | (std::uint32_t (*(p + 1)) << 8) |
-           (std::uint32_t (*(p + 2)) << 16) | (std::uint32_t (*(p + 3)) << 24);
+    return std::uint32_t (*p) | (std::uint32_t (*(p + 1)) << 8) | (std::uint32_t (*(p + 2)) << 16) |
+           (std::uint32_t (*(p + 3)) << 24);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -245,8 +250,8 @@ data_decoder::get_uint32_be ()
     const bytearray data = read (in_, 4);
     const uint8_t *p = data.begin ();
 
-    return std::uint32_t (*(p + 3)) | (std::uint32_t (*(p + 2)) << 8) |
-           (std::uint32_t (*(p + 1)) << 16) | (std::uint32_t (*p) << 24);
+    return std::uint32_t (*(p + 3)) | (std::uint32_t (*(p + 2)) << 8) | (std::uint32_t (*(p + 1)) << 16) |
+           (std::uint32_t (*p) << 24);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -259,9 +264,8 @@ data_decoder::get_uint64_le ()
     const bytearray data = read (in_, 8);
     const uint8_t *p = data.begin ();
 
-    return std::uint64_t (*p) | (std::uint64_t (*(p + 1)) << 8) |
-           (std::uint64_t (*(p + 2)) << 16) | (std::uint64_t (*(p + 3)) << 24) |
-           (std::uint64_t (*(p + 4)) << 32) | (std::uint64_t (*(p + 5)) << 40) |
+    return std::uint64_t (*p) | (std::uint64_t (*(p + 1)) << 8) | (std::uint64_t (*(p + 2)) << 16) |
+           (std::uint64_t (*(p + 3)) << 24) | (std::uint64_t (*(p + 4)) << 32) | (std::uint64_t (*(p + 5)) << 40) |
            (std::uint64_t (*(p + 6)) << 48) | (std::uint64_t (*(p + 7)) << 56);
 }
 
@@ -275,10 +279,73 @@ data_decoder::get_uint64_be ()
     const bytearray data = read (in_, 8);
     const uint8_t *p = data.begin ();
 
-    return std::uint64_t (*(p + 7)) | (std::uint64_t (*(p + 6)) << 8) |
-           (std::uint64_t (*(p + 5)) << 16) | (std::uint64_t (*(p + 4)) << 24) |
-           (std::uint64_t (*(p + 3)) << 32) | (std::uint64_t (*(p + 2)) << 40) |
+    return std::uint64_t (*(p + 7)) | (std::uint64_t (*(p + 6)) << 8) | (std::uint64_t (*(p + 5)) << 16) |
+           (std::uint64_t (*(p + 4)) << 24) | (std::uint64_t (*(p + 3)) << 32) | (std::uint64_t (*(p + 2)) << 40) |
            (std::uint64_t (*(p + 1)) << 48) | (std::uint64_t (*p) << 56);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode a float32 (be)
+// @return value
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+float
+data_decoder::get_float32_be ()
+{
+    static_assert (std::numeric_limits<float>::is_iec559, "float must be IEEE 754 binary32");
+
+    std::uint32_t value = get_uint32_be ();
+
+    float result;
+    std::memcpy (&result, &value, sizeof (float));
+    return result;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode a float32 (le)
+// @return value
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+float
+data_decoder::get_float32_le ()
+{
+    static_assert (std::numeric_limits<float>::is_iec559, "float must be IEEE 754 binary32");
+
+    std::uint32_t value = get_uint32_le ();
+
+    float result;
+    std::memcpy (&result, &value, sizeof (float));
+    return result;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode a float64 (be)
+// @return value
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+double
+data_decoder::get_float64_be ()
+{
+    static_assert (std::numeric_limits<double>::is_iec559, "double must be IEEE 754 binary64");
+
+    std::uint64_t value = get_uint64_be ();
+
+    double result;
+    std::memcpy (&result, &value, sizeof (double));
+    return result;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode a float64 (le)
+// @return value
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+double
+data_decoder::get_float64_le ()
+{
+    static_assert (std::numeric_limits<double>::is_iec559, "double must be IEEE 754 binary64");
+
+    std::uint64_t value = get_uint64_le ();
+
+    double result;
+    std::memcpy (&result, &value, sizeof (double));
+    return result;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -292,8 +359,7 @@ data_decoder::get_apfs_datetime ()
     auto timestamp = get_uint64_le ();
 
     if (timestamp)
-        dt = mobius::core::datetime::new_datetime_from_unix_timestamp (
-            timestamp / 1000000000);
+        dt = mobius::core::datetime::new_datetime_from_unix_timestamp (timestamp / 1000000000);
 
     return dt;
 }
@@ -309,8 +375,7 @@ data_decoder::get_hfs_datetime ()
     auto timestamp = get_uint32_be ();
 
     if (timestamp)
-        dt = mobius::core::datetime::datetime (1904, 1, 1, 0, 0, 0) +
-             mobius::core::datetime::timedelta (timestamp);
+        dt = mobius::core::datetime::datetime (1904, 1, 1, 0, 0, 0) + mobius::core::datetime::timedelta (timestamp);
 
     return dt;
 }
@@ -327,8 +392,7 @@ data_decoder::get_iso9660_datetime ()
     // parse date/time from string
     int y, m, d;
     int hh, mm, ss;
-    sscanf (reinterpret_cast<const char *> (data.data ()),
-            "%04d%02d%02d%02d%02d%02d", &y, &m, &d, &hh, &mm, &ss);
+    sscanf (reinterpret_cast<const char *> (data.data ()), "%04d%02d%02d%02d%02d%02d", &y, &m, &d, &hh, &mm, &ss);
 
     // create datetime object
     mobius::core::datetime::datetime dt;
@@ -373,8 +437,7 @@ data_decoder::get_unix_datetime ()
     auto timestamp = get_uint32_le ();
 
     if (timestamp)
-        dt = mobius::core::datetime::new_datetime_from_unix_timestamp (
-            timestamp);
+        dt = mobius::core::datetime::new_datetime_from_unix_timestamp (timestamp);
 
     return dt;
 }
@@ -453,8 +516,7 @@ data_decoder::get_c_string (const std::string &encoding)
     bytearray ending;
     std::uint64_t read_size;
 
-    if (encoding == "UTF-16LE" || encoding == "UTF-16" ||
-        encoding == "UTF-16BE")
+    if (encoding == "UTF-16LE" || encoding == "UTF-16" || encoding == "UTF-16BE")
     {
         read_size = 2;
         ending = bytearray ({0, 0});
@@ -501,8 +563,7 @@ data_decoder::get_guid ()
     uint32_t guid6 = get_uint32_be ();
 
     char buffer[64];
-    sprintf (buffer, "%08X-%04X-%04X-%04X-%04X%08X", guid1, guid2, guid3, guid4,
-             guid5, guid6);
+    sprintf (buffer, "%08X-%04X-%04X-%04X-%04X%08X", guid1, guid2, guid3, guid4, guid5, guid6);
 
     return buffer;
 }
@@ -516,8 +577,7 @@ data_decoder::get_uuid ()
 {
     std::string uuid = get_bytearray_by_size (16).to_hexstring ();
 
-    return uuid.substr (0, 8) + '-' + uuid.substr (8, 4) + '-' +
-           uuid.substr (12, 4) + '-' + uuid.substr (16, 4) + '-' +
+    return uuid.substr (0, 8) + '-' + uuid.substr (8, 4) + '-' + uuid.substr (12, 4) + '-' + uuid.substr (16, 4) + '-' +
            uuid.substr (20);
 }
 
@@ -536,8 +596,7 @@ data_decoder::get_sid ()
     uint64_t auth = std::uint64_t (get_uint16_be ()) << 32; // big endian
     auth |= get_uint32_be ();
 
-    std::string sid =
-        "S-" + std::to_string (revision) + '-' + std::to_string (auth);
+    std::string sid = "S-" + std::to_string (revision) + '-' + std::to_string (auth);
 
     for (std::uint8_t i = 0; i < subauth_count; i++)
     {
@@ -569,8 +628,8 @@ data_decoder::get_ipv4_be ()
 {
     bytearray data = read (in_, 4);
 
-    return std::to_string (data[0]) + '.' + std::to_string (data[1]) + '.' +
-           std::to_string (data[2]) + '.' + std::to_string (data[3]);
+    return std::to_string (data[0]) + '.' + std::to_string (data[1]) + '.' + std::to_string (data[2]) + '.' +
+           std::to_string (data[3]);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -582,8 +641,8 @@ data_decoder::get_ipv4_le ()
 {
     bytearray data = read (in_, 4);
 
-    return std::to_string (data[3]) + '.' + std::to_string (data[2]) + '.' +
-           std::to_string (data[1]) + '.' + std::to_string (data[0]);
+    return std::to_string (data[3]) + '.' + std::to_string (data[2]) + '.' + std::to_string (data[1]) + '.' +
+           std::to_string (data[0]);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -604,43 +663,42 @@ data_decoder::get_ipv6 ()
         switch (state)
         {
 
-        case 0: // start
-            if (segment)
-            {
-                stream << std::uppercase << std::hex << segment << std::dec;
-                state = 1;
-            }
+            case 0: // start
+                if (segment)
+                {
+                    stream << std::uppercase << std::hex << segment << std::dec;
+                    state = 1;
+                }
 
-            else
-            {
-                stream << "::";
-                state = 2;
-            }
-            break;
+                else
+                {
+                    stream << "::";
+                    state = 2;
+                }
+                break;
 
-        case 1: // nth segment
-            if (segment)
-                stream << ':' << std::uppercase << std::hex << segment
-                       << std::dec;
+            case 1: // nth segment
+                if (segment)
+                    stream << ':' << std::uppercase << std::hex << segment << std::dec;
 
-            else
-            {
-                stream << "::";
-                state = 2;
-            }
-            break;
+                else
+                {
+                    stream << "::";
+                    state = 2;
+                }
+                break;
 
-        case 2: // "::" deployed
-            if (segment)
-            {
-                stream << std::uppercase << std::hex << segment << std::dec;
-                ++state;
-            }
-            break;
+            case 2: // "::" deployed
+                if (segment)
+                {
+                    stream << std::uppercase << std::hex << segment << std::dec;
+                    ++state;
+                }
+                break;
 
-        case 3: // end segments
-            stream << ':' << std::uppercase << std::hex << segment << std::dec;
-            break;
+            case 3: // end segments
+                stream << ':' << std::uppercase << std::hex << segment << std::dec;
+                break;
         }
     }
 
@@ -665,43 +723,42 @@ data_decoder::get_ipv4_mapped_ipv6 ()
         switch (state)
         {
 
-        case 0: // start
-            if (segment)
-            {
-                stream << std::uppercase << std::hex << segment << std::dec;
-                state = 1;
-            }
+            case 0: // start
+                if (segment)
+                {
+                    stream << std::uppercase << std::hex << segment << std::dec;
+                    state = 1;
+                }
 
-            else
-            {
-                stream << "::";
-                state = 2;
-            }
-            break;
+                else
+                {
+                    stream << "::";
+                    state = 2;
+                }
+                break;
 
-        case 1: // nth segment
-            if (segment)
-                stream << ':' << std::uppercase << std::hex << segment
-                       << std::dec;
+            case 1: // nth segment
+                if (segment)
+                    stream << ':' << std::uppercase << std::hex << segment << std::dec;
 
-            else
-            {
-                stream << "::";
-                state = 2;
-            }
-            break;
+                else
+                {
+                    stream << "::";
+                    state = 2;
+                }
+                break;
 
-        case 2: // "::" deployed
-            if (segment)
-            {
-                stream << std::uppercase << std::hex << segment << std::dec;
-                ++state;
-            }
-            break;
+            case 2: // "::" deployed
+                if (segment)
+                {
+                    stream << std::uppercase << std::hex << segment << std::dec;
+                    ++state;
+                }
+                break;
 
-        case 3: // end segments
-            stream << ':' << std::uppercase << std::hex << segment << std::dec;
-            break;
+            case 3: // end segments
+                stream << ':' << std::uppercase << std::hex << segment << std::dec;
+                break;
         }
     }
 
@@ -711,10 +768,8 @@ data_decoder::get_ipv4_mapped_ipv6 ()
     else if (state != 2)
         stream << ":";
 
-    stream << static_cast<int> (get_uint8 ()) << '.'
-           << static_cast<int> (get_uint8 ()) << '.'
-           << static_cast<int> (get_uint8 ()) << '.'
-           << static_cast<int> (get_uint8 ());
+    stream << static_cast<int> (get_uint8 ()) << '.' << static_cast<int> (get_uint8 ()) << '.'
+           << static_cast<int> (get_uint8 ()) << '.' << static_cast<int> (get_uint8 ());
 
     return stream.str ();
 }

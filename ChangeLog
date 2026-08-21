@@ -3,6 +3,10 @@ Mobius Forensic Toolkit 2.29
 	* os-win: Retrieve LID, PUID, and GDID from Win Profiles
 	* libmobius_core: Add new function datetime::new_datetime_from_cocoa_timestamp
 	* libmobius_core: Add new function decoder::bplist
+	* libmobius_core: Add new function decoder::data_decoder::get_float32_be
+	* libmobius_core: Add new function decoder::data_decoder::get_float32_le
+	* libmobius_core: Add new function decoder::data_decoder::get_float64_be
+	* libmobius_core: Add new function decoder::data_decoder::get_float64_le
 	* libmobius_framework: Rename register_evidence_processor_implementation to register_implementation
 	* libmobius_framework: Create new function evidence_processor::unregister_implementation
 	* libmobius_framework: Rename get_evidence_processor_implementation to get_implementation
