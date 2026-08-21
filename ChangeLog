@@ -7,8 +7,14 @@ Mobius Forensic Toolkit 2.29
 	* libmobius_core: Add new function decoder::data_decoder::get_float32_le
 	* libmobius_core: Add new function decoder::data_decoder::get_float64_be
 	* libmobius_core: Add new function decoder::data_decoder::get_float64_le
-	* libmobius_framework: Rename register_evidence_processor_implementation to register_implementation
+	* libmobius_core: Add new function pod::data::to_bool
+	* libmobius_core: Add new function pod::data::to_integer
+	* libmobius_core: Add new function pod::data::to_float
+	* libmobius_core: Add new function pod::data::to_datetime
+	* libmobius_core: Add new function pod::data::to_bytearray
+	* libmobius_core: Remove pod::data::operator long double
 	* libmobius_framework: Create new function evidence_processor::unregister_implementation
+	* libmobius_framework: Rename register_evidence_processor_implementation to register_implementation
 	* libmobius_framework: Rename get_evidence_processor_implementation to get_implementation
 	* libmobius_framework: Rename list_evidence_processor_implementations to list_implementations
 	* libmobius_python: Improve mobius.core.file_decoder classes using the PyType_FromSpec API
@@ -19,6 +25,11 @@ Mobius Forensic Toolkit 2.29
 	* libmobius_python: Improve api_dataholder class using the PyType_FromSpec API
 	* libmobius_python: Add new function datetime.new_datetime_from_cocoa_timestamp
 	* libmobius_python: Add new function decoder.bplist
+        * libmobius_python: Add new function decoder.data_decoder.get_float32_be
+        * libmobius_python: Add new function decoder.data_decoder.get_float32_le
+        * libmobius_python: Add new function decoder.data_decoder.get_float64_be
+        * libmobius_python: Add new function decoder.data_decoder.get_float64_le
+	* tools: Add plist_view utility to display .plist files
 
 Mobius Forensic Toolkit 2.28
 	* Bundle girepository libraries to improve AppImage portability

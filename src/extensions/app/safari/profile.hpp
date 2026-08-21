@@ -83,6 +83,7 @@ class profile
     std::size_t count_visited_urls () const;
 
     void add_history_db_file (const mobius::core::io::file &);
+    void add_downloads_plist_file (const mobius::core::io::file &);
 
   private:
     // Implementation class forward declaration
