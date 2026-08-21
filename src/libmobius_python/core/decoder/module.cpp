@@ -40,6 +40,7 @@ PyObject *decoder_func_base32 (PyObject *, PyObject *);
 PyObject *decoder_func_base32hex (PyObject *, PyObject *);
 PyObject *decoder_func_base64 (PyObject *, PyObject *);
 PyObject *decoder_func_base64url (PyObject *, PyObject *);
+PyObject *decoder_func_bplist (PyObject *, PyObject *);
 PyObject *decoder_func_btencode (PyObject *, PyObject *);
 PyObject *decoder_func_get_filetype (PyObject *, PyObject *);
 PyObject *decoder_func_hexstring (PyObject *, PyObject *);
