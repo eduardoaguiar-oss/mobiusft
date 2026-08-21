@@ -101,6 +101,13 @@ set_target_properties(tools_list_resources PROPERTIES OUTPUT_NAME "list_resource
 target_link_libraries(tools_list_resources PRIVATE Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tool: plist_view - Displays property list (plist) file info
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_executable(tools_plist_view plist_view.cpp)
+set_target_properties(tools_plist_view PROPERTIES OUTPUT_NAME "plist_view")
+target_link_libraries(tools_plist_view PRIVATE Mobius::Core)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tool: torrent_info - Displays torrent file info
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_executable(tools_torrent_info torrent_info.cpp)
@@ -145,6 +152,7 @@ install(TARGETS
     tools_imagefile_convert
     tools_imagefile_info
     tools_list_resources
+    tools_plist_view
     tools_torrent_info
     tools_vfs_info
     DESTINATION share/mobiusft/tools
