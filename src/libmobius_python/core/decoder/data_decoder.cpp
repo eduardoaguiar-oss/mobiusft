@@ -275,8 +275,7 @@ tp_f_get_uint16_le (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret =
-            mobius::py::pylong_from_std_uint16_t (self->obj->get_uint16_le ());
+        ret = mobius::py::pylong_from_std_uint16_t (self->obj->get_uint16_le ());
     }
     catch (const std::exception &e)
     {
@@ -301,8 +300,7 @@ tp_f_get_uint32_le (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret =
-            mobius::py::pylong_from_std_uint32_t (self->obj->get_uint32_le ());
+        ret = mobius::py::pylong_from_std_uint32_t (self->obj->get_uint32_le ());
     }
     catch (const std::exception &e)
     {
@@ -327,8 +325,7 @@ tp_f_get_uint64_le (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret =
-            mobius::py::pylong_from_std_uint64_t (self->obj->get_uint64_le ());
+        ret = mobius::py::pylong_from_std_uint64_t (self->obj->get_uint64_le ());
     }
     catch (const std::exception &e)
     {
@@ -353,8 +350,7 @@ tp_f_get_uint16_be (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret =
-            mobius::py::pylong_from_std_uint16_t (self->obj->get_uint16_be ());
+        ret = mobius::py::pylong_from_std_uint16_t (self->obj->get_uint16_be ());
     }
     catch (const std::exception &e)
     {
@@ -379,8 +375,7 @@ tp_f_get_uint32_be (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret =
-            mobius::py::pylong_from_std_uint32_t (self->obj->get_uint32_be ());
+        ret = mobius::py::pylong_from_std_uint32_t (self->obj->get_uint32_be ());
     }
     catch (const std::exception &e)
     {
@@ -405,8 +400,107 @@ tp_f_get_uint64_be (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret =
-            mobius::py::pylong_from_std_uint64_t (self->obj->get_uint64_be ());
+        ret = mobius::py::pylong_from_std_uint64_t (self->obj->get_uint64_be ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // return value
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>get_float32_be</i> method implementation
+// @param self object
+// @param args argument list
+// @return value
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_get_float32_be (core_decoder_data_decoder_o *self, PyObject *)
+{
+    // execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pyfloat_from_cpp (self->obj->get_float32_be ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // return value
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>get_float32_le</i> method implementation
+// @param self object
+// @param args argument list
+// @return value
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_get_float32_le (core_decoder_data_decoder_o *self, PyObject *)
+{
+    // execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pyfloat_from_cpp (self->obj->get_float32_le ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // return value
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>get_float64_be</i> method implementation
+// @param self object
+// @param args argument list
+// @return value
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_get_float64_be (core_decoder_data_decoder_o *self, PyObject *)
+{
+    // execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pyfloat_from_cpp (self->obj->get_float64_be ());
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // return value
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>get_float64_le</i> method implementation
+// @param self object
+// @param args argument list
+// @return value
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_get_float64_le (core_decoder_data_decoder_o *self, PyObject *)
+{
+    // execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pyfloat_from_cpp (self->obj->get_float64_le ());
     }
     catch (const std::exception &e)
     {
@@ -431,9 +525,7 @@ tp_f_get_hfs_datetime (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
-            self->obj->get_hfs_datetime ()
-        );
+        ret = mobius::py::pydatetime_from_datetime (self->obj->get_hfs_datetime ());
     }
     catch (const std::exception &e)
     {
@@ -458,9 +550,7 @@ tp_f_get_iso9660_datetime (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
-            self->obj->get_iso9660_datetime ()
-        );
+        ret = mobius::py::pydatetime_from_datetime (self->obj->get_iso9660_datetime ());
     }
     catch (const std::exception &e)
     {
@@ -485,9 +575,7 @@ tp_f_get_nt_datetime (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
-            self->obj->get_nt_datetime ()
-        );
+        ret = mobius::py::pydatetime_from_datetime (self->obj->get_nt_datetime ());
     }
     catch (const std::exception &e)
     {
@@ -512,9 +600,7 @@ tp_f_get_unix_datetime (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
-            self->obj->get_unix_datetime ()
-        );
+        ret = mobius::py::pydatetime_from_datetime (self->obj->get_unix_datetime ());
     }
     catch (const std::exception &e)
     {
@@ -539,9 +625,7 @@ tp_f_get_fat_datetime (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pydatetime_from_datetime (
-            self->obj->get_fat_datetime ()
-        );
+        ret = mobius::py::pydatetime_from_datetime (self->obj->get_fat_datetime ());
     }
     catch (const std::exception &e)
     {
@@ -579,9 +663,7 @@ tp_f_get_bytearray_by_size (core_decoder_data_decoder_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybytes_from_bytearray (
-            self->obj->get_bytearray_by_size (arg_size)
-        );
+        ret = mobius::py::pybytes_from_bytearray (self->obj->get_bytearray_by_size (arg_size));
     }
     catch (const std::exception &e)
     {
@@ -621,9 +703,7 @@ tp_f_get_string_by_size (core_decoder_data_decoder_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
-            self->obj->get_string_by_size (arg_size, arg_encode)
-        );
+        ret = mobius::py::pystring_from_std_string (self->obj->get_string_by_size (arg_size, arg_encode));
     }
     catch (const std::exception &e)
     {
@@ -661,9 +741,7 @@ tp_f_get_c_string (core_decoder_data_decoder_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
-            self->obj->get_c_string (arg_encode)
-        );
+        ret = mobius::py::pystring_from_std_string (self->obj->get_c_string (arg_encode));
     }
     catch (const std::exception &e)
     {
@@ -701,9 +779,7 @@ tp_f_get_hex_string_by_size (core_decoder_data_decoder_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
-            self->obj->get_hex_string_by_size (arg_size)
-        );
+        ret = mobius::py::pystring_from_std_string (self->obj->get_hex_string_by_size (arg_size));
     }
     catch (const std::exception &e)
     {
@@ -903,9 +979,7 @@ tp_f_get_ipv4_mapped_ipv6 (core_decoder_data_decoder_o *self, PyObject *)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
-            self->obj->get_ipv4_mapped_ipv6 ()
-        );
+        ret = mobius::py::pystring_from_std_string (self->obj->get_ipv4_mapped_ipv6 ());
     }
     catch (const std::exception &e)
     {
@@ -923,62 +997,41 @@ static PyMethodDef tp_methods[] = {
     {"skip", (PyCFunction) tp_f_skip, METH_VARARGS, "Skip n bytes ahead"},
     {"seek", (PyCFunction) tp_f_seek, METH_VARARGS, "Seek reader position"},
     {"tell", (PyCFunction) tp_f_tell, METH_VARARGS, "Tell current position"},
-    {(char *) "get_size", (PyCFunction) tp_f_get_size, METH_VARARGS,
-     "Get data size"},
-    {(char *) "get_int8", (PyCFunction) tp_f_get_int8, METH_VARARGS,
-     "get int8 value"},
-    {(char *) "get_int16_le", (PyCFunction) tp_f_get_int16_le, METH_VARARGS,
-     "get int16 little endian value"},
-    {(char *) "get_int32_le", (PyCFunction) tp_f_get_int32_le, METH_VARARGS,
-     "get int32 little endian value"},
-    {(char *) "get_uint8", (PyCFunction) tp_f_get_uint8, METH_VARARGS,
-     "get uint8 value"},
-    {(char *) "get_uint16_le", (PyCFunction) tp_f_get_uint16_le, METH_VARARGS,
-     "get uint16 little endian value"},
-    {(char *) "get_uint32_le", (PyCFunction) tp_f_get_uint32_le, METH_VARARGS,
-     "get uint32 little endian value"},
-    {(char *) "get_uint64_le", (PyCFunction) tp_f_get_uint64_le, METH_VARARGS,
-     "get uint64 little endian value"},
-    {(char *) "get_uint16_be", (PyCFunction) tp_f_get_uint16_be, METH_VARARGS,
-     "get uint16 big endian value"},
-    {(char *) "get_uint32_be", (PyCFunction) tp_f_get_uint32_be, METH_VARARGS,
-     "get uint32 big endian value"},
-    {(char *) "get_uint64_be", (PyCFunction) tp_f_get_uint64_be, METH_VARARGS,
-     "get uint64 big endian value"},
-    {(char *) "get_hfs_datetime", (PyCFunction) tp_f_get_hfs_datetime,
-     METH_VARARGS, "get HFS datetime"},
-    {(char *) "get_iso9660_datetime", (PyCFunction) tp_f_get_iso9660_datetime,
-     METH_VARARGS, "get ISO-9660 datetime"},
-    {(char *) "get_nt_datetime", (PyCFunction) tp_f_get_nt_datetime,
-     METH_VARARGS, "get NT datetime"},
-    {(char *) "get_unix_datetime", (PyCFunction) tp_f_get_unix_datetime,
-     METH_VARARGS, "get Unix datetime"},
-    {(char *) "get_fat_datetime", (PyCFunction) tp_f_get_fat_datetime,
-     METH_VARARGS, "get FAT datetime"},
-    {(char *) "get_bytearray_by_size", (PyCFunction) tp_f_get_bytearray_by_size,
-     METH_VARARGS, "get bytearray by size"},
-    {(char *) "get_string_by_size", (PyCFunction) tp_f_get_string_by_size,
-     METH_VARARGS, "get string by size"},
-    {(char *) "get_c_string", (PyCFunction) tp_f_get_c_string, METH_VARARGS,
-     "get C string"},
+    {(char *) "get_size", (PyCFunction) tp_f_get_size, METH_VARARGS, "Get data size"},
+    {(char *) "get_int8", (PyCFunction) tp_f_get_int8, METH_VARARGS, "get int8 value"},
+    {(char *) "get_int16_le", (PyCFunction) tp_f_get_int16_le, METH_VARARGS, "get int16 little endian value"},
+    {(char *) "get_int32_le", (PyCFunction) tp_f_get_int32_le, METH_VARARGS, "get int32 little endian value"},
+    {(char *) "get_uint8", (PyCFunction) tp_f_get_uint8, METH_VARARGS, "get uint8 value"},
+    {(char *) "get_uint16_le", (PyCFunction) tp_f_get_uint16_le, METH_VARARGS, "get uint16 little endian value"},
+    {(char *) "get_uint32_le", (PyCFunction) tp_f_get_uint32_le, METH_VARARGS, "get uint32 little endian value"},
+    {(char *) "get_uint64_le", (PyCFunction) tp_f_get_uint64_le, METH_VARARGS, "get uint64 little endian value"},
+    {(char *) "get_uint16_be", (PyCFunction) tp_f_get_uint16_be, METH_VARARGS, "get uint16 big endian value"},
+    {(char *) "get_uint32_be", (PyCFunction) tp_f_get_uint32_be, METH_VARARGS, "get uint32 big endian value"},
+    {(char *) "get_uint64_be", (PyCFunction) tp_f_get_uint64_be, METH_VARARGS, "get uint64 big endian value"},
+    {(char *) "get_float32_be", (PyCFunction) tp_f_get_float32_be, METH_VARARGS, "get float32 big endian value"},
+    {(char *) "get_float32_le", (PyCFunction) tp_f_get_float32_le, METH_VARARGS, "get float32 little endian value"},
+    {(char *) "get_float64_be", (PyCFunction) tp_f_get_float64_be, METH_VARARGS, "get float64 big endian value"},
+    {(char *) "get_float64_le", (PyCFunction) tp_f_get_float64_le, METH_VARARGS, "get float64 little endian value"},
+    {(char *) "get_hfs_datetime", (PyCFunction) tp_f_get_hfs_datetime, METH_VARARGS, "get HFS datetime"},
+    {(char *) "get_iso9660_datetime", (PyCFunction) tp_f_get_iso9660_datetime, METH_VARARGS, "get ISO-9660 datetime"},
+    {(char *) "get_nt_datetime", (PyCFunction) tp_f_get_nt_datetime, METH_VARARGS, "get NT datetime"},
+    {(char *) "get_unix_datetime", (PyCFunction) tp_f_get_unix_datetime, METH_VARARGS, "get Unix datetime"},
+    {(char *) "get_fat_datetime", (PyCFunction) tp_f_get_fat_datetime, METH_VARARGS, "get FAT datetime"},
+    {(char *) "get_bytearray_by_size", (PyCFunction) tp_f_get_bytearray_by_size, METH_VARARGS, "get bytearray by size"},
+    {(char *) "get_string_by_size", (PyCFunction) tp_f_get_string_by_size, METH_VARARGS, "get string by size"},
+    {(char *) "get_c_string", (PyCFunction) tp_f_get_c_string, METH_VARARGS, "get C string"},
     {(char *) "get_hex_string_by_size",
-     (PyCFunction) tp_f_get_hex_string_by_size, METH_VARARGS,
+     (PyCFunction) tp_f_get_hex_string_by_size,
+     METH_VARARGS,
      "get hex string by size"},
-    {(char *) "get_guid", (PyCFunction) tp_f_get_guid, METH_VARARGS,
-     "get GUID"},
-    {(char *) "get_uuid", (PyCFunction) tp_f_get_uuid, METH_VARARGS,
-     "get UUID"},
+    {(char *) "get_guid", (PyCFunction) tp_f_get_guid, METH_VARARGS, "get GUID"},
+    {(char *) "get_uuid", (PyCFunction) tp_f_get_uuid, METH_VARARGS, "get UUID"},
     {(char *) "get_sid", (PyCFunction) tp_f_get_sid, METH_VARARGS, "Get SID"},
-    {(char *) "get_ipv4", (PyCFunction) tp_f_get_ipv4, METH_VARARGS,
-     "get IPv4 as string"},
-    {(char *) "get_ipv4_be", (PyCFunction) tp_f_get_ipv4_be, METH_VARARGS,
-     "get IPv4 (big endian) as string"},
-    {(char *) "get_ipv4_le", (PyCFunction) tp_f_get_ipv4_le, METH_VARARGS,
-     "get IPv4 (little endian) as string"},
-    {(char *) "get_ipv6", (PyCFunction) tp_f_get_ipv6, METH_VARARGS,
-     "get IPv6 as string"},
-    {(char *) "get_ipv4_mapped_ipv6", (PyCFunction) tp_f_get_ipv4_mapped_ipv6,
-     METH_VARARGS, "get IPv6 as string"},
+    {(char *) "get_ipv4", (PyCFunction) tp_f_get_ipv4, METH_VARARGS, "get IPv4 as string"},
+    {(char *) "get_ipv4_be", (PyCFunction) tp_f_get_ipv4_be, METH_VARARGS, "get IPv4 (big endian) as string"},
+    {(char *) "get_ipv4_le", (PyCFunction) tp_f_get_ipv4_le, METH_VARARGS, "get IPv4 (little endian) as string"},
+    {(char *) "get_ipv6", (PyCFunction) tp_f_get_ipv6, METH_VARARGS, "get IPv6 as string"},
+    {(char *) "get_ipv4_mapped_ipv6", (PyCFunction) tp_f_get_ipv4_mapped_ipv6, METH_VARARGS, "get IPv6 as string"},
     {nullptr, nullptr, 0, nullptr} // sentinel
 };
 
@@ -997,9 +1050,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 
     try
     {
-        arg_reader = pymobius_core_io_reader_from_pyobject (
-            mobius::py::get_arg (args, 0)
-        );
+        arg_reader = pymobius_core_io_reader_from_pyobject (mobius::py::get_arg (args, 0));
     }
     catch (const std::exception &e)
     {
@@ -1008,10 +1059,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     }
 
     // Create Python object
-    core_decoder_data_decoder_o *ret =
-        reinterpret_cast<core_decoder_data_decoder_o *> (
-            type->tp_alloc (type, 0)
-        );
+    core_decoder_data_decoder_o *ret = reinterpret_cast<core_decoder_data_decoder_o *> (type->tp_alloc (type, 0));
 
     if (ret)
     {
@@ -1074,9 +1122,8 @@ new_core_decoder_data_decoder_type ()
         return mobius::py::pytypeobject (core_decoder_data_decoder_type);
 
     // Allocate type from spec
-    core_decoder_data_decoder_type = reinterpret_cast<PyTypeObject *> (
-        PyType_FromSpec (&core_decoder_data_decoder_spec)
-    );
+    core_decoder_data_decoder_type =
+        reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_decoder_data_decoder_spec));
 
     // Create type
     mobius::py::pytypeobject type (core_decoder_data_decoder_type);
@@ -1094,9 +1141,7 @@ bool
 pymobius_core_decoder_data_decoder_check (PyObject *value)
 {
     if (!core_decoder_data_decoder_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("data_decoder type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("data_decoder type is not initialized"));
 
     return mobius::py::isinstance (value, core_decoder_data_decoder_type);
 }
@@ -1107,18 +1152,12 @@ pymobius_core_decoder_data_decoder_check (PyObject *value)
 // @return New data_decoder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_core_decoder_data_decoder_to_pyobject (
-    const mobius::core::decoder::data_decoder &obj
-)
+pymobius_core_decoder_data_decoder_to_pyobject (const mobius::core::decoder::data_decoder &obj)
 {
     if (!core_decoder_data_decoder_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("data_decoder type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("data_decoder type is not initialized"));
 
-    return mobius::py::to_pyobject<core_decoder_data_decoder_o> (
-        obj, core_decoder_data_decoder_type
-    );
+    return mobius::py::to_pyobject<core_decoder_data_decoder_o> (obj, core_decoder_data_decoder_type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1130,11 +1169,7 @@ mobius::core::decoder::data_decoder
 pymobius_core_decoder_data_decoder_from_pyobject (PyObject *value)
 {
     if (!core_decoder_data_decoder_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("data_decoder type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("data_decoder type is not initialized"));
 
-    return mobius::py::from_pyobject<core_decoder_data_decoder_o> (
-        value, core_decoder_data_decoder_type
-    );
+    return mobius::py::from_pyobject<core_decoder_data_decoder_o> (value, core_decoder_data_decoder_type);
 }
