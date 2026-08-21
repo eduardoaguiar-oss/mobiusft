@@ -13,6 +13,7 @@ app-emule
 app-emuletorrent
 app-gecko
 app-itubego
+app-safari
 app-shareaza
 app-skype
 app-sticky-notes
