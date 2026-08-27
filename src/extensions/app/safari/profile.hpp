@@ -35,8 +35,29 @@ namespace mobius::extension::app::safari
 class profile
 {
   public:
+     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Downloaded file
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Visited URL structure
+    struct downloaded_file
+    {
+        // @brief Timestamp
+        mobius::core::datetime::datetime timestamp;
+
+        // @brief Filename
+        std::string filename;
+
+        // @brief Path
+        std::string path;
+
+        // @brief Metadata
+        mobius::core::pod::map metadata;
+
+        // @brief Source file
+        mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Visited URL
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct visited_url
     {
@@ -79,6 +100,8 @@ class profile
     mobius::core::datetime::datetime get_creation_time () const;
     mobius::core::datetime::datetime get_last_modified_time () const;
 
+    std::vector<downloaded_file> get_downloaded_files () const;
+    std::size_t count_downloaded_files () const;
     std::vector<visited_url> get_visited_urls () const;
     std::size_t count_visited_urls () const;
 

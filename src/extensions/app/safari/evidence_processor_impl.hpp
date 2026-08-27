@@ -70,7 +70,7 @@ class evidence_processor_impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _scan_profile_folder (const mobius::core::io::folder &);
     void _save_app_profiles ();
-    void _save_downloads ();
+    void _save_received_files ();
     void _save_visited_urls ();
 };
 

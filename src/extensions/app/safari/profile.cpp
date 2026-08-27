@@ -16,11 +16,13 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "profile.hpp"
-#include "file_history_db.hpp"
+#include <mobius/core/io/path.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/mediator.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <mobius/framework/utils.hpp>
+#include "file_downloads_plist.hpp"
+#include "file_history_db.hpp"
 
 namespace mobius::extension::app::safari
 {
@@ -104,6 +106,26 @@ class profile::impl
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get downloaded files
+    // @return Vector of downloaded files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<downloaded_file>
+    get_downloaded_files () const
+    {
+        return downloaded_files_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Count downloaded files
+    // @return Count of downloaded files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::size_t
+    count_downloaded_files () const
+    {
+        return downloaded_files_.size ();
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Get visited URLs
     // @return Vector of visited URLs
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -141,6 +163,9 @@ class profile::impl
 
     // @brief Last modified time
     mobius::core::datetime::datetime last_modified_time_;
+
+    // @brief Downloaded files
+    std::vector<downloaded_file> downloaded_files_;
 
     // @brief Visited URLs
     std::vector<visited_url> visited_urls_;
@@ -188,6 +213,67 @@ profile::impl::_update_mtime (const mobius::core::io::file &f)
 
     if (!last_modified_time_ || f.get_modification_time () > last_modified_time_)
         last_modified_time_ = f.get_modification_time ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add downloads.plist file
+// @param f File object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::add_downloads_plist_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Decode file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        file_downloads_plist file_downloads_plist (f.new_reader ());
+
+        if (!file_downloads_plist)
+            return;
+
+        log.info (__LINE__, "File decoded [downloads.plist]: " + f.get_path ());
+
+        _set_folder (f.get_parent ());
+        _update_mtime (f);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Add downloaded files
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (const auto &entry : file_downloads_plist.get_entries ())
+        {
+            downloaded_file df;
+            df.timestamp = entry.start_time;
+            df.path = entry.local_path;
+            df.filename = mobius::core::io::path (df.path).get_filename ();
+            df.f = f;
+
+            // Metadata
+            df.metadata.set ("download_identifier", entry.identifier);
+            df.metadata.set ("end_time", entry.end_time);
+            df.metadata.set ("profile_name", entry.profile_name);
+            df.metadata.set ("received_bytes", entry.downloaded_bytes);
+            df.metadata.set ("record_idx", entry.idx);
+            df.metadata.set ("sandbox_identifier", entry.sandbox_identifier);
+            df.metadata.set ("start_time", entry.start_time);
+            df.metadata.set ("total_bytes", entry.file_size);
+            df.metadata.set ("url", entry.url);
+
+            // Add to downloaded files
+            downloaded_files_.push_back (df);
+        }
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Emit sampling_file event
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::emit ("sampling_file", std::string ("app.safari.downloads_plist"), f.new_reader ());
+    }
+    catch (const std::exception &e)
+    {
+        log.error (__LINE__, e.what ());
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -255,48 +341,7 @@ profile::impl::add_history_db_file (const mobius::core::io::file &f)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        mobius::core::emit (
-            "sampling_file", std::string ("app.safari.history_db"),
-            f.new_reader ()
-        );
-    }
-    catch (const std::exception &e)
-    {
-        log.error (__LINE__, e.what ());
-    }
-}
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Add downloads.plist file
-// @param f File object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void
-profile::impl::add_downloads_plist_file (const mobius::core::io::file &f)
-{
-    mobius::core::log log (__FILE__, __FUNCTION__);
-
-    try
-    {
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Decode file
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        log.info (__LINE__, "File decoded [downloads.plist]: " + f.get_path ());
-
-        _set_folder (f.get_parent ());
-        _update_mtime (f);
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Add downloaded files
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Emit sampling_file event
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        mobius::core::emit (
-            "sampling_file", std::string ("app.safari.downloads_plist"),
-            f.new_reader ()
-        );
-
+        mobius::core::emit ("sampling_file", std::string ("app.safari.history_db"), f.new_reader ());
     }
     catch (const std::exception &e)
     {
@@ -382,6 +427,26 @@ std::vector<profile::visited_url>
 profile::get_visited_urls () const
 {
     return impl_->get_visited_urls ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get downloaded files
+// @return Vector of downloaded files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<profile::downloaded_file>
+profile::get_downloaded_files () const
+{
+    return impl_->get_downloaded_files ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Count downloaded files
+// @return Count of downloaded files
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::size_t
+profile::count_downloaded_files () const
+{
+    return impl_->count_downloaded_files ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

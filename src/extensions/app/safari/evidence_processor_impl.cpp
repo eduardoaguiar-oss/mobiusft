@@ -77,7 +77,7 @@ void
 evidence_processor_impl::on_complete ()
 {
     _save_app_profiles ();
-    _save_downloads ();
+    _save_received_files ();
     _save_visited_urls ();
 }
 
@@ -104,6 +104,9 @@ evidence_processor_impl::_scan_profile_folder (
         {
             if (name == "history.db")
                 p.add_history_db_file (f);
+
+            else if (name == "downloads.plist")
+                p.add_downloads_plist_file (f);
         }
         catch (const std::exception &e)
         {
@@ -141,6 +144,8 @@ evidence_processor_impl::_save_app_profiles ()
 
         // Metadata
         auto metadata = mobius::core::pod::map ();
+        metadata.set ("num_received_files", p.count_downloaded_files ());
+        metadata.set ("num_visited_urls", p.count_visited_urls ());
         e.set_attribute ("metadata", metadata);
 
         // Sources
@@ -155,13 +160,36 @@ evidence_processor_impl::_save_app_profiles ()
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Save downloads
+// @brief Save received files
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::_save_downloads ()
+evidence_processor_impl::_save_received_files ()
 {
     for (const auto &p : profiles_)
     {
+        for (const auto &entry : p.get_downloaded_files ())
+        {
+            if (entry.timestamp)
+            {
+                auto e = item_.new_evidence ("received-file");
+
+                e.set_attribute ("timestamp", entry.timestamp);
+                e.set_attribute ("username", p.get_username ());
+                e.set_attribute ("path", entry.path);
+                e.set_attribute ("filename", entry.filename);
+                e.set_attribute ("app_id", APP_ID);
+                e.set_attribute ("app_name", APP_NAME);
+
+                e.set_attribute ("metadata", entry.metadata);
+
+                e.set_tag ("app.browser");
+                e.add_source (entry.f);
+
+                // Tell mediator about the new evidence
+                mediator_.on_evidence_created (e);
+            }
+        }
+
     }
 }
 
