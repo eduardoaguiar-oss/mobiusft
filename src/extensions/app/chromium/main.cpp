@@ -25,7 +25,7 @@ extern "C"
 {
     const char *EXTENSION_ID = "app-chromium";
     const char *EXTENSION_NAME = "App Chromium";
-    const char *EXTENSION_VERSION = "1.9";
+    const char *EXTENSION_VERSION = "1.10";
     const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
     const char *EXTENSION_DESCRIPTION = "Chromium based browsers support";
 } // extern "C"
@@ -36,11 +36,8 @@ extern "C"
 extern "C" void
 start ()
 {
-    mobius::framework::evidence_processor::
-        register_evidence_processor_implementation<
-            mobius::extension::app::chromium::evidence_processor_impl> (
-            EXTENSION_ID, EXTENSION_NAME
-        );
+    mobius::framework::evidence_processor::register_implementation<
+        mobius::extension::app::chromium::evidence_processor_impl> (EXTENSION_ID, EXTENSION_NAME);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -49,6 +46,5 @@ start ()
 extern "C" void
 stop ()
 {
-    mobius::framework::evidence_processor::
-        unregister_evidence_processor_implementation (EXTENSION_ID);
+    mobius::framework::evidence_processor::unregister_implementation (EXTENSION_ID);
 }

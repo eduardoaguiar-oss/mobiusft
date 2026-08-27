@@ -1,5 +1,6 @@
 Mobius Forensic Toolkit 2.29
 	* app-safari: Add new C++ extension for Safari browser support
+	* app-chromium: Add support for Web Data files v147 and v149
 	* app-emule: Switch to register_implementation/unregister_implementation API
 	* app-emule: Improve Statistics.ini file detection
 	* app-emule: Improve Preferences.ini file detection
