@@ -53,31 +53,14 @@ class inifile
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Function prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool has_group (const std::string &) const;
     bool has_value (const std::string &, const std::string &) const;
     std::string get_value (const std::string &, const std::string &) const;
+    std::string get_value (const std::string &, const std::string &, const std::string &) const;
     std::map<std::string, std::string> get_values (const std::string &) const;
     void set_case_sensitive (bool);
     void set_comment_char (char);
     void set_value_char (char);
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Get value, with default if not found
-    // @param section Section name
-    // @param key Key name
-    // @param default_value Default value to return if key not found
-    // @return Value string or default_value if not found
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    std::string
-    get_value (
-        const std::string &section,
-        const std::string &key,
-        const std::string &default_value
-    ) const
-    {
-        if (has_value (section, key))
-            return get_value (section, key);
-        return default_value;
-    }
 
   private:
     // @brief Implementation class forward declaration

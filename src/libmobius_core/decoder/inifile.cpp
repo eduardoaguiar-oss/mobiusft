@@ -22,6 +22,7 @@
 #include <atomic>
 #include <stdexcept>
 #include <utility>
+#include <algorithm>
 #include <map>
 
 namespace mobius::core::decoder
@@ -37,11 +38,7 @@ class inifile::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     impl (const impl &) = delete;
     impl (impl &&) = delete;
-    impl (
-        const mobius::core::io::reader &,
-        const std::string &,
-        const std::string &
-    );
+    impl (const mobius::core::io::reader &, const std::string &, const std::string &);
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Operators
@@ -52,8 +49,10 @@ class inifile::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool has_group (const std::string &) const;
     bool has_value (const std::string &, const std::string &) const;
     std::string get_value (const std::string &, const std::string &) const;
+    std::string get_value (const std::string &, const std::string &, const std::string &) const;
     std::map<std::string, std::string> get_values (const std::string &) const;
     void set_case_sensitive (bool);
     void set_comment_char (char);
@@ -90,11 +89,7 @@ class inifile::impl
 // @param encoding File encoding
 // @param separator Line separator
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-inifile::impl::impl (
-    const mobius::core::io::reader &reader,
-    const std::string &encoding,
-    const std::string &separator
-)
+inifile::impl::impl (const mobius::core::io::reader &reader, const std::string &encoding, const std::string &separator)
     : line_reader_ (reader, encoding, separator)
 {
 }
@@ -123,9 +118,9 @@ void
 inifile::impl::set_comment_char (char c)
 {
     if (is_loaded_)
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG (
-            "could not set comment char because inifile is already loaded"
-        ));
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("could not set comment char because inifile is already loaded")
+        );
 
     comment_char_ = c;
 }
@@ -138,11 +133,24 @@ void
 inifile::impl::set_value_char (char c)
 {
     if (is_loaded_)
-        throw std::runtime_error (MOBIUS_EXCEPTION_MSG (
-            "could not set value char because inifile is already loaded"
-        ));
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("could not set value char because inifile is already loaded"));
 
     value_char_ = c;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if inifile has a given group
+// @param group Group name
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+inifile::impl::has_group (const std::string &group) const
+{
+    _load ();
+
+    std::string a_group = (is_case_sensitive_) ? group : mobius::core::string::tolower (group);
+
+    return std::any_of (values_.begin (), values_.end (), [&] (const auto &kv) { return kv.first.first == a_group; });
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -152,16 +160,12 @@ inifile::impl::set_value_char (char c)
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-inifile::impl::has_value (
-    const std::string &group, const std::string &key
-) const
+inifile::impl::has_value (const std::string &group, const std::string &key) const
 {
     _load ();
 
-    std::string a_group =
-        (is_case_sensitive_) ? group : mobius::core::string::tolower (group);
-    std::string a_key =
-        (is_case_sensitive_) ? key : mobius::core::string::tolower (key);
+    std::string a_group = (is_case_sensitive_) ? group : mobius::core::string::tolower (group);
+    std::string a_key = (is_case_sensitive_) ? key : mobius::core::string::tolower (key);
 
     return values_.find ({a_group, a_key}) != values_.end ();
 }
@@ -173,18 +177,14 @@ inifile::impl::has_value (
 // @return Value
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::string
-inifile::impl::get_value (
-    const std::string &group, const std::string &key
-) const
+inifile::impl::get_value (const std::string &group, const std::string &key) const
 {
     std::string value;
 
     _load ();
 
-    std::string a_group =
-        (is_case_sensitive_) ? group : mobius::core::string::tolower (group);
-    std::string a_key =
-        (is_case_sensitive_) ? key : mobius::core::string::tolower (key);
+    std::string a_group = (is_case_sensitive_) ? group : mobius::core::string::tolower (group);
+    std::string a_key = (is_case_sensitive_) ? key : mobius::core::string::tolower (key);
 
     auto iter = values_.find ({a_group, a_key});
 
@@ -192,6 +192,21 @@ inifile::impl::get_value (
         value = iter->second;
 
     return value;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get value, with default if not found
+// @param section Section name
+// @param key Key name
+// @param default_value Default value to return if key not found
+// @return Value string or default_value if not found
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+inifile::impl::get_value (const std::string &section, const std::string &key, const std::string &default_value) const
+{
+    if (has_value (section, key))
+        return get_value (section, key);
+    return default_value;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -206,8 +221,7 @@ inifile::impl::get_values (const std::string &group) const
 
     _load ();
 
-    std::string a_group =
-        (is_case_sensitive_) ? group : mobius::core::string::tolower (group);
+    std::string a_group = (is_case_sensitive_) ? group : mobius::core::string::tolower (group);
 
     for (const auto &kv : values_)
     {
@@ -252,8 +266,7 @@ inifile::impl::_load () const
                 pos = line.find (']');
 
                 if (pos != std::string::npos)
-                    group =
-                        mobius::core::string::strip (line.substr (1, pos - 1));
+                    group = mobius::core::string::strip (line.substr (1, pos - 1));
             }
 
             // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -265,10 +278,8 @@ inifile::impl::_load () const
 
                 if (pos != std::string::npos)
                 {
-                    auto key =
-                        mobius::core::string::strip (line.substr (0, pos));
-                    auto value =
-                        mobius::core::string::strip (line.substr (pos + 1));
+                    auto key = mobius::core::string::strip (line.substr (0, pos));
+                    auto value = mobius::core::string::strip (line.substr (pos + 1));
 
                     if (!is_case_sensitive_)
                     {
@@ -304,11 +315,7 @@ inifile::impl::_load () const
 // @param encoding File encoding
 // @param separator Line separator
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-inifile::inifile (
-    const mobius::core::io::reader &reader,
-    const std::string &encoding,
-    const std::string &separator
-)
+inifile::inifile (const mobius::core::io::reader &reader, const std::string &encoding, const std::string &separator)
     : impl_ (std::make_shared<impl> (reader, encoding, separator))
 {
 }
@@ -344,6 +351,17 @@ inifile::set_value_char (char c)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if inifile has a given group
+// @param group Group name
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+inifile::has_group (const std::string &group) const
+{
+    return impl_->has_group (group);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Check if inifile has a given value
 // @param group Group name
 // @param name Value name
@@ -365,6 +383,19 @@ std::string
 inifile::get_value (const std::string &group, const std::string &name) const
 {
     return impl_->get_value (group, name);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get value, with default if not found
+// @param group Group name
+// @param name Value name
+// @param default_value Default value to return if key not found
+// @return Value string or default_value if not found
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+inifile::get_value (const std::string &group, const std::string &name, const std::string &default_value) const
+{
+    return impl_->get_value (group, name, default_value);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
