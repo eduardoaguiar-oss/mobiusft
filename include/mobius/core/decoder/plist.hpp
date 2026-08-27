@@ -1,5 +1,5 @@
-#ifndef MOBIUS_CORE_DECODER_BPLIST_HPP
-#define MOBIUS_CORE_DECODER_BPLIST_HPP
+#ifndef MOBIUS_CORE_DECODER_PLIST_HPP
+#define MOBIUS_CORE_DECODER_PLIST_HPP
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Mobius Forensic Toolkit
@@ -24,8 +24,8 @@
 namespace mobius::core::decoder
 {
 
-mobius::core::pod::data bplist (const mobius::core::io::reader &);
-mobius::core::pod::data bplist (const mobius::core::bytearray &);
+mobius::core::pod::data plist (const mobius::core::io::reader &);
+mobius::core::pod::data plist (const mobius::core::bytearray &);
 
 } // namespace mobius::core::decoder
 

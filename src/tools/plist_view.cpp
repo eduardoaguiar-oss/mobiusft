@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/application.hpp>
-#include <mobius/core/decoder/bplist.hpp>
+#include <mobius/core/decoder/plist.hpp>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <unistd.h>
@@ -124,7 +124,7 @@ void
 show_plist (const std::string &path)
 {
     auto f = mobius::core::io::new_file_by_path (path);
-    auto data = mobius::core::decoder::bplist (f.new_reader ());
+    auto data = mobius::core::decoder::plist (f.new_reader ());
 
     show_plist_data (data);
 }

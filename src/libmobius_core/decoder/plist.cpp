@@ -15,13 +15,18 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/decoder/bplist.hpp>
+#include <mobius/core/datetime/conv_iso_string.hpp>
+#include <mobius/core/decoder/base64.hpp>
 #include <mobius/core/decoder/data_decoder.hpp>
+#include <mobius/core/decoder/plist.hpp>
+#include <mobius/core/decoder/xml/dom.hpp>
 #include <mobius/core/io/bytearray_io.hpp>
 #include <mobius/core/pod/data.hpp>
 #include <mobius/core/pod/map.hpp>
 #include <mobius/core/string_functions.hpp>
 #include <vector>
+
+#include <iostream>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @see https://github.com/opensource-apple/CF/blob/master/CFBinaryPList.c
@@ -448,32 +453,169 @@ bplist_decoder::_decode_object (std::uint64_t index)
     return result;
 }
 
-} // namespace
-
-namespace mobius::core::decoder
-{
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Decode bplist data
 // @param reader Reader object
 // @return Pod object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::pod::data
-bplist (const mobius::core::io::reader &reader)
+decode_bplist (const mobius::core::io::reader &reader)
 {
     bplist_decoder decoder (reader);
     return decoder.get_data ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Decode bplist data
+// @brief Decode XML item element
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::pod::data
+decode_xmlitem (const mobius::core::decoder::xml::element &element)
+{
+    if (!element)
+        return {};
+
+    auto tag_name = element.get_name ();
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Basic types
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    if (tag_name == "true")
+        return true;
+
+    else if (tag_name == "false")
+        return false;
+
+    else if (tag_name == "string")
+        return element.get_content ();
+
+    else if (tag_name == "data")
+        return mobius::core::decoder::base64 (element.get_content ());
+
+    else if (tag_name == "integer")
+        return static_cast<std::int64_t> (std::stoll (element.get_content ()));
+
+    else if (tag_name == "real")
+        return std::stold (element.get_content ());
+
+    else if (tag_name == "date")
+        return mobius::core::datetime::new_datetime_from_iso_string (element.get_content ());
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Array
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    else if (tag_name == "array")
+    {
+        std::vector<mobius::core::pod::data> array_data;
+        auto children = element.get_children ();
+
+        std::transform (
+            children.begin (),
+            children.end (),
+            std::back_inserter (array_data),
+            [] (const auto &child) { return decode_xmlitem (child); }
+        );
+
+        return array_data;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Dict type
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    else if (tag_name == "dict")
+    {
+        mobius::core::pod::map dict_data;
+        auto children = element.get_children ();
+
+        for (std::size_t i = 0; i + 1 < children.size (); i += 2)
+        {
+            auto key_element = children[i];
+            auto value_element = children[i + 1];
+
+            if (key_element && key_element.get_name () == "key" && value_element)
+            {
+                auto key = key_element.get_content ();
+                auto value = decode_xmlitem (value_element);
+
+                dict_data.set (key, value);
+            }
+        }
+
+        return dict_data;
+    }
+
+    return {};
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode XML plist
+// @param reader Reader object
+// @return Decoded data
+// @see https://en.wikipedia.org/wiki/Property_list
+// @see https://javorszky.co.uk/2023/11/09/what-the-hell-is-true-in-a-plist/
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::pod::data
+decode_xmlplist (const mobius::core::io::reader &reader)
+{
+    try
+    {
+        auto dom = mobius::core::decoder::xml::dom (reader);
+        auto root = dom.get_root_element ();
+
+        if (!root || root.get_name () != "plist")
+            return {};
+
+        // The root element of a plist should contain exactly one child element, which is always a <dict> element.
+        auto children = root.get_children ();
+
+        if (children.size () != 1 || children[0].get_name () != "dict")
+            return {};
+
+        return decode_xmlitem (children[0]);
+    }
+    catch (const std::exception &e)
+    {
+    }
+
+    return {};
+}
+
+} // namespace
+
+namespace mobius::core::decoder
+{
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode plist data
+// @param reader Reader object
+// @return Pod object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+mobius::core::pod::data
+plist (const mobius::core::io::reader &reader)
+{
+    mobius::core::pod::data data;
+
+    // Read first 8 bytes to determine if it's a bplist or XML plist
+    auto r = reader;
+    auto bytes = r.read (8);
+    r.rewind ();
+
+    if (bytes.startswith ("bplist0"))
+        data = decode_bplist (reader);
+
+    else if (bytes.startswith ("<?xml"))
+        data = decode_xmlplist (reader);
+
+    return data;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode plist data
 // @param data Data
 // @return Pod object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::pod::data
-bplist (const mobius::core::bytearray &data)
+plist (const mobius::core::bytearray &data)
 {
-    bplist_decoder decoder (mobius::core::io::new_bytearray_reader (data));
-    return decoder.get_data ();
+    return plist (mobius::core::io::new_bytearray_reader (data));
 }
 
 } // namespace mobius::core::decoder
