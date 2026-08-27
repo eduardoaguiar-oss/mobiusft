@@ -22,9 +22,9 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "inifile.hpp"
 #include <mobius/core/exception.inc>
-#include <pymobius.hpp>
 #include <pydict.hpp>
 #include <pygil.hpp>
+#include <pymobius.hpp>
 #include <stdexcept>
 #include "core/io/reader.hpp"
 
@@ -33,7 +33,7 @@ namespace
 // @brief Global pointer to hold the heap-allocated type
 static PyTypeObject *core_decoder_inifile_type = nullptr;
 
-} // namespace 
+} // namespace
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>set_case_sensitive</i> method implementation
@@ -144,6 +144,44 @@ tp_f_set_value_char (core_decoder_inifile_o *self, PyObject *args)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief <i>has_group</i> method implementation
+// @param self Object
+// @param args Argument list
+// @return true/false
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyObject *
+tp_f_has_group (core_decoder_inifile_o *self, PyObject *args)
+{
+    // Parse input args
+    std::string arg_group;
+
+    try
+    {
+        arg_group = mobius::py::get_arg_as_std_string (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // Execute C++ function
+    PyObject *ret = nullptr;
+
+    try
+    {
+        ret = mobius::py::pybool_from_bool (self->obj->has_group (arg_group));
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_runtime_error (e.what ());
+    }
+
+    // Return value
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>has_value</i> method implementation
 // @param self Object
 // @param args Argument list
@@ -172,9 +210,7 @@ tp_f_has_value (core_decoder_inifile_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pybool_from_bool (
-            self->obj->has_value (arg_group, arg_name)
-        );
+        ret = mobius::py::pybool_from_bool (self->obj->has_value (arg_group, arg_name));
     }
     catch (const std::exception &e)
     {
@@ -214,9 +250,7 @@ tp_f_get_value (core_decoder_inifile_o *self, PyObject *args)
 
     try
     {
-        ret = mobius::py::pystring_from_std_string (
-            self->obj->get_value (arg_group, arg_name)
-        );
+        ret = mobius::py::pystring_from_std_string (self->obj->get_value (arg_group, arg_name));
     }
     catch (const std::exception &e)
     {
@@ -273,17 +307,16 @@ tp_f_get_values (core_decoder_inifile_o *self, PyObject *args)
 // @brief Methods structure
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef tp_methods[] = {
-    {"set_case_sensitive", (PyCFunction) tp_f_set_case_sensitive, METH_VARARGS,
+    {"set_case_sensitive",
+     (PyCFunction) tp_f_set_case_sensitive,
+     METH_VARARGS,
      "Set group and key to be case sensitive or not"},
-    {"set_comment_char", (PyCFunction) tp_f_set_comment_char, METH_VARARGS,
-     "Set char used to start a comment"},
-    {"set_value_char", (PyCFunction) tp_f_set_value_char, METH_VARARGS,
-     "Set char used to separate key and value"},
-    {"has_value", (PyCFunction) tp_f_has_value, METH_VARARGS,
-     "Check if inifile has a given value"},
+    {"set_comment_char", (PyCFunction) tp_f_set_comment_char, METH_VARARGS, "Set char used to start a comment"},
+    {"set_value_char", (PyCFunction) tp_f_set_value_char, METH_VARARGS, "Set char used to separate key and value"},
+    {"has_value", (PyCFunction) tp_f_has_value, METH_VARARGS, "Check if inifile has a given value"},
+    {"has_group", (PyCFunction) tp_f_has_group, METH_VARARGS, "Check if inifile has a given group"},
     {"get_value", (PyCFunction) tp_f_get_value, METH_VARARGS, "Get value"},
-    {"get_values", (PyCFunction) tp_f_get_values, METH_VARARGS,
-     "Get map of key/value pairs for a given group"},
+    {"get_values", (PyCFunction) tp_f_get_values, METH_VARARGS, "Get map of key/value pairs for a given group"},
     {nullptr, nullptr, 0, nullptr}, // sentinel
 };
 
@@ -304,9 +337,7 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
 
     try
     {
-        arg_reader = mobius::py::get_arg_as_cpp (
-            args, 0, pymobius_core_io_reader_from_pyobject
-        );
+        arg_reader = mobius::py::get_arg_as_cpp (args, 0, pymobius_core_io_reader_from_pyobject);
         arg_encoding = mobius::py::get_arg_as_std_string (args, 1, "UTF-8");
         arg_separator = mobius::py::get_arg_as_std_string (args, 2, {});
     }
@@ -317,16 +348,14 @@ tp_new (PyTypeObject *type, PyObject *args, PyObject *)
     }
 
     // Create Python object
-    core_decoder_inifile_o *ret =
-        reinterpret_cast<core_decoder_inifile_o *> (type->tp_alloc (type, 0));
+    core_decoder_inifile_o *ret = reinterpret_cast<core_decoder_inifile_o *> (type->tp_alloc (type, 0));
 
     if (ret)
     {
         try
         {
-            ret->obj = mobius::py::GIL () (new mobius::core::decoder::inifile (
-                arg_reader, arg_encoding, arg_separator
-            ));
+            ret->obj =
+                mobius::py::GIL () (new mobius::core::decoder::inifile (arg_reader, arg_encoding, arg_separator));
         }
         catch (const std::exception &e)
         {
@@ -383,9 +412,7 @@ new_core_decoder_inifile_type ()
         return mobius::py::pytypeobject (core_decoder_inifile_type);
 
     // Allocate type from spec
-    core_decoder_inifile_type = reinterpret_cast<PyTypeObject *> (
-        PyType_FromSpec (&core_decoder_inifile_spec)
-    );
+    core_decoder_inifile_type = reinterpret_cast<PyTypeObject *> (PyType_FromSpec (&core_decoder_inifile_spec));
 
     // Create type
     mobius::py::pytypeobject type (core_decoder_inifile_type);
@@ -403,9 +430,7 @@ bool
 pymobius_core_decoder_inifile_check (PyObject *value)
 {
     if (!core_decoder_inifile_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("inifile type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("inifile type is not initialized"));
 
     return mobius::py::isinstance (value, core_decoder_inifile_type);
 }
@@ -416,18 +441,12 @@ pymobius_core_decoder_inifile_check (PyObject *value)
 // @return New inifile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_core_decoder_inifile_to_pyobject (
-    const mobius::core::decoder::inifile &obj
-)
+pymobius_core_decoder_inifile_to_pyobject (const mobius::core::decoder::inifile &obj)
 {
     if (!core_decoder_inifile_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("inifile type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("inifile type is not initialized"));
 
-    return mobius::py::to_pyobject<core_decoder_inifile_o> (
-        obj, core_decoder_inifile_type
-    );
+    return mobius::py::to_pyobject<core_decoder_inifile_o> (obj, core_decoder_inifile_type);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -439,11 +458,7 @@ mobius::core::decoder::inifile
 pymobius_core_decoder_inifile_from_pyobject (PyObject *value)
 {
     if (!core_decoder_inifile_type)
-        throw std::runtime_error (
-            MOBIUS_EXCEPTION_MSG ("inifile type is not initialized")
-        );
+        throw std::runtime_error (MOBIUS_EXCEPTION_MSG ("inifile type is not initialized"));
 
-    return mobius::py::from_pyobject<core_decoder_inifile_o> (
-        value, core_decoder_inifile_type
-    );
+    return mobius::py::from_pyobject<core_decoder_inifile_o> (value, core_decoder_inifile_type);
 }
