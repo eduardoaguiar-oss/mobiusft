@@ -33,10 +33,10 @@ add_library(libmobius_python_core_decoder STATIC
     func_base32hex.cpp
     func_base64.cpp
     func_base64url.cpp
-    func_bplist.cpp
     func_btencode.cpp
     func_get_filetype.cpp
     func_hexstring.cpp
+    func_plist.cpp
     inifile.cpp
     lnk.cpp
     mfc.cpp

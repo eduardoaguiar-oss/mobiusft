@@ -23,7 +23,7 @@
 #include "core/io/reader.hpp"
 #include "core/pod/data.hpp"
 #include <Python.h>
-#include <mobius/core/decoder/bplist.hpp>
+#include <mobius/core/decoder/plist.hpp>
 #include <pygil.hpp>
 #include <pymobius.hpp>
 
@@ -34,7 +34,7 @@
 // @return Python object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-decoder_func_bplist (PyObject *, PyObject *args)
+decoder_func_plist (PyObject *, PyObject *args)
 {
     // parse input args
     mobius::core::io::reader arg_reader;
@@ -56,7 +56,7 @@ decoder_func_bplist (PyObject *, PyObject *args)
     try
     {
         auto data =
-            mobius::py::GIL () (mobius::core::decoder::bplist (arg_reader));
+            mobius::py::GIL () (mobius::core::decoder::plist (arg_reader));
 
         ret = pymobius_core_pod_data_to_python (data);
     }
