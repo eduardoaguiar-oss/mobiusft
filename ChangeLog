@@ -1,5 +1,8 @@
 Mobius Forensic Toolkit 2.29
 	* app-safari: Add new C++ extension for Safari browser support
+	* app-emule: Switch to register_implementation/unregister_implementation API
+	* app-emule: Improve Statistics.ini file detection
+	* app-emule: Improve Preferences.ini file detection
 	* os-win: Retrieve LID, PUID, and GDID from Win Profiles
 	* libmobius_core: Add new function datetime::new_datetime_from_cocoa_timestamp
 	* libmobius_core: Add new function decoder::bplist
@@ -13,6 +16,7 @@ Mobius Forensic Toolkit 2.29
 	* libmobius_core: Add new function pod::data::to_datetime
 	* libmobius_core: Add new function pod::data::to_bytearray
 	* libmobius_core: Remove pod::data::operator long double
+	* libmobius_core: Add new function decoder::inifile::has_group
 	* libmobius_framework: Create new function evidence_processor::unregister_implementation
 	* libmobius_framework: Rename register_evidence_processor_implementation to register_implementation
 	* libmobius_framework: Rename get_evidence_processor_implementation to get_implementation
@@ -29,6 +33,7 @@ Mobius Forensic Toolkit 2.29
         * libmobius_python: Add new function decoder.data_decoder.get_float32_le
         * libmobius_python: Add new function decoder.data_decoder.get_float64_be
         * libmobius_python: Add new function decoder.data_decoder.get_float64_le
+	* libmobius_python: Add new function decoder.inifile.has_group
 	* tools: Add plist_view utility to display .plist files
 
 Mobius Forensic Toolkit 2.28

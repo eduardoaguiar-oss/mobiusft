@@ -65,9 +65,7 @@ profile::_set_folder (const mobius::core::io::folder &f)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Emit sampling_folder event
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::core::emit (
-        "sampling_folder", std::string ("app.emule.profiles"), f
-    );
+    mobius::core::emit ("sampling_folder", std::string ("app.emule.profiles"), f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -80,8 +78,7 @@ profile::_update_mtime (const mobius::core::io::file &f)
     if (!f)
         return;
 
-    if (!last_modified_time_ ||
-        f.get_modification_time () > last_modified_time_)
+    if (!last_modified_time_ || f.get_modification_time () > last_modified_time_)
         last_modified_time_ = f.get_modification_time ();
 }
 
@@ -126,18 +123,13 @@ profile::add_ac_searchstrings_dat_file (const mobius::core::io::file &f)
         }
 
         // Set folder and update mtime
-        log.info (
-            __LINE__, "File decoded [AC_SearchStrings.dat]: " + f.get_path ()
-        );
+        log.info (__LINE__, "File decoded [AC_SearchStrings.dat]: " + f.get_path ());
 
         _set_folder (f.get_parent ());
         _update_mtime (f);
 
         // Emit sampling_file event
-        mobius::core::emit (
-            "sampling_file", std::string ("app.emule.ac_searchstrings_dat"),
-            f.new_reader ()
-        );
+        mobius::core::emit ("sampling_file", std::string ("app.emule.ac_searchstrings_dat"), f.new_reader ());
     }
     catch (const std::exception &e)
     {
@@ -200,8 +192,7 @@ profile::add_key_index_dat_file (const mobius::core::io::file &f)
                         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
                         rf.hashes["ed2k"] = hash_ed2k;
 
-                        auto aich_hash =
-                            metadata.get<std::string> ("hash_aich");
+                        auto aich_hash = metadata.get<std::string> ("hash_aich");
 
                         if (!aich_hash.empty ())
                             rf.hashes["aich"] = aich_hash;
@@ -215,10 +206,7 @@ profile::add_key_index_dat_file (const mobius::core::io::file &f)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        mobius::core::emit (
-            "sampling_file", std::string ("app.emule.key_index_dat"),
-            f.new_reader ()
-        );
+        mobius::core::emit ("sampling_file", std::string ("app.emule.key_index_dat"), f.new_reader ());
     }
     catch (const std::exception &e)
     {
@@ -262,8 +250,7 @@ profile::add_known_met_file (const mobius::core::io::file &f)
             lf.username = username_;
             lf.filename = metadata.get<std::string> ("name");
             lf.flag_downloaded = true;
-            lf.flag_uploaded =
-                metadata.get<std::int64_t> ("uploaded_bytes") > 0;
+            lf.flag_uploaded = metadata.get<std::int64_t> ("uploaded_bytes") > 0;
             lf.flag_shared = mobius::framework::evidence_flag::always;
             lf.flag_corrupted = metadata.get<bool> ("is_corrupted");
             lf.flag_completed = true; // @see CPartFile::PerformFileCompleteEnd
@@ -298,10 +285,7 @@ profile::add_known_met_file (const mobius::core::io::file &f)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        mobius::core::emit (
-            "sampling_file", std::string ("app.emule.known_met"),
-            f.new_reader ()
-        );
+        mobius::core::emit ("sampling_file", std::string ("app.emule.known_met"), f.new_reader ());
     }
     catch (const std::exception &e)
     {
@@ -340,13 +324,10 @@ profile::add_preferences_dat_file (const mobius::core::io::file &f)
         if (version > LATEST_PREFERENCES_DAT_VERSION)
         {
             log.development (
-                __LINE__, "Unsupported Preferences.dat version: " +
-                              mobius::core::string::to_string (version) +
-                              " (last supported version: " +
-                              mobius::core::string::to_string (
-                                  LATEST_PREFERENCES_DAT_VERSION
-                              ) +
-                              ")"
+                __LINE__,
+                "Unsupported Preferences.dat version: " + mobius::core::string::to_string (version) +
+                    " (last supported version: " + mobius::core::string::to_string (LATEST_PREFERENCES_DAT_VERSION) +
+                    ")"
             );
             return;
         }
@@ -358,8 +339,7 @@ profile::add_preferences_dat_file (const mobius::core::io::file &f)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Set attributes
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        bool overwrite = !preferences_dat_f_ ||
-                         (preferences_dat_f_.is_deleted () && !f.is_deleted ());
+        bool overwrite = !preferences_dat_f_ || (preferences_dat_f_.is_deleted () && !f.is_deleted ());
         mobius::core::value_selector vs (overwrite);
 
         preferences_dat_version_ = vs (preferences_dat_version_, version);
@@ -375,8 +355,7 @@ profile::add_preferences_dat_file (const mobius::core::io::file &f)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         mobius::core::emit (
             "sampling_file",
-            "app.emule.preferences_dat." +
-                mobius::core::string::to_string (version, 5),
+            "app.emule.preferences_dat." + mobius::core::string::to_string (version, 5),
             f.new_reader ()
         );
     }
@@ -406,6 +385,9 @@ profile::add_preferences_ini_file (const mobius::core::io::file &f)
 
         mobius::core::decoder::inifile ini (reader);
 
+        if (!ini.has_group ("emule"))
+            return;
+
         auto incoming_dir = ini.get_value ("emule", "incomingdir");
         auto temp_dir = ini.get_value ("emule", "tempdir");
         auto nick = ini.get_value ("emule", "nick");
@@ -417,8 +399,7 @@ profile::add_preferences_ini_file (const mobius::core::io::file &f)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Set attributes
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        bool overwrite = !preferences_dat_f_ ||
-                         (preferences_dat_f_.is_deleted () && !f.is_deleted ());
+        bool overwrite = !preferences_dat_f_ || (preferences_dat_f_.is_deleted () && !f.is_deleted ());
         mobius::core::value_selector vs (overwrite);
 
         incoming_dir_ = vs (incoming_dir_, incoming_dir);
@@ -436,10 +417,7 @@ profile::add_preferences_ini_file (const mobius::core::io::file &f)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        mobius::core::emit (
-            "sampling_file", std::string ("app.emule.preferences_ini"),
-            f.new_reader ()
-        );
+        mobius::core::emit ("sampling_file", std::string ("app.emule.preferences_ini"), f.new_reader ());
     }
     catch (const std::exception &e)
     {
@@ -475,21 +453,15 @@ profile::add_preferenceskad_dat_file (const mobius::core::io::file &f)
         auto c3 = decoder.get_uint32_le ();
         auto c4 = decoder.get_uint32_le ();
 
-        auto kamdelia_guid = mobius::core::string::to_hex (c1, 8) +
-                             mobius::core::string::to_hex (c2, 8) +
-                             mobius::core::string::to_hex (c3, 8) +
-                             mobius::core::string::to_hex (c4, 8);
+        auto kamdelia_guid = mobius::core::string::to_hex (c1, 8) + mobius::core::string::to_hex (c2, 8) +
+                             mobius::core::string::to_hex (c3, 8) + mobius::core::string::to_hex (c4, 8);
 
-        log.info (
-            __LINE__, "File decoded [Preferenceskad.dat]: " + f.get_path ()
-        );
+        log.info (__LINE__, "File decoded [Preferenceskad.dat]: " + f.get_path ());
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Set attributes
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        bool overwrite =
-            !preferenceskad_dat_f_ ||
-            (preferenceskad_dat_f_.is_deleted () && !f.is_deleted ());
+        bool overwrite = !preferenceskad_dat_f_ || (preferenceskad_dat_f_.is_deleted () && !f.is_deleted ());
         mobius::core::value_selector vs (overwrite);
 
         kamdelia_guid_ = vs (kamdelia_guid_, kamdelia_guid);
@@ -503,10 +475,7 @@ profile::add_preferenceskad_dat_file (const mobius::core::io::file &f)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        mobius::core::emit (
-            "sampling_file", std::string ("app.emule.preferenceskad_dat"),
-            f.new_reader ()
-        );
+        mobius::core::emit ("sampling_file", std::string ("app.emule.preferenceskad_dat"), f.new_reader ());
     }
     catch (const std::exception &e)
     {
@@ -534,29 +503,24 @@ profile::add_statistics_ini_file (const mobius::core::io::file &f)
 
         mobius::core::decoder::inifile ini (reader);
 
-        std::uint64_t total_downloaded_bytes = std::stol (
-            ini.get_value ("statistics", "TotalDownloadedBytes", "0")
-        );
-        std::uint64_t total_uploaded_bytes =
-            std::stol (ini.get_value ("statistics", "TotalUploadedBytes", "0"));
-        std::uint64_t download_completed_files =
-            std::stol (ini.get_value ("statistics", "DownCompletedFiles", "0"));
+        if (!ini.has_group ("statistics"))
+            return;
+
+        std::uint64_t total_downloaded_bytes = std::stoull (ini.get_value ("statistics", "TotalDownloadedBytes", "0"));
+        std::uint64_t total_uploaded_bytes = std::stoull (ini.get_value ("statistics", "TotalUploadedBytes", "0"));
+        std::uint64_t download_completed_files = std::stoull (ini.get_value ("statistics", "DownCompletedFiles", "0"));
 
         log.info (__LINE__, "File decoded [Statistics.ini]: " + f.get_path ());
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Set attributes
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        bool overwrite = !statistics_ini_f_ ||
-                         (statistics_ini_f_.is_deleted () && !f.is_deleted ());
+        bool overwrite = !statistics_ini_f_ || (statistics_ini_f_.is_deleted () && !f.is_deleted ());
         mobius::core::value_selector vs (overwrite);
 
-        total_downloaded_bytes_ =
-            vs (total_downloaded_bytes_, total_downloaded_bytes);
-        total_uploaded_bytes_ =
-            vs (total_uploaded_bytes_, total_uploaded_bytes);
-        download_completed_files_ =
-            vs (download_completed_files_, download_completed_files);
+        total_downloaded_bytes_ = vs (total_downloaded_bytes_, total_downloaded_bytes);
+        total_uploaded_bytes_ = vs (total_uploaded_bytes_, total_uploaded_bytes);
+        download_completed_files_ = vs (download_completed_files_, download_completed_files);
         statistics_ini_f_ = vs (statistics_ini_f_, f);
         source_files_.push_back (f);
 
@@ -566,10 +530,7 @@ profile::add_statistics_ini_file (const mobius::core::io::file &f)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        mobius::core::emit (
-            "sampling_file", std::string ("app.emule.statistics_ini"),
-            f.new_reader ()
-        );
+        mobius::core::emit ("sampling_file", std::string ("app.emule.statistics_ini"), f.new_reader ());
     }
     catch (const std::exception &e)
     {
@@ -597,9 +558,7 @@ profile::add_storedsearches_met_file (const mobius::core::io::file &f)
             return;
 
         auto version = stored_searches.get_version ();
-        log.info (
-            __LINE__, "File decoded [StoredSearches.met]: " + f.get_path ()
-        );
+        log.info (__LINE__, "File decoded [StoredSearches.met]: " + f.get_path ());
 
         _set_folder (f.get_parent ());
         _update_mtime (f);
@@ -632,8 +591,7 @@ profile::add_storedsearches_met_file (const mobius::core::io::file &f)
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         mobius::core::emit (
             "sampling_file",
-            "app.emule.storedsearches_met." +
-                mobius::core::string::to_string (version, 5),
+            "app.emule.storedsearches_met." + mobius::core::string::to_string (version, 5),
             f.new_reader ()
         );
     }
