@@ -38,7 +38,6 @@ endif()
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(mobius_core_decoder STATIC
     base64.cpp
-    bplist.cpp
     btencode.cpp
     data_decoder.cpp
     filetype.cpp
@@ -46,6 +45,7 @@ add_library(mobius_core_decoder STATIC
     inifile.cpp
     lnk.cpp
     mfc.cpp
+    plist.cpp
     qdatastream.cpp
     sourcecode.cpp
     tdf.cpp
