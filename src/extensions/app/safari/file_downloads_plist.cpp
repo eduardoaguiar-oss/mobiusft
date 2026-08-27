@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "file_downloads_plist.hpp"
-#include <mobius/core/decoder/bplist.hpp>
+#include <mobius/core/decoder/plist.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/string_functions.hpp>
 
@@ -36,9 +36,9 @@ file_downloads_plist::file_downloads_plist (const mobius::core::io::reader &read
     try
     {
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Try to parse the Downloads.plist file as a binary plist file
+        // Try to parse the Downloads.plist file
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        auto data = mobius::core::decoder::bplist (reader);
+        auto data = mobius::core::decoder::plist (reader);
 
         if (!data.is_map ())
             return;

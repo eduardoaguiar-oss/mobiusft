@@ -86,9 +86,7 @@ evidence_processor_impl::on_complete ()
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::_scan_profile_folder (
-    const mobius::core::io::folder &folder
-)
+evidence_processor_impl::_scan_profile_folder (const mobius::core::io::folder &folder)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -102,18 +100,18 @@ evidence_processor_impl::_scan_profile_folder (
     {
         try
         {
-            if (name == "history.db")
-                p.add_history_db_file (f);
+            if (name == "bookmarks.plist")
+                p.add_bookmarks_plist_file (f);
 
             else if (name == "downloads.plist")
                 p.add_downloads_plist_file (f);
+
+            else if (name == "history.db")
+                p.add_history_db_file (f);
         }
         catch (const std::exception &e)
         {
-            log.warning (
-                __LINE__,
-                std::string (e.what ()) + " (file: " + f.get_path () + ")"
-            );
+            log.warning (__LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")");
         }
     }
 
@@ -189,7 +187,6 @@ evidence_processor_impl::_save_received_files ()
                 mediator_.on_evidence_created (e);
             }
         }
-
     }
 }
 

@@ -148,8 +148,9 @@ class profile::impl
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void add_history_db_file (const mobius::core::io::file &);
+    void add_bookmarks_plist_file (const mobius::core::io::file &);
     void add_downloads_plist_file (const mobius::core::io::file &);
+    void add_history_db_file (const mobius::core::io::file &);
 
   private:
     // @brief Folder object
@@ -213,6 +214,41 @@ profile::impl::_update_mtime (const mobius::core::io::file &f)
 
     if (!last_modified_time_ || f.get_modification_time () > last_modified_time_)
         last_modified_time_ = f.get_modification_time ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add bookmarks.plist file
+// @param f File object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::add_bookmarks_plist_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Decode file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        //file_bookmarks_plist file_bookmarks_plist (f.new_reader ());
+
+        //if (!file_bookmarks_plist)
+        //    return;
+
+        log.info (__LINE__, "File decoded [bookmarks.plist]: " + f.get_path ());
+
+        _set_folder (f.get_parent ());
+        _update_mtime (f);
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Emit sampling_file event
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::emit ("sampling_file", std::string ("app.safari.bookmarks_plist"), f.new_reader ());
+    }
+    catch (const std::exception &e)
+    {
+        log.error (__LINE__, e.what ());
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -460,13 +496,13 @@ profile::count_visited_urls () const
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Add history.db file
+// @brief Add bookmarks.plist file
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-profile::add_history_db_file (const mobius::core::io::file &f)
+profile::add_bookmarks_plist_file (const mobius::core::io::file &f)
 {
-    impl_->add_history_db_file (f);
+    impl_->add_bookmarks_plist_file (f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -477,6 +513,16 @@ void
 profile::add_downloads_plist_file (const mobius::core::io::file &f)
 {
     impl_->add_downloads_plist_file (f);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add history.db file
+// @param f File object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::add_history_db_file (const mobius::core::io::file &f)
+{
+    impl_->add_history_db_file (f);
 }
 
 } // namespace mobius::extension::app::safari
