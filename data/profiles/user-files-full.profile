@@ -12,6 +12,7 @@ app-dcpp
 app-emule
 app-emuletorrent
 app-gecko
+app-internet-explorer
 app-itubego
 app-safari
 app-shareaza
