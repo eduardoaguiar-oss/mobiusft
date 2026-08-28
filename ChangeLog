@@ -1,5 +1,6 @@
 Mobius Forensic Toolkit 2.29
 	* app-safari: Add new C++ extension for Safari browser support
+	* app-internet-explorer: Add new C++ extension for Internet Explorer browser support
 	* app-chromium: Add support for Web Data files v147 and v149
 	* app-emule: Switch to register_implementation/unregister_implementation API
 	* app-emule: Improve Statistics.ini file detection
@@ -30,10 +31,10 @@ Mobius Forensic Toolkit 2.29
 	* libmobius_python: Improve api_dataholder class using the PyType_FromSpec API
 	* libmobius_python: Add new function datetime.new_datetime_from_cocoa_timestamp
 	* libmobius_python: Add new function decoder.bplist
-        * libmobius_python: Add new function decoder.data_decoder.get_float32_be
-        * libmobius_python: Add new function decoder.data_decoder.get_float32_le
-        * libmobius_python: Add new function decoder.data_decoder.get_float64_be
-        * libmobius_python: Add new function decoder.data_decoder.get_float64_le
+	* libmobius_python: Add new function decoder.data_decoder.get_float32_be
+	* libmobius_python: Add new function decoder.data_decoder.get_float32_le
+	* libmobius_python: Add new function decoder.data_decoder.get_float64_be
+	* libmobius_python: Add new function decoder.data_decoder.get_float64_le
 	* libmobius_python: Add new function decoder.inifile.has_group
 	* tools: Add plist_view utility to display .plist files
 

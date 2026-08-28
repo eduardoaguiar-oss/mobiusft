@@ -37,6 +37,22 @@ set_target_properties(app_internet_explorer PROPERTIES OUTPUT_NAME "app-internet
 target_link_libraries(app_internet_explorer PRIVATE Mobius::Framework Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: msiecf_view
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Tools: msiecf_view
+add_executable(tools_msiecf_view
+    tools/msiecf_view.cpp
+    file_msiecf.cpp
+)
+
+set_target_properties(tools_msiecf_view PROPERTIES OUTPUT_NAME "msiecf_view")
+target_link_libraries(tools_msiecf_view PRIVATE Mobius::Framework Mobius::Core)
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Installation
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 install(TARGETS app_internet_explorer LIBRARY DESTINATION share/mobiusft/extensions)
+
+install(TARGETS
+    tools_msiecf_view
+    RUNTIME DESTINATION share/mobiusft/tools)
