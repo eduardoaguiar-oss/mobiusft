@@ -27,9 +27,9 @@ project(app_internet_explorer LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_library(app_internet_explorer MODULE
     main.cpp
+    evidence_processor_impl.cpp
     file_msiecf.cpp
-#    evidence_processor_impl.cpp
-#    profile.cpp
+    profile.cpp
 )
 
 set_target_properties(app_internet_explorer PROPERTIES OUTPUT_NAME "app-internet-explorer" PREFIX "")
