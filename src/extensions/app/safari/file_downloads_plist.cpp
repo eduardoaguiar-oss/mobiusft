@@ -18,6 +18,7 @@
 #include "file_downloads_plist.hpp"
 #include <mobius/core/decoder/plist.hpp>
 #include <mobius/core/log.hpp>
+#include <mobius/core/mediator.hpp>
 #include <mobius/core/string_functions.hpp>
 
 namespace mobius::extension::app::safari
@@ -73,6 +74,11 @@ file_downloads_plist::file_downloads_plist (const mobius::core::io::reader &read
                 entries_.push_back (e);
             }
         }
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Emit sampling_file event
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::emit ("sampling_file", std::string ("app.safari.downloads_plist"), reader);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Finish parsing
