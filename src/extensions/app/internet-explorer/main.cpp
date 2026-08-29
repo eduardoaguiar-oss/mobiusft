@@ -16,7 +16,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/framework/evidence_processor/evidence_processor_registry.hpp>
-//#include "evidence_processor_impl.hpp"
+#include "evidence_processor_impl.hpp"
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Extension data
@@ -36,10 +36,8 @@ extern "C"
 extern "C" void
 start ()
 {
-    //mobius::framework::evidence_processor::register_implementation<
-    //        mobius::extension::app::internet_explorer::evidence_processor_impl> (
-    //        EXTENSION_ID, EXTENSION_NAME
-    //    );
+    mobius::framework::evidence_processor::register_implementation<
+        mobius::extension::app::internet_explorer::evidence_processor_impl> (EXTENSION_ID, EXTENSION_NAME);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -48,5 +46,5 @@ start ()
 extern "C" void
 stop ()
 {
-    //mobius::framework::evidence_processor::unregister_implementation (EXTENSION_ID);
+    mobius::framework::evidence_processor::unregister_implementation (EXTENSION_ID);
 }
