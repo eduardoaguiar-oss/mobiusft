@@ -40,8 +40,8 @@ Mobius Forensic Toolkit is a powerful, open-source digital forensics framework d
 Mobius Forensic Toolkit combines performance, extensibility, and specialized depth—particularly in P2P and browser forensics—making it an essential tool for digital investigators, researchers, and cybersecurity professionals.
 
 ## Getting Started:
-- [**Quick Start Guide**](https://www.nongnu.org/mobiusft/support/getting_started/index.html): Follow the step-by-step guide to set up and start using Mobius Forensic Toolkit in minutes.
-- **Comprehensive Documentation**: Access detailed tutorials, API references, and case studies to maximize your efficiency.
+- [**Getting Started Guide**](https://github.com/eduardoaguiar-oss/mobiusft/wiki/Getting-Started): Follow the step-by-step guide to set up a new case and start using Mobius Forensic Toolkit in minutes.
+- **Comprehensive Documentation**: Access detailed tutorials, API references, and case studies to maximize your efficiency on [**Mobius Forensic Toolkit Wiki Page**](https://github.com/eduardoaguiar-oss/mobiusft/wiki).
 
 ## Getting project files
 Download the latest version of the Mobius Forensic Toolkit from GitHub:  
