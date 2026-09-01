@@ -26,6 +26,8 @@
 #include <mobius/core/string_functions.hpp>
 #include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/model/evidence.hpp>
+#include <mobius/framework/utils.hpp>
+#include "file_msiecf.hpp"
 
 namespace
 {
@@ -62,7 +64,7 @@ evidence_processor_impl::evidence_processor_impl (
 void
 evidence_processor_impl::on_folder_entered (const mobius::core::io::folder &folder)
 {
-    _scan_profile_folder (folder);
+    _scan_folder (folder);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -71,15 +73,14 @@ evidence_processor_impl::on_folder_entered (const mobius::core::io::folder &fold
 void
 evidence_processor_impl::on_complete ()
 {
-    _save_app_profiles ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Scan folder for Internet Explorer profiles
+// @brief Scan folder for Internet Explorer artifacts
 // @param folder Folder to scan
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::_scan_profile_folder (const mobius::core::io::folder &folder)
+evidence_processor_impl::_scan_folder (const mobius::core::io::folder &folder)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -87,61 +88,115 @@ evidence_processor_impl::_scan_profile_folder (const mobius::core::io::folder &f
     // Scan folder
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     auto w = mobius::core::io::walker (folder);
-    profile p;
 
     for (const auto &[name, f] : w.get_files_with_names ())
     {
         try
         {
             if (name == "index.dat")
-                p.add_index_dat_file (f);
+                _decode_index_dat_file (f);
 
             else if (name == "webcachev01.dat")
-                p.add_webcachev01_dat_file (f);
+                _decode_webcachev01_dat_file (f);
         }
         catch (const std::exception &e)
         {
             log.warning (__LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")");
         }
     }
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // If we have a new profile, add it to the profiles list
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    if (p)
-        profiles_.push_back (p);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Save app profiles
+// @brief Add index.dat file
+// @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::_save_app_profiles ()
+evidence_processor_impl::_decode_index_dat_file (const mobius::core::io::file &f)
 {
-    for (const auto &p : profiles_)
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
     {
-        auto e = item_.new_evidence ("app-profile");
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Try to parse the index.dat file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        file_msiecf file_msiecf (f.new_reader ());
 
-        // Attributes
-        e.set_attribute ("app_id", APP_ID);
-        e.set_attribute ("app_name", APP_NAME);
-        e.set_attribute ("username", p.get_username ());
-        e.set_attribute ("creation_time", p.get_creation_time ());
-        e.set_attribute ("last_modified_time", p.get_last_modified_time ());
-        e.set_attribute ("path", p.get_path ());
+        if (!file_msiecf)
+            return;
 
-        // Metadata
-        auto metadata = mobius::core::pod::map ();
-        e.set_attribute ("metadata", metadata);
+        log.info (__LINE__, "File decoded [index.dat]: " + f.get_path ());
 
-        // Sources
-        e.add_source (p.get_folder ());
+        auto username = mobius::framework::get_username_from_path (f.get_path ());
 
-        // Tags
-        e.set_tag ("app.browser");
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Retrieve data
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        /*for (const auto &item : download_history.to_list ())
+        {
+            if (item.is_map ())
+            {
+                auto map = item.to_map ();
 
-        // Notify mediator
-        mediator_.on_evidence_created (e);
+                entry e;
+
+                e.idx = entries_.size () + 1;
+                e.local_path = map.get<std::string> ("DownloadEntryPath");
+                e.url = map.get<std::string> ("DownloadEntryURL");
+                e.file_size = map.get<std::int64_t> ("DownloadEntryProgressTotalToLoad");
+                e.downloaded_bytes = map.get<std::int64_t> ("DownloadEntryProgressBytesSoFar");
+                e.start_time = map.get<mobius::core::datetime::datetime> ("DownloadEntryDateAddedKey");
+                e.end_time = map.get<mobius::core::datetime::datetime> ("DownloadEntryDateFinishedKey");
+                e.profile_name = map.get<std::string> ("DownloadEntryProfileUUIDStringKey");
+                e.identifier = map.get<std::string> ("DownloadEntryIdentifier");
+                e.sandbox_identifier = map.get<std::string> ("DownloadEntrySandboxIdentifier");
+
+                entries_.push_back (e);
+            }
+        }*/
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Emit sampling_file event
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::emit ("sampling_file", std::string ("app.internet-explorer.index_dat"), f.new_reader ());
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add WebCacheV01.dat file
+// @param f File object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_processor_impl::_decode_webcachev01_dat_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Test signature for now. We do not parse WebCacheV01.dat file yet
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        auto reader = f.new_reader ();
+        reader.skip (4);
+        auto signature = reader.read (4);
+
+        if (signature != "\x89\xab\xcd\xef")
+            return;
+
+        log.info (__LINE__, "File detected [WebCacheV01.dat]: " + f.get_path ());
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Emit sampling_file event
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::emit ("sampling_file", std::string ("app.internet-explorer.webcachev01_dat"), f.new_reader ());
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
     }
 }
 

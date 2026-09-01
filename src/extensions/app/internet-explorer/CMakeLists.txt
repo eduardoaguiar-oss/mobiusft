@@ -29,7 +29,6 @@ add_library(app_internet_explorer MODULE
     main.cpp
     evidence_processor_impl.cpp
     file_msiecf.cpp
-    profile.cpp
 )
 
 set_target_properties(app_internet_explorer PROPERTIES OUTPUT_NAME "app-internet-explorer" PREFIX "")

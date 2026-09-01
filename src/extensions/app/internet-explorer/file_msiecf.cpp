@@ -67,7 +67,8 @@ file_msiecf::file_msiecf (const mobius::core::io::reader &reader)
     allocated_blocks_ = decoder.get_uint32_le ();
 
     auto u1 = decoder.get_uint32_le ();
-    log.development (__LINE__, "msiecf (index.dat) u1: " + std::to_string (u1));
+    if (u1)
+        log.development (__LINE__, "msiecf (index.dat) u1: " + std::to_string (u1));
 
     cache_size_limit_ = decoder.get_uint64_le ();
     cache_size_ = decoder.get_uint64_le ();
@@ -146,7 +147,8 @@ file_msiecf::__decode_hash_table (mobius::core::decoder::data_decoder &decoder)
         auto iter = offsets_.find (record.offset);
 
         if (iter != offsets_.end ())
-            std::cerr << "\tDuplicate record offset: " << record.offset << " - 0x" << std::hex << iter->second << "/" << record.hash << std::dec << std::endl;
+            std::cerr << "\tDuplicate record offset: " << record.offset << " - 0x" << std::hex << iter->second << "/"
+                      << record.hash << std::dec << std::endl;
 
         else
         {

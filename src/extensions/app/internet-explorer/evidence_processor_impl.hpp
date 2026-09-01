@@ -22,7 +22,6 @@
 #include <mobius/framework/evidence_processor/mediator.hpp>
 #include <mobius/framework/evidence_processor/profile.hpp>
 #include <mobius/framework/model/item.hpp>
-#include "profile.hpp"
 
 namespace mobius::extension::app::internet_explorer
 {
@@ -30,8 +29,7 @@ namespace mobius::extension::app::internet_explorer
 // @brief Internet Explorer <i>evidence_processor</i> implementation class
 // @author Eduardo Aguiar
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class evidence_processor_impl
-    : public mobius::framework::evidence_processor::evidence_processor_impl_base
+class evidence_processor_impl : public mobius::framework::evidence_processor::evidence_processor_impl_base
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -56,20 +54,12 @@ class evidence_processor_impl
     // @brief Mediator
     mobius::framework::evidence_processor::mediator mediator_;
 
-    // @brief User name
-    std::string username_;
-
-    // @brief Current profile
-    profile profile_;
-
-    // @brief Profiles found
-    std::vector<profile> profiles_;
-
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    void _scan_profile_folder (const mobius::core::io::folder &);
-    void _save_app_profiles ();
+    void _scan_folder (const mobius::core::io::folder &);
+    void _decode_index_dat_file (const mobius::core::io::file &);
+    void _decode_webcachev01_dat_file (const mobius::core::io::file &);
 };
 
 } // namespace mobius::extension::app::internet_explorer
