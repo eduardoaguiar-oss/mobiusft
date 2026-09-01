@@ -57,7 +57,9 @@ class profile
     std::string get_path () const;
     mobius::core::datetime::datetime get_creation_time () const;
     mobius::core::datetime::datetime get_last_modified_time () const;
+    bool has_data () const;
 
+    void add_ntuser_dat_file (const mobius::core::io::file &);
     void add_index_dat_file (const mobius::core::io::file &);
     void add_webcachev01_dat_file (const mobius::core::io::file &);
 

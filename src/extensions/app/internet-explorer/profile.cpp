@@ -104,8 +104,19 @@ class profile::impl
     }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if the profile has any associated data
+    // @return True if the profile has data, false otherwise
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool
+    has_data () const
+    {
+        return has_data_;
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Prototypes
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void add_ntuser_dat_file (const mobius::core::io::file &);
     void add_index_dat_file (const mobius::core::io::file &);
     void add_webcachev01_dat_file (const mobius::core::io::file &);
 
@@ -121,6 +132,9 @@ class profile::impl
 
     // @brief Last modified time
     mobius::core::datetime::datetime last_modified_time_;
+
+    // @brief Indicates whether the profile has any associated data
+    bool has_data_;
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
@@ -146,11 +160,6 @@ profile::impl::_set_folder (const mobius::core::io::folder &f)
     last_modified_time_ = f.get_modification_time ();
     creation_time_ = f.get_creation_time ();
     username_ = mobius::framework::get_username_from_path (f.get_path ());
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Emit sampling_folder event
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    mobius::core::emit ("sampling_folder", std::string ("app.internet-explorer.profiles"), f);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -165,6 +174,26 @@ profile::impl::_update_mtime (const mobius::core::io::file &f)
 
     if (!last_modified_time_ || f.get_modification_time () > last_modified_time_)
         last_modified_time_ = f.get_modification_time ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Add NTUSER.DAT file
+// @param f File object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+profile::impl::add_ntuser_dat_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        _set_folder (f.get_parent ());
+        _update_mtime (f);
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, e.what ());
+    }
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -188,8 +217,9 @@ profile::impl::add_index_dat_file (const mobius::core::io::file &f)
 
         log.info (__LINE__, "File decoded [index.dat]: " + f.get_path ());
 
-        _set_folder (f.get_parent ());
         _update_mtime (f);
+
+        has_data_ = true;
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Retrieve data
@@ -240,44 +270,18 @@ profile::impl::add_webcachev01_dat_file (const mobius::core::io::file &f)
     try
     {
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Try to parse the WebCacheV01.dat file
+        // Test signature for now. We do not parse WebCacheV01.dat file yet
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // @todo test signature, for now
-        /*file_msiecf file_msiecf (f.new_reader ());
+        auto reader = f.new_reader ();
+        reader.skip (4);
+        auto signature = reader.read (4);
 
-        if (!file_msiecf)
+        if (signature != "\x89\xab\xcd\xef")
             return;
 
-        log.info (__LINE__, "File decoded [WebCacheV01.dat]: " + f.get_path ());
+        log.info (__LINE__, "File detected [WebCacheV01.dat]: " + f.get_path ());
 
-        _set_folder (f.get_parent ());
-        _update_mtime (f);*/
-
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Retrieve data
-        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        /*for (const auto &item : download_history.to_list ())
-        {
-            if (item.is_map ())
-            {
-                auto map = item.to_map ();
-
-                entry e;
-
-                e.idx = entries_.size () + 1;
-                e.local_path = map.get<std::string> ("DownloadEntryPath");
-                e.url = map.get<std::string> ("DownloadEntryURL");
-                e.file_size = map.get<std::int64_t> ("DownloadEntryProgressTotalToLoad");
-                e.downloaded_bytes = map.get<std::int64_t> ("DownloadEntryProgressBytesSoFar");
-                e.start_time = map.get<mobius::core::datetime::datetime> ("DownloadEntryDateAddedKey");
-                e.end_time = map.get<mobius::core::datetime::datetime> ("DownloadEntryDateFinishedKey");
-                e.profile_name = map.get<std::string> ("DownloadEntryProfileUUIDStringKey");
-                e.identifier = map.get<std::string> ("DownloadEntryIdentifier");
-                e.sandbox_identifier = map.get<std::string> ("DownloadEntrySandboxIdentifier");
-
-                entries_.push_back (e);
-            }
-        }*/
+        _update_mtime (f);
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event
@@ -358,6 +362,16 @@ mobius::core::datetime::datetime
 profile::get_last_modified_time () const
 {
     return impl_->get_last_modified_time ();
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if the profile has any associated data
+// @return True if the profile has data, false otherwise
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+bool
+profile::has_data () const
+{
+    return impl_->has_data ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
