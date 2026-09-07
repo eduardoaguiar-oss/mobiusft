@@ -98,7 +98,7 @@ class Ant(object):
         status.set('phase_number', self.__phase_number)
         status.set('phase_name', self.__phase_name)
         status.set('tagged_files', self.__tagged_files_count)
-        status.set('evidences', len(self.__evidences_count))
+        status.set('evidences', self.__evidences_count)
             
         return status
 
