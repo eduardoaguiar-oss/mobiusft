@@ -96,7 +96,7 @@ evidence_processor_impl::_scan_folder (const mobius::core::io::folder &folder)
             if (name == "index.dat")
                 _decode_index_dat_file (f);
 
-            else if (name == "webcachev01.dat")
+            else if (name == "webcachev01.dat" || name == "container.dat")
                 _decode_webcachev01_dat_file (f);
         }
         catch (const std::exception &e)

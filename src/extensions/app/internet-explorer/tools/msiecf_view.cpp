@@ -65,6 +65,7 @@ show_file (const std::string &path)
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     std::cout << std::endl;
     std::cout << "File metadata:" << std::endl;
+    std::cout << "\tPath: " << path << std::endl;
     std::cout << "\tSignature: " << dat.get_signature () << std::endl;
     std::cout << "\tVersion: " << dat.get_version () << std::endl;
     std::cout << "\tSize: " << dat.get_size () << std::endl;
@@ -146,7 +147,6 @@ main (int argc, char **argv)
         catch (const std::exception &e)
         {
             std::cerr << "Error: " << e.what () << std::endl;
-            exit (EXIT_FAILURE);
         }
 
         optind++;

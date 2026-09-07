@@ -37,6 +37,7 @@ Mobius Forensic Toolkit 2.29
 	* libmobius_python: Add new function decoder.data_decoder.get_float64_le
 	* libmobius_python: Add new function decoder.inifile.has_group
 	* tools: Add plist_view utility to display .plist files
+	* pymobius.ant.evidence.ufdr: Fix bug in get_status function (Reported by Clemente Paixão)
 
 Mobius Forensic Toolkit 2.28
 	* Bundle girepository libraries to improve AppImage portability

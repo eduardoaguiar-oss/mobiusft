@@ -47,10 +47,13 @@ class file_msiecf
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct hash_table_record
     {
+        std::uint8_t type = 0;
         std::uint32_t hash = 0;
         std::uint32_t offset = 0;
         std::uint32_t hash_table_idx = 0;
         std::uint32_t entry_idx = 0;
+        std::uint32_t location_hash = 0;
+        bool is_active = true;
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -205,8 +208,9 @@ class file_msiecf
     std::map<std::uint32_t, std::uint32_t> offsets_;
 
     // Helper functions
-    std::uint32_t __decode_hash_table (mobius::core::decoder::data_decoder &);
-    void __decode_record (mobius::core::decoder::data_decoder &, const hash_table_record &);
+    std::uint32_t _decode_hash_table (mobius::core::decoder::data_decoder &);
+    void _decode_record (mobius::core::decoder::data_decoder &, const hash_table_record &);
+    void _decode_url_record (mobius::core::decoder::data_decoder &);
 };
 
 } // namespace mobius::extension::app::internet_explorer
