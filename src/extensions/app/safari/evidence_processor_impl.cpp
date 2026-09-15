@@ -206,11 +206,11 @@ evidence_processor_impl::_save_visited_urls ()
             e.set_attribute ("timestamp", entry.timestamp);
             e.set_attribute ("title", entry.title);
             e.set_attribute ("url", entry.url);
+            e.set_attribute ("app_name", APP_NAME);
 
             // Metadata
             auto metadata = mobius::core::pod::map ();
             metadata.set ("app_id", APP_ID);
-            metadata.set ("app_name", APP_NAME);
             metadata.set ("num_visited_urls", p.count_visited_urls ());
             metadata.update (entry.metadata);
 
