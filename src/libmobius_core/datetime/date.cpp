@@ -157,6 +157,38 @@ to_string (const date &d)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create a date object from a YYYY[-]MM[-]DD string
+// @param str string in YYYY[-]MM[-]DD format
+// @return date object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+date
+date_from_yyyymmdd (const std::string &str)
+{
+    int year = 0;
+    int month = 0;
+    int day = 0;
+
+    if (str.length () == 8)
+    {
+        year = std::stoi (str.substr (0, 4));
+        month = std::stoi (str.substr (4, 2));
+        day = std::stoi (str.substr (6, 2));
+    }
+
+    else if (str.length () == 10 && str[4] == '-' && str[7] == '-')
+    {
+        year = std::stoi (str.substr (0, 4));
+        month = std::stoi (str.substr (5, 2));
+        day = std::stoi (str.substr (8, 2));
+    }
+
+    else
+        return {};
+
+    return date (year, month, day);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Write datetime representation to std::ostream
 // @param stream ostream reference
 // @param dt datetime object
