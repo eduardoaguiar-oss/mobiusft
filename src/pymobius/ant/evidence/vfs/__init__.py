@@ -26,7 +26,6 @@ from . import bookmarked_urls
 from . import cookies
 from . import installed_programs
 from . import trash_can_entries
-from . import visited_urls
 from . import wireless_connections
 from . import wireless_networks
 
@@ -35,7 +34,7 @@ from . import wireless_networks
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 ANT_ID = 'evidence.vfs'
 ANT_NAME = 'Evidence Loader Agent - VFS'
-ANT_VERSION = '1.1'
+ANT_VERSION = '1.2'
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # @brief Ants for each evidence type
@@ -47,7 +46,6 @@ ANTS = [
     cookies.Ant,
     installed_programs.Ant,
     trash_can_entries.Ant,
-    visited_urls.Ant,
     wireless_connections.Ant,
     wireless_networks.Ant,
 ]
@@ -91,7 +89,7 @@ class Ant(object):
     # @brief Run ant
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     def run(self):
-        mobius.core.logf(f"INF ant {self.id} started")
+        mobius.core.logf(f"INF ant {self.id} started. Item UID: {self.__item.uid}")
 
         # run sub-ants
         for idx, ant_class in enumerate(ANTS, 1):
