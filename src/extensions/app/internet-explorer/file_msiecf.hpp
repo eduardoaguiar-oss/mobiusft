@@ -20,7 +20,8 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/decoder/data_decoder.hpp>
 #include <mobius/core/io/reader.hpp>
-#include <map>
+#include <mobius/core/pod/data.hpp>
+#include <unordered_map>
 #include <string>
 #include <vector>
 
@@ -51,9 +52,63 @@ class file_msiecf
         std::uint32_t hash = 0;
         std::uint32_t offset = 0;
         std::uint32_t hash_table_idx = 0;
-        std::uint32_t entry_idx = 0;
-        std::uint32_t location_hash = 0;
-        bool is_active = true;
+        std::uint32_t hash_entry_idx = 0;
+        std::uint32_t original_hash = 0;
+        bool is_deleted = false;
+        bool is_active = false;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief URL data
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct url
+    {
+        std::uint32_t record_offset = 0;
+        std::uint32_t record_hash = 0;
+        std::uint32_t record_hash_table_idx = 0;
+        std::uint32_t record_hash_entry_idx = 0;
+        std::uint32_t record_original_hash = 0;
+        std::uint32_t record_calculated_hash = 0;
+        std::uint8_t record_type = 0;
+
+        mobius::core::datetime::datetime modification_time;
+        mobius::core::datetime::datetime access_time;
+        mobius::core::datetime::datetime expiration_time;
+        mobius::core::datetime::datetime last_sync_time;
+        mobius::core::datetime::datetime cached_file_creation_time;
+
+        std::uint32_t calculated_hash = 0;
+        std::uint64_t cached_file_size = 0;
+        std::uint32_t group_offset = 0;
+        std::uint32_t release_seconds = 0;
+        std::uint32_t location_offset = 0;
+        std::uint32_t cache_dir_index = 0;
+        std::uint32_t filename_offset = 0;
+        std::uint32_t flags = 0;
+        std::uint32_t data_offset = 0;
+        std::uint32_t data_size = 0;
+        std::uint32_t extension_offset = 0;
+        std::uint32_t hits = 0;
+
+        std::string location;
+        std::string location_type;
+        std::string location_value;
+        std::string location_username;
+        std::string filename;
+        std::string dirname;
+        std::string page_title;
+        std::string query_string;
+        std::string http_response;
+
+        mobius::core::datetime::date start_period;
+        mobius::core::datetime::date end_period;
+
+        mobius::core::datetime::datetime local_time;
+
+        bool is_deleted = false;
+        bool is_reallocated = false;
+
+        std::unordered_map<std::uint8_t, mobius::core::pod::data> tags;
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -170,6 +225,11 @@ class file_msiecf
         return directories_;
     }
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::vector<url> get_urls () const;
+
   private:
     // @brief Flag is instance
     bool is_instance_ = false;
@@ -204,13 +264,13 @@ class file_msiecf
     // @brief Cache directories
     std::vector<cache_directory_entry> directories_;
 
-    // @brief Record offsets to avoid duplicates
-    std::map<std::uint32_t, std::uint32_t> offsets_;
+    // @brief Offset -> URL mapping
+    std::unordered_map<std::uint32_t, url> urls_;
 
     // Helper functions
     std::uint32_t _decode_hash_table (mobius::core::decoder::data_decoder &);
     void _decode_record (mobius::core::decoder::data_decoder &, const hash_table_record &);
-    void _decode_url_record (mobius::core::decoder::data_decoder &);
+    void _decode_url_record (mobius::core::decoder::data_decoder &, const hash_table_record &);
 };
 
 } // namespace mobius::extension::app::internet_explorer

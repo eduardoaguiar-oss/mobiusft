@@ -87,6 +87,81 @@ show_file (const std::string &path)
         std::cout << "\t" << dir.dirname << '\t' << dir.file_count << std::endl;
 
     std::cout << std::endl;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Show URLs
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::cout << "URLs:" << std::endl;
+
+    for (const auto &url : dat.get_urls ())
+    {
+        std::cout << std::endl;
+        std::cout << "\tURL: " << url.location << std::endl;
+        std::cout << "\t\tRecord Type: " << static_cast<int> (url.record_type) << std::endl;
+        std::cout << "\t\tRecord Offset: " << url.record_offset << " (0x"
+                  << mobius::core::string::to_hex (url.record_offset, 8) << ")" << std::endl;
+        std::cout << "\t\tRecord Hash: 0x" << mobius::core::string::to_hex (url.record_hash, 8) << std::endl;
+        std::cout << "\t\tRecord Original Hash: 0x" << mobius::core::string::to_hex (url.record_original_hash, 8)
+                  << std::endl;
+        std::cout << "\t\tRecord Calculated Hash: 0x" << mobius::core::string::to_hex (url.calculated_hash, 8)
+                  << std::endl;
+        std::cout << "\t\tRecord Hash Table Index: " << url.record_hash_table_idx << std::endl;
+        std::cout << "\t\tRecord Hash Entry Index: " << url.record_hash_entry_idx << std::endl;
+
+        std::cout << std::endl;
+        std::cout << "\t\tAccess Time: " << url.access_time << std::endl;
+        std::cout << "\t\tModification Time: " << url.modification_time << std::endl;
+        std::cout << "\t\tExpiration Time: " << url.expiration_time << std::endl;
+        std::cout << "\t\tLast Sync Time: " << url.last_sync_time << std::endl;
+        std::cout << "\t\tLocal Time: " << url.local_time << std::endl;
+
+        std::cout << std::endl;
+        std::cout << "\t\tLocation: " << url.location << std::endl;
+        std::cout << "\t\tLocation Type: " << url.location_type << std::endl;
+        std::cout << "\t\tLocation Username: " << url.location_username << std::endl;
+        std::cout << "\t\tLocation Value: " << url.location_value << std::endl;
+        std::cout << "\t\tPage Title: " << url.page_title << std::endl;
+        std::cout << "\t\tQuery String: " << url.query_string << std::endl;
+        std::cout << "\t\tHTTP Response: " << url.http_response << std::endl;
+
+        std::cout << std::endl;
+        std::cout << "\t\tFlags: 0x" << mobius::core::string::to_hex (url.flags, 8) << std::endl;
+        std::cout << "\t\tIs Deleted: " << (url.is_deleted ? "true" : "false") << std::endl;
+        std::cout << "\t\tIs Reallocated: " << (url.is_reallocated ? "true" : "false") << std::endl;
+
+        std::cout << "\t\tLocation Offset: " << url.location_offset;
+        if (url.location_offset)
+            std::cout << " (0x" << mobius::core::string::to_hex (url.record_offset + url.location_offset, 8) << ")";
+        std::cout << std::endl;
+
+        std::cout << "\t\tFilename Offset: " << url.filename_offset;
+        if (url.filename_offset)
+            std::cout << " (0x" << mobius::core::string::to_hex (url.record_offset + url.filename_offset, 8) << ")";
+        std::cout << std::endl;
+
+        std::cout << "\t\tData Offset: " << url.data_offset;
+        if (url.data_offset)
+            std::cout << " (0x" << mobius::core::string::to_hex (url.record_offset + url.data_offset, 8) << ")";
+        std::cout << std::endl;
+
+        std::cout << "\t\tData Size: " << url.data_size << std::endl;
+        std::cout << "\t\tHits: " << url.hits << std::endl;
+
+        std::cout << std::endl;
+        std::cout << "\t\tCache Dir Index: " << url.cache_dir_index << std::endl;
+        std::cout << "\t\tDirname: " << url.dirname << std::endl;
+        std::cout << "\t\tFile Name: " << url.filename << std::endl;
+        std::cout << "\t\tFile Size: " << url.cached_file_size << std::endl;
+        std::cout << "\t\tFile Creation Time: " << url.cached_file_creation_time << std::endl;
+
+        std::cout << "\t\tTags: " << url.tags.size () << " entries" << std::endl;
+
+        std::vector<std::pair<std::uint8_t, mobius::core::pod::data>> sorted_tags (url.tags.begin (), url.tags.end ());
+        std::sort (sorted_tags.begin (), sorted_tags.end (), [] (const auto &a, const auto &b) { return a.first < b.first; });
+
+        for (const auto &[k, v] : sorted_tags) // show sorted
+            std::cout << "\t\t\t[0x" << mobius::core::string::to_hex (k, 2) << "]: " << v.to_string () << std::endl;
+    }
 }
 
 } // namespace
