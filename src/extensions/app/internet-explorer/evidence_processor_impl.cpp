@@ -73,6 +73,7 @@ evidence_processor_impl::on_folder_entered (const mobius::core::io::folder &fold
 void
 evidence_processor_impl::on_complete ()
 {
+    _save_visited_urls ();
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -120,9 +121,9 @@ evidence_processor_impl::_decode_index_dat_file (const mobius::core::io::file &f
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Try to parse the index.dat file
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        file_msiecf file_msiecf (f.new_reader ());
+        file_msiecf fm (f.new_reader ());
 
-        if (!file_msiecf)
+        if (!fm)
             return;
 
         log.info (__LINE__, "File decoded [index.dat]: " + f.get_path ());
@@ -130,30 +131,69 @@ evidence_processor_impl::_decode_index_dat_file (const mobius::core::io::file &f
         auto username = mobius::framework::get_username_from_path (f.get_path ());
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // Retrieve data
+        // Retrieve Visited URLs
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        /*for (const auto &item : download_history.to_list ())
+        for (const auto &url : fm.get_urls ())
         {
-            if (item.is_map ())
+            if (url.location_type == "visited" || url.location_type == "mshist")
             {
-                auto map = item.to_map ();
+                visited_url vu;
+                vu.timestamp = url.access_time;
+                vu.title = url.page_title;
+                vu.url = url.location_value;
+                vu.username = username;
 
-                entry e;
+                if (vu.username.empty ())
+                    vu.username = url.location_username;
 
-                e.idx = entries_.size () + 1;
-                e.local_path = map.get<std::string> ("DownloadEntryPath");
-                e.url = map.get<std::string> ("DownloadEntryURL");
-                e.file_size = map.get<std::int64_t> ("DownloadEntryProgressTotalToLoad");
-                e.downloaded_bytes = map.get<std::int64_t> ("DownloadEntryProgressBytesSoFar");
-                e.start_time = map.get<mobius::core::datetime::datetime> ("DownloadEntryDateAddedKey");
-                e.end_time = map.get<mobius::core::datetime::datetime> ("DownloadEntryDateFinishedKey");
-                e.profile_name = map.get<std::string> ("DownloadEntryProfileUUIDStringKey");
-                e.identifier = map.get<std::string> ("DownloadEntryIdentifier");
-                e.sandbox_identifier = map.get<std::string> ("DownloadEntrySandboxIdentifier");
+                vu.metadata.set ("access_time", url.access_time);
+                vu.metadata.set ("data_offset", url.data_offset);
+                vu.metadata.set ("data_size", url.data_size);
+                vu.metadata.set ("expiration_time", url.expiration_time);
+                vu.metadata.set ("filename", url.filename);
+                vu.metadata.set ("filename_offset", url.filename_offset);
+                vu.metadata.set ("hits", url.hits);
+                vu.metadata.set ("is_deleted", url.is_deleted);
+                vu.metadata.set ("is_reallocated", url.is_reallocated);
+                vu.metadata.set ("last_sync_time", url.last_sync_time);
+                vu.metadata.set ("local_time", url.local_time);
+                vu.metadata.set ("location", url.location);
+                vu.metadata.set ("location_offset", url.location_offset);
+                vu.metadata.set ("location_type", url.location_type);
+                vu.metadata.set ("location_username", url.location_username);
+                vu.metadata.set ("location_value", url.location_value);
+                vu.metadata.set ("modification_time", url.modification_time);
+                vu.metadata.set ("page_title", url.page_title);
+                vu.metadata.set ("query_string", url.query_string);
+                vu.metadata.set ("record_calculated_hash", mobius::core::string::to_hex (url.calculated_hash, 8));
+                vu.metadata.set ("record_hash", "0x" + mobius::core::string::to_hex (url.record_hash, 8));
+                vu.metadata.set ("record_hash_table_idx", url.record_hash_table_idx);
+                vu.metadata.set ("record_hash_entry_idx", url.record_hash_entry_idx);
+                vu.metadata.set ("record_offset", url.record_offset);
+                vu.metadata.set ("record_original_hash", mobius::core::string::to_hex (url.record_original_hash, 8));
+                vu.metadata.set ("record_type", url.record_type);
 
-                entries_.push_back (e);
+                // Add sorted tags to metadata
+                std::vector<std::pair<uint8_t, mobius::core::pod::data>> sorted_tags (
+                    url.tags.begin (),
+                    url.tags.end ()
+                );
+
+                std::sort (
+                    sorted_tags.begin (),
+                    sorted_tags.end (),
+                    [] (const auto &a, const auto &b) { return a.first < b.first; }
+                );
+
+                for (const auto &[k, v] : sorted_tags)
+                    vu.metadata.set ("tag_" + mobius::core::string::to_hex (k, 2), v.to_string ());
+
+                // Set the file object for the visited URL entry
+                vu.f = f;
+
+                visited_urls_.push_back (vu);
             }
-        }*/
+        }
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event
@@ -162,7 +202,7 @@ evidence_processor_impl::_decode_index_dat_file (const mobius::core::io::file &f
     }
     catch (const std::exception &e)
     {
-        log.warning (__LINE__, e.what ());
+        log.warning (__LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")");
     }
 }
 
@@ -196,7 +236,32 @@ evidence_processor_impl::_decode_webcachev01_dat_file (const mobius::core::io::f
     }
     catch (const std::exception &e)
     {
-        log.warning (__LINE__, e.what ());
+        log.warning (__LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")");
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save visited URLs
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_processor_impl::_save_visited_urls ()
+{
+    for (const auto &vu : visited_urls_)
+    {
+        auto e = item_.new_evidence ("visited-url");
+
+        e.set_attribute ("username", vu.username);
+        e.set_attribute ("url", vu.url);
+        e.set_attribute ("title", vu.title);
+        e.set_attribute ("timestamp", vu.timestamp);
+        e.set_attribute ("app_name", APP_NAME);
+        e.set_attribute ("metadata", vu.metadata);
+
+        e.set_tag ("app.browser");
+        e.add_source (vu.f);
+
+        // Tell mediator about the new evidence
+        mediator_.on_evidence_created (e);
     }
 }
 

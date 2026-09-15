@@ -33,6 +33,30 @@ class evidence_processor_impl : public mobius::framework::evidence_processor::ev
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Visited URL struct
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct visited_url
+    {
+        // @brief Timestamp
+        mobius::core::datetime::datetime timestamp;
+
+        // @brief Title
+        std::string title;
+
+        // @brief Url
+        std::string url;
+
+        // @brief Username
+        std::string username;
+        
+        // @brief Metadata
+        mobius::core::pod::map metadata;
+
+        // @brief Source file
+        mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     explicit evidence_processor_impl (
@@ -54,12 +78,16 @@ class evidence_processor_impl : public mobius::framework::evidence_processor::ev
     // @brief Mediator
     mobius::framework::evidence_processor::mediator mediator_;
 
+    // @brief Visited URLs
+    std::vector<visited_url> visited_urls_;
+
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _scan_folder (const mobius::core::io::folder &);
     void _decode_index_dat_file (const mobius::core::io::file &);
     void _decode_webcachev01_dat_file (const mobius::core::io::file &);
+    void _save_visited_urls ();
 };
 
 } // namespace mobius::extension::app::internet_explorer
