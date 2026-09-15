@@ -836,6 +836,7 @@ MODEL = [
                   columns=[
                       args(id='timestamp', name="Date/time (UTC)", format='datetime', first_sortable=True),
                       args(id='username', name="User name", is_sortable=True),
+                      args(id='app_name', name="Application", is_sortable=True),
                       args(id="url", name="URL", is_sortable=True),
                   ]),
          ],
@@ -846,6 +847,7 @@ MODEL = [
                       args(id="url", name="URL"),
                       args(id='title', name="Page title"),
                       args(id='username', name="User name"),
+                      args(id='app_name', name="Application"),
                   ]),
          ]
          ),
