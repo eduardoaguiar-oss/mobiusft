@@ -2,9 +2,11 @@ Mobius Forensic Toolkit 2.29
 	* app-safari: Add new C++ extension for Safari browser support
 	* app-internet-explorer: Add new C++ extension for Internet Explorer browser support
 	* app-chromium: Add support for Web Data files v147 and v149
+	* app-chromium: Add attribute "app_name" to Visited URLs
 	* app-emule: Switch to register_implementation/unregister_implementation API
 	* app-emule: Improve Statistics.ini file detection
 	* app-emule: Improve Preferences.ini file detection
+	* app-gecko: Add attribute "app_name" to Visited URLs
 	* os-win: Retrieve LID, PUID, and GDID from Win Profiles
 	* libmobius_core: Add new function datetime::new_datetime_from_cocoa_timestamp
 	* libmobius_core: Add new function decoder::bplist
@@ -19,6 +21,8 @@ Mobius Forensic Toolkit 2.29
 	* libmobius_core: Add new function pod::data::to_bytearray
 	* libmobius_core: Remove pod::data::operator long double
 	* libmobius_core: Add new function decoder::inifile::has_group
+	* libmobius_core: Add safeguard against empty separator in bytearray::find
+	* libmobius_core: Add new function datetime::date_from_yyyymmdd
 	* libmobius_framework: Create new function evidence_processor::unregister_implementation
 	* libmobius_framework: Rename register_evidence_processor_implementation to register_implementation
 	* libmobius_framework: Rename get_evidence_processor_implementation to get_implementation
@@ -38,6 +42,7 @@ Mobius Forensic Toolkit 2.29
 	* libmobius_python: Add new function decoder.inifile.has_group
 	* tools: Add plist_view utility to display .plist files
 	* pymobius.ant.evidence.ufdr: Fix bug in get_status function (Reported by Clemente Paixão)
+	* pymobius.ant.evidence.vfs: Add item.uid to start message
 
 Mobius Forensic Toolkit 2.28
 	* Bundle girepository libraries to improve AppImage portability
