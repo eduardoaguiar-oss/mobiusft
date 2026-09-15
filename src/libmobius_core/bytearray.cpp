@@ -542,6 +542,9 @@ bytearray::split (const bytearray &sep) const
 {
     std::vector<bytearray> pieces;
 
+    if (sep.empty ())
+        return pieces;
+
     auto iter = begin ();
     auto next_iter = std::search (iter, end (), sep.begin (), sep.end ());
 
