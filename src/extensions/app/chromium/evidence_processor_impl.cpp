@@ -970,6 +970,7 @@ evidence_processor_impl::_save_visited_urls ()
             e.set_attribute ("url", entry.url);
             e.set_attribute ("title", entry.title);
             e.set_attribute ("timestamp", entry.timestamp);
+            e.set_attribute ("app_name", p.get_app_name ());
             e.set_attribute ("app_family", APP_FAMILY);
             e.set_attribute ("metadata", entry.metadata);
 
