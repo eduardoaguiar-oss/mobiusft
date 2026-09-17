@@ -3,6 +3,8 @@ Mobius Forensic Toolkit 2.29
 	* app-internet-explorer: Add new C++ extension for Internet Explorer browser support
 	* app-chromium: Add support for Web Data files v147 and v149
 	* app-chromium: Add attribute "app_name" to Visited URLs
+	* app-chromium: Fix SQL error in file_web_data::_get_profile_phones function
+	* app-chromium: Check for meta table before querying in get_db_schema_version function
 	* app-emule: Switch to register_implementation/unregister_implementation API
 	* app-emule: Improve Statistics.ini file detection
 	* app-emule: Improve Preferences.ini file detection
@@ -23,6 +25,9 @@ Mobius Forensic Toolkit 2.29
 	* libmobius_core: Add new function decoder::inifile::has_group
 	* libmobius_core: Add safeguard against empty separator in bytearray::find
 	* libmobius_core: Add new function datetime::date_from_yyyymmdd
+	* libmobius_core: Add new function decoder::triplets
+	* libmobius_core: Add new function decoder::url
+	* libmobius_core: database::new_statement function logs query when an error happens
 	* libmobius_framework: Create new function evidence_processor::unregister_implementation
 	* libmobius_framework: Rename register_evidence_processor_implementation to register_implementation
 	* libmobius_framework: Rename get_evidence_processor_implementation to get_implementation
@@ -43,6 +48,9 @@ Mobius Forensic Toolkit 2.29
 	* tools: Add plist_view utility to display .plist files
 	* pymobius.ant.evidence.ufdr: Fix bug in get_status function (Reported by Clemente Paixão)
 	* pymobius.ant.evidence.vfs: Add item.uid to start message
+	* pymobius.ant.evidence.vfs: Remove legacy module cookies.py
+	* pymobius.ant.evidence.vfs: Remove legacy module visited_urls.py
+	* pymobius.app: Remove legacy package "edge"
 
 Mobius Forensic Toolkit 2.28
 	* Bundle girepository libraries to improve AppImage portability
