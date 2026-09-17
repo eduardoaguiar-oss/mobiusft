@@ -23,7 +23,6 @@ import pymobius.ant.turing
 
 from . import accounts
 from . import bookmarked_urls
-from . import cookies
 from . import installed_programs
 from . import trash_can_entries
 from . import wireless_connections
@@ -43,7 +42,6 @@ ANTS = [
     pymobius.ant.turing.Ant,
     accounts.Ant,
     bookmarked_urls.Ant,
-    cookies.Ant,
     installed_programs.Ant,
     trash_can_entries.Ant,
     wireless_connections.Ant,
