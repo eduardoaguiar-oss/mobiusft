@@ -60,12 +60,10 @@ namespace
 // of the web data schema in Chromium-based applications.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::unordered_set<std::int64_t> UNKNOWN_SCHEMA_VERSIONS = {
-    1,   2,   3,   4,   5,   6,   7,   8,   9,   10,  11,  12,  13,  14,
-    15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,
-    29,  30,  31,  32,  33,  34,  35,  36,  37,  38,  39,  41,  42,  44,
-    47,  49,  50,  51,  53,  54,  57,  59,  62,  63,  66,  68,  69,  73,
-    75,  79,  85,  89,  93,  94,  95,  101, 102, 103, 105, 106, 114, 115,
-    118, 121, 124, 126, 129, 131, 133, 136, 139, 142, 144, 146, 148
+    1,   2,   3,   4,   5,   6,   7,   8,   9,   10,  11,  12,  13,  14,  15,  16,  17,  18,  19,  20, 21,
+    22,  23,  24,  25,  26,  27,  28,  29,  30,  31,  32,  33,  34,  35,  36,  37,  38,  39,  41,  42, 44,
+    47,  49,  50,  51,  53,  54,  57,  59,  62,  63,  66,  68,  69,  73,  75,  79,  85,  89,  93,  94, 95,
+    101, 102, 103, 105, 106, 114, 115, 118, 121, 124, 126, 129, 131, 133, 136, 139, 142, 144, 146, 148
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -121,11 +119,7 @@ namespace
 // @return true if profile is in trash, false otherwise
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static bool
-_is_profile_in_trash (
-    mobius::core::database::database &db,
-    std::int64_t schema_version,
-    const std::string &guid
-)
+_is_profile_in_trash (mobius::core::database::database &db, std::int64_t schema_version, const std::string &guid)
 {
     if (schema_version < 40 || schema_version > 98)
         return false;
@@ -149,11 +143,7 @@ _is_profile_in_trash (
 // @return Vector of autofill profile addresses
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::vector<file_web_data::autofill_profile_address>
-_get_profile_addresses (
-    mobius::core::database::database &db,
-    std::int64_t schema_version,
-    const std::string &guid
-)
+_get_profile_addresses (mobius::core::database::database &db, std::int64_t schema_version, const std::string &guid)
 {
     std::vector<file_web_data::autofill_profile_address> addresses;
 
@@ -246,11 +236,7 @@ _get_profile_addresses (
 // @return Vector of profile emails
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::vector<std::string>
-_get_profile_emails (
-    mobius::core::database::database &db,
-    std::int64_t schema_version,
-    const std::string &guid
-)
+_get_profile_emails (mobius::core::database::database &db, std::int64_t schema_version, const std::string &guid)
 {
     std::vector<std::string> emails;
 
@@ -281,11 +267,7 @@ _get_profile_emails (
 // @return Vector of profile names
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::vector<file_web_data::autofill_profile_name>
-_get_profile_names (
-    mobius::core::database::database &db,
-    std::int64_t schema_version,
-    const std::string &guid
-)
+_get_profile_names (mobius::core::database::database &db, std::int64_t schema_version, const std::string &guid)
 {
     std::vector<file_web_data::autofill_profile_name> names;
 
@@ -363,11 +345,7 @@ _get_profile_names (
 // @return Vector of profile phones
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::vector<file_web_data::autofill_profile_phone>
-_get_profile_phones (
-    mobius::core::database::database &db,
-    std::int64_t schema_version,
-    const std::string &guid
-)
+_get_profile_phones (mobius::core::database::database &db, std::int64_t schema_version, const std::string &guid)
 {
     std::vector<file_web_data::autofill_profile_phone> phones;
 
@@ -376,8 +354,8 @@ _get_profile_phones (
 
     // Prepare statement to retrieve phones from autofill_profile_phones table
     auto stmt = db.new_statement_with_pattern (
-        "SELECT {autofill_profile_phones.type} "
-        "number, "
+        "SELECT {autofill_profile_phones.type}, "
+        "number "
         "FROM autofill_profile_phones "
         "WHERE guid = ?"
     );
@@ -406,14 +384,11 @@ _get_profile_phones (
 // @return Map of server card metadata
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::unordered_map<std::string, server_card_metadata>
-_get_server_card_metadata (
-    mobius::core::database::database &db, std::int64_t schema_version
-)
+_get_server_card_metadata (mobius::core::database::database &db, std::int64_t schema_version)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
-    std::unordered_map<std::string, server_card_metadata>
-        server_card_metadata_map;
+    std::unordered_map<std::string, server_card_metadata> server_card_metadata_map;
 
     try
     {
@@ -458,9 +433,7 @@ _get_server_card_metadata (
 // @return Map of unmasked credit cards
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static std::unordered_map<std::string, unmasked_credit_card>
-_get_unmasked_credit_cards (
-    mobius::core::database::database &db, std::int64_t schema_version
-)
+_get_unmasked_credit_cards (mobius::core::database::database &db, std::int64_t schema_version)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
@@ -534,13 +507,9 @@ file_web_data::file_web_data (const mobius::core::io::reader &reader)
             return;
 
         if (schema_version_ > LAST_KNOWN_SCHEMA_VERSION ||
-            UNKNOWN_SCHEMA_VERSIONS.find (schema_version_) !=
-                UNKNOWN_SCHEMA_VERSIONS.end ())
+            UNKNOWN_SCHEMA_VERSIONS.find (schema_version_) != UNKNOWN_SCHEMA_VERSIONS.end ())
         {
-            log.development (
-                __LINE__,
-                "Unhandled schema version: " + std::to_string (schema_version_)
-            );
+            log.development (__LINE__, "Unhandled schema version: " + std::to_string (schema_version_));
         }
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -604,8 +573,7 @@ file_web_data::_load_autofill_entries (mobius::core::database::database &db)
             entry.count = stmt.get_column_int (2);
             entry.date_created = get_datetime (stmt.get_column_int64 (3));
             entry.date_last_used = get_datetime (stmt.get_column_int64 (4));
-            entry.is_encrypted = entry.value.startswith ("v10") ||
-                                 entry.value.startswith ("v20");
+            entry.is_encrypted = entry.value.startswith ("v10") || entry.value.startswith ("v20");
 
             // Add entry to the list
             autofill_entries_.emplace_back (std::move (entry));
@@ -682,16 +650,11 @@ file_web_data::_load_autofill_profiles (mobius::core::database::database &db)
             profile.date_last_used = get_datetime (stmt.get_column_int64 (18));
             // profile.validity_bitfield = stmt.get_column_string (19);
 
-            profile.is_in_trash =
-                _is_profile_in_trash (db, schema_version_, profile.guid);
-            profile.addresses =
-                _get_profile_addresses (db, schema_version_, profile.guid);
-            profile.emails =
-                _get_profile_emails (db, schema_version_, profile.guid);
-            profile.names =
-                _get_profile_names (db, schema_version_, profile.guid);
-            profile.phones =
-                _get_profile_phones (db, schema_version_, profile.guid);
+            profile.is_in_trash = _is_profile_in_trash (db, schema_version_, profile.guid);
+            profile.addresses = _get_profile_addresses (db, schema_version_, profile.guid);
+            profile.emails = _get_profile_emails (db, schema_version_, profile.guid);
+            profile.names = _get_profile_names (db, schema_version_, profile.guid);
+            profile.phones = _get_profile_phones (db, schema_version_, profile.guid);
 
             // Create address, if available
             auto address_line_1 = stmt.get_column_string (0);
@@ -704,9 +667,8 @@ file_web_data::_load_autofill_profiles (mobius::core::database::database &db)
             auto street_address = stmt.get_column_string (16);
             auto zip_code = stmt.get_column_string (20);
 
-            if (!address_line_1.empty () || !address_line_2.empty () ||
-                !street_address.empty () || !dependent_locality.empty () ||
-                !city.empty () || !state.empty () || !zip_code.empty () ||
+            if (!address_line_1.empty () || !address_line_2.empty () || !street_address.empty () ||
+                !dependent_locality.empty () || !city.empty () || !state.empty () || !zip_code.empty () ||
                 !country_code.empty () || !country.empty ())
             {
                 autofill_profile_address address;
@@ -820,8 +782,7 @@ file_web_data::_load_masked_credit_cards (mobius::core::database::database &db)
 
     auto server_card_metadata = _get_server_card_metadata (db, schema_version_);
 
-    auto unmasked_credit_cards =
-        _get_unmasked_credit_cards (db, schema_version_);
+    auto unmasked_credit_cards = _get_unmasked_credit_cards (db, schema_version_);
 
     try
     {
@@ -866,8 +827,7 @@ file_web_data::_load_masked_credit_cards (mobius::core::database::database &db)
             card.card_art_url = stmt.get_column_string (2);
             card.card_benefit_source = stmt.get_column_int64 (3);
             // card.card_creation_source = stmt.get_column_int64 (4);
-            card.card_info_retrieval_enrollment_state =
-                stmt.get_column_int64 (5);
+            card.card_info_retrieval_enrollment_state = stmt.get_column_int64 (5);
             card.card_issuer = stmt.get_column_int64 (6);
             card.card_issuer_id = stmt.get_column_string (7);
             card.expiration_month = stmt.get_column_int64 (8);
@@ -886,8 +846,7 @@ file_web_data::_load_masked_credit_cards (mobius::core::database::database &db)
             card.virtual_card_enrollment_type = stmt.get_column_int64 (21);
 
             if (!card.last_four.empty ())
-                card.card_number =
-                    std::string ("**** **** **** ") + card.last_four;
+                card.card_number = std::string ("**** **** **** ") + card.last_four;
 
             // name_on_card
             auto name_on_card = stmt.get_column_bytearray (12);
@@ -901,8 +860,7 @@ file_web_data::_load_masked_credit_cards (mobius::core::database::database &db)
             auto iter_server_card = server_card_metadata.find (card.id);
             if (iter_server_card != server_card_metadata.end ())
             {
-                card.billing_address_id =
-                    iter_server_card->second.billing_address_id;
+                card.billing_address_id = iter_server_card->second.billing_address_id;
                 card.use_count = iter_server_card->second.use_count;
                 card.use_date = iter_server_card->second.use_date;
             }
@@ -914,8 +872,7 @@ file_web_data::_load_masked_credit_cards (mobius::core::database::database &db)
                 card.unmask_date = iter_unmasked->second.unmask_date;
                 card.use_count = iter_unmasked->second.use_count;
                 card.use_date = iter_unmasked->second.use_date;
-                card.card_number_encrypted =
-                    iter_unmasked->second.card_number_encrypted;
+                card.card_number_encrypted = iter_unmasked->second.card_number_encrypted;
             }
 
             // Add card to the list
