@@ -55,6 +55,7 @@ add_library(mobius_core_decoder STATIC
     sgml/tokenizer.cpp
     xml/dom.cpp
     xml/element.cpp
+    url.cpp
 )
 
 target_include_directories(mobius_core_decoder PRIVATE
