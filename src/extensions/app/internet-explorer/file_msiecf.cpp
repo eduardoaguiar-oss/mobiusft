@@ -301,6 +301,7 @@ namespace mobius::extension::app::internet_explorer
 // @see MSIE Cache File (index.dat) format specification v0.0.18. By Joachim Metz
 // @see http://www.stevebunting.org/udpd4n6/forensics/index_dat2.htm
 // @see https://www.geoffchappell.com/studies/windows/ie/wininet/api/urlcache/indexdat.htm
+// @see https://kb.digital-detective.net/display/BF/Internet+Explorer
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 file_msiecf::file_msiecf (const mobius::core::io::reader &reader)
 {

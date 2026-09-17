@@ -28,6 +28,7 @@ project(app_internet_explorer LANGUAGES CXX)
 add_library(app_internet_explorer MODULE
     main.cpp
     evidence_processor_impl.cpp
+    file_cookie.cpp
     file_msiecf.cpp
 )
 
@@ -36,9 +37,19 @@ set_target_properties(app_internet_explorer PROPERTIES OUTPUT_NAME "app-internet
 target_link_libraries(app_internet_explorer PRIVATE Mobius::Framework Mobius::Core)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-# Tools: msiecf_view
+# Tools: ie_cookie
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+add_executable(tools_ie_cookie
+    tools/ie_cookie.cpp
+    file_cookie.cpp
+)
+
+set_target_properties(tools_ie_cookie PROPERTIES OUTPUT_NAME "ie_cookie")
+target_link_libraries(tools_ie_cookie PRIVATE Mobius::Framework Mobius::Core)
+
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Tools: msiecf_view
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 add_executable(tools_msiecf_view
     tools/msiecf_view.cpp
     file_msiecf.cpp
@@ -53,5 +64,6 @@ target_link_libraries(tools_msiecf_view PRIVATE Mobius::Framework Mobius::Core)
 install(TARGETS app_internet_explorer LIBRARY DESTINATION share/mobiusft/extensions)
 
 install(TARGETS
+    tools_ie_cookie
     tools_msiecf_view
     RUNTIME DESTINATION share/mobiusft/tools)

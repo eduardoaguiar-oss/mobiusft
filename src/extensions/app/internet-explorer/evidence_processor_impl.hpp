@@ -33,6 +33,36 @@ class evidence_processor_impl : public mobius::framework::evidence_processor::ev
 {
   public:
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Cookie struct
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct cookie
+    {
+        // @brief Domain
+        std::string domain;
+
+        // @brief Name
+        std::string name;
+
+        // @brief Value
+        mobius::core::bytearray value;
+
+        // @brief Creation time
+        mobius::core::datetime::datetime creation_time;
+
+        // @brief Expiration time
+        mobius::core::datetime::datetime expiration_time;
+
+        // @brief Username
+        std::string username;
+
+        // @brief Metadata
+        mobius::core::pod::map metadata;
+
+        // @brief Source file
+        mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Visited URL struct
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct visited_url
@@ -78,6 +108,9 @@ class evidence_processor_impl : public mobius::framework::evidence_processor::ev
     // @brief Mediator
     mobius::framework::evidence_processor::mediator mediator_;
 
+    // @brief Cookies
+    std::vector<cookie> cookies_;
+
     // @brief Visited URLs
     std::vector<visited_url> visited_urls_;
 
@@ -85,8 +118,14 @@ class evidence_processor_impl : public mobius::framework::evidence_processor::ev
     // Helper functions
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _scan_folder (const mobius::core::io::folder &);
+    void _scan_cookies_folder (const mobius::core::io::folder &);
+    void _scan_favorites_folder (const mobius::core::io::folder &);
+
     void _decode_index_dat_file (const mobius::core::io::file &);
     void _decode_webcachev01_dat_file (const mobius::core::io::file &);
+    void _decode_cookie_file (const mobius::core::io::file &);
+
+    void _save_cookies ();
     void _save_visited_urls ();
 };
 

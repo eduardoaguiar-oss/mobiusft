@@ -27,7 +27,10 @@
 #include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/model/evidence.hpp>
 #include <mobius/framework/utils.hpp>
+#include "file_cookie.hpp"
 #include "file_msiecf.hpp"
+
+#include <iostream>
 
 namespace
 {
@@ -65,6 +68,8 @@ void
 evidence_processor_impl::on_folder_entered (const mobius::core::io::folder &folder)
 {
     _scan_folder (folder);
+    _scan_cookies_folder (folder);
+    _scan_favorites_folder (folder);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -73,6 +78,7 @@ evidence_processor_impl::on_folder_entered (const mobius::core::io::folder &fold
 void
 evidence_processor_impl::on_complete ()
 {
+    _save_cookies ();
     _save_visited_urls ();
 }
 
@@ -108,6 +114,119 @@ evidence_processor_impl::_scan_folder (const mobius::core::io::folder &folder)
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Scan folder for Internet Explorer cookies
+// @param folder Folder to scan
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_processor_impl::_scan_cookies_folder (const mobius::core::io::folder &folder)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    if (folder.get_name () != "Cookies")
+        return;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Scan folder
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto w = mobius::core::io::walker (folder);
+
+    for (const auto &[name, f] : w.get_files_with_names ())
+    {
+        try
+        {
+            if (name.ends_with (".txt") || name.ends_with (".cookie"))
+                _decode_cookie_file (f);
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (__LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")");
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Scan folder for Internet Explorer favorites
+// @param folder Folder to scan
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_processor_impl::_scan_favorites_folder (const mobius::core::io::folder &folder)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    //if (folder.get_name () != "Favorites")
+    //    return;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Scan folder
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto w = mobius::core::io::walker (folder);
+
+    for (const auto &[name, f] : w.get_files_with_names ())
+    {
+        try
+        {
+            if (name.ends_with (".url"))
+std::cout << "Decoding favorite file: " << f.get_path () << std::endl;
+                //_decode_favorite_file (f);
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (__LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")");
+        }
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode Internet Explorer favorite file
+// @param f File object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+/*void
+evidence_processor_impl::_decode_favorite_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        file_msiecf fm (f.new_reader ());
+
+        if (!fm)
+            return;
+
+        log.info (__LINE__, "File decoded [favorite]: " + f.get_path ());
+
+        auto username = mobius::framework::get_username_from_path (f.get_path ());
+
+        for (const auto &url : fm.get_urls ())
+        {
+            if (url.location_type == "favorite")
+            {
+                visited_url vu;
+                vu.timestamp = url.access_time;
+                vu.title = url.page_title;
+                vu.url = url.location_value;
+                vu.username = username;
+
+                if (vu.username.empty ())
+                    vu.username = url.location_username;
+
+                vu.metadata.set ("access_time", url.access_time);
+                vu.metadata.set ("data_offset", url.data_offset);
+                vu.metadata.set ("data_size", url.data_size);
+                vu.metadata.set ("expiration_time", url.expiration_time);
+
+                vu.f = f;
+
+                visited_urls_.emplace_back (std::move (vu));
+            }
+        }
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")");
+    }
+}*/
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Add index.dat file
 // @param f File object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -133,6 +252,8 @@ evidence_processor_impl::_decode_index_dat_file (const mobius::core::io::file &f
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Retrieve Visited URLs
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        bool has_iedownload = false;
+
         for (const auto &url : fm.get_urls ())
         {
             if (url.location_type == "visited" || url.location_type == "mshist")
@@ -165,12 +286,18 @@ evidence_processor_impl::_decode_index_dat_file (const mobius::core::io::file &f
                 vu.metadata.set ("modification_time", url.modification_time);
                 vu.metadata.set ("page_title", url.page_title);
                 vu.metadata.set ("query_string", url.query_string);
-                vu.metadata.set ("record_calculated_hash", mobius::core::string::to_hex (url.calculated_hash, 8));
+                vu.metadata.set (
+                    "record_calculated_hash",
+                    "0x" + mobius::core::string::to_hex (url.calculated_hash, 8)
+                );
                 vu.metadata.set ("record_hash", "0x" + mobius::core::string::to_hex (url.record_hash, 8));
                 vu.metadata.set ("record_hash_table_idx", url.record_hash_table_idx);
                 vu.metadata.set ("record_hash_entry_idx", url.record_hash_entry_idx);
                 vu.metadata.set ("record_offset", url.record_offset);
-                vu.metadata.set ("record_original_hash", mobius::core::string::to_hex (url.record_original_hash, 8));
+                vu.metadata.set (
+                    "record_original_hash",
+                    "0x" + mobius::core::string::to_hex (url.record_original_hash, 8)
+                );
                 vu.metadata.set ("record_type", url.record_type);
 
                 // Add sorted tags to metadata
@@ -193,7 +320,13 @@ evidence_processor_impl::_decode_index_dat_file (const mobius::core::io::file &f
 
                 visited_urls_.push_back (vu);
             }
+
+            else if (url.location_type == "iedownload")
+                has_iedownload = true;
         }
+
+        if (has_iedownload)
+            log.development (__LINE__, "IEDownload location type detected. Path: " + f.get_path ());
 
         // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // Emit sampling_file event
@@ -237,6 +370,95 @@ evidence_processor_impl::_decode_webcachev01_dat_file (const mobius::core::io::f
     catch (const std::exception &e)
     {
         log.warning (__LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")");
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Decode cookie file
+// @param f File object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_processor_impl::_decode_cookie_file (const mobius::core::io::file &f)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    try
+    {
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Try to parse the cookie file
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        file_cookie fc (f.new_reader ());
+
+        if (!fc)
+            return;
+
+        log.info (__LINE__, "File decoded [cookie]: " + f.get_path ());
+
+        auto username = mobius::framework::get_username_from_path (f.get_path ());
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Retrieve cookies
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (const auto &c : fc.get_cookies ())
+        {
+            cookie cookie;
+
+            cookie.domain = c.domain;
+            cookie.name = c.name;
+            cookie.value = c.value;
+            cookie.creation_time = c.creation_time;
+            cookie.expiration_time = c.expiration_time;
+            cookie.username = username;
+
+            cookie.metadata.set ("is_secure", c.is_secure);
+            cookie.metadata.set ("is_session", c.is_session);
+            cookie.metadata.set ("is_third_party", c.is_third_party);
+            cookie.metadata.set ("is_restricted", c.is_restricted);
+            cookie.metadata.set ("is_ie6", c.is_ie6);
+            cookie.metadata.set ("is_legacy", c.is_legacy);
+            cookie.metadata.set ("is_httponly", c.is_httponly);
+
+            cookie.f = f;
+
+            cookies_.emplace_back (std::move (cookie));
+        }
+
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Emit sampling_file event
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        mobius::core::emit ("sampling_file", std::string ("app.internet-explorer.cookie"), f.new_reader ());
+    }
+    catch (const std::exception &e)
+    {
+        log.warning (__LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")");
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save cookies
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_processor_impl::_save_cookies ()
+{
+    for (const auto &c : cookies_)
+    {
+        auto e = item_.new_evidence ("cookie");
+        e.set_attribute ("app_id", APP_ID);
+        e.set_attribute ("app_name", APP_NAME);
+        e.set_attribute ("username", c.username);
+        e.set_attribute ("name", c.name);
+        e.set_attribute ("value", c.value);
+        e.set_attribute ("domain", c.domain);
+        e.set_attribute ("creation_time", c.creation_time);
+        e.set_attribute ("expiration_time", c.expiration_time);
+        e.set_attribute ("is_deleted", c.f.is_deleted ());
+        e.set_attribute ("metadata", c.metadata);
+
+        e.set_tag ("app.browser");
+        e.add_source (c.f);
+
+        // Tell mediator about the new evidence
+        mediator_.on_evidence_created (e);
     }
 }
 
