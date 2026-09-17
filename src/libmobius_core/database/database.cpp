@@ -18,6 +18,7 @@
 #include <mobius/core/database/database.hpp>
 #include <mobius/core/database/exception.inc>
 #include <mobius/core/exception.inc>
+#include <mobius/core/log.hpp>
 #include <chrono>
 #include <sqlite3.h>
 #include <stdexcept>
@@ -232,9 +233,7 @@ database::execute (const std::string &sql)
         rc = sqlite3_exec (impl_->db, sql.c_str (), nullptr, nullptr, nullptr);
 
         if (rc == SQLITE_BUSY)
-            std::this_thread::sleep_for (
-                std::chrono::microseconds (SLEEP_TIME)
-            );
+            std::this_thread::sleep_for (std::chrono::microseconds (SLEEP_TIME));
     }
 
     if (rc != SQLITE_OK)
@@ -278,13 +277,16 @@ database::new_statement (const std::string &sql)
         rc = sqlite3_prepare_v2 (impl_->db, sql.c_str (), -1, &stmt, nullptr);
 
         if (rc == SQLITE_BUSY)
-            std::this_thread::sleep_for (
-                std::chrono::microseconds (SLEEP_TIME)
-            );
+            std::this_thread::sleep_for (std::chrono::microseconds (SLEEP_TIME));
     }
 
     if (rc != SQLITE_OK)
+    {
+        mobius::core::log log (__FILE__, __FUNCTION__);
+        log.warning (__LINE__, "Failed to prepare SQL statement: " + sql);
+
         throw std::runtime_error (MOBIUS_EXCEPTION_SQLITE);
+    }
 
     return statement (*this, stmt);
 }
@@ -470,9 +472,7 @@ database::has_table (const std::string &table) const
 // @return true/false
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
-database::table_has_column (
-    const std::string &table, const std::string &column
-) const
+database::table_has_column (const std::string &table, const std::string &column) const
 {
     return sqlite3_table_column_metadata (
                impl_->db,       // db
