@@ -19,8 +19,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/io/reader.hpp>
-#include <map>
 #include <memory>
+#include <tuple>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -36,11 +37,7 @@ class inifile
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Constructors
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    inifile (
-        const mobius::core::io::reader &,
-        const std::string & = "UTF-8",
-        const std::string & = {}
-    );
+    inifile (const mobius::core::io::reader &, const std::string & = "UTF-8", const std::string & = {});
     inifile (inifile &&) noexcept = default;
     inifile (const inifile &) noexcept = default;
 
@@ -58,6 +55,7 @@ class inifile
     std::string get_value (const std::string &, const std::string &) const;
     std::string get_value (const std::string &, const std::string &, const std::string &) const;
     std::map<std::string, std::string> get_values (const std::string &) const;
+    std::vector<std::tuple<std::string, std::string, std::string>> get_values () const;
     void set_case_sensitive (bool);
     void set_comment_char (char);
     void set_value_char (char);
