@@ -63,6 +63,27 @@ class evidence_processor_impl : public mobius::framework::evidence_processor::ev
     };
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Favorite struct
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    struct favorite
+    {
+        // @brief Name
+        std::string name;
+
+        // @brief URL
+        std::string url;
+
+        // @brief Folder within the Favorites directory
+        std::string folder_rpath;
+
+        // @brief Username
+        std::string username;
+
+        // @brief Source file
+        mobius::core::io::file f;
+    };
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // @brief Visited URL struct
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct visited_url
@@ -111,6 +132,9 @@ class evidence_processor_impl : public mobius::framework::evidence_processor::ev
     // @brief Cookies
     std::vector<cookie> cookies_;
 
+    // @brief Favorites
+    std::vector<favorite> favorites_;
+
     // @brief Visited URLs
     std::vector<visited_url> visited_urls_;
 
@@ -119,12 +143,17 @@ class evidence_processor_impl : public mobius::framework::evidence_processor::ev
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     void _scan_folder (const mobius::core::io::folder &);
     void _scan_cookies_folder (const mobius::core::io::folder &);
-    void _scan_favorites_folder (const mobius::core::io::folder &);
+    void _scan_favorites_folder (const mobius::core::io::folder &, const std::string & = {});
+    void _scan_ntuser_dat_folder (const mobius::core::io::folder &);
+
+    std::string _get_favorites_path_from_ntuser_dat (const mobius::core::io::file &);
 
     void _decode_index_dat_file (const mobius::core::io::file &);
     void _decode_webcachev01_dat_file (const mobius::core::io::file &);
     void _decode_cookie_file (const mobius::core::io::file &);
+    void _decode_favorite_file (const mobius::core::io::file &, const std::string &);
 
+    void _save_bookmarked_urls ();
     void _save_cookies ();
     void _save_visited_urls ();
 };

@@ -17,14 +17,14 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "evidence_processor_impl.hpp"
 #include <mobius/core/datasource/datasource_vfs.hpp>
+#include <mobius/core/decoder/inifile.hpp>
 #include <mobius/core/io/path.hpp>
-#include <mobius/core/io/uri.hpp>
 #include <mobius/core/io/walker.hpp>
 #include <mobius/core/log.hpp>
 #include <mobius/core/mediator.hpp>
+#include <mobius/core/os/win/registry/hive_file.hpp>
 #include <mobius/core/pod/data.hpp>
 #include <mobius/core/string_functions.hpp>
-#include <mobius/framework/evidence_flag.hpp>
 #include <mobius/framework/model/evidence.hpp>
 #include <mobius/framework/utils.hpp>
 #include "file_cookie.hpp"
@@ -69,7 +69,7 @@ evidence_processor_impl::on_folder_entered (const mobius::core::io::folder &fold
 {
     _scan_folder (folder);
     _scan_cookies_folder (folder);
-    _scan_favorites_folder (folder);
+    _scan_ntuser_dat_folder (folder);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -78,6 +78,7 @@ evidence_processor_impl::on_folder_entered (const mobius::core::io::folder &fold
 void
 evidence_processor_impl::on_complete ()
 {
+    _save_bookmarked_urls ();
     _save_cookies ();
     _save_visited_urls ();
 }
@@ -145,29 +146,26 @@ evidence_processor_impl::_scan_cookies_folder (const mobius::core::io::folder &f
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Scan folder for Internet Explorer favorites
-// @param folder Folder to scan
+// @brief Scan folder for NTUSER.DAT files
+// @param folder Folder object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void
-evidence_processor_impl::_scan_favorites_folder (const mobius::core::io::folder &folder)
+evidence_processor_impl::_scan_ntuser_dat_folder (const mobius::core::io::folder &folder)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
+    mobius::core::io::walker w (folder);
 
-    //if (folder.get_name () != "Favorites")
-    //    return;
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // Scan folder
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    auto w = mobius::core::io::walker (folder);
-
-    for (const auto &[name, f] : w.get_files_with_names ())
+    for (const auto &f : w.get_files_by_name ("ntuser.dat"))
     {
         try
         {
-            if (name.ends_with (".url"))
-std::cout << "Decoding favorite file: " << f.get_path () << std::endl;
-                //_decode_favorite_file (f);
+            auto favorites = _get_favorites_path_from_ntuser_dat (f);
+
+            if (!favorites.empty ())
+            {
+                for (const auto &folder : w.get_folders_by_name (favorites))
+                    _scan_favorites_folder (folder);
+            }
         }
         catch (const std::exception &e)
         {
@@ -177,54 +175,124 @@ std::cout << "Decoding favorite file: " << f.get_path () << std::endl;
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get the path to the Favorites folder from an NTUSER.DAT file
+// @param f NTUSER.DAT file object
+// @return Path to the Favorites folder as a string
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::string
+evidence_processor_impl::_get_favorites_path_from_ntuser_dat (const mobius::core::io::file &f)
+{
+    try
+    {
+        // Open the NTUSER.DAT file as a registry hive
+        auto reg = mobius::core::os::win::registry::hive_file (f.new_reader ());
+
+        if (!reg.is_instance ())
+            return {};
+
+        // Get the Shell Folders key from the registry
+        const auto root_key = reg.get_root_key ();
+        const auto shell_folders_key =
+            root_key.get_key_by_path ("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders");
+
+        if (!shell_folders_key)
+            return {};
+
+        // Get the path of the Favorites folder
+        auto favorites = shell_folders_key.get_data_by_name ("Favorites").get_data_as_string ("utf-16le");
+
+        if (favorites.empty ())
+            return {};
+
+        // Get file name from the path
+        auto pos = favorites.rfind ('\\');
+
+        if (pos != std::string::npos)
+            return favorites.substr (pos + 1);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::core::log log (__FILE__, __FUNCTION__);
+        log.warning (__LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")");
+    }
+
+    return {};
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Scan folder for Internet Explorer favorites
+// @param folder Folder to scan
+// @param rpath Relative path within the Favorites folder
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_processor_impl::_scan_favorites_folder (const mobius::core::io::folder &folder, const std::string &rpath)
+{
+    mobius::core::log log (__FILE__, __FUNCTION__);
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Scan files
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto w = mobius::core::io::walker (folder);
+
+    for (const auto &f : w.get_files_by_pattern ("*.url"))
+    {
+        try
+        {
+            _decode_favorite_file (f, rpath);
+        }
+        catch (const std::exception &e)
+        {
+            log.warning (__LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")");
+        }
+    }
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Scan subfolders
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    auto subpath = rpath;
+
+    if (!subpath.empty ())
+        subpath += "/";
+
+    for (const auto &child : w.get_folders ())
+        _scan_favorites_folder (child, subpath + child.get_name ());
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Decode Internet Explorer favorite file
 // @param f File object
+// @param rpath Relative path within the Favorites folder
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-/*void
-evidence_processor_impl::_decode_favorite_file (const mobius::core::io::file &f)
+void
+evidence_processor_impl::_decode_favorite_file (const mobius::core::io::file &f, const std::string &rpath)
 {
     mobius::core::log log (__FILE__, __FUNCTION__);
 
     try
     {
-        file_msiecf fm (f.new_reader ());
+        mobius::core::decoder::inifile ini (f.new_reader ());
 
-        if (!fm)
-            return;
+        auto url = ini.get_value ("internetshortcut", "url");
 
-        log.info (__LINE__, "File decoded [favorite]: " + f.get_path ());
-
-        auto username = mobius::framework::get_username_from_path (f.get_path ());
-
-        for (const auto &url : fm.get_urls ())
+        if (!url.empty ())
         {
-            if (url.location_type == "favorite")
-            {
-                visited_url vu;
-                vu.timestamp = url.access_time;
-                vu.title = url.page_title;
-                vu.url = url.location_value;
-                vu.username = username;
+            favorite fav;
 
-                if (vu.username.empty ())
-                    vu.username = url.location_username;
+            fav.name = f.get_name ();
+            fav.name = fav.name.substr (0, fav.name.size () - 4);
+            fav.url = url;
+            fav.folder_rpath = rpath;
+            fav.f = f;
+            fav.username = mobius::framework::get_username_from_path (f.get_path ());
 
-                vu.metadata.set ("access_time", url.access_time);
-                vu.metadata.set ("data_offset", url.data_offset);
-                vu.metadata.set ("data_size", url.data_size);
-                vu.metadata.set ("expiration_time", url.expiration_time);
-
-                vu.f = f;
-
-                visited_urls_.emplace_back (std::move (vu));
-            }
+            favorites_.emplace_back (std::move (fav));
         }
     }
     catch (const std::exception &e)
     {
         log.warning (__LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")");
     }
-}*/
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Add index.dat file
@@ -431,6 +499,40 @@ evidence_processor_impl::_decode_cookie_file (const mobius::core::io::file &f)
     catch (const std::exception &e)
     {
         log.warning (__LINE__, std::string (e.what ()) + " (file: " + f.get_path () + ")");
+    }
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Save bookmarked URLs
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+void
+evidence_processor_impl::_save_bookmarked_urls ()
+{
+    for (const auto &fav : favorites_)
+    {
+        auto e = item_.new_evidence ("bookmarked-url");
+
+        // Set attributes
+        e.set_attribute ("name", fav.name);
+        e.set_attribute ("url", fav.url);
+        e.set_attribute ("folder", fav.folder_rpath);
+        e.set_attribute ("username", fav.username);
+        e.set_attribute ("app_name", APP_NAME);
+        e.set_attribute ("creation_time", fav.f.get_creation_time ());
+
+        // Set metadata
+        auto metadata = mobius::core::pod::map ();
+        metadata.set("modification_time", fav.f.get_modification_time ());
+        metadata.set("last_access_time", fav.f.get_access_time ());
+
+        e.set_attribute ("metadata", metadata);
+
+        // Set tag and source
+        e.set_tag ("app.browser");
+        e.add_source (fav.f);
+
+        // Tell mediator about the new evidence
+        mediator_.on_evidence_created (e);
     }
 }
 
