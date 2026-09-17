@@ -299,12 +299,39 @@ class ProcessingView(object):
     def __update_options(self):
         selected_rows = self.__status_tableview.get_selected_rows()
         selected_items = [row[3] for (row_id, row) in selected_rows]
-        can_run = any(item for item in selected_items if item.has_datasource() and item not in self.__running_items)
-        can_update = any(item for item in selected_items if item.has_ant('evidence') and item not in self.__running_items)
+        can_run = any(item for item in selected_items if self.__can_run(item))
+        can_update = any(item for item in selected_items if self.__can_update(item))
 
         self.__execute_button.set_sensitive(can_run)
         self.__update_button.set_sensitive(can_update)
         self.__profile_combobox.set_sensitive(can_run)
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Check if an item can run
+    # @param item Item to check
+    # @return True if the item can run, False otherwise
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __can_run(self, item):
+        if item in self.__running_items:
+            return False
+        
+        if not item.has_datasource():
+            return False
+
+        datasource = item.get_datasource()
+
+        if not datasource.is_available():
+            return False
+
+        return True
+
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    # @brief Check if an item can be updated
+    # @param item Item to check
+    # @return True if the item can be updated, False otherwise
+    # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    def __can_update(self, item):
+        return self.__can_run(item) and item.has_ant('evidence')
 
     # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     # @brief Update running timer based on selection
