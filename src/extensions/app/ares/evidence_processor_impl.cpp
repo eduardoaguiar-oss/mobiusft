@@ -370,8 +370,8 @@ evidence_processor_impl::_decode_ntuser_dat_file (
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     // Get evidences from Ares key
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    const auto &root_key = decoder.get_root_key ();
-    const auto &ares_key = root_key.get_key_by_path ("Software\\Ares");
+    const auto root_key = decoder.get_root_key ();
+    const auto ares_key = root_key.get_key_by_path ("Software\\Ares");
 
     if (ares_key)
     {

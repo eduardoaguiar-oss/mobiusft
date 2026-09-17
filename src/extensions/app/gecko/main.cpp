@@ -25,7 +25,7 @@ extern "C"
 {
     const char *EXTENSION_ID = "app-gecko";
     const char *EXTENSION_NAME = "App Gecko";
-    const char *EXTENSION_VERSION = "1.1";
+    const char *EXTENSION_VERSION = "1.2";
     const char *EXTENSION_AUTHORS = "Eduardo Aguiar";
     const char *EXTENSION_DESCRIPTION = "Gecko based browsers support";
 } // extern "C"
