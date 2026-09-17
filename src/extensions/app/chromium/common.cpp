@@ -36,10 +36,8 @@ namespace
 static constexpr bool DEBUG = false;
 
 // @brief DPAPI prefix used to identify encrypted data
-const mobius::core::bytearray DPAPI_PREFIX = {0x01, 0x00, 0x00, 0x00, 0xd0,
-                                              0x8c, 0x9d, 0xdf, 0x01, 0x15,
-                                              0xd1, 0x11, 0x8c, 0x7a, 0x00,
-                                              0xc0, 0x4f, 0xc2, 0x97, 0xeb};
+const mobius::core::bytearray DPAPI_PREFIX = {0x01, 0x00, 0x00, 0x00, 0xd0, 0x8c, 0x9d, 0xdf, 0x01, 0x15,
+                                              0xd1, 0x11, 0x8c, 0x7a, 0x00, 0xc0, 0x4f, 0xc2, 0x97, 0xeb};
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Known Chromium browsers
@@ -49,85 +47,76 @@ const mobius::core::bytearray DPAPI_PREFIX = {0x01, 0x00, 0x00, 0x00, 0xd0,
 // and can change over time as new browsers are released or existing ones are
 // updated.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::vector<std::tuple<std::string, std::string, std::string>>
-    chromiumBrowsers = {
+std::vector<std::tuple<std::string, std::string, std::string>> chromiumBrowsers = {
 
-        // Most popular Chromium-based browsers first
-        {"/google/chrome/user data/", "chrome", "Google Chrome"},
-        {"/microsoft/edge/user data/", "edge", "Microsoft Edge"},
-        {"/bravesoftware/brave-browser/user data/", "brave", "Brave"},
-        {"/opera software/opera stable", "opera", "Opera"},
-        {"/vivaldi/user data/", "vivaldi", "Vivaldi"},
-        {"/yandex/yandexbrowser/user data/", "yandex", "Yandex Browser"},
-        {"/chromium/user data/", "chromium", "Chromium"},
+    // Most popular Chromium-based browsers first
+    {"/google/chrome/user data/", "chrome", "Google Chrome"},
+    {"/microsoft/edge/user data/", "edge", "Microsoft Edge"},
+    {"/bravesoftware/brave-browser/user data/", "brave", "Brave"},
+    {"/opera software/opera stable", "opera", "Opera"},
+    {"/vivaldi/user data/", "vivaldi", "Vivaldi"},
+    {"/yandex/yandexbrowser/user data/", "yandex", "Yandex Browser"},
+    {"/chromium/user data/", "chromium", "Chromium"},
 
-        // Other Chromium-based browsers
-        {"/1stbrowser/user data/", "1stbrowser", "1st Browser"},
-        {"/7star/7star/user data/", "7star", "7 Star"},
-        {"/aliexpress/user data/", "aliexpress", "AliExpress"},
-        {"/amigo/user data/", "amigo", "Amigo"},
-        {"/appkiwi/user data/", "appkiwi", "AppKiwi"},
-        {"/avast software/browser/user data/", "avast", "Avast Browser"},
-        {"/bobrowser/user data/", "bobrowser", "BoBrowser"},
-        {"/ccleaner browser/user data/", "ccleaner", "CCleaner Browser"},
-        {"/centbrowser/user data/", "centbrowser", "CentBrowser"},
-        {"/chedot/user data/", "chedot", "Chedot"},
-        {"/chromium/user data/", "chromium", "Chromium"},
-        {"/ckaach", "ckaach", "Ckaach"},
-        {"/coccoc/browser/user data/", "coccoc", "Coccoc"},
-        {"/comodo/dragon/user data/", "comodo", "Comodo Dragon"},
-        {"/cryptotab browser/user data/", "cryptotab", "CryptoTab Browser"},
-        {"/discord", "discord", "Discord"},
-        {"/elements browser/user data/", "elements", "Elements Browser"},
-        {"/epic privacy browser/user data/", "epic", "Epic Privacy Browser"},
-        {"/google/chrome sxs/user data/", "chrome.canary", "Chrome Canary"},
-        {"/kiwi/user data/", "kiwi", "Kiwi Browser"},
-        {"/kodi/userdata/addon_data/plugin.program.browser.launcher/profile/2",
-         "kodi.browser", "Kodi Browser Launcher"},
-        {"/kodi/userdata/addon_data/plugin.program.chrome.launcher/profile",
-         "kodi.chrome", "Kodi Chrome Launcher"},
-        {"/kometa/user data/", "kometa", "Kometa"},
-        {"/lunascape/user data/", "lunascape", "Lunascape"},
-        {"/maxthon/user data/", "maxthon", "Maxthon"},
-        {"/microsoft/edge beta/user data/", "edge.beta", "Microsoft Edge Beta"},
-        {"/microsoft/edge dev/user data/", "edge.dev", "Microsoft Edge Dev"},
-        {"/microsoft/edge sxs/user data/", "edge.canary",
-         "Microsoft Edge Canary"},
-        {"/microsoft/office/", "office", "Microsoft Office"},
-        {"/microsoft/onedrive/", "onedrive", "Microsoft OneDrive"},
-        {"/mighty browser/user data/", "mighty", "Mighty Browser"},
-        {"/naver/whale/user data/", "whale", "Naver Whale"},
-        {"/opera software/opera gx stable", "opera-gx", "Opera GX"},
-        {"/orbitum/user data/", "orbitum", "Orbitum"},
-        {"/packages/microsoft.copilot_8wekyb3d8bbwe/", "copilot",
-         "Microsoft Copilot"},
-        {"/packages/microsoft.microsoftofficehub_8wekyb3d8bbwe", "officehub",
-         "Microsoft Office Hub"},
-        {"/packages/microsoft.skypeapp_kzf8qxf38zg5c", "skype", "Skype App"},
-        {"/packages/microsoft.windowscommunicationsapps_8wekyb3d8bbwe", "mail",
-         "Windows Mail and Calendar"},
-        {"/packages/spotifyab.spotifymusic_zpdnekdrzrea0", "spotify",
-         "Spotify"},
-        {"/packages/msteams_8wekyb3d8bbwe", "teams", "Microsoft Teams"},
-        {"/pale moon/user data/", "palemoon", "Pale Moon"},
-        {"/plutotv", "plutotv", "PlutoTV"},
-        {"/puffin/user data/", "puffin", "Puffin"},
-        {"/qutebrowser/user data/", "qutebrowser", "QuteBrowser"},
-        {"/qqbrowser/user data/", "qqbrowser", "QQ Browser"},
-        {"/rambox/user data/", "rambox", "Rambox"},
-        {"/razer/chroma/user data/", "razer", "Razer Chroma"},
-        {"/roaming/whatsapp", "whatsapp", "WhatsApp"},
-        {"/rockmelt/user data/", "rockmelt", "Rockmelt"},
-        {"/sleipnir/user data/", "sleipnir", "Sleipnir"},
-        {"/slimjet/user data/", "slimjet", "Slimjet"},
-        {"/sputnik/sputnik/user data/", "sputnik", "Sputnik"},
-        {"/temp/avastbcltmp/chrome", "avast.bcltmp", "Avast Browser Cleanup"},
-        {"/temp/bcltmp/chrome", "chrome.bcltmp",
-         "Google Chrome from Avast Browser Cleanup"},
-        {"/torch/user data/", "torch", "Torch"},
-        {"/ucbrowser/user data/", "ucbrowser", "UC Browser"},
-        {"/ucozmedia/uran/user data/", "uran", "Uran"},
-        {"/zoom", "zoom", "Zoom"},
+    // Other Chromium-based browsers
+    {"/1stbrowser/user data/", "1stbrowser", "1st Browser"},
+    {"/7star/7star/user data/", "7star", "7 Star"},
+    {"/aliexpress/user data/", "aliexpress", "AliExpress"},
+    {"/amigo/user data/", "amigo", "Amigo"},
+    {"/appkiwi/user data/", "appkiwi", "AppKiwi"},
+    {"/avast software/browser/user data/", "avast", "Avast Browser"},
+    {"/bobrowser/user data/", "bobrowser", "BoBrowser"},
+    {"/ccleaner browser/user data/", "ccleaner", "CCleaner Browser"},
+    {"/centbrowser/user data/", "centbrowser", "CentBrowser"},
+    {"/chedot/user data/", "chedot", "Chedot"},
+    {"/chromium/user data/", "chromium", "Chromium"},
+    {"/ckaach", "ckaach", "Ckaach"},
+    {"/coccoc/browser/user data/", "coccoc", "Coccoc"},
+    {"/comodo/dragon/user data/", "comodo", "Comodo Dragon"},
+    {"/cryptotab browser/user data/", "cryptotab", "CryptoTab Browser"},
+    {"/discord", "discord", "Discord"},
+    {"/elements browser/user data/", "elements", "Elements Browser"},
+    {"/epic privacy browser/user data/", "epic", "Epic Privacy Browser"},
+    {"/google/chrome sxs/user data/", "chrome.canary", "Chrome Canary"},
+    {"/kiwi/user data/", "kiwi", "Kiwi Browser"},
+    {"/kodi/userdata/addon_data/plugin.program.browser.launcher/profile/2", "kodi.browser", "Kodi Browser Launcher"},
+    {"/kodi/userdata/addon_data/plugin.program.chrome.launcher/profile", "kodi.chrome", "Kodi Chrome Launcher"},
+    {"/kometa/user data/", "kometa", "Kometa"},
+    {"/lunascape/user data/", "lunascape", "Lunascape"},
+    {"/maxthon/user data/", "maxthon", "Maxthon"},
+    {"/microsoft/edge beta/user data/", "edge.beta", "Microsoft Edge Beta"},
+    {"/microsoft/edge dev/user data/", "edge.dev", "Microsoft Edge Dev"},
+    {"/microsoft/edge sxs/user data/", "edge.canary", "Microsoft Edge Canary"},
+    {"/microsoft/office/", "office", "Microsoft Office"},
+    {"/microsoft/onedrive/", "onedrive", "Microsoft OneDrive"},
+    {"/mighty browser/user data/", "mighty", "Mighty Browser"},
+    {"/naver/whale/user data/", "whale", "Naver Whale"},
+    {"/opera software/opera gx stable", "opera-gx", "Opera GX"},
+    {"/orbitum/user data/", "orbitum", "Orbitum"},
+    {"/packages/microsoft.copilot_8wekyb3d8bbwe/", "copilot", "Microsoft Copilot"},
+    {"/packages/microsoft.microsoftofficehub_8wekyb3d8bbwe", "officehub", "Microsoft Office Hub"},
+    {"/packages/microsoft.skypeapp_kzf8qxf38zg5c", "skype", "Skype App"},
+    {"/packages/microsoft.windowscommunicationsapps_8wekyb3d8bbwe", "mail", "Windows Mail and Calendar"},
+    {"/packages/spotifyab.spotifymusic_zpdnekdrzrea0", "spotify", "Spotify"},
+    {"/packages/msteams_8wekyb3d8bbwe", "teams", "Microsoft Teams"},
+    {"/pale moon/user data/", "palemoon", "Pale Moon"},
+    {"/plutotv", "plutotv", "PlutoTV"},
+    {"/puffin/user data/", "puffin", "Puffin"},
+    {"/qutebrowser/user data/", "qutebrowser", "QuteBrowser"},
+    {"/qqbrowser/user data/", "qqbrowser", "QQ Browser"},
+    {"/rambox/user data/", "rambox", "Rambox"},
+    {"/razer/chroma/user data/", "razer", "Razer Chroma"},
+    {"/roaming/whatsapp", "whatsapp", "WhatsApp"},
+    {"/rockmelt/user data/", "rockmelt", "Rockmelt"},
+    {"/sleipnir/user data/", "sleipnir", "Sleipnir"},
+    {"/slimjet/user data/", "slimjet", "Slimjet"},
+    {"/sputnik/sputnik/user data/", "sputnik", "Sputnik"},
+    {"/temp/avastbcltmp/chrome", "avast.bcltmp", "Avast Browser Cleanup"},
+    {"/temp/bcltmp/chrome", "chrome.bcltmp", "Google Chrome from Avast Browser Cleanup"},
+    {"/torch/user data/", "torch", "Torch"},
+    {"/ucbrowser/user data/", "ucbrowser", "UC Browser"},
+    {"/ucozmedia/uran/user data/", "uran", "Uran"},
+    {"/zoom", "zoom", "Zoom"},
 };
 
 } // namespace
@@ -150,8 +139,7 @@ duration_to_string (std::uint64_t duration)
     seconds = seconds % 60;
 
     std::stringstream ss;
-    ss << std::setfill ('0') << std::setw (2) << hours << ":"
-       << std::setfill ('0') << std::setw (2) << minutes << ":"
+    ss << std::setfill ('0') << std::setw (2) << hours << ":" << std::setfill ('0') << std::setw (2) << minutes << ":"
        << std::setfill ('0') << std::setw (2) << seconds;
 
     if (microseconds > 0)
@@ -172,19 +160,13 @@ get_datetime (std::uint64_t timestamp)
         return {};
 
     else if (timestamp <= std::numeric_limits<std::uint32_t>::max ())
-        return mobius::core::datetime::new_datetime_from_unix_timestamp (
-            timestamp
-        );
+        return mobius::core::datetime::new_datetime_from_unix_timestamp (timestamp);
 
     else if (timestamp < 10000000000000000)
-        return mobius::core::datetime::new_datetime_from_unix_timestamp (
-            timestamp / 1000000
-        );
+        return mobius::core::datetime::new_datetime_from_unix_timestamp (timestamp / 1000000);
 
     else
-        return mobius::core::datetime::new_datetime_from_nt_timestamp (
-            timestamp * 10
-        );
+        return mobius::core::datetime::new_datetime_from_nt_timestamp (timestamp * 10);
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -223,33 +205,26 @@ get_db_schema_version (mobius::core::database::database db)
 
     try
     {
-        auto stmt =
-            db.new_statement ("SELECT value FROM meta WHERE key = 'version'");
+        if (!db.has_table ("meta"))
+            return schema_version;
+
+        auto stmt = db.new_statement ("SELECT value FROM meta WHERE key = 'version'");
 
         if (stmt.fetch_row ())
         {
             schema_version = stmt.get_column_int64 (0);
 
             if (!schema_version)
-            {
-                log.warning (
-                    __LINE__, "Schema version = 0. Path: " + db.get_path ()
-                );
-            }
+                log.warning (__LINE__, "Schema version = 0. Path: " + db.get_path ());
         }
         else
         {
-            log.warning (
-                __LINE__, "Schema version not found in meta table. Path: " +
-                              db.get_path ()
-            );
+            log.warning (__LINE__, "Schema version not found in meta table. Path: " + db.get_path ());
         }
     }
     catch (const std::exception &e)
     {
-        log.warning (
-            __LINE__, std::string (e.what ()) + ". Path: " + db.get_path ()
-        );
+        log.warning (__LINE__, std::string (e.what ()) + ". Path: " + db.get_path ());
     }
 
     return schema_version;
@@ -290,8 +265,7 @@ get_app_from_path (const std::string &path)
 bool
 is_encrypted (const mobius::core::bytearray &data)
 {
-    return data.startswith ("v10") || data.startswith ("v20") ||
-           data.startswith (DPAPI_PREFIX);
+    return data.startswith ("v10") || data.startswith ("v20") || data.startswith (DPAPI_PREFIX);
 }
 
 } // namespace mobius::extension::app::chromium
