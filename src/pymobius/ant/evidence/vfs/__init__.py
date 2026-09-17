@@ -22,7 +22,6 @@ import mobius.framework
 import pymobius.ant.turing
 
 from . import accounts
-from . import bookmarked_urls
 from . import installed_programs
 from . import trash_can_entries
 from . import wireless_connections
@@ -41,7 +40,6 @@ ANT_VERSION = '1.2'
 ANTS = [
     pymobius.ant.turing.Ant,
     accounts.Ant,
-    bookmarked_urls.Ant,
     installed_programs.Ant,
     trash_can_entries.Ant,
     wireless_connections.Ant,
