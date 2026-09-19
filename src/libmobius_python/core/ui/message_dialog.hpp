@@ -18,8 +18,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
 #include <mobius/core/ui/message_dialog.hpp>
+#include <Python.h>
 #include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -33,11 +33,9 @@ typedef struct
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-mobius::py::pytypeobject new_ui_message_dialog_type ();
+mobius::py::pytypeobject new_core_ui_message_dialog_type ();
 bool pymobius_core_ui_message_dialog_check (PyObject *);
-PyObject *pymobius_core_ui_message_dialog_to_pyobject (
-    const mobius::core::ui::message_dialog &);
-mobius::core::ui::message_dialog
-pymobius_core_ui_message_dialog_from_pyobject (PyObject *);
+PyObject *pymobius_core_ui_message_dialog_to_pyobject (const mobius::core::ui::message_dialog &);
+mobius::core::ui::message_dialog pymobius_core_ui_message_dialog_from_pyobject (PyObject *);
 
 #endif

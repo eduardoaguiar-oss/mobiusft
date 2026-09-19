@@ -26,6 +26,13 @@
 #include <pymobius.hpp>
 #include <stdexcept>
 
+namespace
+{
+// @brief Global pointer to hold the heap-allocated type
+static PyTypeObject *core_ui_message_dialog_type = nullptr;
+
+} // namespace
+
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief <i>type</i> Attribute getter
 // @param self Object
@@ -424,68 +431,46 @@ tp_dealloc (core_ui_message_dialog_o *self)
     Py_TYPE (self)->tp_free ((PyObject *) self);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Type structure
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyTypeObject core_ui_message_dialog_t = {
-    PyVarObject_HEAD_INIT (nullptr, 0)        // header
-    "mobius.core.ui.message_dialog",          // tp_name
-    sizeof (core_ui_message_dialog_o),        // tp_basicsize
-    0,                                        // tp_itemsize
-    (destructor) tp_dealloc,                  // tp_dealloc
-    0,                                        // tp_print
-    0,                                        // tp_getattr
-    0,                                        // tp_setattr
-    0,                                        // tp_compare
-    0,                                        // tp_repr
-    0,                                        // tp_as_number
-    0,                                        // tp_as_sequence
-    0,                                        // tp_as_mapping
-    0,                                        // tp_hash
-    0,                                        // tp_call
-    0,                                        // tp_str
-    0,                                        // tp_getattro
-    0,                                        // tp_setattro
-    0,                                        // tp_as_buffer
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE, // tp_flags
-    "Message Dialog class",                   // tp_doc
-    0,                                        // tp_traverse
-    0,                                        // tp_clear
-    0,                                        // tp_richcompare
-    0,                                        // tp_weaklistoffset
-    0,                                        // tp_iter
-    0,                                        // tp_iternext
-    tp_methods,                               // tp_methods
-    0,                                        // tp_members
-    tp_getset,                                // tp_getset
-    0,                                        // tp_base
-    0,                                        // tp_dict
-    0,                                        // tp_descr_get
-    0,                                        // tp_descr_set
-    0,                                        // tp_dictoffset
-    0,                                        // tp_init
-    0,                                        // tp_alloc
-    tp_new,                                   // tp_new
-    0,                                        // tp_free
-    0,                                        // tp_is_gc
-    0,                                        // tp_bases
-    0,                                        // tp_mro
-    0,                                        // tp_cache
-    0,                                        // tp_subclasses
-    0,                                        // tp_weaklist
-    0,                                        // tp_del
-    0,                                        // tp_version_tag
-    0,                                        // tp_finalize
-    nullptr,                                  // tp_vectorcall
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type Slots
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Slot core_ui_message_dialog_slots[] = {
+    {Py_tp_new, reinterpret_cast<void *> (tp_new)},
+    {Py_tp_dealloc, reinterpret_cast<void *> (tp_dealloc)},
+    {Py_tp_doc, const_cast<char *> ("core.ui.message_dialog class")},
+    {Py_tp_getset, reinterpret_cast<void *> (tp_getset)},
+    {Py_tp_methods, reinterpret_cast<void *> (tp_methods)},
+    {0, nullptr} // Sentinel
 };
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Type specification
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+static PyType_Spec core_ui_message_dialog_spec = {
+    .name = "mobius.core.ui.message_dialog",
+    .basicsize = sizeof (core_ui_message_dialog_o),
+    .itemsize = 0,
+    .flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .slots = core_ui_message_dialog_slots,
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Create <i>mobius.core.ui.message_dialog</i> type
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::py::pytypeobject
-new_ui_message_dialog_type ()
+new_core_ui_message_dialog_type ()
 {
-    mobius::py::pytypeobject type (&core_ui_message_dialog_t);
+    // If type is already created, return it
+    if (core_ui_message_dialog_type)
+        return mobius::py::pytypeobject (core_ui_message_dialog_type);
+
+    // Allocate type from spec
+    core_ui_message_dialog_type = reinterpret_cast<PyTypeObject *> (
+        PyType_FromSpec (&core_ui_message_dialog_spec)
+    );
+
+    // Create type
+    mobius::py::pytypeobject type (core_ui_message_dialog_type);
     type.create ();
 
     type.add_constant ("type_info", 1);
@@ -515,47 +500,54 @@ new_ui_message_dialog_type ()
     return type;
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Check if value is an instance of <i>message_dialog</i>
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Check if value is an instance of <i>core.ui.message_dialog</i>
 // @param value Python value
 // @return true/false
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 bool
 pymobius_core_ui_message_dialog_check (PyObject *value)
 {
-    return PyObject_IsInstance (
-        value, reinterpret_cast<PyObject *> (&core_ui_message_dialog_t));
+    if (!core_ui_message_dialog_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.ui.message_dialog type is not initialized")
+        );
+
+    return mobius::py::isinstance (value, core_ui_message_dialog_type);
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>message_dialog</i> Python object from C++ object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.ui.message_dialog</i> Python object from C++ object
 // @param obj C++ object
-// @return New message_dialog object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @return New core.ui.message_dialog object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 PyObject *
-pymobius_core_ui_message_dialog_to_pyobject (
-    const mobius::core::ui::message_dialog &obj)
+pymobius_core_ui_message_dialog_to_pyobject (const mobius::core::ui::message_dialog &obj)
 {
-    PyObject *ret = _PyObject_New (&core_ui_message_dialog_t);
+    if (!core_ui_message_dialog_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.ui.message_dialog type is not initialized")
+        );
 
-    if (ret)
-        ((core_ui_message_dialog_o *) ret)->obj =
-            new mobius::core::ui::message_dialog (obj);
-
-    return ret;
+    return mobius::py::to_pyobject<core_ui_message_dialog_o> (
+        obj, core_ui_message_dialog_type
+    );
 }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// @brief Create <i>message_dialog</i> C++ object from Python object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create <i>core.ui.message_dialog</i> C++ object from Python object
 // @param value Python value
-// @return Message_dialog object
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @return core.ui.message_dialog object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 mobius::core::ui::message_dialog
 pymobius_core_ui_message_dialog_from_pyobject (PyObject *value)
 {
-    if (!pymobius_core_ui_message_dialog_check (value))
-        throw std::invalid_argument (MOBIUS_EXCEPTION_MSG (
-            "object must be an instance of mobius.core.ui.message_dialog"));
+    if (!core_ui_message_dialog_type)
+        throw std::runtime_error (
+            MOBIUS_EXCEPTION_MSG ("core.ui.message_dialog type is not initialized")
+        );
 
-    return *(reinterpret_cast<core_ui_message_dialog_o *> (value)->obj);
+    return mobius::py::from_pyobject<core_ui_message_dialog_o> (
+        value, core_ui_message_dialog_type
+    );
 }
