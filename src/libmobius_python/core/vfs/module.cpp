@@ -34,10 +34,7 @@ namespace
 // @brief Module methods
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static PyMethodDef module_methods[] = {
-    {"get_imagefile_implementations",
-     func_vfs_get_imagefile_implementations,
-     METH_VARARGS,
-     "Get imagefile implementations available"},
+    {"get_imagefile_types", func_vfs_get_imagefile_types, METH_VARARGS, "Get imagefile implementations available"},
     {"new_disk_by_device_uid", func_vfs_new_disk_by_device_uid, METH_VARARGS, "Create new disk by device UID"},
     {"new_disk_by_path", func_vfs_new_disk_by_path, METH_VARARGS, "Create new disk by file path"},
     {"new_disk_by_url", func_vfs_new_disk_by_url, METH_VARARGS, "Create new disk by file URL"},
