@@ -38,9 +38,9 @@ class ImagefileChooserDialog(object):
         self.__filechooser.set_current_name("imagefile")
 
         imagetypes = []
-        for imagetype, description, extensions, is_writeable in mobius.core.vfs.get_imagefile_implementations():
+        for imagetype, description, extensions, is_writeable, is_virtual_disk in mobius.core.vfs.get_imagefile_types():
             if is_writeable:
-                imagetypes.append((description, imagetype, extensions.split('|')))
+                imagetypes.append((description, imagetype, extensions))
 
         for description, imagetype, extensions in sorted(imagetypes):
             patterns = ['*.%s' % e for e in extensions if e != '*']

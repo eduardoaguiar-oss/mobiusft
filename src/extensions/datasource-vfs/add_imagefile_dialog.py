@@ -41,8 +41,8 @@ class AddImageFileDialog(object):
 
         # add supported image file types
         imagetypes = []
-        for imagetype, description, extensions, is_writeable in mobius.core.vfs.get_imagefile_implementations():
-            imagetypes.append((description, imagetype, extensions.split('|')))
+        for imagetype, description, extensions, is_writeable, is_virtual_disk in mobius.core.vfs.get_imagefile_types():
+            imagetypes.append((description, imagetype, extensions))
 
         last_imagetype = mobius.framework.get_config('disk.last-imagetype')
 
