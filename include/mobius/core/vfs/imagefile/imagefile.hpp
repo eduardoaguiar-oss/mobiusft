@@ -20,14 +20,14 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/metadata.hpp>
-#include <mobius/core/vfs/imagefile_impl_base.hpp>
+#include <mobius/core/vfs/imagefile/imagefile_impl_base.hpp>
 #include <functional>
 #include <memory>
 #include <set>
 #include <string>
 #include <vector>
 
-namespace mobius::core::vfs
+namespace mobius::core::vfs::imagefile
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief imagefile handle class
@@ -206,22 +206,28 @@ struct imagefile_type
     // @brief Default constructor
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     imagefile_type () = default;
-
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // @brief Constructor from type traits
-    // @param t Type traits object
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    template <typename T> imagefile_type ()
-    {
-        id = T::id;
-        description = T::description;
-        is_writeable = T::is_writeable;
-        is_virtual_disk = T::is_virtual_disk;
-        file_extensions = T::file_extensions;
-        is_instance = T::is_instance;
-        builder = T::builder;
-    };
 };
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Create new imagefile type from type traits
+// @param T Type traits object
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+template <typename T>
+imagefile_type
+new_imagefile_type ()
+{
+    imagefile_type result;
+
+    result.id = T::get_id ();
+    result.description = T::get_description ();
+    result.is_writeable = T::is_writeable ();
+    result.is_virtual_disk = T::is_virtual_disk ();
+    result.file_extensions = T::get_file_extensions ();
+    result.is_instance = T::is_instance;
+    result.builder = [] (const mobius::core::io::file &f) { return std::make_shared<T> (f); };
+
+    return result;
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Imagefile resource
@@ -258,6 +264,6 @@ imagefile new_imagefile_by_url (const std::string &, const std::string & = "auto
 imagefile new_imagefile_by_path (const std::string &, const std::string & = "autodetect");
 imagefile new_imagefile_from_file (const mobius::core::io::file &, const std::string & = "autodetect");
 
-} // namespace mobius::core::vfs
+} // namespace mobius::core::vfs::imagefile
 
 #endif
