@@ -18,8 +18,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <Python.h>
 #include <mobius/core/vfs/imagefile.hpp>
+#include <Python.h>
+#include <pytypeobject.hpp>
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Data structure
@@ -29,12 +30,12 @@ typedef struct
     PyObject_HEAD mobius::core::vfs::imagefile *obj;
 } core_vfs_imagefile_o;
 
-extern PyTypeObject core_vfs_imagefile_t;
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Helper functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-PyObject *
-    pymobius_core_vfs_imagefile_to_pyobject (mobius::core::vfs::imagefile);
+mobius::py::pytypeobject new_core_vfs_imagefile_type ();
+bool pymobius_core_vfs_imagefile_check (PyObject *);
+PyObject *pymobius_core_vfs_imagefile_to_pyobject (const mobius::core::vfs::imagefile &);
+mobius::core::vfs::imagefile pymobius_core_vfs_imagefile_from_pyobject (PyObject *);
 
 #endif
