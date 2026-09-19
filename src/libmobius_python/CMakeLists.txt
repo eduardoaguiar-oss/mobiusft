@@ -73,8 +73,8 @@ set_target_properties(libmobius_python PROPERTIES
 )
 
 target_link_libraries(libmobius_python PRIVATE
-    libmobius_python_core
-    libmobius_python_framework
+    mobius_python_core
+    mobius_python_framework
     Python3::Module
 )
 

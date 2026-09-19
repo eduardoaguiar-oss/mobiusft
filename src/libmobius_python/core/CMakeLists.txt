@@ -20,7 +20,7 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.20)
-project(libmobius-python-core LANGUAGES CXX)
+project(mobius_python_core LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Build sub-libraries
@@ -44,7 +44,7 @@ add_subdirectory(vfs)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(libmobius_python_core STATIC
+add_library(mobius_python_core STATIC
     module.cpp
     application.cpp
     extension.cpp
@@ -58,17 +58,18 @@ add_library(libmobius_python_core STATIC
     thread_guard.cpp
 )
 
-set_target_properties(libmobius_python_core PROPERTIES
+set_target_properties(mobius_python_core PROPERTIES
     PREFIX ""
+    POSITION_INDEPENDENT_CODE ON
 )
 
-target_include_directories(libmobius_python_core PRIVATE
+target_include_directories(mobius_python_core PRIVATE
     ${MOBIUS_PYTHON_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${Python3_INCLUDE_DIRS}
 )
 
-target_link_libraries(libmobius_python_core
+target_link_libraries(mobius_python_core
    PRIVATE
        "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_crypt>"
        "$<LINK_LIBRARY:WHOLE_ARCHIVE,libmobius_python_core_database>"
@@ -89,4 +90,4 @@ target_link_libraries(libmobius_python_core
        Mobius::Core
 )
 
-target_compile_options(libmobius_python_core PRIVATE -fno-strict-aliasing -fPIC)
+target_compile_options(mobius_python_core PRIVATE -fno-strict-aliasing)

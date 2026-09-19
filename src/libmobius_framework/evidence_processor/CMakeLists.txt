@@ -25,7 +25,7 @@ project(libmobius-framework-evidence-processor LANGUAGES CXX)
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_framework_evidence_processor OBJECT
+add_library(mobius_framework_evidence_processor STATIC
     mediator.cpp
     engine.cpp
     evidence_processor_registry.cpp
@@ -36,6 +36,8 @@ target_link_libraries(mobius_framework_evidence_processor PRIVATE
     Mobius::Core
 )
 
-set_target_properties(mobius_framework_evidence_processor PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set_target_properties(mobius_framework_evidence_processor PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
+)
 
 target_compile_options(mobius_framework_evidence_processor PRIVATE -fno-strict-aliasing)

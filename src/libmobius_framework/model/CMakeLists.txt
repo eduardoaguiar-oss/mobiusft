@@ -20,12 +20,12 @@
 # Project
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 cmake_minimum_required(VERSION 3.20)
-project(libmobius-framework-model LANGUAGES CXX)
+project(mobius_framework_model LANGUAGES CXX)
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # Target
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-add_library(mobius_framework_model OBJECT
+add_library(mobius_framework_model STATIC
     ant.cpp
     case.cpp
     case_schema.cpp
@@ -39,6 +39,8 @@ target_include_directories(mobius_framework_model PRIVATE
     ${MOBIUS_INCLUDE_DIRS}
 )
 
-set_target_properties(mobius_framework_model PROPERTIES POSITION_INDEPENDENT_CODE ON)
+set_target_properties(mobius_framework_model PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
+)
 
 target_compile_options(mobius_framework_model PRIVATE -fno-strict-aliasing)
