@@ -38,4 +38,8 @@ bool pymobius_core_vfs_disk_check (PyObject *);
 PyObject *pymobius_core_vfs_disk_to_pyobject (const mobius::core::vfs::disk &);
 mobius::core::vfs::disk pymobius_core_vfs_disk_from_pyobject (PyObject *);
 
+PyObject *func_vfs_new_disk_by_device_uid (PyObject *, PyObject *);
+PyObject *func_vfs_new_disk_by_path (PyObject *, PyObject *);
+PyObject *func_vfs_new_disk_by_url (PyObject *, PyObject *);
+
 #endif

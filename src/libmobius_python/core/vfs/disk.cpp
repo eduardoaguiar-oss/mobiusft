@@ -459,3 +459,111 @@ pymobius_core_vfs_disk_from_pyobject (PyObject *value)
 
     return mobius::py::from_pyobject<core_vfs_disk_o> (value, core_vfs_disk_type);
 }
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Function new_disk_by_device_uid
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_vfs_new_disk_by_device_uid (PyObject *, PyObject *args)
+{
+    // parse arguments
+    std::string arg_uid;
+
+    try
+    {
+        arg_uid = mobius::py::get_arg_as_std_string (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // execute C++ code
+    PyObject *ret = nullptr;
+
+    try
+    {
+        auto disk = mobius::core::vfs::new_disk_by_device_uid (arg_uid);
+        ret = pymobius_core_vfs_disk_to_pyobject (disk);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_io_error (e.what ());
+    }
+
+    // create Python disk according to its type
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Function new_disk_by_path
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_vfs_new_disk_by_path (PyObject *, PyObject *args)
+{
+    // parse arguments
+    std::string arg_path;
+
+    try
+    {
+        arg_path = mobius::py::get_arg_as_std_string (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // execute C++ code
+    PyObject *ret = nullptr;
+
+    try
+    {
+        auto disk = mobius::core::vfs::new_disk_by_path (arg_path);
+        ret = pymobius_core_vfs_disk_to_pyobject (disk);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_io_error (e.what ());
+    }
+
+    // create Python disk according to its type
+    return ret;
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Function new_disk_by_url
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+PyObject *
+func_vfs_new_disk_by_url (PyObject *, PyObject *args)
+{
+    // parse arguments
+    std::string arg_url;
+
+    try
+    {
+        arg_url = mobius::py::get_arg_as_std_string (args, 0);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_invalid_type_error (e.what ());
+        return nullptr;
+    }
+
+    // execute C++ code
+    PyObject *ret = nullptr;
+
+    try
+    {
+        auto disk = mobius::core::vfs::new_disk_by_url (arg_url);
+        ret = pymobius_core_vfs_disk_to_pyobject (disk);
+    }
+    catch (const std::exception &e)
+    {
+        mobius::py::set_io_error (e.what ());
+    }
+
+    // create Python disk according to its type
+    return ret;
+}
