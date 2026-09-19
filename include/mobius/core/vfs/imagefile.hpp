@@ -18,11 +18,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#include <mobius/core/vfs/imagefile_impl_base.hpp>
 #include <mobius/core/io/file.hpp>
 #include <mobius/core/metadata.hpp>
+#include <mobius/core/vfs/imagefile_impl_base.hpp>
 #include <functional>
 #include <memory>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -34,145 +35,192 @@ namespace mobius::core::vfs
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class imagefile
 {
-public:
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Datatypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  using size_type = imagefile_impl_base::size_type;
+  public:
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Datatypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    using size_type = imagefile_impl_base::size_type;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Constructors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  imagefile ();
-  explicit imagefile (const std::shared_ptr <imagefile_impl_base>&);
-  explicit imagefile (const mobius::core::io::file&, const std::string& = "autodetect");
-  imagefile (const imagefile&) noexcept = default;
-  imagefile (imagefile&&) noexcept = default;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Constructors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    imagefile ();
+    explicit imagefile (const std::shared_ptr<imagefile_impl_base> &);
+    explicit imagefile (const mobius::core::io::file &, const std::string & = "autodetect");
+    imagefile (const imagefile &) noexcept = default;
+    imagefile (imagefile &&) noexcept = default;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Operators
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  imagefile& operator= (const imagefile&) noexcept = default;
-  imagefile& operator= (imagefile&&) noexcept = default;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Operators
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    imagefile &operator= (const imagefile &) noexcept = default;
+    imagefile &operator= (imagefile &&) noexcept = default;
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Check if imagefile is valid
-  // @return true/false
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  operator bool () const noexcept
-  {
-    return impl_->operator bool ();
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if imagefile is valid
+    // @return true/false
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    operator bool () const noexcept
+    {
+        return impl_->operator bool ();
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Check if imagefile is available
-  // @return true/false
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  bool
-  is_available () const
-  {
-    return impl_->is_available ();
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Check if imagefile is available
+    // @return true/false
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    bool
+    is_available () const
+    {
+        return impl_->is_available ();
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get type
-  // @return type as string
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  std::string
-  get_type () const
-  {
-    return impl_->get_type ();
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get type
+    // @return type as string
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    std::string
+    get_type () const
+    {
+        return impl_->get_type ();
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get imagefile size
-  // @return size in bytes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  size_type
-  get_size () const
-  {
-    return impl_->get_size ();
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get imagefile size
+    // @return size in bytes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    size_type
+    get_size () const
+    {
+        return impl_->get_size ();
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get number of sectors
-  // @return number of sectors
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  size_type
-  get_sectors () const
-  {
-    return impl_->get_sectors ();
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get number of sectors
+    // @return number of sectors
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    size_type
+    get_sectors () const
+    {
+        return impl_->get_sectors ();
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get sector size
-  // @return sector size in bytes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  size_type
-  get_sector_size () const
-  {
-    return impl_->get_sector_size ();
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get sector size
+    // @return sector size in bytes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    size_type
+    get_sector_size () const
+    {
+        return impl_->get_sector_size ();
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get attribute
-  // @param name Attribute name
-  // @return Attribute value
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::core::pod::data
-  get_attribute (const std::string& name) const
-  {
-    return impl_->get_attribute (name);
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get attribute
+    // @param name Attribute name
+    // @return Attribute value
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::pod::data
+    get_attribute (const std::string &name) const
+    {
+        return impl_->get_attribute (name);
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Set attribute
-  // @param name Attribute name
-  // @param value Attribute value
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  void
-  set_attribute (const std::string& name, const mobius::core::pod::data& value)
-  {
-    impl_->set_attribute (name, value);
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Set attribute
+    // @param name Attribute name
+    // @param value Attribute value
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    void
+    set_attribute (const std::string &name, const mobius::core::pod::data &value)
+    {
+        impl_->set_attribute (name, value);
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Get attributes
-  // @return Attribute values
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::core::pod::map
-  get_attributes () const
-  {
-    return impl_->get_attributes ();
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Get attributes
+    // @return Attribute values
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::pod::map
+    get_attributes () const
+    {
+        return impl_->get_attributes ();
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Create new reader for imagefile
-  // @return Reader object
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::core::io::reader
-  new_reader () const
-  {
-    return impl_->new_reader ();
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Create new reader for imagefile
+    // @return Reader object
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::io::reader
+    new_reader () const
+    {
+        return impl_->new_reader ();
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // @brief Create new writer for imagefile
-  // @return Writer object
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::core::io::writer
-  new_writer () const
-  {
-    return impl_->new_writer ();
-  }
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Create new writer for imagefile
+    // @return Writer object
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::io::writer
+    new_writer () const
+    {
+        return impl_->new_writer ();
+    }
 
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  // Prototypes
-  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  mobius::core::metadata get_metadata () const;
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Prototypes
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    mobius::core::metadata get_metadata () const;
 
-private:
-  std::shared_ptr <imagefile_impl_base> impl_;
+  private:
+    std::shared_ptr<imagefile_impl_base> impl_;
+};
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// Imagefile type structure
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+struct imagefile_type
+{
+    // @brief Type ID
+    std::string id;
+
+    // @brief Type description
+    std::string description;
+
+    // @brief If the imagefile type is writeable
+    bool is_writeable = false;
+
+    // @brief If the imagefile type represents a virtual disk
+    bool is_virtual_disk = false;
+
+    // @brief Supported file extensions for the imagefile type
+    std::set<std::string> file_extensions;
+
+    // @brief Function to check if a given file is an instance of this imagefile type
+    std::function<bool (const mobius::core::io::file &)> is_instance;
+
+    // @brief Function to build an instance of the imagefile implementation for a given file
+    std::function<std::shared_ptr<imagefile_impl_base> (const mobius::core::io::file &)> builder;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Default constructor
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    imagefile_type () = default;
+
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // @brief Constructor from type traits
+    // @param t Type traits object
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    template <typename T> imagefile_type ()
+    {
+        id = T::id;
+        description = T::description;
+        is_writeable = T::is_writeable;
+        is_virtual_disk = T::is_virtual_disk;
+        file_extensions = T::file_extensions;
+        is_instance = T::is_instance;
+        builder = T::builder;
+    };
 };
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -180,46 +228,36 @@ private:
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct imagefile_resource_type
 {
-  std::string file_extensions;
-  bool is_writeable;
-  std::function <bool (const mobius::core::io::file&)> is_instance;
-  std::function <std::shared_ptr <imagefile_impl_base> (const mobius::core::io::file&)> build;
+    std::string file_extensions;
+    bool is_writeable;
+    std::function<bool (const mobius::core::io::file &)> is_instance;
+    std::function<std::shared_ptr<imagefile_impl_base> (const mobius::core::io::file &)> build;
 };
 
-template <typename T> constexpr imagefile_resource_type
+template <typename T>
+constexpr imagefile_resource_type
 make_imagefile_resource ()
 {
-  return imagefile_resource_type {
-    T::get_file_extensions (),
-    T::is_writeable (),
-    T::is_instance,
-    [] (const mobius::core::io::file& f){
-      return std::make_shared <T> (f);
-    }
-  };
+    return imagefile_resource_type {
+        T::get_file_extensions (),
+        T::is_writeable (),
+        T::is_instance,
+        [] (const mobius::core::io::file &f) { return std::make_shared<T> (f); }
+    };
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // Functions
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-std::shared_ptr <imagefile_impl_base> build_imagefile_implementation (
-  const mobius::core::io::file&,
-  const std::string&);
+std::vector<imagefile_type> get_imagefile_types ();
 
-imagefile new_imagefile_by_url (
-  const std::string&,
-  const std::string& = "autodetect");
+std::shared_ptr<imagefile_impl_base>
+build_imagefile_implementation (const mobius::core::io::file &, const std::string &);
 
-imagefile new_imagefile_by_path (
-  const std::string&,
-  const std::string& = "autodetect");
-
-imagefile new_imagefile_from_file (
-  const mobius::core::io::file&,
-  const std::string& = "autodetect");
+imagefile new_imagefile_by_url (const std::string &, const std::string & = "autodetect");
+imagefile new_imagefile_by_path (const std::string &, const std::string & = "autodetect");
+imagefile new_imagefile_from_file (const mobius::core::io::file &, const std::string & = "autodetect");
 
 } // namespace mobius::core::vfs
 
 #endif
-
-

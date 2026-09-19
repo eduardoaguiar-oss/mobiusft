@@ -22,13 +22,24 @@
 #include <mobius/core/vfs/imagefile.hpp>
 #include <mobius/core/vfs/imagefile_impl_null.hpp>
 #include <stdexcept>
+#include <unordered_map>
+
+namespace
+{
+// @brief Implemented imagefile types
+static const std::unordered_map<std::string, mobius::core::vfs::imagefile_type> IMAGEFILE_TYPES;
+
+} // namespace
 
 namespace mobius::core::vfs
 {
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Construct object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-imagefile::imagefile () { impl_ = std::make_shared<imagefile_impl_null> (); }
+imagefile::imagefile ()
+    : impl_ (std::make_shared<imagefile_impl_null> ())
+{
+}
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // @brief Constructor from implementation pointer
@@ -60,18 +71,15 @@ imagefile::get_metadata () const
     mobius::core::metadata metadata = {
         {"type", "Type", "std::string", get_type ()},
         {"size", "Size", "size_type", std::to_string (get_size ()) + " bytes"},
-        {"sectors", "Number of sectors", "size_type",
-         std::to_string (get_sectors ())},
-        {"sector_size", "Sector size", "size_type",
-         std::to_string (get_sector_size ()) + " bytes"}};
+        {"sectors", "Number of sectors", "size_type", std::to_string (get_sectors ())},
+        {"sector_size", "Sector size", "size_type", std::to_string (get_sector_size ()) + " bytes"}
+    };
 
     // implementation specific metadata
     for (const auto &p : get_attributes ())
     {
-        auto description = mobius::core::string::capitalize (
-            mobius::core::string::replace (p.first, "_", " "));
-        metadata.add (p.first, description, "std::string",
-                      p.second.to_string ());
+        auto description = mobius::core::string::capitalize (mobius::core::string::replace (p.first, "_", " "));
+        metadata.add (p.first, description, "std::string", p.second.to_string ());
     }
 
     return metadata;
@@ -84,15 +92,13 @@ imagefile::get_metadata () const
 // @return shared_ptr to implementation object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 std::shared_ptr<imagefile_impl_base>
-build_imagefile_implementation (const mobius::core::io::file &f,
-                                const std::string &id)
+build_imagefile_implementation (const mobius::core::io::file &f, const std::string &id)
 {
     // If type == "autodetect", use f_is_instance function to check if file
     // is an instance of this imagefile type.
     if (id == "autodetect")
     {
-        for (const auto &resource :
-             mobius::core::get_resources ("vfs.imagefile"))
+        for (const auto &resource : mobius::core::get_resources ("vfs.imagefile"))
         {
             auto img_resource = resource.get_value<imagefile_resource_type> ();
 
@@ -111,9 +117,7 @@ build_imagefile_implementation (const mobius::core::io::file &f,
     // Otherwise, if type is given, create imagefile using type implementation
     else
     {
-        auto img_resource =
-            mobius::core::get_resource_value<imagefile_resource_type> (
-                "vfs.imagefile." + id);
+        auto img_resource = mobius::core::get_resource_value<imagefile_resource_type> ("vfs.imagefile." + id);
         return img_resource.build (f);
     }
 }
@@ -151,10 +155,53 @@ new_imagefile_by_path (const std::string &path, const std::string &type)
 // @return Imagefile object
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 imagefile
-new_imagefile_from_file (const mobius::core::io::file &f,
-                         const std::string &type)
+new_imagefile_from_file (const mobius::core::io::file &f, const std::string &type)
 {
     return imagefile (f, type);
+}
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+// @brief Get imagefile types
+// @return Vector of imagefile types
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+std::vector<imagefile_type>
+get_imagefile_types ()
+{
+    std::vector<imagefile_type> types (IMAGEFILE_TYPES.size ());
+
+    // Convert the IMAGEFILE_TYPES map to a vector of imagefile_type objects
+    std::transform (
+        IMAGEFILE_TYPES.begin (),
+        IMAGEFILE_TYPES.end (),
+        types.begin (),
+        [] (const auto &pair) { return pair.second; }
+    );
+
+    // @deprecated Add old imagefile types from resources
+    for (const auto &resource : mobius::core::get_resources ("vfs.imagefile"))
+    {
+        auto img_resource = resource.get_value<imagefile_resource_type> ();
+
+        imagefile_type img_type;
+
+        img_type.id = resource.get_id ();
+        img_type.description = resource.get_description ();
+        img_type.is_instance = img_resource.is_instance;
+        img_type.builder = img_resource.build;
+        img_type.is_writeable = img_resource.is_writeable;
+        img_type.file_extensions = { img_resource.file_extensions };
+
+        types.push_back (img_type);
+    }
+    
+    // Sort the imagefile types by their ID
+    std::sort (
+        types.begin (),
+        types.end (),
+        [] (const imagefile_type &a, const imagefile_type &b) { return a.id < b.id; }
+    );
+
+    return types;
 }
 
 } // namespace mobius::core::vfs
